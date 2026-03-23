@@ -1,1 +1,542 @@
-{"expected":[{"type":"literal","text":"EXPLAIN","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"REPLACE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"SET","ignoreCase":true},{"type":"literal","text":"SET","ignoreCase":true},{"type":"literal","text":"SET","ignoreCase":true},{"type":"literal","text":"USE","ignoreCase":true},{"type":"literal","text":"SYSTEM","ignoreCase":true},{"type":"literal","text":"(","ignoreCase":false},{"type":"literal","text":"WITH","ignoreCase":true},{"type":"literal","text":"SELECT","ignoreCase":true},{"type":"end"}],"found":"i","location":{"start":{"offset":221,"line":4,"column":1},"end":{"offset":222,"line":4,"column":2}},"name":"SyntaxError"}
+[
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "test"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "i",
+        "type": {
+          "name": "int"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "j",
+        "type": {
+          "name": "int"
+        }
+      },
+      {
+        "kind": "projectionDef",
+        "name": "p",
+        "query": {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "asterisk"
+            },
+            {
+              "kind": "columnRef",
+              "parts": [
+                "_part_offset"
+              ]
+            }
+          ],
+          "orderBy": [
+            {
+              "kind": "orderByItem",
+              "expr": {
+                "kind": "columnRef",
+                "parts": [
+                  "j"
+                ]
+              },
+              "direction": "ASC"
+            }
+          ]
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "i"
+          ]
+        }
+      }
+    ],
+    "settings": [
+      {
+        "name": "index_granularity",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      },
+      {
+        "name": "max_bytes_to_merge_at_max_space_in_pool",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ],
+    "settingsAfterOrderBy": true,
+    "leadingComments": [
+      "-- disable merge"
+    ]
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "test"
+      }
+    },
+    "selectQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "number"
+          ]
+        },
+        {
+          "kind": "binaryExpr",
+          "op": "-",
+          "left": {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "10"
+          },
+          "right": {
+            "kind": "columnRef",
+            "parts": [
+              "number"
+            ]
+          }
+        }
+      ],
+      "from": {
+        "kind": "tableFunctionRef",
+        "name": "numbers",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "5"
+          }
+        ]
+      }
+    },
+    "leadingComments": [
+      "-- make 5 parts"
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "_part"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "_part_starting_offset"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "_part_offset"
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "test"
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "all"
+          ]
+        },
+        "direction": "ASC"
+      }
+    ],
+    "leadingComments": [
+      "-- verify _part_starting_offset and _part_offset in parent part and projection"
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "_part"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "_part_starting_offset"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "_part_offset"
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "test"
+    },
+    "where": {
+      "kind": "binaryExpr",
+      "op": "=",
+      "left": {
+        "kind": "columnRef",
+        "parts": [
+          "j"
+        ]
+      },
+      "right": {
+        "kind": "literal",
+        "type": "UInt64",
+        "value": "8"
+      }
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "all"
+          ]
+        },
+        "direction": "ASC"
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "asterisk"
+      },
+      {
+        "kind": "binaryExpr",
+        "op": "+",
+        "left": {
+          "kind": "columnRef",
+          "parts": [
+            "_part_starting_offset"
+          ]
+        },
+        "right": {
+          "kind": "columnRef",
+          "parts": [
+            "_part_offset"
+          ]
+        }
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "test"
+    },
+    "where": {
+      "kind": "binaryExpr",
+      "op": "=",
+      "left": {
+        "kind": "binaryExpr",
+        "op": "+",
+        "left": {
+          "kind": "columnRef",
+          "parts": [
+            "_part_starting_offset"
+          ]
+        },
+        "right": {
+          "kind": "columnRef",
+          "parts": [
+            "_part_offset"
+          ]
+        }
+      },
+      "right": {
+        "kind": "literal",
+        "type": "UInt64",
+        "value": "8"
+      }
+    },
+    "settings": [
+      {
+        "name": "parallel_replicas_local_plan",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      },
+      {
+        "name": "max_rows_to_read",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ],
+    "leadingComments": [
+      "-- make sure key analysis works correctly"
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "asterisk"
+      },
+      {
+        "kind": "binaryExpr",
+        "op": "+",
+        "left": {
+          "kind": "columnRef",
+          "parts": [
+            "_part_offset"
+          ]
+        },
+        "right": {
+          "kind": "columnRef",
+          "parts": [
+            "_part_starting_offset"
+          ]
+        }
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "test"
+    },
+    "where": {
+      "kind": "binaryExpr",
+      "op": "=",
+      "left": {
+        "kind": "binaryExpr",
+        "op": "+",
+        "left": {
+          "kind": "columnRef",
+          "parts": [
+            "_part_offset"
+          ]
+        },
+        "right": {
+          "kind": "columnRef",
+          "parts": [
+            "_part_starting_offset"
+          ]
+        }
+      },
+      "right": {
+        "kind": "literal",
+        "type": "UInt64",
+        "value": "8"
+      }
+    },
+    "settings": [
+      {
+        "name": "parallel_replicas_local_plan",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      },
+      {
+        "name": "max_rows_to_read",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "asterisk"
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "test"
+    },
+    "prewhere": {
+      "kind": "binaryExpr",
+      "op": "=",
+      "left": {
+        "kind": "literal",
+        "type": "UInt64",
+        "value": "8"
+      },
+      "right": {
+        "kind": "binaryExpr",
+        "op": "+",
+        "left": {
+          "kind": "columnRef",
+          "parts": [
+            "_part_offset"
+          ]
+        },
+        "right": {
+          "kind": "columnRef",
+          "parts": [
+            "_part_starting_offset"
+          ]
+        },
+        "parenthesized": true
+      }
+    },
+    "where": {
+      "kind": "binaryExpr",
+      "op": "=",
+      "left": {
+        "kind": "literal",
+        "type": "UInt64",
+        "value": "8"
+      },
+      "right": {
+        "kind": "binaryExpr",
+        "op": "+",
+        "left": {
+          "kind": "columnRef",
+          "parts": [
+            "_part_offset"
+          ]
+        },
+        "right": {
+          "kind": "columnRef",
+          "parts": [
+            "_part_starting_offset"
+          ]
+        },
+        "parenthesized": true
+      }
+    },
+    "settings": [
+      {
+        "name": "parallel_replicas_local_plan",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      },
+      {
+        "name": "max_rows_to_read",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ],
+    "leadingComments": [
+      "-- from fuzzer"
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "asterisk"
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "test"
+    },
+    "prewhere": {
+      "kind": "naryExpr",
+      "op": "AND",
+      "operands": [
+        {
+          "kind": "binaryExpr",
+          "op": "=",
+          "left": {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "8"
+          },
+          "right": {
+            "kind": "binaryExpr",
+            "op": "*",
+            "left": {
+              "kind": "columnRef",
+              "parts": [
+                "_part_starting_offset"
+              ]
+            },
+            "right": {
+              "kind": "columnRef",
+              "parts": [
+                "_part_offset"
+              ]
+            },
+            "parenthesized": true
+          },
+          "parenthesized": true
+        },
+        {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "3"
+        }
+      ]
+    },
+    "where": {
+      "kind": "binaryExpr",
+      "op": "=",
+      "left": {
+        "kind": "literal",
+        "type": "UInt64",
+        "value": "8"
+      },
+      "right": {
+        "kind": "binaryExpr",
+        "op": "+",
+        "left": {
+          "kind": "columnRef",
+          "parts": [
+            "_part_starting_offset"
+          ]
+        },
+        "right": {
+          "kind": "columnRef",
+          "parts": [
+            "_part_offset"
+          ]
+        },
+        "parenthesized": true
+      }
+    }
+  }
+]

@@ -1,1 +1,234 @@
-{"expected":[{"type":"literal","text":"EXPLAIN","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"REPLACE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"SET","ignoreCase":true},{"type":"literal","text":"SET","ignoreCase":true},{"type":"literal","text":"SET","ignoreCase":true},{"type":"literal","text":"USE","ignoreCase":true},{"type":"literal","text":"SYSTEM","ignoreCase":true},{"type":"literal","text":"(","ignoreCase":false},{"type":"literal","text":"WITH","ignoreCase":true},{"type":"literal","text":"SELECT","ignoreCase":true},{"type":"end"}],"found":"I","location":{"start":{"offset":411,"line":17,"column":1},"end":{"offset":412,"line":17,"column":2}},"name":"SyntaxError"}
+[
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "enable_analyzer",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ],
+    "leadingComments": [
+      "-- Tags: no-parallel"
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "skip_redundant_aliases_in_udf",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createFunction",
+    "name": "03274_test_function",
+    "functionExpr": {
+      "kind": "lambdaExpr",
+      "params": [
+        "input_column_name"
+      ],
+      "body": {
+        "kind": "functionCall",
+        "name": "tupleElement",
+        "args": [
+          {
+            "kind": "tupleLiteral",
+            "elements": [
+              {
+                "kind": "alias",
+                "expr": {
+                  "kind": "literal",
+                  "type": "String",
+                  "value": "1"
+                },
+                "alias": "a"
+              },
+              {
+                "kind": "alias",
+                "expr": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "input_column_name"
+                  ]
+                },
+                "alias": "input_column_name"
+              }
+            ],
+            "source": "(\n        '1' AS a,\n        input_column_name AS input_column_name\n    )"
+          },
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "2"
+          }
+        ],
+        "parenthesized": true
+      }
+    }
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "test_table"
+    },
+    "ifNotExists": true,
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "metadata_a",
+        "type": {
+          "name": "String"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "metadata_b",
+        "type": {
+          "name": "String"
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree",
+      "args": []
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "functionCall",
+          "name": "tuple",
+          "args": []
+        }
+      }
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "skip_redundant_aliases_in_udf",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "test_table"
+      }
+    },
+    "selectQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "a"
+        },
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "b"
+        }
+      ]
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "mat_a"
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "test_table"
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "mat_b"
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "test_table"
+    }
+  },
+  {
+    "kind": "createFunction",
+    "name": "test_03274",
+    "functionExpr": {
+      "kind": "lambdaExpr",
+      "params": [
+        "x"
+      ],
+      "body": {
+        "kind": "tupleLiteral",
+        "elements": [
+          {
+            "kind": "alias",
+            "expr": {
+              "kind": "binaryExpr",
+              "op": "+",
+              "left": {
+                "kind": "columnRef",
+                "parts": [
+                  "x"
+                ]
+              },
+              "right": {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "1"
+              }
+            },
+            "alias": "y"
+          },
+          {
+            "kind": "binaryExpr",
+            "op": "+",
+            "left": {
+              "kind": "columnRef",
+              "parts": [
+                "y"
+              ]
+            },
+            "right": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "2"
+            }
+          }
+        ],
+        "source": "(x + 1 as y, y + 2)",
+        "parenthesized": true
+      }
+    }
+  }
+]

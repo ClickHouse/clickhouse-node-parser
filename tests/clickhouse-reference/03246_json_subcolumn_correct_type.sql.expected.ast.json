@@ -1,1 +1,161 @@
-{"expected":[{"type":"literal","text":"EXPLAIN","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"REPLACE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"SET","ignoreCase":true},{"type":"literal","text":"SET","ignoreCase":true},{"type":"literal","text":"SET","ignoreCase":true},{"type":"literal","text":"USE","ignoreCase":true},{"type":"literal","text":"SYSTEM","ignoreCase":true},{"type":"literal","text":"(","ignoreCase":false},{"type":"literal","text":"WITH","ignoreCase":true},{"type":"literal","text":"SELECT","ignoreCase":true},{"type":"end"}],"found":"i","location":{"start":{"offset":152,"line":5,"column":1},"end":{"offset":153,"line":5,"column":2}},"name":"SyntaxError"}
+[
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "enable_json_type",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "enable_analyzer",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "allow_dynamic_type_in_join_keys",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "test"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "json",
+        "type": {
+          "name": "JSON",
+          "args": [
+            {
+              "kind": "setting",
+              "name": "max_dynamic_types",
+              "value": {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "1"
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "engine": {
+      "name": "Memory"
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "test"
+      }
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "toTypeName",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "json",
+              "c0"
+            ]
+          }
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "test"
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "literal",
+        "type": "UInt64",
+        "value": "1"
+      }
+    ],
+    "from": {
+      "left": {
+        "kind": "subqueryFrom",
+        "query": {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "alias",
+              "expr": {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "1"
+              },
+              "alias": "c0"
+            }
+          ]
+        },
+        "alias": "tx"
+      },
+      "kind": "joinExpr",
+      "joinType": "FULL",
+      "right": {
+        "kind": "tableRef",
+        "table": "test"
+      },
+      "constraint": {
+        "kind": "on",
+        "expr": {
+          "kind": "binaryExpr",
+          "op": "=",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "test",
+              "json",
+              "Float32"
+            ]
+          },
+          "right": {
+            "kind": "columnRef",
+            "parts": [
+              "tx",
+              "c0"
+            ]
+          }
+        }
+      }
+    }
+  }
+]

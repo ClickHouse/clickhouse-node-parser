@@ -124,6 +124,8 @@ TopLevelStatement
   / SetStatement
   / UseStatement
   / SystemStatement
+  / InsertStatement
+  / OpaqueStatement
   / query:UnionQuery intoOutfile:( _ IntoOutfileClause )? preSettings:( _ SettingsClause )? format:( _ FormatClause )? postSettings:( _ SettingsClause )* {
       let result = query;
       if (intoOutfile !== null) {
@@ -173,12 +175,85 @@ UseStatement
 SystemStatement
   = "SYSTEM"i ![a-zA-Z0-9_] body:$( ![\n;] . )+ { return loc({ kind: 'system', body: body.trim() }); }
 
+// OpaqueStatement: statements we recognize but don't fully parse (DROP, ALTER, TRUNCATE, etc.)
+// The body is consumed as raw text until end of statement.
+OpaqueStatement
+  = keyword:( "DROP"i / "ALTER"i / "RENAME"i / "ATTACH"i / "DETACH"i / "OPTIMIZE"i / "CHECK"i / "DESCRIBE"i / "DESC"i / "EXISTS"i / "SHOW"i / "GRANT"i / "REVOKE"i / "EXCHANGE"i / "KILL"i / "UNDO"i / "DELETE"i / "BACKUP"i / "RESTORE"i / "BEGIN"i / "COMMIT"i / "ROLLBACK"i / "WATCH"i / "UNDROP"i / "MOVE"i / "TRUNCATE"i ) ![a-zA-Z0-9_] body:$( ![\n;] . )* { return loc({ kind: 'system', body: (keyword + ' ' + body).trim() }); }
+
+// ── INSERT statements ────────────────────────────────────────────────────────
+
+// InsertStatement: INSERT INTO [TABLE] target [(columns)] [SETTINGS ...] [data]
+// target can be a table reference or TABLE FUNCTION / FUNCTION call
+InsertStatement
+  = "INSERT"i ![a-zA-Z0-9_] _ "INTO"i ![a-zA-Z0-9_] _ target:InsertTarget
+    partitionBy:( _ "PARTITION"i ![a-zA-Z0-9_] _ "BY"i ![a-zA-Z0-9_] _ Expression )?
+    columns:( _ InsertColumnList )?
+    insertSettings:( _ SettingsClause )?
+    data:InsertDataClause {
+      const result = { kind: 'insert', target: target };
+      if (partitionBy !== null) result.partitionBy = partitionBy[7];
+      if (columns !== null) result.columns = columns[1];
+      if (insertSettings !== null) result.insertSettings = insertSettings[1];
+      if (data !== null) {
+        result.selectQuery = data.query;
+        if (data.querySettings) result.querySettings = data.querySettings;
+      }
+      return loc(result);
+    }
+
+// InsertTarget: identifies what to insert into (table or table function)
+InsertTarget
+  = "TABLE"i ![a-zA-Z0-9_] _ "FUNCTION"i ![a-zA-Z0-9_] _ func:InsertFunctionCall { return { kind: 'function', func }; }
+  / "FUNCTION"i ![a-zA-Z0-9_] _ func:InsertFunctionCall { return { kind: 'function', func }; }
+  / "TABLE"i ![a-zA-Z0-9_] _ table:TableRef { return { kind: 'table', table }; }
+  / table:TableRef { return { kind: 'table', table }; }
+
+// InsertFunctionCall: parses a function call in INSERT INTO [TABLE] FUNCTION context
+InsertFunctionCall
+  = name:FunctionName _ "(" _ args:FunctionCallArgList? _ ")" {
+      return loc({ kind: 'tableFunctionRef', name, args: args !== null ? args : [] });
+    }
+
+// InsertColumnList: optional column list with support for trailing comma and complex expressions
+// Supports identifiers, asterisks with transformers, qualified asterisks, COLUMNS(), etc.
+InsertColumnList
+  = "(" _ head:SelectItem tail:( _ "," _ SelectItem )* _ ","? _ ")" {
+      return buildCommaList(head, tail);
+    }
+
+// InsertDataClause: VALUES (skipped), SELECT query, FORMAT (skipped), or empty
+// For INSERT...SELECT...FORMAT, the FORMAT + data is consumed after the SELECT
+InsertDataClause
+  = _ "VALUES"i ![a-zA-Z0-9_] InsertRawData { return null; }
+  / _ "FORMAT"i ![a-zA-Z0-9_] InsertRawData { return null; }
+  / _ query:UnionQuery querySettings:( _ SettingsClause )? ( _ FormatClause InsertRawData )? { return { query, querySettings: querySettings ? querySettings[1] : null }; }
+  / "" { return null; }
+
+// InsertRawData: consumes everything until ";" or end of input (including newlines, strings)
+InsertRawData
+  = ( "'" ( "''" / "\\'" / "\\\\" / !"'" ( [\n\r] / . ) )* "'"
+    / !";" ( [\n\r] / . )
+  )*
+
 // ── CREATE statements ────────────────────────────────────────────────────────
 
-// PARALLEL WITH: chains multiple CREATE statements
+// PARALLEL WITH: chains multiple statements (CREATE, INSERT, TRUNCATE, etc.)
 ParallelWithStatement
   = head:CreateStatement tail:( _ "PARALLEL"i ![a-zA-Z0-9_] _ "WITH"i ![a-zA-Z0-9_] _ CreateStatement )+ {
       return loc({ kind: 'parallelWith', queries: [head, ...tail.map(t => t[7])] });
+    }
+  / head:ParallelWithItem tail:( _ "PARALLEL"i ![a-zA-Z0-9_] _ "WITH"i ![a-zA-Z0-9_] _ ParallelWithItem )+ {
+      return loc({ kind: 'parallelWith', queries: [head, ...tail.map(t => t[7])] });
+    }
+
+ParallelWithItem
+  = InsertStatement
+  / TruncateStatement
+
+// TruncateStatement: TRUNCATE [TABLE] [IF EXISTS] [db.]table — minimal parsing for PARALLEL WITH support
+TruncateStatement
+  = "TRUNCATE"i ![a-zA-Z0-9_] ( _ "TABLE"i ![a-zA-Z0-9_] )? ( _ "IF"i ![a-zA-Z0-9_] _ "EXISTS"i ![a-zA-Z0-9_] )? _ table:TableRef {
+      return loc({ kind: 'truncate', table });
     }
 
 // Unified entry point for all CREATE/REPLACE statements
@@ -1596,7 +1671,7 @@ SelectItem
 
 SelectItemAlias
   = _ KW_AS _ alias:AliasName { return alias; }
-  / _ !KW_FORMAT alias:Identifier { return alias; }
+  / _ !KW_FORMAT !("PARALLEL"i ![a-zA-Z0-9_] _ "WITH"i ![a-zA-Z0-9_]) alias:Identifier { return alias; }
 
 FromClause
   = KW_FROM comments:_ expr:JoinExpr { return addWsLeading(expr, comments); }
@@ -1680,7 +1755,7 @@ FromAtomAlias
   / _ "(" _ !( KW_SELECT / KW_WITH / "EXPLAIN"i ![a-zA-Z0-9_] ) head:AliasName tail:( _ "," _ AliasName )* _ ")" {
       return { columnAliases: [head, ...tail.map((t) => t[3])] };
     }
-  / _ !JoinKeyword !ArrayJoinKeyword !KW_FORMAT alias:Identifier { return alias; }
+  / _ !JoinKeyword !ArrayJoinKeyword !KW_FORMAT !("PARALLEL"i ![a-zA-Z0-9_] _ "WITH"i ![a-zA-Z0-9_]) alias:Identifier { return alias; }
 
 TableFunctionRef
   = name:FunctionName _ "(" _ args:TableFunctionArgList? settings:( ( _ "," )? _ KW_SETTINGS _ SettingsList )? _ ")" {

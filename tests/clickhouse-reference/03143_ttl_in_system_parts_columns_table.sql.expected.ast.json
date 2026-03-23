@@ -1,1 +1,201 @@
-{"expected":[{"type":"literal","text":"EXPLAIN","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"REPLACE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"SET","ignoreCase":true},{"type":"literal","text":"SET","ignoreCase":true},{"type":"literal","text":"SET","ignoreCase":true},{"type":"literal","text":"USE","ignoreCase":true},{"type":"literal","text":"SYSTEM","ignoreCase":true},{"type":"literal","text":"(","ignoreCase":false},{"type":"literal","text":"WITH","ignoreCase":true},{"type":"literal","text":"SELECT","ignoreCase":true},{"type":"end"}],"found":"I","location":{"start":{"offset":190,"line":9,"column":1},"end":{"offset":191,"line":9,"column":2}},"name":"SyntaxError"}
+[
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "test_03143"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "timestamp",
+        "type": {
+          "name": "DateTime"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "x",
+        "type": {
+          "name": "UInt32"
+        },
+        "ttl": {
+          "kind": "binaryExpr",
+          "op": "+",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "timestamp"
+            ]
+          },
+          "right": {
+            "kind": "functionCall",
+            "name": "toIntervalMonth",
+            "args": [
+              {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "1"
+              }
+            ]
+          }
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "y",
+        "type": {
+          "name": "String"
+        },
+        "ttl": {
+          "kind": "binaryExpr",
+          "op": "+",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "timestamp"
+            ]
+          },
+          "right": {
+            "kind": "functionCall",
+            "name": "toIntervalDay",
+            "args": [
+              {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "1"
+              }
+            ]
+          }
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "z",
+        "type": {
+          "name": "String"
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "functionCall",
+          "name": "tuple",
+          "args": []
+        }
+      }
+    ]
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "test_03143"
+      }
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "name"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "column"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "type"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "column_ttl_min"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "column_ttl_max"
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "database": "system",
+      "table": "parts_columns"
+    },
+    "where": {
+      "kind": "naryExpr",
+      "op": "AND",
+      "operands": [
+        {
+          "kind": "binaryExpr",
+          "op": "=",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "table"
+            ]
+          },
+          "right": {
+            "kind": "literal",
+            "type": "String",
+            "value": "test_03143"
+          }
+        },
+        {
+          "kind": "binaryExpr",
+          "op": "=",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "database"
+            ]
+          },
+          "right": {
+            "kind": "functionCall",
+            "name": "currentDatabase",
+            "args": []
+          }
+        }
+      ]
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "name"
+          ]
+        },
+        "direction": "ASC"
+      },
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "column"
+          ]
+        },
+        "direction": "ASC"
+      }
+    ]
+  }
+]

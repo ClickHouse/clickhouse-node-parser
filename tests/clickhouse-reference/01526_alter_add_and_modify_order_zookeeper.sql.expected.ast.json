@@ -1,1 +1,189 @@
-{"expected":[{"type":"literal","text":"EXPLAIN","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"REPLACE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"SET","ignoreCase":true},{"type":"literal","text":"SET","ignoreCase":true},{"type":"literal","text":"SET","ignoreCase":true},{"type":"literal","text":"USE","ignoreCase":true},{"type":"literal","text":"SYSTEM","ignoreCase":true},{"type":"literal","text":"(","ignoreCase":false},{"type":"literal","text":"WITH","ignoreCase":true},{"type":"literal","text":"SELECT","ignoreCase":true},{"type":"end"}],"found":"I","location":{"start":{"offset":380,"line":16,"column":1},"end":{"offset":381,"line":16,"column":2}},"name":"SyntaxError"}
+[
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "replication_alter_partitions_sync",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "2"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "table_for_alter"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "d",
+        "type": {
+          "name": "Date"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "a",
+        "type": {
+          "name": "String"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "b",
+        "type": {
+          "name": "UInt8"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "x",
+        "type": {
+          "name": "String"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "y",
+        "type": {
+          "name": "Int8"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "version",
+        "type": {
+          "name": "UInt64"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "sign",
+        "type": {
+          "name": "Int8"
+        },
+        "defaultKind": "DEFAULT",
+        "defaultExpr": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ],
+    "engine": {
+      "name": "ReplicatedVersionedCollapsingMergeTree",
+      "args": [
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "/clickhouse/tables/{database}/01526_alter_add/t1"
+        },
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "1"
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "sign"
+          ]
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "version"
+          ]
+        }
+      ]
+    },
+    "partitionBy": {
+      "kind": "columnRef",
+      "parts": [
+        "y"
+      ]
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "d"
+          ]
+        }
+      }
+    ],
+    "settings": [
+      {
+        "name": "index_granularity",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "8192"
+        }
+      }
+    ],
+    "settingsAfterOrderBy": true
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "table_for_alter"
+      }
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "asterisk"
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "table_for_alter"
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "table_for_alter"
+      }
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "asterisk"
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "table_for_alter"
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "d"
+          ]
+        },
+        "direction": "ASC"
+      }
+    ]
+  }
+]

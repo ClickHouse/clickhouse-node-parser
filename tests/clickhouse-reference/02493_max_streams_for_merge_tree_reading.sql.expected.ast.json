@@ -1,1 +1,1211 @@
-{"expected":[{"type":"literal","text":"EXPLAIN","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"REPLACE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"SET","ignoreCase":true},{"type":"literal","text":"SET","ignoreCase":true},{"type":"literal","text":"SET","ignoreCase":true},{"type":"literal","text":"USE","ignoreCase":true},{"type":"literal","text":"SYSTEM","ignoreCase":true},{"type":"literal","text":"(","ignoreCase":false},{"type":"literal","text":"WITH","ignoreCase":true},{"type":"literal","text":"SELECT","ignoreCase":true},{"type":"end"}],"found":"i","location":{"start":{"offset":198,"line":5,"column":1},"end":{"offset":199,"line":5,"column":2}},"name":"SyntaxError"}
+[
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "merge_tree_read_split_ranges_into_intersecting_and_non_intersecting_injection_probability",
+        "value": {
+          "kind": "literal",
+          "type": "Float64",
+          "value": "0.0"
+        }
+      }
+    ],
+    "leadingComments": [
+      "-- Tags: no-random-merge-tree-settings"
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "t"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "x",
+        "type": {
+          "name": "UInt64"
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "x"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "t"
+      }
+    },
+    "selectQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "number"
+          ]
+        }
+      ],
+      "from": {
+        "kind": "tableFunctionRef",
+        "name": "numbers_mt",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "10000000"
+          }
+        ]
+      },
+      "settings": [
+        {
+          "name": "max_insert_threads",
+          "value": {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "8"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "allow_prefetched_read_pool_for_remote_filesystem",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "allow_prefetched_read_pool_for_local_filesystem",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "sum",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "x"
+            ]
+          }
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "t"
+    },
+    "settings": [
+      {
+        "name": "max_threads",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "32"
+        }
+      },
+      {
+        "name": "max_streams_for_merge_tree_reading",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "16"
+        }
+      },
+      {
+        "name": "allow_asynchronous_read_from_io_pool_for_merge_tree",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      }
+    ],
+    "leadingComments": [
+      "-- { echo }",
+      "-- The number of output streams is limited by max_streams_for_merge_tree_reading"
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "asterisk"
+      }
+    ],
+    "from": {
+      "kind": "subqueryFrom",
+      "query": {
+        "kind": "explain",
+        "explainType": "PIPELINE",
+        "query": {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "functionCall",
+              "name": "sum",
+              "args": [
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "x"
+                  ]
+                }
+              ]
+            }
+          ],
+          "from": {
+            "kind": "tableRef",
+            "table": "t"
+          },
+          "settings": [
+            {
+              "name": "max_threads",
+              "value": {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "32"
+              }
+            },
+            {
+              "name": "max_streams_for_merge_tree_reading",
+              "value": {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "16"
+              }
+            },
+            {
+              "name": "allow_asynchronous_read_from_io_pool_for_merge_tree",
+              "value": {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "0"
+              }
+            }
+          ]
+        }
+      }
+    },
+    "where": {
+      "kind": "naryExpr",
+      "op": "OR",
+      "operands": [
+        {
+          "kind": "functionCall",
+          "name": "like",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "explain"
+              ]
+            },
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "%Resize%"
+            }
+          ]
+        },
+        {
+          "kind": "functionCall",
+          "name": "like",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "explain"
+              ]
+            },
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "%MergeTreeSelect%"
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "sum",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "x"
+            ]
+          }
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "t"
+    },
+    "settings": [
+      {
+        "name": "max_threads",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "4"
+        }
+      },
+      {
+        "name": "max_streams_for_merge_tree_reading",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "16"
+        }
+      },
+      {
+        "name": "allow_asynchronous_read_from_io_pool_for_merge_tree",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      },
+      {
+        "name": "max_streams_to_max_threads_ratio",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "8"
+        }
+      }
+    ],
+    "leadingComments": [
+      "-- Without asynchronous_read, max_streams_for_merge_tree_reading limits max_streams * max_streams_to_max_threads_ratio"
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "asterisk"
+      }
+    ],
+    "from": {
+      "kind": "subqueryFrom",
+      "query": {
+        "kind": "explain",
+        "explainType": "PIPELINE",
+        "query": {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "functionCall",
+              "name": "sum",
+              "args": [
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "x"
+                  ]
+                }
+              ]
+            }
+          ],
+          "from": {
+            "kind": "tableRef",
+            "table": "t"
+          },
+          "settings": [
+            {
+              "name": "max_threads",
+              "value": {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "4"
+              }
+            },
+            {
+              "name": "max_streams_for_merge_tree_reading",
+              "value": {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "16"
+              }
+            },
+            {
+              "name": "allow_asynchronous_read_from_io_pool_for_merge_tree",
+              "value": {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "0"
+              }
+            },
+            {
+              "name": "max_streams_to_max_threads_ratio",
+              "value": {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "8"
+              }
+            }
+          ]
+        }
+      }
+    },
+    "where": {
+      "kind": "naryExpr",
+      "op": "OR",
+      "operands": [
+        {
+          "kind": "functionCall",
+          "name": "like",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "explain"
+              ]
+            },
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "%Resize%"
+            }
+          ]
+        },
+        {
+          "kind": "functionCall",
+          "name": "like",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "explain"
+              ]
+            },
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "%MergeTreeSelect%"
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "sum",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "x"
+            ]
+          }
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "t"
+    },
+    "settings": [
+      {
+        "name": "max_threads",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "4"
+        }
+      },
+      {
+        "name": "max_streams_for_merge_tree_reading",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "16"
+        }
+      },
+      {
+        "name": "allow_asynchronous_read_from_io_pool_for_merge_tree",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ],
+    "leadingComments": [
+      "-- With asynchronous_read, read in max_streams_for_merge_tree_reading async streams and resize to max_threads"
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "asterisk"
+      }
+    ],
+    "from": {
+      "kind": "subqueryFrom",
+      "query": {
+        "kind": "explain",
+        "explainType": "PIPELINE",
+        "query": {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "functionCall",
+              "name": "sum",
+              "args": [
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "x"
+                  ]
+                }
+              ]
+            }
+          ],
+          "from": {
+            "kind": "tableRef",
+            "table": "t"
+          },
+          "settings": [
+            {
+              "name": "max_threads",
+              "value": {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "4"
+              }
+            },
+            {
+              "name": "max_streams_for_merge_tree_reading",
+              "value": {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "16"
+              }
+            },
+            {
+              "name": "allow_asynchronous_read_from_io_pool_for_merge_tree",
+              "value": {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "1"
+              }
+            }
+          ]
+        }
+      }
+    },
+    "where": {
+      "kind": "naryExpr",
+      "op": "OR",
+      "operands": [
+        {
+          "kind": "functionCall",
+          "name": "like",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "explain"
+              ]
+            },
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "%Resize%"
+            }
+          ]
+        },
+        {
+          "kind": "functionCall",
+          "name": "like",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "explain"
+              ]
+            },
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "%MergeTreeSelect%"
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "sum",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "x"
+            ]
+          }
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "t"
+    },
+    "settings": [
+      {
+        "name": "max_threads",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "4"
+        }
+      },
+      {
+        "name": "max_streams_for_merge_tree_reading",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "16"
+        }
+      },
+      {
+        "name": "allow_asynchronous_read_from_io_pool_for_merge_tree",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      },
+      {
+        "name": "max_streams_to_max_threads_ratio",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "8"
+        }
+      }
+    ],
+    "leadingComments": [
+      "-- With asynchronous_read, read using max_streams * max_streams_to_max_threads_ratio async streams, resize to max_streams_for_merge_tree_reading outp[ut streams, resize to max_threads after aggregation"
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "asterisk"
+      }
+    ],
+    "from": {
+      "kind": "subqueryFrom",
+      "query": {
+        "kind": "explain",
+        "explainType": "PIPELINE",
+        "query": {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "functionCall",
+              "name": "sum",
+              "args": [
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "x"
+                  ]
+                }
+              ]
+            }
+          ],
+          "from": {
+            "kind": "tableRef",
+            "table": "t"
+          },
+          "settings": [
+            {
+              "name": "max_threads",
+              "value": {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "4"
+              }
+            },
+            {
+              "name": "max_streams_for_merge_tree_reading",
+              "value": {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "16"
+              }
+            },
+            {
+              "name": "allow_asynchronous_read_from_io_pool_for_merge_tree",
+              "value": {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "1"
+              }
+            },
+            {
+              "name": "max_streams_to_max_threads_ratio",
+              "value": {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "8"
+              }
+            }
+          ]
+        }
+      }
+    },
+    "where": {
+      "kind": "naryExpr",
+      "op": "OR",
+      "operands": [
+        {
+          "kind": "functionCall",
+          "name": "like",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "explain"
+              ]
+            },
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "%Resize%"
+            }
+          ]
+        },
+        {
+          "kind": "functionCall",
+          "name": "like",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "explain"
+              ]
+            },
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "%MergeTreeSelect%"
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "query_plan_remove_redundant_sorting",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      }
+    ],
+    "leadingComments": [
+      "-- For read-in-order, disable everything"
+    ],
+    "trailingComments": [
+      "-- to keep reading in order"
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "sum",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "x"
+            ]
+          }
+        ]
+      }
+    ],
+    "from": {
+      "kind": "subqueryFrom",
+      "query": {
+        "kind": "select",
+        "select": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "x"
+            ]
+          }
+        ],
+        "from": {
+          "kind": "tableRef",
+          "table": "t"
+        },
+        "orderBy": [
+          {
+            "kind": "orderByItem",
+            "expr": {
+              "kind": "columnRef",
+              "parts": [
+                "x"
+              ]
+            },
+            "direction": "ASC"
+          }
+        ]
+      }
+    },
+    "settings": [
+      {
+        "name": "max_threads",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "4"
+        }
+      },
+      {
+        "name": "max_streams_for_merge_tree_reading",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "16"
+        }
+      },
+      {
+        "name": "allow_asynchronous_read_from_io_pool_for_merge_tree",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      },
+      {
+        "name": "optimize_read_in_order",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      },
+      {
+        "name": "query_plan_read_in_order",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "asterisk"
+      }
+    ],
+    "from": {
+      "kind": "subqueryFrom",
+      "query": {
+        "kind": "explain",
+        "explainType": "PIPELINE",
+        "query": {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "functionCall",
+              "name": "sum",
+              "args": [
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "x"
+                  ]
+                }
+              ]
+            }
+          ],
+          "from": {
+            "kind": "subqueryFrom",
+            "query": {
+              "kind": "select",
+              "select": [
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "x"
+                  ]
+                }
+              ],
+              "from": {
+                "kind": "tableRef",
+                "table": "t"
+              },
+              "orderBy": [
+                {
+                  "kind": "orderByItem",
+                  "expr": {
+                    "kind": "columnRef",
+                    "parts": [
+                      "x"
+                    ]
+                  },
+                  "direction": "ASC"
+                }
+              ]
+            }
+          },
+          "settings": [
+            {
+              "name": "max_threads",
+              "value": {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "4"
+              }
+            },
+            {
+              "name": "max_streams_for_merge_tree_reading",
+              "value": {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "16"
+              }
+            },
+            {
+              "name": "allow_asynchronous_read_from_io_pool_for_merge_tree",
+              "value": {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "1"
+              }
+            },
+            {
+              "name": "optimize_read_in_order",
+              "value": {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "1"
+              }
+            },
+            {
+              "name": "query_plan_read_in_order",
+              "value": {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "1"
+              }
+            }
+          ]
+        }
+      }
+    },
+    "where": {
+      "kind": "functionCall",
+      "name": "like",
+      "args": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "explain"
+          ]
+        },
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "%Resize%"
+        }
+      ]
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "sum",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "x"
+            ]
+          }
+        ]
+      }
+    ],
+    "from": {
+      "kind": "subqueryFrom",
+      "query": {
+        "kind": "select",
+        "select": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "x"
+            ]
+          }
+        ],
+        "from": {
+          "kind": "tableRef",
+          "table": "t"
+        },
+        "orderBy": [
+          {
+            "kind": "orderByItem",
+            "expr": {
+              "kind": "columnRef",
+              "parts": [
+                "x"
+              ]
+            },
+            "direction": "ASC"
+          }
+        ]
+      }
+    },
+    "settings": [
+      {
+        "name": "max_threads",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "4"
+        }
+      },
+      {
+        "name": "max_streams_for_merge_tree_reading",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "16"
+        }
+      },
+      {
+        "name": "allow_asynchronous_read_from_io_pool_for_merge_tree",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      },
+      {
+        "name": "max_streams_to_max_threads_ratio",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "8"
+        }
+      },
+      {
+        "name": "optimize_read_in_order",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      },
+      {
+        "name": "query_plan_read_in_order",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "asterisk"
+      }
+    ],
+    "from": {
+      "kind": "subqueryFrom",
+      "query": {
+        "kind": "explain",
+        "explainType": "PIPELINE",
+        "query": {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "functionCall",
+              "name": "sum",
+              "args": [
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "x"
+                  ]
+                }
+              ]
+            }
+          ],
+          "from": {
+            "kind": "subqueryFrom",
+            "query": {
+              "kind": "select",
+              "select": [
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "x"
+                  ]
+                }
+              ],
+              "from": {
+                "kind": "tableRef",
+                "table": "t"
+              },
+              "orderBy": [
+                {
+                  "kind": "orderByItem",
+                  "expr": {
+                    "kind": "columnRef",
+                    "parts": [
+                      "x"
+                    ]
+                  },
+                  "direction": "ASC"
+                }
+              ]
+            }
+          },
+          "settings": [
+            {
+              "name": "max_threads",
+              "value": {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "4"
+              }
+            },
+            {
+              "name": "max_streams_for_merge_tree_reading",
+              "value": {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "16"
+              }
+            },
+            {
+              "name": "allow_asynchronous_read_from_io_pool_for_merge_tree",
+              "value": {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "1"
+              }
+            },
+            {
+              "name": "max_streams_to_max_threads_ratio",
+              "value": {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "8"
+              }
+            },
+            {
+              "name": "optimize_read_in_order",
+              "value": {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "1"
+              }
+            },
+            {
+              "name": "query_plan_read_in_order",
+              "value": {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "1"
+              }
+            }
+          ]
+        }
+      }
+    },
+    "where": {
+      "kind": "functionCall",
+      "name": "like",
+      "args": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "explain"
+          ]
+        },
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "%Resize%"
+        }
+      ]
+    }
+  }
+]

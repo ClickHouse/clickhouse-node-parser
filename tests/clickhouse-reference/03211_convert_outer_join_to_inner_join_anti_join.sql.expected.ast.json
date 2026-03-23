@@ -1,1 +1,426 @@
-{"expected":[{"type":"literal","text":"EXPLAIN","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"REPLACE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"SET","ignoreCase":true},{"type":"literal","text":"SET","ignoreCase":true},{"type":"literal","text":"SET","ignoreCase":true},{"type":"literal","text":"USE","ignoreCase":true},{"type":"literal","text":"SYSTEM","ignoreCase":true},{"type":"literal","text":"(","ignoreCase":false},{"type":"literal","text":"WITH","ignoreCase":true},{"type":"literal","text":"SELECT","ignoreCase":true},{"type":"end"}],"found":"I","location":{"start":{"offset":65,"line":2,"column":1},"end":{"offset":66,"line":2,"column":2}},"name":"SyntaxError"}
+[
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "t0"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "c0",
+        "type": {
+          "name": "Int32"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "c1",
+        "type": {
+          "name": "Int32"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "c2",
+        "type": {
+          "name": "String"
+        }
+      }
+    ],
+    "engine": {
+      "name": "Log",
+      "args": []
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "t0"
+      }
+    },
+    "columns": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "c0"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "c1"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "c2"
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "asterisk"
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "t0"
+    },
+    "format": "PrettyMonoBlock"
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "left",
+          "c2"
+        ]
+      }
+    ],
+    "from": {
+      "left": {
+        "kind": "tableRef",
+        "table": "t0",
+        "alias": "left"
+      },
+      "kind": "joinExpr",
+      "joinType": "LEFT",
+      "right": {
+        "kind": "tableRef",
+        "table": "t0",
+        "alias": "right_0"
+      },
+      "constraint": {
+        "kind": "on",
+        "expr": {
+          "kind": "binaryExpr",
+          "op": "=",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "left",
+              "c0"
+            ],
+            "parenthesized": true
+          },
+          "right": {
+            "kind": "columnRef",
+            "parts": [
+              "right_0",
+              "c1"
+            ],
+            "parenthesized": true
+          },
+          "parenthesized": true
+        }
+      }
+    },
+    "where": {
+      "kind": "functionCall",
+      "name": "abs",
+      "args": [
+        {
+          "kind": "functionCall",
+          "name": "negate",
+          "args": [
+            {
+              "kind": "functionCall",
+              "name": "sign",
+              "args": [
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "right_0",
+                    "c1"
+                  ]
+                }
+              ],
+              "parenthesized": true
+            }
+          ],
+          "parenthesized": true
+        }
+      ],
+      "parenthesized": true
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "SUM",
+        "args": [
+          {
+            "kind": "binaryExpr",
+            "op": "<>",
+            "left": {
+              "kind": "columnRef",
+              "parts": [
+                "check"
+              ]
+            },
+            "right": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "0"
+            }
+          }
+        ]
+      }
+    ],
+    "from": {
+      "kind": "subqueryFrom",
+      "query": {
+        "kind": "select",
+        "select": [
+          {
+            "kind": "alias",
+            "expr": {
+              "kind": "functionCall",
+              "name": "abs",
+              "args": [
+                {
+                  "kind": "functionCall",
+                  "name": "negate",
+                  "args": [
+                    {
+                      "kind": "functionCall",
+                      "name": "sign",
+                      "args": [
+                        {
+                          "kind": "columnRef",
+                          "parts": [
+                            "right_0",
+                            "c1"
+                          ]
+                        }
+                      ],
+                      "parenthesized": true
+                    }
+                  ],
+                  "parenthesized": true
+                }
+              ],
+              "parenthesized": true
+            },
+            "alias": "check"
+          }
+        ],
+        "from": {
+          "left": {
+            "kind": "tableRef",
+            "table": "t0",
+            "alias": "left"
+          },
+          "kind": "joinExpr",
+          "joinType": "LEFT",
+          "right": {
+            "kind": "tableRef",
+            "table": "t0",
+            "alias": "right_0"
+          },
+          "constraint": {
+            "kind": "on",
+            "expr": {
+              "kind": "binaryExpr",
+              "op": "=",
+              "left": {
+                "kind": "columnRef",
+                "parts": [
+                  "left",
+                  "c0"
+                ],
+                "parenthesized": true
+              },
+              "right": {
+                "kind": "columnRef",
+                "parts": [
+                  "right_0",
+                  "c1"
+                ],
+                "parenthesized": true
+              },
+              "parenthesized": true
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "abs",
+          "args": [
+            {
+              "kind": "functionCall",
+              "name": "negate",
+              "args": [
+                {
+                  "kind": "functionCall",
+                  "name": "sign",
+                  "args": [
+                    {
+                      "kind": "columnRef",
+                      "parts": [
+                        "right_0",
+                        "c1"
+                      ]
+                    }
+                  ],
+                  "parenthesized": true
+                }
+              ],
+              "parenthesized": true
+            }
+          ],
+          "parenthesized": true
+        },
+        "alias": "check"
+      }
+    ],
+    "from": {
+      "left": {
+        "kind": "tableRef",
+        "table": "t0",
+        "alias": "left"
+      },
+      "kind": "joinExpr",
+      "joinType": "LEFT",
+      "right": {
+        "kind": "tableRef",
+        "table": "t0",
+        "alias": "right_0"
+      },
+      "constraint": {
+        "kind": "on",
+        "expr": {
+          "kind": "binaryExpr",
+          "op": "=",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "left",
+              "c0"
+            ],
+            "parenthesized": true
+          },
+          "right": {
+            "kind": "columnRef",
+            "parts": [
+              "right_0",
+              "c1"
+            ],
+            "parenthesized": true
+          },
+          "parenthesized": true
+        }
+      }
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "abs",
+          "args": [
+            {
+              "kind": "functionCall",
+              "name": "negate",
+              "args": [
+                {
+                  "kind": "functionCall",
+                  "name": "sign",
+                  "args": [
+                    {
+                      "kind": "columnRef",
+                      "parts": [
+                        "right_0",
+                        "c1"
+                      ]
+                    }
+                  ],
+                  "parenthesized": true
+                }
+              ],
+              "parenthesized": true
+            }
+          ],
+          "parenthesized": true
+        },
+        "alias": "check"
+      }
+    ],
+    "from": {
+      "left": {
+        "kind": "tableRef",
+        "table": "t0",
+        "alias": "left"
+      },
+      "kind": "joinExpr",
+      "joinType": "LEFT",
+      "right": {
+        "kind": "tableRef",
+        "table": "t0",
+        "alias": "right_0"
+      },
+      "constraint": {
+        "kind": "on",
+        "expr": {
+          "kind": "binaryExpr",
+          "op": "=",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "left",
+              "c0"
+            ],
+            "parenthesized": true
+          },
+          "right": {
+            "kind": "columnRef",
+            "parts": [
+              "right_0",
+              "c1"
+            ],
+            "parenthesized": true
+          },
+          "parenthesized": true
+        }
+      }
+    },
+    "where": {
+      "kind": "binaryExpr",
+      "op": "<>",
+      "left": {
+        "kind": "columnRef",
+        "parts": [
+          "check"
+        ]
+      },
+      "right": {
+        "kind": "literal",
+        "type": "UInt64",
+        "value": "0"
+      }
+    }
+  }
+]

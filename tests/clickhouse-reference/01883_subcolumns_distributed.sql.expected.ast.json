@@ -1,1 +1,321 @@
-{"expected":[{"type":"literal","text":"EXPLAIN","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"REPLACE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"SET","ignoreCase":true},{"type":"literal","text":"SET","ignoreCase":true},{"type":"literal","text":"SET","ignoreCase":true},{"type":"literal","text":"USE","ignoreCase":true},{"type":"literal","text":"SYSTEM","ignoreCase":true},{"type":"literal","text":"(","ignoreCase":false},{"type":"literal","text":"WITH","ignoreCase":true},{"type":"literal","text":"SELECT","ignoreCase":true},{"type":"end"}],"found":"I","location":{"start":{"offset":279,"line":4,"column":1},"end":{"offset":280,"line":4,"column":2}},"name":"SyntaxError"}
+[
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "t_subcolumns_local"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "arr",
+        "type": {
+          "name": "Array",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "UInt32"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "n",
+        "type": {
+          "name": "Nullable",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "String"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "t",
+        "type": {
+          "name": "Tuple",
+          "args": [
+            {
+              "kind": "namedField",
+              "name": "s1",
+              "type": {
+                "name": "String"
+              }
+            },
+            {
+              "kind": "namedField",
+              "name": "s2",
+              "type": {
+                "name": "String"
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "functionCall",
+          "name": "tuple",
+          "args": []
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "t_subcolumns_dist"
+    },
+    "asTable": {
+      "kind": "tableRef",
+      "table": "t_subcolumns_local"
+    },
+    "engine": {
+      "name": "Distributed",
+      "args": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "test_cluster_two_shards"
+          ]
+        },
+        {
+          "kind": "functionCall",
+          "name": "currentDatabase",
+          "args": []
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "t_subcolumns_local"
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "t_subcolumns_local"
+      }
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "arr",
+          "size0"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "n",
+          "null"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "t",
+          "s1"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "t",
+          "s2"
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "t_subcolumns_dist"
+    }
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "t_subcolumns_local"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "arr",
+        "type": {
+          "name": "Array",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "UInt32"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "n",
+        "type": {
+          "name": "Nullable",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "String"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "t",
+        "type": {
+          "name": "Tuple",
+          "args": [
+            {
+              "kind": "namedField",
+              "name": "s1",
+              "type": {
+                "name": "String"
+              }
+            },
+            {
+              "kind": "namedField",
+              "name": "s2",
+              "type": {
+                "name": "String"
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "engine": {
+      "name": "StripeLog"
+    },
+    "leadingComments": [
+      "-- StripeLog doesn't support subcolumns."
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "arr",
+          "size0"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "n",
+          "null"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "t",
+          "s1"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "t",
+          "s2"
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "t_subcolumns_dist"
+    },
+    "settings": [
+      {
+        "name": "enable_analyzer",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "arr",
+          "size0"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "n",
+          "null"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "t",
+          "s1"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "t",
+          "s2"
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "t_subcolumns_dist"
+    },
+    "settings": [
+      {
+        "name": "enable_analyzer",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      }
+    ],
+    "trailingComments": [
+      "-- {serverError UNKNOWN_IDENTIFIER}"
+    ]
+  }
+]

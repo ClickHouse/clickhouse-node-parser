@@ -1,1 +1,294 @@
-{"expected":[{"type":"literal","text":"EXPLAIN","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"REPLACE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"SET","ignoreCase":true},{"type":"literal","text":"SET","ignoreCase":true},{"type":"literal","text":"SET","ignoreCase":true},{"type":"literal","text":"USE","ignoreCase":true},{"type":"literal","text":"SYSTEM","ignoreCase":true},{"type":"literal","text":"(","ignoreCase":false},{"type":"literal","text":"WITH","ignoreCase":true},{"type":"literal","text":"SELECT","ignoreCase":true},{"type":"end"}],"found":"I","location":{"start":{"offset":266,"line":10,"column":1},"end":{"offset":267,"line":10,"column":2}},"name":"SyntaxError"}
+[
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "test"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "id",
+        "type": {
+          "name": "Nullable",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "String"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "status",
+        "type": {
+          "name": "Nullable",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "Enum8",
+                "args": [
+                  {
+                    "kind": "enumValues",
+                    "values": [
+                      {
+                        "name": "NEW",
+                        "value": "0"
+                      },
+                      {
+                        "name": "CANCEL",
+                        "value": "1"
+                      }
+                    ]
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "nested.nestedType",
+        "type": {
+          "name": "Array",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "Nullable",
+                "args": [
+                  {
+                    "kind": "type",
+                    "type": {
+                      "name": "String"
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "partition",
+        "type": {
+          "name": "Date"
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree",
+      "args": []
+    },
+    "partitionBy": {
+      "kind": "columnRef",
+      "parts": [
+        "partition"
+      ]
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "partition"
+          ]
+        }
+      }
+    ],
+    "settings": [
+      {
+        "name": "index_granularity",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "8192"
+        }
+      }
+    ],
+    "settingsAfterOrderBy": true
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "test"
+      }
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "status"
+        ]
+      },
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "count",
+          "args": []
+        },
+        "alias": "all"
+      }
+    ],
+    "from": {
+      "left": {
+        "kind": "tableRef",
+        "table": "test"
+      },
+      "kind": "arrayJoinExpr",
+      "joinType": "ARRAY",
+      "expressions": [
+        {
+          "kind": "alias",
+          "expr": {
+            "kind": "columnRef",
+            "parts": [
+              "nested"
+            ]
+          },
+          "alias": "nestedJoined"
+        }
+      ]
+    },
+    "where": {
+      "kind": "naryExpr",
+      "op": "AND",
+      "operands": [
+        {
+          "kind": "inExpr",
+          "negated": false,
+          "expr": {
+            "kind": "columnRef",
+            "parts": [
+              "status"
+            ]
+          },
+          "values": {
+            "kind": "subqueryExpr",
+            "query": {
+              "kind": "select",
+              "select": [
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "status"
+                  ]
+                }
+              ],
+              "from": {
+                "left": {
+                  "kind": "tableRef",
+                  "table": "test"
+                },
+                "kind": "arrayJoinExpr",
+                "joinType": "ARRAY",
+                "expressions": [
+                  {
+                    "kind": "alias",
+                    "expr": {
+                      "kind": "columnRef",
+                      "parts": [
+                        "nested"
+                      ]
+                    },
+                    "alias": "nestedJoined"
+                  }
+                ]
+              },
+              "groupBy": {
+                "kind": "expressions",
+                "items": [
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "status"
+                    ]
+                  }
+                ]
+              },
+              "orderBy": [
+                {
+                  "kind": "orderByItem",
+                  "expr": {
+                    "kind": "functionCall",
+                    "name": "count",
+                    "args": []
+                  },
+                  "direction": "DESC"
+                }
+              ],
+              "limit": {
+                "count": {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "10"
+                }
+              }
+            }
+          },
+          "parenthesized": true
+        },
+        {
+          "kind": "inExpr",
+          "negated": false,
+          "expr": {
+            "kind": "columnRef",
+            "parts": [
+              "id"
+            ]
+          },
+          "values": [
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "1"
+            },
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "2"
+            }
+          ],
+          "parenthesized": true
+        }
+      ]
+    },
+    "groupBy": {
+      "kind": "expressions",
+      "items": [
+        {
+          "kind": "functionCall",
+          "name": "CUBE",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "status"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "limit": {
+      "count": {
+        "kind": "literal",
+        "type": "UInt64",
+        "value": "100"
+      }
+    }
+  }
+]

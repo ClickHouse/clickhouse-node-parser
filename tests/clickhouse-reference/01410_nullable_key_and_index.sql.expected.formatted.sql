@@ -1,1 +1,185 @@
-<Parse Error>
+SET max_threads = 1;
+
+SET optimize_read_in_order = 0;
+
+CREATE TABLE nullable_key
+(
+    k Nullable(int),
+    v int
+)
+ENGINE = MergeTree
+ORDER BY k
+SETTINGS allow_nullable_key = 1, index_granularity = 1;
+
+INSERT INTO nullable_key SELECT
+    number * 2,
+    number * 3
+FROM numbers(10);
+
+INSERT INTO nullable_key SELECT
+    NULL,
+    negate(number)
+FROM numbers(3);
+
+SELECT *
+FROM nullable_key
+ORDER BY
+    k ASC,
+    v ASC;
+
+SET force_primary_key = 1;
+
+SET max_rows_to_read = 3;
+
+SELECT *
+FROM nullable_key
+WHERE isNull(k);
+
+SET max_rows_to_read = 10;
+
+SELECT *
+FROM nullable_key
+WHERE isNotNull(k);
+
+SET max_rows_to_read = 5;
+
+SELECT *
+FROM nullable_key
+WHERE k > 10;
+
+SELECT *
+FROM nullable_key
+WHERE k < 10;
+
+SET max_rows_to_read = 4; -- one additional left mark needs to be read
+
+SELECT *
+FROM nullable_key
+WHERE k IN (10, 20)
+SETTINGS transform_null_in = 1;
+
+SELECT *
+FROM nullable_key
+WHERE k IN (3, NULL)
+SETTINGS transform_null_in = 1;
+
+CREATE TABLE nullable_key_without_final_mark
+(
+    s Nullable(String)
+)
+ENGINE = MergeTree
+ORDER BY s
+SETTINGS allow_nullable_key = 1, write_final_mark = 0;
+
+INSERT INTO nullable_key_without_final_mark;
+
+SET max_rows_to_read = 0;
+
+SELECT *
+FROM nullable_key_without_final_mark
+WHERE isNull(s);
+
+SELECT *
+FROM nullable_key_without_final_mark
+WHERE isNotNull(s);
+
+CREATE TABLE nullable_minmax_index
+(
+    k int,
+    v Nullable(int),
+    INDEX v_minmax v TYPE minmax GRANULARITY 4
+)
+ENGINE = MergeTree
+ORDER BY k
+SETTINGS index_granularity = 1;
+
+INSERT INTO nullable_minmax_index; -- [3, +Inf]
+
+INSERT INTO nullable_minmax_index; -- [1, 2]
+
+INSERT INTO nullable_minmax_index; -- [+Inf, +Inf]
+
+SET force_primary_key = 0;
+
+SELECT *
+FROM nullable_minmax_index
+ORDER BY
+    k ASC,
+    v ASC;
+
+SET max_rows_to_read = 6;
+
+SELECT *
+FROM nullable_minmax_index
+WHERE isNull(v);
+
+SET max_rows_to_read = 8;
+
+SELECT *
+FROM nullable_minmax_index
+WHERE isNotNull(v);
+
+SELECT *
+FROM nullable_minmax_index
+WHERE v > 2;
+
+SELECT *
+FROM nullable_minmax_index
+WHERE v <= 2;
+
+CREATE TABLE xxxx_null
+(
+    ts Nullable(DateTime)
+)
+ENGINE = MergeTree
+ORDER BY toStartOfHour(ts)
+SETTINGS allow_nullable_key = 1;
+
+INSERT INTO xxxx_null SELECT '2021-11-11 00:00:00';
+
+SELECT *
+FROM xxxx_null
+WHERE ts > '2021-10-11 00:00:00';
+
+-- nullable keys are forbidden when `allow_nullable_key = 0`
+CREATE TABLE invalid_null
+(
+    id Nullable(String)
+)
+ENGINE = MergeTree
+ORDER BY id; -- { serverError ILLEGAL_COLUMN }
+
+CREATE TABLE invalid_lc_null
+(
+    id LowCardinality(Nullable(String))
+)
+ENGINE = MergeTree
+ORDER BY id; -- { serverError ILLEGAL_COLUMN }
+
+CREATE TABLE invalid_array_null
+(
+    id Array(Nullable(String))
+)
+ENGINE = MergeTree
+ORDER BY id; -- { serverError ILLEGAL_COLUMN }
+
+CREATE TABLE invalid_tuple_null
+(
+    id Tuple(Nullable(String), UInt8)
+)
+ENGINE = MergeTree
+ORDER BY id; -- { serverError ILLEGAL_COLUMN }
+
+CREATE TABLE invalid_map_null
+(
+    id Map(UInt8, Nullable(String))
+)
+ENGINE = MergeTree
+ORDER BY id; -- { serverError ILLEGAL_COLUMN }
+
+CREATE TABLE invalid_simple_agg_state_null
+(
+    id SimpleAggregateFunction(sum, Nullable(UInt64))
+)
+ENGINE = MergeTree
+ORDER BY id; -- { serverError DATA_TYPE_CANNOT_BE_USED_IN_KEY }

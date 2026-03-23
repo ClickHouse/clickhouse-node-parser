@@ -1,1 +1,15 @@
-<Parse Error>
+CREATE TEMPORARY TABLE test_00707
+(
+    x Float32,
+    y Float64,
+    z UInt64,
+    s String
+);
+
+INSERT INTO test_00707;
+
+INSERT INTO test_00707;
+
+INSERT INTO test_00707;
+
+INSERT INTO test_00707;

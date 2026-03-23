@@ -1,1 +1,756 @@
-{"expected":[{"type":"literal","text":"EXPLAIN","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"REPLACE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"SET","ignoreCase":true},{"type":"literal","text":"SET","ignoreCase":true},{"type":"literal","text":"SET","ignoreCase":true},{"type":"literal","text":"USE","ignoreCase":true},{"type":"literal","text":"SYSTEM","ignoreCase":true},{"type":"literal","text":"(","ignoreCase":false},{"type":"literal","text":"WITH","ignoreCase":true},{"type":"literal","text":"SELECT","ignoreCase":true},{"type":"end"}],"found":"i","location":{"start":{"offset":146,"line":2,"column":1},"end":{"offset":147,"line":2,"column":2}},"name":"SyntaxError"}
+[
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "prewhere_alias"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "a",
+        "type": {
+          "name": "UInt8"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "b",
+        "type": {
+          "name": "Int32"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "c",
+        "type": {
+          "name": "UInt8"
+        },
+        "defaultKind": "ALIAS",
+        "defaultExpr": {
+          "kind": "columnRef",
+          "parts": [
+            "a"
+          ]
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "d",
+        "type": {
+          "name": "Int64"
+        },
+        "defaultKind": "ALIAS",
+        "defaultExpr": {
+          "kind": "binaryExpr",
+          "op": "+",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "b"
+            ]
+          },
+          "right": {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "1"
+          }
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "e",
+        "type": {
+          "name": "Int32"
+        },
+        "defaultKind": "ALIAS",
+        "defaultExpr": {
+          "kind": "binaryExpr",
+          "op": "+",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "a"
+            ]
+          },
+          "right": {
+            "kind": "columnRef",
+            "parts": [
+              "b"
+            ]
+          }
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "functionCall",
+          "name": "tuple",
+          "args": []
+        }
+      }
+    ]
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "prewhere_alias"
+      }
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "a"
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "prewhere_alias"
+    },
+    "prewhere": {
+      "kind": "binaryExpr",
+      "op": "=",
+      "left": {
+        "kind": "columnRef",
+        "parts": [
+          "a"
+        ]
+      },
+      "right": {
+        "kind": "literal",
+        "type": "UInt64",
+        "value": "1"
+      }
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "b"
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "prewhere_alias"
+    },
+    "prewhere": {
+      "kind": "binaryExpr",
+      "op": "=",
+      "left": {
+        "kind": "columnRef",
+        "parts": [
+          "a"
+        ]
+      },
+      "right": {
+        "kind": "literal",
+        "type": "UInt64",
+        "value": "1"
+      }
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "c"
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "prewhere_alias"
+    },
+    "prewhere": {
+      "kind": "binaryExpr",
+      "op": "=",
+      "left": {
+        "kind": "columnRef",
+        "parts": [
+          "a"
+        ]
+      },
+      "right": {
+        "kind": "literal",
+        "type": "UInt64",
+        "value": "1"
+      }
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "d"
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "prewhere_alias"
+    },
+    "prewhere": {
+      "kind": "binaryExpr",
+      "op": "=",
+      "left": {
+        "kind": "columnRef",
+        "parts": [
+          "a"
+        ]
+      },
+      "right": {
+        "kind": "literal",
+        "type": "UInt64",
+        "value": "1"
+      }
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "a"
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "prewhere_alias"
+    },
+    "prewhere": {
+      "kind": "binaryExpr",
+      "op": "=",
+      "left": {
+        "kind": "columnRef",
+        "parts": [
+          "b"
+        ]
+      },
+      "right": {
+        "kind": "literal",
+        "type": "UInt64",
+        "value": "1"
+      }
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "b"
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "prewhere_alias"
+    },
+    "prewhere": {
+      "kind": "binaryExpr",
+      "op": "=",
+      "left": {
+        "kind": "columnRef",
+        "parts": [
+          "b"
+        ]
+      },
+      "right": {
+        "kind": "literal",
+        "type": "UInt64",
+        "value": "1"
+      }
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "c"
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "prewhere_alias"
+    },
+    "prewhere": {
+      "kind": "binaryExpr",
+      "op": "=",
+      "left": {
+        "kind": "columnRef",
+        "parts": [
+          "b"
+        ]
+      },
+      "right": {
+        "kind": "literal",
+        "type": "UInt64",
+        "value": "1"
+      }
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "d"
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "prewhere_alias"
+    },
+    "prewhere": {
+      "kind": "binaryExpr",
+      "op": "=",
+      "left": {
+        "kind": "columnRef",
+        "parts": [
+          "b"
+        ]
+      },
+      "right": {
+        "kind": "literal",
+        "type": "UInt64",
+        "value": "1"
+      }
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "a"
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "prewhere_alias"
+    },
+    "prewhere": {
+      "kind": "binaryExpr",
+      "op": "=",
+      "left": {
+        "kind": "columnRef",
+        "parts": [
+          "c"
+        ]
+      },
+      "right": {
+        "kind": "literal",
+        "type": "UInt64",
+        "value": "1"
+      }
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "b"
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "prewhere_alias"
+    },
+    "prewhere": {
+      "kind": "binaryExpr",
+      "op": "=",
+      "left": {
+        "kind": "columnRef",
+        "parts": [
+          "c"
+        ]
+      },
+      "right": {
+        "kind": "literal",
+        "type": "UInt64",
+        "value": "1"
+      }
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "c"
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "prewhere_alias"
+    },
+    "prewhere": {
+      "kind": "binaryExpr",
+      "op": "=",
+      "left": {
+        "kind": "columnRef",
+        "parts": [
+          "c"
+        ]
+      },
+      "right": {
+        "kind": "literal",
+        "type": "UInt64",
+        "value": "1"
+      }
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "d"
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "prewhere_alias"
+    },
+    "prewhere": {
+      "kind": "binaryExpr",
+      "op": "=",
+      "left": {
+        "kind": "columnRef",
+        "parts": [
+          "c"
+        ]
+      },
+      "right": {
+        "kind": "literal",
+        "type": "UInt64",
+        "value": "1"
+      }
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "a"
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "prewhere_alias"
+    },
+    "prewhere": {
+      "kind": "binaryExpr",
+      "op": "=",
+      "left": {
+        "kind": "columnRef",
+        "parts": [
+          "d"
+        ]
+      },
+      "right": {
+        "kind": "literal",
+        "type": "UInt64",
+        "value": "2"
+      }
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "b"
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "prewhere_alias"
+    },
+    "prewhere": {
+      "kind": "binaryExpr",
+      "op": "=",
+      "left": {
+        "kind": "columnRef",
+        "parts": [
+          "d"
+        ]
+      },
+      "right": {
+        "kind": "literal",
+        "type": "UInt64",
+        "value": "2"
+      }
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "c"
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "prewhere_alias"
+    },
+    "prewhere": {
+      "kind": "binaryExpr",
+      "op": "=",
+      "left": {
+        "kind": "columnRef",
+        "parts": [
+          "d"
+        ]
+      },
+      "right": {
+        "kind": "literal",
+        "type": "UInt64",
+        "value": "2"
+      }
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "d"
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "prewhere_alias"
+    },
+    "prewhere": {
+      "kind": "binaryExpr",
+      "op": "=",
+      "left": {
+        "kind": "columnRef",
+        "parts": [
+          "d"
+        ]
+      },
+      "right": {
+        "kind": "literal",
+        "type": "UInt64",
+        "value": "2"
+      }
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "a"
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "prewhere_alias"
+    },
+    "prewhere": {
+      "kind": "columnRef",
+      "parts": [
+        "a"
+      ]
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "b"
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "prewhere_alias"
+    },
+    "prewhere": {
+      "kind": "columnRef",
+      "parts": [
+        "a"
+      ]
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "c"
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "prewhere_alias"
+    },
+    "prewhere": {
+      "kind": "columnRef",
+      "parts": [
+        "a"
+      ]
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "d"
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "prewhere_alias"
+    },
+    "prewhere": {
+      "kind": "columnRef",
+      "parts": [
+        "a"
+      ]
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "a"
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "prewhere_alias"
+    },
+    "prewhere": {
+      "kind": "columnRef",
+      "parts": [
+        "c"
+      ]
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "b"
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "prewhere_alias"
+    },
+    "prewhere": {
+      "kind": "columnRef",
+      "parts": [
+        "c"
+      ]
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "c"
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "prewhere_alias"
+    },
+    "prewhere": {
+      "kind": "columnRef",
+      "parts": [
+        "c"
+      ]
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "d"
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "prewhere_alias"
+    },
+    "prewhere": {
+      "kind": "columnRef",
+      "parts": [
+        "c"
+      ]
+    }
+  }
+]

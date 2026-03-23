@@ -1,1 +1,376 @@
-{"expected":[{"type":"literal","text":"EXPLAIN","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"REPLACE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"SET","ignoreCase":true},{"type":"literal","text":"SET","ignoreCase":true},{"type":"literal","text":"SET","ignoreCase":true},{"type":"literal","text":"USE","ignoreCase":true},{"type":"literal","text":"SYSTEM","ignoreCase":true},{"type":"literal","text":"(","ignoreCase":false},{"type":"literal","text":"WITH","ignoreCase":true},{"type":"literal","text":"SELECT","ignoreCase":true},{"type":"end"}],"found":"I","location":{"start":{"offset":271,"line":8,"column":1},"end":{"offset":272,"line":8,"column":2}},"name":"SyntaxError"}
+[
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "dst_sparse"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "id",
+        "type": {
+          "name": "Int64"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "budget",
+        "type": {
+          "name": "Tuple",
+          "args": [
+            {
+              "kind": "namedField",
+              "name": "currencyCode",
+              "type": {
+                "name": "String"
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "id"
+          ]
+        }
+      }
+    ],
+    "settings": [
+      {
+        "name": "ratio_of_defaults_for_sparse_serialization",
+        "value": {
+          "kind": "literal",
+          "type": "Float64",
+          "value": "0.9"
+        }
+      },
+      {
+        "name": "serialization_info_version",
+        "value": {
+          "kind": "literal",
+          "type": "String",
+          "value": "basic"
+        }
+      }
+    ],
+    "settingsAfterOrderBy": true,
+    "asQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "number"
+          ]
+        },
+        {
+          "kind": "functionCall",
+          "name": "arrayJoin",
+          "args": [
+            {
+              "kind": "arrayLiteral",
+              "elements": [
+                {
+                  "kind": "functionCall",
+                  "name": "tuple",
+                  "args": [
+                    {
+                      "kind": "literal",
+                      "type": "String",
+                      "value": ""
+                    }
+                  ]
+                }
+              ],
+              "source": "[tuple('')]"
+            }
+          ]
+        }
+      ],
+      "from": {
+        "kind": "tableFunctionRef",
+        "name": "numbers",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "999"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "dst_sparse"
+      }
+    }
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "mytable_sparse"
+    },
+    "engine": {
+      "name": "MergeTree"
+    },
+    "asQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "id"
+          ]
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "budget"
+          ]
+        }
+      ],
+      "from": {
+        "kind": "tableRef",
+        "table": "dst_sparse"
+      }
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "id"
+          ]
+        }
+      }
+    ],
+    "settings": [
+      {
+        "name": "ratio_of_defaults_for_sparse_serialization",
+        "value": {
+          "kind": "literal",
+          "type": "Float64",
+          "value": "1.0"
+        }
+      },
+      {
+        "name": "serialization_info_version",
+        "value": {
+          "kind": "literal",
+          "type": "String",
+          "value": "basic"
+        }
+      }
+    ],
+    "settingsAfterOrderBy": true
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "count",
+        "args": []
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "mytable_sparse"
+    }
+  },
+  {
+    "kind": "select",
+    "distinct": {
+      "kind": "distinct"
+    },
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "table"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "column"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "serialization_kind"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "subcolumns",
+          "names"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "subcolumns",
+          "serializations"
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "database": "system",
+      "table": "parts_columns"
+    },
+    "where": {
+      "kind": "naryExpr",
+      "op": "AND",
+      "operands": [
+        {
+          "kind": "binaryExpr",
+          "op": "=",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "database"
+            ]
+          },
+          "right": {
+            "kind": "functionCall",
+            "name": "currentDatabase",
+            "args": []
+          }
+        },
+        {
+          "kind": "inExpr",
+          "negated": false,
+          "expr": {
+            "kind": "columnRef",
+            "parts": [
+              "table"
+            ]
+          },
+          "values": [
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "dst_sparse"
+            },
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "mytable_sparse"
+            }
+          ]
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "active"
+          ]
+        },
+        {
+          "kind": "binaryExpr",
+          "op": "=",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "column"
+            ]
+          },
+          "right": {
+            "kind": "literal",
+            "type": "String",
+            "value": "budget"
+          }
+        }
+      ]
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "table"
+          ]
+        },
+        "direction": "ASC"
+      }
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "mytable_sparse"
+    },
+    "engine": {
+      "name": "MergeTree"
+    },
+    "asQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "id"
+          ]
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "budget"
+          ]
+        }
+      ],
+      "from": {
+        "kind": "tableRef",
+        "table": "dst_sparse"
+      }
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "id"
+          ]
+        }
+      }
+    ],
+    "settings": [
+      {
+        "name": "ratio_of_defaults_for_sparse_serialization",
+        "value": {
+          "kind": "literal",
+          "type": "Float64",
+          "value": "0.9"
+        }
+      },
+      {
+        "name": "serialization_info_version",
+        "value": {
+          "kind": "literal",
+          "type": "String",
+          "value": "basic"
+        }
+      }
+    ],
+    "settingsAfterOrderBy": true
+  }
+]

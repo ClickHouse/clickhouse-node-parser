@@ -1,1 +1,18 @@
-<Parse Error>
+CREATE TABLE DATE_INFO_DICT
+(
+    TV Date,
+    SHAMSI String,
+    HIJRI String,
+    MILADI String,
+    S_DAY UInt8,
+    H_DAY UInt8,
+    S_MONTH UInt8,
+    H_MONTH UInt8,
+    WEEK_DAY_NAME String,
+    DAY_NUMBER UInt8,
+    HOLIDAY UInt8,
+    WEEK_NAME String
+)
+ENGINE = Join(`ANY`, `LEFT`, TV);
+
+INSERT INTO DATE_INFO_DICT (TV, SHAMSI, HIJRI, MILADI, S_DAY, H_DAY, S_MONTH, H_MONTH, WEEK_DAY_NAME, DAY_NUMBER, HOLIDAY, WEEK_NAME);

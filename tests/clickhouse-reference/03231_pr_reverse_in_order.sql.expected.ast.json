@@ -1,1 +1,810 @@
-{"expected":[{"type":"literal","text":"EXPLAIN","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"REPLACE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"SET","ignoreCase":true},{"type":"literal","text":"SET","ignoreCase":true},{"type":"literal","text":"SET","ignoreCase":true},{"type":"literal","text":"USE","ignoreCase":true},{"type":"literal","text":"SYSTEM","ignoreCase":true},{"type":"literal","text":"(","ignoreCase":false},{"type":"literal","text":"WITH","ignoreCase":true},{"type":"literal","text":"SELECT","ignoreCase":true},{"type":"end"}],"found":"I","location":{"start":{"offset":325,"line":11,"column":1},"end":{"offset":326,"line":11,"column":2}},"name":"SyntaxError"}
+[
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "checks"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "check_name",
+        "type": {
+          "name": "LowCardinality",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "String"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "check_status",
+        "type": {
+          "name": "LowCardinality",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "String"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "check_start_time",
+        "type": {
+          "name": "DateTime"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "test_name",
+        "type": {
+          "name": "LowCardinality",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "String"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "test_status",
+        "type": {
+          "name": "LowCardinality",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "String"
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "engine": {
+      "name": "ReplicatedMergeTree",
+      "args": [
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "/clickhouse/{database}/checks"
+        },
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "{replica}"
+        }
+      ]
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "check_start_time"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "checks"
+      }
+    },
+    "selectQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "asan"
+        },
+        {
+          "kind": "functionCall",
+          "name": "if",
+          "args": [
+            {
+              "kind": "binaryExpr",
+              "op": "%",
+              "left": {
+                "kind": "columnRef",
+                "parts": [
+                  "number"
+                ]
+              },
+              "right": {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "2"
+              }
+            },
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "success"
+            },
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "fail"
+            }
+          ]
+        },
+        {
+          "kind": "binaryExpr",
+          "op": "+",
+          "left": {
+            "kind": "functionCall",
+            "name": "toDateTime",
+            "args": [
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "2024-06-07 00:00:01"
+              }
+            ]
+          },
+          "right": {
+            "kind": "functionCall",
+            "name": "toIntervalHour",
+            "args": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "number"
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "02221_parallel_replicas_bug"
+        },
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "FAIL"
+        }
+      ],
+      "from": {
+        "kind": "tableFunctionRef",
+        "name": "numbers",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "100"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "checks"
+      }
+    },
+    "selectQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "asan"
+        },
+        {
+          "kind": "functionCall",
+          "name": "if",
+          "args": [
+            {
+              "kind": "binaryExpr",
+              "op": "%",
+              "left": {
+                "kind": "columnRef",
+                "parts": [
+                  "number"
+                ]
+              },
+              "right": {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "2"
+              }
+            },
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "success"
+            },
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "fail"
+            }
+          ]
+        },
+        {
+          "kind": "binaryExpr",
+          "op": "+",
+          "left": {
+            "kind": "functionCall",
+            "name": "toDateTime",
+            "args": [
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "2024-06-06 00:00:02"
+              }
+            ]
+          },
+          "right": {
+            "kind": "functionCall",
+            "name": "toIntervalHour",
+            "args": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "number"
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "02221_parallel_replicas_bug"
+        },
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "FAIL"
+        }
+      ],
+      "from": {
+        "kind": "tableFunctionRef",
+        "name": "numbers",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "100"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "checks"
+      }
+    },
+    "selectQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "asan"
+        },
+        {
+          "kind": "functionCall",
+          "name": "if",
+          "args": [
+            {
+              "kind": "binaryExpr",
+              "op": "%",
+              "left": {
+                "kind": "columnRef",
+                "parts": [
+                  "number"
+                ]
+              },
+              "right": {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "2"
+              }
+            },
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "success"
+            },
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "fail"
+            }
+          ]
+        },
+        {
+          "kind": "binaryExpr",
+          "op": "+",
+          "left": {
+            "kind": "functionCall",
+            "name": "toDateTime",
+            "args": [
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "2024-06-05 00:00:03"
+              }
+            ]
+          },
+          "right": {
+            "kind": "functionCall",
+            "name": "toIntervalHour",
+            "args": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "number"
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "02221_parallel_replicas_bug"
+        },
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "FAIL"
+        }
+      ],
+      "from": {
+        "kind": "tableFunctionRef",
+        "name": "numbers",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "100"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "trimBoth",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "explain"
+            ]
+          }
+        ]
+      }
+    ],
+    "from": {
+      "kind": "subqueryFrom",
+      "query": {
+        "kind": "explain",
+        "settings": [
+          {
+            "name": "actions",
+            "value": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "1"
+            }
+          }
+        ],
+        "query": {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "check_start_time"
+              ]
+            },
+            {
+              "kind": "columnRef",
+              "parts": [
+                "check_name"
+              ]
+            },
+            {
+              "kind": "columnRef",
+              "parts": [
+                "test_name"
+              ]
+            },
+            {
+              "kind": "columnRef",
+              "parts": [
+                "test_status"
+              ]
+            },
+            {
+              "kind": "columnRef",
+              "parts": [
+                "check_status"
+              ]
+            }
+          ],
+          "from": {
+            "kind": "tableRef",
+            "table": "checks"
+          },
+          "where": {
+            "kind": "naryExpr",
+            "op": "AND",
+            "operands": [
+              {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "1"
+              },
+              {
+                "kind": "binaryExpr",
+                "op": "!=",
+                "left": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "test_status"
+                  ]
+                },
+                "right": {
+                  "kind": "literal",
+                  "type": "String",
+                  "value": "SKIPPED"
+                },
+                "parenthesized": true
+              },
+              {
+                "kind": "binaryExpr",
+                "op": "!=",
+                "left": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "test_status"
+                  ]
+                },
+                "right": {
+                  "kind": "literal",
+                  "type": "String",
+                  "value": "OK"
+                },
+                "parenthesized": true
+              },
+              {
+                "kind": "binaryExpr",
+                "op": "!=",
+                "left": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "check_status"
+                  ]
+                },
+                "right": {
+                  "kind": "literal",
+                  "type": "String",
+                  "value": "success"
+                },
+                "parenthesized": true
+              },
+              {
+                "kind": "functionCall",
+                "name": "ilike",
+                "args": [
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "test_name"
+                    ]
+                  },
+                  {
+                    "kind": "literal",
+                    "type": "String",
+                    "value": "%parallel_replicas%"
+                  }
+                ],
+                "parenthesized": true
+              }
+            ]
+          },
+          "orderBy": [
+            {
+              "kind": "orderByItem",
+              "expr": {
+                "kind": "columnRef",
+                "parts": [
+                  "check_start_time"
+                ]
+              },
+              "direction": "DESC"
+            },
+            {
+              "kind": "orderByItem",
+              "expr": {
+                "kind": "columnRef",
+                "parts": [
+                  "check_name"
+                ]
+              },
+              "direction": "ASC"
+            },
+            {
+              "kind": "orderByItem",
+              "expr": {
+                "kind": "columnRef",
+                "parts": [
+                  "test_name"
+                ]
+              },
+              "direction": "ASC"
+            }
+          ],
+          "settings": [
+            {
+              "name": "query_plan_read_in_order",
+              "value": {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "1"
+              }
+            },
+            {
+              "name": "optimize_read_in_order",
+              "value": {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "1"
+              }
+            },
+            {
+              "name": "max_parallel_replicas",
+              "value": {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "1"
+              }
+            }
+          ]
+        }
+      }
+    },
+    "where": {
+      "kind": "functionCall",
+      "name": "like",
+      "args": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "explain"
+          ]
+        },
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "%InReverseOrder%"
+        }
+      ]
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "check_start_time"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "check_name"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "test_name"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "test_status"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "check_status"
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "checks"
+    },
+    "where": {
+      "kind": "naryExpr",
+      "op": "AND",
+      "operands": [
+        {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        },
+        {
+          "kind": "binaryExpr",
+          "op": "!=",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "test_status"
+            ]
+          },
+          "right": {
+            "kind": "literal",
+            "type": "String",
+            "value": "SKIPPED"
+          }
+        },
+        {
+          "kind": "binaryExpr",
+          "op": "!=",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "test_status"
+            ]
+          },
+          "right": {
+            "kind": "literal",
+            "type": "String",
+            "value": "OK"
+          }
+        },
+        {
+          "kind": "binaryExpr",
+          "op": "!=",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "check_status"
+            ]
+          },
+          "right": {
+            "kind": "literal",
+            "type": "String",
+            "value": "success"
+          }
+        },
+        {
+          "kind": "functionCall",
+          "name": "ilike",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "test_name"
+              ]
+            },
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "%parallel_replicas%"
+            }
+          ]
+        }
+      ]
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "check_start_time"
+          ]
+        },
+        "direction": "DESC"
+      },
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "check_name"
+          ]
+        },
+        "direction": "ASC"
+      },
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "test_name"
+          ]
+        },
+        "direction": "ASC"
+      }
+    ],
+    "settings": [
+      {
+        "name": "query_plan_read_in_order",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      },
+      {
+        "name": "optimize_read_in_order",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      },
+      {
+        "name": "allow_experimental_parallel_reading_from_replicas",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      },
+      {
+        "name": "cluster_for_parallel_replicas",
+        "value": {
+          "kind": "literal",
+          "type": "String",
+          "value": "test_cluster_one_shard_three_replicas_localhost"
+        }
+      },
+      {
+        "name": "max_parallel_replicas",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "3"
+        }
+      }
+    ]
+  }
+]

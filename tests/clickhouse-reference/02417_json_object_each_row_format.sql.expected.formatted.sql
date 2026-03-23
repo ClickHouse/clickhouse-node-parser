@@ -1,1 +1,19 @@
-<Parse Error>
+-- Tags: no-parallel, no-fasttest
+SET input_format_json_try_infer_numbers_from_strings = 1;
+
+SELECT
+    number,
+    'Hello' AS str,
+    range(number) AS arr
+FROM numbers(3)
+FORMAT JSONObjectEachRow;
+
+INSERT INTO FUNCTION file(`02417_data`.jsonObjectEachRow) SELECT
+    number,
+    'Hello' AS str,
+    range(number) AS arr
+FROM numbers(3)
+SETTINGS engine_file_truncate_on_insert = 1;
+
+SELECT *
+FROM file(`02417_data`.jsonObjectEachRow);

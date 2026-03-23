@@ -1,1 +1,58 @@
-<Parse Error>
+CREATE TABLE t_00818
+(
+    a Nullable(Int64),
+    b Nullable(Int64),
+    c Nullable(String)
+)
+ENGINE = Memory;
+
+CREATE TABLE s_00818
+(
+    a Nullable(Int64),
+    b Nullable(Int64),
+    c Nullable(String)
+)
+ENGINE = Memory;
+
+INSERT INTO t_00818;
+
+INSERT INTO s_00818;
+
+SELECT *
+FROM
+    t_00818
+LEFT JOIN s_00818
+    ON t_00818.a = s_00818.a
+ORDER BY t_00818.a ASC;
+
+SELECT *
+FROM
+    t_00818
+LEFT JOIN s_00818
+    ON t_00818.a = s_00818.a
+    AND t_00818.a = s_00818.b
+ORDER BY t_00818.a ASC;
+
+SELECT *
+FROM
+    t_00818
+LEFT JOIN s_00818
+    ON t_00818.a = s_00818.a
+WHERE s_00818.a = 1
+ORDER BY t_00818.a ASC;
+
+SELECT *
+FROM
+    t_00818
+LEFT JOIN s_00818
+    ON t_00818.a = s_00818.a
+    AND t_00818.a = s_00818.a
+ORDER BY t_00818.a ASC;
+
+SELECT *
+FROM
+    t_00818
+LEFT JOIN s_00818
+    ON t_00818.a = s_00818.a
+    AND t_00818.b = s_00818.a
+ORDER BY t_00818.a ASC;

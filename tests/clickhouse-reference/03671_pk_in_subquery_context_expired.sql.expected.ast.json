@@ -1,1 +1,521 @@
-{"expected":[{"type":"literal","text":"EXPLAIN","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"REPLACE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"SET","ignoreCase":true},{"type":"literal","text":"SET","ignoreCase":true},{"type":"literal","text":"SET","ignoreCase":true},{"type":"literal","text":"USE","ignoreCase":true},{"type":"literal","text":"SYSTEM","ignoreCase":true},{"type":"literal","text":"(","ignoreCase":false},{"type":"literal","text":"WITH","ignoreCase":true},{"type":"literal","text":"SELECT","ignoreCase":true},{"type":"end"}],"found":"I","location":{"start":{"offset":146,"line":9,"column":1},"end":{"offset":147,"line":9,"column":2}},"name":"SyntaxError"}
+[
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "tbl"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "id1",
+        "type": {
+          "name": "LowCardinality",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "String"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "id2",
+        "type": {
+          "name": "LowCardinality",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "String"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "v",
+        "type": {
+          "name": "Int64"
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "id1"
+          ]
+        }
+      },
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "id2"
+          ]
+        }
+      },
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "v"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "tbl"
+      }
+    }
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "join_engine"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "id1",
+        "type": {
+          "name": "LowCardinality",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "String"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "id2",
+        "type": {
+          "name": "LowCardinality",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "String"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "v",
+        "type": {
+          "name": "Int64"
+        }
+      }
+    ],
+    "engine": {
+      "name": "Join",
+      "args": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "ANY"
+          ]
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "LEFT"
+          ]
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "id1"
+          ]
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "id2"
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "join_engine"
+      }
+    }
+  },
+  {
+    "kind": "union",
+    "queries": [
+      {
+        "kind": "select",
+        "select": [
+          {
+            "kind": "alias",
+            "expr": {
+              "kind": "functionCall",
+              "name": "uniq",
+              "args": [
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "id2"
+                  ]
+                }
+              ]
+            },
+            "alias": "count"
+          }
+        ],
+        "from": {
+          "kind": "subqueryFrom",
+          "query": {
+            "kind": "select",
+            "with": [
+              {
+                "kind": "cteSubquery",
+                "name": "cte",
+                "query": {
+                  "kind": "select",
+                  "select": [
+                    {
+                      "kind": "columnRef",
+                      "parts": [
+                        "id2"
+                      ]
+                    }
+                  ],
+                  "from": {
+                    "kind": "tableRef",
+                    "table": "tbl"
+                  },
+                  "where": {
+                    "kind": "binaryExpr",
+                    "op": "=",
+                    "left": {
+                      "kind": "functionCall",
+                      "name": "joinGet",
+                      "args": [
+                        {
+                          "kind": "functionCall",
+                          "name": "concat",
+                          "args": [
+                            {
+                              "kind": "functionCall",
+                              "name": "currentDatabase",
+                              "args": []
+                            },
+                            {
+                              "kind": "literal",
+                              "type": "String",
+                              "value": ".join_engine"
+                            }
+                          ]
+                        },
+                        {
+                          "kind": "literal",
+                          "type": "String",
+                          "value": "v"
+                        },
+                        {
+                          "kind": "columnRef",
+                          "parts": [
+                            "id1"
+                          ]
+                        },
+                        {
+                          "kind": "columnRef",
+                          "parts": [
+                            "id2"
+                          ]
+                        }
+                      ]
+                    },
+                    "right": {
+                      "kind": "columnRef",
+                      "parts": [
+                        "tbl",
+                        "v"
+                      ]
+                    }
+                  }
+                }
+              }
+            ],
+            "select": [
+              {
+                "kind": "asterisk"
+              }
+            ],
+            "from": {
+              "kind": "tableRef",
+              "table": "tbl",
+              "alias": "e"
+            },
+            "where": {
+              "kind": "binaryExpr",
+              "op": "=",
+              "left": {
+                "kind": "functionCall",
+                "name": "joinGet",
+                "args": [
+                  {
+                    "kind": "functionCall",
+                    "name": "concat",
+                    "args": [
+                      {
+                        "kind": "functionCall",
+                        "name": "currentDatabase",
+                        "args": []
+                      },
+                      {
+                        "kind": "literal",
+                        "type": "String",
+                        "value": ".join_engine"
+                      }
+                    ]
+                  },
+                  {
+                    "kind": "literal",
+                    "type": "String",
+                    "value": "v"
+                  },
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "id1"
+                    ]
+                  },
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "id2"
+                    ]
+                  }
+                ]
+              },
+              "right": {
+                "kind": "columnRef",
+                "parts": [
+                  "e",
+                  "v"
+                ]
+              }
+            }
+          }
+        },
+        "where": {
+          "kind": "inExpr",
+          "negated": false,
+          "expr": {
+            "kind": "columnRef",
+            "parts": [
+              "id2"
+            ]
+          },
+          "values": {
+            "kind": "subqueryExpr",
+            "query": {
+              "kind": "select",
+              "select": [
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "id2"
+                  ]
+                }
+              ],
+              "from": {
+                "kind": "subqueryFrom",
+                "query": {
+                  "kind": "select",
+                  "select": [
+                    {
+                      "kind": "columnRef",
+                      "parts": [
+                        "id2"
+                      ]
+                    }
+                  ],
+                  "from": {
+                    "kind": "tableRef",
+                    "table": "tbl"
+                  },
+                  "where": {
+                    "kind": "binaryExpr",
+                    "op": "=",
+                    "left": {
+                      "kind": "functionCall",
+                      "name": "joinGet",
+                      "args": [
+                        {
+                          "kind": "functionCall",
+                          "name": "concat",
+                          "args": [
+                            {
+                              "kind": "functionCall",
+                              "name": "currentDatabase",
+                              "args": []
+                            },
+                            {
+                              "kind": "literal",
+                              "type": "String",
+                              "value": ".join_engine"
+                            }
+                          ]
+                        },
+                        {
+                          "kind": "literal",
+                          "type": "String",
+                          "value": "v"
+                        },
+                        {
+                          "kind": "columnRef",
+                          "parts": [
+                            "id1"
+                          ]
+                        },
+                        {
+                          "kind": "columnRef",
+                          "parts": [
+                            "id2"
+                          ]
+                        }
+                      ]
+                    },
+                    "right": {
+                      "kind": "columnRef",
+                      "parts": [
+                        "tbl",
+                        "v"
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      {
+        "kind": "select",
+        "select": [
+          {
+            "kind": "alias",
+            "expr": {
+              "kind": "functionCall",
+              "name": "uniq",
+              "args": [
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "id2"
+                  ]
+                }
+              ]
+            },
+            "alias": "count"
+          }
+        ],
+        "from": {
+          "kind": "subqueryFrom",
+          "query": {
+            "kind": "select",
+            "select": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "id2"
+                ]
+              }
+            ],
+            "from": {
+              "kind": "tableRef",
+              "table": "tbl"
+            },
+            "where": {
+              "kind": "binaryExpr",
+              "op": "=",
+              "left": {
+                "kind": "functionCall",
+                "name": "joinGet",
+                "args": [
+                  {
+                    "kind": "functionCall",
+                    "name": "concat",
+                    "args": [
+                      {
+                        "kind": "functionCall",
+                        "name": "currentDatabase",
+                        "args": []
+                      },
+                      {
+                        "kind": "literal",
+                        "type": "String",
+                        "value": ".join_engine"
+                      }
+                    ]
+                  },
+                  {
+                    "kind": "literal",
+                    "type": "String",
+                    "value": "v"
+                  },
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "id1"
+                    ]
+                  },
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "id2"
+                    ]
+                  }
+                ]
+              },
+              "right": {
+                "kind": "columnRef",
+                "parts": [
+                  "tbl",
+                  "v"
+                ]
+              }
+            }
+          }
+        }
+      }
+    ],
+    "leadingComments": [
+      "--",
+      "-- The same as before, but without relying on enable_global_with_statement",
+      "--"
+    ]
+  }
+]

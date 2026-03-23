@@ -1,1 +1,19 @@
-<Parse Error>
+CREATE TABLE empty
+(
+    value Int8
+)
+ENGINE = TinyLog;
+
+CREATE TABLE data
+(
+    value Int8
+)
+ENGINE = TinyLog;
+
+INSERT INTO data SELECT *
+FROM empty;
+
+SELECT *
+FROM data;
+
+INSERT INTO data SELECT 1;

@@ -1,1 +1,947 @@
-{"expected":[{"type":"literal","text":"EXPLAIN","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"REPLACE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"SET","ignoreCase":true},{"type":"literal","text":"SET","ignoreCase":true},{"type":"literal","text":"SET","ignoreCase":true},{"type":"literal","text":"USE","ignoreCase":true},{"type":"literal","text":"SYSTEM","ignoreCase":true},{"type":"literal","text":"(","ignoreCase":false},{"type":"literal","text":"WITH","ignoreCase":true},{"type":"literal","text":"SELECT","ignoreCase":true},{"type":"end"}],"found":"i","location":{"start":{"offset":186,"line":5,"column":1},"end":{"offset":187,"line":5,"column":2}},"name":"SyntaxError"}
+[
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "allow_suspicious_low_cardinality_types",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "enable_analyzer",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "tab"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "x",
+        "type": {
+          "name": "LowCardinality",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "Nullable",
+                "args": [
+                  {
+                    "kind": "type",
+                    "type": {
+                      "name": "Float64"
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "x"
+          ]
+        }
+      }
+    ],
+    "settings": [
+      {
+        "name": "allow_nullable_key",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ],
+    "settingsAfterOrderBy": true
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "tab"
+      }
+    },
+    "selectQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "number"
+          ]
+        }
+      ],
+      "from": {
+        "kind": "tableFunctionRef",
+        "name": "numbers",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "2"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "arrayLiteral",
+          "elements": [
+            {
+              "kind": "tupleLiteral",
+              "elements": [
+                {
+                  "kind": "functionCall",
+                  "name": "arrayJoin",
+                  "args": [
+                    {
+                      "kind": "arrayLiteral",
+                      "elements": [
+                        {
+                          "kind": "columnRef",
+                          "parts": [
+                            "x"
+                          ]
+                        }
+                      ],
+                      "source": "[x]"
+                    }
+                  ]
+                },
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "x"
+                  ]
+                }
+              ],
+              "source": "(arrayJoin([x]), x)"
+            }
+          ],
+          "source": "[(arrayJoin([x]), x)]"
+        },
+        "alias": "row"
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "tab"
+    }
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "t__fuzz_307"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "k1",
+        "type": {
+          "name": "DateTime"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "k2",
+        "type": {
+          "name": "LowCardinality",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "Nullable",
+                "args": [
+                  {
+                    "kind": "type",
+                    "type": {
+                      "name": "Float64"
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "v",
+        "type": {
+          "name": "Nullable",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "UInt32"
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "engine": {
+      "name": "ReplacingMergeTree"
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "k1"
+          ]
+        }
+      },
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "k2"
+          ]
+        }
+      }
+    ],
+    "settings": [
+      {
+        "name": "allow_nullable_key",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ],
+    "settingsAfterOrderBy": true
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "t__fuzz_307"
+      }
+    },
+    "selectQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "asterisk"
+        }
+      ],
+      "from": {
+        "kind": "tableFunctionRef",
+        "name": "generateRandom",
+        "args": []
+      },
+      "limit": {
+        "count": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "10"
+        }
+      }
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "arrayJoin",
+          "args": [
+            {
+              "kind": "arrayLiteral",
+              "elements": [
+                {
+                  "kind": "functionCall",
+                  "name": "tuple",
+                  "args": [
+                    {
+                      "kind": "arrayLiteral",
+                      "elements": [
+                        {
+                          "kind": "tupleLiteral",
+                          "elements": [
+                            {
+                              "kind": "functionCall",
+                              "name": "toNullable",
+                              "args": [
+                                {
+                                  "kind": "literal",
+                                  "type": "NULL",
+                                  "value": "NULL"
+                                }
+                              ]
+                            },
+                            {
+                              "kind": "literal",
+                              "type": "Int64",
+                              "value": "-9223372036854775808"
+                            },
+                            {
+                              "kind": "functionCall",
+                              "name": "toNullable",
+                              "args": [
+                                {
+                                  "kind": "literal",
+                                  "type": "Float64",
+                                  "value": "3.4028234663852886e38"
+                                }
+                              ]
+                            },
+                            {
+                              "kind": "functionCall",
+                              "name": "arrayJoin",
+                              "args": [
+                                {
+                                  "kind": "arrayLiteral",
+                                  "elements": [
+                                    {
+                                      "kind": "functionCall",
+                                      "name": "tuple",
+                                      "args": [
+                                        {
+                                          "kind": "arrayLiteral",
+                                          "elements": [
+                                            {
+                                              "kind": "tupleLiteral",
+                                              "elements": [
+                                                {
+                                                  "kind": "functionCall",
+                                                  "name": "toNullable",
+                                                  "args": [
+                                                    {
+                                                      "kind": "literal",
+                                                      "type": "NULL",
+                                                      "value": "NULL"
+                                                    }
+                                                  ]
+                                                },
+                                                {
+                                                  "kind": "literal",
+                                                  "type": "UInt64",
+                                                  "value": "2147483647"
+                                                },
+                                                {
+                                                  "kind": "functionCall",
+                                                  "name": "toNullable",
+                                                  "args": [
+                                                    {
+                                                      "kind": "literal",
+                                                      "type": "Float64",
+                                                      "value": "0.5"
+                                                    }
+                                                  ]
+                                                },
+                                                {
+                                                  "kind": "columnRef",
+                                                  "parts": [
+                                                    "k2"
+                                                  ]
+                                                }
+                                              ],
+                                              "source": "(toNullable(NULL), 2147483647, toNullable(0.5), k2)"
+                                            }
+                                          ],
+                                          "source": "[(toNullable(NULL), 2147483647, toNullable(0.5), k2)]"
+                                        }
+                                      ]
+                                    }
+                                  ],
+                                  "source": "[tuple([(toNullable(NULL), 2147483647, toNullable(0.5), k2)])]"
+                                }
+                              ]
+                            },
+                            {
+                              "kind": "columnRef",
+                              "parts": [
+                                "k2"
+                              ]
+                            }
+                          ],
+                          "source": "(toNullable(NULL), -9223372036854775808, toNullable(3.4028234663852886e38), arrayJoin(\n[tuple([(toNullable(NULL), 2147483647, toNullable(0.5), k2)])]), k2)"
+                        }
+                      ],
+                      "source": "[(toNullable(NULL), -9223372036854775808, toNullable(3.4028234663852886e38), arrayJoin(\n[tuple([(toNullable(NULL), 2147483647, toNullable(0.5), k2)])]), k2)]"
+                    }
+                  ]
+                }
+              ],
+              "source": "[tuple([(toNullable(NULL), -9223372036854775808, toNullable(3.4028234663852886e38), arrayJoin(\n[tuple([(toNullable(NULL), 2147483647, toNullable(0.5), k2)])]), k2)])]"
+            }
+          ]
+        },
+        "alias": "row"
+      },
+      {
+        "kind": "functionCall",
+        "name": "arrayJoin",
+        "args": [
+          {
+            "kind": "arrayLiteral",
+            "elements": [
+              {
+                "kind": "tupleLiteral",
+                "elements": [
+                  {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "1024"
+                  },
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "k2"
+                    ]
+                  }
+                ],
+                "source": "(1024, k2)"
+              }
+            ],
+            "source": "[(1024, k2)]"
+          }
+        ]
+      },
+      {
+        "kind": "literal",
+        "type": "Int64",
+        "value": "-9223372036854775807"
+      },
+      {
+        "kind": "literal",
+        "type": "UInt64",
+        "value": "256"
+      },
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "tupleElement",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "row"
+              ]
+            },
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "1048576"
+            },
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "1024"
+            }
+          ]
+        },
+        "alias": "k"
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "t__fuzz_307",
+      "final": true
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "tupleLiteral",
+          "elements": [
+            {
+              "kind": "functionCall",
+              "name": "toNullable",
+              "args": [
+                {
+                  "kind": "literal",
+                  "type": "String",
+                  "value": "655.36"
+                }
+              ]
+            },
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "2"
+            },
+            {
+              "kind": "functionCall",
+              "name": "toNullable",
+              "args": [
+                {
+                  "kind": "literal",
+                  "type": "String",
+                  "value": "0.2147483648"
+                }
+              ]
+            },
+            {
+              "kind": "columnRef",
+              "parts": [
+                "k2"
+              ]
+            }
+          ],
+          "source": "(toNullable('655.36'), 2, toNullable\n('0.2147483648'), k2)"
+        },
+        "direction": "ASC"
+      },
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "functionCall",
+          "name": "toNullable",
+          "args": [
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "102.3"
+            }
+          ]
+        },
+        "direction": "DESC"
+      },
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "literal",
+          "type": "String",
+          "value": "10.25"
+        },
+        "direction": "DESC"
+      },
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "k"
+          ]
+        },
+        "direction": "ASC"
+      }
+    ],
+    "format": "Null"
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "t__fuzz_282"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "k1",
+        "type": {
+          "name": "DateTime"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "k2",
+        "type": {
+          "name": "LowCardinality",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "Nullable",
+                "args": [
+                  {
+                    "kind": "type",
+                    "type": {
+                      "name": "Float64"
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "v",
+        "type": {
+          "name": "Nullable",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "UInt32"
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "engine": {
+      "name": "ReplacingMergeTree"
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "k1"
+          ]
+        }
+      },
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "k2"
+          ]
+        }
+      }
+    ],
+    "settings": [
+      {
+        "name": "allow_nullable_key",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ],
+    "settingsAfterOrderBy": true
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "t__fuzz_282"
+      }
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "arrayJoin",
+          "args": [
+            {
+              "kind": "arrayLiteral",
+              "elements": [
+                {
+                  "kind": "functionCall",
+                  "name": "tuple",
+                  "args": [
+                    {
+                      "kind": "arrayLiteral",
+                      "elements": [
+                        {
+                          "kind": "tupleLiteral",
+                          "elements": [
+                            {
+                              "kind": "functionCall",
+                              "name": "toNullable",
+                              "args": [
+                                {
+                                  "kind": "literal",
+                                  "type": "NULL",
+                                  "value": "NULL"
+                                }
+                              ]
+                            },
+                            {
+                              "kind": "literal",
+                              "type": "Int64",
+                              "value": "-9223372036854775808"
+                            },
+                            {
+                              "kind": "functionCall",
+                              "name": "toNullable",
+                              "args": [
+                                {
+                                  "kind": "literal",
+                                  "type": "Float64",
+                                  "value": "3.4028234663852886e38"
+                                }
+                              ]
+                            },
+                            {
+                              "kind": "functionCall",
+                              "name": "arrayJoin",
+                              "args": [
+                                {
+                                  "kind": "arrayLiteral",
+                                  "elements": [
+                                    {
+                                      "kind": "functionCall",
+                                      "name": "tuple",
+                                      "args": [
+                                        {
+                                          "kind": "arrayLiteral",
+                                          "elements": [
+                                            {
+                                              "kind": "tupleLiteral",
+                                              "elements": [
+                                                {
+                                                  "kind": "functionCall",
+                                                  "name": "toNullable",
+                                                  "args": [
+                                                    {
+                                                      "kind": "literal",
+                                                      "type": "NULL",
+                                                      "value": "NULL"
+                                                    }
+                                                  ]
+                                                },
+                                                {
+                                                  "kind": "literal",
+                                                  "type": "UInt64",
+                                                  "value": "2147483647"
+                                                },
+                                                {
+                                                  "kind": "functionCall",
+                                                  "name": "toNullable",
+                                                  "args": [
+                                                    {
+                                                      "kind": "literal",
+                                                      "type": "Float64",
+                                                      "value": "0.5"
+                                                    }
+                                                  ]
+                                                },
+                                                {
+                                                  "kind": "columnRef",
+                                                  "parts": [
+                                                    "k2"
+                                                  ]
+                                                }
+                                              ],
+                                              "source": "(toNullable(NULL), 2147483647, toNullable(0.5), k2)"
+                                            }
+                                          ],
+                                          "source": "[(toNullable(NULL), 2147483647, toNullable(0.5), k2)]"
+                                        }
+                                      ]
+                                    }
+                                  ],
+                                  "source": "[tuple([(toNullable(NULL), 2147483647, toNullable(0.5), k2)])]"
+                                }
+                              ]
+                            },
+                            {
+                              "kind": "columnRef",
+                              "parts": [
+                                "k2"
+                              ]
+                            }
+                          ],
+                          "source": "(toNullable(NULL), -9223372036854775808, toNullable(3.4028234663852886e38), arrayJoin([tuple([(toNullable(NULL), 2147483647, toNullable(0.5), k2)])]), k2)"
+                        }
+                      ],
+                      "source": "[(toNullable(NULL), -9223372036854775808, toNullable(3.4028234663852886e38), arrayJoin([tuple([(toNullable(NULL), 2147483647, toNullable(0.5), k2)])]), k2)]"
+                    }
+                  ]
+                }
+              ],
+              "source": "[tuple([(toNullable(NULL), -9223372036854775808, toNullable(3.4028234663852886e38), arrayJoin([tuple([(toNullable(NULL), 2147483647, toNullable(0.5), k2)])]), k2)])]"
+            }
+          ]
+        },
+        "alias": "row"
+      },
+      {
+        "kind": "functionCall",
+        "name": "arrayJoin",
+        "args": [
+          {
+            "kind": "arrayLiteral",
+            "elements": [
+              {
+                "kind": "tupleLiteral",
+                "elements": [
+                  {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "1024"
+                  },
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "k2"
+                    ]
+                  }
+                ],
+                "source": "(1024, k2)"
+              }
+            ],
+            "source": "[(1024, k2)]"
+          }
+        ]
+      },
+      {
+        "kind": "literal",
+        "type": "Int64",
+        "value": "-9223372036854775807"
+      },
+      {
+        "kind": "literal",
+        "type": "UInt64",
+        "value": "256"
+      },
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "tupleElement",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "row"
+              ]
+            },
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "1048576"
+            },
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "1024"
+            }
+          ]
+        },
+        "alias": "k"
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "t__fuzz_282",
+      "final": true
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "tupleLiteral",
+          "elements": [
+            {
+              "kind": "functionCall",
+              "name": "toNullable",
+              "args": [
+                {
+                  "kind": "literal",
+                  "type": "String",
+                  "value": "655.36"
+                }
+              ]
+            },
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "2"
+            },
+            {
+              "kind": "functionCall",
+              "name": "toNullable",
+              "args": [
+                {
+                  "kind": "literal",
+                  "type": "String",
+                  "value": "0.2147483648"
+                }
+              ]
+            },
+            {
+              "kind": "columnRef",
+              "parts": [
+                "k2"
+              ]
+            }
+          ],
+          "source": "(toNullable('655.36'), 2, toNullable('0.2147483648'), k2)"
+        },
+        "direction": "ASC"
+      },
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "functionCall",
+          "name": "toNullable",
+          "args": [
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "102.3"
+            }
+          ]
+        },
+        "direction": "DESC"
+      },
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "literal",
+          "type": "String",
+          "value": "10.25"
+        },
+        "direction": "DESC"
+      },
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "k"
+          ]
+        },
+        "direction": "ASC"
+      }
+    ],
+    "format": "Null"
+  }
+]

@@ -1,1 +1,139 @@
-{"expected":[{"type":"literal","text":"EXPLAIN","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"REPLACE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"SET","ignoreCase":true},{"type":"literal","text":"SET","ignoreCase":true},{"type":"literal","text":"SET","ignoreCase":true},{"type":"literal","text":"USE","ignoreCase":true},{"type":"literal","text":"SYSTEM","ignoreCase":true},{"type":"literal","text":"(","ignoreCase":false},{"type":"literal","text":"WITH","ignoreCase":true},{"type":"literal","text":"SELECT","ignoreCase":true},{"type":"end"}],"found":"i","location":{"start":{"offset":62,"line":2,"column":1},"end":{"offset":63,"line":2,"column":2}},"name":"SyntaxError"}
+[
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "tab"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "val",
+        "type": {
+          "name": "UInt8"
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "val"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "function",
+      "func": {
+        "kind": "tableFunctionRef",
+        "name": "remote",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": "127.0.0.2"
+          },
+          {
+            "kind": "functionCall",
+            "name": "currentDatabase",
+            "args": []
+          },
+          {
+            "kind": "columnRef",
+            "parts": [
+              "tab"
+            ]
+          }
+        ]
+      }
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "function",
+      "func": {
+        "kind": "tableFunctionRef",
+        "name": "remote",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": "127.0.0.{2|3}"
+          },
+          {
+            "kind": "functionCall",
+            "name": "currentDatabase",
+            "args": []
+          },
+          {
+            "kind": "columnRef",
+            "parts": [
+              "tab"
+            ]
+          }
+        ]
+      }
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "function",
+      "func": {
+        "kind": "tableFunctionRef",
+        "name": "remote",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": "127.0.0.{2|3|4}"
+          },
+          {
+            "kind": "functionCall",
+            "name": "currentDatabase",
+            "args": []
+          },
+          {
+            "kind": "columnRef",
+            "parts": [
+              "tab"
+            ]
+          }
+        ]
+      }
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "asterisk"
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "tab"
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "val"
+          ]
+        },
+        "direction": "ASC"
+      }
+    ]
+  }
+]

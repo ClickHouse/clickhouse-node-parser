@@ -1,1 +1,1624 @@
-{"expected":[{"type":"literal","text":"EXPLAIN","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"REPLACE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"SET","ignoreCase":true},{"type":"literal","text":"SET","ignoreCase":true},{"type":"literal","text":"SET","ignoreCase":true},{"type":"literal","text":"USE","ignoreCase":true},{"type":"literal","text":"SYSTEM","ignoreCase":true},{"type":"literal","text":"(","ignoreCase":false},{"type":"literal","text":"WITH","ignoreCase":true},{"type":"literal","text":"SELECT","ignoreCase":true},{"type":"end"}],"found":"i","location":{"start":{"offset":711,"line":15,"column":1},"end":{"offset":712,"line":15,"column":2}},"name":"SyntaxError"}
+[
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "engine_file_truncate_on_insert",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ],
+    "leadingComments": [
+      "-- Tags: no-fasttest, no-parallel"
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "output_format_parquet_use_custom_encoder",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "output_format_parquet_row_group_size",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "100"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "input_format_parquet_filter_push_down",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "input_format_parquet_page_filter_push_down",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "input_format_parquet_bloom_filter_push_down",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "schema_inference_make_columns_nullable",
+        "value": {
+          "kind": "literal",
+          "type": "String",
+          "value": "auto"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "enable_analyzer",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ],
+    "trailingComments": [
+      "-- required for multiple array joins"
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "max_block_size",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1000000"
+        }
+      }
+    ],
+    "trailingComments": [
+      "-- have only one block to make sure rows are split into row groups deterministically"
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "preferred_block_size_bytes",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1000000000000"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "data"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "n",
+        "type": {
+          "name": "UInt64"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "s",
+        "type": {
+          "name": "String"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "l",
+        "type": {
+          "name": "UInt256"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "d",
+        "type": {
+          "name": "Decimal128",
+          "args": [
+            {
+              "kind": "literal",
+              "value": "4"
+            }
+          ]
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "lc",
+        "type": {
+          "name": "LowCardinality",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "String"
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "engine": {
+      "name": "Memory"
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "data"
+      }
+    },
+    "selectQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "binaryExpr",
+          "op": "*",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "number"
+            ]
+          },
+          "right": {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "100"
+          }
+        },
+        {
+          "kind": "functionCall",
+          "name": "toString",
+          "args": [
+            {
+              "kind": "binaryExpr",
+              "op": "*",
+              "left": {
+                "kind": "columnRef",
+                "parts": [
+                  "number"
+                ]
+              },
+              "right": {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "10"
+              }
+            }
+          ]
+        },
+        {
+          "kind": "binaryExpr",
+          "op": "*",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "number"
+            ]
+          },
+          "right": {
+            "kind": "castExpr",
+            "expr": {
+              "kind": "literal",
+              "type": "Float64",
+              "value": "10000000000000000000000000000000000000000"
+            },
+            "type": "UInt256",
+            "operator": true
+          }
+        },
+        {
+          "kind": "binaryExpr",
+          "op": "*",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "number"
+            ]
+          },
+          "right": {
+            "kind": "castExpr",
+            "expr": {
+              "kind": "literal",
+              "type": "Float64",
+              "value": "123.456"
+            },
+            "type": "Decimal128(4)",
+            "operator": true
+          }
+        },
+        {
+          "kind": "functionCall",
+          "name": "concat",
+          "args": [
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "lc"
+            },
+            {
+              "kind": "binaryExpr",
+              "op": "*",
+              "left": {
+                "kind": "functionCall",
+                "name": "intDiv",
+                "args": [
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "number"
+                    ]
+                  },
+                  {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "123"
+                  }
+                ]
+              },
+              "right": {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "2"
+              }
+            }
+          ]
+        }
+      ],
+      "from": {
+        "kind": "tableFunctionRef",
+        "name": "numbers",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "1000"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "function",
+      "func": {
+        "kind": "tableFunctionRef",
+        "name": "file",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "bf_03263",
+              "parquet"
+            ]
+          }
+        ]
+      }
+    },
+    "selectQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "asterisk"
+        }
+      ],
+      "from": {
+        "kind": "tableRef",
+        "table": "data"
+      },
+      "settings": [
+        {
+          "name": "output_format_parquet_write_bloom_filter",
+          "value": {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "0"
+          }
+        }
+      ]
+    },
+    "leadingComments": [
+      "-- Baseline test without bloom filter."
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "literal",
+        "type": "String",
+        "value": "no bf: metadata"
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "rg",
+          "num_rows"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "col",
+          "name"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "col",
+          "bloom_filter_bytes"
+        ]
+      }
+    ],
+    "from": {
+      "left": {
+        "left": {
+          "kind": "tableFunctionRef",
+          "name": "file",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "bf_03263",
+                "parquet"
+              ]
+            },
+            {
+              "kind": "columnRef",
+              "parts": [
+                "ParquetMetadata"
+              ]
+            }
+          ]
+        },
+        "kind": "arrayJoinExpr",
+        "joinType": "ARRAY",
+        "expressions": [
+          {
+            "kind": "alias",
+            "expr": {
+              "kind": "columnRef",
+              "parts": [
+                "row_groups"
+              ]
+            },
+            "alias": "rg"
+          }
+        ]
+      },
+      "kind": "arrayJoinExpr",
+      "joinType": "ARRAY",
+      "expressions": [
+        {
+          "kind": "alias",
+          "expr": {
+            "kind": "columnRef",
+            "parts": [
+              "rg",
+              "columns"
+            ]
+          },
+          "alias": "col"
+        }
+      ]
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "rg",
+            "file_offset"
+          ]
+        },
+        "direction": "ASC"
+      },
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "col",
+            "name"
+          ]
+        },
+        "direction": "ASC"
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "literal",
+        "type": "String",
+        "value": "no bf: UInt64 hit"
+      },
+      {
+        "kind": "functionCall",
+        "name": "count",
+        "args": []
+      },
+      {
+        "kind": "functionCall",
+        "name": "sum",
+        "args": [
+          {
+            "kind": "alias",
+            "expr": {
+              "kind": "binaryExpr",
+              "op": "=",
+              "left": {
+                "kind": "columnRef",
+                "parts": [
+                  "n"
+                ]
+              },
+              "right": {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "12300"
+              }
+            },
+            "alias": "cond"
+          }
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableFunctionRef",
+      "name": "file",
+      "args": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "bf_03263",
+            "parquet"
+          ]
+        }
+      ]
+    },
+    "where": {
+      "kind": "functionCall",
+      "name": "indexHint",
+      "args": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "cond"
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "literal",
+        "type": "String",
+        "value": "no bf: UInt64 miss"
+      },
+      {
+        "kind": "functionCall",
+        "name": "count",
+        "args": []
+      },
+      {
+        "kind": "functionCall",
+        "name": "sum",
+        "args": [
+          {
+            "kind": "alias",
+            "expr": {
+              "kind": "binaryExpr",
+              "op": "=",
+              "left": {
+                "kind": "columnRef",
+                "parts": [
+                  "n"
+                ]
+              },
+              "right": {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "12345"
+              }
+            },
+            "alias": "cond"
+          }
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableFunctionRef",
+      "name": "file",
+      "args": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "bf_03263",
+            "parquet"
+          ]
+        }
+      ]
+    },
+    "where": {
+      "kind": "functionCall",
+      "name": "indexHint",
+      "args": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "cond"
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "function",
+      "func": {
+        "kind": "tableFunctionRef",
+        "name": "file",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "bf_03263",
+              "parquet"
+            ]
+          }
+        ]
+      }
+    },
+    "selectQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "asterisk"
+        }
+      ],
+      "from": {
+        "kind": "tableRef",
+        "table": "data"
+      },
+      "settings": [
+        {
+          "name": "output_format_parquet_write_bloom_filter",
+          "value": {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "1"
+          }
+        }
+      ]
+    },
+    "leadingComments": [
+      "-- With bloom filter."
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "literal",
+        "type": "String",
+        "value": "bf: metadata"
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "rg",
+          "num_rows"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "col",
+          "name"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "col",
+          "bloom_filter_bytes"
+        ]
+      }
+    ],
+    "from": {
+      "left": {
+        "left": {
+          "kind": "tableFunctionRef",
+          "name": "file",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "bf_03263",
+                "parquet"
+              ]
+            },
+            {
+              "kind": "columnRef",
+              "parts": [
+                "ParquetMetadata"
+              ]
+            }
+          ]
+        },
+        "kind": "arrayJoinExpr",
+        "joinType": "ARRAY",
+        "expressions": [
+          {
+            "kind": "alias",
+            "expr": {
+              "kind": "columnRef",
+              "parts": [
+                "row_groups"
+              ]
+            },
+            "alias": "rg"
+          }
+        ]
+      },
+      "kind": "arrayJoinExpr",
+      "joinType": "ARRAY",
+      "expressions": [
+        {
+          "kind": "alias",
+          "expr": {
+            "kind": "columnRef",
+            "parts": [
+              "rg",
+              "columns"
+            ]
+          },
+          "alias": "col"
+        }
+      ]
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "rg",
+            "file_offset"
+          ]
+        },
+        "direction": "ASC"
+      },
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "col",
+            "name"
+          ]
+        },
+        "direction": "ASC"
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "literal",
+        "type": "String",
+        "value": "bf: UInt64 hit"
+      },
+      {
+        "kind": "functionCall",
+        "name": "count",
+        "args": []
+      },
+      {
+        "kind": "functionCall",
+        "name": "sum",
+        "args": [
+          {
+            "kind": "alias",
+            "expr": {
+              "kind": "binaryExpr",
+              "op": "=",
+              "left": {
+                "kind": "columnRef",
+                "parts": [
+                  "n"
+                ]
+              },
+              "right": {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "12300"
+              }
+            },
+            "alias": "cond"
+          }
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableFunctionRef",
+      "name": "file",
+      "args": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "bf_03263",
+            "parquet"
+          ]
+        }
+      ]
+    },
+    "where": {
+      "kind": "functionCall",
+      "name": "indexHint",
+      "args": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "cond"
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "literal",
+        "type": "String",
+        "value": "bf: UInt64 miss"
+      },
+      {
+        "kind": "functionCall",
+        "name": "count",
+        "args": []
+      },
+      {
+        "kind": "functionCall",
+        "name": "sum",
+        "args": [
+          {
+            "kind": "alias",
+            "expr": {
+              "kind": "binaryExpr",
+              "op": "=",
+              "left": {
+                "kind": "columnRef",
+                "parts": [
+                  "n"
+                ]
+              },
+              "right": {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "12345"
+              }
+            },
+            "alias": "cond"
+          }
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableFunctionRef",
+      "name": "file",
+      "args": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "bf_03263",
+            "parquet"
+          ]
+        }
+      ]
+    },
+    "where": {
+      "kind": "functionCall",
+      "name": "indexHint",
+      "args": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "cond"
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "literal",
+        "type": "String",
+        "value": "bf: String hit"
+      },
+      {
+        "kind": "functionCall",
+        "name": "count",
+        "args": []
+      },
+      {
+        "kind": "functionCall",
+        "name": "sum",
+        "args": [
+          {
+            "kind": "alias",
+            "expr": {
+              "kind": "binaryExpr",
+              "op": "=",
+              "left": {
+                "kind": "columnRef",
+                "parts": [
+                  "s"
+                ]
+              },
+              "right": {
+                "kind": "literal",
+                "type": "String",
+                "value": "1230"
+              }
+            },
+            "alias": "cond"
+          }
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableFunctionRef",
+      "name": "file",
+      "args": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "bf_03263",
+            "parquet"
+          ]
+        }
+      ]
+    },
+    "where": {
+      "kind": "functionCall",
+      "name": "indexHint",
+      "args": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "cond"
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "literal",
+        "type": "String",
+        "value": "bf: String miss"
+      },
+      {
+        "kind": "functionCall",
+        "name": "count",
+        "args": []
+      },
+      {
+        "kind": "functionCall",
+        "name": "sum",
+        "args": [
+          {
+            "kind": "alias",
+            "expr": {
+              "kind": "binaryExpr",
+              "op": "=",
+              "left": {
+                "kind": "columnRef",
+                "parts": [
+                  "s"
+                ]
+              },
+              "right": {
+                "kind": "literal",
+                "type": "String",
+                "value": "1234"
+              }
+            },
+            "alias": "cond"
+          }
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableFunctionRef",
+      "name": "file",
+      "args": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "bf_03263",
+            "parquet"
+          ]
+        }
+      ]
+    },
+    "where": {
+      "kind": "functionCall",
+      "name": "indexHint",
+      "args": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "cond"
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "literal",
+        "type": "String",
+        "value": "bf: UInt256 hit"
+      },
+      {
+        "kind": "functionCall",
+        "name": "count",
+        "args": []
+      },
+      {
+        "kind": "functionCall",
+        "name": "sum",
+        "args": [
+          {
+            "kind": "alias",
+            "expr": {
+              "kind": "binaryExpr",
+              "op": "=",
+              "left": {
+                "kind": "columnRef",
+                "parts": [
+                  "l"
+                ]
+              },
+              "right": {
+                "kind": "castExpr",
+                "expr": {
+                  "kind": "literal",
+                  "type": "Float64",
+                  "value": "7890000000000000000000000000000000000000000"
+                },
+                "type": "UInt256",
+                "operator": true
+              }
+            },
+            "alias": "cond"
+          }
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableFunctionRef",
+      "name": "file",
+      "args": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "bf_03263",
+            "parquet"
+          ]
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "Parquet"
+          ]
+        },
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "l UInt256"
+        }
+      ]
+    },
+    "where": {
+      "kind": "functionCall",
+      "name": "indexHint",
+      "args": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "cond"
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "literal",
+        "type": "String",
+        "value": "bf: UInt256 miss"
+      },
+      {
+        "kind": "functionCall",
+        "name": "count",
+        "args": []
+      },
+      {
+        "kind": "functionCall",
+        "name": "sum",
+        "args": [
+          {
+            "kind": "alias",
+            "expr": {
+              "kind": "binaryExpr",
+              "op": "=",
+              "left": {
+                "kind": "columnRef",
+                "parts": [
+                  "l"
+                ]
+              },
+              "right": {
+                "kind": "castExpr",
+                "expr": {
+                  "kind": "literal",
+                  "type": "Float64",
+                  "value": "7890000000000000000000000000000000000000001"
+                },
+                "type": "UInt256",
+                "operator": true
+              }
+            },
+            "alias": "cond"
+          }
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableFunctionRef",
+      "name": "file",
+      "args": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "bf_03263",
+            "parquet"
+          ]
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "Parquet"
+          ]
+        },
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "l UInt256"
+        }
+      ]
+    },
+    "where": {
+      "kind": "functionCall",
+      "name": "indexHint",
+      "args": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "cond"
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "literal",
+        "type": "String",
+        "value": "bf: Decimal128(4) hit"
+      },
+      {
+        "kind": "functionCall",
+        "name": "count",
+        "args": []
+      },
+      {
+        "kind": "functionCall",
+        "name": "sum",
+        "args": [
+          {
+            "kind": "alias",
+            "expr": {
+              "kind": "binaryExpr",
+              "op": "=",
+              "left": {
+                "kind": "columnRef",
+                "parts": [
+                  "d"
+                ]
+              },
+              "right": {
+                "kind": "castExpr",
+                "expr": {
+                  "kind": "literal",
+                  "type": "Float64",
+                  "value": "108147.456"
+                },
+                "type": "Decimal128(4)",
+                "operator": true
+              }
+            },
+            "alias": "cond"
+          }
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableFunctionRef",
+      "name": "file",
+      "args": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "bf_03263",
+            "parquet"
+          ]
+        }
+      ]
+    },
+    "where": {
+      "kind": "functionCall",
+      "name": "indexHint",
+      "args": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "cond"
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "literal",
+        "type": "String",
+        "value": "bf: Decimal128(4) miss"
+      },
+      {
+        "kind": "functionCall",
+        "name": "count",
+        "args": []
+      },
+      {
+        "kind": "functionCall",
+        "name": "sum",
+        "args": [
+          {
+            "kind": "alias",
+            "expr": {
+              "kind": "binaryExpr",
+              "op": "=",
+              "left": {
+                "kind": "columnRef",
+                "parts": [
+                  "d"
+                ]
+              },
+              "right": {
+                "kind": "castExpr",
+                "expr": {
+                  "kind": "literal",
+                  "type": "Float64",
+                  "value": "108147.4567"
+                },
+                "type": "Decimal128(4)",
+                "operator": true
+              }
+            },
+            "alias": "cond"
+          }
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableFunctionRef",
+      "name": "file",
+      "args": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "bf_03263",
+            "parquet"
+          ]
+        }
+      ]
+    },
+    "where": {
+      "kind": "functionCall",
+      "name": "indexHint",
+      "args": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "cond"
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "literal",
+        "type": "String",
+        "value": "bf: LowCardinality(String) hit"
+      },
+      {
+        "kind": "functionCall",
+        "name": "count",
+        "args": []
+      },
+      {
+        "kind": "functionCall",
+        "name": "sum",
+        "args": [
+          {
+            "kind": "alias",
+            "expr": {
+              "kind": "binaryExpr",
+              "op": "=",
+              "left": {
+                "kind": "columnRef",
+                "parts": [
+                  "lc"
+                ]
+              },
+              "right": {
+                "kind": "literal",
+                "type": "String",
+                "value": "lc4"
+              }
+            },
+            "alias": "cond"
+          }
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableFunctionRef",
+      "name": "file",
+      "args": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "bf_03263",
+            "parquet"
+          ]
+        }
+      ]
+    },
+    "where": {
+      "kind": "functionCall",
+      "name": "indexHint",
+      "args": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "cond"
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "literal",
+        "type": "String",
+        "value": "bf: LowCardinality(String) miss"
+      },
+      {
+        "kind": "functionCall",
+        "name": "count",
+        "args": []
+      },
+      {
+        "kind": "functionCall",
+        "name": "sum",
+        "args": [
+          {
+            "kind": "alias",
+            "expr": {
+              "kind": "binaryExpr",
+              "op": "=",
+              "left": {
+                "kind": "columnRef",
+                "parts": [
+                  "lc"
+                ]
+              },
+              "right": {
+                "kind": "literal",
+                "type": "String",
+                "value": "lc1"
+              }
+            },
+            "alias": "cond"
+          }
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableFunctionRef",
+      "name": "file",
+      "args": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "bf_03263",
+            "parquet"
+          ]
+        }
+      ]
+    },
+    "where": {
+      "kind": "functionCall",
+      "name": "indexHint",
+      "args": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "cond"
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "function",
+      "func": {
+        "kind": "tableFunctionRef",
+        "name": "file",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "bf_03263",
+              "parquet"
+            ]
+          }
+        ]
+      }
+    },
+    "selectQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "asterisk"
+        }
+      ],
+      "from": {
+        "kind": "tableRef",
+        "table": "data"
+      },
+      "settings": [
+        {
+          "name": "output_format_parquet_write_bloom_filter",
+          "value": {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "1"
+          }
+        },
+        {
+          "name": "output_format_parquet_bloom_filter_bits_per_value",
+          "value": {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "30"
+          }
+        }
+      ]
+    },
+    "leadingComments": [
+      "-- Try different output_format_parquet_bloom_filter_bits_per_value, check that size changed."
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "literal",
+        "type": "String",
+        "value": "more bits per value: metadata"
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "rg",
+          "num_rows"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "col",
+          "name"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "col",
+          "bloom_filter_bytes"
+        ]
+      }
+    ],
+    "from": {
+      "left": {
+        "left": {
+          "kind": "tableFunctionRef",
+          "name": "file",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "bf_03263",
+                "parquet"
+              ]
+            },
+            {
+              "kind": "columnRef",
+              "parts": [
+                "ParquetMetadata"
+              ]
+            }
+          ]
+        },
+        "kind": "arrayJoinExpr",
+        "joinType": "ARRAY",
+        "expressions": [
+          {
+            "kind": "alias",
+            "expr": {
+              "kind": "columnRef",
+              "parts": [
+                "row_groups"
+              ]
+            },
+            "alias": "rg"
+          }
+        ]
+      },
+      "kind": "arrayJoinExpr",
+      "joinType": "ARRAY",
+      "expressions": [
+        {
+          "kind": "alias",
+          "expr": {
+            "kind": "columnRef",
+            "parts": [
+              "rg",
+              "columns"
+            ]
+          },
+          "alias": "col"
+        }
+      ]
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "rg",
+            "file_offset"
+          ]
+        },
+        "direction": "ASC"
+      },
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "col",
+            "name"
+          ]
+        },
+        "direction": "ASC"
+      }
+    ]
+  }
+]

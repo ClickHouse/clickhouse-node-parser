@@ -1,1 +1,68 @@
-<Parse Error>
+SET parallel_replicas_for_non_replicated_merge_tree = 1;
+
+SET allow_experimental_parallel_reading_from_replicas = 1;
+
+SET cluster_for_parallel_replicas = 'parallel_replicas';
+
+CREATE TABLE test_table
+(
+    a UInt64,
+    b UInt64,
+    c UInt64,
+    d UInt64,
+    x Array(String)
+)
+ENGINE = MergeTree()
+ORDER BY a
+PARTITION BY b;
+
+INSERT INTO test_table SELECT
+    number,
+    number % 2,
+    number,
+    number % 3,
+    ['a', 'b', 'c']
+FROM numbers(1);
+
+SELECT y
+FROM test_table
+ORDER BY c ASC;
+
+SET allow_experimental_parallel_reading_from_replicas = 0;
+
+SELECT '----';
+
+SELECT y
+FROM remote('127.0.0.{1,2}', currentDatabase(), test_table)
+ORDER BY c ASC
+SETTINGS extremes = 1;
+
+CREATE TABLE test_table
+(
+    a UInt64,
+    b UInt64,
+    c UInt64,
+    d UInt64,
+    n Nested(x String)
+)
+ENGINE = MergeTree()
+ORDER BY a
+PARTITION BY b;
+
+INSERT INTO test_table SELECT
+    number,
+    number % 2,
+    number,
+    number % 3,
+    ['a']
+FROM numbers(1);
+
+SELECT
+    a,
+    b,
+    c,
+    d,
+    n.x,
+    n.y
+FROM test_table
+ORDER BY c ASC;

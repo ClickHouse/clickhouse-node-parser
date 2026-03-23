@@ -1,1 +1,67 @@
-<Parse Error>
+-- https://github.com/ClickHouse/ClickHouse/issues/29838
+SET enable_analyzer = 1;
+
+SET distributed_foreground_insert = 1;
+
+CREATE TABLE first_table_lr
+(
+    id String,
+    id2 String
+)
+ENGINE = ReplicatedMergeTree('/clickhouse/tables/{database}/test_03080/alter', 'r1')
+ORDER BY id;
+
+CREATE TABLE first_table
+(
+    id String,
+    id2 String
+)
+ENGINE = Distributed('test_shard_localhost', currentDatabase(), 'first_table_lr');
+
+CREATE TABLE second_table_lr
+(
+    id String,
+    id2 String
+)
+ENGINE = MergeTree()
+ORDER BY id;
+
+CREATE TABLE second_table
+(
+    id String,
+    id2 String
+)
+ENGINE = Distributed('test_shard_localhost', currentDatabase(), 'second_table_lr');
+
+INSERT INTO first_table;
+
+INSERT INTO second_table;
+
+CREATE TABLE two_tables
+(
+    id String,
+    id2 String
+)
+ENGINE = Merge(currentDatabase(), '^(first_table)$');
+
+SELECT count()
+FROM
+    first_table AS s
+INNER JOIN second_table AS f
+    USING (id)
+WHERE f.id2 GLOBAL IN (
+        SELECT id2
+        FROM second_table
+        GROUP BY id2
+    );
+
+SELECT count()
+FROM
+    two_tables AS s
+INNER JOIN second_table AS f
+    USING (id)
+WHERE f.id2 GLOBAL IN (
+        SELECT id2
+        FROM second_table
+        GROUP BY id2
+    );

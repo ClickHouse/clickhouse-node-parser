@@ -1,1 +1,69 @@
-<Parse Error>
+-- add_minmax_index_for_numeric_columns=0: Would use the index and not the projection that we want to test (id2 = 3)
+SET log_queries = 1;
+
+SET log_queries_min_type = 'QUERY_FINISH';
+
+SET optimize_use_implicit_projections = 1;
+
+CREATE TABLE t
+(
+    id UInt64,
+    id2 UInt64,
+    id3 UInt64,
+    PROJECTION t_normal (    SELECT
+        id,
+        id2,
+        id3
+    ORDER BY
+        id2 ASC,
+        id ASC,
+        id3 ASC),
+    PROJECTION t_agg (    SELECT sum(id3)
+    GROUP BY id2)
+)
+ENGINE = MergeTree
+ORDER BY id
+SETTINGS index_granularity = 8, add_minmax_index_for_numeric_columns = 0;
+
+INSERT INTO t SELECT
+    number,
+    negate(number),
+    number
+FROM numbers(10000);
+
+SET parallel_replicas_local_plan = 1, parallel_replicas_support_projection = 1, optimize_aggregation_in_order = 0;
+
+SELECT *
+FROM t
+WHERE id2 = 3
+FORMAT Null;
+
+SELECT sum(id3)
+FROM t
+GROUP BY id2
+FORMAT Null;
+
+SELECT min(id)
+FROM t
+FORMAT Null;
+
+SELECT
+    --Remove the prefix string which is a mutable database name.
+    arrayStringConcat(arrayPopFront(splitByString('.', projections[1])), '.')
+FROM `system`.query_log
+WHERE current_database = currentDatabase()
+    AND query = 'SELECT * FROM t WHERE id2 = 3 FORMAT Null;';
+
+SELECT
+    --Remove the prefix string which is a mutable database name.
+    arrayStringConcat(arrayPopFront(splitByString('.', projections[1])), '.')
+FROM `system`.query_log
+WHERE current_database = currentDatabase()
+    AND query = 'SELECT sum(id3) FROM t GROUP BY id2 FORMAT Null;';
+
+SELECT
+    --Remove the prefix string which is a mutable database name.
+    arrayStringConcat(arrayPopFront(splitByString('.', projections[1])), '.')
+FROM `system`.query_log
+WHERE current_database = currentDatabase()
+    AND query = 'SELECT min(id) FROM t FORMAT Null;';

@@ -1,1 +1,27 @@
-<Parse Error>
+SET prefer_localhost_replica = 0;
+
+-- { echoOn }
+CREATE TABLE data
+(
+    key Int
+)
+ENGINE = Memory();
+
+CREATE TABLE dist
+(
+    key Int
+)
+ENGINE = Distributed(test_shard_localhost, currentDatabase(), data);
+
+-- check that FLUSH DISTRIBUTED does flushing anyway
+INSERT INTO dist;
+
+SELECT *
+FROM data;
+
+CREATE TABLE dist
+(
+    key Int
+)
+ENGINE = Distributed(test_shard_localhost, currentDatabase(), data)
+SETTINGS flush_on_detach = 0;

@@ -1,1 +1,57 @@
-<Parse Error>
+CREATE TABLE bloom_filter_not_has
+(
+    ary Array(LowCardinality(Nullable(String))),
+    d Date,
+    INDEX idx_ary ary TYPE bloom_filter(0.01) GRANULARITY 1024
+)
+ENGINE = MergeTree()
+ORDER BY d
+PARTITION BY d;
+
+INSERT INTO bloom_filter_not_has;
+
+INSERT INTO bloom_filter_not_has;
+
+SELECT count()
+FROM bloom_filter_not_has
+WHERE has(ary, 'a');
+
+SELECT count()
+FROM bloom_filter_not_has
+WHERE NOT has(ary, 'a');
+
+SELECT count()
+FROM bloom_filter_not_has
+WHERE has(ary, 'b');
+
+SELECT *
+FROM bloom_filter_not_has
+WHERE NOT has(ary, 'b')
+ORDER BY ary ASC;
+
+SELECT count()
+FROM bloom_filter_not_has
+WHERE has(ary, 'c');
+
+SELECT *
+FROM bloom_filter_not_has
+WHERE NOT has(ary, 'c')
+ORDER BY ary ASC;
+
+SELECT count()
+FROM bloom_filter_not_has
+WHERE has(ary, 'd');
+
+SELECT *
+FROM bloom_filter_not_has
+WHERE NOT has(ary, 'd')
+ORDER BY ary ASC;
+
+SELECT count()
+FROM bloom_filter_not_has
+WHERE has(ary, 'f');
+
+SELECT *
+FROM bloom_filter_not_has
+WHERE NOT has(ary, 'f')
+ORDER BY ary ASC;

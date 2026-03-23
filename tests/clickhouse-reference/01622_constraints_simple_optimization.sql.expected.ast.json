@@ -1,1 +1,2504 @@
-{"expected":[{"type":"literal","text":"EXPLAIN","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"REPLACE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"SET","ignoreCase":true},{"type":"literal","text":"SET","ignoreCase":true},{"type":"literal","text":"SET","ignoreCase":true},{"type":"literal","text":"USE","ignoreCase":true},{"type":"literal","text":"SYSTEM","ignoreCase":true},{"type":"literal","text":"(","ignoreCase":false},{"type":"literal","text":"WITH","ignoreCase":true},{"type":"literal","text":"SELECT","ignoreCase":true},{"type":"end"}],"found":"I","location":{"start":{"offset":427,"line":8,"column":1},"end":{"offset":428,"line":8,"column":2}},"name":"SyntaxError"}
+[
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "convert_query_to_cnf",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "optimize_using_constraints",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "optimize_move_to_prewhere",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "optimize_substitute_columns",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "optimize_append_index",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "constraint_test_assumption"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "URL",
+        "type": {
+          "name": "String"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "a",
+        "type": {
+          "name": "Int32"
+        }
+      },
+      {
+        "kind": "constraintDef",
+        "name": "c1",
+        "constraintType": "ASSUME",
+        "expr": {
+          "kind": "binaryExpr",
+          "op": "=",
+          "left": {
+            "kind": "functionCall",
+            "name": "domainWithoutWWW",
+            "args": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "URL"
+                ]
+              }
+            ]
+          },
+          "right": {
+            "kind": "literal",
+            "type": "String",
+            "value": "bigmir.net"
+          }
+        }
+      },
+      {
+        "kind": "constraintDef",
+        "name": "c2",
+        "constraintType": "ASSUME",
+        "expr": {
+          "kind": "naryExpr",
+          "op": "AND",
+          "operands": [
+            {
+              "kind": "binaryExpr",
+              "op": ">",
+              "left": {
+                "kind": "columnRef",
+                "parts": [
+                  "URL"
+                ]
+              },
+              "right": {
+                "kind": "literal",
+                "type": "String",
+                "value": "zzz"
+              }
+            },
+            {
+              "kind": "binaryExpr",
+              "op": "=",
+              "left": {
+                "kind": "functionCall",
+                "name": "startsWith",
+                "args": [
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "URL"
+                    ]
+                  },
+                  {
+                    "kind": "literal",
+                    "type": "String",
+                    "value": "test"
+                  }
+                ]
+              },
+              "right": {
+                "kind": "literal",
+                "type": "Bool",
+                "value": "1"
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "engine": {
+      "name": "TinyLog"
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "constraint_test_assumption"
+      }
+    },
+    "columns": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "URL"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "a"
+        ]
+      }
+    ],
+    "leadingComments": [
+      "--- Add wrong rows in order to check optimization"
+    ]
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "constraint_test_assumption"
+      }
+    },
+    "columns": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "URL"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "a"
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "constraint_test_assumption"
+      }
+    },
+    "columns": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "URL"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "a"
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "constraint_test_assumption"
+      }
+    },
+    "columns": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "URL"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "a"
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "count",
+        "args": []
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "constraint_test_assumption"
+    },
+    "where": {
+      "kind": "binaryExpr",
+      "op": "=",
+      "left": {
+        "kind": "functionCall",
+        "name": "domainWithoutWWW",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "URL"
+            ]
+          }
+        ]
+      },
+      "right": {
+        "kind": "literal",
+        "type": "String",
+        "value": "bigmir.net"
+      }
+    },
+    "trailingComments": [
+      "--- assumption -> 4"
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "count",
+        "args": []
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "constraint_test_assumption"
+    },
+    "where": {
+      "kind": "unaryExpr",
+      "op": "NOT",
+      "expr": {
+        "kind": "binaryExpr",
+        "op": "=",
+        "left": {
+          "kind": "functionCall",
+          "name": "domainWithoutWWW",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "URL"
+              ]
+            }
+          ]
+        },
+        "right": {
+          "kind": "literal",
+          "type": "String",
+          "value": "bigmir.net"
+        }
+      }
+    },
+    "trailingComments": [
+      "--- assumption -> 0"
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "count",
+        "args": []
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "constraint_test_assumption"
+    },
+    "where": {
+      "kind": "binaryExpr",
+      "op": "!=",
+      "left": {
+        "kind": "functionCall",
+        "name": "domainWithoutWWW",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "URL"
+            ]
+          }
+        ]
+      },
+      "right": {
+        "kind": "literal",
+        "type": "String",
+        "value": "bigmir.net"
+      }
+    },
+    "trailingComments": [
+      "--- assumption -> 0"
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "count",
+        "args": []
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "constraint_test_assumption"
+    },
+    "where": {
+      "kind": "binaryExpr",
+      "op": "=",
+      "left": {
+        "kind": "functionCall",
+        "name": "domainWithoutWWW",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "URL"
+            ]
+          }
+        ]
+      },
+      "right": {
+        "kind": "literal",
+        "type": "String",
+        "value": "nothing"
+      }
+    },
+    "trailingComments": [
+      "--- not optimized -> 0"
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "count",
+        "args": []
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "constraint_test_assumption"
+    },
+    "where": {
+      "kind": "naryExpr",
+      "op": "AND",
+      "operands": [
+        {
+          "kind": "binaryExpr",
+          "op": "=",
+          "left": {
+            "kind": "functionCall",
+            "name": "domainWithoutWWW",
+            "args": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "URL"
+                ]
+              }
+            ]
+          },
+          "right": {
+            "kind": "literal",
+            "type": "String",
+            "value": "bigmir.net"
+          }
+        },
+        {
+          "kind": "binaryExpr",
+          "op": ">",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "URL"
+            ]
+          },
+          "right": {
+            "kind": "literal",
+            "type": "String",
+            "value": "zzz"
+          }
+        }
+      ],
+      "parenthesized": true
+    },
+    "trailingComments": [
+      "---> assumption -> 4"
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "count",
+        "args": []
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "constraint_test_assumption"
+    },
+    "where": {
+      "kind": "naryExpr",
+      "op": "AND",
+      "operands": [
+        {
+          "kind": "binaryExpr",
+          "op": "=",
+          "left": {
+            "kind": "functionCall",
+            "name": "domainWithoutWWW",
+            "args": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "URL"
+                ]
+              }
+            ]
+          },
+          "right": {
+            "kind": "literal",
+            "type": "String",
+            "value": "bigmir.net"
+          }
+        },
+        {
+          "kind": "unaryExpr",
+          "op": "NOT",
+          "expr": {
+            "kind": "binaryExpr",
+            "op": "<=",
+            "left": {
+              "kind": "columnRef",
+              "parts": [
+                "URL"
+              ]
+            },
+            "right": {
+              "kind": "literal",
+              "type": "String",
+              "value": "zzz"
+            }
+          }
+        }
+      ],
+      "parenthesized": true
+    },
+    "trailingComments": [
+      "---> assumption -> 4"
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "count",
+        "args": []
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "constraint_test_assumption"
+    },
+    "where": {
+      "kind": "naryExpr",
+      "op": "OR",
+      "operands": [
+        {
+          "kind": "naryExpr",
+          "op": "AND",
+          "operands": [
+            {
+              "kind": "binaryExpr",
+              "op": "=",
+              "left": {
+                "kind": "functionCall",
+                "name": "domainWithoutWWW",
+                "args": [
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "URL"
+                    ]
+                  }
+                ]
+              },
+              "right": {
+                "kind": "literal",
+                "type": "String",
+                "value": "bigmir.net"
+              }
+            },
+            {
+              "kind": "binaryExpr",
+              "op": ">",
+              "left": {
+                "kind": "columnRef",
+                "parts": [
+                  "URL"
+                ]
+              },
+              "right": {
+                "kind": "literal",
+                "type": "String",
+                "value": "zzz"
+              }
+            }
+          ],
+          "parenthesized": true
+        },
+        {
+          "kind": "naryExpr",
+          "op": "AND",
+          "operands": [
+            {
+              "kind": "binaryExpr",
+              "op": "=",
+              "left": {
+                "kind": "columnRef",
+                "parts": [
+                  "a"
+                ]
+              },
+              "right": {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "10"
+              }
+            },
+            {
+              "kind": "binaryExpr",
+              "op": "<",
+              "left": {
+                "kind": "binaryExpr",
+                "op": "+",
+                "left": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "a"
+                  ]
+                },
+                "right": {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "5"
+                }
+              },
+              "right": {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "100"
+              }
+            }
+          ],
+          "parenthesized": true
+        }
+      ]
+    },
+    "trailingComments": [
+      "---> assumption -> 4"
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "count",
+        "args": []
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "constraint_test_assumption"
+    },
+    "where": {
+      "kind": "naryExpr",
+      "op": "AND",
+      "operands": [
+        {
+          "kind": "binaryExpr",
+          "op": "=",
+          "left": {
+            "kind": "functionCall",
+            "name": "domainWithoutWWW",
+            "args": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "URL"
+                ]
+              }
+            ]
+          },
+          "right": {
+            "kind": "literal",
+            "type": "String",
+            "value": "bigmir.net"
+          }
+        },
+        {
+          "kind": "binaryExpr",
+          "op": "=",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "URL"
+            ]
+          },
+          "right": {
+            "kind": "literal",
+            "type": "String",
+            "value": "111"
+          }
+        }
+      ],
+      "parenthesized": true
+    },
+    "trailingComments": [
+      "---> assumption & no assumption -> 0"
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "count",
+        "args": []
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "constraint_test_assumption"
+    },
+    "where": {
+      "kind": "binaryExpr",
+      "op": "=",
+      "left": {
+        "kind": "functionCall",
+        "name": "startsWith",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "URL"
+            ]
+          },
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": "test"
+          }
+        ]
+      },
+      "right": {
+        "kind": "literal",
+        "type": "Bool",
+        "value": "1"
+      },
+      "parenthesized": true
+    },
+    "trailingComments": [
+      "---> assumption -> 4"
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "constraint_test_transitivity"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "a",
+        "type": {
+          "name": "Int64"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "b",
+        "type": {
+          "name": "Int64"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "c",
+        "type": {
+          "name": "Int64"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "d",
+        "type": {
+          "name": "Int32"
+        }
+      },
+      {
+        "kind": "constraintDef",
+        "name": "c1",
+        "constraintType": "ASSUME",
+        "expr": {
+          "kind": "naryExpr",
+          "op": "AND",
+          "operands": [
+            {
+              "kind": "binaryExpr",
+              "op": "=",
+              "left": {
+                "kind": "columnRef",
+                "parts": [
+                  "a"
+                ]
+              },
+              "right": {
+                "kind": "columnRef",
+                "parts": [
+                  "b"
+                ]
+              }
+            },
+            {
+              "kind": "binaryExpr",
+              "op": "=",
+              "left": {
+                "kind": "columnRef",
+                "parts": [
+                  "c"
+                ]
+              },
+              "right": {
+                "kind": "columnRef",
+                "parts": [
+                  "d"
+                ]
+              }
+            }
+          ]
+        }
+      },
+      {
+        "kind": "constraintDef",
+        "name": "c2",
+        "constraintType": "ASSUME",
+        "expr": {
+          "kind": "binaryExpr",
+          "op": "=",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "b"
+            ]
+          },
+          "right": {
+            "kind": "columnRef",
+            "parts": [
+              "c"
+            ]
+          }
+        }
+      }
+    ],
+    "engine": {
+      "name": "TinyLog"
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "constraint_test_transitivity"
+      }
+    },
+    "columns": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "a"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "b"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "c"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "d"
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "count",
+        "args": []
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "constraint_test_transitivity"
+    },
+    "where": {
+      "kind": "binaryExpr",
+      "op": "=",
+      "left": {
+        "kind": "columnRef",
+        "parts": [
+          "a"
+        ]
+      },
+      "right": {
+        "kind": "columnRef",
+        "parts": [
+          "d"
+        ]
+      }
+    },
+    "trailingComments": [
+      "---> assumption -> 1"
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "constraint_test_strong_connectivity"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "a",
+        "type": {
+          "name": "String"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "b",
+        "type": {
+          "name": "String"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "c",
+        "type": {
+          "name": "String"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "d",
+        "type": {
+          "name": "String"
+        }
+      },
+      {
+        "kind": "constraintDef",
+        "name": "c1",
+        "constraintType": "ASSUME",
+        "expr": {
+          "kind": "naryExpr",
+          "op": "AND",
+          "operands": [
+            {
+              "kind": "binaryExpr",
+              "op": "<=",
+              "left": {
+                "kind": "columnRef",
+                "parts": [
+                  "a"
+                ]
+              },
+              "right": {
+                "kind": "columnRef",
+                "parts": [
+                  "b"
+                ]
+              }
+            },
+            {
+              "kind": "binaryExpr",
+              "op": "<=",
+              "left": {
+                "kind": "columnRef",
+                "parts": [
+                  "b"
+                ]
+              },
+              "right": {
+                "kind": "columnRef",
+                "parts": [
+                  "c"
+                ]
+              }
+            },
+            {
+              "kind": "binaryExpr",
+              "op": "<=",
+              "left": {
+                "kind": "columnRef",
+                "parts": [
+                  "c"
+                ]
+              },
+              "right": {
+                "kind": "columnRef",
+                "parts": [
+                  "d"
+                ]
+              }
+            },
+            {
+              "kind": "binaryExpr",
+              "op": "<=",
+              "left": {
+                "kind": "columnRef",
+                "parts": [
+                  "d"
+                ]
+              },
+              "right": {
+                "kind": "columnRef",
+                "parts": [
+                  "a"
+                ]
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "engine": {
+      "name": "TinyLog"
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "constraint_test_strong_connectivity"
+      }
+    },
+    "columns": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "a"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "b"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "c"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "d"
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "count",
+        "args": []
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "constraint_test_strong_connectivity"
+    },
+    "where": {
+      "kind": "binaryExpr",
+      "op": "=",
+      "left": {
+        "kind": "columnRef",
+        "parts": [
+          "a"
+        ]
+      },
+      "right": {
+        "kind": "columnRef",
+        "parts": [
+          "d"
+        ]
+      }
+    },
+    "trailingComments": [
+      "---> assumption -> 1"
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "count",
+        "args": []
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "constraint_test_strong_connectivity"
+    },
+    "where": {
+      "kind": "naryExpr",
+      "op": "AND",
+      "operands": [
+        {
+          "kind": "binaryExpr",
+          "op": "=",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "a"
+            ]
+          },
+          "right": {
+            "kind": "columnRef",
+            "parts": [
+              "c"
+            ]
+          }
+        },
+        {
+          "kind": "binaryExpr",
+          "op": "=",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "b"
+            ]
+          },
+          "right": {
+            "kind": "columnRef",
+            "parts": [
+              "d"
+            ]
+          }
+        }
+      ]
+    },
+    "trailingComments": [
+      "---> assumption -> 1"
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "count",
+        "args": []
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "constraint_test_strong_connectivity"
+    },
+    "where": {
+      "kind": "naryExpr",
+      "op": "OR",
+      "operands": [
+        {
+          "kind": "binaryExpr",
+          "op": "<",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "a"
+            ]
+          },
+          "right": {
+            "kind": "columnRef",
+            "parts": [
+              "c"
+            ]
+          }
+        },
+        {
+          "kind": "binaryExpr",
+          "op": "<",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "b"
+            ]
+          },
+          "right": {
+            "kind": "columnRef",
+            "parts": [
+              "d"
+            ]
+          }
+        }
+      ]
+    },
+    "trailingComments": [
+      "---> assumption -> 0"
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "count",
+        "args": []
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "constraint_test_strong_connectivity"
+    },
+    "where": {
+      "kind": "naryExpr",
+      "op": "OR",
+      "operands": [
+        {
+          "kind": "binaryExpr",
+          "op": "<=",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "a"
+            ]
+          },
+          "right": {
+            "kind": "columnRef",
+            "parts": [
+              "c"
+            ]
+          }
+        },
+        {
+          "kind": "binaryExpr",
+          "op": "<=",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "b"
+            ]
+          },
+          "right": {
+            "kind": "columnRef",
+            "parts": [
+              "d"
+            ]
+          }
+        }
+      ]
+    },
+    "trailingComments": [
+      "---> assumption -> 1"
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "constraint_test_transitivity2"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "a",
+        "type": {
+          "name": "String"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "b",
+        "type": {
+          "name": "String"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "c",
+        "type": {
+          "name": "String"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "d",
+        "type": {
+          "name": "String"
+        }
+      },
+      {
+        "kind": "constraintDef",
+        "name": "c1",
+        "constraintType": "ASSUME",
+        "expr": {
+          "kind": "naryExpr",
+          "op": "AND",
+          "operands": [
+            {
+              "kind": "binaryExpr",
+              "op": ">",
+              "left": {
+                "kind": "columnRef",
+                "parts": [
+                  "a"
+                ]
+              },
+              "right": {
+                "kind": "columnRef",
+                "parts": [
+                  "b"
+                ]
+              }
+            },
+            {
+              "kind": "binaryExpr",
+              "op": ">=",
+              "left": {
+                "kind": "columnRef",
+                "parts": [
+                  "b"
+                ]
+              },
+              "right": {
+                "kind": "columnRef",
+                "parts": [
+                  "c"
+                ]
+              }
+            },
+            {
+              "kind": "binaryExpr",
+              "op": ">",
+              "left": {
+                "kind": "columnRef",
+                "parts": [
+                  "c"
+                ]
+              },
+              "right": {
+                "kind": "columnRef",
+                "parts": [
+                  "d"
+                ]
+              }
+            },
+            {
+              "kind": "binaryExpr",
+              "op": ">=",
+              "left": {
+                "kind": "columnRef",
+                "parts": [
+                  "a"
+                ]
+              },
+              "right": {
+                "kind": "columnRef",
+                "parts": [
+                  "d"
+                ]
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "engine": {
+      "name": "TinyLog"
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "constraint_test_transitivity2"
+      }
+    },
+    "columns": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "a"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "b"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "c"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "d"
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "count",
+        "args": []
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "constraint_test_transitivity2"
+    },
+    "where": {
+      "kind": "binaryExpr",
+      "op": ">",
+      "left": {
+        "kind": "columnRef",
+        "parts": [
+          "a"
+        ]
+      },
+      "right": {
+        "kind": "columnRef",
+        "parts": [
+          "d"
+        ]
+      }
+    },
+    "trailingComments": [
+      "---> assumption -> 1"
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "count",
+        "args": []
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "constraint_test_transitivity2"
+    },
+    "where": {
+      "kind": "binaryExpr",
+      "op": ">=",
+      "left": {
+        "kind": "columnRef",
+        "parts": [
+          "a"
+        ]
+      },
+      "right": {
+        "kind": "columnRef",
+        "parts": [
+          "d"
+        ]
+      }
+    },
+    "trailingComments": [
+      "---> assumption -> 1"
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "count",
+        "args": []
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "constraint_test_transitivity2"
+    },
+    "where": {
+      "kind": "binaryExpr",
+      "op": "<",
+      "left": {
+        "kind": "columnRef",
+        "parts": [
+          "d"
+        ]
+      },
+      "right": {
+        "kind": "columnRef",
+        "parts": [
+          "a"
+        ]
+      }
+    },
+    "trailingComments": [
+      "---> assumption -> 1"
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "count",
+        "args": []
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "constraint_test_transitivity2"
+    },
+    "where": {
+      "kind": "binaryExpr",
+      "op": "<",
+      "left": {
+        "kind": "columnRef",
+        "parts": [
+          "a"
+        ]
+      },
+      "right": {
+        "kind": "columnRef",
+        "parts": [
+          "d"
+        ]
+      }
+    },
+    "trailingComments": [
+      "---> assumption -> 0"
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "count",
+        "args": []
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "constraint_test_transitivity2"
+    },
+    "where": {
+      "kind": "binaryExpr",
+      "op": "=",
+      "left": {
+        "kind": "columnRef",
+        "parts": [
+          "a"
+        ]
+      },
+      "right": {
+        "kind": "columnRef",
+        "parts": [
+          "d"
+        ]
+      }
+    },
+    "trailingComments": [
+      "---> assumption -> 0"
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "count",
+        "args": []
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "constraint_test_transitivity2"
+    },
+    "where": {
+      "kind": "binaryExpr",
+      "op": "!=",
+      "left": {
+        "kind": "columnRef",
+        "parts": [
+          "a"
+        ]
+      },
+      "right": {
+        "kind": "columnRef",
+        "parts": [
+          "d"
+        ]
+      }
+    },
+    "trailingComments": [
+      "---> assumption -> 1"
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "constraint_test_transitivity3"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "a",
+        "type": {
+          "name": "Int64"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "b",
+        "type": {
+          "name": "Int64"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "c",
+        "type": {
+          "name": "Int64"
+        }
+      },
+      {
+        "kind": "constraintDef",
+        "name": "c1",
+        "constraintType": "ASSUME",
+        "expr": {
+          "kind": "naryExpr",
+          "op": "AND",
+          "operands": [
+            {
+              "kind": "binaryExpr",
+              "op": ">",
+              "left": {
+                "kind": "columnRef",
+                "parts": [
+                  "b"
+                ]
+              },
+              "right": {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "10"
+              }
+            },
+            {
+              "kind": "binaryExpr",
+              "op": ">",
+              "left": {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "1"
+              },
+              "right": {
+                "kind": "columnRef",
+                "parts": [
+                  "a"
+                ]
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "engine": {
+      "name": "TinyLog"
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "constraint_test_transitivity3"
+      }
+    },
+    "columns": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "a"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "b"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "c"
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "count",
+        "args": []
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "constraint_test_transitivity3"
+    },
+    "where": {
+      "kind": "binaryExpr",
+      "op": "<",
+      "left": {
+        "kind": "columnRef",
+        "parts": [
+          "a"
+        ]
+      },
+      "right": {
+        "kind": "columnRef",
+        "parts": [
+          "b"
+        ]
+      }
+    },
+    "trailingComments": [
+      "---> assumption -> 1"
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "count",
+        "args": []
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "constraint_test_transitivity3"
+    },
+    "where": {
+      "kind": "binaryExpr",
+      "op": ">=",
+      "left": {
+        "kind": "columnRef",
+        "parts": [
+          "b"
+        ]
+      },
+      "right": {
+        "kind": "columnRef",
+        "parts": [
+          "a"
+        ]
+      }
+    },
+    "trailingComments": [
+      "---> assumption -> 1"
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "constraint_test_constants_repl"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "a",
+        "type": {
+          "name": "Int64"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "b",
+        "type": {
+          "name": "Int64"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "c",
+        "type": {
+          "name": "Int64"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "d",
+        "type": {
+          "name": "Int64"
+        }
+      },
+      {
+        "kind": "constraintDef",
+        "name": "c1",
+        "constraintType": "ASSUME",
+        "expr": {
+          "kind": "naryExpr",
+          "op": "AND",
+          "operands": [
+            {
+              "kind": "binaryExpr",
+              "op": "=",
+              "left": {
+                "kind": "binaryExpr",
+                "op": "-",
+                "left": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "a"
+                  ]
+                },
+                "right": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "b"
+                  ]
+                }
+              },
+              "right": {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "10"
+              }
+            },
+            {
+              "kind": "binaryExpr",
+              "op": "=",
+              "left": {
+                "kind": "binaryExpr",
+                "op": "+",
+                "left": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "c"
+                  ]
+                },
+                "right": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "d"
+                  ]
+                }
+              },
+              "right": {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "20"
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "engine": {
+      "name": "TinyLog"
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "constraint_test_constants_repl"
+      }
+    },
+    "columns": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "a"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "b"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "c"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "d"
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "count",
+        "args": []
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "constraint_test_constants_repl"
+    },
+    "where": {
+      "kind": "binaryExpr",
+      "op": "=",
+      "left": {
+        "kind": "binaryExpr",
+        "op": "-",
+        "left": {
+          "kind": "columnRef",
+          "parts": [
+            "a"
+          ]
+        },
+        "right": {
+          "kind": "columnRef",
+          "parts": [
+            "b"
+          ]
+        }
+      },
+      "right": {
+        "kind": "literal",
+        "type": "UInt64",
+        "value": "10"
+      }
+    },
+    "trailingComments": [
+      "---> assumption -> 1"
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "count",
+        "args": []
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "constraint_test_constants_repl"
+    },
+    "where": {
+      "kind": "binaryExpr",
+      "op": "<",
+      "left": {
+        "kind": "binaryExpr",
+        "op": "-",
+        "left": {
+          "kind": "columnRef",
+          "parts": [
+            "a"
+          ]
+        },
+        "right": {
+          "kind": "columnRef",
+          "parts": [
+            "b"
+          ]
+        }
+      },
+      "right": {
+        "kind": "literal",
+        "type": "UInt64",
+        "value": "0"
+      }
+    },
+    "trailingComments": [
+      "---> assumption -> 0"
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "count",
+        "args": []
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "constraint_test_constants_repl"
+    },
+    "where": {
+      "kind": "binaryExpr",
+      "op": "=",
+      "left": {
+        "kind": "binaryExpr",
+        "op": "-",
+        "left": {
+          "kind": "columnRef",
+          "parts": [
+            "a"
+          ]
+        },
+        "right": {
+          "kind": "columnRef",
+          "parts": [
+            "b"
+          ]
+        }
+      },
+      "right": {
+        "kind": "binaryExpr",
+        "op": "+",
+        "left": {
+          "kind": "columnRef",
+          "parts": [
+            "c"
+          ]
+        },
+        "right": {
+          "kind": "columnRef",
+          "parts": [
+            "d"
+          ]
+        }
+      }
+    },
+    "trailingComments": [
+      "---> assumption -> 0"
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "count",
+        "args": []
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "constraint_test_constants_repl"
+    },
+    "where": {
+      "kind": "binaryExpr",
+      "op": "=",
+      "left": {
+        "kind": "binaryExpr",
+        "op": "*",
+        "left": {
+          "kind": "binaryExpr",
+          "op": "-",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "a"
+            ]
+          },
+          "right": {
+            "kind": "columnRef",
+            "parts": [
+              "b"
+            ]
+          },
+          "parenthesized": true
+        },
+        "right": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "2"
+        }
+      },
+      "right": {
+        "kind": "binaryExpr",
+        "op": "+",
+        "left": {
+          "kind": "columnRef",
+          "parts": [
+            "c"
+          ]
+        },
+        "right": {
+          "kind": "columnRef",
+          "parts": [
+            "d"
+          ]
+        }
+      }
+    },
+    "trailingComments": [
+      "---> assumption -> 1"
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "constraint_test_constants"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "a",
+        "type": {
+          "name": "Int64"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "b",
+        "type": {
+          "name": "Int64"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "c",
+        "type": {
+          "name": "Int64"
+        }
+      },
+      {
+        "kind": "constraintDef",
+        "name": "c1",
+        "constraintType": "ASSUME",
+        "expr": {
+          "kind": "naryExpr",
+          "op": "AND",
+          "operands": [
+            {
+              "kind": "binaryExpr",
+              "op": ">",
+              "left": {
+                "kind": "columnRef",
+                "parts": [
+                  "b"
+                ]
+              },
+              "right": {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "10"
+              }
+            },
+            {
+              "kind": "binaryExpr",
+              "op": ">=",
+              "left": {
+                "kind": "columnRef",
+                "parts": [
+                  "a"
+                ]
+              },
+              "right": {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "10"
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "engine": {
+      "name": "TinyLog"
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "constraint_test_constants"
+      }
+    },
+    "columns": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "a"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "b"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "c"
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "count",
+        "args": []
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "constraint_test_constants"
+    },
+    "where": {
+      "kind": "binaryExpr",
+      "op": "<",
+      "left": {
+        "kind": "literal",
+        "type": "UInt64",
+        "value": "9"
+      },
+      "right": {
+        "kind": "columnRef",
+        "parts": [
+          "b"
+        ]
+      }
+    },
+    "trailingComments": [
+      "---> assumption -> 1"
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "count",
+        "args": []
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "constraint_test_constants"
+    },
+    "where": {
+      "kind": "binaryExpr",
+      "op": "<",
+      "left": {
+        "kind": "literal",
+        "type": "UInt64",
+        "value": "11"
+      },
+      "right": {
+        "kind": "columnRef",
+        "parts": [
+          "b"
+        ]
+      }
+    },
+    "trailingComments": [
+      "---> assumption -> 0"
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "count",
+        "args": []
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "constraint_test_constants"
+    },
+    "where": {
+      "kind": "binaryExpr",
+      "op": "<=",
+      "left": {
+        "kind": "literal",
+        "type": "UInt64",
+        "value": "10"
+      },
+      "right": {
+        "kind": "columnRef",
+        "parts": [
+          "b"
+        ]
+      }
+    },
+    "trailingComments": [
+      "---> assumption -> 1"
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "count",
+        "args": []
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "constraint_test_constants"
+    },
+    "where": {
+      "kind": "binaryExpr",
+      "op": "<",
+      "left": {
+        "kind": "literal",
+        "type": "UInt64",
+        "value": "9"
+      },
+      "right": {
+        "kind": "columnRef",
+        "parts": [
+          "a"
+        ]
+      }
+    },
+    "trailingComments": [
+      "---> assumption -> 1"
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "count",
+        "args": []
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "constraint_test_constants"
+    },
+    "where": {
+      "kind": "binaryExpr",
+      "op": "<",
+      "left": {
+        "kind": "literal",
+        "type": "UInt64",
+        "value": "10"
+      },
+      "right": {
+        "kind": "columnRef",
+        "parts": [
+          "a"
+        ]
+      }
+    },
+    "trailingComments": [
+      "---> assumption -> 0"
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "count",
+        "args": []
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "constraint_test_constants"
+    },
+    "where": {
+      "kind": "binaryExpr",
+      "op": "<=",
+      "left": {
+        "kind": "literal",
+        "type": "UInt64",
+        "value": "10"
+      },
+      "right": {
+        "kind": "columnRef",
+        "parts": [
+          "a"
+        ]
+      }
+    },
+    "trailingComments": [
+      "---> assumption -> 1"
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "count",
+        "args": []
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "constraint_test_constants"
+    },
+    "where": {
+      "kind": "binaryExpr",
+      "op": "<=",
+      "left": {
+        "kind": "literal",
+        "type": "UInt64",
+        "value": "9"
+      },
+      "right": {
+        "kind": "columnRef",
+        "parts": [
+          "a"
+        ]
+      }
+    },
+    "trailingComments": [
+      "---> assumption -> 1"
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "count",
+        "args": []
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "constraint_test_constants"
+    },
+    "where": {
+      "kind": "binaryExpr",
+      "op": "<=",
+      "left": {
+        "kind": "literal",
+        "type": "UInt64",
+        "value": "11"
+      },
+      "right": {
+        "kind": "columnRef",
+        "parts": [
+          "a"
+        ]
+      }
+    },
+    "trailingComments": [
+      "---> assumption -> 0"
+    ]
+  }
+]

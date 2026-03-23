@@ -1,1 +1,53 @@
-<Parse Error>
+CREATE TABLE m
+(
+    a String,
+    f UInt8 DEFAULT 0
+)
+ENGINE = Merge(currentDatabase(), '^(t1|t2)$');
+
+CREATE TABLE t1
+(
+    a String,
+    f UInt8 DEFAULT 1
+)
+ENGINE = MergeTree
+ORDER BY tuple()
+SETTINGS index_granularity = 8192;
+
+INSERT INTO t1 (a);
+
+CREATE TABLE t2
+(
+    a String,
+    f UInt8 DEFAULT 2
+)
+ENGINE = MergeTree
+ORDER BY tuple()
+SETTINGS index_granularity = 8192;
+
+INSERT INTO t2 (a);
+
+-- { echoOn }
+SELECT *
+FROM m
+PREWHERE a = 'OK'
+ORDER BY
+    a ASC,
+    f ASC;
+
+SELECT *
+FROM m
+PREWHERE f = 1
+ORDER BY
+    a ASC,
+    f ASC;
+
+SELECT *
+FROM m
+WHERE f = 0
+SETTINGS optimize_move_to_prewhere = 0;
+
+SELECT *
+FROM m
+WHERE f = 0
+SETTINGS optimize_move_to_prewhere = 1;

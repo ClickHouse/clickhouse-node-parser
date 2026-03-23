@@ -1,1 +1,1461 @@
-{"expected":[{"type":"literal","text":"EXPLAIN","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"REPLACE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"SET","ignoreCase":true},{"type":"literal","text":"SET","ignoreCase":true},{"type":"literal","text":"SET","ignoreCase":true},{"type":"literal","text":"USE","ignoreCase":true},{"type":"literal","text":"SYSTEM","ignoreCase":true},{"type":"literal","text":"(","ignoreCase":false},{"type":"literal","text":"WITH","ignoreCase":true},{"type":"literal","text":"SELECT","ignoreCase":true},{"type":"end"}],"found":"I","location":{"start":{"offset":164,"line":7,"column":1},"end":{"offset":165,"line":7,"column":2}},"name":"SyntaxError"}
+[
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "test_json_decimal_precision"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "id",
+        "type": {
+          "name": "UInt32"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "json_data",
+        "type": {
+          "name": "String"
+        }
+      }
+    ],
+    "engine": {
+      "name": "Memory"
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "test_json_decimal_precision"
+      }
+    },
+    "leadingComments": [
+      "-- Insert test data with decimal values that could lose precision"
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "literal",
+          "type": "String",
+          "value": "Test 1: JSONExtract with numeric JSON values"
+        },
+        "alias": "test_name"
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "id"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "json_data"
+        ]
+      },
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "JSONExtract",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "json_data"
+              ]
+            },
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "dec"
+            },
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "Decimal(32,16)"
+            }
+          ]
+        },
+        "alias": "extracted_decimal"
+      },
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "castExpr",
+          "expr": {
+            "kind": "functionCall",
+            "name": "JSONExtractString",
+            "args": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "json_data"
+                ]
+              },
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "dec"
+              }
+            ]
+          },
+          "type": "Decimal(32,16)",
+          "operator": true
+        },
+        "alias": "string_cast_decimal"
+      },
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "binaryExpr",
+          "op": "=",
+          "left": {
+            "kind": "functionCall",
+            "name": "JSONExtract",
+            "args": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "json_data"
+                ]
+              },
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "dec"
+              },
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "Decimal(32,16)"
+              }
+            ]
+          },
+          "right": {
+            "kind": "castExpr",
+            "expr": {
+              "kind": "functionCall",
+              "name": "JSONExtractString",
+              "args": [
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "json_data"
+                  ]
+                },
+                {
+                  "kind": "literal",
+                  "type": "String",
+                  "value": "dec"
+                }
+              ]
+            },
+            "type": "Decimal(32,16)",
+            "operator": true
+          }
+        },
+        "alias": "precision_preserved"
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "test_json_decimal_precision"
+    },
+    "where": {
+      "kind": "inExpr",
+      "negated": false,
+      "expr": {
+        "kind": "columnRef",
+        "parts": [
+          "id"
+        ]
+      },
+      "values": [
+        {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        },
+        {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "3"
+        },
+        {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "5"
+        },
+        {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "7"
+        },
+        {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "9"
+        },
+        {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "11"
+        },
+        {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "13"
+        },
+        {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "15"
+        }
+      ]
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "id"
+          ]
+        },
+        "direction": "ASC"
+      }
+    ],
+    "leadingComments": [
+      "-- Test 1: Verify that JSONExtract preserves precision for numeric JSON values"
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "literal",
+          "type": "String",
+          "value": "Test 2: JSONExtract with string JSON values"
+        },
+        "alias": "test_name"
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "id"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "json_data"
+        ]
+      },
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "JSONExtract",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "json_data"
+              ]
+            },
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "dec"
+            },
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "Decimal(32,16)"
+            }
+          ]
+        },
+        "alias": "extracted_decimal"
+      },
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "castExpr",
+          "expr": {
+            "kind": "functionCall",
+            "name": "JSONExtractString",
+            "args": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "json_data"
+                ]
+              },
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "dec"
+              }
+            ]
+          },
+          "type": "Decimal(32,16)",
+          "operator": true
+        },
+        "alias": "string_cast_decimal"
+      },
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "binaryExpr",
+          "op": "=",
+          "left": {
+            "kind": "functionCall",
+            "name": "JSONExtract",
+            "args": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "json_data"
+                ]
+              },
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "dec"
+              },
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "Decimal(32,16)"
+              }
+            ]
+          },
+          "right": {
+            "kind": "castExpr",
+            "expr": {
+              "kind": "functionCall",
+              "name": "JSONExtractString",
+              "args": [
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "json_data"
+                  ]
+                },
+                {
+                  "kind": "literal",
+                  "type": "String",
+                  "value": "dec"
+                }
+              ]
+            },
+            "type": "Decimal(32,16)",
+            "operator": true
+          }
+        },
+        "alias": "precision_preserved"
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "test_json_decimal_precision"
+    },
+    "where": {
+      "kind": "inExpr",
+      "negated": false,
+      "expr": {
+        "kind": "columnRef",
+        "parts": [
+          "id"
+        ]
+      },
+      "values": [
+        {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "2"
+        },
+        {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "4"
+        },
+        {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "6"
+        },
+        {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "8"
+        },
+        {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "10"
+        },
+        {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "12"
+        },
+        {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "14"
+        },
+        {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "16"
+        }
+      ]
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "id"
+          ]
+        },
+        "direction": "ASC"
+      }
+    ],
+    "leadingComments": [
+      "-- Test 2: Verify that JSONExtract preserves precision for string JSON values"
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "literal",
+          "type": "String",
+          "value": "Test 3: Specific precision verification"
+        },
+        "alias": "test_name"
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "id"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "json_data"
+        ]
+      },
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "JSONExtract",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "json_data"
+              ]
+            },
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "dec"
+            },
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "Decimal(32,16)"
+            }
+          ]
+        },
+        "alias": "extracted_decimal"
+      },
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "castExpr",
+          "expr": {
+            "kind": "functionCall",
+            "name": "JSONExtractString",
+            "args": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "json_data"
+                ]
+              },
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "dec"
+              }
+            ]
+          },
+          "type": "Decimal(32,16)",
+          "operator": true
+        },
+        "alias": "string_cast_decimal"
+      },
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "binaryExpr",
+          "op": "=",
+          "left": {
+            "kind": "functionCall",
+            "name": "JSONExtract",
+            "args": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "json_data"
+                ]
+              },
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "dec"
+              },
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "Decimal(32,16)"
+              }
+            ]
+          },
+          "right": {
+            "kind": "castExpr",
+            "expr": {
+              "kind": "functionCall",
+              "name": "JSONExtractString",
+              "args": [
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "json_data"
+                  ]
+                },
+                {
+                  "kind": "literal",
+                  "type": "String",
+                  "value": "dec"
+                }
+              ]
+            },
+            "type": "Decimal(32,16)",
+            "operator": true
+          }
+        },
+        "alias": "precision_preserved"
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "test_json_decimal_precision"
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "id"
+          ]
+        },
+        "direction": "ASC"
+      }
+    ],
+    "leadingComments": [
+      "-- Test 3: Verify specific precision values match expected results"
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "literal",
+          "type": "String",
+          "value": "Test 4: Original issue #69082 verification"
+        },
+        "alias": "test_name"
+      },
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "JSONExtract",
+          "args": [
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "{\"dec\": 111244542.003}"
+            },
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "dec"
+            },
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "Decimal(31,16)"
+            }
+          ]
+        },
+        "alias": "direct_extraction"
+      },
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "castExpr",
+          "expr": {
+            "kind": "functionCall",
+            "name": "JSONExtractString",
+            "args": [
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "{\"dec\": 111244542.003}"
+              },
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "dec"
+              }
+            ]
+          },
+          "type": "Decimal(32,16)",
+          "operator": true
+        },
+        "alias": "string_cast"
+      },
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "toString",
+          "args": [
+            {
+              "kind": "functionCall",
+              "name": "JSONExtract",
+              "args": [
+                {
+                  "kind": "literal",
+                  "type": "String",
+                  "value": "{\"dec\": 111244542.003}"
+                },
+                {
+                  "kind": "literal",
+                  "type": "String",
+                  "value": "dec"
+                },
+                {
+                  "kind": "literal",
+                  "type": "String",
+                  "value": "Decimal(31,16)"
+                }
+              ]
+            }
+          ]
+        },
+        "alias": "direct_extraction_str"
+      },
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "toString",
+          "args": [
+            {
+              "kind": "castExpr",
+              "expr": {
+                "kind": "functionCall",
+                "name": "JSONExtractString",
+                "args": [
+                  {
+                    "kind": "literal",
+                    "type": "String",
+                    "value": "{\"dec\": 111244542.003}"
+                  },
+                  {
+                    "kind": "literal",
+                    "type": "String",
+                    "value": "dec"
+                  }
+                ]
+              },
+              "type": "Decimal(32,16)",
+              "operator": true
+            }
+          ]
+        },
+        "alias": "string_cast_str"
+      },
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "binaryExpr",
+          "op": "=",
+          "left": {
+            "kind": "functionCall",
+            "name": "JSONExtract",
+            "args": [
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "{\"dec\": 111244542.003}"
+              },
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "dec"
+              },
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "Decimal(31,16)"
+              }
+            ]
+          },
+          "right": {
+            "kind": "castExpr",
+            "expr": {
+              "kind": "functionCall",
+              "name": "JSONExtractString",
+              "args": [
+                {
+                  "kind": "literal",
+                  "type": "String",
+                  "value": "{\"dec\": 111244542.003}"
+                },
+                {
+                  "kind": "literal",
+                  "type": "String",
+                  "value": "dec"
+                }
+              ]
+            },
+            "type": "Decimal(32,16)",
+            "operator": true
+          }
+        },
+        "alias": "issue_resolved"
+      }
+    ],
+    "leadingComments": [
+      "-- Test 4: Verify that the fix resolves the original issue from #69082"
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "literal",
+          "type": "String",
+          "value": "Test 5: Edge cases with extreme precision"
+        },
+        "alias": "test_name"
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "id"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "json_data"
+        ]
+      },
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "JSONExtract",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "json_data"
+              ]
+            },
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "dec"
+            },
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "Decimal(38,37)"
+            }
+          ]
+        },
+        "alias": "extracted_decimal"
+      },
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "castExpr",
+          "expr": {
+            "kind": "functionCall",
+            "name": "JSONExtractString",
+            "args": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "json_data"
+                ]
+              },
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "dec"
+              }
+            ]
+          },
+          "type": "Decimal(38,37)",
+          "operator": true
+        },
+        "alias": "string_cast_decimal"
+      },
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "binaryExpr",
+          "op": "=",
+          "left": {
+            "kind": "functionCall",
+            "name": "JSONExtract",
+            "args": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "json_data"
+                ]
+              },
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "dec"
+              },
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "Decimal(38,37)"
+              }
+            ]
+          },
+          "right": {
+            "kind": "castExpr",
+            "expr": {
+              "kind": "functionCall",
+              "name": "JSONExtractString",
+              "args": [
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "json_data"
+                  ]
+                },
+                {
+                  "kind": "literal",
+                  "type": "String",
+                  "value": "dec"
+                }
+              ]
+            },
+            "type": "Decimal(38,37)",
+            "operator": true
+          }
+        },
+        "alias": "precision_preserved"
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "test_json_decimal_precision"
+    },
+    "where": {
+      "kind": "inExpr",
+      "negated": false,
+      "expr": {
+        "kind": "columnRef",
+        "parts": [
+          "id"
+        ]
+      },
+      "values": [
+        {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "9"
+        },
+        {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "10"
+        },
+        {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "11"
+        },
+        {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "12"
+        }
+      ]
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "id"
+          ]
+        },
+        "direction": "ASC"
+      }
+    ],
+    "leadingComments": [
+      "-- Test 5: Edge cases with very large and very small numbers"
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "literal",
+          "type": "String",
+          "value": "Test 6: Performance test with multiple values"
+        },
+        "alias": "test_name"
+      },
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "count",
+          "args": []
+        },
+        "alias": "total_rows"
+      },
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "countIf",
+          "args": [
+            {
+              "kind": "binaryExpr",
+              "op": "=",
+              "left": {
+                "kind": "functionCall",
+                "name": "JSONExtract",
+                "args": [
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "json_data"
+                    ]
+                  },
+                  {
+                    "kind": "literal",
+                    "type": "String",
+                    "value": "dec"
+                  },
+                  {
+                    "kind": "literal",
+                    "type": "String",
+                    "value": "Decimal(32,16)"
+                  }
+                ]
+              },
+              "right": {
+                "kind": "castExpr",
+                "expr": {
+                  "kind": "functionCall",
+                  "name": "JSONExtractString",
+                  "args": [
+                    {
+                      "kind": "columnRef",
+                      "parts": [
+                        "json_data"
+                      ]
+                    },
+                    {
+                      "kind": "literal",
+                      "type": "String",
+                      "value": "dec"
+                    }
+                  ]
+                },
+                "type": "Decimal(32,16)",
+                "operator": true
+              }
+            }
+          ]
+        },
+        "alias": "precision_preserved_count"
+      },
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "countIf",
+          "args": [
+            {
+              "kind": "binaryExpr",
+              "op": "!=",
+              "left": {
+                "kind": "functionCall",
+                "name": "JSONExtract",
+                "args": [
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "json_data"
+                    ]
+                  },
+                  {
+                    "kind": "literal",
+                    "type": "String",
+                    "value": "dec"
+                  },
+                  {
+                    "kind": "literal",
+                    "type": "String",
+                    "value": "Decimal(32,16)"
+                  }
+                ]
+              },
+              "right": {
+                "kind": "castExpr",
+                "expr": {
+                  "kind": "functionCall",
+                  "name": "JSONExtractString",
+                  "args": [
+                    {
+                      "kind": "columnRef",
+                      "parts": [
+                        "json_data"
+                      ]
+                    },
+                    {
+                      "kind": "literal",
+                      "type": "String",
+                      "value": "dec"
+                    }
+                  ]
+                },
+                "type": "Decimal(32,16)",
+                "operator": true
+              }
+            }
+          ]
+        },
+        "alias": "precision_lost_count"
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "test_json_decimal_precision"
+    },
+    "leadingComments": [
+      "-- Test 6: Performance test with multiple values"
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "literal",
+          "type": "String",
+          "value": "Test 7: Different decimal scales"
+        },
+        "alias": "test_name"
+      },
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "JSONExtract",
+          "args": [
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "{\"dec\": 123.456}"
+            },
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "dec"
+            },
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "Decimal(10,2)"
+            }
+          ]
+        },
+        "alias": "scale_2"
+      },
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "JSONExtract",
+          "args": [
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "{\"dec\": 123.456}"
+            },
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "dec"
+            },
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "Decimal(10,3)"
+            }
+          ]
+        },
+        "alias": "scale_3"
+      },
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "JSONExtract",
+          "args": [
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "{\"dec\": 123.456}"
+            },
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "dec"
+            },
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "Decimal(10,4)"
+            }
+          ]
+        },
+        "alias": "scale_4"
+      },
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "JSONExtract",
+          "args": [
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "{\"dec\": 123.456}"
+            },
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "dec"
+            },
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "Decimal(10,5)"
+            }
+          ]
+        },
+        "alias": "scale_5"
+      }
+    ],
+    "leadingComments": [
+      "-- Test 7: Verify that the fix works with different decimal scales"
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "literal",
+          "type": "String",
+          "value": "Test 8: Negative numbers"
+        },
+        "alias": "test_name"
+      },
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "JSONExtract",
+          "args": [
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "{\"dec\": -111244542.003}"
+            },
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "dec"
+            },
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "Decimal(32,16)"
+            }
+          ]
+        },
+        "alias": "negative_extraction"
+      },
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "castExpr",
+          "expr": {
+            "kind": "functionCall",
+            "name": "JSONExtractString",
+            "args": [
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "{\"dec\": -111244542.003}"
+              },
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "dec"
+              }
+            ]
+          },
+          "type": "Decimal(32,16)",
+          "operator": true
+        },
+        "alias": "negative_string_cast"
+      },
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "binaryExpr",
+          "op": "=",
+          "left": {
+            "kind": "functionCall",
+            "name": "JSONExtract",
+            "args": [
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "{\"dec\": -111244542.003}"
+              },
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "dec"
+              },
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "Decimal(32,16)"
+              }
+            ]
+          },
+          "right": {
+            "kind": "castExpr",
+            "expr": {
+              "kind": "functionCall",
+              "name": "JSONExtractString",
+              "args": [
+                {
+                  "kind": "literal",
+                  "type": "String",
+                  "value": "{\"dec\": -111244542.003}"
+                },
+                {
+                  "kind": "literal",
+                  "type": "String",
+                  "value": "dec"
+                }
+              ]
+            },
+            "type": "Decimal(32,16)",
+            "operator": true
+          }
+        },
+        "alias": "negative_precision_preserved"
+      }
+    ],
+    "leadingComments": [
+      "-- Test 8: Verify that the fix works with negative numbers"
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "literal",
+          "type": "String",
+          "value": "Test 9: Simple precision demonstration"
+        },
+        "alias": "test_name"
+      },
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "JSONExtract",
+          "args": [
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "{\"amount\": 16.4}"
+            },
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "amount"
+            },
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "Decimal64(6)"
+            }
+          ]
+        },
+        "alias": "json_extract_result"
+      },
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "CAST",
+          "args": [
+            {
+              "kind": "functionCall",
+              "name": "JSONExtractString",
+              "args": [
+                {
+                  "kind": "literal",
+                  "type": "String",
+                  "value": "{\"amount\": 16.4}"
+                },
+                {
+                  "kind": "literal",
+                  "type": "String",
+                  "value": "amount"
+                }
+              ]
+            },
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "Decimal64(6)"
+            }
+          ]
+        },
+        "alias": "string_cast_result"
+      },
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "binaryExpr",
+          "op": "=",
+          "left": {
+            "kind": "functionCall",
+            "name": "JSONExtract",
+            "args": [
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "{\"amount\": 16.4}"
+              },
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "amount"
+              },
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "Decimal64(6)"
+              }
+            ]
+          },
+          "right": {
+            "kind": "functionCall",
+            "name": "CAST",
+            "args": [
+              {
+                "kind": "functionCall",
+                "name": "JSONExtractString",
+                "args": [
+                  {
+                    "kind": "literal",
+                    "type": "String",
+                    "value": "{\"amount\": 16.4}"
+                  },
+                  {
+                    "kind": "literal",
+                    "type": "String",
+                    "value": "amount"
+                  }
+                ]
+              },
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "Decimal64(6)"
+              }
+            ]
+          }
+        },
+        "alias": "precision_preserved"
+      }
+    ],
+    "leadingComments": [
+      "-- Test 9: Simple case that demonstrates the fix"
+    ]
+  }
+]

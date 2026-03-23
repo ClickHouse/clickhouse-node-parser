@@ -1,1 +1,451 @@
-{"expected":[{"type":"literal","text":"EXPLAIN","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"REPLACE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"SET","ignoreCase":true},{"type":"literal","text":"SET","ignoreCase":true},{"type":"literal","text":"SET","ignoreCase":true},{"type":"literal","text":"USE","ignoreCase":true},{"type":"literal","text":"SYSTEM","ignoreCase":true},{"type":"literal","text":"(","ignoreCase":false},{"type":"literal","text":"WITH","ignoreCase":true},{"type":"literal","text":"SELECT","ignoreCase":true},{"type":"end"}],"found":"I","location":{"start":{"offset":75,"line":2,"column":1},"end":{"offset":76,"line":2,"column":2}},"name":"SyntaxError"}
+[
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "test"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "a",
+        "type": {
+          "name": "Int64"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "b",
+        "type": {
+          "name": "Int64"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "c",
+        "type": {
+          "name": "Int64"
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "a"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "test"
+      }
+    },
+    "columns": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "a"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "b"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "c"
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "asterisk"
+      },
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "literal",
+          "type": "String",
+          "value": "original"
+        },
+        "alias": "orig"
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "test"
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "a"
+          ]
+        },
+        "direction": "ASC"
+      },
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "b"
+          ]
+        },
+        "direction": "ASC",
+        "fillTo": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "20"
+        },
+        "fillStep": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "2"
+        },
+        "fillStaleness": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "3"
+        }
+      },
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "c"
+          ]
+        },
+        "direction": "ASC",
+        "fillTo": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "25"
+        },
+        "fillStep": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "3"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "test2"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "a",
+        "type": {
+          "name": "Int64"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "b",
+        "type": {
+          "name": "Int64"
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "a"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "test2"
+      }
+    },
+    "columns": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "a"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "b"
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "asterisk"
+      },
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "literal",
+          "type": "String",
+          "value": "original"
+        },
+        "alias": "orig"
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "test2"
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "a"
+          ]
+        },
+        "direction": "ASC"
+      },
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "b"
+          ]
+        },
+        "direction": "ASC"
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "asterisk"
+      },
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "literal",
+          "type": "String",
+          "value": "original"
+        },
+        "alias": "orig"
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "test2"
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "a"
+          ]
+        },
+        "direction": "ASC",
+        "fillTo": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "20"
+        },
+        "fillStaleness": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "4"
+        }
+      },
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "b"
+          ]
+        },
+        "direction": "ASC",
+        "fillTo": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "15"
+        },
+        "fillStaleness": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "7"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "test3"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "a",
+        "type": {
+          "name": "Int64"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "b",
+        "type": {
+          "name": "Int64"
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "a"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "test3"
+      }
+    },
+    "columns": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "a"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "b"
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "a"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "b"
+        ]
+      },
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "literal",
+          "type": "String",
+          "value": "original"
+        },
+        "alias": "orig"
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "test3"
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "a"
+          ]
+        },
+        "direction": "ASC",
+        "fillTo": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "33"
+        },
+        "fillStep": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "3"
+        }
+      },
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "b"
+          ]
+        },
+        "direction": "ASC",
+        "fillFrom": {
+          "kind": "literal",
+          "type": "Int64",
+          "value": "-10"
+        },
+        "fillStep": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "2"
+        }
+      }
+    ]
+  }
+]

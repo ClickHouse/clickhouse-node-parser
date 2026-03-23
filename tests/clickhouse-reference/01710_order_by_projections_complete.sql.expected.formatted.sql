@@ -1,1 +1,31 @@
-<Parse Error>
+CREATE TABLE data_order_by_proj_comp
+(
+    t UInt64,
+    PROJECTION tSort (    SELECT *
+    ORDER BY t ASC)
+)
+ENGINE = MergeTree()
+ORDER BY t;
+
+INSERT INTO data_order_by_proj_comp;
+
+INSERT INTO data_order_by_proj_comp;
+
+-- { echoOn }
+SELECT t
+FROM data_order_by_proj_comp
+WHERE t > 0
+ORDER BY t ASC
+SETTINGS optimize_read_in_order = 1;
+
+SELECT t
+FROM data_order_by_proj_comp
+WHERE t > 0
+ORDER BY t ASC
+SETTINGS optimize_read_in_order = 0;
+
+SELECT t
+FROM data_order_by_proj_comp
+WHERE t > 0
+ORDER BY t ASC
+SETTINGS max_threads = 1;

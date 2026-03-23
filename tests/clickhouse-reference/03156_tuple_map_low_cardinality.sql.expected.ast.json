@@ -1,1 +1,350 @@
-{"expected":[{"type":"literal","text":"EXPLAIN","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"REPLACE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"SET","ignoreCase":true},{"type":"literal","text":"SET","ignoreCase":true},{"type":"literal","text":"SET","ignoreCase":true},{"type":"literal","text":"USE","ignoreCase":true},{"type":"literal","text":"SYSTEM","ignoreCase":true},{"type":"literal","text":"(","ignoreCase":false},{"type":"literal","text":"WITH","ignoreCase":true},{"type":"literal","text":"SELECT","ignoreCase":true},{"type":"end"}],"found":"I","location":{"start":{"offset":177,"line":7,"column":1},"end":{"offset":178,"line":7,"column":2}},"name":"SyntaxError"}
+[
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "t_map_lc"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "id",
+        "type": {
+          "name": "UInt64"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "t",
+        "type": {
+          "name": "Tuple",
+          "args": [
+            {
+              "kind": "namedField",
+              "name": "m",
+              "type": {
+                "name": "Map",
+                "args": [
+                  {
+                    "kind": "type",
+                    "type": {
+                      "name": "LowCardinality",
+                      "args": [
+                        {
+                          "kind": "type",
+                          "type": {
+                            "name": "String"
+                          }
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "kind": "type",
+                    "type": {
+                      "name": "LowCardinality",
+                      "args": [
+                        {
+                          "kind": "type",
+                          "type": {
+                            "name": "String"
+                          }
+                        }
+                      ]
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "id"
+          ]
+        }
+      }
+    ],
+    "settings": [
+      {
+        "name": "min_bytes_for_wide_part",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      }
+    ],
+    "settingsAfterOrderBy": true
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "t_map_lc"
+      }
+    },
+    "selectQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "asterisk"
+        }
+      ],
+      "from": {
+        "kind": "tableFunctionRef",
+        "name": "generateRandom",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": "id UInt64, t Tuple(m Map(LowCardinality(String), LowCardinality(String)))"
+          }
+        ]
+      },
+      "limit": {
+        "count": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "100000"
+        }
+      }
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "count",
+        "args": []
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "t_map_lc"
+    },
+    "where": {
+      "kind": "unaryExpr",
+      "op": "NOT",
+      "expr": {
+        "kind": "functionCall",
+        "name": "ignore",
+        "args": [
+          {
+            "kind": "asterisk"
+          },
+          {
+            "kind": "functionCall",
+            "name": "mapKeys",
+            "args": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "t",
+                  "m"
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "count",
+        "args": []
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "t_map_lc"
+    },
+    "where": {
+      "kind": "unaryExpr",
+      "op": "NOT",
+      "expr": {
+        "kind": "functionCall",
+        "name": "ignore",
+        "args": [
+          {
+            "kind": "asterisk"
+          },
+          {
+            "kind": "columnRef",
+            "parts": [
+              "t",
+              "m",
+              "keys"
+            ]
+          }
+        ]
+      }
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "count",
+        "args": []
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "t_map_lc"
+    },
+    "where": {
+      "kind": "unaryExpr",
+      "op": "NOT",
+      "expr": {
+        "kind": "functionCall",
+        "name": "ignore",
+        "args": [
+          {
+            "kind": "asterisk"
+          },
+          {
+            "kind": "columnRef",
+            "parts": [
+              "t",
+              "m",
+              "values"
+            ]
+          }
+        ]
+      }
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "asterisk"
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "t_map_lc"
+    },
+    "where": {
+      "kind": "functionCall",
+      "name": "mapContains",
+      "args": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "t",
+            "m"
+          ]
+        },
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "not_existing_key_1337"
+        }
+      ]
+    }
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "t_map_lc"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "id",
+        "type": {
+          "name": "UInt64"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "t",
+        "type": {
+          "name": "Tuple",
+          "args": [
+            {
+              "kind": "namedField",
+              "name": "m",
+              "type": {
+                "name": "Map",
+                "args": [
+                  {
+                    "kind": "type",
+                    "type": {
+                      "name": "LowCardinality",
+                      "args": [
+                        {
+                          "kind": "type",
+                          "type": {
+                            "name": "String"
+                          }
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "kind": "type",
+                    "type": {
+                      "name": "LowCardinality",
+                      "args": [
+                        {
+                          "kind": "type",
+                          "type": {
+                            "name": "String"
+                          }
+                        }
+                      ]
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "id"
+          ]
+        }
+      }
+    ],
+    "settings": [
+      {
+        "name": "min_bytes_for_wide_part",
+        "value": {
+          "kind": "literal",
+          "type": "String",
+          "value": "10G"
+        }
+      }
+    ],
+    "settingsAfterOrderBy": true
+  }
+]

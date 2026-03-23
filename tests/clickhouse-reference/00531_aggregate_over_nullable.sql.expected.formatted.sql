@@ -1,1 +1,22 @@
-<Parse Error>
+SET allow_deprecated_syntax_for_merge_tree = 1;
+
+CREATE TABLE agg_over_nullable
+(
+    `partition` Date,
+    timestamp DateTime,
+    user_id Nullable(UInt32),
+    description Nullable(String)
+)
+ENGINE = MergeTree(`partition`, timestamp, 8192);
+
+INSERT INTO agg_over_nullable (`partition`, timestamp, user_id, description);
+
+INSERT INTO agg_over_nullable (`partition`, timestamp, user_id, description);
+
+INSERT INTO agg_over_nullable (`partition`, timestamp, user_id, description);
+
+SELECT arraySort(groupUniqArray(description))
+FROM agg_over_nullable;
+
+SELECT arraySort(topK(3)(description))
+FROM agg_over_nullable;

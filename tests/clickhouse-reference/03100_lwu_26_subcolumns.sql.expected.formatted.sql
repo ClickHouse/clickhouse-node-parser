@@ -1,1 +1,36 @@
-<Parse Error>
+SET enable_json_type = 1;
+
+SET enable_lightweight_update = 1;
+
+CREATE TABLE t_lwu_subcolumns
+(
+    data JSON,
+    arr Array(UInt32),
+    n Nullable(String)
+)
+ENGINE = MergeTree
+ORDER BY tuple()
+SETTINGS enable_block_number_column = 1, enable_block_offset_column = 1;
+
+INSERT INTO t_lwu_subcolumns;
+
+SET apply_patch_parts = 0;
+
+SELECT *
+FROM t_lwu_subcolumns;
+
+SELECT
+    data.a,
+    data.b,
+    data.c
+FROM t_lwu_subcolumns;
+
+SELECT arr.size0
+FROM t_lwu_subcolumns;
+
+SELECT n.`null`
+FROM t_lwu_subcolumns;
+
+SET apply_patch_parts = 1;
+
+SET optimize_throw_if_noop = 1;

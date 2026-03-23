@@ -1,1 +1,9 @@
-<Parse Error>
+CREATE TEMPORARY TABLE t
+(
+    a UInt8
+);
+
+INSERT INTO t;
+
+SELECT *
+FROM t;

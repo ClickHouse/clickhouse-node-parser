@@ -1,1 +1,3949 @@
-{"expected":[{"type":"literal","text":"EXPLAIN","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"REPLACE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"SET","ignoreCase":true},{"type":"literal","text":"SET","ignoreCase":true},{"type":"literal","text":"SET","ignoreCase":true},{"type":"literal","text":"USE","ignoreCase":true},{"type":"literal","text":"SYSTEM","ignoreCase":true},{"type":"literal","text":"(","ignoreCase":false},{"type":"literal","text":"WITH","ignoreCase":true},{"type":"literal","text":"SELECT","ignoreCase":true},{"type":"end"}],"found":"I","location":{"start":{"offset":132,"line":3,"column":1},"end":{"offset":133,"line":3,"column":2}},"name":"SyntaxError"}
+[
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "simple_levenshtein"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "lhs",
+        "type": {
+          "name": "Array",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "UInt8"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "rhs",
+        "type": {
+          "name": "Array",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "UInt8"
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "functionCall",
+          "name": "tuple",
+          "args": []
+        }
+      }
+    ],
+    "leadingComments": [
+      "-- arrayLevenshteinDistance"
+    ]
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "simple_levenshtein"
+      }
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "arrayLevenshteinDistance",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "lhs"
+            ]
+          },
+          {
+            "kind": "columnRef",
+            "parts": [
+              "rhs"
+            ]
+          }
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "simple_levenshtein"
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "arrayLevenshteinDistance",
+        "args": [
+          {
+            "kind": "arrayLiteral",
+            "elements": [
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "1"
+              },
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "2"
+              }
+            ],
+            "source": "['1', '2']"
+          },
+          {
+            "kind": "arrayLiteral",
+            "elements": [
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "1"
+              }
+            ],
+            "source": "['1']"
+          }
+        ]
+      },
+      {
+        "kind": "functionCall",
+        "name": "arrayLevenshteinDistance",
+        "args": [
+          {
+            "kind": "arrayLiteral",
+            "elements": [
+              {
+                "kind": "functionCall",
+                "name": "toFixedString",
+                "args": [
+                  {
+                    "kind": "literal",
+                    "type": "String",
+                    "value": "1"
+                  },
+                  {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "16"
+                  }
+                ]
+              },
+              {
+                "kind": "functionCall",
+                "name": "toFixedString",
+                "args": [
+                  {
+                    "kind": "literal",
+                    "type": "String",
+                    "value": "2"
+                  },
+                  {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "16"
+                  }
+                ]
+              }
+            ],
+            "source": "[toFixedString('1', 16), toFixedString('2', 16)]"
+          },
+          {
+            "kind": "arrayLiteral",
+            "elements": [
+              {
+                "kind": "functionCall",
+                "name": "toFixedString",
+                "args": [
+                  {
+                    "kind": "literal",
+                    "type": "String",
+                    "value": "1"
+                  },
+                  {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "16"
+                  }
+                ]
+              }
+            ],
+            "source": "[toFixedString('1', 16)]"
+          }
+        ]
+      },
+      {
+        "kind": "functionCall",
+        "name": "arrayLevenshteinDistance",
+        "args": [
+          {
+            "kind": "arrayLiteral",
+            "elements": [
+              {
+                "kind": "functionCall",
+                "name": "toUInt16",
+                "args": [
+                  {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "1"
+                  }
+                ]
+              }
+            ],
+            "source": "[toUInt16(1)]"
+          },
+          {
+            "kind": "arrayLiteral",
+            "elements": [
+              {
+                "kind": "functionCall",
+                "name": "toUInt16",
+                "args": [
+                  {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "2"
+                  }
+                ]
+              },
+              {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "1"
+              }
+            ],
+            "source": "[toUInt16(2), 1]"
+          }
+        ]
+      },
+      {
+        "kind": "functionCall",
+        "name": "arrayLevenshteinDistance",
+        "args": [
+          {
+            "kind": "arrayLiteral",
+            "elements": [
+              {
+                "kind": "functionCall",
+                "name": "toFloat32",
+                "args": [
+                  {
+                    "kind": "literal",
+                    "type": "Float64",
+                    "value": "1.1"
+                  }
+                ]
+              },
+              {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "2"
+              }
+            ],
+            "source": "[toFloat32(1.1), 2]"
+          },
+          {
+            "kind": "arrayLiteral",
+            "elements": [
+              {
+                "kind": "functionCall",
+                "name": "toFloat32",
+                "args": [
+                  {
+                    "kind": "literal",
+                    "type": "Float64",
+                    "value": "1.1"
+                  }
+                ]
+              }
+            ],
+            "source": "[toFloat32(1.1)]"
+          }
+        ]
+      },
+      {
+        "kind": "functionCall",
+        "name": "arrayLevenshteinDistance",
+        "args": [
+          {
+            "kind": "arrayLiteral",
+            "elements": [
+              {
+                "kind": "functionCall",
+                "name": "toFloat64",
+                "args": [
+                  {
+                    "kind": "literal",
+                    "type": "Float64",
+                    "value": "1.1"
+                  }
+                ]
+              },
+              {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "2"
+              }
+            ],
+            "source": "[toFloat64(1.1), 2]"
+          },
+          {
+            "kind": "arrayLiteral",
+            "elements": [
+              {
+                "kind": "functionCall",
+                "name": "toFloat64",
+                "args": [
+                  {
+                    "kind": "literal",
+                    "type": "Float64",
+                    "value": "1.1"
+                  }
+                ]
+              }
+            ],
+            "source": "[toFloat64(1.1)]"
+          }
+        ]
+      },
+      {
+        "kind": "functionCall",
+        "name": "arrayLevenshteinDistance",
+        "args": [
+          {
+            "kind": "arrayLiteral",
+            "elements": [
+              {
+                "kind": "functionCall",
+                "name": "toDate",
+                "args": [
+                  {
+                    "kind": "literal",
+                    "type": "String",
+                    "value": "2025-01-01"
+                  }
+                ]
+              },
+              {
+                "kind": "functionCall",
+                "name": "toDate",
+                "args": [
+                  {
+                    "kind": "literal",
+                    "type": "String",
+                    "value": "2025-01-02"
+                  }
+                ]
+              }
+            ],
+            "source": "[toDate('2025-01-01'), toDate('2025-01-02')]"
+          },
+          {
+            "kind": "arrayLiteral",
+            "elements": [
+              {
+                "kind": "functionCall",
+                "name": "toDate",
+                "args": [
+                  {
+                    "kind": "literal",
+                    "type": "String",
+                    "value": "2025-01-01"
+                  }
+                ]
+              }
+            ],
+            "source": "[toDate('2025-01-01')]"
+          }
+        ]
+      }
+    ],
+    "leadingComments": [
+      "-- arrayLevenshteinDistance for different types"
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "weighted_levenshtein"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "lhs",
+        "type": {
+          "name": "Array",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "String"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "rhs",
+        "type": {
+          "name": "Array",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "String"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "lhs_weights",
+        "type": {
+          "name": "Array",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "Float64"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "rhs_weights",
+        "type": {
+          "name": "Array",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "Float64"
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "functionCall",
+          "name": "tuple",
+          "args": []
+        }
+      }
+    ],
+    "leadingComments": [
+      "-- arrayLevenshteinDistanceWeighted"
+    ]
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "weighted_levenshtein"
+      }
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "arrayLevenshteinDistanceWeighted",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "lhs"
+            ]
+          },
+          {
+            "kind": "columnRef",
+            "parts": [
+              "rhs"
+            ]
+          },
+          {
+            "kind": "columnRef",
+            "parts": [
+              "lhs_weights"
+            ]
+          },
+          {
+            "kind": "columnRef",
+            "parts": [
+              "rhs_weights"
+            ]
+          }
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "weighted_levenshtein"
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "arrayLevenshteinDistanceWeighted",
+        "args": [
+          {
+            "kind": "arrayLiteral",
+            "elements": [
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "1"
+              },
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "2"
+              }
+            ],
+            "source": "['1', '2']"
+          },
+          {
+            "kind": "arrayLiteral",
+            "elements": [
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "1"
+              }
+            ],
+            "source": "['1']"
+          },
+          {
+            "kind": "arrayLiteral",
+            "elements": [
+              {
+                "kind": "literal",
+                "type": "Float64",
+                "value": "1."
+              },
+              {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "2"
+              }
+            ],
+            "source": "[1., 2]"
+          },
+          {
+            "kind": "arrayLiteral",
+            "elements": [
+              {
+                "kind": "literal",
+                "type": "Float64",
+                "value": "1."
+              }
+            ],
+            "source": "[1.]"
+          }
+        ]
+      },
+      {
+        "kind": "functionCall",
+        "name": "arrayLevenshteinDistanceWeighted",
+        "args": [
+          {
+            "kind": "arrayLiteral",
+            "elements": [
+              {
+                "kind": "functionCall",
+                "name": "toFixedString",
+                "args": [
+                  {
+                    "kind": "literal",
+                    "type": "String",
+                    "value": "1"
+                  },
+                  {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "16"
+                  }
+                ]
+              },
+              {
+                "kind": "functionCall",
+                "name": "toFixedString",
+                "args": [
+                  {
+                    "kind": "literal",
+                    "type": "String",
+                    "value": "2"
+                  },
+                  {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "16"
+                  }
+                ]
+              }
+            ],
+            "source": "[toFixedString('1', 16), toFixedString('2', 16)]"
+          },
+          {
+            "kind": "arrayLiteral",
+            "elements": [
+              {
+                "kind": "functionCall",
+                "name": "toFixedString",
+                "args": [
+                  {
+                    "kind": "literal",
+                    "type": "String",
+                    "value": "1"
+                  },
+                  {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "16"
+                  }
+                ]
+              }
+            ],
+            "source": "[toFixedString('1', 16)]"
+          },
+          {
+            "kind": "arrayLiteral",
+            "elements": [
+              {
+                "kind": "literal",
+                "type": "Float64",
+                "value": "1."
+              },
+              {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "2"
+              }
+            ],
+            "source": "[1., 2]"
+          },
+          {
+            "kind": "arrayLiteral",
+            "elements": [
+              {
+                "kind": "literal",
+                "type": "Float64",
+                "value": "1."
+              }
+            ],
+            "source": "[1.]"
+          }
+        ]
+      },
+      {
+        "kind": "functionCall",
+        "name": "arrayLevenshteinDistanceWeighted",
+        "args": [
+          {
+            "kind": "arrayLiteral",
+            "elements": [
+              {
+                "kind": "functionCall",
+                "name": "toUInt16",
+                "args": [
+                  {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "1"
+                  }
+                ]
+              }
+            ],
+            "source": "[toUInt16(1)]"
+          },
+          {
+            "kind": "arrayLiteral",
+            "elements": [
+              {
+                "kind": "functionCall",
+                "name": "toUInt16",
+                "args": [
+                  {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "2"
+                  }
+                ]
+              },
+              {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "1"
+              }
+            ],
+            "source": "[toUInt16(2), 1]"
+          },
+          {
+            "kind": "arrayLiteral",
+            "elements": [
+              {
+                "kind": "literal",
+                "type": "Float64",
+                "value": "1."
+              }
+            ],
+            "source": "[1.]"
+          },
+          {
+            "kind": "arrayLiteral",
+            "elements": [
+              {
+                "kind": "literal",
+                "type": "Float64",
+                "value": "2."
+              },
+              {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "1"
+              }
+            ],
+            "source": "[2., 1]"
+          }
+        ]
+      },
+      {
+        "kind": "functionCall",
+        "name": "arrayLevenshteinDistanceWeighted",
+        "args": [
+          {
+            "kind": "arrayLiteral",
+            "elements": [
+              {
+                "kind": "functionCall",
+                "name": "toFloat32",
+                "args": [
+                  {
+                    "kind": "literal",
+                    "type": "Float64",
+                    "value": "1.1"
+                  }
+                ]
+              },
+              {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "2"
+              }
+            ],
+            "source": "[toFloat32(1.1), 2]"
+          },
+          {
+            "kind": "arrayLiteral",
+            "elements": [
+              {
+                "kind": "functionCall",
+                "name": "toFloat32",
+                "args": [
+                  {
+                    "kind": "literal",
+                    "type": "Float64",
+                    "value": "1.1"
+                  }
+                ]
+              }
+            ],
+            "source": "[toFloat32(1.1)]"
+          },
+          {
+            "kind": "arrayLiteral",
+            "elements": [
+              {
+                "kind": "literal",
+                "type": "Float64",
+                "value": "1."
+              },
+              {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "2"
+              }
+            ],
+            "source": "[1., 2]"
+          },
+          {
+            "kind": "arrayLiteral",
+            "elements": [
+              {
+                "kind": "literal",
+                "type": "Float64",
+                "value": "1."
+              }
+            ],
+            "source": "[1.]"
+          }
+        ]
+      },
+      {
+        "kind": "functionCall",
+        "name": "arrayLevenshteinDistanceWeighted",
+        "args": [
+          {
+            "kind": "arrayLiteral",
+            "elements": [
+              {
+                "kind": "functionCall",
+                "name": "toFloat64",
+                "args": [
+                  {
+                    "kind": "literal",
+                    "type": "Float64",
+                    "value": "1.1"
+                  }
+                ]
+              },
+              {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "2"
+              }
+            ],
+            "source": "[toFloat64(1.1), 2]"
+          },
+          {
+            "kind": "arrayLiteral",
+            "elements": [
+              {
+                "kind": "functionCall",
+                "name": "toFloat64",
+                "args": [
+                  {
+                    "kind": "literal",
+                    "type": "Float64",
+                    "value": "1.1"
+                  }
+                ]
+              }
+            ],
+            "source": "[toFloat64(1.1)]"
+          },
+          {
+            "kind": "arrayLiteral",
+            "elements": [
+              {
+                "kind": "literal",
+                "type": "Float64",
+                "value": "1."
+              },
+              {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "2"
+              }
+            ],
+            "source": "[1., 2]"
+          },
+          {
+            "kind": "arrayLiteral",
+            "elements": [
+              {
+                "kind": "literal",
+                "type": "Float64",
+                "value": "1."
+              }
+            ],
+            "source": "[1.]"
+          }
+        ]
+      },
+      {
+        "kind": "functionCall",
+        "name": "arrayLevenshteinDistanceWeighted",
+        "args": [
+          {
+            "kind": "arrayLiteral",
+            "elements": [
+              {
+                "kind": "functionCall",
+                "name": "toDate",
+                "args": [
+                  {
+                    "kind": "literal",
+                    "type": "String",
+                    "value": "2025-01-01"
+                  }
+                ]
+              },
+              {
+                "kind": "functionCall",
+                "name": "toDate",
+                "args": [
+                  {
+                    "kind": "literal",
+                    "type": "String",
+                    "value": "2025-01-02"
+                  }
+                ]
+              }
+            ],
+            "source": "[toDate('2025-01-01'), toDate('2025-01-02')]"
+          },
+          {
+            "kind": "arrayLiteral",
+            "elements": [
+              {
+                "kind": "functionCall",
+                "name": "toDate",
+                "args": [
+                  {
+                    "kind": "literal",
+                    "type": "String",
+                    "value": "2025-01-01"
+                  }
+                ]
+              }
+            ],
+            "source": "[toDate('2025-01-01')]"
+          },
+          {
+            "kind": "arrayLiteral",
+            "elements": [
+              {
+                "kind": "literal",
+                "type": "Float64",
+                "value": "1."
+              },
+              {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "2"
+              }
+            ],
+            "source": "[1., 2]"
+          },
+          {
+            "kind": "arrayLiteral",
+            "elements": [
+              {
+                "kind": "literal",
+                "type": "Float64",
+                "value": "1."
+              }
+            ],
+            "source": "[1.]"
+          }
+        ]
+      }
+    ],
+    "leadingComments": [
+      "-- arrayLevenshteinDistance for different arrays' types"
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "arrayLevenshteinDistanceWeighted",
+        "args": [
+          {
+            "kind": "arrayLiteral",
+            "elements": [
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "1"
+              },
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "2"
+              }
+            ],
+            "source": "['1', '2']"
+          },
+          {
+            "kind": "arrayLiteral",
+            "elements": [
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "1"
+              }
+            ],
+            "source": "['1']"
+          },
+          {
+            "kind": "arrayLiteral",
+            "elements": [
+              {
+                "kind": "functionCall",
+                "name": "toUInt8",
+                "args": [
+                  {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "1"
+                  }
+                ]
+              },
+              {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "2"
+              }
+            ],
+            "source": "[toUInt8(1), 2]"
+          },
+          {
+            "kind": "arrayLiteral",
+            "elements": [
+              {
+                "kind": "functionCall",
+                "name": "toUInt8",
+                "args": [
+                  {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "1"
+                  }
+                ]
+              }
+            ],
+            "source": "[toUInt8(1)]"
+          }
+        ]
+      },
+      {
+        "kind": "functionCall",
+        "name": "arrayLevenshteinDistanceWeighted",
+        "args": [
+          {
+            "kind": "arrayLiteral",
+            "elements": [
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "1"
+              },
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "2"
+              }
+            ],
+            "source": "['1', '2']"
+          },
+          {
+            "kind": "arrayLiteral",
+            "elements": [
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "1"
+              }
+            ],
+            "source": "['1']"
+          },
+          {
+            "kind": "arrayLiteral",
+            "elements": [
+              {
+                "kind": "functionCall",
+                "name": "toUInt16",
+                "args": [
+                  {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "1"
+                  }
+                ]
+              },
+              {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "2"
+              }
+            ],
+            "source": "[toUInt16(1), 2]"
+          },
+          {
+            "kind": "arrayLiteral",
+            "elements": [
+              {
+                "kind": "functionCall",
+                "name": "toUInt16",
+                "args": [
+                  {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "1"
+                  }
+                ]
+              }
+            ],
+            "source": "[toUInt16(1)]"
+          }
+        ]
+      },
+      {
+        "kind": "functionCall",
+        "name": "arrayLevenshteinDistanceWeighted",
+        "args": [
+          {
+            "kind": "arrayLiteral",
+            "elements": [
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "1"
+              },
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "2"
+              }
+            ],
+            "source": "['1', '2']"
+          },
+          {
+            "kind": "arrayLiteral",
+            "elements": [
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "1"
+              }
+            ],
+            "source": "['1']"
+          },
+          {
+            "kind": "arrayLiteral",
+            "elements": [
+              {
+                "kind": "functionCall",
+                "name": "toUInt32",
+                "args": [
+                  {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "1"
+                  }
+                ]
+              },
+              {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "2"
+              }
+            ],
+            "source": "[toUInt32(1), 2]"
+          },
+          {
+            "kind": "arrayLiteral",
+            "elements": [
+              {
+                "kind": "functionCall",
+                "name": "toUInt32",
+                "args": [
+                  {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "1"
+                  }
+                ]
+              }
+            ],
+            "source": "[toUInt32(1)]"
+          }
+        ]
+      },
+      {
+        "kind": "functionCall",
+        "name": "arrayLevenshteinDistanceWeighted",
+        "args": [
+          {
+            "kind": "arrayLiteral",
+            "elements": [
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "1"
+              },
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "2"
+              }
+            ],
+            "source": "['1', '2']"
+          },
+          {
+            "kind": "arrayLiteral",
+            "elements": [
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "1"
+              }
+            ],
+            "source": "['1']"
+          },
+          {
+            "kind": "arrayLiteral",
+            "elements": [
+              {
+                "kind": "functionCall",
+                "name": "toUInt64",
+                "args": [
+                  {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "1"
+                  }
+                ]
+              },
+              {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "2"
+              }
+            ],
+            "source": "[toUInt64(1), 2]"
+          },
+          {
+            "kind": "arrayLiteral",
+            "elements": [
+              {
+                "kind": "functionCall",
+                "name": "toUInt64",
+                "args": [
+                  {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "1"
+                  }
+                ]
+              }
+            ],
+            "source": "[toUInt64(1)]"
+          }
+        ]
+      },
+      {
+        "kind": "functionCall",
+        "name": "arrayLevenshteinDistanceWeighted",
+        "args": [
+          {
+            "kind": "arrayLiteral",
+            "elements": [
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "1"
+              },
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "2"
+              }
+            ],
+            "source": "['1', '2']"
+          },
+          {
+            "kind": "arrayLiteral",
+            "elements": [
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "1"
+              }
+            ],
+            "source": "['1']"
+          },
+          {
+            "kind": "arrayLiteral",
+            "elements": [
+              {
+                "kind": "functionCall",
+                "name": "toUInt128",
+                "args": [
+                  {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "1"
+                  }
+                ]
+              },
+              {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "2"
+              }
+            ],
+            "source": "[toUInt128(1), 2]"
+          },
+          {
+            "kind": "arrayLiteral",
+            "elements": [
+              {
+                "kind": "functionCall",
+                "name": "toUInt128",
+                "args": [
+                  {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "1"
+                  }
+                ]
+              }
+            ],
+            "source": "[toUInt128(1)]"
+          }
+        ]
+      },
+      {
+        "kind": "functionCall",
+        "name": "arrayLevenshteinDistanceWeighted",
+        "args": [
+          {
+            "kind": "arrayLiteral",
+            "elements": [
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "1"
+              },
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "2"
+              }
+            ],
+            "source": "['1', '2']"
+          },
+          {
+            "kind": "arrayLiteral",
+            "elements": [
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "1"
+              }
+            ],
+            "source": "['1']"
+          },
+          {
+            "kind": "arrayLiteral",
+            "elements": [
+              {
+                "kind": "functionCall",
+                "name": "toUInt256",
+                "args": [
+                  {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "1"
+                  }
+                ]
+              },
+              {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "2"
+              }
+            ],
+            "source": "[toUInt256(1), 2]"
+          },
+          {
+            "kind": "arrayLiteral",
+            "elements": [
+              {
+                "kind": "functionCall",
+                "name": "toUInt256",
+                "args": [
+                  {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "1"
+                  }
+                ]
+              }
+            ],
+            "source": "[toUInt256(1)]"
+          }
+        ]
+      },
+      {
+        "kind": "functionCall",
+        "name": "arrayLevenshteinDistanceWeighted",
+        "args": [
+          {
+            "kind": "arrayLiteral",
+            "elements": [
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "1"
+              },
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "2"
+              }
+            ],
+            "source": "['1', '2']"
+          },
+          {
+            "kind": "arrayLiteral",
+            "elements": [
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "1"
+              }
+            ],
+            "source": "['1']"
+          },
+          {
+            "kind": "arrayLiteral",
+            "elements": [
+              {
+                "kind": "functionCall",
+                "name": "toInt8",
+                "args": [
+                  {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "1"
+                  }
+                ]
+              },
+              {
+                "kind": "functionCall",
+                "name": "toInt8",
+                "args": [
+                  {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "2"
+                  }
+                ]
+              }
+            ],
+            "source": "[toInt8(1), toInt8(2)]"
+          },
+          {
+            "kind": "arrayLiteral",
+            "elements": [
+              {
+                "kind": "functionCall",
+                "name": "toInt8",
+                "args": [
+                  {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "1"
+                  }
+                ]
+              }
+            ],
+            "source": "[toInt8(1)]"
+          }
+        ],
+        "trailingComments": [
+          "-- automatic type assumption gives Int16"
+        ]
+      },
+      {
+        "kind": "functionCall",
+        "name": "arrayLevenshteinDistanceWeighted",
+        "args": [
+          {
+            "kind": "arrayLiteral",
+            "elements": [
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "1"
+              },
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "2"
+              }
+            ],
+            "source": "['1', '2']"
+          },
+          {
+            "kind": "arrayLiteral",
+            "elements": [
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "1"
+              }
+            ],
+            "source": "['1']"
+          },
+          {
+            "kind": "arrayLiteral",
+            "elements": [
+              {
+                "kind": "functionCall",
+                "name": "toInt16",
+                "args": [
+                  {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "1"
+                  }
+                ]
+              },
+              {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "2"
+              }
+            ],
+            "source": "[toInt16(1), 2]"
+          },
+          {
+            "kind": "arrayLiteral",
+            "elements": [
+              {
+                "kind": "functionCall",
+                "name": "toInt16",
+                "args": [
+                  {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "1"
+                  }
+                ]
+              }
+            ],
+            "source": "[toInt16(1)]"
+          }
+        ]
+      },
+      {
+        "kind": "functionCall",
+        "name": "arrayLevenshteinDistanceWeighted",
+        "args": [
+          {
+            "kind": "arrayLiteral",
+            "elements": [
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "1"
+              },
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "2"
+              }
+            ],
+            "source": "['1', '2']"
+          },
+          {
+            "kind": "arrayLiteral",
+            "elements": [
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "1"
+              }
+            ],
+            "source": "['1']"
+          },
+          {
+            "kind": "arrayLiteral",
+            "elements": [
+              {
+                "kind": "functionCall",
+                "name": "toInt32",
+                "args": [
+                  {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "1"
+                  }
+                ]
+              },
+              {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "2"
+              }
+            ],
+            "source": "[toInt32(1), 2]"
+          },
+          {
+            "kind": "arrayLiteral",
+            "elements": [
+              {
+                "kind": "functionCall",
+                "name": "toInt32",
+                "args": [
+                  {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "1"
+                  }
+                ]
+              }
+            ],
+            "source": "[toInt32(1)]"
+          }
+        ]
+      },
+      {
+        "kind": "functionCall",
+        "name": "arrayLevenshteinDistanceWeighted",
+        "args": [
+          {
+            "kind": "arrayLiteral",
+            "elements": [
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "1"
+              },
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "2"
+              }
+            ],
+            "source": "['1', '2']"
+          },
+          {
+            "kind": "arrayLiteral",
+            "elements": [
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "1"
+              }
+            ],
+            "source": "['1']"
+          },
+          {
+            "kind": "arrayLiteral",
+            "elements": [
+              {
+                "kind": "functionCall",
+                "name": "toInt64",
+                "args": [
+                  {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "1"
+                  }
+                ]
+              },
+              {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "2"
+              }
+            ],
+            "source": "[toInt64(1), 2]"
+          },
+          {
+            "kind": "arrayLiteral",
+            "elements": [
+              {
+                "kind": "functionCall",
+                "name": "toInt64",
+                "args": [
+                  {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "1"
+                  }
+                ]
+              }
+            ],
+            "source": "[toInt64(1)]"
+          }
+        ]
+      },
+      {
+        "kind": "functionCall",
+        "name": "arrayLevenshteinDistanceWeighted",
+        "args": [
+          {
+            "kind": "arrayLiteral",
+            "elements": [
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "1"
+              },
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "2"
+              }
+            ],
+            "source": "['1', '2']"
+          },
+          {
+            "kind": "arrayLiteral",
+            "elements": [
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "1"
+              }
+            ],
+            "source": "['1']"
+          },
+          {
+            "kind": "arrayLiteral",
+            "elements": [
+              {
+                "kind": "functionCall",
+                "name": "toInt128",
+                "args": [
+                  {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "1"
+                  }
+                ]
+              },
+              {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "2"
+              }
+            ],
+            "source": "[toInt128(1), 2]"
+          },
+          {
+            "kind": "arrayLiteral",
+            "elements": [
+              {
+                "kind": "functionCall",
+                "name": "toInt128",
+                "args": [
+                  {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "1"
+                  }
+                ]
+              }
+            ],
+            "source": "[toInt128(1)]"
+          }
+        ]
+      },
+      {
+        "kind": "functionCall",
+        "name": "arrayLevenshteinDistanceWeighted",
+        "args": [
+          {
+            "kind": "arrayLiteral",
+            "elements": [
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "1"
+              },
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "2"
+              }
+            ],
+            "source": "['1', '2']"
+          },
+          {
+            "kind": "arrayLiteral",
+            "elements": [
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "1"
+              }
+            ],
+            "source": "['1']"
+          },
+          {
+            "kind": "arrayLiteral",
+            "elements": [
+              {
+                "kind": "functionCall",
+                "name": "toInt256",
+                "args": [
+                  {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "1"
+                  }
+                ]
+              },
+              {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "2"
+              }
+            ],
+            "source": "[toInt256(1), 2]"
+          },
+          {
+            "kind": "arrayLiteral",
+            "elements": [
+              {
+                "kind": "functionCall",
+                "name": "toInt256",
+                "args": [
+                  {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "1"
+                  }
+                ]
+              }
+            ],
+            "source": "[toInt256(1)]"
+          }
+        ]
+      },
+      {
+        "kind": "functionCall",
+        "name": "arrayLevenshteinDistanceWeighted",
+        "args": [
+          {
+            "kind": "arrayLiteral",
+            "elements": [
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "1"
+              },
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "2"
+              }
+            ],
+            "source": "['1', '2']"
+          },
+          {
+            "kind": "arrayLiteral",
+            "elements": [
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "1"
+              }
+            ],
+            "source": "['1']"
+          },
+          {
+            "kind": "arrayLiteral",
+            "elements": [
+              {
+                "kind": "functionCall",
+                "name": "toFloat32",
+                "args": [
+                  {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "1"
+                  }
+                ]
+              },
+              {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "2"
+              }
+            ],
+            "source": "[toFloat32(1), 2]"
+          },
+          {
+            "kind": "arrayLiteral",
+            "elements": [
+              {
+                "kind": "functionCall",
+                "name": "toFloat32",
+                "args": [
+                  {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "1"
+                  }
+                ]
+              }
+            ],
+            "source": "[toFloat32(1)]"
+          }
+        ]
+      },
+      {
+        "kind": "functionCall",
+        "name": "arrayLevenshteinDistanceWeighted",
+        "args": [
+          {
+            "kind": "arrayLiteral",
+            "elements": [
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "1"
+              },
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "2"
+              }
+            ],
+            "source": "['1', '2']"
+          },
+          {
+            "kind": "arrayLiteral",
+            "elements": [
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "1"
+              }
+            ],
+            "source": "['1']"
+          },
+          {
+            "kind": "arrayLiteral",
+            "elements": [
+              {
+                "kind": "functionCall",
+                "name": "toFloat64",
+                "args": [
+                  {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "1"
+                  }
+                ]
+              },
+              {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "2"
+              }
+            ],
+            "source": "[toFloat64(1), 2]"
+          },
+          {
+            "kind": "arrayLiteral",
+            "elements": [
+              {
+                "kind": "functionCall",
+                "name": "toFloat64",
+                "args": [
+                  {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "1"
+                  }
+                ]
+              }
+            ],
+            "source": "[toFloat64(1)]"
+          }
+        ]
+      }
+    ],
+    "leadingComments": [
+      "-- arrayLevenshteinDistanceWeighted for different weight types"
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "round",
+        "args": [
+          {
+            "kind": "functionCall",
+            "name": "arraySimilarity",
+            "args": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "lhs"
+                ]
+              },
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "rhs"
+                ]
+              },
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "lhs_weights"
+                ]
+              },
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "rhs_weights"
+                ]
+              }
+            ]
+          },
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "5"
+          }
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "weighted_levenshtein"
+    },
+    "leadingComments": [
+      "-- arraySimilarity"
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "arraySimilarity",
+        "args": [
+          {
+            "kind": "arrayLiteral",
+            "elements": [
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "1"
+              },
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "2"
+              }
+            ],
+            "source": "['1', '2']"
+          },
+          {
+            "kind": "arrayLiteral",
+            "elements": [
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "1"
+              }
+            ],
+            "source": "['1']"
+          },
+          {
+            "kind": "arrayLiteral",
+            "elements": [
+              {
+                "kind": "literal",
+                "type": "Float64",
+                "value": "1."
+              },
+              {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "2"
+              }
+            ],
+            "source": "[1., 2]"
+          },
+          {
+            "kind": "arrayLiteral",
+            "elements": [
+              {
+                "kind": "literal",
+                "type": "Float64",
+                "value": "1."
+              }
+            ],
+            "source": "[1.]"
+          }
+        ]
+      },
+      {
+        "kind": "functionCall",
+        "name": "arraySimilarity",
+        "args": [
+          {
+            "kind": "arrayLiteral",
+            "elements": [
+              {
+                "kind": "functionCall",
+                "name": "toFixedString",
+                "args": [
+                  {
+                    "kind": "literal",
+                    "type": "String",
+                    "value": "1"
+                  },
+                  {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "16"
+                  }
+                ]
+              },
+              {
+                "kind": "functionCall",
+                "name": "toFixedString",
+                "args": [
+                  {
+                    "kind": "literal",
+                    "type": "String",
+                    "value": "2"
+                  },
+                  {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "16"
+                  }
+                ]
+              }
+            ],
+            "source": "[toFixedString('1', 16), toFixedString('2', 16)]"
+          },
+          {
+            "kind": "arrayLiteral",
+            "elements": [
+              {
+                "kind": "functionCall",
+                "name": "toFixedString",
+                "args": [
+                  {
+                    "kind": "literal",
+                    "type": "String",
+                    "value": "1"
+                  },
+                  {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "16"
+                  }
+                ]
+              }
+            ],
+            "source": "[toFixedString('1', 16)]"
+          },
+          {
+            "kind": "arrayLiteral",
+            "elements": [
+              {
+                "kind": "literal",
+                "type": "Float64",
+                "value": "1."
+              },
+              {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "2"
+              }
+            ],
+            "source": "[1., 2]"
+          },
+          {
+            "kind": "arrayLiteral",
+            "elements": [
+              {
+                "kind": "literal",
+                "type": "Float64",
+                "value": "1."
+              }
+            ],
+            "source": "[1.]"
+          }
+        ]
+      },
+      {
+        "kind": "functionCall",
+        "name": "arraySimilarity",
+        "args": [
+          {
+            "kind": "arrayLiteral",
+            "elements": [
+              {
+                "kind": "functionCall",
+                "name": "toUInt16",
+                "args": [
+                  {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "1"
+                  }
+                ]
+              }
+            ],
+            "source": "[toUInt16(1)]"
+          },
+          {
+            "kind": "arrayLiteral",
+            "elements": [
+              {
+                "kind": "functionCall",
+                "name": "toUInt16",
+                "args": [
+                  {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "2"
+                  }
+                ]
+              },
+              {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "1"
+              }
+            ],
+            "source": "[toUInt16(2), 1]"
+          },
+          {
+            "kind": "arrayLiteral",
+            "elements": [
+              {
+                "kind": "literal",
+                "type": "Float64",
+                "value": "1."
+              }
+            ],
+            "source": "[1.]"
+          },
+          {
+            "kind": "arrayLiteral",
+            "elements": [
+              {
+                "kind": "literal",
+                "type": "Float64",
+                "value": "2."
+              },
+              {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "1"
+              }
+            ],
+            "source": "[2., 1]"
+          }
+        ]
+      },
+      {
+        "kind": "functionCall",
+        "name": "arraySimilarity",
+        "args": [
+          {
+            "kind": "arrayLiteral",
+            "elements": [
+              {
+                "kind": "functionCall",
+                "name": "toFloat32",
+                "args": [
+                  {
+                    "kind": "literal",
+                    "type": "Float64",
+                    "value": "1.1"
+                  }
+                ]
+              },
+              {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "2"
+              }
+            ],
+            "source": "[toFloat32(1.1), 2]"
+          },
+          {
+            "kind": "arrayLiteral",
+            "elements": [
+              {
+                "kind": "functionCall",
+                "name": "toFloat32",
+                "args": [
+                  {
+                    "kind": "literal",
+                    "type": "Float64",
+                    "value": "1.1"
+                  }
+                ]
+              }
+            ],
+            "source": "[toFloat32(1.1)]"
+          },
+          {
+            "kind": "arrayLiteral",
+            "elements": [
+              {
+                "kind": "literal",
+                "type": "Float64",
+                "value": "1."
+              },
+              {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "2"
+              }
+            ],
+            "source": "[1., 2]"
+          },
+          {
+            "kind": "arrayLiteral",
+            "elements": [
+              {
+                "kind": "literal",
+                "type": "Float64",
+                "value": "1."
+              }
+            ],
+            "source": "[1.]"
+          }
+        ]
+      },
+      {
+        "kind": "functionCall",
+        "name": "arraySimilarity",
+        "args": [
+          {
+            "kind": "arrayLiteral",
+            "elements": [
+              {
+                "kind": "functionCall",
+                "name": "toFloat64",
+                "args": [
+                  {
+                    "kind": "literal",
+                    "type": "Float64",
+                    "value": "1.1"
+                  }
+                ]
+              },
+              {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "2"
+              }
+            ],
+            "source": "[toFloat64(1.1), 2]"
+          },
+          {
+            "kind": "arrayLiteral",
+            "elements": [
+              {
+                "kind": "functionCall",
+                "name": "toFloat64",
+                "args": [
+                  {
+                    "kind": "literal",
+                    "type": "Float64",
+                    "value": "1.1"
+                  }
+                ]
+              }
+            ],
+            "source": "[toFloat64(1.1)]"
+          },
+          {
+            "kind": "arrayLiteral",
+            "elements": [
+              {
+                "kind": "literal",
+                "type": "Float64",
+                "value": "1."
+              },
+              {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "2"
+              }
+            ],
+            "source": "[1., 2]"
+          },
+          {
+            "kind": "arrayLiteral",
+            "elements": [
+              {
+                "kind": "literal",
+                "type": "Float64",
+                "value": "1."
+              }
+            ],
+            "source": "[1.]"
+          }
+        ]
+      },
+      {
+        "kind": "functionCall",
+        "name": "arraySimilarity",
+        "args": [
+          {
+            "kind": "arrayLiteral",
+            "elements": [
+              {
+                "kind": "functionCall",
+                "name": "toDate",
+                "args": [
+                  {
+                    "kind": "literal",
+                    "type": "String",
+                    "value": "2025-01-01"
+                  }
+                ]
+              },
+              {
+                "kind": "functionCall",
+                "name": "toDate",
+                "args": [
+                  {
+                    "kind": "literal",
+                    "type": "String",
+                    "value": "2025-01-02"
+                  }
+                ]
+              }
+            ],
+            "source": "[toDate('2025-01-01'), toDate('2025-01-02')]"
+          },
+          {
+            "kind": "arrayLiteral",
+            "elements": [
+              {
+                "kind": "functionCall",
+                "name": "toDate",
+                "args": [
+                  {
+                    "kind": "literal",
+                    "type": "String",
+                    "value": "2025-01-01"
+                  }
+                ]
+              }
+            ],
+            "source": "[toDate('2025-01-01')]"
+          },
+          {
+            "kind": "arrayLiteral",
+            "elements": [
+              {
+                "kind": "literal",
+                "type": "Float64",
+                "value": "1."
+              },
+              {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "2"
+              }
+            ],
+            "source": "[1., 2]"
+          },
+          {
+            "kind": "arrayLiteral",
+            "elements": [
+              {
+                "kind": "literal",
+                "type": "Float64",
+                "value": "1."
+              }
+            ],
+            "source": "[1.]"
+          }
+        ]
+      }
+    ],
+    "leadingComments": [
+      "-- arraySimilarity for different arrays' types"
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "arraySimilarity",
+        "args": [
+          {
+            "kind": "arrayLiteral",
+            "elements": [
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "1"
+              },
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "2"
+              }
+            ],
+            "source": "['1', '2']"
+          },
+          {
+            "kind": "arrayLiteral",
+            "elements": [
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "1"
+              }
+            ],
+            "source": "['1']"
+          },
+          {
+            "kind": "arrayLiteral",
+            "elements": [
+              {
+                "kind": "functionCall",
+                "name": "toUInt8",
+                "args": [
+                  {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "1"
+                  }
+                ]
+              },
+              {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "2"
+              }
+            ],
+            "source": "[toUInt8(1), 2]"
+          },
+          {
+            "kind": "arrayLiteral",
+            "elements": [
+              {
+                "kind": "functionCall",
+                "name": "toUInt8",
+                "args": [
+                  {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "1"
+                  }
+                ]
+              }
+            ],
+            "source": "[toUInt8(1)]"
+          }
+        ]
+      },
+      {
+        "kind": "functionCall",
+        "name": "arraySimilarity",
+        "args": [
+          {
+            "kind": "arrayLiteral",
+            "elements": [
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "1"
+              },
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "2"
+              }
+            ],
+            "source": "['1', '2']"
+          },
+          {
+            "kind": "arrayLiteral",
+            "elements": [
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "1"
+              }
+            ],
+            "source": "['1']"
+          },
+          {
+            "kind": "arrayLiteral",
+            "elements": [
+              {
+                "kind": "functionCall",
+                "name": "toUInt16",
+                "args": [
+                  {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "1"
+                  }
+                ]
+              },
+              {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "2"
+              }
+            ],
+            "source": "[toUInt16(1), 2]"
+          },
+          {
+            "kind": "arrayLiteral",
+            "elements": [
+              {
+                "kind": "functionCall",
+                "name": "toUInt16",
+                "args": [
+                  {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "1"
+                  }
+                ]
+              }
+            ],
+            "source": "[toUInt16(1)]"
+          }
+        ]
+      },
+      {
+        "kind": "functionCall",
+        "name": "arraySimilarity",
+        "args": [
+          {
+            "kind": "arrayLiteral",
+            "elements": [
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "1"
+              },
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "2"
+              }
+            ],
+            "source": "['1', '2']"
+          },
+          {
+            "kind": "arrayLiteral",
+            "elements": [
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "1"
+              }
+            ],
+            "source": "['1']"
+          },
+          {
+            "kind": "arrayLiteral",
+            "elements": [
+              {
+                "kind": "functionCall",
+                "name": "toUInt32",
+                "args": [
+                  {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "1"
+                  }
+                ]
+              },
+              {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "2"
+              }
+            ],
+            "source": "[toUInt32(1), 2]"
+          },
+          {
+            "kind": "arrayLiteral",
+            "elements": [
+              {
+                "kind": "functionCall",
+                "name": "toUInt32",
+                "args": [
+                  {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "1"
+                  }
+                ]
+              }
+            ],
+            "source": "[toUInt32(1)]"
+          }
+        ]
+      },
+      {
+        "kind": "functionCall",
+        "name": "arraySimilarity",
+        "args": [
+          {
+            "kind": "arrayLiteral",
+            "elements": [
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "1"
+              },
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "2"
+              }
+            ],
+            "source": "['1', '2']"
+          },
+          {
+            "kind": "arrayLiteral",
+            "elements": [
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "1"
+              }
+            ],
+            "source": "['1']"
+          },
+          {
+            "kind": "arrayLiteral",
+            "elements": [
+              {
+                "kind": "functionCall",
+                "name": "toUInt64",
+                "args": [
+                  {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "1"
+                  }
+                ]
+              },
+              {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "2"
+              }
+            ],
+            "source": "[toUInt64(1), 2]"
+          },
+          {
+            "kind": "arrayLiteral",
+            "elements": [
+              {
+                "kind": "functionCall",
+                "name": "toUInt64",
+                "args": [
+                  {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "1"
+                  }
+                ]
+              }
+            ],
+            "source": "[toUInt64(1)]"
+          }
+        ]
+      },
+      {
+        "kind": "functionCall",
+        "name": "arraySimilarity",
+        "args": [
+          {
+            "kind": "arrayLiteral",
+            "elements": [
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "1"
+              },
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "2"
+              }
+            ],
+            "source": "['1', '2']"
+          },
+          {
+            "kind": "arrayLiteral",
+            "elements": [
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "1"
+              }
+            ],
+            "source": "['1']"
+          },
+          {
+            "kind": "arrayLiteral",
+            "elements": [
+              {
+                "kind": "functionCall",
+                "name": "toUInt128",
+                "args": [
+                  {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "1"
+                  }
+                ]
+              },
+              {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "2"
+              }
+            ],
+            "source": "[toUInt128(1), 2]"
+          },
+          {
+            "kind": "arrayLiteral",
+            "elements": [
+              {
+                "kind": "functionCall",
+                "name": "toUInt128",
+                "args": [
+                  {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "1"
+                  }
+                ]
+              }
+            ],
+            "source": "[toUInt128(1)]"
+          }
+        ]
+      },
+      {
+        "kind": "functionCall",
+        "name": "arraySimilarity",
+        "args": [
+          {
+            "kind": "arrayLiteral",
+            "elements": [
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "1"
+              },
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "2"
+              }
+            ],
+            "source": "['1', '2']"
+          },
+          {
+            "kind": "arrayLiteral",
+            "elements": [
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "1"
+              }
+            ],
+            "source": "['1']"
+          },
+          {
+            "kind": "arrayLiteral",
+            "elements": [
+              {
+                "kind": "functionCall",
+                "name": "toUInt256",
+                "args": [
+                  {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "1"
+                  }
+                ]
+              },
+              {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "2"
+              }
+            ],
+            "source": "[toUInt256(1), 2]"
+          },
+          {
+            "kind": "arrayLiteral",
+            "elements": [
+              {
+                "kind": "functionCall",
+                "name": "toUInt256",
+                "args": [
+                  {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "1"
+                  }
+                ]
+              }
+            ],
+            "source": "[toUInt256(1)]"
+          }
+        ]
+      },
+      {
+        "kind": "functionCall",
+        "name": "arraySimilarity",
+        "args": [
+          {
+            "kind": "arrayLiteral",
+            "elements": [
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "1"
+              },
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "2"
+              }
+            ],
+            "source": "['1', '2']"
+          },
+          {
+            "kind": "arrayLiteral",
+            "elements": [
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "1"
+              }
+            ],
+            "source": "['1']"
+          },
+          {
+            "kind": "arrayLiteral",
+            "elements": [
+              {
+                "kind": "functionCall",
+                "name": "toInt8",
+                "args": [
+                  {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "1"
+                  }
+                ]
+              },
+              {
+                "kind": "functionCall",
+                "name": "toInt8",
+                "args": [
+                  {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "2"
+                  }
+                ]
+              }
+            ],
+            "source": "[toInt8(1), toInt8(2)]"
+          },
+          {
+            "kind": "arrayLiteral",
+            "elements": [
+              {
+                "kind": "functionCall",
+                "name": "toInt8",
+                "args": [
+                  {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "1"
+                  }
+                ]
+              }
+            ],
+            "source": "[toInt8(1)]"
+          }
+        ],
+        "trailingComments": [
+          "-- automatic type assumption gives Int16"
+        ]
+      },
+      {
+        "kind": "functionCall",
+        "name": "arraySimilarity",
+        "args": [
+          {
+            "kind": "arrayLiteral",
+            "elements": [
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "1"
+              },
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "2"
+              }
+            ],
+            "source": "['1', '2']"
+          },
+          {
+            "kind": "arrayLiteral",
+            "elements": [
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "1"
+              }
+            ],
+            "source": "['1']"
+          },
+          {
+            "kind": "arrayLiteral",
+            "elements": [
+              {
+                "kind": "functionCall",
+                "name": "toInt16",
+                "args": [
+                  {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "1"
+                  }
+                ]
+              },
+              {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "2"
+              }
+            ],
+            "source": "[toInt16(1), 2]"
+          },
+          {
+            "kind": "arrayLiteral",
+            "elements": [
+              {
+                "kind": "functionCall",
+                "name": "toInt16",
+                "args": [
+                  {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "1"
+                  }
+                ]
+              }
+            ],
+            "source": "[toInt16(1)]"
+          }
+        ]
+      },
+      {
+        "kind": "functionCall",
+        "name": "arraySimilarity",
+        "args": [
+          {
+            "kind": "arrayLiteral",
+            "elements": [
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "1"
+              },
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "2"
+              }
+            ],
+            "source": "['1', '2']"
+          },
+          {
+            "kind": "arrayLiteral",
+            "elements": [
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "1"
+              }
+            ],
+            "source": "['1']"
+          },
+          {
+            "kind": "arrayLiteral",
+            "elements": [
+              {
+                "kind": "functionCall",
+                "name": "toInt32",
+                "args": [
+                  {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "1"
+                  }
+                ]
+              },
+              {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "2"
+              }
+            ],
+            "source": "[toInt32(1), 2]"
+          },
+          {
+            "kind": "arrayLiteral",
+            "elements": [
+              {
+                "kind": "functionCall",
+                "name": "toInt32",
+                "args": [
+                  {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "1"
+                  }
+                ]
+              }
+            ],
+            "source": "[toInt32(1)]"
+          }
+        ]
+      },
+      {
+        "kind": "functionCall",
+        "name": "arraySimilarity",
+        "args": [
+          {
+            "kind": "arrayLiteral",
+            "elements": [
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "1"
+              },
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "2"
+              }
+            ],
+            "source": "['1', '2']"
+          },
+          {
+            "kind": "arrayLiteral",
+            "elements": [
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "1"
+              }
+            ],
+            "source": "['1']"
+          },
+          {
+            "kind": "arrayLiteral",
+            "elements": [
+              {
+                "kind": "functionCall",
+                "name": "toInt64",
+                "args": [
+                  {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "1"
+                  }
+                ]
+              },
+              {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "2"
+              }
+            ],
+            "source": "[toInt64(1), 2]"
+          },
+          {
+            "kind": "arrayLiteral",
+            "elements": [
+              {
+                "kind": "functionCall",
+                "name": "toInt64",
+                "args": [
+                  {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "1"
+                  }
+                ]
+              }
+            ],
+            "source": "[toInt64(1)]"
+          }
+        ]
+      },
+      {
+        "kind": "functionCall",
+        "name": "arraySimilarity",
+        "args": [
+          {
+            "kind": "arrayLiteral",
+            "elements": [
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "1"
+              },
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "2"
+              }
+            ],
+            "source": "['1', '2']"
+          },
+          {
+            "kind": "arrayLiteral",
+            "elements": [
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "1"
+              }
+            ],
+            "source": "['1']"
+          },
+          {
+            "kind": "arrayLiteral",
+            "elements": [
+              {
+                "kind": "functionCall",
+                "name": "toInt128",
+                "args": [
+                  {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "1"
+                  }
+                ]
+              },
+              {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "2"
+              }
+            ],
+            "source": "[toInt128(1), 2]"
+          },
+          {
+            "kind": "arrayLiteral",
+            "elements": [
+              {
+                "kind": "functionCall",
+                "name": "toInt128",
+                "args": [
+                  {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "1"
+                  }
+                ]
+              }
+            ],
+            "source": "[toInt128(1)]"
+          }
+        ]
+      },
+      {
+        "kind": "functionCall",
+        "name": "arraySimilarity",
+        "args": [
+          {
+            "kind": "arrayLiteral",
+            "elements": [
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "1"
+              },
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "2"
+              }
+            ],
+            "source": "['1', '2']"
+          },
+          {
+            "kind": "arrayLiteral",
+            "elements": [
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "1"
+              }
+            ],
+            "source": "['1']"
+          },
+          {
+            "kind": "arrayLiteral",
+            "elements": [
+              {
+                "kind": "functionCall",
+                "name": "toInt256",
+                "args": [
+                  {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "1"
+                  }
+                ]
+              },
+              {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "2"
+              }
+            ],
+            "source": "[toInt256(1), 2]"
+          },
+          {
+            "kind": "arrayLiteral",
+            "elements": [
+              {
+                "kind": "functionCall",
+                "name": "toInt256",
+                "args": [
+                  {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "1"
+                  }
+                ]
+              }
+            ],
+            "source": "[toInt256(1)]"
+          }
+        ]
+      },
+      {
+        "kind": "functionCall",
+        "name": "arraySimilarity",
+        "args": [
+          {
+            "kind": "arrayLiteral",
+            "elements": [
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "1"
+              },
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "2"
+              }
+            ],
+            "source": "['1', '2']"
+          },
+          {
+            "kind": "arrayLiteral",
+            "elements": [
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "1"
+              }
+            ],
+            "source": "['1']"
+          },
+          {
+            "kind": "arrayLiteral",
+            "elements": [
+              {
+                "kind": "functionCall",
+                "name": "toFloat32",
+                "args": [
+                  {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "1"
+                  }
+                ]
+              },
+              {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "2"
+              }
+            ],
+            "source": "[toFloat32(1), 2]"
+          },
+          {
+            "kind": "arrayLiteral",
+            "elements": [
+              {
+                "kind": "functionCall",
+                "name": "toFloat32",
+                "args": [
+                  {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "1"
+                  }
+                ]
+              }
+            ],
+            "source": "[toFloat32(1)]"
+          }
+        ]
+      },
+      {
+        "kind": "functionCall",
+        "name": "arraySimilarity",
+        "args": [
+          {
+            "kind": "arrayLiteral",
+            "elements": [
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "1"
+              },
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "2"
+              }
+            ],
+            "source": "['1', '2']"
+          },
+          {
+            "kind": "arrayLiteral",
+            "elements": [
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "1"
+              }
+            ],
+            "source": "['1']"
+          },
+          {
+            "kind": "arrayLiteral",
+            "elements": [
+              {
+                "kind": "functionCall",
+                "name": "toFloat64",
+                "args": [
+                  {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "1"
+                  }
+                ]
+              },
+              {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "2"
+              }
+            ],
+            "source": "[toFloat64(1), 2]"
+          },
+          {
+            "kind": "arrayLiteral",
+            "elements": [
+              {
+                "kind": "functionCall",
+                "name": "toFloat64",
+                "args": [
+                  {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "1"
+                  }
+                ]
+              }
+            ],
+            "source": "[toFloat64(1)]"
+          }
+        ]
+      }
+    ],
+    "leadingComments": [
+      "-- arraySimilarity for different weight types"
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "arrayLevenshteinDistance",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "lhs"
+            ]
+          },
+          {
+            "kind": "columnRef",
+            "parts": [
+              "rhs"
+            ]
+          },
+          {
+            "kind": "columnRef",
+            "parts": [
+              "lhs_weights"
+            ]
+          },
+          {
+            "kind": "columnRef",
+            "parts": [
+              "rhs_weights"
+            ]
+          }
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "weighted_levenshtein"
+    },
+    "leadingComments": [
+      "-- errors NUMBER_OF_ARGUMENTS_DOESNT_MATCH"
+    ],
+    "trailingComments": [
+      "-- { serverError NUMBER_OF_ARGUMENTS_DOESNT_MATCH }"
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "arrayLevenshteinDistanceWeighted",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "lhs"
+            ]
+          },
+          {
+            "kind": "columnRef",
+            "parts": [
+              "rhs"
+            ]
+          }
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "simple_levenshtein"
+    },
+    "trailingComments": [
+      "-- { serverError NUMBER_OF_ARGUMENTS_DOESNT_MATCH }"
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "round",
+        "args": [
+          {
+            "kind": "functionCall",
+            "name": "arraySimilarity",
+            "args": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "lhs"
+                ]
+              },
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "rhs"
+                ]
+              }
+            ]
+          },
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "5"
+          }
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "simple_levenshtein"
+    },
+    "trailingComments": [
+      "-- { serverError NUMBER_OF_ARGUMENTS_DOESNT_MATCH }"
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "arrayLevenshteinDistance",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "1"
+          },
+          {
+            "kind": "arrayLiteral",
+            "elements": [
+              {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "1"
+              }
+            ],
+            "source": "[1]"
+          }
+        ]
+      }
+    ],
+    "leadingComments": [
+      "-- errors ILLEGAL_TYPE_OF_ARGUMENT"
+    ],
+    "trailingComments": [
+      "-- { serverError ILLEGAL_TYPE_OF_ARGUMENT }"
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "arrayLevenshteinDistanceWeighted",
+        "args": [
+          {
+            "kind": "arrayLiteral",
+            "elements": [
+              {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "1"
+              }
+            ],
+            "source": "[1]"
+          },
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "1"
+          },
+          {
+            "kind": "arrayLiteral",
+            "elements": [
+              {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "1"
+              },
+              {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "2"
+              }
+            ],
+            "source": "[1, 2]"
+          },
+          {
+            "kind": "arrayLiteral",
+            "elements": [
+              {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "1"
+              }
+            ],
+            "source": "[1]"
+          }
+        ]
+      }
+    ],
+    "trailingComments": [
+      "-- { serverError ILLEGAL_TYPE_OF_ARGUMENT }"
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "arraySimilarity",
+        "args": [
+          {
+            "kind": "arrayLiteral",
+            "elements": [
+              {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "1"
+              },
+              {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "2"
+              }
+            ],
+            "source": "[1, 2]"
+          },
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "1"
+          },
+          {
+            "kind": "arrayLiteral",
+            "elements": [
+              {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "1"
+              },
+              {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "2"
+              }
+            ],
+            "source": "[1, 2]"
+          },
+          {
+            "kind": "arrayLiteral",
+            "elements": [
+              {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "1"
+              }
+            ],
+            "source": "[1]"
+          }
+        ]
+      }
+    ],
+    "trailingComments": [
+      "-- { serverError ILLEGAL_TYPE_OF_ARGUMENT }"
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "arrayLevenshteinDistanceWeighted",
+        "args": [
+          {
+            "kind": "arrayLiteral",
+            "elements": [
+              {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "1"
+              },
+              {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "2"
+              }
+            ],
+            "source": "[1, 2]"
+          },
+          {
+            "kind": "arrayLiteral",
+            "elements": [
+              {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "1"
+              }
+            ],
+            "source": "[1]"
+          },
+          {
+            "kind": "arrayLiteral",
+            "elements": [
+              {
+                "kind": "literal",
+                "type": "Float64",
+                "value": "1."
+              },
+              {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "2"
+              }
+            ],
+            "source": "[1., 2]"
+          },
+          {
+            "kind": "arrayLiteral",
+            "elements": [
+              {
+                "kind": "literal",
+                "type": "Float64",
+                "value": "1."
+              },
+              {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "2"
+              }
+            ],
+            "source": "[1., 2]"
+          }
+        ]
+      }
+    ],
+    "leadingComments": [
+      "--"
+    ],
+    "trailingComments": [
+      "-- { serverError SIZES_OF_ARRAYS_DONT_MATCH }"
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "arraySimilarity",
+        "args": [
+          {
+            "kind": "arrayLiteral",
+            "elements": [
+              {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "1"
+              },
+              {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "2"
+              }
+            ],
+            "source": "[1, 2]"
+          },
+          {
+            "kind": "arrayLiteral",
+            "elements": [
+              {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "1"
+              }
+            ],
+            "source": "[1]"
+          },
+          {
+            "kind": "arrayLiteral",
+            "elements": [
+              {
+                "kind": "literal",
+                "type": "Float64",
+                "value": "1."
+              },
+              {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "2"
+              }
+            ],
+            "source": "[1., 2]"
+          },
+          {
+            "kind": "arrayLiteral",
+            "elements": [
+              {
+                "kind": "literal",
+                "type": "Float64",
+                "value": "1."
+              },
+              {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "2"
+              }
+            ],
+            "source": "[1., 2]"
+          }
+        ]
+      }
+    ],
+    "trailingComments": [
+      "-- { serverError SIZES_OF_ARRAYS_DONT_MATCH }"
+    ]
+  }
+]

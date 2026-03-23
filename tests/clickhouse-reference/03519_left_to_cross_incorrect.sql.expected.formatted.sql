@@ -1,1 +1,24 @@
-<Parse Error>
+SET enable_analyzer = 1;
+
+CREATE TABLE t0
+(
+    c0 Int32 DEFAULT 0,
+    c1 Int32
+)
+ENGINE = MergeTree()
+ORDER BY c0;
+
+CREATE TABLE t1
+(
+    c0 Int32
+)
+ENGINE = MergeTree()
+ORDER BY c0;
+
+INSERT INTO t1 (c0);
+
+SELECT *
+FROM
+    t1
+LEFT JOIN t0
+    ON 1 = 1;

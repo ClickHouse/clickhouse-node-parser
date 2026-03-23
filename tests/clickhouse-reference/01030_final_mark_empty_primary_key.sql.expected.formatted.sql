@@ -1,1 +1,13 @@
-<Parse Error>
+CREATE TABLE empty_pk
+(
+    x UInt64
+)
+ENGINE = MergeTree
+ORDER BY tuple()
+SETTINGS index_granularity = 256, index_granularity_bytes = '10Mi';
+
+INSERT INTO empty_pk SELECT number
+FROM numbers(100000);
+
+SELECT sum(x)
+FROM empty_pk;

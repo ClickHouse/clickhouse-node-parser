@@ -324,6 +324,11 @@ export function isCreateLiveViewStatement(
   return node !== undefined && node.kind === 'createLiveView';
 }
 
+/** Type guard for {@link import('./ast').InsertStatement | InsertStatement} nodes. */
+export function isInsertStatement(node: ASTNode | undefined): node is ASTNodeKindMap['insert'] {
+  return node !== undefined && node.kind === 'insert';
+}
+
 /** Type guard for {@link import('./ast').ColumnDef | ColumnDef} nodes. */
 export function isColumnDef(node: ASTNode | undefined): node is ASTNodeKindMap['columnDef'] {
   return node !== undefined && node.kind === 'columnDef';

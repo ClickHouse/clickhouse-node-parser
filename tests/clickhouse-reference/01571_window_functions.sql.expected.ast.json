@@ -1,1 +1,514 @@
-{"expected":[{"type":"literal","text":"EXPLAIN","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"REPLACE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"SET","ignoreCase":true},{"type":"literal","text":"SET","ignoreCase":true},{"type":"literal","text":"SET","ignoreCase":true},{"type":"literal","text":"USE","ignoreCase":true},{"type":"literal","text":"SYSTEM","ignoreCase":true},{"type":"literal","text":"(","ignoreCase":false},{"type":"literal","text":"WITH","ignoreCase":true},{"type":"literal","text":"SELECT","ignoreCase":true},{"type":"end"}],"found":"I","location":{"start":{"offset":435,"line":17,"column":1},"end":{"offset":436,"line":17,"column":2}},"name":"SyntaxError"}
+[
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "order_by_const"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "a",
+        "type": {
+          "name": "UInt64"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "b",
+        "type": {
+          "name": "UInt64"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "c",
+        "type": {
+          "name": "UInt64"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "d",
+        "type": {
+          "name": "UInt64"
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "a"
+          ]
+        }
+      },
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "b"
+          ]
+        }
+      }
+    ],
+    "settings": [
+      {
+        "name": "index_granularity",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "8192"
+        }
+      }
+    ],
+    "settingsAfterOrderBy": true,
+    "leadingComments": [
+      "-- { echo }",
+      "-- Another test for window functions because the other one is too long.",
+      "-- some craziness with a mix of materialized and unmaterialized const columns",
+      "-- after merging sorted transform, that used to break the peer group detection in",
+      "-- the window transform."
+    ]
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "order_by_const"
+      }
+    },
+    "columns": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "a"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "b"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "c"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "d"
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "order_by_const"
+      }
+    },
+    "columns": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "a"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "b"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "c"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "d"
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "order_by_const"
+      }
+    },
+    "columns": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "a"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "b"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "c"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "d"
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "row_number",
+        "args": [],
+        "window": {
+          "orderBy": [
+            {
+              "kind": "orderByItem",
+              "expr": {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "1"
+              },
+              "direction": "ASC"
+            },
+            {
+              "kind": "orderByItem",
+              "expr": {
+                "kind": "columnRef",
+                "parts": [
+                  "a"
+                ]
+              },
+              "direction": "ASC"
+            }
+          ]
+        }
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "order_by_const"
+    },
+    "settings": [
+      {
+        "name": "query_plan_enable_multithreading_after_window_functions",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      }
+    ],
+    "leadingComments": [
+      "-- output 1 sorted stream"
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "count",
+        "args": [],
+        "window": {
+          "frame": {
+            "frameType": "rows",
+            "start": {
+              "kind": "preceding",
+              "expr": {
+                "kind": "binaryExpr",
+                "op": "+",
+                "left": {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "1"
+                },
+                "right": {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "1"
+                }
+              }
+            },
+            "end": {
+              "kind": "following",
+              "expr": {
+                "kind": "binaryExpr",
+                "op": "+",
+                "left": {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "1"
+                },
+                "right": {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "1"
+                }
+              }
+            }
+          }
+        }
+      }
+    ],
+    "from": {
+      "kind": "tableFunctionRef",
+      "name": "numbers",
+      "args": [
+        {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "10"
+        }
+      ]
+    },
+    "leadingComments": [
+      "-- expressions in window frame"
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "count",
+        "args": [],
+        "window": {
+          "frame": {
+            "frameType": "rows",
+            "start": {
+              "kind": "following",
+              "expr": {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "2"
+              }
+            },
+            "end": {
+              "kind": "following",
+              "expr": {
+                "kind": "binaryExpr",
+                "op": "+",
+                "left": {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "1"
+                },
+                "right": {
+                  "kind": "literal",
+                  "type": "Int64",
+                  "value": "-1"
+                }
+              }
+            }
+          }
+        }
+      }
+    ],
+    "from": {
+      "kind": "tableFunctionRef",
+      "name": "numbers",
+      "args": [
+        {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "10"
+        }
+      ]
+    },
+    "leadingComments": [
+      "-- signed and unsigned in offset do not cause logical error"
+    ],
+    "trailingComments": [
+      "-- { serverError BAD_ARGUMENTS }"
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "number"
+        ]
+      },
+      {
+        "kind": "functionCall",
+        "name": "lagInFrame",
+        "args": [
+          {
+            "kind": "functionCall",
+            "name": "toNullable",
+            "args": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "number"
+                ]
+              }
+            ]
+          },
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "2"
+          },
+          {
+            "kind": "literal",
+            "type": "NULL",
+            "value": "NULL"
+          }
+        ]
+      },
+      {
+        "kind": "functionCall",
+        "name": "lagInFrame",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "number"
+            ]
+          },
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "2"
+          },
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "1"
+          }
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableFunctionRef",
+      "name": "numbers",
+      "args": [
+        {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "10"
+        }
+      ]
+    },
+    "windows": [
+      {
+        "name": "w",
+        "spec": {
+          "orderBy": [
+            {
+              "kind": "orderByItem",
+              "expr": {
+                "kind": "columnRef",
+                "parts": [
+                  "number"
+                ]
+              },
+              "direction": "ASC"
+            }
+          ]
+        }
+      }
+    ],
+    "leadingComments": [
+      "-- default arguments of lagInFrame can be a subtype of the argument"
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "number"
+        ]
+      },
+      {
+        "kind": "functionCall",
+        "name": "row_number",
+        "args": [],
+        "window": {
+          "partitionBy": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "number"
+              ]
+            }
+          ],
+          "frame": {
+            "frameType": "rows",
+            "start": {
+              "kind": "unbounded"
+            },
+            "end": {
+              "kind": "preceding",
+              "expr": {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "1"
+              }
+            }
+          }
+        }
+      }
+    ],
+    "from": {
+      "kind": "tableFunctionRef",
+      "name": "numbers",
+      "args": [
+        {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "4"
+        }
+      ]
+    },
+    "settings": [
+      {
+        "name": "max_block_size",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "2"
+        }
+      }
+    ],
+    "leadingComments": [
+      "-- the case when current_row goes past the partition end at the block end"
+    ]
+  }
+]

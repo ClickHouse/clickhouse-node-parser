@@ -1,1 +1,201 @@
-<Parse Error>
+-- Tags: no-parallel-replicas
+-- ^ because we are using query_log
+-- add_minmax_index_for_numeric_columns=0: Different read rows
+SET read_in_order_use_virtual_row = 1;
+
+SET use_query_condition_cache = 0;
+
+CREATE TABLE t
+(
+    x UInt64,
+    y UInt64,
+    z UInt64,
+    k UInt64
+)
+ENGINE = MergeTree
+ORDER BY (x, y, z)
+SETTINGS index_granularity = 8192, index_granularity_bytes = 10485760, add_minmax_index_for_numeric_columns = 0;
+
+INSERT INTO t SELECT
+    number,
+    number,
+    number,
+    number
+FROM numbers(8192 * 3);
+
+INSERT INTO t SELECT
+    number + (8192 * 3),
+    number + (8192 * 3),
+    number + (8192 * 3),
+    number
+FROM numbers(8192 * 3);
+
+-- Expecting 2 virtual rows + one chunk (8192) for result + one extra chunk for next consumption in merge transform (8192),
+-- both chunks come from the same part.
+SELECT x
+FROM t
+ORDER BY x ASC
+LIMIT 4
+SETTINGS
+    max_block_size = 8192,
+    read_in_order_two_level_merge_threshold = 0,
+    max_threads = 1,
+    optimize_read_in_order = 1,
+    log_comment = 'preliminary merge, no filter';
+
+SELECT read_rows
+FROM `system`.query_log
+WHERE current_database = currentDatabase()
+    AND log_comment = 'preliminary merge, no filter'
+    AND type = 'QueryFinish'
+ORDER BY query_start_time DESC
+LIMIT 1;
+
+-- Expecting 2 virtual rows + two chunks (8192*2) get filtered out + one chunk for result (8192),
+-- all chunks come from the same part.
+SELECT k
+FROM t
+WHERE k > 8192 * 2
+ORDER BY x ASC
+LIMIT 4
+SETTINGS
+    max_block_size = 8192,
+    read_in_order_two_level_merge_threshold = 0,
+    max_threads = 1,
+    optimize_read_in_order = 1,
+    log_comment = 'preliminary merge with filter';
+
+SELECT read_rows
+FROM `system`.query_log
+WHERE current_database = currentDatabase()
+    AND log_comment = 'preliminary merge with filter'
+    AND type = 'QueryFinish'
+ORDER BY query_start_time DESC
+LIMIT 1;
+
+-- Expecting 2 virtual rows + one chunk (8192) for result + one extra chunk for next consumption in merge transform (8192),
+-- both chunks come from the same part.
+SELECT x
+FROM t
+ORDER BY x ASC
+LIMIT 4
+SETTINGS
+    max_block_size = 8192,
+    read_in_order_two_level_merge_threshold = 5,
+    max_threads = 1,
+    optimize_read_in_order = 1,
+    log_comment = 'no preliminary merge, no filter';
+
+SELECT read_rows
+FROM `system`.query_log
+WHERE current_database = currentDatabase()
+    AND log_comment = 'no preliminary merge, no filter'
+    AND type = 'QueryFinish'
+ORDER BY query_start_time DESC
+LIMIT 1;
+
+-- Expecting 2 virtual rows + two chunks (8192*2) get filtered out + one chunk for result (8192),
+-- all chunks come from the same part.
+SELECT k
+FROM t
+WHERE k > 8192 * 2
+ORDER BY x ASC
+LIMIT 4
+SETTINGS
+    max_block_size = 8192,
+    read_in_order_two_level_merge_threshold = 5,
+    max_threads = 1,
+    optimize_read_in_order = 1,
+    log_comment = 'no preliminary merge, with filter';
+
+SELECT read_rows
+FROM `system`.query_log
+WHERE current_database = currentDatabase()
+    AND log_comment = 'no preliminary merge, with filter'
+    AND type = 'QueryFinish'
+ORDER BY query_start_time DESC
+LIMIT 1;
+
+CREATE TABLE fixed_prefix
+(
+    a UInt32,
+    b UInt32
+)
+ENGINE = MergeTree
+ORDER BY (a, b)
+SETTINGS index_granularity = 3;
+
+INSERT INTO fixed_prefix;
+
+SELECT
+    a,
+    b
+FROM fixed_prefix
+WHERE a = 1
+ORDER BY b ASC
+SETTINGS
+    max_threads = 1,
+    optimize_read_in_order = 1,
+    read_in_order_two_level_merge_threshold = 0; --force preliminary merge
+
+SELECT
+    a,
+    b
+FROM fixed_prefix
+WHERE a = 1
+ORDER BY b ASC
+SETTINGS
+    max_threads = 1,
+    optimize_read_in_order = 1,
+    read_in_order_two_level_merge_threshold = 5; --avoid preliminary merge
+
+CREATE TABLE function_pk
+(
+    A Int64,
+    B Int64
+)
+ENGINE = MergeTree
+ORDER BY (A, negate(B))
+SETTINGS index_granularity = 1;
+
+INSERT INTO function_pk;
+
+INSERT INTO function_pk;
+
+INSERT INTO function_pk;
+
+SELECT *
+FROM function_pk
+ORDER BY (A,-B) ASC
+LIMIT 3
+SETTINGS
+    max_threads = 1,
+    optimize_read_in_order = 1,
+    read_in_order_two_level_merge_threshold = 5; --avoid preliminary merge
+
+-- modified from 02317_distinct_in_order_optimization
+SELECT '-- test distinct ----';
+
+CREATE TABLE distinct_in_order
+(
+    a int,
+    b int,
+    c int
+)
+ENGINE = MergeTree
+ORDER BY (a, b)
+SETTINGS index_granularity = 8192, index_granularity_bytes = '10Mi';
+
+INSERT INTO distinct_in_order SELECT
+    number % number,
+    number % 5,
+    number % 10
+FROM numbers(1, 1000000);
+
+SELECT DISTINCT a
+FROM distinct_in_order
+ORDER BY a ASC
+SETTINGS
+    read_in_order_two_level_merge_threshold = 0,
+    optimize_read_in_order = 1,
+    max_threads = 2;

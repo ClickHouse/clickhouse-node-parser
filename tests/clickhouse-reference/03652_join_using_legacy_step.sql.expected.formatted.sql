@@ -1,1 +1,85 @@
-<Parse Error>
+SET query_plan_use_new_logical_join_step = 0;
+
+SET enable_analyzer = 1;
+
+CREATE TABLE t1
+(
+    x Int8
+)
+ENGINE = Memory;
+
+INSERT INTO t1;
+
+CREATE TABLE t2
+(
+    x UInt8
+)
+ENGINE = Memory;
+
+INSERT INTO t2;
+
+CREATE TABLE t3
+(
+    x UInt16
+)
+ENGINE = Memory;
+
+INSERT INTO t3;
+
+CREATE TABLE t4
+(
+    x UInt32
+)
+ENGINE = Memory;
+
+INSERT INTO t4;
+
+SELECT coalesce(t1.x, t2.x, t3.x, t4.x) AS x
+FROM
+    t1
+FULL JOIN t2
+    USING (x)
+FULL JOIN t3
+    USING (x)
+FULL JOIN t4
+    USING (x);
+
+SELECT 1 AS x
+FROM
+    t1
+FULL JOIN t2
+    USING (x)
+FULL JOIN t3
+    USING (x)
+FULL JOIN t4
+    USING (x);
+
+SELECT 1 AS x
+FROM
+    t1
+RIGHT JOIN t2
+    USING (x)
+RIGHT JOIN t3
+    USING (x)
+RIGHT JOIN t4
+    USING (x);
+
+SELECT 1 AS x
+FROM
+    t1
+LEFT JOIN t2
+    USING (x)
+LEFT JOIN t3
+    USING (x)
+LEFT JOIN t4
+    USING (x);
+
+SELECT 1 AS x
+FROM
+    t1
+RIGHT JOIN t2
+    USING (x)
+FULL JOIN t3
+    USING (x)
+INNER JOIN t4
+    USING (x);

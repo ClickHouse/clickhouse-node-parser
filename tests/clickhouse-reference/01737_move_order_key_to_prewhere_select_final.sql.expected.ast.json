@@ -1,1 +1,1394 @@
-{"expected":[{"type":"literal","text":"EXPLAIN","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"REPLACE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"SET","ignoreCase":true},{"type":"literal","text":"SET","ignoreCase":true},{"type":"literal","text":"SET","ignoreCase":true},{"type":"literal","text":"USE","ignoreCase":true},{"type":"literal","text":"SYSTEM","ignoreCase":true},{"type":"literal","text":"(","ignoreCase":false},{"type":"literal","text":"WITH","ignoreCase":true},{"type":"literal","text":"SELECT","ignoreCase":true},{"type":"end"}],"found":"I","location":{"start":{"offset":174,"line":4,"column":1},"end":{"offset":175,"line":4,"column":2}},"name":"SyntaxError"}
+[
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "optimize_move_to_prewhere",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "convert_query_to_cnf",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "prewhere_move_select_final"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "x",
+        "type": {
+          "name": "Int"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "y",
+        "type": {
+          "name": "Int"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "z",
+        "type": {
+          "name": "Int"
+        }
+      }
+    ],
+    "engine": {
+      "name": "ReplacingMergeTree",
+      "args": []
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "x"
+          ]
+        }
+      },
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "y"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "prewhere_move_select_final"
+      }
+    },
+    "selectQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "number"
+          ]
+        },
+        {
+          "kind": "binaryExpr",
+          "op": "*",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "number"
+            ]
+          },
+          "right": {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "2"
+          }
+        },
+        {
+          "kind": "binaryExpr",
+          "op": "*",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "number"
+            ]
+          },
+          "right": {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "3"
+          }
+        }
+      ],
+      "from": {
+        "kind": "tableFunctionRef",
+        "name": "numbers",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "1000"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "optimize_move_to_prewhere_if_final",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "replaceRegexpAll",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "explain"
+            ]
+          },
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": "__table1\\\\.|_UInt8|_UInt16"
+          },
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": ""
+          }
+        ]
+      }
+    ],
+    "from": {
+      "kind": "subqueryFrom",
+      "query": {
+        "kind": "explain",
+        "settings": [
+          {
+            "name": "actions",
+            "value": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "1"
+            }
+          }
+        ],
+        "query": {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "asterisk"
+            }
+          ],
+          "from": {
+            "kind": "tableRef",
+            "table": "prewhere_move_select_final"
+          },
+          "where": {
+            "kind": "binaryExpr",
+            "op": ">",
+            "left": {
+              "kind": "columnRef",
+              "parts": [
+                "x"
+              ]
+            },
+            "right": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "100"
+            }
+          }
+        }
+      }
+    },
+    "where": {
+      "kind": "functionCall",
+      "name": "like",
+      "args": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "explain"
+          ]
+        },
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "%Prewhere%"
+        }
+      ]
+    },
+    "leadingComments": [
+      "-- order key can be pushed down with final"
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "replaceRegexpAll",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "explain"
+            ]
+          },
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": "__table1\\\\.|_UInt8|_UInt16"
+          },
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": ""
+          }
+        ]
+      }
+    ],
+    "from": {
+      "kind": "subqueryFrom",
+      "query": {
+        "kind": "explain",
+        "settings": [
+          {
+            "name": "actions",
+            "value": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "1"
+            }
+          }
+        ],
+        "query": {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "asterisk"
+            }
+          ],
+          "from": {
+            "kind": "tableRef",
+            "table": "prewhere_move_select_final",
+            "final": true
+          },
+          "where": {
+            "kind": "binaryExpr",
+            "op": ">",
+            "left": {
+              "kind": "columnRef",
+              "parts": [
+                "x"
+              ]
+            },
+            "right": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "100"
+            }
+          }
+        }
+      }
+    },
+    "where": {
+      "kind": "functionCall",
+      "name": "like",
+      "args": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "explain"
+          ]
+        },
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "%Prewhere%"
+        }
+      ]
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "replaceRegexpAll",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "explain"
+            ]
+          },
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": "__table1\\\\.|_UInt8|_UInt16"
+          },
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": ""
+          }
+        ]
+      }
+    ],
+    "from": {
+      "kind": "subqueryFrom",
+      "query": {
+        "kind": "explain",
+        "settings": [
+          {
+            "name": "actions",
+            "value": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "1"
+            }
+          }
+        ],
+        "query": {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "asterisk"
+            }
+          ],
+          "from": {
+            "kind": "tableRef",
+            "table": "prewhere_move_select_final"
+          },
+          "where": {
+            "kind": "binaryExpr",
+            "op": ">",
+            "left": {
+              "kind": "columnRef",
+              "parts": [
+                "y"
+              ]
+            },
+            "right": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "100"
+            }
+          }
+        }
+      }
+    },
+    "where": {
+      "kind": "functionCall",
+      "name": "like",
+      "args": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "explain"
+          ]
+        },
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "%Prewhere%"
+        }
+      ]
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "replaceRegexpAll",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "explain"
+            ]
+          },
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": "__table1\\\\.|_UInt8|_UInt16"
+          },
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": ""
+          }
+        ]
+      }
+    ],
+    "from": {
+      "kind": "subqueryFrom",
+      "query": {
+        "kind": "explain",
+        "settings": [
+          {
+            "name": "actions",
+            "value": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "1"
+            }
+          }
+        ],
+        "query": {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "asterisk"
+            }
+          ],
+          "from": {
+            "kind": "tableRef",
+            "table": "prewhere_move_select_final",
+            "final": true
+          },
+          "where": {
+            "kind": "binaryExpr",
+            "op": ">",
+            "left": {
+              "kind": "columnRef",
+              "parts": [
+                "y"
+              ]
+            },
+            "right": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "100"
+            }
+          }
+        }
+      }
+    },
+    "where": {
+      "kind": "functionCall",
+      "name": "like",
+      "args": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "explain"
+          ]
+        },
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "%Prewhere%"
+        }
+      ]
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "replaceRegexpAll",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "explain"
+            ]
+          },
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": "__table1\\\\.|_UInt8|_UInt16"
+          },
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": ""
+          }
+        ]
+      }
+    ],
+    "from": {
+      "kind": "subqueryFrom",
+      "query": {
+        "kind": "explain",
+        "settings": [
+          {
+            "name": "actions",
+            "value": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "1"
+            }
+          }
+        ],
+        "query": {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "asterisk"
+            }
+          ],
+          "from": {
+            "kind": "tableRef",
+            "table": "prewhere_move_select_final"
+          },
+          "where": {
+            "kind": "binaryExpr",
+            "op": ">",
+            "left": {
+              "kind": "binaryExpr",
+              "op": "+",
+              "left": {
+                "kind": "columnRef",
+                "parts": [
+                  "x"
+                ]
+              },
+              "right": {
+                "kind": "columnRef",
+                "parts": [
+                  "y"
+                ]
+              }
+            },
+            "right": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "100"
+            }
+          }
+        }
+      }
+    },
+    "where": {
+      "kind": "functionCall",
+      "name": "like",
+      "args": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "explain"
+          ]
+        },
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "%Prewhere%"
+        }
+      ]
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "replaceRegexpAll",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "explain"
+            ]
+          },
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": "__table1\\\\.|_UInt8|_UInt16"
+          },
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": ""
+          }
+        ]
+      }
+    ],
+    "from": {
+      "kind": "subqueryFrom",
+      "query": {
+        "kind": "explain",
+        "settings": [
+          {
+            "name": "actions",
+            "value": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "1"
+            }
+          }
+        ],
+        "query": {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "asterisk"
+            }
+          ],
+          "from": {
+            "kind": "tableRef",
+            "table": "prewhere_move_select_final",
+            "final": true
+          },
+          "where": {
+            "kind": "binaryExpr",
+            "op": ">",
+            "left": {
+              "kind": "binaryExpr",
+              "op": "+",
+              "left": {
+                "kind": "columnRef",
+                "parts": [
+                  "x"
+                ]
+              },
+              "right": {
+                "kind": "columnRef",
+                "parts": [
+                  "y"
+                ]
+              }
+            },
+            "right": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "100"
+            }
+          }
+        }
+      }
+    },
+    "where": {
+      "kind": "functionCall",
+      "name": "like",
+      "args": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "explain"
+          ]
+        },
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "%Prewhere%"
+        }
+      ]
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "asterisk"
+      }
+    ],
+    "from": {
+      "kind": "subqueryFrom",
+      "query": {
+        "kind": "explain",
+        "settings": [
+          {
+            "name": "actions",
+            "value": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "1"
+            }
+          }
+        ],
+        "query": {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "asterisk"
+            }
+          ],
+          "from": {
+            "kind": "tableRef",
+            "table": "prewhere_move_select_final",
+            "final": true
+          },
+          "where": {
+            "kind": "binaryExpr",
+            "op": ">",
+            "left": {
+              "kind": "columnRef",
+              "parts": [
+                "z"
+              ]
+            },
+            "right": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "400"
+            }
+          }
+        }
+      }
+    },
+    "where": {
+      "kind": "functionCall",
+      "name": "like",
+      "args": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "explain"
+          ]
+        },
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "%Prewhere filter"
+        }
+      ]
+    },
+    "leadingComments": [
+      "-- can not be pushed down"
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "replaceRegexpAll",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "explain"
+            ]
+          },
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": "__table1\\\\.|_UInt8|_UInt16"
+          },
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": ""
+          }
+        ]
+      }
+    ],
+    "from": {
+      "kind": "subqueryFrom",
+      "query": {
+        "kind": "explain",
+        "settings": [
+          {
+            "name": "actions",
+            "value": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "1"
+            }
+          }
+        ],
+        "query": {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "asterisk"
+            }
+          ],
+          "from": {
+            "kind": "tableRef",
+            "table": "prewhere_move_select_final",
+            "final": true
+          },
+          "where": {
+            "kind": "naryExpr",
+            "op": "AND",
+            "operands": [
+              {
+                "kind": "binaryExpr",
+                "op": ">",
+                "left": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "y"
+                  ]
+                },
+                "right": {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "100"
+                }
+              },
+              {
+                "kind": "binaryExpr",
+                "op": ">",
+                "left": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "z"
+                  ]
+                },
+                "right": {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "400"
+                }
+              }
+            ]
+          }
+        }
+      }
+    },
+    "where": {
+      "kind": "naryExpr",
+      "op": "OR",
+      "operands": [
+        {
+          "kind": "functionCall",
+          "name": "like",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "explain"
+              ]
+            },
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "%Prewhere%"
+            }
+          ]
+        },
+        {
+          "kind": "functionCall",
+          "name": "like",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "explain"
+              ]
+            },
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "%Filter%"
+            }
+          ]
+        }
+      ]
+    },
+    "leadingComments": [
+      "-- only condition with x/y can be pushed down"
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "replaceRegexpAll",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "explain"
+            ]
+          },
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": "__table1\\\\.|_UInt8|_UInt16"
+          },
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": ""
+          }
+        ]
+      }
+    ],
+    "from": {
+      "kind": "subqueryFrom",
+      "query": {
+        "kind": "explain",
+        "settings": [
+          {
+            "name": "actions",
+            "value": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "1"
+            }
+          }
+        ],
+        "query": {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "asterisk"
+            }
+          ],
+          "from": {
+            "kind": "tableRef",
+            "table": "prewhere_move_select_final",
+            "final": true
+          },
+          "where": {
+            "kind": "naryExpr",
+            "op": "AND",
+            "operands": [
+              {
+                "kind": "binaryExpr",
+                "op": ">",
+                "left": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "x"
+                  ]
+                },
+                "right": {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "50"
+                }
+              },
+              {
+                "kind": "binaryExpr",
+                "op": ">",
+                "left": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "z"
+                  ]
+                },
+                "right": {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "400"
+                }
+              }
+            ]
+          }
+        }
+      }
+    },
+    "where": {
+      "kind": "naryExpr",
+      "op": "OR",
+      "operands": [
+        {
+          "kind": "functionCall",
+          "name": "like",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "explain"
+              ]
+            },
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "%Prewhere%"
+            }
+          ]
+        },
+        {
+          "kind": "functionCall",
+          "name": "like",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "explain"
+              ]
+            },
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "%Filter%"
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "replaceRegexpAll",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "explain"
+            ]
+          },
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": "__table1\\\\.|_UInt8|_UInt16"
+          },
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": ""
+          }
+        ]
+      }
+    ],
+    "from": {
+      "kind": "subqueryFrom",
+      "query": {
+        "kind": "explain",
+        "settings": [
+          {
+            "name": "actions",
+            "value": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "1"
+            }
+          }
+        ],
+        "query": {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "asterisk"
+            }
+          ],
+          "from": {
+            "kind": "tableRef",
+            "table": "prewhere_move_select_final",
+            "final": true
+          },
+          "where": {
+            "kind": "naryExpr",
+            "op": "AND",
+            "operands": [
+              {
+                "kind": "binaryExpr",
+                "op": ">",
+                "left": {
+                  "kind": "binaryExpr",
+                  "op": "+",
+                  "left": {
+                    "kind": "columnRef",
+                    "parts": [
+                      "x"
+                    ]
+                  },
+                  "right": {
+                    "kind": "columnRef",
+                    "parts": [
+                      "y"
+                    ]
+                  }
+                },
+                "right": {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "50"
+                }
+              },
+              {
+                "kind": "binaryExpr",
+                "op": ">",
+                "left": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "z"
+                  ]
+                },
+                "right": {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "400"
+                }
+              }
+            ]
+          }
+        }
+      }
+    },
+    "where": {
+      "kind": "naryExpr",
+      "op": "OR",
+      "operands": [
+        {
+          "kind": "functionCall",
+          "name": "like",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "explain"
+              ]
+            },
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "%Prewhere%"
+            }
+          ]
+        },
+        {
+          "kind": "functionCall",
+          "name": "like",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "explain"
+              ]
+            },
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "%Filter%"
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "optimize_move_to_prewhere_if_final",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "replaceRegexpAll",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "explain"
+            ]
+          },
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": "__table1\\\\.|_UInt8|_UInt16"
+          },
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": ""
+          }
+        ]
+      }
+    ],
+    "from": {
+      "kind": "subqueryFrom",
+      "query": {
+        "kind": "explain",
+        "settings": [
+          {
+            "name": "actions",
+            "value": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "1"
+            }
+          }
+        ],
+        "query": {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "asterisk"
+            }
+          ],
+          "from": {
+            "kind": "tableRef",
+            "table": "prewhere_move_select_final",
+            "final": true
+          },
+          "where": {
+            "kind": "binaryExpr",
+            "op": ">",
+            "left": {
+              "kind": "columnRef",
+              "parts": [
+                "z"
+              ]
+            },
+            "right": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "400"
+            }
+          }
+        }
+      }
+    },
+    "where": {
+      "kind": "functionCall",
+      "name": "like",
+      "args": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "explain"
+          ]
+        },
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "%Prewhere%"
+        }
+      ]
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "replaceRegexpAll",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "explain"
+            ]
+          },
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": "__table1\\\\.|_UInt8|_UInt16"
+          },
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": ""
+          }
+        ]
+      }
+    ],
+    "from": {
+      "kind": "subqueryFrom",
+      "query": {
+        "kind": "explain",
+        "settings": [
+          {
+            "name": "actions",
+            "value": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "1"
+            }
+          }
+        ],
+        "query": {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "asterisk"
+            }
+          ],
+          "from": {
+            "kind": "tableRef",
+            "table": "prewhere_move_select_final",
+            "final": true
+          },
+          "where": {
+            "kind": "naryExpr",
+            "op": "AND",
+            "operands": [
+              {
+                "kind": "binaryExpr",
+                "op": ">",
+                "left": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "y"
+                  ]
+                },
+                "right": {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "100"
+                }
+              },
+              {
+                "kind": "binaryExpr",
+                "op": ">",
+                "left": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "z"
+                  ]
+                },
+                "right": {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "400"
+                }
+              }
+            ]
+          }
+        }
+      }
+    },
+    "where": {
+      "kind": "functionCall",
+      "name": "like",
+      "args": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "explain"
+          ]
+        },
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "%Prewhere%"
+        }
+      ]
+    }
+  }
+]

@@ -1,1 +1,1571 @@
-{"expected":[{"type":"literal","text":"EXPLAIN","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"REPLACE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"SET","ignoreCase":true},{"type":"literal","text":"SET","ignoreCase":true},{"type":"literal","text":"SET","ignoreCase":true},{"type":"literal","text":"USE","ignoreCase":true},{"type":"literal","text":"SYSTEM","ignoreCase":true},{"type":"literal","text":"(","ignoreCase":false},{"type":"literal","text":"WITH","ignoreCase":true},{"type":"literal","text":"SELECT","ignoreCase":true},{"type":"end"}],"found":"I","location":{"start":{"offset":339,"line":19,"column":1},"end":{"offset":340,"line":19,"column":2}},"name":"SyntaxError"}
+[
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "tokenbf_tab"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "id",
+        "type": {
+          "name": "UInt32"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "str",
+        "type": {
+          "name": "String"
+        }
+      },
+      {
+        "kind": "indexDef",
+        "name": "idx",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "str"
+          ]
+        },
+        "indexType": {
+          "name": "tokenbf_v1",
+          "args": [
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "256"
+            },
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "2"
+            },
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "0"
+            }
+          ]
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "id"
+          ]
+        }
+      }
+    ],
+    "settings": [
+      {
+        "name": "index_granularity",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ],
+    "settingsAfterOrderBy": true
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "ngrambf_tab"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "id",
+        "type": {
+          "name": "UInt32"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "str",
+        "type": {
+          "name": "String"
+        }
+      },
+      {
+        "kind": "indexDef",
+        "name": "idx",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "str"
+          ]
+        },
+        "indexType": {
+          "name": "ngrambf_v1",
+          "args": [
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "3"
+            },
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "256"
+            },
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "2"
+            },
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "0"
+            }
+          ]
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "id"
+          ]
+        }
+      }
+    ],
+    "settings": [
+      {
+        "name": "index_granularity",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ],
+    "settingsAfterOrderBy": true
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "tokenbf_tab"
+      }
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "ngrambf_tab"
+      }
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "asterisk"
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "tokenbf_tab"
+    },
+    "where": {
+      "kind": "functionCall",
+      "name": "match",
+      "args": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "str"
+          ]
+        },
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": " Hello (ClickHouse|World) "
+        }
+      ]
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "id"
+          ]
+        },
+        "direction": "ASC"
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "asterisk"
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "ngrambf_tab"
+    },
+    "where": {
+      "kind": "functionCall",
+      "name": "match",
+      "args": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "str"
+          ]
+        },
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "Hello (ClickHouse|World)"
+        }
+      ]
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "id"
+          ]
+        },
+        "direction": "ASC"
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "asterisk"
+      }
+    ],
+    "from": {
+      "kind": "subqueryFrom",
+      "query": {
+        "kind": "explain",
+        "explainType": "PLAN",
+        "settings": [
+          {
+            "name": "indexes",
+            "value": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "1"
+            }
+          }
+        ],
+        "query": {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "asterisk"
+            }
+          ],
+          "from": {
+            "kind": "tableRef",
+            "table": "tokenbf_tab"
+          },
+          "where": {
+            "kind": "functionCall",
+            "name": "match",
+            "args": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "str"
+                ]
+              },
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": " Hello (ClickHouse|World) "
+              }
+            ]
+          },
+          "orderBy": [
+            {
+              "kind": "orderByItem",
+              "expr": {
+                "kind": "columnRef",
+                "parts": [
+                  "id"
+                ]
+              },
+              "direction": "ASC"
+            }
+          ]
+        }
+      }
+    },
+    "where": {
+      "kind": "functionCall",
+      "name": "like",
+      "args": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "explain"
+          ]
+        },
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "%Granules: %"
+        }
+      ]
+    },
+    "settings": [
+      {
+        "name": "enable_analyzer",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      }
+    ],
+    "leadingComments": [
+      "-- Read 2/6 granules",
+      "-- Required string: 'Hello '",
+      "-- Alternatives: 'Hello ClickHouse', 'Hello World'",
+      "-- Surrounded by spaces for tokenbf"
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "asterisk"
+      }
+    ],
+    "from": {
+      "kind": "subqueryFrom",
+      "query": {
+        "kind": "explain",
+        "explainType": "PLAN",
+        "settings": [
+          {
+            "name": "indexes",
+            "value": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "1"
+            }
+          }
+        ],
+        "query": {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "asterisk"
+            }
+          ],
+          "from": {
+            "kind": "tableRef",
+            "table": "tokenbf_tab"
+          },
+          "where": {
+            "kind": "functionCall",
+            "name": "match",
+            "args": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "str"
+                ]
+              },
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": " Hello (ClickHouse|World) "
+              }
+            ]
+          },
+          "orderBy": [
+            {
+              "kind": "orderByItem",
+              "expr": {
+                "kind": "columnRef",
+                "parts": [
+                  "id"
+                ]
+              },
+              "direction": "ASC"
+            }
+          ]
+        }
+      }
+    },
+    "where": {
+      "kind": "functionCall",
+      "name": "like",
+      "args": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "explain"
+          ]
+        },
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "%Granules: %"
+        }
+      ]
+    },
+    "settings": [
+      {
+        "name": "enable_analyzer",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "asterisk"
+      }
+    ],
+    "from": {
+      "kind": "subqueryFrom",
+      "query": {
+        "kind": "explain",
+        "explainType": "PLAN",
+        "settings": [
+          {
+            "name": "indexes",
+            "value": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "1"
+            }
+          }
+        ],
+        "query": {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "asterisk"
+            }
+          ],
+          "from": {
+            "kind": "tableRef",
+            "table": "ngrambf_tab"
+          },
+          "where": {
+            "kind": "functionCall",
+            "name": "match",
+            "args": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "str"
+                ]
+              },
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "Hello (ClickHouse|World)"
+              }
+            ]
+          },
+          "orderBy": [
+            {
+              "kind": "orderByItem",
+              "expr": {
+                "kind": "columnRef",
+                "parts": [
+                  "id"
+                ]
+              },
+              "direction": "ASC"
+            }
+          ]
+        }
+      }
+    },
+    "where": {
+      "kind": "functionCall",
+      "name": "like",
+      "args": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "explain"
+          ]
+        },
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "%Granules: %"
+        }
+      ]
+    },
+    "settings": [
+      {
+        "name": "enable_analyzer",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "asterisk"
+      }
+    ],
+    "from": {
+      "kind": "subqueryFrom",
+      "query": {
+        "kind": "explain",
+        "explainType": "PLAN",
+        "settings": [
+          {
+            "name": "indexes",
+            "value": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "1"
+            }
+          }
+        ],
+        "query": {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "asterisk"
+            }
+          ],
+          "from": {
+            "kind": "tableRef",
+            "table": "ngrambf_tab"
+          },
+          "where": {
+            "kind": "functionCall",
+            "name": "match",
+            "args": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "str"
+                ]
+              },
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "Hello (ClickHouse|World)"
+              }
+            ]
+          },
+          "orderBy": [
+            {
+              "kind": "orderByItem",
+              "expr": {
+                "kind": "columnRef",
+                "parts": [
+                  "id"
+                ]
+              },
+              "direction": "ASC"
+            }
+          ]
+        }
+      }
+    },
+    "where": {
+      "kind": "functionCall",
+      "name": "like",
+      "args": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "explain"
+          ]
+        },
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "%Granules: %"
+        }
+      ]
+    },
+    "settings": [
+      {
+        "name": "enable_analyzer",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "literal",
+        "type": "String",
+        "value": "---"
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "asterisk"
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "tokenbf_tab"
+    },
+    "where": {
+      "kind": "functionCall",
+      "name": "match",
+      "args": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "str"
+          ]
+        },
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": ".* (ClickHouse|World) "
+        }
+      ]
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "id"
+          ]
+        },
+        "direction": "ASC"
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "asterisk"
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "ngrambf_tab"
+    },
+    "where": {
+      "kind": "functionCall",
+      "name": "match",
+      "args": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "str"
+          ]
+        },
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": ".*(ClickHouse|World)"
+        }
+      ]
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "id"
+          ]
+        },
+        "direction": "ASC"
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "asterisk"
+      }
+    ],
+    "from": {
+      "kind": "subqueryFrom",
+      "query": {
+        "kind": "explain",
+        "explainType": "PLAN",
+        "settings": [
+          {
+            "name": "indexes",
+            "value": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "1"
+            }
+          }
+        ],
+        "query": {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "asterisk"
+            }
+          ],
+          "from": {
+            "kind": "tableRef",
+            "table": "tokenbf_tab"
+          },
+          "where": {
+            "kind": "functionCall",
+            "name": "match",
+            "args": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "str"
+                ]
+              },
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": ".* (ClickHouse|World) "
+              }
+            ]
+          },
+          "orderBy": [
+            {
+              "kind": "orderByItem",
+              "expr": {
+                "kind": "columnRef",
+                "parts": [
+                  "id"
+                ]
+              },
+              "direction": "ASC"
+            }
+          ]
+        }
+      }
+    },
+    "where": {
+      "kind": "functionCall",
+      "name": "like",
+      "args": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "explain"
+          ]
+        },
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "%Granules: %"
+        }
+      ]
+    },
+    "settings": [
+      {
+        "name": "enable_analyzer",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      }
+    ],
+    "leadingComments": [
+      "-- Read 3/6 granules",
+      "-- Required string: -",
+      "-- Alternatives: 'ClickHouse', 'World'",
+      "-- Surrounded by spaces for tokenbf"
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "asterisk"
+      }
+    ],
+    "from": {
+      "kind": "subqueryFrom",
+      "query": {
+        "kind": "explain",
+        "explainType": "PLAN",
+        "settings": [
+          {
+            "name": "indexes",
+            "value": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "1"
+            }
+          }
+        ],
+        "query": {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "asterisk"
+            }
+          ],
+          "from": {
+            "kind": "tableRef",
+            "table": "tokenbf_tab"
+          },
+          "where": {
+            "kind": "functionCall",
+            "name": "match",
+            "args": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "str"
+                ]
+              },
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": ".* (ClickHouse|World) "
+              }
+            ]
+          },
+          "orderBy": [
+            {
+              "kind": "orderByItem",
+              "expr": {
+                "kind": "columnRef",
+                "parts": [
+                  "id"
+                ]
+              },
+              "direction": "ASC"
+            }
+          ]
+        }
+      }
+    },
+    "where": {
+      "kind": "functionCall",
+      "name": "like",
+      "args": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "explain"
+          ]
+        },
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "%Granules: %"
+        }
+      ]
+    },
+    "settings": [
+      {
+        "name": "enable_analyzer",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "asterisk"
+      }
+    ],
+    "from": {
+      "kind": "subqueryFrom",
+      "query": {
+        "kind": "explain",
+        "explainType": "PLAN",
+        "settings": [
+          {
+            "name": "indexes",
+            "value": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "1"
+            }
+          }
+        ],
+        "query": {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "asterisk"
+            }
+          ],
+          "from": {
+            "kind": "tableRef",
+            "table": "ngrambf_tab"
+          },
+          "where": {
+            "kind": "functionCall",
+            "name": "match",
+            "args": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "str"
+                ]
+              },
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": ".*(ClickHouse|World)"
+              }
+            ]
+          },
+          "orderBy": [
+            {
+              "kind": "orderByItem",
+              "expr": {
+                "kind": "columnRef",
+                "parts": [
+                  "id"
+                ]
+              },
+              "direction": "ASC"
+            }
+          ]
+        }
+      }
+    },
+    "where": {
+      "kind": "functionCall",
+      "name": "like",
+      "args": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "explain"
+          ]
+        },
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "%Granules: %"
+        }
+      ]
+    },
+    "settings": [
+      {
+        "name": "enable_analyzer",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "asterisk"
+      }
+    ],
+    "from": {
+      "kind": "subqueryFrom",
+      "query": {
+        "kind": "explain",
+        "explainType": "PLAN",
+        "settings": [
+          {
+            "name": "indexes",
+            "value": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "1"
+            }
+          }
+        ],
+        "query": {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "asterisk"
+            }
+          ],
+          "from": {
+            "kind": "tableRef",
+            "table": "ngrambf_tab"
+          },
+          "where": {
+            "kind": "functionCall",
+            "name": "match",
+            "args": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "str"
+                ]
+              },
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": ".*(ClickHouse|World)"
+              }
+            ]
+          },
+          "orderBy": [
+            {
+              "kind": "orderByItem",
+              "expr": {
+                "kind": "columnRef",
+                "parts": [
+                  "id"
+                ]
+              },
+              "direction": "ASC"
+            }
+          ]
+        }
+      }
+    },
+    "where": {
+      "kind": "functionCall",
+      "name": "like",
+      "args": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "explain"
+          ]
+        },
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "%Granules: %"
+        }
+      ]
+    },
+    "settings": [
+      {
+        "name": "enable_analyzer",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "asterisk"
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "tokenbf_tab"
+    },
+    "where": {
+      "kind": "functionCall",
+      "name": "match",
+      "args": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "str"
+          ]
+        },
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": " OLAP .*"
+        }
+      ]
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "id"
+          ]
+        },
+        "direction": "ASC"
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "asterisk"
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "ngrambf_tab"
+    },
+    "where": {
+      "kind": "functionCall",
+      "name": "match",
+      "args": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "str"
+          ]
+        },
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "OLAP.*"
+        }
+      ]
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "id"
+          ]
+        },
+        "direction": "ASC"
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "asterisk"
+      }
+    ],
+    "from": {
+      "kind": "subqueryFrom",
+      "query": {
+        "kind": "explain",
+        "explainType": "PLAN",
+        "settings": [
+          {
+            "name": "indexes",
+            "value": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "1"
+            }
+          }
+        ],
+        "query": {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "asterisk"
+            }
+          ],
+          "from": {
+            "kind": "tableRef",
+            "table": "tokenbf_tab"
+          },
+          "where": {
+            "kind": "functionCall",
+            "name": "match",
+            "args": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "str"
+                ]
+              },
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": " OLAP (.*?)*"
+              }
+            ]
+          },
+          "orderBy": [
+            {
+              "kind": "orderByItem",
+              "expr": {
+                "kind": "columnRef",
+                "parts": [
+                  "id"
+                ]
+              },
+              "direction": "ASC"
+            }
+          ]
+        }
+      }
+    },
+    "where": {
+      "kind": "functionCall",
+      "name": "like",
+      "args": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "explain"
+          ]
+        },
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "%Granules: %"
+        }
+      ]
+    },
+    "settings": [
+      {
+        "name": "enable_analyzer",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      }
+    ],
+    "leadingComments": [
+      "-- Read 1/6 granules",
+      "-- Required string: 'OLAP'",
+      "-- Alternatives: -",
+      "-- Surrounded by spaces for tokenbf"
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "asterisk"
+      }
+    ],
+    "from": {
+      "kind": "subqueryFrom",
+      "query": {
+        "kind": "explain",
+        "explainType": "PLAN",
+        "settings": [
+          {
+            "name": "indexes",
+            "value": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "1"
+            }
+          }
+        ],
+        "query": {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "asterisk"
+            }
+          ],
+          "from": {
+            "kind": "tableRef",
+            "table": "tokenbf_tab"
+          },
+          "where": {
+            "kind": "functionCall",
+            "name": "match",
+            "args": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "str"
+                ]
+              },
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": " OLAP (.*?)*"
+              }
+            ]
+          },
+          "orderBy": [
+            {
+              "kind": "orderByItem",
+              "expr": {
+                "kind": "columnRef",
+                "parts": [
+                  "id"
+                ]
+              },
+              "direction": "ASC"
+            }
+          ]
+        }
+      }
+    },
+    "where": {
+      "kind": "functionCall",
+      "name": "like",
+      "args": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "explain"
+          ]
+        },
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "%Granules: %"
+        }
+      ]
+    },
+    "settings": [
+      {
+        "name": "enable_analyzer",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "asterisk"
+      }
+    ],
+    "from": {
+      "kind": "subqueryFrom",
+      "query": {
+        "kind": "explain",
+        "explainType": "PLAN",
+        "settings": [
+          {
+            "name": "indexes",
+            "value": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "1"
+            }
+          }
+        ],
+        "query": {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "asterisk"
+            }
+          ],
+          "from": {
+            "kind": "tableRef",
+            "table": "ngrambf_tab"
+          },
+          "where": {
+            "kind": "functionCall",
+            "name": "match",
+            "args": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "str"
+                ]
+              },
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "OLAP (.*?)*"
+              }
+            ]
+          },
+          "orderBy": [
+            {
+              "kind": "orderByItem",
+              "expr": {
+                "kind": "columnRef",
+                "parts": [
+                  "id"
+                ]
+              },
+              "direction": "ASC"
+            }
+          ]
+        }
+      }
+    },
+    "where": {
+      "kind": "functionCall",
+      "name": "like",
+      "args": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "explain"
+          ]
+        },
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "%Granules: %"
+        }
+      ]
+    },
+    "settings": [
+      {
+        "name": "enable_analyzer",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "asterisk"
+      }
+    ],
+    "from": {
+      "kind": "subqueryFrom",
+      "query": {
+        "kind": "explain",
+        "explainType": "PLAN",
+        "settings": [
+          {
+            "name": "indexes",
+            "value": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "1"
+            }
+          }
+        ],
+        "query": {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "asterisk"
+            }
+          ],
+          "from": {
+            "kind": "tableRef",
+            "table": "ngrambf_tab"
+          },
+          "where": {
+            "kind": "functionCall",
+            "name": "match",
+            "args": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "str"
+                ]
+              },
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "OLAP (.*?)*"
+              }
+            ]
+          },
+          "orderBy": [
+            {
+              "kind": "orderByItem",
+              "expr": {
+                "kind": "columnRef",
+                "parts": [
+                  "id"
+                ]
+              },
+              "direction": "ASC"
+            }
+          ]
+        }
+      }
+    },
+    "where": {
+      "kind": "functionCall",
+      "name": "like",
+      "args": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "explain"
+          ]
+        },
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "%Granules: %"
+        }
+      ]
+    },
+    "settings": [
+      {
+        "name": "enable_analyzer",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  }
+]

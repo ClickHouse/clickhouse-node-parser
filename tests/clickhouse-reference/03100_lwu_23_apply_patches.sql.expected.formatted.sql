@@ -1,1 +1,94 @@
-<Parse Error>
+SET enable_lightweight_update = 1;
+
+CREATE TABLE t_apply_patches
+(
+    a UInt64,
+    b UInt64,
+    c UInt64,
+    d UInt64
+)
+ENGINE = MergeTree
+ORDER BY tuple()
+SETTINGS min_bytes_for_wide_part = 0, min_bytes_for_full_part_storage = 0, ratio_of_defaults_for_sparse_serialization = 1.0, enable_block_number_column = 1, enable_block_offset_column = 1;
+
+SET mutations_sync = 2;
+
+INSERT INTO t_apply_patches SELECT
+    number,
+    0,
+    0,
+    0
+FROM numbers(10000);
+
+SELECT
+    b,
+    c,
+    count()
+FROM t_apply_patches
+GROUP BY
+    b,
+    c
+ORDER BY
+    b ASC,
+    c ASC;
+
+SELECT
+    b,
+    c,
+    count()
+FROM t_apply_patches
+GROUP BY
+    b,
+    c
+ORDER BY
+    b ASC,
+    c ASC
+SETTINGS apply_patch_parts = 0;
+
+SELECT
+    ProfileEvents['MutationSomePartColumns'],
+    ProfileEvents['MutatedUncompressedBytes'] -- 2 * 8 * 10000 = 160000, because only 2 columns must be affected.
+FROM `system`.part_log
+WHERE database = currentDatabase()
+    AND table = 't_apply_patches'
+    AND event_type = 'MutatePart'
+ORDER BY `ALL` ASC;
+
+CREATE TABLE t_apply_patches_smt
+(
+    a UInt64,
+    b UInt64,
+    c UInt64,
+    d UInt64
+)
+ENGINE = ReplicatedMergeTree('/zookeeper/{database}/t_apply_patches_smt/', '1')
+ORDER BY tuple()
+SETTINGS min_bytes_for_wide_part = 0, min_bytes_for_full_part_storage = 0, ratio_of_defaults_for_sparse_serialization = 1.0, enable_block_number_column = 1, enable_block_offset_column = 1;
+
+INSERT INTO t_apply_patches_smt SELECT
+    number,
+    0,
+    0,
+    0
+FROM numbers(10000);
+
+SELECT
+    b,
+    c,
+    count()
+FROM t_apply_patches_smt
+GROUP BY
+    b,
+    c
+ORDER BY
+    b ASC,
+    c ASC;
+
+SELECT
+    ProfileEvents['MutationSomePartColumns'],
+    ProfileEvents['MutatedUncompressedBytes'] -- 2 * 8 * 10000 = 160000, because only 2 columns must be affected.
+FROM `system`.part_log
+WHERE database = currentDatabase()
+    AND table = 't_apply_patches_smt'
+    AND event_type = 'MutatePart'
+ORDER BY `ALL` ASC;

@@ -1,1 +1,881 @@
-{"expected":[{"type":"literal","text":"EXPLAIN","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"REPLACE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"SET","ignoreCase":true},{"type":"literal","text":"SET","ignoreCase":true},{"type":"literal","text":"SET","ignoreCase":true},{"type":"literal","text":"USE","ignoreCase":true},{"type":"literal","text":"SYSTEM","ignoreCase":true},{"type":"literal","text":"(","ignoreCase":false},{"type":"literal","text":"WITH","ignoreCase":true},{"type":"literal","text":"SELECT","ignoreCase":true},{"type":"end"}],"found":"I","location":{"start":{"offset":267,"line":12,"column":1},"end":{"offset":268,"line":12,"column":2}},"name":"SyntaxError"}
+[
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "enable_analyzer",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "max_parallel_replicas",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "use_skip_indexes_on_data_read",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "enable_full_text_index",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "tab"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "text",
+        "type": {
+          "name": "String"
+        }
+      },
+      {
+        "kind": "indexDef",
+        "name": "idx_text",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "text"
+          ]
+        },
+        "indexType": {
+          "name": "text",
+          "args": [
+            {
+              "kind": "binaryExpr",
+              "op": "=",
+              "left": {
+                "kind": "columnRef",
+                "parts": [
+                  "tokenizer"
+                ]
+              },
+              "right": {
+                "kind": "literal",
+                "type": "String",
+                "value": "splitByNonAlpha"
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "functionCall",
+          "name": "tuple",
+          "args": []
+        }
+      }
+    ]
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "tab"
+      }
+    },
+    "columns": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "text"
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "count",
+        "args": []
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "tab"
+    },
+    "where": {
+      "kind": "functionCall",
+      "name": "hasToken",
+      "args": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "text"
+          ]
+        },
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "Hello"
+        }
+      ]
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "trim",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "explain"
+            ]
+          }
+        ]
+      }
+    ],
+    "from": {
+      "kind": "subqueryFrom",
+      "query": {
+        "kind": "explain",
+        "settings": [
+          {
+            "name": "actions",
+            "value": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "1"
+            }
+          },
+          {
+            "name": "indexes",
+            "value": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "1"
+            }
+          }
+        ],
+        "query": {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "functionCall",
+              "name": "count",
+              "args": []
+            }
+          ],
+          "from": {
+            "kind": "tableRef",
+            "table": "tab"
+          },
+          "where": {
+            "kind": "functionCall",
+            "name": "hasToken",
+            "args": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "text"
+                ]
+              },
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "Hello"
+              }
+            ]
+          },
+          "settings": [
+            {
+              "name": "use_skip_indexes_on_data_read",
+              "value": {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "1"
+              }
+            }
+          ]
+        }
+      }
+    },
+    "where": {
+      "kind": "naryExpr",
+      "op": "OR",
+      "operands": [
+        {
+          "kind": "functionCall",
+          "name": "like",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "explain"
+              ]
+            },
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "%Filter column%"
+            }
+          ]
+        },
+        {
+          "kind": "functionCall",
+          "name": "like",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "explain"
+              ]
+            },
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "%Name: idx_text%"
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "count",
+        "args": []
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "tab"
+    },
+    "where": {
+      "kind": "functionCall",
+      "name": "hasToken",
+      "args": [
+        {
+          "kind": "functionCall",
+          "name": "lower",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "text"
+              ]
+            }
+          ]
+        },
+        {
+          "kind": "functionCall",
+          "name": "lower",
+          "args": [
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "Hello"
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "trim",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "explain"
+            ]
+          }
+        ]
+      }
+    ],
+    "from": {
+      "kind": "subqueryFrom",
+      "query": {
+        "kind": "explain",
+        "settings": [
+          {
+            "name": "actions",
+            "value": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "1"
+            }
+          },
+          {
+            "name": "indexes",
+            "value": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "1"
+            }
+          }
+        ],
+        "query": {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "functionCall",
+              "name": "count",
+              "args": []
+            }
+          ],
+          "from": {
+            "kind": "tableRef",
+            "table": "tab"
+          },
+          "where": {
+            "kind": "functionCall",
+            "name": "hasToken",
+            "args": [
+              {
+                "kind": "functionCall",
+                "name": "lower",
+                "args": [
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "text"
+                    ]
+                  }
+                ]
+              },
+              {
+                "kind": "functionCall",
+                "name": "lower",
+                "args": [
+                  {
+                    "kind": "literal",
+                    "type": "String",
+                    "value": "Hello"
+                  }
+                ]
+              }
+            ]
+          },
+          "settings": [
+            {
+              "name": "use_skip_indexes_on_data_read",
+              "value": {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "1"
+              }
+            }
+          ]
+        }
+      }
+    },
+    "where": {
+      "kind": "naryExpr",
+      "op": "OR",
+      "operands": [
+        {
+          "kind": "functionCall",
+          "name": "like",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "explain"
+              ]
+            },
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "%Filter column%"
+            }
+          ]
+        },
+        {
+          "kind": "functionCall",
+          "name": "like",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "explain"
+              ]
+            },
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "%Name: idx_text%"
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "count",
+        "args": []
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "tab"
+    },
+    "where": {
+      "kind": "functionCall",
+      "name": "hasAllTokens",
+      "args": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "text"
+          ]
+        },
+        {
+          "kind": "arrayLiteral",
+          "elements": [
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "Hello"
+            }
+          ],
+          "source": "['Hello']"
+        }
+      ]
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "trim",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "explain"
+            ]
+          }
+        ]
+      }
+    ],
+    "from": {
+      "kind": "subqueryFrom",
+      "query": {
+        "kind": "explain",
+        "settings": [
+          {
+            "name": "actions",
+            "value": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "1"
+            }
+          },
+          {
+            "name": "indexes",
+            "value": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "1"
+            }
+          }
+        ],
+        "query": {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "functionCall",
+              "name": "count",
+              "args": []
+            }
+          ],
+          "from": {
+            "kind": "tableRef",
+            "table": "tab"
+          },
+          "where": {
+            "kind": "functionCall",
+            "name": "hasAllTokens",
+            "args": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "text"
+                ]
+              },
+              {
+                "kind": "arrayLiteral",
+                "elements": [
+                  {
+                    "kind": "literal",
+                    "type": "String",
+                    "value": "Hello"
+                  }
+                ],
+                "source": "['Hello']"
+              }
+            ]
+          },
+          "settings": [
+            {
+              "name": "use_skip_indexes_on_data_read",
+              "value": {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "1"
+              }
+            }
+          ]
+        }
+      }
+    },
+    "where": {
+      "kind": "naryExpr",
+      "op": "OR",
+      "operands": [
+        {
+          "kind": "functionCall",
+          "name": "like",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "explain"
+              ]
+            },
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "%Filter column%"
+            }
+          ]
+        },
+        {
+          "kind": "functionCall",
+          "name": "like",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "explain"
+              ]
+            },
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "%Name: idx_text%"
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "tab"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "text",
+        "type": {
+          "name": "String"
+        }
+      },
+      {
+        "kind": "indexDef",
+        "name": "idx_text",
+        "expr": {
+          "kind": "functionCall",
+          "name": "lower",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "text"
+              ]
+            }
+          ]
+        },
+        "indexType": {
+          "name": "text",
+          "args": [
+            {
+              "kind": "binaryExpr",
+              "op": "=",
+              "left": {
+                "kind": "columnRef",
+                "parts": [
+                  "tokenizer"
+                ]
+              },
+              "right": {
+                "kind": "literal",
+                "type": "String",
+                "value": "splitByNonAlpha"
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "functionCall",
+          "name": "tuple",
+          "args": []
+        }
+      }
+    ],
+    "leadingComments": [
+      "-- --------------------------"
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "count",
+        "args": []
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "tab"
+    },
+    "where": {
+      "kind": "functionCall",
+      "name": "hasAllTokens",
+      "args": [
+        {
+          "kind": "functionCall",
+          "name": "lower",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "text"
+              ]
+            }
+          ]
+        },
+        {
+          "kind": "arrayLiteral",
+          "elements": [
+            {
+              "kind": "functionCall",
+              "name": "lower",
+              "args": [
+                {
+                  "kind": "literal",
+                  "type": "String",
+                  "value": "Hello"
+                }
+              ]
+            }
+          ],
+          "source": "[lower('Hello')]"
+        }
+      ]
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "trim",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "explain"
+            ]
+          }
+        ]
+      }
+    ],
+    "from": {
+      "kind": "subqueryFrom",
+      "query": {
+        "kind": "explain",
+        "settings": [
+          {
+            "name": "actions",
+            "value": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "1"
+            }
+          },
+          {
+            "name": "indexes",
+            "value": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "1"
+            }
+          }
+        ],
+        "query": {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "functionCall",
+              "name": "count",
+              "args": []
+            }
+          ],
+          "from": {
+            "kind": "tableRef",
+            "table": "tab"
+          },
+          "where": {
+            "kind": "functionCall",
+            "name": "hasAllTokens",
+            "args": [
+              {
+                "kind": "functionCall",
+                "name": "lower",
+                "args": [
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "text"
+                    ]
+                  }
+                ]
+              },
+              {
+                "kind": "arrayLiteral",
+                "elements": [
+                  {
+                    "kind": "functionCall",
+                    "name": "lower",
+                    "args": [
+                      {
+                        "kind": "literal",
+                        "type": "String",
+                        "value": "Hello"
+                      }
+                    ]
+                  }
+                ],
+                "source": "[lower('Hello')]"
+              }
+            ]
+          },
+          "settings": [
+            {
+              "name": "use_skip_indexes_on_data_read",
+              "value": {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "1"
+              }
+            }
+          ]
+        }
+      }
+    },
+    "where": {
+      "kind": "naryExpr",
+      "op": "OR",
+      "operands": [
+        {
+          "kind": "functionCall",
+          "name": "like",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "explain"
+              ]
+            },
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "%Filter column%"
+            }
+          ]
+        },
+        {
+          "kind": "functionCall",
+          "name": "like",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "explain"
+              ]
+            },
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "%Name: idx_text%"
+            }
+          ]
+        }
+      ]
+    }
+  }
+]

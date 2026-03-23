@@ -1,1 +1,32 @@
-<Parse Error>
+-----------------------------------------------------------------------------------
+-- Check that `DICTIONARY` can be created with a `COMMENT` clause
+-- and comment is visible both in `comment` column of `system.dictionaries`
+-- and `SHOW CREATE DICTIONARY`.
+-----------------------------------------------------------------------------------
+-- prerequisites
+CREATE TABLE source_table
+(
+    id UInt64,
+    value String
+)
+ENGINE = Memory();
+
+INSERT INTO source_table;
+
+INSERT INTO source_table;
+
+CREATE DICTIONARY `2024_dictionary_with_comment`
+(
+    id UInt64,
+    value String
+)
+PRIMARY KEY id
+SOURCE(clickhouse(HOST 'localhost' PORT tcpPort() TABLE 'source_table'))
+LIFETIME(MIN 0 MAX 1000)
+LAYOUT(FLAT())
+COMMENT 'Test dictionary with comment';
+
+SELECT comment
+FROM `system`.dictionaries
+WHERE name == '2024_dictionary_with_comment'
+    AND database == currentDatabase();

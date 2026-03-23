@@ -1,1 +1,245 @@
-{"expected":[{"type":"literal","text":"EXPLAIN","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"REPLACE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"SET","ignoreCase":true},{"type":"literal","text":"SET","ignoreCase":true},{"type":"literal","text":"SET","ignoreCase":true},{"type":"literal","text":"USE","ignoreCase":true},{"type":"literal","text":"SYSTEM","ignoreCase":true},{"type":"literal","text":"(","ignoreCase":false},{"type":"literal","text":"WITH","ignoreCase":true},{"type":"literal","text":"SELECT","ignoreCase":true},{"type":"end"}],"found":"I","location":{"start":{"offset":300,"line":3,"column":1},"end":{"offset":301,"line":3,"column":2}},"name":"SyntaxError"}
+[
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "allow_deprecated_syntax_for_merge_tree",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "test"
+    },
+    "ifNotExists": true,
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "id",
+        "type": {
+          "name": "UInt32"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "track",
+        "type": {
+          "name": "UInt8"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "codec",
+        "type": {
+          "name": "String"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "content",
+        "type": {
+          "name": "String"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "rdate",
+        "type": {
+          "name": "Date"
+        },
+        "defaultKind": "DEFAULT",
+        "defaultExpr": {
+          "kind": "literal",
+          "type": "String",
+          "value": "2018-02-03"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "track_id",
+        "type": {
+          "name": "String"
+        },
+        "defaultKind": "DEFAULT",
+        "defaultExpr": {
+          "kind": "functionCall",
+          "name": "concat",
+          "args": [
+            {
+              "kind": "functionCall",
+              "name": "concat",
+              "args": [
+                {
+                  "kind": "functionCall",
+                  "name": "concat",
+                  "args": [
+                    {
+                      "kind": "functionCall",
+                      "name": "toString",
+                      "args": [
+                        {
+                          "kind": "columnRef",
+                          "parts": [
+                            "track"
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "kind": "literal",
+                      "type": "String",
+                      "value": "-"
+                    }
+                  ]
+                },
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "codec"
+                  ]
+                }
+              ]
+            },
+            {
+              "kind": "columnRef",
+              "parts": [
+                "content"
+              ]
+            }
+          ]
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree",
+      "args": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "rdate"
+          ]
+        },
+        {
+          "kind": "tupleLiteral",
+          "elements": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "id"
+              ]
+            },
+            {
+              "kind": "columnRef",
+              "parts": [
+                "track_id"
+              ]
+            }
+          ],
+          "source": "(id, track_id)"
+        },
+        {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "8192"
+        }
+      ]
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "test"
+      }
+    },
+    "columns": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "id"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "track"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "codec"
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "asterisk"
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "test"
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "id"
+          ]
+        },
+        "direction": "ASC"
+      }
+    ]
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "test"
+      }
+    },
+    "columns": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "id"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "track"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "codec"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "content"
+        ]
+      }
+    ]
+  }
+]

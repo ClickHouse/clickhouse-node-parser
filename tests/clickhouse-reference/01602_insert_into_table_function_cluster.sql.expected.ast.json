@@ -1,1 +1,437 @@
-{"expected":[{"type":"literal","text":"EXPLAIN","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"REPLACE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"SET","ignoreCase":true},{"type":"literal","text":"SET","ignoreCase":true},{"type":"literal","text":"SET","ignoreCase":true},{"type":"literal","text":"USE","ignoreCase":true},{"type":"literal","text":"SYSTEM","ignoreCase":true},{"type":"literal","text":"(","ignoreCase":false},{"type":"literal","text":"WITH","ignoreCase":true},{"type":"literal","text":"SELECT","ignoreCase":true},{"type":"end"}],"found":"I","location":{"start":{"offset":186,"line":4,"column":1},"end":{"offset":187,"line":4,"column":2}},"name":"SyntaxError"}
+[
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "x"
+    },
+    "asTable": {
+      "kind": "tableRef",
+      "database": "system",
+      "table": "numbers"
+    },
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "number"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "y"
+    },
+    "asTable": {
+      "kind": "tableRef",
+      "database": "system",
+      "table": "numbers"
+    },
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "number"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "function",
+      "func": {
+        "kind": "tableFunctionRef",
+        "name": "cluster",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": "test_shard_localhost"
+          },
+          {
+            "kind": "functionCall",
+            "name": "currentDatabase",
+            "args": []
+          },
+          {
+            "kind": "columnRef",
+            "parts": [
+              "x"
+            ]
+          }
+        ]
+      }
+    },
+    "selectQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "asterisk"
+        }
+      ],
+      "from": {
+        "kind": "tableFunctionRef",
+        "name": "numbers",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "10"
+          }
+        ]
+      }
+    },
+    "leadingComments": [
+      "-- Just one shard, sharding key isn't necessary"
+    ]
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "function",
+      "func": {
+        "kind": "tableFunctionRef",
+        "name": "cluster",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": "test_shard_localhost"
+          },
+          {
+            "kind": "functionCall",
+            "name": "currentDatabase",
+            "args": []
+          },
+          {
+            "kind": "columnRef",
+            "parts": [
+              "x"
+            ]
+          },
+          {
+            "kind": "functionCall",
+            "name": "rand",
+            "args": []
+          }
+        ]
+      }
+    },
+    "selectQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "asterisk"
+        }
+      ],
+      "from": {
+        "kind": "tableFunctionRef",
+        "name": "numbers",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "10"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "function",
+      "func": {
+        "kind": "tableFunctionRef",
+        "name": "cluster",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": "test_cluster_two_shards_localhost"
+          },
+          {
+            "kind": "functionCall",
+            "name": "currentDatabase",
+            "args": []
+          },
+          {
+            "kind": "columnRef",
+            "parts": [
+              "x"
+            ]
+          }
+        ]
+      }
+    },
+    "selectQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "asterisk"
+        }
+      ],
+      "from": {
+        "kind": "tableFunctionRef",
+        "name": "numbers",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "10"
+          }
+        ]
+      }
+    },
+    "leadingComments": [
+      "-- More than one shard, sharding key is necessary"
+    ],
+    "trailingComments": [
+      "--{ serverError STORAGE_REQUIRES_PARAMETER }"
+    ]
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "function",
+      "func": {
+        "kind": "tableFunctionRef",
+        "name": "cluster",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": "test_cluster_two_shards_localhost"
+          },
+          {
+            "kind": "functionCall",
+            "name": "currentDatabase",
+            "args": []
+          },
+          {
+            "kind": "columnRef",
+            "parts": [
+              "x"
+            ]
+          },
+          {
+            "kind": "functionCall",
+            "name": "rand",
+            "args": []
+          }
+        ]
+      }
+    },
+    "selectQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "asterisk"
+        }
+      ],
+      "from": {
+        "kind": "tableFunctionRef",
+        "name": "numbers",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "10"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "function",
+      "func": {
+        "kind": "tableFunctionRef",
+        "name": "remote",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": "127.0.0.{1,2}"
+          },
+          {
+            "kind": "functionCall",
+            "name": "currentDatabase",
+            "args": []
+          },
+          {
+            "kind": "columnRef",
+            "parts": [
+              "y"
+            ]
+          },
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": "default"
+          }
+        ]
+      }
+    },
+    "selectQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "asterisk"
+        }
+      ],
+      "from": {
+        "kind": "tableFunctionRef",
+        "name": "numbers",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "10"
+          }
+        ]
+      }
+    },
+    "trailingComments": [
+      "-- { serverError STORAGE_REQUIRES_PARAMETER }"
+    ]
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "function",
+      "func": {
+        "kind": "tableFunctionRef",
+        "name": "remote",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": "127.0.0.{1,2}"
+          },
+          {
+            "kind": "functionCall",
+            "name": "currentDatabase",
+            "args": []
+          },
+          {
+            "kind": "columnRef",
+            "parts": [
+              "y"
+            ]
+          },
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": "default"
+          },
+          {
+            "kind": "functionCall",
+            "name": "rand",
+            "args": []
+          }
+        ]
+      }
+    },
+    "selectQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "asterisk"
+        }
+      ],
+      "from": {
+        "kind": "tableFunctionRef",
+        "name": "numbers",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "10"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "asterisk"
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "x"
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "number"
+          ]
+        },
+        "direction": "ASC"
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "asterisk"
+      }
+    ],
+    "from": {
+      "kind": "tableFunctionRef",
+      "name": "remote",
+      "args": [
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "127.0.0.{1,2}"
+        },
+        {
+          "kind": "functionCall",
+          "name": "currentDatabase",
+          "args": []
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "y"
+          ]
+        }
+      ]
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "number"
+          ]
+        },
+        "direction": "ASC"
+      }
+    ]
+  }
+]

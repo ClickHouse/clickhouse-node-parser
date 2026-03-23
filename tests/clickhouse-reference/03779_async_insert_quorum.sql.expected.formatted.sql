@@ -1,1 +1,69 @@
-<Parse Error>
+CREATE TABLE table1
+(
+    x UInt32
+)
+ENGINE = ReplicatedMergeTree('/clickhouse/tables/{database}/test_03779/table', '1')
+ORDER BY x;
+
+CREATE TABLE table2
+(
+    x UInt32
+)
+ENGINE = ReplicatedMergeTree('/clickhouse/tables/{database}/test_03779/table', '2')
+ORDER BY x;
+
+SET insert_quorum = 2;
+
+SET async_insert = 1;
+
+SET wait_for_async_insert = 0;
+
+SET async_insert_deduplicate = 1;
+
+SET wait_for_async_insert_timeout = 10000, async_insert_max_query_number = 1000, async_insert_max_data_size = 10000000, async_insert_use_adaptive_busy_timeout = 0;
+
+SET insert_quorum_parallel = 0;
+
+INSERT INTO table1; -- { serverError  UNSUPPORTED_PARAMETER }
+
+SET insert_quorum_parallel = 1;
+
+INSERT INTO table1;
+
+INSERT INTO table1;
+
+INSERT INTO table2;
+
+INSERT INTO table2;
+
+INSERT INTO table2;
+
+SELECT
+    'q1',
+    x
+FROM table1
+ORDER BY `all` ASC;
+
+SELECT
+    'q2',
+    x
+FROM table2
+ORDER BY `all` ASC;
+
+SELECT
+    query,
+    query_kind,
+    ProfileEvents['QuorumParts'] AS quorum_parts,
+    ProfileEvents['QuorumWaitMicroseconds'] > 0 AS quorum_wait_microseconds_non_zero,
+    ProfileEvents['QuorumFailedInserts'] AS quorum_failed_inserts
+FROM `system`.query_log
+WHERE type = 'QueryFinish'
+    AND query_kind = 'System'
+    AND has(databases, current_database())
+    AND has(tables, concat(current_database(), '.table2'))
+ORDER BY event_time DESC
+FORMAT Vertical;
+
+SET wait_for_async_insert = 1, insert_quorum_timeout = 1;
+
+INSERT INTO table2; -- { serverError UNKNOWN_STATUS_OF_INSERT }

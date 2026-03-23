@@ -1,1 +1,63 @@
-<Parse Error>
+SET enable_analyzer = 1;
+
+CREATE TABLE users
+(
+    uid Int16,
+    name String,
+    age Int16
+)
+ENGINE = Memory;
+
+INSERT INTO users;
+
+INSERT INTO users;
+
+INSERT INTO users;
+
+CREATE TABLE users2
+(
+    uid Int16,
+    name String,
+    age Int16
+)
+ENGINE = Memory;
+
+INSERT INTO users2;
+
+-- { echoOn }
+SET allow_experimental_correlated_subqueries = 1;
+
+SELECT *
+FROM users AS u1
+WHERE EXISTS((
+        SELECT *
+        FROM users2 AS u2
+        WHERE u1.age = u2.age
+    ));
+
+SELECT *
+FROM users AS u1
+WHERE (age = 50)
+    OR exists((
+        SELECT *
+        FROM users2 AS u2
+        WHERE u1.age = u2.age
+    ))
+ORDER BY `ALL` ASC
+SETTINGS allow_experimental_correlated_subqueries = 1;
+
+SELECT *
+FROM users AS u1
+WHERE (age = 50)
+    OR exists((
+        SELECT *
+        FROM users2 AS u2
+        WHERE u1.age = u2.age
+        UNION ALL
+        SELECT *
+        FROM users2 AS u2
+        WHERE u1.age != u2.age
+    ))
+ORDER BY `ALL` ASC
+FORMAT Null
+SETTINGS allow_experimental_correlated_subqueries = 1;

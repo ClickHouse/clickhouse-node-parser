@@ -1,1 +1,25 @@
-<Parse Error>
+CREATE TABLE t0
+(
+    c0 Int
+)
+ENGINE = Memory;
+
+SELECT *
+FROM loop(remote('localhost:9000', currentDatabase(), 't0')) AS tx; -- { serverError TOO_MANY_RETRIES_TO_FETCH_PARTS }
+
+INSERT INTO t0 SELECT *
+FROM numbers(7);
+
+SELECT '---';
+
+SELECT *
+FROM loop(remote('localhost:9000', currentDatabase(), 't0')) AS tx
+LIMIT 3;
+
+SELECT *
+FROM loop(remote('localhost:9000', currentDatabase(), 't0')) AS tx
+LIMIT 7;
+
+SELECT *
+FROM loop(remote('localhost:9000', currentDatabase(), 't0')) AS tx
+LIMIT 11;

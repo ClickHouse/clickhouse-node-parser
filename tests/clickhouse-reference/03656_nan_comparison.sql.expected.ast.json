@@ -1,1 +1,154 @@
-{"expected":[{"type":"literal","text":"EXPLAIN","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"REPLACE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"SET","ignoreCase":true},{"type":"literal","text":"SET","ignoreCase":true},{"type":"literal","text":"SET","ignoreCase":true},{"type":"literal","text":"USE","ignoreCase":true},{"type":"literal","text":"SYSTEM","ignoreCase":true},{"type":"literal","text":"(","ignoreCase":false},{"type":"literal","text":"WITH","ignoreCase":true},{"type":"literal","text":"SELECT","ignoreCase":true},{"type":"end"}],"found":"i","location":{"start":{"offset":62,"line":2,"column":1},"end":{"offset":63,"line":2,"column":2}},"name":"SyntaxError"}
+[
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "t7"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "c57",
+        "type": {
+          "name": "UInt32"
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "c57"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "t7"
+      }
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "binaryExpr",
+        "op": "=",
+        "left": {
+          "kind": "subqueryExpr",
+          "query": {
+            "kind": "select",
+            "select": [
+              {
+                "kind": "functionCall",
+                "name": "count",
+                "args": [
+                  {
+                    "kind": "asterisk"
+                  }
+                ]
+              }
+            ],
+            "from": {
+              "kind": "tableRef",
+              "table": "t7",
+              "alias": "ref_0"
+            },
+            "where": {
+              "kind": "binaryExpr",
+              "op": "<>",
+              "left": {
+                "kind": "columnRef",
+                "parts": [
+                  "ref_0",
+                  "c57"
+                ]
+              },
+              "right": {
+                "kind": "functionCall",
+                "name": "multiIf",
+                "args": [
+                  {
+                    "kind": "binaryExpr",
+                    "op": "=",
+                    "left": {
+                      "kind": "literal",
+                      "type": "UInt64",
+                      "value": "1"
+                    },
+                    "right": {
+                      "kind": "literal",
+                      "type": "UInt64",
+                      "value": "1"
+                    }
+                  },
+                  {
+                    "kind": "literal",
+                    "type": "Float64",
+                    "value": "nan"
+                  },
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "ref_0",
+                      "c57"
+                    ]
+                  }
+                ],
+                "parenthesized": true
+              }
+            }
+          }
+        },
+        "right": {
+          "kind": "subqueryExpr",
+          "query": {
+            "kind": "select",
+            "select": [
+              {
+                "kind": "functionCall",
+                "name": "count",
+                "args": [
+                  {
+                    "kind": "asterisk"
+                  }
+                ]
+              }
+            ],
+            "from": {
+              "kind": "tableRef",
+              "table": "t7",
+              "alias": "ref_0"
+            },
+            "where": {
+              "kind": "binaryExpr",
+              "op": "<>",
+              "left": {
+                "kind": "columnRef",
+                "parts": [
+                  "ref_0",
+                  "c57"
+                ]
+              },
+              "right": {
+                "kind": "literal",
+                "type": "Float64",
+                "value": "nan"
+              }
+            }
+          }
+        }
+      }
+    ]
+  }
+]

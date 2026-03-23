@@ -1,1 +1,236 @@
-{"expected":[{"type":"literal","text":"EXPLAIN","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"REPLACE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"SET","ignoreCase":true},{"type":"literal","text":"SET","ignoreCase":true},{"type":"literal","text":"SET","ignoreCase":true},{"type":"literal","text":"USE","ignoreCase":true},{"type":"literal","text":"SYSTEM","ignoreCase":true},{"type":"literal","text":"(","ignoreCase":false},{"type":"literal","text":"WITH","ignoreCase":true},{"type":"literal","text":"SELECT","ignoreCase":true},{"type":"end"}],"found":"I","location":{"start":{"offset":76,"line":2,"column":1},"end":{"offset":77,"line":2,"column":2}},"name":"SyntaxError"}
+[
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "test_datetime"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "timestamp",
+        "type": {
+          "name": "DateTime",
+          "args": [
+            {
+              "kind": "literal",
+              "value": "'Asia/Istanbul'"
+            }
+          ]
+        }
+      }
+    ],
+    "engine": {
+      "name": "Log"
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "test_datetime"
+      }
+    }
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "date_time_output_format",
+        "value": {
+          "kind": "literal",
+          "type": "String",
+          "value": "simple"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "timestamp"
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "test_datetime"
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "formatDateTime",
+          "args": [
+            {
+              "kind": "functionCall",
+              "name": "toDateTime",
+              "args": [
+                {
+                  "kind": "literal",
+                  "type": "String",
+                  "value": "2020-10-15 00:00:00"
+                },
+                {
+                  "kind": "literal",
+                  "type": "String",
+                  "value": "Asia/Istanbul"
+                }
+              ]
+            },
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "%Y-%m-%d %R:%S"
+            }
+          ]
+        },
+        "alias": "formatted_simple"
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "test_datetime"
+    }
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "date_time_output_format",
+        "value": {
+          "kind": "literal",
+          "type": "String",
+          "value": "iso"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "formatDateTime",
+          "args": [
+            {
+              "kind": "functionCall",
+              "name": "toDateTime",
+              "args": [
+                {
+                  "kind": "literal",
+                  "type": "String",
+                  "value": "2020-10-15 00:00:00"
+                },
+                {
+                  "kind": "literal",
+                  "type": "String",
+                  "value": "Asia/Istanbul"
+                }
+              ]
+            },
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "%Y-%m-%dT%R:%SZ"
+            },
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "UTC"
+            }
+          ]
+        },
+        "alias": "formatted_iso"
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "test_datetime"
+    }
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "date_time_output_format",
+        "value": {
+          "kind": "literal",
+          "type": "String",
+          "value": "unix_timestamp"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "toUnixTimestamp",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "timestamp"
+            ]
+          }
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "test_datetime"
+    }
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "test_datetime"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "timestamp",
+        "type": {
+          "name": "DateTime64",
+          "args": [
+            {
+              "kind": "literal",
+              "value": "3"
+            },
+            {
+              "kind": "literal",
+              "value": "'Asia/Istanbul'"
+            }
+          ]
+        }
+      }
+    ],
+    "engine": {
+      "name": "Log"
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "test_datetime"
+      }
+    }
+  }
+]

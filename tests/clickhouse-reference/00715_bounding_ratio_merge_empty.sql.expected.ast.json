@@ -1,1 +1,161 @@
-{"expected":[{"type":"literal","text":"EXPLAIN","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"REPLACE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"SET","ignoreCase":true},{"type":"literal","text":"SET","ignoreCase":true},{"type":"literal","text":"SET","ignoreCase":true},{"type":"literal","text":"USE","ignoreCase":true},{"type":"literal","text":"SYSTEM","ignoreCase":true},{"type":"literal","text":"(","ignoreCase":false},{"type":"literal","text":"WITH","ignoreCase":true},{"type":"literal","text":"SELECT","ignoreCase":true},{"type":"end"}],"found":"i","location":{"start":{"offset":71,"line":2,"column":1},"end":{"offset":72,"line":2,"column":2}},"name":"SyntaxError"}
+[
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "rate_test"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "timestamp",
+        "type": {
+          "name": "UInt32"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "event",
+        "type": {
+          "name": "UInt32"
+        }
+      }
+    ],
+    "engine": {
+      "name": "Memory"
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "rate_test"
+      }
+    }
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "rate_test2"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "timestamp",
+        "type": {
+          "name": "UInt32"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "event",
+        "type": {
+          "name": "UInt32"
+        }
+      }
+    ],
+    "engine": {
+      "name": "Memory"
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "boundingRatioMerge",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "state"
+            ]
+          }
+        ]
+      }
+    ],
+    "from": {
+      "kind": "subqueryFrom",
+      "query": {
+        "kind": "union",
+        "queries": [
+          {
+            "kind": "select",
+            "select": [
+              {
+                "kind": "alias",
+                "expr": {
+                  "kind": "functionCall",
+                  "name": "boundingRatioState",
+                  "args": [
+                    {
+                      "kind": "columnRef",
+                      "parts": [
+                        "timestamp"
+                      ]
+                    },
+                    {
+                      "kind": "columnRef",
+                      "parts": [
+                        "event"
+                      ]
+                    }
+                  ]
+                },
+                "alias": "state"
+              }
+            ],
+            "from": {
+              "kind": "tableRef",
+              "table": "rate_test"
+            }
+          },
+          {
+            "kind": "select",
+            "select": [
+              {
+                "kind": "functionCall",
+                "name": "boundingRatioState",
+                "args": [
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "timestamp"
+                    ]
+                  },
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "event"
+                    ]
+                  }
+                ]
+              }
+            ],
+            "from": {
+              "kind": "tableRef",
+              "table": "rate_test2"
+            },
+            "where": {
+              "kind": "binaryExpr",
+              "op": "=",
+              "left": {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "1"
+              },
+              "right": {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "0"
+              }
+            }
+          }
+        ]
+      }
+    }
+  }
+]

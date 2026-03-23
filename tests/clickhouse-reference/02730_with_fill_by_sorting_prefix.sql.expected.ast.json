@@ -1,1 +1,1156 @@
-{"expected":[{"type":"literal","text":"EXPLAIN","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"REPLACE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"SET","ignoreCase":true},{"type":"literal","text":"SET","ignoreCase":true},{"type":"literal","text":"SET","ignoreCase":true},{"type":"literal","text":"USE","ignoreCase":true},{"type":"literal","text":"SYSTEM","ignoreCase":true},{"type":"literal","text":"(","ignoreCase":false},{"type":"literal","text":"WITH","ignoreCase":true},{"type":"literal","text":"SELECT","ignoreCase":true},{"type":"end"}],"found":"i","location":{"start":{"offset":331,"line":9,"column":1},"end":{"offset":332,"line":9,"column":2}},"name":"SyntaxError"}
+[
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "use_with_fill_by_sorting_prefix",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ],
+    "leadingComments": [
+      "-- { echoOn }"
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "number"
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableFunctionRef",
+      "name": "numbers",
+      "args": [
+        {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      ]
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "10"
+        },
+        "direction": "ASC"
+      },
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "number"
+          ]
+        },
+        "direction": "DESC",
+        "fillFrom": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ],
+    "settings": [
+      {
+        "name": "enable_positional_arguments",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      }
+    ],
+    "leadingComments": [
+      "-- corner case with constant sort prefix"
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "ts"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "sensor_id",
+        "type": {
+          "name": "UInt64"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "timestamp",
+        "type": {
+          "name": "UInt64"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "value",
+        "type": {
+          "name": "Float64"
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree",
+      "args": []
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "sensor_id"
+          ]
+        }
+      },
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "timestamp"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "ts"
+      }
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "asterisk"
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "ts"
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "sensor_id"
+          ]
+        },
+        "direction": "ASC"
+      },
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "timestamp"
+          ]
+        },
+        "direction": "ASC",
+        "fillStep": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ],
+    "leadingComments": [
+      "-- FillingTransform: 6 rows will be processed in 1 chunks"
+    ]
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "ts"
+      }
+    },
+    "leadingComments": [
+      "-- FillingTransform: 6 rows will be processed in 3 chunks with 2 rows each"
+    ]
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "ts"
+      }
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "ts"
+      }
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "asterisk"
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "ts"
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "sensor_id"
+          ]
+        },
+        "direction": "ASC"
+      },
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "timestamp"
+          ]
+        },
+        "direction": "ASC",
+        "fillStep": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ],
+    "settings": [
+      {
+        "name": "max_block_size",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "2"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "ts"
+      }
+    },
+    "leadingComments": [
+      "-- FillingTransform: 6 rows will be processed in 2 chunks with 3 rows each"
+    ]
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "ts"
+      }
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "asterisk"
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "ts"
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "sensor_id"
+          ]
+        },
+        "direction": "ASC"
+      },
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "timestamp"
+          ]
+        },
+        "direction": "ASC",
+        "fillStep": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ],
+    "settings": [
+      {
+        "name": "max_block_size",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "3"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "asterisk"
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "ts"
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "sensor_id"
+          ]
+        },
+        "direction": "ASC"
+      },
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "timestamp"
+          ]
+        },
+        "direction": "ASC",
+        "fillFrom": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "6"
+        },
+        "fillTo": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "10"
+        },
+        "fillStep": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        },
+        "interpolate": [
+          {
+            "col": "value",
+            "expr": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "9999"
+            }
+          }
+        ]
+      }
+    ],
+    "leadingComments": [
+      "-- FROM and TO",
+      "-- ASC order in sorting prefix"
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "asterisk"
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "ts"
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "sensor_id"
+          ]
+        },
+        "direction": "ASC"
+      },
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "timestamp"
+          ]
+        },
+        "direction": "ASC",
+        "fillFrom": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "6"
+        },
+        "fillTo": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "10"
+        },
+        "fillStep": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        },
+        "interpolate": [
+          {
+            "col": "value",
+            "expr": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "9999"
+            }
+          }
+        ]
+      }
+    ],
+    "settings": [
+      {
+        "name": "use_with_fill_by_sorting_prefix",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "asterisk"
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "ts"
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "sensor_id"
+          ]
+        },
+        "direction": "DESC"
+      },
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "timestamp"
+          ]
+        },
+        "direction": "ASC",
+        "fillFrom": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "6"
+        },
+        "fillTo": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "10"
+        },
+        "fillStep": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        },
+        "interpolate": [
+          {
+            "col": "value",
+            "expr": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "9999"
+            }
+          }
+        ]
+      }
+    ],
+    "leadingComments": [
+      "-- DESC order in sorting prefix"
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "asterisk"
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "ts"
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "sensor_id"
+          ]
+        },
+        "direction": "DESC"
+      },
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "timestamp"
+          ]
+        },
+        "direction": "ASC",
+        "fillFrom": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "6"
+        },
+        "fillTo": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "10"
+        },
+        "fillStep": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        },
+        "interpolate": [
+          {
+            "col": "value",
+            "expr": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "9999"
+            }
+          }
+        ]
+      }
+    ],
+    "settings": [
+      {
+        "name": "use_with_fill_by_sorting_prefix",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "asterisk"
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "ts"
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "sensor_id"
+          ]
+        },
+        "direction": "ASC"
+      },
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "timestamp"
+          ]
+        },
+        "direction": "ASC",
+        "fillFrom": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "6"
+        },
+        "fillStep": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        },
+        "interpolate": [
+          {
+            "col": "value",
+            "expr": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "9999"
+            }
+          }
+        ]
+      }
+    ],
+    "leadingComments": [
+      "-- without TO",
+      "-- ASC order in sorting prefix"
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "asterisk"
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "ts"
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "sensor_id"
+          ]
+        },
+        "direction": "ASC"
+      },
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "timestamp"
+          ]
+        },
+        "direction": "ASC",
+        "fillFrom": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "6"
+        },
+        "fillStep": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        },
+        "interpolate": [
+          {
+            "col": "value",
+            "expr": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "9999"
+            }
+          }
+        ]
+      }
+    ],
+    "settings": [
+      {
+        "name": "use_with_fill_by_sorting_prefix",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "asterisk"
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "ts"
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "sensor_id"
+          ]
+        },
+        "direction": "DESC"
+      },
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "timestamp"
+          ]
+        },
+        "direction": "ASC",
+        "fillFrom": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "6"
+        },
+        "fillStep": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        },
+        "interpolate": [
+          {
+            "col": "value",
+            "expr": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "9999"
+            }
+          }
+        ]
+      }
+    ],
+    "leadingComments": [
+      "-- DESC order in sorting prefix"
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "asterisk"
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "ts"
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "sensor_id"
+          ]
+        },
+        "direction": "DESC"
+      },
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "timestamp"
+          ]
+        },
+        "direction": "ASC",
+        "fillFrom": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "6"
+        },
+        "fillStep": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        },
+        "interpolate": [
+          {
+            "col": "value",
+            "expr": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "9999"
+            }
+          }
+        ]
+      }
+    ],
+    "settings": [
+      {
+        "name": "use_with_fill_by_sorting_prefix",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "asterisk"
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "ts"
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "sensor_id"
+          ]
+        },
+        "direction": "ASC"
+      },
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "timestamp"
+          ]
+        },
+        "direction": "ASC",
+        "fillTo": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "10"
+        },
+        "fillStep": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        },
+        "interpolate": [
+          {
+            "col": "value",
+            "expr": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "9999"
+            }
+          }
+        ]
+      }
+    ],
+    "leadingComments": [
+      "-- without FROM",
+      "-- ASC order in sorting prefix"
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "asterisk"
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "ts"
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "sensor_id"
+          ]
+        },
+        "direction": "ASC"
+      },
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "timestamp"
+          ]
+        },
+        "direction": "ASC",
+        "fillTo": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "10"
+        },
+        "fillStep": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        },
+        "interpolate": [
+          {
+            "col": "value",
+            "expr": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "9999"
+            }
+          }
+        ]
+      }
+    ],
+    "settings": [
+      {
+        "name": "use_with_fill_by_sorting_prefix",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "asterisk"
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "ts"
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "sensor_id"
+          ]
+        },
+        "direction": "DESC"
+      },
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "timestamp"
+          ]
+        },
+        "direction": "ASC",
+        "fillTo": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "10"
+        },
+        "fillStep": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        },
+        "interpolate": [
+          {
+            "col": "value",
+            "expr": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "9999"
+            }
+          }
+        ]
+      }
+    ],
+    "leadingComments": [
+      "-- DESC order in sorting prefix"
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "asterisk"
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "ts"
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "sensor_id"
+          ]
+        },
+        "direction": "DESC"
+      },
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "timestamp"
+          ]
+        },
+        "direction": "ASC",
+        "fillTo": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "10"
+        },
+        "fillStep": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        },
+        "interpolate": [
+          {
+            "col": "value",
+            "expr": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "9999"
+            }
+          }
+        ]
+      }
+    ],
+    "settings": [
+      {
+        "name": "use_with_fill_by_sorting_prefix",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "asterisk"
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "ts"
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "sensor_id"
+          ]
+        },
+        "direction": "ASC"
+      },
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "value"
+          ]
+        },
+        "direction": "ASC"
+      },
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "timestamp"
+          ]
+        },
+        "direction": "ASC",
+        "fillFrom": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "6"
+        },
+        "fillTo": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "10"
+        },
+        "interpolate": [
+          {
+            "col": "value",
+            "expr": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "1"
+            }
+          }
+        ]
+      }
+    ],
+    "leadingComments": [
+      "-- checking that sorting prefix columns can't be used in INTERPOLATE"
+    ],
+    "trailingComments": [
+      "-- { serverError INVALID_WITH_FILL_EXPRESSION }"
+    ]
+  }
+]

@@ -1,1 +1,726 @@
-{"expected":[{"type":"literal","text":"EXPLAIN","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"REPLACE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"SET","ignoreCase":true},{"type":"literal","text":"SET","ignoreCase":true},{"type":"literal","text":"SET","ignoreCase":true},{"type":"literal","text":"USE","ignoreCase":true},{"type":"literal","text":"SYSTEM","ignoreCase":true},{"type":"literal","text":"(","ignoreCase":false},{"type":"literal","text":"WITH","ignoreCase":true},{"type":"literal","text":"SELECT","ignoreCase":true},{"type":"end"}],"found":"I","location":{"start":{"offset":95,"line":3,"column":1},"end":{"offset":96,"line":3,"column":2}},"name":"SyntaxError"}
+[
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "send_logs_level",
+        "value": {
+          "kind": "literal",
+          "type": "String",
+          "value": "fatal"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "add_aggregate"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "a",
+        "type": {
+          "name": "UInt32"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "b",
+        "type": {
+          "name": "UInt32"
+        }
+      }
+    ],
+    "engine": {
+      "name": "Memory"
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "add_aggregate"
+      }
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "add_aggregate"
+      }
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "countMerge",
+        "args": [
+          {
+            "kind": "binaryExpr",
+            "op": "+",
+            "left": {
+              "kind": "columnRef",
+              "parts": [
+                "x"
+              ]
+            },
+            "right": {
+              "kind": "columnRef",
+              "parts": [
+                "y"
+              ]
+            }
+          }
+        ]
+      }
+    ],
+    "from": {
+      "kind": "subqueryFrom",
+      "query": {
+        "kind": "select",
+        "select": [
+          {
+            "kind": "alias",
+            "expr": {
+              "kind": "functionCall",
+              "name": "countState",
+              "args": [
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "a"
+                  ]
+                }
+              ]
+            },
+            "alias": "x"
+          },
+          {
+            "kind": "alias",
+            "expr": {
+              "kind": "functionCall",
+              "name": "countState",
+              "args": [
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "b"
+                  ]
+                }
+              ]
+            },
+            "alias": "y"
+          }
+        ],
+        "from": {
+          "kind": "tableRef",
+          "table": "add_aggregate"
+        }
+      }
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "sumMerge",
+        "args": [
+          {
+            "kind": "binaryExpr",
+            "op": "+",
+            "left": {
+              "kind": "columnRef",
+              "parts": [
+                "x"
+              ]
+            },
+            "right": {
+              "kind": "columnRef",
+              "parts": [
+                "y"
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "kind": "functionCall",
+        "name": "sumMerge",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "x"
+            ]
+          }
+        ]
+      },
+      {
+        "kind": "functionCall",
+        "name": "sumMerge",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "y"
+            ]
+          }
+        ]
+      }
+    ],
+    "from": {
+      "kind": "subqueryFrom",
+      "query": {
+        "kind": "select",
+        "select": [
+          {
+            "kind": "alias",
+            "expr": {
+              "kind": "functionCall",
+              "name": "sumState",
+              "args": [
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "a"
+                  ]
+                }
+              ]
+            },
+            "alias": "x"
+          },
+          {
+            "kind": "alias",
+            "expr": {
+              "kind": "functionCall",
+              "name": "sumState",
+              "args": [
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "b"
+                  ]
+                }
+              ]
+            },
+            "alias": "y"
+          }
+        ],
+        "from": {
+          "kind": "tableRef",
+          "table": "add_aggregate"
+        }
+      }
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "sumMerge",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "x"
+            ]
+          }
+        ]
+      }
+    ],
+    "from": {
+      "kind": "subqueryFrom",
+      "query": {
+        "kind": "select",
+        "select": [
+          {
+            "kind": "alias",
+            "expr": {
+              "kind": "binaryExpr",
+              "op": "+",
+              "left": {
+                "kind": "functionCall",
+                "name": "sumState",
+                "args": [
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "a"
+                    ]
+                  }
+                ]
+              },
+              "right": {
+                "kind": "functionCall",
+                "name": "countState",
+                "args": [
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "b"
+                    ]
+                  }
+                ]
+              }
+            },
+            "alias": "x"
+          }
+        ],
+        "from": {
+          "kind": "tableRef",
+          "table": "add_aggregate"
+        }
+      }
+    },
+    "trailingComments": [
+      "-- { serverError CANNOT_ADD_DIFFERENT_AGGREGATE_STATES }"
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "sumMerge",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "x"
+            ]
+          }
+        ]
+      }
+    ],
+    "from": {
+      "kind": "subqueryFrom",
+      "query": {
+        "kind": "select",
+        "select": [
+          {
+            "kind": "alias",
+            "expr": {
+              "kind": "binaryExpr",
+              "op": "+",
+              "left": {
+                "kind": "functionCall",
+                "name": "sumState",
+                "args": [
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "a"
+                    ]
+                  }
+                ]
+              },
+              "right": {
+                "kind": "functionCall",
+                "name": "sumState",
+                "args": [
+                  {
+                    "kind": "functionCall",
+                    "name": "toInt32",
+                    "args": [
+                      {
+                        "kind": "columnRef",
+                        "parts": [
+                          "b"
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            },
+            "alias": "x"
+          }
+        ],
+        "from": {
+          "kind": "tableRef",
+          "table": "add_aggregate"
+        }
+      }
+    },
+    "trailingComments": [
+      "-- { serverError CANNOT_ADD_DIFFERENT_AGGREGATE_STATES }"
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "minMerge",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "x"
+            ]
+          }
+        ]
+      }
+    ],
+    "from": {
+      "kind": "subqueryFrom",
+      "query": {
+        "kind": "select",
+        "select": [
+          {
+            "kind": "alias",
+            "expr": {
+              "kind": "binaryExpr",
+              "op": "+",
+              "left": {
+                "kind": "functionCall",
+                "name": "minState",
+                "args": [
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "a"
+                    ]
+                  }
+                ]
+              },
+              "right": {
+                "kind": "functionCall",
+                "name": "minState",
+                "args": [
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "b"
+                    ]
+                  }
+                ]
+              }
+            },
+            "alias": "x"
+          }
+        ],
+        "from": {
+          "kind": "tableRef",
+          "table": "add_aggregate"
+        }
+      }
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "uniqMerge",
+        "args": [
+          {
+            "kind": "binaryExpr",
+            "op": "+",
+            "left": {
+              "kind": "columnRef",
+              "parts": [
+                "x"
+              ]
+            },
+            "right": {
+              "kind": "columnRef",
+              "parts": [
+                "y"
+              ]
+            }
+          }
+        ]
+      }
+    ],
+    "from": {
+      "kind": "subqueryFrom",
+      "query": {
+        "kind": "select",
+        "select": [
+          {
+            "kind": "alias",
+            "expr": {
+              "kind": "functionCall",
+              "name": "uniqState",
+              "args": [
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "a"
+                  ]
+                }
+              ]
+            },
+            "alias": "x"
+          },
+          {
+            "kind": "alias",
+            "expr": {
+              "kind": "functionCall",
+              "name": "uniqState",
+              "args": [
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "b"
+                  ]
+                }
+              ]
+            },
+            "alias": "y"
+          }
+        ],
+        "from": {
+          "kind": "tableRef",
+          "table": "add_aggregate"
+        }
+      }
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "arraySort",
+        "args": [
+          {
+            "kind": "functionCall",
+            "name": "groupArrayMerge",
+            "args": [
+              {
+                "kind": "binaryExpr",
+                "op": "+",
+                "left": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "x"
+                  ]
+                },
+                "right": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "y"
+                  ]
+                }
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "from": {
+      "kind": "subqueryFrom",
+      "query": {
+        "kind": "select",
+        "select": [
+          {
+            "kind": "alias",
+            "expr": {
+              "kind": "functionCall",
+              "name": "groupArrayState",
+              "args": [
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "a"
+                  ]
+                }
+              ]
+            },
+            "alias": "x"
+          },
+          {
+            "kind": "alias",
+            "expr": {
+              "kind": "functionCall",
+              "name": "groupArrayState",
+              "args": [
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "b"
+                  ]
+                }
+              ]
+            },
+            "alias": "y"
+          }
+        ],
+        "from": {
+          "kind": "tableRef",
+          "table": "add_aggregate"
+        }
+      }
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "arraySort",
+        "args": [
+          {
+            "kind": "functionCall",
+            "name": "groupUniqArrayMerge",
+            "args": [
+              {
+                "kind": "binaryExpr",
+                "op": "+",
+                "left": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "x"
+                  ]
+                },
+                "right": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "y"
+                  ]
+                }
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "from": {
+      "kind": "subqueryFrom",
+      "query": {
+        "kind": "select",
+        "select": [
+          {
+            "kind": "alias",
+            "expr": {
+              "kind": "functionCall",
+              "name": "groupUniqArrayState",
+              "args": [
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "a"
+                  ]
+                }
+              ]
+            },
+            "alias": "x"
+          },
+          {
+            "kind": "alias",
+            "expr": {
+              "kind": "functionCall",
+              "name": "groupUniqArrayState",
+              "args": [
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "b"
+                  ]
+                }
+              ]
+            },
+            "alias": "y"
+          }
+        ],
+        "from": {
+          "kind": "tableRef",
+          "table": "add_aggregate"
+        }
+      }
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "uniqMerge",
+        "args": [
+          {
+            "kind": "binaryExpr",
+            "op": "+",
+            "left": {
+              "kind": "columnRef",
+              "parts": [
+                "x"
+              ]
+            },
+            "right": {
+              "kind": "columnRef",
+              "parts": [
+                "y"
+              ]
+            }
+          }
+        ]
+      }
+    ],
+    "from": {
+      "kind": "subqueryFrom",
+      "query": {
+        "kind": "select",
+        "select": [
+          {
+            "kind": "alias",
+            "expr": {
+              "kind": "functionCall",
+              "name": "uniqState",
+              "args": [
+                {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "65536"
+                },
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "a"
+                  ]
+                }
+              ]
+            },
+            "alias": "x"
+          },
+          {
+            "kind": "alias",
+            "expr": {
+              "kind": "functionCall",
+              "name": "uniqState",
+              "args": [
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "b"
+                  ]
+                }
+              ]
+            },
+            "alias": "y"
+          }
+        ],
+        "from": {
+          "kind": "tableRef",
+          "table": "add_aggregate"
+        }
+      }
+    },
+    "trailingComments": [
+      "-- { serverError CANNOT_ADD_DIFFERENT_AGGREGATE_STATES }"
+    ]
+  }
+]

@@ -1,1 +1,251 @@
-{"expected":[{"type":"literal","text":"EXPLAIN","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"REPLACE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"SET","ignoreCase":true},{"type":"literal","text":"SET","ignoreCase":true},{"type":"literal","text":"SET","ignoreCase":true},{"type":"literal","text":"USE","ignoreCase":true},{"type":"literal","text":"SYSTEM","ignoreCase":true},{"type":"literal","text":"(","ignoreCase":false},{"type":"literal","text":"WITH","ignoreCase":true},{"type":"literal","text":"SELECT","ignoreCase":true},{"type":"end"}],"found":"i","location":{"start":{"offset":220,"line":5,"column":1},"end":{"offset":221,"line":5,"column":2}},"name":"SyntaxError"}
+[
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "use_hive_partitioning",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      }
+    ],
+    "leadingComments": [
+      "-- Tags: no-parallel"
+    ],
+    "trailingComments": [
+      "-- required because of \"?query=select\""
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "file_delim"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "a",
+        "type": {
+          "name": "int"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "b",
+        "type": {
+          "name": "int"
+        }
+      }
+    ],
+    "engine": {
+      "name": "File",
+      "args": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "CSV"
+          ]
+        },
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "01545_url_file_format_settings.csv"
+        }
+      ]
+    },
+    "settings": [
+      {
+        "name": "format_csv_delimiter",
+        "value": {
+          "kind": "literal",
+          "type": "String",
+          "value": "|"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "file_delim"
+      }
+    },
+    "selectQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        },
+        {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "2"
+        }
+      ]
+    }
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "url_delim"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "a",
+        "type": {
+          "name": "int"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "b",
+        "type": {
+          "name": "int"
+        }
+      }
+    ],
+    "engine": {
+      "name": "URL",
+      "args": [
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "http://127.0.0.1:8123/?query=select%201%2C%202%20format%20CSV%20settings%20format_csv_delimiter%3D%27/%27%3B%0A"
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "CSV"
+          ]
+        }
+      ]
+    },
+    "settings": [
+      {
+        "name": "format_csv_delimiter",
+        "value": {
+          "kind": "literal",
+          "type": "String",
+          "value": "/"
+        }
+      }
+    ],
+    "leadingComments": [
+      "-- select 1, 2 format CSV settings format_csv_delimiter='/';"
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "asterisk"
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "file_delim"
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "asterisk"
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "url_delim"
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "asterisk"
+      }
+    ],
+    "from": {
+      "kind": "tableFunctionRef",
+      "name": "file",
+      "args": [
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "01545_url_file_format_settings.csv"
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "CSV"
+          ]
+        },
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "a int, b int"
+        }
+      ]
+    },
+    "settings": [
+      {
+        "name": "format_csv_delimiter",
+        "value": {
+          "kind": "literal",
+          "type": "String",
+          "value": "|"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "asterisk"
+      }
+    ],
+    "from": {
+      "kind": "tableFunctionRef",
+      "name": "url",
+      "args": [
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "http://127.0.0.1:8123/?query=select%201%2C%202%20format%20CSV%20settings%20format_csv_delimiter%3D%27/%27%3B%0A"
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "CSV"
+          ]
+        },
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "a int, b int"
+        }
+      ]
+    },
+    "settings": [
+      {
+        "name": "format_csv_delimiter",
+        "value": {
+          "kind": "literal",
+          "type": "String",
+          "value": "/"
+        }
+      }
+    ]
+  }
+]

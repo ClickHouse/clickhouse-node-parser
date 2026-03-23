@@ -1,1 +1,32 @@
-<Parse Error>
+CREATE TABLE user_country
+(
+    user_id UInt64,
+    country String
+)
+ENGINE = ReplacingMergeTree
+ORDER BY user_id;
+
+CREATE TABLE user_transactions
+(
+    user_id UInt64,
+    transaction_id String
+)
+ENGINE = MergeTree
+ORDER BY user_id;
+
+INSERT INTO user_country (user_id, country);
+
+INSERT INTO user_transactions (user_id, transaction_id);
+
+-- Expected 3 rows, got only 1. Removing 'ANY' and adding 'FINAL' fixes
+-- the issue (but it is not always possible). Moving filter by 'country' to
+-- an outer query doesn't help. Query without filter by 'country' works
+-- as expected (returns 3 rows).
+SELECT *
+FROM
+    user_transactions
+LEFT JOIN user_country
+    USING (user_id)
+WHERE user_id = 1
+    AND country = 'US'
+ORDER BY `ALL` ASC;

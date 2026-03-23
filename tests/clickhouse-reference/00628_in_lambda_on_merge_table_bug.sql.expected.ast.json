@@ -1,1 +1,701 @@
-{"expected":[{"type":"literal","text":"EXPLAIN","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"REPLACE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"SET","ignoreCase":true},{"type":"literal","text":"SET","ignoreCase":true},{"type":"literal","text":"SET","ignoreCase":true},{"type":"literal","text":"USE","ignoreCase":true},{"type":"literal","text":"SYSTEM","ignoreCase":true},{"type":"literal","text":"(","ignoreCase":false},{"type":"literal","text":"WITH","ignoreCase":true},{"type":"literal","text":"SELECT","ignoreCase":true},{"type":"end"}],"found":"i","location":{"start":{"offset":363,"line":4,"column":1},"end":{"offset":364,"line":4,"column":2}},"name":"SyntaxError"}
+[
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "test_in_tuple_1"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "key",
+        "type": {
+          "name": "Int32"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "key_2",
+        "type": {
+          "name": "Int32"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "x",
+        "type": {
+          "name": "Array",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "Int32"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "y",
+        "type": {
+          "name": "Array",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "Int32"
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "key"
+          ]
+        }
+      },
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "key_2"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "test_in_tuple_2"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "key",
+        "type": {
+          "name": "Int32"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "key_2",
+        "type": {
+          "name": "Int32"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "x",
+        "type": {
+          "name": "Array",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "Int32"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "y",
+        "type": {
+          "name": "Array",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "Int32"
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "key"
+          ]
+        }
+      },
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "key_2"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "test_in_tuple"
+    },
+    "asTable": {
+      "kind": "tableRef",
+      "table": "test_in_tuple_1"
+    },
+    "engine": {
+      "name": "Merge",
+      "args": [
+        {
+          "kind": "functionCall",
+          "name": "currentDatabase",
+          "args": []
+        },
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "^test_in_tuple_[0-9]+$"
+        }
+      ]
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "test_in_tuple_1"
+      }
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "test_in_tuple_2"
+      }
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "key"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "arr_x"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "arr_y"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "_table"
+        ]
+      }
+    ],
+    "from": {
+      "left": {
+        "kind": "tableRef",
+        "table": "test_in_tuple"
+      },
+      "kind": "arrayJoinExpr",
+      "joinType": "LEFT ARRAY",
+      "expressions": [
+        {
+          "kind": "alias",
+          "expr": {
+            "kind": "columnRef",
+            "parts": [
+              "x"
+            ]
+          },
+          "alias": "arr_x"
+        },
+        {
+          "kind": "alias",
+          "expr": {
+            "kind": "columnRef",
+            "parts": [
+              "y"
+            ]
+          },
+          "alias": "arr_y"
+        }
+      ]
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "_table"
+          ]
+        },
+        "direction": "ASC"
+      },
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "arr_x"
+          ]
+        },
+        "direction": "ASC"
+      },
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "arr_y"
+          ]
+        },
+        "direction": "ASC"
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "key"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "arr_x"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "arr_y"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "_table"
+        ]
+      }
+    ],
+    "from": {
+      "left": {
+        "kind": "tableRef",
+        "table": "test_in_tuple"
+      },
+      "kind": "arrayJoinExpr",
+      "joinType": "LEFT ARRAY",
+      "expressions": [
+        {
+          "kind": "alias",
+          "expr": {
+            "kind": "columnRef",
+            "parts": [
+              "x"
+            ]
+          },
+          "alias": "arr_x"
+        },
+        {
+          "kind": "alias",
+          "expr": {
+            "kind": "columnRef",
+            "parts": [
+              "y"
+            ]
+          },
+          "alias": "arr_y"
+        }
+      ]
+    },
+    "where": {
+      "kind": "inExpr",
+      "negated": false,
+      "expr": {
+        "kind": "tupleLiteral",
+        "elements": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "key_2"
+            ]
+          },
+          {
+            "kind": "columnRef",
+            "parts": [
+              "arr_x"
+            ]
+          },
+          {
+            "kind": "columnRef",
+            "parts": [
+              "arr_y"
+            ]
+          }
+        ],
+        "source": "(key_2, arr_x, arr_y)"
+      },
+      "values": [
+        {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        },
+        {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        },
+        {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      ]
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "_table"
+          ]
+        },
+        "direction": "ASC"
+      },
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "arr_x"
+          ]
+        },
+        "direction": "ASC"
+      },
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "arr_y"
+          ]
+        },
+        "direction": "ASC"
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "key"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "arr_x"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "arr_y"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "_table"
+        ]
+      }
+    ],
+    "from": {
+      "left": {
+        "kind": "tableRef",
+        "table": "test_in_tuple"
+      },
+      "kind": "arrayJoinExpr",
+      "joinType": "LEFT ARRAY",
+      "expressions": [
+        {
+          "kind": "alias",
+          "expr": {
+            "kind": "functionCall",
+            "name": "arrayFilter",
+            "args": [
+              {
+                "kind": "lambdaExpr",
+                "params": [
+                  "t",
+                  "x_0",
+                  "x_1"
+                ],
+                "body": {
+                  "kind": "inExpr",
+                  "negated": false,
+                  "expr": {
+                    "kind": "tupleLiteral",
+                    "elements": [
+                      {
+                        "kind": "columnRef",
+                        "parts": [
+                          "key_2"
+                        ]
+                      },
+                      {
+                        "kind": "columnRef",
+                        "parts": [
+                          "x_0"
+                        ]
+                      },
+                      {
+                        "kind": "columnRef",
+                        "parts": [
+                          "x_1"
+                        ]
+                      }
+                    ],
+                    "source": "(key_2, x_0, x_1)"
+                  },
+                  "values": [
+                    {
+                      "kind": "literal",
+                      "type": "UInt64",
+                      "value": "1"
+                    },
+                    {
+                      "kind": "literal",
+                      "type": "UInt64",
+                      "value": "1"
+                    },
+                    {
+                      "kind": "literal",
+                      "type": "UInt64",
+                      "value": "1"
+                    }
+                  ]
+                }
+              },
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "x"
+                ]
+              },
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "x"
+                ]
+              },
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "y"
+                ]
+              }
+            ]
+          },
+          "alias": "arr_x"
+        },
+        {
+          "kind": "alias",
+          "expr": {
+            "kind": "functionCall",
+            "name": "arrayFilter",
+            "args": [
+              {
+                "kind": "lambdaExpr",
+                "params": [
+                  "t",
+                  "x_0",
+                  "x_1"
+                ],
+                "body": {
+                  "kind": "inExpr",
+                  "negated": false,
+                  "expr": {
+                    "kind": "tupleLiteral",
+                    "elements": [
+                      {
+                        "kind": "columnRef",
+                        "parts": [
+                          "key_2"
+                        ]
+                      },
+                      {
+                        "kind": "columnRef",
+                        "parts": [
+                          "x_0"
+                        ]
+                      },
+                      {
+                        "kind": "columnRef",
+                        "parts": [
+                          "x_1"
+                        ]
+                      }
+                    ],
+                    "source": "(key_2, x_0, x_1)"
+                  },
+                  "values": [
+                    {
+                      "kind": "literal",
+                      "type": "UInt64",
+                      "value": "1"
+                    },
+                    {
+                      "kind": "literal",
+                      "type": "UInt64",
+                      "value": "1"
+                    },
+                    {
+                      "kind": "literal",
+                      "type": "UInt64",
+                      "value": "1"
+                    }
+                  ]
+                }
+              },
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "y"
+                ]
+              },
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "x"
+                ]
+              },
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "y"
+                ]
+              }
+            ]
+          },
+          "alias": "arr_y"
+        }
+      ]
+    },
+    "where": {
+      "kind": "inExpr",
+      "negated": false,
+      "expr": {
+        "kind": "tupleLiteral",
+        "elements": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "key_2"
+            ]
+          },
+          {
+            "kind": "columnRef",
+            "parts": [
+              "arr_x"
+            ]
+          },
+          {
+            "kind": "columnRef",
+            "parts": [
+              "arr_y"
+            ]
+          }
+        ],
+        "source": "(key_2, arr_x, arr_y)"
+      },
+      "values": [
+        {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        },
+        {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        },
+        {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      ]
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "_table"
+          ]
+        },
+        "direction": "ASC"
+      },
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "arr_x"
+          ]
+        },
+        "direction": "ASC"
+      },
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "arr_y"
+          ]
+        },
+        "direction": "ASC"
+      }
+    ]
+  }
+]

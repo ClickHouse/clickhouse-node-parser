@@ -1,1 +1,1044 @@
-{"expected":[{"type":"literal","text":"EXPLAIN","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"REPLACE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"SET","ignoreCase":true},{"type":"literal","text":"SET","ignoreCase":true},{"type":"literal","text":"SET","ignoreCase":true},{"type":"literal","text":"USE","ignoreCase":true},{"type":"literal","text":"SYSTEM","ignoreCase":true},{"type":"literal","text":"(","ignoreCase":false},{"type":"literal","text":"WITH","ignoreCase":true},{"type":"literal","text":"SELECT","ignoreCase":true},{"type":"end"}],"found":"i","location":{"start":{"offset":192,"line":5,"column":1},"end":{"offset":193,"line":5,"column":2}},"name":"SyntaxError"}
+[
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "allow_deprecated_syntax_for_merge_tree",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "max_threads",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "max_insert_threads",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "test_ins_arr"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "date",
+        "type": {
+          "name": "Date"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "val",
+        "type": {
+          "name": "Array",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "UInt64"
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree",
+      "args": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "date"
+          ]
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "date"
+          ],
+          "parenthesized": true
+        },
+        {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "8192"
+        }
+      ]
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "test_ins_arr"
+      }
+    },
+    "selectQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "functionCall",
+          "name": "toDate",
+          "args": [
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "2017-10-02"
+            }
+          ]
+        },
+        {
+          "kind": "arrayLiteral",
+          "elements": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "number"
+              ]
+            },
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "42"
+            }
+          ],
+          "source": "[number, 42]"
+        }
+      ],
+      "from": {
+        "kind": "tableRef",
+        "database": "system",
+        "table": "numbers"
+      },
+      "limit": {
+        "count": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "10000"
+        }
+      }
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "asterisk"
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "test_ins_arr"
+    },
+    "limit": {
+      "count": {
+        "kind": "literal",
+        "type": "UInt64",
+        "value": "10"
+      }
+    }
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "test_ins_null"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "date",
+        "type": {
+          "name": "Date"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "val",
+        "type": {
+          "name": "Nullable",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "UInt64"
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree",
+      "args": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "date"
+          ]
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "date"
+          ],
+          "parenthesized": true
+        },
+        {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "8192"
+        }
+      ]
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "test_ins_null"
+      }
+    },
+    "selectQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "functionCall",
+          "name": "toDate",
+          "args": [
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "2017-10-02"
+            }
+          ]
+        },
+        {
+          "kind": "functionCall",
+          "name": "if",
+          "args": [
+            {
+              "kind": "binaryExpr",
+              "op": "%",
+              "left": {
+                "kind": "columnRef",
+                "parts": [
+                  "number"
+                ]
+              },
+              "right": {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "2"
+              }
+            },
+            {
+              "kind": "columnRef",
+              "parts": [
+                "number"
+              ]
+            },
+            {
+              "kind": "literal",
+              "type": "NULL",
+              "value": "NULL"
+            }
+          ]
+        }
+      ],
+      "from": {
+        "kind": "tableRef",
+        "database": "system",
+        "table": "numbers"
+      },
+      "limit": {
+        "count": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "10000"
+        }
+      }
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "asterisk"
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "test_ins_null"
+    },
+    "limit": {
+      "count": {
+        "kind": "literal",
+        "type": "UInt64",
+        "value": "10"
+      }
+    }
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "test_ins_arr_null"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "date",
+        "type": {
+          "name": "Date"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "val",
+        "type": {
+          "name": "Array",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "Nullable",
+                "args": [
+                  {
+                    "kind": "type",
+                    "type": {
+                      "name": "UInt64"
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree",
+      "args": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "date"
+          ]
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "date"
+          ],
+          "parenthesized": true
+        },
+        {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "8192"
+        }
+      ]
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "test_ins_arr_null"
+      }
+    },
+    "selectQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "functionCall",
+          "name": "toDate",
+          "args": [
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "2017-10-02"
+            }
+          ]
+        },
+        {
+          "kind": "arrayLiteral",
+          "elements": [
+            {
+              "kind": "functionCall",
+              "name": "if",
+              "args": [
+                {
+                  "kind": "binaryExpr",
+                  "op": "%",
+                  "left": {
+                    "kind": "columnRef",
+                    "parts": [
+                      "number"
+                    ]
+                  },
+                  "right": {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "2"
+                  }
+                },
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "number"
+                  ]
+                },
+                {
+                  "kind": "literal",
+                  "type": "NULL",
+                  "value": "NULL"
+                }
+              ]
+            },
+            {
+              "kind": "columnRef",
+              "parts": [
+                "number"
+              ]
+            },
+            {
+              "kind": "literal",
+              "type": "NULL",
+              "value": "NULL"
+            }
+          ],
+          "source": "[if(number % 2, number, Null), number, Null]"
+        }
+      ],
+      "from": {
+        "kind": "tableRef",
+        "database": "system",
+        "table": "numbers"
+      },
+      "limit": {
+        "count": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "10000"
+        }
+      }
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "asterisk"
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "test_ins_arr_null"
+    },
+    "limit": {
+      "count": {
+        "kind": "literal",
+        "type": "UInt64",
+        "value": "10"
+      }
+    }
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "test_ins_arr_arr"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "date",
+        "type": {
+          "name": "Date"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "val",
+        "type": {
+          "name": "Array",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "Array",
+                "args": [
+                  {
+                    "kind": "type",
+                    "type": {
+                      "name": "UInt64"
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree",
+      "args": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "date"
+          ]
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "date"
+          ],
+          "parenthesized": true
+        },
+        {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "8192"
+        }
+      ]
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "test_ins_arr_arr"
+      }
+    },
+    "selectQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "functionCall",
+          "name": "toDate",
+          "args": [
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "2017-10-02"
+            }
+          ]
+        },
+        {
+          "kind": "arrayLiteral",
+          "elements": [
+            {
+              "kind": "arrayLiteral",
+              "elements": [
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "number"
+                  ]
+                }
+              ],
+              "source": "[number]"
+            },
+            {
+              "kind": "arrayLiteral",
+              "elements": [
+                {
+                  "kind": "binaryExpr",
+                  "op": "+",
+                  "left": {
+                    "kind": "columnRef",
+                    "parts": [
+                      "number"
+                    ]
+                  },
+                  "right": {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "1"
+                  }
+                },
+                {
+                  "kind": "binaryExpr",
+                  "op": "+",
+                  "left": {
+                    "kind": "columnRef",
+                    "parts": [
+                      "number"
+                    ]
+                  },
+                  "right": {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "2"
+                  }
+                }
+              ],
+              "source": "[number + 1, number + 2]"
+            }
+          ],
+          "source": "[[number],[number + 1, number + 2]]"
+        }
+      ],
+      "from": {
+        "kind": "tableRef",
+        "database": "system",
+        "table": "numbers"
+      },
+      "limit": {
+        "count": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "10000"
+        }
+      }
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "asterisk"
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "test_ins_arr_arr"
+    },
+    "limit": {
+      "count": {
+        "kind": "literal",
+        "type": "UInt64",
+        "value": "10"
+      }
+    }
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "test_ins_arr_arr_null"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "date",
+        "type": {
+          "name": "Date"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "val",
+        "type": {
+          "name": "Array",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "Array",
+                "args": [
+                  {
+                    "kind": "type",
+                    "type": {
+                      "name": "Nullable",
+                      "args": [
+                        {
+                          "kind": "type",
+                          "type": {
+                            "name": "UInt64"
+                          }
+                        }
+                      ]
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree",
+      "args": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "date"
+          ]
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "date"
+          ],
+          "parenthesized": true
+        },
+        {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "8192"
+        }
+      ]
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "test_ins_arr_arr_null"
+      }
+    },
+    "selectQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "functionCall",
+          "name": "toDate",
+          "args": [
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "2017-10-02"
+            }
+          ]
+        },
+        {
+          "kind": "arrayLiteral",
+          "elements": [
+            {
+              "kind": "arrayLiteral",
+              "elements": [
+                {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "1"
+                },
+                {
+                  "kind": "literal",
+                  "type": "NULL",
+                  "value": "NULL"
+                },
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "number"
+                  ]
+                }
+              ],
+              "source": "[1, Null, number]"
+            },
+            {
+              "kind": "arrayLiteral",
+              "elements": [
+                {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "3"
+                },
+                {
+                  "kind": "literal",
+                  "type": "NULL",
+                  "value": "NULL"
+                },
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "number"
+                  ]
+                }
+              ],
+              "source": "[3, Null, number]"
+            }
+          ],
+          "source": "[[1, Null, number], [3, Null, number]]"
+        }
+      ],
+      "from": {
+        "kind": "tableRef",
+        "database": "system",
+        "table": "numbers"
+      },
+      "limit": {
+        "count": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "10000"
+        }
+      }
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "asterisk"
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "test_ins_arr_arr_null"
+    },
+    "limit": {
+      "count": {
+        "kind": "literal",
+        "type": "UInt64",
+        "value": "10"
+      }
+    }
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "test_ins_arr_arr_arr"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "date",
+        "type": {
+          "name": "Date"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "val",
+        "type": {
+          "name": "Array",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "Array",
+                "args": [
+                  {
+                    "kind": "type",
+                    "type": {
+                      "name": "Array",
+                      "args": [
+                        {
+                          "kind": "type",
+                          "type": {
+                            "name": "UInt64"
+                          }
+                        }
+                      ]
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree",
+      "args": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "date"
+          ]
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "date"
+          ],
+          "parenthesized": true
+        },
+        {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "8192"
+        }
+      ]
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "test_ins_arr_arr_arr"
+      }
+    },
+    "selectQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "functionCall",
+          "name": "toDate",
+          "args": [
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "2017-10-02"
+            }
+          ]
+        },
+        {
+          "kind": "arrayLiteral",
+          "elements": [
+            {
+              "kind": "arrayLiteral",
+              "elements": [
+                {
+                  "kind": "arrayLiteral",
+                  "elements": [
+                    {
+                      "kind": "columnRef",
+                      "parts": [
+                        "number"
+                      ]
+                    }
+                  ],
+                  "source": "[number]"
+                }
+              ],
+              "source": "[[number]]"
+            },
+            {
+              "kind": "arrayLiteral",
+              "elements": [
+                {
+                  "kind": "arrayLiteral",
+                  "elements": [
+                    {
+                      "kind": "binaryExpr",
+                      "op": "+",
+                      "left": {
+                        "kind": "columnRef",
+                        "parts": [
+                          "number"
+                        ]
+                      },
+                      "right": {
+                        "kind": "literal",
+                        "type": "UInt64",
+                        "value": "1"
+                      }
+                    }
+                  ],
+                  "source": "[number + 1]"
+                },
+                {
+                  "kind": "arrayLiteral",
+                  "elements": [
+                    {
+                      "kind": "binaryExpr",
+                      "op": "+",
+                      "left": {
+                        "kind": "columnRef",
+                        "parts": [
+                          "number"
+                        ]
+                      },
+                      "right": {
+                        "kind": "literal",
+                        "type": "UInt64",
+                        "value": "2"
+                      }
+                    },
+                    {
+                      "kind": "binaryExpr",
+                      "op": "+",
+                      "left": {
+                        "kind": "columnRef",
+                        "parts": [
+                          "number"
+                        ]
+                      },
+                      "right": {
+                        "kind": "literal",
+                        "type": "UInt64",
+                        "value": "3"
+                      }
+                    }
+                  ],
+                  "source": "[number + 2, number + 3]"
+                }
+              ],
+              "source": "[[number + 1], [number + 2, number + 3]]"
+            }
+          ],
+          "source": "[[[number]],[[number + 1], [number + 2, number + 3]]]"
+        }
+      ],
+      "from": {
+        "kind": "tableRef",
+        "database": "system",
+        "table": "numbers"
+      },
+      "limit": {
+        "count": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "10000"
+        }
+      }
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "asterisk"
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "test_ins_arr_arr_arr"
+    },
+    "limit": {
+      "count": {
+        "kind": "literal",
+        "type": "UInt64",
+        "value": "10"
+      }
+    }
+  }
+]

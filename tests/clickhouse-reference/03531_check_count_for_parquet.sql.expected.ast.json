@@ -1,1 +1,194 @@
-{"expected":[{"type":"literal","text":"EXPLAIN","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"REPLACE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"SET","ignoreCase":true},{"type":"literal","text":"SET","ignoreCase":true},{"type":"literal","text":"SET","ignoreCase":true},{"type":"literal","text":"USE","ignoreCase":true},{"type":"literal","text":"SYSTEM","ignoreCase":true},{"type":"literal","text":"(","ignoreCase":false},{"type":"literal","text":"WITH","ignoreCase":true},{"type":"literal","text":"SELECT","ignoreCase":true},{"type":"end"}],"found":"i","location":{"start":{"offset":366,"line":7,"column":1},"end":{"offset":367,"line":7,"column":2}},"name":"SyntaxError"}
+[
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "count",
+        "args": []
+      }
+    ],
+    "from": {
+      "kind": "tableFunctionRef",
+      "name": "url",
+      "args": [
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "http://localhost:11111/test/hive_partitioning/column0=Elizabeth/sample.parquet"
+        }
+      ]
+    },
+    "leadingComments": [
+      "-- Tags: no-fasttest, no-parallel",
+      "-- no-fasttest because of Parquet",
+      "-- no-parallel because we're writing a file with fixed name"
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "count",
+        "args": []
+      }
+    ],
+    "from": {
+      "kind": "tableFunctionRef",
+      "name": "url",
+      "args": [
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "http://localhost:11111/test/hive_partitioning/column0=Elizabeth/sample.parquet"
+        }
+      ]
+    },
+    "where": {
+      "kind": "binaryExpr",
+      "op": "=",
+      "left": {
+        "kind": "columnRef",
+        "parts": [
+          "column1"
+        ]
+      },
+      "right": {
+        "kind": "literal",
+        "type": "String",
+        "value": "meow"
+      }
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "function",
+      "func": {
+        "kind": "tableFunctionRef",
+        "name": "file",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": "03531.parquet"
+          }
+        ]
+      }
+    },
+    "selectQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "asterisk"
+        }
+      ],
+      "from": {
+        "kind": "tableFunctionRef",
+        "name": "numbers",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "42"
+          }
+        ]
+      },
+      "settings": [
+        {
+          "name": "engine_file_truncate_on_insert",
+          "value": {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "1"
+          }
+        },
+        {
+          "name": "output_format_parquet_row_group_size",
+          "value": {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "10"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "sleep",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "1"
+          }
+        ]
+      }
+    ],
+    "trailingComments": [
+      "-- quirk in schema cache: cache is not used for up to 1s after file is written"
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "count",
+        "args": []
+      }
+    ],
+    "from": {
+      "kind": "tableFunctionRef",
+      "name": "file",
+      "args": [
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "03531.parquet"
+        }
+      ]
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "count",
+        "args": []
+      }
+    ],
+    "from": {
+      "kind": "tableFunctionRef",
+      "name": "file",
+      "args": [
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "03531.parquet"
+        }
+      ]
+    },
+    "where": {
+      "kind": "binaryExpr",
+      "op": "=",
+      "left": {
+        "kind": "columnRef",
+        "parts": [
+          "number"
+        ]
+      },
+      "right": {
+        "kind": "literal",
+        "type": "UInt64",
+        "value": "13"
+      }
+    }
+  }
+]

@@ -1,1 +1,181 @@
-{"expected":[{"type":"literal","text":"EXPLAIN","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"REPLACE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"SET","ignoreCase":true},{"type":"literal","text":"SET","ignoreCase":true},{"type":"literal","text":"SET","ignoreCase":true},{"type":"literal","text":"USE","ignoreCase":true},{"type":"literal","text":"SYSTEM","ignoreCase":true},{"type":"literal","text":"(","ignoreCase":false},{"type":"literal","text":"WITH","ignoreCase":true},{"type":"literal","text":"SELECT","ignoreCase":true},{"type":"end"}],"found":"I","location":{"start":{"offset":163,"line":3,"column":1},"end":{"offset":164,"line":3,"column":2}},"name":"SyntaxError"}
+[
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "allow_deprecated_syntax_for_merge_tree",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "test54378"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "part_date",
+        "type": {
+          "name": "Date"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "pk_date",
+        "type": {
+          "name": "Date"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "date",
+        "type": {
+          "name": "Date"
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree",
+      "args": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "part_date"
+          ]
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "pk_date"
+          ]
+        },
+        {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "8192"
+        }
+      ]
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "test54378"
+      }
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "literal",
+        "type": "UInt64",
+        "value": "232"
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "test54378"
+    },
+    "prewhere": {
+      "kind": "inExpr",
+      "negated": false,
+      "expr": {
+        "kind": "binaryExpr",
+        "op": "=",
+        "left": {
+          "kind": "columnRef",
+          "parts": [
+            "part_date"
+          ]
+        },
+        "right": {
+          "kind": "subqueryExpr",
+          "query": {
+            "kind": "select",
+            "select": [
+              {
+                "kind": "functionCall",
+                "name": "toDate",
+                "args": [
+                  {
+                    "kind": "literal",
+                    "type": "String",
+                    "value": "2018-04-19"
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "parenthesized": true
+      },
+      "values": {
+        "kind": "subqueryExpr",
+        "query": {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "functionCall",
+              "name": "toDate",
+              "args": [
+                {
+                  "kind": "literal",
+                  "type": "String",
+                  "value": "2018-04-19"
+                }
+              ]
+            }
+          ]
+        }
+      }
+    },
+    "groupBy": {
+      "kind": "expressions",
+      "items": [
+        {
+          "kind": "functionCall",
+          "name": "toDate",
+          "args": [
+            {
+              "kind": "functionCall",
+              "name": "toDate",
+              "args": [
+                {
+                  "kind": "literal",
+                  "type": "Int64",
+                  "value": "-2147483649"
+                },
+                {
+                  "kind": "literal",
+                  "type": "NULL",
+                  "value": "NULL"
+                }
+              ]
+            },
+            {
+              "kind": "literal",
+              "type": "NULL",
+              "value": "NULL"
+            }
+          ]
+        },
+        {
+          "kind": "literal",
+          "type": "Float64",
+          "value": "-inf"
+        }
+      ]
+    }
+  }
+]

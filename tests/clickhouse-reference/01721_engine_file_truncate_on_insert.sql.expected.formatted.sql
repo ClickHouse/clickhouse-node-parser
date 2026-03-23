@@ -1,1 +1,16 @@
-<Parse Error>
+INSERT INTO FUNCTION file('01721_file/test/data.TSV', 'TSV', 'id UInt32');
+
+INSERT INTO test;
+
+INSERT INTO test;
+
+SELECT *
+FROM test;
+
+SET engine_file_truncate_on_insert = 0;
+
+INSERT INTO test;
+
+SET engine_file_truncate_on_insert = 1;
+
+INSERT INTO test;

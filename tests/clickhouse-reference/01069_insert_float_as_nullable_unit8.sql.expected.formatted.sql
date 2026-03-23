@@ -1,1 +1,19 @@
-<Parse Error>
+CREATE TEMPORARY TABLE t1
+(
+    a Nullable(UInt8)
+);
+
+INSERT INTO t1;
+
+SELECT *
+FROM t1;
+
+CREATE TEMPORARY TABLE t2
+(
+    a UInt8
+);
+
+INSERT INTO t2;
+
+SELECT *
+FROM t2;

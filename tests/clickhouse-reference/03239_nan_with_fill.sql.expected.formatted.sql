@@ -1,1 +1,23 @@
-<Parse Error>
+SELECT nan
+ORDER BY 1 ASC;
+
+SELECT -nan
+ORDER BY 1 ASC;
+
+SELECT 0. / 0.
+ORDER BY 1 ASC;
+
+SELECT 1
+ORDER BY nan ASC WITH FILL FROM 1;
+
+CREATE TABLE t0
+(
+    c0 Float32
+)
+ENGINE = Memory();
+
+INSERT INTO t0 (c0);
+
+SELECT 1
+FROM t0
+ORDER BY t0.c0 ASC;

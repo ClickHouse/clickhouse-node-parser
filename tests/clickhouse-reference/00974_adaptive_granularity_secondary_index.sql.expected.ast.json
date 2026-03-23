@@ -1,1 +1,550 @@
-{"expected":[{"type":"literal","text":"EXPLAIN","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"REPLACE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"SET","ignoreCase":true},{"type":"literal","text":"SET","ignoreCase":true},{"type":"literal","text":"SET","ignoreCase":true},{"type":"literal","text":"USE","ignoreCase":true},{"type":"literal","text":"SYSTEM","ignoreCase":true},{"type":"literal","text":"(","ignoreCase":false},{"type":"literal","text":"WITH","ignoreCase":true},{"type":"literal","text":"SELECT","ignoreCase":true},{"type":"end"}],"found":"I","location":{"start":{"offset":258,"line":10,"column":1},"end":{"offset":259,"line":10,"column":2}},"name":"SyntaxError"}
+[
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "indexed_table"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "tm",
+        "type": {
+          "name": "DateTime"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "log_message",
+        "type": {
+          "name": "String"
+        }
+      },
+      {
+        "kind": "indexDef",
+        "name": "log_message",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "log_message"
+          ]
+        },
+        "indexType": {
+          "name": "tokenbf_v1",
+          "args": [
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "4096"
+            },
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "2"
+            },
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "0"
+            }
+          ]
+        },
+        "granularity": 1
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "tm"
+          ]
+        }
+      }
+    ],
+    "settings": [
+      {
+        "name": "index_granularity_bytes",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "50"
+        }
+      },
+      {
+        "name": "min_index_granularity_bytes",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "40"
+        }
+      }
+    ],
+    "settingsAfterOrderBy": true
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "indexed_table"
+      }
+    },
+    "selectQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "binaryExpr",
+          "op": "+",
+          "left": {
+            "kind": "functionCall",
+            "name": "toDateTime",
+            "args": [
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "2019-05-27 10:00:00"
+              }
+            ]
+          },
+          "right": {
+            "kind": "binaryExpr",
+            "op": "%",
+            "left": {
+              "kind": "columnRef",
+              "parts": [
+                "number"
+              ]
+            },
+            "right": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "100"
+            }
+          }
+        },
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "h"
+        }
+      ],
+      "from": {
+        "kind": "tableFunctionRef",
+        "name": "numbers",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "1000"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "indexed_table"
+      }
+    },
+    "selectQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "binaryExpr",
+          "op": "+",
+          "left": {
+            "kind": "functionCall",
+            "name": "toDateTime",
+            "args": [
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "2019-05-27 10:00:00"
+              }
+            ]
+          },
+          "right": {
+            "kind": "binaryExpr",
+            "op": "%",
+            "left": {
+              "kind": "columnRef",
+              "parts": [
+                "number"
+              ]
+            },
+            "right": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "100"
+            }
+          }
+        },
+        {
+          "kind": "functionCall",
+          "name": "concat",
+          "args": [
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "hhhhhhhhhhhhhhhhhhhhhhhhh"
+            },
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "xxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+            },
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "yyyyyyyyyyyyyyyyyyyyyyyyyy"
+            },
+            {
+              "kind": "functionCall",
+              "name": "toString",
+              "args": [
+                {
+                  "kind": "functionCall",
+                  "name": "rand",
+                  "args": []
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "from": {
+        "kind": "tableFunctionRef",
+        "name": "numbers",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "1000"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "COUNT",
+        "args": []
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "indexed_table"
+    },
+    "where": {
+      "kind": "functionCall",
+      "name": "like",
+      "args": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "log_message"
+          ]
+        },
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "%x%"
+        }
+      ]
+    }
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "another_indexed_table"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "tm",
+        "type": {
+          "name": "DateTime"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "log_message",
+        "type": {
+          "name": "String"
+        }
+      },
+      {
+        "kind": "indexDef",
+        "name": "log_message",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "log_message"
+          ]
+        },
+        "indexType": {
+          "name": "tokenbf_v1",
+          "args": [
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "4096"
+            },
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "2"
+            },
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "0"
+            }
+          ]
+        },
+        "granularity": 1
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "tm"
+          ]
+        }
+      }
+    ],
+    "settings": [
+      {
+        "name": "index_granularity_bytes",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "50"
+        }
+      },
+      {
+        "name": "min_index_granularity_bytes",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "40"
+        }
+      },
+      {
+        "name": "vertical_merge_algorithm_min_rows_to_activate",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      },
+      {
+        "name": "vertical_merge_algorithm_min_columns_to_activate",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      }
+    ],
+    "settingsAfterOrderBy": true
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "another_indexed_table"
+      }
+    },
+    "selectQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "binaryExpr",
+          "op": "+",
+          "left": {
+            "kind": "functionCall",
+            "name": "toDateTime",
+            "args": [
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "2019-05-27 10:00:00"
+              }
+            ]
+          },
+          "right": {
+            "kind": "binaryExpr",
+            "op": "%",
+            "left": {
+              "kind": "columnRef",
+              "parts": [
+                "number"
+              ]
+            },
+            "right": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "100"
+            }
+          }
+        },
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "h"
+        }
+      ],
+      "from": {
+        "kind": "tableFunctionRef",
+        "name": "numbers",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "1000"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "another_indexed_table"
+      }
+    },
+    "selectQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "binaryExpr",
+          "op": "+",
+          "left": {
+            "kind": "functionCall",
+            "name": "toDateTime",
+            "args": [
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "2019-05-27 10:00:00"
+              }
+            ]
+          },
+          "right": {
+            "kind": "binaryExpr",
+            "op": "%",
+            "left": {
+              "kind": "columnRef",
+              "parts": [
+                "number"
+              ]
+            },
+            "right": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "100"
+            }
+          }
+        },
+        {
+          "kind": "functionCall",
+          "name": "concat",
+          "args": [
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "hhhhhhhhhhhhhhhhhhhhhhhhh"
+            },
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "xxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+            },
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "yyyyyyyyyyyyyyyyyyyyyyyyyy"
+            },
+            {
+              "kind": "functionCall",
+              "name": "toString",
+              "args": [
+                {
+                  "kind": "functionCall",
+                  "name": "rand",
+                  "args": []
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "from": {
+        "kind": "tableFunctionRef",
+        "name": "numbers",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "1000"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "COUNT",
+        "args": []
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "another_indexed_table"
+    },
+    "where": {
+      "kind": "functionCall",
+      "name": "like",
+      "args": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "log_message"
+          ]
+        },
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "%x%"
+        }
+      ]
+    }
+  }
+]

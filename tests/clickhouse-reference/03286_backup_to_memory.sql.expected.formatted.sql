@@ -1,1 +1,12 @@
-<Parse Error>
+CREATE TABLE t1
+(
+    x Int32
+)
+ENGINE = MergeTree()
+ORDER BY tuple();
+
+INSERT INTO t1;
+
+SELECT *
+FROM t1
+ORDER BY x ASC;

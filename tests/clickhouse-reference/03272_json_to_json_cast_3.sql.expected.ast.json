@@ -1,1 +1,761 @@
-{"expected":[{"type":"literal","text":"EXPLAIN","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"REPLACE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"SET","ignoreCase":true},{"type":"literal","text":"SET","ignoreCase":true},{"type":"literal","text":"SET","ignoreCase":true},{"type":"literal","text":"USE","ignoreCase":true},{"type":"literal","text":"SYSTEM","ignoreCase":true},{"type":"literal","text":"(","ignoreCase":false},{"type":"literal","text":"WITH","ignoreCase":true},{"type":"literal","text":"SELECT","ignoreCase":true},{"type":"end"}],"found":"i","location":{"start":{"offset":168,"line":5,"column":1},"end":{"offset":169,"line":5,"column":2}},"name":"SyntaxError"}
+[
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "enable_json_type",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "enable_analyzer",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "output_format_native_write_json_as_string",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "test"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "json",
+        "type": {
+          "name": "JSON",
+          "args": [
+            {
+              "kind": "setting",
+              "name": "max_dynamic_paths",
+              "value": {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "2"
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "engine": {
+      "name": "Memory"
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "test"
+      }
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "castExpr",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "json"
+          ]
+        },
+        "type": "JSON(SKIP a, max_dynamic_paths=2)",
+        "operator": true
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "test"
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "castExpr",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "json"
+          ]
+        },
+        "type": "JSON(SKIP a.b, max_dynamic_paths=2)",
+        "operator": true
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "test"
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "castExpr",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "json"
+          ]
+        },
+        "type": "JSON(SKIP b, max_dynamic_paths=2)",
+        "operator": true
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "test"
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "castExpr",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "json"
+          ]
+        },
+        "type": "JSON(SKIP c, max_dynamic_paths=2)",
+        "operator": true
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "test"
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "castExpr",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "json"
+          ]
+        },
+        "type": "JSON(SKIP c.d, max_dynamic_paths=2)",
+        "operator": true
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "test"
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "castExpr",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "json"
+          ]
+        },
+        "type": "JSON(SKIP d, max_dynamic_paths=2)",
+        "operator": true
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "test"
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "castExpr",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "json"
+          ]
+        },
+        "type": "JSON(SKIP a, SKIP b, max_dynamic_paths=2)",
+        "operator": true
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "test"
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "castExpr",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "json"
+          ]
+        },
+        "type": "JSON(SKIP a, SKIP c, max_dynamic_paths=2)",
+        "operator": true
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "test"
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "castExpr",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "json"
+          ]
+        },
+        "type": "JSON(SKIP a, SKIP c.d, max_dynamic_paths=2)",
+        "operator": true
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "test"
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "castExpr",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "json"
+          ]
+        },
+        "type": "JSON(SKIP a, SKIP d, max_dynamic_paths=2)",
+        "operator": true
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "test"
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "castExpr",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "json"
+          ]
+        },
+        "type": "JSON(SKIP a.b, SKIP b, max_dynamic_paths=2)",
+        "operator": true
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "test"
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "castExpr",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "json"
+          ]
+        },
+        "type": "JSON(SKIP a.b, SKIP c, max_dynamic_paths=2)",
+        "operator": true
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "test"
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "castExpr",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "json"
+          ]
+        },
+        "type": "JSON(SKIP a.b, SKIP c.d, max_dynamic_paths=2)",
+        "operator": true
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "test"
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "castExpr",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "json"
+          ]
+        },
+        "type": "JSON(SKIP a.b, SKIP d, max_dynamic_paths=2)",
+        "operator": true
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "test"
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "castExpr",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "json"
+          ]
+        },
+        "type": "JSON(SKIP b, SKIP c, max_dynamic_paths=2)",
+        "operator": true
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "test"
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "castExpr",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "json"
+          ]
+        },
+        "type": "JSON(SKIP b, SKIP c.d, max_dynamic_paths=2)",
+        "operator": true
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "test"
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "castExpr",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "json"
+          ]
+        },
+        "type": "JSON(SKIP b, SKIP d, max_dynamic_paths=2)",
+        "operator": true
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "test"
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "castExpr",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "json"
+          ]
+        },
+        "type": "JSON(SKIP c, SKIP d, max_dynamic_paths=2)",
+        "operator": true
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "test"
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "castExpr",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "json"
+          ]
+        },
+        "type": "JSON(SKIP a, SKIP b, SKIP c, max_dynamic_paths=2)",
+        "operator": true
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "test"
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "castExpr",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "json"
+          ]
+        },
+        "type": "JSON(SKIP a, SKIP b, SKIP c.d, max_dynamic_paths=2)",
+        "operator": true
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "test"
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "castExpr",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "json"
+          ]
+        },
+        "type": "JSON(SKIP a, SKIP b, SKIP d, max_dynamic_paths=2)",
+        "operator": true
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "test"
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "castExpr",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "json"
+          ]
+        },
+        "type": "JSON(SKIP a, SKIP c, SKIP d, max_dynamic_paths=2)",
+        "operator": true
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "test"
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "castExpr",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "json"
+          ]
+        },
+        "type": "JSON(SKIP a, SKIP c.d, SKIP d, max_dynamic_paths=2)",
+        "operator": true
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "test"
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "castExpr",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "json"
+          ]
+        },
+        "type": "JSON(SKIP a.b, SKIP b, SKIP c, max_dynamic_paths=2)",
+        "operator": true
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "test"
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "castExpr",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "json"
+          ]
+        },
+        "type": "JSON(SKIP a.b, SKIP b, SKIP c.d, max_dynamic_paths=2)",
+        "operator": true
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "test"
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "castExpr",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "json"
+          ]
+        },
+        "type": "JSON(SKIP a.b, SKIP b, SKIP d, max_dynamic_paths=2)",
+        "operator": true
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "test"
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "castExpr",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "json"
+          ]
+        },
+        "type": "JSON(SKIP a.b, SKIP c, SKIP d, max_dynamic_paths=2)",
+        "operator": true
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "test"
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "castExpr",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "json"
+          ]
+        },
+        "type": "JSON(SKIP a.b, SKIP c.d, SKIP d, max_dynamic_paths=2)",
+        "operator": true
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "test"
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "castExpr",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "json"
+          ]
+        },
+        "type": "JSON(SKIP b, SKIP c, SKIP d, max_dynamic_paths=2)",
+        "operator": true
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "test"
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "castExpr",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "json"
+          ]
+        },
+        "type": "JSON(SKIP b, SKIP c.d, SKIP d, max_dynamic_paths=2)",
+        "operator": true
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "test"
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "castExpr",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "json"
+          ]
+        },
+        "type": "JSON(SKIP REGEXP '.*a.*', max_dynamic_paths=2)",
+        "operator": true
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "test"
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "castExpr",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "json"
+          ]
+        },
+        "type": "JSON(SKIP REGEXP '.*b.*', max_dynamic_paths=2)",
+        "operator": true
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "test"
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "castExpr",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "json"
+          ]
+        },
+        "type": "JSON(SKIP REGEXP '.*d.*', max_dynamic_paths=2)",
+        "operator": true
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "test"
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "castExpr",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "json"
+          ]
+        },
+        "type": "JSON(SKIP REGEXP '.*c.*', max_dynamic_paths=2)",
+        "operator": true
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "test"
+    }
+  }
+]

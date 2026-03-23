@@ -1,1 +1,63 @@
-<Parse Error>
+SET insert_deduplicate = 1;
+
+SET deduplicate_blocks_in_dependent_materialized_views = 1;
+
+SET insert_deduplication_token = 'test';
+
+CREATE TABLE landing
+(
+    timestamp UInt64,
+    value UInt64
+)
+ENGINE = MergeTree
+ORDER BY tuple()
+SETTINGS non_replicated_deduplication_window = 1000;
+
+CREATE TABLE ds_1_1
+(
+    t UInt64,
+    v UInt64
+)
+ENGINE = MergeTree
+ORDER BY tuple()
+SETTINGS non_replicated_deduplication_window = 1000;
+
+CREATE MATERIALIZED VIEW mv_1_1
+TO ds_1_1
+AS
+SELECT
+    timestamp AS t,
+    sum(value) AS v
+FROM landing
+GROUP BY t;
+
+CREATE MATERIALIZED VIEW mv_1_2
+TO ds_1_1
+AS
+SELECT
+    timestamp AS t,
+    sum(value) AS v
+FROM landing
+GROUP BY t;
+
+INSERT INTO landing SELECT
+    1 AS timestamp,
+    1 AS value
+FROM numbers(10)
+ORDER BY `ALL` ASC;
+
+SELECT sleep(3);
+
+SELECT
+    table,
+    name,
+    error
+FROM `system`.part_log
+WHERE database = currentDatabase()
+    AND error != 389
+ORDER BY
+    table ASC,
+    name ASC;
+
+SELECT count()
+FROM landing;

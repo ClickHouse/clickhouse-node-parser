@@ -1,1 +1,12 @@
-<Parse Error>
+CREATE TABLE t_index_non_materialized
+(
+    a UInt32
+)
+ENGINE = MergeTree
+ORDER BY tuple();
+
+INSERT INTO t_index_non_materialized;
+
+SELECT count()
+FROM t_index_non_materialized
+WHERE a = 1;

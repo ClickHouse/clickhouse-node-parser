@@ -1,1 +1,238 @@
-{"expected":[{"type":"literal","text":"EXPLAIN","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"REPLACE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"SET","ignoreCase":true},{"type":"literal","text":"SET","ignoreCase":true},{"type":"literal","text":"SET","ignoreCase":true},{"type":"literal","text":"USE","ignoreCase":true},{"type":"literal","text":"SYSTEM","ignoreCase":true},{"type":"literal","text":"(","ignoreCase":false},{"type":"literal","text":"WITH","ignoreCase":true},{"type":"literal","text":"SELECT","ignoreCase":true},{"type":"end"}],"found":"I","location":{"start":{"offset":466,"line":6,"column":1},"end":{"offset":467,"line":6,"column":2}},"name":"SyntaxError"}
+[
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "allow_deprecated_syntax_for_merge_tree",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createDatabase",
+    "name": "{CLICKHOUSE_DATABASE_1:Identifier}"
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "test_00571"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "date",
+        "type": {
+          "name": "Date"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "platform",
+        "type": {
+          "name": "Enum8",
+          "args": [
+            {
+              "kind": "enumValues",
+              "values": [
+                {
+                  "name": "a",
+                  "value": "0"
+                },
+                {
+                  "name": "b",
+                  "value": "1"
+                },
+                {
+                  "name": "c",
+                  "value": "2"
+                }
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "app",
+        "type": {
+          "name": "Enum8",
+          "args": [
+            {
+              "kind": "enumValues",
+              "values": [
+                {
+                  "name": "a",
+                  "value": "0"
+                },
+                {
+                  "name": "b",
+                  "value": "1"
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree",
+      "args": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "date"
+          ]
+        },
+        {
+          "kind": "tupleLiteral",
+          "elements": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "platform"
+              ]
+            },
+            {
+              "kind": "columnRef",
+              "parts": [
+                "app"
+              ]
+            }
+          ],
+          "source": "(platform, app)"
+        },
+        {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "8192"
+        }
+      ]
+    }
+  },
+  {
+    "kind": "createMaterializedView",
+    "table": {
+      "kind": "tableRef",
+      "table": "test_materialized_00571"
+    },
+    "engine": {
+      "name": "MergeTree",
+      "args": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "date"
+          ]
+        },
+        {
+          "kind": "tupleLiteral",
+          "elements": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "platform"
+              ]
+            },
+            {
+              "kind": "columnRef",
+              "parts": [
+                "app"
+              ]
+            }
+          ],
+          "source": "(platform, app)"
+        },
+        {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "8192"
+        }
+      ]
+    },
+    "populate": true,
+    "asQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "date"
+          ]
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "platform"
+          ]
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "app"
+          ]
+        }
+      ],
+      "from": {
+        "kind": "subqueryFrom",
+        "query": {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "asterisk"
+            }
+          ],
+          "from": {
+            "kind": "tableRef",
+            "table": "test_00571"
+          }
+        }
+      }
+    }
+  },
+  {
+    "kind": "use",
+    "database": "{CLICKHOUSE_DATABASE_1:Identifier}"
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "database": "{CLICKHOUSE_DATABASE:Identifier}",
+        "table": "test_00571"
+      }
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "asterisk"
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "database": "{CLICKHOUSE_DATABASE:Identifier}",
+      "table": "test_00571"
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "asterisk"
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "database": "{CLICKHOUSE_DATABASE:Identifier}",
+      "table": "test_materialized_00571"
+    }
+  }
+]

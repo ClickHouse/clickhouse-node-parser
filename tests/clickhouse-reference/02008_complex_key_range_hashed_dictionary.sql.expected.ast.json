@@ -1,1 +1,1710 @@
-{"expected":[{"type":"literal","text":"EXPLAIN","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"REPLACE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"SET","ignoreCase":true},{"type":"literal","text":"SET","ignoreCase":true},{"type":"literal","text":"SET","ignoreCase":true},{"type":"literal","text":"USE","ignoreCase":true},{"type":"literal","text":"SYSTEM","ignoreCase":true},{"type":"literal","text":"(","ignoreCase":false},{"type":"literal","text":"WITH","ignoreCase":true},{"type":"literal","text":"SELECT","ignoreCase":true},{"type":"end"}],"found":"I","location":{"start":{"offset":158,"line":11,"column":1},"end":{"offset":159,"line":11,"column":2}},"name":"SyntaxError"}
+[
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "date_table"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "CountryID",
+        "type": {
+          "name": "UInt64"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "CountryKey",
+        "type": {
+          "name": "String"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "StartDate",
+        "type": {
+          "name": "Date"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "EndDate",
+        "type": {
+          "name": "Date"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "Tax",
+        "type": {
+          "name": "Float64"
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree",
+      "args": []
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "CountryID"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "date_table"
+      }
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "date_table"
+      }
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "date_table"
+      }
+    }
+  },
+  {
+    "kind": "createDictionary",
+    "table": {
+      "kind": "tableRef",
+      "table": "range_dictionary"
+    },
+    "dictAttrs": [
+      {
+        "name": "CountryID",
+        "type": {
+          "name": "UInt64"
+        }
+      },
+      {
+        "name": "CountryKey",
+        "type": {
+          "name": "String"
+        }
+      },
+      {
+        "name": "StartDate",
+        "type": {
+          "name": "Date"
+        }
+      },
+      {
+        "name": "EndDate",
+        "type": {
+          "name": "Date"
+        }
+      },
+      {
+        "name": "Tax",
+        "type": {
+          "name": "Float64"
+        },
+        "defaultValue": {
+          "kind": "literal",
+          "type": "Float64",
+          "value": "0.2"
+        }
+      }
+    ],
+    "dictDef": {
+      "primaryKey": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "CountryID"
+          ]
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "CountryKey"
+          ]
+        }
+      ],
+      "source": {
+        "name": "clickhouse",
+        "pairs": [
+          {
+            "name": "TABLE",
+            "value": {
+              "kind": "literal",
+              "type": "String",
+              "value": "date_table"
+            }
+          }
+        ]
+      },
+      "lifetime": {
+        "min": 1,
+        "max": 1000
+      },
+      "layout": {
+        "name": "COMPLEX_KEY_RANGE_HASHED",
+        "pairs": []
+      },
+      "range": [
+        {
+          "name": "MIN",
+          "value": {
+            "kind": "columnRef",
+            "parts": [
+              "StartDate"
+            ]
+          }
+        },
+        {
+          "name": "MAX",
+          "value": {
+            "kind": "columnRef",
+            "parts": [
+              "EndDate"
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "dictGet",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": "range_dictionary"
+          },
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": "Tax"
+          },
+          {
+            "kind": "tupleLiteral",
+            "elements": [
+              {
+                "kind": "functionCall",
+                "name": "toUInt64",
+                "args": [
+                  {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "1"
+                  }
+                ]
+              },
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "1"
+              }
+            ],
+            "source": "(toUInt64(1), '1')"
+          },
+          {
+            "kind": "functionCall",
+            "name": "toDate",
+            "args": [
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "2019-05-15"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "dictGet",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": "range_dictionary"
+          },
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": "Tax"
+          },
+          {
+            "kind": "tupleLiteral",
+            "elements": [
+              {
+                "kind": "functionCall",
+                "name": "toUInt64",
+                "args": [
+                  {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "1"
+                  }
+                ]
+              },
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "1"
+              }
+            ],
+            "source": "(toUInt64(1), '1')"
+          },
+          {
+            "kind": "functionCall",
+            "name": "toDate",
+            "args": [
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "2019-05-29"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "dictGet",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": "range_dictionary"
+          },
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": "Tax"
+          },
+          {
+            "kind": "tupleLiteral",
+            "elements": [
+              {
+                "kind": "functionCall",
+                "name": "toUInt64",
+                "args": [
+                  {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "2"
+                  }
+                ]
+              },
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "2"
+              }
+            ],
+            "source": "(toUInt64(2), '2')"
+          },
+          {
+            "kind": "functionCall",
+            "name": "toDate",
+            "args": [
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "2019-05-29"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "dictGet",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": "range_dictionary"
+          },
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": "Tax"
+          },
+          {
+            "kind": "tupleLiteral",
+            "elements": [
+              {
+                "kind": "functionCall",
+                "name": "toUInt64",
+                "args": [
+                  {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "2"
+                  }
+                ]
+              },
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "2"
+              }
+            ],
+            "source": "(toUInt64(2), '2')"
+          },
+          {
+            "kind": "functionCall",
+            "name": "toDate",
+            "args": [
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "2019-05-31"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "dictGetOrDefault",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": "range_dictionary"
+          },
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": "Tax"
+          },
+          {
+            "kind": "tupleLiteral",
+            "elements": [
+              {
+                "kind": "functionCall",
+                "name": "toUInt64",
+                "args": [
+                  {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "2"
+                  }
+                ]
+              },
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "2"
+              }
+            ],
+            "source": "(toUInt64(2), '2')"
+          },
+          {
+            "kind": "functionCall",
+            "name": "toDate",
+            "args": [
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "2019-05-31"
+              }
+            ]
+          },
+          {
+            "kind": "literal",
+            "type": "Float64",
+            "value": "0.4"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "dictHas",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": "range_dictionary"
+          },
+          {
+            "kind": "tupleLiteral",
+            "elements": [
+              {
+                "kind": "functionCall",
+                "name": "toUInt64",
+                "args": [
+                  {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "1"
+                  }
+                ]
+              },
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "1"
+              }
+            ],
+            "source": "(toUInt64(1), '1')"
+          },
+          {
+            "kind": "functionCall",
+            "name": "toDate",
+            "args": [
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "2019-05-15"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "dictHas",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": "range_dictionary"
+          },
+          {
+            "kind": "tupleLiteral",
+            "elements": [
+              {
+                "kind": "functionCall",
+                "name": "toUInt64",
+                "args": [
+                  {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "1"
+                  }
+                ]
+              },
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "1"
+              }
+            ],
+            "source": "(toUInt64(1), '1')"
+          },
+          {
+            "kind": "functionCall",
+            "name": "toDate",
+            "args": [
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "2019-05-29"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "dictHas",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": "range_dictionary"
+          },
+          {
+            "kind": "tupleLiteral",
+            "elements": [
+              {
+                "kind": "functionCall",
+                "name": "toUInt64",
+                "args": [
+                  {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "2"
+                  }
+                ]
+              },
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "2"
+              }
+            ],
+            "source": "(toUInt64(2), '2')"
+          },
+          {
+            "kind": "functionCall",
+            "name": "toDate",
+            "args": [
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "2019-05-29"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "dictHas",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": "range_dictionary"
+          },
+          {
+            "kind": "tupleLiteral",
+            "elements": [
+              {
+                "kind": "functionCall",
+                "name": "toUInt64",
+                "args": [
+                  {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "2"
+                  }
+                ]
+              },
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "2"
+              }
+            ],
+            "source": "(toUInt64(2), '2')"
+          },
+          {
+            "kind": "functionCall",
+            "name": "toDate",
+            "args": [
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "2019-05-31"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "asterisk"
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "range_dictionary"
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "CountryID"
+          ]
+        },
+        "direction": "ASC"
+      },
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "StartDate"
+          ]
+        },
+        "direction": "ASC"
+      },
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "EndDate"
+          ]
+        },
+        "direction": "ASC"
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "literal",
+        "type": "UInt64",
+        "value": "1"
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "range_dictionary"
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "CountryID"
+          ]
+        },
+        "direction": "ASC"
+      },
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "StartDate"
+          ]
+        },
+        "direction": "ASC"
+      },
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "EndDate"
+          ]
+        },
+        "direction": "ASC"
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "CountryID"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "StartDate"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "Tax"
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "range_dictionary"
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "CountryID"
+          ]
+        },
+        "direction": "ASC"
+      },
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "StartDate"
+          ]
+        },
+        "direction": "ASC"
+      },
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "EndDate"
+          ]
+        },
+        "direction": "ASC"
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "Tax"
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "range_dictionary"
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "CountryID"
+          ]
+        },
+        "direction": "ASC"
+      },
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "StartDate"
+          ]
+        },
+        "direction": "ASC"
+      },
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "EndDate"
+          ]
+        },
+        "direction": "ASC"
+      }
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "date_table"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "CountryID",
+        "type": {
+          "name": "UInt64"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "CountryKey",
+        "type": {
+          "name": "String"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "StartDate",
+        "type": {
+          "name": "Date"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "EndDate",
+        "type": {
+          "name": "Date"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "Tax",
+        "type": {
+          "name": "Nullable",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "Float64"
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree",
+      "args": []
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "CountryID"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "date_table"
+      }
+    }
+  },
+  {
+    "kind": "createDictionary",
+    "table": {
+      "kind": "tableRef",
+      "table": "range_dictionary_nullable"
+    },
+    "dictAttrs": [
+      {
+        "name": "CountryID",
+        "type": {
+          "name": "UInt64"
+        }
+      },
+      {
+        "name": "CountryKey",
+        "type": {
+          "name": "String"
+        }
+      },
+      {
+        "name": "StartDate",
+        "type": {
+          "name": "Date"
+        }
+      },
+      {
+        "name": "EndDate",
+        "type": {
+          "name": "Date"
+        }
+      },
+      {
+        "name": "Tax",
+        "type": {
+          "name": "Nullable",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "Float64"
+              }
+            }
+          ]
+        },
+        "defaultValue": {
+          "kind": "literal",
+          "type": "Float64",
+          "value": "0.2"
+        }
+      }
+    ],
+    "dictDef": {
+      "primaryKey": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "CountryID"
+          ]
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "CountryKey"
+          ]
+        }
+      ],
+      "source": {
+        "name": "clickhouse",
+        "pairs": [
+          {
+            "name": "TABLE",
+            "value": {
+              "kind": "literal",
+              "type": "String",
+              "value": "date_table"
+            }
+          }
+        ]
+      },
+      "lifetime": {
+        "min": 1,
+        "max": 1000
+      },
+      "layout": {
+        "name": "COMPLEX_KEY_RANGE_HASHED",
+        "pairs": []
+      },
+      "range": [
+        {
+          "name": "MIN",
+          "value": {
+            "kind": "columnRef",
+            "parts": [
+              "StartDate"
+            ]
+          }
+        },
+        {
+          "name": "MAX",
+          "value": {
+            "kind": "columnRef",
+            "parts": [
+              "EndDate"
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "dictGet",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": "range_dictionary_nullable"
+          },
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": "Tax"
+          },
+          {
+            "kind": "tupleLiteral",
+            "elements": [
+              {
+                "kind": "functionCall",
+                "name": "toUInt64",
+                "args": [
+                  {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "1"
+                  }
+                ]
+              },
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "1"
+              }
+            ],
+            "source": "(toUInt64(1), '1')"
+          },
+          {
+            "kind": "functionCall",
+            "name": "toDate",
+            "args": [
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "2019-05-15"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "dictGet",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": "range_dictionary_nullable"
+          },
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": "Tax"
+          },
+          {
+            "kind": "tupleLiteral",
+            "elements": [
+              {
+                "kind": "functionCall",
+                "name": "toUInt64",
+                "args": [
+                  {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "1"
+                  }
+                ]
+              },
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "1"
+              }
+            ],
+            "source": "(toUInt64(1), '1')"
+          },
+          {
+            "kind": "functionCall",
+            "name": "toDate",
+            "args": [
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "2019-05-29"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "dictGet",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": "range_dictionary_nullable"
+          },
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": "Tax"
+          },
+          {
+            "kind": "tupleLiteral",
+            "elements": [
+              {
+                "kind": "functionCall",
+                "name": "toUInt64",
+                "args": [
+                  {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "2"
+                  }
+                ]
+              },
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "2"
+              }
+            ],
+            "source": "(toUInt64(2), '2')"
+          },
+          {
+            "kind": "functionCall",
+            "name": "toDate",
+            "args": [
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "2019-05-29"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "dictGet",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": "range_dictionary_nullable"
+          },
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": "Tax"
+          },
+          {
+            "kind": "tupleLiteral",
+            "elements": [
+              {
+                "kind": "functionCall",
+                "name": "toUInt64",
+                "args": [
+                  {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "2"
+                  }
+                ]
+              },
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "2"
+              }
+            ],
+            "source": "(toUInt64(2), '2')"
+          },
+          {
+            "kind": "functionCall",
+            "name": "toDate",
+            "args": [
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "2019-05-31"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "dictGetOrDefault",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": "range_dictionary_nullable"
+          },
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": "Tax"
+          },
+          {
+            "kind": "tupleLiteral",
+            "elements": [
+              {
+                "kind": "functionCall",
+                "name": "toUInt64",
+                "args": [
+                  {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "2"
+                  }
+                ]
+              },
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "2"
+              }
+            ],
+            "source": "(toUInt64(2), '2')"
+          },
+          {
+            "kind": "functionCall",
+            "name": "toDate",
+            "args": [
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "2019-05-31"
+              }
+            ]
+          },
+          {
+            "kind": "literal",
+            "type": "Float64",
+            "value": "0.4"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "dictHas",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": "range_dictionary_nullable"
+          },
+          {
+            "kind": "tupleLiteral",
+            "elements": [
+              {
+                "kind": "functionCall",
+                "name": "toUInt64",
+                "args": [
+                  {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "1"
+                  }
+                ]
+              },
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "1"
+              }
+            ],
+            "source": "(toUInt64(1), '1')"
+          },
+          {
+            "kind": "functionCall",
+            "name": "toDate",
+            "args": [
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "2019-05-15"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "dictHas",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": "range_dictionary_nullable"
+          },
+          {
+            "kind": "tupleLiteral",
+            "elements": [
+              {
+                "kind": "functionCall",
+                "name": "toUInt64",
+                "args": [
+                  {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "1"
+                  }
+                ]
+              },
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "1"
+              }
+            ],
+            "source": "(toUInt64(1), '1')"
+          },
+          {
+            "kind": "functionCall",
+            "name": "toDate",
+            "args": [
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "2019-05-29"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "dictHas",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": "range_dictionary_nullable"
+          },
+          {
+            "kind": "tupleLiteral",
+            "elements": [
+              {
+                "kind": "functionCall",
+                "name": "toUInt64",
+                "args": [
+                  {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "2"
+                  }
+                ]
+              },
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "2"
+              }
+            ],
+            "source": "(toUInt64(2), '2')"
+          },
+          {
+            "kind": "functionCall",
+            "name": "toDate",
+            "args": [
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "2019-05-29"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "dictHas",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": "range_dictionary_nullable"
+          },
+          {
+            "kind": "tupleLiteral",
+            "elements": [
+              {
+                "kind": "functionCall",
+                "name": "toUInt64",
+                "args": [
+                  {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "2"
+                  }
+                ]
+              },
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "2"
+              }
+            ],
+            "source": "(toUInt64(2), '2')"
+          },
+          {
+            "kind": "functionCall",
+            "name": "toDate",
+            "args": [
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "2019-05-31"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "asterisk"
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "range_dictionary_nullable"
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "CountryID"
+          ]
+        },
+        "direction": "ASC"
+      },
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "StartDate"
+          ]
+        },
+        "direction": "ASC"
+      },
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "EndDate"
+          ]
+        },
+        "direction": "ASC"
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "literal",
+        "type": "UInt64",
+        "value": "1"
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "range_dictionary_nullable"
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "CountryID"
+          ]
+        },
+        "direction": "ASC"
+      },
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "StartDate"
+          ]
+        },
+        "direction": "ASC"
+      },
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "EndDate"
+          ]
+        },
+        "direction": "ASC"
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "CountryID"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "StartDate"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "Tax"
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "range_dictionary_nullable"
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "CountryID"
+          ]
+        },
+        "direction": "ASC"
+      },
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "StartDate"
+          ]
+        },
+        "direction": "ASC"
+      },
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "EndDate"
+          ]
+        },
+        "direction": "ASC"
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "Tax"
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "range_dictionary_nullable"
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "CountryID"
+          ]
+        },
+        "direction": "ASC"
+      },
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "StartDate"
+          ]
+        },
+        "direction": "ASC"
+      },
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "EndDate"
+          ]
+        },
+        "direction": "ASC"
+      }
+    ]
+  }
+]

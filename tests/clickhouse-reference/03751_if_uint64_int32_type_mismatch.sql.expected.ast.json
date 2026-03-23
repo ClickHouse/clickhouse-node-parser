@@ -1,1 +1,544 @@
-{"expected":[{"type":"literal","text":"EXPLAIN","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"REPLACE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"SET","ignoreCase":true},{"type":"literal","text":"SET","ignoreCase":true},{"type":"literal","text":"SET","ignoreCase":true},{"type":"literal","text":"USE","ignoreCase":true},{"type":"literal","text":"SYSTEM","ignoreCase":true},{"type":"literal","text":"(","ignoreCase":false},{"type":"literal","text":"WITH","ignoreCase":true},{"type":"literal","text":"SELECT","ignoreCase":true},{"type":"end"}],"found":"I","location":{"start":{"offset":198,"line":9,"column":1},"end":{"offset":199,"line":9,"column":2}},"name":"SyntaxError"}
+[
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "test_if_type_mismatch"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "c_f7nvvq",
+        "type": {
+          "name": "Int32"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "c_ooi4e9x212",
+        "type": {
+          "name": "Float64"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "c_h16pd",
+        "type": {
+          "name": "String"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "c_j3",
+        "type": {
+          "name": "String"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "c_u37",
+        "type": {
+          "name": "Float64"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "c_d9n_3",
+        "type": {
+          "name": "Int32"
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree",
+      "args": []
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "c_d9n_3"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "test_if_type_mismatch"
+      }
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "toTypeName",
+        "args": [
+          {
+            "kind": "functionCall",
+            "name": "if",
+            "args": [
+              {
+                "kind": "binaryExpr",
+                "op": "%",
+                "left": {
+                  "kind": "functionCall",
+                  "name": "rand",
+                  "args": []
+                },
+                "right": {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "2"
+                }
+              },
+              {
+                "kind": "functionCall",
+                "name": "floor",
+                "args": [
+                  {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "4373163444658715090"
+                  }
+                ]
+              },
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "c_f7nvvq"
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "test_if_type_mismatch"
+    },
+    "limit": {
+      "count": {
+        "kind": "literal",
+        "type": "UInt64",
+        "value": "1"
+      }
+    },
+    "leadingComments": [
+      "-- Test case 1: Simple if with UInt64 literal (fits in Int64) and Int32 column"
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "toTypeName",
+        "args": [
+          {
+            "kind": "functionCall",
+            "name": "multiIf",
+            "args": [
+              {
+                "kind": "binaryExpr",
+                "op": ">",
+                "left": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "c_ooi4e9x212"
+                  ]
+                },
+                "right": {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "5"
+                }
+              },
+              {
+                "kind": "functionCall",
+                "name": "floor",
+                "args": [
+                  {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "4373163444658715090"
+                  }
+                ]
+              },
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "c_f7nvvq"
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "test_if_type_mismatch"
+    },
+    "limit": {
+      "count": {
+        "kind": "literal",
+        "type": "UInt64",
+        "value": "1"
+      }
+    },
+    "leadingComments": [
+      "-- Test case 2: Case expression (which uses if internally)"
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "subq_0",
+            "c_q9e4c4y15"
+          ]
+        },
+        "alias": "c_n_2010"
+      }
+    ],
+    "from": {
+      "kind": "subqueryFrom",
+      "query": {
+        "kind": "select",
+        "select": [
+          {
+            "kind": "alias",
+            "expr": {
+              "kind": "columnRef",
+              "parts": [
+                "ref_0",
+                "c_ooi4e9x212"
+              ]
+            },
+            "alias": "c_or3kcz"
+          },
+          {
+            "kind": "alias",
+            "expr": {
+              "kind": "functionCall",
+              "name": "floor",
+              "args": [
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "ref_0",
+                    "c_f7nvvq"
+                  ]
+                }
+              ]
+            },
+            "alias": "c_pfnd1iaw"
+          },
+          {
+            "kind": "alias",
+            "expr": {
+              "kind": "functionCall",
+              "name": "floor",
+              "args": [
+                {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "4373163444658715090"
+                }
+              ]
+            },
+            "alias": "c_j59"
+          },
+          {
+            "kind": "alias",
+            "expr": {
+              "kind": "columnRef",
+              "parts": [
+                "ref_0",
+                "c_u37"
+              ]
+            },
+            "alias": "c_f_2008"
+          },
+          {
+            "kind": "alias",
+            "expr": {
+              "kind": "columnRef",
+              "parts": [
+                "ref_0",
+                "c_h16pd"
+              ]
+            },
+            "alias": "c_y2_2009"
+          },
+          {
+            "kind": "alias",
+            "expr": {
+              "kind": "columnRef",
+              "parts": [
+                "ref_0",
+                "c_j3"
+              ]
+            },
+            "alias": "c_q9e4c4y15"
+          }
+        ],
+        "from": {
+          "kind": "tableFunctionRef",
+          "name": "remote",
+          "args": [
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "127.0.0.1"
+            },
+            {
+              "kind": "functionCall",
+              "name": "currentDatabase",
+              "args": []
+            },
+            {
+              "kind": "columnRef",
+              "parts": [
+                "test_if_type_mismatch"
+              ]
+            }
+          ],
+          "alias": "ref_0"
+        },
+        "where": {
+          "kind": "castExpr",
+          "expr": {
+            "kind": "binaryExpr",
+            "op": ">",
+            "left": {
+              "kind": "columnRef",
+              "parts": [
+                "ref_0",
+                "c_u37"
+              ]
+            },
+            "right": {
+              "kind": "columnRef",
+              "parts": [
+                "ref_0",
+                "c_d9n_3"
+              ]
+            },
+            "parenthesized": true
+          },
+          "type": "Nullable(Bool)",
+          "parenthesized": true
+        }
+      },
+      "alias": "subq_0"
+    },
+    "where": {
+      "kind": "castExpr",
+      "expr": {
+        "kind": "binaryExpr",
+        "op": "=",
+        "left": {
+          "kind": "functionCall",
+          "name": "negate",
+          "args": [
+            {
+              "kind": "functionCall",
+              "name": "multiIf",
+              "args": [
+                {
+                  "kind": "castExpr",
+                  "expr": {
+                    "kind": "binaryExpr",
+                    "op": "=",
+                    "left": {
+                      "kind": "columnRef",
+                      "parts": [
+                        "subq_0",
+                        "c_j59"
+                      ]
+                    },
+                    "right": {
+                      "kind": "columnRef",
+                      "parts": [
+                        "subq_0",
+                        "c_pfnd1iaw"
+                      ]
+                    },
+                    "parenthesized": true
+                  },
+                  "type": "Nullable(Bool)",
+                  "parenthesized": true
+                },
+                {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "0"
+                },
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "subq_0",
+                    "c_pfnd1iaw"
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        "right": {
+          "kind": "functionCall",
+          "name": "multiIf",
+          "args": [
+            {
+              "kind": "castExpr",
+              "expr": {
+                "kind": "binaryExpr",
+                "op": "<",
+                "left": {
+                  "kind": "functionCall",
+                  "name": "round",
+                  "args": [
+                    {
+                      "kind": "columnRef",
+                      "parts": [
+                        "subq_0",
+                        "c_or3kcz"
+                      ]
+                    }
+                  ]
+                },
+                "right": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "subq_0",
+                    "c_j59"
+                  ]
+                },
+                "parenthesized": true
+              },
+              "type": "Nullable(Bool)",
+              "parenthesized": true
+            },
+            {
+              "kind": "columnRef",
+              "parts": [
+                "subq_0",
+                "c_j59"
+              ]
+            },
+            {
+              "kind": "columnRef",
+              "parts": [
+                "subq_0",
+                "c_pfnd1iaw"
+              ]
+            }
+          ]
+        },
+        "parenthesized": true
+      },
+      "type": "Nullable(Bool)",
+      "parenthesized": true
+    },
+    "leadingComments": [
+      "-- Test case 3: Query pattern from original issue #70017 using remote() to simulate distributed query",
+      "-- This triggers prewhere optimization which materializes the constant and loses the type flag"
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "if",
+          "args": [
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "1"
+            },
+            {
+              "kind": "functionCall",
+              "name": "floor",
+              "args": [
+                {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "4373163444658715090"
+                }
+              ]
+            },
+            {
+              "kind": "functionCall",
+              "name": "toInt32",
+              "args": [
+                {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "0"
+                }
+              ]
+            }
+          ]
+        },
+        "alias": "when_true"
+      },
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "if",
+          "args": [
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "0"
+            },
+            {
+              "kind": "functionCall",
+              "name": "floor",
+              "args": [
+                {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "4373163444658715090"
+                }
+              ]
+            },
+            {
+              "kind": "functionCall",
+              "name": "toInt32",
+              "args": [
+                {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "42"
+                }
+              ]
+            }
+          ]
+        },
+        "alias": "when_false"
+      }
+    ],
+    "leadingComments": [
+      "-- Test case 4: Verify the actual value computation works correctly"
+    ]
+  }
+]

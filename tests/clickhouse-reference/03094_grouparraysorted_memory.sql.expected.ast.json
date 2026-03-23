@@ -1,1 +1,321 @@
-{"expected":[{"type":"literal","text":"EXPLAIN","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"REPLACE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"SET","ignoreCase":true},{"type":"literal","text":"SET","ignoreCase":true},{"type":"literal","text":"SET","ignoreCase":true},{"type":"literal","text":"USE","ignoreCase":true},{"type":"literal","text":"SYSTEM","ignoreCase":true},{"type":"literal","text":"(","ignoreCase":false},{"type":"literal","text":"WITH","ignoreCase":true},{"type":"literal","text":"SELECT","ignoreCase":true},{"type":"end"}],"found":"I","location":{"start":{"offset":997,"line":36,"column":1},"end":{"offset":998,"line":36,"column":2}},"name":"SyntaxError"}
+[
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "03094_grouparrysorted_dest"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "ServiceName",
+        "type": {
+          "name": "LowCardinality",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "String"
+              }
+            }
+          ]
+        },
+        "codec": [
+          {
+            "name": "ZSTD",
+            "args": [
+              {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "1"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "kind": "columnDef",
+        "name": "SlowSpans",
+        "type": {
+          "name": "AggregateFunction",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "groupArraySorted",
+                "args": [
+                  {
+                    "kind": "literal",
+                    "value": "100"
+                  }
+                ]
+              }
+            },
+            {
+              "kind": "type",
+              "type": {
+                "name": "Tuple",
+                "args": [
+                  {
+                    "kind": "namedField",
+                    "name": "NegativeDurationNs",
+                    "type": {
+                      "name": "Int64"
+                    }
+                  },
+                  {
+                    "kind": "namedField",
+                    "name": "Timestamp",
+                    "type": {
+                      "name": "DateTime64",
+                      "args": [
+                        {
+                          "kind": "literal",
+                          "value": "9"
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "kind": "namedField",
+                    "name": "TraceId",
+                    "type": {
+                      "name": "String"
+                    }
+                  },
+                  {
+                    "kind": "namedField",
+                    "name": "SpanId",
+                    "type": {
+                      "name": "String"
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        "codec": [
+          {
+            "name": "ZSTD",
+            "args": [
+              {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "1"
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "engine": {
+      "name": "AggregatingMergeTree",
+      "args": []
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "ServiceName"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "03094_grouparrysorted_src"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "ServiceName",
+        "type": {
+          "name": "String"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "Duration",
+        "type": {
+          "name": "Int64"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "Timestamp",
+        "type": {
+          "name": "DateTime64",
+          "args": [
+            {
+              "kind": "literal",
+              "value": "9"
+            }
+          ]
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "TraceId",
+        "type": {
+          "name": "String"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "SpanId",
+        "type": {
+          "name": "String"
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree",
+      "args": []
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "functionCall",
+          "name": "tuple",
+          "args": []
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createMaterializedView",
+    "table": {
+      "kind": "tableRef",
+      "table": "03094_grouparrysorted_mv"
+    },
+    "toTable": {
+      "kind": "tableRef",
+      "table": "03094_grouparrysorted_dest"
+    },
+    "asQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "ServiceName"
+          ]
+        },
+        {
+          "kind": "alias",
+          "expr": {
+            "kind": "functionCall",
+            "name": "groupArraySortedState",
+            "params": [
+              {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "100"
+              }
+            ],
+            "args": [
+              {
+                "kind": "functionCall",
+                "name": "CAST",
+                "args": [
+                  {
+                    "kind": "functionCall",
+                    "name": "tuple",
+                    "args": [
+                      {
+                        "kind": "functionCall",
+                        "name": "negate",
+                        "args": [
+                          {
+                            "kind": "columnRef",
+                            "parts": [
+                              "Duration"
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "kind": "columnRef",
+                        "parts": [
+                          "Timestamp"
+                        ]
+                      },
+                      {
+                        "kind": "columnRef",
+                        "parts": [
+                          "TraceId"
+                        ]
+                      },
+                      {
+                        "kind": "columnRef",
+                        "parts": [
+                          "SpanId"
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "kind": "literal",
+                    "type": "String",
+                    "value": "Tuple(NegativeDurationNs Int64, Timestamp DateTime64(9), TraceId String, SpanId String)"
+                  }
+                ]
+              }
+            ]
+          },
+          "alias": "SlowSpans"
+        }
+      ],
+      "from": {
+        "kind": "tableRef",
+        "table": "03094_grouparrysorted_src"
+      },
+      "groupBy": {
+        "kind": "expressions",
+        "items": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "ServiceName"
+            ]
+          }
+        ]
+      }
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "03094_grouparrysorted_src"
+      }
+    },
+    "selectQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "asterisk"
+        }
+      ],
+      "from": {
+        "kind": "tableFunctionRef",
+        "name": "generateRandom",
+        "args": []
+      },
+      "limit": {
+        "count": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "500000"
+        }
+      }
+    }
+  }
+]

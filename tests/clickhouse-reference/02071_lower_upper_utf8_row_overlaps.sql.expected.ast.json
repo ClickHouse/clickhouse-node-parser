@@ -1,1 +1,259 @@
-{"expected":[{"type":"literal","text":"EXPLAIN","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"REPLACE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"SET","ignoreCase":true},{"type":"literal","text":"SET","ignoreCase":true},{"type":"literal","text":"SET","ignoreCase":true},{"type":"literal","text":"USE","ignoreCase":true},{"type":"literal","text":"SYSTEM","ignoreCase":true},{"type":"literal","text":"(","ignoreCase":false},{"type":"literal","text":"WITH","ignoreCase":true},{"type":"literal","text":"SELECT","ignoreCase":true},{"type":"end"}],"found":"i","location":{"start":{"offset":130,"line":4,"column":1},"end":{"offset":131,"line":4,"column":2}},"name":"SyntaxError"}
+[
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "utf8_overlap"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "str",
+        "type": {
+          "name": "String"
+        }
+      }
+    ],
+    "engine": {
+      "name": "Memory",
+      "args": []
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "utf8_overlap"
+      }
+    },
+    "leadingComments": [
+      "-- { echoOn }",
+      "-- NOTE: total string size should be > 16 (sizeof(__m128i))"
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "lowerUTF8",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": "КВ АМ И СЖ"
+          }
+        ]
+      }
+    ],
+    "leadingComments": [
+      "-- NOTE: regression test for introduced bug",
+      "-- https://github.com/ClickHouse/ClickHouse/issues/42756"
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "upperUTF8",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": "кв ам и сж"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "lowerUTF8",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": "КВ АМ И СЖ КВ АМ И СЖ"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "upperUTF8",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": "кв ам и сж кв ам и сж"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "lowerUTF8",
+        "args": [
+          {
+            "kind": "functionCall",
+            "name": "concat",
+            "args": [
+              {
+                "kind": "functionCall",
+                "name": "repeat",
+                "args": [
+                  {
+                    "kind": "literal",
+                    "type": "String",
+                    "value": "0"
+                  },
+                  {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "16"
+                  }
+                ]
+              },
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "КВ АМ И СЖ"
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "leadingComments": [
+      "-- Test at 32 and 64 byte boundaries"
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "upperUTF8",
+        "args": [
+          {
+            "kind": "functionCall",
+            "name": "concat",
+            "args": [
+              {
+                "kind": "functionCall",
+                "name": "repeat",
+                "args": [
+                  {
+                    "kind": "literal",
+                    "type": "String",
+                    "value": "0"
+                  },
+                  {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "16"
+                  }
+                ]
+              },
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "кв ам и сж"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "lowerUTF8",
+        "args": [
+          {
+            "kind": "functionCall",
+            "name": "concat",
+            "args": [
+              {
+                "kind": "functionCall",
+                "name": "repeat",
+                "args": [
+                  {
+                    "kind": "literal",
+                    "type": "String",
+                    "value": "0"
+                  },
+                  {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "48"
+                  }
+                ]
+              },
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "КВ АМ И СЖ"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "upperUTF8",
+        "args": [
+          {
+            "kind": "functionCall",
+            "name": "concat",
+            "args": [
+              {
+                "kind": "functionCall",
+                "name": "repeat",
+                "args": [
+                  {
+                    "kind": "literal",
+                    "type": "String",
+                    "value": "0"
+                  },
+                  {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "48"
+                  }
+                ]
+              },
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "кв ам и сж"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

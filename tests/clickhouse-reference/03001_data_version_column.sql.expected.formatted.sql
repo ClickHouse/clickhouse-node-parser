@@ -1,1 +1,30 @@
-<Parse Error>
+CREATE TABLE t_data_version
+(
+    a UInt64,
+    b UInt64
+)
+ENGINE = MergeTree
+ORDER BY a;
+
+INSERT INTO t_data_version;
+
+INSERT INTO t_data_version;
+
+SELECT
+    _part,
+    _part_data_version,
+    *
+FROM t_data_version
+ORDER BY a ASC;
+
+INSERT INTO t_data_version;
+
+-- Check parts pruning.
+SELECT
+    _part,
+    _part_data_version,
+    *
+FROM t_data_version
+WHERE _part_data_version = 4
+ORDER BY a ASC
+SETTINGS max_rows_to_read = 1;

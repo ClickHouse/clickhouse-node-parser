@@ -1,1 +1,20 @@
-<Parse Error>
+CREATE TABLE test_00681
+(
+    x Int32
+)
+ENGINE = Log;
+
+INSERT INTO test_00681;
+
+SELECT a1
+FROM (
+        SELECT
+            x AS a1,
+            x AS a2
+        FROM test_00681
+        UNION ALL
+        SELECT
+            x,
+            x
+        FROM test_00681
+    );

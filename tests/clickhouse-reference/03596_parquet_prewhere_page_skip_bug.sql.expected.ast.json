@@ -1,1 +1,262 @@
-{"expected":[{"type":"literal","text":"EXPLAIN","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"REPLACE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"SET","ignoreCase":true},{"type":"literal","text":"SET","ignoreCase":true},{"type":"literal","text":"SET","ignoreCase":true},{"type":"literal","text":"USE","ignoreCase":true},{"type":"literal","text":"SYSTEM","ignoreCase":true},{"type":"literal","text":"(","ignoreCase":false},{"type":"literal","text":"WITH","ignoreCase":true},{"type":"literal","text":"SELECT","ignoreCase":true},{"type":"end"}],"found":"i","location":{"start":{"offset":164,"line":7,"column":1},"end":{"offset":165,"line":7,"column":2}},"name":"SyntaxError"}
+[
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "output_format_parquet_use_custom_encoder",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ],
+    "leadingComments": [
+      "-- Tags: no-fasttest"
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "input_format_parquet_use_native_reader_v3",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "engine_file_truncate_on_insert",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "function",
+      "func": {
+        "kind": "tableFunctionRef",
+        "name": "file",
+        "args": [
+          {
+            "kind": "functionCall",
+            "name": "concat",
+            "args": [
+              {
+                "kind": "functionCall",
+                "name": "current_database",
+                "args": []
+              },
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "03596_parquet_prewhere_page_skip_bug.parquet"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "selectQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "alias",
+          "expr": {
+            "kind": "columnRef",
+            "parts": [
+              "number"
+            ]
+          },
+          "alias": "n"
+        },
+        {
+          "kind": "alias",
+          "expr": {
+            "kind": "binaryExpr",
+            "op": "*",
+            "left": {
+              "kind": "columnRef",
+              "parts": [
+                "number"
+              ]
+            },
+            "right": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "10"
+            }
+          },
+          "alias": "n10"
+        }
+      ],
+      "from": {
+        "kind": "tableFunctionRef",
+        "name": "numbers",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "200"
+          }
+        ]
+      },
+      "settings": [
+        {
+          "name": "output_format_parquet_data_page_size",
+          "value": {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "100"
+          }
+        },
+        {
+          "name": "output_format_parquet_batch_size",
+          "value": {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "10"
+          }
+        },
+        {
+          "name": "output_format_parquet_row_group_size",
+          "value": {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "100"
+          }
+        },
+        {
+          "name": "output_format_parquet_write_page_index",
+          "value": {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "0"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "n10"
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableFunctionRef",
+      "name": "file",
+      "args": [
+        {
+          "kind": "functionCall",
+          "name": "concat",
+          "args": [
+            {
+              "kind": "functionCall",
+              "name": "current_database",
+              "args": []
+            },
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "03596_parquet_prewhere_page_skip_bug.parquet"
+            }
+          ]
+        }
+      ]
+    },
+    "prewhere": {
+      "kind": "inExpr",
+      "negated": false,
+      "expr": {
+        "kind": "columnRef",
+        "parts": [
+          "n"
+        ]
+      },
+      "values": [
+        {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "131"
+        },
+        {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "174"
+        },
+        {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "175"
+        },
+        {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "176"
+        }
+      ]
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "all"
+          ]
+        },
+        "direction": "ASC"
+      }
+    ],
+    "settings": [
+      {
+        "name": "input_format_parquet_page_filter_push_down",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      },
+      {
+        "name": "input_format_parquet_filter_push_down",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      },
+      {
+        "name": "input_format_parquet_bloom_filter_push_down",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      },
+      {
+        "name": "input_format_parquet_max_block_size",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "10"
+        }
+      }
+    ]
+  }
+]

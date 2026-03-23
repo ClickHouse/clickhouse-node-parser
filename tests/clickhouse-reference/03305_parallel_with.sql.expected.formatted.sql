@@ -1,1 +1,30 @@
-<Parse Error>
+CREATE TABLE table1
+(
+    x Int32
+)
+ENGINE = MergeTree
+ORDER BY x
+PARALLEL WITH
+CREATE TABLE table2
+(
+    y Int32
+)
+ENGINE = MergeTree
+ORDER BY y;
+
+INSERT INTO table1 SELECT number
+FROM numbers(3)
+PARALLEL WITH
+INSERT INTO table1 SELECT number
+FROM numbers(10, 2)
+PARALLEL WITH
+INSERT INTO table2 SELECT number
+FROM numbers(20, 1);
+
+SELECT *
+FROM table1
+ORDER BY x ASC;
+
+SELECT *
+FROM table2
+ORDER BY y ASC;

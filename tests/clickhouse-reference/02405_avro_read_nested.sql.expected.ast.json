@@ -1,1 +1,364 @@
-{"expected":[{"type":"literal","text":"EXPLAIN","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"REPLACE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"SET","ignoreCase":true},{"type":"literal","text":"SET","ignoreCase":true},{"type":"literal","text":"SET","ignoreCase":true},{"type":"literal","text":"USE","ignoreCase":true},{"type":"literal","text":"SYSTEM","ignoreCase":true},{"type":"literal","text":"(","ignoreCase":false},{"type":"literal","text":"WITH","ignoreCase":true},{"type":"literal","text":"SELECT","ignoreCase":true},{"type":"end"}],"found":"i","location":{"start":{"offset":60,"line":5,"column":1},"end":{"offset":61,"line":5,"column":2}},"name":"SyntaxError"}
+[
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "flatten_nested",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ],
+    "leadingComments": [
+      "-- Tags: no-fasttest, no-parallel"
+    ]
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "function",
+      "func": {
+        "kind": "tableFunctionRef",
+        "name": "file",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "02405_data",
+              "avro"
+            ]
+          }
+        ]
+      }
+    },
+    "selectQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "alias",
+          "expr": {
+            "kind": "castExpr",
+            "expr": {
+              "kind": "arrayLiteral",
+              "elements": [
+                {
+                  "kind": "tupleLiteral",
+                  "elements": [
+                    {
+                      "kind": "literal",
+                      "type": "UInt64",
+                      "value": "1"
+                    },
+                    {
+                      "kind": "literal",
+                      "type": "String",
+                      "value": "aa"
+                    }
+                  ],
+                  "source": "(1, 'aa')"
+                },
+                {
+                  "kind": "tupleLiteral",
+                  "elements": [
+                    {
+                      "kind": "literal",
+                      "type": "UInt64",
+                      "value": "2"
+                    },
+                    {
+                      "kind": "literal",
+                      "type": "String",
+                      "value": "bb"
+                    }
+                  ],
+                  "source": "(2, 'bb')"
+                }
+              ],
+              "source": "[(1, 'aa'), (2, 'bb')]"
+            },
+            "type": "Nested(x UInt32, y String)",
+            "operator": true
+          },
+          "alias": "nested"
+        }
+      ],
+      "settings": [
+        {
+          "name": "engine_file_truncate_on_insert",
+          "value": {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "1"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "asterisk"
+      }
+    ],
+    "from": {
+      "kind": "tableFunctionRef",
+      "name": "file",
+      "args": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "02405_data",
+            "avro"
+          ]
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "auto"
+          ]
+        },
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "nested Nested(x UInt32, y String)"
+        }
+      ]
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "function",
+      "func": {
+        "kind": "tableFunctionRef",
+        "name": "file",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "02405_data",
+              "avro"
+            ]
+          }
+        ]
+      }
+    },
+    "selectQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "alias",
+          "expr": {
+            "kind": "castExpr",
+            "expr": {
+              "kind": "arrayLiteral",
+              "elements": [
+                {
+                  "kind": "tupleLiteral",
+                  "elements": [
+                    {
+                      "kind": "literal",
+                      "type": "UInt64",
+                      "value": "1"
+                    },
+                    {
+                      "kind": "tupleLiteral",
+                      "elements": [
+                        {
+                          "kind": "literal",
+                          "type": "UInt64",
+                          "value": "2"
+                        },
+                        {
+                          "kind": "arrayLiteral",
+                          "elements": [
+                            {
+                              "kind": "literal",
+                              "type": "String",
+                              "value": "aa"
+                            },
+                            {
+                              "kind": "literal",
+                              "type": "String",
+                              "value": "bb"
+                            }
+                          ],
+                          "source": "['aa', 'bb']"
+                        }
+                      ],
+                      "source": "(2, ['aa', 'bb'])"
+                    },
+                    {
+                      "kind": "arrayLiteral",
+                      "elements": [
+                        {
+                          "kind": "tupleLiteral",
+                          "elements": [
+                            {
+                              "kind": "literal",
+                              "type": "UInt64",
+                              "value": "3"
+                            },
+                            {
+                              "kind": "literal",
+                              "type": "String",
+                              "value": "cc"
+                            }
+                          ],
+                          "source": "(3, 'cc')"
+                        },
+                        {
+                          "kind": "tupleLiteral",
+                          "elements": [
+                            {
+                              "kind": "literal",
+                              "type": "UInt64",
+                              "value": "4"
+                            },
+                            {
+                              "kind": "literal",
+                              "type": "String",
+                              "value": "dd"
+                            }
+                          ],
+                          "source": "(4, 'dd')"
+                        }
+                      ],
+                      "source": "[(3, 'cc'), (4, 'dd')]"
+                    }
+                  ],
+                  "source": "(1, (2, ['aa', 'bb']), [(3, 'cc'), (4, 'dd')])"
+                },
+                {
+                  "kind": "tupleLiteral",
+                  "elements": [
+                    {
+                      "kind": "literal",
+                      "type": "UInt64",
+                      "value": "5"
+                    },
+                    {
+                      "kind": "tupleLiteral",
+                      "elements": [
+                        {
+                          "kind": "literal",
+                          "type": "UInt64",
+                          "value": "6"
+                        },
+                        {
+                          "kind": "arrayLiteral",
+                          "elements": [
+                            {
+                              "kind": "literal",
+                              "type": "String",
+                              "value": "ee"
+                            },
+                            {
+                              "kind": "literal",
+                              "type": "String",
+                              "value": "ff"
+                            }
+                          ],
+                          "source": "['ee', 'ff']"
+                        }
+                      ],
+                      "source": "(6, ['ee', 'ff'])"
+                    },
+                    {
+                      "kind": "arrayLiteral",
+                      "elements": [
+                        {
+                          "kind": "tupleLiteral",
+                          "elements": [
+                            {
+                              "kind": "literal",
+                              "type": "UInt64",
+                              "value": "7"
+                            },
+                            {
+                              "kind": "literal",
+                              "type": "String",
+                              "value": "gg"
+                            }
+                          ],
+                          "source": "(7, 'gg')"
+                        },
+                        {
+                          "kind": "tupleLiteral",
+                          "elements": [
+                            {
+                              "kind": "literal",
+                              "type": "UInt64",
+                              "value": "8"
+                            },
+                            {
+                              "kind": "literal",
+                              "type": "String",
+                              "value": "hh"
+                            }
+                          ],
+                          "source": "(8, 'hh')"
+                        }
+                      ],
+                      "source": "[(7, 'gg'), (8, 'hh')]"
+                    }
+                  ],
+                  "source": "(5, (6, ['ee', 'ff']), [(7, 'gg'), (8, 'hh')])"
+                }
+              ],
+              "source": "[(1, (2, ['aa', 'bb']), [(3, 'cc'), (4, 'dd')]), (5, (6, ['ee', 'ff']), [(7, 'gg'), (8, 'hh')])]"
+            },
+            "type": "Nested(x UInt32, y Tuple(y1 UInt32, y2 Array(String)), z Nested(z1 UInt32, z2 String))",
+            "operator": true
+          },
+          "alias": "nested"
+        }
+      ],
+      "settings": [
+        {
+          "name": "engine_file_truncate_on_insert",
+          "value": {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "1"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "asterisk"
+      }
+    ],
+    "from": {
+      "kind": "tableFunctionRef",
+      "name": "file",
+      "args": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "02405_data",
+            "avro"
+          ]
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "auto"
+          ]
+        },
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "nested Nested(x UInt32, y Tuple(y1 UInt32, y2 Array(String)), z Nested(z1 UInt32, z2 String))"
+        }
+      ]
+    }
+  }
+]

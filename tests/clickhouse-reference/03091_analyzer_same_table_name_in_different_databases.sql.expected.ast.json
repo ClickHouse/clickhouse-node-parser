@@ -1,1 +1,266 @@
-{"expected":[{"type":"literal","text":"EXPLAIN","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"REPLACE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"SET","ignoreCase":true},{"type":"literal","text":"SET","ignoreCase":true},{"type":"literal","text":"SET","ignoreCase":true},{"type":"literal","text":"USE","ignoreCase":true},{"type":"literal","text":"SYSTEM","ignoreCase":true},{"type":"literal","text":"(","ignoreCase":false},{"type":"literal","text":"WITH","ignoreCase":true},{"type":"literal","text":"SELECT","ignoreCase":true},{"type":"end"}],"found":"I","location":{"start":{"offset":432,"line":8,"column":1},"end":{"offset":433,"line":8,"column":2}},"name":"SyntaxError"}
+[
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "enable_analyzer",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ],
+    "leadingComments": [
+      "-- https://github.com/ClickHouse/ClickHouse/issues/61947"
+    ]
+  },
+  {
+    "kind": "createDatabase",
+    "name": "{CLICKHOUSE_DATABASE:Identifier}"
+  },
+  {
+    "kind": "createDatabase",
+    "name": "{CLICKHOUSE_DATABASE_1:Identifier}"
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "database": "{CLICKHOUSE_DATABASE:Identifier}",
+      "table": "1-1"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "field",
+        "type": {
+          "name": "Int8"
+        }
+      }
+    ],
+    "engine": {
+      "name": "Memory"
+    }
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "database": "{CLICKHOUSE_DATABASE_1:Identifier}",
+      "table": "1-1"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "field",
+        "type": {
+          "name": "Int8"
+        }
+      }
+    ],
+    "engine": {
+      "name": "Memory"
+    }
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "database": "{CLICKHOUSE_DATABASE_1:Identifier}",
+      "table": "2-1"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "field",
+        "type": {
+          "name": "Int8"
+        }
+      }
+    ],
+    "engine": {
+      "name": "Memory"
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "database": "{CLICKHOUSE_DATABASE:Identifier}",
+        "table": "1-1"
+      }
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "asterisk"
+      }
+    ],
+    "from": {
+      "left": {
+        "kind": "tableRef",
+        "database": "{CLICKHOUSE_DATABASE:Identifier}",
+        "table": "1-1"
+      },
+      "kind": "joinExpr",
+      "joinType": "LEFT",
+      "right": {
+        "kind": "tableRef",
+        "database": "{CLICKHOUSE_DATABASE_1:Identifier}",
+        "table": "1-1"
+      },
+      "constraint": {
+        "kind": "on",
+        "expr": {
+          "kind": "binaryExpr",
+          "op": "=",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "{CLICKHOUSE_DATABASE:Identifier}",
+              "1-1",
+              "field"
+            ]
+          },
+          "right": {
+            "kind": "columnRef",
+            "parts": [
+              "{CLICKHOUSE_DATABASE_1:Identifier}",
+              "1-1",
+              "field"
+            ]
+          }
+        }
+      }
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "asterisk"
+      }
+    ],
+    "from": {
+      "kind": "subqueryFrom",
+      "query": {
+        "kind": "union",
+        "queries": [
+          {
+            "kind": "select",
+            "select": [
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "using asterisk"
+              },
+              {
+                "kind": "tupleExpansion",
+                "expr": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "{CLICKHOUSE_DATABASE:Identifier}",
+                    "1-1"
+                  ]
+                }
+              },
+              {
+                "kind": "tupleExpansion",
+                "expr": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "{CLICKHOUSE_DATABASE_1:Identifier}",
+                    "1-1"
+                  ]
+                }
+              }
+            ],
+            "from": {
+              "left": {
+                "kind": "tableRef",
+                "database": "{CLICKHOUSE_DATABASE:Identifier}",
+                "table": "1-1"
+              },
+              "kind": "joinExpr",
+              "joinType": "LEFT",
+              "right": {
+                "kind": "tableRef",
+                "database": "{CLICKHOUSE_DATABASE_1:Identifier}",
+                "table": "1-1"
+              },
+              "constraint": {
+                "kind": "using",
+                "columns": [
+                  "field"
+                ]
+              }
+            }
+          },
+          {
+            "kind": "select",
+            "select": [
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "using field name"
+              },
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "{CLICKHOUSE_DATABASE:Identifier}",
+                  "1-1",
+                  "field"
+                ]
+              },
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "{CLICKHOUSE_DATABASE_1:Identifier}",
+                  "1-1",
+                  "field"
+                ]
+              }
+            ],
+            "from": {
+              "left": {
+                "kind": "tableRef",
+                "database": "{CLICKHOUSE_DATABASE:Identifier}",
+                "table": "1-1"
+              },
+              "kind": "joinExpr",
+              "joinType": "LEFT",
+              "right": {
+                "kind": "tableRef",
+                "database": "{CLICKHOUSE_DATABASE_1:Identifier}",
+                "table": "1-1"
+              },
+              "constraint": {
+                "kind": "using",
+                "columns": [
+                  "field"
+                ]
+              }
+            }
+          }
+        ]
+      }
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "ALL"
+          ]
+        },
+        "direction": "ASC"
+      }
+    ]
+  }
+]

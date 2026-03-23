@@ -1,1 +1,37 @@
-<Parse Error>
+CREATE TABLE lwd_test_02521
+(
+    id UInt64,
+    value String,
+    event_time DateTime
+)
+ENGINE = MergeTree()
+ORDER BY id
+SETTINGS min_bytes_for_wide_part = 0, index_granularity = 8192, index_granularity_bytes = '10Mi';
+
+INSERT INTO lwd_test_02521 SELECT
+    number,
+    randomString(10),
+    now() - toIntervalMonth(2)
+FROM numbers(50000);
+
+INSERT INTO lwd_test_02521 SELECT
+    number,
+    randomString(10),
+    now()
+FROM numbers(50000);
+
+SET mutations_sync = 1;
+
+-- { echoOn }
+SELECT
+    'Rows in parts',
+    SUM(`rows`)
+FROM `system`.parts
+WHERE database = currentDatabase()
+    AND table = 'lwd_test_02521'
+    AND active;
+
+SELECT
+    'Count',
+    count()
+FROM lwd_test_02521;

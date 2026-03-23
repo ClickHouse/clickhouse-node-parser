@@ -1,1 +1,506 @@
-{"expected":[{"type":"literal","text":"EXPLAIN","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"REPLACE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"SET","ignoreCase":true},{"type":"literal","text":"SET","ignoreCase":true},{"type":"literal","text":"SET","ignoreCase":true},{"type":"literal","text":"USE","ignoreCase":true},{"type":"literal","text":"SYSTEM","ignoreCase":true},{"type":"literal","text":"(","ignoreCase":false},{"type":"literal","text":"WITH","ignoreCase":true},{"type":"literal","text":"SELECT","ignoreCase":true},{"type":"end"}],"found":"I","location":{"start":{"offset":198,"line":5,"column":1},"end":{"offset":199,"line":5,"column":2}},"name":"SyntaxError"}
+[
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "allow_deprecated_syntax_for_merge_tree",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "enum_nested_alter"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "d",
+        "type": {
+          "name": "Date"
+        },
+        "defaultKind": "DEFAULT",
+        "defaultExpr": {
+          "kind": "literal",
+          "type": "String",
+          "value": "2000-01-01"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "x",
+        "type": {
+          "name": "UInt64"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "n",
+        "type": {
+          "name": "Nested",
+          "args": [
+            {
+              "kind": "namedField",
+              "name": "a",
+              "type": {
+                "name": "String"
+              }
+            },
+            {
+              "kind": "namedField",
+              "name": "e",
+              "type": {
+                "name": "Enum8",
+                "args": [
+                  {
+                    "kind": "enumValues",
+                    "values": [
+                      {
+                        "name": "Hello",
+                        "value": "1"
+                      }
+                    ]
+                  }
+                ]
+              }
+            },
+            {
+              "kind": "namedField",
+              "name": "b",
+              "type": {
+                "name": "UInt8"
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree",
+      "args": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "d"
+          ]
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "x"
+          ]
+        },
+        {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      ]
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "enum_nested_alter"
+      }
+    },
+    "columns": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "x"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "n",
+          "e"
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "asterisk"
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "enum_nested_alter"
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "enum_nested_alter"
+      }
+    },
+    "columns": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "x"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "n",
+          "e"
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "asterisk"
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "enum_nested_alter"
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "x"
+          ]
+        },
+        "direction": "ASC"
+      }
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "enum_nested_alter"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "d",
+        "type": {
+          "name": "Date"
+        },
+        "defaultKind": "DEFAULT",
+        "defaultExpr": {
+          "kind": "literal",
+          "type": "String",
+          "value": "2000-01-01"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "x",
+        "type": {
+          "name": "UInt64"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "tasks",
+        "type": {
+          "name": "Nested",
+          "args": [
+            {
+              "kind": "namedField",
+              "name": "errcategory",
+              "type": {
+                "name": "Enum8",
+                "args": [
+                  {
+                    "kind": "enumValues",
+                    "values": [
+                      {
+                        "name": "undefined",
+                        "value": "0"
+                      },
+                      {
+                        "name": "system",
+                        "value": "1"
+                      },
+                      {
+                        "name": "generic",
+                        "value": "2"
+                      },
+                      {
+                        "name": "asio.netdb",
+                        "value": "3"
+                      },
+                      {
+                        "name": "asio.misc",
+                        "value": "4"
+                      },
+                      {
+                        "name": "asio.addrinfo",
+                        "value": "5"
+                      },
+                      {
+                        "name": "rtb.client",
+                        "value": "6"
+                      },
+                      {
+                        "name": "rtb.logic",
+                        "value": "7"
+                      },
+                      {
+                        "name": "http.status",
+                        "value": "8"
+                      }
+                    ]
+                  }
+                ]
+              }
+            },
+            {
+              "kind": "namedField",
+              "name": "status",
+              "type": {
+                "name": "Enum16",
+                "args": [
+                  {
+                    "kind": "enumValues",
+                    "values": [
+                      {
+                        "name": "hello",
+                        "value": "1"
+                      },
+                      {
+                        "name": "world",
+                        "value": "2"
+                      }
+                    ]
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree",
+      "args": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "d"
+          ]
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "x"
+          ]
+        },
+        {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      ]
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "enum_nested_alter"
+      }
+    },
+    "columns": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "x"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "tasks",
+          "errcategory"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "tasks",
+          "status"
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "enum_nested_alter"
+      }
+    },
+    "columns": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "x"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "tasks",
+          "errcategory"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "tasks",
+          "status"
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "enum_nested_alter"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "d",
+        "type": {
+          "name": "Date"
+        },
+        "defaultKind": "DEFAULT",
+        "defaultExpr": {
+          "kind": "literal",
+          "type": "String",
+          "value": "2000-01-01"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "x",
+        "type": {
+          "name": "UInt64"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "n",
+        "type": {
+          "name": "Nested",
+          "args": [
+            {
+              "kind": "namedField",
+              "name": "a",
+              "type": {
+                "name": "String"
+              }
+            },
+            {
+              "kind": "namedField",
+              "name": "e",
+              "type": {
+                "name": "Enum8",
+                "args": [
+                  {
+                    "kind": "enumValues",
+                    "values": [
+                      {
+                        "name": "Hello.world",
+                        "value": "1"
+                      }
+                    ]
+                  }
+                ]
+              }
+            },
+            {
+              "kind": "namedField",
+              "name": "b",
+              "type": {
+                "name": "UInt8"
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree",
+      "args": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "d"
+          ]
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "x"
+          ]
+        },
+        {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      ]
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "enum_nested_alter"
+      }
+    },
+    "columns": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "x"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "n",
+          "e"
+        ]
+      }
+    ]
+  }
+]

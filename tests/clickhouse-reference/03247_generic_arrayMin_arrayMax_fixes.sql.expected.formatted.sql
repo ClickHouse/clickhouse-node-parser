@@ -1,1 +1,43 @@
-<Parse Error>
+-- { echoOn }
+-- https://github.com/ClickHouse/ClickHouse/issues/68895
+SELECT arrayMax(x -> toFixedString('.', 1), []);
+
+-- https://github.com/ClickHouse/ClickHouse/issues/69600
+SELECT arrayMax(x -> (negate(x)), [1, 2, 4]) AS res;
+
+SELECT arrayMax(x -> toUInt16(negate(x)), [1, 2, 4]) AS res;
+
+-- https://github.com/ClickHouse/ClickHouse/pull/69640
+SELECT arrayMin(x1 -> (x1 * toNullable(-1)), materialize([1, 2, 3]));
+
+SELECT arrayMin(x1 -> x1 * -1, [1,2,3]);
+
+CREATE TABLE test_aggregation_array
+(
+    x Array(Int)
+)
+ENGINE = MergeTree()
+ORDER BY tuple();
+
+INSERT INTO test_aggregation_array;
+
+SELECT
+    [arrayMin(x1 -> (x1 * materialize(-1)), [toNullable(toUInt256(0)), materialize(4)])],
+    arrayMin([arrayMin([0])])
+FROM test_aggregation_array
+GROUP BY
+    arrayAvg([1]),
+    [0, toUInt256(8)]
+WITH CUBE
+SETTINGS enable_analyzer = 1;
+
+SELECT
+    [arrayMin([3, arrayMin([toUInt128(8)]), 4, 5]), arrayMax([materialize(1)]), arrayMin([arrayMax([1]), 2]), 2],
+    arrayMin([0, toLowCardinality(8)]),
+    2,
+    arrayMax(x1 -> (x1 * -1), x)
+FROM test_aggregation_array;
+
+SELECT arrayMax(x -> x.1, [(1, 'a'), (0, 'b')]);
+
+SELECT arrayMin(x -> x.2, [(1, 'a'), (0, 'b')]);

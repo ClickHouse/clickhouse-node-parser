@@ -1,1 +1,265 @@
-<Parse Error>
+CREATE TABLE test_tab
+(
+    id UInt32,
+    haystack String,
+    needle String,
+    replacement String
+)
+ENGINE = MergeTree()
+ORDER BY id;
+
+INSERT INTO test_tab;
+
+SELECT
+    id,
+    haystack,
+    needle,
+    'x',
+    replaceAll(haystack, needle, 'x')
+FROM test_tab
+ORDER BY id ASC;
+
+SELECT
+    id,
+    haystack,
+    needle,
+    'x',
+    replaceAll('Hello World', needle, 'x')
+FROM test_tab
+ORDER BY id ASC;
+
+SELECT
+    id,
+    haystack,
+    'l',
+    replacement,
+    replaceAll(haystack, 'l', replacement)
+FROM test_tab
+ORDER BY id ASC;
+
+SELECT
+    id,
+    haystack,
+    'l',
+    replacement,
+    replaceAll('Hello World', 'l', replacement)
+FROM test_tab
+ORDER BY id ASC;
+
+SELECT
+    id,
+    haystack,
+    needle,
+    replacement,
+    replaceAll(haystack, needle, replacement)
+FROM test_tab
+ORDER BY id ASC;
+
+SELECT
+    id,
+    haystack,
+    needle,
+    replacement,
+    replaceAll('Hello World', needle, replacement)
+FROM test_tab
+ORDER BY id ASC;
+
+SELECT
+    id,
+    haystack,
+    needle,
+    'x',
+    replaceOne(haystack, needle, 'x')
+FROM test_tab
+ORDER BY id ASC;
+
+SELECT
+    id,
+    haystack,
+    needle,
+    'x',
+    replaceOne('Hello World', needle, 'x')
+FROM test_tab
+ORDER BY id ASC;
+
+SELECT
+    id,
+    haystack,
+    'l',
+    replacement,
+    replaceOne(haystack, 'l', replacement)
+FROM test_tab
+ORDER BY id ASC;
+
+SELECT
+    id,
+    haystack,
+    'l',
+    replacement,
+    replaceOne('Hello World', 'l', replacement)
+FROM test_tab
+ORDER BY id ASC;
+
+SELECT
+    id,
+    haystack,
+    needle,
+    replacement,
+    replaceOne(haystack, needle, replacement)
+FROM test_tab
+ORDER BY id ASC;
+
+SELECT
+    id,
+    haystack,
+    needle,
+    replacement,
+    replaceOne('Hello World', needle, replacement)
+FROM test_tab
+ORDER BY id ASC;
+
+SELECT
+    id,
+    haystack,
+    needle,
+    'x',
+    replaceRegexpAll(haystack, needle, 'x')
+FROM test_tab
+ORDER BY id ASC;
+
+SELECT
+    id,
+    haystack,
+    needle,
+    'x',
+    replaceRegexpAll('Hello World', needle, 'x')
+FROM test_tab
+ORDER BY id ASC;
+
+SELECT
+    id,
+    haystack,
+    'l',
+    replacement,
+    replaceRegexpAll(haystack, 'l', replacement)
+FROM test_tab
+ORDER BY id ASC;
+
+SELECT
+    id,
+    haystack,
+    'l',
+    replacement,
+    replaceRegexpAll('Hello World', 'l', replacement)
+FROM test_tab
+ORDER BY id ASC;
+
+SELECT
+    id,
+    haystack,
+    needle,
+    replacement,
+    replaceRegexpAll(haystack, needle, replacement)
+FROM test_tab
+ORDER BY id ASC;
+
+SELECT
+    id,
+    haystack,
+    needle,
+    replacement,
+    replaceRegexpAll('Hello World', needle, replacement)
+FROM test_tab
+ORDER BY id ASC;
+
+SELECT
+    id,
+    haystack,
+    needle,
+    'x',
+    replaceRegexpOne(haystack, needle, 'x')
+FROM test_tab
+ORDER BY id ASC;
+
+SELECT
+    id,
+    haystack,
+    needle,
+    'x',
+    replaceRegexpOne('Hello World', needle, 'x')
+FROM test_tab
+ORDER BY id ASC;
+
+SELECT
+    id,
+    haystack,
+    'l',
+    replacement,
+    replaceRegexpOne(haystack, 'l', replacement)
+FROM test_tab
+ORDER BY id ASC;
+
+SELECT
+    id,
+    haystack,
+    'l',
+    replacement,
+    replaceRegexpOne('Hello World', 'l', replacement)
+FROM test_tab
+ORDER BY id ASC;
+
+SELECT
+    id,
+    haystack,
+    needle,
+    replacement,
+    replaceRegexpOne(haystack, needle, replacement)
+FROM test_tab
+ORDER BY id ASC;
+
+SELECT
+    id,
+    haystack,
+    needle,
+    replacement,
+    replaceRegexpOne('Hello World', needle, replacement)
+FROM test_tab
+ORDER BY id ASC;
+
+INSERT INTO test_tab;
+
+SELECT replaceAll(haystack, needle, 'x')
+FROM test_tab;
+
+SELECT replaceOne(haystack, needle, 'x')
+FROM test_tab;
+
+SELECT replaceRegexpAll(haystack, needle, 'x')
+FROM test_tab;
+
+SELECT replaceRegexpOne(haystack, needle, 'x')
+FROM test_tab;
+
+SELECT replaceAll(haystack, '', replacement)
+FROM test_tab;
+
+SELECT replaceOne(haystack, '', replacement)
+FROM test_tab;
+
+SELECT replaceRegexpAll(haystack, '', replacement)
+FROM test_tab;
+
+SELECT replaceRegexpOne(haystack, '', replacement)
+FROM test_tab;
+
+SELECT replaceAll(haystack, needle, replacement)
+FROM test_tab;
+
+SELECT replaceOne(haystack, needle, replacement)
+FROM test_tab;
+
+SELECT replaceRegexpAll(haystack, needle, replacement)
+FROM test_tab;
+
+SELECT replaceRegexpOne(haystack, needle, replacement)
+FROM test_tab;

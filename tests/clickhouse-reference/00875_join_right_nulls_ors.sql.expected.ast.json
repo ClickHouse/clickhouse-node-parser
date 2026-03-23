@@ -1,1 +1,1054 @@
-{"expected":[{"type":"literal","text":"EXPLAIN","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"REPLACE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"SET","ignoreCase":true},{"type":"literal","text":"SET","ignoreCase":true},{"type":"literal","text":"SET","ignoreCase":true},{"type":"literal","text":"USE","ignoreCase":true},{"type":"literal","text":"SYSTEM","ignoreCase":true},{"type":"literal","text":"(","ignoreCase":false},{"type":"literal","text":"WITH","ignoreCase":true},{"type":"literal","text":"SELECT","ignoreCase":true},{"type":"end"}],"found":"I","location":{"start":{"offset":233,"line":4,"column":1},"end":{"offset":234,"line":4,"column":2}},"name":"SyntaxError"}
+[
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "t"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "x",
+        "type": {
+          "name": "String"
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "functionCall",
+          "name": "tuple",
+          "args": []
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "nt"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "x",
+        "type": {
+          "name": "Nullable",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "String"
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "functionCall",
+          "name": "tuple",
+          "args": []
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "ntxy"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "x",
+        "type": {
+          "name": "Nullable",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "String"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "y",
+        "type": {
+          "name": "Nullable",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "String"
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "functionCall",
+          "name": "tuple",
+          "args": []
+        }
+      }
+    ]
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "t"
+      }
+    },
+    "columns": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "x"
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "nt"
+      }
+    },
+    "columns": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "x"
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "ntxy"
+      }
+    },
+    "columns": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "x"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "y"
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "join_use_nulls",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "literal",
+        "type": "String",
+        "value": "n rj n"
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "t1",
+          "x"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "t2",
+          "x"
+        ]
+      }
+    ],
+    "from": {
+      "left": {
+        "kind": "tableRef",
+        "table": "nt",
+        "alias": "t1"
+      },
+      "kind": "joinExpr",
+      "joinType": "RIGHT",
+      "right": {
+        "kind": "tableRef",
+        "table": "ntxy",
+        "alias": "t2"
+      },
+      "constraint": {
+        "kind": "on",
+        "expr": {
+          "kind": "naryExpr",
+          "op": "OR",
+          "operands": [
+            {
+              "kind": "binaryExpr",
+              "op": "=",
+              "left": {
+                "kind": "columnRef",
+                "parts": [
+                  "t1",
+                  "x"
+                ]
+              },
+              "right": {
+                "kind": "columnRef",
+                "parts": [
+                  "t2",
+                  "x"
+                ]
+              }
+            },
+            {
+              "kind": "binaryExpr",
+              "op": "=",
+              "left": {
+                "kind": "columnRef",
+                "parts": [
+                  "t1",
+                  "x"
+                ]
+              },
+              "right": {
+                "kind": "columnRef",
+                "parts": [
+                  "t2",
+                  "y"
+                ]
+              }
+            }
+          ]
+        }
+      }
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "t1",
+            "x"
+          ]
+        },
+        "direction": "ASC"
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "literal",
+        "type": "String",
+        "value": "n a rj n"
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "t1",
+          "x"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "t2",
+          "x"
+        ]
+      }
+    ],
+    "from": {
+      "left": {
+        "kind": "tableRef",
+        "table": "nt",
+        "alias": "t1"
+      },
+      "kind": "joinExpr",
+      "joinType": "RIGHT",
+      "right": {
+        "kind": "tableRef",
+        "table": "ntxy",
+        "alias": "t2"
+      },
+      "constraint": {
+        "kind": "on",
+        "expr": {
+          "kind": "naryExpr",
+          "op": "OR",
+          "operands": [
+            {
+              "kind": "binaryExpr",
+              "op": "=",
+              "left": {
+                "kind": "columnRef",
+                "parts": [
+                  "t1",
+                  "x"
+                ]
+              },
+              "right": {
+                "kind": "columnRef",
+                "parts": [
+                  "t2",
+                  "x"
+                ]
+              }
+            },
+            {
+              "kind": "binaryExpr",
+              "op": "=",
+              "left": {
+                "kind": "columnRef",
+                "parts": [
+                  "t1",
+                  "x"
+                ]
+              },
+              "right": {
+                "kind": "columnRef",
+                "parts": [
+                  "t2",
+                  "y"
+                ]
+              }
+            }
+          ]
+        }
+      }
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "t1",
+            "x"
+          ]
+        },
+        "direction": "ASC"
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "literal",
+        "type": "String",
+        "value": "n fj n"
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "t1",
+          "x"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "t2",
+          "x"
+        ]
+      }
+    ],
+    "from": {
+      "left": {
+        "kind": "tableRef",
+        "table": "nt",
+        "alias": "t1"
+      },
+      "kind": "joinExpr",
+      "joinType": "FULL",
+      "right": {
+        "kind": "tableRef",
+        "table": "ntxy",
+        "alias": "t2"
+      },
+      "constraint": {
+        "kind": "on",
+        "expr": {
+          "kind": "naryExpr",
+          "op": "OR",
+          "operands": [
+            {
+              "kind": "binaryExpr",
+              "op": "=",
+              "left": {
+                "kind": "columnRef",
+                "parts": [
+                  "t1",
+                  "x"
+                ]
+              },
+              "right": {
+                "kind": "columnRef",
+                "parts": [
+                  "t2",
+                  "x"
+                ]
+              }
+            },
+            {
+              "kind": "binaryExpr",
+              "op": "=",
+              "left": {
+                "kind": "columnRef",
+                "parts": [
+                  "t1",
+                  "x"
+                ]
+              },
+              "right": {
+                "kind": "columnRef",
+                "parts": [
+                  "t2",
+                  "y"
+                ]
+              }
+            }
+          ]
+        }
+      }
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "t1",
+            "x"
+          ]
+        },
+        "direction": "ASC"
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "literal",
+        "type": "String",
+        "value": "t rj n"
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "t1",
+          "x"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "t2",
+          "x"
+        ]
+      }
+    ],
+    "from": {
+      "left": {
+        "kind": "tableRef",
+        "table": "t",
+        "alias": "t1"
+      },
+      "kind": "joinExpr",
+      "joinType": "RIGHT",
+      "right": {
+        "kind": "tableRef",
+        "table": "ntxy",
+        "alias": "t2"
+      },
+      "constraint": {
+        "kind": "on",
+        "expr": {
+          "kind": "naryExpr",
+          "op": "OR",
+          "operands": [
+            {
+              "kind": "binaryExpr",
+              "op": "=",
+              "left": {
+                "kind": "columnRef",
+                "parts": [
+                  "t1",
+                  "x"
+                ]
+              },
+              "right": {
+                "kind": "columnRef",
+                "parts": [
+                  "t2",
+                  "x"
+                ]
+              }
+            },
+            {
+              "kind": "binaryExpr",
+              "op": "=",
+              "left": {
+                "kind": "columnRef",
+                "parts": [
+                  "t1",
+                  "x"
+                ]
+              },
+              "right": {
+                "kind": "columnRef",
+                "parts": [
+                  "t2",
+                  "y"
+                ]
+              }
+            }
+          ]
+        }
+      }
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "t1",
+            "x"
+          ]
+        },
+        "direction": "ASC"
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "literal",
+        "type": "String",
+        "value": "t fj n"
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "t1",
+          "x"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "t2",
+          "x"
+        ]
+      }
+    ],
+    "from": {
+      "left": {
+        "kind": "tableRef",
+        "table": "t",
+        "alias": "t1"
+      },
+      "kind": "joinExpr",
+      "joinType": "FULL",
+      "right": {
+        "kind": "tableRef",
+        "table": "ntxy",
+        "alias": "t2"
+      },
+      "constraint": {
+        "kind": "on",
+        "expr": {
+          "kind": "naryExpr",
+          "op": "OR",
+          "operands": [
+            {
+              "kind": "binaryExpr",
+              "op": "=",
+              "left": {
+                "kind": "columnRef",
+                "parts": [
+                  "t1",
+                  "x"
+                ]
+              },
+              "right": {
+                "kind": "columnRef",
+                "parts": [
+                  "t2",
+                  "x"
+                ]
+              }
+            },
+            {
+              "kind": "binaryExpr",
+              "op": "=",
+              "left": {
+                "kind": "columnRef",
+                "parts": [
+                  "t1",
+                  "x"
+                ]
+              },
+              "right": {
+                "kind": "columnRef",
+                "parts": [
+                  "t2",
+                  "y"
+                ]
+              }
+            }
+          ]
+        }
+      }
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "t1",
+            "x"
+          ]
+        },
+        "direction": "ASC"
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "literal",
+        "type": "String",
+        "value": "n rj t"
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "t1",
+          "x"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "t2",
+          "x"
+        ]
+      }
+    ],
+    "from": {
+      "left": {
+        "kind": "tableRef",
+        "table": "ntxy",
+        "alias": "t1"
+      },
+      "kind": "joinExpr",
+      "joinType": "RIGHT",
+      "right": {
+        "kind": "tableRef",
+        "table": "t",
+        "alias": "t2"
+      },
+      "constraint": {
+        "kind": "on",
+        "expr": {
+          "kind": "naryExpr",
+          "op": "OR",
+          "operands": [
+            {
+              "kind": "binaryExpr",
+              "op": "=",
+              "left": {
+                "kind": "columnRef",
+                "parts": [
+                  "t1",
+                  "x"
+                ]
+              },
+              "right": {
+                "kind": "columnRef",
+                "parts": [
+                  "t2",
+                  "x"
+                ]
+              }
+            },
+            {
+              "kind": "binaryExpr",
+              "op": "=",
+              "left": {
+                "kind": "columnRef",
+                "parts": [
+                  "t1",
+                  "y"
+                ]
+              },
+              "right": {
+                "kind": "columnRef",
+                "parts": [
+                  "t2",
+                  "x"
+                ]
+              }
+            }
+          ]
+        }
+      }
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "t1",
+            "x"
+          ]
+        },
+        "direction": "ASC"
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "literal",
+        "type": "String",
+        "value": "n a rj t"
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "t1",
+          "x"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "t2",
+          "x"
+        ]
+      }
+    ],
+    "from": {
+      "left": {
+        "kind": "tableRef",
+        "table": "ntxy",
+        "alias": "t1"
+      },
+      "kind": "joinExpr",
+      "joinType": "RIGHT",
+      "right": {
+        "kind": "tableRef",
+        "table": "t",
+        "alias": "t2"
+      },
+      "constraint": {
+        "kind": "on",
+        "expr": {
+          "kind": "naryExpr",
+          "op": "OR",
+          "operands": [
+            {
+              "kind": "binaryExpr",
+              "op": "=",
+              "left": {
+                "kind": "columnRef",
+                "parts": [
+                  "t1",
+                  "x"
+                ]
+              },
+              "right": {
+                "kind": "columnRef",
+                "parts": [
+                  "t2",
+                  "x"
+                ]
+              }
+            },
+            {
+              "kind": "binaryExpr",
+              "op": "=",
+              "left": {
+                "kind": "columnRef",
+                "parts": [
+                  "t1",
+                  "y"
+                ]
+              },
+              "right": {
+                "kind": "columnRef",
+                "parts": [
+                  "t2",
+                  "x"
+                ]
+              }
+            }
+          ]
+        }
+      }
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "t1",
+            "x"
+          ]
+        },
+        "direction": "ASC"
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "literal",
+        "type": "String",
+        "value": "n fj t"
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "t1",
+          "x"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "t2",
+          "x"
+        ]
+      }
+    ],
+    "from": {
+      "left": {
+        "kind": "tableRef",
+        "table": "ntxy",
+        "alias": "t1"
+      },
+      "kind": "joinExpr",
+      "joinType": "FULL",
+      "right": {
+        "kind": "tableRef",
+        "table": "t",
+        "alias": "t2"
+      },
+      "constraint": {
+        "kind": "on",
+        "expr": {
+          "kind": "naryExpr",
+          "op": "OR",
+          "operands": [
+            {
+              "kind": "binaryExpr",
+              "op": "=",
+              "left": {
+                "kind": "columnRef",
+                "parts": [
+                  "t1",
+                  "x"
+                ]
+              },
+              "right": {
+                "kind": "columnRef",
+                "parts": [
+                  "t2",
+                  "x"
+                ]
+              }
+            },
+            {
+              "kind": "binaryExpr",
+              "op": "=",
+              "left": {
+                "kind": "columnRef",
+                "parts": [
+                  "t2",
+                  "x"
+                ]
+              },
+              "right": {
+                "kind": "columnRef",
+                "parts": [
+                  "t1",
+                  "y"
+                ]
+              }
+            }
+          ]
+        }
+      }
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "t1",
+            "x"
+          ]
+        },
+        "direction": "ASC"
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "literal",
+        "type": "String",
+        "value": "n fj t"
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "t1",
+          "x"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "t2",
+          "x"
+        ]
+      }
+    ],
+    "from": {
+      "left": {
+        "kind": "tableRef",
+        "table": "ntxy",
+        "alias": "t1"
+      },
+      "kind": "joinExpr",
+      "joinType": "FULL",
+      "right": {
+        "kind": "tableRef",
+        "table": "t",
+        "alias": "t2"
+      },
+      "constraint": {
+        "kind": "on",
+        "expr": {
+          "kind": "naryExpr",
+          "op": "OR",
+          "operands": [
+            {
+              "kind": "binaryExpr",
+              "op": "=",
+              "left": {
+                "kind": "columnRef",
+                "parts": [
+                  "t2",
+                  "x"
+                ]
+              },
+              "right": {
+                "kind": "columnRef",
+                "parts": [
+                  "t1",
+                  "y"
+                ]
+              }
+            },
+            {
+              "kind": "binaryExpr",
+              "op": "=",
+              "left": {
+                "kind": "columnRef",
+                "parts": [
+                  "t1",
+                  "x"
+                ]
+              },
+              "right": {
+                "kind": "columnRef",
+                "parts": [
+                  "t2",
+                  "x"
+                ]
+              }
+            }
+          ]
+        }
+      }
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "t1",
+            "x"
+          ]
+        },
+        "direction": "ASC"
+      }
+    ]
+  }
+]

@@ -1,1 +1,157 @@
-{"expected":[{"type":"literal","text":"EXPLAIN","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"REPLACE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"SET","ignoreCase":true},{"type":"literal","text":"SET","ignoreCase":true},{"type":"literal","text":"SET","ignoreCase":true},{"type":"literal","text":"USE","ignoreCase":true},{"type":"literal","text":"SYSTEM","ignoreCase":true},{"type":"literal","text":"(","ignoreCase":false},{"type":"literal","text":"WITH","ignoreCase":true},{"type":"literal","text":"SELECT","ignoreCase":true},{"type":"end"}],"found":"I","location":{"start":{"offset":544,"line":12,"column":1},"end":{"offset":545,"line":12,"column":2}},"name":"SyntaxError"}
+[
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "use_query_cache",
+        "value": {
+          "kind": "literal",
+          "type": "Bool",
+          "value": "1"
+        }
+      }
+    ],
+    "leadingComments": [
+      "-- enable query cache session-wide but also force it individually in each of below statements"
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "query_cache_system_table_handling",
+        "value": {
+          "kind": "literal",
+          "type": "String",
+          "value": "save"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "literal",
+        "type": "UInt64",
+        "value": "1"
+      }
+    ],
+    "settings": [
+      {
+        "name": "use_query_cache",
+        "value": {
+          "kind": "literal",
+          "type": "Bool",
+          "value": "1"
+        }
+      }
+    ],
+    "leadingComments": [
+      "-- check that SELECT statements create entries in the query cache ..."
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "COUNT",
+        "args": [
+          {
+            "kind": "asterisk"
+          }
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "database": "system",
+      "table": "query_cache"
+    }
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "eligible_test"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "a",
+        "type": {
+          "name": "String"
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "a"
+          ]
+        }
+      }
+    ],
+    "leadingComments": [
+      "-- ... and all other statements also should not create entries:",
+      "-- CREATE"
+    ],
+    "trailingComments": [
+      "--  SETTINGS use_query_cache = true; -- SETTINGS rejected as unknown"
+    ]
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "eligible_test"
+      }
+    },
+    "leadingComments": [
+      "-- INSERT"
+    ],
+    "trailingComments": [
+      "-- SETTINGS use_query_cache = true; -- SETTINGS rejected as unknown"
+    ]
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "eligible_test"
+      }
+    },
+    "selectQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "asterisk"
+        }
+      ],
+      "from": {
+        "kind": "tableRef",
+        "table": "eligible_test"
+      },
+      "settings": [
+        {
+          "name": "use_query_cache",
+          "value": {
+            "kind": "literal",
+            "type": "Bool",
+            "value": "1"
+          }
+        }
+      ]
+    }
+  }
+]

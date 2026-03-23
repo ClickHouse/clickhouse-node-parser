@@ -1,1 +1,93 @@
-<Parse Error>
+SELECT toBool(sin(SUM(number))) AS x
+FROM (
+        SELECT 1 AS number
+    )
+GROUP BY number
+HAVING 1
+    AND sin(sum(number))
+ORDER BY `ALL` ASC
+SETTINGS enable_optimize_predicate_expression = 0;
+
+SELECT toBool(sin(SUM(number))) AS x
+FROM (
+        SELECT 1 AS number
+    )
+GROUP BY number
+HAVING 1
+    AND sin(1)
+ORDER BY `ALL` ASC
+SETTINGS enable_optimize_predicate_expression = 0;
+
+SELECT toBool(sin(SUM(number))) AS x
+FROM (
+        SELECT 1 AS number
+    )
+GROUP BY number
+HAVING x
+    AND sin(sum(number))
+ORDER BY `ALL` ASC
+SETTINGS enable_optimize_predicate_expression = 1;
+
+SELECT 1
+    AND sin(1);
+
+SET enable_analyzer = 1;
+
+SELECT toBool(sin(SUM(number))) AS x
+FROM (
+        SELECT 1 AS number
+    )
+GROUP BY number
+HAVING 1
+    AND sin(sum(number))
+ORDER BY `ALL` ASC
+SETTINGS enable_optimize_predicate_expression = 1;
+
+CREATE TABLE t2
+(
+    c0 Int32
+)
+ENGINE = MergeTree
+ORDER BY c0;
+
+INSERT INTO t2;
+
+SELECT
+    MAX(`left`.c0),
+    min2(`left`.c0, negate((negate(`left`.c0))) * ((radians(`left`.c0) - radians(`left`.c0)))) AS g,
+    ((isNotNull((isNotNull(-1925024212)))) != radians(tan(1216286224)))
+    AND cos(lcm(MAX(`left`.c0), -1966575216)
+    OR (MAX(`left`.c0) * 1180517420)) AS h,
+    NOT h,
+    isNull(h)
+FROM t2 AS `left`
+GROUP BY g
+ORDER BY g DESC;
+
+SELECT
+    MAX(`left`.c0),
+    min2(`left`.c0, negate((negate(`left`.c0))) * ((radians(`left`.c0) - radians(`left`.c0)))) AS g,
+    ((isNotNull((isNotNull(-1925024212)))) != radians(tan(1216286224)))
+    AND cos(lcm(MAX(`left`.c0), -1966575216)
+    OR (MAX(`left`.c0) * 1180517420)) AS h,
+    NOT h,
+    isNull(h)
+FROM t2 AS `left`
+GROUP BY g
+HAVING h
+ORDER BY g DESC
+SETTINGS enable_optimize_predicate_expression = 0;
+
+SELECT
+    MAX(`left`.c0),
+    min2(`left`.c0, negate((negate(`left`.c0))) * ((radians(`left`.c0) - radians(`left`.c0)))) AS g,
+    ((isNotNull((isNotNull(-1925024212)))) != radians(tan(1216286224)))
+    AND cos(lcm(MAX(`left`.c0), -1966575216)
+    OR (MAX(`left`.c0) * 1180517420)) AS h,
+    NOT h,
+    isNull(h)
+FROM t2 AS `left`
+GROUP BY g
+HAVING h
+ORDER BY g DESC
+SETTINGS enable_optimize_predicate_expression = 1;

@@ -1,1 +1,144 @@
-{"expected":[{"type":"literal","text":"EXPLAIN","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"REPLACE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"SET","ignoreCase":true},{"type":"literal","text":"SET","ignoreCase":true},{"type":"literal","text":"SET","ignoreCase":true},{"type":"literal","text":"USE","ignoreCase":true},{"type":"literal","text":"SYSTEM","ignoreCase":true},{"type":"literal","text":"(","ignoreCase":false},{"type":"literal","text":"WITH","ignoreCase":true},{"type":"literal","text":"SELECT","ignoreCase":true},{"type":"end"}],"found":"i","location":{"start":{"offset":460,"line":5,"column":1},"end":{"offset":461,"line":5,"column":2}},"name":"SyntaxError"}
+[
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "t"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "s",
+        "type": {
+          "name": "LowCardinality",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "String"
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "functionCall",
+          "name": "tuple",
+          "args": []
+        }
+      }
+    ],
+    "settings": [
+      {
+        "name": "min_bytes_for_wide_part",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      },
+      {
+        "name": "min_rows_for_wide_part",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      }
+    ],
+    "settingsAfterOrderBy": true
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "t"
+      }
+    },
+    "selectQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "alias",
+          "expr": {
+            "kind": "functionCall",
+            "name": "concat",
+            "args": [
+              {
+                "kind": "functionCall",
+                "name": "repeat",
+                "args": [
+                  {
+                    "kind": "literal",
+                    "type": "String",
+                    "value": "x"
+                  },
+                  {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "1000"
+                  }
+                ]
+              },
+              {
+                "kind": "functionCall",
+                "name": "toString",
+                "args": [
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "number"
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          "alias": "s"
+        }
+      ],
+      "from": {
+        "kind": "tableFunctionRef",
+        "name": "numbers_mt",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "Float64",
+            "value": "5e6"
+          }
+        ]
+      },
+      "settings": [
+        {
+          "name": "max_insert_threads",
+          "value": {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "16"
+          }
+        },
+        {
+          "name": "max_memory_usage",
+          "value": {
+            "kind": "literal",
+            "type": "String",
+            "value": "15Gi"
+          }
+        }
+      ]
+    },
+    "leadingComments": [
+      "-- The problem was that we didn't account for dictionary size in `ColumnLowCardinality::byteSize()`.",
+      "-- Because of that we tend to accumulate too many blocks in `SimpleSquashingChunksTransform`.",
+      "-- To reproduce we need a column with heavy dictionaries and ideally nothing else consuming significant amount of memory."
+    ]
+  }
+]

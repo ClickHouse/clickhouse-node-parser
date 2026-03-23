@@ -1,1 +1,22 @@
-<Parse Error>
+SET allow_deprecated_syntax_for_merge_tree = 1;
+
+CREATE TABLE `prewhere`
+(
+    d Date,
+    a String,
+    b String
+)
+ENGINE = MergeTree(d, d, 8192);
+
+INSERT INTO `prewhere`;
+
+INSERT INTO `prewhere`;
+
+SELECT
+    d,
+    a,
+    a1,
+    b
+FROM `prewhere`
+PREWHERE like(a, 'hello%')
+ORDER BY a1 ASC;

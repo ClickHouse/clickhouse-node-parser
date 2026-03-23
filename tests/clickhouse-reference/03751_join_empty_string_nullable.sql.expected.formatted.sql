@@ -1,1 +1,64 @@
-<Parse Error>
+-- Case 1: Nullable(String) key column with INNER JOIN
+CREATE TABLE t_join_nullable_string
+(
+    c0 Nullable(String)
+)
+ENGINE = Join(`ALL`, `INNER`, c0);
+
+INSERT INTO t_join_nullable_string (c0);
+
+SELECT
+    c0,
+    isNull(c0) AS is_null
+FROM t_join_nullable_string;
+
+-- Case 2: Nullable(String) key column with LEFT JOIN (NULL keys are not stored in join tables)
+CREATE TABLE t_join_nullable_string
+(
+    c0 Nullable(String)
+)
+ENGINE = Join(`ALL`, `LEFT`, c0);
+
+INSERT INTO t_join_nullable_string (c0);
+
+SELECT
+    c0,
+    isNull(c0) AS is_null
+FROM t_join_nullable_string
+ORDER BY c0 ASC;
+
+-- Case 3: ANY strictness
+CREATE TABLE t_join_nullable_string
+(
+    c0 Nullable(String)
+)
+ENGINE = Join(`ANY`, `LEFT`, c0);
+
+-- Case 4: Multiple empty strings (should deduplicate for ANY)
+CREATE TABLE t_join_nullable_string
+(
+    c0 Nullable(String),
+    val UInt64
+)
+ENGINE = Join(`ANY`, `LEFT`, c0);
+
+INSERT INTO t_join_nullable_string (c0, val);
+
+SELECT
+    c0,
+    val
+FROM t_join_nullable_string;
+
+-- Case 5: Multiple empty strings with ALL strictness (should keep all)
+CREATE TABLE t_join_nullable_string
+(
+    c0 Nullable(String),
+    val UInt64
+)
+ENGINE = Join(`ALL`, `LEFT`, c0);
+
+SELECT
+    c0,
+    val
+FROM t_join_nullable_string
+ORDER BY val ASC;

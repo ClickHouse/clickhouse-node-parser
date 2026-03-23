@@ -17,6 +17,7 @@ import {
   FunctionCall,
   FromExpr,
   HostItem,
+  InsertStatement,
   IntersectStatement,
   InterpolateItem,
   JoinConstraint,
@@ -272,6 +273,16 @@ export function formatNode(node: ASTNode, indent: string = ''): string {
     // Non-expression node types without dedicated formatters
     case 'orderByItem':
       return formatOrderByItem(node, indent);
+    // Statement nodes that can appear as ASTNode
+    case 'insert':
+      return formatInsertStatement(node, indent);
+    case 'truncate': {
+      const t = node.table;
+      const tn = t.database
+        ? `${quoteIdent(t.database)}.${quoteIdent(t.table)}`
+        : quoteIdent(t.table);
+      return `${indent}TRUNCATE TABLE ${tn}`;
+    }
     // CTE nodes — format inline
     case 'cteSubquery':
       return `${quoteIdent(node.name)} AS (\n${formatStatement(node.query, indent + '  ')}\n${indent})`;
@@ -371,6 +382,16 @@ function formatStatement(stmt: Statement, indent: string): string {
   }
   if (stmt.kind === 'system') {
     return formatSystemStatement(stmt, indent);
+  }
+  if (stmt.kind === 'insert') {
+    return formatInsertStatement(stmt, indent);
+  }
+  if (stmt.kind === 'truncate') {
+    const t = stmt.table;
+    const name = t.database
+      ? `${quoteIdent(t.database)}.${quoteIdent(t.table)}`
+      : quoteIdent(t.table);
+    return `${indent}TRUNCATE TABLE ${name}`;
   }
   if (stmt.kind === 'parallelWith') {
     return stmt.queries.map((q) => formatStatement(q, indent)).join(`\nPARALLEL WITH\n`);
@@ -503,6 +524,38 @@ function formatUseStatement(stmt: UseStatement, indent: string): string {
 
 function formatSystemStatement(stmt: SystemStatement, indent: string): string {
   return `${indent}SYSTEM ${stmt.body}`;
+}
+
+function formatInsertStatement(stmt: InsertStatement, indent: string): string {
+  const parts: string[] = [`${indent}INSERT INTO`];
+  if (stmt.target.kind === 'function') {
+    const f = stmt.target.func;
+    const args = f.args.map((a) => formatExpr(a, indent)).join(', ');
+    parts.push(`FUNCTION ${f.name}(${args})`);
+  } else {
+    const t = stmt.target.table;
+    parts.push(
+      t.database ? `${quoteIdent(t.database)}.${quoteIdent(t.table)}` : quoteIdent(t.table),
+    );
+  }
+  if (stmt.partitionBy) {
+    parts.push(`PARTITION BY ${formatExpr(stmt.partitionBy, indent)}`);
+  }
+  if (stmt.columns && stmt.columns.length > 0) {
+    parts.push(`(${stmt.columns.map((c) => formatExpr(c, indent)).join(', ')})`);
+  }
+  if (stmt.insertSettings && stmt.insertSettings.length > 0) {
+    parts.push(`SETTINGS ${formatSettingsList(stmt.insertSettings, indent)}`);
+  }
+  if (stmt.selectQuery) {
+    const formatted = formatStatement(stmt.selectQuery, '');
+    if (stmt.selectQuery.kind === 'select' && stmt.selectQuery.parenthesized) {
+      parts.push(`(${formatted})`);
+    } else {
+      parts.push(formatted);
+    }
+  }
+  return parts.join(' ');
 }
 
 function formatCreateStatement(
@@ -1174,7 +1227,11 @@ function formatUnionStatement(stmt: UnionStatement, indent: string): string {
   const mode = stmt.unionMode === 'DISTINCT' ? 'UNION DISTINCT' : 'UNION ALL';
   let result = stmt.queries
     .map((q) => {
-      const s = formatStatement(q, indent);
+      let s = formatStatement(q, indent);
+      // Prepend leading comments on union members
+      if (q.leadingComments && q.leadingComments.length > 0) {
+        s = q.leadingComments.join('\n') + '\n' + s;
+      }
       // Wrap nested unions/intersects in parentheses to preserve nesting structure
       if (q.kind === 'union' || q.kind === 'intersect') return `(${s})`;
       if (q.kind === 'select' && q.parenthesized) return `(${s})`;

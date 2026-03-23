@@ -1,1 +1,32 @@
-<Parse Error>
+-- Tags: no-parallel-replicas
+SELECT '--------';
+
+SELECT
+    arrayJoin([0, 1, 3, NULL]) AS x,
+    x = 0,
+    if(x = 0, 'x=0', 'x<>0')
+ORDER BY x ASC;
+
+CREATE TABLE mutation_delete_null_rows
+(
+    EventDate Date,
+    CounterID Nullable(String),
+    UserID Nullable(UInt32)
+)
+ENGINE = MergeTree()
+ORDER BY EventDate;
+
+INSERT INTO mutation_delete_null_rows;
+
+INSERT INTO mutation_delete_null_rows;
+
+SELECT
+    *,
+    UserID = 0 AS UserIDEquals0,
+    if(UserID = 0, 'delete', 'leave') AS verdict
+FROM mutation_delete_null_rows
+ORDER BY EventDate ASC;
+
+SELECT *
+FROM mutation_delete_null_rows
+ORDER BY EventDate ASC;

@@ -1,1 +1,1218 @@
-{"expected":[{"type":"literal","text":"EXPLAIN","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"REPLACE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"SET","ignoreCase":true},{"type":"literal","text":"SET","ignoreCase":true},{"type":"literal","text":"SET","ignoreCase":true},{"type":"literal","text":"USE","ignoreCase":true},{"type":"literal","text":"SYSTEM","ignoreCase":true},{"type":"literal","text":"(","ignoreCase":false},{"type":"literal","text":"WITH","ignoreCase":true},{"type":"literal","text":"SELECT","ignoreCase":true},{"type":"end"}],"found":"i","location":{"start":{"offset":133,"line":6,"column":1},"end":{"offset":134,"line":6,"column":2}},"name":"SyntaxError"}
+[
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "enable_json_type",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ],
+    "leadingComments": [
+      "-- Tags: long"
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "max_block_size",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1000"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "test"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "json",
+        "type": {
+          "name": "JSON"
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "functionCall",
+          "name": "tuple",
+          "args": []
+        }
+      }
+    ]
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "test"
+      }
+    },
+    "selectQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "functionCall",
+          "name": "multiIf",
+          "args": [
+            {
+              "kind": "binaryExpr",
+              "op": "<",
+              "left": {
+                "kind": "columnRef",
+                "parts": [
+                  "number"
+                ]
+              },
+              "right": {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "1000"
+              }
+            },
+            {
+              "kind": "castExpr",
+              "expr": {
+                "kind": "literal",
+                "type": "String",
+                "value": "{}"
+              },
+              "type": "JSON",
+              "operator": true
+            },
+            {
+              "kind": "binaryExpr",
+              "op": "<",
+              "left": {
+                "kind": "columnRef",
+                "parts": [
+                  "number"
+                ]
+              },
+              "right": {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "3000"
+              }
+            },
+            {
+              "kind": "castExpr",
+              "expr": {
+                "kind": "literal",
+                "type": "String",
+                "value": "{\"a\" : 42, \"b\" : \"Hello\"}"
+              },
+              "type": "JSON",
+              "operator": true
+            },
+            {
+              "kind": "castExpr",
+              "expr": {
+                "kind": "literal",
+                "type": "String",
+                "value": "{\"c\" : [1, 2, 3], \"d\" : \"2020-01-01\"}"
+              },
+              "type": "JSON",
+              "operator": true
+            }
+          ]
+        }
+      ],
+      "from": {
+        "kind": "tableFunctionRef",
+        "name": "numbers",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "20000"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "kind": "select",
+    "distinct": {
+      "kind": "distinct"
+    },
+    "select": [
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "arrayJoin",
+          "args": [
+            {
+              "kind": "functionCall",
+              "name": "JSONAllPaths",
+              "args": [
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "json"
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        "alias": "path"
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "test"
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "path"
+          ]
+        },
+        "direction": "ASC"
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "distinct": {
+      "kind": "distinct"
+    },
+    "select": [
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "arrayJoin",
+          "args": [
+            {
+              "kind": "functionCall",
+              "name": "JSONDynamicPaths",
+              "args": [
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "json"
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        "alias": "path"
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "test"
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "path"
+          ]
+        },
+        "direction": "ASC"
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "distinct": {
+      "kind": "distinct"
+    },
+    "select": [
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "arrayJoin",
+          "args": [
+            {
+              "kind": "functionCall",
+              "name": "JSONSharedDataPaths",
+              "args": [
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "json"
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        "alias": "path"
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "test"
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "path"
+          ]
+        },
+        "direction": "ASC"
+      }
+    ]
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "test"
+      }
+    },
+    "selectQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "functionCall",
+          "name": "multiIf",
+          "args": [
+            {
+              "kind": "binaryExpr",
+              "op": "<",
+              "left": {
+                "kind": "columnRef",
+                "parts": [
+                  "number"
+                ]
+              },
+              "right": {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "1000"
+              }
+            },
+            {
+              "kind": "castExpr",
+              "expr": {
+                "kind": "literal",
+                "type": "String",
+                "value": "{\"a\" : 42, \"b\" : \"Hello\"}"
+              },
+              "type": "JSON",
+              "operator": true
+            },
+            {
+              "kind": "binaryExpr",
+              "op": "<",
+              "left": {
+                "kind": "columnRef",
+                "parts": [
+                  "number"
+                ]
+              },
+              "right": {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "3000"
+              }
+            },
+            {
+              "kind": "castExpr",
+              "expr": {
+                "kind": "literal",
+                "type": "String",
+                "value": "{\"c\" : [1, 2, 3], \"d\" : \"2020-01-01\"}"
+              },
+              "type": "JSON",
+              "operator": true
+            },
+            {
+              "kind": "castExpr",
+              "expr": {
+                "kind": "literal",
+                "type": "String",
+                "value": "{\"e\" : 43, \"f\" : [\"s1\", \"s2\", \"s3\"]}"
+              },
+              "type": "JSON",
+              "operator": true
+            }
+          ]
+        }
+      ],
+      "from": {
+        "kind": "tableFunctionRef",
+        "name": "numbers",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "20000"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "test"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "json",
+        "type": {
+          "name": "JSON",
+          "args": [
+            {
+              "kind": "setting",
+              "name": "max_dynamic_paths",
+              "value": {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "2"
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "functionCall",
+          "name": "tuple",
+          "args": []
+        }
+      }
+    ]
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "test"
+      }
+    },
+    "selectQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "functionCall",
+          "name": "multiIf",
+          "args": [
+            {
+              "kind": "binaryExpr",
+              "op": "<",
+              "left": {
+                "kind": "columnRef",
+                "parts": [
+                  "number"
+                ]
+              },
+              "right": {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "1000"
+              }
+            },
+            {
+              "kind": "castExpr",
+              "expr": {
+                "kind": "literal",
+                "type": "String",
+                "value": "{}"
+              },
+              "type": "JSON(max_dynamic_paths=2)",
+              "operator": true
+            },
+            {
+              "kind": "binaryExpr",
+              "op": "<",
+              "left": {
+                "kind": "columnRef",
+                "parts": [
+                  "number"
+                ]
+              },
+              "right": {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "3000"
+              }
+            },
+            {
+              "kind": "castExpr",
+              "expr": {
+                "kind": "literal",
+                "type": "String",
+                "value": "{\"a\" : 42, \"b\" : \"Hello\"}"
+              },
+              "type": "JSON(max_dynamic_paths=2)",
+              "operator": true
+            },
+            {
+              "kind": "castExpr",
+              "expr": {
+                "kind": "literal",
+                "type": "String",
+                "value": "{\"c\" : [1, 2, 3], \"d\" : \"2020-01-01\"}"
+              },
+              "type": "JSON(max_dynamic_paths=2)",
+              "operator": true
+            }
+          ]
+        }
+      ],
+      "from": {
+        "kind": "tableFunctionRef",
+        "name": "numbers",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "20000"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "test"
+      }
+    },
+    "selectQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "functionCall",
+          "name": "multiIf",
+          "args": [
+            {
+              "kind": "binaryExpr",
+              "op": "<",
+              "left": {
+                "kind": "columnRef",
+                "parts": [
+                  "number"
+                ]
+              },
+              "right": {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "1000"
+              }
+            },
+            {
+              "kind": "castExpr",
+              "expr": {
+                "kind": "literal",
+                "type": "String",
+                "value": "{\"a\" : 42, \"b\" : \"Hello\"}"
+              },
+              "type": "JSON(max_dynamic_paths=2)",
+              "operator": true
+            },
+            {
+              "kind": "binaryExpr",
+              "op": "<",
+              "left": {
+                "kind": "columnRef",
+                "parts": [
+                  "number"
+                ]
+              },
+              "right": {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "3000"
+              }
+            },
+            {
+              "kind": "castExpr",
+              "expr": {
+                "kind": "literal",
+                "type": "String",
+                "value": "{\"c\" : [1, 2, 3], \"d\" : \"2020-01-01\"}"
+              },
+              "type": "JSON(max_dynamic_paths=2)",
+              "operator": true
+            },
+            {
+              "kind": "castExpr",
+              "expr": {
+                "kind": "literal",
+                "type": "String",
+                "value": "{\"e\" : 43, \"f\" : [\"s1\", \"s2\", \"s3\"]}"
+              },
+              "type": "JSON(max_dynamic_paths=2)",
+              "operator": true
+            }
+          ]
+        }
+      ],
+      "from": {
+        "kind": "tableFunctionRef",
+        "name": "numbers",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "20000"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "test"
+      }
+    },
+    "selectQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "functionCall",
+          "name": "multiIf",
+          "args": [
+            {
+              "kind": "binaryExpr",
+              "op": "<",
+              "left": {
+                "kind": "columnRef",
+                "parts": [
+                  "number"
+                ]
+              },
+              "right": {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "1000"
+              }
+            },
+            {
+              "kind": "castExpr",
+              "expr": {
+                "kind": "literal",
+                "type": "String",
+                "value": "{\"a\" : 42}"
+              },
+              "type": "JSON(max_dynamic_paths=2)",
+              "operator": true
+            },
+            {
+              "kind": "binaryExpr",
+              "op": "<",
+              "left": {
+                "kind": "columnRef",
+                "parts": [
+                  "number"
+                ]
+              },
+              "right": {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "3000"
+              }
+            },
+            {
+              "kind": "castExpr",
+              "expr": {
+                "kind": "literal",
+                "type": "String",
+                "value": "{\"b\" : \"Hello\", \"c\" : [1, 2, 3], \"d\" : \"2020-01-01\"}"
+              },
+              "type": "JSON(max_dynamic_paths=2)",
+              "operator": true
+            },
+            {
+              "kind": "castExpr",
+              "expr": {
+                "kind": "literal",
+                "type": "String",
+                "value": "{\"e\" : 43}"
+              },
+              "type": "JSON(max_dynamic_paths=2)",
+              "operator": true
+            }
+          ]
+        }
+      ],
+      "from": {
+        "kind": "tableFunctionRef",
+        "name": "numbers",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "20000"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "test"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "json",
+        "type": {
+          "name": "JSON",
+          "args": [
+            {
+              "kind": "setting",
+              "name": "max_dynamic_paths",
+              "value": {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "8"
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "functionCall",
+          "name": "tuple",
+          "args": []
+        }
+      }
+    ]
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "test"
+      }
+    },
+    "selectQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "functionCall",
+          "name": "multiIf",
+          "args": [
+            {
+              "kind": "binaryExpr",
+              "op": "<",
+              "left": {
+                "kind": "columnRef",
+                "parts": [
+                  "number"
+                ]
+              },
+              "right": {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "1000"
+              }
+            },
+            {
+              "kind": "castExpr",
+              "expr": {
+                "kind": "literal",
+                "type": "String",
+                "value": "{}"
+              },
+              "type": "JSON(max_dynamic_paths=8)",
+              "operator": true
+            },
+            {
+              "kind": "binaryExpr",
+              "op": "<",
+              "left": {
+                "kind": "columnRef",
+                "parts": [
+                  "number"
+                ]
+              },
+              "right": {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "3000"
+              }
+            },
+            {
+              "kind": "castExpr",
+              "expr": {
+                "kind": "functionCall",
+                "name": "materialize",
+                "args": [
+                  {
+                    "kind": "literal",
+                    "type": "String",
+                    "value": "{\"a\" : [{\"b\" : 42, \"c\" : [1, 2, 3]}]}"
+                  }
+                ]
+              },
+              "type": "JSON(max_dynamic_paths=8)",
+              "operator": true
+            },
+            {
+              "kind": "castExpr",
+              "expr": {
+                "kind": "functionCall",
+                "name": "materialize",
+                "args": [
+                  {
+                    "kind": "literal",
+                    "type": "String",
+                    "value": "{\"a\" : [{\"d\" : \"2020-01-01\", \"e\" : \"Hello\"}]}"
+                  }
+                ]
+              },
+              "type": "JSON(max_dynamic_paths=8)",
+              "operator": true
+            }
+          ]
+        }
+      ],
+      "from": {
+        "kind": "tableFunctionRef",
+        "name": "numbers",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "20000"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "kind": "select",
+    "distinct": {
+      "kind": "distinct"
+    },
+    "select": [
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "arrayJoin",
+          "args": [
+            {
+              "kind": "functionCall",
+              "name": "JSONAllPaths",
+              "args": [
+                {
+                  "kind": "functionCall",
+                  "name": "arrayJoin",
+                  "args": [
+                    {
+                      "kind": "columnRef",
+                      "parts": [
+                        "json",
+                        "a[]"
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        "alias": "path"
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "test"
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "path"
+          ]
+        },
+        "direction": "ASC"
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "distinct": {
+      "kind": "distinct"
+    },
+    "select": [
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "arrayJoin",
+          "args": [
+            {
+              "kind": "functionCall",
+              "name": "JSONDynamicPaths",
+              "args": [
+                {
+                  "kind": "functionCall",
+                  "name": "arrayJoin",
+                  "args": [
+                    {
+                      "kind": "columnRef",
+                      "parts": [
+                        "json",
+                        "a[]"
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        "alias": "path"
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "test"
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "path"
+          ]
+        },
+        "direction": "ASC"
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "distinct": {
+      "kind": "distinct"
+    },
+    "select": [
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "arrayJoin",
+          "args": [
+            {
+              "kind": "functionCall",
+              "name": "JSONSharedDataPaths",
+              "args": [
+                {
+                  "kind": "functionCall",
+                  "name": "arrayJoin",
+                  "args": [
+                    {
+                      "kind": "columnRef",
+                      "parts": [
+                        "json",
+                        "a[]"
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        "alias": "path"
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "test"
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "path"
+          ]
+        },
+        "direction": "ASC"
+      }
+    ]
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "test"
+      }
+    },
+    "selectQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "functionCall",
+          "name": "multiIf",
+          "args": [
+            {
+              "kind": "binaryExpr",
+              "op": "<",
+              "left": {
+                "kind": "columnRef",
+                "parts": [
+                  "number"
+                ]
+              },
+              "right": {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "1000"
+              }
+            },
+            {
+              "kind": "castExpr",
+              "expr": {
+                "kind": "functionCall",
+                "name": "materialize",
+                "args": [
+                  {
+                    "kind": "literal",
+                    "type": "String",
+                    "value": "{\"a\" : [{\"b\" : 42, \"c\" : [1, 2, 3]}]}"
+                  }
+                ]
+              },
+              "type": "JSON(max_dynamic_paths=8)",
+              "operator": true
+            },
+            {
+              "kind": "binaryExpr",
+              "op": "<",
+              "left": {
+                "kind": "columnRef",
+                "parts": [
+                  "number"
+                ]
+              },
+              "right": {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "3000"
+              }
+            },
+            {
+              "kind": "castExpr",
+              "expr": {
+                "kind": "functionCall",
+                "name": "materialize",
+                "args": [
+                  {
+                    "kind": "literal",
+                    "type": "String",
+                    "value": "{\"a\" : [{\"d\" : \"2020-01-01\", \"e\" : \"Hello\"}]}"
+                  }
+                ]
+              },
+              "type": "JSON(max_dynamic_paths=8)",
+              "operator": true
+            },
+            {
+              "kind": "castExpr",
+              "expr": {
+                "kind": "functionCall",
+                "name": "materialize",
+                "args": [
+                  {
+                    "kind": "literal",
+                    "type": "String",
+                    "value": "{\"a\" : [{\"f\" : \"2020-01-01 00:00:00\", \"g\" : \"Hello2\"}]}"
+                  }
+                ]
+              },
+              "type": "JSON(max_dynamic_paths=8)",
+              "operator": true
+            }
+          ]
+        }
+      ],
+      "from": {
+        "kind": "tableFunctionRef",
+        "name": "numbers",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "20000"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "test"
+      }
+    },
+    "selectQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "functionCall",
+          "name": "multiIf",
+          "args": [
+            {
+              "kind": "binaryExpr",
+              "op": "<",
+              "left": {
+                "kind": "columnRef",
+                "parts": [
+                  "number"
+                ]
+              },
+              "right": {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "1000"
+              }
+            },
+            {
+              "kind": "castExpr",
+              "expr": {
+                "kind": "functionCall",
+                "name": "materialize",
+                "args": [
+                  {
+                    "kind": "literal",
+                    "type": "String",
+                    "value": "{\"a\" : [{\"b\" : 42}]}"
+                  }
+                ]
+              },
+              "type": "JSON(max_dynamic_paths=8)",
+              "operator": true
+            },
+            {
+              "kind": "binaryExpr",
+              "op": "<",
+              "left": {
+                "kind": "columnRef",
+                "parts": [
+                  "number"
+                ]
+              },
+              "right": {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "3000"
+              }
+            },
+            {
+              "kind": "castExpr",
+              "expr": {
+                "kind": "functionCall",
+                "name": "materialize",
+                "args": [
+                  {
+                    "kind": "literal",
+                    "type": "String",
+                    "value": "{\"a\" : [{\"d\" : \"2020-01-01\", \"e\" : \"Hello\"}]}"
+                  }
+                ]
+              },
+              "type": "JSON(max_dynamic_paths=8)",
+              "operator": true
+            },
+            {
+              "kind": "castExpr",
+              "expr": {
+                "kind": "functionCall",
+                "name": "materialize",
+                "args": [
+                  {
+                    "kind": "literal",
+                    "type": "String",
+                    "value": "{\"a\" : [{\"f\" : \"2020-01-01 00:00:00\"}]}"
+                  }
+                ]
+              },
+              "type": "JSON(max_dynamic_paths=8)",
+              "operator": true
+            }
+          ]
+        }
+      ],
+      "from": {
+        "kind": "tableFunctionRef",
+        "name": "numbers",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "20000"
+          }
+        ]
+      }
+    }
+  }
+]

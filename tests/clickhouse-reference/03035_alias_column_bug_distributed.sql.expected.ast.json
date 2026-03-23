@@ -1,1 +1,309 @@
-{"expected":[{"type":"literal","text":"EXPLAIN","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"REPLACE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"SET","ignoreCase":true},{"type":"literal","text":"SET","ignoreCase":true},{"type":"literal","text":"SET","ignoreCase":true},{"type":"literal","text":"USE","ignoreCase":true},{"type":"literal","text":"SYSTEM","ignoreCase":true},{"type":"literal","text":"(","ignoreCase":false},{"type":"literal","text":"WITH","ignoreCase":true},{"type":"literal","text":"SELECT","ignoreCase":true},{"type":"end"}],"found":"I","location":{"start":{"offset":329,"line":13,"column":1},"end":{"offset":330,"line":13,"column":2}},"name":"SyntaxError"}
+[
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "enable_analyzer",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ],
+    "leadingComments": [
+      "-- https://github.com/ClickHouse/ClickHouse/issues/44414"
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "alias_bug"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "src",
+        "type": {
+          "name": "String"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "theAlias",
+        "type": {
+          "name": "String"
+        },
+        "defaultKind": "ALIAS",
+        "defaultExpr": {
+          "kind": "functionCall",
+          "name": "trimBoth",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "src"
+              ]
+            }
+          ]
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree",
+      "args": []
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "src"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "alias_bug_dist"
+    },
+    "asTable": {
+      "kind": "tableRef",
+      "table": "alias_bug"
+    },
+    "engine": {
+      "name": "Distributed",
+      "args": [
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "test_shard_localhost"
+        },
+        {
+          "kind": "functionCall",
+          "name": "currentDatabase",
+          "args": []
+        },
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "alias_bug"
+        },
+        {
+          "kind": "functionCall",
+          "name": "rand",
+          "args": []
+        }
+      ]
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "alias_bug"
+      }
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "theAlias"
+        ]
+      },
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "CAST",
+          "args": [
+            {
+              "kind": "literal",
+              "type": "NULL",
+              "value": "NULL"
+            },
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "Nullable(String)"
+            }
+          ]
+        },
+        "alias": "src"
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "alias_bug"
+    },
+    "limit": {
+      "count": {
+        "kind": "literal",
+        "type": "UInt64",
+        "value": "1"
+      }
+    },
+    "format": "Null",
+    "leadingComments": [
+      "-- OK"
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "theAlias"
+        ]
+      },
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "CAST",
+          "args": [
+            {
+              "kind": "literal",
+              "type": "NULL",
+              "value": "NULL"
+            },
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "Nullable(String)"
+            }
+          ]
+        },
+        "alias": "src"
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "alias_bug_dist"
+    },
+    "limit": {
+      "count": {
+        "kind": "literal",
+        "type": "UInt64",
+        "value": "1"
+      }
+    },
+    "format": "Null",
+    "leadingComments": [
+      "-- Not OK"
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "alias_bug"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "s",
+        "type": {
+          "name": "String"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "src",
+        "type": {
+          "name": "String"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "theAlias",
+        "type": {
+          "name": "String"
+        },
+        "defaultKind": "ALIAS",
+        "defaultExpr": {
+          "kind": "functionCall",
+          "name": "trimBoth",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "src"
+              ]
+            }
+          ]
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree",
+      "args": []
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "src"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "CAST",
+          "args": [
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "123"
+            },
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "String"
+            }
+          ]
+        },
+        "alias": "src"
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "theAlias"
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "alias_bug_dist"
+    },
+    "limit": {
+      "count": {
+        "kind": "literal",
+        "type": "UInt64",
+        "value": "1"
+      }
+    },
+    "format": "Null",
+    "leadingComments": [
+      "-- Unknown identifier"
+    ]
+  }
+]

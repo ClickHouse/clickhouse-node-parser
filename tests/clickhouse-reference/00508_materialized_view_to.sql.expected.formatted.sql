@@ -1,1 +1,39 @@
-<Parse Error>
+CREATE TABLE src
+(
+    x UInt8
+)
+ENGINE = Null;
+
+CREATE TABLE dst
+(
+    x UInt8
+)
+ENGINE = Memory;
+
+CREATE MATERIALIZED VIEW mv_00508
+TO dst
+AS
+SELECT *
+FROM src;
+
+INSERT INTO src;
+
+SELECT *
+FROM mv_00508
+ORDER BY x ASC;
+
+SELECT *
+FROM dst
+ORDER BY x ASC;
+
+USE default;
+
+INSERT INTO {CLICKHOUSE_DATABASE:Identifier}.src;
+
+SELECT *
+FROM {CLICKHOUSE_DATABASE:Identifier}.mv_00508
+ORDER BY x ASC;
+
+SELECT *
+FROM {CLICKHOUSE_DATABASE:Identifier}.dst
+ORDER BY x ASC;

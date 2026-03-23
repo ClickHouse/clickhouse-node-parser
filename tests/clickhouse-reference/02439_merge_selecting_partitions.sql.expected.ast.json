@@ -1,1 +1,487 @@
-{"expected":[{"type":"literal","text":"EXPLAIN","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"REPLACE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"SET","ignoreCase":true},{"type":"literal","text":"SET","ignoreCase":true},{"type":"literal","text":"SET","ignoreCase":true},{"type":"literal","text":"USE","ignoreCase":true},{"type":"literal","text":"SYSTEM","ignoreCase":true},{"type":"literal","text":"(","ignoreCase":false},{"type":"literal","text":"WITH","ignoreCase":true},{"type":"literal","text":"SELECT","ignoreCase":true},{"type":"end"}],"found":"i","location":{"start":{"offset":133,"line":2,"column":1},"end":{"offset":134,"line":2,"column":2}},"name":"SyntaxError"}
+[
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "rmt"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "n",
+        "type": {
+          "name": "int"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "m",
+        "type": {
+          "name": "int"
+        }
+      }
+    ],
+    "engine": {
+      "name": "ReplicatedMergeTree",
+      "args": [
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "/test/02439/{shard}/{database}"
+        },
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "{replica}"
+        }
+      ]
+    },
+    "partitionBy": {
+      "kind": "columnRef",
+      "parts": [
+        "n"
+      ]
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "n"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "rmt"
+      }
+    },
+    "selectQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "number"
+          ]
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "number"
+          ]
+        }
+      ],
+      "from": {
+        "kind": "tableFunctionRef",
+        "name": "numbers",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "50"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "rmt"
+      }
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "rmt"
+      }
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "rmt"
+      }
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "rmt"
+      }
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "rmt"
+      }
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "rmt"
+      }
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "rmt"
+      }
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "rmt"
+      }
+    }
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "optimize_throw_if_noop",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "sleepEachRow",
+          "args": [
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "3"
+            }
+          ]
+        },
+        "alias": "higher_probability_of_reproducing_the_issue"
+      }
+    ],
+    "format": "Null"
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "asterisk"
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "database": "system",
+      "table": "zookeeper_log"
+    },
+    "where": {
+      "kind": "naryExpr",
+      "op": "AND",
+      "operands": [
+        {
+          "kind": "functionCall",
+          "name": "like",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "path"
+              ]
+            },
+            {
+              "kind": "functionCall",
+              "name": "concat",
+              "args": [
+                {
+                  "kind": "literal",
+                  "type": "String",
+                  "value": "/test/02439/"
+                },
+                {
+                  "kind": "functionCall",
+                  "name": "getMacro",
+                  "args": [
+                    {
+                      "kind": "literal",
+                      "type": "String",
+                      "value": "shard"
+                    }
+                  ]
+                },
+                {
+                  "kind": "literal",
+                  "type": "String",
+                  "value": "/"
+                },
+                {
+                  "kind": "functionCall",
+                  "name": "currentDatabase",
+                  "args": []
+                },
+                {
+                  "kind": "literal",
+                  "type": "String",
+                  "value": "/block_numbers/%"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "kind": "inExpr",
+          "negated": false,
+          "expr": {
+            "kind": "columnRef",
+            "parts": [
+              "op_num"
+            ]
+          },
+          "values": [
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "List"
+            },
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "SimpleList"
+            },
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "FilteredList"
+            }
+          ]
+        },
+        {
+          "kind": "functionCall",
+          "name": "notLike",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "path"
+              ]
+            },
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "%/block_numbers/1"
+            }
+          ]
+        },
+        {
+          "kind": "functionCall",
+          "name": "notLike",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "path"
+              ]
+            },
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "%/block_numbers/123"
+            }
+          ]
+        },
+        {
+          "kind": "binaryExpr",
+          "op": ">=",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "event_time"
+            ]
+          },
+          "right": {
+            "kind": "binaryExpr",
+            "op": "-",
+            "left": {
+              "kind": "functionCall",
+              "name": "now",
+              "args": []
+            },
+            "right": {
+              "kind": "functionCall",
+              "name": "toIntervalMinute",
+              "args": [
+                {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "1"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "kind": "naryExpr",
+          "op": "OR",
+          "operands": [
+            {
+              "kind": "functionCall",
+              "name": "isNull",
+              "args": [
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "query_id"
+                  ]
+                }
+              ]
+            },
+            {
+              "kind": "binaryExpr",
+              "op": "=",
+              "left": {
+                "kind": "columnRef",
+                "parts": [
+                  "query_id"
+                ]
+              },
+              "right": {
+                "kind": "literal",
+                "type": "String",
+                "value": ""
+              }
+            },
+            {
+              "kind": "inExpr",
+              "negated": false,
+              "expr": {
+                "kind": "columnRef",
+                "parts": [
+                  "query_id"
+                ]
+              },
+              "values": {
+                "kind": "subqueryExpr",
+                "query": {
+                  "kind": "select",
+                  "select": [
+                    {
+                      "kind": "columnRef",
+                      "parts": [
+                        "query_id"
+                      ]
+                    }
+                  ],
+                  "from": {
+                    "kind": "tableRef",
+                    "database": "system",
+                    "table": "query_log"
+                  },
+                  "where": {
+                    "kind": "naryExpr",
+                    "op": "AND",
+                    "operands": [
+                      {
+                        "kind": "binaryExpr",
+                        "op": ">=",
+                        "left": {
+                          "kind": "columnRef",
+                          "parts": [
+                            "event_time"
+                          ]
+                        },
+                        "right": {
+                          "kind": "binaryExpr",
+                          "op": "-",
+                          "left": {
+                            "kind": "functionCall",
+                            "name": "now",
+                            "args": []
+                          },
+                          "right": {
+                            "kind": "functionCall",
+                            "name": "toIntervalMinute",
+                            "args": [
+                              {
+                                "kind": "literal",
+                                "type": "UInt64",
+                                "value": "1"
+                              }
+                            ]
+                          }
+                        }
+                      },
+                      {
+                        "kind": "binaryExpr",
+                        "op": "=",
+                        "left": {
+                          "kind": "columnRef",
+                          "parts": [
+                            "current_database"
+                          ]
+                        },
+                        "right": {
+                          "kind": "functionCall",
+                          "name": "currentDatabase",
+                          "args": []
+                        }
+                      }
+                    ]
+                  }
+                }
+              }
+            }
+          ],
+          "parenthesized": true,
+          "leadingComments": [
+            "-- avoid race with tests like 02311_system_zookeeper_insert"
+          ]
+        }
+      ]
+    },
+    "leadingComments": [
+      "-- it should not list unneeded partitions where we cannot merge anything"
+    ]
+  }
+]

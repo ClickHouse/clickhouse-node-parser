@@ -1,1 +1,48 @@
-<Parse Error>
+SELECT '=== ataptive granularity: table one -; table two + ===';
+
+CREATE TABLE table_one
+(
+    id UInt64,
+    value UInt64
+)
+ENGINE = MergeTree
+ORDER BY value
+PARTITION BY id
+SETTINGS index_granularity = 8192, index_granularity_bytes = 0, min_bytes_for_wide_part = 100;
+
+CREATE TABLE table_two
+(
+    id UInt64,
+    value UInt64
+)
+ENGINE = MergeTree
+ORDER BY value
+PARTITION BY id
+SETTINGS index_granularity = 8192, index_granularity_bytes = 1024, min_bytes_for_wide_part = 100;
+
+INSERT INTO table_one SELECT
+    intDiv(number, 10),
+    number
+FROM numbers(100);
+
+CREATE TABLE table_two
+(
+    id UInt64,
+    value UInt64
+)
+ENGINE = MergeTree
+ORDER BY value
+PARTITION BY id
+SETTINGS index_granularity = 8192, index_granularity_bytes = 0, min_bytes_for_wide_part = 100;
+
+SELECT '=== ataptive granularity: table one +; table two + ===';
+
+CREATE TABLE table_one
+(
+    id UInt64,
+    value UInt64
+)
+ENGINE = MergeTree
+ORDER BY value
+PARTITION BY id
+SETTINGS index_granularity = 8192, index_granularity_bytes = 1024, min_bytes_for_wide_part = 100;

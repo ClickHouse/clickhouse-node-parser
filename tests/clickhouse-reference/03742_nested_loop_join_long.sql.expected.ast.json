@@ -1,1 +1,1803 @@
-{"expected":[{"type":"literal","text":"EXPLAIN","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"REPLACE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"SET","ignoreCase":true},{"type":"literal","text":"SET","ignoreCase":true},{"type":"literal","text":"SET","ignoreCase":true},{"type":"literal","text":"USE","ignoreCase":true},{"type":"literal","text":"SYSTEM","ignoreCase":true},{"type":"literal","text":"(","ignoreCase":false},{"type":"literal","text":"WITH","ignoreCase":true},{"type":"literal","text":"SELECT","ignoreCase":true},{"type":"end"}],"found":"I","location":{"start":{"offset":129,"line":10,"column":1},"end":{"offset":130,"line":10,"column":2}},"name":"SyntaxError"}
+[
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "events"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "Id",
+        "type": {
+          "name": "Nullable",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "UInt64"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "Payload",
+        "type": {
+          "name": "String"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "Time",
+        "type": {
+          "name": "DateTime"
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "Time"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "events"
+      }
+    },
+    "selectQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "binaryExpr",
+          "op": "+",
+          "left": {
+            "kind": "binaryExpr",
+            "op": "%",
+            "left": {
+              "kind": "columnRef",
+              "parts": [
+                "number"
+              ]
+            },
+            "right": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "3"
+            }
+          },
+          "right": {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "2"
+          }
+        },
+        {
+          "kind": "functionCall",
+          "name": "concat",
+          "args": [
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "Payload_"
+            },
+            {
+              "kind": "functionCall",
+              "name": "toString",
+              "args": [
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "number"
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "kind": "binaryExpr",
+          "op": "+",
+          "left": {
+            "kind": "functionCall",
+            "name": "toDateTime",
+            "args": [
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "2024-01-01 00:00:00"
+              }
+            ]
+          },
+          "right": {
+            "kind": "functionCall",
+            "name": "toIntervalMinute",
+            "args": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "number"
+                ]
+              }
+            ]
+          }
+        }
+      ],
+      "from": {
+        "kind": "tableFunctionRef",
+        "name": "numbers",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "100"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "events"
+      }
+    },
+    "selectQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "literal",
+          "type": "NULL",
+          "value": "NULL"
+        },
+        {
+          "kind": "functionCall",
+          "name": "concat",
+          "args": [
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "Payload_NULL"
+            },
+            {
+              "kind": "functionCall",
+              "name": "toString",
+              "args": [
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "number"
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "kind": "binaryExpr",
+          "op": "+",
+          "left": {
+            "kind": "functionCall",
+            "name": "toDateTime",
+            "args": [
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "2024-01-01 00:00:00"
+              }
+            ]
+          },
+          "right": {
+            "kind": "functionCall",
+            "name": "toIntervalMinute",
+            "args": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "number"
+                ]
+              }
+            ]
+          }
+        }
+      ],
+      "from": {
+        "kind": "tableFunctionRef",
+        "name": "numbers",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "10"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "attributes"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "EventId",
+        "type": {
+          "name": "UInt64"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "AnotherId",
+        "type": {
+          "name": "Nullable",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "UInt64"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "Attribute",
+        "type": {
+          "name": "String"
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "EventId"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "attributes"
+      }
+    },
+    "selectQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "alias",
+          "expr": {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "1"
+          },
+          "alias": "EventId"
+        },
+        {
+          "kind": "alias",
+          "expr": {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "1"
+          },
+          "alias": "AnotherId"
+        },
+        {
+          "kind": "alias",
+          "expr": {
+            "kind": "functionCall",
+            "name": "concat",
+            "args": [
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "A_"
+              },
+              {
+                "kind": "functionCall",
+                "name": "toString",
+                "args": [
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "number"
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          "alias": "Attribute"
+        }
+      ],
+      "from": {
+        "kind": "tableFunctionRef",
+        "name": "numbers",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "100000"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "attributes"
+      }
+    },
+    "selectQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "alias",
+          "expr": {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "2"
+          },
+          "alias": "EventId"
+        },
+        {
+          "kind": "alias",
+          "expr": {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "2"
+          },
+          "alias": "AnotherId"
+        },
+        {
+          "kind": "alias",
+          "expr": {
+            "kind": "functionCall",
+            "name": "concat",
+            "args": [
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "B_"
+              },
+              {
+                "kind": "functionCall",
+                "name": "toString",
+                "args": [
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "number"
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          "alias": "Attribute"
+        }
+      ],
+      "from": {
+        "kind": "tableFunctionRef",
+        "name": "numbers",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "800000"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "attributes"
+      }
+    },
+    "selectQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "alias",
+          "expr": {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "3"
+          },
+          "alias": "EventId"
+        },
+        {
+          "kind": "alias",
+          "expr": {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "3"
+          },
+          "alias": "AnotherId"
+        },
+        {
+          "kind": "alias",
+          "expr": {
+            "kind": "functionCall",
+            "name": "concat",
+            "args": [
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "C_"
+              },
+              {
+                "kind": "functionCall",
+                "name": "toString",
+                "args": [
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "number"
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          "alias": "Attribute"
+        }
+      ],
+      "from": {
+        "kind": "tableFunctionRef",
+        "name": "numbers",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "300000"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "attributes"
+      }
+    },
+    "selectQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "alias",
+          "expr": {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "42"
+          },
+          "alias": "EventId"
+        },
+        {
+          "kind": "alias",
+          "expr": {
+            "kind": "literal",
+            "type": "NULL",
+            "value": "NULL"
+          },
+          "alias": "AnotherId"
+        },
+        {
+          "kind": "alias",
+          "expr": {
+            "kind": "functionCall",
+            "name": "concat",
+            "args": [
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "O_"
+              },
+              {
+                "kind": "functionCall",
+                "name": "toString",
+                "args": [
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "number"
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          "alias": "Attribute"
+        }
+      ],
+      "from": {
+        "kind": "tableFunctionRef",
+        "name": "numbers",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "200000"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "events2"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "Id",
+        "type": {
+          "name": "UInt64"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "Payload",
+        "type": {
+          "name": "String"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "Time",
+        "type": {
+          "name": "DateTime"
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "Time"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "events2"
+      }
+    },
+    "selectQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "number"
+          ]
+        },
+        {
+          "kind": "functionCall",
+          "name": "concat",
+          "args": [
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "Payload_"
+            },
+            {
+              "kind": "functionCall",
+              "name": "toString",
+              "args": [
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "number"
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "kind": "binaryExpr",
+          "op": "+",
+          "left": {
+            "kind": "functionCall",
+            "name": "toDateTime",
+            "args": [
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "2024-01-01 00:00:00"
+              }
+            ]
+          },
+          "right": {
+            "kind": "functionCall",
+            "name": "toIntervalMinute",
+            "args": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "number"
+                ]
+              }
+            ]
+          }
+        }
+      ],
+      "from": {
+        "kind": "tableFunctionRef",
+        "name": "numbers",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "1000000"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "attributes2"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "EventId",
+        "type": {
+          "name": "UInt64"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "OtherId",
+        "type": {
+          "name": "Nullable",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "UInt32"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "Attribute",
+        "type": {
+          "name": "String"
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "EventId"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "attributes2"
+      }
+    },
+    "selectQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "alias",
+          "expr": {
+            "kind": "binaryExpr",
+            "op": "%",
+            "left": {
+              "kind": "functionCall",
+              "name": "sipHash64",
+              "args": [
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "number"
+                  ]
+                },
+                {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "1"
+                }
+              ]
+            },
+            "right": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "10000000"
+            }
+          },
+          "alias": "EventId"
+        },
+        {
+          "kind": "alias",
+          "expr": {
+            "kind": "binaryExpr",
+            "op": "%",
+            "left": {
+              "kind": "functionCall",
+              "name": "sipHash64",
+              "args": [
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "number"
+                  ]
+                },
+                {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "1"
+                }
+              ]
+            },
+            "right": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "10000000"
+            }
+          },
+          "alias": "OtherId"
+        },
+        {
+          "kind": "alias",
+          "expr": {
+            "kind": "functionCall",
+            "name": "concat",
+            "args": [
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "Attribute_"
+              },
+              {
+                "kind": "functionCall",
+                "name": "toString",
+                "args": [
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "number"
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          "alias": "Attribute"
+        }
+      ],
+      "from": {
+        "kind": "tableFunctionRef",
+        "name": "numbers",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "1000000"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "attributes2"
+      }
+    },
+    "selectQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "alias",
+          "expr": {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "32"
+          },
+          "alias": "EventId"
+        },
+        {
+          "kind": "alias",
+          "expr": {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "32"
+          },
+          "alias": "OtherId"
+        },
+        {
+          "kind": "alias",
+          "expr": {
+            "kind": "literal",
+            "type": "String",
+            "value": "Attribute_Dup"
+          },
+          "alias": "Attribute"
+        }
+      ]
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "attributes2"
+      }
+    },
+    "selectQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "alias",
+          "expr": {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "1000001"
+          },
+          "alias": "EventId"
+        },
+        {
+          "kind": "alias",
+          "expr": {
+            "kind": "literal",
+            "type": "NULL",
+            "value": "NULL"
+          },
+          "alias": "OtherId"
+        },
+        {
+          "kind": "alias",
+          "expr": {
+            "kind": "literal",
+            "type": "String",
+            "value": "Attribute_Dup"
+          },
+          "alias": "Attribute"
+        }
+      ]
+    }
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "query_plan_join_swap_table",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "enable_analyzer",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "join_algorithm",
+        "value": {
+          "kind": "literal",
+          "type": "String",
+          "value": "direct"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "min_joined_block_size_rows",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      },
+      {
+        "name": "min_joined_block_size_bytes",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "t0",
+          "Id"
+        ]
+      },
+      {
+        "kind": "functionCall",
+        "name": "sum",
+        "args": [
+          {
+            "kind": "functionCall",
+            "name": "sipHash64",
+            "args": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "t0",
+                  "Payload"
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "kind": "functionCall",
+        "name": "count",
+        "args": []
+      },
+      {
+        "kind": "functionCall",
+        "name": "countIf",
+        "args": [
+          {
+            "kind": "binaryExpr",
+            "op": "!=",
+            "left": {
+              "kind": "columnRef",
+              "parts": [
+                "t1",
+                "Attribute"
+              ]
+            },
+            "right": {
+              "kind": "literal",
+              "type": "String",
+              "value": ""
+            }
+          }
+        ]
+      },
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "sum",
+          "args": [
+            {
+              "kind": "functionCall",
+              "name": "sipHash64",
+              "args": [
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "t1",
+                    "Attribute"
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        "alias": "attr_hash_sum"
+      }
+    ],
+    "from": {
+      "left": {
+        "kind": "tableRef",
+        "table": "events",
+        "alias": "t0"
+      },
+      "kind": "joinExpr",
+      "joinType": "INNER",
+      "right": {
+        "kind": "tableRef",
+        "table": "attributes",
+        "alias": "t1"
+      },
+      "constraint": {
+        "kind": "on",
+        "expr": {
+          "kind": "binaryExpr",
+          "op": "=",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "t0",
+              "Id"
+            ]
+          },
+          "right": {
+            "kind": "columnRef",
+            "parts": [
+              "t1",
+              "EventId"
+            ]
+          }
+        }
+      }
+    },
+    "groupBy": {
+      "kind": "expressions",
+      "items": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "t0",
+            "Id"
+          ]
+        }
+      ]
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "t0",
+            "Id"
+          ]
+        },
+        "direction": "ASC"
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "t0",
+          "Id"
+        ]
+      },
+      {
+        "kind": "functionCall",
+        "name": "sum",
+        "args": [
+          {
+            "kind": "functionCall",
+            "name": "sipHash64",
+            "args": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "t0",
+                  "Payload"
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "kind": "functionCall",
+        "name": "count",
+        "args": []
+      },
+      {
+        "kind": "functionCall",
+        "name": "countIf",
+        "args": [
+          {
+            "kind": "binaryExpr",
+            "op": "!=",
+            "left": {
+              "kind": "columnRef",
+              "parts": [
+                "t1",
+                "Attribute"
+              ]
+            },
+            "right": {
+              "kind": "literal",
+              "type": "String",
+              "value": ""
+            }
+          }
+        ]
+      },
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "sum",
+          "args": [
+            {
+              "kind": "functionCall",
+              "name": "sipHash64",
+              "args": [
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "t1",
+                    "Attribute"
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        "alias": "attr_hash_sum"
+      }
+    ],
+    "from": {
+      "left": {
+        "kind": "tableRef",
+        "table": "events",
+        "alias": "t0"
+      },
+      "kind": "joinExpr",
+      "joinType": "LEFT",
+      "right": {
+        "kind": "tableRef",
+        "table": "attributes",
+        "alias": "t1"
+      },
+      "constraint": {
+        "kind": "on",
+        "expr": {
+          "kind": "binaryExpr",
+          "op": "=",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "t0",
+              "Id"
+            ]
+          },
+          "right": {
+            "kind": "columnRef",
+            "parts": [
+              "t1",
+              "EventId"
+            ]
+          }
+        }
+      }
+    },
+    "groupBy": {
+      "kind": "expressions",
+      "items": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "t0",
+            "Id"
+          ]
+        }
+      ]
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "t0",
+            "Id"
+          ]
+        },
+        "direction": "ASC"
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "t0",
+          "Id"
+        ]
+      },
+      {
+        "kind": "functionCall",
+        "name": "sum",
+        "args": [
+          {
+            "kind": "functionCall",
+            "name": "sipHash64",
+            "args": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "t0",
+                  "Payload"
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "kind": "functionCall",
+        "name": "count",
+        "args": []
+      },
+      {
+        "kind": "functionCall",
+        "name": "countIf",
+        "args": [
+          {
+            "kind": "binaryExpr",
+            "op": "!=",
+            "left": {
+              "kind": "columnRef",
+              "parts": [
+                "t1",
+                "Attribute"
+              ]
+            },
+            "right": {
+              "kind": "literal",
+              "type": "String",
+              "value": ""
+            }
+          }
+        ]
+      },
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "sum",
+          "args": [
+            {
+              "kind": "functionCall",
+              "name": "sipHash64",
+              "args": [
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "t1",
+                    "Attribute"
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        "alias": "attr_hash_sum"
+      }
+    ],
+    "from": {
+      "left": {
+        "kind": "tableRef",
+        "table": "events",
+        "alias": "t0"
+      },
+      "kind": "joinExpr",
+      "joinType": "LEFT",
+      "right": {
+        "kind": "tableRef",
+        "table": "attributes",
+        "alias": "t1"
+      },
+      "constraint": {
+        "kind": "on",
+        "expr": {
+          "kind": "binaryExpr",
+          "op": "=",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "t0",
+              "Id"
+            ]
+          },
+          "right": {
+            "kind": "columnRef",
+            "parts": [
+              "t1",
+              "EventId"
+            ]
+          }
+        }
+      }
+    },
+    "groupBy": {
+      "kind": "expressions",
+      "items": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "t0",
+            "Id"
+          ]
+        }
+      ]
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "t0",
+            "Id"
+          ]
+        },
+        "direction": "ASC"
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "t0",
+          "Id"
+        ]
+      },
+      {
+        "kind": "functionCall",
+        "name": "sum",
+        "args": [
+          {
+            "kind": "functionCall",
+            "name": "sipHash64",
+            "args": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "t0",
+                  "Payload"
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "kind": "functionCall",
+        "name": "count",
+        "args": []
+      },
+      {
+        "kind": "functionCall",
+        "name": "countIf",
+        "args": [
+          {
+            "kind": "binaryExpr",
+            "op": "!=",
+            "left": {
+              "kind": "columnRef",
+              "parts": [
+                "t1",
+                "Attribute"
+              ]
+            },
+            "right": {
+              "kind": "literal",
+              "type": "String",
+              "value": ""
+            }
+          }
+        ]
+      },
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "sum",
+          "args": [
+            {
+              "kind": "functionCall",
+              "name": "sipHash64",
+              "args": [
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "t1",
+                    "Attribute"
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        "alias": "attr_hash_sum"
+      }
+    ],
+    "from": {
+      "left": {
+        "kind": "tableRef",
+        "table": "events",
+        "alias": "t0"
+      },
+      "kind": "joinExpr",
+      "joinType": "LEFT",
+      "right": {
+        "kind": "tableRef",
+        "table": "attributes",
+        "alias": "t1"
+      },
+      "constraint": {
+        "kind": "on",
+        "expr": {
+          "kind": "binaryExpr",
+          "op": "=",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "t0",
+              "Id"
+            ]
+          },
+          "right": {
+            "kind": "columnRef",
+            "parts": [
+              "t1",
+              "EventId"
+            ]
+          }
+        }
+      }
+    },
+    "groupBy": {
+      "kind": "expressions",
+      "items": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "t0",
+            "Id"
+          ]
+        }
+      ]
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "t0",
+            "Id"
+          ]
+        },
+        "direction": "ASC"
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "sum",
+          "args": [
+            {
+              "kind": "functionCall",
+              "name": "sipHash64",
+              "args": [
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "t0",
+                    "Id"
+                  ]
+                },
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "t0",
+                    "Payload"
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        "alias": "hash_sum"
+      },
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "count",
+          "args": []
+        },
+        "alias": "cnt"
+      }
+    ],
+    "from": {
+      "left": {
+        "kind": "tableRef",
+        "table": "events2",
+        "alias": "t0"
+      },
+      "kind": "joinExpr",
+      "joinType": "INNER",
+      "right": {
+        "kind": "tableRef",
+        "table": "attributes2",
+        "alias": "t1"
+      },
+      "constraint": {
+        "kind": "on",
+        "expr": {
+          "kind": "binaryExpr",
+          "op": "=",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "t1",
+              "EventId"
+            ]
+          },
+          "right": {
+            "kind": "columnRef",
+            "parts": [
+              "t0",
+              "Id"
+            ]
+          }
+        }
+      }
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "sum",
+          "args": [
+            {
+              "kind": "functionCall",
+              "name": "sipHash64",
+              "args": [
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "t0",
+                    "Id"
+                  ]
+                },
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "t0",
+                    "Payload"
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        "alias": "hash_sum"
+      },
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "count",
+          "args": []
+        },
+        "alias": "cnt"
+      }
+    ],
+    "from": {
+      "left": {
+        "kind": "tableRef",
+        "table": "events2",
+        "alias": "t0"
+      },
+      "kind": "joinExpr",
+      "joinType": "LEFT",
+      "right": {
+        "kind": "tableRef",
+        "table": "attributes2",
+        "alias": "t1"
+      },
+      "constraint": {
+        "kind": "on",
+        "expr": {
+          "kind": "binaryExpr",
+          "op": "=",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "t1",
+              "EventId"
+            ]
+          },
+          "right": {
+            "kind": "columnRef",
+            "parts": [
+              "t0",
+              "Id"
+            ]
+          }
+        }
+      }
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "sum",
+          "args": [
+            {
+              "kind": "functionCall",
+              "name": "sipHash64",
+              "args": [
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "t0",
+                    "Id"
+                  ]
+                },
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "t0",
+                    "Payload"
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        "alias": "hash_sum"
+      },
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "count",
+          "args": []
+        },
+        "alias": "cnt"
+      }
+    ],
+    "from": {
+      "left": {
+        "kind": "tableRef",
+        "table": "events2",
+        "alias": "t0"
+      },
+      "kind": "joinExpr",
+      "joinType": "LEFT",
+      "right": {
+        "kind": "tableRef",
+        "table": "attributes2",
+        "alias": "t1"
+      },
+      "constraint": {
+        "kind": "on",
+        "expr": {
+          "kind": "binaryExpr",
+          "op": "=",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "t1",
+              "EventId"
+            ]
+          },
+          "right": {
+            "kind": "columnRef",
+            "parts": [
+              "t0",
+              "Id"
+            ]
+          }
+        }
+      }
+    }
+  }
+]

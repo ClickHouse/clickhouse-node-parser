@@ -1,1 +1,29 @@
-<Parse Error>
+SET enable_analyzer = 1;
+
+SET enable_parallel_replicas = 0;
+
+SET query_plan_join_swap_table = 0, query_plan_optimize_join_order_limit = 1; -- Changes query plan
+
+SET correlated_subqueries_use_in_memory_buffer = 0;
+
+CREATE TABLE users
+(
+    uid Int16,
+    name String,
+    age Int16
+)
+ENGINE = Memory;
+
+INSERT INTO users;
+
+INSERT INTO users;
+
+INSERT INTO users;
+
+SELECT *
+FROM users AS u1
+WHERE uid = (
+        SELECT sum(age)
+        FROM users AS u2
+        WHERE u1.name = u2.name
+    );

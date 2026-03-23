@@ -1,1 +1,289 @@
-{"expected":[{"type":"literal","text":"EXPLAIN","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"REPLACE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"SET","ignoreCase":true},{"type":"literal","text":"SET","ignoreCase":true},{"type":"literal","text":"SET","ignoreCase":true},{"type":"literal","text":"USE","ignoreCase":true},{"type":"literal","text":"SYSTEM","ignoreCase":true},{"type":"literal","text":"(","ignoreCase":false},{"type":"literal","text":"WITH","ignoreCase":true},{"type":"literal","text":"SELECT","ignoreCase":true},{"type":"end"}],"found":"i","location":{"start":{"offset":234,"line":10,"column":1},"end":{"offset":235,"line":10,"column":2}},"name":"SyntaxError"}
+[
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "enable_analyzer",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ],
+    "leadingComments": [
+      "-- https://github.com/ClickHouse/ClickHouse/issues/27115"
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "fill_ex"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "eventDate",
+        "type": {
+          "name": "Date"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "storeId",
+        "type": {
+          "name": "String"
+        }
+      }
+    ],
+    "engine": {
+      "name": "ReplacingMergeTree",
+      "args": []
+    },
+    "partitionBy": {
+      "kind": "functionCall",
+      "name": "toYYYYMM",
+      "args": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "eventDate"
+          ]
+        }
+      ]
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "storeId"
+          ]
+        }
+      },
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "eventDate"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "fill_ex"
+      }
+    },
+    "columns": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "eventDate"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "storeId"
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "groupArray",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "key"
+              ]
+            }
+          ]
+        },
+        "alias": "keys"
+      },
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "count",
+          "args": []
+        },
+        "alias": "c"
+      }
+    ],
+    "from": {
+      "kind": "subqueryFrom",
+      "query": {
+        "kind": "select",
+        "select": [
+          {
+            "kind": "asterisk"
+          },
+          {
+            "kind": "alias",
+            "expr": {
+              "kind": "columnRef",
+              "parts": [
+                "eventDate"
+              ]
+            },
+            "alias": "key"
+          }
+        ],
+        "from": {
+          "kind": "subqueryFrom",
+          "query": {
+            "kind": "select",
+            "select": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "eventDate"
+                ]
+              }
+            ],
+            "from": {
+              "kind": "subqueryFrom",
+              "query": {
+                "kind": "select",
+                "select": [
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "eventDate"
+                    ]
+                  }
+                ],
+                "from": {
+                  "kind": "tableRef",
+                  "table": "fill_ex",
+                  "final": true
+                },
+                "where": {
+                  "kind": "naryExpr",
+                  "op": "AND",
+                  "operands": [
+                    {
+                      "kind": "binaryExpr",
+                      "op": ">=",
+                      "left": {
+                        "kind": "columnRef",
+                        "parts": [
+                          "eventDate"
+                        ]
+                      },
+                      "right": {
+                        "kind": "functionCall",
+                        "name": "toDate",
+                        "args": [
+                          {
+                            "kind": "literal",
+                            "type": "String",
+                            "value": "2021-07-01"
+                          }
+                        ]
+                      }
+                    },
+                    {
+                      "kind": "binaryExpr",
+                      "op": "<",
+                      "left": {
+                        "kind": "columnRef",
+                        "parts": [
+                          "eventDate"
+                        ]
+                      },
+                      "right": {
+                        "kind": "functionCall",
+                        "name": "toDate",
+                        "args": [
+                          {
+                            "kind": "literal",
+                            "type": "String",
+                            "value": "2021-07-30"
+                          }
+                        ]
+                      }
+                    }
+                  ]
+                },
+                "orderBy": [
+                  {
+                    "kind": "orderByItem",
+                    "expr": {
+                      "kind": "columnRef",
+                      "parts": [
+                        "eventDate"
+                      ]
+                    },
+                    "direction": "ASC"
+                  }
+                ]
+              }
+            },
+            "orderBy": [
+              {
+                "kind": "orderByItem",
+                "expr": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "eventDate"
+                  ]
+                },
+                "direction": "ASC",
+                "fillFrom": {
+                  "kind": "functionCall",
+                  "name": "toDate",
+                  "args": [
+                    {
+                      "kind": "literal",
+                      "type": "String",
+                      "value": "2021-07-01"
+                    }
+                  ]
+                },
+                "fillTo": {
+                  "kind": "functionCall",
+                  "name": "toDate",
+                  "args": [
+                    {
+                      "kind": "literal",
+                      "type": "String",
+                      "value": "2021-07-30"
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        },
+        "orderBy": [
+          {
+            "kind": "orderByItem",
+            "expr": {
+              "kind": "columnRef",
+              "parts": [
+                "eventDate"
+              ]
+            },
+            "direction": "ASC"
+          }
+        ]
+      }
+    }
+  }
+]

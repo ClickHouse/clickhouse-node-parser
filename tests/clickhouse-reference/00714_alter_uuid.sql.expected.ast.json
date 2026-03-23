@@ -1,1 +1,358 @@
-{"expected":[{"type":"literal","text":"EXPLAIN","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"REPLACE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"SET","ignoreCase":true},{"type":"literal","text":"SET","ignoreCase":true},{"type":"literal","text":"SET","ignoreCase":true},{"type":"literal","text":"USE","ignoreCase":true},{"type":"literal","text":"SYSTEM","ignoreCase":true},{"type":"literal","text":"(","ignoreCase":false},{"type":"literal","text":"WITH","ignoreCase":true},{"type":"literal","text":"SELECT","ignoreCase":true},{"type":"end"}],"found":"I","location":{"start":{"offset":493,"line":14,"column":1},"end":{"offset":494,"line":14,"column":2}},"name":"SyntaxError"}
+[
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "literal",
+          "type": "String",
+          "value": "00000000-0000-01f8-9cb8-cb1b82fb3900"
+        },
+        "alias": "str"
+      },
+      {
+        "kind": "functionCall",
+        "name": "toUUID",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "str"
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "toFixedString",
+          "args": [
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "00000000-0000-02f8-9cb8-cb1b82fb3900"
+            },
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "36"
+            }
+          ]
+        },
+        "alias": "str"
+      },
+      {
+        "kind": "functionCall",
+        "name": "toUUID",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "str"
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "literal",
+          "type": "String",
+          "value": "00000000-0000-03f8-9cb8-cb1b82fb3900"
+        },
+        "alias": "str"
+      },
+      {
+        "kind": "functionCall",
+        "name": "CAST",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "str"
+            ]
+          },
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": "UUID"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "toFixedString",
+          "args": [
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "00000000-0000-04f8-9cb8-cb1b82fb3900"
+            },
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "36"
+            }
+          ]
+        },
+        "alias": "str"
+      },
+      {
+        "kind": "functionCall",
+        "name": "CAST",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "str"
+            ]
+          },
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": "UUID"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "uuid"
+    },
+    "ifNotExists": true,
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "created_at",
+        "type": {
+          "name": "DateTime"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "id0",
+        "type": {
+          "name": "String"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "id1",
+        "type": {
+          "name": "FixedString",
+          "args": [
+            {
+              "kind": "literal",
+              "value": "36"
+            }
+          ]
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "partitionBy": {
+      "kind": "functionCall",
+      "name": "toDate",
+      "args": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "created_at"
+          ]
+        }
+      ]
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "created_at"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "uuid"
+      }
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "id0"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "id1"
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "uuid"
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "toTypeName",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "id0"
+            ]
+          }
+        ]
+      },
+      {
+        "kind": "functionCall",
+        "name": "toTypeName",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "id1"
+            ]
+          }
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "uuid"
+    }
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "uuid"
+    },
+    "ifNotExists": true,
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "created_at",
+        "type": {
+          "name": "DateTime"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "id0",
+        "type": {
+          "name": "String"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "id1",
+        "type": {
+          "name": "FixedString",
+          "args": [
+            {
+              "kind": "literal",
+              "value": "36"
+            }
+          ]
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "partitionBy": {
+      "kind": "functionCall",
+      "name": "toDate",
+      "args": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "created_at"
+          ]
+        }
+      ]
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "created_at"
+          ]
+        }
+      },
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "id0"
+          ]
+        }
+      },
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "id1"
+          ]
+        }
+      }
+    ],
+    "leadingComments": [
+      "-- with UUID in key"
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "send_logs_level",
+        "value": {
+          "kind": "literal",
+          "type": "String",
+          "value": "fatal"
+        }
+      }
+    ]
+  }
+]

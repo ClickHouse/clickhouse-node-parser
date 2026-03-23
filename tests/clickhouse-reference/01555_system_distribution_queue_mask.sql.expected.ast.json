@@ -1,1 +1,384 @@
-{"expected":[{"type":"literal","text":"EXPLAIN","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"REPLACE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"SET","ignoreCase":true},{"type":"literal","text":"SET","ignoreCase":true},{"type":"literal","text":"SET","ignoreCase":true},{"type":"literal","text":"USE","ignoreCase":true},{"type":"literal","text":"SYSTEM","ignoreCase":true},{"type":"literal","text":"(","ignoreCase":false},{"type":"literal","text":"WITH","ignoreCase":true},{"type":"literal","text":"SELECT","ignoreCase":true},{"type":"end"}],"found":"i","location":{"start":{"offset":337,"line":7,"column":1},"end":{"offset":338,"line":7,"column":2}},"name":"SyntaxError"}
+[
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "use_compact_format_in_distributed_parts_names",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      }
+    ],
+    "leadingComments": [
+      "-- force data path with the user/pass in it"
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "prefer_localhost_replica",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      }
+    ],
+    "leadingComments": [
+      "-- use async send even for localhost"
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "data_01555"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "key",
+        "type": {
+          "name": "Int"
+        }
+      }
+    ],
+    "engine": {
+      "name": "Null",
+      "args": []
+    }
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "dist_01555"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "key",
+        "type": {
+          "name": "Int"
+        }
+      }
+    ],
+    "engine": {
+      "name": "Distributed",
+      "args": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "test_cluster_with_incorrect_pw"
+          ]
+        },
+        {
+          "kind": "functionCall",
+          "name": "currentDatabase",
+          "args": []
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "data_01555"
+          ]
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "key"
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "dist_01555"
+      }
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "length",
+        "args": [
+          {
+            "kind": "functionCall",
+            "name": "splitByChar",
+            "args": [
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "*"
+              },
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "data_path"
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "kind": "functionCall",
+        "name": "replaceRegexpOne",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "data_path"
+            ]
+          },
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": "^.*/([^/]*)/"
+          },
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": "\\\\1"
+          }
+        ]
+      },
+      {
+        "kind": "functionCall",
+        "name": "extract",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "last_exception"
+            ]
+          },
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": "AUTHENTICATION_FAILED"
+          }
+        ]
+      },
+      {
+        "kind": "binaryExpr",
+        "op": "<",
+        "left": {
+          "kind": "functionCall",
+          "name": "dateDiff",
+          "args": [
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "s"
+            },
+            {
+              "kind": "columnRef",
+              "parts": [
+                "last_exception_time"
+              ]
+            },
+            {
+              "kind": "functionCall",
+              "name": "now",
+              "args": []
+            }
+          ]
+        },
+        "right": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "3600"
+        }
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "database": "system",
+      "table": "distribution_queue"
+    },
+    "where": {
+      "kind": "naryExpr",
+      "op": "AND",
+      "operands": [
+        {
+          "kind": "binaryExpr",
+          "op": "=",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "database"
+            ]
+          },
+          "right": {
+            "kind": "functionCall",
+            "name": "currentDatabase",
+            "args": []
+          }
+        },
+        {
+          "kind": "binaryExpr",
+          "op": "=",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "table"
+            ]
+          },
+          "right": {
+            "kind": "literal",
+            "type": "String",
+            "value": "dist_01555"
+          }
+        }
+      ]
+    },
+    "format": "CSV"
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "dist_01555"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "key",
+        "type": {
+          "name": "Int"
+        }
+      }
+    ],
+    "engine": {
+      "name": "Distributed",
+      "args": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "test_shard_localhost"
+          ]
+        },
+        {
+          "kind": "functionCall",
+          "name": "currentDatabase",
+          "args": []
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "data_01555"
+          ]
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "key"
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "length",
+        "args": [
+          {
+            "kind": "functionCall",
+            "name": "splitByChar",
+            "args": [
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "*"
+              },
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "data_path"
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "kind": "functionCall",
+        "name": "replaceRegexpOne",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "data_path"
+            ]
+          },
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": "^.*/([^/]*)/"
+          },
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": "\\\\1"
+          }
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "database": "system",
+      "table": "distribution_queue"
+    },
+    "where": {
+      "kind": "naryExpr",
+      "op": "AND",
+      "operands": [
+        {
+          "kind": "binaryExpr",
+          "op": "=",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "database"
+            ]
+          },
+          "right": {
+            "kind": "functionCall",
+            "name": "currentDatabase",
+            "args": []
+          }
+        },
+        {
+          "kind": "binaryExpr",
+          "op": "=",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "table"
+            ]
+          },
+          "right": {
+            "kind": "literal",
+            "type": "String",
+            "value": "dist_01555"
+          }
+        }
+      ]
+    },
+    "format": "CSV"
+  }
+]

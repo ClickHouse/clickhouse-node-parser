@@ -1,1 +1,35 @@
-<Parse Error>
+CREATE TABLE test_00562
+(
+    s String,
+    i Int64
+)
+ENGINE = Memory;
+
+INSERT INTO test_00562;
+
+SELECT
+    s,
+    SUM(i * 2) AS i
+FROM test_00562
+GROUP BY s
+UNION ALL
+SELECT
+    s,
+    SUM(i * 2) AS i
+FROM test_00562
+GROUP BY s;
+
+SELECT s
+FROM (
+        SELECT
+            s,
+            SUM(i * 2) AS i
+        FROM test_00562
+        GROUP BY s
+        UNION ALL
+        SELECT
+            s,
+            SUM(i * 2) AS i
+        FROM test_00562
+        GROUP BY s
+    );

@@ -1,1 +1,309 @@
-{"expected":[{"type":"literal","text":"EXPLAIN","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"REPLACE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"SET","ignoreCase":true},{"type":"literal","text":"SET","ignoreCase":true},{"type":"literal","text":"SET","ignoreCase":true},{"type":"literal","text":"USE","ignoreCase":true},{"type":"literal","text":"SYSTEM","ignoreCase":true},{"type":"literal","text":"(","ignoreCase":false},{"type":"literal","text":"WITH","ignoreCase":true},{"type":"literal","text":"SELECT","ignoreCase":true},{"type":"end"}],"found":"I","location":{"start":{"offset":275,"line":10,"column":1},"end":{"offset":276,"line":10,"column":2}},"name":"SyntaxError"}
+[
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "summing_mt_aggregating_column"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "Key",
+        "type": {
+          "name": "UInt64"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "Value",
+        "type": {
+          "name": "UInt64"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "ConcatArraySimple",
+        "type": {
+          "name": "SimpleAggregateFunction",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "groupArrayArray"
+              }
+            },
+            {
+              "kind": "type",
+              "type": {
+                "name": "Array",
+                "args": [
+                  {
+                    "kind": "type",
+                    "type": {
+                      "name": "UInt64"
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "ConcatArrayComplex",
+        "type": {
+          "name": "AggregateFunction",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "groupArrayArray"
+              }
+            },
+            {
+              "kind": "type",
+              "type": {
+                "name": "Array",
+                "args": [
+                  {
+                    "kind": "type",
+                    "type": {
+                      "name": "UInt64"
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "engine": {
+      "name": "SummingMergeTree",
+      "args": []
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "Key"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "summing_mt_aggregating_column"
+      }
+    },
+    "selectQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        },
+        {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "2"
+        },
+        {
+          "kind": "arrayLiteral",
+          "elements": [
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "333"
+            },
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "444"
+            }
+          ],
+          "source": "[333, 444]"
+        },
+        {
+          "kind": "functionCall",
+          "name": "groupArrayArrayState",
+          "args": [
+            {
+              "kind": "arrayLiteral",
+              "elements": [
+                {
+                  "kind": "functionCall",
+                  "name": "toUInt64",
+                  "args": [
+                    {
+                      "kind": "literal",
+                      "type": "UInt64",
+                      "value": "33"
+                    }
+                  ]
+                },
+                {
+                  "kind": "functionCall",
+                  "name": "toUInt64",
+                  "args": [
+                    {
+                      "kind": "literal",
+                      "type": "UInt64",
+                      "value": "44"
+                    }
+                  ]
+                }
+              ],
+              "source": "[toUInt64(33), toUInt64(44)]"
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "summing_mt_aggregating_column"
+      }
+    },
+    "selectQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        },
+        {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "3"
+        },
+        {
+          "kind": "arrayLiteral",
+          "elements": [
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "555"
+            },
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "999"
+            }
+          ],
+          "source": "[555, 999]"
+        },
+        {
+          "kind": "functionCall",
+          "name": "groupArrayArrayState",
+          "args": [
+            {
+              "kind": "arrayLiteral",
+              "elements": [
+                {
+                  "kind": "functionCall",
+                  "name": "toUInt64",
+                  "args": [
+                    {
+                      "kind": "literal",
+                      "type": "UInt64",
+                      "value": "55"
+                    }
+                  ]
+                },
+                {
+                  "kind": "functionCall",
+                  "name": "toUInt64",
+                  "args": [
+                    {
+                      "kind": "literal",
+                      "type": "UInt64",
+                      "value": "99"
+                    }
+                  ]
+                }
+              ],
+              "source": "[toUInt64(55), toUInt64(99)]"
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "Key"
+        ]
+      },
+      {
+        "kind": "functionCall",
+        "name": "any",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "Value"
+            ]
+          }
+        ]
+      },
+      {
+        "kind": "functionCall",
+        "name": "any",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "ConcatArraySimple"
+            ]
+          }
+        ]
+      },
+      {
+        "kind": "functionCall",
+        "name": "groupArrayArrayMerge",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "ConcatArrayComplex"
+            ]
+          }
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "summing_mt_aggregating_column"
+    },
+    "groupBy": {
+      "kind": "expressions",
+      "items": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "Key"
+          ]
+        }
+      ]
+    }
+  }
+]

@@ -1,1 +1,74 @@
-<Parse Error>
+CREATE TABLE T1
+(
+    A Int32,
+    B Int32
+)
+ENGINE = Memory();
+
+INSERT INTO T1;
+
+CREATE TABLE T2
+(
+    A Int32,
+    B Int32,
+    C Int32
+)
+ENGINE = Memory();
+
+INSERT INTO T2;
+
+CREATE TEMPORARY TABLE T1
+(
+    A Int32,
+    B Int32
+)
+ENGINE = MergeTree
+ORDER BY A AS
+SELECT
+    1 AS A,
+    2 AS B;
+
+CREATE TEMPORARY TABLE T2
+(
+    A Int32,
+    B Int32,
+    C Int32
+)
+ENGINE = MergeTree
+ORDER BY A AS
+SELECT
+    1 AS A,
+    2 AS B,
+    3 AS C;
+
+SELECT *
+FROM
+    T1
+FULL JOIN T2
+    ON T1.A = T2.A
+ORDER BY `ALL` ASC
+FORMAT PrettyCompactMonoBlock;
+
+SELECT *
+FROM
+    T1
+FULL JOIN T2
+    USING (A)
+ORDER BY `ALL` ASC
+FORMAT PrettyCompactMonoBlock;
+
+SELECT *
+FROM
+    T1
+FULL JOIN {CLICKHOUSE_DATABASE:Identifier}.T2
+    ON T1.A = T2.A
+ORDER BY `ALL` ASC
+FORMAT PrettyCompactMonoBlock;
+
+SELECT *
+FROM
+    {CLICKHOUSE_DATABASE:Identifier}.T1
+FULL JOIN T2
+    ON T1.A = T2.A
+ORDER BY `ALL` ASC
+FORMAT PrettyCompactMonoBlock;

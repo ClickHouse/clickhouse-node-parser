@@ -1,1 +1,20 @@
-<Parse Error>
+CREATE TABLE t_enum
+(
+    x Enum8('hello' = 1, 'world' = 2)
+)
+ENGINE = TinyLog;
+
+CREATE TABLE t_source
+(
+    x Nullable(String)
+)
+ENGINE = TinyLog;
+
+INSERT INTO t_source (x);
+
+INSERT INTO t_enum (x) SELECT x
+FROM t_source
+WHERE x IN ('hello', 'world');
+
+SELECT *
+FROM t_enum;

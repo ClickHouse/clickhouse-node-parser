@@ -1,1 +1,46 @@
-<Parse Error>
+CREATE DATABASE {CLICKHOUSE_DATABASE:Identifier}
+ENGINE = Atomic;
+
+USE {CLICKHOUSE_DATABASE:Identifier};
+
+CREATE TABLE data
+(
+    id UInt64
+)
+ENGINE = MergeTree()
+ORDER BY id;
+
+CREATE MATERIALIZED VIEW mv1
+(
+    id UInt64
+)
+ENGINE = MergeTree()
+ORDER BY id
+AS
+SELECT id + 1 AS id
+FROM data;
+
+INSERT INTO data;
+
+SELECT *
+FROM mv1;
+
+CREATE MATERIALIZED VIEW mv1
+(
+    id UInt64
+)
+ENGINE = MergeTree()
+ORDER BY id
+AS
+SELECT id + 2 AS id
+FROM data;
+
+CREATE MATERIALIZED VIEW mv1
+(
+    id UInt64
+)
+ENGINE = MergeTree()
+ORDER BY id
+AS
+SELECT id + 3 AS id
+FROM data;

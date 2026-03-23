@@ -1845,8 +1845,42 @@ export type CreateStatement =
  */
 export type ParallelWithStatement = {
   kind: 'parallelWith';
-  /** The CREATE statements being executed in parallel (always 2+). */
-  queries: CreateStatement[];
+  /** The CREATE or INSERT statements being executed in parallel (always 2+). */
+  queries: (CreateStatement | InsertStatement | TruncateStatement)[];
+} & NodeMetadata;
+
+/**
+ * An INSERT statement: inserts data into a table or table function.
+ *
+ * @example `INSERT INTO t (a, b) VALUES (1, 2)` — VALUES data is not stored in AST
+ * @example `INSERT INTO t SELECT * FROM other` — SELECT query is stored in `selectQuery`
+ * @example `INSERT INTO TABLE FUNCTION s3(...) PARTITION BY val SELECT ...`
+ */
+export type InsertStatement = {
+  kind: 'insert';
+  /** The insert target — either a table reference or a table function. */
+  target: { kind: 'table'; table: TableRef } | { kind: 'function'; func: TableFunctionRef };
+  /** Optional column list for the insert. */
+  columns?: Expression[];
+  /** Optional PARTITION BY expression. */
+  partitionBy?: Expression;
+  /** Optional INSERT-level SETTINGS (before SELECT/VALUES). */
+  insertSettings?: SettingItem[];
+  /** Optional SELECT query (for INSERT ... SELECT). */
+  selectQuery?: QueryStatement;
+  /** Optional SELECT-level SETTINGS (after SELECT). */
+  querySettings?: SettingItem[];
+} & NodeMetadata;
+
+/**
+ * A TRUNCATE statement: removes all data from a table.
+ *
+ * @example `TRUNCATE TABLE t`
+ */
+export type TruncateStatement = {
+  kind: 'truncate';
+  /** The table to truncate. */
+  table: TableRef;
 } & NodeMetadata;
 
 /**
@@ -1863,7 +1897,9 @@ export type Statement =
   | UseStatement
   | SystemStatement
   | CreateStatement
-  | ParallelWithStatement;
+  | ParallelWithStatement
+  | InsertStatement
+  | TruncateStatement;
 
 // ── AST node kind map ────────────────────────────────────────────────────────
 
@@ -1927,6 +1963,8 @@ export interface ASTNodeKindMap {
   createWindowView: CreateWindowViewStatement;
   createLiveView: CreateLiveViewStatement;
   parallelWith: ParallelWithStatement;
+  insert: InsertStatement;
+  truncate: TruncateStatement;
   columnDef: ColumnDef;
   constraintDef: ConstraintDef;
   indexDef: IndexDef;
@@ -2613,7 +2651,35 @@ export const QueryStatementSchema: z.ZodType<QueryStatement> = z.lazy(() =>
 export const ParallelWithStatementSchema: z.ZodType<ParallelWithStatement> = z.lazy(() =>
   z.object({
     kind: z.literal('parallelWith'),
-    queries: z.array(CreateStatementSchema),
+    queries: z.array(
+      z.union([CreateStatementSchema, InsertStatementSchema, TruncateStatementSchema]),
+    ),
+    ...ExprMetadataFields,
+  }),
+);
+
+/** Zod schema for {@link InsertStatement}. */
+export const InsertStatementSchema: z.ZodType<InsertStatement> = z.lazy(() =>
+  z.object({
+    kind: z.literal('insert'),
+    target: z.union([
+      z.object({ kind: z.literal('table'), table: TableRefSchema }),
+      z.object({ kind: z.literal('function'), func: TableFunctionRefSchema }),
+    ]),
+    columns: z.array(ExpressionSchema).optional(),
+    partitionBy: ExpressionSchema.optional(),
+    insertSettings: z.array(SettingItemSchema).optional(),
+    selectQuery: QueryStatementSchema.optional(),
+    querySettings: z.array(SettingItemSchema).optional(),
+    ...ExprMetadataFields,
+  }),
+);
+
+/** Zod schema for {@link TruncateStatement}. */
+export const TruncateStatementSchema: z.ZodType<TruncateStatement> = z.lazy(() =>
+  z.object({
+    kind: z.literal('truncate'),
+    table: TableRefSchema,
     ...ExprMetadataFields,
   }),
 );
@@ -2632,6 +2698,8 @@ export const StatementSchema: z.ZodType<Statement> = z.lazy(() =>
     SystemStatementSchema,
     CreateStatementSchema,
     ParallelWithStatementSchema,
+    InsertStatementSchema,
+    TruncateStatementSchema,
   ]),
 );
 

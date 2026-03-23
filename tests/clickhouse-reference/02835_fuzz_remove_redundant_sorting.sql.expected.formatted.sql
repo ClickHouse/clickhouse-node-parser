@@ -1,1 +1,23 @@
-<Parse Error>
+CREATE TABLE numbers500k
+(
+    number UInt32
+)
+ENGINE = MergeTree()
+ORDER BY tuple();
+
+INSERT INTO numbers500k SELECT number
+FROM `system`.numbers
+LIMIT 500000;
+
+SELECT intDiv(number, NULL) AS k
+FROM (
+        SELECT *
+        FROM remote('127.0.0.{2,3}', currentDatabase(), numbers500k)
+        PREWHERE 31
+        WHERE 65537 > 0
+        ORDER BY number DESC
+    )
+GROUP BY GROUPING SETS ((k))
+WITH TOTALS
+ORDER BY k ASC
+LIMIT 2147483648;

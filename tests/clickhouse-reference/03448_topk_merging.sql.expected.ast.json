@@ -1,1 +1,1044 @@
-{"expected":[{"type":"literal","text":"EXPLAIN","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"REPLACE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"SET","ignoreCase":true},{"type":"literal","text":"SET","ignoreCase":true},{"type":"literal","text":"SET","ignoreCase":true},{"type":"literal","text":"USE","ignoreCase":true},{"type":"literal","text":"SYSTEM","ignoreCase":true},{"type":"literal","text":"(","ignoreCase":false},{"type":"literal","text":"WITH","ignoreCase":true},{"type":"literal","text":"SELECT","ignoreCase":true},{"type":"end"}],"found":"I","location":{"start":{"offset":171,"line":7,"column":1},"end":{"offset":172,"line":7,"column":2}},"name":"SyntaxError"}
+[
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "topk_test"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "foo",
+        "type": {
+          "name": "UInt64"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "top_items",
+        "type": {
+          "name": "AggregateFunction",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "topKWeighted",
+                "args": [
+                  {
+                    "kind": "literal",
+                    "value": "100"
+                  },
+                  {
+                    "kind": "literal",
+                    "value": "3"
+                  },
+                  {
+                    "kind": "literal",
+                    "value": "'counts'"
+                  }
+                ]
+              }
+            },
+            {
+              "kind": "type",
+              "type": {
+                "name": "String"
+              }
+            },
+            {
+              "kind": "type",
+              "type": {
+                "name": "UInt64"
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "engine": {
+      "name": "AggregatingMergeTree",
+      "args": []
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "foo"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "topk_test"
+      }
+    },
+    "selectQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "alias",
+          "expr": {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "6"
+          },
+          "alias": "foo"
+        },
+        {
+          "kind": "functionCall",
+          "name": "topKWeightedState",
+          "params": [
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "100"
+            },
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "3"
+            },
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "counts"
+            }
+          ],
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "item"
+              ]
+            },
+            {
+              "kind": "functionCall",
+              "name": "toUInt64",
+              "args": [
+                {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "10"
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "from": {
+        "kind": "subqueryFrom",
+        "query": {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "alias",
+              "expr": {
+                "kind": "functionCall",
+                "name": "arrayJoin",
+                "args": [
+                  {
+                    "kind": "arrayLiteral",
+                    "elements": [
+                      {
+                        "kind": "literal",
+                        "type": "String",
+                        "value": "a"
+                      },
+                      {
+                        "kind": "literal",
+                        "type": "String",
+                        "value": "a"
+                      },
+                      {
+                        "kind": "literal",
+                        "type": "String",
+                        "value": "a"
+                      },
+                      {
+                        "kind": "literal",
+                        "type": "String",
+                        "value": "b"
+                      },
+                      {
+                        "kind": "literal",
+                        "type": "String",
+                        "value": "b"
+                      },
+                      {
+                        "kind": "literal",
+                        "type": "String",
+                        "value": "b"
+                      },
+                      {
+                        "kind": "literal",
+                        "type": "String",
+                        "value": "c"
+                      },
+                      {
+                        "kind": "literal",
+                        "type": "String",
+                        "value": "c"
+                      },
+                      {
+                        "kind": "literal",
+                        "type": "String",
+                        "value": "c"
+                      },
+                      {
+                        "kind": "literal",
+                        "type": "String",
+                        "value": "d"
+                      },
+                      {
+                        "kind": "literal",
+                        "type": "String",
+                        "value": "d"
+                      },
+                      {
+                        "kind": "literal",
+                        "type": "String",
+                        "value": "e"
+                      },
+                      {
+                        "kind": "literal",
+                        "type": "String",
+                        "value": "e"
+                      }
+                    ],
+                    "source": "['a','a','a','b','b','b','c','c','c','d','d','e','e']"
+                  }
+                ]
+              },
+              "alias": "item"
+            }
+          ]
+        }
+      }
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "topk_test"
+      }
+    },
+    "selectQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "alias",
+          "expr": {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "8"
+          },
+          "alias": "foo"
+        },
+        {
+          "kind": "functionCall",
+          "name": "topKWeightedState",
+          "params": [
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "100"
+            },
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "3"
+            },
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "counts"
+            }
+          ],
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "item"
+              ]
+            },
+            {
+              "kind": "functionCall",
+              "name": "toUInt64",
+              "args": [
+                {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "10"
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "from": {
+        "kind": "subqueryFrom",
+        "query": {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "alias",
+              "expr": {
+                "kind": "functionCall",
+                "name": "arrayJoin",
+                "args": [
+                  {
+                    "kind": "arrayLiteral",
+                    "elements": [
+                      {
+                        "kind": "literal",
+                        "type": "String",
+                        "value": "i"
+                      },
+                      {
+                        "kind": "literal",
+                        "type": "String",
+                        "value": "i"
+                      },
+                      {
+                        "kind": "literal",
+                        "type": "String",
+                        "value": "i"
+                      },
+                      {
+                        "kind": "literal",
+                        "type": "String",
+                        "value": "j"
+                      },
+                      {
+                        "kind": "literal",
+                        "type": "String",
+                        "value": "j"
+                      },
+                      {
+                        "kind": "literal",
+                        "type": "String",
+                        "value": "j"
+                      },
+                      {
+                        "kind": "literal",
+                        "type": "String",
+                        "value": "k"
+                      },
+                      {
+                        "kind": "literal",
+                        "type": "String",
+                        "value": "k"
+                      },
+                      {
+                        "kind": "literal",
+                        "type": "String",
+                        "value": "k"
+                      },
+                      {
+                        "kind": "literal",
+                        "type": "String",
+                        "value": "d"
+                      },
+                      {
+                        "kind": "literal",
+                        "type": "String",
+                        "value": "d"
+                      },
+                      {
+                        "kind": "literal",
+                        "type": "String",
+                        "value": "e"
+                      },
+                      {
+                        "kind": "literal",
+                        "type": "String",
+                        "value": "e"
+                      }
+                    ],
+                    "source": "['i','i','i','j','j','j','k','k','k','d','d','e','e']"
+                  }
+                ]
+              },
+              "alias": "item"
+            }
+          ]
+        }
+      }
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "topk_test"
+      }
+    },
+    "selectQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "alias",
+          "expr": {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "9"
+          },
+          "alias": "foo"
+        },
+        {
+          "kind": "functionCall",
+          "name": "topKWeightedState",
+          "params": [
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "100"
+            },
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "3"
+            },
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "counts"
+            }
+          ],
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "item"
+              ]
+            },
+            {
+              "kind": "functionCall",
+              "name": "toUInt64",
+              "args": [
+                {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "10"
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "from": {
+        "kind": "subqueryFrom",
+        "query": {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "alias",
+              "expr": {
+                "kind": "functionCall",
+                "name": "arrayJoin",
+                "args": [
+                  {
+                    "kind": "arrayLiteral",
+                    "elements": [
+                      {
+                        "kind": "literal",
+                        "type": "String",
+                        "value": "l"
+                      },
+                      {
+                        "kind": "literal",
+                        "type": "String",
+                        "value": "l"
+                      },
+                      {
+                        "kind": "literal",
+                        "type": "String",
+                        "value": "l"
+                      },
+                      {
+                        "kind": "literal",
+                        "type": "String",
+                        "value": "m"
+                      },
+                      {
+                        "kind": "literal",
+                        "type": "String",
+                        "value": "m"
+                      },
+                      {
+                        "kind": "literal",
+                        "type": "String",
+                        "value": "m"
+                      },
+                      {
+                        "kind": "literal",
+                        "type": "String",
+                        "value": "n"
+                      },
+                      {
+                        "kind": "literal",
+                        "type": "String",
+                        "value": "n"
+                      },
+                      {
+                        "kind": "literal",
+                        "type": "String",
+                        "value": "n"
+                      },
+                      {
+                        "kind": "literal",
+                        "type": "String",
+                        "value": "d"
+                      },
+                      {
+                        "kind": "literal",
+                        "type": "String",
+                        "value": "d"
+                      },
+                      {
+                        "kind": "literal",
+                        "type": "String",
+                        "value": "e"
+                      },
+                      {
+                        "kind": "literal",
+                        "type": "String",
+                        "value": "e"
+                      }
+                    ],
+                    "source": "['l','l','l','m','m','m','n','n','n','d','d','e','e']"
+                  }
+                ]
+              },
+              "alias": "item"
+            }
+          ]
+        }
+      }
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "topk_test"
+      }
+    },
+    "selectQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "alias",
+          "expr": {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "10"
+          },
+          "alias": "foo"
+        },
+        {
+          "kind": "functionCall",
+          "name": "topKWeightedState",
+          "params": [
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "100"
+            },
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "3"
+            },
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "counts"
+            }
+          ],
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "item"
+              ]
+            },
+            {
+              "kind": "functionCall",
+              "name": "toUInt64",
+              "args": [
+                {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "10"
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "from": {
+        "kind": "subqueryFrom",
+        "query": {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "alias",
+              "expr": {
+                "kind": "functionCall",
+                "name": "arrayJoin",
+                "args": [
+                  {
+                    "kind": "arrayLiteral",
+                    "elements": [
+                      {
+                        "kind": "literal",
+                        "type": "String",
+                        "value": "z"
+                      },
+                      {
+                        "kind": "literal",
+                        "type": "String",
+                        "value": "z"
+                      },
+                      {
+                        "kind": "literal",
+                        "type": "String",
+                        "value": "z"
+                      },
+                      {
+                        "kind": "literal",
+                        "type": "String",
+                        "value": "w"
+                      },
+                      {
+                        "kind": "literal",
+                        "type": "String",
+                        "value": "w"
+                      },
+                      {
+                        "kind": "literal",
+                        "type": "String",
+                        "value": "w"
+                      },
+                      {
+                        "kind": "literal",
+                        "type": "String",
+                        "value": "y"
+                      },
+                      {
+                        "kind": "literal",
+                        "type": "String",
+                        "value": "y"
+                      },
+                      {
+                        "kind": "literal",
+                        "type": "String",
+                        "value": "y"
+                      },
+                      {
+                        "kind": "literal",
+                        "type": "String",
+                        "value": "d"
+                      },
+                      {
+                        "kind": "literal",
+                        "type": "String",
+                        "value": "d"
+                      },
+                      {
+                        "kind": "literal",
+                        "type": "String",
+                        "value": "e"
+                      },
+                      {
+                        "kind": "literal",
+                        "type": "String",
+                        "value": "e"
+                      }
+                    ],
+                    "source": "['z','z','z','w','w','w','y','y','y','d','d','e','e']"
+                  }
+                ]
+              },
+              "alias": "item"
+            }
+          ]
+        }
+      }
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "topk_test"
+      }
+    },
+    "selectQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "alias",
+          "expr": {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "11"
+          },
+          "alias": "foo"
+        },
+        {
+          "kind": "functionCall",
+          "name": "topKWeightedState",
+          "params": [
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "100"
+            },
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "3"
+            },
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "counts"
+            }
+          ],
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "item"
+              ]
+            },
+            {
+              "kind": "functionCall",
+              "name": "toUInt64",
+              "args": [
+                {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "10"
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "from": {
+        "kind": "subqueryFrom",
+        "query": {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "alias",
+              "expr": {
+                "kind": "functionCall",
+                "name": "arrayJoin",
+                "args": [
+                  {
+                    "kind": "arrayLiteral",
+                    "elements": [
+                      {
+                        "kind": "literal",
+                        "type": "String",
+                        "value": "i"
+                      },
+                      {
+                        "kind": "literal",
+                        "type": "String",
+                        "value": "i"
+                      },
+                      {
+                        "kind": "literal",
+                        "type": "String",
+                        "value": "i"
+                      },
+                      {
+                        "kind": "literal",
+                        "type": "String",
+                        "value": "j"
+                      },
+                      {
+                        "kind": "literal",
+                        "type": "String",
+                        "value": "j"
+                      },
+                      {
+                        "kind": "literal",
+                        "type": "String",
+                        "value": "j"
+                      },
+                      {
+                        "kind": "literal",
+                        "type": "String",
+                        "value": "k"
+                      },
+                      {
+                        "kind": "literal",
+                        "type": "String",
+                        "value": "k"
+                      },
+                      {
+                        "kind": "literal",
+                        "type": "String",
+                        "value": "k"
+                      },
+                      {
+                        "kind": "literal",
+                        "type": "String",
+                        "value": "d"
+                      },
+                      {
+                        "kind": "literal",
+                        "type": "String",
+                        "value": "d"
+                      },
+                      {
+                        "kind": "literal",
+                        "type": "String",
+                        "value": "e"
+                      },
+                      {
+                        "kind": "literal",
+                        "type": "String",
+                        "value": "e"
+                      }
+                    ],
+                    "source": "['i','i','i','j','j','j','k','k','k','d','d','e','e']"
+                  }
+                ]
+              },
+              "alias": "item"
+            }
+          ]
+        }
+      }
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "asterisk"
+      }
+    ],
+    "from": {
+      "kind": "subqueryFrom",
+      "query": {
+        "kind": "select",
+        "select": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "foo"
+            ]
+          },
+          {
+            "kind": "alias",
+            "expr": {
+              "kind": "functionCall",
+              "name": "untuple",
+              "args": [
+                {
+                  "kind": "functionCall",
+                  "name": "arrayJoin",
+                  "args": [
+                    {
+                      "kind": "functionCall",
+                      "name": "topKWeightedMerge",
+                      "params": [
+                        {
+                          "kind": "literal",
+                          "type": "UInt64",
+                          "value": "100"
+                        },
+                        {
+                          "kind": "literal",
+                          "type": "UInt64",
+                          "value": "3"
+                        },
+                        {
+                          "kind": "literal",
+                          "type": "String",
+                          "value": "counts"
+                        }
+                      ],
+                      "args": [
+                        {
+                          "kind": "columnRef",
+                          "parts": [
+                            "top_items"
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            "alias": "top"
+          }
+        ],
+        "from": {
+          "kind": "tableRef",
+          "table": "topk_test"
+        },
+        "groupBy": {
+          "kind": "expressions",
+          "items": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "foo"
+              ]
+            }
+          ]
+        }
+      }
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "foo"
+          ]
+        },
+        "direction": "ASC"
+      },
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "top",
+            "count"
+          ]
+        },
+        "direction": "DESC"
+      },
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "top",
+            "item"
+          ]
+        },
+        "direction": "ASC"
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "asterisk"
+      }
+    ],
+    "from": {
+      "kind": "subqueryFrom",
+      "query": {
+        "kind": "select",
+        "select": [
+          {
+            "kind": "alias",
+            "expr": {
+              "kind": "functionCall",
+              "name": "untuple",
+              "args": [
+                {
+                  "kind": "functionCall",
+                  "name": "arrayJoin",
+                  "args": [
+                    {
+                      "kind": "functionCall",
+                      "name": "topKWeightedMerge",
+                      "params": [
+                        {
+                          "kind": "literal",
+                          "type": "UInt64",
+                          "value": "100"
+                        },
+                        {
+                          "kind": "literal",
+                          "type": "UInt64",
+                          "value": "3"
+                        },
+                        {
+                          "kind": "literal",
+                          "type": "String",
+                          "value": "counts"
+                        }
+                      ],
+                      "args": [
+                        {
+                          "kind": "columnRef",
+                          "parts": [
+                            "top_items"
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            "alias": "top"
+          }
+        ],
+        "from": {
+          "kind": "tableRef",
+          "table": "topk_test",
+          "final": true
+        }
+      }
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "top",
+            "count"
+          ]
+        },
+        "direction": "DESC"
+      },
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "top",
+            "item"
+          ]
+        },
+        "direction": "ASC"
+      }
+    ]
+  }
+]

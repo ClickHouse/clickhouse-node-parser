@@ -1,1 +1,274 @@
-{"expected":[{"type":"literal","text":"EXPLAIN","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"REPLACE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"SET","ignoreCase":true},{"type":"literal","text":"SET","ignoreCase":true},{"type":"literal","text":"SET","ignoreCase":true},{"type":"literal","text":"USE","ignoreCase":true},{"type":"literal","text":"SYSTEM","ignoreCase":true},{"type":"literal","text":"(","ignoreCase":false},{"type":"literal","text":"WITH","ignoreCase":true},{"type":"literal","text":"SELECT","ignoreCase":true},{"type":"end"}],"found":"I","location":{"start":{"offset":158,"line":3,"column":1},"end":{"offset":159,"line":3,"column":2}},"name":"SyntaxError"}
+[
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "t0"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "c0",
+        "type": {
+          "name": "Float64"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "c1",
+        "type": {
+          "name": "BFloat16"
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree",
+      "args": []
+    },
+    "partitionBy": {
+      "kind": "functionCall",
+      "name": "murmurHash3_64",
+      "args": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "c0"
+          ]
+        }
+      ],
+      "parenthesized": true
+    },
+    "primaryKey": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "c0"
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "join_algorithm",
+        "value": {
+          "kind": "literal",
+          "type": "String",
+          "value": "full_sorting_merge"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "t0"
+      }
+    },
+    "columns": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "c0"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "c1"
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "count",
+        "args": []
+      }
+    ],
+    "from": {
+      "left": {
+        "left": {
+          "kind": "tableRef",
+          "table": "t0",
+          "alias": "t0d0"
+        },
+        "kind": "joinExpr",
+        "joinType": "INNER",
+        "right": {
+          "kind": "tableRef",
+          "table": "t0",
+          "alias": "t1d0"
+        },
+        "constraint": {
+          "kind": "on",
+          "expr": {
+            "kind": "binaryExpr",
+            "op": "=",
+            "left": {
+              "kind": "columnRef",
+              "parts": [
+                "t1d0",
+                "c0"
+              ]
+            },
+            "right": {
+              "kind": "columnRef",
+              "parts": [
+                "t0d0",
+                "c0"
+              ]
+            }
+          }
+        }
+      },
+      "kind": "joinExpr",
+      "joinType": "INNER",
+      "right": {
+        "kind": "tableRef",
+        "table": "t0",
+        "alias": "t2d0"
+      },
+      "constraint": {
+        "kind": "on",
+        "expr": {
+          "kind": "binaryExpr",
+          "op": "=",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "t1d0",
+              "c1"
+            ]
+          },
+          "right": {
+            "kind": "columnRef",
+            "parts": [
+              "t2d0",
+              "c1"
+            ]
+          }
+        }
+      }
+    },
+    "where": {
+      "kind": "binaryExpr",
+      "op": "!=",
+      "left": {
+        "kind": "columnRef",
+        "parts": [
+          "t1d0",
+          "c0"
+        ]
+      },
+      "right": {
+        "kind": "columnRef",
+        "parts": [
+          "t2d0",
+          "c0"
+        ]
+      }
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "sum",
+        "args": [
+          {
+            "kind": "binaryExpr",
+            "op": "!=",
+            "left": {
+              "kind": "columnRef",
+              "parts": [
+                "t1d0",
+                "c0"
+              ]
+            },
+            "right": {
+              "kind": "columnRef",
+              "parts": [
+                "t2d0",
+                "c0"
+              ]
+            }
+          }
+        ]
+      }
+    ],
+    "from": {
+      "left": {
+        "left": {
+          "kind": "tableRef",
+          "table": "t0",
+          "alias": "t0d0"
+        },
+        "kind": "joinExpr",
+        "joinType": "INNER",
+        "right": {
+          "kind": "tableRef",
+          "table": "t0",
+          "alias": "t1d0"
+        },
+        "constraint": {
+          "kind": "on",
+          "expr": {
+            "kind": "binaryExpr",
+            "op": "=",
+            "left": {
+              "kind": "columnRef",
+              "parts": [
+                "t1d0",
+                "c0"
+              ]
+            },
+            "right": {
+              "kind": "columnRef",
+              "parts": [
+                "t0d0",
+                "c0"
+              ]
+            }
+          }
+        }
+      },
+      "kind": "joinExpr",
+      "joinType": "INNER",
+      "right": {
+        "kind": "tableRef",
+        "table": "t0",
+        "alias": "t2d0"
+      },
+      "constraint": {
+        "kind": "on",
+        "expr": {
+          "kind": "binaryExpr",
+          "op": "=",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "t1d0",
+              "c1"
+            ]
+          },
+          "right": {
+            "kind": "columnRef",
+            "parts": [
+              "t2d0",
+              "c1"
+            ]
+          }
+        }
+      }
+    }
+  }
+]

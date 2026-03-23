@@ -1,1 +1,32 @@
-<Parse Error>
+SELECT *
+FROM numbers(10)
+FORMAT JSONLines;
+
+SELECT *
+FROM numbers(10)
+FORMAT NDJSON;
+
+CREATE TABLE `02267_t`
+(
+    n1 UInt32,
+    n2 UInt32
+)
+ENGINE = Memory;
+
+INSERT INTO `02267_t`;
+
+INSERT INTO `02267_t`;
+
+SELECT *
+FROM `02267_t`
+ORDER BY
+    n1 ASC,
+    n2 ASC
+FORMAT JSONLines;
+
+SELECT *
+FROM `02267_t`
+ORDER BY
+    n1 ASC,
+    n2 ASC
+FORMAT NDJSON;

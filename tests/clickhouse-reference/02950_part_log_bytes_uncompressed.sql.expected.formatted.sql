@@ -1,1 +1,40 @@
-<Parse Error>
+-- Tags: no-random-merge-tree-settings, no-random-settings
+-- Because we compare part sizes, and they could be affected by index granularity and index compression settings.
+CREATE TABLE part_log_bytes_uncompressed
+(
+    key UInt8,
+    value UInt8
+)
+ENGINE = MergeTree()
+ORDER BY key;
+
+INSERT INTO part_log_bytes_uncompressed SELECT
+    1,
+    1
+FROM numbers(1000);
+
+INSERT INTO part_log_bytes_uncompressed SELECT
+    2,
+    1
+FROM numbers(1000);
+
+INSERT INTO part_log_bytes_uncompressed SELECT
+    3,
+    1
+FROM numbers(1000);
+
+SELECT
+    event_type,
+    table,
+    part_name,
+    bytes_uncompressed > 0,
+    (if(bytes_uncompressed > 0, (if(size_in_bytes < bytes_uncompressed, '1', toString((size_in_bytes, bytes_uncompressed)))), '0'))
+FROM `system`.part_log
+WHERE event_date >= yesterday()
+    AND database = currentDatabase()
+    AND table = 'part_log_bytes_uncompressed'
+    AND ((event_type != 'RemovePart'
+    OR part_name = 'all_4_4_0'))
+ORDER BY
+    part_name ASC,
+    event_type ASC;

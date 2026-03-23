@@ -1,1 +1,1473 @@
-{"expected":[{"type":"literal","text":"EXPLAIN","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"REPLACE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"SET","ignoreCase":true},{"type":"literal","text":"SET","ignoreCase":true},{"type":"literal","text":"SET","ignoreCase":true},{"type":"literal","text":"USE","ignoreCase":true},{"type":"literal","text":"SYSTEM","ignoreCase":true},{"type":"literal","text":"(","ignoreCase":false},{"type":"literal","text":"WITH","ignoreCase":true},{"type":"literal","text":"SELECT","ignoreCase":true},{"type":"end"}],"found":"I","location":{"start":{"offset":2692,"line":70,"column":1},"end":{"offset":2693,"line":70,"column":2}},"name":"SyntaxError"}
+[
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "joined_subquery_requires_alias",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "max_threads",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "max_bytes_before_external_sort",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      }
+    ],
+    "leadingComments": [
+      "-- It affects number of read rows and max_rows_to_read."
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "max_bytes_ratio_before_external_sort",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "max_bytes_before_external_group_by",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "max_bytes_ratio_before_external_group_by",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "target_table"
+    },
+    "engine": {
+      "name": "SummingMergeTree",
+      "args": []
+    },
+    "asQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "alias",
+          "expr": {
+            "kind": "columnRef",
+            "parts": [
+              "number"
+            ]
+          },
+          "alias": "id"
+        },
+        {
+          "kind": "alias",
+          "expr": {
+            "kind": "functionCall",
+            "name": "maxState",
+            "args": [
+              {
+                "kind": "functionCall",
+                "name": "toDateTime",
+                "args": [
+                  {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "0"
+                  },
+                  {
+                    "kind": "literal",
+                    "type": "String",
+                    "value": "UTC"
+                  }
+                ]
+              }
+            ]
+          },
+          "alias": "latest_login_time"
+        },
+        {
+          "kind": "alias",
+          "expr": {
+            "kind": "functionCall",
+            "name": "maxState",
+            "args": [
+              {
+                "kind": "functionCall",
+                "name": "toDateTime",
+                "args": [
+                  {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "0"
+                  },
+                  {
+                    "kind": "literal",
+                    "type": "String",
+                    "value": "UTC"
+                  }
+                ]
+              }
+            ]
+          },
+          "alias": "latest_checkout_time"
+        },
+        {
+          "kind": "alias",
+          "expr": {
+            "kind": "functionCall",
+            "name": "minState",
+            "args": [
+              {
+                "kind": "functionCall",
+                "name": "toUInt64",
+                "args": [
+                  {
+                    "kind": "literal",
+                    "type": "Int64",
+                    "value": "-1"
+                  }
+                ]
+              }
+            ]
+          },
+          "alias": "fastest_session"
+        },
+        {
+          "kind": "alias",
+          "expr": {
+            "kind": "functionCall",
+            "name": "maxState",
+            "args": [
+              {
+                "kind": "functionCall",
+                "name": "toUInt64",
+                "args": [
+                  {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "0"
+                  }
+                ]
+              }
+            ]
+          },
+          "alias": "biggest_inactivity_period"
+        }
+      ],
+      "from": {
+        "kind": "tableFunctionRef",
+        "name": "numbers",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "50000"
+          }
+        ]
+      },
+      "groupBy": {
+        "kind": "expressions",
+        "items": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "id"
+            ]
+          }
+        ]
+      },
+      "settings": [
+        {
+          "name": "max_insert_threads",
+          "value": {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "1"
+          }
+        }
+      ]
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "id"
+          ]
+        }
+      }
+    ],
+    "settings": [
+      {
+        "name": "index_granularity",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "128"
+        }
+      },
+      {
+        "name": "index_granularity_bytes",
+        "value": {
+          "kind": "literal",
+          "type": "String",
+          "value": "10Mi"
+        }
+      }
+    ],
+    "settingsAfterOrderBy": true,
+    "leadingComments": [
+      "-- that is the final table, which is filled incrementally from 2 different sources"
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "logins"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "id",
+        "type": {
+          "name": "UInt64"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "ts",
+        "type": {
+          "name": "DateTime",
+          "args": [
+            {
+              "kind": "literal",
+              "value": "'UTC'"
+            }
+          ]
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "id"
+          ]
+        }
+      }
+    ],
+    "leadingComments": [
+      "-- source table #1"
+    ]
+  },
+  {
+    "kind": "createMaterializedView",
+    "table": {
+      "kind": "tableRef",
+      "table": "mv_logins2target"
+    },
+    "toTable": {
+      "kind": "tableRef",
+      "table": "target_table"
+    },
+    "asQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "id"
+          ]
+        },
+        {
+          "kind": "alias",
+          "expr": {
+            "kind": "functionCall",
+            "name": "maxState",
+            "args": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "ts"
+                ]
+              }
+            ]
+          },
+          "alias": "latest_login_time"
+        },
+        {
+          "kind": "alias",
+          "expr": {
+            "kind": "functionCall",
+            "name": "maxState",
+            "args": [
+              {
+                "kind": "functionCall",
+                "name": "toDateTime",
+                "args": [
+                  {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "0"
+                  },
+                  {
+                    "kind": "literal",
+                    "type": "String",
+                    "value": "UTC"
+                  }
+                ]
+              }
+            ]
+          },
+          "alias": "latest_checkout_time"
+        },
+        {
+          "kind": "alias",
+          "expr": {
+            "kind": "functionCall",
+            "name": "minState",
+            "args": [
+              {
+                "kind": "functionCall",
+                "name": "toUInt64",
+                "args": [
+                  {
+                    "kind": "literal",
+                    "type": "Int64",
+                    "value": "-1"
+                  }
+                ]
+              }
+            ]
+          },
+          "alias": "fastest_session"
+        },
+        {
+          "kind": "alias",
+          "expr": {
+            "kind": "functionCall",
+            "name": "if",
+            "args": [
+              {
+                "kind": "binaryExpr",
+                "op": ">",
+                "left": {
+                  "kind": "functionCall",
+                  "name": "max",
+                  "args": [
+                    {
+                      "kind": "columnRef",
+                      "parts": [
+                        "current_latest_checkout_time"
+                      ]
+                    }
+                  ]
+                },
+                "right": {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "0"
+                }
+              },
+              {
+                "kind": "functionCall",
+                "name": "maxState",
+                "args": [
+                  {
+                    "kind": "functionCall",
+                    "name": "toUInt64",
+                    "args": [
+                      {
+                        "kind": "binaryExpr",
+                        "op": "-",
+                        "left": {
+                          "kind": "columnRef",
+                          "parts": [
+                            "ts"
+                          ]
+                        },
+                        "right": {
+                          "kind": "columnRef",
+                          "parts": [
+                            "current_latest_checkout_time"
+                          ]
+                        }
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "kind": "functionCall",
+                "name": "maxState",
+                "args": [
+                  {
+                    "kind": "functionCall",
+                    "name": "toUInt64",
+                    "args": [
+                      {
+                        "kind": "literal",
+                        "type": "UInt64",
+                        "value": "0"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          "alias": "biggest_inactivity_period"
+        }
+      ],
+      "from": {
+        "left": {
+          "kind": "tableRef",
+          "table": "logins"
+        },
+        "kind": "joinExpr",
+        "joinType": "LEFT",
+        "right": {
+          "kind": "subqueryFrom",
+          "query": {
+            "kind": "select",
+            "select": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "id"
+                ]
+              },
+              {
+                "kind": "alias",
+                "expr": {
+                  "kind": "functionCall",
+                  "name": "maxMerge",
+                  "args": [
+                    {
+                      "kind": "columnRef",
+                      "parts": [
+                        "latest_checkout_time"
+                      ]
+                    }
+                  ]
+                },
+                "alias": "current_latest_checkout_time"
+              }
+            ],
+            "from": {
+              "kind": "tableRef",
+              "table": "target_table"
+            },
+            "fromLeadingComments": [
+              "-- normal MV sees only the incoming block, but we need something like feedback here",
+              "-- so we do join with target table, the most important thing here is that",
+              "-- we extract from target table only row affected by that MV, referencing src table",
+              "-- it second time"
+            ],
+            "where": {
+              "kind": "inExpr",
+              "negated": false,
+              "expr": {
+                "kind": "columnRef",
+                "parts": [
+                  "id"
+                ]
+              },
+              "values": {
+                "kind": "subqueryExpr",
+                "query": {
+                  "kind": "select",
+                  "select": [
+                    {
+                      "kind": "columnRef",
+                      "parts": [
+                        "id"
+                      ]
+                    }
+                  ],
+                  "from": {
+                    "kind": "tableRef",
+                    "table": "logins"
+                  }
+                }
+              }
+            },
+            "groupBy": {
+              "kind": "expressions",
+              "items": [
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "id"
+                  ]
+                }
+              ]
+            }
+          }
+        },
+        "constraint": {
+          "kind": "using",
+          "columns": [
+            "id"
+          ]
+        }
+      },
+      "groupBy": {
+        "kind": "expressions",
+        "items": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "id"
+            ]
+          }
+        ]
+      }
+    },
+    "leadingComments": [
+      "-- and mv with something like feedback from target table"
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "checkouts"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "id",
+        "type": {
+          "name": "UInt64"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "ts",
+        "type": {
+          "name": "DateTime",
+          "args": [
+            {
+              "kind": "literal",
+              "value": "'UTC'"
+            }
+          ]
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "id"
+          ]
+        }
+      }
+    ],
+    "leadingComments": [
+      "-- the same for second pipeline"
+    ]
+  },
+  {
+    "kind": "createMaterializedView",
+    "table": {
+      "kind": "tableRef",
+      "table": "mv_checkouts2target"
+    },
+    "toTable": {
+      "kind": "tableRef",
+      "table": "target_table"
+    },
+    "asQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "id"
+          ]
+        },
+        {
+          "kind": "alias",
+          "expr": {
+            "kind": "functionCall",
+            "name": "maxState",
+            "args": [
+              {
+                "kind": "functionCall",
+                "name": "toDateTime",
+                "args": [
+                  {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "0"
+                  },
+                  {
+                    "kind": "literal",
+                    "type": "String",
+                    "value": "UTC"
+                  }
+                ]
+              }
+            ]
+          },
+          "alias": "latest_login_time"
+        },
+        {
+          "kind": "alias",
+          "expr": {
+            "kind": "functionCall",
+            "name": "maxState",
+            "args": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "ts"
+                ]
+              }
+            ]
+          },
+          "alias": "latest_checkout_time"
+        },
+        {
+          "kind": "alias",
+          "expr": {
+            "kind": "functionCall",
+            "name": "if",
+            "args": [
+              {
+                "kind": "binaryExpr",
+                "op": ">",
+                "left": {
+                  "kind": "functionCall",
+                  "name": "max",
+                  "args": [
+                    {
+                      "kind": "columnRef",
+                      "parts": [
+                        "current_latest_login_time"
+                      ]
+                    }
+                  ]
+                },
+                "right": {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "0"
+                }
+              },
+              {
+                "kind": "functionCall",
+                "name": "minState",
+                "args": [
+                  {
+                    "kind": "functionCall",
+                    "name": "toUInt64",
+                    "args": [
+                      {
+                        "kind": "binaryExpr",
+                        "op": "-",
+                        "left": {
+                          "kind": "columnRef",
+                          "parts": [
+                            "ts"
+                          ]
+                        },
+                        "right": {
+                          "kind": "columnRef",
+                          "parts": [
+                            "current_latest_login_time"
+                          ]
+                        }
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "kind": "functionCall",
+                "name": "minState",
+                "args": [
+                  {
+                    "kind": "functionCall",
+                    "name": "toUInt64",
+                    "args": [
+                      {
+                        "kind": "literal",
+                        "type": "Int64",
+                        "value": "-1"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          "alias": "fastest_session"
+        },
+        {
+          "kind": "alias",
+          "expr": {
+            "kind": "functionCall",
+            "name": "maxState",
+            "args": [
+              {
+                "kind": "functionCall",
+                "name": "toUInt64",
+                "args": [
+                  {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "0"
+                  }
+                ]
+              }
+            ]
+          },
+          "alias": "biggest_inactivity_period"
+        }
+      ],
+      "from": {
+        "left": {
+          "kind": "tableRef",
+          "table": "checkouts"
+        },
+        "kind": "joinExpr",
+        "joinType": "LEFT",
+        "right": {
+          "kind": "subqueryFrom",
+          "query": {
+            "kind": "select",
+            "select": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "id"
+                ]
+              },
+              {
+                "kind": "alias",
+                "expr": {
+                  "kind": "functionCall",
+                  "name": "maxMerge",
+                  "args": [
+                    {
+                      "kind": "columnRef",
+                      "parts": [
+                        "latest_login_time"
+                      ]
+                    }
+                  ]
+                },
+                "alias": "current_latest_login_time"
+              }
+            ],
+            "from": {
+              "kind": "tableRef",
+              "table": "target_table"
+            },
+            "where": {
+              "kind": "inExpr",
+              "negated": false,
+              "expr": {
+                "kind": "columnRef",
+                "parts": [
+                  "id"
+                ]
+              },
+              "values": {
+                "kind": "subqueryExpr",
+                "query": {
+                  "kind": "select",
+                  "select": [
+                    {
+                      "kind": "columnRef",
+                      "parts": [
+                        "id"
+                      ]
+                    }
+                  ],
+                  "from": {
+                    "kind": "tableRef",
+                    "table": "checkouts"
+                  }
+                }
+              }
+            },
+            "groupBy": {
+              "kind": "expressions",
+              "items": [
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "id"
+                  ]
+                }
+              ]
+            }
+          }
+        },
+        "constraint": {
+          "kind": "using",
+          "columns": [
+            "id"
+          ]
+        }
+      },
+      "groupBy": {
+        "kind": "expressions",
+        "items": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "id"
+            ]
+          }
+        ]
+      }
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "logins"
+      }
+    },
+    "selectQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "alias",
+          "expr": {
+            "kind": "columnRef",
+            "parts": [
+              "number"
+            ]
+          },
+          "alias": "id"
+        },
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "2000-01-01 08:00:00"
+        }
+      ],
+      "from": {
+        "kind": "tableFunctionRef",
+        "name": "numbers",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "50000"
+          }
+        ]
+      }
+    },
+    "leadingComments": [
+      "-- feed with some initial values"
+    ]
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "checkouts"
+      }
+    },
+    "selectQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "alias",
+          "expr": {
+            "kind": "columnRef",
+            "parts": [
+              "number"
+            ]
+          },
+          "alias": "id"
+        },
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "2000-01-01 10:00:00"
+        }
+      ],
+      "from": {
+        "kind": "tableFunctionRef",
+        "name": "numbers",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "50000"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "max_rows_to_read",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "7120"
+        }
+      }
+    ],
+    "leadingComments": [
+      "-- ensure that we don't read whole target table during join",
+      "-- by this time we should have 3 parts for target_table because of prev inserts",
+      "-- and we plan to make two more inserts. With index_granularity=128 and max id=1000",
+      "-- we expect to read not more than:",
+      "--      1000 rows read from numbers(1000) in the INSERT itself",
+      "--      1000 rows in the `IN (SELECT id FROM table)` in the mat views",
+      "--      (1000/128) marks per part * (3 + 2) parts * 128 granularity = 5120 rows",
+      "--      Total: 7120"
+    ]
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "logins"
+      }
+    },
+    "selectQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "alias",
+          "expr": {
+            "kind": "columnRef",
+            "parts": [
+              "number"
+            ]
+          },
+          "alias": "id"
+        },
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "2000-01-01 11:00:00"
+        }
+      ],
+      "from": {
+        "kind": "tableFunctionRef",
+        "name": "numbers",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "1000"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "checkouts"
+      }
+    },
+    "selectQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "alias",
+          "expr": {
+            "kind": "columnRef",
+            "parts": [
+              "number"
+            ]
+          },
+          "alias": "id"
+        },
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "2000-01-01 11:10:00"
+        }
+      ],
+      "from": {
+        "kind": "tableFunctionRef",
+        "name": "numbers",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "1000"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "max_rows_to_read",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "897"
+        }
+      }
+    ],
+    "leadingComments": [
+      "-- by this time we should have 5 parts for target_table because of prev inserts",
+      "-- and we plan to make two more inserts. With index_granularity=128 and max id=1",
+      "-- we expect to read not more than:",
+      "--      1 mark per part * (5 + 2) parts * 128 granularity + 1 (numbers(1)) = 897 rows"
+    ]
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "logins"
+      }
+    },
+    "selectQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "alias",
+          "expr": {
+            "kind": "binaryExpr",
+            "op": "+",
+            "left": {
+              "kind": "columnRef",
+              "parts": [
+                "number"
+              ]
+            },
+            "right": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "2"
+            }
+          },
+          "alias": "id"
+        },
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "2001-01-01 11:10:01"
+        }
+      ],
+      "from": {
+        "kind": "tableFunctionRef",
+        "name": "numbers",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "1"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "checkouts"
+      }
+    },
+    "selectQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "alias",
+          "expr": {
+            "kind": "binaryExpr",
+            "op": "+",
+            "left": {
+              "kind": "columnRef",
+              "parts": [
+                "number"
+              ]
+            },
+            "right": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "2"
+            }
+          },
+          "alias": "id"
+        },
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "2001-01-01 11:10:02"
+        }
+      ],
+      "from": {
+        "kind": "tableFunctionRef",
+        "name": "numbers",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "1"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "max_rows_to_read",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "literal",
+        "type": "String",
+        "value": "-- unmerged state"
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "id"
+        ]
+      },
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "finalizeAggregation",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "latest_login_time"
+              ]
+            }
+          ]
+        },
+        "alias": "current_latest_login_time"
+      },
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "finalizeAggregation",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "latest_checkout_time"
+              ]
+            }
+          ]
+        },
+        "alias": "current_latest_checkout_time"
+      },
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "finalizeAggregation",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "fastest_session"
+              ]
+            }
+          ]
+        },
+        "alias": "current_fastest_session"
+      },
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "finalizeAggregation",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "biggest_inactivity_period"
+              ]
+            }
+          ]
+        },
+        "alias": "current_biggest_inactivity_period"
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "target_table"
+    },
+    "where": {
+      "kind": "inExpr",
+      "negated": false,
+      "expr": {
+        "kind": "columnRef",
+        "parts": [
+          "id"
+        ]
+      },
+      "values": [
+        {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        },
+        {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "2"
+        }
+      ]
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "id"
+          ]
+        },
+        "direction": "ASC"
+      },
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "current_latest_login_time"
+          ]
+        },
+        "direction": "ASC"
+      },
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "current_latest_checkout_time"
+          ]
+        },
+        "direction": "ASC"
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "id"
+        ]
+      },
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "maxMerge",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "latest_login_time"
+              ]
+            }
+          ]
+        },
+        "alias": "current_latest_login_time"
+      },
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "maxMerge",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "latest_checkout_time"
+              ]
+            }
+          ]
+        },
+        "alias": "current_latest_checkout_time"
+      },
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "minMerge",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "fastest_session"
+              ]
+            }
+          ]
+        },
+        "alias": "current_fastest_session"
+      },
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "maxMerge",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "biggest_inactivity_period"
+              ]
+            }
+          ]
+        },
+        "alias": "current_biggest_inactivity_period"
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "target_table"
+    },
+    "where": {
+      "kind": "inExpr",
+      "negated": false,
+      "expr": {
+        "kind": "columnRef",
+        "parts": [
+          "id"
+        ]
+      },
+      "values": [
+        {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        },
+        {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "2"
+        }
+      ]
+    },
+    "groupBy": {
+      "kind": "expressions",
+      "items": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "id"
+          ]
+        }
+      ]
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "id"
+          ]
+        },
+        "direction": "ASC"
+      }
+    ]
+  }
+]

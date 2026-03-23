@@ -1,1 +1,1032 @@
-{"expected":[{"type":"literal","text":"EXPLAIN","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"REPLACE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"SET","ignoreCase":true},{"type":"literal","text":"SET","ignoreCase":true},{"type":"literal","text":"SET","ignoreCase":true},{"type":"literal","text":"USE","ignoreCase":true},{"type":"literal","text":"SYSTEM","ignoreCase":true},{"type":"literal","text":"(","ignoreCase":false},{"type":"literal","text":"WITH","ignoreCase":true},{"type":"literal","text":"SELECT","ignoreCase":true},{"type":"end"}],"found":"I","location":{"start":{"offset":944,"line":13,"column":1},"end":{"offset":945,"line":13,"column":2}},"name":"SyntaxError"}
+[
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "t"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "key",
+        "type": {
+          "name": "String"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "value",
+        "type": {
+          "name": "UInt64"
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "functionCall",
+          "name": "tuple",
+          "args": []
+        }
+      }
+    ],
+    "settings": [
+      {
+        "name": "index_granularity",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "128"
+        }
+      }
+    ],
+    "settingsAfterOrderBy": true,
+    "leadingComments": [
+      "-- index_granularity: to be able to produce small blocks from reading"
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "enable_parallel_replicas",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      },
+      {
+        "name": "automatic_parallel_replicas_mode",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      },
+      {
+        "name": "parallel_replicas_local_plan",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      },
+      {
+        "name": "parallel_replicas_index_analysis_only_on_coordinator",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      },
+      {
+        "name": "parallel_replicas_for_non_replicated_merge_tree",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      },
+      {
+        "name": "max_parallel_replicas",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "3"
+        }
+      },
+      {
+        "name": "cluster_for_parallel_replicas",
+        "value": {
+          "kind": "literal",
+          "type": "String",
+          "value": "parallel_replicas"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "enable_analyzer",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ],
+    "leadingComments": [
+      "-- For runs with the old analyzer"
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "max_threads",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "4"
+        }
+      },
+      {
+        "name": "max_block_size",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "128"
+        }
+      }
+    ],
+    "leadingComments": [
+      "-- max_block_size is set explicitly to ensure enough blocks will be fed to the statistics collector"
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "automatic_parallel_replicas_min_bytes_per_replica",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      }
+    ],
+    "leadingComments": [
+      "-- May disable the usage of parallel replicas"
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "max_bytes_before_external_group_by",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      },
+      {
+        "name": "max_bytes_ratio_before_external_group_by",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      }
+    ],
+    "leadingComments": [
+      "-- External aggregation is not supported at the moment, i.e., no statistics will be reported"
+    ]
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "t"
+      }
+    },
+    "selectQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "functionCall",
+          "name": "toString",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "number"
+              ]
+            }
+          ]
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "number"
+          ]
+        }
+      ],
+      "from": {
+        "kind": "tableFunctionRef",
+        "name": "numbers",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "Float64",
+            "value": "1e4"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "key"
+        ]
+      },
+      {
+        "kind": "functionCall",
+        "name": "SUM",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "value"
+            ]
+          }
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "t"
+    },
+    "groupBy": {
+      "kind": "expressions",
+      "items": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "key"
+          ]
+        }
+      ]
+    },
+    "format": "Null",
+    "postFormatSettings": [
+      {
+        "name": "log_comment",
+        "value": {
+          "kind": "literal",
+          "type": "String",
+          "value": "03783_autopr_dataflow_cache_reuse_query_0"
+        }
+      }
+    ],
+    "leadingComments": [
+      "--set send_logs_level='trace', send_logs_source_regexp = 'optimize';"
+    ],
+    "trailingComments": [
+      "-- empty cache, don't apply optimization, collect stats"
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "key"
+        ]
+      },
+      {
+        "kind": "functionCall",
+        "name": "SUM",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "value"
+            ]
+          }
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "t"
+    },
+    "groupBy": {
+      "kind": "expressions",
+      "items": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "key"
+          ]
+        }
+      ]
+    },
+    "format": "Null",
+    "postFormatSettings": [
+      {
+        "name": "log_comment",
+        "value": {
+          "kind": "literal",
+          "type": "String",
+          "value": "03783_autopr_dataflow_cache_reuse_query_1"
+        }
+      }
+    ],
+    "trailingComments": [
+      "-- stats available, don't apply since no benefit"
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "send_logs_level",
+        "value": {
+          "kind": "literal",
+          "type": "String",
+          "value": "none"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "t"
+      }
+    },
+    "selectQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "functionCall",
+          "name": "concat",
+          "args": [
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "ololokekkekkek"
+            },
+            {
+              "kind": "functionCall",
+              "name": "toString",
+              "args": [
+                {
+                  "kind": "binaryExpr",
+                  "op": "%",
+                  "left": {
+                    "kind": "columnRef",
+                    "parts": [
+                      "number"
+                    ]
+                  },
+                  "right": {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "10"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "number"
+          ]
+        }
+      ],
+      "from": {
+        "kind": "tableFunctionRef",
+        "name": "numbers",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "Float64",
+            "value": "5e5"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "key"
+        ]
+      },
+      {
+        "kind": "functionCall",
+        "name": "SUM",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "value"
+            ]
+          }
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "t"
+    },
+    "groupBy": {
+      "kind": "expressions",
+      "items": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "key"
+          ]
+        }
+      ]
+    },
+    "format": "Null",
+    "postFormatSettings": [
+      {
+        "name": "log_comment",
+        "value": {
+          "kind": "literal",
+          "type": "String",
+          "value": "03783_autopr_dataflow_cache_reuse_query_2"
+        }
+      }
+    ],
+    "leadingComments": [
+      "--set send_logs_level='trace', send_logs_source_regexp = 'optimize';"
+    ],
+    "trailingComments": [
+      "-- stats available, but we have to recollect since data grew, don't apply"
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "key"
+        ]
+      },
+      {
+        "kind": "functionCall",
+        "name": "SUM",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "value"
+            ]
+          }
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "t"
+    },
+    "groupBy": {
+      "kind": "expressions",
+      "items": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "key"
+          ]
+        }
+      ]
+    },
+    "format": "Null",
+    "postFormatSettings": [
+      {
+        "name": "log_comment",
+        "value": {
+          "kind": "literal",
+          "type": "String",
+          "value": "03783_autopr_dataflow_cache_reuse_query_3"
+        }
+      }
+    ],
+    "trailingComments": [
+      "-- stats available, apply"
+    ]
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "t"
+      }
+    },
+    "selectQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "functionCall",
+          "name": "concat",
+          "args": [
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "ololokekkekkek"
+            },
+            {
+              "kind": "functionCall",
+              "name": "toString",
+              "args": [
+                {
+                  "kind": "binaryExpr",
+                  "op": "%",
+                  "left": {
+                    "kind": "columnRef",
+                    "parts": [
+                      "number"
+                    ]
+                  },
+                  "right": {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "10"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "number"
+          ]
+        }
+      ],
+      "from": {
+        "kind": "tableFunctionRef",
+        "name": "numbers",
+        "args": [
+          {
+            "kind": "binaryExpr",
+            "op": "+",
+            "left": {
+              "kind": "literal",
+              "type": "Float64",
+              "value": "5e5"
+            },
+            "right": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "100000"
+            }
+          }
+        ]
+      }
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "key"
+        ]
+      },
+      {
+        "kind": "functionCall",
+        "name": "SUM",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "value"
+            ]
+          }
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "t"
+    },
+    "groupBy": {
+      "kind": "expressions",
+      "items": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "key"
+          ]
+        }
+      ]
+    },
+    "format": "Null",
+    "postFormatSettings": [
+      {
+        "name": "log_comment",
+        "value": {
+          "kind": "literal",
+          "type": "String",
+          "value": "03783_autopr_dataflow_cache_reuse_query_4"
+        }
+      }
+    ],
+    "leadingComments": [
+      "--set send_logs_level='trace', send_logs_source_regexp = 'optimize';"
+    ],
+    "trailingComments": [
+      "-- stats available, but we have to recollect since data grew, don't apply"
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "key"
+        ]
+      },
+      {
+        "kind": "functionCall",
+        "name": "SUM",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "value"
+            ]
+          }
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "t"
+    },
+    "groupBy": {
+      "kind": "expressions",
+      "items": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "key"
+          ]
+        }
+      ]
+    },
+    "format": "Null",
+    "postFormatSettings": [
+      {
+        "name": "log_comment",
+        "value": {
+          "kind": "literal",
+          "type": "String",
+          "value": "03783_autopr_dataflow_cache_reuse_query_5"
+        }
+      }
+    ],
+    "trailingComments": [
+      "-- stats available, apply"
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "key"
+        ]
+      },
+      {
+        "kind": "functionCall",
+        "name": "SUM",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "value"
+            ]
+          }
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "t"
+    },
+    "groupBy": {
+      "kind": "expressions",
+      "items": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "key"
+          ]
+        }
+      ]
+    },
+    "format": "Null",
+    "postFormatSettings": [
+      {
+        "name": "log_comment",
+        "value": {
+          "kind": "literal",
+          "type": "String",
+          "value": "03783_autopr_dataflow_cache_reuse_query_6"
+        }
+      }
+    ],
+    "leadingComments": [
+      "--set send_logs_level='trace', send_logs_source_regexp = 'optimize';"
+    ],
+    "trailingComments": [
+      "-- stats available, but we have to recollect since data shrinked, don't apply"
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "key"
+        ]
+      },
+      {
+        "kind": "functionCall",
+        "name": "SUM",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "value"
+            ]
+          }
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "t"
+    },
+    "groupBy": {
+      "kind": "expressions",
+      "items": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "key"
+          ]
+        }
+      ]
+    },
+    "format": "Null",
+    "postFormatSettings": [
+      {
+        "name": "log_comment",
+        "value": {
+          "kind": "literal",
+          "type": "String",
+          "value": "03783_autopr_dataflow_cache_reuse_query_7"
+        }
+      }
+    ],
+    "trailingComments": [
+      "-- stats available, don't apply since no benefit"
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "enable_parallel_replicas",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      },
+      {
+        "name": "automatic_parallel_replicas_mode",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "log_comment"
+          ]
+        },
+        "alias": "query"
+      },
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "binaryExpr",
+          "op": ">",
+          "left": {
+            "kind": "functionCall",
+            "name": "arrayElement",
+            "args": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "ProfileEvents"
+                ]
+              },
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "RuntimeDataflowStatisticsInputBytes"
+              }
+            ]
+          },
+          "right": {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "0"
+          }
+        },
+        "alias": "stats_collected"
+      },
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "binaryExpr",
+          "op": ">",
+          "left": {
+            "kind": "functionCall",
+            "name": "arrayElement",
+            "args": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "ProfileEvents"
+                ]
+              },
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "ParallelReplicasUsedCount"
+              }
+            ]
+          },
+          "right": {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "0"
+          }
+        },
+        "alias": "pr_used"
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "database": "system",
+      "table": "query_log"
+    },
+    "where": {
+      "kind": "naryExpr",
+      "op": "AND",
+      "operands": [
+        {
+          "kind": "binaryExpr",
+          "op": ">=",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "event_date"
+            ]
+          },
+          "right": {
+            "kind": "functionCall",
+            "name": "yesterday",
+            "args": []
+          },
+          "parenthesized": true
+        },
+        {
+          "kind": "binaryExpr",
+          "op": ">=",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "event_time"
+            ]
+          },
+          "right": {
+            "kind": "binaryExpr",
+            "op": "-",
+            "left": {
+              "kind": "functionCall",
+              "name": "NOW",
+              "args": []
+            },
+            "right": {
+              "kind": "functionCall",
+              "name": "toIntervalMinute",
+              "args": [
+                {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "15"
+                }
+              ]
+            },
+            "parenthesized": true
+          },
+          "parenthesized": true
+        },
+        {
+          "kind": "binaryExpr",
+          "op": "=",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "current_database"
+            ]
+          },
+          "right": {
+            "kind": "functionCall",
+            "name": "currentDatabase",
+            "args": []
+          },
+          "parenthesized": true
+        },
+        {
+          "kind": "functionCall",
+          "name": "like",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "log_comment"
+              ]
+            },
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "03783_autopr_dataflow_cache_reuse_query_%"
+            }
+          ],
+          "parenthesized": true
+        },
+        {
+          "kind": "binaryExpr",
+          "op": "=",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "type"
+            ]
+          },
+          "right": {
+            "kind": "literal",
+            "type": "String",
+            "value": "QueryFinish"
+          },
+          "parenthesized": true
+        }
+      ]
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "log_comment"
+          ]
+        },
+        "direction": "ASC"
+      }
+    ],
+    "format": "TSVWithNames"
+  }
+]

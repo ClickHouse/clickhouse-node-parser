@@ -1,1 +1,25 @@
-<Parse Error>
+CREATE TEMPORARY TABLE table
+(
+    x UInt8
+);
+
+INSERT INTO table;
+
+INSERT INTO table;
+
+INSERT INTO table;
+
+SELECT *
+FROM table
+ORDER BY x ASC;
+
+CREATE TEMPORARY TABLE `FORMAT`
+(
+    x UInt8
+);
+
+INSERT INTO `FORMAT`;
+
+SELECT *
+FROM `FORMAT`
+FORMAT Values;

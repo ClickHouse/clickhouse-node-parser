@@ -1,1 +1,1432 @@
-{"expected":[{"type":"literal","text":"EXPLAIN","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"REPLACE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"SET","ignoreCase":true},{"type":"literal","text":"SET","ignoreCase":true},{"type":"literal","text":"SET","ignoreCase":true},{"type":"literal","text":"USE","ignoreCase":true},{"type":"literal","text":"SYSTEM","ignoreCase":true},{"type":"literal","text":"(","ignoreCase":false},{"type":"literal","text":"WITH","ignoreCase":true},{"type":"literal","text":"SELECT","ignoreCase":true},{"type":"end"}],"found":"I","location":{"start":{"offset":234,"line":11,"column":1},"end":{"offset":235,"line":11,"column":2}},"name":"SyntaxError"}
+[
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "max_threads",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "max_insert_threads",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "max_block_size",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "65536"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "enable_analyzer",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "test_limit_by_all_old_planner"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "id",
+        "type": {
+          "name": "Int32"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "category",
+        "type": {
+          "name": "String"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "value",
+        "type": {
+          "name": "Int32"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "name",
+        "type": {
+          "name": "String"
+        }
+      }
+    ],
+    "engine": {
+      "name": "Memory"
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "test_limit_by_all_old_planner"
+      }
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "id"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "category"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "value"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "name"
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "test_limit_by_all_old_planner"
+    },
+    "limitBy": {
+      "count": {
+        "kind": "literal",
+        "type": "UInt64",
+        "value": "1"
+      },
+      "by": []
+    },
+    "settings": [
+      {
+        "name": "allow_experimental_analyzer",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      }
+    ],
+    "leadingComments": [
+      "-- Test 1: Test that LIMIT BY ALL throws an exception when using the old planner",
+      "-- This tests the changes in TreeWriter.cpp"
+    ],
+    "trailingComments": [
+      "-- {serverError NOT_IMPLEMENTED}"
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "id"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "category"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "value"
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "test_limit_by_all_old_planner"
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "id"
+          ]
+        },
+        "direction": "ASC"
+      },
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "category"
+          ]
+        },
+        "direction": "ASC"
+      },
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "value"
+          ]
+        },
+        "direction": "ASC"
+      }
+    ],
+    "limitBy": {
+      "count": {
+        "kind": "literal",
+        "type": "UInt64",
+        "value": "1"
+      },
+      "by": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "id"
+          ]
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "category"
+          ]
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "value"
+          ]
+        }
+      ]
+    },
+    "leadingComments": [
+      "-- Test 2: Basic LIMIT BY usage."
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "id"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "category"
+        ]
+      },
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "concat",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "category"
+              ]
+            },
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "_"
+            },
+            {
+              "kind": "columnRef",
+              "parts": [
+                "name"
+              ]
+            }
+          ]
+        },
+        "alias": "combined"
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "test_limit_by_all_old_planner"
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "id"
+          ]
+        },
+        "direction": "ASC"
+      },
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "category"
+          ]
+        },
+        "direction": "ASC"
+      },
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "value"
+          ]
+        },
+        "direction": "ASC"
+      }
+    ],
+    "limitBy": {
+      "count": {
+        "kind": "literal",
+        "type": "UInt64",
+        "value": "2"
+      },
+      "by": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "id"
+          ]
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "category"
+          ]
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "combined"
+          ]
+        }
+      ]
+    },
+    "leadingComments": [
+      "-- Test 3: LIMIT BY with computed column - make deterministic by ordering by value"
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "id"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "category"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "value"
+        ]
+      },
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "row_number",
+          "args": [],
+          "window": {
+            "partitionBy": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "category"
+                ]
+              }
+            ],
+            "orderBy": [
+              {
+                "kind": "orderByItem",
+                "expr": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "value"
+                  ]
+                },
+                "direction": "ASC"
+              }
+            ]
+          }
+        },
+        "alias": "rn"
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "test_limit_by_all_old_planner"
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "id"
+          ]
+        },
+        "direction": "ASC"
+      },
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "category"
+          ]
+        },
+        "direction": "ASC"
+      },
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "value"
+          ]
+        },
+        "direction": "ASC"
+      },
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "rn"
+          ]
+        },
+        "direction": "ASC"
+      }
+    ],
+    "limitBy": {
+      "count": {
+        "kind": "literal",
+        "type": "UInt64",
+        "value": "1"
+      },
+      "by": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "id"
+          ]
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "category"
+          ]
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "value"
+          ]
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "rn"
+          ]
+        }
+      ]
+    },
+    "limit": {
+      "count": {
+        "kind": "literal",
+        "type": "UInt64",
+        "value": "3"
+      }
+    },
+    "leadingComments": [
+      "-- Test 4: LIMIT BY with window function - make deterministic"
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "id"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "category"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "value"
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "test_limit_by_all_old_planner"
+    },
+    "where": {
+      "kind": "binaryExpr",
+      "op": ">",
+      "left": {
+        "kind": "columnRef",
+        "parts": [
+          "value"
+        ]
+      },
+      "right": {
+        "kind": "literal",
+        "type": "UInt64",
+        "value": "200"
+      }
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "id"
+          ]
+        },
+        "direction": "ASC"
+      },
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "category"
+          ]
+        },
+        "direction": "ASC"
+      },
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "value"
+          ]
+        },
+        "direction": "ASC"
+      }
+    ],
+    "limitBy": {
+      "count": {
+        "kind": "literal",
+        "type": "UInt64",
+        "value": "1"
+      },
+      "by": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "id"
+          ]
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "category"
+          ]
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "value"
+          ]
+        }
+      ]
+    },
+    "leadingComments": [
+      "-- Test 5: LIMIT BY with WHERE clause - make deterministic"
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "id"
+        ]
+      }
+    ],
+    "from": {
+      "kind": "subqueryFrom",
+      "query": {
+        "kind": "select",
+        "distinct": {
+          "kind": "distinct"
+        },
+        "select": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "id"
+            ]
+          },
+          {
+            "kind": "columnRef",
+            "parts": [
+              "category"
+            ]
+          }
+        ],
+        "from": {
+          "kind": "tableRef",
+          "table": "test_limit_by_all_old_planner"
+        }
+      }
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "id"
+          ]
+        },
+        "direction": "ASC"
+      },
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "category"
+          ]
+        },
+        "direction": "ASC"
+      }
+    ],
+    "limitBy": {
+      "count": {
+        "kind": "literal",
+        "type": "UInt64",
+        "value": "1"
+      },
+      "by": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "id"
+          ]
+        }
+      ]
+    },
+    "leadingComments": [
+      "-- Test 6: LIMIT BY with unique values"
+    ]
+  },
+  {
+    "kind": "select",
+    "distinct": {
+      "kind": "distinct"
+    },
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "id"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "category"
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "test_limit_by_all_old_planner"
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "id"
+          ]
+        },
+        "direction": "ASC"
+      },
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "category"
+          ]
+        },
+        "direction": "ASC"
+      }
+    ],
+    "limitBy": {
+      "count": {
+        "kind": "literal",
+        "type": "UInt64",
+        "value": "1"
+      },
+      "by": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "id"
+          ]
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "category"
+          ]
+        }
+      ]
+    },
+    "limit": {
+      "count": {
+        "kind": "literal",
+        "type": "UInt64",
+        "value": "2"
+      }
+    },
+    "leadingComments": [
+      "-- Test 7: LIMIT BY with DISTINCT clause"
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "id"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "category"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "value"
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "test_limit_by_all_old_planner"
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "id"
+          ]
+        },
+        "direction": "ASC"
+      },
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "category"
+          ]
+        },
+        "direction": "ASC"
+      },
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "value"
+          ]
+        },
+        "direction": "ASC"
+      }
+    ],
+    "limitBy": {
+      "count": {
+        "kind": "literal",
+        "type": "Int64",
+        "value": "-1"
+      },
+      "by": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "id"
+          ]
+        }
+      ]
+    },
+    "leadingComments": [
+      "-- Test 8: Negative LIMIT BY should throw an exception"
+    ],
+    "trailingComments": [
+      "-- { serverError NOT_IMPLEMENTED }"
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "id"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "category"
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "test_limit_by_all_old_planner"
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "id"
+          ]
+        },
+        "direction": "ASC"
+      },
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "category"
+          ]
+        },
+        "direction": "ASC"
+      },
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "value"
+          ]
+        },
+        "direction": "ASC"
+      }
+    ],
+    "limitBy": {
+      "count": {
+        "kind": "literal",
+        "type": "UInt64",
+        "value": "2"
+      },
+      "by": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "id"
+          ]
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "category"
+          ]
+        }
+      ],
+      "offset": {
+        "kind": "literal",
+        "type": "UInt64",
+        "value": "1"
+      }
+    },
+    "leadingComments": [
+      "-- Test 9: LIMIT BY with OFFSET"
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "id"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "category"
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "test_limit_by_all_old_planner"
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "value"
+          ]
+        },
+        "direction": "DESC"
+      }
+    ],
+    "limitBy": {
+      "count": {
+        "kind": "literal",
+        "type": "UInt64",
+        "value": "1"
+      },
+      "by": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "id"
+          ]
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "category"
+          ]
+        }
+      ]
+    },
+    "limit": {
+      "count": {
+        "kind": "literal",
+        "type": "UInt64",
+        "value": "2"
+      }
+    },
+    "leadingComments": [
+      "-- Test 10: LIMIT BY with DESC ORDER BY"
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "id"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "category"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "value"
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "test_limit_by_all_old_planner"
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "id"
+          ]
+        },
+        "direction": "ASC"
+      },
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "category"
+          ]
+        },
+        "direction": "ASC"
+      },
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "value"
+          ]
+        },
+        "direction": "ASC"
+      }
+    ],
+    "limitBy": {
+      "count": {
+        "kind": "literal",
+        "type": "UInt64",
+        "value": "0"
+      },
+      "by": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "id"
+          ]
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "category"
+          ]
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "value"
+          ]
+        }
+      ]
+    },
+    "leadingComments": [
+      "-- Test 11: 0 LIMIT BY - Should give no result"
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "id"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "category"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "value"
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "test_limit_by_all_old_planner"
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "id"
+          ]
+        },
+        "direction": "ASC"
+      },
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "category"
+          ]
+        },
+        "direction": "ASC"
+      },
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "value"
+          ]
+        },
+        "direction": "ASC"
+      }
+    ],
+    "limitBy": {
+      "count": {
+        "kind": "literal",
+        "type": "UInt64",
+        "value": "2"
+      },
+      "by": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "id"
+          ]
+        }
+      ],
+      "offset": {
+        "kind": "literal",
+        "type": "UInt64",
+        "value": "1"
+      }
+    },
+    "leadingComments": [
+      "-- Test 12: Misc"
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "d"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "category"
+        ]
+      },
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "count",
+          "args": []
+        },
+        "alias": "c"
+      }
+    ],
+    "from": {
+      "kind": "subqueryFrom",
+      "query": {
+        "kind": "select",
+        "with": [
+          {
+            "kind": "cteExpr",
+            "name": "d",
+            "expr": {
+              "kind": "functionCall",
+              "name": "toStartOfDay",
+              "args": [
+                {
+                  "kind": "functionCall",
+                  "name": "toDateTime",
+                  "args": [
+                    {
+                      "kind": "literal",
+                      "type": "String",
+                      "value": "2025-01-01 12:00:00"
+                    }
+                  ]
+                }
+              ]
+            }
+          }
+        ],
+        "select": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "d"
+            ]
+          },
+          {
+            "kind": "columnRef",
+            "parts": [
+              "category"
+            ]
+          }
+        ],
+        "from": {
+          "kind": "tableRef",
+          "table": "test_limit_by_all_old_planner"
+        },
+        "orderBy": [
+          {
+            "kind": "orderByItem",
+            "expr": {
+              "kind": "columnRef",
+              "parts": [
+                "d"
+              ]
+            },
+            "direction": "ASC"
+          },
+          {
+            "kind": "orderByItem",
+            "expr": {
+              "kind": "columnRef",
+              "parts": [
+                "category"
+              ]
+            },
+            "direction": "ASC"
+          },
+          {
+            "kind": "orderByItem",
+            "expr": {
+              "kind": "columnRef",
+              "parts": [
+                "value"
+              ]
+            },
+            "direction": "ASC"
+          },
+          {
+            "kind": "orderByItem",
+            "expr": {
+              "kind": "columnRef",
+              "parts": [
+                "name"
+              ]
+            },
+            "direction": "ASC"
+          }
+        ],
+        "limitBy": {
+          "count": {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "2"
+          },
+          "by": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "d"
+              ]
+            },
+            {
+              "kind": "columnRef",
+              "parts": [
+                "category"
+              ]
+            }
+          ]
+        },
+        "settings": [
+          {
+            "name": "enable_positional_arguments",
+            "value": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "0"
+            }
+          }
+        ]
+      }
+    },
+    "groupBy": {
+      "kind": "expressions",
+      "items": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "d"
+          ]
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "category"
+          ]
+        }
+      ]
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "d"
+          ]
+        },
+        "direction": "ASC"
+      },
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "category"
+          ]
+        },
+        "direction": "ASC"
+      }
+    ]
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "test_limit_by_all_old_planner"
+      }
+    },
+    "leadingComments": [
+      "-- Test 13: NULL key handling"
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "id"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "category"
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "test_limit_by_all_old_planner"
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "id"
+          ]
+        },
+        "direction": "ASC"
+      },
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "category"
+          ]
+        },
+        "direction": "ASC"
+      },
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "value"
+          ]
+        },
+        "direction": "ASC"
+      }
+    ],
+    "limitBy": {
+      "count": {
+        "kind": "literal",
+        "type": "UInt64",
+        "value": "1"
+      },
+      "by": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "id"
+          ]
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "category"
+          ]
+        }
+      ]
+    }
+  }
+]

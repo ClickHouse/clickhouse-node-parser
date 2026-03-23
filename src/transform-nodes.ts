@@ -77,6 +77,8 @@ export interface NodePositionMap {
   createWindowView: Statement;
   createLiveView: Statement;
   parallelWith: Statement;
+  insert: Statement;
+  truncate: Statement;
 
   // CREATE TABLE element nodes
   columnDef: import('./ast').TableElement;

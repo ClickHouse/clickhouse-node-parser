@@ -1,1 +1,154 @@
-<Parse Error>
+SET enable_optimize_predicate_expression = 0;
+
+SET optimize_move_to_prewhere = 1;
+
+SET convert_query_to_cnf = 0;
+
+SELECT *
+FROM
+    `system`.one AS l
+CROSS JOIN `system`.one AS r
+ORDER BY `all` ASC;
+
+CREATE TABLE t1_00826
+(
+    a Int8,
+    b Nullable(Int8)
+)
+ENGINE = Memory;
+
+CREATE TABLE t2_00826
+(
+    a Int8,
+    b Nullable(Int8)
+)
+ENGINE = Memory;
+
+INSERT INTO t1_00826;
+
+INSERT INTO t2_00826;
+
+INSERT INTO t2_00826 (a);
+
+SELECT '--- cross ---';
+
+SELECT *
+FROM
+    t1_00826
+CROSS JOIN t2_00826
+WHERE t1_00826.a = t2_00826.a
+ORDER BY `ALL` ASC;
+
+SELECT *
+FROM
+    t1_00826
+CROSS JOIN t2_00826
+WHERE t1_00826.b = t2_00826.b
+ORDER BY `ALL` ASC;
+
+SELECT *
+FROM
+    t1_00826
+CROSS JOIN t2_00826
+WHERE t1_00826.a = t2_00826.b
+ORDER BY t1_00826.a ASC;
+
+SELECT *
+FROM
+    t1_00826 AS x
+CROSS JOIN t1_00826 AS y
+WHERE x.a = y.a
+    AND x.b = y.b
+ORDER BY x.a ASC;
+
+SELECT *
+FROM
+    t1_00826
+CROSS JOIN t2_00826
+WHERE t1_00826.a = t1_00826.b
+ORDER BY (t1_00826.a, t2_00826.a, t2_00826.b) ASC;
+
+SELECT *
+FROM
+    t1_00826
+CROSS JOIN t2_00826
+WHERE t1_00826.a = t2_00826.a
+    AND t1_00826.b = t2_00826.b
+ORDER BY `all` ASC;
+
+SELECT *
+FROM
+    t1_00826
+CROSS JOIN t2_00826
+WHERE t1_00826.a = t2_00826.a
+    AND ((t1_00826.b = t2_00826.b
+    AND 1))
+ORDER BY `all` ASC;
+
+SELECT *
+FROM
+    t1_00826
+CROSS JOIN t2_00826
+WHERE t1_00826.a = t2_00826.a
+    AND t1_00826.b = t2_00826.b
+    AND t1_00826.a >= 1
+    AND t2_00826.b = 1
+ORDER BY `all` ASC;
+
+SELECT *
+FROM
+    t1_00826
+CROSS JOIN t2_00826
+WHERE t1_00826.a = t2_00826.a
+    AND t1_00826.b = t2_00826.b
+    AND ((t1_00826.a >= 1
+    OR t2_00826.b = 1))
+ORDER BY `all` ASC;
+
+SELECT *
+FROM
+    t1_00826
+CROSS JOIN t2_00826
+WHERE t1_00826.a + 1 = t2_00826.a + t2_00826.b
+    AND (t1_00826.a + t1_00826.b + t2_00826.a + t2_00826.b > 5)
+ORDER BY `all` ASC;
+
+SELECT *
+FROM
+    t1_00826
+CROSS JOIN t2_00826
+WHERE t1_00826.b = t2_00826.a
+    AND ((isNull(t2_00826.b)
+    OR t2_00826.b > t2_00826.a))
+ORDER BY t1_00826.a ASC;
+
+SELECT a AS b
+FROM
+    t1_00826
+CROSS JOIN t2_00826
+WHERE t1_00826.b = t2_00826.a
+    AND b > 0
+ORDER BY `ALL` ASC;
+
+SELECT *
+FROM
+    t1_00826
+CROSS JOIN t2_00826
+WHERE t1_00826.a = t2_00826.a
+ORDER BY `ALL` ASC;
+
+SELECT *
+FROM
+    t1_00826
+CROSS JOIN t2_00826
+WHERE t1_00826.b = t2_00826.b
+ORDER BY `ALL` ASC;
+
+SELECT *
+FROM
+    t1_00826
+CROSS JOIN t2_00826
+WHERE t1_00826.a = t2_00826.a
+    AND ((isNull(t2_00826.b)
+    OR t2_00826.b < 2))
+ORDER BY `ALL` ASC;

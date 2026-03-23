@@ -1,1 +1,24 @@
-<Parse Error>
+CREATE TABLE tab2
+(
+    id String,
+    version Int64,
+    l String,
+    accountCode String,
+    z Int32
+)
+ENGINE = ReplacingMergeTree(z)
+PRIMARY KEY (accountCode, id)
+ORDER BY (accountCode, id, version, l);
+
+INSERT INTO tab2 SELECT
+    toString(number),
+    number,
+    toString(number),
+    toString(number),
+    0
+FROM numbers(1e6);
+
+SET max_threads = 2;
+
+SELECT count()
+FROM tab2 FINAL;

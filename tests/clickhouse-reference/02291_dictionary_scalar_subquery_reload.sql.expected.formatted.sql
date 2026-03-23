@@ -1,1 +1,34 @@
-<Parse Error>
+CREATE TABLE test_dictionary_source_table
+(
+    id UInt64,
+    value String
+)
+ENGINE = TinyLog;
+
+CREATE VIEW test_dictionary_view (id UInt64, value String)
+AS
+SELECT
+    id,
+    value
+FROM test_dictionary_source_table
+WHERE id = (
+        SELECT max(id)
+        FROM test_dictionary_source_table
+    );
+
+INSERT INTO test_dictionary_source_table;
+
+CREATE DICTIONARY test_dictionary
+(
+    id UInt64,
+    value String
+)
+PRIMARY KEY id
+SOURCE(clickhouse(TABLE 'test_dictionary_view'))
+LIFETIME(MIN 0 MAX 1)
+LAYOUT(FLAT());
+
+SELECT *
+FROM test_dictionary;
+
+INSERT INTO test_dictionary_source_table;

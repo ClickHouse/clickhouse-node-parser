@@ -1,1 +1,1340 @@
-{"expected":[{"type":"literal","text":"EXPLAIN","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"REPLACE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"SET","ignoreCase":true},{"type":"literal","text":"SET","ignoreCase":true},{"type":"literal","text":"SET","ignoreCase":true},{"type":"literal","text":"USE","ignoreCase":true},{"type":"literal","text":"SYSTEM","ignoreCase":true},{"type":"literal","text":"(","ignoreCase":false},{"type":"literal","text":"WITH","ignoreCase":true},{"type":"literal","text":"SELECT","ignoreCase":true},{"type":"end"}],"found":"I","location":{"start":{"offset":1987,"line":64,"column":1},"end":{"offset":1988,"line":64,"column":2}},"name":"SyntaxError"}
+[
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "enable_full_text_index",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ],
+    "leadingComments": [
+      "-- Tags: no-random-mergetree-settings, no-random-settings",
+      "-- ^^ Prevent the data sizes from varying with random parameters.",
+      "-- This test validates the storage size of the text index without and with posting list compression."
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "use_skip_indexes_on_data_read",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "use_query_condition_cache",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "max_insert_threads",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "max_block_size",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "65536"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "min_insert_block_size_rows",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "min_insert_block_size_bytes",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "tab_bitpacking"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "ts",
+        "type": {
+          "name": "DateTime"
+        },
+        "codec": [
+          {
+            "name": "LZ4"
+          }
+        ]
+      },
+      {
+        "kind": "columnDef",
+        "name": "str",
+        "type": {
+          "name": "String"
+        },
+        "codec": [
+          {
+            "name": "LZ4"
+          }
+        ]
+      },
+      {
+        "kind": "indexDef",
+        "name": "inv_idx",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "str"
+          ]
+        },
+        "indexType": {
+          "name": "text",
+          "args": [
+            {
+              "kind": "binaryExpr",
+              "op": "=",
+              "left": {
+                "kind": "columnRef",
+                "parts": [
+                  "tokenizer"
+                ]
+              },
+              "right": {
+                "kind": "literal",
+                "type": "String",
+                "value": "splitByNonAlpha"
+              }
+            },
+            {
+              "kind": "binaryExpr",
+              "op": "=",
+              "left": {
+                "kind": "columnRef",
+                "parts": [
+                  "posting_list_codec"
+                ]
+              },
+              "right": {
+                "kind": "literal",
+                "type": "String",
+                "value": "bitpacking"
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "ts"
+          ]
+        }
+      }
+    ],
+    "settings": [
+      {
+        "name": "min_rows_for_wide_part",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      },
+      {
+        "name": "min_bytes_for_wide_part",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      },
+      {
+        "name": "index_granularity",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "8192"
+        }
+      },
+      {
+        "name": "index_granularity_bytes",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      },
+      {
+        "name": "enable_block_offset_column",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      },
+      {
+        "name": "enable_block_number_column",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      },
+      {
+        "name": "string_serialization_version",
+        "value": {
+          "kind": "literal",
+          "type": "String",
+          "value": "with_size_stream"
+        }
+      },
+      {
+        "name": "primary_key_compress_block_size",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "65536"
+        }
+      },
+      {
+        "name": "marks_compress_block_size",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "65536"
+        }
+      },
+      {
+        "name": "min_compress_block_size",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "65536"
+        }
+      },
+      {
+        "name": "max_compress_block_size",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1048576"
+        }
+      },
+      {
+        "name": "ratio_of_defaults_for_sparse_serialization",
+        "value": {
+          "kind": "literal",
+          "type": "Float64",
+          "value": "0.95"
+        }
+      },
+      {
+        "name": "serialization_info_version",
+        "value": {
+          "kind": "literal",
+          "type": "String",
+          "value": "basic"
+        }
+      },
+      {
+        "name": "auto_statistics_types",
+        "value": {
+          "kind": "literal",
+          "type": "String",
+          "value": "minmax"
+        }
+      }
+    ],
+    "settingsAfterOrderBy": true
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "tab_uncompressed"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "ts",
+        "type": {
+          "name": "DateTime"
+        },
+        "codec": [
+          {
+            "name": "LZ4"
+          }
+        ]
+      },
+      {
+        "kind": "columnDef",
+        "name": "str",
+        "type": {
+          "name": "String"
+        },
+        "codec": [
+          {
+            "name": "LZ4"
+          }
+        ]
+      },
+      {
+        "kind": "indexDef",
+        "name": "inv_idx",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "str"
+          ]
+        },
+        "indexType": {
+          "name": "text",
+          "args": [
+            {
+              "kind": "binaryExpr",
+              "op": "=",
+              "left": {
+                "kind": "columnRef",
+                "parts": [
+                  "tokenizer"
+                ]
+              },
+              "right": {
+                "kind": "literal",
+                "type": "String",
+                "value": "splitByNonAlpha"
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "ts"
+          ]
+        }
+      }
+    ],
+    "settings": [
+      {
+        "name": "min_rows_for_wide_part",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      },
+      {
+        "name": "min_bytes_for_wide_part",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      },
+      {
+        "name": "index_granularity",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "8192"
+        }
+      },
+      {
+        "name": "index_granularity_bytes",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      },
+      {
+        "name": "enable_block_offset_column",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      },
+      {
+        "name": "enable_block_number_column",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      },
+      {
+        "name": "string_serialization_version",
+        "value": {
+          "kind": "literal",
+          "type": "String",
+          "value": "with_size_stream"
+        }
+      },
+      {
+        "name": "primary_key_compress_block_size",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "65536"
+        }
+      },
+      {
+        "name": "marks_compress_block_size",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "65536"
+        }
+      },
+      {
+        "name": "min_compress_block_size",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "65536"
+        }
+      },
+      {
+        "name": "max_compress_block_size",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1048576"
+        }
+      },
+      {
+        "name": "ratio_of_defaults_for_sparse_serialization",
+        "value": {
+          "kind": "literal",
+          "type": "Float64",
+          "value": "0.95"
+        }
+      },
+      {
+        "name": "serialization_info_version",
+        "value": {
+          "kind": "literal",
+          "type": "String",
+          "value": "basic"
+        }
+      },
+      {
+        "name": "auto_statistics_types",
+        "value": {
+          "kind": "literal",
+          "type": "String",
+          "value": "minmax"
+        }
+      }
+    ],
+    "settingsAfterOrderBy": true
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "tab_bitpacking"
+      }
+    },
+    "selectQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "2026-01-09 10:00:00"
+        },
+        {
+          "kind": "alias",
+          "expr": {
+            "kind": "functionCall",
+            "name": "multiIf",
+            "args": [
+              {
+                "kind": "binaryExpr",
+                "op": "=",
+                "left": {
+                  "kind": "binaryExpr",
+                  "op": "%",
+                  "left": {
+                    "kind": "columnRef",
+                    "parts": [
+                      "number"
+                    ]
+                  },
+                  "right": {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "3"
+                  }
+                },
+                "right": {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "0"
+                }
+              },
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "aa"
+              },
+              {
+                "kind": "binaryExpr",
+                "op": "=",
+                "left": {
+                  "kind": "binaryExpr",
+                  "op": "%",
+                  "left": {
+                    "kind": "columnRef",
+                    "parts": [
+                      "number"
+                    ]
+                  },
+                  "right": {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "3"
+                  }
+                },
+                "right": {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "1"
+                }
+              },
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "bb"
+              },
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "cc"
+              }
+            ]
+          },
+          "alias": "str"
+        }
+      ],
+      "from": {
+        "kind": "tableFunctionRef",
+        "name": "numbers",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "1024000"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "tab_uncompressed"
+      }
+    },
+    "selectQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "2026-01-09 11:00:00"
+        },
+        {
+          "kind": "alias",
+          "expr": {
+            "kind": "functionCall",
+            "name": "multiIf",
+            "args": [
+              {
+                "kind": "binaryExpr",
+                "op": "=",
+                "left": {
+                  "kind": "binaryExpr",
+                  "op": "%",
+                  "left": {
+                    "kind": "columnRef",
+                    "parts": [
+                      "number"
+                    ]
+                  },
+                  "right": {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "3"
+                  }
+                },
+                "right": {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "0"
+                }
+              },
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "aa"
+              },
+              {
+                "kind": "binaryExpr",
+                "op": "=",
+                "left": {
+                  "kind": "binaryExpr",
+                  "op": "%",
+                  "left": {
+                    "kind": "columnRef",
+                    "parts": [
+                      "number"
+                    ]
+                  },
+                  "right": {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "3"
+                  }
+                },
+                "right": {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "1"
+                }
+              },
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "bb"
+              },
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "cc"
+              }
+            ]
+          },
+          "alias": "str"
+        }
+      ],
+      "from": {
+        "kind": "tableFunctionRef",
+        "name": "numbers",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "1024000"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "tab_bitpacking"
+      }
+    },
+    "selectQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "2026-01-09 12:00:00"
+        },
+        {
+          "kind": "alias",
+          "expr": {
+            "kind": "functionCall",
+            "name": "multiIf",
+            "args": [
+              {
+                "kind": "binaryExpr",
+                "op": "<",
+                "left": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "number"
+                  ]
+                },
+                "right": {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "129"
+                }
+              },
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "tail129"
+              },
+              {
+                "kind": "binaryExpr",
+                "op": "=",
+                "left": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "number"
+                  ]
+                },
+                "right": {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "129"
+                }
+              },
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "single"
+              },
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "noise"
+              }
+            ]
+          },
+          "alias": "str"
+        }
+      ],
+      "from": {
+        "kind": "tableFunctionRef",
+        "name": "numbers",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "512"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "tab_uncompressed"
+      }
+    },
+    "selectQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "2026-01-09 13:00:00"
+        },
+        {
+          "kind": "alias",
+          "expr": {
+            "kind": "functionCall",
+            "name": "multiIf",
+            "args": [
+              {
+                "kind": "binaryExpr",
+                "op": "<",
+                "left": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "number"
+                  ]
+                },
+                "right": {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "129"
+                }
+              },
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "tail129"
+              },
+              {
+                "kind": "binaryExpr",
+                "op": "=",
+                "left": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "number"
+                  ]
+                },
+                "right": {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "129"
+                }
+              },
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "single"
+              },
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "noise"
+              }
+            ]
+          },
+          "alias": "str"
+        }
+      ],
+      "from": {
+        "kind": "tableFunctionRef",
+        "name": "numbers",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "512"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "tab_bitpacking"
+      }
+    },
+    "selectQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "2026-01-09 14:00:00"
+        },
+        {
+          "kind": "alias",
+          "expr": {
+            "kind": "functionCall",
+            "name": "if",
+            "args": [
+              {
+                "kind": "binaryExpr",
+                "op": "<",
+                "left": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "number"
+                  ]
+                },
+                "right": {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "1003"
+                }
+              },
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "mid1003"
+              },
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "noise"
+              }
+            ]
+          },
+          "alias": "str"
+        }
+      ],
+      "from": {
+        "kind": "tableFunctionRef",
+        "name": "numbers",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "1500"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "tab_uncompressed"
+      }
+    },
+    "selectQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "2026-01-09 15:00:00"
+        },
+        {
+          "kind": "alias",
+          "expr": {
+            "kind": "functionCall",
+            "name": "if",
+            "args": [
+              {
+                "kind": "binaryExpr",
+                "op": "<",
+                "left": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "number"
+                  ]
+                },
+                "right": {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "1003"
+                }
+              },
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "mid1003"
+              },
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "noise"
+              }
+            ]
+          },
+          "alias": "str"
+        }
+      ],
+      "from": {
+        "kind": "tableFunctionRef",
+        "name": "numbers",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "1500"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "tab_bitpacking"
+      }
+    },
+    "selectQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "2026-01-09 16:00:00"
+        },
+        {
+          "kind": "alias",
+          "expr": {
+            "kind": "functionCall",
+            "name": "multiIf",
+            "args": [
+              {
+                "kind": "inExpr",
+                "negated": false,
+                "expr": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "number"
+                  ]
+                },
+                "values": [
+                  {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "0"
+                  },
+                  {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "777"
+                  }
+                ]
+              },
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "rare2"
+              },
+              {
+                "kind": "inExpr",
+                "negated": false,
+                "expr": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "number"
+                  ]
+                },
+                "values": [
+                  {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "1"
+                  },
+                  {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "2"
+                  },
+                  {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "3"
+                  },
+                  {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "4"
+                  },
+                  {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "5"
+                  }
+                ]
+              },
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "rare5"
+              },
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "noise"
+              }
+            ]
+          },
+          "alias": "str"
+        }
+      ],
+      "from": {
+        "kind": "tableFunctionRef",
+        "name": "numbers",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "2000"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "tab_uncompressed"
+      }
+    },
+    "selectQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "2026-01-09 17:00:00"
+        },
+        {
+          "kind": "alias",
+          "expr": {
+            "kind": "functionCall",
+            "name": "multiIf",
+            "args": [
+              {
+                "kind": "inExpr",
+                "negated": false,
+                "expr": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "number"
+                  ]
+                },
+                "values": [
+                  {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "0"
+                  },
+                  {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "777"
+                  }
+                ]
+              },
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "rare2"
+              },
+              {
+                "kind": "inExpr",
+                "negated": false,
+                "expr": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "number"
+                  ]
+                },
+                "values": [
+                  {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "1"
+                  },
+                  {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "2"
+                  },
+                  {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "3"
+                  },
+                  {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "4"
+                  },
+                  {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "5"
+                  }
+                ]
+              },
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "rare5"
+              },
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "noise"
+              }
+            ]
+          },
+          "alias": "str"
+        }
+      ],
+      "from": {
+        "kind": "tableFunctionRef",
+        "name": "numbers",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "2000"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "table"
+        ]
+      },
+      {
+        "kind": "functionCall",
+        "name": "sum",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "rows"
+            ]
+          }
+        ]
+      },
+      {
+        "kind": "functionCall",
+        "name": "sum",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "secondary_indices_compressed_bytes"
+            ]
+          }
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "database": "system",
+      "table": "parts"
+    },
+    "where": {
+      "kind": "naryExpr",
+      "op": "AND",
+      "operands": [
+        {
+          "kind": "binaryExpr",
+          "op": "=",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "database"
+            ]
+          },
+          "right": {
+            "kind": "functionCall",
+            "name": "currentDatabase",
+            "args": []
+          }
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "active"
+          ]
+        },
+        {
+          "kind": "inExpr",
+          "negated": false,
+          "expr": {
+            "kind": "columnRef",
+            "parts": [
+              "table"
+            ]
+          },
+          "values": [
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "tab_bitpacking"
+            },
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "tab_uncompressed"
+            }
+          ]
+        }
+      ]
+    },
+    "groupBy": {
+      "kind": "expressions",
+      "items": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "table"
+          ]
+        }
+      ]
+    },
+    "leadingComments": [
+      "-- Compare the size of the text index for the same dataset with vs. without compression."
+    ]
+  }
+]

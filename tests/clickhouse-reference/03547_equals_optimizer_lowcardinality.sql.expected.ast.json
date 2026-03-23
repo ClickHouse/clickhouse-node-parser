@@ -1,1 +1,266 @@
-{"expected":[{"type":"literal","text":"EXPLAIN","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"REPLACE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"SET","ignoreCase":true},{"type":"literal","text":"SET","ignoreCase":true},{"type":"literal","text":"SET","ignoreCase":true},{"type":"literal","text":"USE","ignoreCase":true},{"type":"literal","text":"SYSTEM","ignoreCase":true},{"type":"literal","text":"(","ignoreCase":false},{"type":"literal","text":"WITH","ignoreCase":true},{"type":"literal","text":"SELECT","ignoreCase":true},{"type":"end"}],"found":"I","location":{"start":{"offset":86,"line":2,"column":1},"end":{"offset":87,"line":2,"column":2}},"name":"SyntaxError"}
+[
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "test"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "d1",
+        "type": {
+          "name": "Dynamic",
+          "args": [
+            {
+              "kind": "setting",
+              "name": "max_types",
+              "value": {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "2"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "d2",
+        "type": {
+          "name": "Dynamic",
+          "args": [
+            {
+              "kind": "setting",
+              "name": "max_types",
+              "value": {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "2"
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "engine": {
+      "name": "Memory"
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "test"
+      }
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "dynamicType",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "d2"
+            ]
+          }
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "test"
+    },
+    "groupBy": {
+      "kind": "expressions",
+      "items": [
+        {
+          "kind": "functionCall",
+          "name": "dynamicType",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "d2"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "having": {
+      "kind": "naryExpr",
+      "op": "OR",
+      "operands": [
+        {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        },
+        {
+          "kind": "binaryExpr",
+          "op": "=",
+          "left": {
+            "kind": "binaryExpr",
+            "op": "=",
+            "left": {
+              "kind": "functionCall",
+              "name": "materialize",
+              "args": [
+                {
+                  "kind": "functionCall",
+                  "name": "toLowCardinality",
+                  "args": [
+                    {
+                      "kind": "literal",
+                      "type": "UInt64",
+                      "value": "0"
+                    }
+                  ]
+                }
+              ]
+            },
+            "right": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "0"
+            },
+            "parenthesized": true
+          },
+          "right": {
+            "kind": "functionCall",
+            "name": "anyLast",
+            "args": [
+              {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "1"
+              }
+            ]
+          },
+          "parenthesized": true
+        }
+      ]
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        },
+        "direction": "ASC"
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "dynamicType",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "d2"
+            ]
+          }
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "test"
+    },
+    "groupBy": {
+      "kind": "expressions",
+      "items": [
+        {
+          "kind": "functionCall",
+          "name": "dynamicType",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "d2"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "having": {
+      "kind": "naryExpr",
+      "op": "OR",
+      "operands": [
+        {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        },
+        {
+          "kind": "binaryExpr",
+          "op": "=",
+          "left": {
+            "kind": "binaryExpr",
+            "op": "=",
+            "left": {
+              "kind": "functionCall",
+              "name": "materialize",
+              "args": [
+                {
+                  "kind": "functionCall",
+                  "name": "toLowCardinality",
+                  "args": [
+                    {
+                      "kind": "literal",
+                      "type": "UInt64",
+                      "value": "0"
+                    }
+                  ]
+                }
+              ]
+            },
+            "right": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "0"
+            },
+            "parenthesized": true
+          },
+          "right": {
+            "kind": "functionCall",
+            "name": "anyLast",
+            "args": [
+              {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "0"
+              }
+            ]
+          },
+          "parenthesized": true
+        }
+      ]
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        },
+        "direction": "ASC"
+      }
+    ]
+  }
+]

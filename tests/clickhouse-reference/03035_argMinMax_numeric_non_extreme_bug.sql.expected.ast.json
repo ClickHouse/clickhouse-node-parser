@@ -1,1 +1,403 @@
-{"expected":[{"type":"literal","text":"EXPLAIN","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"REPLACE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"SET","ignoreCase":true},{"type":"literal","text":"SET","ignoreCase":true},{"type":"literal","text":"SET","ignoreCase":true},{"type":"literal","text":"USE","ignoreCase":true},{"type":"literal","text":"SYSTEM","ignoreCase":true},{"type":"literal","text":"(","ignoreCase":false},{"type":"literal","text":"WITH","ignoreCase":true},{"type":"literal","text":"SELECT","ignoreCase":true},{"type":"end"}],"found":"I","location":{"start":{"offset":204,"line":11,"column":1},"end":{"offset":205,"line":11,"column":2}},"name":"SyntaxError"}
+[
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "test"
+    },
+    "ifNotExists": true,
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "value",
+        "type": {
+          "name": "Float64"
+        },
+        "codec": [
+          {
+            "name": "Delta"
+          },
+          {
+            "name": "LZ4"
+          }
+        ]
+      },
+      {
+        "kind": "columnDef",
+        "name": "uuid",
+        "type": {
+          "name": "LowCardinality",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "String"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "time",
+        "type": {
+          "name": "DateTime64",
+          "args": [
+            {
+              "kind": "literal",
+              "value": "3"
+            },
+            {
+              "kind": "literal",
+              "value": "'UTC'"
+            }
+          ]
+        },
+        "codec": [
+          {
+            "name": "DoubleDelta"
+          },
+          {
+            "name": "LZ4"
+          }
+        ]
+      }
+    ],
+    "engine": {
+      "name": "MergeTree",
+      "args": []
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "uuid"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "test"
+      }
+    },
+    "columns": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "uuid"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "time"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "value"
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "max",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "time"
+            ]
+          }
+        ]
+      },
+      {
+        "kind": "functionCall",
+        "name": "max",
+        "args": [
+          {
+            "kind": "functionCall",
+            "name": "toNullable",
+            "args": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "time"
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "kind": "functionCall",
+        "name": "min",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "time"
+            ]
+          }
+        ]
+      },
+      {
+        "kind": "functionCall",
+        "name": "min",
+        "args": [
+          {
+            "kind": "functionCall",
+            "name": "toNullable",
+            "args": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "time"
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "kind": "functionCall",
+        "name": "argMax",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "value"
+            ]
+          },
+          {
+            "kind": "columnRef",
+            "parts": [
+              "time"
+            ]
+          }
+        ]
+      },
+      {
+        "kind": "functionCall",
+        "name": "argMax",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "value"
+            ]
+          },
+          {
+            "kind": "functionCall",
+            "name": "toNullable",
+            "args": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "time"
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "kind": "functionCall",
+        "name": "argMin",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "value"
+            ]
+          },
+          {
+            "kind": "columnRef",
+            "parts": [
+              "time"
+            ]
+          }
+        ]
+      },
+      {
+        "kind": "functionCall",
+        "name": "argMin",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "value"
+            ]
+          },
+          {
+            "kind": "functionCall",
+            "name": "toNullable",
+            "args": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "time"
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "kind": "functionCall",
+        "name": "argMinIf",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "value"
+            ]
+          },
+          {
+            "kind": "functionCall",
+            "name": "toNullable",
+            "args": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "time"
+                ]
+              }
+            ]
+          },
+          {
+            "kind": "binaryExpr",
+            "op": "!=",
+            "left": {
+              "kind": "columnRef",
+              "parts": [
+                "time"
+              ]
+            },
+            "right": {
+              "kind": "literal",
+              "type": "String",
+              "value": "2021-01-01 00:00:00.000"
+            }
+          }
+        ]
+      },
+      {
+        "kind": "functionCall",
+        "name": "argMaxIf",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "value"
+            ]
+          },
+          {
+            "kind": "functionCall",
+            "name": "toNullable",
+            "args": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "time"
+                ]
+              }
+            ]
+          },
+          {
+            "kind": "binaryExpr",
+            "op": "!=",
+            "left": {
+              "kind": "columnRef",
+              "parts": [
+                "time"
+              ]
+            },
+            "right": {
+              "kind": "literal",
+              "type": "String",
+              "value": "2021-01-01 00:00:59.000"
+            }
+          }
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "test"
+    },
+    "where": {
+      "kind": "naryExpr",
+      "op": "AND",
+      "operands": [
+        {
+          "kind": "binaryExpr",
+          "op": ">=",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "time"
+            ]
+          },
+          "right": {
+            "kind": "functionCall",
+            "name": "fromUnixTimestamp64Milli",
+            "args": [
+              {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "1609459200000"
+              },
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "UTC"
+              }
+            ]
+          },
+          "parenthesized": true
+        },
+        {
+          "kind": "binaryExpr",
+          "op": "<",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "time"
+            ]
+          },
+          "right": {
+            "kind": "functionCall",
+            "name": "fromUnixTimestamp64Milli",
+            "args": [
+              {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "1609459260000"
+              },
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "UTC"
+              }
+            ]
+          },
+          "parenthesized": true
+        }
+      ]
+    },
+    "format": "Vertical"
+  }
+]

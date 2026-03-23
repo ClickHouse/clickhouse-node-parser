@@ -1,1 +1,338 @@
-{"expected":[{"type":"literal","text":"EXPLAIN","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"REPLACE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"SET","ignoreCase":true},{"type":"literal","text":"SET","ignoreCase":true},{"type":"literal","text":"SET","ignoreCase":true},{"type":"literal","text":"USE","ignoreCase":true},{"type":"literal","text":"SYSTEM","ignoreCase":true},{"type":"literal","text":"(","ignoreCase":false},{"type":"literal","text":"WITH","ignoreCase":true},{"type":"literal","text":"SELECT","ignoreCase":true},{"type":"end"}],"found":"i","location":{"start":{"offset":343,"line":3,"column":1},"end":{"offset":344,"line":3,"column":2}},"name":"SyntaxError"}
+[
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "allow_deprecated_syntax_for_merge_tree",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "merge_distributed1"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "CounterID",
+        "type": {
+          "name": "UInt32"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "StartDate",
+        "type": {
+          "name": "Date"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "Sign",
+        "type": {
+          "name": "Int8"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "VisitID",
+        "type": {
+          "name": "UInt64"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "UserID",
+        "type": {
+          "name": "UInt64"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "StartTime",
+        "type": {
+          "name": "DateTime"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "ClickLogID",
+        "type": {
+          "name": "UInt64"
+        }
+      }
+    ],
+    "engine": {
+      "name": "CollapsingMergeTree",
+      "args": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "StartDate"
+          ]
+        },
+        {
+          "kind": "functionCall",
+          "name": "intHash32",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "UserID"
+              ]
+            }
+          ]
+        },
+        {
+          "kind": "functionCall",
+          "name": "tuple",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "CounterID"
+              ]
+            },
+            {
+              "kind": "columnRef",
+              "parts": [
+                "StartDate"
+              ]
+            },
+            {
+              "kind": "functionCall",
+              "name": "intHash32",
+              "args": [
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "UserID"
+                  ]
+                }
+              ]
+            },
+            {
+              "kind": "columnRef",
+              "parts": [
+                "VisitID"
+              ]
+            },
+            {
+              "kind": "columnRef",
+              "parts": [
+                "ClickLogID"
+              ]
+            }
+          ]
+        },
+        {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "8192"
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "Sign"
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "merge_distributed1"
+      }
+    }
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "merge_distributed"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "CounterID",
+        "type": {
+          "name": "UInt32"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "StartDate",
+        "type": {
+          "name": "Date"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "Sign",
+        "type": {
+          "name": "Int8"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "VisitID",
+        "type": {
+          "name": "UInt64"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "UserID",
+        "type": {
+          "name": "UInt64"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "StartTime",
+        "type": {
+          "name": "DateTime"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "ClickLogID",
+        "type": {
+          "name": "UInt64"
+        }
+      }
+    ],
+    "engine": {
+      "name": "Distributed",
+      "args": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "test_shard_localhost"
+          ]
+        },
+        {
+          "kind": "functionCall",
+          "name": "currentDatabase",
+          "args": []
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "merge_distributed1"
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "merge_distributed1"
+      }
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "CounterID"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "dummy"
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "merge_distributed"
+    },
+    "where": {
+      "kind": "binaryExpr",
+      "op": "<>",
+      "left": {
+        "kind": "columnRef",
+        "parts": [
+          "dummy"
+        ]
+      },
+      "right": {
+        "kind": "literal",
+        "type": "String",
+        "value": ""
+      }
+    },
+    "limit": {
+      "count": {
+        "kind": "literal",
+        "type": "UInt64",
+        "value": "10"
+      }
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "CounterID"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "dummy1"
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "merge_distributed"
+    },
+    "where": {
+      "kind": "binaryExpr",
+      "op": "<>",
+      "left": {
+        "kind": "columnRef",
+        "parts": [
+          "dummy1"
+        ]
+      },
+      "right": {
+        "kind": "literal",
+        "type": "String",
+        "value": ""
+      }
+    },
+    "limit": {
+      "count": {
+        "kind": "literal",
+        "type": "UInt64",
+        "value": "10"
+      }
+    },
+    "trailingComments": [
+      "-- { serverError UNKNOWN_IDENTIFIER }"
+    ]
+  }
+]

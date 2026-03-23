@@ -1,1 +1,918 @@
-{"expected":[{"type":"literal","text":"EXPLAIN","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"REPLACE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"SET","ignoreCase":true},{"type":"literal","text":"SET","ignoreCase":true},{"type":"literal","text":"SET","ignoreCase":true},{"type":"literal","text":"USE","ignoreCase":true},{"type":"literal","text":"SYSTEM","ignoreCase":true},{"type":"literal","text":"(","ignoreCase":false},{"type":"literal","text":"WITH","ignoreCase":true},{"type":"literal","text":"SELECT","ignoreCase":true},{"type":"end"}],"found":"I","location":{"start":{"offset":213,"line":3,"column":1},"end":{"offset":214,"line":3,"column":2}},"name":"SyntaxError"}
+[
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "allow_deprecated_syntax_for_merge_tree",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "agg_func_col"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "p",
+        "type": {
+          "name": "Date"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "k",
+        "type": {
+          "name": "UInt8"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "d",
+        "type": {
+          "name": "AggregateFunction",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "sum"
+              }
+            },
+            {
+              "kind": "type",
+              "type": {
+                "name": "UInt64"
+              }
+            }
+          ]
+        },
+        "defaultKind": "DEFAULT",
+        "defaultExpr": {
+          "kind": "functionCall",
+          "name": "arrayReduce",
+          "args": [
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "sumState"
+            },
+            {
+              "kind": "arrayLiteral",
+              "elements": [
+                {
+                  "kind": "functionCall",
+                  "name": "toUInt64",
+                  "args": [
+                    {
+                      "kind": "literal",
+                      "type": "UInt64",
+                      "value": "200"
+                    }
+                  ]
+                }
+              ],
+              "source": "[toUInt64(200)]"
+            }
+          ]
+        }
+      }
+    ],
+    "engine": {
+      "name": "AggregatingMergeTree",
+      "args": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "p"
+          ]
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "k"
+          ]
+        },
+        {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      ]
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "agg_func_col"
+      }
+    },
+    "columns": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "k"
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "agg_func_col"
+      }
+    },
+    "columns": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "k"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "d"
+        ]
+      }
+    ],
+    "selectQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "alias",
+          "expr": {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "1"
+          },
+          "alias": "k"
+        },
+        {
+          "kind": "alias",
+          "expr": {
+            "kind": "functionCall",
+            "name": "arrayReduce",
+            "args": [
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "sumState"
+              },
+              {
+                "kind": "arrayLiteral",
+                "elements": [
+                  {
+                    "kind": "functionCall",
+                    "name": "toUInt64",
+                    "args": [
+                      {
+                        "kind": "literal",
+                        "type": "UInt64",
+                        "value": "100"
+                      }
+                    ]
+                  }
+                ],
+                "source": "[toUInt64(100)]"
+              }
+            ]
+          },
+          "alias": "d"
+        }
+      ]
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "k"
+        ]
+      },
+      {
+        "kind": "functionCall",
+        "name": "sumMerge",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "d"
+            ]
+          }
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "agg_func_col"
+    },
+    "groupBy": {
+      "kind": "expressions",
+      "items": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "k"
+          ]
+        }
+      ]
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "k"
+          ]
+        },
+        "direction": "ASC"
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "k"
+        ]
+      },
+      {
+        "kind": "functionCall",
+        "name": "sumMerge",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "d"
+            ]
+          }
+        ]
+      },
+      {
+        "kind": "functionCall",
+        "name": "avgMerge",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "af_avg1"
+            ]
+          }
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "agg_func_col"
+    },
+    "groupBy": {
+      "kind": "expressions",
+      "items": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "k"
+          ]
+        }
+      ]
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "k"
+          ]
+        },
+        "direction": "ASC"
+      }
+    ]
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "agg_func_col"
+      }
+    },
+    "columns": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "k"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "af_avg1"
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "k"
+        ]
+      },
+      {
+        "kind": "functionCall",
+        "name": "sumMerge",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "d"
+            ]
+          }
+        ]
+      },
+      {
+        "kind": "functionCall",
+        "name": "avgMerge",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "af_avg1"
+            ]
+          }
+        ]
+      },
+      {
+        "kind": "functionCall",
+        "name": "groupUniqArrayMerge",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "af_gua"
+            ]
+          }
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "agg_func_col"
+    },
+    "groupBy": {
+      "kind": "expressions",
+      "items": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "k"
+          ]
+        }
+      ]
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "k"
+          ]
+        },
+        "direction": "ASC"
+      }
+    ]
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "agg_func_col"
+      }
+    },
+    "columns": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "k"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "af_avg1"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "af_gua"
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "arrayReduce",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": "groupUniqArrayIf"
+          },
+          {
+            "kind": "arrayLiteral",
+            "elements": [
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "---"
+              },
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "---"
+              },
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "t1"
+              }
+            ],
+            "source": "['---', '---', 't1']"
+          },
+          {
+            "kind": "arrayLiteral",
+            "elements": [
+              {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "1"
+              },
+              {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "1"
+              },
+              {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "0"
+              }
+            ],
+            "source": "[1, 1, 0]"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "arrayReduce",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": "groupUniqArrayMergeIf"
+          },
+          {
+            "kind": "arrayLiteral",
+            "elements": [
+              {
+                "kind": "functionCall",
+                "name": "arrayReduce",
+                "args": [
+                  {
+                    "kind": "literal",
+                    "type": "String",
+                    "value": "groupUniqArrayState"
+                  },
+                  {
+                    "kind": "arrayLiteral",
+                    "elements": [
+                      {
+                        "kind": "literal",
+                        "type": "String",
+                        "value": "---"
+                      },
+                      {
+                        "kind": "literal",
+                        "type": "String",
+                        "value": "---"
+                      }
+                    ],
+                    "source": "['---', '---']"
+                  }
+                ]
+              },
+              {
+                "kind": "functionCall",
+                "name": "arrayReduce",
+                "args": [
+                  {
+                    "kind": "literal",
+                    "type": "String",
+                    "value": "groupUniqArrayState"
+                  },
+                  {
+                    "kind": "arrayLiteral",
+                    "elements": [
+                      {
+                        "kind": "literal",
+                        "type": "String",
+                        "value": "t1"
+                      },
+                      {
+                        "kind": "literal",
+                        "type": "String",
+                        "value": "t"
+                      }
+                    ],
+                    "source": "['t1', 't']"
+                  }
+                ]
+              }
+            ],
+            "source": "[arrayReduce('groupUniqArrayState', ['---', '---']), arrayReduce('groupUniqArrayState', ['t1', 't'])]"
+          },
+          {
+            "kind": "arrayLiteral",
+            "elements": [
+              {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "1"
+              },
+              {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "0"
+              }
+            ],
+            "source": "[1, 0]"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "inExpr",
+        "negated": false,
+        "expr": {
+          "kind": "functionCall",
+          "name": "arrayReduce",
+          "args": [
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "avgState"
+            },
+            {
+              "kind": "arrayLiteral",
+              "elements": [
+                {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "0"
+                }
+              ],
+              "source": "[0]"
+            }
+          ]
+        },
+        "values": [
+          {
+            "kind": "functionCall",
+            "name": "arrayReduce",
+            "args": [
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "avgState"
+              },
+              {
+                "kind": "arrayLiteral",
+                "elements": [
+                  {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "0"
+                  },
+                  {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "1"
+                  }
+                ],
+                "source": "[0, 1]"
+              }
+            ]
+          },
+          {
+            "kind": "functionCall",
+            "name": "arrayReduce",
+            "args": [
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "avgState"
+              },
+              {
+                "kind": "arrayLiteral",
+                "elements": [
+                  {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "0"
+                  }
+                ],
+                "source": "[0]"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "inExpr",
+        "negated": false,
+        "expr": {
+          "kind": "functionCall",
+          "name": "arrayReduce",
+          "args": [
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "avgState"
+            },
+            {
+              "kind": "arrayLiteral",
+              "elements": [
+                {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "0"
+                }
+              ],
+              "source": "[0]"
+            }
+          ]
+        },
+        "values": [
+          {
+            "kind": "functionCall",
+            "name": "arrayReduce",
+            "args": [
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "avgState"
+              },
+              {
+                "kind": "arrayLiteral",
+                "elements": [
+                  {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "0"
+                  },
+                  {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "1"
+                  }
+                ],
+                "source": "[0, 1]"
+              }
+            ]
+          },
+          {
+            "kind": "functionCall",
+            "name": "arrayReduce",
+            "args": [
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "avgState"
+              },
+              {
+                "kind": "arrayLiteral",
+                "elements": [
+                  {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "1"
+                  }
+                ],
+                "source": "[1]"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "arrayReduce",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": "uniqExactMerge"
+          },
+          {
+            "kind": "arrayLiteral",
+            "elements": [
+              {
+                "kind": "functionCall",
+                "name": "arrayReduce",
+                "args": [
+                  {
+                    "kind": "literal",
+                    "type": "String",
+                    "value": "uniqExactMergeState"
+                  },
+                  {
+                    "kind": "arrayLiteral",
+                    "elements": [
+                      {
+                        "kind": "functionCall",
+                        "name": "arrayReduce",
+                        "args": [
+                          {
+                            "kind": "literal",
+                            "type": "String",
+                            "value": "uniqExactState"
+                          },
+                          {
+                            "kind": "arrayLiteral",
+                            "elements": [
+                              {
+                                "kind": "literal",
+                                "type": "UInt64",
+                                "value": "12345678901"
+                              }
+                            ],
+                            "source": "[12345678901]"
+                          }
+                        ]
+                      },
+                      {
+                        "kind": "functionCall",
+                        "name": "arrayReduce",
+                        "args": [
+                          {
+                            "kind": "literal",
+                            "type": "String",
+                            "value": "uniqExactState"
+                          },
+                          {
+                            "kind": "arrayLiteral",
+                            "elements": [
+                              {
+                                "kind": "literal",
+                                "type": "UInt64",
+                                "value": "12345678901"
+                              }
+                            ],
+                            "source": "[12345678901]"
+                          }
+                        ]
+                      }
+                    ],
+                    "source": "[\n            arrayReduce('uniqExactState', [12345678901]),\n            arrayReduce('uniqExactState', [12345678901])\n        ]"
+                  }
+                ]
+              }
+            ],
+            "source": "[arrayReduce('uniqExactMergeState',\n        [\n            arrayReduce('uniqExactState', [12345678901]),\n            arrayReduce('uniqExactState', [12345678901])\n        ])\n    ]"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "arrayReduce",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": "uniqExactMerge"
+          },
+          {
+            "kind": "arrayLiteral",
+            "elements": [
+              {
+                "kind": "functionCall",
+                "name": "arrayReduce",
+                "args": [
+                  {
+                    "kind": "literal",
+                    "type": "String",
+                    "value": "uniqExactMergeState"
+                  },
+                  {
+                    "kind": "arrayLiteral",
+                    "elements": [
+                      {
+                        "kind": "functionCall",
+                        "name": "arrayReduce",
+                        "args": [
+                          {
+                            "kind": "literal",
+                            "type": "String",
+                            "value": "uniqExactState"
+                          },
+                          {
+                            "kind": "arrayLiteral",
+                            "elements": [
+                              {
+                                "kind": "literal",
+                                "type": "UInt64",
+                                "value": "12345678901"
+                              }
+                            ],
+                            "source": "[12345678901]"
+                          }
+                        ]
+                      },
+                      {
+                        "kind": "functionCall",
+                        "name": "arrayReduce",
+                        "args": [
+                          {
+                            "kind": "literal",
+                            "type": "String",
+                            "value": "uniqExactState"
+                          },
+                          {
+                            "kind": "arrayLiteral",
+                            "elements": [
+                              {
+                                "kind": "literal",
+                                "type": "UInt64",
+                                "value": "12345678902"
+                              }
+                            ],
+                            "source": "[12345678902]"
+                          }
+                        ]
+                      }
+                    ],
+                    "source": "[\n            arrayReduce('uniqExactState', [12345678901]),\n            arrayReduce('uniqExactState', [12345678902])\n        ]"
+                  }
+                ]
+              }
+            ],
+            "source": "[arrayReduce('uniqExactMergeState',\n        [\n            arrayReduce('uniqExactState', [12345678901]),\n            arrayReduce('uniqExactState', [12345678902])\n        ])\n    ]"
+          }
+        ]
+      }
+    ]
+  }
+]

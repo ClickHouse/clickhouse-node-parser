@@ -1,1 +1,87 @@
-<Parse Error>
+-- There is different code path when:
+-- - _state is not requested
+-- - _state is requested
+-- - only _state is requested
+SELECT *
+FROM `system`.parts
+FORMAT Null;
+
+SELECT
+    *,
+    _state
+FROM `system`.parts
+FORMAT Null;
+
+SELECT _state
+FROM `system`.parts
+FORMAT Null;
+
+CREATE TABLE data_01660
+(
+    key Int
+)
+ENGINE = MergeTree()
+ORDER BY key;
+
+-- Empty
+SELECT _state
+FROM `system`.parts
+WHERE database = currentDatabase()
+    AND table = 'data_01660';
+
+SELECT
+    name,
+    _state
+FROM `system`.parts
+WHERE database = currentDatabase()
+    AND table = 'data_01660';
+
+SELECT
+    name,
+    active
+FROM `system`.parts
+WHERE database = currentDatabase()
+    AND table = 'data_01660';
+
+INSERT INTO data_01660;
+
+INSERT INTO data_01660;
+
+SELECT
+    name,
+    _state
+FROM `system`.parts
+WHERE database = currentDatabase()
+    AND table = 'data_01660'
+ORDER BY name ASC;
+
+SELECT
+    name,
+    active
+FROM `system`.parts
+WHERE database = currentDatabase()
+    AND table = 'data_01660'
+ORDER BY name ASC;
+
+SELECT
+    count(),
+    _state
+FROM `system`.parts
+WHERE database = currentDatabase()
+    AND table = 'data_01660'
+GROUP BY _state
+ORDER BY _state ASC;
+
+SELECT
+    if(count() > 0, 'HAVE PARTS', 'NO PARTS'),
+    _state
+FROM `system`.parts
+WHERE database = currentDatabase()
+    AND table = 'data_01660'
+GROUP BY _state
+ORDER BY _state ASC;
+
+SELECT *
+FROM `system`.parts
+WHERE database = currentDatabase()
+    AND table = 'data_01660';

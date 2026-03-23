@@ -1,1 +1,22 @@
-<Parse Error>
+CREATE TABLE t_00712_1
+(
+    a Int32,
+    b Int32
+)
+ENGINE = MergeTree
+ORDER BY (a)
+PARTITION BY (a,b);
+
+INSERT INTO t_00712_1;
+
+SELECT b
+FROM t_00712_1
+PREWHERE a < 1000;
+
+SELECT c
+FROM t_00712_1
+WHERE a < 1000;
+
+SELECT c
+FROM t_00712_1
+PREWHERE a < 1000;

@@ -1,1 +1,12 @@
-<Parse Error>
+CREATE TABLE t
+(
+    n int
+)
+ENGINE = MergeTree
+ORDER BY n;
+
+INSERT INTO t;
+
+SELECT 1
+FROM t
+GROUP BY 1;

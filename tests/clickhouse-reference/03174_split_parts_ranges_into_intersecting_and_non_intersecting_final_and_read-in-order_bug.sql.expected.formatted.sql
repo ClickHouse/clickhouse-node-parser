@@ -1,1 +1,16 @@
-<Parse Error>
+-- Tags: no-tsan, no-asan, no-msan, no-fasttest
+-- Test is slow
+CREATE TABLE tab
+(
+    x DateTime('UTC'),
+    y UInt32,
+    v Int32
+)
+ENGINE = ReplacingMergeTree(v)
+ORDER BY x;
+
+INSERT INTO tab SELECT
+    toDateTime('2000-01-01', 'UTC') + number,
+    number,
+    1
+FROM numbers(1e7);

@@ -1,1 +1,86 @@
-<Parse Error>
+SET enable_analyzer = 1;
+
+SET max_parallel_replicas = 1;
+
+SET use_skip_indexes_on_data_read = 1;
+
+SET enable_full_text_index = 1;
+
+CREATE TABLE tab
+(
+    text String,
+    INDEX idx_text text TYPE text(tokenizer = 'splitByNonAlpha')
+)
+ENGINE = MergeTree
+ORDER BY tuple();
+
+INSERT INTO tab (text);
+
+SELECT count()
+FROM tab
+WHERE hasToken(text, 'Hello');
+
+SELECT trim(`explain`)
+FROM (
+        EXPLAIN actions = 1, indexes = 1
+        SELECT count()
+        FROM tab
+        WHERE hasToken(text, 'Hello')
+        SETTINGS use_skip_indexes_on_data_read = 1
+    )
+WHERE like(`explain`, '%Filter column%')
+    OR like(`explain`, '%Name: idx_text%');
+
+SELECT count()
+FROM tab
+WHERE hasToken(lower(text), lower('Hello'));
+
+SELECT trim(`explain`)
+FROM (
+        EXPLAIN actions = 1, indexes = 1
+        SELECT count()
+        FROM tab
+        WHERE hasToken(lower(text), lower('Hello'))
+        SETTINGS use_skip_indexes_on_data_read = 1
+    )
+WHERE like(`explain`, '%Filter column%')
+    OR like(`explain`, '%Name: idx_text%');
+
+SELECT count()
+FROM tab
+WHERE hasAllTokens(text, ['Hello']);
+
+SELECT trim(`explain`)
+FROM (
+        EXPLAIN actions = 1, indexes = 1
+        SELECT count()
+        FROM tab
+        WHERE hasAllTokens(text, ['Hello'])
+        SETTINGS use_skip_indexes_on_data_read = 1
+    )
+WHERE like(`explain`, '%Filter column%')
+    OR like(`explain`, '%Name: idx_text%');
+
+-- --------------------------
+CREATE TABLE tab
+(
+    text String,
+    INDEX idx_text lower(text) TYPE text(tokenizer = 'splitByNonAlpha')
+)
+ENGINE = MergeTree
+ORDER BY tuple();
+
+SELECT count()
+FROM tab
+WHERE hasAllTokens(lower(text), [lower('Hello')]);
+
+SELECT trim(`explain`)
+FROM (
+        EXPLAIN actions = 1, indexes = 1
+        SELECT count()
+        FROM tab
+        WHERE hasAllTokens(lower(text), [lower('Hello')])
+        SETTINGS use_skip_indexes_on_data_read = 1
+    )
+WHERE like(`explain`, '%Filter column%')
+    OR like(`explain`, '%Name: idx_text%');

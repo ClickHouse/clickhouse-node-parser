@@ -1,1 +1,1024 @@
-{"expected":[{"type":"literal","text":"EXPLAIN","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"REPLACE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"SET","ignoreCase":true},{"type":"literal","text":"SET","ignoreCase":true},{"type":"literal","text":"SET","ignoreCase":true},{"type":"literal","text":"USE","ignoreCase":true},{"type":"literal","text":"SYSTEM","ignoreCase":true},{"type":"literal","text":"(","ignoreCase":false},{"type":"literal","text":"WITH","ignoreCase":true},{"type":"literal","text":"SELECT","ignoreCase":true},{"type":"end"}],"found":"I","location":{"start":{"offset":208,"line":11,"column":1},"end":{"offset":209,"line":11,"column":2}},"name":"SyntaxError"}
+[
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "product_groups"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "group_id",
+        "type": {
+          "name": "Int64"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "group_name",
+        "type": {
+          "name": "String"
+        }
+      }
+    ],
+    "engine": {
+      "name": "Memory"
+    }
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "products"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "product_id",
+        "type": {
+          "name": "Int64"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "product_name",
+        "type": {
+          "name": "String"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "price",
+        "type": {
+          "name": "DECIMAL",
+          "args": [
+            {
+              "kind": "literal",
+              "value": "11"
+            },
+            {
+              "kind": "literal",
+              "value": "2"
+            }
+          ]
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "group_id",
+        "type": {
+          "name": "Int64"
+        }
+      }
+    ],
+    "engine": {
+      "name": "Memory"
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "product_groups"
+      }
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "products"
+      }
+    },
+    "columns": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "product_id"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "product_name"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "group_id"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "price"
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "literal",
+        "type": "String",
+        "value": "---- Q1 ----"
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "product_name"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "price"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "group_name"
+        ]
+      },
+      {
+        "kind": "functionCall",
+        "name": "AVG",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "price"
+            ]
+          }
+        ],
+        "window": {
+          "partitionBy": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "group_name"
+              ]
+            }
+          ]
+        }
+      }
+    ],
+    "from": {
+      "left": {
+        "kind": "tableRef",
+        "table": "products"
+      },
+      "kind": "joinExpr",
+      "joinType": "INNER",
+      "right": {
+        "kind": "tableRef",
+        "table": "product_groups"
+      },
+      "constraint": {
+        "kind": "using",
+        "columns": [
+          "group_id"
+        ]
+      }
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "group_name"
+          ]
+        },
+        "direction": "ASC"
+      },
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "product_name"
+          ]
+        },
+        "direction": "ASC"
+      },
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "price"
+          ]
+        },
+        "direction": "ASC"
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "product_name"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "group_name"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "price"
+        ]
+      },
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "rank",
+          "args": [],
+          "window": {
+            "partitionBy": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "group_name"
+                ]
+              }
+            ],
+            "orderBy": [
+              {
+                "kind": "orderByItem",
+                "expr": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "price"
+                  ]
+                },
+                "direction": "ASC"
+              }
+            ]
+          }
+        },
+        "alias": "rank"
+      }
+    ],
+    "from": {
+      "left": {
+        "kind": "tableRef",
+        "table": "products"
+      },
+      "kind": "joinExpr",
+      "joinType": "INNER",
+      "right": {
+        "kind": "tableRef",
+        "table": "product_groups"
+      },
+      "constraint": {
+        "kind": "using",
+        "columns": [
+          "group_id"
+        ]
+      }
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "group_name"
+          ]
+        },
+        "direction": "ASC"
+      },
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "rank"
+          ]
+        },
+        "direction": "ASC"
+      },
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "price"
+          ]
+        },
+        "direction": "ASC"
+      },
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "product_name"
+          ]
+        },
+        "direction": "ASC"
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "product_name"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "group_name"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "price"
+        ]
+      },
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "row_number",
+          "args": [],
+          "window": {
+            "partitionBy": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "group_name"
+                ]
+              }
+            ],
+            "orderBy": [
+              {
+                "kind": "orderByItem",
+                "expr": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "price"
+                  ]
+                },
+                "direction": "DESC"
+              },
+              {
+                "kind": "orderByItem",
+                "expr": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "product_name"
+                  ]
+                },
+                "direction": "ASC"
+              }
+            ]
+          }
+        },
+        "alias": "rn"
+      }
+    ],
+    "from": {
+      "left": {
+        "kind": "tableRef",
+        "table": "products"
+      },
+      "kind": "joinExpr",
+      "joinType": "INNER",
+      "right": {
+        "kind": "tableRef",
+        "table": "product_groups"
+      },
+      "constraint": {
+        "kind": "using",
+        "columns": [
+          "group_id"
+        ]
+      }
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "group_name"
+          ]
+        },
+        "direction": "ASC"
+      },
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "rn"
+          ]
+        },
+        "direction": "ASC"
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "asterisk"
+      }
+    ],
+    "from": {
+      "kind": "subqueryFrom",
+      "query": {
+        "kind": "select",
+        "select": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "product_name"
+            ]
+          },
+          {
+            "kind": "columnRef",
+            "parts": [
+              "group_name"
+            ]
+          },
+          {
+            "kind": "columnRef",
+            "parts": [
+              "price"
+            ]
+          },
+          {
+            "kind": "alias",
+            "expr": {
+              "kind": "functionCall",
+              "name": "min",
+              "args": [
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "price"
+                  ]
+                }
+              ],
+              "window": {
+                "partitionBy": [
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "group_name"
+                    ]
+                  }
+                ]
+              }
+            },
+            "alias": "min_price"
+          },
+          {
+            "kind": "alias",
+            "expr": {
+              "kind": "functionCall",
+              "name": "dense_rank",
+              "args": [],
+              "window": {
+                "partitionBy": [
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "group_name"
+                    ]
+                  }
+                ],
+                "orderBy": [
+                  {
+                    "kind": "orderByItem",
+                    "expr": {
+                      "kind": "columnRef",
+                      "parts": [
+                        "price"
+                      ]
+                    },
+                    "direction": "ASC"
+                  }
+                ]
+              }
+            },
+            "alias": "r"
+          }
+        ],
+        "from": {
+          "left": {
+            "kind": "tableRef",
+            "table": "products"
+          },
+          "kind": "joinExpr",
+          "joinType": "INNER",
+          "right": {
+            "kind": "tableRef",
+            "table": "product_groups"
+          },
+          "constraint": {
+            "kind": "using",
+            "columns": [
+              "group_id"
+            ]
+          }
+        }
+      },
+      "alias": "t"
+    },
+    "where": {
+      "kind": "binaryExpr",
+      "op": ">",
+      "left": {
+        "kind": "columnRef",
+        "parts": [
+          "min_price"
+        ]
+      },
+      "right": {
+        "kind": "literal",
+        "type": "UInt64",
+        "value": "160"
+      }
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "group_name"
+          ]
+        },
+        "direction": "ASC"
+      },
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "r"
+          ]
+        },
+        "direction": "ASC"
+      },
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "product_name"
+          ]
+        },
+        "direction": "ASC"
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "product_name"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "group_name"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "price"
+        ]
+      },
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "FIRST_VALUE",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "price"
+              ]
+            }
+          ],
+          "window": {
+            "partitionBy": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "group_name"
+                ]
+              }
+            ],
+            "orderBy": [
+              {
+                "kind": "orderByItem",
+                "expr": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "product_name"
+                  ]
+                },
+                "direction": "DESC"
+              }
+            ]
+          }
+        },
+        "alias": "price_per_group_per_alphab"
+      }
+    ],
+    "from": {
+      "left": {
+        "kind": "tableRef",
+        "table": "products"
+      },
+      "kind": "joinExpr",
+      "joinType": "INNER",
+      "right": {
+        "kind": "tableRef",
+        "table": "product_groups"
+      },
+      "constraint": {
+        "kind": "using",
+        "columns": [
+          "group_id"
+        ]
+      }
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "group_name"
+          ]
+        },
+        "direction": "ASC"
+      },
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "product_name"
+          ]
+        },
+        "direction": "DESC"
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "product_name"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "group_name"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "price"
+        ]
+      },
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "LAST_VALUE",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "price"
+              ]
+            }
+          ],
+          "window": {
+            "partitionBy": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "group_name"
+                ]
+              }
+            ],
+            "orderBy": [
+              {
+                "kind": "orderByItem",
+                "expr": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "price"
+                  ]
+                },
+                "direction": "ASC"
+              }
+            ],
+            "frame": {
+              "frameType": "range",
+              "start": {
+                "kind": "unbounded"
+              },
+              "end": {
+                "kind": "unbounded"
+              }
+            }
+          }
+        },
+        "alias": "highest_price_per_group"
+      }
+    ],
+    "from": {
+      "left": {
+        "kind": "tableRef",
+        "table": "products"
+      },
+      "kind": "joinExpr",
+      "joinType": "INNER",
+      "right": {
+        "kind": "tableRef",
+        "table": "product_groups"
+      },
+      "constraint": {
+        "kind": "using",
+        "columns": [
+          "group_id"
+        ]
+      }
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "group_name"
+          ]
+        },
+        "direction": "ASC"
+      },
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "product_name"
+          ]
+        },
+        "direction": "ASC"
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "product_name"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "price"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "group_name"
+        ]
+      },
+      {
+        "kind": "functionCall",
+        "name": "round",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "avg0"
+            ]
+          }
+        ]
+      },
+      {
+        "kind": "functionCall",
+        "name": "round",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "avg1"
+            ]
+          }
+        ]
+      }
+    ],
+    "from": {
+      "kind": "subqueryFrom",
+      "query": {
+        "kind": "select",
+        "select": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "product_name"
+            ]
+          },
+          {
+            "kind": "columnRef",
+            "parts": [
+              "price"
+            ]
+          },
+          {
+            "kind": "columnRef",
+            "parts": [
+              "group_name"
+            ]
+          },
+          {
+            "kind": "alias",
+            "expr": {
+              "kind": "functionCall",
+              "name": "avg",
+              "args": [
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "price"
+                  ]
+                }
+              ],
+              "window": {
+                "partitionBy": [
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "group_name"
+                    ]
+                  }
+                ],
+                "orderBy": [
+                  {
+                    "kind": "orderByItem",
+                    "expr": {
+                      "kind": "columnRef",
+                      "parts": [
+                        "price"
+                      ]
+                    },
+                    "direction": "ASC"
+                  }
+                ]
+              }
+            },
+            "alias": "avg0"
+          },
+          {
+            "kind": "alias",
+            "expr": {
+              "kind": "functionCall",
+              "name": "avg",
+              "args": [
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "price"
+                  ]
+                }
+              ],
+              "window": {
+                "partitionBy": [
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "group_name"
+                    ]
+                  }
+                ],
+                "orderBy": [
+                  {
+                    "kind": "orderByItem",
+                    "expr": {
+                      "kind": "columnRef",
+                      "parts": [
+                        "price"
+                      ]
+                    },
+                    "direction": "ASC"
+                  }
+                ],
+                "frame": {
+                  "frameType": "range",
+                  "start": {
+                    "kind": "unbounded"
+                  },
+                  "end": {
+                    "kind": "unbounded"
+                  }
+                }
+              }
+            },
+            "alias": "avg1"
+          }
+        ],
+        "from": {
+          "left": {
+            "kind": "tableRef",
+            "table": "products"
+          },
+          "kind": "joinExpr",
+          "joinType": "INNER",
+          "right": {
+            "kind": "tableRef",
+            "table": "product_groups"
+          },
+          "constraint": {
+            "kind": "using",
+            "columns": [
+              "group_id"
+            ]
+          }
+        }
+      },
+      "alias": "t"
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "group_name"
+          ]
+        },
+        "direction": "ASC"
+      },
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "product_name"
+          ]
+        },
+        "direction": "ASC"
+      },
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "price"
+          ]
+        },
+        "direction": "ASC"
+      }
+    ]
+  }
+]

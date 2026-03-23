@@ -14,6 +14,7 @@ import {
   ExplainStatement,
   Expression,
   FromExpr,
+  InsertStatement,
   ParallelWithStatement,
   JoinConstraint,
   OrderByItem,
@@ -1953,10 +1954,77 @@ function createTableQueryNode(stmt: CreateTableStatement): ExplainNode {
 }
 
 function parallelWithQueryNode(stmt: ParallelWithStatement): ExplainNode {
-  const firstTable = stmt.queries[0]?.kind === 'createTable' ? stmt.queries[0].table.table : '';
-  const label = `ParallelWithQuery ${stmt.queries.length} CreateQuery_${firstTable}`;
-  const children = stmt.queries.map((q) => stmtNode(q));
+  const first = stmt.queries[0];
+  let kindPrefix: string;
+  let firstTable: string;
+  if (first?.kind === 'insert') {
+    kindPrefix = 'InsertQuery_';
+    firstTable = '';
+  } else {
+    kindPrefix = 'CreateQuery';
+    firstTable = first?.kind === 'createTable' ? first.table.table : '';
+  }
+  const label = `ParallelWithQuery ${stmt.queries.length} ${kindPrefix}_${firstTable}`;
+  const children = stmt.queries.map((q) => stmtNode(q as Statement));
   return n(label, children);
+}
+
+// Check if a query statement (or any of its children in a union) has settings
+function hasSelectSettings(query?: Statement): boolean {
+  if (!query) return false;
+  if (query.kind === 'select') return !!(query.settings && query.settings.length > 0);
+  if (query.kind === 'union') return query.queries.some((q) => hasSelectSettings(q));
+  return false;
+}
+
+function insertQueryNode(stmt: InsertStatement): ExplainNode {
+  const children: ExplainNode[] = [];
+
+  // First child: table identifier or function
+  if (stmt.target.kind === 'table') {
+    const t = stmt.target.table;
+    if (t.database) {
+      children.push(n(`Identifier ${t.database}`));
+      children.push(n(`Identifier ${t.table}`));
+    } else {
+      children.push(n(`Identifier ${t.table}`));
+    }
+  } else {
+    const func = stmt.target.func;
+    const argsNodes = func.args.map(exprNode);
+    children.push(n(`Function ${func.name}`, [n('ExpressionList', argsNodes)]));
+  }
+
+  // PARTITION BY expression
+  if (stmt.partitionBy) {
+    children.push(exprNode(stmt.partitionBy));
+  }
+
+  // Column list
+  if (stmt.columns && stmt.columns.length > 0) {
+    children.push(
+      n(
+        'ExpressionList',
+        stmt.columns.map((c) => exprNode(c)),
+      ),
+    );
+  }
+
+  // SELECT query
+  if (stmt.selectQuery) {
+    children.push(stmtNode(stmt.selectQuery));
+  }
+
+  // Settings: InsertQuery gets a Set child if any settings exist (insert-level or select-level)
+  const hasInsertSettings = stmt.insertSettings && stmt.insertSettings.length > 0;
+  const hasQuerySettings = stmt.querySettings && stmt.querySettings.length > 0;
+  // Check if the inner SELECT query has settings
+  const selectHasSettings = hasSelectSettings(stmt.selectQuery);
+  if (hasInsertSettings || hasQuerySettings || selectHasSettings) {
+    children.push(n('Set'));
+  }
+
+  return n('InsertQuery  ', children);
 }
 
 // Build the top-level SelectWithUnionQuery node for a statement (SelectStatement or UnionStatement)
@@ -2003,6 +2071,14 @@ function stmtNode(stmt: Statement): ExplainNode {
   }
   if (stmt.kind === 'createWindowView') return n('CreateQuery');
   if (stmt.kind === 'createLiveView') return n('CreateQuery');
+  if (stmt.kind === 'insert') return insertQueryNode(stmt);
+  if (stmt.kind === 'truncate') {
+    const t = stmt.table;
+    const tableName = t.database ? `${t.database}.${t.table}` : t.table;
+    const children = [n(`Identifier ${t.table}`)];
+    if (t.database) children.unshift(n(`Identifier ${t.database}`));
+    return n(`TruncateQuery  ${tableName}`, children);
+  }
 
   const format = stmt.format;
 

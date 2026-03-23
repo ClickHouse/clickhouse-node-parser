@@ -1,1 +1,463 @@
-{"expected":[{"type":"literal","text":"EXPLAIN","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"REPLACE","ignoreCase":true},{"type":"literal","text":"CREATE","ignoreCase":true},{"type":"literal","text":"SET","ignoreCase":true},{"type":"literal","text":"SET","ignoreCase":true},{"type":"literal","text":"SET","ignoreCase":true},{"type":"literal","text":"USE","ignoreCase":true},{"type":"literal","text":"SYSTEM","ignoreCase":true},{"type":"literal","text":"(","ignoreCase":false},{"type":"literal","text":"WITH","ignoreCase":true},{"type":"literal","text":"SELECT","ignoreCase":true},{"type":"end"}],"found":"I","location":{"start":{"offset":421,"line":6,"column":1},"end":{"offset":422,"line":6,"column":2}},"name":"SyntaxError"}
+[
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "IPv6CIDRToRange",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "1"
+          },
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "1"
+          }
+        ]
+      }
+    ],
+    "trailingComments": [
+      "-- { serverError ILLEGAL_TYPE_OF_ARGUMENT }"
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "IPv6CIDRToRange",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": "1234"
+          },
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "1"
+          }
+        ]
+      }
+    ],
+    "trailingComments": [
+      "-- { serverError ILLEGAL_TYPE_OF_ARGUMENT }"
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "IPv6CIDRToRange",
+        "args": [
+          {
+            "kind": "functionCall",
+            "name": "toFixedString",
+            "args": [
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "1234"
+              },
+              {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "10"
+              }
+            ]
+          },
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "1"
+          }
+        ]
+      }
+    ],
+    "trailingComments": [
+      "-- { serverError ILLEGAL_TYPE_OF_ARGUMENT }"
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "IPv6CIDRToRange",
+        "args": [
+          {
+            "kind": "functionCall",
+            "name": "toFixedString",
+            "args": [
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "1234"
+              },
+              {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "16"
+              }
+            ]
+          },
+          {
+            "kind": "functionCall",
+            "name": "toUInt16",
+            "args": [
+              {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "1"
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "trailingComments": [
+      "-- { serverError ILLEGAL_TYPE_OF_ARGUMENT }"
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "ipv6_range"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "ip",
+        "type": {
+          "name": "IPv6"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "cidr",
+        "type": {
+          "name": "UInt8"
+        }
+      }
+    ],
+    "engine": {
+      "name": "Memory"
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "ipv6_range"
+      }
+    },
+    "columns": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "ip"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "cidr"
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "IPv6NumToString",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "ip"
+            ]
+          }
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "cidr"
+        ]
+      },
+      {
+        "kind": "functionCall",
+        "name": "IPv6CIDRToRange",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "ip"
+            ]
+          },
+          {
+            "kind": "columnRef",
+            "parts": [
+              "cidr"
+            ]
+          }
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "ipv6_range"
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "IPv6CIDRToRange",
+        "args": [
+          {
+            "kind": "functionCall",
+            "name": "IPv6StringToNum",
+            "args": [
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "2001:0db8:0000:85a3:0000:0000:ac1f:8001"
+              }
+            ]
+          },
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "0"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "IPv6CIDRToRange",
+        "args": [
+          {
+            "kind": "functionCall",
+            "name": "IPv6StringToNum",
+            "args": [
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "2001:0db8:0000:85a3:0000:0000:ac1f:8001"
+              }
+            ]
+          },
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "128"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "IPv6CIDRToRange",
+        "args": [
+          {
+            "kind": "functionCall",
+            "name": "IPv6StringToNum",
+            "args": [
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "ffff:ffff:ffff:ffff:ffff:ffff:ffff:ffff"
+              }
+            ]
+          },
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "64"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "IPv6CIDRToRange",
+        "args": [
+          {
+            "kind": "functionCall",
+            "name": "IPv6StringToNum",
+            "args": [
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "0000:0000:0000:0000:0000:0000:0000:0000"
+              }
+            ]
+          },
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "8"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "IPv6CIDRToRange",
+        "args": [
+          {
+            "kind": "functionCall",
+            "name": "IPv6StringToNum",
+            "args": [
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "ffff:0000:0000:0000:0000:0000:0000:0000"
+              }
+            ]
+          },
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "4"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "binaryExpr",
+        "op": "=",
+        "left": {
+          "kind": "functionCall",
+          "name": "IPv6CIDRToRange",
+          "args": [
+            {
+              "kind": "functionCall",
+              "name": "IPv6StringToNum",
+              "args": [
+                {
+                  "kind": "literal",
+                  "type": "String",
+                  "value": "2001:0db8:0000:85a3:0000:0000:ac1f:8001"
+                }
+              ]
+            },
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "128"
+            }
+          ]
+        },
+        "right": {
+          "kind": "functionCall",
+          "name": "IPv6CIDRToRange",
+          "args": [
+            {
+              "kind": "functionCall",
+              "name": "IPv6StringToNum",
+              "args": [
+                {
+                  "kind": "literal",
+                  "type": "String",
+                  "value": "2001:0db8:0000:85a3:0000:0000:ac1f:8001"
+                }
+              ]
+            },
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "200"
+            }
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "IPv6CIDRToRange",
+        "args": [
+          {
+            "kind": "functionCall",
+            "name": "IPv6StringToNum",
+            "args": [
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "2001:0db8:0000:85a3:0000:0000:ac1f:8001"
+              }
+            ]
+          },
+          {
+            "kind": "functionCall",
+            "name": "toUInt8",
+            "args": [
+              {
+                "kind": "binaryExpr",
+                "op": "-",
+                "left": {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "128"
+                },
+                "right": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "number"
+                  ]
+                }
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableFunctionRef",
+      "name": "numbers",
+      "args": [
+        {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "2"
+        }
+      ]
+    }
+  }
+]
