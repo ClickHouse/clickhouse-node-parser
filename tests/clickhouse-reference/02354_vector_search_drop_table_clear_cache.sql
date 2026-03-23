@@ -9,6 +9,12 @@ SET parallel_replicas_local_plan = 1; -- this setting is randomized, set it expl
 DROP TABLE IF EXISTS tab;
 CREATE TABLE tab(id Int32, vec Array(Float32), INDEX idx vec TYPE vector_similarity('hnsw', 'L2Distance', 2)) ENGINE = MergeTree ORDER BY id SETTINGS index_granularity = 8192;
 INSERT INTO tab VALUES (0, [1.0, 0.0]), (1, [1.1, 0.0]), (2, [1.2, 0.0]), (3, [1.3, 0.0]), (4, [1.4, 0.0]), (5, [0.0, 2.0]), (6, [0.0, 2.1]), (7, [0.0, 2.2]), (8, [0.0, 2.3]), (9, [0.0, 2.4]);
+-- Make sure vector index is loaded and used
+WITH [0.0, 2.0] AS reference_vec
+SELECT id
+FROM tab
+ORDER BY L2Distance(vec, reference_vec)
+LIMIT 3;
 -- Make sure vector index cache is utilized.
 SELECT name, IF(value > 0, 'Good', 'Zero') FROM system.metrics where name like '%VectorSimilarityIndexCacheBytes%';
 -- SYNC is important to drop the table/parts/caches immediately

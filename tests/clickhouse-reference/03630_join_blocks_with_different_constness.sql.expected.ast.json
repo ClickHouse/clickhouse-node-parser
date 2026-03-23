@@ -1,0 +1,423 @@
+[
+  {
+    "kind": "select",
+    "with": [
+      {
+        "kind": "cteSubquery",
+        "name": "input_1",
+        "query": {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "alias",
+              "expr": {
+                "kind": "castExpr",
+                "expr": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "number"
+                  ]
+                },
+                "type": "String",
+                "operator": true
+              },
+              "alias": "parent_id"
+            },
+            {
+              "kind": "alias",
+              "expr": {
+                "kind": "castExpr",
+                "expr": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "number"
+                  ]
+                },
+                "type": "String",
+                "operator": true
+              },
+              "alias": "id"
+            },
+            {
+              "kind": "alias",
+              "expr": {
+                "kind": "castExpr",
+                "expr": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "number"
+                  ]
+                },
+                "type": "String",
+                "operator": true
+              },
+              "alias": "value"
+            }
+          ],
+          "from": {
+            "kind": "tableFunctionRef",
+            "name": "numbers_mt",
+            "args": [
+              {
+                "kind": "literal",
+                "type": "Float64",
+                "value": "1e6"
+              }
+            ]
+          }
+        }
+      },
+      {
+        "kind": "cteSubquery",
+        "name": "dimensions_1",
+        "query": {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "alias",
+              "expr": {
+                "kind": "castExpr",
+                "expr": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "number"
+                  ]
+                },
+                "type": "String",
+                "operator": true
+              },
+              "alias": "value_id"
+            }
+          ],
+          "from": {
+            "kind": "tableFunctionRef",
+            "name": "numbers_mt",
+            "args": [
+              {
+                "kind": "literal",
+                "type": "Float64",
+                "value": "1e6"
+              }
+            ]
+          }
+        }
+      },
+      {
+        "kind": "cteSubquery",
+        "name": "dimensions_2",
+        "query": {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "alias",
+              "expr": {
+                "kind": "castExpr",
+                "expr": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "number"
+                  ]
+                },
+                "type": "String",
+                "operator": true
+              },
+              "alias": "value_id"
+            }
+          ],
+          "from": {
+            "kind": "tableFunctionRef",
+            "name": "numbers_mt",
+            "args": [
+              {
+                "kind": "literal",
+                "type": "Float64",
+                "value": "1e6"
+              }
+            ]
+          }
+        }
+      },
+      {
+        "kind": "cteSubquery",
+        "name": "parents",
+        "query": {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "alias",
+              "expr": {
+                "kind": "literal",
+                "type": "String",
+                "value": "foo"
+              },
+              "alias": "type"
+            },
+            {
+              "kind": "columnRef",
+              "parts": [
+                "parent_id"
+              ]
+            }
+          ],
+          "from": {
+            "kind": "tableRef",
+            "table": "input_1"
+          },
+          "groupBy": {
+            "kind": "expressions",
+            "items": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "parent_id"
+                ]
+              }
+            ]
+          }
+        }
+      },
+      {
+        "kind": "cteSubquery",
+        "name": "parents_with_value",
+        "query": {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "type"
+              ]
+            },
+            {
+              "kind": "columnRef",
+              "parts": [
+                "parent_id"
+              ]
+            },
+            {
+              "kind": "columnRef",
+              "parts": [
+                "t",
+                "value"
+              ]
+            }
+          ],
+          "from": {
+            "left": {
+              "kind": "tableRef",
+              "table": "parents"
+            },
+            "kind": "joinExpr",
+            "joinType": "LEFT",
+            "right": {
+              "kind": "tableRef",
+              "table": "input_1",
+              "alias": "t"
+            },
+            "constraint": {
+              "kind": "on",
+              "expr": {
+                "kind": "binaryExpr",
+                "op": "=",
+                "left": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "t",
+                    "id"
+                  ]
+                },
+                "right": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "parents",
+                    "parent_id"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      },
+      {
+        "kind": "cteSubquery",
+        "name": "values",
+        "query": {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "alias",
+              "expr": {
+                "kind": "literal",
+                "type": "String",
+                "value": "foo"
+              },
+              "alias": "type"
+            },
+            {
+              "kind": "alias",
+              "expr": {
+                "kind": "literal",
+                "type": "String",
+                "value": ""
+              },
+              "alias": "parent_id"
+            },
+            {
+              "kind": "columnRef",
+              "parts": [
+                "value"
+              ]
+            }
+          ],
+          "from": {
+            "kind": "tableRef",
+            "table": "input_1"
+          }
+        }
+      },
+      {
+        "kind": "cteSubquery",
+        "name": "all",
+        "query": {
+          "kind": "union",
+          "queries": [
+            {
+              "kind": "select",
+              "select": [
+                {
+                  "kind": "asterisk"
+                }
+              ],
+              "from": {
+                "kind": "tableRef",
+                "table": "parents_with_value"
+              }
+            },
+            {
+              "kind": "select",
+              "select": [
+                {
+                  "kind": "asterisk"
+                }
+              ],
+              "from": {
+                "kind": "tableRef",
+                "table": "values"
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "type"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "value"
+        ]
+      }
+    ],
+    "from": {
+      "left": {
+        "left": {
+          "kind": "tableRef",
+          "table": "all"
+        },
+        "kind": "joinExpr",
+        "joinType": "INNER",
+        "right": {
+          "kind": "tableRef",
+          "table": "dimensions_1",
+          "alias": "dim1"
+        },
+        "constraint": {
+          "kind": "on",
+          "expr": {
+            "kind": "binaryExpr",
+            "op": "=",
+            "left": {
+              "kind": "columnRef",
+              "parts": [
+                "all",
+                "value"
+              ]
+            },
+            "right": {
+              "kind": "columnRef",
+              "parts": [
+                "dim1",
+                "value_id"
+              ]
+            }
+          }
+        }
+      },
+      "kind": "joinExpr",
+      "joinType": "INNER",
+      "right": {
+        "kind": "tableRef",
+        "table": "dimensions_2",
+        "alias": "dim2"
+      },
+      "constraint": {
+        "kind": "on",
+        "expr": {
+          "kind": "binaryExpr",
+          "op": "=",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "all",
+              "value"
+            ]
+          },
+          "right": {
+            "kind": "columnRef",
+            "parts": [
+              "dim2",
+              "value_id"
+            ]
+          }
+        }
+      }
+    },
+    "format": "Null",
+    "postFormatSettings": [
+      {
+        "name": "max_block_size",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "65535"
+        }
+      },
+      {
+        "name": "max_joined_block_size_rows",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "65535"
+        }
+      },
+      {
+        "name": "max_threads",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "32"
+        }
+      }
+    ],
+    "leadingComments": [
+      "-- Regression for the case when the JOIN contains const and non-const blocks, which leads to UB:",
+      "--",
+      "--   Too large size (18446603496615682040) passed to allocator. It indicates an error"
+    ]
+  }
+]

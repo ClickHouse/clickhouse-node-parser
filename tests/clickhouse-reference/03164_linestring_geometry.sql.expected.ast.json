@@ -61,5 +61,136 @@
         ]
       }
     ]
+  },
+  {
+    "kind": "select",
+    "with": [
+      {
+        "kind": "cteExpr",
+        "name": "x",
+        "expr": {
+          "kind": "functionCall",
+          "name": "wkt",
+          "args": [
+            {
+              "kind": "functionCall",
+              "name": "CAST",
+              "args": [
+                {
+                  "kind": "arrayLiteral",
+                  "elements": [
+                    {
+                      "kind": "tupleLiteral",
+                      "elements": [
+                        {
+                          "kind": "literal",
+                          "type": "UInt64",
+                          "value": "1"
+                        },
+                        {
+                          "kind": "literal",
+                          "type": "UInt64",
+                          "value": "1"
+                        }
+                      ],
+                      "source": "(1, 1)"
+                    },
+                    {
+                      "kind": "tupleLiteral",
+                      "elements": [
+                        {
+                          "kind": "literal",
+                          "type": "UInt64",
+                          "value": "2"
+                        },
+                        {
+                          "kind": "literal",
+                          "type": "UInt64",
+                          "value": "2"
+                        }
+                      ],
+                      "source": "(2, 2)"
+                    },
+                    {
+                      "kind": "tupleLiteral",
+                      "elements": [
+                        {
+                          "kind": "literal",
+                          "type": "UInt64",
+                          "value": "3"
+                        },
+                        {
+                          "kind": "literal",
+                          "type": "UInt64",
+                          "value": "3"
+                        }
+                      ],
+                      "source": "(3, 3)"
+                    }
+                  ],
+                  "source": "[(1, 1), (2, 2), (3, 3)]"
+                },
+                {
+                  "kind": "literal",
+                  "type": "String",
+                  "value": "Array(Tuple(Float64, Float64))"
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ],
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "x"
+        ]
+      },
+      {
+        "kind": "functionCall",
+        "name": "toTypeName",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "x"
+            ]
+          }
+        ]
+      },
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "readWKTRing",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "x"
+              ]
+            }
+          ]
+        },
+        "alias": "y"
+      },
+      {
+        "kind": "functionCall",
+        "name": "toTypeName",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "y"
+            ]
+          }
+        ]
+      }
+    ],
+    "leadingComments": [
+      "-- Native Array(Tuple(Float64, Float64)) is threated as Ring, not as LineString."
+    ]
   }
 ]

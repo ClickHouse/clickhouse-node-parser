@@ -16,6 +16,21 @@ SELECT
 
 SET log_queries = 0;
 
+WITH concat(addressToLine(arrayJoin(trace) AS addr), '#', demangle(addressToSymbol(addr))) AS symbol
+
+SELECT count() > 0
+FROM `system`.trace_log AS t
+WHERE query_id = (
+        SELECT query_id
+        FROM `system`.query_log
+        WHERE current_database = currentDatabase()
+            AND like(query, '%test real time query profiler%')
+            AND notLike(query, '%system%')
+        ORDER BY event_time DESC
+        LIMIT 1
+    )
+    AND like(symbol, '%FunctionSleep%');
+
 SET query_profiler_real_time_period_ns = 0;
 
 SET query_profiler_cpu_time_period_ns = 1000000;
@@ -26,3 +41,18 @@ SELECT
     count(),
     ignore('test cpu time query profiler')
 FROM numbers_mt(10000000000);
+
+WITH concat(addressToLine(arrayJoin(trace) AS addr), '#', demangle(addressToSymbol(addr))) AS symbol
+
+SELECT count() > 0
+FROM `system`.trace_log AS t
+WHERE query_id = (
+        SELECT query_id
+        FROM `system`.query_log
+        WHERE current_database = currentDatabase()
+            AND like(query, '%test cpu time query profiler%')
+            AND notLike(query, '%system%')
+        ORDER BY event_time DESC
+        LIMIT 1
+    )
+    AND like(symbol, '%Source%');

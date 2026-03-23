@@ -11,6 +11,8 @@ INSERT INTO test_table VALUES (0, 'Value', [1, 2, 3], [[1, 2, 3]]), (0, 'Value',
 SELECT id, value, value_1 FROM test_table ARRAY JOIN [1, 2, 3] AS value_1;
 SELECT '--';
 SELECT id, value FROM test_table ARRAY JOIN [1, 2, 3] AS value;
+WITH [1, 2, 3] AS constant_array SELECT id, value FROM test_table ARRAY JOIN constant_array AS value;
+WITH [1, 2, 3] AS constant_array SELECT id, value, value_1 FROM test_table ARRAY JOIN constant_array AS value_1;
 SELECT id, value, value_1, value_2 FROM test_table ARRAY JOIN [[1, 2, 3]] AS value_1 ARRAY JOIN value_1 AS value_2;
 SELECT 1 AS value FROM test_table ARRAY JOIN [1,2,3] AS value;
 SELECT id, value, test_table.value_array FROM test_table ARRAY JOIN value_array;

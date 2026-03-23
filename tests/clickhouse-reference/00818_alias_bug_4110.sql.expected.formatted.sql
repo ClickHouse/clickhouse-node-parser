@@ -89,6 +89,14 @@ SELECT
     10 AS a,
     a + 1 AS a; -- { serverError UNKNOWN_IDENTIFIER }
 
+WITH 10 AS a
+
+SELECT a AS a; -- { serverError UNKNOWN_IDENTIFIER }
+
+WITH 10 AS a
+
+SELECT a + 1 AS a; -- { serverError UNKNOWN_IDENTIFIER }
+
 SELECT 0 AS t
 FROM (
         SELECT 1 AS t

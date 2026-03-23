@@ -84,4 +84,26 @@ SETTINGS select_sequential_consistency = 1;
 
 SET max_rows_to_read = 0; -- system.text_log can be really big
 
+-- Check that in every mutation there were parts that built sets (log messages like 'Created Set with 10000000 entries from 10000000 rows in 0.388989187 sec.' )
+-- and parts that shared sets (log messages like 'Got set from cache in 0.388930505 sec.' )
+WITH (
+        SELECT uuid
+        FROM `system`.tables
+        WHERE (database = currentDatabase())
+            AND (name = '02581_trips')
+    ) AS table_uuid
+
+SELECT
+    CAST(splitByChar('_', query_id)[5], 'UInt64') AS mutation_version, -- '5521485f-8a40-4aba-87a2-00342c369563::all_3_3_0_6'
+    sum(like(message, 'Created Set with % entries%')) >= 1 AS has_parts_for_which_set_was_built,
+    sum(like(message, 'Got set from cache%')) >= 1 AS has_parts_that_shared_set
+FROM `system`.text_log
+WHERE like(query_id, concat(CAST(table_uuid, 'String'), '::all\\_%'))
+    AND (event_date >= yesterday())
+    AND ((like(message, 'Created Set with % entries%')
+    OR like(message, 'Got set from cache%')))
+GROUP BY mutation_version
+ORDER BY mutation_version ASC
+FORMAT TSVWithNames;
+
 DROP TABLE `02581_trips`;

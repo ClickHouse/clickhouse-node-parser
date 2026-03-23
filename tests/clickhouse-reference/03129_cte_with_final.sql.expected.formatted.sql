@@ -13,4 +13,12 @@ INSERT INTO t;
 
 SET enable_analyzer = 1;
 
+WITH merged_test AS (
+    SELECT *
+    FROM t FINAL
+)
+
+SELECT *
+FROM merged_test;
+
 DROP TABLE t;

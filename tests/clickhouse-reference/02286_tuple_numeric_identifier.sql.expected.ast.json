@@ -385,5 +385,52 @@
         }
       }
     ]
+  },
+  {
+    "kind": "select",
+    "with": [
+      {
+        "kind": "cteExpr",
+        "name": "data",
+        "expr": {
+          "kind": "literal",
+          "type": "String",
+          "value": "{\"1\":{\"key\":\"value\"}}"
+        }
+      },
+      {
+        "kind": "cteExpr",
+        "name": "parsed_json",
+        "expr": {
+          "kind": "functionCall",
+          "name": "JSONExtract",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "data"
+              ]
+            },
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "Tuple(\"1\" Tuple(key String))"
+            }
+          ]
+        }
+      }
+    ],
+    "select": [
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "parsed_json"
+          ]
+        },
+        "alias": "ssid"
+      }
+    ]
   }
 ]

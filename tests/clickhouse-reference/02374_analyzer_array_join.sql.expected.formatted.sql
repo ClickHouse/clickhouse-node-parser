@@ -31,6 +31,25 @@ FROM
     test_table
 ARRAY JOIN [1, 2, 3] AS value;
 
+WITH [1, 2, 3] AS constant_array
+
+SELECT
+    id,
+    value
+FROM
+    test_table
+ARRAY JOIN constant_array AS value;
+
+WITH [1, 2, 3] AS constant_array
+
+SELECT
+    id,
+    value,
+    value_1
+FROM
+    test_table
+ARRAY JOIN constant_array AS value_1;
+
 SELECT
     id,
     value,

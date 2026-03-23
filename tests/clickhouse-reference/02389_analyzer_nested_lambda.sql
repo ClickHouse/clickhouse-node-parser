@@ -12,6 +12,8 @@ SELECT arrayMap(x -> x + arrayMap(x -> (SELECT 5), [1])[1], [1,2,3]);
 SELECT (SELECT 5) AS subquery, arrayMap(x -> x + arrayMap(x -> subquery, [1])[1], [1,2,3]);
 SELECT arrayMap(x -> x + arrayMap(x -> (SELECT 5 UNION DISTINCT SELECT 5), [1])[1], [1,2,3]);
 SELECT (SELECT 5 UNION DISTINCT SELECT 5) AS subquery, arrayMap(x -> x + arrayMap(x -> subquery, [1])[1], [1,2,3]);
+WITH x -> toString(x) AS lambda SELECT arrayMap(x -> lambda(x), [1,2,3]);
+WITH x -> toString(x) AS lambda SELECT arrayMap(x -> arrayMap(y -> concat(lambda(x), '_', lambda(y)), [1,2,3]), [1,2,3]);
 DROP TABLE IF EXISTS test_table;
 CREATE TABLE test_table
 (
@@ -31,6 +33,9 @@ SELECT 5 AS constant, arrayMap(x -> x + arrayMap(y -> x + y + id + constant, [1]
 SELECT arrayMap(x -> x + arrayMap(x -> id + (SELECT id FROM test_table), [1])[1], [1,2,3]) FROM test_table;
 SELECT arrayMap(x -> id + arrayMap(x -> id + (SELECT id FROM test_table), [1])[1], [1,2,3]) FROM test_table;
 SELECT arrayMap(x -> id + arrayMap(x -> id + (SELECT id FROM test_table UNION DISTINCT SELECT id FROM test_table), [1])[1], [1,2,3]) FROM test_table;
+WITH x -> toString(id) AS lambda SELECT arrayMap(x -> lambda(x), [1,2,3]) FROM test_table;
+WITH x -> toString(id) AS lambda SELECT arrayMap(x -> arrayMap(y -> lambda(y), [1,2,3]), [1,2,3]) FROM test_table;
+WITH x -> toString(id) AS lambda SELECT arrayMap(x -> arrayMap(y -> concat(lambda(x), '_', lambda(y)), [1,2,3]), [1,2,3]) FROM test_table;
 SELECT arrayMap(x -> concat(concat(concat(concat(concat(toString(id), '___\0_______\0____'), toString(id), concat(concat(toString(id), ''), toString(id)), toString(id)),
     arrayMap(x -> concat(concat(concat(concat(toString(id), ''), toString(id)), toString(id), '___\0_______\0____'), toString(id)) AS lambda, [NULL, inf, 1, 1]),
     concat(toString(id), NULL), toString(id)), toString(id))) AS lambda, [NULL, NULL, 2147483647])

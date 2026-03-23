@@ -28,3 +28,57 @@ FROM (
         FROM `system`.numbers
         LIMIT 10
     );
+
+WITH (
+        SELECT v
+        FROM vecs_Float32
+        LIMIT 1
+    ) AS a
+
+SELECT count(dp)
+FROM (
+        SELECT dotProduct(a, v) AS dp
+        FROM vecs_Float32
+    );
+
+WITH t AS (
+    SELECT number + a AS x
+    FROM numbers(5)
+)
+
+SELECT
+    0 AS a,
+    x
+FROM t
+UNION ALL
+SELECT
+    5 AS a,
+    x
+FROM t
+ORDER BY
+    a ASC,
+    x ASC
+FORMAT Null
+SETTINGS enable_analyzer = 1;
+
+WITH t AS (
+    SELECT number + a AS x
+    FROM numbers(5)
+)
+
+SELECT *
+FROM (
+        SELECT
+            0 AS a,
+            x
+        FROM t
+        UNION ALL
+        SELECT
+            5 AS a,
+            x
+        FROM t
+    )
+ORDER BY
+    a ASC,
+    x ASC
+SETTINGS enable_analyzer = 1;

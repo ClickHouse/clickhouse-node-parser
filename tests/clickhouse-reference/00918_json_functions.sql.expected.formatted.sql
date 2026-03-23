@@ -380,6 +380,10 @@ FROM (
 
 SELECT JSONExtractKeysAndValues([], JSONLength('^?V{LSwp')); -- { serverError ILLEGAL_COLUMN }
 
+WITH '{"i": 1, "f": 1.2}' AS json
+
+SELECT JSONExtract(json, 'i', JSONType(json, 'i')); -- { serverError ILLEGAL_COLUMN }
+
 SELECT JSONExtract('{"a": [100.0, 200], "b": [-100, 200.0, 300]}', 'Map(Int64, Array(Float64))'); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
 SET allow_simdjson = 0;

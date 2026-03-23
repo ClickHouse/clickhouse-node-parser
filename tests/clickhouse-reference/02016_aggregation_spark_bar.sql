@@ -26,6 +26,7 @@ SELECT sparkbar(3,toDate('2020-01-01'),toDate('2020-01-10'))(event_date,cnt) FRO
 SELECT sparkbar(4,toDate('2020-01-01'),toDate('2020-01-08'))(event_date,cnt) FROM spark_bar_test;
 SELECT sparkbar(5,toDate('2020-01-01'),toDate('2020-01-10'))(event_date,cnt) FROM spark_bar_test;
 SELECT sparkbar(9,toDate('2020-01-01'),toDate('2020-01-10'))(event_date,cnt) FROM spark_bar_test;
+WITH number DIV 50 AS k, toUInt32(number % 50) AS value SELECT k, sparkbar(50, 0, 99)(number, value) FROM numbers(100) GROUP BY k ORDER BY k;
 SELECT sparkbar(128, 0, 9223372036854775806)(toUInt64(9223372036854775806), number % 65535) FROM numbers(100);
 SELECT sparkbar(128)(toUInt64(9223372036854775806), number % 65535) FROM numbers(100);
 SELECT sparkbar(9)(x, y) FROM (SELECT * FROM Values('x UInt64, y UInt8', (18446744073709551615,255), (0,0), (0,0), (4036797895307271799,254)));

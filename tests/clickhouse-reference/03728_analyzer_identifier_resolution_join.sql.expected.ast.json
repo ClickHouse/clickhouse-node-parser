@@ -294,6 +294,140 @@
     ]
   },
   {
+    "kind": "select",
+    "with": [
+      {
+        "kind": "cteSubquery",
+        "name": "records",
+        "query": {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "address",
+                "email_address"
+              ]
+            }
+          ],
+          "from": {
+            "kind": "tableRef",
+            "table": "address"
+          },
+          "groupBy": {
+            "kind": "expressions",
+            "items": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "address",
+                  "email_address"
+                ]
+              }
+            ]
+          }
+        }
+      },
+      {
+        "kind": "cteSubquery",
+        "name": "stats",
+        "query": {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "alias",
+              "expr": {
+                "kind": "subqueryExpr",
+                "query": {
+                  "kind": "select",
+                  "select": [
+                    {
+                      "kind": "functionCall",
+                      "name": "COUNT",
+                      "args": [
+                        {
+                          "kind": "asterisk"
+                        }
+                      ]
+                    }
+                  ],
+                  "from": {
+                    "left": {
+                      "kind": "tableRef",
+                      "table": "fact_click"
+                    },
+                    "kind": "joinExpr",
+                    "joinType": "INNER",
+                    "right": {
+                      "kind": "tableRef",
+                      "table": "records"
+                    },
+                    "constraint": {
+                      "kind": "on",
+                      "expr": {
+                        "kind": "binaryExpr",
+                        "op": "=",
+                        "left": {
+                          "kind": "columnRef",
+                          "parts": [
+                            "records",
+                            "email_address"
+                          ]
+                        },
+                        "right": {
+                          "kind": "columnRef",
+                          "parts": [
+                            "fact_click",
+                            "email_address"
+                          ]
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              "alias": "num_clicks"
+            },
+            {
+              "kind": "alias",
+              "expr": {
+                "kind": "subqueryExpr",
+                "query": {
+                  "kind": "select",
+                  "select": [
+                    {
+                      "kind": "functionCall",
+                      "name": "COUNT",
+                      "args": [
+                        {
+                          "kind": "asterisk"
+                        }
+                      ]
+                    }
+                  ],
+                  "from": {
+                    "kind": "tableRef",
+                    "table": "records"
+                  }
+                }
+              },
+              "alias": "num_records"
+            }
+          ]
+        }
+      }
+    ],
+    "select": [
+      {
+        "kind": "asterisk"
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "stats"
+    }
+  },
+  {
     "kind": "drop",
     "targetType": "TABLE",
     "table": {

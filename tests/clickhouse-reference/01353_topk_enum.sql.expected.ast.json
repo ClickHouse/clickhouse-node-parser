@@ -1,0 +1,74 @@
+[
+  {
+    "kind": "select",
+    "with": [
+      {
+        "kind": "cteExpr",
+        "name": "x",
+        "expr": {
+          "kind": "castExpr",
+          "expr": {
+            "kind": "binaryExpr",
+            "op": "%",
+            "left": {
+              "kind": "functionCall",
+              "name": "round",
+              "args": [
+                {
+                  "kind": "functionCall",
+                  "name": "sqrt",
+                  "args": [
+                    {
+                      "kind": "columnRef",
+                      "parts": [
+                        "number"
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            "right": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "4"
+            }
+          },
+          "type": "Enum('' = 0, 'hello' = 1, 'world' = 2, 'test' = 3)"
+        }
+      }
+    ],
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "topK",
+        "params": [
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "10"
+          }
+        ],
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "x"
+            ]
+          }
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableFunctionRef",
+      "name": "numbers",
+      "args": [
+        {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1000"
+        }
+      ]
+    }
+  }
+]

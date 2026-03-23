@@ -16,6 +16,15 @@ FROM
     FROM 03038_table
 )
 ORDER BY time ASC;
+WITH subquery AS (
+    SELECT
+        toUInt64(time) AS time,
+        toHour(03038_table.time)
+    FROM 03038_table
+)
+SELECT *
+FROM subquery
+ORDER BY subquery.time ASC;
 SELECT *
 FROM
 (

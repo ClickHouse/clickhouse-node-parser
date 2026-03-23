@@ -30,6 +30,30 @@ SETTINGS index_granularity = 8192;
 
 SET enable_analyzer = 1;
 
+WITH records AS (
+    SELECT address.email_address
+    FROM address
+    GROUP BY address.email_address
+),
+
+stats AS (
+    SELECT
+        (
+            SELECT COUNT(*)
+            FROM
+                fact_click
+            INNER JOIN records
+                ON records.email_address = fact_click.email_address
+        ) AS num_clicks,
+        (
+            SELECT COUNT(*)
+            FROM records
+        ) AS num_records
+)
+
+SELECT *
+FROM stats;
+
 DROP TABLE address;
 
 DROP TABLE fact_click;

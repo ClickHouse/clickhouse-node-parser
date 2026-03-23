@@ -373,6 +373,21 @@ FROM (
     )
 ORDER BY 1 ASC;
 
+WITH res AS (
+    SELECT first_col
+    FROM (
+            SELECT
+                first_col,
+                second_col AS total
+            FROM tp2
+            ORDER BY 2 DESC
+        )
+    LIMIT 1
+)
+
+SELECT *
+FROM res;
+
 CREATE TABLE test
 (
     id UInt32,

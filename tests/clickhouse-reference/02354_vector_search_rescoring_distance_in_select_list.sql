@@ -52,5 +52,30 @@ INSERT INTO tab_bf16 VALUES (0, [1.0, 0.0]),
                         (8, [0.0, 2.3]),
                         (9, [0.0, 2.4]);
 SELECT '-- Search vector: Array(Float64)';
+WITH CAST([0.0, 2.0] AS Array(Float64)) AS reference_vec
+SELECT id, L2Distance(vec, reference_vec)
+FROM tab_f32
+ORDER BY L2Distance(vec, reference_vec)
+LIMIT 4;
+WITH CAST([0.0, 2.0] AS Array(BFloat16)) AS reference_vec
+SELECT id, L2Distance(vec, reference_vec)
+FROM tab_f32
+ORDER BY L2Distance(vec, reference_vec)
+LIMIT 4;
+WITH [0.0, 2.0] AS reference_vec
+SELECT id, L2Distance(vec, reference_vec)
+FROM tab_bf16
+ORDER BY L2Distance(vec, reference_vec)
+LIMIT 4;
+WITH CAST([0.0, 2.0] AS Array(BFloat16)) AS reference_vec
+SELECT id, L2Distance(vec, reference_vec)
+FROM tab_bf16
+ORDER BY L2Distance(vec, reference_vec)
+LIMIT 4;
+WITH CAST([0.0, 2.0] AS Array(Float32)) AS reference_vec
+SELECT id, L2Distance(vec, reference_vec)
+FROM tab_bf16
+ORDER BY L2Distance(vec, reference_vec)
+LIMIT 4;
 DROP TABLE tab_f32;
 DROP TABLE tab_bf16;

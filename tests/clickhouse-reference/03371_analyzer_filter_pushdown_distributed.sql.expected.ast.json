@@ -174,6 +174,80 @@
     ]
   },
   {
+    "kind": "select",
+    "with": [
+      {
+        "kind": "cteSubquery",
+        "name": "alias_1",
+        "query": {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "c1"
+              ]
+            },
+            {
+              "kind": "columnRef",
+              "parts": [
+                "c2"
+              ]
+            }
+          ],
+          "from": {
+            "kind": "tableRef",
+            "table": "distributed_bug_table"
+          }
+        }
+      }
+    ],
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "c1"
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "alias_1"
+    },
+    "where": {
+      "kind": "inExpr",
+      "negated": false,
+      "expr": {
+        "kind": "columnRef",
+        "parts": [
+          "c2"
+        ]
+      },
+      "values": {
+        "kind": "subqueryExpr",
+        "query": {
+          "kind": "select",
+          "distinct": {
+            "kind": "distinct"
+          },
+          "select": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "c2"
+              ]
+            }
+          ],
+          "from": {
+            "kind": "tableRef",
+            "table": "alias_1"
+          }
+        }
+      }
+    },
+    "format": "Null"
+  },
+  {
     "kind": "set",
     "settings": [
       {

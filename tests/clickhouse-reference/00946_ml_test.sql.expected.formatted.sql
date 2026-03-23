@@ -29,6 +29,14 @@ ENGINE = Memory AS
 SELECT stochasticLinearRegressionState(0.1, 0.0, 5, 'SGD')(target, param1, param2, param3, param4, param5, param6, param7) AS state
 FROM defaults;
 
+WITH (
+        SELECT state
+        FROM model
+    ) AS model
+
+SELECT round(evalMLMethod(model, predict1, predict2, predict3, predict4, predict5, predict6, predict7), 12)
+FROM defaults;
+
 DROP TABLE defaults;
 
 DROP TABLE model;

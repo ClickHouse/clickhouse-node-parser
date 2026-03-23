@@ -66,6 +66,85 @@ INSERT INTO department;
 
 INSERT INTO department;
 
+-- extract all departments under 'A'. Result should be A, B, C, D and F
+WITH subdepartment AS (
+    SELECT
+        name AS root_name,
+        *
+    FROM department
+    WHERE name = 'A'
+    UNION ALL
+-- recursive term
+    SELECT
+        sd.root_name,
+        d.*
+    FROM
+        department AS d
+    CROSS JOIN subdepartment AS sd
+    WHERE d.parent_department = sd.id
+)
+
+SELECT *
+FROM subdepartment
+ORDER BY name ASC;
+
+-- extract all departments under 'A' with "level" number
+WITH subdepartment AS (
+    SELECT
+        1 AS level,
+        *
+    FROM department
+    WHERE name = 'A'
+    UNION ALL
+-- recursive term
+    SELECT
+        sd.level + 1,
+        d.*
+    FROM
+        department AS d
+    CROSS JOIN subdepartment AS sd
+    WHERE d.parent_department = sd.id
+)
+
+SELECT *
+FROM subdepartment
+ORDER BY name ASC;
+
+-- extract all departments under 'A' with "level" number.
+-- Only shows level 2 or more
+WITH subdepartment AS (
+    SELECT
+        1 AS level,
+        *
+    FROM department
+    WHERE name = 'A'
+    UNION ALL
+-- recursive term
+    SELECT
+        sd.level + 1,
+        d.*
+    FROM
+        department AS d
+    CROSS JOIN subdepartment AS sd
+    WHERE d.parent_department = sd.id
+)
+
+SELECT *
+FROM subdepartment
+WHERE level >= 2
+ORDER BY name ASC;
+
+-- "RECURSIVE" is ignored if the query has no self-reference
+WITH subdepartment AS (
+    SELECT *
+    FROM department
+    WHERE name = 'A'
+)
+
+SELECT *
+FROM subdepartment
+ORDER BY name ASC;
+
 -- inside subqueries
 SELECT count(*)
 FROM (
@@ -97,3 +176,66 @@ WHERE n < (
             ) AS t
         WHERE n < 100
     );
+
+-- corner case in which sub-WITH gets initialized first
+WITH q AS (
+    SELECT *
+    FROM department
+    UNION ALL
+(    WITH x AS (
+        SELECT *
+        FROM q
+    )
+
+    SELECT *
+    FROM x)
+)
+
+SELECT *
+FROM q
+LIMIT 24;
+
+WITH q AS (
+    SELECT *
+    FROM department
+    UNION ALL
+(    WITH x AS (
+        SELECT *
+        FROM department
+        UNION ALL
+(        SELECT *
+        FROM q
+        UNION ALL
+        SELECT *
+        FROM x)
+    )
+
+    SELECT *
+    FROM x)
+)
+
+SELECT *
+FROM q
+LIMIT 32;
+
+-- recursive term has sub-UNION
+WITH t AS (
+    SELECT
+        1 AS i,
+        2 AS j
+    UNION ALL
+    SELECT
+        t2.i,
+        t.j + 1
+    FROM
+        (
+            SELECT 2 AS i
+            UNION ALL
+            SELECT 3 AS i
+        ) AS t2
+    INNER JOIN t
+        ON (t2.i = t.i + 1)
+)
+
+SELECT *
+FROM t;

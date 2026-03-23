@@ -14,6 +14,158 @@
   },
   {
     "kind": "select",
+    "with": [
+      {
+        "kind": "cteExpr",
+        "name": "x",
+        "expr": {
+          "kind": "functionCall",
+          "name": "arrayJoin",
+          "args": [
+            {
+              "kind": "arrayLiteral",
+              "elements": [
+                {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "0"
+                },
+                {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "1"
+                },
+                {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "2"
+                },
+                {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "10"
+                }
+              ],
+              "source": "[0, 1, 2, 10]"
+            }
+          ]
+        }
+      }
+    ],
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "quantilesGK",
+        "params": [
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "100"
+          },
+          {
+            "kind": "literal",
+            "type": "Float64",
+            "value": "0.5"
+          },
+          {
+            "kind": "literal",
+            "type": "Float64",
+            "value": "0.4"
+          },
+          {
+            "kind": "literal",
+            "type": "Float64",
+            "value": "0.1"
+          }
+        ],
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "x"
+            ]
+          }
+        ]
+      }
+    ],
+    "leadingComments": [
+      "-- { echoOn }"
+    ]
+  },
+  {
+    "kind": "select",
+    "with": [
+      {
+        "kind": "cteExpr",
+        "name": "x",
+        "expr": {
+          "kind": "functionCall",
+          "name": "arrayJoin",
+          "args": [
+            {
+              "kind": "arrayLiteral",
+              "elements": [
+                {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "0"
+                },
+                {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "6"
+                },
+                {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "7"
+                },
+                {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "9"
+                },
+                {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "10"
+                }
+              ],
+              "source": "[0, 6, 7, 9, 10]"
+            }
+          ]
+        }
+      }
+    ],
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "quantileGK",
+        "params": [
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "100"
+          },
+          {
+            "kind": "literal",
+            "type": "Float64",
+            "value": "0.5"
+          }
+        ],
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "x"
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "select",
     "select": [
       {
         "kind": "functionCall",
@@ -146,6 +298,130 @@
           "kind": "literal",
           "type": "UInt64",
           "value": "10"
+        }
+      ]
+    }
+  },
+  {
+    "kind": "select",
+    "with": [
+      {
+        "kind": "cteExpr",
+        "name": "col",
+        "expr": {
+          "kind": "binaryExpr",
+          "op": "+",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "number"
+            ]
+          },
+          "right": {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "1"
+          }
+        }
+      }
+    ],
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "quantilesGK",
+        "params": [
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "10000"
+          },
+          {
+            "kind": "literal",
+            "type": "Float64",
+            "value": "0.25"
+          },
+          {
+            "kind": "literal",
+            "type": "Float64",
+            "value": "0.5"
+          },
+          {
+            "kind": "literal",
+            "type": "Float64",
+            "value": "0.75"
+          }
+        ],
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "col"
+            ]
+          }
+        ]
+      },
+      {
+        "kind": "functionCall",
+        "name": "count",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "col"
+            ]
+          }
+        ]
+      },
+      {
+        "kind": "functionCall",
+        "name": "quantilesGK",
+        "params": [
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "10000"
+          },
+          {
+            "kind": "literal",
+            "type": "Float64",
+            "value": "0.0"
+          },
+          {
+            "kind": "literal",
+            "type": "Float64",
+            "value": "1.0"
+          }
+        ],
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "col"
+            ]
+          }
+        ]
+      },
+      {
+        "kind": "functionCall",
+        "name": "sum",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "col"
+            ]
+          }
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableFunctionRef",
+      "name": "numbers",
+      "args": [
+        {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1000"
         }
       ]
     }

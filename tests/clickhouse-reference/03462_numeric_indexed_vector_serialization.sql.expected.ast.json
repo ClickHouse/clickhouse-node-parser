@@ -113,6 +113,215 @@
     ]
   },
   {
+    "kind": "select",
+    "with": [
+      {
+        "kind": "cteExpr",
+        "name": "vec_1",
+        "expr": {
+          "kind": "subqueryExpr",
+          "query": {
+            "kind": "select",
+            "select": [
+              {
+                "kind": "functionCall",
+                "name": "groupNumericIndexedVectorStateIf",
+                "args": [
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "uin"
+                    ]
+                  },
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "value"
+                    ]
+                  },
+                  {
+                    "kind": "binaryExpr",
+                    "op": "=",
+                    "left": {
+                      "kind": "columnRef",
+                      "parts": [
+                        "ds"
+                      ]
+                    },
+                    "right": {
+                      "kind": "literal",
+                      "type": "String",
+                      "value": "2023-12-26"
+                    }
+                  }
+                ]
+              }
+            ],
+            "from": {
+              "kind": "tableRef",
+              "table": "uin_value_details_int32_float64"
+            }
+          }
+        }
+      },
+      {
+        "kind": "cteExpr",
+        "name": "vec_2",
+        "expr": {
+          "kind": "subqueryExpr",
+          "query": {
+            "kind": "select",
+            "select": [
+              {
+                "kind": "functionCall",
+                "name": "groupNumericIndexedVectorStateIf",
+                "args": [
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "uin"
+                    ]
+                  },
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "value"
+                    ]
+                  },
+                  {
+                    "kind": "binaryExpr",
+                    "op": "=",
+                    "left": {
+                      "kind": "columnRef",
+                      "parts": [
+                        "ds"
+                      ]
+                    },
+                    "right": {
+                      "kind": "literal",
+                      "type": "String",
+                      "value": "2023-12-27"
+                    }
+                  }
+                ]
+              }
+            ],
+            "from": {
+              "kind": "tableRef",
+              "table": "uin_value_details_int32_float64"
+            }
+          }
+        }
+      }
+    ],
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "arrayJoin",
+        "args": [
+          {
+            "kind": "arrayLiteral",
+            "elements": [
+              {
+                "kind": "functionCall",
+                "name": "numericIndexedVectorToMap",
+                "args": [
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "vec_1"
+                    ]
+                  }
+                ]
+              },
+              {
+                "kind": "functionCall",
+                "name": "numericIndexedVectorToMap",
+                "args": [
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "vec_2"
+                    ]
+                  }
+                ]
+              },
+              {
+                "kind": "functionCall",
+                "name": "numericIndexedVectorToMap",
+                "args": [
+                  {
+                    "kind": "functionCall",
+                    "name": "CAST",
+                    "args": [
+                      {
+                        "kind": "functionCall",
+                        "name": "CAST",
+                        "args": [
+                          {
+                            "kind": "columnRef",
+                            "parts": [
+                              "vec_1"
+                            ]
+                          },
+                          {
+                            "kind": "literal",
+                            "type": "String",
+                            "value": "String"
+                          }
+                        ]
+                      },
+                      {
+                        "kind": "literal",
+                        "type": "String",
+                        "value": "AggregateFunction(groupNumericIndexedVector, UInt32, Float64)"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "kind": "functionCall",
+                "name": "numericIndexedVectorToMap",
+                "args": [
+                  {
+                    "kind": "functionCall",
+                    "name": "CAST",
+                    "args": [
+                      {
+                        "kind": "functionCall",
+                        "name": "CAST",
+                        "args": [
+                          {
+                            "kind": "columnRef",
+                            "parts": [
+                              "vec_2"
+                            ]
+                          },
+                          {
+                            "kind": "literal",
+                            "type": "String",
+                            "value": "String"
+                          }
+                        ]
+                      },
+                      {
+                        "kind": "literal",
+                        "type": "String",
+                        "value": "AggregateFunction(groupNumericIndexedVector, UInt32, Float64)"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ],
+            "source": "[\n    numericIndexedVectorToMap(vec_1)\n    , numericIndexedVectorToMap(vec_2)\n    , numericIndexedVectorToMap(CAST(CAST(vec_1, 'String'), 'AggregateFunction(groupNumericIndexedVector, UInt32, Float64)'))\n    , numericIndexedVectorToMap(CAST(CAST(vec_2, 'String'), 'AggregateFunction(groupNumericIndexedVector, UInt32, Float64)'))\n]"
+          }
+        ]
+      }
+    ]
+  },
+  {
     "kind": "drop",
     "targetType": "TABLE",
     "table": {

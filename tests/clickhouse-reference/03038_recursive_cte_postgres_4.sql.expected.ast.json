@@ -88,5 +88,440 @@
         "table": "graph"
       }
     }
+  },
+  {
+    "kind": "select",
+    "with": [
+      {
+        "kind": "cteSubquery",
+        "name": "search_graph",
+        "query": {
+          "kind": "union",
+          "queries": [
+            {
+              "kind": "select",
+              "select": [
+                {
+                  "kind": "asterisk"
+                },
+                {
+                  "kind": "alias",
+                  "expr": {
+                    "kind": "literal",
+                    "type": "Bool",
+                    "value": "0"
+                  },
+                  "alias": "is_cycle"
+                },
+                {
+                  "kind": "alias",
+                  "expr": {
+                    "kind": "arrayLiteral",
+                    "elements": [
+                      {
+                        "kind": "functionCall",
+                        "name": "tuple",
+                        "args": [
+                          {
+                            "kind": "columnRef",
+                            "parts": [
+                              "g",
+                              "f"
+                            ]
+                          },
+                          {
+                            "kind": "columnRef",
+                            "parts": [
+                              "g",
+                              "t"
+                            ]
+                          }
+                        ]
+                      }
+                    ],
+                    "source": "[tuple(g.f, g.t)]"
+                  },
+                  "alias": "path"
+                }
+              ],
+              "from": {
+                "kind": "tableRef",
+                "table": "graph",
+                "alias": "g"
+              }
+            },
+            {
+              "kind": "select",
+              "select": [
+                {
+                  "kind": "qualifiedAsterisk",
+                  "parts": [
+                    "g"
+                  ]
+                },
+                {
+                  "kind": "functionCall",
+                  "name": "has",
+                  "args": [
+                    {
+                      "kind": "columnRef",
+                      "parts": [
+                        "path"
+                      ]
+                    },
+                    {
+                      "kind": "functionCall",
+                      "name": "tuple",
+                      "args": [
+                        {
+                          "kind": "columnRef",
+                          "parts": [
+                            "g",
+                            "f"
+                          ]
+                        },
+                        {
+                          "kind": "columnRef",
+                          "parts": [
+                            "g",
+                            "t"
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "kind": "functionCall",
+                  "name": "arrayConcat",
+                  "args": [
+                    {
+                      "kind": "columnRef",
+                      "parts": [
+                        "sg",
+                        "path"
+                      ]
+                    },
+                    {
+                      "kind": "arrayLiteral",
+                      "elements": [
+                        {
+                          "kind": "functionCall",
+                          "name": "tuple",
+                          "args": [
+                            {
+                              "kind": "columnRef",
+                              "parts": [
+                                "g",
+                                "f"
+                              ]
+                            },
+                            {
+                              "kind": "columnRef",
+                              "parts": [
+                                "g",
+                                "t"
+                              ]
+                            }
+                          ]
+                        }
+                      ],
+                      "source": "[tuple(g.f, g.t)]"
+                    }
+                  ]
+                }
+              ],
+              "from": {
+                "left": {
+                  "kind": "tableRef",
+                  "table": "graph",
+                  "alias": "g"
+                },
+                "kind": "joinExpr",
+                "joinType": "CROSS",
+                "right": {
+                  "kind": "tableRef",
+                  "table": "search_graph",
+                  "alias": "sg"
+                }
+              },
+              "where": {
+                "kind": "naryExpr",
+                "op": "AND",
+                "operands": [
+                  {
+                    "kind": "binaryExpr",
+                    "op": "=",
+                    "left": {
+                      "kind": "columnRef",
+                      "parts": [
+                        "g",
+                        "f"
+                      ]
+                    },
+                    "right": {
+                      "kind": "columnRef",
+                      "parts": [
+                        "sg",
+                        "t"
+                      ]
+                    }
+                  },
+                  {
+                    "kind": "unaryExpr",
+                    "op": "NOT",
+                    "expr": {
+                      "kind": "columnRef",
+                      "parts": [
+                        "is_cycle"
+                      ]
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "select": [
+      {
+        "kind": "asterisk"
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "search_graph"
+    },
+    "settings": [
+      {
+        "name": "query_plan_join_swap_table",
+        "value": {
+          "kind": "literal",
+          "type": "String",
+          "value": "false"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "with": [
+      {
+        "kind": "cteSubquery",
+        "name": "search_graph",
+        "query": {
+          "kind": "union",
+          "queries": [
+            {
+              "kind": "select",
+              "select": [
+                {
+                  "kind": "asterisk"
+                },
+                {
+                  "kind": "alias",
+                  "expr": {
+                    "kind": "literal",
+                    "type": "Bool",
+                    "value": "0"
+                  },
+                  "alias": "is_cycle"
+                },
+                {
+                  "kind": "alias",
+                  "expr": {
+                    "kind": "arrayLiteral",
+                    "elements": [
+                      {
+                        "kind": "functionCall",
+                        "name": "tuple",
+                        "args": [
+                          {
+                            "kind": "columnRef",
+                            "parts": [
+                              "g",
+                              "f"
+                            ]
+                          },
+                          {
+                            "kind": "columnRef",
+                            "parts": [
+                              "g",
+                              "t"
+                            ]
+                          }
+                        ]
+                      }
+                    ],
+                    "source": "[tuple(g.f, g.t)]"
+                  },
+                  "alias": "path"
+                }
+              ],
+              "from": {
+                "kind": "tableRef",
+                "table": "graph",
+                "alias": "g"
+              }
+            },
+            {
+              "kind": "select",
+              "select": [
+                {
+                  "kind": "qualifiedAsterisk",
+                  "parts": [
+                    "g"
+                  ]
+                },
+                {
+                  "kind": "functionCall",
+                  "name": "has",
+                  "args": [
+                    {
+                      "kind": "columnRef",
+                      "parts": [
+                        "path"
+                      ]
+                    },
+                    {
+                      "kind": "functionCall",
+                      "name": "tuple",
+                      "args": [
+                        {
+                          "kind": "columnRef",
+                          "parts": [
+                            "g",
+                            "f"
+                          ]
+                        },
+                        {
+                          "kind": "columnRef",
+                          "parts": [
+                            "g",
+                            "t"
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "kind": "functionCall",
+                  "name": "arrayConcat",
+                  "args": [
+                    {
+                      "kind": "columnRef",
+                      "parts": [
+                        "sg",
+                        "path"
+                      ]
+                    },
+                    {
+                      "kind": "arrayLiteral",
+                      "elements": [
+                        {
+                          "kind": "functionCall",
+                          "name": "tuple",
+                          "args": [
+                            {
+                              "kind": "columnRef",
+                              "parts": [
+                                "g",
+                                "f"
+                              ]
+                            },
+                            {
+                              "kind": "columnRef",
+                              "parts": [
+                                "g",
+                                "t"
+                              ]
+                            }
+                          ]
+                        }
+                      ],
+                      "source": "[tuple(g.f, g.t)]"
+                    }
+                  ]
+                }
+              ],
+              "from": {
+                "left": {
+                  "kind": "tableRef",
+                  "table": "graph",
+                  "alias": "g"
+                },
+                "kind": "joinExpr",
+                "joinType": "CROSS",
+                "right": {
+                  "kind": "tableRef",
+                  "table": "search_graph",
+                  "alias": "sg"
+                }
+              },
+              "where": {
+                "kind": "naryExpr",
+                "op": "AND",
+                "operands": [
+                  {
+                    "kind": "binaryExpr",
+                    "op": "=",
+                    "left": {
+                      "kind": "columnRef",
+                      "parts": [
+                        "g",
+                        "f"
+                      ]
+                    },
+                    "right": {
+                      "kind": "columnRef",
+                      "parts": [
+                        "sg",
+                        "t"
+                      ]
+                    }
+                  },
+                  {
+                    "kind": "unaryExpr",
+                    "op": "NOT",
+                    "expr": {
+                      "kind": "columnRef",
+                      "parts": [
+                        "is_cycle"
+                      ]
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "select": [
+      {
+        "kind": "asterisk"
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "search_graph"
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "path"
+          ]
+        },
+        "direction": "ASC"
+      }
+    ],
+    "leadingComments": [
+      "-- ordering by the path column has same effect as SEARCH DEPTH FIRST"
+    ]
   }
 ]

@@ -31,6 +31,12 @@ SELECT round(h3EdgeLengthM(arrayJoin([0,1,2])), 2);
 
 SELECT round(h3EdgeLengthKm(arrayJoin([0,1,2])), 2);
 
+WITH h3ToGeo(arrayJoin([579205133326352383,589753847883235327,594082350283882495])) AS p
+
+SELECT
+    round(p.1, 2),
+    round(p.2, 2);
+
 SELECT arrayMap(p -> (round(p.1, 2), round(p.2, 2)), h3ToGeoBoundary(arrayJoin([579205133326352383,589753847883235327,594082350283882495])));
 
 SELECT h3kRing(arrayJoin([579205133326352383]), arrayJoin([toUInt16(1),toUInt16(2),toUInt16(3)]));

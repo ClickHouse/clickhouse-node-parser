@@ -48,3 +48,9 @@ FROM uin_value_details; -- { serverError BAD_ARGUMENTS }
 
 SELECT numericIndexedVectorCardinality(groupNumericIndexedVectorState('BSI', 64, 14)(uin, value))
 FROM uin_value_details; -- { serverError BAD_ARGUMENTS }
+
+WITH numericIndexedVectorBuild(mapFromArrays([1, 2, 3], [10, 20, 30])) AS res1,
+
+numericIndexedVectorBuild(mapFromArrays(arrayMap(x -> toUInt32(x), [1, 2, 3]), [10.5, 20.3, 30.892])) AS res2
+
+SELECT tuple(numericIndexedVectorAllValueSum(res1), numericIndexedVectorCardinality(res1), toTypeName(res1), numericIndexedVectorAllValueSum(res2), numericIndexedVectorCardinality(res2), toTypeName(res2));

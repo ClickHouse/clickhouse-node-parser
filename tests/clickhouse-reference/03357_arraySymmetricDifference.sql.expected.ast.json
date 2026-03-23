@@ -737,6 +737,358 @@
     ]
   },
   {
+    "kind": "select",
+    "with": [
+      {
+        "kind": "cteExpr",
+        "name": "f",
+        "expr": {
+          "kind": "functionCall",
+          "name": "materialize",
+          "args": [
+            {
+              "kind": "arrayLiteral",
+              "elements": [
+                {
+                  "kind": "tupleLiteral",
+                  "elements": [
+                    {
+                      "kind": "literal",
+                      "type": "UInt64",
+                      "value": "1"
+                    },
+                    {
+                      "kind": "arrayLiteral",
+                      "elements": [
+                        {
+                          "kind": "literal",
+                          "type": "String",
+                          "value": "a"
+                        },
+                        {
+                          "kind": "literal",
+                          "type": "String",
+                          "value": "b"
+                        }
+                      ],
+                      "source": "['a', 'b']"
+                    }
+                  ],
+                  "source": "(1, ['a', 'b'])"
+                },
+                {
+                  "kind": "tupleLiteral",
+                  "elements": [
+                    {
+                      "kind": "literal",
+                      "type": "NULL",
+                      "value": "NULL"
+                    },
+                    {
+                      "kind": "arrayLiteral",
+                      "elements": [
+                        {
+                          "kind": "literal",
+                          "type": "String",
+                          "value": "c"
+                        }
+                      ],
+                      "source": "['c']"
+                    }
+                  ],
+                  "source": "(NULL, ['c'])"
+                }
+              ],
+              "source": "[(1, ['a', 'b']), (NULL, ['c'])]"
+            }
+          ]
+        }
+      },
+      {
+        "kind": "cteExpr",
+        "name": "s",
+        "expr": {
+          "kind": "functionCall",
+          "name": "materialize",
+          "args": [
+            {
+              "kind": "arrayLiteral",
+              "elements": [
+                {
+                  "kind": "tupleLiteral",
+                  "elements": [
+                    {
+                      "kind": "literal",
+                      "type": "UInt64",
+                      "value": "2"
+                    },
+                    {
+                      "kind": "arrayLiteral",
+                      "elements": [
+                        {
+                          "kind": "literal",
+                          "type": "String",
+                          "value": "c"
+                        },
+                        {
+                          "kind": "literal",
+                          "type": "NULL",
+                          "value": "NULL"
+                        }
+                      ],
+                      "source": "['c', NULL]"
+                    }
+                  ],
+                  "source": "(2, ['c', NULL])"
+                },
+                {
+                  "kind": "tupleLiteral",
+                  "elements": [
+                    {
+                      "kind": "literal",
+                      "type": "UInt64",
+                      "value": "1"
+                    },
+                    {
+                      "kind": "arrayLiteral",
+                      "elements": [
+                        {
+                          "kind": "literal",
+                          "type": "String",
+                          "value": "a"
+                        },
+                        {
+                          "kind": "literal",
+                          "type": "String",
+                          "value": "b"
+                        }
+                      ],
+                      "source": "['a', 'b']"
+                    }
+                  ],
+                  "source": "(1, ['a', 'b'])"
+                }
+              ],
+              "source": "[(2, ['c', NULL]), (1, ['a', 'b'])]"
+            }
+          ]
+        }
+      }
+    ],
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "arraySort",
+        "args": [
+          {
+            "kind": "functionCall",
+            "name": "arraySymmetricDifference",
+            "args": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "f"
+                ]
+              },
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "s"
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "with": [
+      {
+        "kind": "cteExpr",
+        "name": "f",
+        "expr": {
+          "kind": "functionCall",
+          "name": "materialize",
+          "args": [
+            {
+              "kind": "arrayLiteral",
+              "elements": [
+                {
+                  "kind": "tupleLiteral",
+                  "elements": [
+                    {
+                      "kind": "literal",
+                      "type": "UInt64",
+                      "value": "1"
+                    },
+                    {
+                      "kind": "castExpr",
+                      "expr": {
+                        "kind": "arrayLiteral",
+                        "elements": [
+                          {
+                            "kind": "literal",
+                            "type": "String",
+                            "value": "a"
+                          },
+                          {
+                            "kind": "literal",
+                            "type": "String",
+                            "value": "b"
+                          }
+                        ],
+                        "source": "['a', 'b']"
+                      },
+                      "type": "Array(LowCardinality(String))",
+                      "operator": true
+                    }
+                  ],
+                  "source": "(1, ['a', 'b']::Array(LowCardinality(String)))"
+                },
+                {
+                  "kind": "tupleLiteral",
+                  "elements": [
+                    {
+                      "kind": "literal",
+                      "type": "NULL",
+                      "value": "NULL"
+                    },
+                    {
+                      "kind": "castExpr",
+                      "expr": {
+                        "kind": "arrayLiteral",
+                        "elements": [
+                          {
+                            "kind": "literal",
+                            "type": "String",
+                            "value": "c"
+                          }
+                        ],
+                        "source": "['c']"
+                      },
+                      "type": "Array(LowCardinality(String))",
+                      "operator": true
+                    }
+                  ],
+                  "source": "(NULL, ['c']::Array(LowCardinality(String)))"
+                }
+              ],
+              "source": "[(1, ['a', 'b']::Array(LowCardinality(String))), (NULL, ['c']::Array(LowCardinality(String)))]"
+            }
+          ]
+        }
+      },
+      {
+        "kind": "cteExpr",
+        "name": "s",
+        "expr": {
+          "kind": "functionCall",
+          "name": "materialize",
+          "args": [
+            {
+              "kind": "arrayLiteral",
+              "elements": [
+                {
+                  "kind": "tupleLiteral",
+                  "elements": [
+                    {
+                      "kind": "literal",
+                      "type": "UInt64",
+                      "value": "2"
+                    },
+                    {
+                      "kind": "castExpr",
+                      "expr": {
+                        "kind": "arrayLiteral",
+                        "elements": [
+                          {
+                            "kind": "literal",
+                            "type": "String",
+                            "value": "c"
+                          },
+                          {
+                            "kind": "literal",
+                            "type": "NULL",
+                            "value": "NULL"
+                          }
+                        ],
+                        "source": "['c', NULL]"
+                      },
+                      "type": "Array(LowCardinality(Nullable(String)))",
+                      "operator": true
+                    }
+                  ],
+                  "source": "(2, ['c', NULL]::Array(LowCardinality(Nullable(String))))"
+                },
+                {
+                  "kind": "tupleLiteral",
+                  "elements": [
+                    {
+                      "kind": "literal",
+                      "type": "UInt64",
+                      "value": "1"
+                    },
+                    {
+                      "kind": "castExpr",
+                      "expr": {
+                        "kind": "arrayLiteral",
+                        "elements": [
+                          {
+                            "kind": "literal",
+                            "type": "String",
+                            "value": "a"
+                          },
+                          {
+                            "kind": "literal",
+                            "type": "String",
+                            "value": "b"
+                          }
+                        ],
+                        "source": "['a', 'b']"
+                      },
+                      "type": "Array(LowCardinality(String))",
+                      "operator": true
+                    }
+                  ],
+                  "source": "(1, ['a', 'b']::Array(LowCardinality(String)))"
+                }
+              ],
+              "source": "[(2, ['c', NULL]::Array(LowCardinality(Nullable(String)))), (1, ['a', 'b']::Array(LowCardinality(String)))]"
+            }
+          ]
+        }
+      }
+    ],
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "arraySort",
+        "args": [
+          {
+            "kind": "functionCall",
+            "name": "arraySymmetricDifference",
+            "args": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "f"
+                ]
+              },
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "s"
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
     "kind": "drop",
     "targetType": "TABLE",
     "table": {

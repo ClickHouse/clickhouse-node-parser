@@ -163,5 +163,230 @@
         }
       }
     ]
+  },
+  {
+    "kind": "select",
+    "with": [
+      {
+        "kind": "cteSubquery",
+        "name": "lineWithInlines",
+        "query": {
+          "kind": "select",
+          "distinct": {
+            "kind": "distinct"
+          },
+          "select": [
+            {
+              "kind": "alias",
+              "expr": {
+                "kind": "functionCall",
+                "name": "addressToLineWithInlines",
+                "args": [
+                  {
+                    "kind": "functionCall",
+                    "name": "arrayJoin",
+                    "args": [
+                      {
+                        "kind": "columnRef",
+                        "parts": [
+                          "trace"
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              "alias": "lineWithInlines"
+            }
+          ],
+          "from": {
+            "kind": "tableRef",
+            "database": "system",
+            "table": "trace_log"
+          },
+          "where": {
+            "kind": "binaryExpr",
+            "op": "=",
+            "left": {
+              "kind": "columnRef",
+              "parts": [
+                "query_id"
+              ]
+            },
+            "right": {
+              "kind": "subqueryExpr",
+              "query": {
+                "kind": "select",
+                "select": [
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "query_id"
+                    ]
+                  }
+                ],
+                "from": {
+                  "kind": "tableRef",
+                  "database": "system",
+                  "table": "query_log"
+                },
+                "where": {
+                  "kind": "naryExpr",
+                  "op": "AND",
+                  "operands": [
+                    {
+                      "kind": "binaryExpr",
+                      "op": "=",
+                      "left": {
+                        "kind": "columnRef",
+                        "parts": [
+                          "current_database"
+                        ]
+                      },
+                      "right": {
+                        "kind": "functionCall",
+                        "name": "currentDatabase",
+                        "args": []
+                      }
+                    },
+                    {
+                      "kind": "binaryExpr",
+                      "op": "=",
+                      "left": {
+                        "kind": "columnRef",
+                        "parts": [
+                          "log_comment"
+                        ]
+                      },
+                      "right": {
+                        "kind": "literal",
+                        "type": "String",
+                        "value": "02161_test_case"
+                      }
+                    }
+                  ]
+                },
+                "orderBy": [
+                  {
+                    "kind": "orderByItem",
+                    "expr": {
+                      "kind": "columnRef",
+                      "parts": [
+                        "event_time"
+                      ]
+                    },
+                    "direction": "DESC"
+                  }
+                ],
+                "limit": {
+                  "count": {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "1"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    ],
+    "select": [
+      {
+        "kind": "literal",
+        "type": "String",
+        "value": "has inlines:"
+      },
+      {
+        "kind": "functionCall",
+        "name": "or",
+        "args": [
+          {
+            "kind": "binaryExpr",
+            "op": ">",
+            "left": {
+              "kind": "functionCall",
+              "name": "max",
+              "args": [
+                {
+                  "kind": "functionCall",
+                  "name": "length",
+                  "args": [
+                    {
+                      "kind": "columnRef",
+                      "parts": [
+                        "lineWithInlines"
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            "right": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "1"
+            }
+          },
+          {
+            "kind": "binaryExpr",
+            "op": "=",
+            "left": {
+              "kind": "functionCall",
+              "name": "max",
+              "args": [
+                {
+                  "kind": "functionCall",
+                  "name": "locate",
+                  "args": [
+                    {
+                      "kind": "functionCall",
+                      "name": "arrayElement",
+                      "args": [
+                        {
+                          "kind": "columnRef",
+                          "parts": [
+                            "lineWithInlines"
+                          ]
+                        },
+                        {
+                          "kind": "literal",
+                          "type": "UInt64",
+                          "value": "1"
+                        }
+                      ]
+                    },
+                    {
+                      "kind": "literal",
+                      "type": "String",
+                      "value": ":"
+                    }
+                  ]
+                }
+              ]
+            },
+            "right": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "0"
+            }
+          }
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "lineWithInlines"
+    },
+    "settings": [
+      {
+        "name": "short_circuit_function_evaluation",
+        "value": {
+          "kind": "literal",
+          "type": "String",
+          "value": "enable"
+        }
+      }
+    ]
   }
 ]

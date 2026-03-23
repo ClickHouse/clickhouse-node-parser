@@ -11,6 +11,16 @@ SELECT
     (b + 1) AS c,
     d;
 
+WITH 1 AS a
+
+SELECT a;
+
+WITH a AS b
+
+SELECT
+    1 AS a,
+    b;
+
 SELECT
     1 AS x,
     x,
@@ -53,6 +63,19 @@ SELECT
     value AS value_1
 FROM test_table;
 
+WITH value_1 AS value_2,
+
+id_1 AS id_2,
+
+id AS id_1,
+
+value AS value_1
+
+SELECT
+    id_2,
+    value_2
+FROM test_table;
+
 SELECT
     (id + b) AS id,
     id AS b
@@ -73,8 +96,17 @@ FROM test_table;
 SELECT (id + 1 + 1 + 1 + id) AS id
 FROM test_table;
 
+WITH id AS value
+
+SELECT value
+FROM test_table;
+
 SET prefer_column_name_to_alias = 1;
 
 SET prefer_column_name_to_alias = 0;
 
 DROP TABLE test_table;
+
+WITH path('clickhouse.com/a/b/c') AS x
+
+SELECT x AS path;

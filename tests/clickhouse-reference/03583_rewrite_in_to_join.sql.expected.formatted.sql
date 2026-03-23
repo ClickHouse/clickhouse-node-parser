@@ -125,6 +125,15 @@ SELECT number IN (
     )
 FROM numbers(3);
 
+WITH t AS (
+    SELECT number
+    FROM numbers(5)
+)
+
+SELECT *
+FROM numbers(8)
+WHERE number IN (t);
+
 -- Tuple
 SELECT *
 FROM numbers(8)
@@ -135,6 +144,18 @@ WHERE (number+1, number+2) IN (
         FROM numbers(5)
     );
 
+-- Tuple and CTE
+WITH t AS (
+    SELECT
+        number,
+        number + 1
+    FROM numbers(5)
+)
+
+SELECT *
+FROM numbers(8)
+WHERE (number+1, number+2) IN (t);
+
 -- Mismatching number of elements 
 SELECT *
 FROM numbers(8)
@@ -144,6 +165,17 @@ WHERE (number+1, number+2, number+3) IN (
             number + 1
         FROM numbers(5)
     ); -- {serverError NUMBER_OF_COLUMNS_DOESNT_MATCH,BAD_ARGUMENTS, ILLEGAL_TYPE_OF_ARGUMENT}
+
+WITH t AS (
+    SELECT
+        number,
+        number + 1
+    FROM numbers(5)
+)
+
+SELECT *
+FROM numbers(8)
+WHERE (number+1, number+2, number+3) IN (t); -- {serverError NUMBER_OF_COLUMNS_DOESNT_MATCH,BAD_ARGUMENTS, ILLEGAL_TYPE_OF_ARGUMENT}
 
 -- Inside IF function condition and arguments
 SELECT if(c0 = ANY((

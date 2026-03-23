@@ -603,6 +603,40 @@ SELECT
 FROM tuple_test
 ORDER BY id ASC;
 
+WITH filtered AS (
+    SELECT
+        id,
+        tup
+    FROM tuple_test
+    WHERE isNotNull(tup)
+)
+
+SELECT
+    id,
+    tup.u,
+    tup.s
+FROM filtered
+ORDER BY id ASC
+SETTINGS enable_analyzer = 1; -- CTE tup.u notation is not recognized in old analyzer
+
+WITH stats AS (
+    SELECT
+        avg(tup.u) AS avg_u,
+        max(tup.u) AS max_u
+    FROM tuple_test
+)
+
+SELECT
+    id,
+    tup.u,
+    tup.u - (
+        SELECT avg_u
+        FROM stats
+    ) AS diff_from_avg
+FROM tuple_test
+WHERE isNotNull(tup)
+ORDER BY id ASC;
+
 SELECT groupArray(tup) AS tuple_array
 FROM tuple_test;
 

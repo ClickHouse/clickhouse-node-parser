@@ -176,5 +176,146 @@
       "kind": "tableRef",
       "table": "date"
     }
+  },
+  {
+    "kind": "select",
+    "with": [
+      {
+        "kind": "cteExpr",
+        "name": "EventDate",
+        "expr": {
+          "kind": "binaryExpr",
+          "op": "+",
+          "left": {
+            "kind": "functionCall",
+            "name": "toDate",
+            "args": [
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "2000-01-01"
+              }
+            ]
+          },
+          "right": {
+            "kind": "binaryExpr",
+            "op": "%",
+            "left": {
+              "kind": "functionCall",
+              "name": "rand",
+              "args": []
+            },
+            "right": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "30000",
+              "parenthesized": true
+            }
+          }
+        }
+      }
+    ],
+    "select": [
+      {
+        "kind": "asterisk"
+      }
+    ],
+    "from": {
+      "kind": "tableFunctionRef",
+      "name": "numbers",
+      "args": [
+        {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1000000"
+        }
+      ]
+    },
+    "where": {
+      "kind": "binaryExpr",
+      "op": "!=",
+      "left": {
+        "kind": "columnRef",
+        "parts": [
+          "EventDate"
+        ]
+      },
+      "right": {
+        "kind": "functionCall",
+        "name": "toDate",
+        "args": [
+          {
+            "kind": "functionCall",
+            "name": "concat",
+            "args": [
+              {
+                "kind": "functionCall",
+                "name": "toString",
+                "args": [
+                  {
+                    "kind": "functionCall",
+                    "name": "toYear",
+                    "args": [
+                      {
+                        "kind": "columnRef",
+                        "parts": [
+                          "EventDate"
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "-"
+              },
+              {
+                "kind": "functionCall",
+                "name": "toString",
+                "args": [
+                  {
+                    "kind": "functionCall",
+                    "name": "toMonth",
+                    "args": [
+                      {
+                        "kind": "columnRef",
+                        "parts": [
+                          "EventDate"
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "-"
+              },
+              {
+                "kind": "functionCall",
+                "name": "toString",
+                "args": [
+                  {
+                    "kind": "functionCall",
+                    "name": "toDayOfMonth",
+                    "args": [
+                      {
+                        "kind": "columnRef",
+                        "parts": [
+                          "EventDate"
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    }
   }
 ]

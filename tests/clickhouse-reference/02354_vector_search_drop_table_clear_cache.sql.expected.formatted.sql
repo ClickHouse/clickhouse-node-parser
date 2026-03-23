@@ -20,6 +20,14 @@ SETTINGS index_granularity = 8192;
 
 INSERT INTO tab;
 
+-- Make sure vector index is loaded and used
+WITH [0.0, 2.0] AS reference_vec
+
+SELECT id
+FROM tab
+ORDER BY L2Distance(vec, reference_vec) ASC
+LIMIT 3;
+
 -- Make sure vector index cache is utilized.
 SELECT
     name,

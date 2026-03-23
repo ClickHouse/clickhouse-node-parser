@@ -22,6 +22,16 @@ ORDER BY id;
 
 INSERT INTO tab;
 
+WITH [0.0, 2.0] AS reference_vec
+
+SELECT
+    id,
+    vec,
+    L2Distance(vec, reference_vec)
+FROM tab
+ORDER BY L2Distance(vec, reference_vec) ASC
+LIMIT 3;
+
 SELECT
     ProfileEvents['VectorSimilarityIndexCacheHits'],
     ProfileEvents['VectorSimilarityIndexCacheMisses']

@@ -47,3 +47,48 @@ CREATE TABLE graph
 ENGINE = TinyLog;
 
 INSERT INTO graph;
+
+WITH search_graph AS (
+    SELECT
+        *,
+        false AS is_cycle,
+        [tuple(g.f, g.t)] AS path
+    FROM graph AS g
+    UNION ALL
+    SELECT
+        g.*,
+        has(path, tuple(g.f, g.t)),
+        arrayConcat(sg.path, [tuple(g.f, g.t)])
+    FROM
+        graph AS g
+    CROSS JOIN search_graph AS sg
+    WHERE g.f = sg.t
+        AND NOT is_cycle
+)
+
+SELECT *
+FROM search_graph
+SETTINGS query_plan_join_swap_table = 'false';
+
+-- ordering by the path column has same effect as SEARCH DEPTH FIRST
+WITH search_graph AS (
+    SELECT
+        *,
+        false AS is_cycle,
+        [tuple(g.f, g.t)] AS path
+    FROM graph AS g
+    UNION ALL
+    SELECT
+        g.*,
+        has(path, tuple(g.f, g.t)),
+        arrayConcat(sg.path, [tuple(g.f, g.t)])
+    FROM
+        graph AS g
+    CROSS JOIN search_graph AS sg
+    WHERE g.f = sg.t
+        AND NOT is_cycle
+)
+
+SELECT *
+FROM search_graph
+ORDER BY path ASC;

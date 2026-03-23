@@ -12,6 +12,50 @@ ENGINE = TinyLog;
 
 INSERT INTO tree;
 
+WITH search_tree AS (
+    SELECT
+        id,
+        link,
+        data
+    FROM tree AS t
+    WHERE t.id = 0
+    UNION ALL
+    SELECT
+        t.id,
+        t.link,
+        t.data
+    FROM
+        tree AS t
+    CROSS JOIN search_tree AS st
+    WHERE t.link = st.id
+)
+
+SELECT *
+FROM search_tree;
+
 SELECT '--';
+
+WITH search_tree AS (
+    SELECT
+        id,
+        link,
+        data,
+        [t.id] AS path
+    FROM tree AS t
+    WHERE t.id = 0
+    UNION ALL
+    SELECT
+        t.id,
+        t.link,
+        t.data,
+        arrayConcat(path, [t.id])
+    FROM
+        tree AS t
+    CROSS JOIN search_tree AS st
+    WHERE t.link = st.id
+)
+
+SELECT *
+FROM search_tree;
 
 DROP TABLE tree;

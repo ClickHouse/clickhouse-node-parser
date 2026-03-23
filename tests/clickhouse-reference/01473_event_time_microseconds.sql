@@ -11,3 +11,34 @@ SET query_profiler_real_time_period_ns = 100000000;
 -- a long enough query to trigger the query profiler and to record trace log
 SELECT sleep(2) FORMAT Null;
 SET query_profiler_real_time_period_ns = 1000000000;
+-- query assumes that the event_time field is accurate.
+WITH (
+        SELECT event_time_microseconds, event_time
+        FROM system.metric_log
+        ORDER BY event_time DESC
+        LIMIT 1
+    ) AS time
+SELECT if(dateDiff('second', toDateTime(time.1), toDateTime(time.2)) = 0, 'ok', toString(time));
+WITH (
+          SELECT event_time_microseconds, event_time
+          FROM system.trace_log
+          ORDER BY event_time DESC
+          LIMIT 1
+      ) AS time
+SELECT if(dateDiff('second', toDateTime(time.1), toDateTime(time.2)) = 0, 'ok', toString(time));
+WITH (
+        SELECT event_time_microseconds, event_time
+        FROM system.query_log
+        WHERE current_database = currentDatabase()
+        ORDER BY event_time DESC
+        LIMIT 1
+    ) AS time
+SELECT if(dateDiff('second', toDateTime(time.1), toDateTime(time.2)) = 0, 'ok', toString(time));
+WITH (
+        SELECT event_time_microseconds, event_time
+        FROM system.query_thread_log
+        WHERE current_database = currentDatabase()
+        ORDER BY event_time DESC
+        LIMIT 1
+    ) AS time
+SELECT if(dateDiff('second', toDateTime(time.1), toDateTime(time.2)) = 0, 'ok', toString(time));

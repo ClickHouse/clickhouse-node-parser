@@ -1470,6 +1470,960 @@
   },
   {
     "kind": "select",
+    "with": [
+      {
+        "kind": "cteExpr",
+        "name": "bad_v4",
+        "expr": {
+          "kind": "subqueryExpr",
+          "query": {
+            "kind": "select",
+            "select": [
+              {
+                "kind": "functionCall",
+                "name": "count",
+                "args": []
+              }
+            ],
+            "from": {
+              "kind": "tableRef",
+              "table": "t"
+            },
+            "where": {
+              "kind": "naryExpr",
+              "op": "AND",
+              "operands": [
+                {
+                  "kind": "functionCall",
+                  "name": "isNotNull",
+                  "args": [
+                    {
+                      "kind": "functionCall",
+                      "name": "accurateCastOrNull",
+                      "args": [
+                        {
+                          "kind": "columnRef",
+                          "parts": [
+                            "d"
+                          ]
+                        },
+                        {
+                          "kind": "literal",
+                          "type": "String",
+                          "value": "IPv4"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "kind": "inExpr",
+                  "negated": true,
+                  "expr": {
+                    "kind": "functionCall",
+                    "name": "toIPv4",
+                    "args": [
+                      {
+                        "kind": "functionCall",
+                        "name": "accurateCastOrNull",
+                        "args": [
+                          {
+                            "kind": "columnRef",
+                            "parts": [
+                              "d"
+                            ]
+                          },
+                          {
+                            "kind": "literal",
+                            "type": "String",
+                            "value": "IPv4"
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  "values": [
+                    {
+                      "kind": "functionCall",
+                      "name": "toIPv4",
+                      "args": [
+                        {
+                          "kind": "literal",
+                          "type": "String",
+                          "value": "0.0.0.0"
+                        }
+                      ]
+                    },
+                    {
+                      "kind": "functionCall",
+                      "name": "toIPv4",
+                      "args": [
+                        {
+                          "kind": "literal",
+                          "type": "String",
+                          "value": "192.168.0.1"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          }
+        }
+      },
+      {
+        "kind": "cteExpr",
+        "name": "bad_v6",
+        "expr": {
+          "kind": "subqueryExpr",
+          "query": {
+            "kind": "select",
+            "select": [
+              {
+                "kind": "functionCall",
+                "name": "count",
+                "args": []
+              }
+            ],
+            "from": {
+              "kind": "tableRef",
+              "table": "t"
+            },
+            "where": {
+              "kind": "naryExpr",
+              "op": "AND",
+              "operands": [
+                {
+                  "kind": "functionCall",
+                  "name": "isNotNull",
+                  "args": [
+                    {
+                      "kind": "functionCall",
+                      "name": "accurateCastOrNull",
+                      "args": [
+                        {
+                          "kind": "columnRef",
+                          "parts": [
+                            "d"
+                          ]
+                        },
+                        {
+                          "kind": "literal",
+                          "type": "String",
+                          "value": "IPv6"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "kind": "inExpr",
+                  "negated": true,
+                  "expr": {
+                    "kind": "functionCall",
+                    "name": "toIPv6",
+                    "args": [
+                      {
+                        "kind": "functionCall",
+                        "name": "accurateCastOrNull",
+                        "args": [
+                          {
+                            "kind": "columnRef",
+                            "parts": [
+                              "d"
+                            ]
+                          },
+                          {
+                            "kind": "literal",
+                            "type": "String",
+                            "value": "IPv6"
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  "values": [
+                    {
+                      "kind": "functionCall",
+                      "name": "toIPv6",
+                      "args": [
+                        {
+                          "kind": "literal",
+                          "type": "String",
+                          "value": "::"
+                        }
+                      ]
+                    },
+                    {
+                      "kind": "functionCall",
+                      "name": "toIPv6",
+                      "args": [
+                        {
+                          "kind": "literal",
+                          "type": "String",
+                          "value": "::1"
+                        }
+                      ]
+                    },
+                    {
+                      "kind": "functionCall",
+                      "name": "toIPv6",
+                      "args": [
+                        {
+                          "kind": "literal",
+                          "type": "String",
+                          "value": "::ffff:192.168.0.1"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          }
+        }
+      },
+      {
+        "kind": "cteExpr",
+        "name": "bad_cnt",
+        "expr": {
+          "kind": "binaryExpr",
+          "op": "+",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "bad_v4"
+            ]
+          },
+          "right": {
+            "kind": "columnRef",
+            "parts": [
+              "bad_v6"
+            ]
+          }
+        }
+      }
+    ],
+    "select": [
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "literal",
+          "type": "String",
+          "value": "ch_dbg_summary"
+        },
+        "alias": "tag"
+      },
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "subqueryExpr",
+          "query": {
+            "kind": "select",
+            "select": [
+              {
+                "kind": "functionCall",
+                "name": "count",
+                "args": []
+              }
+            ],
+            "from": {
+              "kind": "tableRef",
+              "table": "t"
+            }
+          }
+        },
+        "alias": "total"
+      },
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "subqueryExpr",
+          "query": {
+            "kind": "select",
+            "select": [
+              {
+                "kind": "functionCall",
+                "name": "count",
+                "args": []
+              }
+            ],
+            "from": {
+              "kind": "tableRef",
+              "table": "t"
+            },
+            "where": {
+              "kind": "functionCall",
+              "name": "isNotNull",
+              "args": [
+                {
+                  "kind": "functionCall",
+                  "name": "accurateCastOrNull",
+                  "args": [
+                    {
+                      "kind": "columnRef",
+                      "parts": [
+                        "d"
+                      ]
+                    },
+                    {
+                      "kind": "literal",
+                      "type": "String",
+                      "value": "IPv4"
+                    }
+                  ]
+                }
+              ]
+            }
+          }
+        },
+        "alias": "typed_v4"
+      },
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "subqueryExpr",
+          "query": {
+            "kind": "select",
+            "select": [
+              {
+                "kind": "functionCall",
+                "name": "count",
+                "args": []
+              }
+            ],
+            "from": {
+              "kind": "tableRef",
+              "table": "t"
+            },
+            "where": {
+              "kind": "functionCall",
+              "name": "isNotNull",
+              "args": [
+                {
+                  "kind": "functionCall",
+                  "name": "accurateCastOrNull",
+                  "args": [
+                    {
+                      "kind": "columnRef",
+                      "parts": [
+                        "d"
+                      ]
+                    },
+                    {
+                      "kind": "literal",
+                      "type": "String",
+                      "value": "IPv6"
+                    }
+                  ]
+                }
+              ]
+            }
+          }
+        },
+        "alias": "typed_v6"
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "bad_v4"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "bad_v6"
+        ]
+      },
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "version",
+          "args": []
+        },
+        "alias": "ver"
+      },
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "getSetting",
+          "args": [
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "session_timezone"
+            }
+          ]
+        },
+        "alias": "tz"
+      }
+    ],
+    "where": {
+      "kind": "binaryExpr",
+      "op": ">",
+      "left": {
+        "kind": "columnRef",
+        "parts": [
+          "bad_cnt"
+        ]
+      },
+      "right": {
+        "kind": "literal",
+        "type": "UInt64",
+        "value": "0"
+      }
+    }
+  },
+  {
+    "kind": "select",
+    "with": [
+      {
+        "kind": "cteExpr",
+        "name": "bad_cnt",
+        "expr": {
+          "kind": "binaryExpr",
+          "op": "+",
+          "left": {
+            "kind": "subqueryExpr",
+            "query": {
+              "kind": "select",
+              "select": [
+                {
+                  "kind": "functionCall",
+                  "name": "count",
+                  "args": []
+                }
+              ],
+              "from": {
+                "kind": "tableRef",
+                "table": "t"
+              },
+              "where": {
+                "kind": "naryExpr",
+                "op": "AND",
+                "operands": [
+                  {
+                    "kind": "functionCall",
+                    "name": "isNotNull",
+                    "args": [
+                      {
+                        "kind": "functionCall",
+                        "name": "accurateCastOrNull",
+                        "args": [
+                          {
+                            "kind": "columnRef",
+                            "parts": [
+                              "d"
+                            ]
+                          },
+                          {
+                            "kind": "literal",
+                            "type": "String",
+                            "value": "IPv4"
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "kind": "inExpr",
+                    "negated": true,
+                    "expr": {
+                      "kind": "functionCall",
+                      "name": "toIPv4",
+                      "args": [
+                        {
+                          "kind": "functionCall",
+                          "name": "accurateCastOrNull",
+                          "args": [
+                            {
+                              "kind": "columnRef",
+                              "parts": [
+                                "d"
+                              ]
+                            },
+                            {
+                              "kind": "literal",
+                              "type": "String",
+                              "value": "IPv4"
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    "values": [
+                      {
+                        "kind": "functionCall",
+                        "name": "toIPv4",
+                        "args": [
+                          {
+                            "kind": "literal",
+                            "type": "String",
+                            "value": "0.0.0.0"
+                          }
+                        ]
+                      },
+                      {
+                        "kind": "functionCall",
+                        "name": "toIPv4",
+                        "args": [
+                          {
+                            "kind": "literal",
+                            "type": "String",
+                            "value": "192.168.0.1"
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            }
+          },
+          "right": {
+            "kind": "subqueryExpr",
+            "query": {
+              "kind": "select",
+              "select": [
+                {
+                  "kind": "functionCall",
+                  "name": "count",
+                  "args": []
+                }
+              ],
+              "from": {
+                "kind": "tableRef",
+                "table": "t"
+              },
+              "where": {
+                "kind": "naryExpr",
+                "op": "AND",
+                "operands": [
+                  {
+                    "kind": "functionCall",
+                    "name": "isNotNull",
+                    "args": [
+                      {
+                        "kind": "functionCall",
+                        "name": "accurateCastOrNull",
+                        "args": [
+                          {
+                            "kind": "columnRef",
+                            "parts": [
+                              "d"
+                            ]
+                          },
+                          {
+                            "kind": "literal",
+                            "type": "String",
+                            "value": "IPv6"
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "kind": "inExpr",
+                    "negated": true,
+                    "expr": {
+                      "kind": "functionCall",
+                      "name": "toIPv6",
+                      "args": [
+                        {
+                          "kind": "functionCall",
+                          "name": "accurateCastOrNull",
+                          "args": [
+                            {
+                              "kind": "columnRef",
+                              "parts": [
+                                "d"
+                              ]
+                            },
+                            {
+                              "kind": "literal",
+                              "type": "String",
+                              "value": "IPv6"
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    "values": [
+                      {
+                        "kind": "functionCall",
+                        "name": "toIPv6",
+                        "args": [
+                          {
+                            "kind": "literal",
+                            "type": "String",
+                            "value": "::"
+                          }
+                        ]
+                      },
+                      {
+                        "kind": "functionCall",
+                        "name": "toIPv6",
+                        "args": [
+                          {
+                            "kind": "literal",
+                            "type": "String",
+                            "value": "::1"
+                          }
+                        ]
+                      },
+                      {
+                        "kind": "functionCall",
+                        "name": "toIPv6",
+                        "args": [
+                          {
+                            "kind": "literal",
+                            "type": "String",
+                            "value": "::ffff:192.168.0.1"
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            }
+          }
+        }
+      }
+    ],
+    "select": [
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "literal",
+          "type": "String",
+          "value": "ch_dbg_offenders"
+        },
+        "alias": "tag"
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "id"
+        ]
+      },
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "toTypeName",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "d"
+              ]
+            }
+          ]
+        },
+        "alias": "src_type"
+      },
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "toIPv4",
+          "args": [
+            {
+              "kind": "functionCall",
+              "name": "accurateCastOrNull",
+              "args": [
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "d"
+                  ]
+                },
+                {
+                  "kind": "literal",
+                  "type": "String",
+                  "value": "IPv4"
+                }
+              ]
+            }
+          ]
+        },
+        "alias": "v4"
+      },
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "toIPv6",
+          "args": [
+            {
+              "kind": "functionCall",
+              "name": "accurateCastOrNull",
+              "args": [
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "d"
+                  ]
+                },
+                {
+                  "kind": "literal",
+                  "type": "String",
+                  "value": "IPv6"
+                }
+              ]
+            }
+          ]
+        },
+        "alias": "v6"
+      },
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "toString",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "d"
+              ]
+            }
+          ]
+        },
+        "alias": "raw_d"
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "t"
+    },
+    "where": {
+      "kind": "naryExpr",
+      "op": "AND",
+      "operands": [
+        {
+          "kind": "binaryExpr",
+          "op": ">",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "bad_cnt"
+            ]
+          },
+          "right": {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "0"
+          }
+        },
+        {
+          "kind": "naryExpr",
+          "op": "OR",
+          "operands": [
+            {
+              "kind": "naryExpr",
+              "op": "AND",
+              "operands": [
+                {
+                  "kind": "functionCall",
+                  "name": "isNotNull",
+                  "args": [
+                    {
+                      "kind": "functionCall",
+                      "name": "accurateCastOrNull",
+                      "args": [
+                        {
+                          "kind": "columnRef",
+                          "parts": [
+                            "d"
+                          ]
+                        },
+                        {
+                          "kind": "literal",
+                          "type": "String",
+                          "value": "IPv4"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "kind": "inExpr",
+                  "negated": true,
+                  "expr": {
+                    "kind": "functionCall",
+                    "name": "toIPv4",
+                    "args": [
+                      {
+                        "kind": "functionCall",
+                        "name": "accurateCastOrNull",
+                        "args": [
+                          {
+                            "kind": "columnRef",
+                            "parts": [
+                              "d"
+                            ]
+                          },
+                          {
+                            "kind": "literal",
+                            "type": "String",
+                            "value": "IPv4"
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  "values": [
+                    {
+                      "kind": "functionCall",
+                      "name": "toIPv4",
+                      "args": [
+                        {
+                          "kind": "literal",
+                          "type": "String",
+                          "value": "0.0.0.0"
+                        }
+                      ]
+                    },
+                    {
+                      "kind": "functionCall",
+                      "name": "toIPv4",
+                      "args": [
+                        {
+                          "kind": "literal",
+                          "type": "String",
+                          "value": "192.168.0.1"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ],
+              "parenthesized": true
+            },
+            {
+              "kind": "naryExpr",
+              "op": "AND",
+              "operands": [
+                {
+                  "kind": "functionCall",
+                  "name": "isNotNull",
+                  "args": [
+                    {
+                      "kind": "functionCall",
+                      "name": "accurateCastOrNull",
+                      "args": [
+                        {
+                          "kind": "columnRef",
+                          "parts": [
+                            "d"
+                          ]
+                        },
+                        {
+                          "kind": "literal",
+                          "type": "String",
+                          "value": "IPv6"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "kind": "inExpr",
+                  "negated": true,
+                  "expr": {
+                    "kind": "functionCall",
+                    "name": "toIPv6",
+                    "args": [
+                      {
+                        "kind": "functionCall",
+                        "name": "accurateCastOrNull",
+                        "args": [
+                          {
+                            "kind": "columnRef",
+                            "parts": [
+                              "d"
+                            ]
+                          },
+                          {
+                            "kind": "literal",
+                            "type": "String",
+                            "value": "IPv6"
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  "values": [
+                    {
+                      "kind": "functionCall",
+                      "name": "toIPv6",
+                      "args": [
+                        {
+                          "kind": "literal",
+                          "type": "String",
+                          "value": "::"
+                        }
+                      ]
+                    },
+                    {
+                      "kind": "functionCall",
+                      "name": "toIPv6",
+                      "args": [
+                        {
+                          "kind": "literal",
+                          "type": "String",
+                          "value": "::1"
+                        }
+                      ]
+                    },
+                    {
+                      "kind": "functionCall",
+                      "name": "toIPv6",
+                      "args": [
+                        {
+                          "kind": "literal",
+                          "type": "String",
+                          "value": "::ffff:192.168.0.1"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ],
+              "parenthesized": true
+            }
+          ],
+          "parenthesized": true
+        }
+      ]
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "id"
+          ]
+        },
+        "direction": "ASC"
+      }
+    ],
+    "limit": {
+      "count": {
+        "kind": "literal",
+        "type": "UInt64",
+        "value": "20"
+      }
+    }
+  },
+  {
+    "kind": "select",
     "distinct": {
       "kind": "distinct"
     },

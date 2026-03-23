@@ -1,6 +1,129 @@
 [
   {
     "kind": "select",
+    "with": [
+      {
+        "kind": "cteExpr",
+        "name": "v0",
+        "expr": {
+          "kind": "subqueryExpr",
+          "query": {
+            "kind": "select",
+            "select": [
+              {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "1"
+              }
+            ]
+          }
+        }
+      }
+    ],
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "v0"
+        ]
+      },
+      {
+        "kind": "binaryExpr",
+        "op": ">",
+        "left": {
+          "kind": "columnRef",
+          "parts": [
+            "v"
+          ]
+        },
+        "right": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      }
+    ],
+    "from": {
+      "kind": "subqueryFrom",
+      "query": {
+        "kind": "union",
+        "queries": [
+          {
+            "kind": "select",
+            "with": [
+              {
+                "kind": "cteExpr",
+                "name": "v1",
+                "expr": {
+                  "kind": "subqueryExpr",
+                  "query": {
+                    "kind": "select",
+                    "select": [
+                      {
+                        "kind": "literal",
+                        "type": "UInt64",
+                        "value": "1"
+                      }
+                    ]
+                  }
+                }
+              },
+              {
+                "kind": "cteExpr",
+                "name": "v2",
+                "expr": {
+                  "kind": "subqueryExpr",
+                  "query": {
+                    "kind": "select",
+                    "select": [
+                      {
+                        "kind": "literal",
+                        "type": "UInt64",
+                        "value": "2"
+                      }
+                    ]
+                  }
+                }
+              }
+            ],
+            "select": [
+              {
+                "kind": "alias",
+                "expr": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "v1"
+                  ]
+                },
+                "alias": "v"
+              }
+            ]
+          },
+          {
+            "kind": "select",
+            "select": [
+              {
+                "kind": "alias",
+                "expr": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "v2"
+                  ]
+                },
+                "alias": "v"
+              }
+            ]
+          }
+        ]
+      },
+      "alias": "a"
+    },
+    "leadingComments": [
+      "-- https://github.com/ClickHouse/ClickHouse/issues/37141"
+    ]
+  },
+  {
+    "kind": "select",
     "select": [
       {
         "kind": "columnRef",

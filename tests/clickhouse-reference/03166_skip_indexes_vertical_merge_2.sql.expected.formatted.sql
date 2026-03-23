@@ -30,4 +30,24 @@ FROM numbers(1000);
 
 SET max_rows_to_read = 0; -- system.text_log can be really big
 
+--- merged: a, c, d; gathered: b, e, f
+WITH (
+        SELECT uuid
+        FROM `system`.tables
+        WHERE database = currentDatabase()
+            AND table = 't_ind_merge_2'
+    ) AS uuid,
+
+extractAllGroupsVertical(message, 'containing (\\d+) columns \\((\\d+) merged, (\\d+) gathered\\)')[1] AS `groups`
+
+SELECT
+    `groups`[1] AS total,
+    `groups`[2] AS merged,
+    `groups`[3] AS gathered
+FROM `system`.text_log
+WHERE (((query_id = concat(uuid, '::all_1_2_1'))
+    OR (query_id = concat(currentDatabase(), '.t_ind_merge_2::all_1_2_1'))))
+    AND notEmpty(`groups`)
+ORDER BY event_time_microseconds ASC;
+
 DROP TABLE t_ind_merge_2;

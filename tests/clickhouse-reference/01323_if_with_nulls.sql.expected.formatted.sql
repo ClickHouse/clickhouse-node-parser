@@ -150,6 +150,13 @@ SELECT
     IF(test = 0, 1, 0)
 FROM test_nullable_float_issue7347;
 
+WITH materialize(CAST(NULL, 'Nullable(Float64)')) AS test
+
+SELECT
+    test,
+    toTypeName(test),
+    IF(test = 0, 1, 0);
+
 DROP TABLE test_nullable_float_issue7347;
 
 -- test case from https://github.com/ClickHouse/ClickHouse/issues/10846

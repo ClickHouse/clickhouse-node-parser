@@ -531,5 +531,326 @@
         ]
       }
     ]
+  },
+  {
+    "kind": "select",
+    "with": [
+      {
+        "kind": "cteExpr",
+        "name": "data",
+        "expr": {
+          "kind": "functionCall",
+          "name": "arrayMap",
+          "args": [
+            {
+              "kind": "lambdaExpr",
+              "params": [
+                "x"
+              ],
+              "body": {
+                "kind": "binaryExpr",
+                "op": "+",
+                "left": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "x"
+                  ]
+                },
+                "right": {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "1"
+                }
+              }
+            },
+            {
+              "kind": "functionCall",
+              "name": "range",
+              "args": [
+                {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "50"
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ],
+    "select": [
+      {
+        "kind": "binaryExpr",
+        "op": "=",
+        "left": {
+          "kind": "functionCall",
+          "name": "arrayReduceInRanges",
+          "args": [
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "groupArray"
+            },
+            {
+              "kind": "arrayLiteral",
+              "elements": [
+                {
+                  "kind": "tupleLiteral",
+                  "elements": [
+                    {
+                      "kind": "columnRef",
+                      "parts": [
+                        "a"
+                      ]
+                    },
+                    {
+                      "kind": "columnRef",
+                      "parts": [
+                        "c"
+                      ]
+                    }
+                  ],
+                  "source": "(a, c)"
+                },
+                {
+                  "kind": "tupleLiteral",
+                  "elements": [
+                    {
+                      "kind": "columnRef",
+                      "parts": [
+                        "b"
+                      ]
+                    },
+                    {
+                      "kind": "columnRef",
+                      "parts": [
+                        "d"
+                      ]
+                    }
+                  ],
+                  "source": "(b, d)"
+                }
+              ],
+              "source": "[(a, c), (b, d)]"
+            },
+            {
+              "kind": "columnRef",
+              "parts": [
+                "data"
+              ]
+            }
+          ]
+        },
+        "right": {
+          "kind": "arrayLiteral",
+          "elements": [
+            {
+              "kind": "functionCall",
+              "name": "arraySlice",
+              "args": [
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "data"
+                  ]
+                },
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "a"
+                  ]
+                },
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "c"
+                  ]
+                }
+              ]
+            },
+            {
+              "kind": "functionCall",
+              "name": "arraySlice",
+              "args": [
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "data"
+                  ]
+                },
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "b"
+                  ]
+                },
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "d"
+                  ]
+                }
+              ]
+            }
+          ],
+          "source": "[arraySlice(data, a, c), arraySlice(data, b, d)]"
+        }
+      }
+    ],
+    "from": {
+      "kind": "subqueryFrom",
+      "query": {
+        "kind": "select",
+        "select": [
+          {
+            "kind": "alias",
+            "expr": {
+              "kind": "binaryExpr",
+              "op": "%",
+              "left": {
+                "kind": "functionCall",
+                "name": "cityHash64",
+                "args": [
+                  {
+                    "kind": "binaryExpr",
+                    "op": "+",
+                    "left": {
+                      "kind": "columnRef",
+                      "parts": [
+                        "number"
+                      ]
+                    },
+                    "right": {
+                      "kind": "literal",
+                      "type": "UInt64",
+                      "value": "100"
+                    }
+                  }
+                ]
+              },
+              "right": {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "40"
+              }
+            },
+            "alias": "a"
+          },
+          {
+            "kind": "alias",
+            "expr": {
+              "kind": "binaryExpr",
+              "op": "%",
+              "left": {
+                "kind": "functionCall",
+                "name": "cityHash64",
+                "args": [
+                  {
+                    "kind": "binaryExpr",
+                    "op": "+",
+                    "left": {
+                      "kind": "columnRef",
+                      "parts": [
+                        "number"
+                      ]
+                    },
+                    "right": {
+                      "kind": "literal",
+                      "type": "UInt64",
+                      "value": "200"
+                    }
+                  }
+                ]
+              },
+              "right": {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "60"
+              }
+            },
+            "alias": "b"
+          },
+          {
+            "kind": "alias",
+            "expr": {
+              "kind": "binaryExpr",
+              "op": "%",
+              "left": {
+                "kind": "functionCall",
+                "name": "cityHash64",
+                "args": [
+                  {
+                    "kind": "binaryExpr",
+                    "op": "+",
+                    "left": {
+                      "kind": "columnRef",
+                      "parts": [
+                        "number"
+                      ]
+                    },
+                    "right": {
+                      "kind": "literal",
+                      "type": "UInt64",
+                      "value": "300"
+                    }
+                  }
+                ]
+              },
+              "right": {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "20"
+              }
+            },
+            "alias": "c"
+          },
+          {
+            "kind": "alias",
+            "expr": {
+              "kind": "binaryExpr",
+              "op": "%",
+              "left": {
+                "kind": "functionCall",
+                "name": "cityHash64",
+                "args": [
+                  {
+                    "kind": "binaryExpr",
+                    "op": "+",
+                    "left": {
+                      "kind": "columnRef",
+                      "parts": [
+                        "number"
+                      ]
+                    },
+                    "right": {
+                      "kind": "literal",
+                      "type": "UInt64",
+                      "value": "400"
+                    }
+                  }
+                ]
+              },
+              "right": {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "30"
+              }
+            },
+            "alias": "d"
+          }
+        ],
+        "from": {
+          "kind": "tableFunctionRef",
+          "name": "numbers",
+          "args": [
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "20"
+            }
+          ]
+        }
+      }
+    }
   }
 ]

@@ -204,5 +204,86 @@
         }
       }
     ]
+  },
+  {
+    "kind": "select",
+    "with": [
+      {
+        "kind": "cteExpr",
+        "name": "reference_vec",
+        "expr": {
+          "kind": "arrayLiteral",
+          "elements": [
+            {
+              "kind": "literal",
+              "type": "Float64",
+              "value": "1."
+            },
+            {
+              "kind": "literal",
+              "type": "Float64",
+              "value": "2."
+            }
+          ],
+          "source": "[1., 2.]"
+        }
+      }
+    ],
+    "select": [
+      {
+        "kind": "asterisk"
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "tab"
+    },
+    "prewhere": {
+      "kind": "binaryExpr",
+      "op": "<",
+      "left": {
+        "kind": "columnRef",
+        "parts": [
+          "id"
+        ]
+      },
+      "right": {
+        "kind": "literal",
+        "type": "UInt64",
+        "value": "5000"
+      }
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "functionCall",
+          "name": "cosineDistance",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "vec"
+              ]
+            },
+            {
+              "kind": "columnRef",
+              "parts": [
+                "reference_vec"
+              ]
+            }
+          ]
+        },
+        "direction": "ASC"
+      }
+    ],
+    "limit": {
+      "count": {
+        "kind": "literal",
+        "type": "UInt64",
+        "value": "10"
+      }
+    },
+    "format": "Null"
   }
 ]

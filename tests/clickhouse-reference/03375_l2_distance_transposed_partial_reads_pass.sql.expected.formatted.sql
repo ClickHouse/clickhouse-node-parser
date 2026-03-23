@@ -23,3 +23,17 @@ CREATE TABLE qbit
 ENGINE = Memory;
 
 INSERT INTO qbit;
+
+WITH [2] AS reference_vec
+
+SELECT
+    id,
+    round(L2DistanceTransposed(vec, reference_vec, toNullable(1)), 5) AS dist
+FROM qbit;
+
+WITH [2] AS reference_vec
+
+SELECT
+    id,
+    round(L2DistanceTransposed(vec, reference_vec, toLowCardinality(toNullable(1))), 5) AS dist
+FROM qbit;

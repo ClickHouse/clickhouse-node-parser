@@ -24,4 +24,19 @@ SET distributed_product_mode = 'allow';
 
 SET prefer_localhost_replica = 1;
 
+WITH alias_1 AS (
+    SELECT
+        c1,
+        c2
+    FROM distributed_bug_table
+)
+
+SELECT c1
+FROM alias_1
+WHERE c2 IN (
+        SELECT DISTINCT c2
+        FROM alias_1
+    )
+FORMAT Null;
+
 SET prefer_localhost_replica = 0;

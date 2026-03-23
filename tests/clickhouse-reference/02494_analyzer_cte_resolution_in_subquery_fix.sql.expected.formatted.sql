@@ -1,0 +1,48 @@
+WITH a AS (
+    SELECT
+        t1.number AS n1,
+        t2.number AS n2
+    FROM
+        numbers(1) AS t1
+    CROSS JOIN numbers(1) AS t2
+),
+
+b AS (
+    SELECT sum(n1) AS s
+    FROM a
+)
+
+SELECT *
+FROM
+    b AS l
+CROSS JOIN a AS r;
+
+WITH a AS (
+    SELECT number
+    FROM numbers(1)
+),
+
+b AS (
+    SELECT number
+    FROM a
+)
+
+SELECT *
+FROM
+    b AS l
+CROSS JOIN a AS r;
+
+WITH a AS (
+    SELECT number
+    FROM numbers(1)
+),
+
+b AS (
+    SELECT number
+    FROM a
+)
+
+SELECT *
+FROM
+    a AS l
+CROSS JOIN b AS r;

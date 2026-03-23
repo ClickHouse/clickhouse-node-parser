@@ -14,7 +14,51 @@ ORDER BY tuple();
 
 INSERT INTO tree;
 
+WITH search_tree AS (
+    SELECT
+        id,
+        link,
+        data
+    FROM tree AS t
+    WHERE t.id = 0
+    UNION ALL
+    SELECT
+        t.id,
+        t.link,
+        t.data
+    FROM
+        tree AS t
+    CROSS JOIN search_tree AS st
+    WHERE t.link = st.id
+)
+
+SELECT *
+FROM search_tree;
+
 SELECT '--';
+
+WITH search_tree AS (
+    SELECT
+        id,
+        link,
+        data,
+        [t.id] AS path
+    FROM tree AS t
+    WHERE t.id = 0
+    UNION ALL
+    SELECT
+        t.id,
+        t.link,
+        t.data,
+        arrayConcat(path, [t.id])
+    FROM
+        tree AS t
+    CROSS JOIN search_tree AS st
+    WHERE t.link = st.id
+)
+
+SELECT *
+FROM search_tree;
 
 DROP TABLE tree;
 
@@ -83,6 +127,85 @@ INSERT INTO department;
 INSERT INTO department;
 
 INSERT INTO department;
+
+-- extract all departments under 'A'. Result should be A, B, C, D and F
+WITH subdepartment AS (
+    SELECT
+        name AS root_name,
+        *
+    FROM department
+    WHERE name = 'A'
+    UNION ALL
+-- recursive term
+    SELECT
+        sd.root_name,
+        d.*
+    FROM
+        department AS d
+    CROSS JOIN subdepartment AS sd
+    WHERE d.parent_department = sd.id
+)
+
+SELECT *
+FROM subdepartment
+ORDER BY name ASC;
+
+-- extract all departments under 'A' with "level" number
+WITH subdepartment AS (
+    SELECT
+        1 AS level,
+        *
+    FROM department
+    WHERE name = 'A'
+    UNION ALL
+-- recursive term
+    SELECT
+        sd.level + 1,
+        d.*
+    FROM
+        department AS d
+    CROSS JOIN subdepartment AS sd
+    WHERE d.parent_department = sd.id
+)
+
+SELECT *
+FROM subdepartment
+ORDER BY name ASC;
+
+-- extract all departments under 'A' with "level" number.
+-- Only shows level 2 or more
+WITH subdepartment AS (
+    SELECT
+        1 AS level,
+        *
+    FROM department
+    WHERE name = 'A'
+    UNION ALL
+-- recursive term
+    SELECT
+        sd.level + 1,
+        d.*
+    FROM
+        department AS d
+    CROSS JOIN subdepartment AS sd
+    WHERE d.parent_department = sd.id
+)
+
+SELECT *
+FROM subdepartment
+WHERE level >= 2
+ORDER BY name ASC;
+
+-- "RECURSIVE" is ignored if the query has no self-reference
+WITH subdepartment AS (
+    SELECT *
+    FROM department
+    WHERE name = 'A'
+)
+
+SELECT *
+FROM subdepartment
+ORDER BY name ASC;
 
 -- corner case in which sub-WITH gets initialized first
 SELECT *

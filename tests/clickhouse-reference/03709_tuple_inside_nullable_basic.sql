@@ -342,6 +342,28 @@ SELECT
     isNull(tup.u) as u_is_null
 FROM tuple_test
 ORDER BY id;
+WITH filtered AS (
+    SELECT id, tup
+    FROM tuple_test
+    WHERE tup IS NOT NULL
+)
+SELECT id, tup.u, tup.s
+FROM filtered
+ORDER BY id
+SETTINGS enable_analyzer = 1; -- CTE tup.u notation is not recognized in old analyzer
+WITH stats AS (
+    SELECT
+        avg(tup.u) as avg_u,
+        max(tup.u) as max_u
+    FROM tuple_test
+)
+SELECT
+    id,
+    tup.u,
+    tup.u - (SELECT avg_u FROM stats) as diff_from_avg
+FROM tuple_test
+WHERE tup IS NOT NULL
+ORDER BY id;
 SELECT groupArray(tup) as tuple_array
 FROM tuple_test;
 SELECT

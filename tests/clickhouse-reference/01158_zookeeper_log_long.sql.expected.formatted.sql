@@ -45,6 +45,95 @@ ORDER BY
     type ASC,
     request_idx ASC;
 
+WITH now() - toIntervalHour(1) AS cutoff_time,
+
+query_ids AS (
+    SELECT query_id
+    FROM `system`.query_log
+    WHERE current_database = currentDatabase()
+        AND event_time >= cutoff_time
+)
+
+SELECT
+    type,
+    has_watch,
+    op_num,
+    replace(path, toString(serverUUID()), '<uuid>'),
+    is_ephemeral,
+    is_sequential,
+    if(startsWith(path, '/clickhouse/sessions'), 1, version),
+    requests_size,
+    request_idx,
+    error,
+    watch_type,
+    watch_state,
+    path_created,
+    stat_version,
+    stat_cversion,
+    stat_dataLength,
+    stat_numChildren
+FROM `system`.zookeeper_log
+WHERE event_time >= cutoff_time
+    AND (session_id, xid) IN (
+        SELECT
+            session_id,
+            xid
+        FROM `system`.zookeeper_log
+        WHERE event_time >= cutoff_time
+            AND path = concat('/test/01158/', currentDatabase(), '/rmt/replicas/1/parts/all_0_0_0')
+            AND ((query_id = ''
+            OR query_id IN (query_ids)))
+    )
+ORDER BY
+    xid ASC,
+    type ASC,
+    request_idx ASC;
+
+WITH now() - toIntervalHour(1) AS cutoff_time,
+
+query_ids AS (
+    SELECT query_id
+    FROM `system`.query_log
+    WHERE current_database = currentDatabase()
+        AND event_time >= cutoff_time
+)
+
+SELECT
+    type,
+    has_watch,
+    op_num,
+    path,
+    is_ephemeral,
+    is_sequential,
+    version,
+    requests_size,
+    request_idx,
+    error,
+    watch_type,
+    watch_state,
+    path_created,
+    stat_version,
+    stat_cversion,
+    stat_dataLength,
+    stat_numChildren
+FROM `system`.zookeeper_log
+WHERE event_time >= cutoff_time
+    AND (session_id, xid) IN (
+        SELECT
+            session_id,
+            xid
+        FROM `system`.zookeeper_log
+        WHERE event_time >= cutoff_time
+            AND like(path, concat('/test/01158/', currentDatabase(), '/rmt/blocks/%'))
+            AND op_num NOT IN (1, 12, 500)
+            AND ((query_id = ''
+            OR query_id IN (query_ids)))
+    )
+ORDER BY
+    xid ASC,
+    type ASC,
+    request_idx ASC;
+
 DROP TABLE rmt;
 
 SELECT count() > 0

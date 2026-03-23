@@ -12,6 +12,21 @@ ENGINE = Memory();
 -- NOTE: total string size should be > 16 (sizeof(__m128i))
 INSERT INTO utf8_overlap;
 
+--                                             ^
+--                                             MONOGRAM FOR YANG
+WITH lowerUTF8(str) AS l_,
+
+upperUTF8(str) AS u_,
+
+concat('0x', hex(str)) AS h_
+
+SELECT
+    length(str),
+    if(l_ == '�', h_, l_),
+    if(u_ == '�', h_, u_)
+FROM utf8_overlap
+FORMAT CSV;
+
 -- NOTE: regression test for introduced bug
 -- https://github.com/ClickHouse/ClickHouse/issues/42756
 SELECT lowerUTF8('КВ АМ И СЖ');

@@ -63,5 +63,2109 @@
         }
       }
     ]
+  },
+  {
+    "kind": "select",
+    "with": [
+      {
+        "kind": "cteSubquery",
+        "name": "build",
+        "query": {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "k"
+              ]
+            },
+            {
+              "kind": "alias",
+              "expr": {
+                "kind": "binaryExpr",
+                "op": "+",
+                "left": {
+                  "kind": "functionCall",
+                  "name": "toDateTime",
+                  "args": [
+                    {
+                      "kind": "literal",
+                      "type": "String",
+                      "value": "2001-01-01 00:00:00"
+                    }
+                  ]
+                },
+                "right": {
+                  "kind": "functionCall",
+                  "name": "toIntervalMinute",
+                  "args": [
+                    {
+                      "kind": "columnRef",
+                      "parts": [
+                        "number"
+                      ]
+                    }
+                  ]
+                }
+              },
+              "alias": "t"
+            },
+            {
+              "kind": "alias",
+              "expr": {
+                "kind": "columnRef",
+                "parts": [
+                  "number"
+                ]
+              },
+              "alias": "v"
+            }
+          ],
+          "from": {
+            "left": {
+              "kind": "tableFunctionRef",
+              "name": "numbers",
+              "args": [
+                {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "10"
+                }
+              ]
+            },
+            "kind": "joinExpr",
+            "joinType": "CROSS",
+            "right": {
+              "kind": "subqueryFrom",
+              "query": {
+                "kind": "select",
+                "select": [
+                  {
+                    "kind": "alias",
+                    "expr": {
+                      "kind": "columnRef",
+                      "parts": [
+                        "number"
+                      ]
+                    },
+                    "alias": "k"
+                  }
+                ],
+                "from": {
+                  "kind": "tableFunctionRef",
+                  "name": "numbers",
+                  "args": [
+                    {
+                      "kind": "literal",
+                      "type": "UInt64",
+                      "value": "5"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "settings": [
+            {
+              "name": "join_algorithm",
+              "value": {
+                "kind": "literal",
+                "type": "String",
+                "value": "default"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "kind": "cteSubquery",
+        "name": "probe",
+        "query": {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "alias",
+              "expr": {
+                "kind": "binaryExpr",
+                "op": "*",
+                "left": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "k"
+                  ]
+                },
+                "right": {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "2"
+                }
+              },
+              "alias": "k"
+            },
+            {
+              "kind": "alias",
+              "expr": {
+                "kind": "binaryExpr",
+                "op": "-",
+                "left": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "t"
+                  ]
+                },
+                "right": {
+                  "kind": "functionCall",
+                  "name": "toIntervalSecond",
+                  "args": [
+                    {
+                      "kind": "literal",
+                      "type": "UInt64",
+                      "value": "30"
+                    }
+                  ]
+                }
+              },
+              "alias": "t"
+            }
+          ],
+          "from": {
+            "kind": "tableRef",
+            "table": "build"
+          }
+        }
+      }
+    ],
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "SUM",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "v"
+            ]
+          }
+        ]
+      }
+    ],
+    "from": {
+      "left": {
+        "kind": "tableRef",
+        "table": "probe"
+      },
+      "kind": "joinExpr",
+      "joinType": "INNER",
+      "right": {
+        "kind": "tableRef",
+        "table": "build"
+      },
+      "constraint": {
+        "kind": "using",
+        "columns": [
+          "k",
+          "t"
+        ]
+      }
+    },
+    "leadingComments": [
+      "-- # 10 dates, 5 keys"
+    ]
+  },
+  {
+    "kind": "select",
+    "with": [
+      {
+        "kind": "cteSubquery",
+        "name": "build",
+        "query": {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "alias",
+              "expr": {
+                "kind": "binaryExpr",
+                "op": "*",
+                "left": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "k"
+                  ]
+                },
+                "right": {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "2"
+                }
+              },
+              "alias": "k"
+            },
+            {
+              "kind": "alias",
+              "expr": {
+                "kind": "binaryExpr",
+                "op": "+",
+                "left": {
+                  "kind": "functionCall",
+                  "name": "toDateTime",
+                  "args": [
+                    {
+                      "kind": "literal",
+                      "type": "String",
+                      "value": "2001-01-01 00:00:00"
+                    }
+                  ]
+                },
+                "right": {
+                  "kind": "functionCall",
+                  "name": "toIntervalMinute",
+                  "args": [
+                    {
+                      "kind": "columnRef",
+                      "parts": [
+                        "number"
+                      ]
+                    }
+                  ]
+                }
+              },
+              "alias": "t"
+            },
+            {
+              "kind": "alias",
+              "expr": {
+                "kind": "columnRef",
+                "parts": [
+                  "number"
+                ]
+              },
+              "alias": "v"
+            }
+          ],
+          "from": {
+            "left": {
+              "kind": "tableFunctionRef",
+              "name": "numbers",
+              "args": [
+                {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "10"
+                }
+              ]
+            },
+            "kind": "joinExpr",
+            "joinType": "CROSS",
+            "right": {
+              "kind": "subqueryFrom",
+              "query": {
+                "kind": "select",
+                "select": [
+                  {
+                    "kind": "alias",
+                    "expr": {
+                      "kind": "columnRef",
+                      "parts": [
+                        "number"
+                      ]
+                    },
+                    "alias": "k"
+                  }
+                ],
+                "from": {
+                  "kind": "tableFunctionRef",
+                  "name": "numbers",
+                  "args": [
+                    {
+                      "kind": "literal",
+                      "type": "UInt64",
+                      "value": "5"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "settings": [
+            {
+              "name": "join_algorithm",
+              "value": {
+                "kind": "literal",
+                "type": "String",
+                "value": "default"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "kind": "cteSubquery",
+        "name": "probe",
+        "query": {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "alias",
+              "expr": {
+                "kind": "functionCall",
+                "name": "intDiv",
+                "args": [
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "k"
+                    ]
+                  },
+                  {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "2"
+                  }
+                ]
+              },
+              "alias": "k"
+            },
+            {
+              "kind": "alias",
+              "expr": {
+                "kind": "binaryExpr",
+                "op": "-",
+                "left": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "t"
+                  ]
+                },
+                "right": {
+                  "kind": "functionCall",
+                  "name": "toIntervalSecond",
+                  "args": [
+                    {
+                      "kind": "literal",
+                      "type": "UInt64",
+                      "value": "30"
+                    }
+                  ]
+                }
+              },
+              "alias": "t"
+            }
+          ],
+          "from": {
+            "kind": "tableRef",
+            "table": "build"
+          }
+        }
+      }
+    ],
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "SUM",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "v"
+            ]
+          }
+        ]
+      },
+      {
+        "kind": "functionCall",
+        "name": "COUNT",
+        "args": [
+          {
+            "kind": "asterisk"
+          }
+        ]
+      }
+    ],
+    "from": {
+      "left": {
+        "kind": "tableRef",
+        "table": "probe"
+      },
+      "kind": "joinExpr",
+      "joinType": "INNER",
+      "right": {
+        "kind": "tableRef",
+        "table": "build"
+      },
+      "constraint": {
+        "kind": "using",
+        "columns": [
+          "k",
+          "t"
+        ]
+      }
+    },
+    "leadingComments": [
+      "-- # Coverage: Missing right side bin"
+    ]
+  },
+  {
+    "kind": "select",
+    "with": [
+      {
+        "kind": "cteSubquery",
+        "name": "build",
+        "query": {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "k"
+              ]
+            },
+            {
+              "kind": "alias",
+              "expr": {
+                "kind": "binaryExpr",
+                "op": "+",
+                "left": {
+                  "kind": "functionCall",
+                  "name": "toDateTime",
+                  "args": [
+                    {
+                      "kind": "literal",
+                      "type": "String",
+                      "value": "2001-01-01 00:00:00"
+                    }
+                  ]
+                },
+                "right": {
+                  "kind": "functionCall",
+                  "name": "toIntervalMinute",
+                  "args": [
+                    {
+                      "kind": "columnRef",
+                      "parts": [
+                        "number"
+                      ]
+                    }
+                  ]
+                }
+              },
+              "alias": "t"
+            },
+            {
+              "kind": "alias",
+              "expr": {
+                "kind": "columnRef",
+                "parts": [
+                  "number"
+                ]
+              },
+              "alias": "v"
+            }
+          ],
+          "from": {
+            "left": {
+              "kind": "tableFunctionRef",
+              "name": "numbers",
+              "args": [
+                {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "20"
+                }
+              ]
+            },
+            "kind": "joinExpr",
+            "joinType": "CROSS",
+            "right": {
+              "kind": "subqueryFrom",
+              "query": {
+                "kind": "select",
+                "select": [
+                  {
+                    "kind": "alias",
+                    "expr": {
+                      "kind": "columnRef",
+                      "parts": [
+                        "number"
+                      ]
+                    },
+                    "alias": "k"
+                  }
+                ],
+                "from": {
+                  "kind": "tableFunctionRef",
+                  "name": "numbers",
+                  "args": [
+                    {
+                      "kind": "literal",
+                      "type": "UInt64",
+                      "value": "5"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "settings": [
+            {
+              "name": "join_algorithm",
+              "value": {
+                "kind": "literal",
+                "type": "String",
+                "value": "default"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "kind": "cteSubquery",
+        "name": "probe",
+        "query": {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "alias",
+              "expr": {
+                "kind": "binaryExpr",
+                "op": "*",
+                "left": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "k"
+                  ]
+                },
+                "right": {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "2"
+                }
+              },
+              "alias": "k"
+            },
+            {
+              "kind": "alias",
+              "expr": {
+                "kind": "binaryExpr",
+                "op": "-",
+                "left": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "t"
+                  ]
+                },
+                "right": {
+                  "kind": "functionCall",
+                  "name": "toIntervalSecond",
+                  "args": [
+                    {
+                      "kind": "literal",
+                      "type": "UInt64",
+                      "value": "30"
+                    }
+                  ]
+                }
+              },
+              "alias": "t"
+            }
+          ],
+          "from": {
+            "kind": "tableRef",
+            "table": "build"
+          }
+        }
+      }
+    ],
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "SUM",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "v"
+            ]
+          }
+        ]
+      }
+    ],
+    "from": {
+      "left": {
+        "kind": "tableRef",
+        "table": "probe"
+      },
+      "kind": "joinExpr",
+      "joinType": "INNER",
+      "right": {
+        "kind": "tableRef",
+        "table": "build"
+      },
+      "constraint": {
+        "kind": "using",
+        "columns": [
+          "k",
+          "t"
+        ]
+      }
+    },
+    "leadingComments": [
+      "-- # 20 dates, 5 keys"
+    ]
+  },
+  {
+    "kind": "select",
+    "with": [
+      {
+        "kind": "cteSubquery",
+        "name": "build",
+        "query": {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "k"
+              ]
+            },
+            {
+              "kind": "alias",
+              "expr": {
+                "kind": "binaryExpr",
+                "op": "+",
+                "left": {
+                  "kind": "functionCall",
+                  "name": "toDateTime",
+                  "args": [
+                    {
+                      "kind": "literal",
+                      "type": "String",
+                      "value": "2001-01-01 00:00:00"
+                    }
+                  ]
+                },
+                "right": {
+                  "kind": "functionCall",
+                  "name": "toIntervalMinute",
+                  "args": [
+                    {
+                      "kind": "columnRef",
+                      "parts": [
+                        "number"
+                      ]
+                    }
+                  ]
+                }
+              },
+              "alias": "t"
+            },
+            {
+              "kind": "alias",
+              "expr": {
+                "kind": "columnRef",
+                "parts": [
+                  "number"
+                ]
+              },
+              "alias": "v"
+            }
+          ],
+          "from": {
+            "left": {
+              "kind": "tableFunctionRef",
+              "name": "numbers",
+              "args": [
+                {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "30"
+                }
+              ]
+            },
+            "kind": "joinExpr",
+            "joinType": "CROSS",
+            "right": {
+              "kind": "subqueryFrom",
+              "query": {
+                "kind": "select",
+                "select": [
+                  {
+                    "kind": "alias",
+                    "expr": {
+                      "kind": "columnRef",
+                      "parts": [
+                        "number"
+                      ]
+                    },
+                    "alias": "k"
+                  }
+                ],
+                "from": {
+                  "kind": "tableFunctionRef",
+                  "name": "numbers",
+                  "args": [
+                    {
+                      "kind": "literal",
+                      "type": "UInt64",
+                      "value": "5"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "settings": [
+            {
+              "name": "join_algorithm",
+              "value": {
+                "kind": "literal",
+                "type": "String",
+                "value": "default"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "kind": "cteSubquery",
+        "name": "probe",
+        "query": {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "alias",
+              "expr": {
+                "kind": "binaryExpr",
+                "op": "*",
+                "left": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "k"
+                  ]
+                },
+                "right": {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "2"
+                }
+              },
+              "alias": "k"
+            },
+            {
+              "kind": "alias",
+              "expr": {
+                "kind": "binaryExpr",
+                "op": "-",
+                "left": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "t"
+                  ]
+                },
+                "right": {
+                  "kind": "functionCall",
+                  "name": "toIntervalSecond",
+                  "args": [
+                    {
+                      "kind": "literal",
+                      "type": "UInt64",
+                      "value": "30"
+                    }
+                  ]
+                }
+              },
+              "alias": "t"
+            }
+          ],
+          "from": {
+            "kind": "tableRef",
+            "table": "build"
+          }
+        }
+      }
+    ],
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "SUM",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "v"
+            ]
+          }
+        ]
+      }
+    ],
+    "from": {
+      "left": {
+        "kind": "tableRef",
+        "table": "probe"
+      },
+      "kind": "joinExpr",
+      "joinType": "INNER",
+      "right": {
+        "kind": "tableRef",
+        "table": "build"
+      },
+      "constraint": {
+        "kind": "using",
+        "columns": [
+          "k",
+          "t"
+        ]
+      }
+    },
+    "leadingComments": [
+      "-- # 30 dates, 5 keys"
+    ]
+  },
+  {
+    "kind": "select",
+    "with": [
+      {
+        "kind": "cteSubquery",
+        "name": "build",
+        "query": {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "k"
+              ]
+            },
+            {
+              "kind": "alias",
+              "expr": {
+                "kind": "binaryExpr",
+                "op": "+",
+                "left": {
+                  "kind": "functionCall",
+                  "name": "toDateTime",
+                  "args": [
+                    {
+                      "kind": "literal",
+                      "type": "String",
+                      "value": "2001-01-01 00:00:00"
+                    }
+                  ]
+                },
+                "right": {
+                  "kind": "functionCall",
+                  "name": "toIntervalMinute",
+                  "args": [
+                    {
+                      "kind": "columnRef",
+                      "parts": [
+                        "number"
+                      ]
+                    }
+                  ]
+                }
+              },
+              "alias": "t"
+            },
+            {
+              "kind": "alias",
+              "expr": {
+                "kind": "columnRef",
+                "parts": [
+                  "number"
+                ]
+              },
+              "alias": "v"
+            }
+          ],
+          "from": {
+            "left": {
+              "kind": "tableFunctionRef",
+              "name": "numbers",
+              "args": [
+                {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "50"
+                }
+              ]
+            },
+            "kind": "joinExpr",
+            "joinType": "CROSS",
+            "right": {
+              "kind": "subqueryFrom",
+              "query": {
+                "kind": "select",
+                "select": [
+                  {
+                    "kind": "alias",
+                    "expr": {
+                      "kind": "columnRef",
+                      "parts": [
+                        "number"
+                      ]
+                    },
+                    "alias": "k"
+                  }
+                ],
+                "from": {
+                  "kind": "tableFunctionRef",
+                  "name": "numbers",
+                  "args": [
+                    {
+                      "kind": "literal",
+                      "type": "UInt64",
+                      "value": "5"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "settings": [
+            {
+              "name": "join_algorithm",
+              "value": {
+                "kind": "literal",
+                "type": "String",
+                "value": "default"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "kind": "cteSubquery",
+        "name": "probe",
+        "query": {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "alias",
+              "expr": {
+                "kind": "binaryExpr",
+                "op": "*",
+                "left": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "k"
+                  ]
+                },
+                "right": {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "2"
+                }
+              },
+              "alias": "k"
+            },
+            {
+              "kind": "alias",
+              "expr": {
+                "kind": "binaryExpr",
+                "op": "-",
+                "left": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "t"
+                  ]
+                },
+                "right": {
+                  "kind": "functionCall",
+                  "name": "toIntervalSecond",
+                  "args": [
+                    {
+                      "kind": "literal",
+                      "type": "UInt64",
+                      "value": "30"
+                    }
+                  ]
+                }
+              },
+              "alias": "t"
+            }
+          ],
+          "from": {
+            "kind": "tableRef",
+            "table": "build"
+          }
+        }
+      }
+    ],
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "SUM",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "v"
+            ]
+          }
+        ]
+      }
+    ],
+    "from": {
+      "left": {
+        "kind": "tableRef",
+        "table": "probe"
+      },
+      "kind": "joinExpr",
+      "joinType": "INNER",
+      "right": {
+        "kind": "tableRef",
+        "table": "build"
+      },
+      "constraint": {
+        "kind": "using",
+        "columns": [
+          "k",
+          "t"
+        ]
+      }
+    },
+    "leadingComments": [
+      "-- # 50 dates, 5 keys"
+    ]
+  },
+  {
+    "kind": "select",
+    "with": [
+      {
+        "kind": "cteSubquery",
+        "name": "build",
+        "query": {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "k"
+              ]
+            },
+            {
+              "kind": "alias",
+              "expr": {
+                "kind": "binaryExpr",
+                "op": "+",
+                "left": {
+                  "kind": "functionCall",
+                  "name": "toDateTime",
+                  "args": [
+                    {
+                      "kind": "literal",
+                      "type": "String",
+                      "value": "2001-01-01 00:00:00"
+                    }
+                  ]
+                },
+                "right": {
+                  "kind": "functionCall",
+                  "name": "toIntervalMinute",
+                  "args": [
+                    {
+                      "kind": "columnRef",
+                      "parts": [
+                        "number"
+                      ]
+                    }
+                  ]
+                }
+              },
+              "alias": "t"
+            },
+            {
+              "kind": "alias",
+              "expr": {
+                "kind": "columnRef",
+                "parts": [
+                  "number"
+                ]
+              },
+              "alias": "v"
+            }
+          ],
+          "from": {
+            "left": {
+              "kind": "tableFunctionRef",
+              "name": "numbers",
+              "args": [
+                {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "100"
+                }
+              ]
+            },
+            "kind": "joinExpr",
+            "joinType": "CROSS",
+            "right": {
+              "kind": "subqueryFrom",
+              "query": {
+                "kind": "select",
+                "select": [
+                  {
+                    "kind": "alias",
+                    "expr": {
+                      "kind": "columnRef",
+                      "parts": [
+                        "number"
+                      ]
+                    },
+                    "alias": "k"
+                  }
+                ],
+                "from": {
+                  "kind": "tableFunctionRef",
+                  "name": "numbers",
+                  "args": [
+                    {
+                      "kind": "literal",
+                      "type": "UInt64",
+                      "value": "5"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "settings": [
+            {
+              "name": "join_algorithm",
+              "value": {
+                "kind": "literal",
+                "type": "String",
+                "value": "default"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "kind": "cteSubquery",
+        "name": "probe",
+        "query": {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "alias",
+              "expr": {
+                "kind": "binaryExpr",
+                "op": "*",
+                "left": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "k"
+                  ]
+                },
+                "right": {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "2"
+                }
+              },
+              "alias": "k"
+            },
+            {
+              "kind": "alias",
+              "expr": {
+                "kind": "binaryExpr",
+                "op": "-",
+                "left": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "t"
+                  ]
+                },
+                "right": {
+                  "kind": "functionCall",
+                  "name": "toIntervalSecond",
+                  "args": [
+                    {
+                      "kind": "literal",
+                      "type": "UInt64",
+                      "value": "30"
+                    }
+                  ]
+                }
+              },
+              "alias": "t"
+            }
+          ],
+          "from": {
+            "kind": "tableRef",
+            "table": "build"
+          }
+        }
+      }
+    ],
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "SUM",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "v"
+            ]
+          }
+        ]
+      }
+    ],
+    "from": {
+      "left": {
+        "kind": "tableRef",
+        "table": "probe"
+      },
+      "kind": "joinExpr",
+      "joinType": "INNER",
+      "right": {
+        "kind": "tableRef",
+        "table": "build"
+      },
+      "constraint": {
+        "kind": "using",
+        "columns": [
+          "k",
+          "t"
+        ]
+      }
+    },
+    "leadingComments": [
+      "-- # 100 dates, 5 keys"
+    ]
+  },
+  {
+    "kind": "select",
+    "with": [
+      {
+        "kind": "cteSubquery",
+        "name": "build",
+        "query": {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "k"
+              ]
+            },
+            {
+              "kind": "alias",
+              "expr": {
+                "kind": "binaryExpr",
+                "op": "+",
+                "left": {
+                  "kind": "functionCall",
+                  "name": "toDateTime",
+                  "args": [
+                    {
+                      "kind": "literal",
+                      "type": "String",
+                      "value": "2001-01-01 00:00:00"
+                    }
+                  ]
+                },
+                "right": {
+                  "kind": "functionCall",
+                  "name": "toIntervalMinute",
+                  "args": [
+                    {
+                      "kind": "columnRef",
+                      "parts": [
+                        "number"
+                      ]
+                    }
+                  ]
+                }
+              },
+              "alias": "t"
+            },
+            {
+              "kind": "alias",
+              "expr": {
+                "kind": "columnRef",
+                "parts": [
+                  "number"
+                ]
+              },
+              "alias": "v"
+            }
+          ],
+          "from": {
+            "left": {
+              "kind": "tableFunctionRef",
+              "name": "numbers",
+              "args": [
+                {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "100"
+                }
+              ]
+            },
+            "kind": "joinExpr",
+            "joinType": "CROSS",
+            "right": {
+              "kind": "subqueryFrom",
+              "query": {
+                "kind": "select",
+                "select": [
+                  {
+                    "kind": "alias",
+                    "expr": {
+                      "kind": "columnRef",
+                      "parts": [
+                        "number"
+                      ]
+                    },
+                    "alias": "k"
+                  }
+                ],
+                "from": {
+                  "kind": "tableFunctionRef",
+                  "name": "numbers",
+                  "args": [
+                    {
+                      "kind": "literal",
+                      "type": "UInt64",
+                      "value": "50"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "settings": [
+            {
+              "name": "join_algorithm",
+              "value": {
+                "kind": "literal",
+                "type": "String",
+                "value": "default"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "kind": "cteSubquery",
+        "name": "probe",
+        "query": {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "alias",
+              "expr": {
+                "kind": "binaryExpr",
+                "op": "*",
+                "left": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "k"
+                  ]
+                },
+                "right": {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "2"
+                }
+              },
+              "alias": "k"
+            },
+            {
+              "kind": "alias",
+              "expr": {
+                "kind": "binaryExpr",
+                "op": "-",
+                "left": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "t"
+                  ]
+                },
+                "right": {
+                  "kind": "functionCall",
+                  "name": "toIntervalSecond",
+                  "args": [
+                    {
+                      "kind": "literal",
+                      "type": "UInt64",
+                      "value": "30"
+                    }
+                  ]
+                }
+              },
+              "alias": "t"
+            }
+          ],
+          "from": {
+            "kind": "tableRef",
+            "table": "build"
+          }
+        }
+      }
+    ],
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "SUM",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "v"
+            ]
+          }
+        ]
+      }
+    ],
+    "from": {
+      "left": {
+        "kind": "tableRef",
+        "table": "probe"
+      },
+      "kind": "joinExpr",
+      "joinType": "INNER",
+      "right": {
+        "kind": "tableRef",
+        "table": "build"
+      },
+      "constraint": {
+        "kind": "using",
+        "columns": [
+          "k",
+          "t"
+        ]
+      }
+    },
+    "leadingComments": [
+      "-- # 100 dates, 50 keys"
+    ]
+  },
+  {
+    "kind": "select",
+    "with": [
+      {
+        "kind": "cteSubquery",
+        "name": "build",
+        "query": {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "k"
+              ]
+            },
+            {
+              "kind": "alias",
+              "expr": {
+                "kind": "binaryExpr",
+                "op": "+",
+                "left": {
+                  "kind": "functionCall",
+                  "name": "toDateTime",
+                  "args": [
+                    {
+                      "kind": "literal",
+                      "type": "String",
+                      "value": "2001-01-01 00:00:00"
+                    }
+                  ]
+                },
+                "right": {
+                  "kind": "functionCall",
+                  "name": "toIntervalMinute",
+                  "args": [
+                    {
+                      "kind": "columnRef",
+                      "parts": [
+                        "number"
+                      ]
+                    }
+                  ]
+                }
+              },
+              "alias": "t"
+            },
+            {
+              "kind": "alias",
+              "expr": {
+                "kind": "columnRef",
+                "parts": [
+                  "number"
+                ]
+              },
+              "alias": "v"
+            }
+          ],
+          "from": {
+            "left": {
+              "kind": "tableFunctionRef",
+              "name": "numbers",
+              "args": [
+                {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "1000"
+                }
+              ]
+            },
+            "kind": "joinExpr",
+            "joinType": "CROSS",
+            "right": {
+              "kind": "subqueryFrom",
+              "query": {
+                "kind": "select",
+                "select": [
+                  {
+                    "kind": "alias",
+                    "expr": {
+                      "kind": "columnRef",
+                      "parts": [
+                        "number"
+                      ]
+                    },
+                    "alias": "k"
+                  }
+                ],
+                "from": {
+                  "kind": "tableFunctionRef",
+                  "name": "numbers",
+                  "args": [
+                    {
+                      "kind": "literal",
+                      "type": "UInt64",
+                      "value": "5"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "settings": [
+            {
+              "name": "join_algorithm",
+              "value": {
+                "kind": "literal",
+                "type": "String",
+                "value": "default"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "kind": "cteSubquery",
+        "name": "probe",
+        "query": {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "alias",
+              "expr": {
+                "kind": "binaryExpr",
+                "op": "*",
+                "left": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "k"
+                  ]
+                },
+                "right": {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "2"
+                }
+              },
+              "alias": "k"
+            },
+            {
+              "kind": "alias",
+              "expr": {
+                "kind": "binaryExpr",
+                "op": "-",
+                "left": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "t"
+                  ]
+                },
+                "right": {
+                  "kind": "functionCall",
+                  "name": "toIntervalSecond",
+                  "args": [
+                    {
+                      "kind": "literal",
+                      "type": "UInt64",
+                      "value": "30"
+                    }
+                  ]
+                }
+              },
+              "alias": "t"
+            }
+          ],
+          "from": {
+            "kind": "tableRef",
+            "table": "build"
+          }
+        }
+      }
+    ],
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "SUM",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "v"
+            ]
+          }
+        ]
+      }
+    ],
+    "from": {
+      "left": {
+        "kind": "tableRef",
+        "table": "probe"
+      },
+      "kind": "joinExpr",
+      "joinType": "INNER",
+      "right": {
+        "kind": "tableRef",
+        "table": "build"
+      },
+      "constraint": {
+        "kind": "using",
+        "columns": [
+          "k",
+          "t"
+        ]
+      }
+    },
+    "leadingComments": [
+      "-- # 1000 dates, 5 keys"
+    ]
+  },
+  {
+    "kind": "select",
+    "with": [
+      {
+        "kind": "cteSubquery",
+        "name": "build",
+        "query": {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "k"
+              ]
+            },
+            {
+              "kind": "alias",
+              "expr": {
+                "kind": "binaryExpr",
+                "op": "+",
+                "left": {
+                  "kind": "functionCall",
+                  "name": "toDateTime",
+                  "args": [
+                    {
+                      "kind": "literal",
+                      "type": "String",
+                      "value": "2001-01-01 00:00:00"
+                    }
+                  ]
+                },
+                "right": {
+                  "kind": "functionCall",
+                  "name": "toIntervalMinute",
+                  "args": [
+                    {
+                      "kind": "columnRef",
+                      "parts": [
+                        "number"
+                      ]
+                    }
+                  ]
+                }
+              },
+              "alias": "t"
+            },
+            {
+              "kind": "alias",
+              "expr": {
+                "kind": "columnRef",
+                "parts": [
+                  "number"
+                ]
+              },
+              "alias": "v"
+            }
+          ],
+          "from": {
+            "left": {
+              "kind": "tableFunctionRef",
+              "name": "numbers",
+              "args": [
+                {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "1000"
+                }
+              ]
+            },
+            "kind": "joinExpr",
+            "joinType": "CROSS",
+            "right": {
+              "kind": "subqueryFrom",
+              "query": {
+                "kind": "select",
+                "select": [
+                  {
+                    "kind": "alias",
+                    "expr": {
+                      "kind": "columnRef",
+                      "parts": [
+                        "number"
+                      ]
+                    },
+                    "alias": "k"
+                  }
+                ],
+                "from": {
+                  "kind": "tableFunctionRef",
+                  "name": "numbers",
+                  "args": [
+                    {
+                      "kind": "literal",
+                      "type": "UInt64",
+                      "value": "50"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "settings": [
+            {
+              "name": "join_algorithm",
+              "value": {
+                "kind": "literal",
+                "type": "String",
+                "value": "default"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "kind": "cteSubquery",
+        "name": "probe",
+        "query": {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "alias",
+              "expr": {
+                "kind": "binaryExpr",
+                "op": "*",
+                "left": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "k"
+                  ]
+                },
+                "right": {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "2"
+                }
+              },
+              "alias": "k"
+            },
+            {
+              "kind": "alias",
+              "expr": {
+                "kind": "binaryExpr",
+                "op": "-",
+                "left": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "t"
+                  ]
+                },
+                "right": {
+                  "kind": "functionCall",
+                  "name": "toIntervalSecond",
+                  "args": [
+                    {
+                      "kind": "literal",
+                      "type": "UInt64",
+                      "value": "30"
+                    }
+                  ]
+                }
+              },
+              "alias": "t"
+            }
+          ],
+          "from": {
+            "kind": "tableRef",
+            "table": "build"
+          }
+        }
+      }
+    ],
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "SUM",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "v"
+            ]
+          }
+        ]
+      }
+    ],
+    "from": {
+      "left": {
+        "kind": "tableRef",
+        "table": "probe"
+      },
+      "kind": "joinExpr",
+      "joinType": "INNER",
+      "right": {
+        "kind": "tableRef",
+        "table": "build"
+      },
+      "constraint": {
+        "kind": "using",
+        "columns": [
+          "k",
+          "t"
+        ]
+      }
+    },
+    "leadingComments": [
+      "-- # 1000 dates, 50 keys"
+    ]
+  },
+  {
+    "kind": "select",
+    "with": [
+      {
+        "kind": "cteSubquery",
+        "name": "build",
+        "query": {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "k"
+              ]
+            },
+            {
+              "kind": "alias",
+              "expr": {
+                "kind": "binaryExpr",
+                "op": "+",
+                "left": {
+                  "kind": "functionCall",
+                  "name": "toDateTime",
+                  "args": [
+                    {
+                      "kind": "literal",
+                      "type": "String",
+                      "value": "2001-01-01 00:00:00"
+                    }
+                  ]
+                },
+                "right": {
+                  "kind": "functionCall",
+                  "name": "toIntervalMinute",
+                  "args": [
+                    {
+                      "kind": "columnRef",
+                      "parts": [
+                        "number"
+                      ]
+                    }
+                  ]
+                }
+              },
+              "alias": "t"
+            },
+            {
+              "kind": "alias",
+              "expr": {
+                "kind": "columnRef",
+                "parts": [
+                  "number"
+                ]
+              },
+              "alias": "v"
+            }
+          ],
+          "from": {
+            "left": {
+              "kind": "tableFunctionRef",
+              "name": "numbers",
+              "args": [
+                {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "10000"
+                }
+              ]
+            },
+            "kind": "joinExpr",
+            "joinType": "CROSS",
+            "right": {
+              "kind": "subqueryFrom",
+              "query": {
+                "kind": "select",
+                "select": [
+                  {
+                    "kind": "alias",
+                    "expr": {
+                      "kind": "columnRef",
+                      "parts": [
+                        "number"
+                      ]
+                    },
+                    "alias": "k"
+                  }
+                ],
+                "from": {
+                  "kind": "tableFunctionRef",
+                  "name": "numbers",
+                  "args": [
+                    {
+                      "kind": "literal",
+                      "type": "UInt64",
+                      "value": "50"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "settings": [
+            {
+              "name": "join_algorithm",
+              "value": {
+                "kind": "literal",
+                "type": "String",
+                "value": "default"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "kind": "cteSubquery",
+        "name": "probe",
+        "query": {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "alias",
+              "expr": {
+                "kind": "binaryExpr",
+                "op": "*",
+                "left": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "k"
+                  ]
+                },
+                "right": {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "2"
+                }
+              },
+              "alias": "k"
+            },
+            {
+              "kind": "alias",
+              "expr": {
+                "kind": "binaryExpr",
+                "op": "-",
+                "left": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "t"
+                  ]
+                },
+                "right": {
+                  "kind": "functionCall",
+                  "name": "toIntervalSecond",
+                  "args": [
+                    {
+                      "kind": "literal",
+                      "type": "UInt64",
+                      "value": "30"
+                    }
+                  ]
+                }
+              },
+              "alias": "t"
+            }
+          ],
+          "from": {
+            "kind": "tableRef",
+            "table": "build"
+          }
+        }
+      }
+    ],
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "SUM",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "v"
+            ]
+          }
+        ]
+      }
+    ],
+    "from": {
+      "left": {
+        "kind": "tableRef",
+        "table": "probe"
+      },
+      "kind": "joinExpr",
+      "joinType": "INNER",
+      "right": {
+        "kind": "tableRef",
+        "table": "build"
+      },
+      "constraint": {
+        "kind": "using",
+        "columns": [
+          "k",
+          "t"
+        ]
+      }
+    },
+    "leadingComments": [
+      "-- # 10000 dates, 50 keys"
+    ]
   }
 ]

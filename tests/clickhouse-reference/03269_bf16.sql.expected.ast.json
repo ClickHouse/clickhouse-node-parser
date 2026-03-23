@@ -973,6 +973,437 @@
   },
   {
     "kind": "select",
+    "with": [
+      {
+        "kind": "cteExpr",
+        "name": "a32",
+        "expr": {
+          "kind": "functionCall",
+          "name": "arrayMap",
+          "args": [
+            {
+              "kind": "lambdaExpr",
+              "params": [
+                "x"
+              ],
+              "body": {
+                "kind": "binaryExpr",
+                "op": "/",
+                "left": {
+                  "kind": "functionCall",
+                  "name": "toFloat32",
+                  "args": [
+                    {
+                      "kind": "columnRef",
+                      "parts": [
+                        "x"
+                      ]
+                    }
+                  ]
+                },
+                "right": {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "2"
+                }
+              }
+            },
+            {
+              "kind": "functionCall",
+              "name": "range",
+              "args": [
+                {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "384"
+                }
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "kind": "cteExpr",
+        "name": "a16",
+        "expr": {
+          "kind": "functionCall",
+          "name": "arrayMap",
+          "args": [
+            {
+              "kind": "lambdaExpr",
+              "params": [
+                "x"
+              ],
+              "body": {
+                "kind": "binaryExpr",
+                "op": "/",
+                "left": {
+                  "kind": "functionCall",
+                  "name": "toBFloat16",
+                  "args": [
+                    {
+                      "kind": "columnRef",
+                      "parts": [
+                        "x"
+                      ]
+                    }
+                  ]
+                },
+                "right": {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "2"
+                }
+              }
+            },
+            {
+              "kind": "functionCall",
+              "name": "range",
+              "args": [
+                {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "384"
+                }
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "kind": "cteExpr",
+        "name": "a32_1",
+        "expr": {
+          "kind": "functionCall",
+          "name": "arrayMap",
+          "args": [
+            {
+              "kind": "lambdaExpr",
+              "params": [
+                "x"
+              ],
+              "body": {
+                "kind": "binaryExpr",
+                "op": "+",
+                "left": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "x"
+                  ]
+                },
+                "right": {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "1"
+                }
+              }
+            },
+            {
+              "kind": "columnRef",
+              "parts": [
+                "a32"
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "kind": "cteExpr",
+        "name": "a16_1",
+        "expr": {
+          "kind": "functionCall",
+          "name": "arrayMap",
+          "args": [
+            {
+              "kind": "lambdaExpr",
+              "params": [
+                "x"
+              ],
+              "body": {
+                "kind": "binaryExpr",
+                "op": "+",
+                "left": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "x"
+                  ]
+                },
+                "right": {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "1"
+                }
+              }
+            },
+            {
+              "kind": "columnRef",
+              "parts": [
+                "a16"
+              ]
+            }
+          ]
+        }
+      }
+    ],
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "a32"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "a16"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "a32_1"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "a16_1"
+        ]
+      },
+      {
+        "kind": "functionCall",
+        "name": "dotProduct",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "a32"
+            ]
+          },
+          {
+            "kind": "columnRef",
+            "parts": [
+              "a32_1"
+            ]
+          }
+        ]
+      },
+      {
+        "kind": "functionCall",
+        "name": "dotProduct",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "a16"
+            ]
+          },
+          {
+            "kind": "columnRef",
+            "parts": [
+              "a16_1"
+            ]
+          }
+        ]
+      },
+      {
+        "kind": "functionCall",
+        "name": "cosineDistance",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "a32"
+            ]
+          },
+          {
+            "kind": "columnRef",
+            "parts": [
+              "a32_1"
+            ]
+          }
+        ]
+      },
+      {
+        "kind": "functionCall",
+        "name": "cosineDistance",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "a16"
+            ]
+          },
+          {
+            "kind": "columnRef",
+            "parts": [
+              "a16_1"
+            ]
+          }
+        ]
+      },
+      {
+        "kind": "functionCall",
+        "name": "L2Distance",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "a32"
+            ]
+          },
+          {
+            "kind": "columnRef",
+            "parts": [
+              "a32_1"
+            ]
+          }
+        ]
+      },
+      {
+        "kind": "functionCall",
+        "name": "L2Distance",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "a16"
+            ]
+          },
+          {
+            "kind": "columnRef",
+            "parts": [
+              "a16_1"
+            ]
+          }
+        ]
+      },
+      {
+        "kind": "functionCall",
+        "name": "L1Distance",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "a32"
+            ]
+          },
+          {
+            "kind": "columnRef",
+            "parts": [
+              "a32_1"
+            ]
+          }
+        ]
+      },
+      {
+        "kind": "functionCall",
+        "name": "L1Distance",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "a16"
+            ]
+          },
+          {
+            "kind": "columnRef",
+            "parts": [
+              "a16_1"
+            ]
+          }
+        ]
+      },
+      {
+        "kind": "functionCall",
+        "name": "LinfDistance",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "a32"
+            ]
+          },
+          {
+            "kind": "columnRef",
+            "parts": [
+              "a32_1"
+            ]
+          }
+        ]
+      },
+      {
+        "kind": "functionCall",
+        "name": "LinfDistance",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "a16"
+            ]
+          },
+          {
+            "kind": "columnRef",
+            "parts": [
+              "a16_1"
+            ]
+          }
+        ]
+      },
+      {
+        "kind": "functionCall",
+        "name": "LpDistance",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "a32"
+            ]
+          },
+          {
+            "kind": "columnRef",
+            "parts": [
+              "a32_1"
+            ]
+          },
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "5"
+          }
+        ]
+      },
+      {
+        "kind": "functionCall",
+        "name": "LpDistance",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "a16"
+            ]
+          },
+          {
+            "kind": "columnRef",
+            "parts": [
+              "a16_1"
+            ]
+          },
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "5"
+          }
+        ]
+      }
+    ],
+    "format": "Vertical",
+    "leadingComments": [
+      "-- Distances"
+    ]
+  },
+  {
+    "kind": "select",
     "select": [
       {
         "kind": "alias",

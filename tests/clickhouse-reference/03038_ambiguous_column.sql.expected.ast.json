@@ -116,6 +116,75 @@
   },
   {
     "kind": "select",
+    "with": [
+      {
+        "kind": "cteSubquery",
+        "name": "subquery",
+        "query": {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "alias",
+              "expr": {
+                "kind": "functionCall",
+                "name": "toUInt64",
+                "args": [
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "time"
+                    ]
+                  }
+                ]
+              },
+              "alias": "time"
+            },
+            {
+              "kind": "functionCall",
+              "name": "toHour",
+              "args": [
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "03038_table",
+                    "time"
+                  ]
+                }
+              ]
+            }
+          ],
+          "from": {
+            "kind": "tableRef",
+            "table": "03038_table"
+          }
+        }
+      }
+    ],
+    "select": [
+      {
+        "kind": "asterisk"
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "subquery"
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "subquery",
+            "time"
+          ]
+        },
+        "direction": "ASC"
+      }
+    ]
+  },
+  {
+    "kind": "select",
     "select": [
       {
         "kind": "asterisk"

@@ -5,6 +5,14 @@ FROM numbers(10)
 LIMIT 3
 WINDOW w AS (ORDER BY number ASC ROWS BETWEEN UNBOUNDED PRECEDING AND UNBOUNDED PRECEDING);
 
+WITH arrayJoin(['a', 'a', 'b', 'b']) AS field
+
+SELECT
+    field,
+    count() OVER (PARTITION BY field)
+ORDER BY field ASC
+LIMIT 1;
+
 SELECT *
 FROM ((
         SELECT

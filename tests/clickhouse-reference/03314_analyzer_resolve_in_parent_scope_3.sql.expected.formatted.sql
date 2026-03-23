@@ -5,3 +5,14 @@ CREATE TABLE test
 )
 ENGINE = MergeTree
 ORDER BY tuple();
+
+WITH (a > b) AS cte,
+
+query AS (
+    SELECT count()
+    FROM test
+    WHERE cte
+)
+
+SELECT *
+FROM query;

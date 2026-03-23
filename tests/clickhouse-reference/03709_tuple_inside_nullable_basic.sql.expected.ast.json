@@ -5103,6 +5103,227 @@
   },
   {
     "kind": "select",
+    "with": [
+      {
+        "kind": "cteSubquery",
+        "name": "filtered",
+        "query": {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "id"
+              ]
+            },
+            {
+              "kind": "columnRef",
+              "parts": [
+                "tup"
+              ]
+            }
+          ],
+          "from": {
+            "kind": "tableRef",
+            "table": "tuple_test"
+          },
+          "where": {
+            "kind": "functionCall",
+            "name": "isNotNull",
+            "args": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "tup"
+                ]
+              }
+            ]
+          }
+        }
+      }
+    ],
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "id"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "tup",
+          "u"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "tup",
+          "s"
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "filtered"
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "id"
+          ]
+        },
+        "direction": "ASC"
+      }
+    ],
+    "settings": [
+      {
+        "name": "enable_analyzer",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ],
+    "trailingComments": [
+      "-- CTE tup.u notation is not recognized in old analyzer"
+    ]
+  },
+  {
+    "kind": "select",
+    "with": [
+      {
+        "kind": "cteSubquery",
+        "name": "stats",
+        "query": {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "alias",
+              "expr": {
+                "kind": "functionCall",
+                "name": "avg",
+                "args": [
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "tup",
+                      "u"
+                    ]
+                  }
+                ]
+              },
+              "alias": "avg_u"
+            },
+            {
+              "kind": "alias",
+              "expr": {
+                "kind": "functionCall",
+                "name": "max",
+                "args": [
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "tup",
+                      "u"
+                    ]
+                  }
+                ]
+              },
+              "alias": "max_u"
+            }
+          ],
+          "from": {
+            "kind": "tableRef",
+            "table": "tuple_test"
+          }
+        }
+      }
+    ],
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "id"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "tup",
+          "u"
+        ]
+      },
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "binaryExpr",
+          "op": "-",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "tup",
+              "u"
+            ]
+          },
+          "right": {
+            "kind": "subqueryExpr",
+            "query": {
+              "kind": "select",
+              "select": [
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "avg_u"
+                  ]
+                }
+              ],
+              "from": {
+                "kind": "tableRef",
+                "table": "stats"
+              }
+            }
+          }
+        },
+        "alias": "diff_from_avg"
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "tuple_test"
+    },
+    "where": {
+      "kind": "functionCall",
+      "name": "isNotNull",
+      "args": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "tup"
+          ]
+        }
+      ]
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "id"
+          ]
+        },
+        "direction": "ASC"
+      }
+    ]
+  },
+  {
+    "kind": "select",
     "select": [
       {
         "kind": "alias",

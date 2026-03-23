@@ -1,17 +1,1 @@
-DROP TABLE IF EXISTS x;
-
-CREATE TABLE x
-ENGINE = Log AS
-SELECT *
-FROM numbers(0);
-
-SELECT *
-FROM x;
-
-DROP TABLE x;
-
-CREATE TABLE x
-(
-    d date
-)
-ENGINE = Log;
+<Parse Error>

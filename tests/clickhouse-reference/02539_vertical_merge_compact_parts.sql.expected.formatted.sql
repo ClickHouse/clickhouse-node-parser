@@ -16,4 +16,42 @@ INSERT INTO t_compact_vertical_merge SELECT
     range(number % 10)
 FROM numbers(40);
 
+WITH splitByChar('_', part_name) AS name_parts,
+
+name_parts[2]::UInt64 AS min_block,
+
+name_parts[3]::UInt64 AS max_block
+
+SELECT
+    min_block,
+    max_block,
+    event_type,
+    merge_algorithm,
+    part_type
+FROM `system`.part_log
+WHERE database = currentDatabase()
+    AND table = 't_compact_vertical_merge'
+    AND min_block = 1
+    AND max_block = 2
+ORDER BY event_time_microseconds ASC;
+
+WITH splitByChar('_', part_name) AS name_parts,
+
+name_parts[2]::UInt64 AS min_block,
+
+name_parts[3]::UInt64 AS max_block
+
+SELECT
+    min_block,
+    max_block,
+    event_type,
+    merge_algorithm,
+    part_type
+FROM `system`.part_log
+WHERE database = currentDatabase()
+    AND table = 't_compact_vertical_merge'
+    AND min_block = 1
+    AND max_block = 3
+ORDER BY event_time_microseconds ASC;
+
 DROP TABLE t_compact_vertical_merge;

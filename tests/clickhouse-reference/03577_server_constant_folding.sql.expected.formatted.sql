@@ -62,6 +62,74 @@ ORDER BY
     1 ASC,
     2 ASC;
 
+WITH flt AS (
+    SELECT number
+    FROM numbers(10)
+    WHERE number = shardNum()
+)
+
+SELECT
+    shardNum(),
+    number
+FROM remote('127.0.0.{1..3}', numbers(100))
+WHERE number IN (flt)
+ORDER BY
+    1 ASC,
+    2 ASC;
+
+WITH flt AS (
+    SELECT number
+    FROM numbers(10)
+    WHERE number = shardNum()
+)
+
+SELECT
+    shardNum(),
+    number
+FROM remote('127.0.0.{1..3}', numbers(100))
+WHERE number GLOBAL IN (flt)
+ORDER BY
+    1 ASC,
+    2 ASC;
+
+WITH flt AS (
+    SELECT number
+    FROM numbers(10)
+    WHERE number = shardNum()
+    UNION ALL
+    SELECT number
+    FROM numbers(10)
+    WHERE number = shardNum() * 2
+)
+
+SELECT
+    shardNum(),
+    number
+FROM remote('127.0.0.{1..3}', numbers(100))
+WHERE number IN (flt)
+ORDER BY
+    1 ASC,
+    2 ASC;
+
+WITH flt AS (
+    SELECT number
+    FROM numbers(10)
+    WHERE number = shardNum()
+    UNION ALL
+    SELECT number
+    FROM numbers(10)
+    WHERE number = shardNum() * 2
+)
+
+SELECT
+    shardNum(),
+    number
+FROM remote('127.0.0.{1..3}', numbers(100))
+WHERE number GLOBAL IN (flt)
+ORDER BY
+    1 ASC,
+    2 ASC;
+
 SELECT
     shardNum(),
     tab.number

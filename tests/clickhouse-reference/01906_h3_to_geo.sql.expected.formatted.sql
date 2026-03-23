@@ -41,6 +41,14 @@ INSERT INTO h3_indexes;
 
 INSERT INTO h3_indexes;
 
+WITH h3ToGeo(h3_index) AS p
+
+SELECT
+    round(p.1, 3),
+    round(p.2, 3)
+FROM h3_indexes
+ORDER BY h3_index ASC;
+
 DROP TABLE h3_indexes;
 
 DROP TABLE IF EXISTS h3_geo;

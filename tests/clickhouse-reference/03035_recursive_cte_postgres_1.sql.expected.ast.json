@@ -18,5 +18,592 @@
       "--",
       "-- { echoOn }"
     ]
+  },
+  {
+    "kind": "select",
+    "with": [
+      {
+        "kind": "cteSubquery",
+        "name": "t",
+        "query": {
+          "kind": "union",
+          "queries": [
+            {
+              "kind": "select",
+              "select": [
+                {
+                  "kind": "alias",
+                  "expr": {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "1"
+                  },
+                  "alias": "n"
+                }
+              ]
+            },
+            {
+              "kind": "select",
+              "select": [
+                {
+                  "kind": "binaryExpr",
+                  "op": "+",
+                  "left": {
+                    "kind": "columnRef",
+                    "parts": [
+                      "n"
+                    ]
+                  },
+                  "right": {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "1"
+                  }
+                }
+              ],
+              "from": {
+                "kind": "tableRef",
+                "table": "t"
+              },
+              "where": {
+                "kind": "binaryExpr",
+                "op": "<",
+                "left": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "n"
+                  ]
+                },
+                "right": {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "100"
+                }
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "sum",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "n"
+            ]
+          }
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "t"
+    },
+    "leadingComments": [
+      "-- WITH RECURSIVE",
+      "-- sum of 1..100"
+    ]
+  },
+  {
+    "kind": "select",
+    "with": [
+      {
+        "kind": "cteSubquery",
+        "name": "t",
+        "query": {
+          "kind": "union",
+          "queries": [
+            {
+              "kind": "select",
+              "select": [
+                {
+                  "kind": "alias",
+                  "expr": {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "1"
+                  },
+                  "alias": "n"
+                }
+              ]
+            },
+            {
+              "kind": "select",
+              "select": [
+                {
+                  "kind": "binaryExpr",
+                  "op": "+",
+                  "left": {
+                    "kind": "columnRef",
+                    "parts": [
+                      "n"
+                    ]
+                  },
+                  "right": {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "1"
+                  }
+                }
+              ],
+              "from": {
+                "kind": "tableRef",
+                "table": "t"
+              },
+              "where": {
+                "kind": "binaryExpr",
+                "op": "<",
+                "left": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "n"
+                  ]
+                },
+                "right": {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "5"
+                }
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "select": [
+      {
+        "kind": "asterisk"
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "t"
+    }
+  },
+  {
+    "kind": "select",
+    "with": [
+      {
+        "kind": "cteSubquery",
+        "name": "t",
+        "query": {
+          "kind": "union",
+          "queries": [
+            {
+              "kind": "select",
+              "select": [
+                {
+                  "kind": "alias",
+                  "expr": {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "1"
+                  },
+                  "alias": "n"
+                }
+              ]
+            },
+            {
+              "kind": "select",
+              "select": [
+                {
+                  "kind": "binaryExpr",
+                  "op": "+",
+                  "left": {
+                    "kind": "columnRef",
+                    "parts": [
+                      "n"
+                    ]
+                  },
+                  "right": {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "1"
+                  }
+                }
+              ],
+              "from": {
+                "kind": "tableRef",
+                "table": "t"
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "select": [
+      {
+        "kind": "asterisk"
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "t"
+    },
+    "limit": {
+      "count": {
+        "kind": "literal",
+        "type": "UInt64",
+        "value": "10"
+      }
+    },
+    "leadingComments": [
+      "-- This'd be an infinite loop, but outside query reads only as much as needed"
+    ]
+  },
+  {
+    "kind": "select",
+    "with": [
+      {
+        "kind": "cteSubquery",
+        "name": "t",
+        "query": {
+          "kind": "union",
+          "queries": [
+            {
+              "kind": "select",
+              "select": [
+                {
+                  "kind": "alias",
+                  "expr": {
+                    "kind": "literal",
+                    "type": "String",
+                    "value": "foo"
+                  },
+                  "alias": "n"
+                }
+              ]
+            },
+            {
+              "kind": "select",
+              "select": [
+                {
+                  "kind": "functionCall",
+                  "name": "concat",
+                  "args": [
+                    {
+                      "kind": "columnRef",
+                      "parts": [
+                        "n"
+                      ]
+                    },
+                    {
+                      "kind": "literal",
+                      "type": "String",
+                      "value": " bar"
+                    }
+                  ]
+                }
+              ],
+              "from": {
+                "kind": "tableRef",
+                "table": "t"
+              },
+              "where": {
+                "kind": "binaryExpr",
+                "op": "<",
+                "left": {
+                  "kind": "functionCall",
+                  "name": "length",
+                  "args": [
+                    {
+                      "kind": "columnRef",
+                      "parts": [
+                        "n"
+                      ]
+                    }
+                  ]
+                },
+                "right": {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "20"
+                }
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "n"
+        ]
+      },
+      {
+        "kind": "functionCall",
+        "name": "toTypeName",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "n"
+            ]
+          }
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "t"
+    }
+  },
+  {
+    "kind": "select",
+    "with": [
+      {
+        "kind": "cteSubquery",
+        "name": "t",
+        "query": {
+          "kind": "union",
+          "queries": [
+            {
+              "kind": "select",
+              "select": [
+                {
+                  "kind": "alias",
+                  "expr": {
+                    "kind": "literal",
+                    "type": "String",
+                    "value": "7"
+                  },
+                  "alias": "n"
+                }
+              ]
+            },
+            {
+              "kind": "select",
+              "select": [
+                {
+                  "kind": "binaryExpr",
+                  "op": "+",
+                  "left": {
+                    "kind": "columnRef",
+                    "parts": [
+                      "n"
+                    ]
+                  },
+                  "right": {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "1"
+                  }
+                }
+              ],
+              "from": {
+                "kind": "tableRef",
+                "table": "t"
+              },
+              "where": {
+                "kind": "binaryExpr",
+                "op": "<",
+                "left": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "n"
+                  ]
+                },
+                "right": {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "10"
+                }
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "n"
+        ]
+      },
+      {
+        "kind": "functionCall",
+        "name": "toTypeName",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "n"
+            ]
+          }
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "t"
+    },
+    "trailingComments": [
+      "-- { serverError ILLEGAL_TYPE_OF_ARGUMENT }"
+    ]
+  },
+  {
+    "kind": "select",
+    "with": [
+      {
+        "kind": "cteSubquery",
+        "name": "w1",
+        "query": {
+          "kind": "select",
+          "with": [
+            {
+              "kind": "cteSubquery",
+              "name": "w2",
+              "query": {
+                "kind": "select",
+                "with": [
+                  {
+                    "kind": "cteSubquery",
+                    "name": "w3",
+                    "query": {
+                      "kind": "select",
+                      "with": [
+                        {
+                          "kind": "cteSubquery",
+                          "name": "w4",
+                          "query": {
+                            "kind": "select",
+                            "with": [
+                              {
+                                "kind": "cteSubquery",
+                                "name": "w5",
+                                "query": {
+                                  "kind": "select",
+                                  "with": [
+                                    {
+                                      "kind": "cteSubquery",
+                                      "name": "w6",
+                                      "query": {
+                                        "kind": "select",
+                                        "with": [
+                                          {
+                                            "kind": "cteSubquery",
+                                            "name": "w7",
+                                            "query": {
+                                              "kind": "select",
+                                              "with": [
+                                                {
+                                                  "kind": "cteSubquery",
+                                                  "name": "w8",
+                                                  "query": {
+                                                    "kind": "select",
+                                                    "select": [
+                                                      {
+                                                        "kind": "literal",
+                                                        "type": "UInt64",
+                                                        "value": "1"
+                                                      }
+                                                    ]
+                                                  }
+                                                }
+                                              ],
+                                              "select": [
+                                                {
+                                                  "kind": "asterisk"
+                                                }
+                                              ],
+                                              "from": {
+                                                "kind": "tableRef",
+                                                "table": "w8"
+                                              }
+                                            }
+                                          }
+                                        ],
+                                        "select": [
+                                          {
+                                            "kind": "asterisk"
+                                          }
+                                        ],
+                                        "from": {
+                                          "kind": "tableRef",
+                                          "table": "w7"
+                                        }
+                                      }
+                                    }
+                                  ],
+                                  "select": [
+                                    {
+                                      "kind": "asterisk"
+                                    }
+                                  ],
+                                  "from": {
+                                    "kind": "tableRef",
+                                    "table": "w6"
+                                  }
+                                }
+                              }
+                            ],
+                            "select": [
+                              {
+                                "kind": "asterisk"
+                              }
+                            ],
+                            "from": {
+                              "kind": "tableRef",
+                              "table": "w5"
+                            }
+                          }
+                        }
+                      ],
+                      "select": [
+                        {
+                          "kind": "asterisk"
+                        }
+                      ],
+                      "from": {
+                        "kind": "tableRef",
+                        "table": "w4"
+                      }
+                    }
+                  }
+                ],
+                "select": [
+                  {
+                    "kind": "asterisk"
+                  }
+                ],
+                "from": {
+                  "kind": "tableRef",
+                  "table": "w3"
+                }
+              }
+            }
+          ],
+          "select": [
+            {
+              "kind": "asterisk"
+            }
+          ],
+          "from": {
+            "kind": "tableRef",
+            "table": "w2"
+          }
+        }
+      }
+    ],
+    "select": [
+      {
+        "kind": "asterisk"
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "w1"
+    },
+    "leadingComments": [
+      "-- Deeply nested WITH caused a list-munging problem in v13",
+      "-- Detection of cross-references and self-references"
+    ]
   }
 ]

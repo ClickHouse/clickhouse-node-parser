@@ -20,6 +20,16 @@ SELECT arrayExcept(materialize(['11','2','3','4','0']), materialize('1')); -- { 
 SELECT arrayExcept(materialize([['11','2','3','4','0']]), materialize([['1']])); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 SELECT arrayExcept([1, 2, 3, 4], [3, 5]) AS result FROM numbers(3);
 SELECT arrayExcept(materialize([1, 2, 3, 4]), [3, 5]) AS result FROM numbers(3);
+WITH excludes AS (
+    SELECT 1 as id, ['b','d'] AS exclude
+    UNION ALL
+    SELECT 2 as id, ['a','c']
+    UNION ALL
+    SELECT 3 as id, ['x','y']
+)
+SELECT
+    id, arrayExcept(['a','b','c'], exclude) AS result
+FROM excludes ORDER BY id;
 SELECT
     arrayExcept(
         multiIf(

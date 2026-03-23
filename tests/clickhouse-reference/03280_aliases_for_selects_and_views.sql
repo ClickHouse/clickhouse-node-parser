@@ -25,3 +25,28 @@ SELECT a FROM test_view_03280;
 SELECT b FROM test_view_03280;
 SELECT c FROM test_view_03280;  -- { serverError UNKNOWN_IDENTIFIER }
 CREATE VIEW test_view_1_03280 (a) AS SELECT 1, 2; -- { serverError BAD_ARGUMENTS }
+WITH t (a, b) AS (
+    SELECT 1, 2
+)
+SELECT a
+FROM t;
+WITH t (a, b) AS (
+    SELECT 1, 2
+)
+SELECT b
+FROM t;
+WITH t (a) AS (
+    SELECT * FROM numbers(1)
+)
+SELECT a
+FROM t;
+WITH t (a) AS (
+    SELECT 1, 2
+)
+SELECT b
+FROM t; -- { serverError BAD_ARGUMENTS }
+WITH t (a, b) AS (
+    SELECT 1, 2
+)
+SELECT c
+FROM t; -- { serverError UNKNOWN_IDENTIFIER }

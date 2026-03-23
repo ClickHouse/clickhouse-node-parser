@@ -310,6 +310,99 @@
     }
   },
   {
+    "kind": "select",
+    "with": [
+      {
+        "kind": "cteExpr",
+        "name": "xyz",
+        "expr": {
+          "kind": "functionCall",
+          "name": "toTimeZone",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "EventTime"
+              ]
+            },
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "Asia/Dubai"
+            }
+          ]
+        }
+      }
+    ],
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "uniq",
+        "args": [
+          {
+            "kind": "asterisk"
+          }
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "database": "test",
+      "table": "hits"
+    },
+    "where": {
+      "kind": "naryExpr",
+      "op": "AND",
+      "operands": [
+        {
+          "kind": "binaryExpr",
+          "op": ">=",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "xyz"
+            ]
+          },
+          "right": {
+            "kind": "literal",
+            "type": "String",
+            "value": "2014-03-20 00:00:00"
+          }
+        },
+        {
+          "kind": "binaryExpr",
+          "op": "<",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "xyz"
+            ]
+          },
+          "right": {
+            "kind": "literal",
+            "type": "String",
+            "value": "2014-03-21 00:00:00"
+          }
+        },
+        {
+          "kind": "binaryExpr",
+          "op": "=",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "EventDate"
+            ]
+          },
+          "right": {
+            "kind": "literal",
+            "type": "String",
+            "value": "2014-03-21"
+          }
+        }
+      ]
+    }
+  },
+  {
     "kind": "set",
     "settings": [
       {

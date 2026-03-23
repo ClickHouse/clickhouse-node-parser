@@ -7,6 +7,15 @@ FROM (
             )
     );
 
+WITH toDateTime(*) AS t
+
+SELECT t IN (
+        SELECT t
+        WHERE t IN (
+                SELECT t
+            )
+    );
+
 SELECT
     (
         SELECT min(*)

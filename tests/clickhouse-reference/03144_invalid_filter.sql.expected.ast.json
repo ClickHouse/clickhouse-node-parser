@@ -76,6 +76,160 @@
     }
   },
   {
+    "kind": "select",
+    "with": [
+      {
+        "kind": "cteExpr",
+        "name": "compound_value",
+        "expr": {
+          "kind": "functionCall",
+          "name": "CAST",
+          "args": [
+            {
+              "kind": "functionCall",
+              "name": "tuple",
+              "args": [
+                {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "1"
+                }
+              ]
+            },
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "Tuple (value UInt64)"
+            }
+          ]
+        }
+      }
+    ],
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "id"
+        ]
+      },
+      {
+        "kind": "qualifiedAsterisk",
+        "parts": [
+          "test_table"
+        ],
+        "transformers": [
+          {
+            "kind": "apply",
+            "func": {
+              "kind": "lambdaExpr",
+              "params": [
+                "x"
+              ],
+              "body": {
+                "kind": "qualifiedAsterisk",
+                "parts": [
+                  "compound_value"
+                ]
+              }
+            }
+          }
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "test_table"
+    },
+    "where": {
+      "kind": "functionCall",
+      "name": "arrayMap",
+      "args": [
+        {
+          "kind": "lambdaExpr",
+          "params": [
+            "x"
+          ],
+          "body": {
+            "kind": "alias",
+            "expr": {
+              "kind": "functionCall",
+              "name": "toString",
+              "args": [
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "x"
+                  ]
+                }
+              ]
+            },
+            "alias": "lambda"
+          }
+        },
+        {
+          "kind": "arrayLiteral",
+          "elements": [
+            {
+              "kind": "literal",
+              "type": "NULL",
+              "value": "NULL"
+            },
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "256"
+            },
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "257"
+            },
+            {
+              "kind": "literal",
+              "type": "NULL",
+              "value": "NULL"
+            },
+            {
+              "kind": "literal",
+              "type": "NULL",
+              "value": "NULL"
+            }
+          ],
+          "source": "[NULL, 256, 257, NULL, NULL]"
+        }
+      ]
+    },
+    "settings": [
+      {
+        "name": "convert_query_to_cnf",
+        "value": {
+          "kind": "literal",
+          "type": "Bool",
+          "value": "1"
+        }
+      },
+      {
+        "name": "optimize_using_constraints",
+        "value": {
+          "kind": "literal",
+          "type": "Bool",
+          "value": "1"
+        }
+      },
+      {
+        "name": "optimize_substitute_columns",
+        "value": {
+          "kind": "literal",
+          "type": "Bool",
+          "value": "1"
+        }
+      }
+    ],
+    "trailingComments": [
+      "-- { serverError ILLEGAL_TYPE_OF_COLUMN_FOR_FILTER }"
+    ]
+  },
+  {
     "kind": "drop",
     "targetType": "TABLE",
     "table": {

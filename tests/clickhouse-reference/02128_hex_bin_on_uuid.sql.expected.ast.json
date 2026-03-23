@@ -26,6 +26,92 @@
   },
   {
     "kind": "select",
+    "with": [
+      {
+        "kind": "cteExpr",
+        "name": "uuid",
+        "expr": {
+          "kind": "functionCall",
+          "name": "generateUUIDv4",
+          "args": []
+        }
+      },
+      {
+        "kind": "cteExpr",
+        "name": "str1",
+        "expr": {
+          "kind": "functionCall",
+          "name": "replace",
+          "args": [
+            {
+              "kind": "functionCall",
+              "name": "toString",
+              "args": [
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "uuid"
+                  ]
+                }
+              ]
+            },
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "-"
+            },
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": ""
+            }
+          ]
+        }
+      },
+      {
+        "kind": "cteExpr",
+        "name": "str2",
+        "expr": {
+          "kind": "functionCall",
+          "name": "lower",
+          "args": [
+            {
+              "kind": "functionCall",
+              "name": "hex",
+              "args": [
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "uuid"
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ],
+    "select": [
+      {
+        "kind": "binaryExpr",
+        "op": "=",
+        "left": {
+          "kind": "columnRef",
+          "parts": [
+            "str1"
+          ]
+        },
+        "right": {
+          "kind": "columnRef",
+          "parts": [
+            "str2"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "kind": "select",
     "select": [
       {
         "kind": "functionCall",

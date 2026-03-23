@@ -25,6 +25,7 @@ set log_queries=1;
 -- │                       0 │                       1 │
 -- └─────────────────────────┴─────────────────────────┘
 create table dist_01756 as system.one engine=Distributed(test_cluster_two_shards, system, one, intHash64(dummy));
+with (select currentDatabase()) as id_no select *, ignore(id_no) from dist_01756 where dummy in (0, 2);
 select splitByString('IN', query)[-1] from system.query_log where
     event_date >= yesterday() and
     event_time > now() - interval 1 hour and
@@ -38,6 +39,7 @@ order by query;
 --
 
 set optimize_skip_unused_shards_rewrite_in=1;
+with (select currentDatabase()) as id_02 select *, ignore(id_02) from dist_01756 where dummy in (0, 2);
 select splitByString('IN', query)[-1] from system.query_log where
     event_date >= yesterday() and
     event_time > now() - interval 1 hour and
@@ -46,6 +48,7 @@ select splitByString('IN', query)[-1] from system.query_log where
     query like concat('%', currentDatabase(), '%AS%id_02%') and
     type = 'QueryFinish'
 order by query;
+with (select currentDatabase()) as id_2 select *, ignore(id_2) from dist_01756 where dummy in (2);
 select splitByString('IN', query)[-1] from system.query_log where
     event_date >= yesterday() and
     event_time > now() - interval 1 hour and
@@ -54,6 +57,7 @@ select splitByString('IN', query)[-1] from system.query_log where
     query like concat('%', currentDatabase(), '%AS%id_2%') and
     type = 'QueryFinish'
 order by query;
+with (select currentDatabase()) as id_00 select *, ignore(id_00) from dist_01756 where dummy in (0);
 select splitByString('IN', query)[-1] from system.query_log where
     event_date >= yesterday() and
     event_time > now() - interval 1 hour and
@@ -63,6 +67,7 @@ select splitByString('IN', query)[-1] from system.query_log where
     type = 'QueryFinish'
 order by query;
 create table data_01756_signed (key Int) engine=Null;
+with (select currentDatabase()) as key_signed select *, ignore(key_signed) from cluster(test_cluster_two_shards, currentDatabase(), data_01756_signed, key) where key in (-1, -2);
 select splitByString('IN', query)[-1] from system.query_log where
     event_date >= yesterday() and
     event_time > now() - interval 1 hour and

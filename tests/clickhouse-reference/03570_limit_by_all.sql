@@ -106,6 +106,12 @@ ARRAY JOIN g.tags AS tag
 ORDER BY t.id, tag, value
 LIMIT 1 BY ALL;
 DROP TABLE test_limit_by_all_tags;
+WITH toStartOfHour(toDateTime('2025-01-01 12:00:00')) AS h
+SELECT h, category
+FROM test_limit_by_all
+ORDER BY h, category, value
+LIMIT 1 BY ALL
+SETTINGS enable_positional_arguments = 0;
 SELECT id, category, value
 FROM test_limit_by_all
 ORDER BY id, category, value

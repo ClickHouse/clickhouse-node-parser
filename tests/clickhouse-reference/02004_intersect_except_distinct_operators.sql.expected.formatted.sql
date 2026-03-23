@@ -127,6 +127,47 @@ INTERSECT
         SELECT 1
     );
 
+WITH (
+        SELECT number
+        FROM numbers(10)
+INTERSECT
+        SELECT 5
+    ) AS a
+
+SELECT a * 10;
+
+WITH (
+        SELECT 5
+EXCEPT
+        SELECT 1
+    ) AS a
+
+SELECT a
+EXCEPT
+SELECT 5;
+
+WITH (
+        SELECT number
+        FROM numbers(10)
+INTERSECT
+        SELECT 5
+    ) AS a
+
+SELECT a
+INTERSECT
+SELECT 1;
+
+WITH (
+        SELECT number
+        FROM numbers(10)
+INTERSECT
+        SELECT 5
+    ) AS a
+
+SELECT a
+EXCEPT
+SELECT 1;
+
 SELECT count()
 FROM (
         SELECT number
@@ -205,6 +246,25 @@ FROM (
         SELECT 1
 EXCEPT
         SELECT 2
+    )
+LIMIT 100;
+
+WITH (
+        SELECT count()
+        FROM (
+(                SELECT 1
+                UNION DISTINCT
+                SELECT 2)
+EXCEPT
+                SELECT 1
+            )
+    ) AS max
+
+SELECT count()
+FROM (
+        SELECT 1
+        UNION ALL
+        SELECT max
     )
 LIMIT 100;
 

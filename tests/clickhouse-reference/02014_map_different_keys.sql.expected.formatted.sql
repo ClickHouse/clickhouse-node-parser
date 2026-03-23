@@ -1,3 +1,21 @@
+WITH map(1, 2, 3, 4) AS m
+
+SELECT m[number]
+FROM numbers(5);
+
+WITH map('1', 2, '3', 4) AS m
+
+SELECT m[toString(number)]
+FROM numbers(5);
+
+WITH map(1, 2, 3, 4) AS m
+
+SELECT m[3];
+
+WITH map('1', 2, '3', 4) AS m
+
+SELECT m['3'];
+
 DROP TABLE IF EXISTS t_map_02014;
 
 CREATE TABLE t_map_02014

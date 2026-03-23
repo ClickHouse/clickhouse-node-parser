@@ -1,0 +1,91 @@
+[
+  {
+    "kind": "select",
+    "with": [
+      {
+        "kind": "cteExpr",
+        "name": "s",
+        "expr": {
+          "kind": "functionCall",
+          "name": "arrayJoin",
+          "args": [
+            {
+              "kind": "arrayLiteral",
+              "elements": [
+                {
+                  "kind": "literal",
+                  "type": "String",
+                  "value": "hello"
+                },
+                {
+                  "kind": "literal",
+                  "type": "String",
+                  "value": "world"
+                }
+              ],
+              "source": "['hello', 'world']"
+            }
+          ]
+        }
+      }
+    ],
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "count",
+        "args": []
+      },
+      {
+        "kind": "functionCall",
+        "name": "arraySort",
+        "args": [
+          {
+            "kind": "functionCall",
+            "name": "groupUniqArray",
+            "args": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "s"
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "kind": "functionCall",
+        "name": "anyHeavy",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "s"
+            ]
+          }
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableFunctionRef",
+      "name": "remote",
+      "args": [
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "127.0.0.{2,3}"
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "system",
+            "one"
+          ]
+        }
+      ]
+    },
+    "leadingComments": [
+      "-- Tags: shard"
+    ]
+  }
+]

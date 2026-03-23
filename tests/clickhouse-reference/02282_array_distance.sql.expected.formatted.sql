@@ -18,6 +18,16 @@ SELECT L2SquaredDistance([1, 2, 3], NULL);
 
 SELECT cosineDistance([1, 2, 3], [0, 0, 0]);
 
+-- Overflows
+WITH CAST([-547274980, 1790553898, 1981517754, 1908431500, 1352428565, -573412550, -552499284, 2096941042], 'Array(Int32)') AS a
+
+SELECT
+    L1Distance(a, a),
+    L2Distance(a, a),
+    L2SquaredDistance(a, a),
+    LinfDistance(a, a),
+    cosineDistance(a, a);
+
 DROP TABLE IF EXISTS vec1;
 
 DROP TABLE IF EXISTS vec2;

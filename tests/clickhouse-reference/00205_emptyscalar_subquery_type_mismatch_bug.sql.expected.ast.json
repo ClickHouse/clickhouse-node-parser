@@ -1,5 +1,80 @@
 [
   {
+    "kind": "select",
+    "with": [
+      {
+        "kind": "cteSubquery",
+        "name": "a",
+        "query": {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "alias",
+              "expr": {
+                "kind": "subqueryExpr",
+                "query": {
+                  "kind": "select",
+                  "select": [
+                    {
+                      "kind": "literal",
+                      "type": "UInt64",
+                      "value": "1"
+                    }
+                  ],
+                  "where": {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "0"
+                  }
+                }
+              },
+              "alias": "b"
+            }
+          ]
+        }
+      }
+    ],
+    "select": [
+      {
+        "kind": "literal",
+        "type": "UInt64",
+        "value": "1"
+      }
+    ],
+    "from": {
+      "left": {
+        "kind": "tableRef",
+        "database": "system",
+        "table": "one"
+      },
+      "kind": "joinExpr",
+      "joinType": "CROSS",
+      "right": {
+        "kind": "tableRef",
+        "table": "a"
+      }
+    },
+    "where": {
+      "kind": "binaryExpr",
+      "op": "=",
+      "left": {
+        "kind": "columnRef",
+        "parts": [
+          "a",
+          "b"
+        ]
+      },
+      "right": {
+        "kind": "literal",
+        "type": "UInt64",
+        "value": "0"
+      }
+    },
+    "leadingComments": [
+      "-- Bug reproduction form #25411"
+    ]
+  },
+  {
     "kind": "drop",
     "targetType": "TABLE",
     "table": {
@@ -81,6 +156,280 @@
     "engine": {
       "name": "MergeTree",
       "args": []
+    }
+  },
+  {
+    "kind": "select",
+    "with": [
+      {
+        "kind": "cteSubquery",
+        "name": "cte_0",
+        "query": {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "alias",
+              "expr": {
+                "kind": "columnRef",
+                "parts": [
+                  "subq_0",
+                  "c6"
+                ]
+              },
+              "alias": "c2"
+            },
+            {
+              "kind": "alias",
+              "expr": {
+                "kind": "functionCall",
+                "name": "multiIf",
+                "args": [
+                  {
+                    "kind": "binaryExpr",
+                    "op": "<>",
+                    "left": {
+                      "kind": "literal",
+                      "type": "UInt64",
+                      "value": "0"
+                    },
+                    "right": {
+                      "kind": "literal",
+                      "type": "UInt64",
+                      "value": "0"
+                    }
+                  },
+                  {
+                    "kind": "binaryExpr",
+                    "op": "+",
+                    "left": {
+                      "kind": "subqueryExpr",
+                      "query": {
+                        "kind": "select",
+                        "select": [
+                          {
+                            "kind": "columnRef",
+                            "parts": [
+                              "c_zeij"
+                            ]
+                          }
+                        ],
+                        "from": {
+                          "kind": "tableRef",
+                          "table": "t_q1ht4gq_5"
+                        },
+                        "orderBy": [
+                          {
+                            "kind": "orderByItem",
+                            "expr": {
+                              "kind": "columnRef",
+                              "parts": [
+                                "c_zeij"
+                              ]
+                            },
+                            "direction": "ASC"
+                          }
+                        ],
+                        "limit": {
+                          "count": {
+                            "kind": "literal",
+                            "type": "UInt64",
+                            "value": "1"
+                          }
+                        },
+                        "offset": {
+                          "kind": "literal",
+                          "type": "UInt64",
+                          "value": "1"
+                        }
+                      }
+                    },
+                    "right": {
+                      "kind": "columnRef",
+                      "parts": [
+                        "subq_0",
+                        "c4"
+                      ]
+                    },
+                    "parenthesized": true
+                  },
+                  {
+                    "kind": "binaryExpr",
+                    "op": "+",
+                    "left": {
+                      "kind": "subqueryExpr",
+                      "query": {
+                        "kind": "select",
+                        "select": [
+                          {
+                            "kind": "columnRef",
+                            "parts": [
+                              "c_zeij"
+                            ]
+                          }
+                        ],
+                        "from": {
+                          "kind": "tableRef",
+                          "table": "t_q1ht4gq_5"
+                        },
+                        "orderBy": [
+                          {
+                            "kind": "orderByItem",
+                            "expr": {
+                              "kind": "columnRef",
+                              "parts": [
+                                "c_zeij"
+                              ]
+                            },
+                            "direction": "ASC"
+                          }
+                        ],
+                        "limit": {
+                          "count": {
+                            "kind": "literal",
+                            "type": "UInt64",
+                            "value": "1"
+                          }
+                        },
+                        "offset": {
+                          "kind": "literal",
+                          "type": "UInt64",
+                          "value": "1"
+                        }
+                      }
+                    },
+                    "right": {
+                      "kind": "columnRef",
+                      "parts": [
+                        "subq_0",
+                        "c4"
+                      ]
+                    },
+                    "parenthesized": true
+                  }
+                ]
+              },
+              "alias": "c4"
+            }
+          ],
+          "from": {
+            "kind": "subqueryFrom",
+            "query": {
+              "kind": "select",
+              "select": [
+                {
+                  "kind": "alias",
+                  "expr": {
+                    "kind": "columnRef",
+                    "parts": [
+                      "ref_0",
+                      "c_nkt"
+                    ]
+                  },
+                  "alias": "c4"
+                },
+                {
+                  "kind": "alias",
+                  "expr": {
+                    "kind": "columnRef",
+                    "parts": [
+                      "ref_0",
+                      "c_nkt"
+                    ]
+                  },
+                  "alias": "c6"
+                }
+              ],
+              "from": {
+                "kind": "tableRef",
+                "table": "t_q1ht4gq_5",
+                "alias": "ref_0"
+              }
+            },
+            "alias": "subq_0"
+          }
+        }
+      }
+    ],
+    "select": [
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "ref_12",
+            "c_zeij"
+          ]
+        },
+        "alias": "c3"
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "t_q1ht4gq_5",
+      "alias": "ref_12"
+    },
+    "where": {
+      "kind": "inExpr",
+      "negated": true,
+      "expr": {
+        "kind": "columnRef",
+        "parts": [
+          "ref_12",
+          "c_jz"
+        ]
+      },
+      "values": {
+        "kind": "subqueryExpr",
+        "query": {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "alias",
+              "expr": {
+                "kind": "columnRef",
+                "parts": [
+                  "ref_14",
+                  "c_mc2"
+                ]
+              },
+              "alias": "c0"
+            }
+          ],
+          "from": {
+            "left": {
+              "kind": "tableRef",
+              "table": "t_q1ht4gq_5",
+              "alias": "ref_14"
+            },
+            "kind": "joinExpr",
+            "joinType": "CROSS",
+            "right": {
+              "kind": "tableRef",
+              "table": "cte_0",
+              "alias": "ref_15"
+            }
+          },
+          "where": {
+            "kind": "binaryExpr",
+            "op": ">",
+            "left": {
+              "kind": "columnRef",
+              "parts": [
+                "ref_15",
+                "c4"
+              ]
+            },
+            "right": {
+              "kind": "columnRef",
+              "parts": [
+                "ref_15",
+                "c2"
+              ]
+            }
+          }
+        }
+      },
+      "parenthesized": true
     }
   }
 ]

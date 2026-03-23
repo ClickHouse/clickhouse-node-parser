@@ -1,0 +1,183 @@
+[
+  {
+    "kind": "select",
+    "with": [
+      {
+        "kind": "cteExpr",
+        "name": "s",
+        "expr": {
+          "kind": "subqueryExpr",
+          "query": {
+            "kind": "select",
+            "select": [
+              {
+                "kind": "functionCall",
+                "name": "sumState",
+                "args": [
+                  {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "1"
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      }
+    ],
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "sumMerge",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "s"
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "with": [
+      {
+        "kind": "cteExpr",
+        "name": "s",
+        "expr": {
+          "kind": "subqueryExpr",
+          "query": {
+            "kind": "select",
+            "select": [
+              {
+                "kind": "functionCall",
+                "name": "sumState",
+                "args": [
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "number"
+                    ]
+                  }
+                ]
+              }
+            ],
+            "from": {
+              "kind": "subqueryFrom",
+              "query": {
+                "kind": "select",
+                "select": [
+                  {
+                    "kind": "asterisk"
+                  }
+                ],
+                "from": {
+                  "kind": "tableRef",
+                  "database": "system",
+                  "table": "numbers"
+                },
+                "limit": {
+                  "count": {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "10"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    ],
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "sumMerge",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "s"
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "with": [
+      {
+        "kind": "cteExpr",
+        "name": "s",
+        "expr": {
+          "kind": "subqueryExpr",
+          "query": {
+            "kind": "select",
+            "select": [
+              {
+                "kind": "functionCall",
+                "name": "quantileState",
+                "params": [
+                  {
+                    "kind": "literal",
+                    "type": "Float64",
+                    "value": "0.5"
+                  }
+                ],
+                "args": [
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "number"
+                    ]
+                  }
+                ]
+              }
+            ],
+            "from": {
+              "kind": "subqueryFrom",
+              "query": {
+                "kind": "select",
+                "select": [
+                  {
+                    "kind": "asterisk"
+                  }
+                ],
+                "from": {
+                  "kind": "tableRef",
+                  "database": "system",
+                  "table": "numbers"
+                },
+                "limit": {
+                  "count": {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "10"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    ],
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "quantileMerge",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "s"
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

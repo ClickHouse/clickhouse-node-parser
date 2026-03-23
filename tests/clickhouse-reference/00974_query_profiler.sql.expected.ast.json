@@ -112,6 +112,214 @@
     ]
   },
   {
+    "kind": "select",
+    "with": [
+      {
+        "kind": "cteExpr",
+        "name": "symbol",
+        "expr": {
+          "kind": "functionCall",
+          "name": "concat",
+          "args": [
+            {
+              "kind": "functionCall",
+              "name": "addressToLine",
+              "args": [
+                {
+                  "kind": "alias",
+                  "expr": {
+                    "kind": "functionCall",
+                    "name": "arrayJoin",
+                    "args": [
+                      {
+                        "kind": "columnRef",
+                        "parts": [
+                          "trace"
+                        ]
+                      }
+                    ]
+                  },
+                  "alias": "addr"
+                }
+              ]
+            },
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "#"
+            },
+            {
+              "kind": "functionCall",
+              "name": "demangle",
+              "args": [
+                {
+                  "kind": "functionCall",
+                  "name": "addressToSymbol",
+                  "args": [
+                    {
+                      "kind": "columnRef",
+                      "parts": [
+                        "addr"
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ],
+    "select": [
+      {
+        "kind": "binaryExpr",
+        "op": ">",
+        "left": {
+          "kind": "functionCall",
+          "name": "count",
+          "args": []
+        },
+        "right": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "database": "system",
+      "table": "trace_log",
+      "alias": "t"
+    },
+    "where": {
+      "kind": "naryExpr",
+      "op": "AND",
+      "operands": [
+        {
+          "kind": "binaryExpr",
+          "op": "=",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "query_id"
+            ]
+          },
+          "right": {
+            "kind": "subqueryExpr",
+            "query": {
+              "kind": "select",
+              "select": [
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "query_id"
+                  ]
+                }
+              ],
+              "from": {
+                "kind": "tableRef",
+                "database": "system",
+                "table": "query_log"
+              },
+              "where": {
+                "kind": "naryExpr",
+                "op": "AND",
+                "operands": [
+                  {
+                    "kind": "binaryExpr",
+                    "op": "=",
+                    "left": {
+                      "kind": "columnRef",
+                      "parts": [
+                        "current_database"
+                      ]
+                    },
+                    "right": {
+                      "kind": "functionCall",
+                      "name": "currentDatabase",
+                      "args": []
+                    }
+                  },
+                  {
+                    "kind": "functionCall",
+                    "name": "like",
+                    "args": [
+                      {
+                        "kind": "columnRef",
+                        "parts": [
+                          "query"
+                        ]
+                      },
+                      {
+                        "kind": "literal",
+                        "type": "String",
+                        "value": "%test real time query profiler%"
+                      }
+                    ]
+                  },
+                  {
+                    "kind": "functionCall",
+                    "name": "notLike",
+                    "args": [
+                      {
+                        "kind": "columnRef",
+                        "parts": [
+                          "query"
+                        ]
+                      },
+                      {
+                        "kind": "literal",
+                        "type": "String",
+                        "value": "%system%"
+                      }
+                    ]
+                  }
+                ]
+              },
+              "orderBy": [
+                {
+                  "kind": "orderByItem",
+                  "expr": {
+                    "kind": "columnRef",
+                    "parts": [
+                      "event_time"
+                    ]
+                  },
+                  "direction": "DESC"
+                }
+              ],
+              "limit": {
+                "count": {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "1"
+                }
+              }
+            }
+          }
+        },
+        {
+          "kind": "functionCall",
+          "name": "like",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "symbol"
+              ]
+            },
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "%FunctionSleep%"
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
     "kind": "set",
     "settings": [
       {
@@ -178,6 +386,214 @@
           "kind": "literal",
           "type": "UInt64",
           "value": "10000000000"
+        }
+      ]
+    }
+  },
+  {
+    "kind": "select",
+    "with": [
+      {
+        "kind": "cteExpr",
+        "name": "symbol",
+        "expr": {
+          "kind": "functionCall",
+          "name": "concat",
+          "args": [
+            {
+              "kind": "functionCall",
+              "name": "addressToLine",
+              "args": [
+                {
+                  "kind": "alias",
+                  "expr": {
+                    "kind": "functionCall",
+                    "name": "arrayJoin",
+                    "args": [
+                      {
+                        "kind": "columnRef",
+                        "parts": [
+                          "trace"
+                        ]
+                      }
+                    ]
+                  },
+                  "alias": "addr"
+                }
+              ]
+            },
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "#"
+            },
+            {
+              "kind": "functionCall",
+              "name": "demangle",
+              "args": [
+                {
+                  "kind": "functionCall",
+                  "name": "addressToSymbol",
+                  "args": [
+                    {
+                      "kind": "columnRef",
+                      "parts": [
+                        "addr"
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ],
+    "select": [
+      {
+        "kind": "binaryExpr",
+        "op": ">",
+        "left": {
+          "kind": "functionCall",
+          "name": "count",
+          "args": []
+        },
+        "right": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "database": "system",
+      "table": "trace_log",
+      "alias": "t"
+    },
+    "where": {
+      "kind": "naryExpr",
+      "op": "AND",
+      "operands": [
+        {
+          "kind": "binaryExpr",
+          "op": "=",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "query_id"
+            ]
+          },
+          "right": {
+            "kind": "subqueryExpr",
+            "query": {
+              "kind": "select",
+              "select": [
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "query_id"
+                  ]
+                }
+              ],
+              "from": {
+                "kind": "tableRef",
+                "database": "system",
+                "table": "query_log"
+              },
+              "where": {
+                "kind": "naryExpr",
+                "op": "AND",
+                "operands": [
+                  {
+                    "kind": "binaryExpr",
+                    "op": "=",
+                    "left": {
+                      "kind": "columnRef",
+                      "parts": [
+                        "current_database"
+                      ]
+                    },
+                    "right": {
+                      "kind": "functionCall",
+                      "name": "currentDatabase",
+                      "args": []
+                    }
+                  },
+                  {
+                    "kind": "functionCall",
+                    "name": "like",
+                    "args": [
+                      {
+                        "kind": "columnRef",
+                        "parts": [
+                          "query"
+                        ]
+                      },
+                      {
+                        "kind": "literal",
+                        "type": "String",
+                        "value": "%test cpu time query profiler%"
+                      }
+                    ]
+                  },
+                  {
+                    "kind": "functionCall",
+                    "name": "notLike",
+                    "args": [
+                      {
+                        "kind": "columnRef",
+                        "parts": [
+                          "query"
+                        ]
+                      },
+                      {
+                        "kind": "literal",
+                        "type": "String",
+                        "value": "%system%"
+                      }
+                    ]
+                  }
+                ]
+              },
+              "orderBy": [
+                {
+                  "kind": "orderByItem",
+                  "expr": {
+                    "kind": "columnRef",
+                    "parts": [
+                      "event_time"
+                    ]
+                  },
+                  "direction": "DESC"
+                }
+              ],
+              "limit": {
+                "count": {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "1"
+                }
+              }
+            }
+          }
+        },
+        {
+          "kind": "functionCall",
+          "name": "like",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "symbol"
+              ]
+            },
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "%Source%"
+            }
+          ]
         }
       ]
     }

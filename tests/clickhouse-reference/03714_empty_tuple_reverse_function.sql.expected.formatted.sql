@@ -5,6 +5,10 @@ SELECT reverse(tuple());
 SELECT reverse(tuple())
 FROM numbers(3);
 
+WITH tuple() AS x
+
+SELECT reverse(x);
+
 DROP TABLE IF EXISTS table_rev_empty_tuple;
 
 CREATE TABLE table_rev_empty_tuple

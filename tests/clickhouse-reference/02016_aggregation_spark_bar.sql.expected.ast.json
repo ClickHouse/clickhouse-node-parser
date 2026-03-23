@@ -1102,6 +1102,132 @@
   },
   {
     "kind": "select",
+    "with": [
+      {
+        "kind": "cteExpr",
+        "name": "k",
+        "expr": {
+          "kind": "binaryExpr",
+          "op": "DIV",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "number"
+            ]
+          },
+          "right": {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "50"
+          }
+        }
+      },
+      {
+        "kind": "cteExpr",
+        "name": "value",
+        "expr": {
+          "kind": "functionCall",
+          "name": "toUInt32",
+          "args": [
+            {
+              "kind": "binaryExpr",
+              "op": "%",
+              "left": {
+                "kind": "columnRef",
+                "parts": [
+                  "number"
+                ]
+              },
+              "right": {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "50"
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "k"
+        ]
+      },
+      {
+        "kind": "functionCall",
+        "name": "sparkbar",
+        "params": [
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "50"
+          },
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "0"
+          },
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "99"
+          }
+        ],
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "number"
+            ]
+          },
+          {
+            "kind": "columnRef",
+            "parts": [
+              "value"
+            ]
+          }
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableFunctionRef",
+      "name": "numbers",
+      "args": [
+        {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "100"
+        }
+      ]
+    },
+    "groupBy": {
+      "kind": "expressions",
+      "items": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "k"
+          ]
+        }
+      ]
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "k"
+          ]
+        },
+        "direction": "ASC"
+      }
+    ]
+  },
+  {
+    "kind": "select",
     "select": [
       {
         "kind": "functionCall",

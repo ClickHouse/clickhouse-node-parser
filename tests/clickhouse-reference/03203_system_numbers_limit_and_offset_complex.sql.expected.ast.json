@@ -1,6 +1,554 @@
 [
   {
     "kind": "select",
+    "with": [
+      {
+        "kind": "cteExpr",
+        "name": "is_prime_slow",
+        "expr": {
+          "kind": "naryExpr",
+          "op": "AND",
+          "operands": [
+            {
+              "kind": "binaryExpr",
+              "op": ">",
+              "left": {
+                "kind": "columnRef",
+                "parts": [
+                  "num"
+                ]
+              },
+              "right": {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "1"
+              },
+              "parenthesized": true
+            },
+            {
+              "kind": "binaryExpr",
+              "op": "=",
+              "left": {
+                "kind": "functionCall",
+                "name": "arraySum",
+                "args": [
+                  {
+                    "kind": "functionCall",
+                    "name": "arrayMap",
+                    "args": [
+                      {
+                        "kind": "lambdaExpr",
+                        "params": [
+                          "y"
+                        ],
+                        "body": {
+                          "kind": "naryExpr",
+                          "op": "AND",
+                          "operands": [
+                            {
+                              "kind": "binaryExpr",
+                              "op": ">",
+                              "left": {
+                                "kind": "columnRef",
+                                "parts": [
+                                  "y"
+                                ]
+                              },
+                              "right": {
+                                "kind": "literal",
+                                "type": "UInt64",
+                                "value": "1"
+                              },
+                              "parenthesized": true
+                            },
+                            {
+                              "kind": "binaryExpr",
+                              "op": "<",
+                              "left": {
+                                "kind": "columnRef",
+                                "parts": [
+                                  "y"
+                                ]
+                              },
+                              "right": {
+                                "kind": "columnRef",
+                                "parts": [
+                                  "num"
+                                ]
+                              },
+                              "parenthesized": true
+                            },
+                            {
+                              "kind": "binaryExpr",
+                              "op": "=",
+                              "left": {
+                                "kind": "binaryExpr",
+                                "op": "%",
+                                "left": {
+                                  "kind": "columnRef",
+                                  "parts": [
+                                    "num"
+                                  ]
+                                },
+                                "right": {
+                                  "kind": "columnRef",
+                                  "parts": [
+                                    "y"
+                                  ]
+                                },
+                                "parenthesized": true
+                              },
+                              "right": {
+                                "kind": "literal",
+                                "type": "UInt64",
+                                "value": "0"
+                              },
+                              "parenthesized": true
+                            }
+                          ],
+                          "parenthesized": true
+                        }
+                      },
+                      {
+                        "kind": "functionCall",
+                        "name": "range",
+                        "args": [
+                          {
+                            "kind": "binaryExpr",
+                            "op": "+",
+                            "left": {
+                              "kind": "functionCall",
+                              "name": "toUInt64",
+                              "args": [
+                                {
+                                  "kind": "functionCall",
+                                  "name": "sqrt",
+                                  "args": [
+                                    {
+                                      "kind": "columnRef",
+                                      "parts": [
+                                        "num"
+                                      ]
+                                    }
+                                  ]
+                                }
+                              ]
+                            },
+                            "right": {
+                              "kind": "literal",
+                              "type": "UInt64",
+                              "value": "1"
+                            }
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              "right": {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "0"
+              },
+              "parenthesized": true
+            }
+          ]
+        }
+      }
+    ],
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "num"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "ds"
+        ]
+      }
+    ],
+    "from": {
+      "kind": "subqueryFrom",
+      "query": {
+        "kind": "select",
+        "with": [
+          {
+            "kind": "cteExpr",
+            "name": "digits_sum",
+            "expr": {
+              "kind": "functionCall",
+              "name": "arraySum",
+              "args": [
+                {
+                  "kind": "functionCall",
+                  "name": "arrayMap",
+                  "args": [
+                    {
+                      "kind": "lambdaExpr",
+                      "params": [
+                        "y"
+                      ],
+                      "body": {
+                        "kind": "functionCall",
+                        "name": "toUInt8",
+                        "args": [
+                          {
+                            "kind": "columnRef",
+                            "parts": [
+                              "y"
+                            ]
+                          }
+                        ]
+                      }
+                    },
+                    {
+                      "kind": "functionCall",
+                      "name": "splitByString",
+                      "args": [
+                        {
+                          "kind": "literal",
+                          "type": "String",
+                          "value": ""
+                        },
+                        {
+                          "kind": "functionCall",
+                          "name": "toString",
+                          "args": [
+                            {
+                              "kind": "columnRef",
+                              "parts": [
+                                "num"
+                              ]
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          }
+        ],
+        "select": [
+          {
+            "kind": "alias",
+            "expr": {
+              "kind": "binaryExpr",
+              "op": "+",
+              "left": {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "1"
+              },
+              "right": {
+                "kind": "binaryExpr",
+                "op": "*",
+                "left": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "number"
+                  ]
+                },
+                "right": {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "2"
+                },
+                "parenthesized": true
+              }
+            },
+            "alias": "num"
+          },
+          {
+            "kind": "alias",
+            "expr": {
+              "kind": "columnRef",
+              "parts": [
+                "digits_sum"
+              ]
+            },
+            "alias": "ds"
+          }
+        ],
+        "from": {
+          "kind": "tableFunctionRef",
+          "name": "numbers_mt",
+          "args": [
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "10000"
+            }
+          ]
+        },
+        "where": {
+          "kind": "inExpr",
+          "negated": false,
+          "expr": {
+            "kind": "columnRef",
+            "parts": [
+              "ds"
+            ]
+          },
+          "values": {
+            "kind": "subqueryExpr",
+            "query": {
+              "kind": "select",
+              "with": [
+                {
+                  "kind": "cteExpr",
+                  "name": "is_prime_slow",
+                  "expr": {
+                    "kind": "naryExpr",
+                    "op": "AND",
+                    "operands": [
+                      {
+                        "kind": "binaryExpr",
+                        "op": ">",
+                        "left": {
+                          "kind": "columnRef",
+                          "parts": [
+                            "number"
+                          ]
+                        },
+                        "right": {
+                          "kind": "literal",
+                          "type": "UInt64",
+                          "value": "1"
+                        },
+                        "parenthesized": true
+                      },
+                      {
+                        "kind": "binaryExpr",
+                        "op": "=",
+                        "left": {
+                          "kind": "functionCall",
+                          "name": "arraySum",
+                          "args": [
+                            {
+                              "kind": "functionCall",
+                              "name": "arrayMap",
+                              "args": [
+                                {
+                                  "kind": "lambdaExpr",
+                                  "params": [
+                                    "y"
+                                  ],
+                                  "body": {
+                                    "kind": "naryExpr",
+                                    "op": "AND",
+                                    "operands": [
+                                      {
+                                        "kind": "binaryExpr",
+                                        "op": ">",
+                                        "left": {
+                                          "kind": "columnRef",
+                                          "parts": [
+                                            "y"
+                                          ]
+                                        },
+                                        "right": {
+                                          "kind": "literal",
+                                          "type": "UInt64",
+                                          "value": "1"
+                                        },
+                                        "parenthesized": true
+                                      },
+                                      {
+                                        "kind": "binaryExpr",
+                                        "op": "<",
+                                        "left": {
+                                          "kind": "columnRef",
+                                          "parts": [
+                                            "y"
+                                          ]
+                                        },
+                                        "right": {
+                                          "kind": "columnRef",
+                                          "parts": [
+                                            "number"
+                                          ]
+                                        },
+                                        "parenthesized": true
+                                      },
+                                      {
+                                        "kind": "binaryExpr",
+                                        "op": "=",
+                                        "left": {
+                                          "kind": "binaryExpr",
+                                          "op": "%",
+                                          "left": {
+                                            "kind": "columnRef",
+                                            "parts": [
+                                              "number"
+                                            ]
+                                          },
+                                          "right": {
+                                            "kind": "columnRef",
+                                            "parts": [
+                                              "y"
+                                            ]
+                                          },
+                                          "parenthesized": true
+                                        },
+                                        "right": {
+                                          "kind": "literal",
+                                          "type": "UInt64",
+                                          "value": "0"
+                                        },
+                                        "parenthesized": true
+                                      }
+                                    ],
+                                    "parenthesized": true
+                                  }
+                                },
+                                {
+                                  "kind": "functionCall",
+                                  "name": "range",
+                                  "args": [
+                                    {
+                                      "kind": "binaryExpr",
+                                      "op": "+",
+                                      "left": {
+                                        "kind": "functionCall",
+                                        "name": "toUInt64",
+                                        "args": [
+                                          {
+                                            "kind": "functionCall",
+                                            "name": "sqrt",
+                                            "args": [
+                                              {
+                                                "kind": "columnRef",
+                                                "parts": [
+                                                  "number"
+                                                ]
+                                              }
+                                            ]
+                                          }
+                                        ]
+                                      },
+                                      "right": {
+                                        "kind": "literal",
+                                        "type": "UInt64",
+                                        "value": "1"
+                                      }
+                                    }
+                                  ]
+                                }
+                              ]
+                            }
+                          ]
+                        },
+                        "right": {
+                          "kind": "literal",
+                          "type": "UInt64",
+                          "value": "0"
+                        },
+                        "parenthesized": true
+                      }
+                    ]
+                  }
+                }
+              ],
+              "select": [
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "number"
+                  ]
+                }
+              ],
+              "from": {
+                "kind": "tableFunctionRef",
+                "name": "numbers",
+                "args": [
+                  {
+                    "kind": "binaryExpr",
+                    "op": "+",
+                    "left": {
+                      "kind": "literal",
+                      "type": "UInt64",
+                      "value": "180"
+                    },
+                    "right": {
+                      "kind": "literal",
+                      "type": "UInt64",
+                      "value": "1"
+                    }
+                  }
+                ]
+              },
+              "where": {
+                "kind": "columnRef",
+                "parts": [
+                  "is_prime_slow"
+                ]
+              }
+            }
+          }
+        }
+      }
+    },
+    "where": {
+      "kind": "columnRef",
+      "parts": [
+        "is_prime_slow"
+      ]
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "num"
+          ]
+        },
+        "direction": "ASC"
+      }
+    ],
+    "offset": {
+      "kind": "literal",
+      "type": "UInt64",
+      "value": "1"
+    },
+    "limit": {
+      "count": {
+        "kind": "literal",
+        "type": "UInt64",
+        "value": "998"
+      },
+      "commaSyntax": true
+    },
+    "settings": [
+      {
+        "name": "max_block_size",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "64"
+        }
+      },
+      {
+        "name": "max_threads",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "16"
+        }
+      }
+    ],
+    "leadingComments": [
+      "--- The following query was buggy before, so let's use it as a test case"
+    ]
+  },
+  {
+    "kind": "select",
     "select": [
       {
         "kind": "columnRef",

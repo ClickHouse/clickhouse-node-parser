@@ -35,3 +35,25 @@ SETTINGS
     log_processors_profiles = 1,
     optimize_move_to_prewhere = 0,
     max_threads = 2;
+
+WITH (
+        SELECT query_id
+        FROM `system`.query_log
+        WHERE current_database = currentDatabase()
+            AND like(query, 'select x from tab%')
+            AND event_date >= (today() - 1)
+        ORDER BY event_time DESC
+        LIMIT 1
+    ) AS id
+
+SELECT
+    replace(name, 'ReadPoolParallelReplicasInOrder', 'ReadPoolInOrder') AS name,
+    output_rows
+FROM `system`.processors_profile_log
+WHERE event_date >= (today() - 1)
+    AND query_id = id
+    AND ((like(name, '%MergeTreeSelect%')
+    OR like(name, '%VirtualRowTransform%')))
+ORDER BY
+    name ASC,
+    output_rows ASC;

@@ -14,4 +14,14 @@ INSERT INTO test SELECT
     number
 FROM numbers(10);
 
+WITH toUInt64(id) AS id_with
+
+SELECT
+    day,
+    count(id_with)
+FROM test
+WHERE day >= '2023-01-01'
+GROUP BY day
+LIMIT 1000;
+
 DROP TABLE test;

@@ -48,6 +48,159 @@
   },
   {
     "kind": "select",
+    "with": [
+      {
+        "kind": "cteExpr",
+        "name": "l_",
+        "expr": {
+          "kind": "functionCall",
+          "name": "lowerUTF8",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "str"
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "kind": "cteExpr",
+        "name": "u_",
+        "expr": {
+          "kind": "functionCall",
+          "name": "upperUTF8",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "str"
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "kind": "cteExpr",
+        "name": "h_",
+        "expr": {
+          "kind": "functionCall",
+          "name": "concat",
+          "args": [
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "0x"
+            },
+            {
+              "kind": "functionCall",
+              "name": "hex",
+              "args": [
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "str"
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ],
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "length",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "str"
+            ]
+          }
+        ]
+      },
+      {
+        "kind": "functionCall",
+        "name": "if",
+        "args": [
+          {
+            "kind": "binaryExpr",
+            "op": "==",
+            "left": {
+              "kind": "columnRef",
+              "parts": [
+                "l_"
+              ]
+            },
+            "right": {
+              "kind": "literal",
+              "type": "String",
+              "value": "�"
+            }
+          },
+          {
+            "kind": "columnRef",
+            "parts": [
+              "h_"
+            ]
+          },
+          {
+            "kind": "columnRef",
+            "parts": [
+              "l_"
+            ]
+          }
+        ]
+      },
+      {
+        "kind": "functionCall",
+        "name": "if",
+        "args": [
+          {
+            "kind": "binaryExpr",
+            "op": "==",
+            "left": {
+              "kind": "columnRef",
+              "parts": [
+                "u_"
+              ]
+            },
+            "right": {
+              "kind": "literal",
+              "type": "String",
+              "value": "�"
+            }
+          },
+          {
+            "kind": "columnRef",
+            "parts": [
+              "h_"
+            ]
+          },
+          {
+            "kind": "columnRef",
+            "parts": [
+              "u_"
+            ]
+          }
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "utf8_overlap"
+    },
+    "format": "CSV",
+    "leadingComments": [
+      "--                                             ^",
+      "--                                             MONOGRAM FOR YANG"
+    ]
+  },
+  {
+    "kind": "select",
     "select": [
       {
         "kind": "functionCall",

@@ -30,3 +30,149 @@
 --
 -- { echoOn }
 SET enable_analyzer = 1;
+
+--
+-- test multiple WITH queries
+--
+WITH y AS (
+    SELECT 1 AS id
+),
+
+x AS (
+    SELECT *
+    FROM y
+    UNION ALL
+    SELECT id + 1
+    FROM x
+    WHERE id < 5
+)
+
+SELECT *
+FROM x
+ORDER BY id ASC;
+
+-- forward reference OK
+WITH x AS (
+    SELECT *
+    FROM y
+    UNION ALL
+    SELECT id + 1
+    FROM x
+    WHERE id < 5
+),
+
+y AS (
+    SELECT 1 AS id
+)
+
+SELECT *
+FROM x
+ORDER BY id ASC;
+
+WITH x AS (
+    SELECT 1 AS id
+    UNION ALL
+    SELECT id + 1
+    FROM x
+    WHERE id < 5
+),
+
+y AS (
+    SELECT 1 AS id
+    UNION ALL
+    SELECT id + 1
+    FROM y
+    WHERE id < 10
+)
+
+SELECT
+    y.*,
+    x.*
+FROM
+    y
+LEFT JOIN x
+    USING (id)
+ORDER BY y.id ASC;
+
+WITH x AS (
+    SELECT 1 AS id
+    UNION ALL
+    SELECT id + 1
+    FROM x
+    WHERE id < 5
+),
+
+y AS (
+    SELECT 1 AS id
+    UNION ALL
+    SELECT id + 1
+    FROM x
+    WHERE id < 10
+)
+
+SELECT
+    y.*,
+    x.*
+FROM
+    y
+LEFT JOIN x
+    USING (id)
+ORDER BY y.id ASC;
+
+WITH x AS (
+    SELECT 1 AS id
+    UNION ALL
+    SELECT id + 1
+    FROM x
+    WHERE id < 3
+),
+
+y AS (
+    SELECT *
+    FROM x
+    UNION ALL
+    SELECT *
+    FROM x
+),
+
+z AS (
+    SELECT *
+    FROM x
+    UNION ALL
+    SELECT id + 1
+    FROM z
+    WHERE id < 10
+)
+
+SELECT *
+FROM z
+ORDER BY id ASC;
+
+WITH x AS (
+    SELECT 1 AS id
+    UNION ALL
+    SELECT id + 1
+    FROM x
+    WHERE id < 3
+),
+
+y AS (
+    SELECT *
+    FROM x
+    UNION ALL
+    SELECT *
+    FROM x
+),
+
+z AS (
+    SELECT *
+    FROM y
+    UNION ALL
+    SELECT id + 1
+    FROM z
+    WHERE id < 10
+)
+
+SELECT *
+FROM z
+ORDER BY id ASC;

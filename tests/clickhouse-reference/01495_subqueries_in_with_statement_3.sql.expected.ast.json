@@ -114,6 +114,1753 @@
     }
   },
   {
+    "kind": "select",
+    "with": [
+      {
+        "kind": "cteSubquery",
+        "name": "x",
+        "query": {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "asterisk"
+            }
+          ],
+          "from": {
+            "kind": "tableRef",
+            "table": "cte1"
+          }
+        }
+      },
+      {
+        "kind": "cteSubquery",
+        "name": "y",
+        "query": {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "asterisk"
+            }
+          ],
+          "from": {
+            "kind": "tableRef",
+            "table": "cte2"
+          }
+        }
+      },
+      {
+        "kind": "cteSubquery",
+        "name": "z",
+        "query": {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "asterisk"
+            }
+          ],
+          "from": {
+            "kind": "tableRef",
+            "table": "x"
+          },
+          "where": {
+            "kind": "binaryExpr",
+            "op": "=",
+            "left": {
+              "kind": "binaryExpr",
+              "op": "%",
+              "left": {
+                "kind": "columnRef",
+                "parts": [
+                  "a"
+                ]
+              },
+              "right": {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "2"
+              }
+            },
+            "right": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "1"
+            }
+          }
+        }
+      },
+      {
+        "kind": "cteSubquery",
+        "name": "w",
+        "query": {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "asterisk"
+            }
+          ],
+          "from": {
+            "kind": "tableRef",
+            "table": "y"
+          },
+          "where": {
+            "kind": "binaryExpr",
+            "op": ">",
+            "left": {
+              "kind": "columnRef",
+              "parts": [
+                "a"
+              ]
+            },
+            "right": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "333"
+            }
+          }
+        }
+      }
+    ],
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "max",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "a"
+            ]
+          }
+        ]
+      }
+    ],
+    "from": {
+      "left": {
+        "kind": "tableRef",
+        "table": "x"
+      },
+      "kind": "joinExpr",
+      "joinType": "INNER",
+      "right": {
+        "kind": "tableRef",
+        "table": "y"
+      },
+      "constraint": {
+        "kind": "using",
+        "columns": [
+          "a"
+        ]
+      }
+    },
+    "where": {
+      "kind": "naryExpr",
+      "op": "AND",
+      "operands": [
+        {
+          "kind": "inExpr",
+          "negated": false,
+          "expr": {
+            "kind": "columnRef",
+            "parts": [
+              "a"
+            ]
+          },
+          "values": {
+            "kind": "subqueryExpr",
+            "query": {
+              "kind": "select",
+              "select": [
+                {
+                  "kind": "asterisk"
+                }
+              ],
+              "from": {
+                "kind": "tableRef",
+                "table": "z"
+              }
+            }
+          }
+        },
+        {
+          "kind": "binaryExpr",
+          "op": "<=",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "a"
+            ]
+          },
+          "right": {
+            "kind": "subqueryExpr",
+            "query": {
+              "kind": "select",
+              "select": [
+                {
+                  "kind": "functionCall",
+                  "name": "max",
+                  "args": [
+                    {
+                      "kind": "columnRef",
+                      "parts": [
+                        "a"
+                      ]
+                    }
+                  ]
+                }
+              ],
+              "from": {
+                "kind": "tableRef",
+                "table": "w"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "kind": "select",
+    "with": [
+      {
+        "kind": "cteSubquery",
+        "name": "x",
+        "query": {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "asterisk"
+            }
+          ],
+          "from": {
+            "kind": "tableRef",
+            "table": "cte1"
+          }
+        }
+      },
+      {
+        "kind": "cteSubquery",
+        "name": "y",
+        "query": {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "asterisk"
+            }
+          ],
+          "from": {
+            "kind": "tableRef",
+            "table": "cte2"
+          }
+        }
+      },
+      {
+        "kind": "cteSubquery",
+        "name": "z",
+        "query": {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "asterisk"
+            }
+          ],
+          "from": {
+            "kind": "tableRef",
+            "table": "x"
+          },
+          "where": {
+            "kind": "binaryExpr",
+            "op": "=",
+            "left": {
+              "kind": "binaryExpr",
+              "op": "%",
+              "left": {
+                "kind": "columnRef",
+                "parts": [
+                  "a"
+                ]
+              },
+              "right": {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "3"
+              }
+            },
+            "right": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "1"
+            }
+          }
+        }
+      },
+      {
+        "kind": "cteSubquery",
+        "name": "w",
+        "query": {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "asterisk"
+            }
+          ],
+          "from": {
+            "kind": "tableRef",
+            "table": "y"
+          },
+          "where": {
+            "kind": "naryExpr",
+            "op": "AND",
+            "operands": [
+              {
+                "kind": "binaryExpr",
+                "op": ">",
+                "left": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "a"
+                  ]
+                },
+                "right": {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "333"
+                }
+              },
+              {
+                "kind": "binaryExpr",
+                "op": "<",
+                "left": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "a"
+                  ]
+                },
+                "right": {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "1000"
+                }
+              }
+            ]
+          }
+        }
+      }
+    ],
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "count",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "a"
+            ]
+          }
+        ]
+      }
+    ],
+    "from": {
+      "left": {
+        "kind": "tableRef",
+        "table": "x"
+      },
+      "kind": "joinExpr",
+      "joinType": "LEFT",
+      "right": {
+        "kind": "tableRef",
+        "table": "y"
+      },
+      "constraint": {
+        "kind": "using",
+        "columns": [
+          "a"
+        ]
+      }
+    },
+    "where": {
+      "kind": "naryExpr",
+      "op": "AND",
+      "operands": [
+        {
+          "kind": "inExpr",
+          "negated": false,
+          "expr": {
+            "kind": "columnRef",
+            "parts": [
+              "a"
+            ]
+          },
+          "values": {
+            "kind": "subqueryExpr",
+            "query": {
+              "kind": "select",
+              "select": [
+                {
+                  "kind": "asterisk"
+                }
+              ],
+              "from": {
+                "kind": "tableRef",
+                "table": "z"
+              }
+            }
+          }
+        },
+        {
+          "kind": "binaryExpr",
+          "op": "<=",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "a"
+            ]
+          },
+          "right": {
+            "kind": "subqueryExpr",
+            "query": {
+              "kind": "select",
+              "select": [
+                {
+                  "kind": "functionCall",
+                  "name": "max",
+                  "args": [
+                    {
+                      "kind": "columnRef",
+                      "parts": [
+                        "a"
+                      ]
+                    }
+                  ]
+                }
+              ],
+              "from": {
+                "kind": "tableRef",
+                "table": "w"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "kind": "select",
+    "with": [
+      {
+        "kind": "cteSubquery",
+        "name": "x",
+        "query": {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "asterisk"
+            }
+          ],
+          "from": {
+            "kind": "tableRef",
+            "table": "cte1"
+          }
+        }
+      },
+      {
+        "kind": "cteSubquery",
+        "name": "y",
+        "query": {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "asterisk"
+            }
+          ],
+          "from": {
+            "kind": "tableRef",
+            "table": "cte2"
+          }
+        }
+      },
+      {
+        "kind": "cteSubquery",
+        "name": "z",
+        "query": {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "asterisk"
+            }
+          ],
+          "from": {
+            "kind": "tableRef",
+            "table": "x"
+          },
+          "where": {
+            "kind": "binaryExpr",
+            "op": "=",
+            "left": {
+              "kind": "binaryExpr",
+              "op": "%",
+              "left": {
+                "kind": "columnRef",
+                "parts": [
+                  "a"
+                ]
+              },
+              "right": {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "3"
+              }
+            },
+            "right": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "1"
+            }
+          }
+        }
+      },
+      {
+        "kind": "cteSubquery",
+        "name": "w",
+        "query": {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "asterisk"
+            }
+          ],
+          "from": {
+            "kind": "tableRef",
+            "table": "y"
+          },
+          "where": {
+            "kind": "naryExpr",
+            "op": "AND",
+            "operands": [
+              {
+                "kind": "binaryExpr",
+                "op": ">",
+                "left": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "a"
+                  ]
+                },
+                "right": {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "333"
+                }
+              },
+              {
+                "kind": "binaryExpr",
+                "op": "<",
+                "left": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "a"
+                  ]
+                },
+                "right": {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "1000"
+                }
+              }
+            ]
+          }
+        }
+      }
+    ],
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "count",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "a"
+            ]
+          }
+        ]
+      }
+    ],
+    "from": {
+      "left": {
+        "kind": "tableRef",
+        "table": "x"
+      },
+      "kind": "joinExpr",
+      "joinType": "LEFT",
+      "right": {
+        "kind": "tableRef",
+        "table": "y"
+      },
+      "constraint": {
+        "kind": "using",
+        "columns": [
+          "a"
+        ]
+      }
+    },
+    "where": {
+      "kind": "inExpr",
+      "negated": false,
+      "expr": {
+        "kind": "columnRef",
+        "parts": [
+          "a"
+        ]
+      },
+      "values": {
+        "kind": "subqueryExpr",
+        "query": {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "asterisk"
+            }
+          ],
+          "from": {
+            "kind": "tableRef",
+            "table": "z"
+          }
+        }
+      }
+    }
+  },
+  {
+    "kind": "select",
+    "with": [
+      {
+        "kind": "cteSubquery",
+        "name": "x",
+        "query": {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "alias",
+              "expr": {
+                "kind": "binaryExpr",
+                "op": "-",
+                "left": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "a"
+                  ]
+                },
+                "right": {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "4000"
+                }
+              },
+              "alias": "a"
+            }
+          ],
+          "from": {
+            "kind": "tableRef",
+            "table": "cte1"
+          },
+          "where": {
+            "kind": "binaryExpr",
+            "op": ">",
+            "left": {
+              "kind": "columnRef",
+              "parts": [
+                "cte1",
+                "a"
+              ]
+            },
+            "right": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "700"
+            }
+          }
+        }
+      },
+      {
+        "kind": "cteSubquery",
+        "name": "y",
+        "query": {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "asterisk"
+            }
+          ],
+          "from": {
+            "kind": "tableRef",
+            "table": "cte2"
+          }
+        }
+      },
+      {
+        "kind": "cteSubquery",
+        "name": "z",
+        "query": {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "asterisk"
+            }
+          ],
+          "from": {
+            "kind": "tableRef",
+            "table": "x"
+          },
+          "where": {
+            "kind": "binaryExpr",
+            "op": "=",
+            "left": {
+              "kind": "binaryExpr",
+              "op": "%",
+              "left": {
+                "kind": "columnRef",
+                "parts": [
+                  "a"
+                ]
+              },
+              "right": {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "3"
+              }
+            },
+            "right": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "1"
+            }
+          }
+        }
+      },
+      {
+        "kind": "cteSubquery",
+        "name": "w",
+        "query": {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "asterisk"
+            }
+          ],
+          "from": {
+            "kind": "tableRef",
+            "table": "y"
+          },
+          "where": {
+            "kind": "naryExpr",
+            "op": "AND",
+            "operands": [
+              {
+                "kind": "binaryExpr",
+                "op": ">",
+                "left": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "a"
+                  ]
+                },
+                "right": {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "333"
+                }
+              },
+              {
+                "kind": "binaryExpr",
+                "op": "<",
+                "left": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "a"
+                  ]
+                },
+                "right": {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "1000"
+                }
+              }
+            ]
+          }
+        }
+      }
+    ],
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "count",
+        "args": [
+          {
+            "kind": "asterisk"
+          }
+        ]
+      }
+    ],
+    "from": {
+      "left": {
+        "kind": "tableRef",
+        "table": "x"
+      },
+      "kind": "joinExpr",
+      "joinType": "LEFT",
+      "right": {
+        "kind": "tableRef",
+        "table": "y"
+      },
+      "constraint": {
+        "kind": "using",
+        "columns": [
+          "a"
+        ]
+      }
+    },
+    "where": {
+      "kind": "inExpr",
+      "negated": false,
+      "expr": {
+        "kind": "columnRef",
+        "parts": [
+          "a"
+        ]
+      },
+      "values": {
+        "kind": "subqueryExpr",
+        "query": {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "asterisk"
+            }
+          ],
+          "from": {
+            "kind": "tableRef",
+            "table": "z"
+          }
+        }
+      }
+    }
+  },
+  {
+    "kind": "select",
+    "with": [
+      {
+        "kind": "cteSubquery",
+        "name": "x",
+        "query": {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "alias",
+              "expr": {
+                "kind": "binaryExpr",
+                "op": "-",
+                "left": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "a"
+                  ]
+                },
+                "right": {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "4000"
+                }
+              },
+              "alias": "a"
+            }
+          ],
+          "from": {
+            "kind": "tableRef",
+            "table": "cte1"
+          },
+          "where": {
+            "kind": "binaryExpr",
+            "op": ">",
+            "left": {
+              "kind": "columnRef",
+              "parts": [
+                "cte1",
+                "a"
+              ]
+            },
+            "right": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "700"
+            }
+          }
+        }
+      },
+      {
+        "kind": "cteSubquery",
+        "name": "y",
+        "query": {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "asterisk"
+            }
+          ],
+          "from": {
+            "kind": "tableRef",
+            "table": "cte2"
+          }
+        }
+      },
+      {
+        "kind": "cteSubquery",
+        "name": "z",
+        "query": {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "asterisk"
+            }
+          ],
+          "from": {
+            "kind": "tableRef",
+            "table": "x"
+          },
+          "where": {
+            "kind": "binaryExpr",
+            "op": "=",
+            "left": {
+              "kind": "binaryExpr",
+              "op": "%",
+              "left": {
+                "kind": "columnRef",
+                "parts": [
+                  "a"
+                ]
+              },
+              "right": {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "3"
+              }
+            },
+            "right": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "1"
+            }
+          }
+        }
+      },
+      {
+        "kind": "cteSubquery",
+        "name": "w",
+        "query": {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "asterisk"
+            }
+          ],
+          "from": {
+            "kind": "tableRef",
+            "table": "y"
+          },
+          "where": {
+            "kind": "naryExpr",
+            "op": "AND",
+            "operands": [
+              {
+                "kind": "binaryExpr",
+                "op": ">",
+                "left": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "a"
+                  ]
+                },
+                "right": {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "333"
+                }
+              },
+              {
+                "kind": "binaryExpr",
+                "op": "<",
+                "left": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "a"
+                  ]
+                },
+                "right": {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "1000"
+                }
+              }
+            ]
+          }
+        }
+      }
+    ],
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "max",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "a"
+            ]
+          }
+        ]
+      },
+      {
+        "kind": "functionCall",
+        "name": "min",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "a"
+            ]
+          }
+        ]
+      },
+      {
+        "kind": "functionCall",
+        "name": "count",
+        "args": [
+          {
+            "kind": "asterisk"
+          }
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "x"
+    },
+    "where": {
+      "kind": "naryExpr",
+      "op": "AND",
+      "operands": [
+        {
+          "kind": "inExpr",
+          "negated": false,
+          "expr": {
+            "kind": "columnRef",
+            "parts": [
+              "a"
+            ]
+          },
+          "values": {
+            "kind": "subqueryExpr",
+            "query": {
+              "kind": "select",
+              "select": [
+                {
+                  "kind": "asterisk"
+                }
+              ],
+              "from": {
+                "kind": "tableRef",
+                "table": "z"
+              }
+            }
+          }
+        },
+        {
+          "kind": "binaryExpr",
+          "op": "<",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "a"
+            ]
+          },
+          "right": {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "100"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "kind": "select",
+    "with": [
+      {
+        "kind": "cteSubquery",
+        "name": "x",
+        "query": {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "alias",
+              "expr": {
+                "kind": "binaryExpr",
+                "op": "-",
+                "left": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "a"
+                  ]
+                },
+                "right": {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "4000"
+                }
+              },
+              "alias": "a"
+            }
+          ],
+          "from": {
+            "kind": "tableRef",
+            "table": "cte1"
+          },
+          "where": {
+            "kind": "binaryExpr",
+            "op": ">",
+            "left": {
+              "kind": "columnRef",
+              "parts": [
+                "cte1",
+                "a"
+              ]
+            },
+            "right": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "700"
+            }
+          }
+        }
+      },
+      {
+        "kind": "cteSubquery",
+        "name": "y",
+        "query": {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "asterisk"
+            }
+          ],
+          "from": {
+            "kind": "tableRef",
+            "table": "cte2"
+          }
+        }
+      },
+      {
+        "kind": "cteSubquery",
+        "name": "z",
+        "query": {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "asterisk"
+            }
+          ],
+          "from": {
+            "kind": "tableRef",
+            "table": "x"
+          },
+          "where": {
+            "kind": "binaryExpr",
+            "op": "=",
+            "left": {
+              "kind": "binaryExpr",
+              "op": "%",
+              "left": {
+                "kind": "columnRef",
+                "parts": [
+                  "a"
+                ]
+              },
+              "right": {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "3"
+              }
+            },
+            "right": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "1"
+            }
+          }
+        }
+      },
+      {
+        "kind": "cteSubquery",
+        "name": "w",
+        "query": {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "asterisk"
+            }
+          ],
+          "from": {
+            "kind": "tableRef",
+            "table": "y"
+          },
+          "where": {
+            "kind": "naryExpr",
+            "op": "AND",
+            "operands": [
+              {
+                "kind": "binaryExpr",
+                "op": ">",
+                "left": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "a"
+                  ]
+                },
+                "right": {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "333"
+                }
+              },
+              {
+                "kind": "binaryExpr",
+                "op": "<",
+                "left": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "a"
+                  ]
+                },
+                "right": {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "1000"
+                }
+              }
+            ]
+          }
+        }
+      }
+    ],
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "max",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "a"
+            ]
+          }
+        ]
+      },
+      {
+        "kind": "functionCall",
+        "name": "min",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "a"
+            ]
+          }
+        ]
+      },
+      {
+        "kind": "functionCall",
+        "name": "count",
+        "args": [
+          {
+            "kind": "asterisk"
+          }
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "x"
+    },
+    "where": {
+      "kind": "binaryExpr",
+      "op": "<",
+      "left": {
+        "kind": "columnRef",
+        "parts": [
+          "a"
+        ]
+      },
+      "right": {
+        "kind": "literal",
+        "type": "UInt64",
+        "value": "100"
+      }
+    }
+  },
+  {
+    "kind": "select",
+    "with": [
+      {
+        "kind": "cteSubquery",
+        "name": "x",
+        "query": {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "alias",
+              "expr": {
+                "kind": "binaryExpr",
+                "op": "-",
+                "left": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "a"
+                  ]
+                },
+                "right": {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "4000"
+                }
+              },
+              "alias": "a"
+            }
+          ],
+          "from": {
+            "kind": "tableRef",
+            "table": "cte1",
+            "alias": "t"
+          },
+          "where": {
+            "kind": "binaryExpr",
+            "op": ">",
+            "left": {
+              "kind": "columnRef",
+              "parts": [
+                "cte1",
+                "a"
+              ]
+            },
+            "right": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "700"
+            }
+          }
+        }
+      },
+      {
+        "kind": "cteSubquery",
+        "name": "y",
+        "query": {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "asterisk"
+            }
+          ],
+          "from": {
+            "kind": "tableRef",
+            "table": "cte2"
+          }
+        }
+      },
+      {
+        "kind": "cteSubquery",
+        "name": "z",
+        "query": {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "asterisk"
+            }
+          ],
+          "from": {
+            "kind": "tableRef",
+            "table": "x"
+          },
+          "where": {
+            "kind": "binaryExpr",
+            "op": "=",
+            "left": {
+              "kind": "binaryExpr",
+              "op": "%",
+              "left": {
+                "kind": "columnRef",
+                "parts": [
+                  "a"
+                ]
+              },
+              "right": {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "3"
+              }
+            },
+            "right": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "1"
+            }
+          }
+        }
+      },
+      {
+        "kind": "cteSubquery",
+        "name": "w",
+        "query": {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "asterisk"
+            }
+          ],
+          "from": {
+            "kind": "tableRef",
+            "table": "y"
+          },
+          "where": {
+            "kind": "naryExpr",
+            "op": "AND",
+            "operands": [
+              {
+                "kind": "binaryExpr",
+                "op": ">",
+                "left": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "a"
+                  ]
+                },
+                "right": {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "333"
+                }
+              },
+              {
+                "kind": "binaryExpr",
+                "op": "<",
+                "left": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "a"
+                  ]
+                },
+                "right": {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "1000"
+                }
+              }
+            ]
+          }
+        }
+      }
+    ],
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "max",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "a"
+            ]
+          }
+        ]
+      },
+      {
+        "kind": "functionCall",
+        "name": "min",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "a"
+            ]
+          }
+        ]
+      },
+      {
+        "kind": "functionCall",
+        "name": "count",
+        "args": [
+          {
+            "kind": "asterisk"
+          }
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "y"
+    },
+    "where": {
+      "kind": "binaryExpr",
+      "op": "<",
+      "left": {
+        "kind": "columnRef",
+        "parts": [
+          "a"
+        ]
+      },
+      "right": {
+        "kind": "literal",
+        "type": "UInt64",
+        "value": "100"
+      }
+    }
+  },
+  {
+    "kind": "select",
+    "with": [
+      {
+        "kind": "cteSubquery",
+        "name": "x",
+        "query": {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "alias",
+              "expr": {
+                "kind": "binaryExpr",
+                "op": "-",
+                "left": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "a"
+                  ]
+                },
+                "right": {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "4000"
+                }
+              },
+              "alias": "a"
+            }
+          ],
+          "from": {
+            "kind": "tableRef",
+            "table": "cte1",
+            "alias": "t"
+          },
+          "where": {
+            "kind": "binaryExpr",
+            "op": ">",
+            "left": {
+              "kind": "columnRef",
+              "parts": [
+                "t",
+                "a"
+              ]
+            },
+            "right": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "700"
+            }
+          }
+        }
+      },
+      {
+        "kind": "cteSubquery",
+        "name": "y",
+        "query": {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "alias",
+              "expr": {
+                "kind": "columnRef",
+                "parts": [
+                  "x",
+                  "a"
+                ]
+              },
+              "alias": "a"
+            }
+          ],
+          "from": {
+            "left": {
+              "kind": "tableRef",
+              "table": "x"
+            },
+            "kind": "joinExpr",
+            "joinType": "LEFT",
+            "right": {
+              "kind": "tableRef",
+              "table": "cte1"
+            },
+            "constraint": {
+              "kind": "using",
+              "columns": [
+                "a"
+              ]
+            }
+          }
+        }
+      },
+      {
+        "kind": "cteSubquery",
+        "name": "z",
+        "query": {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "asterisk"
+            }
+          ],
+          "from": {
+            "kind": "tableRef",
+            "table": "x"
+          },
+          "where": {
+            "kind": "binaryExpr",
+            "op": "=",
+            "left": {
+              "kind": "binaryExpr",
+              "op": "%",
+              "left": {
+                "kind": "columnRef",
+                "parts": [
+                  "a"
+                ]
+              },
+              "right": {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "3"
+              }
+            },
+            "right": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "1"
+            }
+          }
+        }
+      },
+      {
+        "kind": "cteSubquery",
+        "name": "w",
+        "query": {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "asterisk"
+            }
+          ],
+          "from": {
+            "kind": "tableRef",
+            "table": "y"
+          },
+          "where": {
+            "kind": "naryExpr",
+            "op": "AND",
+            "operands": [
+              {
+                "kind": "binaryExpr",
+                "op": ">",
+                "left": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "a"
+                  ]
+                },
+                "right": {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "333"
+                }
+              },
+              {
+                "kind": "binaryExpr",
+                "op": "<",
+                "left": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "a"
+                  ]
+                },
+                "right": {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "1000"
+                }
+              }
+            ]
+          }
+        }
+      }
+    ],
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "max",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "a"
+            ]
+          }
+        ]
+      },
+      {
+        "kind": "functionCall",
+        "name": "min",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "a"
+            ]
+          }
+        ]
+      },
+      {
+        "kind": "functionCall",
+        "name": "count",
+        "args": [
+          {
+            "kind": "asterisk"
+          }
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "y"
+    },
+    "where": {
+      "kind": "binaryExpr",
+      "op": "<",
+      "left": {
+        "kind": "columnRef",
+        "parts": [
+          "a"
+        ]
+      },
+      "right": {
+        "kind": "literal",
+        "type": "UInt64",
+        "value": "100"
+      }
+    }
+  },
+  {
     "kind": "drop",
     "targetType": "TABLE",
     "table": {

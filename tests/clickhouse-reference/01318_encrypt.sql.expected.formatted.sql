@@ -214,4 +214,51 @@ SELECT
     hex(encrypt(mode, input, key32, iv, 'AAD'))
 FROM encryption_test;
 
+WITH CAST(NULL AS Nullable(String)) AS input,
+
+'aes-256-ofb' AS mode
+
+SELECT
+    toTypeName(input),
+    hex(aes_encrypt_mysql(mode, input, key32, iv))
+FROM encryption_test
+LIMIT 1;
+
+WITH CAST('text' AS Nullable(String)) AS input,
+
+'aes-256-ofb' AS mode
+
+SELECT
+    toTypeName(input),
+    hex(aes_encrypt_mysql(mode, input, key32, iv))
+FROM encryption_test
+LIMIT 1;
+
+WITH CAST('text' AS LowCardinality(String)) AS input,
+
+'aes-256-ofb' AS mode
+
+SELECT
+    toTypeName(input),
+    hex(aes_encrypt_mysql(mode, input, key32, iv))
+FROM encryption_test
+LIMIT 1;
+
+-- based on https://github.com/openssl/openssl/blob/master/demos/evp/aesgcm.c#L20
+WITH unhex('eebc1f57487f51921c0465665f8ae6d1658bb26de6f8a069a3520293a572078f') AS key,
+
+unhex('67ba0510262ae487d737ee6298f77e0c') AS tag,
+
+unhex('99aa3e68ed8173a0eed06684') AS iv,
+
+unhex('f56e87055bc32d0eeb31b2eacc2bf2a5') AS plaintext,
+
+unhex('4d23c3cec334b49bdb370c437fec78de') AS aad,
+
+unhex('f7264413a84c0e7cd536867eb9f21736') AS ciphertext
+
+SELECT
+    hex(encrypt('aes-256-gcm', plaintext, key, iv, aad)) AS ciphertext_actual,
+    ciphertext_actual = concat(hex(ciphertext), hex(tag));
+
 DROP TABLE encryption_test;

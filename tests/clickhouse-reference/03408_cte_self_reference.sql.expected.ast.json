@@ -14,5 +14,151 @@
     "leadingComments": [
       "-- Tags: no-tsan"
     ]
+  },
+  {
+    "kind": "select",
+    "with": [
+      {
+        "kind": "cteSubquery",
+        "name": "cte1",
+        "query": {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "asterisk"
+            }
+          ],
+          "from": {
+            "kind": "subqueryFrom",
+            "query": {
+              "kind": "select",
+              "with": [
+                {
+                  "kind": "cteSubquery",
+                  "name": "cte2",
+                  "query": {
+                    "kind": "select",
+                    "select": [
+                      {
+                        "kind": "columnRef",
+                        "parts": [
+                          "id"
+                        ]
+                      },
+                      {
+                        "kind": "columnRef",
+                        "parts": [
+                          "key"
+                        ]
+                      },
+                      {
+                        "kind": "columnRef",
+                        "parts": [
+                          "values"
+                        ]
+                      }
+                    ],
+                    "from": {
+                      "left": {
+                        "kind": "tableRef",
+                        "table": "cte1"
+                      },
+                      "kind": "arrayJoinExpr",
+                      "joinType": "LEFT ARRAY",
+                      "expressions": [
+                        {
+                          "kind": "alias",
+                          "expr": {
+                            "kind": "functionCall",
+                            "name": "mapKeys",
+                            "args": [
+                              {
+                                "kind": "columnRef",
+                                "parts": [
+                                  "key_values"
+                                ]
+                              }
+                            ]
+                          },
+                          "alias": "key"
+                        },
+                        {
+                          "kind": "alias",
+                          "expr": {
+                            "kind": "functionCall",
+                            "name": "mapValues",
+                            "args": [
+                              {
+                                "kind": "columnRef",
+                                "parts": [
+                                  "key_values"
+                                ]
+                              }
+                            ]
+                          },
+                          "alias": "values"
+                        }
+                      ]
+                    }
+                  }
+                }
+              ],
+              "select": [
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "id"
+                  ]
+                },
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "key"
+                  ]
+                },
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "value"
+                  ]
+                }
+              ],
+              "from": {
+                "left": {
+                  "kind": "tableRef",
+                  "table": "cte2"
+                },
+                "kind": "arrayJoinExpr",
+                "joinType": "LEFT ARRAY",
+                "expressions": [
+                  {
+                    "kind": "alias",
+                    "expr": {
+                      "kind": "columnRef",
+                      "parts": [
+                        "values"
+                      ]
+                    },
+                    "alias": "value"
+                  }
+                ]
+              }
+            }
+          }
+        }
+      }
+    ],
+    "select": [
+      {
+        "kind": "asterisk"
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "cte1"
+    },
+    "trailingComments": [
+      "-- { serverError UNKNOWN_TABLE }"
+    ]
   }
 ]

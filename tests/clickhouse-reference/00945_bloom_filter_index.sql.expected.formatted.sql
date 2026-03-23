@@ -94,6 +94,34 @@ WHERE (i64, (i64, i32)) IN (
     )
 SETTINGS max_rows_to_read = 7;
 
+WITH (1, 2) AS liter_prepared_set
+
+SELECT COUNT()
+FROM single_column_bloom_filter
+WHERE i32 IN (liter_prepared_set)
+SETTINGS max_rows_to_read = 6;
+
+WITH ((1, 2), (2, 3)) AS liter_prepared_set
+
+SELECT COUNT()
+FROM single_column_bloom_filter
+WHERE (i32, i32) IN (liter_prepared_set)
+SETTINGS max_rows_to_read = 6;
+
+WITH ((1, 1), (2, 2)) AS liter_prepared_set
+
+SELECT COUNT()
+FROM single_column_bloom_filter
+WHERE (i32, i64) IN (liter_prepared_set)
+SETTINGS max_rows_to_read = 6;
+
+WITH ((1, (1, 1)), (2, (2, 2))) AS liter_prepared_set
+
+SELECT COUNT()
+FROM single_column_bloom_filter
+WHERE (i64, (i64, i32)) IN (liter_prepared_set)
+SETTINGS max_rows_to_read = 6;
+
 -- Check that indexHint() works (but it doesn't work with COUNT()).
 SELECT SUM(ignore(*) + 1)
 FROM single_column_bloom_filter

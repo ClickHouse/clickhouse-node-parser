@@ -1,5 +1,116 @@
 SET enable_analyzer = 1;
 
+WITH (
+        SELECT sleep(0.0001)
+        FROM `system`.one
+    ) AS a1,
+
+(
+        SELECT sleep(0.0001)
+        FROM `system`.one
+    ) AS a2,
+
+(
+        SELECT sleep(0.0001)
+        FROM `system`.one
+    ) AS a3,
+
+(
+        SELECT sleep(0.0001)
+        FROM `system`.one
+    ) AS a4,
+
+(
+        SELECT sleep(0.0001)
+        FROM `system`.one
+    ) AS a5
+
+SELECT
+    '02177_CTE_GLOBAL_ON',
+    a1,
+    a2,
+    a3,
+    a4,
+    a5
+FROM `system`.numbers
+LIMIT 100
+FORMAT Null
+SETTINGS enable_global_with_statement = 1;
+
+WITH (
+        SELECT sleep(0.0001)
+        FROM `system`.one
+    ) AS a1,
+
+(
+        SELECT sleep(0.0001)
+        FROM `system`.one
+    ) AS a2,
+
+(
+        SELECT sleep(0.0001)
+        FROM `system`.one
+    ) AS a3,
+
+(
+        SELECT sleep(0.0001)
+        FROM `system`.one
+    ) AS a4,
+
+(
+        SELECT sleep(0.0001)
+        FROM `system`.one
+    ) AS a5
+
+SELECT
+    '02177_CTE_GLOBAL_OFF',
+    a1,
+    a2,
+    a3,
+    a4,
+    a5
+FROM `system`.numbers
+LIMIT 100
+FORMAT Null
+SETTINGS enable_global_with_statement = 0;
+
+WITH (
+        SELECT sleep(0.0001)
+        FROM `system`.one
+    ) AS a1,
+
+(
+        SELECT sleep(0.0001)
+        FROM `system`.one
+    ) AS a2,
+
+(
+        SELECT sleep(0.0001)
+        FROM `system`.one
+    ) AS a3,
+
+(
+        SELECT sleep(0.0001)
+        FROM `system`.one
+    ) AS a4,
+
+(
+        SELECT sleep(0.0001)
+        FROM `system`.one
+    ) AS a5
+
+SELECT
+    '02177_CTE_NEW_ANALYZER',
+    a1,
+    a2,
+    a3,
+    a4,
+    a5
+FROM `system`.numbers
+LIMIT 100
+FORMAT Null
+SETTINGS enable_analyzer = 1;
+
 SELECT
     '02177_CTE_GLOBAL_ON',
     ProfileEvents['SleepFunctionCalls'] AS sleep_calls,

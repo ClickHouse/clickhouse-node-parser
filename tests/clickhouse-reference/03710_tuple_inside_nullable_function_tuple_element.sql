@@ -1,4 +1,9 @@
 SET allow_experimental_nullable_tuple_type = 1;
+WITH
+(
+    SELECT tuple('1', toDateTime64('2024-01-01 00:00:00', 6, 'UTC'), 3)
+) AS result
+SELECT result.1, result.2, result.3;
 SELECT tupleElement(CAST(NULL AS Nullable(Tuple(Int32, String))), 1);
 SELECT toTypeName(tupleElement(CAST(NULL AS Nullable(Tuple(Int32, String))), 1));
 SELECT tupleElement(CAST((1, 'hello') AS Nullable(Tuple(Int32, String))), 2);
@@ -10,6 +15,14 @@ SELECT toTypeName(tupleElement([CAST(([1, 2, 3], 'a') AS Nullable(Tuple(Array(In
 SELECT tupleElement(CAST(NULL AS Nullable(Tuple(Int8, String))), 3);-- { serverError NOT_FOUND_COLUMN_IN_BLOCK }
 SELECT tupleElement(CAST([(1, 7), (3, 4), (2, 8)] AS Array(Nullable(Tuple(x Int8, y Int8)))), 'y');
 SELECT toTypeName(tupleElement(CAST([(1, 7), (3, 4), (2, 8)] AS Array(Nullable(Tuple(x Int8, y Int8)))), 'y'));
+WITH data AS (
+    SELECT [
+        CAST((1, 7) AS Nullable(Tuple(x Int8, y Int8))),
+        NULL,
+        CAST((2, 8) AS Nullable(Tuple(x Int8, y Int8)))
+    ] AS arr
+)
+SELECT tupleElement(arr, 'y') FROM data;
 SELECT tupleElement([CAST((1, 'a') AS Nullable(Tuple(Nullable(Int32), String))), NULL], 1);
 SELECT toTypeName(tupleElement([CAST((1, 'a') AS Nullable(Tuple(Nullable(Int32), String))), NULL], 1));
 SELECT tupleElement(CAST((1, 'hello') AS Nullable(Tuple(Int32, String))), 5, 'default_value');

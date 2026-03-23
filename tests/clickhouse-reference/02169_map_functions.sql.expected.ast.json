@@ -4454,6 +4454,217 @@
   },
   {
     "kind": "select",
+    "with": [
+      {
+        "kind": "cteExpr",
+        "name": "m1",
+        "expr": {
+          "kind": "castExpr",
+          "expr": {
+            "kind": "tupleLiteral",
+            "elements": [
+              {
+                "kind": "functionCall",
+                "name": "range",
+                "args": [
+                  {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "0"
+                  },
+                  {
+                    "kind": "binaryExpr",
+                    "op": "%",
+                    "left": {
+                      "kind": "columnRef",
+                      "parts": [
+                        "number"
+                      ]
+                    },
+                    "right": {
+                      "kind": "literal",
+                      "type": "UInt64",
+                      "value": "10"
+                    }
+                  }
+                ]
+              },
+              {
+                "kind": "functionCall",
+                "name": "range",
+                "args": [
+                  {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "0"
+                  },
+                  {
+                    "kind": "binaryExpr",
+                    "op": "%",
+                    "left": {
+                      "kind": "columnRef",
+                      "parts": [
+                        "number"
+                      ]
+                    },
+                    "right": {
+                      "kind": "literal",
+                      "type": "UInt64",
+                      "value": "10"
+                    }
+                  }
+                ]
+              }
+            ],
+            "source": "(range(0, number % 10), range(0, number % 10))"
+          },
+          "type": "Map(UInt64, UInt64)",
+          "operator": true
+        }
+      },
+      {
+        "kind": "cteExpr",
+        "name": "m2",
+        "expr": {
+          "kind": "castExpr",
+          "expr": {
+            "kind": "tupleLiteral",
+            "elements": [
+              {
+                "kind": "functionCall",
+                "name": "range",
+                "args": [
+                  {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "0"
+                  },
+                  {
+                    "kind": "binaryExpr",
+                    "op": "%",
+                    "left": {
+                      "kind": "columnRef",
+                      "parts": [
+                        "number"
+                      ]
+                    },
+                    "right": {
+                      "kind": "literal",
+                      "type": "UInt64",
+                      "value": "10"
+                    }
+                  },
+                  {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "2"
+                  }
+                ]
+              },
+              {
+                "kind": "functionCall",
+                "name": "arrayMap",
+                "args": [
+                  {
+                    "kind": "lambdaExpr",
+                    "params": [
+                      "x"
+                    ],
+                    "body": {
+                      "kind": "binaryExpr",
+                      "op": "*",
+                      "left": {
+                        "kind": "columnRef",
+                        "parts": [
+                          "x"
+                        ]
+                      },
+                      "right": {
+                        "kind": "columnRef",
+                        "parts": [
+                          "x"
+                        ]
+                      }
+                    }
+                  },
+                  {
+                    "kind": "functionCall",
+                    "name": "range",
+                    "args": [
+                      {
+                        "kind": "literal",
+                        "type": "UInt64",
+                        "value": "0"
+                      },
+                      {
+                        "kind": "binaryExpr",
+                        "op": "%",
+                        "left": {
+                          "kind": "columnRef",
+                          "parts": [
+                            "number"
+                          ]
+                        },
+                        "right": {
+                          "kind": "literal",
+                          "type": "UInt64",
+                          "value": "10"
+                        }
+                      },
+                      {
+                        "kind": "literal",
+                        "type": "UInt64",
+                        "value": "2"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ],
+            "source": "(range(0, number % 10, 2), arrayMap(x -> x * x, range(0, number % 10, 2)))"
+          },
+          "type": "Map(UInt64, UInt64)",
+          "operator": true
+        }
+      }
+    ],
+    "distinct": {
+      "kind": "distinct"
+    },
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "mapUpdate",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "m1"
+            ]
+          },
+          {
+            "kind": "columnRef",
+            "parts": [
+              "m2"
+            ]
+          }
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableFunctionRef",
+      "name": "numbers",
+      "args": [
+        {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "100000"
+        }
+      ]
+    }
+  },
+  {
+    "kind": "select",
     "select": [
       {
         "kind": "functionCall",

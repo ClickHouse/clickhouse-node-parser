@@ -334,6 +334,863 @@
     ]
   },
   {
+    "kind": "select",
+    "with": [
+      {
+        "kind": "cteExpr",
+        "name": "cutoff_time",
+        "expr": {
+          "kind": "binaryExpr",
+          "op": "-",
+          "left": {
+            "kind": "functionCall",
+            "name": "now",
+            "args": []
+          },
+          "right": {
+            "kind": "functionCall",
+            "name": "toIntervalHour",
+            "args": [
+              {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "1"
+              }
+            ]
+          }
+        }
+      },
+      {
+        "kind": "cteSubquery",
+        "name": "query_ids",
+        "query": {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "query_id"
+              ]
+            }
+          ],
+          "from": {
+            "kind": "tableRef",
+            "database": "system",
+            "table": "query_log"
+          },
+          "where": {
+            "kind": "naryExpr",
+            "op": "AND",
+            "operands": [
+              {
+                "kind": "binaryExpr",
+                "op": "=",
+                "left": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "current_database"
+                  ]
+                },
+                "right": {
+                  "kind": "functionCall",
+                  "name": "currentDatabase",
+                  "args": []
+                }
+              },
+              {
+                "kind": "binaryExpr",
+                "op": ">=",
+                "left": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "event_time"
+                  ]
+                },
+                "right": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "cutoff_time"
+                  ]
+                }
+              }
+            ]
+          }
+        }
+      }
+    ],
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "type"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "has_watch"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "op_num"
+        ]
+      },
+      {
+        "kind": "functionCall",
+        "name": "replace",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "path"
+            ]
+          },
+          {
+            "kind": "functionCall",
+            "name": "toString",
+            "args": [
+              {
+                "kind": "functionCall",
+                "name": "serverUUID",
+                "args": []
+              }
+            ]
+          },
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": "<uuid>"
+          }
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "is_ephemeral"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "is_sequential"
+        ]
+      },
+      {
+        "kind": "functionCall",
+        "name": "if",
+        "args": [
+          {
+            "kind": "functionCall",
+            "name": "startsWith",
+            "args": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "path"
+                ]
+              },
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "/clickhouse/sessions"
+              }
+            ]
+          },
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "1"
+          },
+          {
+            "kind": "columnRef",
+            "parts": [
+              "version"
+            ]
+          }
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "requests_size"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "request_idx"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "error"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "watch_type"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "watch_state"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "path_created"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "stat_version"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "stat_cversion"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "stat_dataLength"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "stat_numChildren"
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "database": "system",
+      "table": "zookeeper_log"
+    },
+    "where": {
+      "kind": "naryExpr",
+      "op": "AND",
+      "operands": [
+        {
+          "kind": "binaryExpr",
+          "op": ">=",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "event_time"
+            ]
+          },
+          "right": {
+            "kind": "columnRef",
+            "parts": [
+              "cutoff_time"
+            ]
+          }
+        },
+        {
+          "kind": "inExpr",
+          "negated": false,
+          "expr": {
+            "kind": "tupleLiteral",
+            "elements": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "session_id"
+                ]
+              },
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "xid"
+                ]
+              }
+            ],
+            "source": "(session_id, xid)"
+          },
+          "values": {
+            "kind": "subqueryExpr",
+            "query": {
+              "kind": "select",
+              "select": [
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "session_id"
+                  ]
+                },
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "xid"
+                  ]
+                }
+              ],
+              "from": {
+                "kind": "tableRef",
+                "database": "system",
+                "table": "zookeeper_log"
+              },
+              "where": {
+                "kind": "naryExpr",
+                "op": "AND",
+                "operands": [
+                  {
+                    "kind": "binaryExpr",
+                    "op": ">=",
+                    "left": {
+                      "kind": "columnRef",
+                      "parts": [
+                        "event_time"
+                      ]
+                    },
+                    "right": {
+                      "kind": "columnRef",
+                      "parts": [
+                        "cutoff_time"
+                      ]
+                    }
+                  },
+                  {
+                    "kind": "binaryExpr",
+                    "op": "=",
+                    "left": {
+                      "kind": "columnRef",
+                      "parts": [
+                        "path"
+                      ]
+                    },
+                    "right": {
+                      "kind": "functionCall",
+                      "name": "concat",
+                      "args": [
+                        {
+                          "kind": "literal",
+                          "type": "String",
+                          "value": "/test/01158/"
+                        },
+                        {
+                          "kind": "functionCall",
+                          "name": "currentDatabase",
+                          "args": []
+                        },
+                        {
+                          "kind": "literal",
+                          "type": "String",
+                          "value": "/rmt/replicas/1/parts/all_0_0_0"
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "kind": "naryExpr",
+                    "op": "OR",
+                    "operands": [
+                      {
+                        "kind": "binaryExpr",
+                        "op": "=",
+                        "left": {
+                          "kind": "columnRef",
+                          "parts": [
+                            "query_id"
+                          ]
+                        },
+                        "right": {
+                          "kind": "literal",
+                          "type": "String",
+                          "value": ""
+                        }
+                      },
+                      {
+                        "kind": "inExpr",
+                        "negated": false,
+                        "expr": {
+                          "kind": "columnRef",
+                          "parts": [
+                            "query_id"
+                          ]
+                        },
+                        "values": [
+                          {
+                            "kind": "columnRef",
+                            "parts": [
+                              "query_ids"
+                            ]
+                          }
+                        ]
+                      }
+                    ],
+                    "parenthesized": true
+                  }
+                ]
+              }
+            }
+          }
+        }
+      ]
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "xid"
+          ]
+        },
+        "direction": "ASC"
+      },
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "type"
+          ]
+        },
+        "direction": "ASC"
+      },
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "request_idx"
+          ]
+        },
+        "direction": "ASC"
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "with": [
+      {
+        "kind": "cteExpr",
+        "name": "cutoff_time",
+        "expr": {
+          "kind": "binaryExpr",
+          "op": "-",
+          "left": {
+            "kind": "functionCall",
+            "name": "now",
+            "args": []
+          },
+          "right": {
+            "kind": "functionCall",
+            "name": "toIntervalHour",
+            "args": [
+              {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "1"
+              }
+            ]
+          }
+        }
+      },
+      {
+        "kind": "cteSubquery",
+        "name": "query_ids",
+        "query": {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "query_id"
+              ]
+            }
+          ],
+          "from": {
+            "kind": "tableRef",
+            "database": "system",
+            "table": "query_log"
+          },
+          "where": {
+            "kind": "naryExpr",
+            "op": "AND",
+            "operands": [
+              {
+                "kind": "binaryExpr",
+                "op": "=",
+                "left": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "current_database"
+                  ]
+                },
+                "right": {
+                  "kind": "functionCall",
+                  "name": "currentDatabase",
+                  "args": []
+                }
+              },
+              {
+                "kind": "binaryExpr",
+                "op": ">=",
+                "left": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "event_time"
+                  ]
+                },
+                "right": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "cutoff_time"
+                  ]
+                }
+              }
+            ]
+          }
+        }
+      }
+    ],
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "type"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "has_watch"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "op_num"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "path"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "is_ephemeral"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "is_sequential"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "version"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "requests_size"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "request_idx"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "error"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "watch_type"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "watch_state"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "path_created"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "stat_version"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "stat_cversion"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "stat_dataLength"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "stat_numChildren"
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "database": "system",
+      "table": "zookeeper_log"
+    },
+    "where": {
+      "kind": "naryExpr",
+      "op": "AND",
+      "operands": [
+        {
+          "kind": "binaryExpr",
+          "op": ">=",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "event_time"
+            ]
+          },
+          "right": {
+            "kind": "columnRef",
+            "parts": [
+              "cutoff_time"
+            ]
+          }
+        },
+        {
+          "kind": "inExpr",
+          "negated": false,
+          "expr": {
+            "kind": "tupleLiteral",
+            "elements": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "session_id"
+                ]
+              },
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "xid"
+                ]
+              }
+            ],
+            "source": "(session_id, xid)"
+          },
+          "values": {
+            "kind": "subqueryExpr",
+            "query": {
+              "kind": "select",
+              "select": [
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "session_id"
+                  ]
+                },
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "xid"
+                  ]
+                }
+              ],
+              "from": {
+                "kind": "tableRef",
+                "database": "system",
+                "table": "zookeeper_log"
+              },
+              "where": {
+                "kind": "naryExpr",
+                "op": "AND",
+                "operands": [
+                  {
+                    "kind": "binaryExpr",
+                    "op": ">=",
+                    "left": {
+                      "kind": "columnRef",
+                      "parts": [
+                        "event_time"
+                      ]
+                    },
+                    "right": {
+                      "kind": "columnRef",
+                      "parts": [
+                        "cutoff_time"
+                      ]
+                    }
+                  },
+                  {
+                    "kind": "functionCall",
+                    "name": "like",
+                    "args": [
+                      {
+                        "kind": "columnRef",
+                        "parts": [
+                          "path"
+                        ]
+                      },
+                      {
+                        "kind": "functionCall",
+                        "name": "concat",
+                        "args": [
+                          {
+                            "kind": "literal",
+                            "type": "String",
+                            "value": "/test/01158/"
+                          },
+                          {
+                            "kind": "functionCall",
+                            "name": "currentDatabase",
+                            "args": []
+                          },
+                          {
+                            "kind": "literal",
+                            "type": "String",
+                            "value": "/rmt/blocks/%"
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "kind": "inExpr",
+                    "negated": true,
+                    "expr": {
+                      "kind": "columnRef",
+                      "parts": [
+                        "op_num"
+                      ]
+                    },
+                    "values": [
+                      {
+                        "kind": "literal",
+                        "type": "UInt64",
+                        "value": "1"
+                      },
+                      {
+                        "kind": "literal",
+                        "type": "UInt64",
+                        "value": "12"
+                      },
+                      {
+                        "kind": "literal",
+                        "type": "UInt64",
+                        "value": "500"
+                      }
+                    ]
+                  },
+                  {
+                    "kind": "naryExpr",
+                    "op": "OR",
+                    "operands": [
+                      {
+                        "kind": "binaryExpr",
+                        "op": "=",
+                        "left": {
+                          "kind": "columnRef",
+                          "parts": [
+                            "query_id"
+                          ]
+                        },
+                        "right": {
+                          "kind": "literal",
+                          "type": "String",
+                          "value": ""
+                        }
+                      },
+                      {
+                        "kind": "inExpr",
+                        "negated": false,
+                        "expr": {
+                          "kind": "columnRef",
+                          "parts": [
+                            "query_id"
+                          ]
+                        },
+                        "values": [
+                          {
+                            "kind": "columnRef",
+                            "parts": [
+                              "query_ids"
+                            ]
+                          }
+                        ]
+                      }
+                    ],
+                    "parenthesized": true
+                  }
+                ]
+              }
+            }
+          }
+        }
+      ]
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "xid"
+          ]
+        },
+        "direction": "ASC"
+      },
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "type"
+          ]
+        },
+        "direction": "ASC"
+      },
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "request_idx"
+          ]
+        },
+        "direction": "ASC"
+      }
+    ]
+  },
+  {
     "kind": "drop",
     "targetType": "TABLE",
     "table": {

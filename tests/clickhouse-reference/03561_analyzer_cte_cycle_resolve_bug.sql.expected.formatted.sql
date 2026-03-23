@@ -13,3 +13,17 @@ INSERT INTO users;
 INSERT INTO users;
 
 SET enable_analyzer = 1;
+
+WITH users AS (
+    WITH t AS (
+        SELECT *
+        FROM users
+    )
+
+    SELECT *
+    FROM t
+)
+
+SELECT *
+FROM users
+FORMAT Null;

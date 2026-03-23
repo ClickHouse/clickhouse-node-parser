@@ -8,6 +8,18 @@ SELECT LpNorm([3., 4., 5.], 1.1);
 
 SELECT LinfNorm([0, 0, 2]);
 
+-- Overflows
+WITH CAST([-547274980, 1790553898, 1981517754, 1908431500, 1352428565, -573412550, -552499284, 2096941042], 'Array(Int32)') AS a
+
+SELECT
+    L1Norm(a),
+    L2Norm(a),
+    L2SquaredNorm(a),
+    LpNorm(a, 1),
+    LpNorm(a, 2),
+    LpNorm(a, 3.14),
+    LinfNorm(a);
+
 DROP TABLE IF EXISTS vec1;
 
 DROP TABLE IF EXISTS vec1f;

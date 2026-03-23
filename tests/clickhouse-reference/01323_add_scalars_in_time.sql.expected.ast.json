@@ -104,6 +104,141 @@
     ]
   },
   {
+    "kind": "select",
+    "with": [
+      {
+        "kind": "cteExpr",
+        "name": "arr1",
+        "expr": {
+          "kind": "subqueryExpr",
+          "query": {
+            "kind": "select",
+            "select": [
+              {
+                "kind": "arrayLiteral",
+                "elements": [
+                  {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "0"
+                  },
+                  {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "1"
+                  },
+                  {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "2"
+                  },
+                  {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "3"
+                  }
+                ],
+                "source": "[0, 1, 2, 3]"
+              }
+            ]
+          }
+        }
+      }
+    ],
+    "select": [
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "arraySort",
+          "args": [
+            {
+              "kind": "functionCall",
+              "name": "arrayIntersect",
+              "args": [
+                {
+                  "kind": "functionCall",
+                  "name": "argMax",
+                  "args": [
+                    {
+                      "kind": "columnRef",
+                      "parts": [
+                        "seqs"
+                      ]
+                    },
+                    {
+                      "kind": "columnRef",
+                      "parts": [
+                        "create_time"
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "arr1"
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        "alias": "common"
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "id"
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "tags"
+    },
+    "where": {
+      "kind": "functionCall",
+      "name": "like",
+      "args": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "id"
+          ]
+        },
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "id%"
+        }
+      ]
+    },
+    "groupBy": {
+      "kind": "expressions",
+      "items": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "id"
+          ]
+        }
+      ]
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "id"
+          ]
+        },
+        "direction": "ASC"
+      }
+    ]
+  },
+  {
     "kind": "drop",
     "targetType": "TABLE",
     "table": {
@@ -425,6 +560,78 @@
         "table": "bbb"
       }
     }
+  },
+  {
+    "kind": "select",
+    "with": [
+      {
+        "kind": "cteExpr",
+        "name": "ids",
+        "expr": {
+          "kind": "subqueryExpr",
+          "query": {
+            "kind": "select",
+            "select": [
+              {
+                "kind": "functionCall",
+                "name": "groupArray",
+                "args": [
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "id"
+                    ]
+                  }
+                ]
+              }
+            ],
+            "from": {
+              "kind": "tableRef",
+              "table": "bbb"
+            }
+          }
+        }
+      }
+    ],
+    "select": [
+      {
+        "kind": "asterisk"
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "aaa"
+    },
+    "where": {
+      "kind": "functionCall",
+      "name": "has",
+      "args": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "ids"
+          ]
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "id"
+          ]
+        }
+      ]
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "id"
+          ]
+        },
+        "direction": "ASC"
+      }
+    ]
   },
   {
     "kind": "drop",

@@ -3653,6 +3653,149 @@
   },
   {
     "kind": "select",
+    "with": [
+      {
+        "kind": "cteExpr",
+        "name": "arr",
+        "expr": {
+          "kind": "castExpr",
+          "expr": {
+            "kind": "arrayLiteral",
+            "elements": [
+              {
+                "kind": "tupleLiteral",
+                "elements": [
+                  {
+                    "kind": "literal",
+                    "type": "NULL",
+                    "value": "NULL"
+                  },
+                  {
+                    "kind": "literal",
+                    "type": "String",
+                    "value": "a"
+                  }
+                ],
+                "source": "(NULL, 'a')"
+              },
+              {
+                "kind": "tupleLiteral",
+                "elements": [
+                  {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "1"
+                  },
+                  {
+                    "kind": "literal",
+                    "type": "String",
+                    "value": "b"
+                  }
+                ],
+                "source": "(1, 'b')"
+              }
+            ],
+            "source": "[(NULL, 'a'), (1, 'b')]"
+          },
+          "type": "Array(Tuple(Nullable(Int64), String))"
+        }
+      }
+    ],
+    "select": [
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "arrayElementOrNull",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "arr"
+              ]
+            },
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "1"
+            }
+          ]
+        },
+        "alias": "idx1"
+      },
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "arrayElementOrNull",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "arr"
+              ]
+            },
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "2"
+            }
+          ]
+        },
+        "alias": "idx2"
+      },
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "arrayElementOrNull",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "arr"
+              ]
+            },
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "3"
+            }
+          ]
+        },
+        "alias": "idx3"
+      },
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "toTypeName",
+          "args": [
+            {
+              "kind": "functionCall",
+              "name": "arrayElementOrNull",
+              "args": [
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "arr"
+                  ]
+                },
+                {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "1"
+                }
+              ]
+            }
+          ]
+        },
+        "alias": "type1"
+      }
+    ]
+  },
+  {
+    "kind": "select",
     "select": [
       {
         "kind": "alias",
@@ -4588,6 +4731,989 @@
                   "kind": "literal",
                   "type": "UInt64",
                   "value": "3"
+                },
+                "alias": "idx"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "functionCall",
+          "name": "tuple",
+          "args": []
+        },
+        "direction": "ASC"
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "with": [
+      {
+        "kind": "cteExpr",
+        "name": "arr",
+        "expr": {
+          "kind": "arrayLiteral",
+          "elements": [
+            {
+              "kind": "tupleLiteral",
+              "elements": [
+                {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "1"
+                },
+                {
+                  "kind": "literal",
+                  "type": "String",
+                  "value": "a"
+                }
+              ],
+              "source": "(1, 'a')"
+            },
+            {
+              "kind": "tupleLiteral",
+              "elements": [
+                {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "2"
+                },
+                {
+                  "kind": "literal",
+                  "type": "String",
+                  "value": "b"
+                }
+              ],
+              "source": "(2, 'b')"
+            }
+          ],
+          "source": "[(1, 'a'), (2, 'b')]"
+        }
+      }
+    ],
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "arrayElementOrNull",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "arr"
+            ]
+          },
+          {
+            "kind": "columnRef",
+            "parts": [
+              "idx"
+            ]
+          }
+        ]
+      }
+    ],
+    "from": {
+      "kind": "subqueryFrom",
+      "query": {
+        "kind": "union",
+        "queries": [
+          {
+            "kind": "select",
+            "select": [
+              {
+                "kind": "alias",
+                "expr": {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "1"
+                },
+                "alias": "idx"
+              }
+            ]
+          },
+          {
+            "kind": "select",
+            "select": [
+              {
+                "kind": "alias",
+                "expr": {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "2"
+                },
+                "alias": "idx"
+              }
+            ]
+          },
+          {
+            "kind": "select",
+            "select": [
+              {
+                "kind": "alias",
+                "expr": {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "3"
+                },
+                "alias": "idx"
+              }
+            ]
+          },
+          {
+            "kind": "select",
+            "select": [
+              {
+                "kind": "alias",
+                "expr": {
+                  "kind": "literal",
+                  "type": "Int64",
+                  "value": "-1"
+                },
+                "alias": "idx"
+              }
+            ]
+          },
+          {
+            "kind": "select",
+            "select": [
+              {
+                "kind": "alias",
+                "expr": {
+                  "kind": "literal",
+                  "type": "Int64",
+                  "value": "-2"
+                },
+                "alias": "idx"
+              }
+            ]
+          },
+          {
+            "kind": "select",
+            "select": [
+              {
+                "kind": "alias",
+                "expr": {
+                  "kind": "literal",
+                  "type": "Int64",
+                  "value": "-3"
+                },
+                "alias": "idx"
+              }
+            ]
+          },
+          {
+            "kind": "select",
+            "select": [
+              {
+                "kind": "alias",
+                "expr": {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "0"
+                },
+                "alias": "idx"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "functionCall",
+          "name": "tuple",
+          "args": []
+        },
+        "direction": "ASC"
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "with": [
+      {
+        "kind": "cteExpr",
+        "name": "arr",
+        "expr": {
+          "kind": "castExpr",
+          "expr": {
+            "kind": "arrayLiteral",
+            "elements": [
+              {
+                "kind": "tupleLiteral",
+                "elements": [
+                  {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "1"
+                  },
+                  {
+                    "kind": "literal",
+                    "type": "String",
+                    "value": "a"
+                  }
+                ],
+                "source": "(1, 'a')"
+              },
+              {
+                "kind": "literal",
+                "type": "NULL",
+                "value": "NULL"
+              }
+            ],
+            "source": "[(1, 'a'), NULL]"
+          },
+          "type": "Array(Nullable(Tuple(Int64, String)))"
+        }
+      }
+    ],
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "idx"
+        ]
+      },
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "arrayElementOrNull",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "arr"
+              ]
+            },
+            {
+              "kind": "columnRef",
+              "parts": [
+                "idx"
+              ]
+            }
+          ]
+        },
+        "alias": "value"
+      },
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "toTypeName",
+          "args": [
+            {
+              "kind": "functionCall",
+              "name": "arrayElementOrNull",
+              "args": [
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "arr"
+                  ]
+                },
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "idx"
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        "alias": "type"
+      }
+    ],
+    "from": {
+      "kind": "subqueryFrom",
+      "query": {
+        "kind": "union",
+        "queries": [
+          {
+            "kind": "select",
+            "select": [
+              {
+                "kind": "alias",
+                "expr": {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "1"
+                },
+                "alias": "idx"
+              }
+            ]
+          },
+          {
+            "kind": "select",
+            "select": [
+              {
+                "kind": "alias",
+                "expr": {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "2"
+                },
+                "alias": "idx"
+              }
+            ]
+          },
+          {
+            "kind": "select",
+            "select": [
+              {
+                "kind": "alias",
+                "expr": {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "3"
+                },
+                "alias": "idx"
+              }
+            ]
+          },
+          {
+            "kind": "select",
+            "select": [
+              {
+                "kind": "alias",
+                "expr": {
+                  "kind": "literal",
+                  "type": "Int64",
+                  "value": "-1"
+                },
+                "alias": "idx"
+              }
+            ]
+          },
+          {
+            "kind": "select",
+            "select": [
+              {
+                "kind": "alias",
+                "expr": {
+                  "kind": "literal",
+                  "type": "Int64",
+                  "value": "-2"
+                },
+                "alias": "idx"
+              }
+            ]
+          },
+          {
+            "kind": "select",
+            "select": [
+              {
+                "kind": "alias",
+                "expr": {
+                  "kind": "literal",
+                  "type": "Int64",
+                  "value": "-3"
+                },
+                "alias": "idx"
+              }
+            ]
+          },
+          {
+            "kind": "select",
+            "select": [
+              {
+                "kind": "alias",
+                "expr": {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "0"
+                },
+                "alias": "idx"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "functionCall",
+          "name": "tuple",
+          "args": []
+        },
+        "direction": "ASC"
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "with": [
+      {
+        "kind": "cteExpr",
+        "name": "arr",
+        "expr": {
+          "kind": "arrayLiteral",
+          "elements": [
+            {
+              "kind": "tupleLiteral",
+              "elements": [
+                {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "1"
+                },
+                {
+                  "kind": "literal",
+                  "type": "String",
+                  "value": "a"
+                }
+              ],
+              "source": "(1, 'a')"
+            },
+            {
+              "kind": "tupleLiteral",
+              "elements": [
+                {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "2"
+                },
+                {
+                  "kind": "literal",
+                  "type": "String",
+                  "value": "b"
+                }
+              ],
+              "source": "(2, 'b')"
+            }
+          ],
+          "source": "[(1, 'a'), (2, 'b')]"
+        }
+      }
+    ],
+    "select": [
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "arrayElementOrNull",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "arr"
+              ]
+            },
+            {
+              "kind": "castExpr",
+              "expr": {
+                "kind": "columnRef",
+                "parts": [
+                  "idx"
+                ]
+              },
+              "type": "Int8"
+            }
+          ]
+        },
+        "alias": "int8_res"
+      },
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "arrayElementOrNull",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "arr"
+              ]
+            },
+            {
+              "kind": "castExpr",
+              "expr": {
+                "kind": "columnRef",
+                "parts": [
+                  "idx"
+                ]
+              },
+              "type": "UInt8"
+            }
+          ]
+        },
+        "alias": "uint8_res"
+      }
+    ],
+    "from": {
+      "kind": "subqueryFrom",
+      "query": {
+        "kind": "union",
+        "queries": [
+          {
+            "kind": "select",
+            "select": [
+              {
+                "kind": "alias",
+                "expr": {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "1"
+                },
+                "alias": "idx"
+              }
+            ]
+          },
+          {
+            "kind": "select",
+            "select": [
+              {
+                "kind": "alias",
+                "expr": {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "2"
+                },
+                "alias": "idx"
+              }
+            ]
+          },
+          {
+            "kind": "select",
+            "select": [
+              {
+                "kind": "alias",
+                "expr": {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "3"
+                },
+                "alias": "idx"
+              }
+            ]
+          },
+          {
+            "kind": "select",
+            "select": [
+              {
+                "kind": "alias",
+                "expr": {
+                  "kind": "literal",
+                  "type": "Int64",
+                  "value": "-1"
+                },
+                "alias": "idx"
+              }
+            ]
+          },
+          {
+            "kind": "select",
+            "select": [
+              {
+                "kind": "alias",
+                "expr": {
+                  "kind": "literal",
+                  "type": "Int64",
+                  "value": "-2"
+                },
+                "alias": "idx"
+              }
+            ]
+          },
+          {
+            "kind": "select",
+            "select": [
+              {
+                "kind": "alias",
+                "expr": {
+                  "kind": "literal",
+                  "type": "Int64",
+                  "value": "-3"
+                },
+                "alias": "idx"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "functionCall",
+          "name": "tuple",
+          "args": []
+        },
+        "direction": "ASC"
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "with": [
+      {
+        "kind": "cteExpr",
+        "name": "arr",
+        "expr": {
+          "kind": "castExpr",
+          "expr": {
+            "kind": "arrayLiteral",
+            "elements": [
+              {
+                "kind": "functionCall",
+                "name": "tuple",
+                "args": []
+              },
+              {
+                "kind": "functionCall",
+                "name": "tuple",
+                "args": []
+              }
+            ],
+            "source": "[tuple(), tuple()]"
+          },
+          "type": "Array(Tuple())"
+        }
+      }
+    ],
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "idx"
+        ]
+      },
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "arrayElementOrNull",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "arr"
+              ]
+            },
+            {
+              "kind": "columnRef",
+              "parts": [
+                "idx"
+              ]
+            }
+          ]
+        },
+        "alias": "value"
+      },
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "toTypeName",
+          "args": [
+            {
+              "kind": "functionCall",
+              "name": "arrayElementOrNull",
+              "args": [
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "arr"
+                  ]
+                },
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "idx"
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        "alias": "type"
+      }
+    ],
+    "from": {
+      "kind": "subqueryFrom",
+      "query": {
+        "kind": "union",
+        "queries": [
+          {
+            "kind": "select",
+            "select": [
+              {
+                "kind": "alias",
+                "expr": {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "1"
+                },
+                "alias": "idx"
+              }
+            ]
+          },
+          {
+            "kind": "select",
+            "select": [
+              {
+                "kind": "alias",
+                "expr": {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "2"
+                },
+                "alias": "idx"
+              }
+            ]
+          },
+          {
+            "kind": "select",
+            "select": [
+              {
+                "kind": "alias",
+                "expr": {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "3"
+                },
+                "alias": "idx"
+              }
+            ]
+          },
+          {
+            "kind": "select",
+            "select": [
+              {
+                "kind": "alias",
+                "expr": {
+                  "kind": "literal",
+                  "type": "Int64",
+                  "value": "-1"
+                },
+                "alias": "idx"
+              }
+            ]
+          },
+          {
+            "kind": "select",
+            "select": [
+              {
+                "kind": "alias",
+                "expr": {
+                  "kind": "literal",
+                  "type": "Int64",
+                  "value": "-2"
+                },
+                "alias": "idx"
+              }
+            ]
+          },
+          {
+            "kind": "select",
+            "select": [
+              {
+                "kind": "alias",
+                "expr": {
+                  "kind": "literal",
+                  "type": "Int64",
+                  "value": "-3"
+                },
+                "alias": "idx"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "functionCall",
+          "name": "tuple",
+          "args": []
+        },
+        "direction": "ASC"
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "with": [
+      {
+        "kind": "cteExpr",
+        "name": "arr",
+        "expr": {
+          "kind": "castExpr",
+          "expr": {
+            "kind": "arrayLiteral",
+            "elements": [
+              {
+                "kind": "functionCall",
+                "name": "tuple",
+                "args": []
+              },
+              {
+                "kind": "literal",
+                "type": "NULL",
+                "value": "NULL"
+              }
+            ],
+            "source": "[tuple(), NULL]"
+          },
+          "type": "Array(Nullable(Tuple()))"
+        }
+      }
+    ],
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "idx"
+        ]
+      },
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "arrayElementOrNull",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "arr"
+              ]
+            },
+            {
+              "kind": "columnRef",
+              "parts": [
+                "idx"
+              ]
+            }
+          ]
+        },
+        "alias": "value"
+      },
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "toTypeName",
+          "args": [
+            {
+              "kind": "functionCall",
+              "name": "arrayElementOrNull",
+              "args": [
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "arr"
+                  ]
+                },
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "idx"
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        "alias": "type"
+      }
+    ],
+    "from": {
+      "kind": "subqueryFrom",
+      "query": {
+        "kind": "union",
+        "queries": [
+          {
+            "kind": "select",
+            "select": [
+              {
+                "kind": "alias",
+                "expr": {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "1"
+                },
+                "alias": "idx"
+              }
+            ]
+          },
+          {
+            "kind": "select",
+            "select": [
+              {
+                "kind": "alias",
+                "expr": {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "2"
+                },
+                "alias": "idx"
+              }
+            ]
+          },
+          {
+            "kind": "select",
+            "select": [
+              {
+                "kind": "alias",
+                "expr": {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "3"
+                },
+                "alias": "idx"
+              }
+            ]
+          },
+          {
+            "kind": "select",
+            "select": [
+              {
+                "kind": "alias",
+                "expr": {
+                  "kind": "literal",
+                  "type": "Int64",
+                  "value": "-1"
+                },
+                "alias": "idx"
+              }
+            ]
+          },
+          {
+            "kind": "select",
+            "select": [
+              {
+                "kind": "alias",
+                "expr": {
+                  "kind": "literal",
+                  "type": "Int64",
+                  "value": "-2"
+                },
+                "alias": "idx"
+              }
+            ]
+          },
+          {
+            "kind": "select",
+            "select": [
+              {
+                "kind": "alias",
+                "expr": {
+                  "kind": "literal",
+                  "type": "Int64",
+                  "value": "-3"
                 },
                 "alias": "idx"
               }
@@ -8910,6 +10036,149 @@
   },
   {
     "kind": "select",
+    "with": [
+      {
+        "kind": "cteExpr",
+        "name": "arr",
+        "expr": {
+          "kind": "castExpr",
+          "expr": {
+            "kind": "arrayLiteral",
+            "elements": [
+              {
+                "kind": "tupleLiteral",
+                "elements": [
+                  {
+                    "kind": "literal",
+                    "type": "NULL",
+                    "value": "NULL"
+                  },
+                  {
+                    "kind": "literal",
+                    "type": "String",
+                    "value": "a"
+                  }
+                ],
+                "source": "(NULL, 'a')"
+              },
+              {
+                "kind": "tupleLiteral",
+                "elements": [
+                  {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "1"
+                  },
+                  {
+                    "kind": "literal",
+                    "type": "String",
+                    "value": "b"
+                  }
+                ],
+                "source": "(1, 'b')"
+              }
+            ],
+            "source": "[(NULL, 'a'), (1, 'b')]"
+          },
+          "type": "Array(Tuple(Nullable(Int64), String))"
+        }
+      }
+    ],
+    "select": [
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "arrayElement",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "arr"
+              ]
+            },
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "1"
+            }
+          ]
+        },
+        "alias": "idx1"
+      },
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "arrayElement",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "arr"
+              ]
+            },
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "2"
+            }
+          ]
+        },
+        "alias": "idx2"
+      },
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "arrayElement",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "arr"
+              ]
+            },
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "3"
+            }
+          ]
+        },
+        "alias": "idx3"
+      },
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "toTypeName",
+          "args": [
+            {
+              "kind": "functionCall",
+              "name": "arrayElement",
+              "args": [
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "arr"
+                  ]
+                },
+                {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "1"
+                }
+              ]
+            }
+          ]
+        },
+        "alias": "type1"
+      }
+    ]
+  },
+  {
+    "kind": "select",
     "select": [
       {
         "kind": "alias",
@@ -9867,6 +11136,989 @@
   },
   {
     "kind": "select",
+    "with": [
+      {
+        "kind": "cteExpr",
+        "name": "arr",
+        "expr": {
+          "kind": "arrayLiteral",
+          "elements": [
+            {
+              "kind": "tupleLiteral",
+              "elements": [
+                {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "1"
+                },
+                {
+                  "kind": "literal",
+                  "type": "String",
+                  "value": "a"
+                }
+              ],
+              "source": "(1, 'a')"
+            },
+            {
+              "kind": "tupleLiteral",
+              "elements": [
+                {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "2"
+                },
+                {
+                  "kind": "literal",
+                  "type": "String",
+                  "value": "b"
+                }
+              ],
+              "source": "(2, 'b')"
+            }
+          ],
+          "source": "[(1, 'a'), (2, 'b')]"
+        }
+      }
+    ],
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "arrayElement",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "arr"
+            ]
+          },
+          {
+            "kind": "columnRef",
+            "parts": [
+              "idx"
+            ]
+          }
+        ]
+      }
+    ],
+    "from": {
+      "kind": "subqueryFrom",
+      "query": {
+        "kind": "union",
+        "queries": [
+          {
+            "kind": "select",
+            "select": [
+              {
+                "kind": "alias",
+                "expr": {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "1"
+                },
+                "alias": "idx"
+              }
+            ]
+          },
+          {
+            "kind": "select",
+            "select": [
+              {
+                "kind": "alias",
+                "expr": {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "2"
+                },
+                "alias": "idx"
+              }
+            ]
+          },
+          {
+            "kind": "select",
+            "select": [
+              {
+                "kind": "alias",
+                "expr": {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "3"
+                },
+                "alias": "idx"
+              }
+            ]
+          },
+          {
+            "kind": "select",
+            "select": [
+              {
+                "kind": "alias",
+                "expr": {
+                  "kind": "literal",
+                  "type": "Int64",
+                  "value": "-1"
+                },
+                "alias": "idx"
+              }
+            ]
+          },
+          {
+            "kind": "select",
+            "select": [
+              {
+                "kind": "alias",
+                "expr": {
+                  "kind": "literal",
+                  "type": "Int64",
+                  "value": "-2"
+                },
+                "alias": "idx"
+              }
+            ]
+          },
+          {
+            "kind": "select",
+            "select": [
+              {
+                "kind": "alias",
+                "expr": {
+                  "kind": "literal",
+                  "type": "Int64",
+                  "value": "-3"
+                },
+                "alias": "idx"
+              }
+            ]
+          },
+          {
+            "kind": "select",
+            "select": [
+              {
+                "kind": "alias",
+                "expr": {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "0"
+                },
+                "alias": "idx"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "functionCall",
+          "name": "tuple",
+          "args": []
+        },
+        "direction": "ASC"
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "with": [
+      {
+        "kind": "cteExpr",
+        "name": "arr",
+        "expr": {
+          "kind": "castExpr",
+          "expr": {
+            "kind": "arrayLiteral",
+            "elements": [
+              {
+                "kind": "tupleLiteral",
+                "elements": [
+                  {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "1"
+                  },
+                  {
+                    "kind": "literal",
+                    "type": "String",
+                    "value": "a"
+                  }
+                ],
+                "source": "(1, 'a')"
+              },
+              {
+                "kind": "literal",
+                "type": "NULL",
+                "value": "NULL"
+              }
+            ],
+            "source": "[(1, 'a'), NULL]"
+          },
+          "type": "Array(Nullable(Tuple(Int64, String)))"
+        }
+      }
+    ],
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "idx"
+        ]
+      },
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "arrayElement",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "arr"
+              ]
+            },
+            {
+              "kind": "columnRef",
+              "parts": [
+                "idx"
+              ]
+            }
+          ]
+        },
+        "alias": "value"
+      },
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "toTypeName",
+          "args": [
+            {
+              "kind": "functionCall",
+              "name": "arrayElement",
+              "args": [
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "arr"
+                  ]
+                },
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "idx"
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        "alias": "type"
+      }
+    ],
+    "from": {
+      "kind": "subqueryFrom",
+      "query": {
+        "kind": "union",
+        "queries": [
+          {
+            "kind": "select",
+            "select": [
+              {
+                "kind": "alias",
+                "expr": {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "1"
+                },
+                "alias": "idx"
+              }
+            ]
+          },
+          {
+            "kind": "select",
+            "select": [
+              {
+                "kind": "alias",
+                "expr": {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "2"
+                },
+                "alias": "idx"
+              }
+            ]
+          },
+          {
+            "kind": "select",
+            "select": [
+              {
+                "kind": "alias",
+                "expr": {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "3"
+                },
+                "alias": "idx"
+              }
+            ]
+          },
+          {
+            "kind": "select",
+            "select": [
+              {
+                "kind": "alias",
+                "expr": {
+                  "kind": "literal",
+                  "type": "Int64",
+                  "value": "-1"
+                },
+                "alias": "idx"
+              }
+            ]
+          },
+          {
+            "kind": "select",
+            "select": [
+              {
+                "kind": "alias",
+                "expr": {
+                  "kind": "literal",
+                  "type": "Int64",
+                  "value": "-2"
+                },
+                "alias": "idx"
+              }
+            ]
+          },
+          {
+            "kind": "select",
+            "select": [
+              {
+                "kind": "alias",
+                "expr": {
+                  "kind": "literal",
+                  "type": "Int64",
+                  "value": "-3"
+                },
+                "alias": "idx"
+              }
+            ]
+          },
+          {
+            "kind": "select",
+            "select": [
+              {
+                "kind": "alias",
+                "expr": {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "0"
+                },
+                "alias": "idx"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "functionCall",
+          "name": "tuple",
+          "args": []
+        },
+        "direction": "ASC"
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "with": [
+      {
+        "kind": "cteExpr",
+        "name": "arr",
+        "expr": {
+          "kind": "arrayLiteral",
+          "elements": [
+            {
+              "kind": "tupleLiteral",
+              "elements": [
+                {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "1"
+                },
+                {
+                  "kind": "literal",
+                  "type": "String",
+                  "value": "a"
+                }
+              ],
+              "source": "(1, 'a')"
+            },
+            {
+              "kind": "tupleLiteral",
+              "elements": [
+                {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "2"
+                },
+                {
+                  "kind": "literal",
+                  "type": "String",
+                  "value": "b"
+                }
+              ],
+              "source": "(2, 'b')"
+            }
+          ],
+          "source": "[(1, 'a'), (2, 'b')]"
+        }
+      }
+    ],
+    "select": [
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "arrayElement",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "arr"
+              ]
+            },
+            {
+              "kind": "castExpr",
+              "expr": {
+                "kind": "columnRef",
+                "parts": [
+                  "idx"
+                ]
+              },
+              "type": "Int8"
+            }
+          ]
+        },
+        "alias": "int8_res"
+      },
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "arrayElement",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "arr"
+              ]
+            },
+            {
+              "kind": "castExpr",
+              "expr": {
+                "kind": "columnRef",
+                "parts": [
+                  "idx"
+                ]
+              },
+              "type": "UInt8"
+            }
+          ]
+        },
+        "alias": "uint8_res"
+      }
+    ],
+    "from": {
+      "kind": "subqueryFrom",
+      "query": {
+        "kind": "union",
+        "queries": [
+          {
+            "kind": "select",
+            "select": [
+              {
+                "kind": "alias",
+                "expr": {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "1"
+                },
+                "alias": "idx"
+              }
+            ]
+          },
+          {
+            "kind": "select",
+            "select": [
+              {
+                "kind": "alias",
+                "expr": {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "2"
+                },
+                "alias": "idx"
+              }
+            ]
+          },
+          {
+            "kind": "select",
+            "select": [
+              {
+                "kind": "alias",
+                "expr": {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "3"
+                },
+                "alias": "idx"
+              }
+            ]
+          },
+          {
+            "kind": "select",
+            "select": [
+              {
+                "kind": "alias",
+                "expr": {
+                  "kind": "literal",
+                  "type": "Int64",
+                  "value": "-1"
+                },
+                "alias": "idx"
+              }
+            ]
+          },
+          {
+            "kind": "select",
+            "select": [
+              {
+                "kind": "alias",
+                "expr": {
+                  "kind": "literal",
+                  "type": "Int64",
+                  "value": "-2"
+                },
+                "alias": "idx"
+              }
+            ]
+          },
+          {
+            "kind": "select",
+            "select": [
+              {
+                "kind": "alias",
+                "expr": {
+                  "kind": "literal",
+                  "type": "Int64",
+                  "value": "-3"
+                },
+                "alias": "idx"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "functionCall",
+          "name": "tuple",
+          "args": []
+        },
+        "direction": "ASC"
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "with": [
+      {
+        "kind": "cteExpr",
+        "name": "arr",
+        "expr": {
+          "kind": "castExpr",
+          "expr": {
+            "kind": "arrayLiteral",
+            "elements": [
+              {
+                "kind": "functionCall",
+                "name": "tuple",
+                "args": []
+              },
+              {
+                "kind": "functionCall",
+                "name": "tuple",
+                "args": []
+              }
+            ],
+            "source": "[tuple(), tuple()]"
+          },
+          "type": "Array(Tuple())"
+        }
+      }
+    ],
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "idx"
+        ]
+      },
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "arrayElement",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "arr"
+              ]
+            },
+            {
+              "kind": "columnRef",
+              "parts": [
+                "idx"
+              ]
+            }
+          ]
+        },
+        "alias": "value"
+      },
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "toTypeName",
+          "args": [
+            {
+              "kind": "functionCall",
+              "name": "arrayElement",
+              "args": [
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "arr"
+                  ]
+                },
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "idx"
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        "alias": "type"
+      }
+    ],
+    "from": {
+      "kind": "subqueryFrom",
+      "query": {
+        "kind": "union",
+        "queries": [
+          {
+            "kind": "select",
+            "select": [
+              {
+                "kind": "alias",
+                "expr": {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "1"
+                },
+                "alias": "idx"
+              }
+            ]
+          },
+          {
+            "kind": "select",
+            "select": [
+              {
+                "kind": "alias",
+                "expr": {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "2"
+                },
+                "alias": "idx"
+              }
+            ]
+          },
+          {
+            "kind": "select",
+            "select": [
+              {
+                "kind": "alias",
+                "expr": {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "3"
+                },
+                "alias": "idx"
+              }
+            ]
+          },
+          {
+            "kind": "select",
+            "select": [
+              {
+                "kind": "alias",
+                "expr": {
+                  "kind": "literal",
+                  "type": "Int64",
+                  "value": "-1"
+                },
+                "alias": "idx"
+              }
+            ]
+          },
+          {
+            "kind": "select",
+            "select": [
+              {
+                "kind": "alias",
+                "expr": {
+                  "kind": "literal",
+                  "type": "Int64",
+                  "value": "-2"
+                },
+                "alias": "idx"
+              }
+            ]
+          },
+          {
+            "kind": "select",
+            "select": [
+              {
+                "kind": "alias",
+                "expr": {
+                  "kind": "literal",
+                  "type": "Int64",
+                  "value": "-3"
+                },
+                "alias": "idx"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "functionCall",
+          "name": "tuple",
+          "args": []
+        },
+        "direction": "ASC"
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "with": [
+      {
+        "kind": "cteExpr",
+        "name": "arr",
+        "expr": {
+          "kind": "castExpr",
+          "expr": {
+            "kind": "arrayLiteral",
+            "elements": [
+              {
+                "kind": "functionCall",
+                "name": "tuple",
+                "args": []
+              },
+              {
+                "kind": "literal",
+                "type": "NULL",
+                "value": "NULL"
+              }
+            ],
+            "source": "[tuple(), NULL]"
+          },
+          "type": "Array(Nullable(Tuple()))"
+        }
+      }
+    ],
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "idx"
+        ]
+      },
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "arrayElement",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "arr"
+              ]
+            },
+            {
+              "kind": "columnRef",
+              "parts": [
+                "idx"
+              ]
+            }
+          ]
+        },
+        "alias": "value"
+      },
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "toTypeName",
+          "args": [
+            {
+              "kind": "functionCall",
+              "name": "arrayElement",
+              "args": [
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "arr"
+                  ]
+                },
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "idx"
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        "alias": "type"
+      }
+    ],
+    "from": {
+      "kind": "subqueryFrom",
+      "query": {
+        "kind": "union",
+        "queries": [
+          {
+            "kind": "select",
+            "select": [
+              {
+                "kind": "alias",
+                "expr": {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "1"
+                },
+                "alias": "idx"
+              }
+            ]
+          },
+          {
+            "kind": "select",
+            "select": [
+              {
+                "kind": "alias",
+                "expr": {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "2"
+                },
+                "alias": "idx"
+              }
+            ]
+          },
+          {
+            "kind": "select",
+            "select": [
+              {
+                "kind": "alias",
+                "expr": {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "3"
+                },
+                "alias": "idx"
+              }
+            ]
+          },
+          {
+            "kind": "select",
+            "select": [
+              {
+                "kind": "alias",
+                "expr": {
+                  "kind": "literal",
+                  "type": "Int64",
+                  "value": "-1"
+                },
+                "alias": "idx"
+              }
+            ]
+          },
+          {
+            "kind": "select",
+            "select": [
+              {
+                "kind": "alias",
+                "expr": {
+                  "kind": "literal",
+                  "type": "Int64",
+                  "value": "-2"
+                },
+                "alias": "idx"
+              }
+            ]
+          },
+          {
+            "kind": "select",
+            "select": [
+              {
+                "kind": "alias",
+                "expr": {
+                  "kind": "literal",
+                  "type": "Int64",
+                  "value": "-3"
+                },
+                "alias": "idx"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "functionCall",
+          "name": "tuple",
+          "args": []
+        },
+        "direction": "ASC"
+      }
+    ]
+  },
+  {
+    "kind": "select",
     "select": [
       {
         "kind": "functionCall",
@@ -10256,6 +12508,427 @@
             "value": "NULL"
           }
         ]
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "with": [
+      {
+        "kind": "cteExpr",
+        "name": "arr",
+        "expr": {
+          "kind": "arrayLiteral",
+          "elements": [
+            {
+              "kind": "tupleLiteral",
+              "elements": [
+                {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "1"
+                },
+                {
+                  "kind": "literal",
+                  "type": "String",
+                  "value": "a"
+                }
+              ],
+              "source": "(1, 'a')"
+            },
+            {
+              "kind": "tupleLiteral",
+              "elements": [
+                {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "2"
+                },
+                {
+                  "kind": "literal",
+                  "type": "String",
+                  "value": "b"
+                }
+              ],
+              "source": "(2, 'b')"
+            }
+          ],
+          "source": "[(1, 'a'), (2, 'b')]"
+        }
+      }
+    ],
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "idx"
+        ]
+      },
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "arrayElementOrNull",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "arr"
+              ]
+            },
+            {
+              "kind": "columnRef",
+              "parts": [
+                "idx"
+              ]
+            }
+          ]
+        },
+        "alias": "value"
+      },
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "toTypeName",
+          "args": [
+            {
+              "kind": "functionCall",
+              "name": "arrayElementOrNull",
+              "args": [
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "arr"
+                  ]
+                },
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "idx"
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        "alias": "type"
+      }
+    ],
+    "from": {
+      "kind": "subqueryFrom",
+      "query": {
+        "kind": "union",
+        "queries": [
+          {
+            "kind": "select",
+            "select": [
+              {
+                "kind": "alias",
+                "expr": {
+                  "kind": "castExpr",
+                  "expr": {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "1"
+                  },
+                  "type": "Nullable(Int64)"
+                },
+                "alias": "idx"
+              }
+            ]
+          },
+          {
+            "kind": "select",
+            "select": [
+              {
+                "kind": "alias",
+                "expr": {
+                  "kind": "castExpr",
+                  "expr": {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "2"
+                  },
+                  "type": "Nullable(Int64)"
+                },
+                "alias": "idx"
+              }
+            ]
+          },
+          {
+            "kind": "select",
+            "select": [
+              {
+                "kind": "alias",
+                "expr": {
+                  "kind": "castExpr",
+                  "expr": {
+                    "kind": "literal",
+                    "type": "Int64",
+                    "value": "-1"
+                  },
+                  "type": "Nullable(Int64)"
+                },
+                "alias": "idx"
+              }
+            ]
+          },
+          {
+            "kind": "select",
+            "select": [
+              {
+                "kind": "alias",
+                "expr": {
+                  "kind": "castExpr",
+                  "expr": {
+                    "kind": "literal",
+                    "type": "Int64",
+                    "value": "-2"
+                  },
+                  "type": "Nullable(Int64)"
+                },
+                "alias": "idx"
+              }
+            ]
+          },
+          {
+            "kind": "select",
+            "select": [
+              {
+                "kind": "alias",
+                "expr": {
+                  "kind": "castExpr",
+                  "expr": {
+                    "kind": "literal",
+                    "type": "NULL",
+                    "value": "NULL"
+                  },
+                  "type": "Nullable(Int64)"
+                },
+                "alias": "idx"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "functionCall",
+          "name": "tuple",
+          "args": []
+        },
+        "direction": "ASC"
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "with": [
+      {
+        "kind": "cteExpr",
+        "name": "arr",
+        "expr": {
+          "kind": "castExpr",
+          "expr": {
+            "kind": "arrayLiteral",
+            "elements": [
+              {
+                "kind": "tupleLiteral",
+                "elements": [
+                  {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "1"
+                  },
+                  {
+                    "kind": "literal",
+                    "type": "String",
+                    "value": "a"
+                  }
+                ],
+                "source": "(1, 'a')"
+              },
+              {
+                "kind": "literal",
+                "type": "NULL",
+                "value": "NULL"
+              }
+            ],
+            "source": "[(1, 'a'), NULL]"
+          },
+          "type": "Array(Nullable(Tuple(Int64, String)))"
+        }
+      }
+    ],
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "idx"
+        ]
+      },
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "arrayElementOrNull",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "arr"
+              ]
+            },
+            {
+              "kind": "columnRef",
+              "parts": [
+                "idx"
+              ]
+            }
+          ]
+        },
+        "alias": "value"
+      },
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "toTypeName",
+          "args": [
+            {
+              "kind": "functionCall",
+              "name": "arrayElementOrNull",
+              "args": [
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "arr"
+                  ]
+                },
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "idx"
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        "alias": "type"
+      }
+    ],
+    "from": {
+      "kind": "subqueryFrom",
+      "query": {
+        "kind": "union",
+        "queries": [
+          {
+            "kind": "select",
+            "select": [
+              {
+                "kind": "alias",
+                "expr": {
+                  "kind": "castExpr",
+                  "expr": {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "1"
+                  },
+                  "type": "Nullable(Int64)"
+                },
+                "alias": "idx"
+              }
+            ]
+          },
+          {
+            "kind": "select",
+            "select": [
+              {
+                "kind": "alias",
+                "expr": {
+                  "kind": "castExpr",
+                  "expr": {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "2"
+                  },
+                  "type": "Nullable(Int64)"
+                },
+                "alias": "idx"
+              }
+            ]
+          },
+          {
+            "kind": "select",
+            "select": [
+              {
+                "kind": "alias",
+                "expr": {
+                  "kind": "castExpr",
+                  "expr": {
+                    "kind": "literal",
+                    "type": "Int64",
+                    "value": "-1"
+                  },
+                  "type": "Nullable(Int64)"
+                },
+                "alias": "idx"
+              }
+            ]
+          },
+          {
+            "kind": "select",
+            "select": [
+              {
+                "kind": "alias",
+                "expr": {
+                  "kind": "castExpr",
+                  "expr": {
+                    "kind": "literal",
+                    "type": "Int64",
+                    "value": "-2"
+                  },
+                  "type": "Nullable(Int64)"
+                },
+                "alias": "idx"
+              }
+            ]
+          },
+          {
+            "kind": "select",
+            "select": [
+              {
+                "kind": "alias",
+                "expr": {
+                  "kind": "castExpr",
+                  "expr": {
+                    "kind": "literal",
+                    "type": "NULL",
+                    "value": "NULL"
+                  },
+                  "type": "Nullable(Int64)"
+                },
+                "alias": "idx"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "functionCall",
+          "name": "tuple",
+          "args": []
+        },
+        "direction": "ASC"
       }
     ]
   },

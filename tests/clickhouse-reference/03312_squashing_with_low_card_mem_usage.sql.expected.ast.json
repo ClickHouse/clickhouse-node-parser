@@ -154,5 +154,146 @@
       "-- Because of that we tend to accumulate too many blocks in `SimpleSquashingChunksTransform`.",
       "-- To reproduce we need a column with heavy dictionaries and ideally nothing else consuming significant amount of memory."
     ]
+  },
+  {
+    "kind": "select",
+    "with": [
+      {
+        "kind": "cteSubquery",
+        "name": "t2",
+        "query": {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "alias",
+              "expr": {
+                "kind": "literal",
+                "type": "String",
+                "value": "x"
+              },
+              "alias": "s"
+            },
+            {
+              "kind": "columnRef",
+              "parts": [
+                "number"
+              ]
+            }
+          ],
+          "from": {
+            "kind": "tableFunctionRef",
+            "name": "numbers_mt",
+            "args": [
+              {
+                "kind": "literal",
+                "type": "Float64",
+                "value": "10000."
+              }
+            ]
+          }
+        }
+      }
+    ],
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "t1",
+          "s"
+        ]
+      }
+    ],
+    "from": {
+      "left": {
+        "kind": "tableRef",
+        "table": "t",
+        "alias": "t1"
+      },
+      "kind": "joinExpr",
+      "joinType": "INNER",
+      "right": {
+        "kind": "tableRef",
+        "table": "t2"
+      },
+      "constraint": {
+        "kind": "on",
+        "expr": {
+          "kind": "binaryExpr",
+          "op": "=",
+          "left": {
+            "kind": "functionCall",
+            "name": "substr",
+            "args": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "t1",
+                  "s"
+                ]
+              },
+              {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "1"
+              },
+              {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "1"
+              }
+            ]
+          },
+          "right": {
+            "kind": "columnRef",
+            "parts": [
+              "t2",
+              "s"
+            ]
+          }
+        }
+      }
+    },
+    "limit": {
+      "count": {
+        "kind": "literal",
+        "type": "Float64",
+        "value": "1e5"
+      }
+    },
+    "settings": [
+      {
+        "name": "max_threads",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "32"
+        }
+      },
+      {
+        "name": "max_memory_usage",
+        "value": {
+          "kind": "literal",
+          "type": "String",
+          "value": "2Gi"
+        }
+      },
+      {
+        "name": "join_algorithm",
+        "value": {
+          "kind": "literal",
+          "type": "String",
+          "value": "parallel_hash"
+        }
+      },
+      {
+        "name": "min_joined_block_size_bytes",
+        "value": {
+          "kind": "literal",
+          "type": "String",
+          "value": "1Mi"
+        }
+      }
+    ],
+    "format": "Null"
   }
 ]

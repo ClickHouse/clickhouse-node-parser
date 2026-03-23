@@ -11,6 +11,11 @@ CREATE TABLE tab_wide_full(id Int32, vec Array(Float32), INDEX idx vec TYPE vect
 INSERT INTO tab_compact_full VALUES (0, [1.0, 0.0]), (1, [1.1, 0.0]), (2, [1.2, 0.0]), (3, [1.3, 0.0]), (4, [1.4, 0.0]), (5, [1.5, 0.0]), (6, [0.0, 2.0]), (7, [0.0, 2.1]), (8, [0.0, 2.2]), (9, [0.0, 2.3]), (10, [0.0, 2.4]), (11, [0.0, 2.5]);
 INSERT INTO tab_wide_full VALUES (0, [1.0, 0.0]), (1, [1.1, 0.0]), (2, [1.2, 0.0]), (3, [1.3, 0.0]), (4, [1.4, 0.0]), (5, [1.5, 0.0]), (6, [0.0, 2.0]), (7, [0.0, 2.1]), (8, [0.0, 2.2]), (9, [0.0, 2.3]), (10, [0.0, 2.4]), (11, [0.0, 2.5]);
 SELECT table, part_type FROM system.parts WHERE database = currentDatabase() AND table LIKE 'tab_%' ORDER BY table;
+WITH [0.0, 2.0] AS reference_vec
+SELECT id, vec, L2Distance(vec, reference_vec)
+FROM tab_compact_full
+ORDER BY L2Distance(vec, reference_vec)
+LIMIT 3;
 SELECT trimLeft(explain) AS explain FROM (
     EXPLAIN indexes = 1
     WITH [0.0, 2.0] AS reference_vec
@@ -20,6 +25,11 @@ SELECT trimLeft(explain) AS explain FROM (
     LIMIT 3
 )
 WHERE explain LIKE '%vector_similarity%' OR explain LIKE '%Granules:%';
+WITH [0.0, 2.0] AS reference_vec
+SELECT id, vec, L2Distance(vec, reference_vec)
+FROM tab_wide_full
+ORDER BY L2Distance(vec, reference_vec)
+LIMIT 3;
 SELECT trimLeft(explain) AS explain FROM (
     EXPLAIN indexes = 1
     WITH [0.0, 2.0] AS reference_vec

@@ -1,0 +1,127 @@
+[
+  {
+    "kind": "select",
+    "with": [
+      {
+        "kind": "cteExpr",
+        "name": "x",
+        "expr": {
+          "kind": "functionCall",
+          "name": "round",
+          "args": [
+            {
+              "kind": "functionCall",
+              "name": "exp",
+              "args": [
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "number"
+                  ]
+                }
+              ]
+            },
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "6"
+            }
+          ]
+        }
+      },
+      {
+        "kind": "cteExpr",
+        "name": "y",
+        "expr": {
+          "kind": "functionCall",
+          "name": "toUInt64",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "x"
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "kind": "cteExpr",
+        "name": "z",
+        "expr": {
+          "kind": "functionCall",
+          "name": "toInt32",
+          "args": [
+            {
+              "kind": "functionCall",
+              "name": "min2",
+              "args": [
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "x"
+                  ]
+                },
+                {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "2147483647"
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ],
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "formatReadableQuantity",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "x"
+            ]
+          }
+        ]
+      },
+      {
+        "kind": "functionCall",
+        "name": "formatReadableQuantity",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "y"
+            ]
+          }
+        ]
+      },
+      {
+        "kind": "functionCall",
+        "name": "formatReadableQuantity",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "z"
+            ]
+          }
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "database": "system",
+      "table": "numbers"
+    },
+    "limit": {
+      "count": {
+        "kind": "literal",
+        "type": "UInt64",
+        "value": "45"
+      }
+    }
+  }
+]

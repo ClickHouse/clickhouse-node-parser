@@ -4,6 +4,8 @@ Select sum(number + 1) from numbers(10);
 Select sum(1 + number) from numbers(10);
 Select sum(number - 1) from numbers(10);
 Select sum(1 - number) from numbers(10);
+WITH 1::Nullable(UInt64) as my_literal Select sum(number + my_literal) from numbers(0);
+WITH 1::Nullable(UInt64) as my_literal Select sum(number) + my_literal * count() from numbers(0);
 -- { echoOff }
 
 DROP TABLE IF EXISTS test_table;

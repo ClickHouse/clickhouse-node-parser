@@ -65,3 +65,45 @@ WHERE metric_id = 3
 ORDER BY
     metric_id ASC,
     grid_timestamp ASC;
+
+-- Calculate idelta and irate from the raw data
+WITH '2024-12-12 12:00:15'::DateTime64(3,'UTC') AS start_ts, -- start of timestamp grid
+
+  start_ts + toIntervalSecond(60) AS end_ts, -- end of timestamp grid
+
+  15 AS step_seconds, -- step of timestamp grid
+
+  45 AS window_seconds -- "staleness" window
+
+SELECT
+    metric_id,
+    timeSeriesInstantDeltaToGrid(start_ts, end_ts, step_seconds, window_seconds)(timestamp, value),
+    timeSeriesInstantRateToGrid(start_ts, end_ts, step_seconds, window_seconds)(timestamp, value)
+FROM t_raw_timeseries
+WHERE metric_id = 3
+    AND and(greaterOrEquals(timestamp, start_ts - toIntervalSecond(window_seconds)), lessOrEquals(timestamp, end_ts))
+GROUP BY metric_id;
+
+-- Calculate idelta and irate from the re-sampled data
+WITH '2024-12-12 12:00:15'::DateTime64(3,'UTC') AS start_ts, -- start of timestamp grid
+
+  start_ts + toIntervalSecond(60) AS end_ts, -- end of timestamp grid
+
+  15 AS step_seconds, -- step of timestamp grid
+
+  45 AS window_seconds -- "staleness" window
+
+SELECT
+    metric_id,
+    timeSeriesInstantDeltaToGrid(start_ts, end_ts, step_seconds, window_seconds)(timestamps, values),
+    timeSeriesInstantRateToGrid(start_ts, end_ts, step_seconds, window_seconds)(timestamps, values)
+FROM (
+        SELECT
+            metric_id,
+            finalizeAggregation(samples).1 AS timestamps,
+            finalizeAggregation(samples).2 AS values
+        FROM t_resampled_timeseries_15_sec
+        WHERE metric_id = 3
+            AND and(greaterOrEquals(grid_timestamp, start_ts - toIntervalSecond(window_seconds)), lessOrEquals(grid_timestamp, end_ts))
+    )
+GROUP BY metric_id;

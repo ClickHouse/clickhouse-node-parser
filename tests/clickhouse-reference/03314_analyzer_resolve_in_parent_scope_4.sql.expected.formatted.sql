@@ -2,6 +2,13 @@ SET enable_analyzer = 1;
 
 SET allow_experimental_correlated_subqueries = 0;
 
+WITH arrayMap(x -> x + 1, [0]) AS a
+
+SELECT 1
+WHERE 1 IN (
+        SELECT arrayJoin(a)
+    );
+
 CREATE TABLE users
 (
     uid Int16,

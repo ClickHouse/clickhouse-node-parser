@@ -70,3 +70,33 @@ WHERE current_database = currentDatabase()
     AND like(query, '-- INSERT USING VALUES%')
     AND type = 'QueryFinish'
 LIMIT 1;
+
+WITH (
+        SELECT initial_query_id
+        FROM `system`.query_log
+        WHERE current_database = currentDatabase()
+            AND event_date >= yesterday()
+            AND like(query, '-- INSERT USING VALUES%')
+        LIMIT 1
+    ) AS q_id
+
+SELECT
+    'VALUES',
+    view_duration_ms >= 50
+FROM `system`.query_views_log
+WHERE initial_query_id = q_id;
+
+WITH (
+        SELECT initial_query_id
+        FROM `system`.query_log
+        WHERE current_database = currentDatabase()
+            AND event_date >= yesterday()
+            AND like(query, '-- INSERT USING TABLE%')
+        LIMIT 1
+    ) AS q_id
+
+SELECT
+    'TABLE',
+    view_duration_ms >= 50
+FROM `system`.query_views_log
+WHERE initial_query_id = q_id;

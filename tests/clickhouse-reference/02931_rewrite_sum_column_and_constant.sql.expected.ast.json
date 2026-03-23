@@ -164,6 +164,123 @@
     }
   },
   {
+    "kind": "select",
+    "with": [
+      {
+        "kind": "cteExpr",
+        "name": "my_literal",
+        "expr": {
+          "kind": "castExpr",
+          "expr": {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "1"
+          },
+          "type": "Nullable(UInt64)",
+          "operator": true
+        }
+      }
+    ],
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "sum",
+        "args": [
+          {
+            "kind": "binaryExpr",
+            "op": "+",
+            "left": {
+              "kind": "columnRef",
+              "parts": [
+                "number"
+              ]
+            },
+            "right": {
+              "kind": "columnRef",
+              "parts": [
+                "my_literal"
+              ]
+            }
+          }
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableFunctionRef",
+      "name": "numbers",
+      "args": [
+        {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      ]
+    }
+  },
+  {
+    "kind": "select",
+    "with": [
+      {
+        "kind": "cteExpr",
+        "name": "my_literal",
+        "expr": {
+          "kind": "castExpr",
+          "expr": {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "1"
+          },
+          "type": "Nullable(UInt64)",
+          "operator": true
+        }
+      }
+    ],
+    "select": [
+      {
+        "kind": "binaryExpr",
+        "op": "+",
+        "left": {
+          "kind": "functionCall",
+          "name": "sum",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "number"
+              ]
+            }
+          ]
+        },
+        "right": {
+          "kind": "binaryExpr",
+          "op": "*",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "my_literal"
+            ]
+          },
+          "right": {
+            "kind": "functionCall",
+            "name": "count",
+            "args": []
+          }
+        }
+      }
+    ],
+    "from": {
+      "kind": "tableFunctionRef",
+      "name": "numbers",
+      "args": [
+        {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      ]
+    }
+  },
+  {
     "kind": "drop",
     "targetType": "TABLE",
     "table": {

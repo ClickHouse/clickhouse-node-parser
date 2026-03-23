@@ -23,6 +23,20 @@ FROM format(JSONEachRow, (
         WHERE column_does_not_exists = 4
     )); -- { serverError UNKNOWN_IDENTIFIER }
 
+-- https://github.com/ClickHouse/ClickHouse/issues/70177
+-- Resolution of the scalar subquery should work ok (already did, adding a test just for safety)
+-- Disabled for the old analyzer since it incorrectly passes 's' to format, instead of resolving s and passing that
+WITH (
+        SELECT sum(number)::String AS s
+        FROM numbers(4)
+    ) AS s
+
+SELECT
+    *,
+    s
+FROM format(TSVRaw, s)
+SETTINGS enable_analyzer = 1;
+
 SELECT count()
 FROM format(TSVRaw, (
         SELECT where_qualified__fuzz_19
@@ -37,6 +51,14 @@ FROM format(TSVRaw, (
         SELECT where_qualified__fuzz_35
         FROM numbers(10000)
     )); -- { serverError UNKNOWN_IDENTIFIER }
+
+WITH (
+        SELECT where_qualified__fuzz_19
+        FROM numbers(10000)
+    ) AS s
+
+SELECT count()
+FROM format(TSVRaw, s); -- { serverError UNKNOWN_IDENTIFIER }
 
 -- https://github.com/ClickHouse/ClickHouse/issues/70675
 SELECT count()

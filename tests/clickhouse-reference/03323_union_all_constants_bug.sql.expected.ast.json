@@ -1,0 +1,264 @@
+[
+  {
+    "kind": "select",
+    "with": [
+      {
+        "kind": "cteSubquery",
+        "name": "transactions_data",
+        "query": {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "alias",
+              "expr": {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "42"
+              },
+              "alias": "grade_name_id"
+            },
+            {
+              "kind": "alias",
+              "expr": {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "42"
+              },
+              "alias": "today_flow_transaction_count"
+            },
+            {
+              "kind": "alias",
+              "expr": {
+                "kind": "functionCall",
+                "name": "CAST",
+                "args": [
+                  {
+                    "kind": "literal",
+                    "type": "String",
+                    "value": "good"
+                  },
+                  {
+                    "kind": "literal",
+                    "type": "String",
+                    "value": "Nullable(String)"
+                  }
+                ]
+              },
+              "alias": "status"
+            }
+          ],
+          "from": {
+            "left": {
+              "kind": "subqueryFrom",
+              "query": {
+                "kind": "select",
+                "select": [
+                  {
+                    "kind": "alias",
+                    "expr": {
+                      "kind": "literal",
+                      "type": "UInt64",
+                      "value": "42"
+                    },
+                    "alias": "dispenser_id"
+                  }
+                ]
+              },
+              "alias": "trans_his"
+            },
+            "kind": "joinExpr",
+            "joinType": "INNER",
+            "right": {
+              "kind": "subqueryFrom",
+              "query": {
+                "kind": "select",
+                "select": [
+                  {
+                    "kind": "alias",
+                    "expr": {
+                      "kind": "literal",
+                      "type": "UInt64",
+                      "value": "42"
+                    },
+                    "alias": "dispenser_id"
+                  }
+                ]
+              },
+              "alias": "gde"
+            },
+            "constraint": {
+              "kind": "on",
+              "expr": {
+                "kind": "binaryExpr",
+                "op": "=",
+                "left": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "trans_his",
+                    "dispenser_id"
+                  ]
+                },
+                "right": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "gde",
+                    "dispenser_id"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    ],
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "flag"
+        ]
+      }
+    ],
+    "from": {
+      "kind": "subqueryFrom",
+      "query": {
+        "kind": "union",
+        "queries": [
+          {
+            "kind": "select",
+            "select": [
+              {
+                "kind": "alias",
+                "expr": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "transactions_data",
+                    "grade_name_id"
+                  ]
+                },
+                "alias": "grade_name_id"
+              },
+              {
+                "kind": "alias",
+                "expr": {
+                  "kind": "functionCall",
+                  "name": "multiIf",
+                  "args": [
+                    {
+                      "kind": "binaryExpr",
+                      "op": "=",
+                      "left": {
+                        "kind": "columnRef",
+                        "parts": [
+                          "transactions_data",
+                          "status"
+                        ]
+                      },
+                      "right": {
+                        "kind": "literal",
+                        "type": "String",
+                        "value": "low"
+                      }
+                    },
+                    {
+                      "kind": "literal",
+                      "type": "String",
+                      "value": "YELLOW"
+                    },
+                    {
+                      "kind": "literal",
+                      "type": "NULL",
+                      "value": "NULL"
+                    }
+                  ]
+                },
+                "alias": "flag"
+              }
+            ],
+            "from": {
+              "kind": "tableRef",
+              "table": "transactions_data"
+            }
+          },
+          {
+            "kind": "select",
+            "select": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "grade_name_id"
+                ]
+              },
+              {
+                "kind": "alias",
+                "expr": {
+                  "kind": "functionCall",
+                  "name": "multiIf",
+                  "args": [
+                    {
+                      "kind": "binaryExpr",
+                      "op": "=",
+                      "left": {
+                        "kind": "columnRef",
+                        "parts": [
+                          "status"
+                        ]
+                      },
+                      "right": {
+                        "kind": "literal",
+                        "type": "String",
+                        "value": "good"
+                      }
+                    },
+                    {
+                      "kind": "literal",
+                      "type": "String",
+                      "value": "GREEN"
+                    },
+                    {
+                      "kind": "literal",
+                      "type": "NULL",
+                      "value": "NULL"
+                    }
+                  ]
+                },
+                "alias": "flag"
+              }
+            ],
+            "from": {
+              "kind": "tableRef",
+              "table": "transactions_data"
+            },
+            "where": {
+              "kind": "binaryExpr",
+              "op": "=",
+              "left": {
+                "kind": "columnRef",
+                "parts": [
+                  "status"
+                ]
+              },
+              "right": {
+                "kind": "literal",
+                "type": "String",
+                "value": "good"
+              }
+            }
+          }
+        ]
+      }
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "grade_name_id"
+          ]
+        },
+        "direction": "ASC"
+      }
+    ]
+  }
+]

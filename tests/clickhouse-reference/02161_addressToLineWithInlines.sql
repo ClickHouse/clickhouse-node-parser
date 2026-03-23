@@ -10,3 +10,12 @@ SELECT count() FROM numbers_mt(10000000000) SETTINGS log_comment='02161_test_cas
 SET log_queries = 0;
 SET query_profiler_cpu_time_period_ns = 0;
 SET max_execution_time = 300;
+WITH
+    lineWithInlines AS
+    (
+        SELECT DISTINCT addressToLineWithInlines(arrayJoin(trace)) AS lineWithInlines FROM system.trace_log WHERE query_id =
+        (
+            SELECT query_id FROM system.query_log WHERE current_database = currentDatabase() AND log_comment='02161_test_case' ORDER BY event_time DESC LIMIT 1
+        )
+    )
+SELECT 'has inlines:', or(max(length(lineWithInlines)) > 1, max(locate(lineWithInlines[1], ':')) = 0) FROM lineWithInlines SETTINGS short_circuit_function_evaluation='enable';

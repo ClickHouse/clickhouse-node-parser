@@ -1,4 +1,5 @@
 CREATE TABLE ts_raw_data(timestamp DateTime64(3,'UTC'), value Float64) ENGINE = MergeTree() ORDER BY timestamp;
+
 INSERT INTO ts_raw_data SELECT arrayJoin(*).1::DateTime64(3, 'UTC') AS timestamp, arrayJoin(*).2 AS value
 FROM (
 select [
@@ -21,6 +22,17 @@ select [
 (1734955661.374, 8),
 (1734955676.374, 8)
 ]);
+
 SELECT groupArraySorted(20)((timestamp::Decimal(20,3), value)) FROM ts_raw_data;
+
 SET allow_experimental_ts_to_grid_aggregate_function = 1;
+
+WITH
+    1734955380 AS start, 1734955680 AS end, 15 AS step, 300 AS window, 60 as predict_offset,
+    range(start, end + 1, step) as grid
+SELECT
+    arrayZip(grid, timeSeriesChangesToGrid(start, end, step, window)(toUnixTimestamp(timestamp), value)) as changes_5m,
+    arrayZip(grid, timeSeriesResetsToGrid(start, end, step, window)(toUnixTimestamp(timestamp), value)) as resets_5m
+FROM ts_raw_data FORMAT Vertical;
+
 DROP TABLE ts_raw_data;

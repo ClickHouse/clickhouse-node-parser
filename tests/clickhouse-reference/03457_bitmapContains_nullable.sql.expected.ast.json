@@ -1,0 +1,572 @@
+[
+  {
+    "kind": "select",
+    "with": [
+      {
+        "kind": "cteExpr",
+        "name": "n",
+        "expr": {
+          "kind": "subqueryExpr",
+          "query": {
+            "kind": "select",
+            "select": [
+              {
+                "kind": "alias",
+                "expr": {
+                  "kind": "functionCall",
+                  "name": "groupBitmapState",
+                  "args": [
+                    {
+                      "kind": "castExpr",
+                      "expr": {
+                        "kind": "columnRef",
+                        "parts": [
+                          "number"
+                        ]
+                      },
+                      "type": "Nullable(UInt8)",
+                      "operator": true
+                    }
+                  ]
+                },
+                "alias": "n"
+              }
+            ],
+            "from": {
+              "kind": "tableFunctionRef",
+              "name": "numbers",
+              "args": [
+                {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "1"
+                }
+              ]
+            }
+          }
+        }
+      }
+    ],
+    "select": [
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "number"
+          ]
+        },
+        "alias": "x"
+      },
+      {
+        "kind": "functionCall",
+        "name": "bitmapContains",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "n"
+            ]
+          },
+          {
+            "kind": "columnRef",
+            "parts": [
+              "x"
+            ]
+          }
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableFunctionRef",
+      "name": "numbers",
+      "args": [
+        {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "10"
+        }
+      ]
+    },
+    "leadingComments": [
+      "-- https://github.com/ClickHouse/ClickHouse/issues/19311"
+    ],
+    "trailingComments": [
+      "-- { serverError ILLEGAL_TYPE_OF_ARGUMENT }"
+    ]
+  },
+  {
+    "kind": "select",
+    "with": [
+      {
+        "kind": "cteSubquery",
+        "name": "men",
+        "query": {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "alias",
+              "expr": {
+                "kind": "functionCall",
+                "name": "toUInt32",
+                "args": [
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "number"
+                    ]
+                  }
+                ]
+              },
+              "alias": "id"
+            },
+            {
+              "kind": "alias",
+              "expr": {
+                "kind": "functionCall",
+                "name": "mod",
+                "args": [
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "id"
+                    ]
+                  },
+                  {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "100"
+                  }
+                ]
+              },
+              "alias": "age"
+            },
+            {
+              "kind": "alias",
+              "expr": {
+                "kind": "binaryExpr",
+                "op": "*",
+                "left": {
+                  "kind": "functionCall",
+                  "name": "mod",
+                  "args": [
+                    {
+                      "kind": "columnRef",
+                      "parts": [
+                        "id"
+                      ]
+                    },
+                    {
+                      "kind": "literal",
+                      "type": "UInt64",
+                      "value": "1000"
+                    }
+                  ]
+                },
+                "right": {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "60"
+                }
+              },
+              "alias": "sal"
+            },
+            {
+              "kind": "alias",
+              "expr": {
+                "kind": "functionCall",
+                "name": "mod",
+                "args": [
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "id"
+                    ]
+                  },
+                  {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "60"
+                  }
+                ]
+              },
+              "alias": "nat"
+            }
+          ],
+          "from": {
+            "kind": "tableRef",
+            "database": "system",
+            "table": "numbers"
+          },
+          "limit": {
+            "count": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "10"
+            }
+          }
+        }
+      },
+      {
+        "kind": "cteSubquery",
+        "name": "t",
+        "query": {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "alias",
+              "expr": {
+                "kind": "columnRef",
+                "parts": [
+                  "number"
+                ]
+              },
+              "alias": "n"
+            },
+            {
+              "kind": "alias",
+              "expr": {
+                "kind": "functionCall",
+                "name": "multiIf",
+                "args": [
+                  {
+                    "kind": "binaryExpr",
+                    "op": "=",
+                    "left": {
+                      "kind": "columnRef",
+                      "parts": [
+                        "n"
+                      ]
+                    },
+                    "right": {
+                      "kind": "literal",
+                      "type": "UInt64",
+                      "value": "0"
+                    }
+                  },
+                  {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "0"
+                  },
+                  {
+                    "kind": "binaryExpr",
+                    "op": "=",
+                    "left": {
+                      "kind": "columnRef",
+                      "parts": [
+                        "n"
+                      ]
+                    },
+                    "right": {
+                      "kind": "literal",
+                      "type": "UInt64",
+                      "value": "1"
+                    }
+                  },
+                  {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "6"
+                  },
+                  {
+                    "kind": "binaryExpr",
+                    "op": "=",
+                    "left": {
+                      "kind": "columnRef",
+                      "parts": [
+                        "n"
+                      ]
+                    },
+                    "right": {
+                      "kind": "literal",
+                      "type": "UInt64",
+                      "value": "2"
+                    }
+                  },
+                  {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "30"
+                  },
+                  {
+                    "kind": "literal",
+                    "type": "NULL",
+                    "value": "NULL"
+                  }
+                ]
+              },
+              "alias": "lo"
+            },
+            {
+              "kind": "alias",
+              "expr": {
+                "kind": "functionCall",
+                "name": "multiIf",
+                "args": [
+                  {
+                    "kind": "binaryExpr",
+                    "op": "=",
+                    "left": {
+                      "kind": "columnRef",
+                      "parts": [
+                        "n"
+                      ]
+                    },
+                    "right": {
+                      "kind": "literal",
+                      "type": "UInt64",
+                      "value": "0"
+                    }
+                  },
+                  {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "5"
+                  },
+                  {
+                    "kind": "binaryExpr",
+                    "op": "=",
+                    "left": {
+                      "kind": "columnRef",
+                      "parts": [
+                        "n"
+                      ]
+                    },
+                    "right": {
+                      "kind": "literal",
+                      "type": "UInt64",
+                      "value": "1"
+                    }
+                  },
+                  {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "29"
+                  },
+                  {
+                    "kind": "binaryExpr",
+                    "op": "=",
+                    "left": {
+                      "kind": "columnRef",
+                      "parts": [
+                        "n"
+                      ]
+                    },
+                    "right": {
+                      "kind": "literal",
+                      "type": "UInt64",
+                      "value": "2"
+                    }
+                  },
+                  {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "99"
+                  },
+                  {
+                    "kind": "literal",
+                    "type": "NULL",
+                    "value": "NULL"
+                  }
+                ]
+              },
+              "alias": "hi"
+            }
+          ],
+          "from": {
+            "kind": "tableRef",
+            "database": "system",
+            "table": "numbers"
+          },
+          "limit": {
+            "count": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "3"
+            }
+          }
+        }
+      },
+      {
+        "kind": "cteSubquery",
+        "name": "t2",
+        "query": {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "alias",
+              "expr": {
+                "kind": "functionCall",
+                "name": "toString",
+                "args": [
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "n"
+                    ]
+                  }
+                ]
+              },
+              "alias": "name"
+            },
+            {
+              "kind": "alias",
+              "expr": {
+                "kind": "functionCall",
+                "name": "groupBitmapState",
+                "args": [
+                  {
+                    "kind": "functionCall",
+                    "name": "multiIf",
+                    "args": [
+                      {
+                        "kind": "naryExpr",
+                        "op": "AND",
+                        "operands": [
+                          {
+                            "kind": "binaryExpr",
+                            "op": ">=",
+                            "left": {
+                              "kind": "columnRef",
+                              "parts": [
+                                "age"
+                              ]
+                            },
+                            "right": {
+                              "kind": "columnRef",
+                              "parts": [
+                                "lo"
+                              ]
+                            },
+                            "parenthesized": true
+                          },
+                          {
+                            "kind": "binaryExpr",
+                            "op": "<=",
+                            "left": {
+                              "kind": "columnRef",
+                              "parts": [
+                                "age"
+                              ]
+                            },
+                            "right": {
+                              "kind": "columnRef",
+                              "parts": [
+                                "hi"
+                              ]
+                            },
+                            "parenthesized": true
+                          }
+                        ]
+                      },
+                      {
+                        "kind": "columnRef",
+                        "parts": [
+                          "id"
+                        ]
+                      },
+                      {
+                        "kind": "literal",
+                        "type": "NULL",
+                        "value": "NULL"
+                      }
+                    ]
+                  }
+                ]
+              },
+              "alias": "bit_state"
+            }
+          ],
+          "from": {
+            "left": {
+              "kind": "tableRef",
+              "table": "men"
+            },
+            "kind": "joinExpr",
+            "joinType": "CROSS",
+            "right": {
+              "kind": "tableRef",
+              "table": "t"
+            }
+          },
+          "groupBy": {
+            "kind": "expressions",
+            "items": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "n"
+                ]
+              }
+            ]
+          }
+        }
+      }
+    ],
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "name"
+        ]
+      },
+      {
+        "kind": "functionCall",
+        "name": "sumIf",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "sal"
+            ]
+          },
+          {
+            "kind": "functionCall",
+            "name": "bitmapContains",
+            "args": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "bit_state"
+                ]
+              },
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "id"
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "from": {
+      "left": {
+        "kind": "tableRef",
+        "table": "men"
+      },
+      "kind": "joinExpr",
+      "joinType": "CROSS",
+      "right": {
+        "kind": "tableRef",
+        "table": "t2"
+      }
+    },
+    "groupBy": {
+      "kind": "expressions",
+      "items": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "name"
+          ]
+        }
+      ]
+    },
+    "trailingComments": [
+      "-- { serverError ILLEGAL_TYPE_OF_ARGUMENT }"
+    ]
+  }
+]

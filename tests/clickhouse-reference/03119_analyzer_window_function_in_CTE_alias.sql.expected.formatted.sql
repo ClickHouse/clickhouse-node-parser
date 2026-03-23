@@ -11,6 +11,26 @@ CREATE TEMPORARY TABLE test
 
 INSERT INTO test;
 
+-- alias clash (a is redefined in CTE)
+-- 21.8: no error, bad result
+-- 21.9 and newer: error "Block structure mismatch in (columns with identical name must have identical structure) stream"
+WITH avg(a) OVER () AS a
+
+SELECT
+    a,
+    id
+FROM test
+SETTINGS allow_experimental_window_functions = 1;
+
+-- no aliases clash, good result
+WITH avg(a) OVER () AS a2
+
+SELECT
+    a2,
+    id
+FROM test
+SETTINGS allow_experimental_window_functions = 1;
+
 -- aliases clash without CTE
 SELECT
     avg(a) OVER () AS a,

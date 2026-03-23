@@ -642,5 +642,230 @@
     "trailingComments": [
       "-- { serverError BAD_ARGUMENTS }"
     ]
+  },
+  {
+    "kind": "select",
+    "with": [
+      {
+        "kind": "cteExpr",
+        "name": "res1",
+        "expr": {
+          "kind": "functionCall",
+          "name": "numericIndexedVectorBuild",
+          "args": [
+            {
+              "kind": "functionCall",
+              "name": "mapFromArrays",
+              "args": [
+                {
+                  "kind": "arrayLiteral",
+                  "elements": [
+                    {
+                      "kind": "literal",
+                      "type": "UInt64",
+                      "value": "1"
+                    },
+                    {
+                      "kind": "literal",
+                      "type": "UInt64",
+                      "value": "2"
+                    },
+                    {
+                      "kind": "literal",
+                      "type": "UInt64",
+                      "value": "3"
+                    }
+                  ],
+                  "source": "[1, 2, 3]"
+                },
+                {
+                  "kind": "arrayLiteral",
+                  "elements": [
+                    {
+                      "kind": "literal",
+                      "type": "UInt64",
+                      "value": "10"
+                    },
+                    {
+                      "kind": "literal",
+                      "type": "UInt64",
+                      "value": "20"
+                    },
+                    {
+                      "kind": "literal",
+                      "type": "UInt64",
+                      "value": "30"
+                    }
+                  ],
+                  "source": "[10, 20, 30]"
+                }
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "kind": "cteExpr",
+        "name": "res2",
+        "expr": {
+          "kind": "functionCall",
+          "name": "numericIndexedVectorBuild",
+          "args": [
+            {
+              "kind": "functionCall",
+              "name": "mapFromArrays",
+              "args": [
+                {
+                  "kind": "functionCall",
+                  "name": "arrayMap",
+                  "args": [
+                    {
+                      "kind": "lambdaExpr",
+                      "params": [
+                        "x"
+                      ],
+                      "body": {
+                        "kind": "functionCall",
+                        "name": "toUInt32",
+                        "args": [
+                          {
+                            "kind": "columnRef",
+                            "parts": [
+                              "x"
+                            ]
+                          }
+                        ]
+                      }
+                    },
+                    {
+                      "kind": "arrayLiteral",
+                      "elements": [
+                        {
+                          "kind": "literal",
+                          "type": "UInt64",
+                          "value": "1"
+                        },
+                        {
+                          "kind": "literal",
+                          "type": "UInt64",
+                          "value": "2"
+                        },
+                        {
+                          "kind": "literal",
+                          "type": "UInt64",
+                          "value": "3"
+                        }
+                      ],
+                      "source": "[1, 2, 3]"
+                    }
+                  ]
+                },
+                {
+                  "kind": "arrayLiteral",
+                  "elements": [
+                    {
+                      "kind": "literal",
+                      "type": "Float64",
+                      "value": "10.5"
+                    },
+                    {
+                      "kind": "literal",
+                      "type": "Float64",
+                      "value": "20.3"
+                    },
+                    {
+                      "kind": "literal",
+                      "type": "Float64",
+                      "value": "30.892"
+                    }
+                  ],
+                  "source": "[10.5, 20.3, 30.892]"
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ],
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "tuple",
+        "args": [
+          {
+            "kind": "functionCall",
+            "name": "numericIndexedVectorAllValueSum",
+            "args": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "res1"
+                ]
+              }
+            ]
+          },
+          {
+            "kind": "functionCall",
+            "name": "numericIndexedVectorCardinality",
+            "args": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "res1"
+                ]
+              }
+            ]
+          },
+          {
+            "kind": "functionCall",
+            "name": "toTypeName",
+            "args": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "res1"
+                ]
+              }
+            ]
+          },
+          {
+            "kind": "functionCall",
+            "name": "numericIndexedVectorAllValueSum",
+            "args": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "res2"
+                ]
+              }
+            ]
+          },
+          {
+            "kind": "functionCall",
+            "name": "numericIndexedVectorCardinality",
+            "args": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "res2"
+                ]
+              }
+            ]
+          },
+          {
+            "kind": "functionCall",
+            "name": "toTypeName",
+            "args": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "res2"
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ]
   }
 ]

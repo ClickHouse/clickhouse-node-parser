@@ -192,6 +192,392 @@
     }
   },
   {
+    "kind": "select",
+    "with": [
+      {
+        "kind": "cteExpr",
+        "name": "name_parts",
+        "expr": {
+          "kind": "functionCall",
+          "name": "splitByChar",
+          "args": [
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "_"
+            },
+            {
+              "kind": "columnRef",
+              "parts": [
+                "part_name"
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "kind": "cteExpr",
+        "name": "min_block",
+        "expr": {
+          "kind": "castExpr",
+          "expr": {
+            "kind": "functionCall",
+            "name": "arrayElement",
+            "args": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "name_parts"
+                ]
+              },
+              {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "2"
+              }
+            ]
+          },
+          "type": "UInt64",
+          "operator": true
+        }
+      },
+      {
+        "kind": "cteExpr",
+        "name": "max_block",
+        "expr": {
+          "kind": "castExpr",
+          "expr": {
+            "kind": "functionCall",
+            "name": "arrayElement",
+            "args": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "name_parts"
+                ]
+              },
+              {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "3"
+              }
+            ]
+          },
+          "type": "UInt64",
+          "operator": true
+        }
+      }
+    ],
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "min_block"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "max_block"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "event_type"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "merge_algorithm"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "part_type"
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "database": "system",
+      "table": "part_log"
+    },
+    "where": {
+      "kind": "naryExpr",
+      "op": "AND",
+      "operands": [
+        {
+          "kind": "binaryExpr",
+          "op": "=",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "database"
+            ]
+          },
+          "right": {
+            "kind": "functionCall",
+            "name": "currentDatabase",
+            "args": []
+          }
+        },
+        {
+          "kind": "binaryExpr",
+          "op": "=",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "table"
+            ]
+          },
+          "right": {
+            "kind": "literal",
+            "type": "String",
+            "value": "t_compact_vertical_merge"
+          }
+        },
+        {
+          "kind": "binaryExpr",
+          "op": "=",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "min_block"
+            ]
+          },
+          "right": {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "1"
+          }
+        },
+        {
+          "kind": "binaryExpr",
+          "op": "=",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "max_block"
+            ]
+          },
+          "right": {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "2"
+          }
+        }
+      ]
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "event_time_microseconds"
+          ]
+        },
+        "direction": "ASC"
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "with": [
+      {
+        "kind": "cteExpr",
+        "name": "name_parts",
+        "expr": {
+          "kind": "functionCall",
+          "name": "splitByChar",
+          "args": [
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "_"
+            },
+            {
+              "kind": "columnRef",
+              "parts": [
+                "part_name"
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "kind": "cteExpr",
+        "name": "min_block",
+        "expr": {
+          "kind": "castExpr",
+          "expr": {
+            "kind": "functionCall",
+            "name": "arrayElement",
+            "args": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "name_parts"
+                ]
+              },
+              {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "2"
+              }
+            ]
+          },
+          "type": "UInt64",
+          "operator": true
+        }
+      },
+      {
+        "kind": "cteExpr",
+        "name": "max_block",
+        "expr": {
+          "kind": "castExpr",
+          "expr": {
+            "kind": "functionCall",
+            "name": "arrayElement",
+            "args": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "name_parts"
+                ]
+              },
+              {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "3"
+              }
+            ]
+          },
+          "type": "UInt64",
+          "operator": true
+        }
+      }
+    ],
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "min_block"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "max_block"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "event_type"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "merge_algorithm"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "part_type"
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "database": "system",
+      "table": "part_log"
+    },
+    "where": {
+      "kind": "naryExpr",
+      "op": "AND",
+      "operands": [
+        {
+          "kind": "binaryExpr",
+          "op": "=",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "database"
+            ]
+          },
+          "right": {
+            "kind": "functionCall",
+            "name": "currentDatabase",
+            "args": []
+          }
+        },
+        {
+          "kind": "binaryExpr",
+          "op": "=",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "table"
+            ]
+          },
+          "right": {
+            "kind": "literal",
+            "type": "String",
+            "value": "t_compact_vertical_merge"
+          }
+        },
+        {
+          "kind": "binaryExpr",
+          "op": "=",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "min_block"
+            ]
+          },
+          "right": {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "1"
+          }
+        },
+        {
+          "kind": "binaryExpr",
+          "op": "=",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "max_block"
+            ]
+          },
+          "right": {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "3"
+          }
+        }
+      ]
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "event_time_microseconds"
+          ]
+        },
+        "direction": "ASC"
+      }
+    ]
+  },
+  {
     "kind": "drop",
     "targetType": "TABLE",
     "table": {

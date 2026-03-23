@@ -22,6 +22,9 @@ SELECT id, value FROM test_table WHERE id IN (SELECT 2);
 SELECT id, value FROM test_table WHERE id IN test_table_for_in;
 SELECT id, value FROM test_table WHERE id IN (SELECT id FROM test_table_for_in);
 SELECT id, value FROM test_table WHERE id IN (SELECT id FROM test_table_for_in UNION DISTINCT SELECT id FROM test_table_for_in);
+WITH cte_test_table_for_in AS (SELECT id FROM test_table_for_in) SELECT id, value FROM test_table WHERE id IN cte_test_table_for_in;
+WITH cte_test_table_for_in AS (SELECT id FROM test_table_for_in) SELECT id, value
+FROM test_table WHERE id IN (SELECT id FROM cte_test_table_for_in UNION DISTINCT SELECT id FROM cte_test_table_for_in);
 -- { echoOff }
 
 DROP TABLE test_table;

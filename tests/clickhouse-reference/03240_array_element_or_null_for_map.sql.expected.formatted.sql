@@ -1,3 +1,21 @@
+WITH map(1, 2, 3, 4) AS m
+
+SELECT arrayElementOrNull(m, number)
+FROM numbers(5);
+
+WITH map('1', 2, '3', 4) AS m
+
+SELECT arrayElementOrNull(m, toString(number))
+FROM numbers(5);
+
+WITH map(1, 2, 3, 4) AS m
+
+SELECT arrayElementOrNull(m, 3);
+
+WITH map('1', 2, '3', 4) AS m
+
+SELECT arrayElementOrNull(m, '3');
+
 DROP TABLE IF EXISTS t_map_03240;
 
 CREATE TABLE t_map_03240
@@ -57,3 +75,15 @@ FROM t_map_03240;
 
 SELECT length(arrayElementOrNull(m2, 'aaa'::FixedString(4)))
 FROM t_map_03240;
+
+WITH map('a', (1, 'foo')) AS m
+
+SELECT
+    arrayElementOrNull(m, 'a'),
+    arrayElementOrNull(m, 'c');
+
+WITH map('a', map(1, 'foo')) AS m
+
+SELECT
+    arrayElementOrNull(m, 'a'),
+    arrayElementOrNull(m, 'c');

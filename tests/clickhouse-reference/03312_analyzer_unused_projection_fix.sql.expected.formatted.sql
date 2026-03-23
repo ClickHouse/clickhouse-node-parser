@@ -19,3 +19,93 @@ EXCEPT
             1,
             1
     );
+
+-- THE RESULT CTE RETURNS 1 ROW WITH ALL COLUMN VALUES NULL. WHICH IS SUPPOSED TO BE THE EXPECTED BEHAVIOUR
+WITH T1 AS (
+    SELECT
+        1 AS A,
+        1 AS B
+    UNION ALL
+    SELECT
+        1 AS A,
+        1 AS B
+),
+
+T2 AS (
+    SELECT
+        1 AS A,
+        1 AS B
+),
+
+T1_WITH_ROWNUM AS (
+    SELECT
+        A,
+        B,
+        ROW_NUMBER() OVER (PARTITION BY A, B ORDER BY A ASC, B ASC) AS RNK
+    FROM T1
+),
+
+T2_WITH_ROWNUM AS (
+    SELECT
+        A,
+        B,
+        ROW_NUMBER() OVER (PARTITION BY A, B ORDER BY A ASC, B ASC) AS RNK
+    FROM T2
+),
+
+RESULT AS (
+    SELECT *
+    FROM T1_WITH_ROWNUM
+EXCEPT
+    SELECT *
+    FROM T2_WITH_ROWNUM
+)
+
+SELECT *
+FROM RESULT;
+
+-- HOWEVER UPON EXPLICITLY USING COLUMN NAMES RATHER THAN *,  NO RESULTS IN THE OUTPUT
+WITH T1 AS (
+    SELECT
+        1 AS A,
+        1 AS B
+    UNION ALL
+    SELECT
+        1 AS A,
+        1 AS B
+),
+
+T2 AS (
+    SELECT
+        1 AS A,
+        1 AS B
+),
+
+T1_WITH_ROWNUM AS (
+    SELECT
+        A,
+        B,
+        ROW_NUMBER() OVER (PARTITION BY A, B ORDER BY A ASC, B ASC) AS RNK
+    FROM T1
+),
+
+T2_WITH_ROWNUM AS (
+    SELECT
+        A,
+        B,
+        ROW_NUMBER() OVER (PARTITION BY A, B ORDER BY A ASC, B ASC) AS RNK
+    FROM T2
+),
+
+RESULT AS (
+    SELECT *
+    FROM T1_WITH_ROWNUM
+EXCEPT
+    SELECT *
+    FROM T2_WITH_ROWNUM
+)
+
+SELECT
+    A,
+    B
+FROM RESULT;

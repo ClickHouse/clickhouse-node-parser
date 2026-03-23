@@ -81,6 +81,56 @@ EXCEPT
         WHERE name = '3'
     );
 
+WITH (
+        SELECT count()
+        FROM (
+(                SELECT *
+                FROM test
+                UNION DISTINCT
+                SELECT *
+                FROM test)
+EXCEPT
+                SELECT *
+                FROM test
+                WHERE toUInt8(name) > 3
+            )
+    ) AS max
+
+SELECT count()
+FROM (
+        SELECT *
+        FROM test
+        UNION ALL
+        SELECT *
+        FROM test
+        WHERE toUInt8(name) < max
+    );
+
+WITH (
+        SELECT count()
+        FROM (
+(                SELECT *
+                FROM test
+                UNION DISTINCT
+                SELECT *
+                FROM test)
+EXCEPT
+                SELECT *
+                FROM test
+                WHERE toUInt8(name) > 3
+            )
+    ) AS max
+
+SELECT count()
+FROM (
+        SELECT *
+        FROM test
+EXCEPT
+        SELECT *
+        FROM test
+        WHERE toUInt8(name) < max
+    );
+
 SELECT uuid
 FROM test
 UNION DISTINCT

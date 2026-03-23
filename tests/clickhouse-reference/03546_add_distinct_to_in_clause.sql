@@ -21,3 +21,27 @@ insert into local_table_2 select 3 from numbers(1000000);
 select id from distributed_table_1 where id in (select id from distributed_table_2) settings enable_add_distinct_to_in_subqueries = 1;
 -- Query with DISTINCT optimization disabled
 select id from distributed_table_1 where id in (select id from distributed_table_2) settings enable_add_distinct_to_in_subqueries = 0;
+-- Compare both NetworkReceiveBytes between with_distinct and without_distinct
+WITH
+    -- Get the value for with_distinct
+    (SELECT read_rows, ProfileEvents
+     FROM system.query_log
+     WHERE current_database = currentDatabase()
+       AND query LIKE '%select id from distributed_table_1 where id in (select id from distributed_table_2) settings enable_add_distinct_to_in_subqueries = 1%'
+       AND type = 'QueryFinish'
+       AND is_initial_query
+     ORDER BY event_time DESC LIMIT 1) AS q1,
+
+    -- Get the value for without_distinct
+    (SELECT read_rows, ProfileEvents
+     FROM system.query_log
+     WHERE current_database = currentDatabase()
+       AND query LIKE '%select id from distributed_table_1 where id in (select id from distributed_table_2) settings enable_add_distinct_to_in_subqueries = 0%'
+       AND type = 'QueryFinish'
+       AND is_initial_query
+     ORDER BY event_time DESC LIMIT 1) AS q2
+
+SELECT
+    q1.read_rows < q2.read_rows AS read_rows_optimization_effective,
+    q1.ProfileEvents['NetworkSendBytes'] < q2.ProfileEvents['NetworkSendBytes'] AS send_optimization_effective,
+    q1.ProfileEvents['NetworkReceiveBytes'] < q2.ProfileEvents['NetworkReceiveBytes'] AS recv_optimization_effective;

@@ -54,5 +54,128 @@
         "table": "t"
       }
     }
+  },
+  {
+    "kind": "select",
+    "with": [
+      {
+        "kind": "cteSubquery",
+        "name": "a",
+        "query": {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "alias",
+              "expr": {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "1"
+              },
+              "alias": "column_a"
+            }
+          ]
+        }
+      },
+      {
+        "kind": "cteSubquery",
+        "name": "b",
+        "query": {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "alias",
+              "expr": {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "2"
+              },
+              "alias": "column_b"
+            }
+          ]
+        }
+      }
+    ],
+    "select": [
+      {
+        "kind": "asterisk"
+      }
+    ],
+    "from": {
+      "left": {
+        "left": {
+          "kind": "tableFunctionRef",
+          "name": "remote",
+          "args": [
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "127.0.0.{1,2}"
+            },
+            {
+              "kind": "functionCall",
+              "name": "currentDatabase",
+              "args": []
+            },
+            {
+              "kind": "columnRef",
+              "parts": [
+                "t"
+              ]
+            }
+          ],
+          "alias": "c"
+        },
+        "kind": "joinExpr",
+        "joinType": "INNER",
+        "right": {
+          "kind": "tableRef",
+          "table": "a"
+        },
+        "constraint": {
+          "kind": "on",
+          "expr": {
+            "kind": "binaryExpr",
+            "op": "=",
+            "left": {
+              "kind": "columnRef",
+              "parts": [
+                "ID"
+              ]
+            },
+            "right": {
+              "kind": "columnRef",
+              "parts": [
+                "column_a"
+              ]
+            }
+          }
+        }
+      },
+      "kind": "joinExpr",
+      "joinType": "INNER",
+      "right": {
+        "kind": "tableRef",
+        "table": "b"
+      },
+      "constraint": {
+        "kind": "on",
+        "expr": {
+          "kind": "binaryExpr",
+          "op": "=",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "ID"
+            ]
+          },
+          "right": {
+            "kind": "columnRef",
+            "parts": [
+              "column_b"
+            ]
+          }
+        }
+      }
+    }
   }
 ]

@@ -114,6 +114,60 @@
   },
   {
     "kind": "select",
+    "with": [
+      {
+        "kind": "cteExpr",
+        "name": "a",
+        "expr": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ],
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "a"
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "with": [
+      {
+        "kind": "cteExpr",
+        "name": "b",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "a"
+          ]
+        }
+      }
+    ],
+    "select": [
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        },
+        "alias": "a"
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "b"
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "select",
     "select": [
       {
         "kind": "alias",
@@ -373,6 +427,69 @@
   },
   {
     "kind": "select",
+    "with": [
+      {
+        "kind": "cteExpr",
+        "name": "value_2",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "value_1"
+          ]
+        }
+      },
+      {
+        "kind": "cteExpr",
+        "name": "id_2",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "id_1"
+          ]
+        }
+      },
+      {
+        "kind": "cteExpr",
+        "name": "id_1",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "id"
+          ]
+        }
+      },
+      {
+        "kind": "cteExpr",
+        "name": "value_1",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "value"
+          ]
+        }
+      }
+    ],
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "id_2"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "value_2"
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "test_table"
+    }
+  },
+  {
+    "kind": "select",
     "select": [
       {
         "kind": "alias",
@@ -591,6 +708,33 @@
     }
   },
   {
+    "kind": "select",
+    "with": [
+      {
+        "kind": "cteExpr",
+        "name": "value",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "id"
+          ]
+        }
+      }
+    ],
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "value"
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "test_table"
+    }
+  },
+  {
     "kind": "set",
     "settings": [
       {
@@ -623,5 +767,37 @@
       "kind": "tableRef",
       "table": "test_table"
     }
+  },
+  {
+    "kind": "select",
+    "with": [
+      {
+        "kind": "cteExpr",
+        "name": "x",
+        "expr": {
+          "kind": "functionCall",
+          "name": "path",
+          "args": [
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "clickhouse.com/a/b/c"
+            }
+          ]
+        }
+      }
+    ],
+    "select": [
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "x"
+          ]
+        },
+        "alias": "path"
+      }
+    ]
   }
 ]

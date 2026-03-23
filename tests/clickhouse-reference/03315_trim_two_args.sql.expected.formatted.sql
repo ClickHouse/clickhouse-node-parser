@@ -51,6 +51,20 @@ SELECT
     trimRight(toFixedString('...hello...', 11), '.') = '...hello' AS right_fixed_special_ok,
     trimBoth(toFixedString('...hello...', 11), '.') = 'hello' AS both_fixed_special_ok;
 
+WITH repeat('x', 1000) AS long_str,
+
+toFixedString(long_str, 1000) AS long_fixed_str,
+
+repeat('#@', 50) AS trim_chars
+
+SELECT
+    length(trimLeft(concat(trim_chars, long_str, trim_chars), '#@')) = 1100 AS left_long_ok,
+    length(trimRight(concat(trim_chars, long_str, trim_chars), '#@')) = 1100 AS right_long_ok,
+    length(trimBoth(concat(trim_chars, long_str, trim_chars), '#@')) = 1000 AS both_long_ok,
+    length(trimLeft(concat(trim_chars, long_fixed_str, trim_chars), '#@')) = 1100 AS left_fixed_long_ok,
+    length(trimRight(concat(trim_chars, long_fixed_str, trim_chars), '#@')) = 1100 AS right_fixed_long_ok,
+    length(trimBoth(concat(trim_chars, long_fixed_str, trim_chars), '#@')) = 1000 AS both_fixed_long_ok;
+
 SELECT
     trimLeft('aabbccHELLOccbbaa', 'abc') = 'HELLOccbbaa' AS left_overlap_ok,
     trimRight('aabbccHELLOccbbaa', 'abc') = 'aabbccHELLO' AS right_overlap_ok,

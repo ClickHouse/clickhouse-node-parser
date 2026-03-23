@@ -97,6 +97,84 @@
     }
   },
   {
+    "kind": "select",
+    "with": [
+      {
+        "kind": "cteExpr",
+        "name": "id_with",
+        "expr": {
+          "kind": "functionCall",
+          "name": "toUInt64",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "id"
+              ]
+            }
+          ]
+        }
+      }
+    ],
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "day"
+        ]
+      },
+      {
+        "kind": "functionCall",
+        "name": "count",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "id_with"
+            ]
+          }
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "test"
+    },
+    "where": {
+      "kind": "binaryExpr",
+      "op": ">=",
+      "left": {
+        "kind": "columnRef",
+        "parts": [
+          "day"
+        ]
+      },
+      "right": {
+        "kind": "literal",
+        "type": "String",
+        "value": "2023-01-01"
+      }
+    },
+    "groupBy": {
+      "kind": "expressions",
+      "items": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "day"
+          ]
+        }
+      ]
+    },
+    "limit": {
+      "count": {
+        "kind": "literal",
+        "type": "UInt64",
+        "value": "1000"
+      }
+    }
+  },
+  {
     "kind": "drop",
     "targetType": "TABLE",
     "table": {

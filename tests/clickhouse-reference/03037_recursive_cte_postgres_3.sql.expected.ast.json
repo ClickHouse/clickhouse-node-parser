@@ -89,5 +89,723 @@
         "table": "tree"
       }
     }
+  },
+  {
+    "kind": "select",
+    "with": [
+      {
+        "kind": "cteSubquery",
+        "name": "t",
+        "query": {
+          "kind": "union",
+          "queries": [
+            {
+              "kind": "select",
+              "select": [
+                {
+                  "kind": "alias",
+                  "expr": {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "1"
+                  },
+                  "alias": "id"
+                },
+                {
+                  "kind": "alias",
+                  "expr": {
+                    "kind": "castExpr",
+                    "expr": {
+                      "kind": "arrayLiteral",
+                      "elements": [],
+                      "source": "[]"
+                    },
+                    "type": "Array(UInt64)",
+                    "operator": true
+                  },
+                  "alias": "path"
+                }
+              ]
+            },
+            {
+              "kind": "select",
+              "select": [
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "tree",
+                    "id"
+                  ]
+                },
+                {
+                  "kind": "functionCall",
+                  "name": "arrayConcat",
+                  "args": [
+                    {
+                      "kind": "columnRef",
+                      "parts": [
+                        "t",
+                        "path"
+                      ]
+                    },
+                    {
+                      "kind": "arrayLiteral",
+                      "elements": [
+                        {
+                          "kind": "columnRef",
+                          "parts": [
+                            "tree",
+                            "id"
+                          ]
+                        }
+                      ],
+                      "source": "[tree.id]"
+                    }
+                  ]
+                }
+              ],
+              "from": {
+                "left": {
+                  "kind": "tableRef",
+                  "table": "tree"
+                },
+                "kind": "joinExpr",
+                "joinType": "INNER",
+                "right": {
+                  "kind": "tableRef",
+                  "table": "t"
+                },
+                "constraint": {
+                  "kind": "on",
+                  "expr": {
+                    "kind": "binaryExpr",
+                    "op": "=",
+                    "left": {
+                      "kind": "columnRef",
+                      "parts": [
+                        "tree",
+                        "parent_id"
+                      ]
+                    },
+                    "right": {
+                      "kind": "columnRef",
+                      "parts": [
+                        "t",
+                        "id"
+                      ]
+                    },
+                    "parenthesized": true
+                  }
+                }
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "select": [
+      {
+        "kind": "qualifiedAsterisk",
+        "parts": [
+          "t1"
+        ]
+      },
+      {
+        "kind": "qualifiedAsterisk",
+        "parts": [
+          "t2"
+        ]
+      }
+    ],
+    "from": {
+      "left": {
+        "kind": "tableRef",
+        "table": "t",
+        "alias": "t1"
+      },
+      "kind": "joinExpr",
+      "joinType": "INNER",
+      "right": {
+        "kind": "tableRef",
+        "table": "t",
+        "alias": "t2"
+      },
+      "constraint": {
+        "kind": "on",
+        "expr": {
+          "kind": "naryExpr",
+          "op": "AND",
+          "operands": [
+            {
+              "kind": "binaryExpr",
+              "op": "=",
+              "left": {
+                "kind": "functionCall",
+                "name": "arrayElement",
+                "args": [
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "t1",
+                      "path"
+                    ]
+                  },
+                  {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "1"
+                  }
+                ]
+              },
+              "right": {
+                "kind": "functionCall",
+                "name": "arrayElement",
+                "args": [
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "t2",
+                      "path"
+                    ]
+                  },
+                  {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "1"
+                  }
+                ]
+              }
+            },
+            {
+              "kind": "binaryExpr",
+              "op": "=",
+              "left": {
+                "kind": "functionCall",
+                "name": "length",
+                "args": [
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "t1",
+                      "path"
+                    ]
+                  }
+                ]
+              },
+              "right": {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "1"
+              }
+            },
+            {
+              "kind": "binaryExpr",
+              "op": ">",
+              "left": {
+                "kind": "functionCall",
+                "name": "length",
+                "args": [
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "t2",
+                      "path"
+                    ]
+                  }
+                ]
+              },
+              "right": {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "1"
+              }
+            }
+          ],
+          "parenthesized": true
+        }
+      }
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "t1",
+            "id"
+          ]
+        },
+        "direction": "ASC"
+      },
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "t2",
+            "id"
+          ]
+        },
+        "direction": "ASC"
+      }
+    ],
+    "leadingComments": [
+      "--",
+      "-- get all paths from \"second level\" nodes to leaf nodes",
+      "--"
+    ]
+  },
+  {
+    "kind": "select",
+    "with": [
+      {
+        "kind": "cteSubquery",
+        "name": "t",
+        "query": {
+          "kind": "union",
+          "queries": [
+            {
+              "kind": "select",
+              "select": [
+                {
+                  "kind": "alias",
+                  "expr": {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "1"
+                  },
+                  "alias": "id"
+                },
+                {
+                  "kind": "alias",
+                  "expr": {
+                    "kind": "castExpr",
+                    "expr": {
+                      "kind": "arrayLiteral",
+                      "elements": [],
+                      "source": "[]"
+                    },
+                    "type": "Array(UInt64)",
+                    "operator": true
+                  },
+                  "alias": "path"
+                }
+              ]
+            },
+            {
+              "kind": "select",
+              "select": [
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "tree",
+                    "id"
+                  ]
+                },
+                {
+                  "kind": "functionCall",
+                  "name": "arrayConcat",
+                  "args": [
+                    {
+                      "kind": "columnRef",
+                      "parts": [
+                        "t",
+                        "path"
+                      ]
+                    },
+                    {
+                      "kind": "arrayLiteral",
+                      "elements": [
+                        {
+                          "kind": "columnRef",
+                          "parts": [
+                            "tree",
+                            "id"
+                          ]
+                        }
+                      ],
+                      "source": "[tree.id]"
+                    }
+                  ]
+                }
+              ],
+              "from": {
+                "left": {
+                  "kind": "tableRef",
+                  "table": "tree"
+                },
+                "kind": "joinExpr",
+                "joinType": "INNER",
+                "right": {
+                  "kind": "tableRef",
+                  "table": "t"
+                },
+                "constraint": {
+                  "kind": "on",
+                  "expr": {
+                    "kind": "binaryExpr",
+                    "op": "=",
+                    "left": {
+                      "kind": "columnRef",
+                      "parts": [
+                        "tree",
+                        "parent_id"
+                      ]
+                    },
+                    "right": {
+                      "kind": "columnRef",
+                      "parts": [
+                        "t",
+                        "id"
+                      ]
+                    },
+                    "parenthesized": true
+                  }
+                }
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "t1",
+          "id"
+        ]
+      },
+      {
+        "kind": "functionCall",
+        "name": "count",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "t2",
+              "path"
+            ]
+          }
+        ]
+      }
+    ],
+    "from": {
+      "left": {
+        "kind": "tableRef",
+        "table": "t",
+        "alias": "t1"
+      },
+      "kind": "joinExpr",
+      "joinType": "INNER",
+      "right": {
+        "kind": "tableRef",
+        "table": "t",
+        "alias": "t2"
+      },
+      "constraint": {
+        "kind": "on",
+        "expr": {
+          "kind": "naryExpr",
+          "op": "AND",
+          "operands": [
+            {
+              "kind": "binaryExpr",
+              "op": "=",
+              "left": {
+                "kind": "functionCall",
+                "name": "arrayElement",
+                "args": [
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "t1",
+                      "path"
+                    ]
+                  },
+                  {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "1"
+                  }
+                ]
+              },
+              "right": {
+                "kind": "functionCall",
+                "name": "arrayElement",
+                "args": [
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "t2",
+                      "path"
+                    ]
+                  },
+                  {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "1"
+                  }
+                ]
+              }
+            },
+            {
+              "kind": "binaryExpr",
+              "op": "=",
+              "left": {
+                "kind": "functionCall",
+                "name": "length",
+                "args": [
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "t1",
+                      "path"
+                    ]
+                  }
+                ]
+              },
+              "right": {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "1"
+              }
+            },
+            {
+              "kind": "binaryExpr",
+              "op": ">",
+              "left": {
+                "kind": "functionCall",
+                "name": "length",
+                "args": [
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "t2",
+                      "path"
+                    ]
+                  }
+                ]
+              },
+              "right": {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "1"
+              }
+            }
+          ],
+          "parenthesized": true
+        }
+      }
+    },
+    "groupBy": {
+      "kind": "expressions",
+      "items": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "t1",
+            "id"
+          ]
+        }
+      ]
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "t1",
+            "id"
+          ]
+        },
+        "direction": "ASC"
+      }
+    ],
+    "leadingComments": [
+      "-- just count 'em"
+    ]
+  },
+  {
+    "kind": "select",
+    "with": [
+      {
+        "kind": "cteSubquery",
+        "name": "t",
+        "query": {
+          "kind": "union",
+          "queries": [
+            {
+              "kind": "select",
+              "select": [
+                {
+                  "kind": "alias",
+                  "expr": {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "1"
+                  },
+                  "alias": "id"
+                },
+                {
+                  "kind": "alias",
+                  "expr": {
+                    "kind": "castExpr",
+                    "expr": {
+                      "kind": "arrayLiteral",
+                      "elements": [],
+                      "source": "[]"
+                    },
+                    "type": "Array(UInt64)",
+                    "operator": true
+                  },
+                  "alias": "path"
+                }
+              ]
+            },
+            {
+              "kind": "select",
+              "select": [
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "tree",
+                    "id"
+                  ]
+                },
+                {
+                  "kind": "functionCall",
+                  "name": "arrayConcat",
+                  "args": [
+                    {
+                      "kind": "columnRef",
+                      "parts": [
+                        "t",
+                        "path"
+                      ]
+                    },
+                    {
+                      "kind": "arrayLiteral",
+                      "elements": [
+                        {
+                          "kind": "columnRef",
+                          "parts": [
+                            "tree",
+                            "id"
+                          ]
+                        }
+                      ],
+                      "source": "[tree.id]"
+                    }
+                  ]
+                }
+              ],
+              "from": {
+                "left": {
+                  "kind": "tableRef",
+                  "table": "tree"
+                },
+                "kind": "joinExpr",
+                "joinType": "INNER",
+                "right": {
+                  "kind": "tableRef",
+                  "table": "t"
+                },
+                "constraint": {
+                  "kind": "on",
+                  "expr": {
+                    "kind": "binaryExpr",
+                    "op": "=",
+                    "left": {
+                      "kind": "columnRef",
+                      "parts": [
+                        "tree",
+                        "parent_id"
+                      ]
+                    },
+                    "right": {
+                      "kind": "columnRef",
+                      "parts": [
+                        "t",
+                        "id"
+                      ]
+                    },
+                    "parenthesized": true
+                  }
+                }
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "t1",
+          "id"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "t2",
+          "path"
+        ]
+      },
+      {
+        "kind": "functionCall",
+        "name": "tuple",
+        "args": [
+          {
+            "kind": "qualifiedAsterisk",
+            "parts": [
+              "t2"
+            ]
+          }
+        ]
+      }
+    ],
+    "from": {
+      "left": {
+        "kind": "tableRef",
+        "table": "t",
+        "alias": "t1"
+      },
+      "kind": "joinExpr",
+      "joinType": "INNER",
+      "right": {
+        "kind": "tableRef",
+        "table": "t",
+        "alias": "t2"
+      },
+      "constraint": {
+        "kind": "on",
+        "expr": {
+          "kind": "binaryExpr",
+          "op": "=",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "t1",
+              "id"
+            ]
+          },
+          "right": {
+            "kind": "columnRef",
+            "parts": [
+              "t2",
+              "id"
+            ]
+          },
+          "parenthesized": true
+        }
+      }
+    },
+    "leadingComments": [
+      "-- -- this variant tickled a whole-row-variable bug in 8.4devel"
+    ]
   }
 ]

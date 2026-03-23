@@ -45,6 +45,22 @@ CROSS JOIN (
         SELECT 1
     ) AS test_table;
 
+WITH cte_subquery AS (
+    SELECT 1
+)
+
+SELECT *
+FROM cte_subquery AS cte_subquery;
+
+WITH cte_subquery AS (
+    SELECT 1
+)
+
+SELECT *
+FROM
+    cte_subquery AS cte_subquery
+CROSS JOIN cte_subquery AS subquery;
+
 SELECT *
 FROM
     t3

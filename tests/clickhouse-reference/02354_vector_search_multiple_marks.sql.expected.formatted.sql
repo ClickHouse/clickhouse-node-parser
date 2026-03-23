@@ -18,4 +18,24 @@ INSERT INTO tab SELECT
     [toFloat32(number), 0.0]
 FROM numbers(10000);
 
+WITH [1.0, 0.0] AS reference_vec
+
+SELECT
+    id,
+    vec,
+    L2Distance(vec, reference_vec)
+FROM tab
+ORDER BY L2Distance(vec, reference_vec) ASC
+LIMIT 1;
+
+WITH [9000.0, 0.0] AS reference_vec
+
+SELECT
+    id,
+    vec,
+    L2Distance(vec, reference_vec)
+FROM tab
+ORDER BY L2Distance(vec, reference_vec) ASC
+LIMIT 1;
+
 DROP TABLE tab;

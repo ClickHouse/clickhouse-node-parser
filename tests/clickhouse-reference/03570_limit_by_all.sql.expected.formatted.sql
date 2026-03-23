@@ -225,6 +225,19 @@ LIMIT 1 BY ALL;
 
 DROP TABLE test_limit_by_all_tags;
 
+WITH toStartOfHour(toDateTime('2025-01-01 12:00:00')) AS h
+
+SELECT
+    h,
+    category
+FROM test_limit_by_all
+ORDER BY
+    h ASC,
+    category ASC,
+    value ASC
+LIMIT 1 BY ALL
+SETTINGS enable_positional_arguments = 0;
+
 SELECT
     id,
     category,

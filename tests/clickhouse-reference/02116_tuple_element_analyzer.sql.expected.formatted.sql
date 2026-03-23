@@ -62,3 +62,15 @@ SELECT tupleElement(t2, materialize(1))
 FROM t_tuple_element; -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
 DROP TABLE t_tuple_element;
+
+WITH (1, 2) AS t
+
+SELECT
+    t.1,
+    t.2;
+
+WITH (1, 2)::Tuple(a UInt32, b UInt32) AS t
+
+SELECT
+    t.1,
+    tupleElement(t, 'b');

@@ -22,6 +22,186 @@ SELECT isIPAddressInRange(CAST(toIPv6('ffff::1'), 'Nullable(IPv6)'), 'ffff::/16'
 
 SELECT isIPAddressInRange(CAST(toIPv6('fffe::1'), 'Nullable(IPv6)'), 'ffff::/16');
 
+WITH arrayJoin([NULL, CAST('192.168.99.255', 'Nullable(String)'), CAST('192.168.100.1', 'Nullable(String)'), CAST('192.168.103.255', 'Nullable(String)'),  CAST('192.168.104.0', 'Nullable(String)')]) AS addr,
+
+'192.168.100.0/22' AS prefix
+
+SELECT
+    addr,
+    prefix,
+    isIPAddressInRange(addr, prefix);
+
+WITH arrayJoin([toIPv4('192.168.99.255'), toIPv4('192.168.100.1'), toIPv4('192.168.103.255'), toIPv4('192.168.104.0')]) AS addr,
+
+'192.168.100.0/22' AS prefix
+
+SELECT
+    addr,
+    prefix,
+    isIPAddressInRange(addr, prefix);
+
+WITH arrayJoin([NULL, CAST(toIPv4('192.168.99.255'), 'Nullable(IPv4)'), CAST(toIPv4('192.168.100.1'), 'Nullable(IPv4)'), CAST(toIPv4('192.168.103.255'), 'Nullable(IPv4)'), CAST(toIPv4('192.168.104.0'), 'Nullable(IPv4)')]) AS addr,
+
+'192.168.100.0/22' AS prefix
+
+SELECT
+    addr,
+    prefix,
+    isIPAddressInRange(addr, prefix);
+
+WITH arrayJoin([toIPv6('::192.168.99.255'), toIPv6('::192.168.100.1'), toIPv6('::192.168.103.255'), toIPv6('::192.168.104.0')]) AS addr,
+
+'::192.168.100.0/118' AS prefix
+
+SELECT
+    addr,
+    prefix,
+    isIPAddressInRange(addr, prefix);
+
+WITH arrayJoin([NULL, CAST(toIPv6('::192.168.99.255'), 'Nullable(IPv6)'), CAST(toIPv6('::192.168.100.1'), 'Nullable(IPv6)'), CAST(toIPv6('::192.168.103.255'), 'Nullable(IPv6)'), CAST(toIPv6('::192.168.104.0'), 'Nullable(IPv6)')]) AS addr,
+
+'::192.168.100.0/118' AS prefix
+
+SELECT
+    addr,
+    prefix,
+    isIPAddressInRange(addr, prefix);
+
+WITH CAST('192.168.100.1', 'Nullable(String)') AS addr,
+
+arrayJoin(['192.168.100.0/22', '192.168.100.0/24', '192.168.100.0/32']) AS prefix
+
+SELECT
+    addr,
+    prefix,
+    isIPAddressInRange(addr, prefix);
+
+WITH CAST('::192.168.100.1', 'Nullable(String)') AS addr,
+
+arrayJoin(['::192.168.100.0/118', '::192.168.100.0/120', '::192.168.100.0/128']) AS prefix
+
+SELECT
+    addr,
+    prefix,
+    isIPAddressInRange(addr, prefix);
+
+WITH CAST(NULL, 'Nullable(String)') AS addr,
+
+arrayJoin(['::192.168.100.0/118', '::192.168.100.0/120', '::192.168.100.0/128']) AS prefix
+
+SELECT
+    addr,
+    prefix,
+    isIPAddressInRange(addr, prefix);
+
+WITH toIPv4('192.168.100.1') AS addr,
+
+arrayJoin(['192.168.100.0/22', '192.168.100.0/24', '192.168.100.0/32']) AS prefix
+
+SELECT
+    addr,
+    prefix,
+    isIPAddressInRange(addr, prefix);
+
+WITH toIPv6('::192.168.100.1') AS addr,
+
+arrayJoin(['::192.168.100.0/118', '::192.168.100.0/120', '::192.168.100.0/128']) AS prefix
+
+SELECT
+    addr,
+    prefix,
+    isIPAddressInRange(addr, prefix);
+
+WITH CAST(toIPv4('192.168.100.1'), 'Nullable(IPv4)') AS addr,
+
+arrayJoin(['192.168.100.0/22', '192.168.100.0/24', '192.168.100.0/32']) AS prefix
+
+SELECT
+    addr,
+    prefix,
+    isIPAddressInRange(addr, prefix);
+
+WITH CAST(NULL, 'Nullable(IPv4)') AS addr,
+
+arrayJoin(['192.168.100.0/22', '192.168.100.0/24', '192.168.100.0/32']) AS prefix
+
+SELECT
+    addr,
+    prefix,
+    isIPAddressInRange(addr, prefix);
+
+WITH CAST(toIPv6('::192.168.100.1'), 'Nullable(IPv6)') AS addr,
+
+arrayJoin(['::192.168.100.0/118', '::192.168.100.0/120', '::192.168.100.0/128']) AS prefix
+
+SELECT
+    addr,
+    prefix,
+    isIPAddressInRange(addr, prefix);
+
+WITH CAST(NULL, 'Nullable(IPv6)') AS addr,
+
+arrayJoin(['::192.168.100.0/118', '::192.168.100.0/120', '::192.168.100.0/128']) AS prefix
+
+SELECT
+    addr,
+    prefix,
+    isIPAddressInRange(addr, prefix);
+
+WITH arrayJoin([CAST('192.168.100.1', 'Nullable(String)'), CAST('192.168.103.255', 'Nullable(String)')]) AS addr,
+
+arrayJoin(['192.168.100.0/22', '192.168.100.0/24']) AS prefix
+
+SELECT
+    addr,
+    prefix,
+    isIPAddressInRange(addr, prefix);
+
+WITH arrayJoin([CAST('::192.168.100.1', 'Nullable(String)'), CAST('::192.168.103.255', 'Nullable(String)')]) AS addr,
+
+arrayJoin(['::192.168.100.0/118', '::192.168.100.0/120']) AS prefix
+
+SELECT
+    addr,
+    prefix,
+    isIPAddressInRange(addr, prefix);
+
+WITH arrayJoin([toIPv4('192.168.100.1'), toIPv4('192.168.103.255')]) AS addr,
+
+arrayJoin(['192.168.100.0/22', '192.168.100.0/24']) AS prefix
+
+SELECT
+    addr,
+    prefix,
+    isIPAddressInRange(addr, prefix);
+
+WITH arrayJoin([toIPv6('::192.168.100.1'), toIPv6('::192.168.103.255')]) AS addr,
+
+arrayJoin(['::192.168.100.0/118', '::192.168.100.0/120']) AS prefix
+
+SELECT
+    addr,
+    prefix,
+    isIPAddressInRange(addr, prefix);
+
+WITH arrayJoin([CAST(toIPv4('192.168.100.1'), 'Nullable(IPv4)'), CAST(toIPv4('192.168.103.255'), 'Nullable(IPv4)')]) AS addr,
+
+arrayJoin(['192.168.100.0/22', '192.168.100.0/24']) AS prefix
+
+SELECT
+    addr,
+    prefix,
+    isIPAddressInRange(addr, prefix);
+
+WITH arrayJoin([CAST(toIPv6('::192.168.100.1'), 'Nullable(IPv6)'), CAST(toIPv6('::192.168.103.255'), 'Nullable(IPv6)')]) AS addr,
+
+arrayJoin(['::192.168.100.0/118', '::192.168.100.0/120']) AS prefix
+
+SELECT
+    addr,
+    prefix,
+    isIPAddressInRange(addr, prefix);
+
 DROP TABLE IF EXISTS test_data_2;
 
 CREATE TABLE test_data_2

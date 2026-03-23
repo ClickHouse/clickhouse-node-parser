@@ -88,6 +88,17 @@ SELECT 'aes-256-gcm' as mode, decrypt(mode, encrypt(mode, input, key32, iv), key
 SELECT 'aes-128-gcm' as mode, decrypt(mode, encrypt(mode, input, key16, iv, 'AAD'), key16, iv, 'AAD') == input FROM encryption_test;
 SELECT 'aes-192-gcm' as mode, decrypt(mode, encrypt(mode, input, key24, iv, 'AAD'), key24, iv, 'AAD') == input FROM encryption_test;
 SELECT 'aes-256-gcm' as mode, decrypt(mode, encrypt(mode, input, key32, iv, 'AAD'), key32, iv, 'AAD') == input FROM encryption_test;
+-- based on https://github.com/openssl/openssl/blob/master/demos/evp/aesgcm.c#L20
+WITH
+    unhex('eebc1f57487f51921c0465665f8ae6d1658bb26de6f8a069a3520293a572078f') as key,
+    unhex('67ba0510262ae487d737ee6298f77e0c') as tag,
+    unhex('99aa3e68ed8173a0eed06684') as iv,
+    unhex('f56e87055bc32d0eeb31b2eacc2bf2a5') as plaintext,
+    unhex('4d23c3cec334b49bdb370c437fec78de') as aad,
+    unhex('f7264413a84c0e7cd536867eb9f21736') as ciphertext
+SELECT
+    hex(decrypt('aes-256-gcm', concat(ciphertext, tag), key, iv, aad)) as plaintext_actual,
+    plaintext_actual = hex(plaintext);
 -- tryDecrypt
 CREATE TABLE decrypt_null (
   dt DateTime,

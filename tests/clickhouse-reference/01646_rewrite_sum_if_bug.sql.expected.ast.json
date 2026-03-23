@@ -265,6 +265,320 @@
     }
   },
   {
+    "kind": "select",
+    "with": [
+      {
+        "kind": "cteExpr",
+        "name": "r1",
+        "expr": {
+          "kind": "functionCall",
+          "name": "sum",
+          "args": [
+            {
+              "kind": "functionCall",
+              "name": "if",
+              "args": [
+                {
+                  "kind": "naryExpr",
+                  "op": "AND",
+                  "operands": [
+                    {
+                      "kind": "binaryExpr",
+                      "op": ">=",
+                      "left": {
+                        "kind": "columnRef",
+                        "parts": [
+                          "a"
+                        ]
+                      },
+                      "right": {
+                        "kind": "literal",
+                        "type": "UInt64",
+                        "value": "0"
+                      },
+                      "parenthesized": true
+                    },
+                    {
+                      "kind": "binaryExpr",
+                      "op": "!=",
+                      "left": {
+                        "kind": "columnRef",
+                        "parts": [
+                          "b"
+                        ]
+                      },
+                      "right": {
+                        "kind": "literal",
+                        "type": "UInt64",
+                        "value": "100"
+                      },
+                      "parenthesized": true
+                    },
+                    {
+                      "kind": "binaryExpr",
+                      "op": "=",
+                      "left": {
+                        "kind": "columnRef",
+                        "parts": [
+                          "c"
+                        ]
+                      },
+                      "right": {
+                        "kind": "literal",
+                        "type": "UInt64",
+                        "value": "0"
+                      },
+                      "parenthesized": true
+                    }
+                  ]
+                },
+                {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "1"
+                },
+                {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "0"
+                }
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "kind": "cteExpr",
+        "name": "r2",
+        "expr": {
+          "kind": "functionCall",
+          "name": "sum",
+          "args": [
+            {
+              "kind": "functionCall",
+              "name": "if",
+              "args": [
+                {
+                  "kind": "naryExpr",
+                  "op": "AND",
+                  "operands": [
+                    {
+                      "kind": "binaryExpr",
+                      "op": ">=",
+                      "left": {
+                        "kind": "columnRef",
+                        "parts": [
+                          "a"
+                        ]
+                      },
+                      "right": {
+                        "kind": "literal",
+                        "type": "UInt64",
+                        "value": "0"
+                      },
+                      "parenthesized": true
+                    },
+                    {
+                      "kind": "binaryExpr",
+                      "op": "!=",
+                      "left": {
+                        "kind": "columnRef",
+                        "parts": [
+                          "b"
+                        ]
+                      },
+                      "right": {
+                        "kind": "literal",
+                        "type": "UInt64",
+                        "value": "100"
+                      },
+                      "parenthesized": true
+                    },
+                    {
+                      "kind": "binaryExpr",
+                      "op": ">",
+                      "left": {
+                        "kind": "columnRef",
+                        "parts": [
+                          "c"
+                        ]
+                      },
+                      "right": {
+                        "kind": "literal",
+                        "type": "UInt64",
+                        "value": "220"
+                      },
+                      "parenthesized": true
+                    }
+                  ]
+                },
+                {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "1"
+                },
+                {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "0"
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ],
+    "select": [
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "binaryExpr",
+          "op": "*",
+          "left": {
+            "kind": "binaryExpr",
+            "op": "*",
+            "left": {
+              "kind": "functionCall",
+              "name": "intDiv",
+              "args": [
+                {
+                  "kind": "functionCall",
+                  "name": "toUInt32",
+                  "args": [
+                    {
+                      "kind": "columnRef",
+                      "parts": [
+                        "rtime"
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "20"
+                }
+              ]
+            },
+            "right": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "20"
+            },
+            "parenthesized": true
+          },
+          "right": {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "1000"
+          }
+        },
+        "alias": "t"
+      },
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "binaryExpr",
+          "op": "/",
+          "left": {
+            "kind": "binaryExpr",
+            "op": "*",
+            "left": {
+              "kind": "columnRef",
+              "parts": [
+                "r1"
+              ]
+            },
+            "right": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "100"
+            },
+            "parenthesized": true
+          },
+          "right": {
+            "kind": "binaryExpr",
+            "op": "+",
+            "left": {
+              "kind": "columnRef",
+              "parts": [
+                "r1"
+              ]
+            },
+            "right": {
+              "kind": "columnRef",
+              "parts": [
+                "r2"
+              ]
+            },
+            "parenthesized": true
+          }
+        },
+        "alias": "m"
+      }
+    ],
+    "from": {
+      "kind": "tableFunctionRef",
+      "name": "cluster",
+      "args": [
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "test_cluster_two_shards"
+        },
+        {
+          "kind": "functionCall",
+          "name": "currentDatabase",
+          "args": []
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "test_alias"
+          ]
+        }
+      ]
+    },
+    "where": {
+      "kind": "binaryExpr",
+      "op": "=",
+      "left": {
+        "kind": "columnRef",
+        "parts": [
+          "day"
+        ]
+      },
+      "right": {
+        "kind": "literal",
+        "type": "String",
+        "value": "2022-01-01"
+      }
+    },
+    "groupBy": {
+      "kind": "expressions",
+      "items": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "t"
+          ]
+        }
+      ]
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "t"
+          ]
+        },
+        "direction": "ASC"
+      }
+    ]
+  },
+  {
     "kind": "drop",
     "targetType": "TABLE",
     "table": {

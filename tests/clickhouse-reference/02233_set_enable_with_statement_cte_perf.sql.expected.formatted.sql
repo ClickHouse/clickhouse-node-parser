@@ -29,6 +29,17 @@ FROM numbers(10000000);
 INSERT INTO idx SELECT number * 5
 FROM numbers(1000);
 
+-- test_enable_global_with_statement_performance_1
+WITH 'test' AS u
+
+SELECT count()
+FROM ev
+WHERE a IN (
+        SELECT a
+        FROM idx
+    )
+SETTINGS enable_global_with_statement = 1;
+
 -- test_enable_global_with_statement_performance_2
 SELECT count()
 FROM ev
@@ -37,6 +48,17 @@ WHERE a IN (
         FROM idx
     )
 SETTINGS enable_global_with_statement = 1;
+
+-- test_enable_global_with_statement_performance_3
+WITH 'test' AS u
+
+SELECT count()
+FROM ev
+WHERE a IN (
+        SELECT a
+        FROM idx
+    )
+SETTINGS enable_global_with_statement = 0;
 
 SELECT count(read_rows)
 FROM (

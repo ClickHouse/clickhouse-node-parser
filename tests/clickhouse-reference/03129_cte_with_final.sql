@@ -9,4 +9,8 @@ ENGINE = ReplacingMergeTree(eventTime)
 ORDER BY key;
 INSERT INTO t Values (1, 'first', '2024-04-19 01:01:01');
 SET enable_analyzer = 1;
+WITH merged_test AS(
+	SELECT * FROM  t Final
+)
+SELECT * FROM  merged_test;
 DROP TABLE t;

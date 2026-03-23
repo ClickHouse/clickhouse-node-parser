@@ -2106,6 +2106,88 @@
     }
   },
   {
+    "kind": "select",
+    "with": [
+      {
+        "kind": "cteExpr",
+        "name": "test",
+        "expr": {
+          "kind": "functionCall",
+          "name": "materialize",
+          "args": [
+            {
+              "kind": "functionCall",
+              "name": "CAST",
+              "args": [
+                {
+                  "kind": "literal",
+                  "type": "NULL",
+                  "value": "NULL"
+                },
+                {
+                  "kind": "literal",
+                  "type": "String",
+                  "value": "Nullable(Float64)"
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ],
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "test"
+        ]
+      },
+      {
+        "kind": "functionCall",
+        "name": "toTypeName",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "test"
+            ]
+          }
+        ]
+      },
+      {
+        "kind": "functionCall",
+        "name": "IF",
+        "args": [
+          {
+            "kind": "binaryExpr",
+            "op": "=",
+            "left": {
+              "kind": "columnRef",
+              "parts": [
+                "test"
+              ]
+            },
+            "right": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "0"
+            }
+          },
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "1"
+          },
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "0"
+          }
+        ]
+      }
+    ]
+  },
+  {
     "kind": "drop",
     "targetType": "TABLE",
     "table": {

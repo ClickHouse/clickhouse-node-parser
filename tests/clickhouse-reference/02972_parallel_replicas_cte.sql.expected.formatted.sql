@@ -23,6 +23,75 @@ ORDER BY a AS
 SELECT *
 FROM numbers(1000);
 
+WITH filtered_groups AS (
+    SELECT a
+    FROM pr_1
+    WHERE a >= 100
+)
+
+SELECT count()
+FROM
+    pr_2
+INNER JOIN filtered_groups
+    ON pr_2.a = filtered_groups.a;
+
+WITH filtered_groups AS (
+    SELECT a
+    FROM pr_1
+    WHERE a >= 100
+)
+
+SELECT count()
+FROM
+    pr_2
+INNER JOIN filtered_groups
+    ON pr_2.a = filtered_groups.a
+SETTINGS
+    enable_parallel_replicas = 1,
+    parallel_replicas_for_non_replicated_merge_tree = 1,
+    cluster_for_parallel_replicas = 'test_cluster_one_shard_three_replicas_localhost',
+    max_parallel_replicas = 3;
+
+-- Testing that it is disabled for enable_analyzer=0. With analyzer it will be supported (with correct result)
+WITH filtered_groups AS (
+    SELECT a
+    FROM pr_1
+    WHERE a >= 100
+)
+
+SELECT count()
+FROM
+    pr_2
+INNER JOIN filtered_groups
+    ON pr_2.a = filtered_groups.a
+SETTINGS
+    enable_analyzer = 0,
+    parallel_replicas_only_with_analyzer = 0,
+    enable_parallel_replicas = 2,
+    parallel_replicas_for_non_replicated_merge_tree = 1,
+    cluster_for_parallel_replicas = 'test_cluster_one_shard_three_replicas_localhost',
+    max_parallel_replicas = 3; -- { serverError SUPPORT_IS_DISABLED }
+
+-- Disabled for any value of enable_parallel_replicas != 1, not just 2
+WITH filtered_groups AS (
+    SELECT a
+    FROM pr_1
+    WHERE a >= 100
+)
+
+SELECT count()
+FROM
+    pr_2
+INNER JOIN filtered_groups
+    ON pr_2.a = filtered_groups.a
+SETTINGS
+    enable_analyzer = 0,
+    parallel_replicas_only_with_analyzer = 0,
+    enable_parallel_replicas = 512,
+    parallel_replicas_for_non_replicated_merge_tree = 1,
+    cluster_for_parallel_replicas = 'test_cluster_one_shard_three_replicas_localhost',
+    max_parallel_replicas = 3; -- { serverError SUPPORT_IS_DISABLED }
+
 -- Sanitizer
 SELECT count()
 FROM
@@ -88,3 +157,23 @@ ENGINE = MergeTree
 ORDER BY n AS
 SELECT *
 FROM numbers(1000);
+
+-- Same but nested CTE's
+WITH cte1 AS (
+    SELECT n
+    FROM numbers_1e3
+),
+
+cte2 AS (
+    SELECT n
+    FROM numbers_1e3
+    WHERE n IN (cte1)
+)
+
+SELECT count()
+FROM cte2
+SETTINGS
+    enable_parallel_replicas = 1,
+    parallel_replicas_for_non_replicated_merge_tree = 1,
+    cluster_for_parallel_replicas = 'test_cluster_one_shard_three_replicas_localhost',
+    max_parallel_replicas = 3;

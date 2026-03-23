@@ -163,6 +163,15 @@ FROM numbers(2);
 SELECT DISTINCT any(number) OVER (ROWS UNBOUNDED PRECEDING)
 FROM numbers(2);
 
+-- Various kinds of aliases are properly substituted into various parts of window
+-- function definition.
+WITH number + 1 AS x
+
+SELECT
+    intDiv(number, 3) AS y,
+    sum(x + y) OVER (PARTITION BY y ORDER BY x ASC ROWS UNBOUNDED PRECEDING)
+FROM numbers(7);
+
 -- WINDOW clause
 SELECT 1
 WINDOW w1 AS ();

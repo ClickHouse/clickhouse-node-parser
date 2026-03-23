@@ -626,5 +626,217 @@
         }
       ]
     }
+  },
+  {
+    "kind": "select",
+    "with": [
+      {
+        "kind": "cteExpr",
+        "name": "time",
+        "expr": {
+          "kind": "functionCall",
+          "name": "toDateTime",
+          "args": [
+            {
+              "kind": "binaryExpr",
+              "op": "+",
+              "left": {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "1000000000"
+              },
+              "right": {
+                "kind": "binaryExpr",
+                "op": "%",
+                "left": {
+                  "kind": "functionCall",
+                  "name": "rand64",
+                  "args": []
+                },
+                "right": {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "1000000000"
+                }
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "select": [
+      {
+        "kind": "binaryExpr",
+        "op": "<=",
+        "left": {
+          "kind": "functionCall",
+          "name": "max",
+          "args": [
+            {
+              "kind": "functionCall",
+              "name": "abs",
+              "args": [
+                {
+                  "kind": "binaryExpr",
+                  "op": "-",
+                  "left": {
+                    "kind": "functionCall",
+                    "name": "toYear",
+                    "args": [
+                      {
+                        "kind": "columnRef",
+                        "parts": [
+                          "time"
+                        ]
+                      }
+                    ]
+                  },
+                  "right": {
+                    "kind": "functionCall",
+                    "name": "toISOYear",
+                    "args": [
+                      {
+                        "kind": "columnRef",
+                        "parts": [
+                          "time"
+                        ]
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        "right": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ],
+    "from": {
+      "kind": "tableFunctionRef",
+      "name": "numbers",
+      "args": [
+        {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "10000"
+        }
+      ]
+    },
+    "leadingComments": [
+      "-- Year and ISO year don't differ by more than one."
+    ]
+  },
+  {
+    "kind": "select",
+    "with": [
+      {
+        "kind": "cteExpr",
+        "name": "time",
+        "expr": {
+          "kind": "functionCall",
+          "name": "toDateTime",
+          "args": [
+            {
+              "kind": "binaryExpr",
+              "op": "+",
+              "left": {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "1000000000"
+              },
+              "right": {
+                "kind": "binaryExpr",
+                "op": "%",
+                "left": {
+                  "kind": "functionCall",
+                  "name": "rand64",
+                  "args": []
+                },
+                "right": {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "1000000000"
+                }
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "distinct": {
+      "kind": "distinct"
+    },
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "and",
+        "args": [
+          {
+            "kind": "functionCall",
+            "name": "greaterOrEquals",
+            "args": [
+              {
+                "kind": "functionCall",
+                "name": "toISOWeek",
+                "args": [
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "time"
+                    ]
+                  }
+                ]
+              },
+              {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "1"
+              }
+            ]
+          },
+          {
+            "kind": "functionCall",
+            "name": "lessOrEquals",
+            "args": [
+              {
+                "kind": "functionCall",
+                "name": "toISOWeek",
+                "args": [
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "time"
+                    ]
+                  }
+                ]
+              },
+              {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "53"
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableFunctionRef",
+      "name": "numbers",
+      "args": [
+        {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1000000"
+        }
+      ]
+    },
+    "leadingComments": [
+      "-- ISO week is between 1 and 53"
+    ]
   }
 ]

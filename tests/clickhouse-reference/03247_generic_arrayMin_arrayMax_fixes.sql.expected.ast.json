@@ -841,5 +841,333 @@
         ]
       }
     ]
+  },
+  {
+    "kind": "select",
+    "with": [
+      {
+        "kind": "cteExpr",
+        "name": "t",
+        "expr": {
+          "kind": "arrayLiteral",
+          "elements": [
+            {
+              "kind": "tupleLiteral",
+              "elements": [
+                {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "1"
+                },
+                {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "2"
+                }
+              ],
+              "source": "(1,2)"
+            },
+            {
+              "kind": "tupleLiteral",
+              "elements": [
+                {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "1"
+                },
+                {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "3"
+                }
+              ],
+              "source": "(1,3)"
+            }
+          ],
+          "source": "[(1,2),(1,3)]"
+        }
+      }
+    ],
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "arrayMin",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "t"
+            ]
+          }
+        ]
+      },
+      {
+        "kind": "functionCall",
+        "name": "arrayMax",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "t"
+            ]
+          }
+        ]
+      }
+    ],
+    "leadingComments": [
+      "-- Extra validation of generic arrayMin/arrayMax"
+    ]
+  },
+  {
+    "kind": "select",
+    "with": [
+      {
+        "kind": "cteExpr",
+        "name": "t",
+        "expr": {
+          "kind": "arrayLiteral",
+          "elements": [
+            {
+              "kind": "functionCall",
+              "name": "map",
+              "args": [
+                {
+                  "kind": "literal",
+                  "type": "String",
+                  "value": "a"
+                },
+                {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "1"
+                },
+                {
+                  "kind": "literal",
+                  "type": "String",
+                  "value": "b"
+                },
+                {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "2"
+                }
+              ]
+            },
+            {
+              "kind": "functionCall",
+              "name": "map",
+              "args": [
+                {
+                  "kind": "literal",
+                  "type": "String",
+                  "value": "a"
+                },
+                {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "1"
+                },
+                {
+                  "kind": "literal",
+                  "type": "String",
+                  "value": "b"
+                },
+                {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "3"
+                }
+              ]
+            }
+          ],
+          "source": "[map('a', 1, 'b', 2), map('a',1,'b',3)]"
+        }
+      }
+    ],
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "arrayMin",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "t"
+            ]
+          }
+        ]
+      },
+      {
+        "kind": "functionCall",
+        "name": "arrayMax",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "t"
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "with": [
+      {
+        "kind": "cteExpr",
+        "name": "t",
+        "expr": {
+          "kind": "arrayLiteral",
+          "elements": [
+            {
+              "kind": "functionCall",
+              "name": "map",
+              "args": [
+                {
+                  "kind": "literal",
+                  "type": "String",
+                  "value": "a"
+                },
+                {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "1"
+                },
+                {
+                  "kind": "literal",
+                  "type": "String",
+                  "value": "b"
+                },
+                {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "2"
+                },
+                {
+                  "kind": "literal",
+                  "type": "String",
+                  "value": "c"
+                },
+                {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "10"
+                }
+              ]
+            },
+            {
+              "kind": "functionCall",
+              "name": "map",
+              "args": [
+                {
+                  "kind": "literal",
+                  "type": "String",
+                  "value": "a"
+                },
+                {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "1"
+                },
+                {
+                  "kind": "literal",
+                  "type": "String",
+                  "value": "b"
+                },
+                {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "3"
+                },
+                {
+                  "kind": "literal",
+                  "type": "String",
+                  "value": "c"
+                },
+                {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "0"
+                }
+              ]
+            }
+          ],
+          "source": "[map('a', 1, 'b', 2, 'c', 10), map('a',1,'b',3, 'c', 0)]"
+        }
+      }
+    ],
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "arrayMin",
+        "args": [
+          {
+            "kind": "lambdaExpr",
+            "params": [
+              "x"
+            ],
+            "body": {
+              "kind": "functionCall",
+              "name": "arrayElement",
+              "args": [
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "x"
+                  ]
+                },
+                {
+                  "kind": "literal",
+                  "type": "String",
+                  "value": "c"
+                }
+              ]
+            }
+          },
+          {
+            "kind": "columnRef",
+            "parts": [
+              "t"
+            ]
+          }
+        ]
+      },
+      {
+        "kind": "functionCall",
+        "name": "arrayMax",
+        "args": [
+          {
+            "kind": "lambdaExpr",
+            "params": [
+              "x"
+            ],
+            "body": {
+              "kind": "functionCall",
+              "name": "arrayElement",
+              "args": [
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "x"
+                  ]
+                },
+                {
+                  "kind": "literal",
+                  "type": "String",
+                  "value": "c"
+                }
+              ]
+            }
+          },
+          {
+            "kind": "columnRef",
+            "parts": [
+              "t"
+            ]
+          }
+        ]
+      }
+    ]
   }
 ]

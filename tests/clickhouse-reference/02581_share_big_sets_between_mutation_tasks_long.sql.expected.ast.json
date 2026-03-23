@@ -1280,6 +1280,328 @@
     ]
   },
   {
+    "kind": "select",
+    "with": [
+      {
+        "kind": "cteExpr",
+        "name": "table_uuid",
+        "expr": {
+          "kind": "subqueryExpr",
+          "query": {
+            "kind": "select",
+            "select": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "uuid"
+                ]
+              }
+            ],
+            "from": {
+              "kind": "tableRef",
+              "database": "system",
+              "table": "tables"
+            },
+            "where": {
+              "kind": "naryExpr",
+              "op": "AND",
+              "operands": [
+                {
+                  "kind": "binaryExpr",
+                  "op": "=",
+                  "left": {
+                    "kind": "columnRef",
+                    "parts": [
+                      "database"
+                    ]
+                  },
+                  "right": {
+                    "kind": "functionCall",
+                    "name": "currentDatabase",
+                    "args": []
+                  },
+                  "parenthesized": true
+                },
+                {
+                  "kind": "binaryExpr",
+                  "op": "=",
+                  "left": {
+                    "kind": "columnRef",
+                    "parts": [
+                      "name"
+                    ]
+                  },
+                  "right": {
+                    "kind": "literal",
+                    "type": "String",
+                    "value": "02581_trips"
+                  },
+                  "parenthesized": true
+                }
+              ]
+            }
+          }
+        }
+      }
+    ],
+    "select": [
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "CAST",
+          "args": [
+            {
+              "kind": "functionCall",
+              "name": "arrayElement",
+              "args": [
+                {
+                  "kind": "functionCall",
+                  "name": "splitByChar",
+                  "args": [
+                    {
+                      "kind": "literal",
+                      "type": "String",
+                      "value": "_"
+                    },
+                    {
+                      "kind": "columnRef",
+                      "parts": [
+                        "query_id"
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "5"
+                }
+              ]
+            },
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "UInt64"
+            }
+          ]
+        },
+        "alias": "mutation_version",
+        "trailingComments": [
+          "-- '5521485f-8a40-4aba-87a2-00342c369563::all_3_3_0_6'"
+        ]
+      },
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "binaryExpr",
+          "op": ">=",
+          "left": {
+            "kind": "functionCall",
+            "name": "sum",
+            "args": [
+              {
+                "kind": "functionCall",
+                "name": "like",
+                "args": [
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "message"
+                    ]
+                  },
+                  {
+                    "kind": "literal",
+                    "type": "String",
+                    "value": "Created Set with % entries%"
+                  }
+                ]
+              }
+            ]
+          },
+          "right": {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "1"
+          }
+        },
+        "alias": "has_parts_for_which_set_was_built"
+      },
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "binaryExpr",
+          "op": ">=",
+          "left": {
+            "kind": "functionCall",
+            "name": "sum",
+            "args": [
+              {
+                "kind": "functionCall",
+                "name": "like",
+                "args": [
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "message"
+                    ]
+                  },
+                  {
+                    "kind": "literal",
+                    "type": "String",
+                    "value": "Got set from cache%"
+                  }
+                ]
+              }
+            ]
+          },
+          "right": {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "1"
+          }
+        },
+        "alias": "has_parts_that_shared_set"
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "database": "system",
+      "table": "text_log"
+    },
+    "where": {
+      "kind": "naryExpr",
+      "op": "AND",
+      "operands": [
+        {
+          "kind": "functionCall",
+          "name": "like",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "query_id"
+              ]
+            },
+            {
+              "kind": "functionCall",
+              "name": "concat",
+              "args": [
+                {
+                  "kind": "functionCall",
+                  "name": "CAST",
+                  "args": [
+                    {
+                      "kind": "columnRef",
+                      "parts": [
+                        "table_uuid"
+                      ]
+                    },
+                    {
+                      "kind": "literal",
+                      "type": "String",
+                      "value": "String"
+                    }
+                  ]
+                },
+                {
+                  "kind": "literal",
+                  "type": "String",
+                  "value": "::all\\\\_%"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "kind": "binaryExpr",
+          "op": ">=",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "event_date"
+            ]
+          },
+          "right": {
+            "kind": "functionCall",
+            "name": "yesterday",
+            "args": []
+          },
+          "parenthesized": true
+        },
+        {
+          "kind": "naryExpr",
+          "op": "OR",
+          "operands": [
+            {
+              "kind": "functionCall",
+              "name": "like",
+              "args": [
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "message"
+                  ]
+                },
+                {
+                  "kind": "literal",
+                  "type": "String",
+                  "value": "Created Set with % entries%"
+                }
+              ]
+            },
+            {
+              "kind": "functionCall",
+              "name": "like",
+              "args": [
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "message"
+                  ]
+                },
+                {
+                  "kind": "literal",
+                  "type": "String",
+                  "value": "Got set from cache%"
+                }
+              ]
+            }
+          ],
+          "parenthesized": true
+        }
+      ]
+    },
+    "groupBy": {
+      "kind": "expressions",
+      "items": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "mutation_version"
+          ]
+        }
+      ]
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "mutation_version"
+          ]
+        },
+        "direction": "ASC"
+      }
+    ],
+    "format": "TSVWithNames",
+    "leadingComments": [
+      "-- Check that in every mutation there were parts that built sets (log messages like 'Created Set with 10000000 entries from 10000000 rows in 0.388989187 sec.' )",
+      "-- and parts that shared sets (log messages like 'Got set from cache in 0.388930505 sec.' )"
+    ]
+  },
+  {
     "kind": "drop",
     "targetType": "TABLE",
     "table": {

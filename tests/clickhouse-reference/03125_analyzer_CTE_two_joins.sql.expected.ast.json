@@ -43,5 +43,121 @@
         "table": "events"
       }
     }
+  },
+  {
+    "kind": "select",
+    "with": [
+      {
+        "kind": "cteSubquery",
+        "name": "cte1",
+        "query": {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "alias",
+              "expr": {
+                "kind": "literal",
+                "type": "String",
+                "value": "1234"
+              },
+              "alias": "x"
+            }
+          ]
+        }
+      },
+      {
+        "kind": "cteSubquery",
+        "name": "cte2",
+        "query": {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "alias",
+              "expr": {
+                "kind": "literal",
+                "type": "String",
+                "value": "1234"
+              },
+              "alias": "x"
+            }
+          ]
+        }
+      }
+    ],
+    "select": [
+      {
+        "kind": "asterisk"
+      }
+    ],
+    "from": {
+      "left": {
+        "left": {
+          "kind": "tableRef",
+          "table": "events",
+          "alias": "events"
+        },
+        "kind": "joinExpr",
+        "joinType": "INNER",
+        "right": {
+          "kind": "tableRef",
+          "table": "cte2"
+        },
+        "constraint": {
+          "kind": "on",
+          "expr": {
+            "kind": "binaryExpr",
+            "op": "=",
+            "left": {
+              "kind": "columnRef",
+              "parts": [
+                "cte2",
+                "x"
+              ]
+            },
+            "right": {
+              "kind": "columnRef",
+              "parts": [
+                "events",
+                "distinct_id"
+              ]
+            }
+          }
+        }
+      },
+      "kind": "joinExpr",
+      "joinType": "INNER",
+      "right": {
+        "kind": "tableRef",
+        "table": "cte1"
+      },
+      "constraint": {
+        "kind": "on",
+        "expr": {
+          "kind": "binaryExpr",
+          "op": "=",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "cte1",
+              "x"
+            ]
+          },
+          "right": {
+            "kind": "columnRef",
+            "parts": [
+              "cte2",
+              "x"
+            ]
+          }
+        }
+      }
+    },
+    "limit": {
+      "count": {
+        "kind": "literal",
+        "type": "UInt64",
+        "value": "1"
+      }
+    }
   }
 ]

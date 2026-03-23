@@ -188,6 +188,114 @@
     ]
   },
   {
+    "kind": "select",
+    "with": [
+      {
+        "kind": "cteExpr",
+        "name": "reference_vec",
+        "expr": {
+          "kind": "arrayLiteral",
+          "elements": [
+            {
+              "kind": "literal",
+              "type": "Float64",
+              "value": "0.5"
+            },
+            {
+              "kind": "literal",
+              "type": "Float64",
+              "value": "0.5"
+            }
+          ],
+          "source": "[0.5, 0.5]"
+        }
+      }
+    ],
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "id"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "vec"
+        ]
+      },
+      {
+        "kind": "functionCall",
+        "name": "L2Distance",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "vec"
+            ]
+          },
+          {
+            "kind": "columnRef",
+            "parts": [
+              "reference_vec"
+            ]
+          }
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "tab"
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "functionCall",
+          "name": "L2Distance",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "vec"
+              ]
+            },
+            {
+              "kind": "columnRef",
+              "parts": [
+                "reference_vec"
+              ]
+            }
+          ]
+        },
+        "direction": "ASC"
+      }
+    ],
+    "limit": {
+      "count": {
+        "kind": "literal",
+        "type": "UInt64",
+        "value": "3"
+      }
+    },
+    "settings": [
+      {
+        "name": "hnsw_candidate_list_size_for_search",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      }
+    ],
+    "leadingComments": [
+      "-- hnsw_candidate_list_size_for_search = 0 is illegal"
+    ],
+    "trailingComments": [
+      "-- { serverError INVALID_SETTING_VALUE }"
+    ]
+  },
+  {
     "kind": "drop",
     "targetType": "TABLE",
     "table": {

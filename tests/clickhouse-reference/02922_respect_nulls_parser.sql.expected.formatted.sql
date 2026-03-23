@@ -21,6 +21,12 @@ WHERE in(number, (0)); -- { serverError SYNTAX_ERROR }
 SELECT if(number > 0, number, 0)
 FROM numbers(0); -- { serverError SYNTAX_ERROR }
 
+WITH (x -> x + 1) AS lambda
+
+SELECT lambda(number)
+FROM numbers(10)
+SETTINGS enable_analyzer = 1; -- { serverError SYNTAX_ERROR }
+
 SELECT *
 FROM `system`.one
 WHERE indexHint(dummy = 1); -- { serverError SYNTAX_ERROR }

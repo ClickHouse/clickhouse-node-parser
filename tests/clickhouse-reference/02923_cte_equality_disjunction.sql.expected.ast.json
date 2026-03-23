@@ -30,5 +30,166 @@
     "leadingComments": [
       "--https://github.com/ClickHouse/ClickHouse/issues/5323"
     ]
+  },
+  {
+    "kind": "select",
+    "with": [
+      {
+        "kind": "cteExpr",
+        "name": "alias_in_error",
+        "expr": {
+          "kind": "naryExpr",
+          "op": "OR",
+          "operands": [
+            {
+              "kind": "binaryExpr",
+              "op": "=",
+              "left": {
+                "kind": "columnRef",
+                "parts": [
+                  "path"
+                ]
+              },
+              "right": {
+                "kind": "literal",
+                "type": "String",
+                "value": "test1"
+              },
+              "parenthesized": true
+            },
+            {
+              "kind": "functionCall",
+              "name": "match",
+              "args": [
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "path"
+                  ]
+                },
+                {
+                  "kind": "literal",
+                  "type": "String",
+                  "value": "test2"
+                }
+              ]
+            },
+            {
+              "kind": "naryExpr",
+              "op": "AND",
+              "operands": [
+                {
+                  "kind": "functionCall",
+                  "name": "match",
+                  "args": [
+                    {
+                      "kind": "columnRef",
+                      "parts": [
+                        "path"
+                      ]
+                    },
+                    {
+                      "kind": "literal",
+                      "type": "String",
+                      "value": "test3"
+                    }
+                  ]
+                },
+                {
+                  "kind": "functionCall",
+                  "name": "match",
+                  "args": [
+                    {
+                      "kind": "columnRef",
+                      "parts": [
+                        "path"
+                      ]
+                    },
+                    {
+                      "kind": "literal",
+                      "type": "String",
+                      "value": "test2"
+                    }
+                  ]
+                }
+              ],
+              "parenthesized": true
+            },
+            {
+              "kind": "functionCall",
+              "name": "match",
+              "args": [
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "path"
+                  ]
+                },
+                {
+                  "kind": "literal",
+                  "type": "String",
+                  "value": "test4"
+                }
+              ]
+            },
+            {
+              "kind": "binaryExpr",
+              "op": "=",
+              "left": {
+                "kind": "columnRef",
+                "parts": [
+                  "path"
+                ]
+              },
+              "right": {
+                "kind": "literal",
+                "type": "String",
+                "value": "test5"
+              },
+              "parenthesized": true
+            },
+            {
+              "kind": "binaryExpr",
+              "op": "=",
+              "left": {
+                "kind": "columnRef",
+                "parts": [
+                  "path"
+                ]
+              },
+              "right": {
+                "kind": "literal",
+                "type": "String",
+                "value": "test6"
+              },
+              "parenthesized": true
+            }
+          ]
+        }
+      }
+    ],
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "count",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "1"
+          }
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "test_bug_optimization"
+    },
+    "where": {
+      "kind": "columnRef",
+      "parts": [
+        "alias_in_error"
+      ]
+    }
   }
 ]

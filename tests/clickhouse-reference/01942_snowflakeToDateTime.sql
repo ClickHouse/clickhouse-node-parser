@@ -8,6 +8,26 @@ SELECT snowflakeToDateTime('abc', 123);  -- {serverError ILLEGAL_TYPE_OF_ARGUMEN
 SELECT snowflakeToDateTime64('abc', 123);  -- {serverError ILLEGAL_TYPE_OF_ARGUMENT}
 SELECT snowflakeToDateTime(123::Int64) SETTINGS allow_deprecated_snowflake_conversion_functions = 0; -- { serverError DEPRECATED_FUNCTION }
 SELECT snowflakeToDateTime64(123::Int64) SETTINGS allow_deprecated_snowflake_conversion_functions = 0; -- { serverError DEPRECATED_FUNCTION }
+WITH
+    CAST(1426860704886947840 AS Int64) AS i64,
+    'UTC' AS tz
+SELECT
+    tz,
+    i64,
+    snowflakeToDateTime(i64, tz) as dt,
+    toTypeName(dt),
+    snowflakeToDateTime64(i64, tz) as dt64,
+    toTypeName(dt64);
+WITH
+    CAST(1426860704886947840 AS Int64) AS i64,
+    'Asia/Shanghai' AS tz
+SELECT
+    tz,
+    i64,
+    snowflakeToDateTime(i64, tz) as dt,
+    toTypeName(dt),
+    snowflakeToDateTime64(i64, tz) as dt64,
+    toTypeName(dt64);
 DROP TABLE IF EXISTS tab;
 CREATE TABLE tab(val Int64, tz String) engine = Log;
 INSERT INTO tab VALUES (42, 'Asia/Singapore');

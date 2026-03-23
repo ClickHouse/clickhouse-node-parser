@@ -20,3 +20,5 @@ SELECT tupleElement(t2, 0) FROM t_tuple_element; -- { serverError ARGUMENT_OUT_O
 SELECT tupleElement(t2, 3) FROM t_tuple_element; -- { serverError ARGUMENT_OUT_OF_BOUND, NOT_FOUND_COLUMN_IN_BLOCK }
 SELECT tupleElement(t2, materialize(1)) FROM t_tuple_element; -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 DROP TABLE t_tuple_element;
+WITH (1, 2) AS t SELECT t.1, t.2;
+WITH (1, 2)::Tuple(a UInt32, b UInt32) AS t SELECT t.1, tupleElement(t, 'b');

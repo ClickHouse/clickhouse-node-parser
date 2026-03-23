@@ -167,6 +167,14 @@ FROM (
     )
 ORDER BY tuple() ASC;
 
+WITH CAST([(NULL, 'a'), (1, 'b')] AS Array(Tuple(Nullable(Int64), String))) AS arr
+
+SELECT
+    arrayElementOrNull(arr, 1) AS idx1,
+    arrayElementOrNull(arr, 2) AS idx2,
+    arrayElementOrNull(arr, 3) AS idx3,
+    toTypeName(arrayElementOrNull(arr, 1)) AS type1;
+
 SELECT
     arrayElementOrNull(CAST([tuple(), tuple()] AS Array(Tuple())), 1) AS idx1,
     arrayElementOrNull(CAST([tuple(), tuple()] AS Array(Tuple())), 2) AS idx2,
@@ -248,6 +256,111 @@ FROM (
         SELECT
             CAST([tuple(), tuple()] AS Array(Nullable(Tuple()))) AS arr,
             3 AS idx
+    )
+ORDER BY tuple() ASC;
+
+WITH [(1, 'a'), (2, 'b')] AS arr
+
+SELECT arrayElementOrNull(arr, idx)
+FROM (
+        SELECT 1 AS idx
+        UNION ALL
+        SELECT 2 AS idx
+        UNION ALL
+        SELECT 3 AS idx
+        UNION ALL
+        SELECT -1 AS idx
+        UNION ALL
+        SELECT -2 AS idx
+        UNION ALL
+        SELECT -3 AS idx
+        UNION ALL
+        SELECT 0 AS idx
+    )
+ORDER BY tuple() ASC;
+
+WITH CAST([(1, 'a'), NULL] AS Array(Nullable(Tuple(Int64, String)))) AS arr
+
+SELECT
+    idx,
+    arrayElementOrNull(arr, idx) AS value,
+    toTypeName(arrayElementOrNull(arr, idx)) AS type
+FROM (
+        SELECT 1 AS idx
+        UNION ALL
+        SELECT 2 AS idx
+        UNION ALL
+        SELECT 3 AS idx
+        UNION ALL
+        SELECT -1 AS idx
+        UNION ALL
+        SELECT -2 AS idx
+        UNION ALL
+        SELECT -3 AS idx
+        UNION ALL
+        SELECT 0 AS idx
+    )
+ORDER BY tuple() ASC;
+
+WITH [(1, 'a'), (2, 'b')] AS arr
+
+SELECT
+    arrayElementOrNull(arr, CAST(idx AS Int8)) AS int8_res,
+    arrayElementOrNull(arr, CAST(idx AS UInt8)) AS uint8_res
+FROM (
+        SELECT 1 AS idx
+        UNION ALL
+        SELECT 2 AS idx
+        UNION ALL
+        SELECT 3 AS idx
+        UNION ALL
+        SELECT -1 AS idx
+        UNION ALL
+        SELECT -2 AS idx
+        UNION ALL
+        SELECT -3 AS idx
+    )
+ORDER BY tuple() ASC;
+
+WITH CAST([tuple(), tuple()] AS Array(Tuple())) AS arr
+
+SELECT
+    idx,
+    arrayElementOrNull(arr, idx) AS value,
+    toTypeName(arrayElementOrNull(arr, idx)) AS type
+FROM (
+        SELECT 1 AS idx
+        UNION ALL
+        SELECT 2 AS idx
+        UNION ALL
+        SELECT 3 AS idx
+        UNION ALL
+        SELECT -1 AS idx
+        UNION ALL
+        SELECT -2 AS idx
+        UNION ALL
+        SELECT -3 AS idx
+    )
+ORDER BY tuple() ASC;
+
+WITH CAST([tuple(), NULL] AS Array(Nullable(Tuple()))) AS arr
+
+SELECT
+    idx,
+    arrayElementOrNull(arr, idx) AS value,
+    toTypeName(arrayElementOrNull(arr, idx)) AS type
+FROM (
+        SELECT 1 AS idx
+        UNION ALL
+        SELECT 2 AS idx
+        UNION ALL
+        SELECT 3 AS idx
+        UNION ALL
+        SELECT -1 AS idx
+        UNION ALL
+        SELECT -2 AS idx
+        UNION ALL
+        SELECT -3 AS idx
     )
 ORDER BY tuple() ASC;
 
@@ -472,6 +585,14 @@ FROM (
     )
 ORDER BY tuple() ASC;
 
+WITH CAST([(NULL, 'a'), (1, 'b')] AS Array(Tuple(Nullable(Int64), String))) AS arr
+
+SELECT
+    arr[1] AS idx1,
+    arr[2] AS idx2,
+    arr[3] AS idx3,
+    toTypeName(arr[1]) AS type1;
+
 SELECT
     CAST([tuple(), tuple()] AS Array(Tuple()))[1] AS idx1,
     CAST([tuple(), tuple()] AS Array(Tuple()))[2] AS idx2,
@@ -556,6 +677,111 @@ FROM (
     )
 ORDER BY tuple() ASC;
 
+WITH [(1, 'a'), (2, 'b')] AS arr
+
+SELECT arr[idx]
+FROM (
+        SELECT 1 AS idx
+        UNION ALL
+        SELECT 2 AS idx
+        UNION ALL
+        SELECT 3 AS idx
+        UNION ALL
+        SELECT -1 AS idx
+        UNION ALL
+        SELECT -2 AS idx
+        UNION ALL
+        SELECT -3 AS idx
+        UNION ALL
+        SELECT 0 AS idx
+    )
+ORDER BY tuple() ASC;
+
+WITH CAST([(1, 'a'), NULL] AS Array(Nullable(Tuple(Int64, String)))) AS arr
+
+SELECT
+    idx,
+    arr[idx] AS value,
+    toTypeName(arr[idx]) AS type
+FROM (
+        SELECT 1 AS idx
+        UNION ALL
+        SELECT 2 AS idx
+        UNION ALL
+        SELECT 3 AS idx
+        UNION ALL
+        SELECT -1 AS idx
+        UNION ALL
+        SELECT -2 AS idx
+        UNION ALL
+        SELECT -3 AS idx
+        UNION ALL
+        SELECT 0 AS idx
+    )
+ORDER BY tuple() ASC;
+
+WITH [(1, 'a'), (2, 'b')] AS arr
+
+SELECT
+    arr[CAST(idx AS Int8)] AS int8_res,
+    arr[CAST(idx AS UInt8)] AS uint8_res
+FROM (
+        SELECT 1 AS idx
+        UNION ALL
+        SELECT 2 AS idx
+        UNION ALL
+        SELECT 3 AS idx
+        UNION ALL
+        SELECT -1 AS idx
+        UNION ALL
+        SELECT -2 AS idx
+        UNION ALL
+        SELECT -3 AS idx
+    )
+ORDER BY tuple() ASC;
+
+WITH CAST([tuple(), tuple()] AS Array(Tuple())) AS arr
+
+SELECT
+    idx,
+    arr[idx] AS value,
+    toTypeName(arr[idx]) AS type
+FROM (
+        SELECT 1 AS idx
+        UNION ALL
+        SELECT 2 AS idx
+        UNION ALL
+        SELECT 3 AS idx
+        UNION ALL
+        SELECT -1 AS idx
+        UNION ALL
+        SELECT -2 AS idx
+        UNION ALL
+        SELECT -3 AS idx
+    )
+ORDER BY tuple() ASC;
+
+WITH CAST([tuple(), NULL] AS Array(Nullable(Tuple()))) AS arr
+
+SELECT
+    idx,
+    arr[idx] AS value,
+    toTypeName(arr[idx]) AS type
+FROM (
+        SELECT 1 AS idx
+        UNION ALL
+        SELECT 2 AS idx
+        UNION ALL
+        SELECT 3 AS idx
+        UNION ALL
+        SELECT -1 AS idx
+        UNION ALL
+        SELECT -2 AS idx
+        UNION ALL
+        SELECT -3 AS idx
+    )
+ORDER BY tuple() ASC;
+
 SELECT [(1, 'a'), (2, 'b')]['x']; -- {serverError ILLEGAL_TYPE_OF_ARGUMENT}
 
 SELECT
@@ -582,5 +808,43 @@ SELECT [(1, 2)][NULL];
 SELECT arrayElementOrNull([(1, 2)], NULL);
 
 SELECT arrayElementOrNull([CAST(NULL AS Nullable(Tuple()))], NULL);
+
+WITH [(1, 'a'), (2, 'b')] AS arr
+
+SELECT
+    idx,
+    arrayElementOrNull(arr, idx) AS value,
+    toTypeName(arrayElementOrNull(arr, idx)) AS type
+FROM (
+        SELECT CAST(1 AS Nullable(Int64)) AS idx
+        UNION ALL
+        SELECT CAST(2 AS Nullable(Int64)) AS idx
+        UNION ALL
+        SELECT CAST(-1 AS Nullable(Int64)) AS idx
+        UNION ALL
+        SELECT CAST(-2 AS Nullable(Int64)) AS idx
+        UNION ALL
+        SELECT CAST(NULL AS Nullable(Int64)) AS idx
+    )
+ORDER BY tuple() ASC;
+
+WITH CAST([(1, 'a'), NULL] AS Array(Nullable(Tuple(Int64, String)))) AS arr
+
+SELECT
+    idx,
+    arrayElementOrNull(arr, idx) AS value,
+    toTypeName(arrayElementOrNull(arr, idx)) AS type
+FROM (
+        SELECT CAST(1 AS Nullable(Int64)) AS idx
+        UNION ALL
+        SELECT CAST(2 AS Nullable(Int64)) AS idx
+        UNION ALL
+        SELECT CAST(-1 AS Nullable(Int64)) AS idx
+        UNION ALL
+        SELECT CAST(-2 AS Nullable(Int64)) AS idx
+        UNION ALL
+        SELECT CAST(NULL AS Nullable(Int64)) AS idx
+    )
+ORDER BY tuple() ASC;
 
 SET allow_experimental_nullable_tuple_type = 0;

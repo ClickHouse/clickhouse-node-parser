@@ -46,3 +46,22 @@ CREATE TABLE graph(
 )
 ENGINE = TinyLog;
 INSERT INTO graph VALUES (1, 2, 'arc 1 -> 2'), (1, 3, 'arc 1 -> 3'), (2, 3, 'arc 2 -> 3'), (1, 4, 'arc 1 -> 4'), (4, 5, 'arc 4 -> 5'), (5, 1, 'arc 5 -> 1');
+WITH RECURSIVE search_graph AS (
+	SELECT *, false AS is_cycle, [tuple(g.f, g.t)] AS path FROM graph g
+	UNION ALL
+	SELECT g.*, has(path, tuple(g.f, g.t)), arrayConcat(sg.path, [tuple(g.f, g.t)])
+	FROM graph g, search_graph sg
+	WHERE g.f = sg.t AND NOT is_cycle
+)
+SELECT * FROM search_graph
+SETTINGS query_plan_join_swap_table = 'false'
+;
+-- ordering by the path column has same effect as SEARCH DEPTH FIRST
+WITH RECURSIVE search_graph AS (
+	SELECT *, false AS is_cycle, [tuple(g.f, g.t)] AS path FROM graph g
+	UNION ALL
+	SELECT g.*, has(path, tuple(g.f, g.t)), arrayConcat(sg.path, [tuple(g.f, g.t)])
+	FROM graph g, search_graph sg
+	WHERE g.f = sg.t AND NOT is_cycle
+)
+SELECT * FROM search_graph ORDER BY path;

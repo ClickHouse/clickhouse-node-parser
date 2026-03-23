@@ -132,6 +132,137 @@
   },
   {
     "kind": "select",
+    "with": [
+      {
+        "kind": "cteExpr",
+        "name": "num",
+        "expr": {
+          "kind": "castExpr",
+          "expr": {
+            "kind": "functionCall",
+            "name": "arrayElement",
+            "args": [
+              {
+                "kind": "functionCall",
+                "name": "splitByChar",
+                "args": [
+                  {
+                    "kind": "literal",
+                    "type": "String",
+                    "value": "_"
+                  },
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "_file"
+                    ]
+                  }
+                ]
+              },
+              {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "3"
+              }
+            ]
+          },
+          "type": "UInt64",
+          "operator": true
+        }
+      }
+    ],
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "count",
+        "args": []
+      },
+      {
+        "kind": "functionCall",
+        "name": "min",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "num"
+            ]
+          }
+        ]
+      },
+      {
+        "kind": "functionCall",
+        "name": "max",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "num"
+            ]
+          }
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableFunctionRef",
+      "name": "s3",
+      "args": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "s3_conn"
+          ]
+        },
+        {
+          "kind": "binaryExpr",
+          "op": "=",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "filename"
+            ]
+          },
+          "right": {
+            "kind": "literal",
+            "type": "String",
+            "value": "test_02495_*"
+          }
+        },
+        {
+          "kind": "binaryExpr",
+          "op": "=",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "format"
+            ]
+          },
+          "right": {
+            "kind": "columnRef",
+            "parts": [
+              "Parquet"
+            ]
+          }
+        }
+      ]
+    },
+    "where": {
+      "kind": "binaryExpr",
+      "op": ">=",
+      "left": {
+        "kind": "columnRef",
+        "parts": [
+          "num"
+        ]
+      },
+      "right": {
+        "kind": "literal",
+        "type": "UInt64",
+        "value": "5"
+      }
+    }
+  },
+  {
+    "kind": "select",
     "select": [
       {
         "kind": "asterisk"

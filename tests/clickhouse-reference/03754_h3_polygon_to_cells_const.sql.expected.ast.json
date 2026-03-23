@@ -1,5 +1,967 @@
 [
   {
+    "kind": "select",
+    "with": [
+      {
+        "kind": "cteExpr",
+        "name": "resolution",
+        "expr": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "7"
+        }
+      },
+      {
+        "kind": "cteExpr",
+        "name": "ring",
+        "expr": {
+          "kind": "arrayLiteral",
+          "elements": [
+            {
+              "kind": "tupleLiteral",
+              "elements": [
+                {
+                  "kind": "literal",
+                  "type": "Float64",
+                  "value": "-122.40898669999721"
+                },
+                {
+                  "kind": "literal",
+                  "type": "Float64",
+                  "value": "37.81331899998324"
+                }
+              ],
+              "source": "(-122.40898669999721, 37.81331899998324)"
+            },
+            {
+              "kind": "tupleLiteral",
+              "elements": [
+                {
+                  "kind": "literal",
+                  "type": "Float64",
+                  "value": "-122.35447369999936"
+                },
+                {
+                  "kind": "literal",
+                  "type": "Float64",
+                  "value": "37.71980619999785"
+                }
+              ],
+              "source": "(-122.35447369999936, 37.71980619999785)"
+            },
+            {
+              "kind": "tupleLiteral",
+              "elements": [
+                {
+                  "kind": "literal",
+                  "type": "Float64",
+                  "value": "-122.4798767000009"
+                },
+                {
+                  "kind": "literal",
+                  "type": "Float64",
+                  "value": "37.815157199999845"
+                }
+              ],
+              "source": "(-122.4798767000009, 37.815157199999845)"
+            }
+          ],
+          "source": "[(-122.40898669999721, 37.81331899998324), (-122.35447369999936, 37.71980619999785), (-122.4798767000009, 37.815157199999845)]"
+        }
+      },
+      {
+        "kind": "cteExpr",
+        "name": "reference",
+        "expr": {
+          "kind": "arrayLiteral",
+          "elements": [
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "872830820ffffff"
+            },
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "872830828ffffff"
+            },
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "87283082affffff"
+            },
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "87283082bffffff"
+            },
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "87283082effffff"
+            },
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "872830870ffffff"
+            },
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "872830876ffffff"
+            }
+          ],
+          "source": "['872830820ffffff', '872830828ffffff', '87283082affffff', '87283082bffffff', '87283082effffff', '872830870ffffff', '872830876ffffff']"
+        }
+      }
+    ],
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "h3PolygonToCells",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "ring"
+            ]
+          },
+          {
+            "kind": "columnRef",
+            "parts": [
+              "resolution"
+            ]
+          }
+        ]
+      },
+      {
+        "kind": "binaryExpr",
+        "op": "=",
+        "left": {
+          "kind": "functionCall",
+          "name": "arraySort",
+          "args": [
+            {
+              "kind": "functionCall",
+              "name": "arrayMap",
+              "args": [
+                {
+                  "kind": "lambdaExpr",
+                  "params": [
+                    "x"
+                  ],
+                  "body": {
+                    "kind": "functionCall",
+                    "name": "h3ToString",
+                    "args": [
+                      {
+                        "kind": "columnRef",
+                        "parts": [
+                          "x"
+                        ]
+                      }
+                    ]
+                  }
+                },
+                {
+                  "kind": "functionCall",
+                  "name": "h3PolygonToCells",
+                  "args": [
+                    {
+                      "kind": "columnRef",
+                      "parts": [
+                        "ring"
+                      ]
+                    },
+                    {
+                      "kind": "columnRef",
+                      "parts": [
+                        "resolution"
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        "right": {
+          "kind": "columnRef",
+          "parts": [
+            "reference"
+          ]
+        }
+      }
+    ],
+    "leadingComments": [
+      "-- Tags: no-fasttest"
+    ]
+  },
+  {
+    "kind": "select",
+    "with": [
+      {
+        "kind": "cteExpr",
+        "name": "resolution",
+        "expr": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "7"
+        }
+      },
+      {
+        "kind": "cteExpr",
+        "name": "ring",
+        "expr": {
+          "kind": "arrayLiteral",
+          "elements": [
+            {
+              "kind": "tupleLiteral",
+              "elements": [
+                {
+                  "kind": "literal",
+                  "type": "Float64",
+                  "value": "-122.40898669999721"
+                },
+                {
+                  "kind": "literal",
+                  "type": "Float64",
+                  "value": "37.81331899998324"
+                }
+              ],
+              "source": "(-122.40898669999721, 37.81331899998324)"
+            },
+            {
+              "kind": "tupleLiteral",
+              "elements": [
+                {
+                  "kind": "literal",
+                  "type": "Float64",
+                  "value": "-122.35447369999936"
+                },
+                {
+                  "kind": "literal",
+                  "type": "Float64",
+                  "value": "37.71980619999785"
+                }
+              ],
+              "source": "(-122.35447369999936, 37.71980619999785)"
+            },
+            {
+              "kind": "tupleLiteral",
+              "elements": [
+                {
+                  "kind": "literal",
+                  "type": "Float64",
+                  "value": "-122.4798767000009"
+                },
+                {
+                  "kind": "literal",
+                  "type": "Float64",
+                  "value": "37.815157199999845"
+                }
+              ],
+              "source": "(-122.4798767000009, 37.815157199999845)"
+            }
+          ],
+          "source": "[(-122.40898669999721, 37.81331899998324), (-122.35447369999936, 37.71980619999785), (-122.4798767000009, 37.815157199999845)]"
+        }
+      },
+      {
+        "kind": "cteExpr",
+        "name": "reference",
+        "expr": {
+          "kind": "arrayLiteral",
+          "elements": [
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "872830820ffffff"
+            },
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "872830828ffffff"
+            },
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "87283082affffff"
+            },
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "87283082bffffff"
+            },
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "87283082effffff"
+            },
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "872830870ffffff"
+            },
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "872830876ffffff"
+            }
+          ],
+          "source": "['872830820ffffff', '872830828ffffff', '87283082affffff', '87283082bffffff', '87283082effffff', '872830870ffffff', '872830876ffffff']"
+        }
+      }
+    ],
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "h3PolygonToCells",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "ring"
+            ]
+          },
+          {
+            "kind": "functionCall",
+            "name": "materialize",
+            "args": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "resolution"
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "kind": "binaryExpr",
+        "op": "=",
+        "left": {
+          "kind": "functionCall",
+          "name": "arraySort",
+          "args": [
+            {
+              "kind": "functionCall",
+              "name": "arrayMap",
+              "args": [
+                {
+                  "kind": "lambdaExpr",
+                  "params": [
+                    "x"
+                  ],
+                  "body": {
+                    "kind": "functionCall",
+                    "name": "h3ToString",
+                    "args": [
+                      {
+                        "kind": "columnRef",
+                        "parts": [
+                          "x"
+                        ]
+                      }
+                    ]
+                  }
+                },
+                {
+                  "kind": "functionCall",
+                  "name": "h3PolygonToCells",
+                  "args": [
+                    {
+                      "kind": "columnRef",
+                      "parts": [
+                        "ring"
+                      ]
+                    },
+                    {
+                      "kind": "functionCall",
+                      "name": "materialize",
+                      "args": [
+                        {
+                          "kind": "columnRef",
+                          "parts": [
+                            "resolution"
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        "right": {
+          "kind": "columnRef",
+          "parts": [
+            "reference"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "with": [
+      {
+        "kind": "cteExpr",
+        "name": "resolution",
+        "expr": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "7"
+        }
+      },
+      {
+        "kind": "cteExpr",
+        "name": "ring",
+        "expr": {
+          "kind": "arrayLiteral",
+          "elements": [
+            {
+              "kind": "tupleLiteral",
+              "elements": [
+                {
+                  "kind": "literal",
+                  "type": "Float64",
+                  "value": "-122.40898669999721"
+                },
+                {
+                  "kind": "literal",
+                  "type": "Float64",
+                  "value": "37.81331899998324"
+                }
+              ],
+              "source": "(-122.40898669999721, 37.81331899998324)"
+            },
+            {
+              "kind": "tupleLiteral",
+              "elements": [
+                {
+                  "kind": "literal",
+                  "type": "Float64",
+                  "value": "-122.35447369999936"
+                },
+                {
+                  "kind": "literal",
+                  "type": "Float64",
+                  "value": "37.71980619999785"
+                }
+              ],
+              "source": "(-122.35447369999936, 37.71980619999785)"
+            },
+            {
+              "kind": "tupleLiteral",
+              "elements": [
+                {
+                  "kind": "literal",
+                  "type": "Float64",
+                  "value": "-122.4798767000009"
+                },
+                {
+                  "kind": "literal",
+                  "type": "Float64",
+                  "value": "37.815157199999845"
+                }
+              ],
+              "source": "(-122.4798767000009, 37.815157199999845)"
+            }
+          ],
+          "source": "[(-122.40898669999721, 37.81331899998324), (-122.35447369999936, 37.71980619999785), (-122.4798767000009, 37.815157199999845)]"
+        }
+      },
+      {
+        "kind": "cteExpr",
+        "name": "reference",
+        "expr": {
+          "kind": "arrayLiteral",
+          "elements": [
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "872830820ffffff"
+            },
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "872830828ffffff"
+            },
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "87283082affffff"
+            },
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "87283082bffffff"
+            },
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "87283082effffff"
+            },
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "872830870ffffff"
+            },
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "872830876ffffff"
+            }
+          ],
+          "source": "['872830820ffffff', '872830828ffffff', '87283082affffff', '87283082bffffff', '87283082effffff', '872830870ffffff', '872830876ffffff']"
+        }
+      }
+    ],
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "h3PolygonToCells",
+        "args": [
+          {
+            "kind": "functionCall",
+            "name": "materialize",
+            "args": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "ring"
+                ]
+              }
+            ]
+          },
+          {
+            "kind": "columnRef",
+            "parts": [
+              "resolution"
+            ]
+          }
+        ]
+      },
+      {
+        "kind": "binaryExpr",
+        "op": "=",
+        "left": {
+          "kind": "functionCall",
+          "name": "arraySort",
+          "args": [
+            {
+              "kind": "functionCall",
+              "name": "arrayMap",
+              "args": [
+                {
+                  "kind": "lambdaExpr",
+                  "params": [
+                    "x"
+                  ],
+                  "body": {
+                    "kind": "functionCall",
+                    "name": "h3ToString",
+                    "args": [
+                      {
+                        "kind": "columnRef",
+                        "parts": [
+                          "x"
+                        ]
+                      }
+                    ]
+                  }
+                },
+                {
+                  "kind": "functionCall",
+                  "name": "h3PolygonToCells",
+                  "args": [
+                    {
+                      "kind": "functionCall",
+                      "name": "materialize",
+                      "args": [
+                        {
+                          "kind": "columnRef",
+                          "parts": [
+                            "ring"
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "kind": "columnRef",
+                      "parts": [
+                        "resolution"
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        "right": {
+          "kind": "columnRef",
+          "parts": [
+            "reference"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "with": [
+      {
+        "kind": "cteExpr",
+        "name": "resolution",
+        "expr": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "7"
+        }
+      },
+      {
+        "kind": "cteExpr",
+        "name": "ring",
+        "expr": {
+          "kind": "arrayLiteral",
+          "elements": [
+            {
+              "kind": "tupleLiteral",
+              "elements": [
+                {
+                  "kind": "literal",
+                  "type": "Float64",
+                  "value": "-122.40898669999721"
+                },
+                {
+                  "kind": "literal",
+                  "type": "Float64",
+                  "value": "37.81331899998324"
+                }
+              ],
+              "source": "(-122.40898669999721, 37.81331899998324)"
+            },
+            {
+              "kind": "tupleLiteral",
+              "elements": [
+                {
+                  "kind": "literal",
+                  "type": "Float64",
+                  "value": "-122.35447369999936"
+                },
+                {
+                  "kind": "literal",
+                  "type": "Float64",
+                  "value": "37.71980619999785"
+                }
+              ],
+              "source": "(-122.35447369999936, 37.71980619999785)"
+            },
+            {
+              "kind": "tupleLiteral",
+              "elements": [
+                {
+                  "kind": "literal",
+                  "type": "Float64",
+                  "value": "-122.4798767000009"
+                },
+                {
+                  "kind": "literal",
+                  "type": "Float64",
+                  "value": "37.815157199999845"
+                }
+              ],
+              "source": "(-122.4798767000009, 37.815157199999845)"
+            }
+          ],
+          "source": "[(-122.40898669999721, 37.81331899998324), (-122.35447369999936, 37.71980619999785), (-122.4798767000009, 37.815157199999845)]"
+        }
+      },
+      {
+        "kind": "cteExpr",
+        "name": "reference",
+        "expr": {
+          "kind": "arrayLiteral",
+          "elements": [
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "872830820ffffff"
+            },
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "872830828ffffff"
+            },
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "87283082affffff"
+            },
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "87283082bffffff"
+            },
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "87283082effffff"
+            },
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "872830870ffffff"
+            },
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "872830876ffffff"
+            }
+          ],
+          "source": "['872830820ffffff', '872830828ffffff', '87283082affffff', '87283082bffffff', '87283082effffff', '872830870ffffff', '872830876ffffff']"
+        }
+      }
+    ],
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "h3PolygonToCells",
+        "args": [
+          {
+            "kind": "functionCall",
+            "name": "materialize",
+            "args": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "ring"
+                ]
+              }
+            ]
+          },
+          {
+            "kind": "functionCall",
+            "name": "materialize",
+            "args": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "resolution"
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "kind": "binaryExpr",
+        "op": "=",
+        "left": {
+          "kind": "functionCall",
+          "name": "arraySort",
+          "args": [
+            {
+              "kind": "functionCall",
+              "name": "arrayMap",
+              "args": [
+                {
+                  "kind": "lambdaExpr",
+                  "params": [
+                    "x"
+                  ],
+                  "body": {
+                    "kind": "functionCall",
+                    "name": "h3ToString",
+                    "args": [
+                      {
+                        "kind": "columnRef",
+                        "parts": [
+                          "x"
+                        ]
+                      }
+                    ]
+                  }
+                },
+                {
+                  "kind": "functionCall",
+                  "name": "h3PolygonToCells",
+                  "args": [
+                    {
+                      "kind": "functionCall",
+                      "name": "materialize",
+                      "args": [
+                        {
+                          "kind": "columnRef",
+                          "parts": [
+                            "ring"
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "kind": "functionCall",
+                      "name": "materialize",
+                      "args": [
+                        {
+                          "kind": "columnRef",
+                          "parts": [
+                            "resolution"
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        "right": {
+          "kind": "columnRef",
+          "parts": [
+            "reference"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "with": [
+      {
+        "kind": "cteExpr",
+        "name": "resolutions",
+        "expr": {
+          "kind": "functionCall",
+          "name": "range",
+          "args": [
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "0"
+            },
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "8"
+            }
+          ]
+        }
+      },
+      {
+        "kind": "cteExpr",
+        "name": "ring",
+        "expr": {
+          "kind": "arrayLiteral",
+          "elements": [
+            {
+              "kind": "tupleLiteral",
+              "elements": [
+                {
+                  "kind": "literal",
+                  "type": "Float64",
+                  "value": "-122.40898669999721"
+                },
+                {
+                  "kind": "literal",
+                  "type": "Float64",
+                  "value": "37.81331899998324"
+                }
+              ],
+              "source": "(-122.40898669999721, 37.81331899998324)"
+            },
+            {
+              "kind": "tupleLiteral",
+              "elements": [
+                {
+                  "kind": "literal",
+                  "type": "Float64",
+                  "value": "-122.35447369999936"
+                },
+                {
+                  "kind": "literal",
+                  "type": "Float64",
+                  "value": "37.71980619999785"
+                }
+              ],
+              "source": "(-122.35447369999936, 37.71980619999785)"
+            },
+            {
+              "kind": "tupleLiteral",
+              "elements": [
+                {
+                  "kind": "literal",
+                  "type": "Float64",
+                  "value": "-122.4798767000009"
+                },
+                {
+                  "kind": "literal",
+                  "type": "Float64",
+                  "value": "37.815157199999845"
+                }
+              ],
+              "source": "(-122.4798767000009, 37.815157199999845)"
+            }
+          ],
+          "source": "[(-122.40898669999721, 37.81331899998324), (-122.35447369999936, 37.71980619999785), (-122.4798767000009, 37.815157199999845)]"
+        }
+      }
+    ],
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "resolution"
+        ]
+      },
+      {
+        "kind": "functionCall",
+        "name": "h3PolygonToCells",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "ring"
+            ]
+          },
+          {
+            "kind": "alias",
+            "expr": {
+              "kind": "functionCall",
+              "name": "arrayJoin",
+              "args": [
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "resolutions"
+                  ]
+                }
+              ]
+            },
+            "alias": "resolution"
+          }
+        ]
+      }
+    ],
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "resolution"
+          ]
+        },
+        "direction": "ASC"
+      }
+    ]
+  },
+  {
     "kind": "drop",
     "targetType": "TABLE",
     "table": {
@@ -257,6 +1219,86 @@
       "kind": "tableRef",
       "table": "rings"
     }
+  },
+  {
+    "kind": "select",
+    "with": [
+      {
+        "kind": "cteExpr",
+        "name": "resolutions",
+        "expr": {
+          "kind": "functionCall",
+          "name": "range",
+          "args": [
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "0"
+            },
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "8"
+            }
+          ]
+        }
+      }
+    ],
+    "distinct": {
+      "kind": "distinct"
+    },
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "resolution"
+        ]
+      },
+      {
+        "kind": "functionCall",
+        "name": "h3PolygonToCells",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "ring"
+            ]
+          },
+          {
+            "kind": "alias",
+            "expr": {
+              "kind": "functionCall",
+              "name": "arrayJoin",
+              "args": [
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "resolutions"
+                  ]
+                }
+              ]
+            },
+            "alias": "resolution"
+          }
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "rings"
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "resolution"
+          ]
+        },
+        "direction": "ASC"
+      }
+    ]
   },
   {
     "kind": "drop",

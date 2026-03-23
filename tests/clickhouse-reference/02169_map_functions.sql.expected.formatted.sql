@@ -169,6 +169,13 @@ SELECT mapUpdate(map('k1', 1, 'k2', 2), materialize(map('k3', 33, 'k4', 44)));
 
 SELECT mapUpdate(materialize(map('k1', 1, 'k2', 2)), materialize(map('k3', 33, 'k4', 44)));
 
+WITH (range(0, number % 10), range(0, number % 10))::Map(UInt64, UInt64) AS m1,
+
+(range(0, number % 10, 2), arrayMap(x -> x * x, range(0, number % 10, 2)))::Map(UInt64, UInt64) AS m2
+
+SELECT DISTINCT mapUpdate(m1, m2)
+FROM numbers(100000);
+
 SELECT mapApply(); -- { serverError NUMBER_OF_ARGUMENTS_DOESNT_MATCH }
 
 SELECT mapApply((x, y) -> (x), map(1, 0, 2, 0)); -- { serverError BAD_ARGUMENTS }

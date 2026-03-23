@@ -7,3 +7,11 @@ ENGINE = MergeTree
 ORDER BY (raw_id);
 
 INSERT INTO test;
+
+WITH like(t, '%_1%') AS issue
+
+SELECT
+    raw_id,
+    arrayFilter((t, t2) -> (NOT issue), columns_n.col_1, columns_n.col_2)
+FROM test
+ORDER BY raw_id ASC;

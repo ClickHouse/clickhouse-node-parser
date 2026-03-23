@@ -14,6 +14,24 @@ ENGINE = TinyLog;
 
 INSERT INTO predicate_table;
 
+WITH toDate('2000-01-01') AS a,
+
+toDateTime('2000-01-01', 'Asia/Istanbul') AS b
+
+SELECT
+    if(value, b, a) AS result,
+    toTypeName(result)
+FROM predicate_table;
+
+WITH toDateTime('2000-01-01', 'Asia/Istanbul') AS a,
+
+toDateTime64('2000-01-01', 5, 'Asia/Istanbul') AS b
+
+SELECT
+    if(value, b, a) AS result,
+    toTypeName(result)
+FROM predicate_table;
+
 SELECT
     CAST(toDate('2000-01-01') AS DateTime('UTC')) AS x,
     toTypeName(x);

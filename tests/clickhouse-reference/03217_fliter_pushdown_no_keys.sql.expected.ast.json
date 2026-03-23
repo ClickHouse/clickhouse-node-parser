@@ -386,5 +386,134 @@
         "value": "2"
       }
     }
+  },
+  {
+    "kind": "select",
+    "with": [
+      {
+        "kind": "cteSubquery",
+        "name": "activity",
+        "query": {
+          "kind": "union",
+          "queries": [
+            {
+              "kind": "select",
+              "select": [
+                {
+                  "kind": "alias",
+                  "expr": {
+                    "kind": "functionCall",
+                    "name": "groupUniqArrayState",
+                    "args": [
+                      {
+                        "kind": "functionCall",
+                        "name": "toDate",
+                        "args": [
+                          {
+                            "kind": "literal",
+                            "type": "String",
+                            "value": "2025-01-01 01:00:00"
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  "alias": "dates_seen"
+                },
+                {
+                  "kind": "alias",
+                  "expr": {
+                    "kind": "functionCall",
+                    "name": "toDateTime",
+                    "args": [
+                      {
+                        "kind": "literal",
+                        "type": "String",
+                        "value": "2025-01-01 01:00:00"
+                      }
+                    ]
+                  },
+                  "alias": "last_seen"
+                }
+              ]
+            },
+            {
+              "kind": "select",
+              "select": [
+                {
+                  "kind": "alias",
+                  "expr": {
+                    "kind": "functionCall",
+                    "name": "groupUniqArrayState",
+                    "args": [
+                      {
+                        "kind": "functionCall",
+                        "name": "toDate",
+                        "args": [
+                          {
+                            "kind": "literal",
+                            "type": "String",
+                            "value": "2023-11-11 11:11:11"
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  "alias": "dates_seen"
+                },
+                {
+                  "kind": "alias",
+                  "expr": {
+                    "kind": "functionCall",
+                    "name": "toDateTime",
+                    "args": [
+                      {
+                        "kind": "literal",
+                        "type": "String",
+                        "value": "2023-11-11 11:11:11"
+                      }
+                    ]
+                  },
+                  "alias": "last_seen"
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ],
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "last_seen"
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "activity"
+    },
+    "where": {
+      "kind": "binaryExpr",
+      "op": "<",
+      "left": {
+        "kind": "columnRef",
+        "parts": [
+          "last_seen"
+        ]
+      },
+      "right": {
+        "kind": "functionCall",
+        "name": "toDateTime",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": "2020-01-01 00:00:00"
+          }
+        ]
+      }
+    }
   }
 ]

@@ -20,3 +20,11 @@ SET prefer_column_name_to_alias = 1;
 
 INSERT INTO repl_tbl (key) SELECT number
 FROM numbers(10);
+
+WITH 10 AS k
+
+SELECT
+    k AS key,
+    *
+FROM repl_tbl
+WHERE key = k;

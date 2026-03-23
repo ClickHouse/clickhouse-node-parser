@@ -11,3 +11,12 @@ CREATE TABLE `03033_example_table`
 )
 ENGINE = MergeTree()
 ORDER BY ColumnA;
+
+WITH helper AS (
+    SELECT *
+    FROM `03033_example_table`
+    ORDER BY ColumnA ASC WITH FILL INTERPOLATE (ColumnB AS ColumnC, ColumnC AS ColumnA)
+)
+
+SELECT ColumnB
+FROM helper;

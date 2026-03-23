@@ -494,6 +494,125 @@
   },
   {
     "kind": "select",
+    "with": [
+      {
+        "kind": "cteExpr",
+        "name": "x",
+        "expr": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "123"
+        }
+      }
+    ],
+    "select": [
+      {
+        "kind": "literal",
+        "type": "UInt64",
+        "value": "555"
+      }
+    ],
+    "from": {
+      "kind": "subqueryFrom",
+      "query": {
+        "kind": "select",
+        "select": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "a"
+            ]
+          },
+          {
+            "kind": "columnRef",
+            "parts": [
+              "x"
+            ]
+          }
+        ],
+        "from": {
+          "kind": "subqueryFrom",
+          "query": {
+            "kind": "select",
+            "select": [
+              {
+                "kind": "alias",
+                "expr": {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "1"
+                },
+                "alias": "a"
+              },
+              {
+                "kind": "alias",
+                "expr": {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "2"
+                },
+                "alias": "b"
+              }
+            ]
+          }
+        }
+      }
+    }
+  },
+  {
+    "kind": "select",
+    "with": [
+      {
+        "kind": "cteSubquery",
+        "name": "t",
+        "query": {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "1"
+            }
+          ]
+        }
+      }
+    ],
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "t"
+        ]
+      },
+      {
+        "kind": "subqueryExpr",
+        "query": {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "asterisk"
+            }
+          ],
+          "from": {
+            "kind": "tableRef",
+            "table": "t"
+          }
+        }
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "t"
+    },
+    "leadingComments": [
+      "-- here we refer to table `test1` (defined as subquery) three times, one of them inside another scalar subquery."
+    ],
+    "trailingComments": [
+      "-- { serverError UNKNOWN_IDENTIFIER }"
+    ]
+  },
+  {
+    "kind": "select",
     "select": [
       {
         "kind": "columnRef",

@@ -32,6 +32,12 @@ FROM (
         SELECT 2 AS `'xyz'`
     );
 
+WITH 3 AS `1`
+
+SELECT
+    1,
+    `1`; -- { serverError AMBIGUOUS_COLUMN_NAME }
+
 -- https://github.com/ClickHouse/ClickHouse/issues/9953
 SELECT
     1,

@@ -13,6 +13,16 @@ FROM numbers(10);
 SELECT sum(1 - number)
 FROM numbers(10);
 
+WITH 1::Nullable(UInt64) AS my_literal
+
+SELECT sum(number + my_literal)
+FROM numbers(0);
+
+WITH 1::Nullable(UInt64) AS my_literal
+
+SELECT sum(number) + my_literal * count()
+FROM numbers(0);
+
 -- { echoOff }
 DROP TABLE IF EXISTS test_table;
 

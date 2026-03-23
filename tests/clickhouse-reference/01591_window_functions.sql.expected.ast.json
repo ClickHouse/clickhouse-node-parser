@@ -1766,6 +1766,118 @@
   },
   {
     "kind": "select",
+    "with": [
+      {
+        "kind": "cteExpr",
+        "name": "x",
+        "expr": {
+          "kind": "binaryExpr",
+          "op": "+",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "number"
+            ]
+          },
+          "right": {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "1"
+          }
+        }
+      }
+    ],
+    "select": [
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "intDiv",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "number"
+              ]
+            },
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "3"
+            }
+          ]
+        },
+        "alias": "y"
+      },
+      {
+        "kind": "functionCall",
+        "name": "sum",
+        "args": [
+          {
+            "kind": "binaryExpr",
+            "op": "+",
+            "left": {
+              "kind": "columnRef",
+              "parts": [
+                "x"
+              ]
+            },
+            "right": {
+              "kind": "columnRef",
+              "parts": [
+                "y"
+              ]
+            }
+          }
+        ],
+        "window": {
+          "partitionBy": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "y"
+              ]
+            }
+          ],
+          "orderBy": [
+            {
+              "kind": "orderByItem",
+              "expr": {
+                "kind": "columnRef",
+                "parts": [
+                  "x"
+                ]
+              },
+              "direction": "ASC"
+            }
+          ],
+          "frame": {
+            "frameType": "rows",
+            "start": {
+              "kind": "unbounded"
+            }
+          }
+        }
+      }
+    ],
+    "from": {
+      "kind": "tableFunctionRef",
+      "name": "numbers",
+      "args": [
+        {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "7"
+        }
+      ]
+    },
+    "leadingComments": [
+      "-- Various kinds of aliases are properly substituted into various parts of window",
+      "-- function definition."
+    ]
+  },
+  {
+    "kind": "select",
     "select": [
       {
         "kind": "literal",

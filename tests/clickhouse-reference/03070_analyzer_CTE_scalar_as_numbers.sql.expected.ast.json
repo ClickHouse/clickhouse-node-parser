@@ -14,5 +14,62 @@
     "leadingComments": [
       "-- https://github.com/ClickHouse/ClickHouse/issues/8259"
     ]
+  },
+  {
+    "kind": "select",
+    "with": [
+      {
+        "kind": "cteExpr",
+        "name": "something",
+        "expr": {
+          "kind": "subqueryExpr",
+          "query": {
+            "kind": "select",
+            "select": [
+              {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "25"
+              }
+            ]
+          }
+        }
+      }
+    ],
+    "select": [
+      {
+        "kind": "asterisk"
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "something"
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableFunctionRef",
+      "name": "numbers",
+      "args": [
+        {
+          "kind": "functionCall",
+          "name": "toUInt64",
+          "args": [
+            {
+              "kind": "functionCall",
+              "name": "assumeNotNull",
+              "args": [
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "something"
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
   }
 ]

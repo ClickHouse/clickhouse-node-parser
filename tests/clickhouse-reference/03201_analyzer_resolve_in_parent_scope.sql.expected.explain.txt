@@ -17,6 +17,108 @@ CreateQuery fake (children 2)
       Function currentDatabase (children 1)
        ExpressionList
 
+SelectWithUnionQuery (children 1)
+ ExpressionList (children 1)
+  SelectQuery (children 3)
+   ExpressionList (children 2)
+    Function and (alias $condition) (children 1)
+     ExpressionList (children 2)
+      Function notLike (children 1)
+       ExpressionList (children 2)
+        Identifier database
+        Literal 'system'
+      Function equals (children 1)
+       ExpressionList (children 2)
+        Identifier name
+        Literal 'fake'
+    WithElement (children 1)
+     Subquery (children 1)
+      SelectWithUnionQuery (children 1)
+       ExpressionList (children 1)
+        SelectQuery (children 3)
+         ExpressionList (children 1)
+          Identifier table
+         TablesInSelectQuery (children 1)
+          TablesInSelectQueryElement (children 1)
+           TableExpression (children 1)
+            TableIdentifier fake
+         Identifier $condition
+   ExpressionList (children 1)
+    Asterisk
+   TablesInSelectQuery (children 1)
+    TablesInSelectQueryElement (children 1)
+     TableExpression (children 1)
+      TableIdentifier $main
+
+SelectWithUnionQuery (children 1)
+ ExpressionList (children 1)
+  SelectQuery (children 3)
+   ExpressionList (children 3)
+    Function arrayElement (alias objectId) (children 1)
+     ExpressionList (children 2)
+      Identifier properties_value
+      Function indexOf (children 1)
+       ExpressionList (children 2)
+        Identifier properties_key
+        Literal 'objectId'
+    WithElement (children 1)
+     Subquery (children 1)
+      SelectWithUnionQuery (children 1)
+       ExpressionList (children 1)
+        SelectQuery (children 1)
+         ExpressionList (children 2)
+          Literal Array_['objectId'] (alias properties_key)
+          Literal Array_['objectValue'] (alias properties_value)
+    WithElement (children 1)
+     Subquery (children 1)
+      SelectWithUnionQuery (children 1)
+       ExpressionList (children 1)
+        SelectQuery (children 2)
+         ExpressionList (children 1)
+          Identifier objectId
+         TablesInSelectQuery (children 1)
+          TablesInSelectQueryElement (children 1)
+           TableExpression (children 1)
+            TableIdentifier data
+   ExpressionList (children 1)
+    Asterisk
+   TablesInSelectQuery (children 1)
+    TablesInSelectQueryElement (children 1)
+     TableExpression (children 1)
+      TableIdentifier nested_query
+
+SelectWithUnionQuery (children 1)
+ ExpressionList (children 1)
+  SelectQuery (children 3)
+   ExpressionList (children 1)
+    Function leftPad (alias paddedval) (children 1)
+     ExpressionList (children 3)
+      Literal 'abc'
+      Literal UInt64_4
+      Literal '0'
+   ExpressionList (children 1)
+    Asterisk
+   TablesInSelectQuery (children 1)
+    TablesInSelectQueryElement (children 1)
+     TableExpression (children 1)
+      Subquery (children 1)
+       SelectWithUnionQuery (children 1)
+        ExpressionList (children 1)
+         SelectQuery (children 1)
+          ExpressionList (children 1)
+           Identifier paddedval
+
+SelectWithUnionQuery (children 1)
+ ExpressionList (children 1)
+  SelectQuery (children 2)
+   ExpressionList (children 1)
+    Literal Tuple_('408', '420') (alias some_tuple)
+   ExpressionList (children 1)
+    Function in (alias flag) (children 1)
+     ExpressionList (children 2)
+      Literal '408'
+      Identifier some_tuple
+
 CreateQuery another_fake (children 2)
  Identifier another_fake
  SelectWithUnionQuery (children 1)
@@ -29,6 +131,40 @@ CreateQuery another_fake (children 2)
      TablesInSelectQueryElement (children 1)
       TableExpression (children 1)
        TableIdentifier system.parts
+
+SelectWithUnionQuery (children 2)
+ ExpressionList (children 1)
+  SelectQuery (children 3)
+   ExpressionList (children 2)
+    Function sum (alias s) (children 1)
+     ExpressionList (children 1)
+      Identifier bytes
+    WithElement (children 1)
+     Subquery (children 1)
+      SelectWithUnionQuery (children 1)
+       ExpressionList (children 1)
+        SelectQuery (children 4)
+         ExpressionList (children 2)
+          Function formatReadableSize (children 1)
+           ExpressionList (children 1)
+            Identifier s
+          Identifier table
+         TablesInSelectQuery (children 1)
+          TablesInSelectQueryElement (children 1)
+           TableExpression (children 1)
+            TableIdentifier another_fake
+         ExpressionList (children 1)
+          Identifier table
+         ExpressionList (children 1)
+          OrderByElement (children 1)
+           Identifier s
+   ExpressionList (children 1)
+    Asterisk
+   TablesInSelectQuery (children 1)
+    TablesInSelectQueryElement (children 1)
+     TableExpression (children 1)
+      TableIdentifier data
+ Identifier Null
 
 CreateQuery test (children 3)
  Identifier test
@@ -45,6 +181,44 @@ CreateQuery test (children 3)
  Storage definition (children 1)
   Function Log
 
+SelectWithUnionQuery (children 1)
+ ExpressionList (children 1)
+  SelectQuery (children 4)
+   ExpressionList (children 1)
+    Function and (alias block_filter) (children 1)
+     ExpressionList (children 2)
+      Function greaterOrEquals (children 1)
+       ExpressionList (children 2)
+        Identifier Block_Height
+        Literal UInt64_1
+      Function lessOrEquals (children 1)
+       ExpressionList (children 2)
+        Identifier Block_Height
+        Literal UInt64_2
+   ExpressionList (children 1)
+    Asterisk
+   TablesInSelectQuery (children 1)
+    TablesInSelectQueryElement (children 1)
+     TableExpression (children 1)
+      TableIdentifier test
+   Function and (children 1)
+    ExpressionList (children 2)
+     Identifier block_filter
+     Function in (children 1)
+      ExpressionList (children 2)
+       Identifier Block_Date
+       Subquery (children 1)
+        SelectWithUnionQuery (children 1)
+         ExpressionList (children 1)
+          SelectQuery (children 3)
+           ExpressionList (children 1)
+            Identifier Block_Date
+           TablesInSelectQuery (children 1)
+            TablesInSelectQueryElement (children 1)
+             TableExpression (children 1)
+              TableIdentifier test
+           Identifier block_filter
+
 CreateQuery test_cte (children 3)
  Identifier test_cte
  Columns definition (children 1)
@@ -57,3 +231,61 @@ CreateQuery test_cte (children 3)
   Function MergeTree
   Function tuple (children 1)
    ExpressionList
+
+SelectWithUnionQuery (children 1)
+ ExpressionList (children 1)
+  SelectQuery (children 3)
+   ExpressionList (children 2)
+    Function greater (alias cte) (children 1)
+     ExpressionList (children 2)
+      Identifier a
+      Identifier b
+    WithElement (children 1)
+     Subquery (children 1)
+      SelectWithUnionQuery (children 1)
+       ExpressionList (children 1)
+        SelectQuery (children 3)
+         ExpressionList (children 1)
+          Function count (children 1)
+           ExpressionList
+         TablesInSelectQuery (children 1)
+          TablesInSelectQueryElement (children 1)
+           TableExpression (children 1)
+            TableIdentifier test_cte
+         Identifier cte
+   ExpressionList (children 1)
+    Asterisk
+   TablesInSelectQuery (children 1)
+    TablesInSelectQueryElement (children 1)
+     TableExpression (children 1)
+      TableIdentifier query
+
+SelectWithUnionQuery (children 1)
+ ExpressionList (children 1)
+  SelectQuery (children 3)
+   ExpressionList (children 1)
+    Function arrayMap (alias a) (children 1)
+     ExpressionList (children 2)
+      Function lambda (children 1)
+       ExpressionList (children 2)
+        Function tuple (children 1)
+         ExpressionList (children 1)
+          Identifier x
+        Function plus (children 1)
+         ExpressionList (children 2)
+          Identifier x
+          Literal UInt64_1
+      Literal Array_[UInt64_0]
+   ExpressionList (children 1)
+    Literal UInt64_1
+   Function in (children 1)
+    ExpressionList (children 2)
+     Literal UInt64_1
+     Subquery (children 1)
+      SelectWithUnionQuery (children 1)
+       ExpressionList (children 1)
+        SelectQuery (children 1)
+         ExpressionList (children 1)
+          Function arrayJoin (children 1)
+           ExpressionList (children 1)
+            Identifier a

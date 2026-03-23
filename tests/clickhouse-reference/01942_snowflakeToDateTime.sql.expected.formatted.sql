@@ -19,6 +19,30 @@ SETTINGS allow_deprecated_snowflake_conversion_functions = 0; -- { serverError D
 SELECT snowflakeToDateTime64(123::Int64)
 SETTINGS allow_deprecated_snowflake_conversion_functions = 0; -- { serverError DEPRECATED_FUNCTION }
 
+WITH CAST(1426860704886947840 AS Int64) AS i64,
+
+'UTC' AS tz
+
+SELECT
+    tz,
+    i64,
+    snowflakeToDateTime(i64, tz) AS dt,
+    toTypeName(dt),
+    snowflakeToDateTime64(i64, tz) AS dt64,
+    toTypeName(dt64);
+
+WITH CAST(1426860704886947840 AS Int64) AS i64,
+
+'Asia/Shanghai' AS tz
+
+SELECT
+    tz,
+    i64,
+    snowflakeToDateTime(i64, tz) AS dt,
+    toTypeName(dt),
+    snowflakeToDateTime64(i64, tz) AS dt64,
+    toTypeName(dt64);
+
 DROP TABLE IF EXISTS tab;
 
 CREATE TABLE tab

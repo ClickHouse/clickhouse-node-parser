@@ -15,3 +15,4 @@ ENGINE = ReplacingMergeTree(ts)
 ORDER BY `key`;
 set prefer_column_name_to_alias = 1;
 INSERT INTO repl_tbl (key) SELECT number FROM numbers(10);
+WITH 10 as k SELECT k as key, * FROM repl_tbl WHERE key = k;

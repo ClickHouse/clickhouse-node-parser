@@ -13,6 +13,18 @@ ORDER BY (id);
 
 INSERT INTO tags (id, seqs);
 
+WITH (
+        SELECT [0, 1, 2, 3]
+    ) AS arr1
+
+SELECT
+    arraySort(arrayIntersect(argMax(seqs, create_time), arr1)) AS common,
+    id
+FROM tags
+WHERE like(id, 'id%')
+GROUP BY id
+ORDER BY id ASC;
+
 DROP TABLE tags;
 
 -- https://github.com/ClickHouse/ClickHouse/issues/15294
@@ -69,6 +81,16 @@ ORDER BY id
 PARTITION BY tuple();
 
 INSERT INTO bbb;
+
+WITH (
+        SELECT groupArray(id)
+        FROM bbb
+    ) AS ids
+
+SELECT *
+FROM aaa
+WHERE has(ids, id)
+ORDER BY id ASC;
 
 DROP TABLE aaa;
 

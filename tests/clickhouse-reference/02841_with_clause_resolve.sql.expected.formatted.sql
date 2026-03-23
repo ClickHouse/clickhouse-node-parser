@@ -1,1 +1,1 @@
-SET enable_analyzer = 1;
+<Parse Error>

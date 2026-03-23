@@ -3298,6 +3298,185 @@
     }
   },
   {
+    "kind": "select",
+    "with": [
+      {
+        "kind": "cteExpr",
+        "name": "key",
+        "expr": {
+          "kind": "functionCall",
+          "name": "unhex",
+          "args": [
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "eebc1f57487f51921c0465665f8ae6d1658bb26de6f8a069a3520293a572078f"
+            }
+          ]
+        }
+      },
+      {
+        "kind": "cteExpr",
+        "name": "tag",
+        "expr": {
+          "kind": "functionCall",
+          "name": "unhex",
+          "args": [
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "67ba0510262ae487d737ee6298f77e0c"
+            }
+          ]
+        }
+      },
+      {
+        "kind": "cteExpr",
+        "name": "iv",
+        "expr": {
+          "kind": "functionCall",
+          "name": "unhex",
+          "args": [
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "99aa3e68ed8173a0eed06684"
+            }
+          ]
+        }
+      },
+      {
+        "kind": "cteExpr",
+        "name": "plaintext",
+        "expr": {
+          "kind": "functionCall",
+          "name": "unhex",
+          "args": [
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "f56e87055bc32d0eeb31b2eacc2bf2a5"
+            }
+          ]
+        }
+      },
+      {
+        "kind": "cteExpr",
+        "name": "aad",
+        "expr": {
+          "kind": "functionCall",
+          "name": "unhex",
+          "args": [
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "4d23c3cec334b49bdb370c437fec78de"
+            }
+          ]
+        }
+      },
+      {
+        "kind": "cteExpr",
+        "name": "ciphertext",
+        "expr": {
+          "kind": "functionCall",
+          "name": "unhex",
+          "args": [
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "f7264413a84c0e7cd536867eb9f21736"
+            }
+          ]
+        }
+      }
+    ],
+    "select": [
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "hex",
+          "args": [
+            {
+              "kind": "functionCall",
+              "name": "decrypt",
+              "args": [
+                {
+                  "kind": "literal",
+                  "type": "String",
+                  "value": "aes-256-gcm"
+                },
+                {
+                  "kind": "functionCall",
+                  "name": "concat",
+                  "args": [
+                    {
+                      "kind": "columnRef",
+                      "parts": [
+                        "ciphertext"
+                      ]
+                    },
+                    {
+                      "kind": "columnRef",
+                      "parts": [
+                        "tag"
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "key"
+                  ]
+                },
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "iv"
+                  ]
+                },
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "aad"
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        "alias": "plaintext_actual"
+      },
+      {
+        "kind": "binaryExpr",
+        "op": "=",
+        "left": {
+          "kind": "columnRef",
+          "parts": [
+            "plaintext_actual"
+          ]
+        },
+        "right": {
+          "kind": "functionCall",
+          "name": "hex",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "plaintext"
+              ]
+            }
+          ]
+        }
+      }
+    ],
+    "leadingComments": [
+      "-- based on https://github.com/openssl/openssl/blob/master/demos/evp/aesgcm.c#L20"
+    ]
+  },
+  {
     "kind": "createTable",
     "table": {
       "kind": "tableRef",

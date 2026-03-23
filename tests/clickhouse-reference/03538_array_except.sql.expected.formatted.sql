@@ -44,6 +44,26 @@ FROM numbers(3);
 SELECT arrayExcept(materialize([1, 2, 3, 4]), [3, 5]) AS result
 FROM numbers(3);
 
+WITH excludes AS (
+    SELECT
+        1 AS id,
+        ['b','d'] AS exclude
+    UNION ALL
+    SELECT
+        2 AS id,
+        ['a','c']
+    UNION ALL
+    SELECT
+        3 AS id,
+        ['x','y']
+)
+
+SELECT
+    id,
+    arrayExcept(['a','b','c'], exclude) AS result
+FROM excludes
+ORDER BY id ASC;
+
 SELECT arrayExcept(multiIf(number = 0, [1, 2, 3], number = 1, [4, 5, 6], [7, 8, 9]), [2, 5, 8]) AS result
 FROM numbers(3);
 

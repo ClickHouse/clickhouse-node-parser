@@ -10,3 +10,7 @@ SELECT t.4 FROM t_tuple_numeric; -- {serverError NOT_FOUND_COLUMN_IN_BLOCK, ARGU
 SELECT `t`.`1`.`1`, `t`.`1`.`2`, `t`.`2` FROM t_tuple_numeric; -- {serverError UNKNOWN_IDENTIFIER, ARGUMENT_OUT_OF_BOUND}
 DROP TABLE t_tuple_numeric;
 CREATE TABLE t_tuple_numeric (t Tuple(Tuple(Int, Int), Int)) ENGINE = MergeTree ORDER BY tuple();
+WITH
+    '{"1":{"key":"value"}}' AS data,
+    JSONExtract(data, 'Tuple("1" Tuple(key String))') AS parsed_json
+SELECT parsed_json AS ssid

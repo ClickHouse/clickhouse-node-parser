@@ -48,6 +48,8 @@ select total from (select first_col, count(second_col) as total from tp2 group b
 select first_col from (select first_col, second_col as total from tp2 order by 1 desc);
 select first_col from (select first_col, second_col as total from tp2 order by 2 desc);
 select max from (select max(first_col) as max, second_col as total from tp2 group by 2) order by 1;
+with res as (select first_col from (select first_col, second_col as total from tp2 order by 2 desc) limit 1)
+select * from res;
 create table test
 (
 `id`  UInt32,

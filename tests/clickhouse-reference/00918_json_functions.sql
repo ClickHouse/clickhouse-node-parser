@@ -146,6 +146,7 @@ SELECT JSONExtractKeysAndValuesRaw('{"a": "hello", "b": [-100, 200.0, 300], "c":
 SELECT JSONExtractString('["a", "b", "c", "d", "e"]', idx) FROM (SELECT arrayJoin([1,2,3,4,5]) AS idx);
 SELECT JSONExtractString(json, 's') FROM (SELECT arrayJoin(['{"s":"u"}', '{"s":"v"}']) AS json);
 SELECT JSONExtractKeysAndValues([], JSONLength('^?V{LSwp')); -- { serverError ILLEGAL_COLUMN }
+WITH '{"i": 1, "f": 1.2}' AS json SELECT JSONExtract(json, 'i', JSONType(json, 'i')); -- { serverError ILLEGAL_COLUMN }
 SELECT JSONExtract('{"a": [100.0, 200], "b": [-100, 200.0, 300]}', 'Map(Int64, Array(Float64))'); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 SET allow_simdjson=0;
 SELECT JSONExtractKeys('{"a": "hello", "b": [-100, 200.0, 300]}');

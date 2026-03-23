@@ -274,5 +274,264 @@
         }
       }
     ]
+  },
+  {
+    "kind": "select",
+    "with": [
+      {
+        "kind": "cteExpr",
+        "name": "id",
+        "expr": {
+          "kind": "subqueryExpr",
+          "query": {
+            "kind": "select",
+            "select": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "query_id"
+                ]
+              }
+            ],
+            "from": {
+              "kind": "tableRef",
+              "database": "system",
+              "table": "query_log"
+            },
+            "where": {
+              "kind": "naryExpr",
+              "op": "AND",
+              "operands": [
+                {
+                  "kind": "binaryExpr",
+                  "op": "=",
+                  "left": {
+                    "kind": "columnRef",
+                    "parts": [
+                      "current_database"
+                    ]
+                  },
+                  "right": {
+                    "kind": "functionCall",
+                    "name": "currentDatabase",
+                    "args": []
+                  }
+                },
+                {
+                  "kind": "functionCall",
+                  "name": "like",
+                  "args": [
+                    {
+                      "kind": "columnRef",
+                      "parts": [
+                        "query"
+                      ]
+                    },
+                    {
+                      "kind": "literal",
+                      "type": "String",
+                      "value": "select x from tab%"
+                    }
+                  ]
+                },
+                {
+                  "kind": "binaryExpr",
+                  "op": ">=",
+                  "left": {
+                    "kind": "columnRef",
+                    "parts": [
+                      "event_date"
+                    ]
+                  },
+                  "right": {
+                    "kind": "binaryExpr",
+                    "op": "-",
+                    "left": {
+                      "kind": "functionCall",
+                      "name": "today",
+                      "args": []
+                    },
+                    "right": {
+                      "kind": "literal",
+                      "type": "UInt64",
+                      "value": "1"
+                    },
+                    "parenthesized": true
+                  }
+                }
+              ]
+            },
+            "orderBy": [
+              {
+                "kind": "orderByItem",
+                "expr": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "event_time"
+                  ]
+                },
+                "direction": "DESC"
+              }
+            ],
+            "limit": {
+              "count": {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "1"
+              }
+            }
+          }
+        }
+      }
+    ],
+    "select": [
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "replace",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "name"
+              ]
+            },
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "ReadPoolParallelReplicasInOrder"
+            },
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "ReadPoolInOrder"
+            }
+          ]
+        },
+        "alias": "name"
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "output_rows"
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "database": "system",
+      "table": "processors_profile_log"
+    },
+    "where": {
+      "kind": "naryExpr",
+      "op": "AND",
+      "operands": [
+        {
+          "kind": "binaryExpr",
+          "op": ">=",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "event_date"
+            ]
+          },
+          "right": {
+            "kind": "binaryExpr",
+            "op": "-",
+            "left": {
+              "kind": "functionCall",
+              "name": "today",
+              "args": []
+            },
+            "right": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "1"
+            },
+            "parenthesized": true
+          }
+        },
+        {
+          "kind": "binaryExpr",
+          "op": "=",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "query_id"
+            ]
+          },
+          "right": {
+            "kind": "columnRef",
+            "parts": [
+              "id"
+            ]
+          }
+        },
+        {
+          "kind": "naryExpr",
+          "op": "OR",
+          "operands": [
+            {
+              "kind": "functionCall",
+              "name": "like",
+              "args": [
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "name"
+                  ]
+                },
+                {
+                  "kind": "literal",
+                  "type": "String",
+                  "value": "%MergeTreeSelect%"
+                }
+              ]
+            },
+            {
+              "kind": "functionCall",
+              "name": "like",
+              "args": [
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "name"
+                  ]
+                },
+                {
+                  "kind": "literal",
+                  "type": "String",
+                  "value": "%VirtualRowTransform%"
+                }
+              ]
+            }
+          ],
+          "parenthesized": true
+        }
+      ]
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "name"
+          ]
+        },
+        "direction": "ASC"
+      },
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "output_rows"
+          ]
+        },
+        "direction": "ASC"
+      }
+    ]
   }
 ]

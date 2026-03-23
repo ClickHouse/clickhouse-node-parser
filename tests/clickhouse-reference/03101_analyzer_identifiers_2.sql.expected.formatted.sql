@@ -81,6 +81,33 @@ SELECT
         SELECT x
     );
 
+WITH 123 AS x
+
+SELECT 555
+FROM (
+        SELECT
+            a,
+            x
+        FROM (
+                SELECT
+                    1 AS a,
+                    2 AS b
+            )
+    );
+
+-- here we refer to table `test1` (defined as subquery) three times, one of them inside another scalar subquery.
+WITH t AS (
+    SELECT 1
+)
+
+SELECT
+    t,
+    (
+        SELECT *
+        FROM t
+    )
+FROM t; -- { serverError UNKNOWN_IDENTIFIER }
+
 -- throws, because x is not visible outside.
 SELECT x
 FROM (

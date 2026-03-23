@@ -76,5 +76,93 @@
         "table": "test"
       }
     }
+  },
+  {
+    "kind": "select",
+    "with": [
+      {
+        "kind": "cteExpr",
+        "name": "issue",
+        "expr": {
+          "kind": "functionCall",
+          "name": "like",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "t"
+              ]
+            },
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "%_1%"
+            }
+          ]
+        }
+      }
+    ],
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "raw_id"
+        ]
+      },
+      {
+        "kind": "functionCall",
+        "name": "arrayFilter",
+        "args": [
+          {
+            "kind": "lambdaExpr",
+            "params": [
+              "t",
+              "t2"
+            ],
+            "body": {
+              "kind": "unaryExpr",
+              "op": "NOT",
+              "expr": {
+                "kind": "columnRef",
+                "parts": [
+                  "issue"
+                ]
+              },
+              "parenthesized": true
+            }
+          },
+          {
+            "kind": "columnRef",
+            "parts": [
+              "columns_n",
+              "col_1"
+            ]
+          },
+          {
+            "kind": "columnRef",
+            "parts": [
+              "columns_n",
+              "col_2"
+            ]
+          }
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "test"
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "raw_id"
+          ]
+        },
+        "direction": "ASC"
+      }
+    ]
   }
 ]

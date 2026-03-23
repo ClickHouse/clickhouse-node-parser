@@ -39,6 +39,16 @@ WHERE database = currentDatabase()
     AND like(table, 'tab_%')
 ORDER BY table ASC;
 
+WITH [0.0, 2.0] AS reference_vec
+
+SELECT
+    id,
+    vec,
+    L2Distance(vec, reference_vec)
+FROM tab_compact_full
+ORDER BY L2Distance(vec, reference_vec) ASC
+LIMIT 3;
+
 SELECT trimLeft(`explain`) AS `explain`
 FROM (
         EXPLAIN indexes = 1
@@ -51,6 +61,16 @@ FROM (
     )
 WHERE like(`explain`, '%vector_similarity%')
     OR like(`explain`, '%Granules:%');
+
+WITH [0.0, 2.0] AS reference_vec
+
+SELECT
+    id,
+    vec,
+    L2Distance(vec, reference_vec)
+FROM tab_wide_full
+ORDER BY L2Distance(vec, reference_vec) ASC
+LIMIT 3;
 
 SELECT trimLeft(`explain`) AS `explain`
 FROM (

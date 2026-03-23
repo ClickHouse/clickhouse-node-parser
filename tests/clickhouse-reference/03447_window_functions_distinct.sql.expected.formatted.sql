@@ -10,6 +10,14 @@ SELECT
 FROM numbers(0, 5)
 ORDER BY number ASC;
 
+WITH intHash64(number) % 10 AS x
+
+SELECT
+    x,
+    sumDistinct(x) OVER (ORDER BY number ASC ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW) AS a,
+    sumDistinct(x) OVER (ORDER BY number ASC ROWS BETWEEN CURRENT ROW AND UNBOUNDED PRECEDING) AS b
+FROM numbers(10);
+
 SELECT
     number,
     s,
@@ -42,3 +50,32 @@ FROM (
         FROM numbers(11)
     )
 ORDER BY ts ASC;
+
+WITH arrayReduce('sumDistinctState', [1 + number, 2, 3]) AS a,
+
+arrayReduce('sumDistinctState', [2 + number, 3, 4]) AS b
+
+SELECT
+    finalizeAggregation(a),
+    finalizeAggregation(b),
+    finalizeAggregation(a + b),
+    finalizeAggregation(a * 2),
+    finalizeAggregation(b * 2)
+FROM numbers(10);
+
+WITH arrayReduce('sumDistinctState', [1, 2, 3]) AS a,
+
+arrayReduce('sumDistinctState', [2, 3, 4]) AS b,
+
+arrayReduce('sumDistinctState', [3, 4, 5]) AS c
+
+SELECT
+    finalizeAggregation(a),
+    finalizeAggregation(b),
+    finalizeAggregation(c),
+    finalizeAggregation(a + b),
+    finalizeAggregation(a + c),
+    finalizeAggregation(b + c),
+    finalizeAggregation((a + b) + c),
+    finalizeAggregation((b + c) + a),
+    finalizeAggregation((c + a) + b);

@@ -59,6 +59,9 @@ select count(1) over (rows unbounded preceding), max(number + 1) over () from nu
 -- Should work in DISTINCT
 select distinct sum(0) over (rows unbounded preceding) from numbers(2);
 select distinct any(number) over (rows unbounded preceding) from numbers(2);
+-- Various kinds of aliases are properly substituted into various parts of window
+-- function definition.
+with number + 1 as x select intDiv(number, 3) as y, sum(x + y) over (partition by y order by x rows unbounded preceding) from numbers(7);
 -- WINDOW clause
 select 1 window w1 as ();
 select sum(number) over w1, sum(number) over w2

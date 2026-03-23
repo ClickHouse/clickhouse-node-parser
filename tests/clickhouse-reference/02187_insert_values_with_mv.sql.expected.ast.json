@@ -492,5 +492,267 @@
         "value": "1"
       }
     }
+  },
+  {
+    "kind": "select",
+    "with": [
+      {
+        "kind": "cteExpr",
+        "name": "q_id",
+        "expr": {
+          "kind": "subqueryExpr",
+          "query": {
+            "kind": "select",
+            "select": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "initial_query_id"
+                ]
+              }
+            ],
+            "from": {
+              "kind": "tableRef",
+              "database": "system",
+              "table": "query_log"
+            },
+            "where": {
+              "kind": "naryExpr",
+              "op": "AND",
+              "operands": [
+                {
+                  "kind": "binaryExpr",
+                  "op": "=",
+                  "left": {
+                    "kind": "columnRef",
+                    "parts": [
+                      "current_database"
+                    ]
+                  },
+                  "right": {
+                    "kind": "functionCall",
+                    "name": "currentDatabase",
+                    "args": []
+                  }
+                },
+                {
+                  "kind": "binaryExpr",
+                  "op": ">=",
+                  "left": {
+                    "kind": "columnRef",
+                    "parts": [
+                      "event_date"
+                    ]
+                  },
+                  "right": {
+                    "kind": "functionCall",
+                    "name": "yesterday",
+                    "args": []
+                  }
+                },
+                {
+                  "kind": "functionCall",
+                  "name": "like",
+                  "args": [
+                    {
+                      "kind": "columnRef",
+                      "parts": [
+                        "query"
+                      ]
+                    },
+                    {
+                      "kind": "literal",
+                      "type": "String",
+                      "value": "-- INSERT USING VALUES%"
+                    }
+                  ]
+                }
+              ]
+            },
+            "limit": {
+              "count": {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "1"
+              }
+            }
+          }
+        }
+      }
+    ],
+    "select": [
+      {
+        "kind": "literal",
+        "type": "String",
+        "value": "VALUES"
+      },
+      {
+        "kind": "binaryExpr",
+        "op": ">=",
+        "left": {
+          "kind": "columnRef",
+          "parts": [
+            "view_duration_ms"
+          ]
+        },
+        "right": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "50"
+        }
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "database": "system",
+      "table": "query_views_log"
+    },
+    "where": {
+      "kind": "binaryExpr",
+      "op": "=",
+      "left": {
+        "kind": "columnRef",
+        "parts": [
+          "initial_query_id"
+        ]
+      },
+      "right": {
+        "kind": "columnRef",
+        "parts": [
+          "q_id"
+        ]
+      }
+    }
+  },
+  {
+    "kind": "select",
+    "with": [
+      {
+        "kind": "cteExpr",
+        "name": "q_id",
+        "expr": {
+          "kind": "subqueryExpr",
+          "query": {
+            "kind": "select",
+            "select": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "initial_query_id"
+                ]
+              }
+            ],
+            "from": {
+              "kind": "tableRef",
+              "database": "system",
+              "table": "query_log"
+            },
+            "where": {
+              "kind": "naryExpr",
+              "op": "AND",
+              "operands": [
+                {
+                  "kind": "binaryExpr",
+                  "op": "=",
+                  "left": {
+                    "kind": "columnRef",
+                    "parts": [
+                      "current_database"
+                    ]
+                  },
+                  "right": {
+                    "kind": "functionCall",
+                    "name": "currentDatabase",
+                    "args": []
+                  }
+                },
+                {
+                  "kind": "binaryExpr",
+                  "op": ">=",
+                  "left": {
+                    "kind": "columnRef",
+                    "parts": [
+                      "event_date"
+                    ]
+                  },
+                  "right": {
+                    "kind": "functionCall",
+                    "name": "yesterday",
+                    "args": []
+                  }
+                },
+                {
+                  "kind": "functionCall",
+                  "name": "like",
+                  "args": [
+                    {
+                      "kind": "columnRef",
+                      "parts": [
+                        "query"
+                      ]
+                    },
+                    {
+                      "kind": "literal",
+                      "type": "String",
+                      "value": "-- INSERT USING TABLE%"
+                    }
+                  ]
+                }
+              ]
+            },
+            "limit": {
+              "count": {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "1"
+              }
+            }
+          }
+        }
+      }
+    ],
+    "select": [
+      {
+        "kind": "literal",
+        "type": "String",
+        "value": "TABLE"
+      },
+      {
+        "kind": "binaryExpr",
+        "op": ">=",
+        "left": {
+          "kind": "columnRef",
+          "parts": [
+            "view_duration_ms"
+          ]
+        },
+        "right": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "50"
+        }
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "database": "system",
+      "table": "query_views_log"
+    },
+    "where": {
+      "kind": "binaryExpr",
+      "op": "=",
+      "left": {
+        "kind": "columnRef",
+        "parts": [
+          "initial_query_id"
+        ]
+      },
+      "right": {
+        "kind": "columnRef",
+        "parts": [
+          "q_id"
+        ]
+      }
+    }
   }
 ]

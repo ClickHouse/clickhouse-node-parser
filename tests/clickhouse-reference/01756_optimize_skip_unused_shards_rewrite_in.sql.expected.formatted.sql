@@ -34,6 +34,16 @@ SET log_queries = 1;
 CREATE TABLE dist_01756 AS `system`.one
 ENGINE = Distributed(test_cluster_two_shards, `system`, one, intHash64(dummy));
 
+WITH (
+        SELECT currentDatabase()
+    ) AS id_no
+
+SELECT
+    *,
+    ignore(id_no)
+FROM dist_01756
+WHERE dummy IN (0, 2);
+
 SELECT splitByString('IN', query)[-1]
 FROM `system`.query_log
 WHERE event_date >= yesterday()
@@ -49,6 +59,16 @@ ORDER BY query ASC;
 --
 SET optimize_skip_unused_shards_rewrite_in = 1;
 
+WITH (
+        SELECT currentDatabase()
+    ) AS id_02
+
+SELECT
+    *,
+    ignore(id_02)
+FROM dist_01756
+WHERE dummy IN (0, 2);
+
 SELECT splitByString('IN', query)[-1]
 FROM `system`.query_log
 WHERE event_date >= yesterday()
@@ -59,6 +79,16 @@ WHERE event_date >= yesterday()
     AND type = 'QueryFinish'
 ORDER BY query ASC;
 
+WITH (
+        SELECT currentDatabase()
+    ) AS id_2
+
+SELECT
+    *,
+    ignore(id_2)
+FROM dist_01756
+WHERE dummy IN (2);
+
 SELECT splitByString('IN', query)[-1]
 FROM `system`.query_log
 WHERE event_date >= yesterday()
@@ -68,6 +98,16 @@ WHERE event_date >= yesterday()
     AND like(query, concat('%', currentDatabase(), '%AS%id_2%'))
     AND type = 'QueryFinish'
 ORDER BY query ASC;
+
+WITH (
+        SELECT currentDatabase()
+    ) AS id_00
+
+SELECT
+    *,
+    ignore(id_00)
+FROM dist_01756
+WHERE dummy IN (0);
 
 SELECT splitByString('IN', query)[-1]
 FROM `system`.query_log
@@ -84,6 +124,16 @@ CREATE TABLE data_01756_signed
     key Int
 )
 ENGINE = Null;
+
+WITH (
+        SELECT currentDatabase()
+    ) AS key_signed
+
+SELECT
+    *,
+    ignore(key_signed)
+FROM cluster(test_cluster_two_shards, currentDatabase(), data_01756_signed, key)
+WHERE key IN (-1, -2);
 
 SELECT splitByString('IN', query)[-1]
 FROM `system`.query_log

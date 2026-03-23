@@ -46,3 +46,84 @@ CREATE TABLE tree
 ENGINE = TinyLog;
 
 INSERT INTO tree;
+
+--
+-- get all paths from "second level" nodes to leaf nodes
+--
+WITH t AS (
+    SELECT
+        1 AS id,
+        []::Array(UInt64) AS path
+    UNION ALL
+    SELECT
+        tree.id,
+        arrayConcat(t.path, [tree.id])
+    FROM
+        tree
+    INNER JOIN t
+        ON (tree.parent_id = t.id)
+)
+
+SELECT
+    t1.*,
+    t2.*
+FROM
+    t AS t1
+INNER JOIN t AS t2
+    ON (t1.path[1] = t2.path[1]
+    AND length(t1.path) = 1
+    AND length(t2.path) > 1)
+ORDER BY
+    t1.id ASC,
+    t2.id ASC;
+
+-- just count 'em
+WITH t AS (
+    SELECT
+        1 AS id,
+        []::Array(UInt64) AS path
+    UNION ALL
+    SELECT
+        tree.id,
+        arrayConcat(t.path, [tree.id])
+    FROM
+        tree
+    INNER JOIN t
+        ON (tree.parent_id = t.id)
+)
+
+SELECT
+    t1.id,
+    count(t2.path)
+FROM
+    t AS t1
+INNER JOIN t AS t2
+    ON (t1.path[1] = t2.path[1]
+    AND length(t1.path) = 1
+    AND length(t2.path) > 1)
+GROUP BY t1.id
+ORDER BY t1.id ASC;
+
+-- -- this variant tickled a whole-row-variable bug in 8.4devel
+WITH t AS (
+    SELECT
+        1 AS id,
+        []::Array(UInt64) AS path
+    UNION ALL
+    SELECT
+        tree.id,
+        arrayConcat(t.path, [tree.id])
+    FROM
+        tree
+    INNER JOIN t
+        ON (tree.parent_id = t.id)
+)
+
+SELECT
+    t1.id,
+    t2.path,
+    tuple(t2.*)
+FROM
+    t AS t1
+INNER JOIN t AS t2
+    ON (t1.id = t2.id);
