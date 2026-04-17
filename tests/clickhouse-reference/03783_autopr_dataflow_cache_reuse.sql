@@ -28,6 +28,7 @@ INSERT INTO t SELECT 'ololokekkekkek' || toString(number % 10), number FROM numb
 --set send_logs_level='trace', send_logs_source_regexp = 'optimize';
 SELECT key, SUM(value) FROM t GROUP BY key FORMAT Null SETTINGS log_comment='03783_autopr_dataflow_cache_reuse_query_4'; -- stats available, but we have to recollect since data grew, don't apply
 SELECT key, SUM(value) FROM t GROUP BY key FORMAT Null SETTINGS log_comment='03783_autopr_dataflow_cache_reuse_query_5'; -- stats available, apply
+TRUNCATE TABLE t;
 --set send_logs_level='trace', send_logs_source_regexp = 'optimize';
 SELECT key, SUM(value) FROM t GROUP BY key FORMAT Null SETTINGS log_comment='03783_autopr_dataflow_cache_reuse_query_6'; -- stats available, but we have to recollect since data shrinked, don't apply
 SELECT key, SUM(value) FROM t GROUP BY key FORMAT Null SETTINGS log_comment='03783_autopr_dataflow_cache_reuse_query_7'; -- stats available, don't apply since no benefit

@@ -7,5 +7,8 @@ SELECT joinGet('join_test', 'num', 500);
 
 INSERT INTO join_test (id, num) SELECT number, number * 2 FROM system.numbers LIMIT 1000;
 SELECT joinGet ('join_test', 'num', 500);
+-- joinGet('join_test', 'num', 500) will be 1000 and it is fine
+
+TRUNCATE TABLE join_test;
 -- joinGet('join_test', 'num', 500) will be 1000 and it is not fine
 DROP TABLE join_test;

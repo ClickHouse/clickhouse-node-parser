@@ -30,6 +30,7 @@ SELECT * FROM ( SELECT * from t1 ) t1 PASTE JOIN ( SELECT * from t2 ) t2 SETTING
 SELECT toTypeName(a) FROM (SELECT number as a FROM numbers(11)) t1 PASTE JOIN (select number as a from numbers(10)) t2 SETTINGS join_use_nulls = 1;
 SET max_threads = 2;
 select * from (SELECT number as a FROM numbers_mt(10)) t1 PASTE JOIN (select number as a from numbers(10) ORDER BY a DESC) t2 SETTINGS max_block_size=10;
+TRUNCATE TABLE test;
 SELECT * FROM (SELECT number FROM test) PASTE JOIN (SELECT number FROM numbers(6) ORDER BY number) SETTINGS joined_subquery_requires_alias = 0;
 SELECT * FROM (SELECT number FROM test PASTE JOIN (Select number FROM numbers(7))) PASTE JOIN (SELECT number FROM numbers(6) PASTE JOIN (SELECT number FROM test)) SETTINGS joined_subquery_requires_alias = 0;
 SELECT * FROM (SELECT number FROM test PASTE JOIN (SELECT number FROM test PASTE JOIN (Select number FROM numbers(7)))) PASTE JOIN (SELECT number FROM numbers(6) PASTE JOIN (SELECT number FROM test)) SETTINGS joined_subquery_requires_alias = 0;

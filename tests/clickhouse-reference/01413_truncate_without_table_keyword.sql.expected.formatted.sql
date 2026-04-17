@@ -12,4 +12,6 @@ SELECT *
 FROM truncate_test
 ORDER BY uint8 ASC;
 
+TRUNCATE TABLE truncate_test;
+
 DROP TABLE truncate_test;

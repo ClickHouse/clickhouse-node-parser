@@ -14,6 +14,7 @@ CREATE TABLE order_by_const
 ENGINE = MergeTree
 ORDER BY (a, b)
 SETTINGS index_granularity = 8192;
+truncate table order_by_const;
 INSERT INTO order_by_const(a, b, c, d) VALUES (1, 1, 101, 1), (1, 2, 102, 1), (1, 3, 103, 1), (1, 4, 104, 1);
 INSERT INTO order_by_const(a, b, c, d) VALUES (1, 5, 104, 1), (1, 6, 105, 1), (2, 1, 106, 2), (2, 1, 107, 2);
 INSERT INTO order_by_const(a, b, c, d) VALUES (2, 2, 107, 2), (2, 3, 108, 2), (2, 4, 109, 2);

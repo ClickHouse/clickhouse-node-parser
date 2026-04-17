@@ -44,6 +44,8 @@ SETTINGS
     min_count_to_compile_expression = 0,
     log_comment = 'midpoint_jit_float_1';
 
+TRUNCATE TABLE midpoint_jit;
+
 INSERT INTO midpoint_jit SELECT
     negate((number)),
     negate((number + 1)),

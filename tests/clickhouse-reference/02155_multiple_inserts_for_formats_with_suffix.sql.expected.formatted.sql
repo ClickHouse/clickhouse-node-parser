@@ -21,6 +21,8 @@ SELECT *
 FROM test
 ORDER BY number ASC;
 
+TRUNCATE TABLE test;
+
 DROP TABLE test;
 
 CREATE TABLE test

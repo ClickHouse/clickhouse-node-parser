@@ -29,7 +29,7 @@ FROM
 LEFT JOIN `system`.one
     USING (dummy);
 
-USE system;
+USE `system`;
 
 SELECT dummy
 FROM

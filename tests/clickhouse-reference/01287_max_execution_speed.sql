@@ -16,4 +16,5 @@ SELECT count() FROM numbers(2000000);
 SELECT max(t) - min(t) >= 1 FROM times;
 SET max_execution_speed = 0;
 SET max_execution_speed_bytes = 8000000;
+TRUNCATE TABLE times;
 SET max_execution_speed_bytes = 0;

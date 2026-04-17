@@ -9,4 +9,5 @@ insert into test select multiIf(number < 1000, NULL::Dynamic(max_types=1), numbe
 select distinct dynamicType(d) as type, isDynamicElementInSharedData(d) as flag from test order by type;
 drop table test;
 create table test (d Dynamic(max_types=1)) engine=MergeTree order by tuple();
+truncate table test;
 insert into test select multiIf(number < 1000, 'Str'::Dynamic(max_types=1), number < 3000, range(number % 5)::Dynamic(max_types=1), number::Dynamic(max_types=1)) from numbers(100000);

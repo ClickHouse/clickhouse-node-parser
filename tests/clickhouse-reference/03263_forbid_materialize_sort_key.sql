@@ -9,6 +9,7 @@ CREATE DICTIONARY IF NOT EXISTS dict (x UInt32, y UInt32) primary key x source(c
 INSERT INTO tab VALUES (1, 2), (3, 4);
 CREATE TABLE IF NOT EXISTS tab2 (x UInt32, y UInt32 materialized dictGet(dict, 'y', x)) engine = MergeTree ORDER BY (y);
 INSERT INTO tab2 (x) VALUES (1), (3);
+TRUNCATE TABLE tab;
 INSERT INTO tab VALUES (1, 4), (3, 2);
 SET mutations_sync=2;
 ALTER TABLE tab2 materialize column y;  -- { serverError CANNOT_UPDATE_COLUMN }

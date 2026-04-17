@@ -32,6 +32,8 @@ ORDER BY id ASC;
 
 INSERT INTO t_json_2;
 
+TRUNCATE TABLE t_json_2;
+
 INSERT INTO t_json_2;
 
 SELECT

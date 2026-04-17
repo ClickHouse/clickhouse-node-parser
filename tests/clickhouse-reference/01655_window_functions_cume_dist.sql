@@ -8,6 +8,7 @@ SELECT number, cume_dist() OVER (ORDER BY number) FROM numbers(5);
 SELECT number, intDiv(number, 3) AS p, cume_dist() OVER (PARTITION BY p ORDER BY number) FROM numbers(10);
 SELECT number, cume_dist() OVER (ORDER BY number DESC) FROM numbers(5);
 CREATE TABLE IF NOT EXISTS test_cume_dist (a Int, b Nullable(Int)) ENGINE = Memory;
+TRUNCATE TABLE test_cume_dist;
 INSERT INTO test_cume_dist VALUES (1, 10), (2, 20), (3, 20), (4, 30), (5, 30), (6, 30), (7, 40), (8, 50);
 SELECT a, b, cume_dist() OVER (ORDER BY b) FROM test_cume_dist ORDER BY b, a;
 INSERT INTO test_cume_dist VALUES (1, 10), (1, 20), (1, 20), (2, 10), (2, 10), (2, 20);

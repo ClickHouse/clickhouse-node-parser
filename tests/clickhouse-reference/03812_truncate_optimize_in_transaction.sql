@@ -7,3 +7,4 @@ CREATE TABLE test_table (key UInt64, value String) ENGINE = MergeTree ORDER BY k
 CREATE TABLE t2 (key UInt64, value String) ENGINE = Memory;
 INSERT INTO TABLE test_table VALUES (1, 'a'), (2, 'b'), (1, 'a');
 SET throw_on_unsupported_query_inside_transaction=0;
+TRUNCATE TABLE test_table;

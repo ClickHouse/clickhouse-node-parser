@@ -45,12 +45,20 @@ export const LiteralSchema = z.object({
   ...ExprMetadataFields,
 });
 
+/** Zod schema for an identifier-position value: plain string or a
+ * query-parameter node ({@link QueryParam}) with `type: 'Identifier'`.
+ * The schema deliberately does not constrain `type` to `'Identifier'` so
+ * that the single QueryParamSchema can be reused. */
+export const IdentifierSchema: z.ZodType<string | QueryParam> = z.lazy(() =>
+  z.union([z.string(), QueryParamSchema]),
+);
+
 /**
  * Zod schema for {@link ColumnRef}.
  */
 export const ColumnRefSchema = z.object({
   kind: z.literal('columnRef'),
-  parts: z.array(z.string()),
+  parts: z.array(IdentifierSchema),
   parenthesized: z.boolean().optional(),
   ...ExprMetadataFields,
 });
@@ -98,8 +106,8 @@ export const SampleClauseSchema = z.object({
  */
 export const TableRefSchema = z.object({
   kind: z.literal('tableRef'),
-  database: z.string().optional(),
-  table: z.string(),
+  database: IdentifierSchema.optional(),
+  table: IdentifierSchema,
   alias: z.string().optional(),
   final: z.boolean().optional(),
   sample: SampleClauseSchema.optional(),
@@ -175,7 +183,7 @@ export const AsteriskSchema: z.ZodType<Asterisk> = z.lazy(() =>
 export const QualifiedAsteriskSchema: z.ZodType<QualifiedAsterisk> = z.lazy(() =>
   z.object({
     kind: z.literal('qualifiedAsterisk'),
-    parts: z.array(z.string()),
+    parts: z.array(IdentifierSchema),
     transformers: z.array(ColumnTransformerSchema).optional(),
     ...ExprMetadataFields,
   }),
@@ -235,7 +243,7 @@ export type Literal = {
  */
 export type ColumnRef = {
   kind: 'columnRef';
-  parts: string[];
+  parts: Identifier[];
   parenthesized?: boolean;
 } & NodeMetadata;
 
@@ -248,8 +256,8 @@ export type ColumnRef = {
  */
 export type TableRef = {
   kind: 'tableRef';
-  database?: string;
-  table: string;
+  database?: Identifier;
+  table: Identifier;
   alias?: string;
   final?: boolean;
   sample?: SampleClause;
@@ -278,7 +286,7 @@ export type Asterisk = {
 export type QualifiedAsterisk = {
   kind: 'qualifiedAsterisk';
   /** Qualifier parts before the `*`, e.g. `['system', 'one']` for `system.one.*`. */
-  parts: string[];
+  parts: Identifier[];
   /** Optional column transformers (EXCEPT, APPLY, REPLACE). */
   transformers?: ColumnTransformer[];
 } & NodeMetadata;
@@ -295,6 +303,13 @@ export type QueryParam = {
   name: string;
   type: string;
 } & NodeMetadata;
+
+/**
+ * Either a bare string identifier or a query-parameter used in identifier
+ * position (`{name:Identifier}`). A query-parameter here is just a
+ * {@link QueryParam} whose `type` is the literal string `'Identifier'`.
+ */
+export type Identifier = string | QueryParam;
 
 /**
  * Tuple expansion: `expr.*` — expands all fields of a tuple expression.
@@ -1423,7 +1438,7 @@ export type AccessControlSettingsItem =
 export type UseStatement = {
   kind: 'use';
   /** The database name to switch to. */
-  database: string;
+  database: Identifier;
 } & NodeMetadata;
 
 /**
@@ -1671,7 +1686,7 @@ export type CreateMaterializedViewStatement = {
 /** `CREATE DATABASE`. */
 export type CreateDatabaseStatement = {
   kind: 'createDatabase';
-  name: string;
+  name: Identifier;
   engine?: EngineClause;
   orderBy?: TableOrderByItem[];
   comment?: string;
@@ -2219,14 +2234,33 @@ export type InsertStatement = {
 } & NodeMetadata;
 
 /**
- * A TRUNCATE statement: removes all data from a table.
+ * A TRUNCATE statement: removes all data from a table, database, or set of tables.
  *
  * @example `TRUNCATE TABLE t`
+ * @example `TRUNCATE DATABASE db`
+ * @example `TRUNCATE ALL TABLES FROM IF EXISTS db`
+ * @example `TRUNCATE TABLES FROM db NOT LIKE '%log'`
  */
 export type TruncateStatement = {
   kind: 'truncate';
-  /** The table to truncate. */
-  table: TableRef;
+  /** What is being truncated. Defaults to 'TABLE'. */
+  targetType: 'TABLE' | 'DATABASE' | 'TABLES';
+  /** Target table (when targetType is 'TABLE'). */
+  table?: TableRef;
+  /** Target database name (when targetType is 'DATABASE' or 'TABLES'). */
+  database?: Identifier;
+  /** TRUNCATE TEMPORARY TABLE. */
+  temporary?: boolean;
+  /** IF EXISTS modifier (position varies: before table for TABLE, after FROM for DATABASE/TABLES). */
+  ifExists?: boolean;
+  /** ON CLUSTER cluster name. */
+  onCluster?: string;
+  /** SETTINGS ... */
+  settings?: SettingItem[];
+  /** Whether the `ALL` keyword was present (only meaningful when targetType='TABLES'). */
+  allTables?: boolean;
+  /** Optional [NOT] LIKE filter on TABLES FROM form. */
+  like?: { pattern: string; not?: boolean };
 } & NodeMetadata;
 
 /**
@@ -2622,7 +2656,7 @@ const AccessControlSettingsItemSchema: z.ZodType<AccessControlSettingsItem> = z.
 export const UseStatementSchema: z.ZodType<UseStatement> = z.lazy(() =>
   z.object({
     kind: z.literal('use'),
-    database: z.string(),
+    database: IdentifierSchema,
     ...ExprMetadataFields,
   }),
 );
@@ -2826,7 +2860,7 @@ export const CreateMaterializedViewStatementSchema: z.ZodType<CreateMaterialized
 export const CreateDatabaseStatementSchema: z.ZodType<CreateDatabaseStatement> = z.lazy(() =>
   z.object({
     kind: z.literal('createDatabase'),
-    name: z.string(),
+    name: IdentifierSchema,
     engine: EngineClauseSchema.optional(),
     orderBy: z.array(TableOrderByItemSchema).optional(),
     comment: z.string().optional(),
@@ -3320,7 +3354,20 @@ export const InsertStatementSchema: z.ZodType<InsertStatement> = z.lazy(() =>
 export const TruncateStatementSchema: z.ZodType<TruncateStatement> = z.lazy(() =>
   z.object({
     kind: z.literal('truncate'),
-    table: TableRefSchema,
+    targetType: z.union([z.literal('TABLE'), z.literal('DATABASE'), z.literal('TABLES')]),
+    table: TableRefSchema.optional(),
+    database: IdentifierSchema.optional(),
+    temporary: z.boolean().optional(),
+    ifExists: z.boolean().optional(),
+    onCluster: z.string().optional(),
+    settings: z.array(SettingItemSchema).optional(),
+    allTables: z.boolean().optional(),
+    like: z
+      .object({
+        pattern: z.string(),
+        not: z.boolean().optional(),
+      })
+      .optional(),
     ...ExprMetadataFields,
   }),
 );

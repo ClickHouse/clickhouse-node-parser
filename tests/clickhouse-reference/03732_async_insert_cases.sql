@@ -25,6 +25,8 @@ insert into 03732_table values (1, 'Alice'), (2, 'Bob'), (1, 'Alice');
 select count(*) from 03732_table;        -- Expecting 3
 select count(*) from 03732_table_mv_dst;     -- Expecting 3
 insert into 03732_table values (3, 'Charlie'), (4, 'David'), (3, 'Charlie');
+truncate table 03732_table;
+truncate table 03732_table_mv_dst;
 insert into 03732_table settings insert_deduplication_token='token1' values (1, 'Alice'), (2, 'Bob'), (1, 'Alice');
 insert into 03732_table settings insert_deduplication_token='token1' values (1, 'Alice'), (1, 'Alice'), (2, 'Bob');
 insert into 03732_table settings insert_deduplication_token='token2' values (3, 'Charlie'), (4, 'David'), (3, 'Charlie');

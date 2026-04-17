@@ -28,6 +28,8 @@ CREATE TABLE IF NOT EXISTS test_cume_dist
 )
 ENGINE = Memory;
 
+TRUNCATE TABLE test_cume_dist;
+
 INSERT INTO test_cume_dist;
 
 SELECT

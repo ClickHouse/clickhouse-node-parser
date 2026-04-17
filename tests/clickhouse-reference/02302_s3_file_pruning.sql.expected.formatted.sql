@@ -34,6 +34,8 @@ CREATE TABLE test_02302
 )
 ENGINE = S3(s3_conn, filename = 'test_02302.2', `format` = Parquet);
 
+TRUNCATE TABLE test_02302;
+
 CREATE TABLE test_02302
 (
     a UInt64

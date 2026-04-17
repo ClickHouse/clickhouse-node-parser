@@ -18,6 +18,8 @@ SETTINGS max_rows_to_read = 1, read_overflow_mode = 'break';
 SELECT max(x) - min(x)
 FROM t;
 
+TRUNCATE TABLE t;
+
 INSERT INTO t SELECT value
 FROM `system`.events
 WHERE event = 'OverflowThrow';

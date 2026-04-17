@@ -16,6 +16,8 @@ CREATE TABLE test
 )
 ENGINE = Memory;
 
+TRUNCATE TABLE test;
+
 INSERT INTO test SELECT
     number,
     '{}'

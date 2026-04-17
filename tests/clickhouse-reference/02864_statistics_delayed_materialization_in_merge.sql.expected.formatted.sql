@@ -36,6 +36,8 @@ FROM (
     )
 WHERE like(`explain`, '%Prewhere%'); -- checks b first, then a (statistics not used)
 
+TRUNCATE TABLE tab;
+
 SET mutations_sync = 2;
 
 ALTER TABLE tab MATERIALIZE STATISTICS a, b;

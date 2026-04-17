@@ -30,6 +30,8 @@ ALTER TABLE trunc ATTACH PARTITION ID '2';
 
 ALTER TABLE trunc ATTACH PARTITION ID '3';
 
+TRUNCATE TABLE trunc;
+
 DROP TABLE trunc;
 
 SET default_table_engine = 'MergeTree';

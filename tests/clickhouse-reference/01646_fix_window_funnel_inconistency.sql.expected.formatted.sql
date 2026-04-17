@@ -29,6 +29,8 @@ ORDER BY level ASC;
 
 SELECT '---';
 
+TRUNCATE TABLE trend;
+
 INSERT INTO trend;
 
 DROP TABLE trend;

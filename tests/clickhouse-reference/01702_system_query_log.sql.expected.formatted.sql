@@ -78,6 +78,8 @@ ALTER TABLE sqllt.table UPDATE i = i + 1 WHERE 1;
 
 ALTER TABLE sqllt.table DELETE WHERE i > 65535;
 
+TRUNCATE TABLE sqllt.table;
+
 DROP TABLE sqllt.table;
 
 SET log_comment = '';

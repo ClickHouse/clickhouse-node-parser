@@ -48,6 +48,7 @@ SELECT * FROM dest_view_stripe_log ORDER BY x LIMIT 1;
 SELECT * FROM dest_view_merge_tree ORDER BY x LIMIT 1;
 SELECT name, database, element_count FROM system.dictionaries WHERE database = 'test_truncate_database' AND name = 'dest_dictionary';
 SELECT * FROM dest_dictionary;
+TRUNCATE DATABASE test_truncate_database;
 SELECT * FROM dest_view_set ORDER BY x LIMIT 1; -- {serverError UNKNOWN_TABLE}
 CREATE TABLE new_table (x UInt16) ENGINE = MergeTree ORDER BY x;
 DROP DATABASE test_truncate_database;

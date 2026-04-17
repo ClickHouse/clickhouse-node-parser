@@ -11,6 +11,7 @@ alter table trunc attach partition id '0';
 alter table trunc attach partition id '1';
 alter table trunc attach partition id '2';
 alter table trunc attach partition id '3';
+truncate trunc;
 drop table trunc;
 set default_table_engine='MergeTree';
 create table trunc (n int, primary key n) partition by n % 10;

@@ -27,4 +27,5 @@ SELECT k == 4 FROM 01504_test WHERE k = 4 OR k IN [4] OR k in (4, 10000001, 1000
 SELECT k == 4 FROM 01504_test WHERE k IN (SELECT toUInt32(number) FROM keys WHERE number = 4);
 SELECT k, value FROM 01504_test WHERE k = 0 OR value > 0; -- { serverError TOO_MANY_ROWS }
 SELECT k, value FROM 01504_test WHERE k = 0 AND k IN (1, 3) OR k > 8; -- { serverError TOO_MANY_ROWS }
+TRUNCATE TABLE 01504_test;
 SELECT 0 == COUNT(1) FROM 01504_test;

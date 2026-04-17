@@ -24,6 +24,8 @@ FROM local;
 SELECT count()
 FROM distributed;
 
+TRUNCATE TABLE local;
+
 INSERT INTO distributed SELECT number
 FROM numbers(256)
 WHERE number % 2 = 1;

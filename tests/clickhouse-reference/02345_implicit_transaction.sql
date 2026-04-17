@@ -13,6 +13,8 @@ CREATE MATERIALIZED VIEW landing_to_target TO target AS
 INSERT INTO landing SELECT * FROM numbers(10000) SETTINGS materialized_views_ignore_errors=1;
 SELECT 'no_transaction_landing', count() = 10000 FROM landing;
 SELECT 'no_transaction_target', count() < 10000 FROM target;
+TRUNCATE TABLE landing;
+TRUNCATE TABLE target;
 INSERT INTO landing SELECT * FROM numbers(10000); -- { serverError FUNCTION_THROW_IF_VALUE_IS_NON_ZERO }
 SELECT 'after_transaction_landing', count() FROM landing;
 SELECT 'after_transaction_target', count() FROM target;

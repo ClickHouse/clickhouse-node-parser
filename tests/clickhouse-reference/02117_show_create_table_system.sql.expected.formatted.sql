@@ -15,4 +15,4 @@ tables_with_database_column=(
 # should have database = currentDatabase() condition"
 
  */
-USE system;
+USE `system`;

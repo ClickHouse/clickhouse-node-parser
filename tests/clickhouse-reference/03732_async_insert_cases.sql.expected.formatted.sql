@@ -41,6 +41,10 @@ FROM `03732_table_mv_dst`; -- Expecting 3
 
 INSERT INTO `03732_table`;
 
+TRUNCATE TABLE `03732_table`;
+
+TRUNCATE TABLE `03732_table_mv_dst`;
+
 INSERT INTO `03732_table` SETTINGS insert_deduplication_token = 'token1';
 
 INSERT INTO `03732_table` SETTINGS insert_deduplication_token = 'token1';

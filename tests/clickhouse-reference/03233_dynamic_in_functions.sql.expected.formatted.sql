@@ -368,6 +368,8 @@ SELECT
     toTypeName(res)
 FROM test;
 
+TRUNCATE TABLE test;
+
 INSERT INTO test SELECT
     concat('str_', number),
     toFixedString(concat('str_', number), 5)

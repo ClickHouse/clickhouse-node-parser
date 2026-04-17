@@ -53,6 +53,7 @@ SELECT count(distinct data) FROM compression_codec_multiple_replicated1;
 SELECT count(distinct data) FROM compression_codec_multiple_replicated2;
 SELECT floor(sum(somenum), 1) FROM compression_codec_multiple_replicated1;
 SELECT floor(sum(somenum), 1) FROM compression_codec_multiple_replicated2;
+TRUNCATE TABLE compression_codec_multiple_replicated1;
 SELECT sum(cityHash64(*)) FROM compression_codec_multiple_replicated2;
 SELECT sum(cityHash64(*)) FROM compression_codec_multiple_replicated1;
 DROP TABLE IF EXISTS compression_codec_multiple_more_types_replicated;

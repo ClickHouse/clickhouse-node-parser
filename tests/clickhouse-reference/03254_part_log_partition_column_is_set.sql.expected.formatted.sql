@@ -25,6 +25,8 @@ SELECT *
 FROM test
 ORDER BY `ALL` ASC;
 
+TRUNCATE TABLE test;
+
 DROP TABLE test;
 
 -- SELECT * FROM system.part_log WHERE database = currentDatabase() FORMAT Vertical;

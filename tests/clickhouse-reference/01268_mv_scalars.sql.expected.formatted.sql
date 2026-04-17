@@ -103,6 +103,8 @@ INSERT INTO left_table SELECT
     number * 2
 FROM numbers(3);
 
+TRUNCATE TABLE left_table;
+
 INSERT INTO left_table SELECT
     toDate('2020-01-01') + 5,
     5,

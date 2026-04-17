@@ -133,6 +133,8 @@ FROM compression_codec_multiple;
 SELECT floor(sum(somenum), 1)
 FROM compression_codec_multiple;
 
+TRUNCATE TABLE compression_codec_multiple;
+
 SELECT sum(cityHash64(*))
 FROM compression_codec_multiple;
 

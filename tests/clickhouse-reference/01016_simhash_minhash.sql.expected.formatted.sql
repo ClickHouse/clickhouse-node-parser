@@ -94,6 +94,8 @@ FROM defaults;
 SELECT wordShingleMinHashCaseInsensitiveUTF8(s)
 FROM defaults;
 
+TRUNCATE TABLE defaults;
+
 INSERT INTO defaults SELECT arrayJoin(splitByString('\n\n', 'ClickHouse uses all available hardware to its full potential to process each query as fast as possible. Peak processing performance for a single query stands at more than 2 terabytes per second (after decompression, only used columns). In distributed setup reads are automatically balanced among healthy replicas to avoid increasing latency.
 ClickHouse supports multi-master asynchronous replication and can be deployed across multiple datacenters. All nodes are equal, which allows avoiding having single points of failure. Downtime of a single node or the whole datacenter wont affect the systems availability for both reads and writes.
 ClickHouse is simple and works out-of-the-box. It streamlines all your data processing: ingest all your structured data into the system and it becomes instantly available for building reports. SQL dialect allows expressing the desired result without involving any custom non-standard API that could be found in some alternative systems.

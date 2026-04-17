@@ -40,7 +40,7 @@ describe('transformNodes', () => {
       const stmts = parse('SELECT a, b FROM t');
       const result = transformNodes(stmts, 'columnRef', (n) => ({
         ...n,
-        parts: n.parts.map((p) => p.toUpperCase()),
+        parts: n.parts.map((p) => (typeof p === 'string' ? p.toUpperCase() : p)),
       }));
       const cols = findNodes(result, 'columnRef');
       expect(cols.map((c) => c.parts)).toEqual([['A'], ['B']]);

@@ -20,6 +20,7 @@ INSERT INTO alias_2 VALUES (5, 'five');
 ALTER TABLE alias_1 ADD COLUMN status String DEFAULT 'active';
 SELECT id, value, status FROM source_table ORDER BY id;
 INSERT INTO alias_1 VALUES (6, 'six', 'inactive');
+TRUNCATE TABLE alias_1;
 SELECT count() FROM source_table;
 -- Re-insert data
 INSERT INTO source_table VALUES (1, 'one', 'active'), (2, 'two', 'active');

@@ -54,6 +54,10 @@ SELECT
     arraySort(groupArray(n))
 FROM rmt2;
 
+TRUNCATE TABLE rmt1;
+
+TRUNCATE TABLE rmt2;
+
 INSERT INTO rmt2;
 
 -- give it a chance to remove source parts

@@ -15,6 +15,8 @@ SELECT *
 FROM t_insert_select_parens
 ORDER BY x ASC;
 
+TRUNCATE TABLE t_insert_select_parens;
+
 -- INSERT SELECT with UNION and parentheses
 INSERT INTO t_insert_select_parens (x) SELECT 2
 UNION ALL

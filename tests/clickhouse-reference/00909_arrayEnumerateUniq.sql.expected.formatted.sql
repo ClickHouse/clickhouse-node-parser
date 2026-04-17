@@ -247,6 +247,8 @@ ORDER BY
     a3 ASC,
     a4 ASC;
 
+TRUNCATE TABLE arrays_test;
+
 INSERT INTO arrays_test;
 
 SELECT
@@ -547,6 +549,8 @@ ORDER BY (CounterID, StartDate, intHash32(UserID), VisitID)
 PARTITION BY toMonday(StartDate)
 SAMPLE BY intHash32(UserID)
 SETTINGS index_granularity = 8192;
+
+TRUNCATE TABLE arr_tests_visits;
 
 INSERT INTO arr_tests_visits (CounterID, StartDate, Sign, VisitID, UserID, VisitVersion, `Test.BannerID`, `Test.Load`, `Test.PuidKey`, `Test.PuidVal`);
 

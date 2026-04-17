@@ -28,6 +28,7 @@ SET exclude_materialize_skip_indexes_on_insert='idx_a';
 INSERT INTO tab SELECT number, number / 50 FROM numbers(100);
 INSERT INTO tab SELECT number, number / 50 FROM numbers(100, 100);
 SELECT * FROM explain_indexes;
+TRUNCATE TABLE tab;
 ALTER TABLE tab MATERIALIZE INDEX idx_a;
 ALTER TABLE tab MATERIALIZE INDEX `id,x_b`;
 INSERT INTO tab SELECT number, number / 50 FROM numbers(100) SETTINGS exclude_materialize_skip_indexes_on_insert='`id,x_b`';

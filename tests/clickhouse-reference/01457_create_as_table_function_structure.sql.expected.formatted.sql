@@ -35,6 +35,8 @@ INSERT INTO test_01457.tf_remote_explicit_structure;
 SELECT *
 FROM tmp;
 
+TRUNCATE TABLE tmp;
+
 INSERT INTO test_01457.tf_remote;
 
 SELECT

@@ -69,6 +69,14 @@ FROM truncate_test_stripe_log;
 SELECT *
 FROM truncate_test_merge_tree;
 
+TRUNCATE TABLES FROM IF EXISTS {CLICKHOUSE_DATABASE:Identifier};
+
+TRUNCATE TABLES FROM IF EXISTS {CLICKHOUSE_DATABASE:Identifier} LIKE '%merge_tree';
+
+TRUNCATE TABLES FROM IF EXISTS {CLICKHOUSE_DATABASE:Identifier} NOT LIKE '%merge_tree';
+
+TRUNCATE TABLES FROM IF EXISTS {CLICKHOUSE_DATABASE:Identifier} NOT LIKE '%stripe%';
+
 DROP TABLE truncate_test_log;
 
 DROP TABLE truncate_test_memory;

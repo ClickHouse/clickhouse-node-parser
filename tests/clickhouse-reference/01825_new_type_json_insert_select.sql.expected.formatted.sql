@@ -48,6 +48,8 @@ INSERT INTO type_json_dst SELECT *
 FROM type_json_src
 WHERE id = 5;
 
+TRUNCATE TABLE type_json_src;
+
 INSERT INTO type_json_src;
 
 DROP TABLE type_json_src;
@@ -85,3 +87,5 @@ SELECT *
 FROM type_json_dst
 ORDER BY data.k1 ASC
 FORMAT JSONEachRow;
+
+TRUNCATE TABLE type_json_dst;

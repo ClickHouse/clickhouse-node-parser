@@ -57,6 +57,8 @@ INSERT INTO test_table;
 SELECT *
 FROM test_table FINAL;
 
+TRUNCATE TABLE test_table;
+
 INSERT INTO test_table;
 
 SELECT ' -- AggregatingMergeTree --\n'

@@ -56,6 +56,8 @@ ORDER BY id ASC;
 
 INSERT INTO alias_1;
 
+TRUNCATE TABLE alias_1;
+
 SELECT count()
 FROM source_table;
 

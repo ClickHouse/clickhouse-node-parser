@@ -16,6 +16,7 @@ INSERT INTO type_json_dst SELECT * FROM type_json_src WHERE id > 1;
 INSERT INTO type_json_dst VALUES (4, '{"arr": [{"k11": 5, "k22": 6}, {"k11": 7, "k33": 8}]}');
 INSERT INTO type_json_src VALUES (5, '{"arr": "not array"}');
 INSERT INTO type_json_dst SELECT * FROM type_json_src WHERE id = 5;
+TRUNCATE TABLE type_json_src;
 INSERT INTO type_json_src VALUES (6, '{"arr": [{"k22": "str1"}]}');
 DROP TABLE type_json_src;
 DROP TABLE type_json_dst;
@@ -28,3 +29,4 @@ INSERT INTO type_json_src FORMAT JSONAsString {"k1": 1, "k10": [{"a": "1", "b": 
 INSERT INTO type_json_src FORMAT JSONAsString  {"k1": 2, "k10": [{"a": "1", "b": "2", "c": {"k11": "haha"}}]};
 INSERT INTO type_json_dst SELECT data FROM type_json_src;
 SELECT * FROM type_json_dst ORDER BY data.k1 FORMAT JSONEachRow;
+TRUNCATE TABLE type_json_dst;

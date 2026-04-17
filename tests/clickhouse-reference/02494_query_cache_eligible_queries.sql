@@ -15,4 +15,6 @@ ALTER TABLE eligible_test ADD COLUMN b String SETTINGS use_query_cache = true;
 -- INSERT
 INSERT INTO eligible_test VALUES('a', 'b'); -- SETTINGS use_query_cache = true; -- SETTINGS rejected as unknown
 INSERT INTO eligible_test SELECT * FROM eligible_test SETTINGS use_query_cache = true;
+-- TRUNCATE
+TRUNCATE TABLE eligible_test SETTINGS use_query_cache = true;
 DROP TABLE eligible_test2;

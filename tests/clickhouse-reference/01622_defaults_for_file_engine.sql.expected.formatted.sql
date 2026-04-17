@@ -14,3 +14,5 @@ SET input_format_defaults_for_omitted_fields = 1;
 
 SELECT *
 FROM json;
+
+TRUNCATE TABLE json;

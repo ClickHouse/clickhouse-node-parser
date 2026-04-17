@@ -145,6 +145,8 @@ WHERE database = 'test_truncate_database'
 SELECT *
 FROM dest_dictionary;
 
+TRUNCATE DATABASE test_truncate_database;
+
 SELECT *
 FROM dest_view_set
 ORDER BY x ASC

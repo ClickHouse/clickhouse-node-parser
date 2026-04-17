@@ -21,6 +21,7 @@ SELECT 5;
 /* Check JSONCompactEachRow Input */
 CREATE TABLE test_table (v1 String, v2 UInt8, v3 DEFAULT v2 * 16, v4 UInt8 DEFAULT 8) ENGINE = MergeTree() ORDER BY v2;
 INSERT INTO test_table FORMAT JSONCompactEachRow ["first", 1, "2", null] ["second", 2, null, 6];
+TRUNCATE TABLE test_table;
 SELECT 6;
 /* Check input_format_null_as_default = 1 */
 SET input_format_null_as_default = 1;
@@ -29,6 +30,7 @@ SELECT 7;
 CREATE TABLE test_table_2 (v1 UInt8, n Nested(id UInt8, name String)) ENGINE = MergeTree() ORDER BY v1;
 INSERT INTO test_table_2 FORMAT JSONCompactEachRow [16, [15, 16, null], ["first", "second", "third"]];
 SELECT * FROM test_table_2 FORMAT JSONCompactEachRow;
+TRUNCATE TABLE test_table_2;
 SELECT 8;
 INSERT INTO test_table FORMAT JSONCompactEachRowWithNamesAndTypes ["v1", "v2", "v3", "v4"]["String","UInt8","UInt16","UInt8"]["first", 1, "2", null]["second", 2, null, 6];
 INSERT INTO test_table FORMAT JSONCompactEachRowWithNames ["v1", "v2", "v3", "v4"]["first", 1, "2", null]["second", 2, null, 6];

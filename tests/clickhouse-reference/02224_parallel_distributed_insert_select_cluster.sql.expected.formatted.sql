@@ -16,6 +16,9 @@ ENGINE = Memory();
 
 INSERT INTO src_02224;
 
+-- { echoOn }
+TRUNCATE TABLE dst_02224;
+
 INSERT INTO FUNCTION cluster('test_cluster_two_shards', currentDatabase(), dst_02224, key) SELECT *
 FROM cluster('test_cluster_two_shards', currentDatabase(), src_02224, key)
 SETTINGS

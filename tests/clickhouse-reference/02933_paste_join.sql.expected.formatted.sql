@@ -208,6 +208,8 @@ PASTE JOIN (
     ) AS t2
 SETTINGS max_block_size = 10;
 
+TRUNCATE TABLE test;
+
 SELECT *
 FROM
     (

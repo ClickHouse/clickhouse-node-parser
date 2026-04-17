@@ -96,6 +96,8 @@ WHERE current_database = currentDatabase()
     AND event_date >= yesterday()
     AND event_time > now() - toIntervalMinute(10);
 
+TRUNCATE TABLE t2;
+
 SET enable_analyzer = 1;
 
 DROP TABLE mv1;
@@ -153,6 +155,8 @@ WHERE current_database = currentDatabase()
     AND event_date >= yesterday()
     AND event_time > now() - toIntervalMinute(10);
 
+TRUNCATE TABLE t3;
+
 DROP TABLE mv2;
 
 CREATE TABLE t4
@@ -207,6 +211,8 @@ WHERE current_database = currentDatabase()
     AND like(query, '-- THIRD INSERT\nINSERT INTO t1%')
     AND event_date >= yesterday()
     AND event_time > now() - toIntervalMinute(10);
+
+TRUNCATE TABLE t4;
 
 DROP TABLE mv3;
 

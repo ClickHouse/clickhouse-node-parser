@@ -45,6 +45,7 @@ ENGINE=TinyLog;
 INSERT INTO needle_table select concat(toString(number + 30), '/tclwebkit', toString(number)) from system.numbers limit 15;
 select * from needle_table;
 select dictGet(regexp_dict1, ('name', 'version'), key) from needle_table;
+truncate table regexp_dictionary_source_table;
 INSERT INTO regexp_dictionary_source_table VALUES (1, 2, 'Linux/(\d+[\.\d]*).+tlinux', ['name', 'version'], ['TencentOS', '\1']);
 INSERT INTO regexp_dictionary_source_table VALUES (2, 3, '(\d+)/tclwebkit(\d+[\.\d]*)', ['name', 'version', 'comment'], ['Android', '$1', 'test $1 and $2']);
 INSERT INTO regexp_dictionary_source_table VALUES (3, 1, '(\d+)/tclwebkit(\d+[\.\d]*)', ['name', 'version', 'comment'], ['Android', '$1', 'test $1 and $2']);

@@ -25,6 +25,8 @@ SELECT id
 FROM tab
 WHERE hasToken(text, 'c');
 
+TRUNCATE TABLE tab;
+
 INSERT INTO tab;
 
 SELECT id

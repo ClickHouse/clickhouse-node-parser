@@ -69,6 +69,8 @@ FROM numbers(10); -- { serverError TOO_MANY_ARGUMENTS_FOR_FUNCTION }
 SELECT length(groupConcat(number))
 FROM numbers(100000);
 
+TRUNCATE TABLE test_groupConcat;
+
 SELECT groupConcat(p_int, ',')
 FROM test_groupConcat
 SETTINGS enable_analyzer = 1;

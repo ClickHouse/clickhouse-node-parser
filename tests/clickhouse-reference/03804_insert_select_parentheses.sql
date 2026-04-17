@@ -6,6 +6,7 @@ CREATE TABLE t_insert_select_parens (x UInt64) ENGINE = Memory;
 -- Basic case: INSERT SELECT with parentheses
 INSERT INTO t_insert_select_parens (x) (SELECT 1);
 SELECT * FROM t_insert_select_parens ORDER BY x;
+TRUNCATE TABLE t_insert_select_parens;
 -- INSERT SELECT with UNION and parentheses
 INSERT INTO t_insert_select_parens (x) (SELECT 2 UNION ALL SELECT 3);
 -- INSERT SELECT with EXCEPT and parentheses

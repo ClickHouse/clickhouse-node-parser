@@ -24,6 +24,8 @@ LAYOUT(HASHED());
 SELECT dictGetKeys('colors', 'grp', 'blue') AS keys
 FROM numbers(1);
 
+TRUNCATE TABLE dict_src;
+
 INSERT INTO dict_src;
 
 DROP DICTIONARY IF EXISTS dict_products;

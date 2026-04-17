@@ -77,6 +77,7 @@ select length(d) as res, toTypeName(res) from test;
 select replaceAll(d, 'str', 'a') as res, toTypeName(res) from test;
 select repeat(d, 2) as res, toTypeName(res) from test;
 select substring(d, 1, 3) as res, toTypeName(res) from test;
+truncate table test;
 insert into test select 'str_' || number, toFixedString('str_' || number, 5) from numbers(4);
 create table test (x Nullable(String), d Dynamic) engine=Memory;
 insert into test select number % 2 ? NULL : 'str_' || number, 'str_' || number from numbers(4);

@@ -30,6 +30,8 @@ SELECT '--';
 
 INSERT INTO test_table;
 
+TRUNCATE TABLE test_table;
+
 DROP TABLE IF EXISTS regex_test_table;
 
 CREATE TABLE regex_test_table

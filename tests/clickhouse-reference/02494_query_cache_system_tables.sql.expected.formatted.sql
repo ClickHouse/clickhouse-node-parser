@@ -28,7 +28,7 @@ SETTINGS
     query_cache_system_table_handling = 'ignore';
 
 -- Edge case which doesn't work well due to conceptual reasons (QueryCache is AST-based), test it anyways to have it documented.
-USE system;
+USE `system`;
 
 SELECT *
 FROM one

@@ -62,6 +62,11 @@ function n(label: string, children: ExplainNode[] = []): ExplainNode {
   return { label, children };
 }
 
+// Canonical string rendering for an Identifier (plain name or query-param).
+function id(x: import('./ast').Identifier): string {
+  return typeof x === 'string' ? x : `{${x.name}:${x.type}}`;
+}
+
 function render(node: ExplainNode, depth = 0): string {
   const indent = ' '.repeat(depth);
   const suffix = node.children.length > 0 ? ` (children ${node.children.length})` : '';
@@ -424,7 +429,8 @@ function exprNode(expr: Expression): ExplainNode {
       // - name[] (JSON array subcolumn): name.:`Array(JSON)`  (expands into two dot-separated parts)
       // - other parts: unchanged
       const formattedParts: string[] = [];
-      for (const part of expr.parts) {
+      for (const rawPart of expr.parts) {
+        const part = id(rawPart);
         if (part.startsWith('^')) {
           formattedParts.push(`^\`${part.slice(1)}\``);
         } else if (part.endsWith('[]')) {
@@ -444,7 +450,7 @@ function exprNode(expr: Expression): ExplainNode {
       return n('Asterisk');
     }
     case 'qualifiedAsterisk': {
-      const qChildren: ExplainNode[] = [n(`Identifier ${expr.parts.join('.')}`)];
+      const qChildren: ExplainNode[] = [n(`Identifier ${expr.parts.map(id).join('.')}`)];
       if (expr.transformers && expr.transformers.length > 0) {
         qChildren.push(transformerListNode(expr.transformers));
       }
@@ -740,8 +746,10 @@ function sampleRatioLabel(
 }
 
 function tableExpressionNode(ref: TableRef): ExplainNode {
-  const id = ref.database ? `${ref.database}.${ref.table}` : ref.table;
-  const label = ref.alias ? `TableIdentifier ${id} (alias ${ref.alias})` : `TableIdentifier ${id}`;
+  const qualified = ref.database ? `${id(ref.database)}.${id(ref.table)}` : id(ref.table);
+  const label = ref.alias
+    ? `TableIdentifier ${qualified} (alias ${ref.alias})`
+    : `TableIdentifier ${qualified}`;
   const children: ExplainNode[] = [n(label)];
   if (ref.sample) {
     children.push(n(sampleRatioLabel(ref.sample.ratio)));
@@ -1500,7 +1508,7 @@ function storageDefNode(
 //   Identifier tableName
 function createIndexQueryNode(stmt: CreateIndexStatement): ExplainNode {
   // Note: double space between CreateIndexQuery and table name (ClickHouse quirk)
-  const label = `CreateIndexQuery  ${stmt.table.table}`;
+  const label = `CreateIndexQuery  ${id(stmt.table.table)}`;
 
   const children: ExplainNode[] = [];
 
@@ -1523,7 +1531,7 @@ function createIndexQueryNode(stmt: CreateIndexStatement): ExplainNode {
   children.push(n('Index', indexChildren));
 
   // Table name
-  children.push(n(`Identifier ${stmt.table.table}`));
+  children.push(n(`Identifier ${id(stmt.table.table)}`));
 
   return n(label, children);
 }
@@ -1535,12 +1543,12 @@ function createDictionaryQueryNode(stmt: CreateDictionaryStatement): ExplainNode
   // Label
   let label = 'CreateQuery';
   if (stmt.table.database) {
-    label += ` ${stmt.table.database} ${stmt.table.table}`;
-    children.push(n(`Identifier ${stmt.table.database}`));
-    children.push(n(`Identifier ${stmt.table.table}`));
+    label += ` ${id(stmt.table.database)} ${id(stmt.table.table)}`;
+    children.push(n(`Identifier ${id(stmt.table.database)}`));
+    children.push(n(`Identifier ${id(stmt.table.table)}`));
   } else {
-    label += ` ${stmt.table.table}`;
-    children.push(n(`Identifier ${stmt.table.table}`));
+    label += ` ${id(stmt.table.table)}`;
+    children.push(n(`Identifier ${id(stmt.table.table)}`));
   }
 
   // Dictionary attributes
@@ -1679,12 +1687,12 @@ function createViewQueryNode(stmt: CreateViewStatement): ExplainNode {
   const children: ExplainNode[] = [];
   let label = 'CreateQuery';
   if (stmt.table.database) {
-    label += ` ${stmt.table.database} ${stmt.table.table}`;
-    children.push(n(`Identifier ${stmt.table.database}`));
-    children.push(n(`Identifier ${stmt.table.table}`));
+    label += ` ${id(stmt.table.database)} ${id(stmt.table.table)}`;
+    children.push(n(`Identifier ${id(stmt.table.database)}`));
+    children.push(n(`Identifier ${id(stmt.table.table)}`));
   } else {
-    label += ` ${stmt.table.table}`;
-    children.push(n(`Identifier ${stmt.table.table}`));
+    label += ` ${id(stmt.table.table)}`;
+    children.push(n(`Identifier ${id(stmt.table.table)}`));
   }
   if (stmt.tableElements && stmt.tableElements.length > 0) {
     const columns = stmt.tableElements.filter((el) => el.kind === 'columnDef');
@@ -1709,12 +1717,12 @@ function createMaterializedViewQueryNode(stmt: CreateMaterializedViewStatement):
   const children: ExplainNode[] = [];
   let label = 'CreateQuery';
   if (stmt.table.database) {
-    label += ` ${stmt.table.database} ${stmt.table.table}`;
-    children.push(n(`Identifier ${stmt.table.database}`));
-    children.push(n(`Identifier ${stmt.table.table}`));
+    label += ` ${id(stmt.table.database)} ${id(stmt.table.table)}`;
+    children.push(n(`Identifier ${id(stmt.table.database)}`));
+    children.push(n(`Identifier ${id(stmt.table.table)}`));
   } else {
-    label += ` ${stmt.table.table}`;
-    children.push(n(`Identifier ${stmt.table.table}`));
+    label += ` ${id(stmt.table.table)}`;
+    children.push(n(`Identifier ${id(stmt.table.table)}`));
   }
   if (stmt.tableElements && stmt.tableElements.length > 0) {
     const colsDefChildren: ExplainNode[] = [];
@@ -1848,12 +1856,12 @@ function createTableQueryNode(stmt: CreateTableStatement): ExplainNode {
 
   let label = 'CreateQuery';
   if (stmt.table.database) {
-    label += ` ${stmt.table.database} ${stmt.table.table}`;
-    children.push(n(`Identifier ${stmt.table.database}`));
-    children.push(n(`Identifier ${stmt.table.table}`));
+    label += ` ${id(stmt.table.database)} ${id(stmt.table.table)}`;
+    children.push(n(`Identifier ${id(stmt.table.database)}`));
+    children.push(n(`Identifier ${id(stmt.table.table)}`));
   } else {
-    label += ` ${stmt.table.table}`;
-    children.push(n(`Identifier ${stmt.table.table}`));
+    label += ` ${id(stmt.table.table)}`;
+    children.push(n(`Identifier ${id(stmt.table.table)}`));
   }
 
   // Columns definition
@@ -2016,13 +2024,17 @@ function parallelWithQueryNode(stmt: ParallelWithStatement): ExplainNode {
     firstTable = '';
   } else if (first?.kind === 'drop') {
     kindPrefix = 'DropQuery_';
-    firstTable = first.table?.table ?? '';
+    firstTable = first.table ? id(first.table.table) : '';
   } else if (first?.kind === 'truncate') {
     kindPrefix = 'TruncateQuery_';
-    firstTable = first.table.table;
+    firstTable = first.table
+      ? id(first.table.table)
+      : first.database !== undefined
+        ? id(first.database)
+        : '';
   } else {
     kindPrefix = 'CreateQuery';
-    firstTable = first?.kind === 'createTable' ? first.table.table : '';
+    firstTable = first?.kind === 'createTable' ? id(first.table.table) : '';
   }
   const label = `ParallelWithQuery ${stmt.queries.length} ${kindPrefix}_${firstTable}`;
   const children = stmt.queries.map((q) => stmtNode(q as Statement));
@@ -2044,10 +2056,10 @@ function insertQueryNode(stmt: InsertStatement): ExplainNode {
   if (stmt.target.kind === 'table') {
     const t = stmt.target.table;
     if (t.database) {
-      children.push(n(`Identifier ${t.database}`));
-      children.push(n(`Identifier ${t.table}`));
+      children.push(n(`Identifier ${id(t.database)}`));
+      children.push(n(`Identifier ${id(t.table)}`));
     } else {
-      children.push(n(`Identifier ${t.table}`));
+      children.push(n(`Identifier ${id(t.table)}`));
     }
   } else {
     const func = stmt.target.func;
@@ -2408,7 +2420,7 @@ function alterCommandNode(cmd: AlterCommand): ExplainNode {
 // Build AlterQuery explain node
 function alterQueryNode(stmt: AlterStatement): ExplainNode {
   const t = stmt.table;
-  const label = t.database ? `AlterQuery ${t.database} ${t.table}` : `AlterQuery  ${t.table}`;
+  const label = t.database ? `AlterQuery ${id(t.database)} ${id(t.table)}` : `AlterQuery  ${id(t.table)}`;
 
   const children: ExplainNode[] = [];
 
@@ -2418,9 +2430,9 @@ function alterQueryNode(stmt: AlterStatement): ExplainNode {
 
   // Identifier(s) for table name
   if (t.database) {
-    children.push(n(`Identifier ${t.database}`));
+    children.push(n(`Identifier ${id(t.database)}`));
   }
-  children.push(n(`Identifier ${t.table}`));
+  children.push(n(`Identifier ${id(t.table)}`));
 
   // Optional FORMAT → Identifier child (before Set)
   if (stmt.format) {
@@ -2504,7 +2516,7 @@ function stmtNode(stmt: Statement): ExplainNode {
     return n('SYSTEM query');
   }
   if (stmt.kind === 'use')
-    return n(`UseQuery ${stmt.database}`, [n(`Identifier ${stmt.database}`)]);
+    return n(`UseQuery ${id(stmt.database)}`, [n(`Identifier ${id(stmt.database)}`)]);
   if (stmt.kind === 'createTable') return createTableQueryNode(stmt);
   if (stmt.kind === 'createView') return createViewQueryNode(stmt);
   if (stmt.kind === 'createMaterializedView') return createMaterializedViewQueryNode(stmt);
@@ -2539,22 +2551,31 @@ function stmtNode(stmt: Statement): ExplainNode {
   if (stmt.kind === 'createLiveView') return n('CreateQuery');
   if (stmt.kind === 'insert') return insertQueryNode(stmt);
   if (stmt.kind === 'truncate') {
-    const t = stmt.table;
-    const tableName = t.database ? `${t.database}.${t.table}` : t.table;
-    const children = [n(`Identifier ${t.table}`)];
-    if (t.database) children.unshift(n(`Identifier ${t.database}`));
-    return n(`TruncateQuery  ${tableName}`, children);
+    if (stmt.targetType === 'TABLE') {
+      const t = stmt.table!;
+      // Label format: "TruncateQuery <db-or-empty> <table>" — for unqualified
+      // refs that collapses to "TruncateQuery  <table>" (double space).
+      const label = `TruncateQuery ${t.database ?? ''} ${id(t.table)}`;
+      const children = [n(`Identifier ${id(t.table)}`)];
+      if (t.database) children.unshift(n(`Identifier ${id(t.database)}`));
+      if (stmt.settings && stmt.settings.length > 0) children.push(n('Set'));
+      return n(label, children);
+    }
+    // DATABASE or TABLES: label format is "TruncateQuery <db> " (single space + trailing space)
+    const db = stmt.database!;
+    const children = [n(`Identifier ${db}`)];
+    return n(`TruncateQuery ${db} `, children);
   }
   if (stmt.kind === 'drop') {
     // DROP FUNCTION and DROP INDEX have their own label formats
     if (stmt.targetType === 'FUNCTION') return n('DropFunctionQuery');
     if (stmt.targetType === 'INDEX' && stmt.table) {
       const t = stmt.table;
-      const tableName = t.database ? `${t.database}.${t.table}` : ` ${t.table}`;
+      const tableName = t.database ? `${id(t.database)}.${id(t.table)}` : ` ${id(t.table)}`;
       const children: ExplainNode[] = [];
       children.push(n(`Identifier ${stmt.indexName}`));
-      if (t.database) children.push(n(`Identifier ${t.database}`));
-      children.push(n(`Identifier ${t.table}`));
+      if (t.database) children.push(n(`Identifier ${id(t.database)}`));
+      children.push(n(`Identifier ${id(t.table)}`));
       return n(`DropIndexQuery ${tableName}`, children);
     }
 
@@ -2564,7 +2585,7 @@ function stmtNode(stmt: Statement): ExplainNode {
     if (stmt.tables && stmt.tables.length > 0) {
       // Multi-table DROP: DropQuery  (with ExpressionList of TableIdentifiers)
       const tableNodes = stmt.tables.map((t) => {
-        const name = t.database ? `${t.database}.${t.table}` : t.table;
+        const name = t.database ? `${id(t.database)}.${id(t.table)}` : t.table;
         return n(`TableIdentifier ${name}`);
       });
       children.push(n('ExpressionList', tableNodes));
@@ -2572,15 +2593,15 @@ function stmtNode(stmt: Statement): ExplainNode {
     } else if (stmt.table) {
       const t = stmt.table;
       if (stmt.targetType === 'DATABASE') {
-        children.push(n(`Identifier ${t.table}`));
-        label = `DropQuery ${t.table} `;
+        children.push(n(`Identifier ${id(t.table)}`));
+        label = `DropQuery ${id(t.table)} `;
       } else if (t.database) {
-        children.push(n(`Identifier ${t.database}`));
-        children.push(n(`Identifier ${t.table}`));
-        label = `DropQuery ${t.database} ${t.table}`;
+        children.push(n(`Identifier ${id(t.database)}`));
+        children.push(n(`Identifier ${id(t.table)}`));
+        label = `DropQuery ${id(t.database)} ${id(t.table)}`;
       } else {
-        children.push(n(`Identifier ${t.table}`));
-        label = `DropQuery  ${t.table}`;
+        children.push(n(`Identifier ${id(t.table)}`));
+        label = `DropQuery  ${id(t.table)}`;
       }
     } else {
       label = 'DropQuery  ';

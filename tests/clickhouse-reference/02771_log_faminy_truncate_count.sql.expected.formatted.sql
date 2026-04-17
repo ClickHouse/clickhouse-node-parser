@@ -9,6 +9,8 @@ ENGINE = Log;
 
 INSERT INTO test_log (crypto_name, trade_date);
 
+TRUNCATE TABLE test_log;
+
 SELECT count()
 FROM test_log;
 

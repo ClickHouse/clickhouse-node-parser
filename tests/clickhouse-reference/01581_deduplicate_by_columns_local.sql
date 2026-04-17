@@ -21,6 +21,7 @@ PARTITION BY (partition_key + 1) -- ensure that column in expression is properly
 ORDER BY (pk, toString(sk * 10)); -- silly order key to ensure that key column is checked even when it is a part of expression. See [1] below.
 INSERT INTO full_duplicates SELECT * FROM source_data;
 SELECT * FROM full_duplicates;
+TRUNCATE full_duplicates;
 --DROP TABLE full_duplicates;
 
 -- Now to the partial duplicates when MATERIALIZED column alway has unique value.
@@ -32,6 +33,7 @@ CREATE TABLE partial_duplicates  (
 ORDER BY (pk, sk);
 INSERT INTO partial_duplicates SELECT * FROM source_data;
 SELECT count() FROM partial_duplicates;
+TRUNCATE partial_duplicates;
 SELECT * FROM partial_duplicates;
 DROP TABLE full_duplicates;
 DROP TABLE partial_duplicates;

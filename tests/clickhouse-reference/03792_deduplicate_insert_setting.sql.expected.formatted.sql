@@ -8,6 +8,8 @@ ORDER BY id;
 
 SET async_insert = 0;
 
+TRUNCATE TABLE test;
+
 SET deduplicate_insert = 'backward_compatible_choice';
 
 SET insert_deduplicate = 1;

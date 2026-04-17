@@ -14,6 +14,7 @@ INSERT INTO test_table VALUES (0);
 SELECT * FROM test_mv ORDER BY arr;
 SELECT '--';
 INSERT INTO test_table VALUES (1);
+TRUNCATE test_table;
 DROP TABLE IF EXISTS regex_test_table;
 CREATE TABLE regex_test_table
 (

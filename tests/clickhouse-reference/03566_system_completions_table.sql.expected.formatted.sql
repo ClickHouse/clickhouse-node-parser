@@ -1,6 +1,6 @@
 CREATE DATABASE IF NOT EXISTS `0003566aaadatabase`;
 
-USE 0003566aaadatabase;
+USE `0003566aaadatabase`;
 
 CREATE TABLE IF NOT EXISTS `0003566aaatable`
 (

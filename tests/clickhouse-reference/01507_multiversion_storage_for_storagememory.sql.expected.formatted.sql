@@ -12,4 +12,6 @@ FROM numbers(10);
 SELECT *
 FROM defaults;
 
+TRUNCATE TABLE defaults;
+
 DROP TABLE defaults;

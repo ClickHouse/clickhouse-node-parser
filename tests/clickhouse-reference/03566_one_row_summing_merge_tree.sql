@@ -39,6 +39,7 @@ ORDER BY key;
 INSERT INTO test_table VALUES(1,6);
 INSERT INTO test_table VALUES(1,NULL);
 select * from test_table final;
+truncate table test_table;
 INSERT INTO test_table VALUES(1,6), (1,NULL);
 select ' -- AggregatingMergeTree --\n' format TSVRaw;
 CREATE TABLE test_table

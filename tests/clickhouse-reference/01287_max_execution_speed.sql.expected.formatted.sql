@@ -37,4 +37,6 @@ SET max_execution_speed = 0;
 
 SET max_execution_speed_bytes = 8000000;
 
+TRUNCATE TABLE times;
+
 SET max_execution_speed_bytes = 0;

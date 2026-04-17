@@ -20,3 +20,4 @@ SELECT * FROM truncate_test_memory;
 SELECT * FROM truncate_test_tiny_log;
 SELECT * FROM truncate_test_stripe_log;
 SELECT * FROM truncate_test_merge_tree;
+TRUNCATE ALL TABLES FROM IF EXISTS {CLICKHOUSE_DATABASE:Identifier};

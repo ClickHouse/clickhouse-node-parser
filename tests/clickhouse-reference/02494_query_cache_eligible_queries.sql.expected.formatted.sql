@@ -33,4 +33,7 @@ INSERT INTO eligible_test SELECT *
 FROM eligible_test
 SETTINGS use_query_cache = true;
 
+-- TRUNCATE
+TRUNCATE TABLE eligible_test SETTINGS use_query_cache = true;
+
 DROP TABLE eligible_test2;

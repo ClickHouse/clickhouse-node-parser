@@ -127,6 +127,7 @@ TopLevelStatement
   / SystemStatement
   / InsertStatement
   / DropStatement
+  / TruncateStatement
   / OpaqueStatement
   / query:UnionQuery intoOutfile:( _ IntoOutfileClause )? preSettings:( _ SettingsClause )? format:( _ FormatClause )? postSettings:( _ SettingsClause )* {
       let result = query;
@@ -794,10 +795,10 @@ AlterInPartitionClause
   = "IN"i ![a-zA-Z0-9_] _ "PARTITION"i ![a-zA-Z0-9_] _ part:AlterPartitionExpr { return part; }
   / "IN"i ![a-zA-Z0-9_] _ "PART"i ![a-zA-Z0-9_] _ id:StringLiteral { return { partitionKind: 'id', id }; }
 
-// OpaqueStatement: statements we recognize but don't fully parse (TRUNCATE, etc.)
-// The body is consumed as raw text until end of statement.
+// OpaqueStatement: access-control and other DDL we don't yet parse structurally.
+// TRUNCATE is intentionally excluded — it's handled by TruncateStatement above.
 OpaqueStatement
-  = keyword:( "ALTER"i / "RENAME"i / "ATTACH"i / "DETACH"i / "OPTIMIZE"i / "CHECK"i / "DESCRIBE"i / "DESC"i / "EXISTS"i / "SHOW"i / "GRANT"i / "REVOKE"i / "EXCHANGE"i / "KILL"i / "UNDO"i / "DELETE"i / "BACKUP"i / "RESTORE"i / "BEGIN"i / "COMMIT"i / "ROLLBACK"i / "WATCH"i / "UNDROP"i / "MOVE"i / "TRUNCATE"i ) ![a-zA-Z0-9_] _ body:$( ![\n;] . )* { return loc({ kind: 'system', body: (keyword + ' ' + body).trim() }); }
+  = keyword:( "ALTER"i / "RENAME"i / "ATTACH"i / "DETACH"i / "OPTIMIZE"i / "CHECK"i / "DESCRIBE"i / "DESC"i / "EXISTS"i / "SHOW"i / "GRANT"i / "REVOKE"i / "EXCHANGE"i / "KILL"i / "UNDO"i / "DELETE"i / "BACKUP"i / "RESTORE"i / "BEGIN"i / "COMMIT"i / "ROLLBACK"i / "WATCH"i / "UNDROP"i / "MOVE"i ) ![a-zA-Z0-9_] _ body:$( ![\n;] . )* { return loc({ kind: 'system', body: (keyword + ' ' + body).trim() }); }
 
 // ── DROP statements ─────────────────────────────────────────────────────────
 
@@ -931,10 +932,52 @@ ParallelWithItem
   / DropStatement
   / TruncateStatement
 
-// TruncateStatement: TRUNCATE [TABLE] [IF EXISTS] [db.]table — minimal parsing for PARALLEL WITH support
+// TruncateStatement: structural parsing for all TRUNCATE variants
+//   TRUNCATE [TEMPORARY] [TABLE] [IF EXISTS] [db.]table [ON CLUSTER cluster] [SYNC] [SETTINGS ...]
+//   TRUNCATE DATABASE [IF EXISTS] db [ON CLUSTER cluster] [SYNC]
+//   TRUNCATE [ALL] TABLES FROM [IF EXISTS] db [ON CLUSTER cluster] [[NOT] LIKE 'pattern']
 TruncateStatement
-  = "TRUNCATE"i ![a-zA-Z0-9_] ( _ "TABLE"i ![a-zA-Z0-9_] )? ( _ "IF"i ![a-zA-Z0-9_] _ "EXISTS"i ![a-zA-Z0-9_] )? _ table:TableRef {
-      return loc({ kind: 'truncate', table });
+  = "TRUNCATE"i ![a-zA-Z0-9_]
+    all:( _ "ALL"i ![a-zA-Z0-9_] )? _ "TABLES"i ![a-zA-Z0-9_]
+    _ "FROM"i ![a-zA-Z0-9_]
+    ifExists:( _ "IF"i ![a-zA-Z0-9_] _ "EXISTS"i ![a-zA-Z0-9_] )?
+    _ database:( QueryParamIdentifier / AliasName )
+    cluster:( _ OnClusterClause )?
+    likeClause:( _ ( "NOT"i ![a-zA-Z0-9_] _ )? "LIKE"i ![a-zA-Z0-9_] _ StringLiteral )? {
+      const result = { kind: 'truncate', targetType: 'TABLES', database };
+      if (all !== null) result.allTables = true;
+      if (ifExists !== null) result.ifExists = true;
+      if (cluster !== null) result.onCluster = cluster[1];
+      if (likeClause !== null) {
+        const notKw = likeClause[1];
+        const pattern = likeClause[5].value;
+        result.like = notKw !== null ? { pattern, not: true } : { pattern };
+      }
+      return loc(result);
+    }
+  / "TRUNCATE"i ![a-zA-Z0-9_]
+    _ "DATABASE"i ![a-zA-Z0-9_]
+    ifExists:( _ "IF"i ![a-zA-Z0-9_] _ "EXISTS"i ![a-zA-Z0-9_] )?
+    _ database:( QueryParamIdentifier / AliasName )
+    cluster:( _ OnClusterClause )? {
+      const result = { kind: 'truncate', targetType: 'DATABASE', database };
+      if (ifExists !== null) result.ifExists = true;
+      if (cluster !== null) result.onCluster = cluster[1];
+      return loc(result);
+    }
+  / "TRUNCATE"i ![a-zA-Z0-9_]
+    temp:( _ "TEMPORARY"i ![a-zA-Z0-9_] )?
+    ( _ "TABLE"i ![a-zA-Z0-9_] )?
+    ifExists:( _ "IF"i ![a-zA-Z0-9_] _ "EXISTS"i ![a-zA-Z0-9_] )?
+    _ table:TableRef
+    cluster:( _ OnClusterClause )?
+    settings:( _ SettingsClause )? {
+      const result = { kind: 'truncate', targetType: 'TABLE', table };
+      if (temp !== null) result.temporary = true;
+      if (ifExists !== null) result.ifExists = true;
+      if (cluster !== null) result.onCluster = cluster[1];
+      if (settings !== null) result.settings = settings[1];
+      return loc(result);
     }
 
 // Unified entry point for all CREATE/REPLACE statements
@@ -4123,7 +4166,7 @@ UnicodeQuoteChar
 // e.g. {CLICKHOUSE_DATABASE:Identifier} used in FROM {DB:Identifier}.tablename
 QueryParamIdentifier
   = "{" _ name:$[a-zA-Z0-9_]+ _ ":" _ "Identifier"i ![a-zA-Z0-9_] _ "}" {
-      return '{' + name + ':Identifier}';
+      return loc({ kind: 'queryParam', name: name, type: 'Identifier' });
     }
 
 TableRef

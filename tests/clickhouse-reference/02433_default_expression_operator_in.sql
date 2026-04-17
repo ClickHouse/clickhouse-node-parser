@@ -10,6 +10,7 @@ CREATE TABLE dep
     `purchase_location` UInt16 MATERIALIZED if(id IN joinGet(concat(currentDatabase(), '.id_join'), 'location', 'CLICK'), 123, 456)
 )
 ENGINE = ReplicatedMergeTree('/test/02433/{database}/dep', '1') ORDER BY tuple();
+TRUNCATE TABLE id_join;
 CREATE TABLE dep2
 (
     `id` Int32,

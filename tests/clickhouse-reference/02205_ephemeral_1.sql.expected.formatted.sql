@@ -10,6 +10,8 @@ CREATE TABLE t_ephemeral_02205_1
 )
 ENGINE = Memory;
 
+TRUNCATE TABLE t_ephemeral_02205_1;
+
 INSERT INTO t_ephemeral_02205_1;
 
 SELECT *

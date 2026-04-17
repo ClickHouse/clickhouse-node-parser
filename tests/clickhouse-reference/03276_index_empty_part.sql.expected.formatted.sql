@@ -11,6 +11,8 @@ SETTINGS primary_key_lazy_load = 0, remove_empty_parts = 0;
 
 INSERT INTO t_index_empty_part (c0, c1);
 
+TRUNCATE TABLE t_index_empty_part;
+
 SELECT
     `rows`,
     primary_key_bytes_in_memory

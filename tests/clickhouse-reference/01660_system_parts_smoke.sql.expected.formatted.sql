@@ -75,6 +75,8 @@ WHERE database = currentDatabase()
 GROUP BY _state
 ORDER BY _state ASC;
 
+TRUNCATE TABLE data_01660;
+
 SELECT
     if(count() > 0, 'HAVE PARTS', 'NO PARTS'),
     _state

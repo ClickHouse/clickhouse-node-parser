@@ -44,6 +44,8 @@ FROM source_data;
 SELECT *
 FROM full_duplicates;
 
+TRUNCATE TABLE full_duplicates;
+
 --DROP TABLE full_duplicates;
 -- Now to the partial duplicates when MATERIALIZED column alway has unique value.
 DROP TABLE IF EXISTS partial_duplicates;
@@ -66,6 +68,8 @@ FROM source_data;
 
 SELECT count()
 FROM partial_duplicates;
+
+TRUNCATE TABLE partial_duplicates;
 
 SELECT *
 FROM partial_duplicates;

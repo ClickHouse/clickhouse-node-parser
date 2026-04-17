@@ -119,6 +119,8 @@ FROM compression_codec_multiple_replicated1;
 SELECT floor(sum(somenum), 1)
 FROM compression_codec_multiple_replicated2;
 
+TRUNCATE TABLE compression_codec_multiple_replicated1;
+
 SELECT sum(cityHash64(*))
 FROM compression_codec_multiple_replicated2;
 

@@ -9,6 +9,8 @@ ENGINE = TinyLog;
 SELECT mapPopulateSeries(value)
 FROM `02005_test_table`;
 
+TRUNCATE TABLE `02005_test_table`;
+
 INSERT INTO `02005_test_table`;
 
 INSERT INTO `02005_test_table`;

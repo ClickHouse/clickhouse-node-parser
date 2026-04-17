@@ -17,6 +17,7 @@ INSERT INTO data_01660 VALUES (1);
 SELECT name, _state FROM system.parts WHERE database = currentDatabase() AND table = 'data_01660' ORDER BY name;
 SELECT name, active FROM system.parts WHERE database = currentDatabase() AND table = 'data_01660' ORDER BY name;
 SELECT count(), _state FROM system.parts WHERE database = currentDatabase() AND table = 'data_01660' GROUP BY _state ORDER BY _state;
+TRUNCATE data_01660;
 SELECT if (count() > 0, 'HAVE PARTS', 'NO PARTS'), _state FROM system.parts WHERE database = currentDatabase() AND table = 'data_01660' GROUP BY _state ORDER BY _state;
 DROP TABLE data_01660;
 SELECT * FROM system.parts WHERE database = currentDatabase() AND table = 'data_01660';

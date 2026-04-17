@@ -8,6 +8,7 @@ create table dist (key Int) engine=Distributed(test_shard_localhost, currentData
 -- check that FLUSH DISTRIBUTED does flushing anyway
 insert into dist values (1);
 select * from data;
+truncate table data;
 -- check flush_on_detach=0
 drop table dist;
 create table dist (key Int) engine=Distributed(test_shard_localhost, currentDatabase(), data) settings flush_on_detach=0;

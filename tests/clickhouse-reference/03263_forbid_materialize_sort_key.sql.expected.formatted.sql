@@ -46,6 +46,8 @@ ORDER BY (y);
 
 INSERT INTO tab2 (x);
 
+TRUNCATE TABLE tab;
+
 INSERT INTO tab;
 
 SET mutations_sync = 2;

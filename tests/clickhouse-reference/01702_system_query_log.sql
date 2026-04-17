@@ -34,6 +34,7 @@ ALTER TABLE sqllt.table RENAME COLUMN new_col TO the_new_col;
 ALTER TABLE sqllt.table DROP COLUMN the_new_col;
 ALTER TABLE sqllt.table UPDATE i = i + 1 WHERE 1;
 ALTER TABLE sqllt.table DELETE WHERE i > 65535;
+TRUNCATE TABLE sqllt.table;
 DROP TABLE sqllt.table SYNC;
 SET log_comment='';
 -- Try to filter out all possible previous junk events by excluding old log entries,

@@ -131,6 +131,8 @@ DROP TABLE local_01099_c;
 
 DROP TABLE distributed_01099_c;
 
+TRUNCATE TABLE local_01099_b;
+
 INSERT INTO distributed_01099_b WITH concat('http://localhost:8123/?query=', 'select+{1,2,3}+format+TSV') AS url
 
 SELECT *

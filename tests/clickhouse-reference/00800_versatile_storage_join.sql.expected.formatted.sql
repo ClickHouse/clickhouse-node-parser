@@ -135,7 +135,7 @@ USE {CLICKHOUSE_DATABASE:Identifier};
 
 SELECT joinGet('join_test', 'b', 1);
 
-USE system;
+USE `system`;
 
 SELECT joinGet(concat({CLICKHOUSE_DATABASE:String}, '.join_test'), 'b', 1);
 

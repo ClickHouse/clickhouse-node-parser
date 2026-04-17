@@ -22,6 +22,8 @@ CREATE TABLE dep
 ENGINE = ReplicatedMergeTree('/test/02433/{database}/dep', '1')
 ORDER BY tuple();
 
+TRUNCATE TABLE id_join;
+
 CREATE TABLE dep2
 (
     id Int32,

@@ -43,4 +43,5 @@ INSERT INTO TABLE FUNCTION clusterAllReplicas('test_shard_localhost', currentDat
 SELECT * FROM distributed_01099_c;
 DROP TABLE local_01099_c;
 DROP TABLE distributed_01099_c;
+truncate table local_01099_b;
 INSERT INTO distributed_01099_b with 'http://localhost:8123/?query=' || 'select+{1,2,3}+format+TSV' as url SELECT * FROM urlCluster('test_cluster_two_shards', (select url), 'TSV', 's String');

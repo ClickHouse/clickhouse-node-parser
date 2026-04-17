@@ -125,7 +125,7 @@ ORDER BY
     _table ASC,
     n ASC;
 
-USE 01902_db_repr1;
+USE `01902_db_repr1`;
 
 CREATE TABLE `01902_db_repr`.t_merge_1 AS `01902_db_repr`.t
 ENGINE = Merge(currentDatabase(), '^t');

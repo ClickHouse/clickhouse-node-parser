@@ -67,6 +67,8 @@ FROM compression_codec_multiple_log;
 SELECT floor(sum(somenum), 1)
 FROM compression_codec_multiple_log;
 
+TRUNCATE TABLE compression_codec_multiple_log;
+
 SELECT sum(cityHash64(*))
 FROM compression_codec_multiple_log;
 
@@ -134,6 +136,8 @@ FROM compression_codec_multiple_tiny_log;
 
 SELECT floor(sum(somenum), 1)
 FROM compression_codec_multiple_tiny_log;
+
+TRUNCATE TABLE compression_codec_multiple_tiny_log;
 
 SELECT sum(cityHash64(*))
 FROM compression_codec_multiple_tiny_log;

@@ -95,6 +95,8 @@ GROUP BY key
 FORMAT Null
 SETTINGS log_comment = '03783_autopr_dataflow_cache_reuse_query_5'; -- stats available, apply
 
+TRUNCATE TABLE t;
+
 --set send_logs_level='trace', send_logs_source_regexp = 'optimize';
 SELECT
     key,

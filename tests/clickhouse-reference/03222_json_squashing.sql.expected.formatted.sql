@@ -27,6 +27,8 @@ SELECT DISTINCT arrayJoin(JSONSharedDataPaths(json)) AS path
 FROM test
 ORDER BY path ASC;
 
+TRUNCATE TABLE test;
+
 INSERT INTO test SELECT multiIf(number < 1000, '{"a" : 42, "b" : "Hello"}'::JSON, number < 3000, '{"c" : [1, 2, 3], "d" : "2020-01-01"}'::JSON, '{"e" : 43, "f" : ["s1", "s2", "s3"]}'::JSON)
 FROM numbers(20000);
 

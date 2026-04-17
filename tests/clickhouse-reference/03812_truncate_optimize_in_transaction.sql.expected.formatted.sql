@@ -23,3 +23,5 @@ ENGINE = Memory;
 INSERT INTO test_table;
 
 SET throw_on_unsupported_query_inside_transaction = 0;
+
+TRUNCATE TABLE test_table;

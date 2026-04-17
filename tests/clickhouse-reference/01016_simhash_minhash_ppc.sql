@@ -41,6 +41,7 @@ SELECT wordShingleMinHash(s) FROM defaults;
 SELECT wordShingleMinHashCaseInsensitive(s) FROM defaults;
 SELECT wordShingleMinHashUTF8(s) FROM defaults;
 SELECT wordShingleMinHashCaseInsensitiveUTF8(s) FROM defaults;
+TRUNCATE TABLE defaults;
 INSERT INTO defaults SELECT arrayJoin(splitByString('\n\n',
 'ClickHouse uses all available hardware to its full potential to process each query as fast as possible. Peak processing performance for a single query stands at more than 2 terabytes per second (after decompression, only used columns). In distributed setup reads are automatically balanced among healthy replicas to avoid increasing latency.
 ClickHouse supports multi-master asynchronous replication and can be deployed across multiple datacenters. All nodes are equal, which allows avoiding having single points of failure. Downtime of a single node or the whole datacenter wont affect the systems availability for both reads and writes.

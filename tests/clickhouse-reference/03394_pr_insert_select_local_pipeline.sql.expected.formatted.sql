@@ -37,6 +37,8 @@ SET enable_parallel_replicas = 1, cluster_for_parallel_replicas = 'test_cluster_
 
 SELECT '-- check result with local pipeline';
 
+TRUNCATE TABLE t_rmt_target;
+
 INSERT INTO t_rmt_target SELECT *
 FROM t_mt_source
 SETTINGS

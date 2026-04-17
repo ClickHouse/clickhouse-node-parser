@@ -6,3 +6,5 @@ CREATE TABLE join_test
     value Float32
 )
 ENGINE = Join(`ANY`, `LEFT`, number);
+
+TRUNCATE TABLE join_test;

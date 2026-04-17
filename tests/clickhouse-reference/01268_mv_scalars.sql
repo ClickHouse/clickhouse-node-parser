@@ -20,6 +20,7 @@ CREATE MATERIALIZED VIEW dest_table_mv TO dest_table as select Date, Id, Units F
 insert into left_table select toDate('2020-01-01'), 0, number * 2 from numbers(3);
 select * from dest_table order by Date, Id, Units;
 insert into left_table select toDate('2020-01-01'), 5, number * 2 from numbers(3);
+truncate table left_table;
 insert into left_table select toDate('2020-01-01') + 5, 5, number * 2 from numbers(3);
 drop table dest_table_mv;
 drop table left_table;

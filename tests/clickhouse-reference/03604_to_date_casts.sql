@@ -14,6 +14,7 @@ INSERT INTO test_date32_casts VALUES
     ('Float64', 120530::Float64),
     ('BFloat16', 121344::BFloat16); -- BFloat16 can't represent 120530 exactly, but it's still the same date
 SELECT from, val, val::Int32 FROM test_date32_casts ORDER BY ALL;
+TRUNCATE TABLE test_date32_casts;
 INSERT INTO test_date32_casts VALUES
     ('Int32', 7::Int32),
     ('UInt32', 7::UInt32),
@@ -50,6 +51,7 @@ INSERT INTO test_date_casts VALUES
     ('Float64', 86400::Float64),
     ('BFloat16', 86800::BFloat16); -- BFloat16 can't represent 86400 exactly, but it's still the same date
 SELECT from, val, val::UInt16 FROM test_date_casts ORDER BY ALL;
+TRUNCATE TABLE test_date_casts;
 INSERT INTO test_date_casts VALUES
     ('Int32', 7::Int32),
     ('UInt32', 7::UInt32),

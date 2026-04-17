@@ -15,6 +15,7 @@ ENGINE = MergeTree ORDER BY tuple() SETTINGS index_granularity = 4, materialize_
 -- negative test case
 ALTER TABLE tab MODIFY SETTING exclude_materialize_skip_indexes_on_merge ='!@#$^#$&#$$%$,,.,3.45,45.';
 INSERT INTO tab SELECT number, number / 50 FROM numbers(100);
+TRUNCATE TABLE tab;
 CREATE VIEW explain_indexes
 AS SELECT trimLeft(explain) AS explain
 FROM

@@ -17,6 +17,7 @@ SET enable_parallel_replicas = 2, parallel_replicas_local_plan = 1, parallel_rep
 SELECT '---normal : contains both projections and parts ---';
 SELECT trimLeft(replaceRegexpAll(explain, 'ReadFromRemoteParallelReplicas.*', 'ReadFromRemoteParallelReplicas')) FROM (explain SELECT sum(key) FROM normal WHERE key > 9999 AND key < 10010) WHERE explain LIKE '%ReadFromMergeTree%' OR explain LIKE '%ReadFromRemoteParallelReplicas%' SETTINGS enable_analyzer = 1;
 SELECT sum(key) FROM normal WHERE key > 9999 AND key < 10010;
+TRUNCATE TABLE normal;
 INSERT INTO normal select number as key, number as value from numbers(10100);
 DROP TABLE normal;
 DROP TABLE IF EXISTS agg;
@@ -32,6 +33,7 @@ ALTER TABLE agg ADD PROJECTION p_agg (SELECT key, sum(value) GROUP BY key);
 INSERT INTO agg SELECT number AS key, number AS value FROM numbers(100, 100);
 SELECT trimLeft(replaceRegexpAll(explain, 'ReadFromRemoteParallelReplicas.*', 'ReadFromRemoteParallelReplicas')) FROM (explain SELECT sum(value) AS v FROM agg where key > 90 AND key < 110) WHERE explain LIKE '%ReadFromMergeTree%' OR explain LIKE '%ReadFromRemoteParallelReplicas%' SETTINGS enable_analyzer = 1;
 SELECT sum(value) AS v FROM agg where key > 90 AND key < 110;
+TRUNCATE TABLE agg;
 INSERT INTO agg SELECT number AS key, number AS value FROM numbers(200);
 DROP TABLE agg;
 DROP TABLE IF EXISTS x;

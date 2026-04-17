@@ -35,3 +35,5 @@ ORDER BY k ASC;
 SELECT *
 FROM replicated_truncate2
 ORDER BY k ASC;
+
+TRUNCATE TABLE replicated_truncate1 SETTINGS replication_alter_partitions_sync = 2;

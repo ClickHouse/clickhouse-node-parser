@@ -9,6 +9,8 @@ CREATE TABLE file_delim
 ENGINE = File(CSV, '01545_url_file_format_settings.csv')
 SETTINGS format_csv_delimiter = '|';
 
+TRUNCATE TABLE file_delim;
+
 INSERT INTO file_delim SELECT
     1,
     2;

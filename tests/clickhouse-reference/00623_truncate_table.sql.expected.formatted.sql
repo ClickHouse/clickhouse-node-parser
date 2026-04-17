@@ -101,4 +101,18 @@ FROM truncate_test_merge_tree;
 SELECT *
 FROM truncate_test_materialized_view;
 
+TRUNCATE TABLE truncate_test_set;
+
+TRUNCATE TABLE truncate_test_log;
+
+TRUNCATE TABLE truncate_test_memory;
+
+TRUNCATE TABLE truncate_test_tiny_log;
+
+TRUNCATE TABLE truncate_test_stripe_log;
+
+TRUNCATE TABLE truncate_test_merge_tree;
+
+TRUNCATE TABLE truncate_test_materialized_view;
+
 DROP TABLE IF EXISTS truncate_test_set;

@@ -43,6 +43,8 @@ FORMAT Null;
 SELECT mapApply((k, v) -> (k, finalizeAggregation(v)), x)
 FROM test;
 
+TRUNCATE TABLE test;
+
 DROP TABLE test;
 
 CREATE TABLE test

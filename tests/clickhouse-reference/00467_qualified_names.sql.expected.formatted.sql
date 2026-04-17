@@ -34,7 +34,7 @@ FROM `system`.one AS one;
 SELECT one.*
 FROM `system`.one AS one;
 
-USE system;
+USE `system`;
 
 SELECT dummy
 FROM one;

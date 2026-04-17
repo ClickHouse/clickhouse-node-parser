@@ -29,6 +29,8 @@ INSERT INTO src;
 SELECT *
 FROM dst;
 
+TRUNCATE TABLE dst;
+
 --DROP TABLE src SYNC;
 --CREATE TABLE src (y String) ENGINE = MergeTree order by tuple();
 ALTER TABLE src ADD COLUMN y UInt8;

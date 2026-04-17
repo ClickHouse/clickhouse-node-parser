@@ -32,6 +32,8 @@ WHERE a >= 110
     AND a < 130
     AND b = 2;
 
+TRUNCATE TABLE t_skip_index_insert;
+
 SET mutations_sync = 2;
 
 ALTER TABLE t_skip_index_insert MATERIALIZE INDEX idx_a;

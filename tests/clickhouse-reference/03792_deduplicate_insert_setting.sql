@@ -3,6 +3,7 @@ CREATE TABLE test
 ENGINE = ReplicatedMergeTree('/clickhouse/tables/{database}/test/test_table', '1')
 ORDER BY id;
 SET async_insert = 0;
+TRUNCATE TABLE test;
 SET deduplicate_insert = 'backward_compatible_choice';
 SET insert_deduplicate = 1;
 INSERT INTO test VALUES (1, 'one line');

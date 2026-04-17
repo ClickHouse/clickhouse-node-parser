@@ -9,6 +9,7 @@ INSERT INTO t_json_2 FORMAT JSONEachRow {"id": 1, "data": {"k1": 1, "k2" : 2}} {
 SELECT id, data, JSONAllPathsWithTypes(data) FROM t_json_2 ORDER BY id;
 SELECT id, data.k1, data.k2, data.k3 FROM t_json_2 ORDER BY id;
 INSERT INTO t_json_2 FORMAT JSONEachRow {"id": 3, "data": {"k3" : 10}} {"id": 4, "data": {"k2": 5, "k3" : "str"}};
+TRUNCATE TABLE t_json_2;
 INSERT INTO TABLE t_json_2 FORMAT JSONEachRow {"id": 1, "data": {"k1" : [1, 2, 3.3]}};
 SELECT id, data.k1 FROM t_json_2 ORDEr BY id;
 INSERT INTO TABLE t_json_2 FORMAT JSONEachRow {"id": 2, "data": {"k1" : ["a", 4, "b"]}};

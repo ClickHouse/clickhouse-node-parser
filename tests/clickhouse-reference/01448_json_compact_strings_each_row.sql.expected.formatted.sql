@@ -74,6 +74,8 @@ ORDER BY v2;
 
 INSERT INTO test_table;
 
+TRUNCATE TABLE test_table;
+
 SELECT 6;
 
 /* Check input_format_null_as_default = 1 */
@@ -97,6 +99,8 @@ INSERT INTO test_table_2;
 SELECT *
 FROM test_table_2
 FORMAT JSONCompactStringsEachRow;
+
+TRUNCATE TABLE test_table_2;
 
 SELECT 8;
 

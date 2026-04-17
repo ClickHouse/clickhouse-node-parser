@@ -25,6 +25,8 @@ INSERT INTO FUNCTION file(concat(currentDatabase(), '_table_time_bug.csv'), 'CSV
     c0
 FROM t0;
 
+TRUNCATE TABLE t0;
+
 -- Read it back from server-side using the file() table function
 -- (NOT FROM INFILE, which is client-side)
 INSERT INTO t0 (c0, c1, c2, c3) SELECT

@@ -153,14 +153,16 @@ const KEYWORDS = new Set([
   'ISNULL',
 ]);
 
-// Quote an identifier with backticks if it needs quoting
-function quoteIdent(s: string): string {
-  // Query parameters ({name:type}) should pass through as-is
-  if (s.startsWith('{') && s.endsWith('}') && s.includes(':')) return s;
+// Quote an identifier with backticks if it needs quoting. Accepts either a
+// plain string or a {@link QueryParam} node (identifier-position query param).
+function quoteIdent(s: import('./ast').Identifier): string {
+  if (typeof s !== 'string') return `{${s.name}:${s.type}}`;
   // Valid bare identifier: starts with letter/underscore, contains only alphanum/underscore/$
   if (/^[a-zA-Z_][a-zA-Z0-9_$]*$/.test(s) && !KEYWORDS.has(s.toUpperCase())) {
     return s;
   }
+  // `*` in qualified-asterisk position passes through
+  if (s === '*') return s;
   // Backtick-quote: escape backticks by doubling them and backslashes by doubling them
   return '`' + s.replace(/\\/g, '\\\\').replace(/`/g, '``') + '`';
 }
@@ -277,13 +279,8 @@ export function formatNode(node: ASTNode, indent: string = ''): string {
     // Statement nodes that can appear as ASTNode
     case 'insert':
       return formatInsertStatement(node, indent);
-    case 'truncate': {
-      const t = node.table;
-      const tn = t.database
-        ? `${quoteIdent(t.database)}.${quoteIdent(t.table)}`
-        : quoteIdent(t.table);
-      return `${indent}TRUNCATE TABLE ${tn}`;
-    }
+    case 'truncate':
+      return formatTruncateStatement(node, indent);
     case 'drop':
       return formatStatement(node, indent);
     case 'alter':
@@ -400,11 +397,7 @@ function formatStatement(stmt: Statement, indent: string): string {
     return formatInsertStatement(stmt, indent);
   }
   if (stmt.kind === 'truncate') {
-    const t = stmt.table;
-    const name = t.database
-      ? `${quoteIdent(t.database)}.${quoteIdent(t.table)}`
-      : quoteIdent(t.table);
-    return `${indent}TRUNCATE TABLE ${name}`;
+    return formatTruncateStatement(stmt, indent);
   }
   if (stmt.kind === 'drop') {
     const fmtRef = (t: import('./ast').TableRef) =>
@@ -561,7 +554,7 @@ function formatAccessControlSettings(
 }
 
 function formatUseStatement(stmt: UseStatement, indent: string): string {
-  return `${indent}USE ${stmt.database}`;
+  return `${indent}USE ${quoteIdent(stmt.database)}`;
 }
 
 function formatAlterPartitionExpr(
@@ -818,6 +811,40 @@ function formatInsertStatement(stmt: InsertStatement, indent: string): string {
   }
   const insertLine = parts.join(' ');
   return prefixLines.length > 0 ? `${prefixLines.join('\n')}\n${insertLine}` : insertLine;
+}
+
+function formatTruncateStatement(
+  stmt: import('./ast').TruncateStatement,
+  indent: string,
+): string {
+  const parts: string[] = [`${indent}TRUNCATE`];
+  if (stmt.targetType === 'TABLES') {
+    if (stmt.allTables) parts.push('ALL');
+    parts.push('TABLES FROM');
+    if (stmt.ifExists) parts.push('IF EXISTS');
+    parts.push(quoteIdent(stmt.database!));
+    if (stmt.onCluster) parts.push(`ON CLUSTER ${quoteIdent(stmt.onCluster)}`);
+    if (stmt.like) {
+      parts.push(stmt.like.not ? 'NOT LIKE' : 'LIKE');
+      parts.push(`'${escapeString(stmt.like.pattern)}'`);
+    }
+  } else if (stmt.targetType === 'DATABASE') {
+    parts.push('DATABASE');
+    if (stmt.ifExists) parts.push('IF EXISTS');
+    parts.push(quoteIdent(stmt.database!));
+    if (stmt.onCluster) parts.push(`ON CLUSTER ${quoteIdent(stmt.onCluster)}`);
+  } else {
+    if (stmt.temporary) parts.push('TEMPORARY');
+    parts.push('TABLE');
+    if (stmt.ifExists) parts.push('IF EXISTS');
+    const t = stmt.table!;
+    parts.push(t.database ? `${quoteIdent(t.database)}.${quoteIdent(t.table)}` : quoteIdent(t.table));
+    if (stmt.onCluster) parts.push(`ON CLUSTER ${quoteIdent(stmt.onCluster)}`);
+    if (stmt.settings && stmt.settings.length > 0) {
+      parts.push(`SETTINGS ${formatSettingsList(stmt.settings, indent)}`);
+    }
+  }
+  return parts.join(' ');
 }
 
 function formatCreateStatement(

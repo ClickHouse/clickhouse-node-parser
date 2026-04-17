@@ -48,6 +48,8 @@ ORDER BY
     x ASC,
     t ASC;
 
+TRUNCATE TABLE select_final;
+
 INSERT INTO select_final SELECT
     toDate('2000-01-01'),
     number,

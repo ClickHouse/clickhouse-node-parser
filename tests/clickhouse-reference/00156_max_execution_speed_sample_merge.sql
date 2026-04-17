@@ -17,3 +17,4 @@ INSERT INTO t00156_max_execution_speed_sample_merge SELECT number FROM numbers(2
 INSERT INTO times SELECT now();
 SELECT * FROM t00156_max_execution_speed_sample_merge WHERE sleepEachRow(0.1) == 0 FORMAT Null;
 SELECT max(t) - min(t) >= 1 FROM times;
+TRUNCATE TABLE times;

@@ -23,6 +23,8 @@ INSERT INTO dist;
 SELECT *
 FROM data;
 
+TRUNCATE TABLE data;
+
 -- check flush_on_detach=0
 DROP TABLE dist;
 

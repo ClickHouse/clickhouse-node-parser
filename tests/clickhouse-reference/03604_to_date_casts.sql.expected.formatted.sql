@@ -17,6 +17,8 @@ SELECT
 FROM test_date32_casts
 ORDER BY `ALL` ASC;
 
+TRUNCATE TABLE test_date32_casts;
+
 INSERT INTO test_date32_casts;
 
 INSERT INTO test_date32_casts;
@@ -37,6 +39,8 @@ SELECT
     val::UInt16
 FROM test_date_casts
 ORDER BY `ALL` ASC;
+
+TRUNCATE TABLE test_date_casts;
 
 INSERT INTO test_date_casts;
 

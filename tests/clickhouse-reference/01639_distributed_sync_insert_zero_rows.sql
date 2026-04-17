@@ -8,6 +8,7 @@ SET distributed_foreground_insert = 1;
 INSERT INTO distributed SELECT number FROM numbers(256) WHERE number % 2 = 0;
 SELECT count() FROM local;
 SELECT count() FROM distributed;
+TRUNCATE TABLE local;
 INSERT INTO distributed SELECT number FROM numbers(256) WHERE number % 2 = 1;
 INSERT INTO distributed SELECT number FROM numbers(256) WHERE number < 128;
 DROP TABLE local;

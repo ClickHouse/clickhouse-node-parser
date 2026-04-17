@@ -31,5 +31,7 @@ CREATE TABLE test
 ENGINE = MergeTree
 ORDER BY tuple();
 
+TRUNCATE TABLE test;
+
 INSERT INTO test SELECT multiIf(number < 1000, 'Str'::Dynamic(max_types=1), number < 3000, range(number % 5)::Dynamic(max_types=1), number::Dynamic(max_types=1))
 FROM numbers(100000);

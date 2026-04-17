@@ -30,6 +30,7 @@ INSERT INTO compression_codec_multiple_log select modulo(number, 100), toString(
 SELECT count(*) FROM compression_codec_multiple_log;
 SELECT count(distinct data) FROM compression_codec_multiple_log;
 SELECT floor(sum(somenum), 1) FROM compression_codec_multiple_log;
+TRUNCATE TABLE compression_codec_multiple_log;
 SELECT sum(cityHash64(*)) FROM compression_codec_multiple_log;
 -- copy-paste for storage tiny log
 DROP TABLE IF EXISTS compression_codec_tiny_log;
@@ -60,6 +61,7 @@ INSERT INTO compression_codec_multiple_tiny_log select modulo(number, 100), toSt
 SELECT count(*) FROM compression_codec_multiple_tiny_log;
 SELECT count(distinct data) FROM compression_codec_multiple_tiny_log;
 SELECT floor(sum(somenum), 1) FROM compression_codec_multiple_tiny_log;
+TRUNCATE TABLE compression_codec_multiple_tiny_log;
 SELECT sum(cityHash64(*)) FROM compression_codec_multiple_tiny_log;
 DROP TABLE compression_codec_multiple_log;
 DROP TABLE compression_codec_multiple_tiny_log;

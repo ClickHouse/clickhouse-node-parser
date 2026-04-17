@@ -6,6 +6,7 @@ insert into test select * from numbers(10);
 insert into test select * from numbers(10, 10); -- { serverError CANNOT_APPEND_TO_FILE }
 insert into test select * from numbers(10, 10) settings engine_file_allow_create_multiple_files=1;
 select * from test order by number;
+truncate table test;
 drop table test;
 create table test (number UInt64) engine=File('Parquet', 'test_02155/test1/data.Parquet');
 insert into test select * from numbers(10) settings engine_file_truncate_on_insert=1;

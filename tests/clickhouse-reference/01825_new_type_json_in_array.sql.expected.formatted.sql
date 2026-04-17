@@ -41,6 +41,8 @@ SELECT DISTINCT arrayJoin(JSONAllPathsWithTypes(arrayJoin(arr))) AS path
 FROM t_json_array
 ORDER BY path ASC;
 
+TRUNCATE TABLE t_json_array;
+
 INSERT INTO t_json_array;
 
 SELECT

@@ -2,6 +2,7 @@ create table rmt (n int) engine=ReplicatedMergeTree('/test/02468/{database}', '1
 create table rmt1 (n int) engine=ReplicatedMergeTree('/test/02468/{database}', '2') order by tuple() partition by n % 2 settings replicated_max_ratio_of_wrong_parts=0, max_suspicious_broken_parts=0, max_suspicious_broken_parts_bytes=0;
 insert into rmt select * from numbers(10) settings max_block_size=1, max_insert_threads=1;
 alter table rmt drop partition id '0';
+truncate table rmt1;
 insert into rmt values (1);
 insert into rmt1 values (2);
 select *, _table from merge(currentDatabase(), '') order by  _table, (*,);

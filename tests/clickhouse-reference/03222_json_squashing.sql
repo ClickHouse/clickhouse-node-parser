@@ -8,6 +8,7 @@ insert into test select multiIf(number < 1000, '{}'::JSON, number < 3000, '{"a" 
 select distinct arrayJoin(JSONAllPaths(json)) as path from test order by path;
 select distinct arrayJoin(JSONDynamicPaths(json)) as path from test order by path;
 select distinct arrayJoin(JSONSharedDataPaths(json)) as path from test order by path;
+truncate table test;
 insert into test select multiIf(number < 1000, '{"a" : 42, "b" : "Hello"}'::JSON, number < 3000, '{"c" : [1, 2, 3], "d" : "2020-01-01"}'::JSON, '{"e" : 43, "f" : ["s1", "s2", "s3"]}'::JSON) from numbers(20000);
 drop table test;
 create table test (json JSON(max_dynamic_paths=2)) engine=MergeTree order by tuple();

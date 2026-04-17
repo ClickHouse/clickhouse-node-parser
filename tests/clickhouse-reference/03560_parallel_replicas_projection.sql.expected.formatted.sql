@@ -50,6 +50,8 @@ FROM normal
 WHERE key > 9999
     AND key < 10010;
 
+TRUNCATE TABLE normal;
+
 INSERT INTO normal SELECT
     number AS key,
     number AS value
@@ -99,6 +101,8 @@ SELECT sum(value) AS v
 FROM agg
 WHERE key > 90
     AND key < 110;
+
+TRUNCATE TABLE agg;
 
 INSERT INTO agg SELECT
     number AS key,

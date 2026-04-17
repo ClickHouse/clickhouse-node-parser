@@ -20,4 +20,6 @@ SELECT
 FROM t_json_2
 ORDER BY id ASC;
 
+TRUNCATE TABLE t_json_2;
+
 INSERT INTO t_json_2;

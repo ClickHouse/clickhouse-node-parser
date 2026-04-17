@@ -9,6 +9,8 @@ SETTINGS old_parts_lifetime = 600;
 
 INSERT INTO data_02491;
 
+TRUNCATE TABLE data_02491;
+
 WITH (
         SELECT uuid
         FROM `system`.tables

@@ -27,6 +27,8 @@ select 1, arraySort(groupArray(n)) from rmt2;
 -- check that no parts are lost
 select 2, arraySort(groupArray(n)) from rmt1;
 select 3, arraySort(groupArray(n)) from rmt2;
+truncate table rmt1;
+truncate table rmt2;
 insert into rmt2 values (1);
 -- give it a chance to remove source parts
 select sleep(2) format Null; -- increases probability of reproducing the issue

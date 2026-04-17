@@ -28,6 +28,8 @@ INSERT INTO tab SELECT
     number / 50
 FROM numbers(100);
 
+TRUNCATE TABLE tab;
+
 CREATE VIEW explain_indexes
 AS
 SELECT trimLeft(`explain`) AS `explain`

@@ -10,6 +10,7 @@ CREATE TABLE dist_test_01040 AS test_01040 Engine=Distributed(test_cluster_two_s
 SET prefer_localhost_replica=0;
 INSERT INTO dist_test_01040 SELECT toUInt64(number) FROM numbers(2);
 SELECT * FROM dist_test_01040 ORDER BY key;
+TRUNCATE TABLE test_01040;
 SET prefer_localhost_replica=1;
 DROP TABLE dist_test_01040;
 -- internal_replication=true

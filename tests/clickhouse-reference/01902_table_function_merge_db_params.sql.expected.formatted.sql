@@ -43,6 +43,6 @@ ORDER BY
     _table ASC,
     n ASC; -- {serverError CANNOT_EXTRACT_TABLE_STRUCTURE}
 
-USE 01902_db_params;
+USE `01902_db_params`;
 
 DROP DATABASE `01902_db_params`;

@@ -9,3 +9,4 @@ CREATE TABLE replicated_truncate2 (d Date, k UInt64, i32 Int32) ENGINE=Replicate
 INSERT INTO replicated_truncate1 VALUES ('2015-01-01', 10, 42);
 SELECT * FROM replicated_truncate1 ORDER BY k;
 SELECT * FROM replicated_truncate2 ORDER BY k;
+TRUNCATE TABLE replicated_truncate1 SETTINGS replication_alter_partitions_sync=2;

@@ -17,6 +17,7 @@ LAYOUT(HASHED())
 LIFETIME(0);
 SELECT dictGetKeys('colors', 'grp', 'blue') AS keys
 FROM numbers(1);
+TRUNCATE TABLE dict_src;
 INSERT INTO dict_src VALUES (2, 'blue');
 DROP DICTIONARY IF EXISTS dict_products;
 DROP TABLE IF EXISTS src_products;

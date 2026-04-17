@@ -16,6 +16,7 @@ SELECT * FROM t_json_array ORDER BY id FORMAT JSONEachRow;
 SELECT id, arr.k1, arr.k2.k3, arr.k2.k4, arr.k2.k5 FROM t_json_array ORDER BY id;
 SELECT arr FROM t_json_array ARRAY JOIN arr ORDER BY arr.k1 FORMAT JSONEachRow;
 SELECT DISTINCT arrayJoin(JSONAllPathsWithTypes(arrayJoin(arr))) as path FROM t_json_array order by path;
+TRUNCATE TABLE t_json_array;
 INSERT INTO t_json_array FORMAT JSONEachRow {"id": 1, "arr": [{"k1": [{"k2": "aaa", "k3": "bbb"}, {"k2": "ccc"}]}]}
 
 INSERT INTO t_json_array FORMAT JSONEachRow {"id": 2, "arr": [{"k1": [{"k3": "ddd", "k4": 10}, {"k4": 20}], "k5": {"k6": "foo"}}]}

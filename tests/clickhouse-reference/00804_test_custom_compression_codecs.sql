@@ -43,6 +43,7 @@ INSERT INTO compression_codec_multiple select modulo(number, 100), toString(numb
 SELECT count(*) FROM compression_codec_multiple;
 SELECT count(distinct data) FROM compression_codec_multiple;
 SELECT floor(sum(somenum), 1) FROM compression_codec_multiple;
+TRUNCATE TABLE compression_codec_multiple;
 SELECT sum(cityHash64(*)) FROM compression_codec_multiple;
 DROP TABLE IF EXISTS compression_codec_multiple_more_types;
 CREATE TABLE compression_codec_multiple_more_types (

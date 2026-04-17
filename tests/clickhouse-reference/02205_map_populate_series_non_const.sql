@@ -5,6 +5,7 @@ CREATE TABLE 02005_test_table
 )
 ENGINE = TinyLog;
 SELECT mapPopulateSeries(value) FROM 02005_test_table;
+TRUNCATE TABLE 02005_test_table;
 INSERT INTO 02005_test_table VALUES (map(0, 5));
 INSERT INTO 02005_test_table VALUES (map(0, 5, 5, 10));
 INSERT INTO 02005_test_table VALUES (map(-5, -5, 0, 5, 5, 10));

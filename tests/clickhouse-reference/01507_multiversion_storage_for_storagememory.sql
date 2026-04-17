@@ -5,4 +5,5 @@ CREATE TABLE defaults
 )ENGINE = Memory();
 INSERT INTO defaults SELECT * FROM numbers(10);
 SELECT * FROM defaults;
+TRUNCATE defaults;
 DROP TABLE defaults;

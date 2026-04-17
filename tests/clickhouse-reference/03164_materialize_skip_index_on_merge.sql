@@ -20,6 +20,7 @@ SELECT trimLeft(explain) AS explain FROM (
 WHERE explain LIKE '%Skip%' OR explain LIKE '%Name:%' OR explain LIKE '%Granules:%';
 SELECT database, table, name, data_compressed_bytes FROM system.data_skipping_indices WHERE database = currentDatabase() AND table = 'tab';
 ALTER TABLE tab MODIFY SETTING materialize_skip_indexes_on_merge = 0;
+TRUNCATE tab;
 SELECT count(), sum(ProfileEvents['MergeTreeDataWriterSkipIndicesCalculationMicroseconds'])
 FROM system.query_log
 WHERE current_database = currentDatabase()

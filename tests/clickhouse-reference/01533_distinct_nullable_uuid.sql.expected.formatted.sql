@@ -32,6 +32,8 @@ FROM bug_14144
 WHERE meta_source_type = 'missing'
 ORDER BY meta_source_req_uuid ASC;
 
+TRUNCATE TABLE bug_14144;
+
 INSERT INTO bug_14144 SELECT
     generateUUIDv4(),
     number,

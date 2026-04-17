@@ -22,6 +22,8 @@ SELECT *
 FROM dist_test_01040
 ORDER BY key ASC;
 
+TRUNCATE TABLE test_01040;
+
 SET prefer_localhost_replica = 1;
 
 DROP TABLE dist_test_01040;

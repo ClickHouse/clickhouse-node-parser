@@ -55,6 +55,8 @@ WHERE database = currentDatabase()
 
 ALTER TABLE tab MODIFY SETTING materialize_skip_indexes_on_merge = 0;
 
+TRUNCATE TABLE tab;
+
 SELECT
     count(),
     sum(ProfileEvents['MergeTreeDataWriterSkipIndicesCalculationMicroseconds'])
