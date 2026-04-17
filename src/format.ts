@@ -291,10 +291,16 @@ export function formatNode(node: ASTNode, indent: string = ''): string {
     case 'alterCommand':
       return formatAlterCommand(node, indent);
     // CTE nodes — format inline
-    case 'cteSubquery':
-      return `${quoteIdent(node.name)} AS (\n${formatStatement(node.query, indent + '  ')}\n${indent})`;
+    case 'cteSubquery': {
+      const colAliases = node.columnAliases
+        ? ` (${node.columnAliases.map(quoteIdent).join(', ')})`
+        : '';
+      return `${quoteIdent(node.name)}${colAliases} AS (\n${formatStatement(node.query, indent + '  ')}\n${indent})`;
+    }
     case 'cteExpr':
       return `${formatExprCore(node.expr, indent)} AS ${quoteIdent(node.name)}`;
+    case 'cteTuple':
+      return `(${node.elements.map((e: Expression) => formatExpr(e, indent)).join(',\n' + indent + '  ')})`;
     // Expression types — use formatExpr (with comments)
     default:
       return formatExpr(node, indent);
@@ -777,6 +783,11 @@ function formatSystemStatement(stmt: SystemStatement, indent: string): string {
 }
 
 function formatInsertStatement(stmt: InsertStatement, indent: string): string {
+  const prefixLines: string[] = [];
+  if (stmt.with && stmt.with.length > 0) {
+    prefixLines.push(formatCTEBlock(stmt.with, indent));
+    prefixLines.push('');
+  }
   const parts: string[] = [`${indent}INSERT INTO`];
   if (stmt.target.kind === 'function') {
     const f = stmt.target.func;
@@ -805,7 +816,8 @@ function formatInsertStatement(stmt: InsertStatement, indent: string): string {
       parts.push(formatted);
     }
   }
-  return parts.join(' ');
+  const insertLine = parts.join(' ');
+  return prefixLines.length > 0 ? `${prefixLines.join('\n')}\n${insertLine}` : insertLine;
 }
 
 function formatCreateStatement(
@@ -1983,8 +1995,8 @@ function formatExprCore(expr: Expression, indent: string): string {
 }
 
 function formatFunctionCall(expr: FunctionCall, indent: string): string {
-  // Quote function name if it contains special characters
-  const funcName = /^[a-zA-Z_][a-zA-Z0-9_]*$/.test(expr.name)
+  // Quote function name if it contains special characters (allow dots for qualified names like lambda.nested)
+  const funcName = /^[a-zA-Z_][a-zA-Z0-9_.]*$/.test(expr.name)
     ? expr.name
     : `\`${expr.name.replace(/`/g, '``')}\``;
   // NOT(tuple) — from PrimaryBase KW_NOT TupleLiteral rule
@@ -2277,7 +2289,7 @@ function formatInterpolateItem(item: InterpolateItem, indent: string): string {
   return item.col;
 }
 
-function formatCTEBlock(ctes: CTE[], indent: string): string {
+function formatCTEBlock(ctes: CTE[], indent: string, recursive?: boolean): string {
   const cteIndent = indent + '  ';
   const innerIndent = indent + '    ';
   const hasComments = ctes.some(
@@ -2291,16 +2303,33 @@ function formatCTEBlock(ctes: CTE[], indent: string): string {
     const parts: string[] = [];
     for (let i = 0; i < ctes.length; i++) {
       const cte = ctes[i];
-      const prefix = i === 0 ? `${indent}WITH ` : `${indent}`;
+      const withKw = recursive ? 'WITH RECURSIVE ' : 'WITH ';
+      const prefix = i === 0 ? `${indent}${withKw}` : `${indent}`;
       if (cte.kind === 'cteExpr') {
         const suffix = i < ctes.length - 1 ? ',' : '';
         parts.push(
           `${prefix}${formatExprCore(cte.expr, innerIndent)} AS ${quoteIdent(cte.name)}${suffix}`,
         );
+      } else if (cte.kind === 'cteTuple') {
+        const suffix = i < ctes.length - 1 ? ',' : '';
+        const inner = cte.elements
+          .map((e: Expression) => `${innerIndent}${formatExpr(e, innerIndent)}`)
+          .join(',\n');
+        parts.push(`${prefix}(\n${inner})${suffix}`);
       } else {
         const suffix = i < ctes.length - 1 ? '),' : ')';
+        const colAliases = cte.columnAliases
+          ? ` (${cte.columnAliases.map(quoteIdent).join(', ')})`
+          : '';
+        // Include leading comments on the CTE body query
+        let bodyComments = '';
+        if (cte.query.leadingComments && cte.query.leadingComments.length > 0) {
+          bodyComments =
+            cte.query.leadingComments.map((c: string) => `${innerIndent}${c}`).join('\n') + '\n';
+        }
         parts.push(
-          `${prefix}${quoteIdent(cte.name)} AS (\n` +
+          `${prefix}${quoteIdent(cte.name)}${colAliases} AS (\n` +
+            bodyComments +
             formatStatement(cte.query, innerIndent) +
             `\n${indent}${suffix}`,
         );
@@ -2329,10 +2358,22 @@ function formatCTEBlock(ctes: CTE[], indent: string): string {
         ? ' ' + cte.trailingComments.join(' ')
         : '';
 
-    if (cte.kind === 'cteSubquery') {
+    if (cte.kind === 'cteTuple') {
+      const suffix = isLast ? '' : ',';
+      const withKw2 = recursive ? 'WITH RECURSIVE ' : 'WITH ';
+      const tuplePrefix = isFirst ? `${indent}${withKw2}` : `${cteIndent}`;
+      const inner = cte.elements
+        .map((e: Expression) => `${innerIndent}${formatExpr(e, innerIndent)}`)
+        .join(',\n');
+      lines.push(`${tuplePrefix}(\n${inner})${suffix}${trailingStr}`);
+    } else if (cte.kind === 'cteSubquery') {
       const suffix = isLast ? ')' : '),';
-      const namePrefix = isFirst ? `${indent}WITH ` : `${cteIndent}`;
-      lines.push(`${namePrefix}${quoteIdent(cte.name)} AS (`);
+      const withKw2 = recursive ? 'WITH RECURSIVE ' : 'WITH ';
+      const namePrefix = isFirst ? `${indent}${withKw2}` : `${cteIndent}`;
+      const colAliases = cte.columnAliases
+        ? ` (${cte.columnAliases.map(quoteIdent).join(', ')})`
+        : '';
+      lines.push(`${namePrefix}${quoteIdent(cte.name)}${colAliases} AS (`);
 
       // Inner query leading comments
       if (cte.query.leadingComments && cte.query.leadingComments.length > 0) {
@@ -2369,7 +2410,8 @@ function formatCTEBlock(ctes: CTE[], indent: string): string {
           exprStr += `\n${cteIndent}${c}`;
         }
       }
-      const exprPrefix = isFirst ? `${indent}WITH ` : `${cteIndent}`;
+      const withKw3 = recursive ? 'WITH RECURSIVE ' : 'WITH ';
+      const exprPrefix = isFirst ? `${indent}${withKw3}` : `${cteIndent}`;
       const hasExprTrailing = cte.expr.trailingComments && cte.expr.trailingComments.length > 0;
       if (hasExprTrailing) {
         lines.push(
@@ -2391,7 +2433,7 @@ function formatSelectStatement(stmt: SelectStatement, indent: string): string {
   const lines: string[] = [];
 
   if (stmt.with && stmt.with.length > 0) {
-    lines.push(formatCTEBlock(stmt.with, indent));
+    lines.push(formatCTEBlock(stmt.with, indent, stmt.recursive));
     lines.push('');
   }
 

@@ -1235,6 +1235,8 @@ export type SelectStatement = {
   qualify?: Expression;
   /** `true` when this SELECT was wrapped in parentheses, e.g. `(SELECT 1)` inside a UNION. */
   parenthesized?: boolean;
+  /** `true` when the WITH clause uses RECURSIVE keyword. */
+  recursive?: boolean;
   /** Query execution settings: `SETTINGS key = value, ...` inside the query body. */
   settings?: SettingItem[];
 } & TrailingClauses &
@@ -1287,6 +1289,8 @@ export type CTESubquery = {
   kind: 'cteSubquery';
   name: string;
   query: QueryStatement;
+  /** Optional column aliases: `WITH t (a, b) AS (SELECT ...)` */
+  columnAliases?: string[];
 } & NodeMetadata;
 
 export type CTEExpr = {
@@ -1295,7 +1299,14 @@ export type CTEExpr = {
   expr: Expression;
 } & NodeMetadata;
 
-export type CTE = CTESubquery | CTEExpr;
+/** Tuple CTE: `WITH ((expr) AS a, (expr) AS b)` — parenthesized list of aliased expressions */
+export type CTETuple = {
+  kind: 'cteTuple';
+  /** The aliased expressions within the tuple, stored as alias expressions */
+  elements: Expression[];
+} & NodeMetadata;
+
+export type CTE = CTESubquery | CTEExpr | CTETuple;
 
 /**
  * Union of statement types that produce query results. These can appear in
@@ -2193,6 +2204,8 @@ export type InsertStatement = {
   kind: 'insert';
   /** The insert target — either a table reference or a table function. */
   target: { kind: 'table'; table: TableRef } | { kind: 'function'; func: TableFunctionRef };
+  /** Optional WITH clause appearing before `INSERT INTO`. */
+  with?: CTE[];
   /** Optional column list for the insert. */
   columns?: Expression[];
   /** Optional PARTITION BY expression. */
@@ -2295,6 +2308,7 @@ export interface ASTNodeKindMap {
   orderByItem: OrderByItem;
   cteSubquery: CTESubquery;
   cteExpr: CTEExpr;
+  cteTuple: CTETuple;
   subqueryFrom: SubqueryFrom;
   tableFunctionRef: TableFunctionRef;
   joinExpr: JoinExpr;
@@ -2423,6 +2437,11 @@ export const CTESchema: z.ZodType<CTE> = z.lazy(() =>
       kind: z.literal('cteExpr'),
       name: z.string(),
       expr: ExpressionSchema,
+      ...ExprMetadataFields,
+    }),
+    z.object({
+      kind: z.literal('cteTuple'),
+      elements: z.array(ExpressionSchema),
       ...ExprMetadataFields,
     }),
   ]),
@@ -3287,6 +3306,7 @@ export const InsertStatementSchema: z.ZodType<InsertStatement> = z.lazy(() =>
       z.object({ kind: z.literal('table'), table: TableRefSchema }),
       z.object({ kind: z.literal('function'), func: TableFunctionRefSchema }),
     ]),
+    with: z.array(CTESchema).optional(),
     columns: z.array(ExpressionSchema).optional(),
     partitionBy: ExpressionSchema.optional(),
     insertSettings: z.array(SettingItemSchema).optional(),

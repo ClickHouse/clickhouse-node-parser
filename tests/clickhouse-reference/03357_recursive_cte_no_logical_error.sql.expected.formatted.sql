@@ -11,11 +11,11 @@ ENGINE = TinyLog;
 INSERT INTO department__fuzz_0;
 
 -- Actually anything except LOGICAL_ERROR is Ok.
-WITH q AS (
+WITH RECURSIVE q AS (
     SELECT *
     FROM department__fuzz_0
     UNION ALL
-(    WITH x AS (
+(    WITH RECURSIVE x AS (
         SELECT *
         FROM department__fuzz_0
         UNION ALL

@@ -48,7 +48,7 @@ ENGINE = TinyLog;
 
 INSERT INTO graph;
 
-WITH search_graph AS (
+WITH RECURSIVE search_graph AS (
     SELECT
         *,
         false AS is_cycle,
@@ -71,7 +71,7 @@ FROM search_graph
 SETTINGS query_plan_join_swap_table = 'false';
 
 -- ordering by the path column has same effect as SEARCH DEPTH FIRST
-WITH search_graph AS (
+WITH RECURSIVE search_graph AS (
     SELECT
         *,
         false AS is_cycle,

@@ -31,7 +31,7 @@
 -- { echoOn }
 SET enable_analyzer = 1;
 
-WITH foo AS (
+WITH RECURSIVE foo AS (
     SELECT 1 AS i
     UNION ALL
 (    SELECT i + 1
@@ -46,7 +46,7 @@ WITH foo AS (
 SELECT *
 FROM foo;
 
-WITH foo AS (
+WITH RECURSIVE foo AS (
     SELECT 1 AS i
     UNION ALL
     SELECT *
@@ -64,7 +64,7 @@ WITH foo AS (
 SELECT *
 FROM foo;
 
-WITH foo AS (
+WITH RECURSIVE foo AS (
     SELECT 1 AS i
     UNION ALL
 (    SELECT i + 1
@@ -79,7 +79,7 @@ EXCEPT
 SELECT *
 FROM foo;
 
-WITH foo AS (
+WITH RECURSIVE foo AS (
     SELECT 1 AS i
     UNION ALL
 (    SELECT i + 1
@@ -97,8 +97,8 @@ FROM foo;
 --
 -- test for nested-recursive-WITH bug
 --
-WITH t AS (
-    WITH s AS (
+WITH RECURSIVE t AS (
+    WITH RECURSIVE s AS (
         SELECT toUInt64(1) AS i
         UNION ALL
         SELECT i + 1
@@ -120,7 +120,7 @@ FROM t;
 --
 -- Test CTEs read in non-initialization orders
 --
-WITH tab AS (
+WITH RECURSIVE tab AS (
     SELECT *
     FROM values('id_key UInt64, link UInt64', (1,17), (2,17), (3,17), (4,17), (6,17), (5,17))
 ),

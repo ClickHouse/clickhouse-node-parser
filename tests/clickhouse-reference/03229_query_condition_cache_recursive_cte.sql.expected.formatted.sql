@@ -17,7 +17,7 @@ ORDER BY tuple();
 
 INSERT INTO tab (id, parent);
 
-WITH recursive AS (
+WITH RECURSIVE recursive AS (
     SELECT id
     FROM tab
     WHERE id = 'uuid3'

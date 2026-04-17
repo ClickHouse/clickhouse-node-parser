@@ -2,7 +2,7 @@ SET enable_analyzer = 1;
 
 CREATE VIEW `03215_test_v`
 AS
-WITH test_table AS (
+WITH RECURSIVE test_table AS (
     SELECT 1 AS number
     UNION ALL
     SELECT number + 1
@@ -18,7 +18,7 @@ FROM `03215_test_v`;
 
 CREATE VIEW `03215_multi_v`
 AS
-WITH task AS (
+WITH RECURSIVE task AS (
     SELECT
         number AS task_id,
         number - 1 AS parent_id

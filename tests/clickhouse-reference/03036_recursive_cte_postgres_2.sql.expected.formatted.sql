@@ -67,7 +67,8 @@ INSERT INTO department;
 INSERT INTO department;
 
 -- extract all departments under 'A'. Result should be A, B, C, D and F
-WITH subdepartment AS (
+WITH RECURSIVE subdepartment AS (
+    -- non recursive term
     SELECT
         name AS root_name,
         *
@@ -89,7 +90,8 @@ FROM subdepartment
 ORDER BY name ASC;
 
 -- extract all departments under 'A' with "level" number
-WITH subdepartment AS (
+WITH RECURSIVE subdepartment AS (
+    -- non recursive term
     SELECT
         1 AS level,
         *
@@ -112,7 +114,8 @@ ORDER BY name ASC;
 
 -- extract all departments under 'A' with "level" number.
 -- Only shows level 2 or more
-WITH subdepartment AS (
+WITH RECURSIVE subdepartment AS (
+    -- non recursive term
     SELECT
         1 AS level,
         *
@@ -135,7 +138,8 @@ WHERE level >= 2
 ORDER BY name ASC;
 
 -- "RECURSIVE" is ignored if the query has no self-reference
-WITH subdepartment AS (
+WITH RECURSIVE subdepartment AS (
+    -- note lack of recursive UNION structure
     SELECT *
     FROM department
     WHERE name = 'A'
@@ -148,7 +152,7 @@ ORDER BY name ASC;
 -- inside subqueries
 SELECT count(*)
 FROM (
-        WITH t AS (
+        WITH RECURSIVE t AS (
             SELECT toUInt64(1) AS n
             UNION ALL
             SELECT n + 1
@@ -162,7 +166,7 @@ FROM (
 WHERE n < (
         SELECT count(*)
         FROM (
-                WITH t AS (
+                WITH RECURSIVE t AS (
                     SELECT toUInt64(1) AS n
                     UNION ALL
                     SELECT n + 1
@@ -178,7 +182,7 @@ WHERE n < (
     );
 
 -- corner case in which sub-WITH gets initialized first
-WITH q AS (
+WITH RECURSIVE q AS (
     SELECT *
     FROM department
     UNION ALL
@@ -195,11 +199,11 @@ SELECT *
 FROM q
 LIMIT 24;
 
-WITH q AS (
+WITH RECURSIVE q AS (
     SELECT *
     FROM department
     UNION ALL
-(    WITH x AS (
+(    WITH RECURSIVE x AS (
         SELECT *
         FROM department
         UNION ALL
@@ -219,7 +223,7 @@ FROM q
 LIMIT 32;
 
 -- recursive term has sub-UNION
-WITH t AS (
+WITH RECURSIVE t AS (
     SELECT
         1 AS i,
         2 AS j

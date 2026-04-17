@@ -1,1 +1,14 @@
-<Parse Error>
+CREATE TEMPORARY TABLE t
+(
+    x UInt8
+);
+
+WITH 2 AS x
+
+INSERT INTO t SELECT 1
+UNION ALL
+(SELECT x);
+
+SELECT *
+FROM t
+ORDER BY `ALL` ASC;

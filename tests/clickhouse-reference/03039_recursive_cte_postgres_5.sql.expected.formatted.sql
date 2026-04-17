@@ -34,7 +34,7 @@ SET enable_analyzer = 1;
 --
 -- test multiple WITH queries
 --
-WITH y AS (
+WITH RECURSIVE y AS (
     SELECT 1 AS id
 ),
 
@@ -52,7 +52,7 @@ FROM x
 ORDER BY id ASC;
 
 -- forward reference OK
-WITH x AS (
+WITH RECURSIVE x AS (
     SELECT *
     FROM y
     UNION ALL
@@ -69,7 +69,7 @@ SELECT *
 FROM x
 ORDER BY id ASC;
 
-WITH x AS (
+WITH RECURSIVE x AS (
     SELECT 1 AS id
     UNION ALL
     SELECT id + 1
@@ -94,7 +94,7 @@ LEFT JOIN x
     USING (id)
 ORDER BY y.id ASC;
 
-WITH x AS (
+WITH RECURSIVE x AS (
     SELECT 1 AS id
     UNION ALL
     SELECT id + 1
@@ -119,7 +119,7 @@ LEFT JOIN x
     USING (id)
 ORDER BY y.id ASC;
 
-WITH x AS (
+WITH RECURSIVE x AS (
     SELECT 1 AS id
     UNION ALL
     SELECT id + 1
@@ -148,7 +148,7 @@ SELECT *
 FROM z
 ORDER BY id ASC;
 
-WITH x AS (
+WITH RECURSIVE x AS (
     SELECT 1 AS id
     UNION ALL
     SELECT id + 1

@@ -12,7 +12,7 @@ ENGINE = TinyLog;
 
 INSERT INTO tree;
 
-WITH search_tree AS (
+WITH RECURSIVE search_tree AS (
     SELECT
         id,
         link,
@@ -35,7 +35,7 @@ FROM search_tree;
 
 SELECT '--';
 
-WITH search_tree AS (
+WITH RECURSIVE search_tree AS (
     SELECT
         id,
         link,

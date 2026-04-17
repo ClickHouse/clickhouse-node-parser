@@ -50,7 +50,7 @@ INSERT INTO tree;
 --
 -- get all paths from "second level" nodes to leaf nodes
 --
-WITH t AS (
+WITH RECURSIVE t AS (
     SELECT
         1 AS id,
         []::Array(UInt64) AS path
@@ -78,7 +78,7 @@ ORDER BY
     t2.id ASC;
 
 -- just count 'em
-WITH t AS (
+WITH RECURSIVE t AS (
     SELECT
         1 AS id,
         []::Array(UInt64) AS path
@@ -105,7 +105,7 @@ GROUP BY t1.id
 ORDER BY t1.id ASC;
 
 -- -- this variant tickled a whole-row-variable bug in 8.4devel
-WITH t AS (
+WITH RECURSIVE t AS (
     SELECT
         1 AS id,
         []::Array(UInt64) AS path

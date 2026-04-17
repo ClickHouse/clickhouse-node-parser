@@ -46,6 +46,7 @@ export interface NodePositionMap {
   // CTE nodes
   cteSubquery: CTE;
   cteExpr: CTE;
+  cteTuple: CTE;
 
   // ORDER BY nodes
   orderByItem: OrderByItem;

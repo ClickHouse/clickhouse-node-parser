@@ -1,6 +1,6 @@
 SET enable_analyzer = 0;
 
-WITH test_table AS (
+WITH RECURSIVE test_table AS (
     SELECT 1 AS number
     UNION ALL
     SELECT number + 1

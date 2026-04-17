@@ -1,7 +1,7 @@
 -- { echoOn }
 SET enable_analyzer = 1;
 
-WITH recursive_cte AS (
+WITH RECURSIVE recursive_cte AS (
     SELECT 1 AS n
     UNION ALL
     SELECT n + 1
@@ -14,7 +14,7 @@ FROM recursive_cte;
 
 SELECT '--';
 
-WITH recursive_cte AS (
+WITH RECURSIVE recursive_cte AS (
     SELECT toUInt8(1) AS n
     UNION ALL
     SELECT toUInt8(n + 1)
@@ -25,7 +25,7 @@ WITH recursive_cte AS (
 SELECT n
 FROM recursive_cte;
 
-WITH recursive_cte AS (
+WITH RECURSIVE recursive_cte AS (
     SELECT toUInt16(1) AS n
     UNION ALL
     SELECT toUInt8(n + 1)
@@ -36,7 +36,7 @@ WITH recursive_cte AS (
 SELECT n
 FROM recursive_cte;
 
-WITH recursive_cte AS (
+WITH RECURSIVE recursive_cte AS (
     SELECT materialize(toUInt16(1)) AS n
     UNION ALL
     SELECT toUInt8(n + 1)
@@ -47,7 +47,7 @@ WITH recursive_cte AS (
 SELECT n
 FROM recursive_cte;
 
-WITH recursive_cte AS (
+WITH RECURSIVE recursive_cte AS (
     SELECT toUInt16(1) AS n
     UNION ALL
     SELECT materialize(toUInt8(n + 1))
@@ -58,7 +58,7 @@ WITH recursive_cte AS (
 SELECT n
 FROM recursive_cte;
 
-WITH recursive_cte AS (
+WITH RECURSIVE recursive_cte AS (
     SELECT
         toUInt16(1) AS n,
         '1' AS concat
@@ -75,7 +75,7 @@ SELECT
     concat
 FROM recursive_cte;
 
-WITH recursive_cte AS (
+WITH RECURSIVE recursive_cte AS (
     SELECT 1 AS n
     UNION ALL
     SELECT n + 1
@@ -86,7 +86,7 @@ SELECT n
 FROM recursive_cte
 LIMIT 5;
 
-WITH recursive_cte AS (
+WITH RECURSIVE recursive_cte AS (
     SELECT materialize(toUInt8(1)) AS n
     UNION ALL
     SELECT materialize(toUInt8(n + 1))

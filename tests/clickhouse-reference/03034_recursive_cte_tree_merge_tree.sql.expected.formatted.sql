@@ -14,7 +14,7 @@ ORDER BY tuple();
 
 INSERT INTO tree;
 
-WITH search_tree AS (
+WITH RECURSIVE search_tree AS (
     SELECT
         id,
         link,
@@ -37,7 +37,7 @@ FROM search_tree;
 
 SELECT '--';
 
-WITH search_tree AS (
+WITH RECURSIVE search_tree AS (
     SELECT
         id,
         link,
@@ -129,7 +129,8 @@ INSERT INTO department;
 INSERT INTO department;
 
 -- extract all departments under 'A'. Result should be A, B, C, D and F
-WITH subdepartment AS (
+WITH RECURSIVE subdepartment AS (
+    -- non recursive term
     SELECT
         name AS root_name,
         *
@@ -151,7 +152,8 @@ FROM subdepartment
 ORDER BY name ASC;
 
 -- extract all departments under 'A' with "level" number
-WITH subdepartment AS (
+WITH RECURSIVE subdepartment AS (
+    -- non recursive term
     SELECT
         1 AS level,
         *
@@ -174,7 +176,8 @@ ORDER BY name ASC;
 
 -- extract all departments under 'A' with "level" number.
 -- Only shows level 2 or more
-WITH subdepartment AS (
+WITH RECURSIVE subdepartment AS (
+    -- non recursive term
     SELECT
         1 AS level,
         *
@@ -197,7 +200,8 @@ WHERE level >= 2
 ORDER BY name ASC;
 
 -- "RECURSIVE" is ignored if the query has no self-reference
-WITH subdepartment AS (
+WITH RECURSIVE subdepartment AS (
+    -- note lack of recursive UNION structure
     SELECT *
     FROM department
     WHERE name = 'A'
@@ -210,7 +214,7 @@ ORDER BY name ASC;
 -- corner case in which sub-WITH gets initialized first
 SELECT *
 FROM (
-        WITH q AS (
+        WITH RECURSIVE q AS (
             SELECT *
             FROM department
             UNION ALL
@@ -234,11 +238,11 @@ ORDER BY
 
 SELECT *
 FROM (
-        WITH q AS (
+        WITH RECURSIVE q AS (
             SELECT *
             FROM department
             UNION ALL
-(            WITH x AS (
+(            WITH RECURSIVE x AS (
                 SELECT *
                 FROM department
                 UNION ALL

@@ -16,11 +16,11 @@ SET enable_analyzer = 1;
 
 SELECT count() > 0
 FROM (
-        WITH q AS (
+        WITH RECURSIVE q AS (
             SELECT 1
             FROM t0
             UNION ALL
-(            WITH x AS (
+(            WITH RECURSIVE x AS (
                 SELECT 1
                 FROM t0
                 UNION ALL

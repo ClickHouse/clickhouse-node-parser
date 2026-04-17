@@ -35,7 +35,7 @@ SET enable_analyzer = 1;
 -- error cases
 --
 -- INTERSECT
-WITH x AS (
+WITH RECURSIVE x AS (
     SELECT 1 AS n
 INTERSECT
     SELECT n + 1
@@ -45,7 +45,7 @@ INTERSECT
 SELECT *
 FROM x; -- {serverError UNSUPPORTED_METHOD}
 
-WITH x AS (
+WITH RECURSIVE x AS (
     SELECT 1 AS n
 INTERSECT
     SELECT n + 1
@@ -56,7 +56,7 @@ SELECT *
 FROM x; -- {serverError UNSUPPORTED_METHOD}
 
 -- EXCEPT
-WITH x AS (
+WITH RECURSIVE x AS (
     SELECT 1 AS n
 EXCEPT
     SELECT n + 1
@@ -66,7 +66,7 @@ EXCEPT
 SELECT *
 FROM x; -- {serverError UNSUPPORTED_METHOD}
 
-WITH x AS (
+WITH RECURSIVE x AS (
     SELECT 1 AS n
 EXCEPT
     SELECT n + 1
@@ -77,7 +77,7 @@ SELECT *
 FROM x; -- {serverError UNSUPPORTED_METHOD}
 
 -- no non-recursive term
-WITH x AS (
+WITH RECURSIVE x AS (
     SELECT n
     FROM x
 )
@@ -86,7 +86,7 @@ SELECT *
 FROM x; -- {serverError UNKNOWN_TABLE}
 
 -- recursive term in the left hand side (strictly speaking, should allow this)
-WITH x AS (
+WITH RECURSIVE x AS (
     SELECT n
     FROM x
     UNION ALL
@@ -108,7 +108,7 @@ INSERT INTO y SELECT *
 FROM numbers(1, 10);
 
 -- LEFT JOIN
-WITH x AS (
+WITH RECURSIVE x AS (
     SELECT a AS n
     FROM y
     WHERE a = 1
@@ -127,7 +127,7 @@ FORMAT NULL
 SETTINGS max_recursive_cte_evaluation_depth = 5; -- { serverError TOO_DEEP_RECURSION }
 
 -- RIGHT JOIN
-WITH x AS (
+WITH RECURSIVE x AS (
     SELECT a AS n
     FROM y
     WHERE a = 1
@@ -146,7 +146,7 @@ FORMAT NULL
 SETTINGS max_recursive_cte_evaluation_depth = 5; -- { serverError TOO_DEEP_RECURSION }
 
 -- FULL JOIN
-WITH x AS (
+WITH RECURSIVE x AS (
     SELECT a AS n
     FROM y
     WHERE a = 1
@@ -165,7 +165,7 @@ FORMAT NULL
 SETTINGS max_recursive_cte_evaluation_depth = 5; -- { serverError TOO_DEEP_RECURSION }
 
 -- subquery
-WITH x AS (
+WITH RECURSIVE x AS (
     SELECT 1 AS n
     UNION ALL
     SELECT n + 1
@@ -182,7 +182,7 @@ FORMAT NULL
 SETTINGS max_recursive_cte_evaluation_depth = 5; -- { serverError TOO_DEEP_RECURSION }
 
 -- aggregate functions
-WITH x AS (
+WITH RECURSIVE x AS (
     SELECT 1 AS n
     UNION ALL
     SELECT count(*)
@@ -194,7 +194,7 @@ FROM x
 FORMAT NULL
 SETTINGS max_recursive_cte_evaluation_depth = 5; -- { serverError TOO_DEEP_RECURSION }
 
-WITH x AS (
+WITH RECURSIVE x AS (
     SELECT 1 AS n
     UNION ALL
     SELECT sum(n)
@@ -207,7 +207,7 @@ FORMAT NULL
 SETTINGS max_recursive_cte_evaluation_depth = 5; -- { serverError TOO_DEEP_RECURSION }
 
 -- ORDER BY
-WITH x AS (
+WITH RECURSIVE x AS (
     SELECT 1 AS n
     UNION ALL
     SELECT n + 1
@@ -228,7 +228,7 @@ SETTINGS max_recursive_cte_evaluation_depth = 5; -- { serverError TOO_DEEP_RECUR
 --     SELECT (SELECT * FROM x) FROM x WHERE id < 5
 -- ) SELECT * FROM x; -- { serverError UNKNOWN_TABLE, CANNOT_INSERT_NULL_IN_ORDINARY_COLUMN }
 -- mutual recursive query (not implemented)
-WITH x AS (
+WITH RECURSIVE x AS (
     SELECT 1 AS id
     UNION ALL
     SELECT id + 1

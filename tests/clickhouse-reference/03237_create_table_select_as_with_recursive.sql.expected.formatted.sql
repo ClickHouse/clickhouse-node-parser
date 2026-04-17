@@ -12,7 +12,7 @@ ORDER BY a;
 
 CREATE VIEW t
 AS
-(WITH 42 AS ttt,
+(WITH RECURSIVE 42 AS ttt,
 
 toDate(s) AS start_date,
 

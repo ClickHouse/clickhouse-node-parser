@@ -568,12 +568,12 @@ function exprNode(expr: Expression): ExplainNode {
           return e.value;
         }
         if (e.kind === 'arrayLiteral') {
-          // Escape single quotes in source text so they appear as \' in the Literal label
-          const src = e.source !== undefined ? e.source.replace(/'/g, "\\'") : null;
+          // Escape single quotes and newlines in source text for the Literal label
+          const src = e.source !== undefined ? escapeStringValue(e.source) : null;
           return src ?? `[${e.elements.map(castElemStr).join(', ')}]`;
         }
         if (e.kind === 'tupleLiteral') {
-          const src = e.source !== undefined ? e.source.replace(/'/g, "\\'") : null;
+          const src = e.source !== undefined ? escapeStringValue(e.source) : null;
           return src ?? `(${e.elements.map(castElemStr).join(', ')})`;
         }
         return null;
@@ -844,7 +844,40 @@ function flattenFromExpr(from: FromExpr): JoinElement[] {
   return [...flattenFromExpr(from.left), { tag: 'arrayJoin', expressions: from.expressions }];
 }
 
-function fromExprNode(from: FromExpr): ExplainNode {
+// ClickHouse renders CTEs distributed to sibling UNION branches with their
+// inner TableJoin/TableExpression order swapped. Mark every nested SELECT in
+// the distributed CTE copies so fromExprNode reverses the pair.
+function markStmtForReverseJoins(s: Statement): Statement {
+  if (s.kind === 'select') {
+    const withCopy = s.with ? markCTEsForReverseJoins(s.with) : undefined;
+    return {
+      ...s,
+      reverseJoins: true,
+      ...(withCopy ? { with: withCopy } : {}),
+    } as Statement;
+  }
+  if (s.kind === 'union') {
+    return { ...s, queries: s.queries.map(markStmtForReverseJoins) } as Statement;
+  }
+  if (s.kind === 'intersect') {
+    return {
+      ...s,
+      left: markStmtForReverseJoins(s.left as Statement),
+      right: markStmtForReverseJoins(s.right as Statement),
+    } as Statement;
+  }
+  return s;
+}
+
+function markCTEsForReverseJoins(ctes: CTE[]): CTE[] {
+  return ctes.map((c) =>
+    c.kind === 'cteSubquery'
+      ? ({ ...c, query: markStmtForReverseJoins(c.query as Statement) } as CTE)
+      : c,
+  );
+}
+
+function fromExprNode(from: FromExpr, reverseJoins = false): ExplainNode {
   const elements = flattenFromExpr(from);
   return n(
     'TablesInSelectQuery',
@@ -853,9 +886,12 @@ function fromExprNode(from: FromExpr): ExplainNode {
         return n('TablesInSelectQueryElement', [fromAtomExplainNode(elem.from)]);
       }
       if (elem.tag === 'join') {
-        const children = [fromAtomExplainNode(elem.from)];
-        children.push(elem.constraint ? joinConstraintNode(elem.constraint) : n('TableJoin'));
-        return n('TablesInSelectQueryElement', children);
+        const tableNode = fromAtomExplainNode(elem.from);
+        const joinNode = elem.constraint ? joinConstraintNode(elem.constraint) : n('TableJoin');
+        return n(
+          'TablesInSelectQueryElement',
+          reverseJoins ? [joinNode, tableNode] : [tableNode, joinNode],
+        );
       }
       // arrayJoin
       return n('TablesInSelectQueryElement', [
@@ -881,6 +917,9 @@ function cteNode(cte: CTE): ExplainNode {
   if (cte.kind === 'cteExpr') {
     return exprNode({ kind: 'alias', expr: cte.expr, alias: cte.name });
   }
+  if (cte.kind === 'cteTuple') {
+    return n('Function tuple', [n('ExpressionList', cte.elements.map(exprNode))]);
+  }
   return n('WithElement', [n('Subquery', [stmtNode(cte.query)])]);
 }
 
@@ -900,7 +939,8 @@ function selectQueryNode(stmt: SelectStatement): ExplainNode {
 
   children.push(n('ExpressionList', stmt.select.map(exprNode)));
 
-  if (stmt.from) children.push(fromExprNode(stmt.from));
+  const reverseJoins = !!(stmt as Record<string, unknown>).reverseJoins;
+  if (stmt.from) children.push(fromExprNode(stmt.from, reverseJoins));
   if (stmt.prewhere) children.push(exprNode(stmt.prewhere));
   if (stmt.where) children.push(exprNode(stmt.where));
   if (stmt.groupBy) {
@@ -984,6 +1024,20 @@ function selectQueryNode(stmt: SelectStatement): ExplainNode {
   // Distributed CTEs go after all other children
   if (cteNodes && isDistributedWith) {
     children.push(cteNodes);
+  }
+
+  // CTE column aliases: WITH t (a, b) AS (...) → ExpressionList with Identifiers
+  if (stmt.with) {
+    for (const cte of stmt.with) {
+      if (cte.kind === 'cteSubquery' && cte.columnAliases && cte.columnAliases.length > 0) {
+        children.push(
+          n(
+            'ExpressionList',
+            cte.columnAliases.map((a) => n(`Identifier ${a}`)),
+          ),
+        );
+      }
+    }
   }
 
   return n('SelectQuery', children);
@@ -2016,9 +2070,28 @@ function insertQueryNode(stmt: InsertStatement): ExplainNode {
     );
   }
 
-  // SELECT query
+  // SELECT query — INSERT-level WITH is attached to the inner SELECT as distributed
   if (stmt.selectQuery) {
-    children.push(stmtNode(stmt.selectQuery));
+    let sq = stmt.selectQuery as Statement;
+    if (stmt.with && stmt.with.length > 0) {
+      const withItems = stmt.with;
+      // Attach WITH to the leftmost SELECT with distributedWith: true
+      function attachInsertWith(s: Statement): Statement {
+        if (s.kind === 'select' && !s.with) {
+          return { ...s, with: withItems, distributedWith: true } as Statement;
+        }
+        if (s.kind === 'union') {
+          const [first, ...rest] = s.queries;
+          return { ...s, queries: [attachInsertWith(first), ...rest] } as Statement;
+        }
+        if (s.kind === 'intersect') {
+          return { ...s, left: attachInsertWith(s.left as Statement) } as Statement;
+        }
+        return s;
+      }
+      sq = attachInsertWith(sq);
+    }
+    children.push(stmtNode(sq));
   }
 
   // Settings: InsertQuery gets a Set child if any settings exist (insert-level or select-level)
@@ -2561,28 +2634,86 @@ function stmtNode(stmt: Statement): ExplainNode {
 
   // INTERSECT/EXCEPT produces SelectIntersectExceptQuery as the single ExpressionList child
   if (stmt.kind === 'intersect') {
+    // Find the WITH CTEs from the left-most SELECT and distribute to all other SELECTs
+    function findLeftmostWith(s: Statement): CTE[] | undefined {
+      if (s.kind === 'select') return s.with;
+      if (s.kind === 'intersect') return findLeftmostWith(s.left);
+      return undefined;
+    }
+    function distributeWithIntersect(s: Statement, withItems: CTE[]): Statement {
+      if (s.kind === 'select' && !s.with) {
+        return { ...s, with: withItems, distributedWith: true } as Statement;
+      }
+      if (s.kind === 'select' && s.with) return s;
+      if (s.kind === 'intersect') {
+        return {
+          ...s,
+          left: distributeWithIntersect(s.left, withItems),
+          right: distributeWithIntersect(s.right, withItems),
+        } as Statement;
+      }
+      return s;
+    }
+    let distributed = stmt;
+    const leftWith = findLeftmostWith(stmt);
+    if (leftWith && leftWith.length > 0) {
+      // Distribute to right side(s) but keep left as-is
+      distributed = {
+        ...stmt,
+        right: distributeWithIntersect(stmt.right, leftWith),
+      } as typeof stmt;
+    }
+
     const leftWrap =
-      stmt.op === 'EXCEPT' || (stmt.op === 'INTERSECT' && stmt.left.kind === 'intersect');
-    const rightWrap = stmt.op === 'INTERSECT' && stmt.right.kind === 'intersect';
+      distributed.op === 'EXCEPT' ||
+      (distributed.op === 'INTERSECT' && distributed.left.kind === 'intersect');
+    const rightWrap = distributed.op === 'INTERSECT' && distributed.right.kind === 'intersect';
     const intersectNode = n('SelectIntersectExceptQuery', [
-      renderIntersectChild(stmt.left, leftWrap),
-      renderIntersectChild(stmt.right, rightWrap),
+      renderIntersectChild(distributed.left, leftWrap),
+      renderIntersectChild(distributed.right, rightWrap),
     ]);
     const children: ExplainNode[] = [n('ExpressionList', [intersectNode])];
     if (format) children.push(n(`Identifier ${format}`));
     return n('SelectWithUnionQuery', children);
   }
 
+  // Distribute WITH within a union's queries and then flatten
+  function distributeAndFlatten(queries: Statement[]): Statement[] {
+    // Distribute WITH CTEs from the first SELECT to all other SELECTs
+    let distributed = queries;
+    if (queries.length > 1) {
+      const firstWith = queries[0]?.kind === 'select' ? queries[0].with : undefined;
+      if (firstWith && firstWith.length > 0) {
+        const reversedWith = markCTEsForReverseJoins(firstWith);
+        distributed = queries.map((q, i) => {
+          if (i === 0 || q.kind !== 'select' || (q.with && q.with.length > 0)) return q;
+          return { ...q, with: reversedWith, distributedWith: true } as Statement;
+        });
+      }
+    }
+    return distributed.flatMap(flattenUnion);
+  }
+
   // Flatten nested UNION ALL so all SELECT queries appear at the same level
   // UNION DISTINCT creates a nesting boundary (don't flatten through it)
+  // Distribute WITH within each nested union before flattening
   function flattenUnion(s: Statement): Statement[] {
-    if (s.kind === 'union' && !s.unionMode) return s.queries.flatMap(flattenUnion);
+    if (s.kind === 'union' && !s.unionMode) return distributeAndFlatten(s.queries);
+    return [s];
+  }
+
+  // Deep flatten: flatten ALL union nodes (including UNION DISTINCT) — used when
+  // the outermost union is itself UNION DISTINCT (pure DISTINCT chain)
+  function flattenUnionDeep(s: Statement): Statement[] {
+    if (s.kind === 'union') return s.queries.flatMap(flattenUnionDeep);
     return [s];
   }
 
   let queries: Statement[];
   if (stmt.kind === 'union') {
-    queries = stmt.queries.flatMap(flattenUnion);
+    // For pure UNION DISTINCT chains, flatten deeply; for UNION ALL, flatten normally
+    const flattener = stmt.unionMode ? flattenUnionDeep : flattenUnion;
+    queries = stmt.queries.flatMap(flattener);
   } else {
     queries = [stmt];
   }
@@ -2591,9 +2722,10 @@ function stmtNode(stmt: Statement): ExplainNode {
   if (queries.length > 1) {
     const firstWith = queries[0]?.kind === 'select' ? queries[0].with : undefined;
     if (firstWith && firstWith.length > 0) {
+      const reversedWith = markCTEsForReverseJoins(firstWith);
       queries = queries.map((q, i) => {
         if (i === 0 || q.kind !== 'select' || (q.with && q.with.length > 0)) return q;
-        return { ...q, with: firstWith, distributedWith: true } as Statement;
+        return { ...q, with: reversedWith, distributedWith: true } as Statement;
       });
     }
   }

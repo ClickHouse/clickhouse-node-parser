@@ -17,7 +17,7 @@ INSERT INTO test_table;
 
 INSERT INTO test_table;
 
-WITH search_tree AS (
+WITH RECURSIVE search_tree AS (
     SELECT
         id,
         parent_id,
@@ -45,7 +45,7 @@ ORDER BY
 
 SELECT '--';
 
-WITH search_tree AS (
+WITH RECURSIVE search_tree AS (
     SELECT
         id,
         parent_id,
@@ -71,7 +71,7 @@ ORDER BY
     id ASC,
     parent_id ASC;
 
-WITH search_tree AS (
+WITH RECURSIVE search_tree AS (
     SELECT
         id,
         parent_id,

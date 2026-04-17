@@ -108,7 +108,7 @@ WITH '2022-01-30'::Date + toIntervalMonth(1) + toIntervalDay(1) AS e1,
 
 '2022-01-30'::Date + (INTERVAL 1 MONTH, INTERVAL 1 DAY) AS e3,
 
-'2022-01-30'::Date + toIntervalMonth(1) AS e4
+'2022-01-30'::Date + tuple(toIntervalMonth(1), toIntervalDay(1)) AS e4
 
 SELECT
     e1 == e2
@@ -122,7 +122,7 @@ WITH '2022-01-30'::Date + toIntervalDay(1) + toIntervalMonth(1) AS e1,
 
 '2022-01-30'::Date + (INTERVAL 1 DAY, INTERVAL 1 MONTH) AS e3,
 
-'2022-01-30'::Date + toIntervalDay(1) AS e4
+'2022-01-30'::Date + tuple(toIntervalDay(1), toIntervalMonth(1)) AS e4
 
 SELECT
     e1 == e2
@@ -136,7 +136,7 @@ WITH '2022-10-11'::Date + toIntervalSecond(-1) + toIntervalMinute(2) + toInterva
 
 '2022-10-11'::Date + (INTERVAL -1 SECOND, INTERVAL 2 MINUTE, INTERVAL -3 MONTH, INTERVAL 1 YEAR) AS e3,
 
-'2022-10-11'::Date + toIntervalSecond(-1) AS e4
+'2022-10-11'::Date + tuple(toIntervalSecond(-1), toIntervalMinute(2), toIntervalMonth(-3), toIntervalYear(1)) AS e4
 
 SELECT
     e1 == e2
@@ -150,7 +150,7 @@ WITH '2022-10-11'::DateTime - toIntervalQuarter(1) - toIntervalWeek(-3) - toInte
 
 '2022-10-11'::DateTime - (INTERVAL 1 QUARTER, INTERVAL -3 WEEK, INTERVAL 1 YEAR, INTERVAL 1 HOUR) AS e3,
 
-'2022-10-11'::DateTime - toIntervalQuarter(1) AS e4
+'2022-10-11'::DateTime - tuple(toIntervalQuarter(1), toIntervalWeek(-3), toIntervalYear(1), toIntervalHour(1)) AS e4
 
 SELECT
     e1 == e2
@@ -164,7 +164,7 @@ WITH '2022-10-11'::DateTime64 - toIntervalYear(1) - toIntervalMonth(4) - toInter
 
 '2022-10-11'::DateTime64 - (INTERVAL 1 YEAR, INTERVAL 4 MONTH, INTERVAL 1 SECOND) AS e3,
 
-'2022-10-11'::DateTime64 - toIntervalYear(1) AS e4
+'2022-10-11'::DateTime64 - tuple(toIntervalYear(1), toIntervalMonth(4), toIntervalSecond(1)) AS e4
 
 SELECT
     e1 == e2

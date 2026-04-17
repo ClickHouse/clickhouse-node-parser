@@ -58,11 +58,11 @@ INSERT INTO department__fuzz_3;
 
 SELECT *
 FROM (
-        WITH q AS (
+        WITH RECURSIVE q AS (
             SELECT *
             FROM department__fuzz_3
             UNION ALL
-(            WITH x AS (
+(            WITH RECURSIVE x AS (
                 SELECT *
                 FROM department__fuzz_1
                 UNION ALL

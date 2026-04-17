@@ -849,7 +849,23 @@ DropTargetType
 // InsertStatement: INSERT INTO [TABLE] target [(columns)] [SETTINGS ...] [data]
 // target can be a table reference or TABLE FUNCTION / FUNCTION call
 InsertStatement
-  = "INSERT"i ![a-zA-Z0-9_] _ "INTO"i ![a-zA-Z0-9_] _ target:InsertTarget
+  = withClause:CTEClause _ "INSERT"i ![a-zA-Z0-9_] _ "INTO"i ![a-zA-Z0-9_] _ target:InsertTarget
+    partitionBy:( _ "PARTITION"i ![a-zA-Z0-9_] _ "BY"i ![a-zA-Z0-9_] _ Expression )?
+    columns:( _ InsertColumnList )?
+    insertSettings:( _ SettingsClause )?
+    data:InsertDataClause {
+      const result = { kind: 'insert', target: target };
+      if (withClause && withClause.items) result.with = withClause.items;
+      if (partitionBy !== null) result.partitionBy = partitionBy[7];
+      if (columns !== null) result.columns = columns[1];
+      if (insertSettings !== null) result.insertSettings = insertSettings[1];
+      if (data !== null) {
+        result.selectQuery = data.query;
+        if (data.querySettings) result.querySettings = data.querySettings;
+      }
+      return loc(result);
+    }
+  / "INSERT"i ![a-zA-Z0-9_] _ "INTO"i ![a-zA-Z0-9_] _ target:InsertTarget
     partitionBy:( _ "PARTITION"i ![a-zA-Z0-9_] _ "BY"i ![a-zA-Z0-9_] _ Expression )?
     columns:( _ InsertColumnList )?
     insertSettings:( _ SettingsClause )?
@@ -2137,6 +2153,43 @@ UnionQueryAtom
   / ExplainStatement
   / SelectStatement
 
+// FromFirstSelectStatement: ClickHouse extension — FROM comes before SELECT
+// e.g. FROM numbers(1) SELECT number
+// e.g. WITH 1 as n FROM numbers(1) SELECT number * n
+FromFirstSelectStatement
+  = withClause:( CTEClause _ )?
+    from:FromClause _
+    KW_SELECT selectComments:_ distinct:( DistinctClause _ )?
+    select:SelectItemList selectTrailing:_HWS
+    prewhere:( _ PrewhereClause )?
+    where:( _ WhereClause )?
+    groupBy:( _ GroupByClause )?
+    having:( _ HavingClause )?
+    orderBy:( _ OrderByClause )?
+    limitBy:( _ LimitByClause )?
+    limit:( _ LimitClause )?
+    offset:( _ OffsetClause )?
+    settings:( _ SettingsClause )? {
+      const result = loc({ kind: 'select' });
+      if (withClause !== null) {
+        result.with = withClause[0].items;
+        if (withClause[0].recursive) result.recursive = true;
+      }
+      if (distinct !== null) result.distinct = distinct[0];
+      result.select = select;
+      result.from = from;
+      if (prewhere !== null) result.prewhere = prewhere[1];
+      if (where !== null) result.where = where[1];
+      if (groupBy !== null) result.groupBy = groupBy[1];
+      if (having !== null) result.having = having[1];
+      if (orderBy !== null) result.orderBy = orderBy[1];
+      if (limitBy !== null) result.limitBy = limitBy[1];
+      if (limit !== null) result.limit = limit[1];
+      if (offset !== null) result.offset = offset[1];
+      if (settings !== null) result.settings = settings[1];
+      return result;
+    }
+
 // SelectStatement: the core SELECT query rule with all optional clauses.
 // Clause order follows ClickHouse syntax: WITH, SELECT, FROM, PREWHERE, WHERE, GROUP BY, HAVING,
 // WINDOW, QUALIFY, ORDER BY, LIMIT BY, LIMIT, OFFSET, FETCH, SETTINGS.
@@ -2145,7 +2198,8 @@ UnionQueryAtom
 // e.g. WITH cte AS (SELECT 1) SELECT * FROM cte
 // e.g. SELECT TOP 5 WITH TIES * FROM t ORDER BY score DESC
 SelectStatement
-  = withClause:( CTEClause _ )?
+  = FromFirstSelectStatement
+  / withClause:( CTEClause _ )?
     KW_SELECT selectComments:_ distinct:( DistinctClause _ )? top:( "TOP"i ![a-zA-Z0-9_] _ UnaryExpr _ ( KW_WITH _ "TIES"i ![a-zA-Z0-9_] _ )? )?
     select:SelectItemList selectTrailing:_HWS
     withModifier1:( _ WithModifierClause )?
@@ -2170,6 +2224,7 @@ SelectStatement
       if (withClause !== null) {
         const wcd = withClause[0];
         result.with = wcd.items;
+        if (wcd.recursive) result.recursive = true;
         const kwComments = flattenWs(wcd.keywordComments);
         if (kwComments.length > 0) result.leadingComments = kwComments;
         withTrailingComments = flattenWs(withClause[1]);
@@ -2292,8 +2347,18 @@ DistinctClause
 // ── Clauses ──────────────────────────────────────────────────────────────────
 
 CTEClause
-  = KW_WITH wc:_ "RECURSIVE"i ![a-zA-Z0-9_] _ items:CTEItemList { return { items: items, keywordComments: wc }; }
+  // Tuple CTE: WITH ((expr) AS a, (expr) AS b) SELECT ... — parenthesized list of aliased expressions
+  = KW_WITH wc:_ "(" _ head:TupleCTEElement _ "," _ second:TupleCTEElement tail:(_ "," _ TupleCTEElement)* _ ")" {
+      const elements = [head, second, ...tail.map(t => t[3])];
+      return { items: [{ kind: 'cteTuple', elements }], keywordComments: wc };
+    }
+  / KW_WITH wc:_ "RECURSIVE"i ![a-zA-Z0-9_] _ items:CTEItemList { return { items: items, keywordComments: wc, recursive: true }; }
   / KW_WITH wc:_ items:CTEItemList { return { items: items, keywordComments: wc }; }
+
+TupleCTEElement
+  = expr:TernaryExpr afterExpr:_ KW_AS _ name:AliasName {
+      return loc({ kind: 'alias', expr: addTrailing(expr, flattenWs(afterExpr)), alias: name });
+    }
 
 CTEItemList
   = head:CTEItem tail:(_ "," _ CTEItem)* lastWs:_HWS {
@@ -2305,12 +2370,28 @@ CTEItemList
     }
 
 CTEItem
+// Subquery CTE with column aliases: name (col1, col2) AS (SELECT ...)
+  = name:Identifier _ "(" _ head:AliasName tail:(_ "," _ AliasName)* _ ")" _ KW_AS _ "(" beforeQuery:_ query:UnionQuery afterQuery:_ ")" {
+      const result = { kind: 'cteSubquery', name, query: addSurroundingWs(query, beforeQuery, afterQuery) };
+      result.columnAliases = [head, ...tail.map(t => t[3])];
+      return result;
+    }
 // Subquery CTE: name AS (SELECT ...)
-  = name:Identifier _ KW_AS _ "(" beforeQuery:_ query:UnionQuery afterQuery:_ ")" {
+  / name:Identifier _ KW_AS _ "(" beforeQuery:_ query:UnionQuery afterQuery:_ ")" {
       return { kind: 'cteSubquery', name, query: addSurroundingWs(query, beforeQuery, afterQuery) };
     }
-  // Expression CTE: expr AS name (ClickHouse extension)
-  / expr:TernaryExpr afterExpr:_ KW_AS _ name:Identifier {
+  // Lambda CTE with parens: (x, y) -> body AS name
+  / "(" _ head:LambdaParamName tail:(_ "," _ LambdaParamName)* _ ")" _ "->" _ body:TernaryExpr afterExpr:_ KW_AS _ name:AliasName {
+      const expr = loc({ kind: 'lambdaExpr', params: [head, ...tail.map(t => t[3])], body });
+      return { kind: 'cteExpr', name, expr: addTrailing(expr, flattenWs(afterExpr)) };
+    }
+  // Lambda CTE: x -> body AS name (single param without parens)
+  / param:LambdaParamName _ "->" _ body:TernaryExpr afterExpr:_ KW_AS _ name:AliasName {
+      const expr = loc({ kind: 'lambdaExpr', params: [param], body });
+      return { kind: 'cteExpr', name, expr: addTrailing(expr, flattenWs(afterExpr)) };
+    }
+  // Expression CTE: expr AS name (ClickHouse extension — name can be a keyword like 'from')
+  / expr:TernaryExpr afterExpr:_ KW_AS _ name:AliasName {
       return { kind: 'cteExpr', name, expr: addTrailing(expr, flattenWs(afterExpr)) };
     }
 
@@ -2327,7 +2408,8 @@ SelectItemList
 // SelectClauseKeyword: strong clause-starting keywords that cannot be column names.
 // Note: SETTINGS, FORMAT, QUALIFY, EXCEPT, WINDOW are omitted since they can appear as column names.
 SelectClauseKeyword
-  = ("FROM"i / "WHERE"i / "PREWHERE"i / "GROUP"i / "HAVING"i / "ORDER"i / "LIMIT"i
+  = "FROM"i ![a-zA-Z0-9_] _ !( "+" / "-" / "*" / "/" / "," / "IN"i ![a-zA-Z0-9_] / "AND"i ![a-zA-Z0-9_] / "OR"i ![a-zA-Z0-9_] )
+  / ("WHERE"i / "PREWHERE"i / "GROUP"i / "HAVING"i / "ORDER"i / "LIMIT"i
   / "OFFSET"i / "UNION"i / "INTERSECT"i / "INTO"i / "FETCH"i) ![a-zA-Z0-9_]
 
 SelectItem
@@ -3364,7 +3446,7 @@ ParenGroup
       return loc({ kind: 'subqueryExpr', query: addSurroundingWs(query, beforeQuery, afterQuery) });
     }
   // Lambda with parens: (x, y, ...) -> expr
-  / "(" _ head:Identifier tail:(_ "," _ Identifier)* _ ")" _ "->" _ body:Expression {
+  / "(" _ head:LambdaParamName tail:(_ "," _ LambdaParamName)* _ ")" _ "->" _ body:Expression {
       return loc({ kind: 'lambdaExpr', params: [head, ...tail.map((t) => t[3])], body });
     }
   // Tuple or parenthesized expression: parse first expression, then branch on comma vs close paren
@@ -3521,7 +3603,7 @@ ExponentPart
 // ── Lambda expressions ────────────────────────────────────────────────────────
 
 LambdaExprNoParens
-  = param:Identifier _ "->" _ body:Expression {
+  = param:LambdaParamName _ "->" _ body:Expression {
       return loc({ kind: 'lambdaExpr', params: [param], body: body });
     }
 
@@ -3560,19 +3642,25 @@ IntervalExpr
   = "INTERVAL"i ![a-zA-Z0-9_] _ expr:Expression _ unit:IntervalUnit {
       return loc({ kind: 'functionCall', name: 'toInterval' + unit, args: [expr] });
     }
-  // INTERVAL 'N unit' MySQL-compatible syntax: single string containing value and unit
+  // INTERVAL 'N unit [N unit ...]' MySQL-compatible syntax: string containing one or more value+unit pairs
   / "INTERVAL"i ![a-zA-Z0-9_] _ str:StringLiteral {
       const parts = str.value.trim().split(/\s+/);
-      const val = parts[0];
-      const unitStr = (parts[1] || '').toUpperCase().replace(/S$/, '');
       const unitMap = {
         NANOSECOND: 'Nanosecond', MICROSECOND: 'Microsecond', MILLISECOND: 'Millisecond',
         SECOND: 'Second', MINUTE: 'Minute', HOUR: 'Hour', DAY: 'Day',
         WEEK: 'Week', MONTH: 'Month', QUARTER: 'Quarter', YEAR: 'Year'
       };
-      const unit = unitMap[unitStr] || 'Second';
-      const numVal = parseInt(val, 10);
-      return loc({ kind: 'functionCall', name: 'toInterval' + unit, args: [loc({ kind: 'literal', type: 'UInt64', value: String(numVal) })] });
+      const intervals = [];
+      for (let i = 0; i + 1 < parts.length; i += 2) {
+        const val = parseInt(parts[i], 10);
+        const unitStr = (parts[i + 1] || '').toUpperCase().replace(/S$/, '');
+        const unit = unitMap[unitStr] || 'Second';
+        const type = val < 0 ? 'Int64' : 'UInt64';
+        intervals.push(loc({ kind: 'functionCall', name: 'toInterval' + unit, args: [loc({ kind: 'literal', type: type, value: String(val) })] }));
+      }
+      if (intervals.length === 1) return intervals[0];
+      // Multi-part interval: wrap in tuple (ClickHouse expands into addTupleOfIntervals)
+      return loc({ kind: 'functionCall', name: 'tuple', args: intervals });
     }
 
 // IntervalUnit: time unit keywords for INTERVAL expressions
@@ -3786,25 +3874,30 @@ FunctionCallArg
 // Matches two or more comma-separated identifiers before "->".
 // The final identifier uses a lookahead to confirm "->" follows.
 MultiLambdaParams
-  = head:Identifier _ "," _ tail:MultiLambdaParamsTail {
+  = head:LambdaParamName _ "," _ tail:MultiLambdaParamsTail {
       return [head, ...tail];
     }
 
 MultiLambdaParamsTail
-  = name:Identifier _ "," _ rest:MultiLambdaParamsTail {
+  = name:LambdaParamName _ "," _ rest:MultiLambdaParamsTail {
       return [name, ...rest];
     }
-  / name:Identifier &(_ "->") {
+  / name:LambdaParamName &(_ "->") {
       return [name];
     }
 
 ColumnRef
+  // Qualified function call: a.b(args) — compound identifier used as function name (e.g. lambda.nested(1))
+  = first:ColumnRefFirst rest:( _ "." _ part:ColumnRefCont { return part; } )+ _ "(" _ args:FunctionCallArgList? _ ")" {
+      const name = [first, ...rest].join('.');
+      return loc({ kind: 'functionCall', name, args: args !== null ? args : [] });
+    }
   // Multi-part qualified name: first.second[.third...] — supports arbitrary nesting depth.
   // e.g. t.col, system.one.dummy, nested.nest.a.b.c (JSON subcolumns).
   // Also supports digit-prefixed identifiers (e.g. 02337_db.table.col),
   // QueryParam identifiers (e.g. {DB:Identifier}.table),
   // JSON object subcolumn ^ prefix (e.g. json.^a), and array subscript suffix (e.g. arr.k1[]).
-  = first:ColumnRefFirst rest:( _ "." _ part:ColumnRefCont { return part; } )+ {
+  / first:ColumnRefFirst rest:( _ "." _ part:ColumnRefCont { return part; } )+ {
       return loc({ kind: 'columnRef', parts: [first, ...rest] });
     }
   // Unqualified: plain identifier (keyword-guarded) or digit-prefixed identifier
@@ -4047,6 +4140,14 @@ Identifier
   / '"' chars:DoubleQuotedChar* '"' { return chars.join(""); }
   / '`' chars:BacktickChar* '`' { return chars.join(""); }
   // Unicode "smart quotes": \u201c...\u201d (left/right double quotation marks)
+  / "\u201c" chars:$(!"\u201d" .)* "\u201d" { return chars; }
+
+// LambdaParamName: like Identifier but allows reserved keywords (e.g. offset, limit),
+// since lambda parameters are just variable names that can shadow keywords
+LambdaParamName
+  = word:$([a-zA-Z_] [a-zA-Z0-9_]*) { return word; }
+  / '"' chars:DoubleQuotedChar* '"' { return chars.join(""); }
+  / '`' chars:BacktickChar* '`' { return chars.join(""); }
   / "\u201c" chars:$(!"\u201d" .)* "\u201d" { return chars; }
 
 // AliasName: like Identifier but allows reserved keywords (e.g. AS AND, AS OR),

@@ -1,7 +1,7 @@
 -- https://www.philipzucker.com/sql_graph_csp/
 SET enable_analyzer = 1;
 
-WITH digits AS (
+WITH RECURSIVE digits AS (
     SELECT 0 AS digit
     UNION ALL
     SELECT digit + 1
