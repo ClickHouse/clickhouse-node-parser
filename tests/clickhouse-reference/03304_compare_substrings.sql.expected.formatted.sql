@@ -431,4 +431,4 @@ FROM (
                     concat('ab', number % 4) AS s2
                 FROM numbers(6)
             )
-    );
+    ); -- {echoOff }

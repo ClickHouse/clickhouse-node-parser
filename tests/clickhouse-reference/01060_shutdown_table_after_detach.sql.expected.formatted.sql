@@ -14,6 +14,10 @@ FROM test;
 
 ALTER TABLE test DROP PARTITION tuple();
 
+DETACH TABLE test;
+
+ATTACH TABLE test;
+
 ALTER TABLE test ATTACH PARTITION tuple();
 
 DROP TABLE test;

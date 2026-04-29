@@ -32,6 +32,8 @@ WHERE database = currentDatabase()
 
 SELECT '-------------------------------------------------------------------------';
 
+OPTIMIZE TABLE test FINAL;
+
 ALTER TABLE test MODIFY SETTING vertical_merge_algorithm_min_rows_to_activate = 1, vertical_merge_algorithm_min_columns_to_activate = 1;
 
 ALTER TABLE test ADD COLUMN x Array(UInt32);

@@ -19,6 +19,8 @@ INSERT INTO test SELECT
     '{"a" : 42, "b" : "Hello, World"}'
 FROM numbers(1000000);
 
+OPTIMIZE TABLE test FINAL;
+
 SELECT
     table,
     sum(`rows`) AS `rows`,

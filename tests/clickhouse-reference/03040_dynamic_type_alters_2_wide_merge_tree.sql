@@ -11,6 +11,7 @@ insert into test select number, number, number from numbers(3, 3);
 insert into test select number, number, 'str_' || toString(number) from numbers(6, 3);
 insert into test select number, number, NULL from numbers(9, 3);
 insert into test select number, number, multiIf(number % 3 == 0, number, number % 3 == 1, 'str_' || toString(number), NULL) from numbers(12, 3);
+optimize table test final;
 select x, y, d, d.String, d.UInt64, d.Date, d.`Tuple(a UInt64)`.a from test order by x;
 alter table test rename column d to d1 settings mutations_sync=1;
 select count(), dynamicType(d1) from test group by dynamicType(d1) order by count(), dynamicType(d1);

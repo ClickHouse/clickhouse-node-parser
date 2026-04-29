@@ -40,6 +40,8 @@ CREATE TABLE foo_memory
 )
 ENGINE = Memory;
 
+SHOW CREATE TABLE foo_memory;
+
 INSERT INTO foo_memory;
 
 CREATE TABLE clone_as_foo_memory
@@ -52,6 +54,8 @@ CREATE TABLE foo_file
     y String
 )
 ENGINE = File(TabSeparated);
+
+SHOW CREATE TABLE foo_file;
 
 INSERT INTO foo_file;
 
@@ -67,6 +71,8 @@ CREATE TABLE foo_merge_tree
 ENGINE = MergeTree
 PRIMARY KEY x;
 
+SHOW CREATE TABLE foo_merge_tree;
+
 INSERT INTO foo_merge_tree;
 
 SELECT *
@@ -74,6 +80,8 @@ FROM foo_merge_tree;
 
 CREATE TABLE clone_as_foo_merge_tree
 CLONE AS foo_merge_tree;
+
+SHOW CREATE TABLE clone_as_foo_merge_tree;
 
 SELECT *
 FROM clone_as_foo_merge_tree;
@@ -101,6 +109,8 @@ CREATE TABLE foo_replacing_merge_tree
 ENGINE = ReplacingMergeTree
 PRIMARY KEY x;
 
+SHOW CREATE TABLE foo_replacing_merge_tree;
+
 INSERT INTO foo_replacing_merge_tree;
 
 SELECT *
@@ -108,6 +118,8 @@ FROM foo_replacing_merge_tree;
 
 CREATE TABLE clone_as_foo_replacing_merge_tree
 CLONE AS foo_replacing_merge_tree;
+
+SHOW CREATE TABLE clone_as_foo_replacing_merge_tree;
 
 SELECT *
 FROM clone_as_foo_replacing_merge_tree;
@@ -135,6 +147,8 @@ CREATE TABLE foo_replicated_merge_tree
 ENGINE = ReplicatedMergeTree('/clickhouse/tables/{database}/test_foo_replicated_merge_tree', 'r1')
 PRIMARY KEY x;
 
+SHOW CREATE TABLE foo_replicated_merge_tree;
+
 INSERT INTO foo_replicated_merge_tree;
 
 SELECT *
@@ -148,6 +162,8 @@ CREATE TABLE clone_as_foo_replicated_merge_tree_p_x
 CLONE AS foo_replicated_merge_tree
 ENGINE = ReplicatedMergeTree('/clickhouse/tables/{database}/clone_as_foo_replicated_merge_tree_p_x', 'r1')
 PRIMARY KEY x;
+
+SHOW CREATE TABLE clone_as_foo_replicated_merge_tree_p_x;
 
 CREATE TABLE clone_as_foo_replicated_merge_tree_p_y
 CLONE AS foo_replicated_merge_tree

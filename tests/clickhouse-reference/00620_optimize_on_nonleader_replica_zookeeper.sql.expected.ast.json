@@ -186,6 +186,33 @@
     }
   },
   {
+    "kind": "system",
+    "body": "SYSTEM SYNC REPLICA rename1 PULL",
+    "trailingComments": [
+      "-- Avoid \"Cannot select parts for optimization: Entry for part 0_1_1_0 hasn't been read from the replication log yet\""
+    ]
+  },
+  {
+    "kind": "system",
+    "body": "SYSTEM SYNC REPLICA rename2"
+  },
+  {
+    "kind": "optimize",
+    "table": {
+      "kind": "tableRef",
+      "table": "rename1"
+    },
+    "final": true
+  },
+  {
+    "kind": "optimize",
+    "table": {
+      "kind": "tableRef",
+      "table": "rename2"
+    },
+    "final": true
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -198,6 +225,22 @@
     }
   },
   {
+    "kind": "rename",
+    "targetType": "TABLE",
+    "pairs": [
+      {
+        "from": {
+          "kind": "tableRef",
+          "table": "rename2"
+        },
+        "to": {
+          "kind": "tableRef",
+          "table": "rename3"
+        }
+      }
+    ]
+  },
+  {
     "kind": "insert",
     "target": {
       "kind": "table",
@@ -206,5 +249,26 @@
         "table": "rename1"
       }
     }
+  },
+  {
+    "kind": "system",
+    "body": "SYSTEM SYNC REPLICA rename3",
+    "trailingComments": [
+      "-- Make \"rename3\" to see all data parts."
+    ]
+  },
+  {
+    "kind": "optimize",
+    "table": {
+      "kind": "tableRef",
+      "table": "rename3"
+    }
+  },
+  {
+    "kind": "system",
+    "body": "SYSTEM SYNC REPLICA rename1",
+    "trailingComments": [
+      "-- Make \"rename1\" to see and process all scheduled merges."
+    ]
   }
 ]

@@ -124,6 +124,11 @@ ORDER BY
     metric_id ASC,
     timestamp ASC;
 
+-- Reload table to test serialization/deserialization of state
+DETACH TABLE t_resampled_timeseries;
+
+ATTACH TABLE t_resampled_timeseries;
+
 -- Check resampled data
 SELECT
     metric_id,
@@ -153,6 +158,11 @@ SETTINGS
     enable_parallel_replicas = 1,
     max_parallel_replicas = 3,
     parallel_replicas_for_non_replicated_merge_tree = 1;
+
+-- Reload table to test serialization/deserialization of state
+DETACH TABLE t_resampled_timeseries_delta;
+
+ATTACH TABLE t_resampled_timeseries_delta;
 
 SELECT
     `step`,

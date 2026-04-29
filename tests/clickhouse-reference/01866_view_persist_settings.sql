@@ -26,3 +26,11 @@ SELECT * FROM view_no_nulls; -- { serverError INCORRECT_QUERY }
 SELECT * FROM view_no_nulls_set;
 SELECT * FROM view_nulls_set;
 SELECT * FROM view_nulls;
+DETACH TABLE view_no_nulls;
+DETACH TABLE view_no_nulls_set;
+DETACH TABLE view_nulls_set;
+DETACH TABLE view_nulls;
+ATTACH TABLE view_no_nulls;
+ATTACH TABLE view_no_nulls_set;
+ATTACH TABLE view_nulls_set;
+ATTACH TABLE view_nulls;

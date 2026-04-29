@@ -57,6 +57,10 @@ SELECT *
 FROM `01686_test`
 WHERE key = 'Hello'; -- { serverError TYPE_MISMATCH }
 
+DETACH TABLE `01686_test` SYNC;
+
+ATTACH TABLE `01686_test`;
+
 SELECT *
 FROM `01686_test`
 WHERE key IN (99, 999, 9999, -123)

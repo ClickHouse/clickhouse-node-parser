@@ -4,4 +4,12 @@ CREATE TABLE aine
 )
 ENGINE = Log;
 
+ATTACH TABLE aine; -- { serverError TABLE_ALREADY_EXISTS }
+
+ATTACH TABLE IF NOT EXISTS aine;
+
+DETACH TABLE aine;
+
+EXISTS TABLE aine;
+
 DROP TABLE aine;

@@ -9,6 +9,7 @@ CREATE TABLE example_mt
 ENGINE = MergeTree()
 ORDER BY id
 SETTINGS async_insert = 1, allow_suspicious_low_cardinality_types = 1;
+SHOW CREATE TABLE example_mt;
 DROP TABLE IF EXISTS example_memory;
 CREATE TABLE example_memory
 (
@@ -17,6 +18,7 @@ CREATE TABLE example_memory
 )
 ENGINE = Memory
 SETTINGS max_rows_to_keep = 100, allow_suspicious_low_cardinality_types = 1;
+SHOW CREATE TABLE example_memory;
 DROP TABLE IF EXISTS example_set;
 CREATE TABLE example_set
 (
@@ -25,6 +27,7 @@ CREATE TABLE example_set
 )
 ENGINE = Set
 SETTINGS persistent = 1, allow_suspicious_low_cardinality_types = 1;
+SHOW CREATE TABLE example_set;
 DROP TABLE IF EXISTS example_join;
 CREATE TABLE example_join
 (
@@ -33,3 +36,4 @@ CREATE TABLE example_join
 )
 ENGINE = Join(ANY, LEFT, id)
 SETTINGS persistent = 1, allow_suspicious_low_cardinality_types = 1;
+SHOW CREATE TABLE example_join;

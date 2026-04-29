@@ -7,6 +7,8 @@ SELECT
     sleep(0.001)
 FORMAT Null;
 
+SYSTEM FLUSH LOGS query_log;
+
 SELECT
     'SLEEP #1 CHECK',
     ProfileEvents['SleepFunctionCalls'] AS calls,

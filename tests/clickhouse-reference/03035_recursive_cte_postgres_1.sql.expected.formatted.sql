@@ -135,4 +135,4 @@ WITH RECURSIVE w1 AS (
 )
 
 SELECT *
-FROM w1;
+FROM w1; -- { echoOff }

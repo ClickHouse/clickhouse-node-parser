@@ -15,6 +15,8 @@ INSERT INTO decimal_sum;
 
 INSERT INTO decimal_sum;
 
+OPTIMIZE TABLE decimal_sum;
+
 SELECT *
 FROM decimal_sum;
 

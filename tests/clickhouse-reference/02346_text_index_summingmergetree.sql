@@ -11,6 +11,7 @@ CREATE TABLE tab
 )
 ENGINE = SummingMergeTree()
 ORDER BY id;
+SYSTEM STOP MERGES tab;
 INSERT INTO tab VALUES
     (1, 'foo', 1),
     (2, 'bar', 2);
@@ -19,6 +20,8 @@ SET use_skip_indexes_on_data_read = 0;
 SELECT sum(value) FROM tab WHERE hasToken(key, 'foo');
 SELECT sum(value) FROM tab WHERE hasToken(key, 'bar');
 SET use_skip_indexes_on_data_read = 1;
+SYSTEM START MERGES tab;
+OPTIMIZE TABLE tab FINAL; -- emulate merge
 SELECT value FROM tab WHERE hasToken(key, 'foo');
 SELECT value FROM tab WHERE hasToken(key, 'bar');
 DROP TABLE tab;

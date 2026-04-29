@@ -23,6 +23,8 @@ ORDER BY key ASC;
 
 SELECT '-----------';
 
+DELETE FROM `02707_keepermap_delete_update` WHERE like(value, 'Some%string');
+
 SELECT
     *,
     _version
@@ -30,6 +32,8 @@ FROM `02707_keepermap_delete_update`
 ORDER BY key ASC;
 
 ALTER TABLE `02707_keepermap_delete_update` DELETE WHERE key >= 4;
+
+DELETE FROM `02707_keepermap_delete_update` WHERE 1 = 1;
 
 SELECT count()
 FROM `02707_keepermap_delete_update`;

@@ -17,3 +17,7 @@ ENGINE = MergeTree()
 ORDER BY s;
 INSERT INTO normal VALUES (1, '');
 INSERT INTO secret VALUES ('secret');
+GRANT ALTER UPDATE ON normal TO test_03727;
+GRANT READ ON REMOTE to test_03727;
+GRANT CREATE TEMPORARY TABLE ON *.* TO test_03727;
+EXECUTE AS test_03727 ALTER TABLE normal UPDATE s = (SELECT * FROM remote('localhost', currentDatabase(), 'secret') LIMIT 1) WHERE n=1; -- { serverError ACCESS_DENIED }

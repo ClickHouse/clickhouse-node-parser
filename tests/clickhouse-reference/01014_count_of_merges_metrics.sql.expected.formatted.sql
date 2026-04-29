@@ -23,6 +23,8 @@ INSERT INTO check_table_test (value1) SELECT value
 FROM `system`.events
 WHERE event = 'Merge';
 
+OPTIMIZE TABLE new_table_test FINAL;
+
 INSERT INTO check_table_test (value2) SELECT value
 FROM `system`.events
 WHERE event = 'Merge';

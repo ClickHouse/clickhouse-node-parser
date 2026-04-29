@@ -16,6 +16,8 @@ SETTINGS index_granularity = 8192;
 
 TRUNCATE TABLE order_by_const;
 
+SYSTEM stop merges order_by_const;
+
 INSERT INTO order_by_const (a, b, c, d);
 
 INSERT INTO order_by_const (a, b, c, d);

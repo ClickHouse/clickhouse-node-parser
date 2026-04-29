@@ -9,6 +9,8 @@ CREATE TABLE test_table
 ENGINE = AggregatingMergeTree()
 ORDER BY (col1, col2);
 
+SHOW CREATE TABLE test_table;
+
 -- regression from performance tests comparison script
 DROP TABLE IF EXISTS test;
 

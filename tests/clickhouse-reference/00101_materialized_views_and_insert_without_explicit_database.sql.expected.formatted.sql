@@ -121,6 +121,14 @@ DROP TABLE tmp_mv3;
 
 DROP TABLE tmp_mv4;
 
+EXISTS TABLE `.inner.tmp_mv`;
+
+EXISTS TABLE `.inner.tmp_mv2`;
+
+EXISTS TABLE `.inner.tmp_mv3`;
+
+EXISTS TABLE `.inner.tmp_mv4`;
+
 DROP TABLE tmp;
 
 DROP DATABASE {CLICKHOUSE_DATABASE:Identifier};

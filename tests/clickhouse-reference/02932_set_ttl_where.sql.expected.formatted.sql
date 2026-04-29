@@ -21,4 +21,6 @@ INSERT INTO t_temp SELECT
 FROM `system`.numbers
 LIMIT 100000;
 
+OPTIMIZE TABLE t_temp FINAL;
+
 DROP TABLE t_temp;

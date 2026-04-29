@@ -10,6 +10,8 @@ LIMIT 1;
 
 SET print_pretty_type_names = 1;
 
+DESCRIBE TABLE test FORMAT TSVRaw;
+
 SELECT toTypeName(a)
 FROM test
 LIMIT 1

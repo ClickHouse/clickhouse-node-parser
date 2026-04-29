@@ -144,6 +144,8 @@ FROM `system`.tables
 WHERE name = 'check_system_tables'
     AND database = currentDatabase();
 
+OPTIMIZE TABLE check_system_tables; -- flush
+
 INSERT INTO check_system_tables SELECT *
 FROM numbers_mt(101); -- direct block write (due to min_rows exceeded)
 

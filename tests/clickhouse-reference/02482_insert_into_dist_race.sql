@@ -9,6 +9,8 @@ SET distributed_foreground_insert=1;
 INSERT INTO dist_02482 VALUES (1, '1'), (2, '2');
 INSERT INTO dist_02482 SELECT number, number FROM numbers(1000);
 SET distributed_foreground_insert=0;
+SYSTEM STOP DISTRIBUTED SENDS dist_02482;
 INSERT INTO dist_02482 VALUES (1, '1'),(2, '2');
+SYSTEM FLUSH DISTRIBUTED dist_02482;
 DROP TABLE tmp_02482;
 DROP TABLE dist_02482;

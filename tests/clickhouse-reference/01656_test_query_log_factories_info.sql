@@ -19,6 +19,7 @@ SELECT repeat('aa', number)
 FROM numbers(10e3)
 SETTINGS max_memory_usage=4e6, max_block_size=100
 FORMAT Null; -- { serverError MEMORY_LIMIT_EXCEEDED }
+SYSTEM FLUSH LOGS query_log;
 SELECT arraySort(used_aggregate_functions)
 FROM system.query_log WHERE current_database = currentDatabase() AND type = 'QueryFinish' AND (query LIKE '%toDate(\'2000-12-05\')%')
 ORDER BY query_start_time DESC LIMIT 1 FORMAT TabSeparatedWithNames;

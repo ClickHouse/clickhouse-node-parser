@@ -213,6 +213,72 @@ ORDER BY tuple();
 
 SET allow_suspicious_codecs = 0;
 
+SHOW CREATE TABLE codecs1;
+
+SHOW CREATE TABLE codecs2;
+
+SHOW CREATE TABLE codecs3;
+
+SHOW CREATE TABLE codecs4;
+
+SHOW CREATE TABLE codecs5;
+
+SHOW CREATE TABLE codecs6;
+
+SHOW CREATE TABLE codecs7;
+
+SHOW CREATE TABLE codecs8;
+
+SHOW CREATE TABLE codecs9;
+
+SHOW CREATE TABLE codecs10;
+
+SHOW CREATE TABLE codecs11;
+
+DETACH TABLE codecs1;
+
+DETACH TABLE codecs2;
+
+DETACH TABLE codecs3;
+
+DETACH TABLE codecs4;
+
+DETACH TABLE codecs5;
+
+DETACH TABLE codecs6;
+
+DETACH TABLE codecs7;
+
+DETACH TABLE codecs8;
+
+DETACH TABLE codecs9;
+
+DETACH TABLE codecs10;
+
+DETACH TABLE codecs11;
+
+ATTACH TABLE codecs1;
+
+ATTACH TABLE codecs2;
+
+ATTACH TABLE codecs3;
+
+ATTACH TABLE codecs4;
+
+ATTACH TABLE codecs5;
+
+ATTACH TABLE codecs6;
+
+ATTACH TABLE codecs7;
+
+ATTACH TABLE codecs8;
+
+ATTACH TABLE codecs9;
+
+ATTACH TABLE codecs10;
+
+ATTACH TABLE codecs11;
+
 SELECT *
 FROM codecs1;
 

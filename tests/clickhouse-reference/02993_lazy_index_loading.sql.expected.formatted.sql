@@ -21,7 +21,11 @@ WHERE database = currentDatabase()
     AND table = 'test'
 FORMAT Vertical;
 
+DETACH TABLE test;
+
 SET max_memory_usage = '50M';
+
+ATTACH TABLE test;
 
 SELECT
     primary_key_bytes_in_memory,

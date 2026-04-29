@@ -21,6 +21,10 @@ INSERT INTO check_query_test SELECT
 FROM `system`.numbers
 LIMIT 81920;
 
+CHECK TABLE check_query_test SETTINGS max_threads = 1;
+
+OPTIMIZE TABLE check_query_test;
+
 DROP TABLE IF EXISTS check_query_test_non_adaptive;
 
 CREATE TABLE check_query_test_non_adaptive
@@ -37,6 +41,10 @@ INSERT INTO check_query_test_non_adaptive SELECT
     toString(number)
 FROM `system`.numbers
 LIMIT 81920;
+
+CHECK TABLE check_query_test_non_adaptive SETTINGS max_threads = 1;
+
+OPTIMIZE TABLE check_query_test_non_adaptive;
 
 INSERT INTO check_query_test_non_adaptive SELECT
     number,

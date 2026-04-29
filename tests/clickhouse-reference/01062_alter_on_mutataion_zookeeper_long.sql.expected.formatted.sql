@@ -63,6 +63,8 @@ INSERT INTO test_alter_on_mutation SELECT
 FROM `system`.numbers
 LIMIT 100, 100;
 
+OPTIMIZE TABLE test_alter_on_mutation FINAL;
+
 ALTER TABLE test_alter_on_mutation MODIFY COLUMN value String;
 
 ALTER TABLE test_alter_on_mutation ADD COLUMN value1 Float64;

@@ -18,6 +18,9 @@ ALTER TABLE visits_order_dst ADD PROJECTION user_name_projection (SELECT * ORDER
 INSERT INTO visits_order SELECT 2, 'user2', number from numbers(1, 10);
 INSERT INTO visits_order SELECT 2, 'another_user2', number*2 from numbers(1, 10);
 INSERT INTO visits_order SELECT 2, 'yet_another_user2', number*3 from numbers(1, 10);
+-- Merge all parts so that projections can no longer help filter them,
+-- which will result in projections not being used.
+OPTIMIZE TABLE visits_order FINAL;
 ALTER TABLE visits_order_dst ATTACH PARTITION ID '2' FROM visits_order;
 SET enable_analyzer=0;
 SET enable_analyzer=1, enable_parallel_replicas=0;

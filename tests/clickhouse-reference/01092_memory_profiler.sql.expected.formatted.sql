@@ -11,6 +11,8 @@ SELECT ignore(groupArray(number), 'test memory profiler')
 FROM numbers(10000000)
 SETTINGS log_comment = '01092_memory_profiler';
 
+SYSTEM FLUSH LOGS trace_log, query_log;
+
 WITH addressToSymbol(arrayJoin(trace)) AS symbol
 
 SELECT count() > 0

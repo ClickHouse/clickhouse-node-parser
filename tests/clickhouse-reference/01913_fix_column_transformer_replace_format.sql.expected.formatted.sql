@@ -15,6 +15,8 @@ AS
 SELECT * REPLACE (arrayMap(x -> x + 1, `Object.Key`) AS `Object.Key`)
 FROM my_table;
 
+SHOW CREATE TABLE my_view;
+
 DROP TABLE my_table;
 
 DROP VIEW my_view;

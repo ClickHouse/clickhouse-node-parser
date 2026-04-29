@@ -44,5 +44,8 @@ ALTER TABLE tp_1 DROP PROJECTION pp;
 -- Now, we don't load projection pp for attached part, but it is written on disk
 ALTER TABLE tp_1 ATTACH PARTITION '0';
 
+-- Make this part obsolete
+OPTIMIZE TABLE tp_1 FINAL;
+
 -- Now, DROP TABLE triggers part removal
 DROP TABLE tp_1;

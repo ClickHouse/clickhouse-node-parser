@@ -12,11 +12,17 @@ ORDER BY dt
 PARTITION BY indexHint(dt)
 SETTINGS index_granularity = 8192, min_bytes_for_wide_part = 0;
 
+SYSTEM stop merges x;
+
 INSERT INTO x;
 
 SELECT i
 FROM x
 WHERE i = 1;
+
+SYSTEM start merges x;
+
+OPTIMIZE TABLE x FINAL;
 
 SELECT i
 FROM x
@@ -43,6 +49,8 @@ ORDER BY dt
 SETTINGS index_granularity = 8192, min_bytes_for_wide_part = 0;
 
 INSERT INTO x;
+
+OPTIMIZE TABLE x FINAL DEDUPLICATE BY dt, i;
 
 SELECT i
 FROM x;

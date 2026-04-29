@@ -11,4 +11,6 @@ CREATE USER test_user_02867 IDENTIFIED WITH ssh_key BY KEY 'key0' TYPE 'ssh-rsa'
 
 CREATE USER test_user_02867 IDENTIFIED WITH ssh_key BY KEY 'key0' TYPE 'ssh-rsa';
 
+SHOW CREATE USER test_user_02867;
+
 DROP USER test_user_02867;

@@ -212,6 +212,8 @@ ORDER BY
     Path ASC,
     Time DESC;
 
+OPTIMIZE TABLE test_graphite FINAL;
+
 SELECT
     key,
     Path,

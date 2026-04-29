@@ -26,7 +26,13 @@ SELECT *
 FROM compression_codec
 ORDER BY id ASC;
 
+OPTIMIZE TABLE compression_codec FINAL;
+
 INSERT INTO compression_codec;
+
+DETACH TABLE compression_codec;
+
+ATTACH TABLE compression_codec;
 
 SELECT count(*)
 FROM compression_codec
@@ -158,6 +164,8 @@ CREATE TABLE compression_codec_multiple_more_types
 ENGINE = MergeTree()
 ORDER BY tuple();
 
+SHOW CREATE TABLE compression_codec_multiple_more_types;
+
 INSERT INTO compression_codec_multiple_more_types;
 
 INSERT INTO compression_codec_multiple_more_types;
@@ -223,6 +231,8 @@ CREATE TABLE test_default_delta
 )
 ENGINE = MergeTree()
 ORDER BY tuple();
+
+SHOW CREATE TABLE test_default_delta;
 
 DROP TABLE compression_codec_multiple;
 

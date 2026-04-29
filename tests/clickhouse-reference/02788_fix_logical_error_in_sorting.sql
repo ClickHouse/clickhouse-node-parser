@@ -22,6 +22,8 @@ CREATE TABLE event_types
 ENGINE = MergeTree
 PARTITION BY substring(type, 1, 1)
 ORDER BY (type, active);
+SYSTEM STOP MERGES session_events;
+SYSTEM STOP MERGES event_types;
 INSERT INTO session_events SELECT
     141,
     '693de636-6d9b-47b7-b52a-33bd303b6255',

@@ -17,6 +17,13 @@ SET max_rows_to_read = 10000;
 
 SET force_primary_key = 1;
 
+DELETE FROM test_lwd WHERE id IN (10000, 10001, 10002);
+
+DELETE FROM test_lwd WHERE id IN (
+    SELECT number
+    FROM numbers(10003, 3)
+);
+
 SELECT count()
 FROM test_lwd
 WHERE id IN (

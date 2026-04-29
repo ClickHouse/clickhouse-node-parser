@@ -17,6 +17,8 @@ FROM numbers(999);
 
 INSERT INTO dst_sparse;
 
+OPTIMIZE TABLE dst_sparse FINAL;
+
 CREATE TABLE mytable_sparse
 ENGINE = MergeTree
 ORDER BY id

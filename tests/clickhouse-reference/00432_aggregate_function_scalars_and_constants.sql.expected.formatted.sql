@@ -48,6 +48,8 @@ ORDER BY k ASC;
 
 INSERT INTO agg_func_col (k, af_avg1, af_gua);
 
+OPTIMIZE TABLE agg_func_col;
+
 SELECT arrayReduce('groupUniqArrayIf', ['---', '---', 't1'], [1, 1, 0]);
 
 SELECT arrayReduce('groupUniqArrayMergeIf', [arrayReduce('groupUniqArrayState', ['---', '---']), arrayReduce('groupUniqArrayState', ['t1', 't'])], [1, 0]);

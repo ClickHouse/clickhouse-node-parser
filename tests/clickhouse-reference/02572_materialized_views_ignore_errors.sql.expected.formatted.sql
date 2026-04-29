@@ -37,6 +37,9 @@ ORDER BY key ASC;
 
 INSERT INTO data_02572 SETTINGS materialized_views_ignore_errors = 1;
 
+-- check system.query_views_log
+SYSTEM flush logs query_views_log;
+
 -- lower(status) to pass through clickhouse-test "exception" check
 SELECT
     lower(status::String),

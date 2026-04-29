@@ -37,6 +37,8 @@ SET insert_deduplication_token = '3';
 
 SET log_comment = 'async_insert_skip_settings_4';
 
+SYSTEM FLUSH LOGS asynchronous_insert_log;
+
 SELECT
     'pending to flush',
     length(entries.bytes)
@@ -44,6 +46,8 @@ FROM `system`.asynchronous_inserts
 WHERE database = currentDatabase()
     AND table = 't_async_insert_skip_settings'
 ORDER BY first_update ASC;
+
+SYSTEM FLUSH ASYNC INSERT QUEUE;
 
 SELECT *
 FROM t_async_insert_skip_settings

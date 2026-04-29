@@ -18,6 +18,20 @@ LEFT JOIN
 USING (id);
 -- Inserting 2 numbers should require 2 calls to sleep
 INSERT into src SELECT number + 100 as id, 1 FROM numbers(2);
+-- Describe should not need to call sleep
+DESCRIBE ( SELECT '1947 #3 QUERY - TRUE',
+                  id,
+                  src.value - deltas_sum as delta
+            FROM src
+            LEFT JOIN
+                (
+                    SELECT id, sum(delta) as deltas_sum FROM dst
+                    WHERE id IN (SELECT id FROM src WHERE not sleepEachRow(0.001))
+                    GROUP BY id
+                ) _a
+                USING (id)
+    ) FORMAT Null;
+SYSTEM FLUSH LOGS query_log;
 SELECT '1947 #1 CHECK - TRUE' as test,
        ProfileEvents['SleepFunctionCalls'] as sleep_calls,
        ProfileEvents['SleepFunctionMicroseconds'] as sleep_microseconds
@@ -63,6 +77,19 @@ LEFT JOIN
 USING (id);
 -- Inserting 2 numbers should require 2 calls to sleep
 INSERT into src SELECT number + 200 as id, 1 FROM numbers(2);
+-- Describe should not need to call sleep
+DESCRIBE ( SELECT '1947 #3 QUERY - FALSE',
+                  id,
+                  src.value - deltas_sum as delta
+            FROM src
+            LEFT JOIN
+            (
+                SELECT id, sum(delta) as deltas_sum FROM dst
+                WHERE id IN (SELECT id FROM src WHERE not sleepEachRow(0.001))
+                GROUP BY id
+            ) _a
+            USING (id)
+    ) FORMAT Null;
 SELECT '1947 #1 CHECK - FALSE' as test,
        ProfileEvents['SleepFunctionCalls'] as sleep_calls,
        ProfileEvents['SleepFunctionMicroseconds'] as sleep_microseconds

@@ -4,6 +4,19 @@
     "targetType": "TABLE",
     "table": {
       "kind": "tableRef",
+      "table": "quorum1"
+    },
+    "ifExists": true,
+    "leadingComments": [
+      "-- Tags: zookeeper, no-parallel, no-shared-merge-tree",
+      "# no-shared-merge-tree: quorum logic is specifit to replicated tables"
+    ]
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
       "table": "quorum2"
     },
     "ifExists": true
@@ -128,6 +141,10 @@
         }
       }
     ]
+  },
+  {
+    "kind": "system",
+    "body": "SYSTEM enable failpoint replicated_merge_tree_insert_quorum_fail_0"
   },
   {
     "kind": "insert",

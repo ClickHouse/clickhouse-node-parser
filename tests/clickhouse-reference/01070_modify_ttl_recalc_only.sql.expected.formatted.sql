@@ -41,6 +41,8 @@ WHERE database = currentDatabase()
     AND active > 0
 ORDER BY name ASC;
 
+OPTIMIZE TABLE ttl FINAL;
+
 CREATE TABLE ttl
 (
     i Int,

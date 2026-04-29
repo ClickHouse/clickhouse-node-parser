@@ -18,6 +18,8 @@ SELECT *
 FROM table_with_version
 ORDER BY key ASC;
 
+SHOW CREATE TABLE table_with_version;
+
 ALTER TABLE table_with_version MODIFY COLUMN version UInt32;
 
 INSERT INTO table_with_version;

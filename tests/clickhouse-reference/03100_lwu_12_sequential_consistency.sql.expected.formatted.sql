@@ -29,7 +29,11 @@ SET select_sequential_consistency = 0;
 
 INSERT INTO t_lwu_sequential_1;
 
+UPDATE t_lwu_sequential_2 SET s = 'foo' WHERE id = 1;
+
 SET select_sequential_consistency = 1;
+
+SYSTEM SYNC REPLICA t_lwu_sequential_1 LIGHTWEIGHT;
 
 SELECT *
 FROM t_lwu_sequential_1

@@ -5,6 +5,8 @@ ENGINE = Log AS
 SELECT *
 FROM numbers(0);
 
+SYSTEM STOP MERGES x;
+
 WITH y AS (
     SELECT *
     FROM numbers(10)

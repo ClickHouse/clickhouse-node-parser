@@ -14,6 +14,8 @@ INSERT INTO t_read_in_order_2 SELECT
     number
 FROM numbers(10000000);
 
+OPTIMIZE TABLE t_read_in_order_2 FINAL;
+
 SET optimize_read_in_order = 1;
 
 SET max_threads = 4;

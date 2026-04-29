@@ -38,4 +38,4 @@ SELECT
 
 SELECT
     arrayReduce('median', [toLowCardinality(toNullable(8))]) AS t,
-    toTypeName(t);
+    toTypeName(t); -- { echoOff }

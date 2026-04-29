@@ -66,6 +66,8 @@ CREATE TABLE test_distributed_03745
 )
 ENGINE = Distributed(test_shard_localhost, currentDatabase(), test_local_03745);
 
+SYSTEM STOP DISTRIBUTED SENDS test_distributed_03745;
+
 -- Pool is created only for async INSERTs
 INSERT INTO test_distributed_03745 SETTINGS prefer_localhost_replica = 0, distributed_foreground_insert = 0;
 

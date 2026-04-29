@@ -44,6 +44,15 @@ ORDER BY
 
 SET mutations_sync = 0;
 
+-- delete some rows using LWD
+DELETE FROM lwd_test WHERE (id % 3) = 0;
+
+-- optimize table to physically delete the rows
+OPTIMIZE TABLE lwd_test FINAL SETTINGS mutations_sync = 2;
+
+-- delete more rows
+DELETE FROM lwd_test WHERE (id % 2) = 0;
+
 -- add another part that doesn't have deleted rows
 INSERT INTO lwd_test SELECT
     number AS id,
@@ -55,5 +64,8 @@ INSERT INTO lwd_test SELECT
     number AS id,
     toString(number + 200) AS value
 FROM numbers(10);
+
+-- delete more rows
+DELETE FROM lwd_test WHERE (id % 3) = 2;
 
 DROP TABLE lwd_test;

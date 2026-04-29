@@ -8,6 +8,9 @@ DROP TABLE IF EXISTS log_proxy_02572;
 
 DROP TABLE IF EXISTS push_to_logs_proxy_mv_02572;
 
+-- create log tables
+SYSTEM flush logs query_log;
+
 CREATE TABLE log_proxy_02572 AS `system`.query_log
 ENGINE = Distributed('test_shard_localhost', currentDatabase(), 'receiver_02572');
 

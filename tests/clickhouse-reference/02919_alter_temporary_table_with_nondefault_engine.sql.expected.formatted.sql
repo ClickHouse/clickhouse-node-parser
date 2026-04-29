@@ -12,6 +12,8 @@ INSERT INTO alter_test;
 
 ALTER TABLE alter_test MODIFY COLUMN b UInt8;
 
+DESCRIBE TABLE alter_test;
+
 CREATE TEMPORARY TABLE alter_test
 (
     a UInt32,

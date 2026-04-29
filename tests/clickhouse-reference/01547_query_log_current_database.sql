@@ -15,12 +15,16 @@ set log_queries=1;
 select '01547_query_log_current_database' from system.one format Null;
 set log_queries=0;
 set log_query_threads=0;
+
+system flush logs query_log, query_thread_log;
+
 select count()
 from system.query_log
 where
     query like 'select \'01547_query_log_current_database%'
     and current_database = currentDatabase()
     and event_date >= yesterday();
+
 -- at least two threads for processing
 -- (but one just waits for another, sigh)
 select count() == 2

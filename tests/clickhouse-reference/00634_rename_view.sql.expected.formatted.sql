@@ -34,6 +34,8 @@ AS
 SELECT id
 FROM test2_00634;
 
+RENAME TABLE v_test1 TO v_test11, v_test2 TO v_test22;
+
 SELECT
     name,
     engine

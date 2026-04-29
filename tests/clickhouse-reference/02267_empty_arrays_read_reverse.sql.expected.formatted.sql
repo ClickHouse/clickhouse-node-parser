@@ -22,6 +22,8 @@ INSERT INTO t_02267 (b, a, c) SELECT
     ['1','2','3','4','5','6']
 FROM numbers(300000);
 
+OPTIMIZE TABLE t_02267 FINAL;
+
 SELECT *
 FROM t_02267
 WHERE hasAll(a, ['x'])

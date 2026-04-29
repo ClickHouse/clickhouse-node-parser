@@ -7,6 +7,8 @@
 set log_queries=1;
 drop table if exists log_proxy_02572;
 drop table if exists push_to_logs_proxy_mv_02572;
+-- create log tables
+system flush logs query_log;
 create table log_proxy_02572 as system.query_log engine=Distributed('test_shard_localhost', currentDatabase(), 'receiver_02572');
 create materialized view push_to_logs_proxy_mv_02572 to log_proxy_02572 as select * from system.query_log;
 select 1 format Null;

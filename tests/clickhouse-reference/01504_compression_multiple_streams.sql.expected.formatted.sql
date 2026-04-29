@@ -18,9 +18,15 @@ INSERT INTO columns_with_multiple_streams;
 SELECT *
 FROM columns_with_multiple_streams;
 
+DETACH TABLE columns_with_multiple_streams;
+
+ATTACH TABLE columns_with_multiple_streams;
+
 ALTER TABLE columns_with_multiple_streams MODIFY COLUMN field1 Nullable(UInt8);
 
 INSERT INTO columns_with_multiple_streams;
+
+SHOW CREATE TABLE columns_with_multiple_streams;
 
 SELECT *
 FROM columns_with_multiple_streams
@@ -29,6 +35,8 @@ ORDER BY field0 ASC;
 ALTER TABLE columns_with_multiple_streams MODIFY COLUMN field3 CODEC(Delta, Default);
 
 INSERT INTO columns_with_multiple_streams;
+
+OPTIMIZE TABLE columns_with_multiple_streams FINAL;
 
 DROP TABLE IF EXISTS columns_with_multiple_streams_compact;
 
@@ -48,9 +56,15 @@ INSERT INTO columns_with_multiple_streams_compact;
 SELECT *
 FROM columns_with_multiple_streams_compact;
 
+DETACH TABLE columns_with_multiple_streams_compact;
+
+ATTACH TABLE columns_with_multiple_streams_compact;
+
 ALTER TABLE columns_with_multiple_streams_compact MODIFY COLUMN field1 Nullable(UInt8);
 
 INSERT INTO columns_with_multiple_streams_compact;
+
+SHOW CREATE TABLE columns_with_multiple_streams_compact;
 
 SELECT *
 FROM columns_with_multiple_streams_compact
@@ -89,6 +103,8 @@ ORDER BY tuple();
 INSERT INTO columns_with_multiple_streams_bad_case;
 
 INSERT INTO columns_with_multiple_streams_bad_case;
+
+OPTIMIZE TABLE columns_with_multiple_streams_bad_case FINAL;
 
 SELECT *
 FROM columns_with_multiple_streams_bad_case

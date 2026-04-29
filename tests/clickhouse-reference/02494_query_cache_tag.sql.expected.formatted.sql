@@ -1,3 +1,7 @@
+-- Tags: no-parallel
+-- Tag no-parallel: Messes with internal cache
+SYSTEM CLEAR QUERY CACHE;
+
 -- Store the result a single query with a tag in the query cache and check that the system table knows about the tag
 SELECT 1
 SETTINGS

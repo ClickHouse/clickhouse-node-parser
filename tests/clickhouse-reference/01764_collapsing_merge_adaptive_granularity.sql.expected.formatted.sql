@@ -23,6 +23,8 @@ SELECT
     count()
 FROM collapsing_table;
 
+OPTIMIZE TABLE collapsing_table FINAL;
+
 DROP TABLE IF EXISTS collapsing_suspicious_granularity;
 
 CREATE TABLE collapsing_suspicious_granularity
@@ -41,3 +43,5 @@ SELECT
     sum(Sign),
     count()
 FROM collapsing_suspicious_granularity;
+
+OPTIMIZE TABLE collapsing_suspicious_granularity FINAL;

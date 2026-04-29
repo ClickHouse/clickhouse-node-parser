@@ -1,6 +1,8 @@
 -- make sure the system.query_log table is created
 SELECT 1;
 
+SYSTEM FLUSH LOGS query_log;
+
 SELECT
     any() AS t,
     substring(query, 1, 70) AS query,

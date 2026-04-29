@@ -23,6 +23,8 @@ INSERT INTO t_async_insert_alter;
 
 ALTER TABLE t_async_insert_alter ADD COLUMN value2 Int64;
 
+SYSTEM FLUSH ASYNC INSERT QUEUE t_async_insert_alter;
+
 SELECT *
 FROM t_async_insert_alter
 ORDER BY id ASC;
@@ -36,6 +38,8 @@ ALTER TABLE t_async_insert_alter MODIFY COLUMN value2 String;
 INSERT INTO t_async_insert_alter;
 
 ALTER TABLE t_async_insert_alter DROP COLUMN value2;
+
+SYSTEM FLUSH LOGS asynchronous_insert_log;
 
 SELECT
     query,

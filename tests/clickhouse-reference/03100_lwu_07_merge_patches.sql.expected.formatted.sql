@@ -16,6 +16,16 @@ INSERT INTO t_lightweight SELECT
     number
 FROM numbers(20);
 
+UPDATE t_lightweight SET c1 = c1 + 100 WHERE id % 2 = 0;
+
+UPDATE t_lightweight SET c1 = c1 + 1000 WHERE id % 3 = 0;
+
+UPDATE t_lightweight SET c1 = 10000 WHERE id = 10;
+
+UPDATE t_lightweight SET c1 = 13000 WHERE id = 10;
+
+UPDATE t_lightweight SET c1 = 15000 WHERE id = 15;
+
 SELECT *
 FROM t_lightweight
 ORDER BY id ASC
@@ -29,6 +39,8 @@ WHERE database = currentDatabase()
     AND table = 't_lightweight'
     AND active
 ORDER BY min_block_number ASC;
+
+OPTIMIZE TABLE t_lightweight PARTITION ID 'patch-3e1a7650697c132eb044cc6f1d82bc92-all' FINAL;
 
 SELECT count()
 FROM t_lightweight

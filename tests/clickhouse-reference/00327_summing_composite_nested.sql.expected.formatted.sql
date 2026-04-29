@@ -143,6 +143,10 @@ ORDER BY
     m.k3Type ASC,
     m.s ASC;
 
+OPTIMIZE TABLE summing_composite_key PARTITION 200001 FINAL;
+
+;
+
 SELECT
     d,
     k,

@@ -11,6 +11,8 @@ WITH 1091 AS id
 
 SELECT 1;
 
+SYSTEM FLUSH LOGS query_log, query_thread_log;
+
 WITH (
         SELECT query_id
         FROM `system`.query_log

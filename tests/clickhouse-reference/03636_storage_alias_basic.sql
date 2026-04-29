@@ -24,6 +24,7 @@ TRUNCATE TABLE alias_1;
 SELECT count() FROM source_table;
 -- Re-insert data
 INSERT INTO source_table VALUES (1, 'one', 'active'), (2, 'two', 'active');
+RENAME TABLE alias_1 TO alias_3;
 SELECT * FROM alias_3 ORDER BY id;
 DROP TABLE alias_2;
 DROP TABLE alias_3;
@@ -32,10 +33,12 @@ SELECT * FROM alias_4 ORDER BY id;
 INSERT INTO alias_4 VALUES (10, 'ten', 'active');
 INSERT INTO alias_4 VALUES (11, 'eleven', 'active');
 INSERT INTO alias_4 VALUES (12, 'twelve', 'active');
+OPTIMIZE TABLE alias_4 FINAL;
 SELECT count() AS parts_after FROM system.parts
 WHERE database = currentDatabase() AND table = 'source_table' AND active;
 SELECT count() FROM alias_4;
 ALTER TABLE alias_4 MODIFY SETTING max_bytes_to_merge_at_max_space_in_pool = 1000000;
+SHOW CREATE TABLE source_table FORMAT TSVRaw;
 ALTER TABLE alias_4 UPDATE value = 'updated' WHERE id = 1 SETTINGS mutations_sync = 1;
 SELECT id, value, status FROM source_table WHERE id = 1;
 ALTER TABLE alias_4 DELETE WHERE id = 2 SETTINGS mutations_sync = 1;
@@ -65,6 +68,10 @@ CREATE TABLE alias_a_exchange ENGINE = Alias(table_a_exchange);
 CREATE TABLE alias_b_exchange ENGINE = Alias(table_b_exchange);
 SELECT * FROM alias_a_exchange ORDER BY value;
 SELECT * FROM alias_b_exchange ORDER BY value;
+-- EXCHANGE the alias
+EXCHANGE TABLES alias_a_exchange AND alias_b_exchange;
+-- EXCHANGE the source tables
+EXCHANGE TABLES table_a_exchange AND table_b_exchange;
 DROP TABLE alias_a_exchange;
 DROP TABLE alias_b_exchange;
 DROP TABLE table_a_exchange;
@@ -76,6 +83,10 @@ INSERT INTO source_attach VALUES (1, 'data1'), (2, 'data2');
 CREATE TABLE alias_attach ENGINE = Alias('source_attach');
 SELECT * FROM alias_attach ORDER BY id;
 SELECT * FROM source_attach ORDER BY id;
+-- DETACH the alias table
+DETACH TABLE alias_attach;
+-- ATTACH the table back
+ATTACH TABLE alias_attach;
 -- Insert through alias after ATTACH
 INSERT INTO alias_attach VALUES (3, 'data3');
 DROP TABLE alias_attach;

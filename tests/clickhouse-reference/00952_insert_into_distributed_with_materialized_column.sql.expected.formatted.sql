@@ -21,6 +21,8 @@ ENGINE = Distributed('test_cluster_two_shards', currentDatabase(), local_00952, 
 
 INSERT INTO distributed_00952;
 
+SYSTEM FLUSH DISTRIBUTED distributed_00952;
+
 SELECT *
 FROM distributed_00952;
 

@@ -44,6 +44,8 @@ SELECT
 FROM dist_01756
 WHERE dummy IN (0, 2);
 
+SYSTEM flush logs query_log;
+
 SELECT splitByString('IN', query)[-1]
 FROM `system`.query_log
 WHERE event_date >= yesterday()

@@ -90,6 +90,13 @@
     ]
   },
   {
+    "kind": "system",
+    "body": "SYSTEM stop merges txn_counters",
+    "leadingComments": [
+      "-- stop background cleanup"
+    ]
+  },
+  {
     "kind": "set",
     "settings": [
       {
@@ -101,6 +108,10 @@
         }
       }
     ]
+  },
+  {
+    "kind": "system",
+    "body": "begin transaction"
   },
   {
     "kind": "insert",
@@ -330,6 +341,10 @@
         "direction": "ASC"
       }
     ]
+  },
+  {
+    "kind": "system",
+    "body": "rollback"
   },
   {
     "kind": "insert",
@@ -594,6 +609,26 @@
         }
       }
     ]
+  },
+  {
+    "kind": "system",
+    "body": "commit"
+  },
+  {
+    "kind": "detach",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "txn_counters"
+    }
+  },
+  {
+    "kind": "attach",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "txn_counters"
+    }
   },
   {
     "kind": "insert",
@@ -897,6 +932,10 @@
         }
       }
     ]
+  },
+  {
+    "kind": "system",
+    "body": "SYSTEM flush logs transactions_info_log"
   },
   {
     "kind": "select",

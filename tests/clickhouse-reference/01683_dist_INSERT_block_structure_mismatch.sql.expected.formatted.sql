@@ -25,6 +25,8 @@ INSERT INTO dist_01683;
 
 SET distributed_foreground_insert = 0;
 
+SYSTEM FLUSH DISTRIBUTED dist_01683;
+
 -- TODO: cover distributed_background_insert_batch=1
 SELECT *
 FROM tmp_01683

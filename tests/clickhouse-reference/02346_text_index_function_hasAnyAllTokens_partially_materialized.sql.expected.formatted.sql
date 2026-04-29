@@ -42,6 +42,8 @@ WHERE (like(`explain`, '%Name%'))
     OR (like(`explain`, '%Granules%'))
     OR (like(`explain`, '%Range%'));
 
+SYSTEM STOP MERGES tab;
+
 -- bar# will be parsed differently by different tokenizers, e.g. splitbyString -> 'bar#'; splitByNonAlpha -> 'bar'
 -- we want to test that the search functions will use the same tokenizer on un-materialized column parts
 INSERT INTO tab (id, message);

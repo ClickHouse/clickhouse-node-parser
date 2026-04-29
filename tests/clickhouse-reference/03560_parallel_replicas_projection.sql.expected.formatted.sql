@@ -10,6 +10,8 @@ ENGINE = MergeTree
 ORDER BY tuple()
 SETTINGS index_granularity = 1;
 
+SYSTEM STOP MERGES normal;
+
 INSERT INTO normal SELECT
     number AS key,
     number AS value
@@ -69,6 +71,8 @@ CREATE TABLE agg
 ENGINE = MergeTree
 ORDER BY tuple()
 SETTINGS index_granularity = 1;
+
+SYSTEM STOP MERGES agg;
 
 INSERT INTO agg SELECT
     number AS key,

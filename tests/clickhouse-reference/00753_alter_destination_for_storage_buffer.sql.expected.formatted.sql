@@ -45,4 +45,6 @@ SELECT *
 FROM buffer_00753
 ORDER BY y ASC;
 
+OPTIMIZE TABLE buffer_00753;
+
 SET send_logs_level = 'warning';

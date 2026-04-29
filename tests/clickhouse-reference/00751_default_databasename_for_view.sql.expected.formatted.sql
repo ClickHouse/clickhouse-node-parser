@@ -50,7 +50,13 @@ WHERE app = (
             )
     );
 
+SHOW CREATE TABLE {CLICKHOUSE_DATABASE:Identifier}.t_mv_00751 FORMAT TabSeparatedRaw;
+
 USE default;
+
+DETACH TABLE {CLICKHOUSE_DATABASE:Identifier}.t_mv_00751;
+
+ATTACH TABLE {CLICKHOUSE_DATABASE:Identifier}.t_mv_00751;
 
 INSERT INTO {CLICKHOUSE_DATABASE:Identifier}.t_00751;
 

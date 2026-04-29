@@ -16,6 +16,8 @@ CREATE TABLE compression_codec_log
 )
 ENGINE = Log();
 
+SHOW CREATE TABLE compression_codec_log;
+
 INSERT INTO compression_codec_log;
 
 INSERT INTO compression_codec_log;
@@ -27,6 +29,10 @@ FROM compression_codec_log
 ORDER BY id ASC;
 
 INSERT INTO compression_codec_log;
+
+DETACH TABLE compression_codec_log;
+
+ATTACH TABLE compression_codec_log;
 
 SELECT count(*)
 FROM compression_codec_log
@@ -43,6 +49,8 @@ CREATE TABLE compression_codec_multiple_log
     somenum Float64 CODEC(Delta(4), LZ4, LZ4, ZSTD(2), LZ4HC(5), ZSTD(3), ZSTD)
 )
 ENGINE = Log();
+
+SHOW CREATE TABLE compression_codec_multiple_log;
 
 INSERT INTO compression_codec_multiple_log;
 
@@ -86,6 +94,8 @@ CREATE TABLE compression_codec_tiny_log
 )
 ENGINE = TinyLog();
 
+SHOW CREATE TABLE compression_codec_tiny_log;
+
 INSERT INTO compression_codec_tiny_log;
 
 INSERT INTO compression_codec_tiny_log;
@@ -97,6 +107,10 @@ FROM compression_codec_tiny_log
 ORDER BY id ASC;
 
 INSERT INTO compression_codec_tiny_log;
+
+DETACH TABLE compression_codec_tiny_log;
+
+ATTACH TABLE compression_codec_tiny_log;
 
 SELECT count(*)
 FROM compression_codec_tiny_log
@@ -113,6 +127,8 @@ CREATE TABLE compression_codec_multiple_tiny_log
     somenum Float64 CODEC(Delta(4), LZ4, LZ4, ZSTD(2), LZ4HC(5), ZSTD(3), ZSTD)
 )
 ENGINE = TinyLog();
+
+SHOW CREATE TABLE compression_codec_multiple_tiny_log;
 
 INSERT INTO compression_codec_multiple_tiny_log;
 

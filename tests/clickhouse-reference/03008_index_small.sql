@@ -6,4 +6,6 @@ INSERT INTO test
 SELECT number DIV 2, number
 FROM numbers(3);
 SELECT count() FROM test WHERE b >= 0;
+DETACH TABLE test;
+ATTACH TABLE test;
 DROP TABLE test;

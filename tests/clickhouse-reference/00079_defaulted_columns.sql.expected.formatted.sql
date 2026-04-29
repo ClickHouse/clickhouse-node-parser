@@ -6,6 +6,8 @@ CREATE TABLE defaulted
 )
 ENGINE = Memory;
 
+DESCRIBE TABLE defaulted;
+
 DROP TABLE defaulted;
 
 CREATE TABLE defaulted

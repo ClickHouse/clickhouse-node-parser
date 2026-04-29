@@ -1,4 +1,5 @@
 set log_queries=1;
+system flush logs query_log;
 select count() from system.query_log where current_database = currentDatabase()
     and query like 'select \'01231_log_queries_min_type/QUERY_START%'
     and event_date >= yesterday();

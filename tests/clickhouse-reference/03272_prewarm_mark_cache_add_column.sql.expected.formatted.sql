@@ -10,15 +10,26 @@ ENGINE = MergeTree
 ORDER BY a
 SETTINGS prewarm_mark_cache = 1, min_bytes_for_wide_part = 0;
 
+-- Drop mark cache because it may be full and we will fail to add new entries to it.
+SYSTEM CLEAR MARK CACHE;
+
+SYSTEM STOP MERGES t_prewarm_add_column;
+
 INSERT INTO t_prewarm_add_column;
 
 ALTER TABLE t_prewarm_add_column ADD COLUMN b UInt64;
 
 INSERT INTO t_prewarm_add_column;
 
+DETACH TABLE t_prewarm_add_column;
+
+ATTACH TABLE t_prewarm_add_column;
+
 SELECT *
 FROM t_prewarm_add_column
 ORDER BY a ASC;
+
+SYSTEM FLUSH LOGS query_log;
 
 SELECT ProfileEvents['LoadedMarksCount']
 FROM `system`.query_log

@@ -14,7 +14,9 @@ CREATE TABLE test_proj_positional
 ENGINE = MergeTree
 ORDER BY a;
 INSERT INTO test_proj_positional VALUES (1, 'x'), (2, 'y');
+DETACH TABLE test_proj_positional;
 SET enable_positional_arguments_for_projections = 0;
+ATTACH TABLE test_proj_positional;
 SELECT * FROM test_proj_positional ORDER BY a;
 DROP TABLE test_proj_positional;
 CREATE TABLE test_proj_positional

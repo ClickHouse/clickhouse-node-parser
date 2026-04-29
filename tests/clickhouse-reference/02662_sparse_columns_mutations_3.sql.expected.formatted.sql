@@ -52,6 +52,8 @@ SELECT
     groupUniqArray(s.5)
 FROM t_sparse_mutations_3;
 
+OPTIMIZE TABLE t_sparse_mutations_3 FINAL;
+
 ALTER TABLE t_sparse_mutations_3 MODIFY COLUMN s Tuple(UInt64, UInt64, UInt64, UInt64, String);
 
 SELECT

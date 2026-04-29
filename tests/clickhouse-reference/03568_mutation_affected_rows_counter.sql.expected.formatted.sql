@@ -21,6 +21,8 @@ FROM t_mutation_rows_counter
 GROUP BY x
 HAVING count() > 1;
 
+SYSTEM FLUSH LOGS part_log;
+
 SELECT
     ProfileEvents['MutatedRows'],
     ProfileEvents['MutationAffectedRowsUpperBound']

@@ -44,6 +44,10 @@ FROM `system`.dictionaries
 WHERE database = 'test_01676'
     AND name = 'dict';
 
+DETACH DATABASE test_01676;
+
+ATTACH DATABASE test_01676;
+
 -- It can be not loaded, or not even finish attaching in case of asynchronous tables loading.
 SELECT COALESCE((
         SELECT status

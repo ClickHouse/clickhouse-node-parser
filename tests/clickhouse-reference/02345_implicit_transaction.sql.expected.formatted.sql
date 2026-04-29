@@ -46,8 +46,12 @@ TRUNCATE TABLE landing;
 
 TRUNCATE TABLE target;
 
+BEGIN TRANSACTION;
+
 INSERT INTO landing SELECT *
 FROM numbers(10000); -- { serverError FUNCTION_THROW_IF_VALUE_IS_NON_ZERO }
+
+ROLLBACK;
 
 SELECT
     'after_transaction_landing',
@@ -94,6 +98,8 @@ SELECT
     'out_transaction',
     count()
 FROM target;
+
+SYSTEM FLUSH LOGS query_log;
 
 SELECT
     'implicit_True',

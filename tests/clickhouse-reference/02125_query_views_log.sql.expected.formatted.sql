@@ -39,6 +39,8 @@ SETTINGS
     max_untracked_memory = 0,
     parallel_view_processing = 0;
 
+SYSTEM flush logs query_views_log, query_log;
+
 -- { echo }
 SELECT
     view_name,

@@ -105,6 +105,8 @@ WHERE t2_a < 2000
 SETTINGS log_comment = 'right_join_view'
 FORMAT Null;
 
+SYSTEM FLUSH LOGS system.query_log;
+
 SELECT
     if(ProfileEvents['SelectedMarks'] == 2, 'ok', format('error: {} @ {}', ProfileEvents['SelectedMarks'], query_id)),
     if(ProfileEvents['SelectedMarksTotal'] == 5, 'ok', format('error: {} @ {}', ProfileEvents['SelectedMarksTotal'], query_id)),

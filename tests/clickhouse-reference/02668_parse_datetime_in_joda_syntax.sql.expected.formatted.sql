@@ -502,4 +502,5 @@ SELECT parseDateTime64InJodaSyntax('2300-01-01 00:00:00', 'yyyy-MM-dd HH:mm:ss')
 -- Test parseDateTimeInJodaSyntax with 3 repetitions in format and 4 digits year
 SELECT parseDateTimeInJodaSyntax('2025', 'YYY', 'UTC') = toDateTime('2025-01-01', 'UTC');
 
-SELECT parseDateTimeInJodaSyntax('2025', 'xxx', 'UTC') = toDateTime('2024-12-30', 'UTC');
+SELECT parseDateTimeInJodaSyntax('2025', 'xxx', 'UTC') = toDateTime('2024-12-30', 'UTC'); -- -------------------------------------------------------------------------------------------------------------------------
+-- { echoOff }

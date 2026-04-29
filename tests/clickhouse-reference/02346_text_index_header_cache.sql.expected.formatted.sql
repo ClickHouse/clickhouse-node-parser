@@ -33,6 +33,8 @@ INSERT INTO tab SELECT
     concat('text_', leftPad(toString(number), 3, '0'))
 FROM numbers(512);
 
+SYSTEM STOP MERGES tab;
+
 DROP VIEW IF EXISTS text_index_cache_stats;
 
 CREATE VIEW text_index_cache_stats
@@ -51,6 +53,8 @@ SELECT count()
 FROM tab
 WHERE hasAnyTokens(message, 'text_000');
 
+SYSTEM FLUSH LOGS query_log;
+
 SELECT *
 FROM text_index_cache_stats(filter = 'text_000');
 
@@ -60,6 +64,8 @@ WHERE hasAnyTokens(message, 'text_511');
 
 SELECT *
 FROM text_index_cache_stats(filter = 'text_511');
+
+SYSTEM CLEAR TEXT INDEX HEADER CACHE;
 
 SELECT count()
 FROM tab

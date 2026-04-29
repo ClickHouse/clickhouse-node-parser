@@ -24,11 +24,17 @@ SETTINGS index_granularity = 4096, index_granularity_bytes = '10Mi';
 
 ALTER TABLE table_for_alter MODIFY SETTING index_granularity = 555; -- { serverError READONLY_SETTING }
 
+SHOW CREATE TABLE table_for_alter;
+
 ALTER TABLE table_for_alter MODIFY SETTING parts_to_throw_insert = 1, parts_to_delay_insert = 1;
 
 INSERT INTO table_for_alter;
 
 INSERT INTO table_for_alter; -- { serverError TOO_MANY_PARTS }
+
+DETACH TABLE table_for_alter;
+
+ATTACH TABLE table_for_alter;
 
 ALTER TABLE table_for_alter MODIFY SETTING xxx_yyy = 124; -- { serverError UNKNOWN_SETTING }
 
@@ -54,6 +60,8 @@ SETTINGS index_granularity = 4096, index_granularity_bytes = '10Mi';
 
 ALTER TABLE table_for_reset_setting MODIFY SETTING index_granularity = 555; -- { serverError READONLY_SETTING }
 
+SHOW CREATE TABLE table_for_reset_setting;
+
 INSERT INTO table_for_reset_setting;
 
 INSERT INTO table_for_reset_setting;
@@ -61,6 +69,10 @@ INSERT INTO table_for_reset_setting;
 ALTER TABLE table_for_reset_setting MODIFY SETTING parts_to_throw_insert = 1, parts_to_delay_insert = 1;
 
 ALTER TABLE table_for_reset_setting RESET SETTING parts_to_delay_insert, parts_to_throw_insert;
+
+DETACH TABLE table_for_reset_setting;
+
+ATTACH TABLE table_for_reset_setting;
 
 ALTER TABLE table_for_reset_setting RESET SETTING index_granularity; -- { serverError READONLY_SETTING }
 

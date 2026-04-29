@@ -15,6 +15,8 @@ INSERT INTO t_vertical_merges SELECT
 
 ALTER TABLE t_vertical_merges ADD COLUMN c String;
 
+OPTIMIZE TABLE t_vertical_merges FINAL;
+
 SELECT
     a,
     b,

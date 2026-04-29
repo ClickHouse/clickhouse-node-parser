@@ -7,6 +7,8 @@ ENGINE = Memory
 EMPTY AS
 SELECT 1;
 
+SHOW CREATE TABLE t;
+
 SELECT count()
 FROM t;
 
@@ -15,6 +17,8 @@ ENGINE = Memory
 EMPTY
 AS
 SELECT 1;
+
+SHOW CREATE TABLE mv;
 
 SELECT count()
 FROM mv;

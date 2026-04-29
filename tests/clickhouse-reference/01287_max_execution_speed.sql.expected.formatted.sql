@@ -39,4 +39,11 @@ SET max_execution_speed_bytes = 8000000;
 
 TRUNCATE TABLE times;
 
-SET max_execution_speed_bytes = 0;
+SET max_execution_speed_bytes = 0; -- Note that 'min_execution_speed' does not count sleeping due to throttling
+-- with 'max_execution_speed' and similar limits like 'priority' and 'max_network_bandwidth'
+-- Note: I have to disable this part of the test because it actually can work slower under sanitizers,
+-- with debug builds and in presence of random system hiccups in our CI environment.
+--SET max_execution_speed = 1000000, min_execution_speed = 2000000;
+-- And this query will work despite the fact that the above settings look contradictory.
+--SELECT count() FROM numbers(1000000);
+--SELECT 'Ok (5)';

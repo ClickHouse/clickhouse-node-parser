@@ -17,6 +17,8 @@ INSERT INTO summing_table (id, ip4Map.value, ip4Map.total, ip6Map.value, ip6Map.
 
 INSERT INTO summing_table (id, ip4Map.value, ip4Map.total, ip6Map.value, ip6Map.total, uuidMap.value, uuidMap.total);
 
+OPTIMIZE TABLE summing_table FINAL;
+
 SELECT *
 FROM summing_table
 ORDER BY

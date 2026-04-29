@@ -17,4 +17,7 @@ CREATE MATERIALIZED VIEW 03789_rmv_mv REFRESH EVERY 1 MONTH APPEND TO 03789_rmv_
     )
 SELECT *
 FROM result;
+SYSTEM REFRESH VIEW 03789_rmv_mv;
+SYSTEM WAIT VIEW 03789_rmv_mv;
+SYSTEM FLUSH LOGS query_log;
 SELECT uniqExact(query) FROM system.query_log WHERE has(databases, currentDatabase()) AND query LIKE '%INSERT%SELECT%' AND type = 'QueryFinish';

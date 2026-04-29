@@ -22,6 +22,8 @@ INSERT INTO test_03285_mat_ttl SELECT
     now()
 FROM numbers(50000);
 
+OPTIMIZE TABLE test_03285_mat_ttl FINAL SETTINGS mutations_sync = 1;
+
 SET mutations_sync = 1;
 
 SELECT

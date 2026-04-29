@@ -26,6 +26,7 @@ SELECT
     number,
     concat('text_', leftPad(toString(number), 3, '0'))
 FROM numbers(512);
+SYSTEM STOP MERGES tab;
 DROP VIEW IF EXISTS text_index_cache_stats;
 CREATE VIEW text_index_cache_stats AS (
   SELECT
@@ -39,9 +40,11 @@ CREATE VIEW text_index_cache_stats AS (
 );
 SELECT '--- cache miss on the first run.';
 SELECT count() FROM tab WHERE hasAnyTokens(message, 'text_000');
+SYSTEM FLUSH LOGS query_log;
 SELECT * FROM text_index_cache_stats(filter = 'text_000');
 SELECT count() FROM tab WHERE hasAnyTokens(message, 'text_511');
 SELECT * FROM text_index_cache_stats(filter = 'text_511');
+SYSTEM CLEAR TEXT INDEX HEADER CACHE;
 SELECT count() FROM tab WHERE hasAnyTokens(message, 'text_001');
 SELECT * FROM text_index_cache_stats(filter = 'text_001');
 SELECT count() FROM tab WHERE hasAnyTokens(message, 'text_510');

@@ -25,6 +25,10 @@ INSERT INTO replicated_constraints1;
 
 INSERT INTO replicated_constraints2;
 
+SYSTEM SYNC REPLICA replicated_constraints1;
+
+SYSTEM SYNC REPLICA replicated_constraints2;
+
 INSERT INTO replicated_constraints1; -- { serverError VIOLATED_CONSTRAINT }
 
 ALTER TABLE replicated_constraints1 DROP CONSTRAINT a_constraint SETTINGS alter_sync = 2;

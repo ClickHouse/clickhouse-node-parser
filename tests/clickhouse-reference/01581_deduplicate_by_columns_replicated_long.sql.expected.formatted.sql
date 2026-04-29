@@ -33,6 +33,11 @@ INSERT INTO replicated_deduplicate_by_columns_r1;
 
 INSERT INTO replicated_deduplicate_by_columns_r2;
 
+-- make sure that all data is present on all replicas
+SYSTEM SYNC REPLICA replicated_deduplicate_by_columns_r2;
+
+SYSTEM SYNC REPLICA replicated_deduplicate_by_columns_r1;
+
 SELECT
     'r1',
     id,
@@ -60,6 +65,16 @@ GROUP BY
 ORDER BY
     id ASC,
     val ASC;
+
+-- NOTE: here and below we need FINAL to force deduplication in such a small set of data in only 1 part.
+-- that should remove full duplicates
+OPTIMIZE TABLE replicated_deduplicate_by_columns_r1 FINAL DEDUPLICATE;
+
+OPTIMIZE TABLE replicated_deduplicate_by_columns_r1 FINAL DEDUPLICATE BY id, val;
+
+OPTIMIZE TABLE replicated_deduplicate_by_columns_r1 FINAL DEDUPLICATE BY COLUMNS('[id, val]');
+
+OPTIMIZE TABLE replicated_deduplicate_by_columns_r1 FINAL DEDUPLICATE BY COLUMNS('[i]') EXCEPT (unique_value);
 
 -- cleanup the mess
 DROP TABLE replicated_deduplicate_by_columns_r1;

@@ -37,6 +37,11 @@ ENGINE = Buffer(currentDatabase(), null_table, 1, 1, 1, 100, 200, 10000, 20000);
 
 INSERT INTO null_table_buffer;
 
+-- OPTIMIZE query should flush Buffer table, but still it is not guaranteed
+-- (see the comment StorageBuffer::optimize)
+-- But the combination of OPTIMIZE + sleep + OPTIMIZE should be enough.
+OPTIMIZE TABLE null_table_buffer;
+
 SELECT sleep(1)
 FORMAT Null;
 

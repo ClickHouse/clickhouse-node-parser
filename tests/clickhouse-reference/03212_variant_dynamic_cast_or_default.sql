@@ -59,6 +59,7 @@ INSERT INTO t (d) VALUES (interval '1' day), (interval '2' month), (interval '3'
 -- Nested
 INSERT INTO t (d) VALUES ([(1, 'aa'), (2, 'bb')]::Nested(x UInt32, y String));
 INSERT INTO t (d) VALUES ([(1, (2, ['aa', 'bb']), [(3, 'cc'), (4, 'dd')]), (5, (6, ['ee', 'ff']), [(7, 'gg'), (8, 'hh')])]::Nested(x UInt32, y Tuple(y1 UInt32, y2 Array(String)), z Nested(z1 UInt32, z2 String)));
+optimize table t final;
 WITH
   (SELECT count()
      FROM t

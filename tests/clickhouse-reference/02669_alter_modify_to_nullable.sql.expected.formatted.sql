@@ -44,6 +44,8 @@ SET mutations_sync = 2;
 
 ALTER TABLE t_modify_to_nullable MODIFY COLUMN s Nullable(String);
 
+SYSTEM FLUSH LOGS part_log;
+
 SELECT
     part_name,
     read_rows

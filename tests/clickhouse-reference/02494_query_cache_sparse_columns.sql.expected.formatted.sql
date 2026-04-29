@@ -1,6 +1,8 @@
 -- Tags: no-parallel
 DROP TABLE IF EXISTS t_cache_sparse;
 
+SYSTEM CLEAR QUERY CACHE;
+
 CREATE TABLE t_cache_sparse
 (
     id UInt64,
@@ -9,6 +11,8 @@ CREATE TABLE t_cache_sparse
 ENGINE = MergeTree
 ORDER BY id
 SETTINGS ratio_of_defaults_for_sparse_serialization = 0.9;
+
+SYSTEM STOP MERGES t_cache_sparse;
 
 INSERT INTO t_cache_sparse SELECT
     number,

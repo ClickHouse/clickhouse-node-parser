@@ -12,6 +12,8 @@ ENGINE = MergeTree
 ORDER BY id
 SETTINGS min_bytes_for_wide_part = 0;
 
+SYSTEM STOP MERGES t_json;
+
 INSERT INTO t_json SELECT
     number,
     '{"k1": 1, "k2": 2}'

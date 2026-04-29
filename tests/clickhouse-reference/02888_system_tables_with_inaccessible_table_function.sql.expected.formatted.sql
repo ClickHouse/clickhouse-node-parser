@@ -50,6 +50,30 @@ WHERE like(name, '%tablefunc%')
     AND database = currentDatabase()
 ORDER BY name ASC;
 
+DETACH TABLE {CLICKHOUSE_DATABASE:Identifier}.tablefunc01;
+
+DETACH TABLE {CLICKHOUSE_DATABASE:Identifier}.tablefunc02;
+
+DETACH TABLE {CLICKHOUSE_DATABASE:Identifier}.tablefunc03;
+
+DETACH TABLE {CLICKHOUSE_DATABASE:Identifier}.tablefunc04;
+
+DETACH TABLE {CLICKHOUSE_DATABASE:Identifier}.tablefunc05;
+
+DETACH TABLE {CLICKHOUSE_DATABASE:Identifier}.tablefunc06;
+
+ATTACH TABLE {CLICKHOUSE_DATABASE:Identifier}.tablefunc01;
+
+ATTACH TABLE {CLICKHOUSE_DATABASE:Identifier}.tablefunc02;
+
+ATTACH TABLE {CLICKHOUSE_DATABASE:Identifier}.tablefunc03;
+
+ATTACH TABLE {CLICKHOUSE_DATABASE:Identifier}.tablefunc04;
+
+ATTACH TABLE {CLICKHOUSE_DATABASE:Identifier}.tablefunc05;
+
+ATTACH TABLE {CLICKHOUSE_DATABASE:Identifier}.tablefunc06;
+
 SELECT count()
 FROM {CLICKHOUSE_DATABASE:Identifier}.tablefunc01; -- { serverError POSTGRESQL_CONNECTION_FAILURE }
 

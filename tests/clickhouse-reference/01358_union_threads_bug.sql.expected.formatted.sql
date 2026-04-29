@@ -22,6 +22,8 @@ FROM (
         LIMIT 100
     );
 
+SYSTEM flush logs query_log;
+
 SELECT length(thread_ids) >= 1
 FROM `system`.query_log
 WHERE current_database = currentDatabase()

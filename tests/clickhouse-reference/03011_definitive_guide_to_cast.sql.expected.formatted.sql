@@ -316,4 +316,4 @@ SELECT
 SELECT parseDateTimeBestEffort('25 Apr 1986 1pm');
 
 -- 10. Functions for converting between different components or rounding of date and time data types.
-SELECT toDayOfMonth(toDateTime(1234567890));
+SELECT toDayOfMonth(toDateTime(1234567890)); -- These functions are covered in a separate topic.

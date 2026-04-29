@@ -16,6 +16,7 @@ CREATE TABLE tab
 ENGINE = ReplacingMergeTree
 ORDER BY (id1, id2)
 SETTINGS index_granularity = 4;
+SYSTEM STOP MERGES tab;
 INSERT INTO tab SELECT number/100, number, number FROM numbers(1000);
 INSERT INTO tab SELECT number/50, number, number * 5 FROM numbers(1000);
 SELECT trimLeft(explain) AS explain FROM (

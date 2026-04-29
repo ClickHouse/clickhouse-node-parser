@@ -17,6 +17,8 @@ SET log_queries = 1;
 
 SELECT 1;
 
+SYSTEM FLUSH LOGS query_log;
+
 -- NOTE: can be rewritten using log_queries_min_query_duration_ms
 CREATE MATERIALIZED VIEW slow_log
 ENGINE = Memory

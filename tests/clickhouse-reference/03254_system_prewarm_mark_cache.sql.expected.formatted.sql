@@ -11,6 +11,8 @@ ENGINE = ReplicatedMergeTree('/clickhouse/tables/{database}/03254_prewarm_mark_c
 ORDER BY a
 SETTINGS prewarm_mark_cache = 0;
 
+SYSTEM CLEAR MARK CACHE;
+
 INSERT INTO t_prewarm_cache SELECT
     number,
     rand(),
@@ -20,6 +22,10 @@ FROM numbers(20000);
 SELECT count()
 FROM t_prewarm_cache
 WHERE NOT ignore(*);
+
+SYSTEM PREWARM MARK CACHE t_prewarm_cache;
+
+SYSTEM FLUSH LOGS query_log;
 
 SELECT ProfileEvents['LoadedMarksCount'] > 0
 FROM `system`.query_log

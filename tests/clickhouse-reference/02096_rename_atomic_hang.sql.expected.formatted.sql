@@ -36,7 +36,13 @@ FROM numbers(1000);
 CREATE DATABASE db_hang_temp
 ENGINE = Atomic;
 
+RENAME TABLE db_hang.test TO db_hang_temp.test;
+
+RENAME TABLE db_hang.test_mv TO db_hang_temp.test_mv;
+
 DROP DATABASE db_hang;
+
+RENAME DATABASE db_hang_temp TO db_hang;
 
 SELECT count()
 FROM db_hang.test;

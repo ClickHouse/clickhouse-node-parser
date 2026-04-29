@@ -8,6 +8,8 @@ ENGINE = MergeTree()
 ORDER BY tuple()
 SETTINGS old_parts_lifetime = 0;
 
+SYSTEM STOP MERGES mt_01451;
+
 INSERT INTO mt_01451;
 
 INSERT INTO mt_01451;
@@ -40,5 +42,9 @@ FROM `system`.parts
 WHERE table = 'mt_01451'
     AND active
     AND database = currentDatabase();
+
+SYSTEM START MERGES mt_01451;
+
+OPTIMIZE TABLE mt_01451 FINAL;
 
 DROP TABLE mt_01451;

@@ -4395,6 +4395,52 @@
     }
   },
   {
+    "kind": "delete",
+    "table": {
+      "kind": "tableRef",
+      "table": "03720_deletes"
+    },
+    "where": {
+      "kind": "naryExpr",
+      "op": "AND",
+      "operands": [
+        {
+          "kind": "binaryExpr",
+          "op": "=",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "k1"
+            ]
+          },
+          "right": {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "1"
+          }
+        },
+        {
+          "kind": "binaryExpr",
+          "op": "=",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "k2"
+            ]
+          },
+          "right": {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "1"
+          }
+        }
+      ]
+    },
+    "leadingComments": [
+      "-- Delete single row with full key"
+    ]
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -4461,6 +4507,54 @@
     ]
   },
   {
+    "kind": "delete",
+    "table": {
+      "kind": "tableRef",
+      "table": "03720_deletes"
+    },
+    "where": {
+      "kind": "binaryExpr",
+      "op": "=",
+      "left": {
+        "kind": "tupleLiteral",
+        "elements": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "k1"
+            ]
+          },
+          {
+            "kind": "columnRef",
+            "parts": [
+              "k2"
+            ]
+          }
+        ],
+        "source": "(k1, k2)"
+      },
+      "right": {
+        "kind": "tupleLiteral",
+        "elements": [
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "2"
+          },
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "2"
+          }
+        ],
+        "source": "(2, 2)"
+      }
+    },
+    "leadingComments": [
+      "-- Delete using tuple equality"
+    ]
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -4503,6 +4597,72 @@
     ],
     "trailingComments": [
       "-- Should be 'c'"
+    ]
+  },
+  {
+    "kind": "delete",
+    "table": {
+      "kind": "tableRef",
+      "table": "03720_deletes"
+    },
+    "where": {
+      "kind": "inExpr",
+      "negated": false,
+      "expr": {
+        "kind": "tupleLiteral",
+        "elements": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "k1"
+            ]
+          },
+          {
+            "kind": "columnRef",
+            "parts": [
+              "k2"
+            ]
+          }
+        ],
+        "source": "(k1, k2)"
+      },
+      "values": [
+        {
+          "kind": "tupleLiteral",
+          "elements": [
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "1"
+            },
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "2"
+            }
+          ],
+          "source": "(1, 2)"
+        },
+        {
+          "kind": "tupleLiteral",
+          "elements": [
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "3"
+            },
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "3"
+            }
+          ],
+          "source": "(3, 3)"
+        }
+      ]
+    },
+    "leadingComments": [
+      "-- Delete using tuple IN"
     ]
   },
   {
@@ -4626,6 +4786,62 @@
     }
   },
   {
+    "kind": "delete",
+    "table": {
+      "kind": "tableRef",
+      "table": "03720_deletes_three_col"
+    },
+    "where": {
+      "kind": "binaryExpr",
+      "op": "=",
+      "left": {
+        "kind": "tupleLiteral",
+        "elements": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "k1"
+            ]
+          },
+          {
+            "kind": "columnRef",
+            "parts": [
+              "k2"
+            ]
+          },
+          {
+            "kind": "columnRef",
+            "parts": [
+              "k3"
+            ]
+          }
+        ],
+        "source": "(k1, k2, k3)"
+      },
+      "right": {
+        "kind": "tupleLiteral",
+        "elements": [
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "1"
+          },
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "1"
+          },
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "1"
+          }
+        ],
+        "source": "(1, 1, 1)"
+      }
+    }
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -4645,6 +4861,85 @@
     "trailingComments": [
       "-- Should be 3"
     ]
+  },
+  {
+    "kind": "delete",
+    "table": {
+      "kind": "tableRef",
+      "table": "03720_deletes_three_col"
+    },
+    "where": {
+      "kind": "inExpr",
+      "negated": false,
+      "expr": {
+        "kind": "tupleLiteral",
+        "elements": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "k1"
+            ]
+          },
+          {
+            "kind": "columnRef",
+            "parts": [
+              "k2"
+            ]
+          },
+          {
+            "kind": "columnRef",
+            "parts": [
+              "k3"
+            ]
+          }
+        ],
+        "source": "(k1, k2, k3)"
+      },
+      "values": [
+        {
+          "kind": "tupleLiteral",
+          "elements": [
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "1"
+            },
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "1"
+            },
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "2"
+            }
+          ],
+          "source": "(1, 1, 2)"
+        },
+        {
+          "kind": "tupleLiteral",
+          "elements": [
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "2"
+            },
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "1"
+            },
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "1"
+            }
+          ],
+          "source": "(2, 1, 1)"
+        }
+      ]
+    }
   },
   {
     "kind": "select",
@@ -4751,6 +5046,49 @@
         "kind": "tableRef",
         "table": "03720_deletes_string"
       }
+    }
+  },
+  {
+    "kind": "delete",
+    "table": {
+      "kind": "tableRef",
+      "table": "03720_deletes_string"
+    },
+    "where": {
+      "kind": "naryExpr",
+      "op": "AND",
+      "operands": [
+        {
+          "kind": "binaryExpr",
+          "op": "=",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "k1"
+            ]
+          },
+          "right": {
+            "kind": "literal",
+            "type": "String",
+            "value": "foo"
+          }
+        },
+        {
+          "kind": "binaryExpr",
+          "op": "=",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "k2"
+            ]
+          },
+          "right": {
+            "kind": "literal",
+            "type": "String",
+            "value": "bar"
+          }
+        }
+      ]
     }
   },
   {

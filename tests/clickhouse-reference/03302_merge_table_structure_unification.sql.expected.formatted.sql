@@ -36,6 +36,8 @@ ORDER BY a ASC;
 
 SELECT '--- table function';
 
+DESCRIBE TABLE merge('^test_');
+
 -- Note that this will also pick up the test_merge table, duplicating the results
 SELECT *
 FROM merge('^test_')

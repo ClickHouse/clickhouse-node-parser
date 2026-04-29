@@ -17,6 +17,8 @@ SET enable_lightweight_update = 1;
 
 SET lightweight_delete_mode = 'lightweight_update_force';
 
+SYSTEM STOP MERGES t_lwu_deletes_3;
+
 INSERT INTO t_lwu_deletes_3 SELECT
     number % 10000,
     toDate('2024-10-10'),
@@ -37,6 +39,24 @@ INSERT INTO t_lwu_deletes_3 SELECT
     0,
     ''
 FROM numbers(100000);
+
+UPDATE t_lwu_deletes_3 SET v1 = 42 WHERE id = 100;
+
+UPDATE t_lwu_deletes_3 SET v1 = 42 WHERE id = 4000;
+
+UPDATE t_lwu_deletes_3 SET v2 = 'foo' WHERE id >= 9500;
+
+DELETE FROM t_lwu_deletes_3 WHERE id = 200;
+
+DELETE FROM t_lwu_deletes_3 WHERE dt = toDate('2024-11-11')
+AND id >= 4000
+AND id < 5000;
+
+DELETE FROM t_lwu_deletes_3 WHERE dt = toDate('2024-11-11')
+AND id >= 3500
+AND id < 4500;
+
+DELETE FROM t_lwu_deletes_3 WHERE notEmpty(v2);
 
 SELECT
     300000 - 10 * 3 - 1500 * 10 - 500 * 10 * 3,
@@ -59,6 +79,12 @@ WHERE database = currentDatabase()
     AND column = '_row_exists'
     AND active
     AND startsWith(name, 'patch');
+
+SYSTEM START MERGES t_lwu_deletes_3;
+
+OPTIMIZE TABLE t_lwu_deletes_3 PARTITION ID 'patch-f18f7271629a324b0d26b6ad0b83a6c2-all' FINAL SETTINGS optimize_throw_if_noop = 1;
+
+OPTIMIZE TABLE t_lwu_deletes_3 PARTITION ID 'all' FINAL SETTINGS optimize_throw_if_noop = 1;
 
 SELECT
     count(),

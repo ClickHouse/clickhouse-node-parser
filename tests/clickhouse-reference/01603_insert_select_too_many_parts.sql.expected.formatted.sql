@@ -8,6 +8,8 @@ ENGINE = MergeTree
 ORDER BY tuple()
 SETTINGS parts_to_delay_insert = 5, parts_to_throw_insert = 5;
 
+SYSTEM STOP MERGES too_many_parts;
+
 SET max_block_size = 1, min_insert_block_size_rows = 0, min_insert_block_size_bytes = 0;
 
 -- Avoid concurrent parts check to avoid flakiness

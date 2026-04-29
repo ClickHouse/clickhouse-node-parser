@@ -1,3 +1,7 @@
+-- Tags: no-parallel
+-- Tag no-parallel: Messes with internal cache
+SYSTEM CLEAR QUERY CACHE;
+
 DROP TABLE IF EXISTS t;
 
 -- Create test table with "many" rows
@@ -7,6 +11,8 @@ CREATE TABLE t
 )
 ENGINE = MergeTree
 ORDER BY c;
+
+SYSTEM STOP MERGES t; -- retain multiple parts to make the SELECT process multiple chunks
 
 INSERT INTO t;
 

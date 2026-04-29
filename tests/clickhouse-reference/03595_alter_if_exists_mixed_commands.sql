@@ -8,6 +8,7 @@ DROP TABLE IF EXISTS test_alter_mixed;
 CREATE TABLE test_alter_mixed (x Int32, y String) ENGINE = Memory;
 -- This should succeed - DROP removes x, COMMENT with IF EXISTS should be silently ignored
 ALTER TABLE test_alter_mixed DROP COLUMN x, COMMENT COLUMN IF EXISTS x 'test comment';
+DESC test_alter_mixed;
 DROP TABLE test_alter_mixed;
 -- Test 2: Multiple operations with mixed types in sequence
 CREATE TABLE test_alter_mixed (a Int32, b String, c Float64) ENGINE = Memory;

@@ -31,6 +31,8 @@ SELECT dictGetUInt64('dict_db_02179.dict', 'val', toUInt64(0));
 
 SET distributed_ddl_output_mode = 'throw';
 
+SYSTEM RELOAD DICTIONARIES ON CLUSTER test_shard_localhost;
+
 SET distributed_ddl_output_mode = 'none';
 
 SELECT dictGetUInt64('dict_db_02179.dict', 'val', toUInt64(1));

@@ -24,6 +24,8 @@ ORDER BY tuple()
 PARTITION BY a % 4
 SETTINGS index_granularity = 8192, index_granularity_bytes = 10485760;
 
+SYSTEM stop merges t1;
+
 INSERT INTO t1 SELECT number
 FROM numbers_mt(1e6);
 
@@ -46,6 +48,8 @@ ORDER BY tuple()
 PARTITION BY a % 8
 SETTINGS index_granularity = 8192, index_granularity_bytes = '10Mi';
 
+SYSTEM stop merges t2;
+
 INSERT INTO t2 SELECT number
 FROM numbers_mt(1e6);
 
@@ -67,6 +71,8 @@ ENGINE = MergeTree
 ORDER BY tuple()
 PARTITION BY a % 16
 SETTINGS index_granularity = 8192, index_granularity_bytes = '10Mi';
+
+SYSTEM stop merges t3;
 
 INSERT INTO t3 SELECT number
 FROM numbers_mt(1e6);
@@ -109,6 +115,8 @@ ORDER BY a
 PARTITION BY a % 4
 SETTINGS index_granularity = 8192, index_granularity_bytes = '10Mi';
 
+SYSTEM stop merges t4;
+
 INSERT INTO t4 SELECT number
 FROM numbers_mt(1e6);
 
@@ -131,6 +139,8 @@ ORDER BY a
 PARTITION BY a % 8
 SETTINGS index_granularity = 8192, index_granularity_bytes = '10Mi';
 
+SYSTEM stop merges t5;
+
 INSERT INTO t5 SELECT number
 FROM numbers_mt(1e6);
 
@@ -152,6 +162,8 @@ ENGINE = MergeTree
 ORDER BY a
 PARTITION BY a % 16
 SETTINGS index_granularity = 8192, index_granularity_bytes = '10Mi';
+
+SYSTEM stop merges t6;
 
 INSERT INTO t6 SELECT number
 FROM numbers_mt(1e6);

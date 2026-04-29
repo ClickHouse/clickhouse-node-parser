@@ -52,6 +52,8 @@ FROM (
     )
 GROUP BY a;
 
+OPTIMIZE TABLE simple_agf_any_summing_mt FINAL;
+
 SELECT
     a,
     any_respect_nulls(any_simple),

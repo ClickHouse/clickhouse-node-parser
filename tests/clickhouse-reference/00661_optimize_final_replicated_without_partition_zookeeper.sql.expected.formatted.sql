@@ -40,6 +40,10 @@ INSERT INTO partitioned_by_tuple_replica1_00661;
 
 INSERT INTO partitioned_by_tuple_replica1_00661;
 
+OPTIMIZE TABLE partitioned_by_tuple_replica1_00661;
+
+SYSTEM SYNC REPLICA partitioned_by_tuple_replica2_00661;
+
 SELECT *
 FROM partitioned_by_tuple_replica2_00661
 ORDER BY
@@ -47,6 +51,8 @@ ORDER BY
     x ASC,
     w ASC,
     y ASC;
+
+OPTIMIZE TABLE partitioned_by_tuple_replica1_00661 FINAL;
 
 DROP TABLE partitioned_by_tuple_replica1_00661;
 

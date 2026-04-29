@@ -32,6 +32,9 @@ ALTER TABLE test UPDATE x = x + 1 WHERE 1;
 
 ALTER TABLE test DROP COLUMN x SETTINGS mutations_sync = 2; --{serverError BAD_ARGUMENTS}
 
+KILL MUTATION WHERE database = currentDatabase()
+AND like(command, '%throwIf%') SYNC FORMAT Null;
+
 ALTER TABLE test UPDATE x = x + 1 WHERE 1 SETTINGS mutations_sync = 2;
 
 SELECT *

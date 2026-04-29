@@ -108,6 +108,7 @@ WHERE date = '2025-01-03' AND id <= 9
 ORDER BY L2Distance(vec, [1.0, 1.0])
 LIMIT 2
 SETTINGS log_comment = '02354_vector_search_post_filter_strategy_query1', vector_search_with_rescoring = 1;
+SYSTEM FLUSH LOGS query_log;
 SELECT DISTINCT ProfileEvents['USearchSearchCount']
 FROM system.query_log
 WHERE log_comment = '02354_vector_search_post_filter_strategy_query1'

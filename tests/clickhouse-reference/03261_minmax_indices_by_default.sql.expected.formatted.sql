@@ -156,6 +156,11 @@ FROM `system`.data_skipping_indices
 WHERE table = 'tbl6'
     AND database = currentDatabase();
 
+-- check that ATTACH of such tables will not throw "uses a reserved index name" error
+DETACH TABLE tbl1;
+
+ATTACH TABLE tbl1;
+
 DROP TABLE tbl1;
 
 DROP TABLE tbl2;

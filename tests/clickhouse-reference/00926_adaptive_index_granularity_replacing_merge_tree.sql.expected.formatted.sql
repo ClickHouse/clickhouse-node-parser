@@ -27,6 +27,8 @@ WHERE table = 'zero_rows_per_granule'
 
 INSERT INTO zero_rows_per_granule (p, k, v1, v2);
 
+OPTIMIZE TABLE zero_rows_per_granule FINAL;
+
 SELECT COUNT(*)
 FROM zero_rows_per_granule FINAL;
 
@@ -65,6 +67,8 @@ WHERE table = 'two_rows_per_granule'
 
 INSERT INTO two_rows_per_granule (p, k, v1, v2);
 
+OPTIMIZE TABLE two_rows_per_granule FINAL;
+
 DROP TABLE IF EXISTS four_rows_per_granule;
 
 CREATE TABLE four_rows_per_granule
@@ -90,10 +94,16 @@ WHERE table = 'four_rows_per_granule'
     AND database = currentDatabase()
     AND active = 1;
 
+DETACH TABLE four_rows_per_granule;
+
+ATTACH TABLE four_rows_per_granule;
+
 INSERT INTO four_rows_per_granule (p, k, v1, v2);
 
 SELECT sleep(0.5)
 FORMAT Null;
+
+OPTIMIZE TABLE four_rows_per_granule FINAL;
 
 SELECT COUNT(*)
 FROM four_rows_per_granule FINAL;
@@ -125,6 +135,12 @@ WHERE table = 'huge_granularity_small_blocks'
 
 INSERT INTO huge_granularity_small_blocks (p, k, v1, v2);
 
+DETACH TABLE huge_granularity_small_blocks;
+
+ATTACH TABLE huge_granularity_small_blocks;
+
+OPTIMIZE TABLE huge_granularity_small_blocks FINAL;
+
 SELECT COUNT(*)
 FROM huge_granularity_small_blocks FINAL;
 
@@ -155,7 +171,13 @@ WHERE table = 'adaptive_granularity_alter'
 
 ALTER TABLE adaptive_granularity_alter MODIFY COLUMN v1 Int16;
 
+DETACH TABLE adaptive_granularity_alter;
+
+ATTACH TABLE adaptive_granularity_alter;
+
 INSERT INTO adaptive_granularity_alter (p, k, v1, v2);
+
+OPTIMIZE TABLE adaptive_granularity_alter FINAL;
 
 ALTER TABLE adaptive_granularity_alter MODIFY COLUMN v2 String;
 

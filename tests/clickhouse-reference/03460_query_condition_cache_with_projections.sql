@@ -15,6 +15,7 @@ settings index_granularity = 1, add_minmax_index_for_numeric_columns=0, max_byte
 -- cache no longer has key collisions for projection parts
 insert into t select 20, number from numbers(10);
 insert into t select 1, number + 1 from numbers(10);
+system clear query condition cache;
 select j from t where j > 3 and i = 20 order by j settings max_threads = 1, use_query_condition_cache = 1, query_condition_cache_store_conditions_as_plaintext = 1;
 select part_name from system.query_condition_cache order by part_name;
 drop table t;

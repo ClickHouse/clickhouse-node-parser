@@ -28,6 +28,8 @@ PARTITION BY toYYYYMM(d);
 
 INSERT INTO replicated_truncate1;
 
+SYSTEM SYNC REPLICA replicated_truncate2;
+
 SELECT *
 FROM replicated_truncate1
 ORDER BY k ASC;

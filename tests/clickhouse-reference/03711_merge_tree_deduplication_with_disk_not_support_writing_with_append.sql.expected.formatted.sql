@@ -19,6 +19,8 @@ ORDER BY key
 PARTITION BY part
 SETTINGS non_replicated_deduplication_window = 3, disk = 's3_plain_rewritable';
 
+SYSTEM STOP MERGES merge_tree_deduplication;
+
 INSERT INTO merge_tree_deduplication (key, value);
 
 SELECT
@@ -69,6 +71,12 @@ SELECT
     value
 FROM merge_tree_deduplication
 WHERE key = 12;
+
+DETACH TABLE merge_tree_deduplication;
+
+ATTACH TABLE merge_tree_deduplication;
+
+OPTIMIZE TABLE merge_tree_deduplication FINAL;
 
 INSERT INTO merge_tree_deduplication (key, value, part);
 
@@ -136,5 +144,9 @@ ALTER TABLE merge_tree_no_deduplication MODIFY SETTING non_replicated_deduplicat
 INSERT INTO merge_tree_no_deduplication (key, value);
 
 INSERT INTO merge_tree_no_deduplication (key, value);
+
+DETACH TABLE merge_tree_no_deduplication;
+
+ATTACH TABLE merge_tree_no_deduplication;
 
 INSERT INTO merge_tree_no_deduplication (key, value);

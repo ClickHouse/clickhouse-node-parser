@@ -20,6 +20,10 @@ ENGINE = MergeTree
 ORDER BY id
 PARTITION BY id;
 
+SYSTEM STOP MERGES t_src;
+
+SYSTEM STOP MERGES t_dst;
+
 INSERT INTO t_dst;
 
 INSERT INTO t_dst;

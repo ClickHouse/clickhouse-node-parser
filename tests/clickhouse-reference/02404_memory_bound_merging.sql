@@ -8,6 +8,7 @@ drop table if exists dist_t;
 drop table if exists t;
 set optimize_trivial_insert_select = 1;
 create table t(a UInt64, b UInt64) engine=MergeTree order by a;
+system stop merges t;
 insert into t select number, number from numbers_mt(1e6);
 set enable_memory_bound_merging_of_aggregation_results = 1;
 set max_threads = 4;

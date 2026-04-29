@@ -8,6 +8,8 @@ CREATE TABLE test_table_1
 ENGINE = MergeTree
 ORDER BY number;
 
+SYSTEM STOP MERGES test_table_1;
+
 DROP TABLE IF EXISTS dist_test_table_1;
 
 CREATE TABLE dist_test_table_1
@@ -28,6 +30,8 @@ CREATE TABLE test_table_2
 )
 ENGINE = MergeTree
 ORDER BY number;
+
+SYSTEM STOP MERGES test_table_2;
 
 DROP TABLE IF EXISTS dist_test_table_2;
 

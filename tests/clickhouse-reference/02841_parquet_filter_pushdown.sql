@@ -44,6 +44,7 @@ insert into function file('02841.parquet')
     n::Decimal256(40)/123456789012345/678901234567890 as d256
 
     from numbers(10000);
+desc file('02841.parquet');
 select count(), sum(number) from file('02841.parquet') where indexHint(u8 in (10, 15, 250));
 select count(), sum(number) from file('02841.parquet') where indexHint(i8 between -3 and 2);
 select count(), sum(number) from file('02841.parquet') where indexHint(u16 between 4000 and 61000 or u16 == 42);

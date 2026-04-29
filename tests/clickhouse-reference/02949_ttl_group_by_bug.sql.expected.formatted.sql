@@ -20,6 +20,8 @@ INSERT INTO ttl_group_by_bug (key, ts, value) SELECT
     0
 FROM numbers(1000);
 
+OPTIMIZE TABLE ttl_group_by_bug FINAL;
+
 SELECT *
 FROM (
         SELECT

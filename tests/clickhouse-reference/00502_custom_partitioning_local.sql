@@ -3,6 +3,7 @@ CREATE TABLE not_partitioned(x UInt8) ENGINE MergeTree ORDER BY x;
 INSERT INTO not_partitioned VALUES (1), (2), (3);
 INSERT INTO not_partitioned VALUES (4), (5);
 SELECT partition, name FROM system.parts WHERE database = currentDatabase() AND table = 'not_partitioned' AND active ORDER BY name;
+OPTIMIZE TABLE not_partitioned PARTITION tuple() FINAL;
 SELECT sum(x) FROM not_partitioned;
 ALTER TABLE not_partitioned DETACH PARTITION ID 'all';
 SELECT system.detached_parts.* EXCEPT (bytes_on_disk, `path`, disk, modification_time) FROM system.detached_parts WHERE database = currentDatabase() AND table = 'not_partitioned';
@@ -13,6 +14,7 @@ CREATE TABLE partitioned_by_week(d Date, x UInt8) ENGINE = MergeTree PARTITION B
 INSERT INTO partitioned_by_week VALUES ('2000-01-01', 1), ('2000-01-02', 2), ('2000-01-03', 3);
 INSERT INTO partitioned_by_week VALUES ('2000-01-03', 4), ('2000-01-03', 5);
 SELECT partition, name FROM system.parts WHERE database = currentDatabase() AND table = 'partitioned_by_week' AND active ORDER BY name;
+OPTIMIZE TABLE partitioned_by_week PARTITION '2000-01-03' FINAL;
 SELECT sum(x) FROM partitioned_by_week;
 ALTER TABLE partitioned_by_week DROP PARTITION '1999-12-27';
 DROP TABLE partitioned_by_week;
@@ -21,6 +23,8 @@ CREATE TABLE partitioned_by_tuple(d Date, x UInt8, y UInt8) ENGINE MergeTree ORD
 INSERT INTO partitioned_by_tuple VALUES ('2000-01-01', 1, 1), ('2000-01-01', 2, 2), ('2000-01-02', 1, 3);
 INSERT INTO partitioned_by_tuple VALUES ('2000-01-02', 1, 4), ('2000-01-01', 1, 5);
 SELECT partition, name FROM system.parts WHERE database = currentDatabase() AND table = 'partitioned_by_tuple' AND active ORDER BY name;
+OPTIMIZE TABLE partitioned_by_tuple PARTITION ('2000-01-01', 1) FINAL;
+OPTIMIZE TABLE partitioned_by_tuple PARTITION ('2000-01-02', 1) FINAL;
 SELECT sum(y) FROM partitioned_by_tuple;
 ALTER TABLE partitioned_by_tuple DETACH PARTITION ID '20000101-1';
 DROP TABLE partitioned_by_tuple;
@@ -29,6 +33,7 @@ CREATE TABLE partitioned_by_string(s String, x UInt8) ENGINE = MergeTree PARTITI
 INSERT INTO partitioned_by_string VALUES ('aaa', 1), ('aaa', 2), ('bbb', 3);
 INSERT INTO partitioned_by_string VALUES ('bbb', 4), ('aaa', 5);
 SELECT partition, name FROM system.parts WHERE database = currentDatabase() AND table = 'partitioned_by_string' AND active ORDER BY name;
+OPTIMIZE TABLE partitioned_by_string PARTITION 'aaa' FINAL;
 SELECT sum(x) FROM partitioned_by_string;
 ALTER TABLE partitioned_by_string DROP PARTITION 'bbb';
 DROP TABLE partitioned_by_string;

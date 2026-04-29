@@ -26,6 +26,10 @@ FROM t_ind_merge_1
 WHERE b < 100
 SETTINGS force_data_skipping_indices = 'idx_b';
 
+OPTIMIZE TABLE t_ind_merge_1 FINAL;
+
+SYSTEM FLUSH LOGS text_log;
+
 SET max_rows_to_read = 0; -- system.text_log can be really big
 
 WITH (

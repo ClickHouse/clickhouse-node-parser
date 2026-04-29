@@ -19,6 +19,8 @@ SET log_queries = 0;
 
 SET query_profiler_cpu_time_period_ns = 0;
 
+SYSTEM FLUSH LOGS query_log, trace_log;
+
 SET max_execution_time = 300;
 
 WITH lineWithInlines AS (
@@ -38,4 +40,5 @@ SELECT
     'has inlines:',
     or(max(length(lineWithInlines)) > 1, max(locate(lineWithInlines[1], ':')) = 0)
 FROM lineWithInlines
-SETTINGS short_circuit_function_evaluation = 'enable';
+SETTINGS short_circuit_function_evaluation = 'enable'; -- `max(length(lineWithInlines)) > 1` check there is any inlines.
+-- `max(locate(lineWithInlines[1], ':')) = 0` check whether none could get a symbol.

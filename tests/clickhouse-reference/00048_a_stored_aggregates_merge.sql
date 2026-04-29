@@ -26,4 +26,5 @@ FROM
     SELECT * FROM system.numbers LIMIT 500, 1000
 )
 GROUP BY d;
+OPTIMIZE TABLE stored_aggregates;
 DROP TABLE stored_aggregates;

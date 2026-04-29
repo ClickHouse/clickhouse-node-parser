@@ -10,6 +10,8 @@ CREATE TABLE nested_table
 ENGINE = MergeTree()
 ORDER BY id;
 
+SHOW CREATE TABLE nested_table;
+
 SET flatten_nested = 1;
 
 ALTER TABLE nested_table ADD COLUMN second Nested(c Int8, d String) AFTER id;

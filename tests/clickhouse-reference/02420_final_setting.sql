@@ -1,3 +1,5 @@
+-- { echoOn }
+SYSTEM STOP MERGES tbl;
 -- simple test case
 create table if not exists replacing_mt (x String) engine=ReplacingMergeTree() ORDER BY x;
 insert into replacing_mt values ('abc');

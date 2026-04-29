@@ -14,6 +14,8 @@ INSERT INTO Customers;
 
 SELECT '-- test create table --';
 
+;
+
 DROP TABLE IF EXISTS kql_table1;
 
 SELECT LastName

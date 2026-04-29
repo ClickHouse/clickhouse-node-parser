@@ -29,11 +29,19 @@ CREATE TABLE checksums_r3
 ENGINE = ReplicatedMergeTree('/tables/{database}/checksums_table', 'r3')
 ORDER BY tuple();
 
+SYSTEM STOP REPLICATION QUEUES checksums_r2;
+
+SYSTEM STOP REPLICATION QUEUES checksums_r3;
+
 ALTER TABLE checksums_r1 MODIFY COLUMN column1 Int32 SETTINGS alter_sync = 1;
 
 INSERT INTO checksums_r1;
 
 INSERT INTO checksums_r3;
+
+SYSTEM START REPLICATION QUEUES checksums_r2;
+
+SYSTEM SYNC REPLICA checksums_r2;
 
 SELECT count()
 FROM checksums_r1;
@@ -43,6 +51,12 @@ FROM checksums_r2;
 
 SELECT count()
 FROM checksums_r3;
+
+SYSTEM START REPLICATION QUEUES checksums_r3;
+
+SYSTEM SYNC REPLICA checksums_r3;
+
+SYSTEM FLUSH LOGS text_log;
 
 SET max_rows_to_read = 0; -- system.text_log can be really big
 

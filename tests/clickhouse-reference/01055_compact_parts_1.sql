@@ -1,6 +1,7 @@
 create table mt_compact (a Int, s String) engine = MergeTree order by a partition by a
 settings index_granularity_bytes = 0;
 alter table mt_compact modify setting min_rows_for_wide_part = 1000; -- { serverError NOT_IMPLEMENTED }
+show create table mt_compact;
 create table mt_compact_2 (a Int, s String) engine = MergeTree order by a partition by a
 settings min_rows_for_wide_part = 1000;
 insert into mt_compact_2 values (1, 'a');

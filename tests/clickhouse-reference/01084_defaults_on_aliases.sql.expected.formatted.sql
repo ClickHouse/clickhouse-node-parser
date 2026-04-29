@@ -9,6 +9,8 @@ CREATE TABLE table_with_defaults_on_aliases
 ENGINE = MergeTree()
 ORDER BY tuple();
 
+SYSTEM STOP MERGES table_with_defaults_on_aliases;
+
 INSERT INTO table_with_defaults_on_aliases (col1);
 
 SELECT *

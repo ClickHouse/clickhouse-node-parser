@@ -21,3 +21,5 @@ FROM numbers(100000);
 SELECT count()
 FROM t_lwu_condition_cache
 WHERE `exists`;
+
+UPDATE t_lwu_condition_cache SET `exists` = 1 WHERE 1;

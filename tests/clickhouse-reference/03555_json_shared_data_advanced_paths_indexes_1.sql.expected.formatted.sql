@@ -19,6 +19,8 @@ INSERT INTO test SELECT toJSONString(arrayMap(x -> tuple(concat('key', x), x), r
 
 INSERT INTO test SELECT toJSONString(arrayMap(x -> tuple(concat('key', x), x), range(65536))::Map(String, UInt32));
 
+OPTIMIZE TABLE test FINAL;
+
 SELECT sipHash64(json::String)
 FROM test
 ORDER BY `all` ASC;

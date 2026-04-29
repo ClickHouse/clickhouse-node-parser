@@ -17,6 +17,8 @@ ENGINE = ReplicatedMergeTree('/clickhouse/tables/{database}/tab/2870', 'r1')
 ORDER BY id
 SETTINGS min_bytes_for_wide_part = 1;
 
+SHOW CREATE TABLE tab;
+
 INSERT INTO tab SELECT
     number,
     randomPrintableASCII(1000),

@@ -17,6 +17,8 @@ ENGINE = MergeTree
 ORDER BY c_custkey
 SETTINGS index_granularity = 10;
 
+SYSTEM STOP MERGES customer;
+
 INSERT INTO nation;
 
 INSERT INTO customer SELECT
@@ -72,6 +74,9 @@ SETTINGS
     max_block_size = 10,
     max_threads = 1,
     log_comment = 'Q1';
+
+-- Check that most of the blocks were skipped
+SYSTEM FLUSH LOGS query_log;
 
 SELECT
     log_comment,

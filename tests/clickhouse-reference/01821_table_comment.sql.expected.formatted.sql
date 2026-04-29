@@ -58,4 +58,6 @@ WHERE name IN ('t1', 't2', 't3', 't4', 't5', 't6')
     AND database = currentDatabase()
 ORDER BY name ASC;
 
+SHOW CREATE TABLE t1;
+
 DROP TABLE t1, t2, t3, t4, t5, t6;

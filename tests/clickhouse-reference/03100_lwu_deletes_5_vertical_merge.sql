@@ -19,8 +19,12 @@ SETTINGS
 INSERT INTO t_lwu_deletes_vertical SELECT number, rand(), rand(), randomPrintableASCII(10), randomPrintableASCII(10) FROM numbers(100000);
 SET enable_lightweight_update = 1;
 SET lightweight_delete_mode = 'lightweight_update_force';
+DELETE FROM t_lwu_deletes_vertical WHERE id % 4 = 0;
 SELECT count() FROM t_lwu_deletes_vertical;
+OPTIMIZE TABLE t_lwu_deletes_vertical FINAL;
 SELECT count() FROM system.parts_columns WHERE database = currentDatabase() AND table = 't_lwu_deletes_vertical' AND active AND partition_id = 'all' AND column = '_row_exists';
+DELETE FROM t_lwu_deletes_vertical WHERE 1;
+SYSTEM FLUSH LOGS part_log;
 SELECT
     merge_algorithm,
     read_rows,

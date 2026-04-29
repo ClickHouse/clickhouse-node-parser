@@ -19,6 +19,8 @@ ENGINE = ReplacingMergeTree
 ORDER BY (id1, id2)
 SETTINGS index_granularity = 4;
 
+SYSTEM STOP MERGES tab;
+
 INSERT INTO tab SELECT
     number / 100,
     number,

@@ -76,6 +76,12 @@ INSERT INTO t3 SELECT
     number
 FROM numbers(8000, 1000);
 
+SYSTEM sync replica t1;
+
+SYSTEM sync replica t2;
+
+SYSTEM sync replica t3;
+
 SELECT
     count(),
     min(k),

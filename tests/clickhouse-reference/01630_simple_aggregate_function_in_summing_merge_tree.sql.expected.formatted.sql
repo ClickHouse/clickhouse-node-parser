@@ -53,6 +53,8 @@ INSERT INTO simple_agf_summing_mt SELECT
 FROM numbers(2)
 GROUP BY a;
 
+OPTIMIZE TABLE simple_agf_summing_mt FINAL;
+
 SELECT
     arraySort(groupUniqArrayArrayMerge(grp_aggreg)) AS gra,
     arraySort(groupUniqArrayArray(grp_simple)) AS grs

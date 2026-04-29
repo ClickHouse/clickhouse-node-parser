@@ -50,6 +50,8 @@ ALTER TABLE tab ADD STATISTICS a, b TYPE tdigest;
 
 ALTER TABLE tab MATERIALIZE STATISTICS ALL;
 
+OPTIMIZE TABLE tab FINAL;
+
 ALTER TABLE tab RENAME COLUMN b TO c;
 
 SELECT replaceRegexpAll(`explain`, '__table1\\.', '')

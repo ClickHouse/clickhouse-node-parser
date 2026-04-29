@@ -24,6 +24,17 @@ create table hilbert_numbers_1_03131(
 insert into hilbert_numbers_1_03131
 select untuple(hilbertDecode(2, hilbertEncode(n1, n2)))
 from hilbert_numbers_03131;
+(
+    select n1, n2 from hilbert_numbers_03131
+    union distinct
+    select n1, n2 from hilbert_numbers_1_03131
+)
+except
+(
+    select n1, n2 from hilbert_numbers_03131
+    intersect
+    select n1, n2 from hilbert_numbers_1_03131
+);
 select hilbertEncode(); -- { serverError TOO_FEW_ARGUMENTS_FOR_FUNCTION }
 select hilbertEncode(1, 2, 3); -- { serverError TOO_MANY_ARGUMENTS_FOR_FUNCTION }
 select hilbertDecode(); -- { serverError NUMBER_OF_ARGUMENTS_DOESNT_MATCH }

@@ -19,6 +19,8 @@ SELECT *
 FROM `system`.distribution_queue
 WHERE database = currentDatabase();
 
+SYSTEM stop distributed sends dist_01293;
+
 INSERT INTO dist_01293 SELECT *
 FROM numbers(10);
 
@@ -32,6 +34,8 @@ SELECT
 FROM `system`.distribution_queue
 WHERE database = currentDatabase();
 
+SYSTEM flush distributed dist_01293;
+
 SELECT
     is_blocked,
     error_count,
@@ -41,6 +45,8 @@ SELECT
     broken_data_compressed_bytes
 FROM `system`.distribution_queue
 WHERE database = currentDatabase();
+
+SYSTEM start distributed sends dist_01293;
 
 DROP TABLE null_01293;
 

@@ -12,6 +12,7 @@ ENGINE=MergeTree()
 ORDER BY key
 PARTITION BY part
 SETTINGS non_replicated_deduplication_window=3;
+SYSTEM STOP MERGES merge_tree_deduplication;
 INSERT INTO merge_tree_deduplication (key, value) VALUES (1, '1');
 SELECT key, value FROM merge_tree_deduplication;
 INSERT INTO merge_tree_deduplication (key, value) VALUES (2, '2');
@@ -30,6 +31,9 @@ ALTER TABLE merge_tree_deduplication DROP PART '77_9_9_0'; -- some old part
 SELECT key, value FROM merge_tree_deduplication WHERE key = 10;
 ALTER TABLE merge_tree_deduplication DROP PART '77_13_13_0'; -- fresh part
 SELECT key, value FROM merge_tree_deduplication WHERE key = 12;
+DETACH TABLE merge_tree_deduplication;
+ATTACH TABLE merge_tree_deduplication;
+OPTIMIZE TABLE  merge_tree_deduplication FINAL;
 INSERT INTO merge_tree_deduplication (key, value, part) VALUES (11, '11', 88);
 ALTER TABLE merge_tree_deduplication DROP PARTITION 77;
 SELECT part, key, value FROM merge_tree_deduplication ORDER BY key, part;
@@ -60,4 +64,6 @@ SELECT * FROM merge_tree_no_deduplication ORDER BY key;
 ALTER TABLE merge_tree_no_deduplication MODIFY SETTING non_replicated_deduplication_window = 3;
 INSERT INTO merge_tree_no_deduplication (key, value) VALUES (2, '2');
 INSERT INTO merge_tree_no_deduplication (key, value) VALUES (3, '3');
+DETACH TABLE merge_tree_no_deduplication;
+ATTACH TABLE merge_tree_no_deduplication;
 INSERT INTO merge_tree_no_deduplication (key, value) VALUES (4, '4');

@@ -27,6 +27,8 @@ SELECT *
 FROM tabl_2
 SETTINGS log_comment = 'ad15a651';
 
+SYSTEM FLUSH LOGS query_log;
+
 SELECT base64Decode(base64Encode(normalizeQuery(query)))
 FROM `system`.query_log
 WHERE type = 'QueryFinish'

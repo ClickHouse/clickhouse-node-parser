@@ -22,6 +22,8 @@ SELECT *
 FROM index
 WHERE key = -1;
 
+OPTIMIZE TABLE index;
+
 SELECT *
 FROM index
 WHERE key < -0.5;

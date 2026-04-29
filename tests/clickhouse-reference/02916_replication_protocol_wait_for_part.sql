@@ -12,9 +12,13 @@ create table tableOut (n int)
     order by tuple()
     settings
         storage_policy='s3_cache';
+
 SET send_logs_level='error';
+
 insert into tableIn values(1);
 insert into tableIn values(2);
+system sync replica tableOut;
 select count() from tableOut;
+
 drop table tableIn;
 drop table tableOut;

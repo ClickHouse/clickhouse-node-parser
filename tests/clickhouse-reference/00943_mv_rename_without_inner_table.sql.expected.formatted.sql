@@ -30,6 +30,8 @@ SELECT *
 FROM original_mv
 ORDER BY x ASC;
 
+RENAME TABLE original_mv TO new_mv;
+
 INSERT INTO src;
 
 SELECT *

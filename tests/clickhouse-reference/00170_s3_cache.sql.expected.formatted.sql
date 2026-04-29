@@ -9,6 +9,8 @@ SET max_memory_usage = '20G';
 
 SET read_through_distributed_cache = 1;
 
+SYSTEM CLEAR FILESYSTEM CACHE;
+
 SELECT count()
 FROM test.hits_s3;
 

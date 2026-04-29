@@ -19,6 +19,7 @@ INSERT INTO 01902_db_repr2.t2 SELECT * FROM numbers(10);
 INSERT INTO 01902_db_repr3.t3 SELECT * FROM numbers(10);
 CREATE TABLE 01902_db_repr.t_merge as 01902_db_repr.t ENGINE=Merge(REGEXP('^01902_db_repr'), '^t');
 SELECT _database, _table, n FROM 01902_db_repr.t_merge ORDER BY _database, _table, n;
+SHOW CREATE  TABLE 01902_db_repr.t_merge;
 SELECT _database, _table, n FROM merge(REGEXP('^01902_db_repr'), '^t') ORDER BY _database, _table, n;
 SELECT _database, _table, n FROM 01902_db_repr.t_merge WHERE _database = '01902_db_repr1' ORDER BY _database, _table, n;
 SELECT _database, _table, n FROM 01902_db_repr.t_merge WHERE _table = 't1' ORDER BY _database, _table, n;
@@ -28,6 +29,7 @@ SELECT _database, _table, n FROM merge('01902_db_repr', '^t$') ORDER BY _databas
 USE 01902_db_repr1;
 CREATE TABLE 01902_db_repr.t_merge_1 as 01902_db_repr.t ENGINE=Merge(currentDatabase(), '^t');
 SELECT _database, _table, n FROM 01902_db_repr.t_merge_1 ORDER BY _database, _table, n;
+SHOW CREATE TABLE 01902_db_repr.t_merge_1;
 SELECT _database, _table, n FROM merge(currentDatabase(), '^t') ORDER BY _database, _table, n;
 --fuzzed LOGICAL_ERROR
 CREATE TABLE 01902_db_repr.t4 (n Date) ENGINE=MergeTree ORDER BY n;

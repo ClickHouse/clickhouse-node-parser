@@ -18,6 +18,8 @@ INSERT INTO `test_table with spaces`;
 
 INSERT INTO `test_table with spaces`;
 
+SYSTEM flush async insert queue `test_table with spaces`;
+
 SELECT
     '`test_table with spaces`',
     count()
@@ -43,6 +45,8 @@ ORDER BY id;
 INSERT INTO `this.is.a.valid.databasename`.`test_table with spaces`;
 
 INSERT INTO `this.is.a.valid.databasename`.`test_table with spaces`;
+
+SYSTEM flush async insert queue `this.is.a.valid.databasename`.`test_table with spaces`;
 
 SELECT
     '`this.is.a.valid.databasename`.`test_table with spaces`',

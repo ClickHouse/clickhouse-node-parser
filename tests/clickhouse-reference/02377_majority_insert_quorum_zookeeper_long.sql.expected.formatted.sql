@@ -82,11 +82,28 @@ ENGINE = ReplicatedMergeTree('/clickhouse/tables/{database}/test_02377/quorum1',
 ORDER BY x
 PARTITION BY y;
 
+-- Insert should be successful
+-- stop replica 3
+SYSTEM STOP FETCHES quorum3;
+
 SELECT x
 FROM quorum3
 ORDER BY x ASC; -- {serverError REPLICA_IS_NOT_IN_QUORUM}
 
+-- Sync replica 3
+SYSTEM START FETCHES quorum3;
+
+SYSTEM SYNC REPLICA quorum3;
+
+-- Stop 2 replicas , so insert wont be successful
+SYSTEM STOP FETCHES quorum2;
+
 SET insert_quorum_timeout = 5000;
+
+-- Sync replica 2 and 3
+SYSTEM START FETCHES quorum2;
+
+SYSTEM SYNC REPLICA quorum2;
 
 SET insert_quorum_timeout = 600000; -- set default value back
 

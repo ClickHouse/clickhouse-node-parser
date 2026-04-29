@@ -15,3 +15,5 @@ INSERT INTO `03250_avoid_prefetch`;
 ALTER TABLE `03250_avoid_prefetch` DELETE WHERE id = 1;
 
 INSERT INTO `03250_avoid_prefetch`;
+
+OPTIMIZE TABLE `03250_avoid_prefetch` FINAL;

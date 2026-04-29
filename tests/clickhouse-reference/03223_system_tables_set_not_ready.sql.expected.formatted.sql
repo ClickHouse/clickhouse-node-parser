@@ -89,7 +89,11 @@ CREATE TABLE rep2
 ENGINE = ReplicatedMergeTree('/{database}/rep', '{table}')
 ORDER BY key;
 
+SYSTEM stop fetches rep2;
+
 INSERT INTO rep1;
+
+SYSTEM sync replica rep2 pull;
 
 SELECT
     'system.replication_queue',

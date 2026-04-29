@@ -287,3 +287,4 @@ FROM numbers(4);
 
 -- Type mismatch: tuple IN array of scalars
 SELECT (1, 2) IN (arrayMap(x -> x, [1, 2, 3])); -- { serverError NO_COMMON_TYPE }
+-- { echoOff }

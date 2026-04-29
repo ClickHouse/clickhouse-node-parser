@@ -38,6 +38,8 @@ CREATE TABLE t(
 )
 ENGINE = MergeTree()
 ORDER BY x SETTINGS index_granularity = 999999999, index_granularity_bytes = 99999999999, use_const_adaptive_granularity = 0, min_bytes_for_wide_part = 0;
+DETACH TABLE t SYNC;
+ATTACH TABLE t;
 CREATE TABLE t(
     x UInt64,
     y String,

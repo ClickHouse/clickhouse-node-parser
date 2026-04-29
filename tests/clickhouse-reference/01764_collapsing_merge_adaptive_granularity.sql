@@ -14,6 +14,7 @@ SETTINGS
     min_bytes_for_wide_part = 0;
 INSERT INTO collapsing_table SELECT if(number == 8192, 8191, number), 1, if(number == 8192, +1, -1) FROM numbers(8193);
 SELECT sum(Sign), count() from collapsing_table;
+OPTIMIZE TABLE collapsing_table FINAL;
 DROP TABLE IF EXISTS collapsing_suspicious_granularity;
 CREATE TABLE collapsing_suspicious_granularity
 (
@@ -30,3 +31,4 @@ SETTINGS
     index_granularity = 1;
 INSERT INTO collapsing_suspicious_granularity VALUES (1, 1, -1) (1, 1, 1);
 SELECT sum(Sign), count() from collapsing_suspicious_granularity;
+OPTIMIZE TABLE collapsing_suspicious_granularity FINAL;

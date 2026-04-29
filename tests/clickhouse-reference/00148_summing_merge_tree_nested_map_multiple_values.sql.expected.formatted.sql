@@ -15,6 +15,8 @@ INSERT INTO nested_map_multiple_values;
 
 INSERT INTO nested_map_multiple_values;
 
+OPTIMIZE TABLE nested_map_multiple_values;
+
 SELECT *
 FROM nested_map_multiple_values;
 
@@ -36,6 +38,8 @@ ENGINE = SummingMergeTree(d, k, 8192);
 INSERT INTO nested_not_a_map;
 
 INSERT INTO nested_not_a_map;
+
+OPTIMIZE TABLE nested_not_a_map;
 
 SELECT *
 FROM nested_not_a_map;

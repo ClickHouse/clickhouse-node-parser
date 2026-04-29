@@ -58,6 +58,8 @@ CREATE TABLE test
 )
 ENGINE = File('Parquet', 'test_02155/test3/data.Parquet.gz');
 
+;
+
 INSERT INTO FUNCTION file(concat(currentDatabase(), '/test4/data.Parquet.gz'), 'Parquet', 'number UInt64') SELECT *
 FROM numbers(10)
 SETTINGS engine_file_truncate_on_insert = 1;

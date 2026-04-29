@@ -21,3 +21,5 @@ SELECT roundToExp2(number) AS k, length(groupArray(1)([hex(number)] AS i)), leng
 SELECT roundToExp2(number) AS k, length(groupArray(1)(number AS i)), length(groupArray(1500)(i)), length(groupArray(70000)(i)) AS s FROM remote('127.0.0.{2,3}', currentDatabase(), 'numbers_mt') GROUP BY k ORDER BY k LIMIT 9, 11;
 SELECT roundToExp2(number) AS k, length(groupArray(1)(hex(number) AS i)), length(groupArray(1500)(i)), length(groupArray(70000)(i)) AS s FROM remote('127.0.0.{2,3}', currentDatabase(), 'numbers_mt') GROUP BY k ORDER BY k LIMIT 9, 11;
 SELECT roundToExp2(number) AS k, length(groupArray(1)([hex(number)] AS i)), length(groupArray(1500)(i)), length(groupArray(70000)(i)) AS s FROM remote('127.0.0.{2,3}', currentDatabase(), 'numbers_mt') GROUP BY k ORDER BY k LIMIT 9, 11;
+-- Check binary compatibility:
+-- clickhouse-client -h old -q "SELECT arrayReduce('groupArrayState', [['1'], ['22'], ['333']]) FORMAT RowBinary" | clickhouse-local -s --input-format RowBinary --structure "d AggregateFunction(groupArray2, Array(String))" -q "SELECT groupArray2Merge(d) FROM table"

@@ -1,3 +1,6 @@
+-- Tags: memory-engine
+-- Uppercase/lowercase are okay, mixed case isn't
+SHOW TABLES FROM information_schema;
 DROP VIEW IF EXISTS v;
 DROP TABLE IF EXISTS t;
 DROP VIEW IF EXISTS mv;

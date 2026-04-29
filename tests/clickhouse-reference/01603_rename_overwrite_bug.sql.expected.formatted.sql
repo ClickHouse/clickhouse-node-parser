@@ -19,6 +19,12 @@ ENGINE = Log AS
 SELECT *
 FROM numbers(200);
 
+DETACH TABLE test_1603_rename_bug_ordinary.foo;
+
+RENAME TABLE test_1603_rename_bug_ordinary.bar TO test_1603_rename_bug_ordinary.foo; -- { serverError TABLE_ALREADY_EXISTS }
+
+ATTACH TABLE test_1603_rename_bug_ordinary.foo;
+
 SELECT count()
 FROM test_1603_rename_bug_ordinary.foo;
 
@@ -42,6 +48,12 @@ CREATE TABLE test_1603_rename_bug_atomic.bar
 ENGINE = Log AS
 SELECT *
 FROM numbers(200);
+
+DETACH TABLE test_1603_rename_bug_atomic.foo;
+
+RENAME TABLE test_1603_rename_bug_atomic.bar TO test_1603_rename_bug_atomic.foo; -- { serverError TABLE_ALREADY_EXISTS }
+
+ATTACH TABLE test_1603_rename_bug_atomic.foo;
 
 SELECT count()
 FROM test_1603_rename_bug_atomic.foo;

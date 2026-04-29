@@ -29,6 +29,8 @@ INSERT INTO tab SELECT
     concat('v', toString(number), '_updated')
 FROM numbers(0, 100000, 3);
 
+OPTIMIZE TABLE tab FINAL;
+
 SELECT count()
 FROM tab
 WHERE text = 'v12345';

@@ -39,11 +39,11 @@ FROM (
 
 SELECT count()
 FROM (
-(        SELECT *
+        SELECT *
         FROM test
         UNION DISTINCT
         SELECT *
-        FROM test)
+        FROM test
         UNION ALL
         SELECT *
         FROM test
@@ -51,11 +51,11 @@ FROM (
 
 SELECT count()
 FROM (
-(        SELECT *
+        SELECT *
         FROM test
         UNION DISTINCT
         SELECT *
-        FROM test)
+        FROM test
 EXCEPT
         SELECT *
         FROM test
@@ -64,17 +64,17 @@ EXCEPT
 
 SELECT count()
 FROM (
-((        SELECT *
+        SELECT *
         FROM test
 INTERSECT
 (        SELECT *
         FROM test
-        WHERE toUInt8(name) < 4))
+        WHERE toUInt8(name) < 4)
         UNION DISTINCT
 (        SELECT *
         FROM test
         WHERE name = '5'
-            OR name = '1'))
+            OR name = '1')
 EXCEPT
         SELECT *
         FROM test
@@ -84,11 +84,11 @@ EXCEPT
 WITH (
         SELECT count()
         FROM (
-(                SELECT *
+                SELECT *
                 FROM test
                 UNION DISTINCT
                 SELECT *
-                FROM test)
+                FROM test
 EXCEPT
                 SELECT *
                 FROM test
@@ -109,11 +109,11 @@ FROM (
 WITH (
         SELECT count()
         FROM (
-(                SELECT *
+                SELECT *
                 FROM test
                 UNION DISTINCT
                 SELECT *
-                FROM test)
+                FROM test
 EXCEPT
                 SELECT *
                 FROM test
@@ -137,11 +137,11 @@ UNION DISTINCT
 SELECT uuid
 FROM test;
 
-(SELECT uuid
+SELECT uuid
 FROM test
 UNION DISTINCT
 SELECT uuid
-FROM test)
+FROM test
 UNION ALL
 SELECT uuid
 FROM test

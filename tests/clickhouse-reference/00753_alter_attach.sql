@@ -32,6 +32,7 @@ CREATE TABLE replicated_table_detach_all2 (
 INSERT INTO replicated_table_detach_all1 VALUES (1, '1'), (2, '2');
 select * from replicated_table_detach_all1 order by id;
 ALTER TABLE replicated_table_detach_all1 DETACH PARTITION ALL;
+SYSTEM SYNC REPLICA replicated_table_detach_all2;
 select * from replicated_table_detach_all2 order by id;
 ALTER TABLE replicated_table_detach_all1 ATTACH PARTITION tuple(1);
 ALTER TABLE replicated_table_detach_all1 FETCH PARTITION ALL FROM '/clickhouse/tables/test_00753_{database}/replicated_table_detach_all1'; -- { serverError SUPPORT_IS_DISABLED }
@@ -50,6 +51,8 @@ ALTER TABLE partition_all2 CLEAR INDEX p IN PARTITION ALL; -- { serverError SUPP
 ALTER TABLE partition_all2 CLEAR COLUMN q IN PARTITION ALL; -- { serverError SUPPORT_IS_DISABLED }
 ALTER TABLE partition_all2 UPDATE q = q + 1 IN PARTITION ALL where p = 1; -- { serverError SUPPORT_IS_DISABLED }
 ALTER TABLE partition_all2 FREEZE PARTITION ALL; -- { serverError SUPPORT_IS_DISABLED }
+CHECK TABLE partition_all2 PARTITION ALL; -- { serverError SUPPORT_IS_DISABLED }
+OPTIMIZE TABLE partition_all2 PARTITION ALL; -- { serverError SUPPORT_IS_DISABLED }
 DROP TABLE partition_all;
 DROP TABLE partition_all2;
 -- test ATTACH ALL

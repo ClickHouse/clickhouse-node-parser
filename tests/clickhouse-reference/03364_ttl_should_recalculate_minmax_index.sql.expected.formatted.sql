@@ -14,6 +14,8 @@ SETTINGS index_granularity = 8192;
 
 INSERT INTO x;
 
+OPTIMIZE TABLE x FINAL;
+
 SELECT i
 FROM x;
 

@@ -12,6 +12,7 @@ INSERT INTO alter_default select toDate('2020-01-05'), number from system.number
 -- Cannot add column without type
 ALTER TABLE alter_default ADD COLUMN value DEFAULT '10'; --{serverError BAD_ARGUMENTS}
 ALTER TABLE alter_default ADD COLUMN value String DEFAULT '10';
+SHOW CREATE TABLE alter_default;
 SELECT sum(cast(value as UInt64)) FROM alter_default;
 ALTER TABLE alter_default MODIFY COLUMN value UInt64;
 ALTER TABLE alter_default MODIFY COLUMN value UInt64 DEFAULT 10;

@@ -179,6 +179,8 @@ FROM stored_aggregates
 GROUP BY d
 ORDER BY d ASC;
 
+OPTIMIZE TABLE stored_aggregates;
+
 DROP TABLE stored_aggregates;
 
 -- complex
@@ -291,6 +293,8 @@ SELECT
 FROM summing_merge_tree_aggregate_function
 GROUP BY k
 ORDER BY k ASC;
+
+OPTIMIZE TABLE summing_merge_tree_aggregate_function;
 
 DROP TABLE summing_merge_tree_aggregate_function;
 

@@ -86,34 +86,48 @@
 
 // Statements is the top-level rule, supporting UNION ALL and FORMAT clauses
 // Allows empty input (e.g., SQL files containing only comments)
+// Accepts any number of extra empty statements (bare `;`) between real statements.
+// Each extra `;` produces an `empty` placeholder so AST indices align with
+// ClickHouse's statement splitter (which emits a `<Explain Error>` for empties).
 Statements
   = pre:_ head:TopLevelStatement headWs:_
-    rest:(";"+ ws2:_ TopLevelStatement ws3:_)*
-    ";"* finalWs:_ {
+    rest:StatementsRestEntry*
+    trailing:StatementsTrailing? finalWs:_ {
       head = addLeading(head, flattenWs(pre));
-      // headWs: .trailing = same-line after head → trailing on head
-      // headWs: .leading = after-newline before ";" → deferred to next stmt (or trailing on last if single stmt)
       head = addTrailing(head, headWs.trailing);
       let pendingLeading = headWs.leading;
       const stmts = [head];
       for (const r of rest) {
-        const ws2val = r[1]; // after ";"
-        let stmt = r[2];
-        const ws3val = r[3]; // after stmt
-        // Same-line after ";" → trailing on prev stmt
+        for (const ep of r.empties) stmts.push(ep);
+        const ws2val = r.ws2;
+        let stmt = r.stmt;
+        const ws3val = r.ws3;
         stmts[stmts.length - 1] = addTrailing(stmts[stmts.length - 1], ws2val.trailing);
-        // Pending from prev iteration + after-newline after ";" → leading on this stmt
         stmt = addLeading(stmt, [...pendingLeading, ...ws2val.leading]);
-        // Same-line after stmt → trailing on this stmt
         stmt = addTrailing(stmt, ws3val.trailing);
-        // After-newline after stmt → deferred to next iteration
         pendingLeading = ws3val.leading;
         stmts.push(stmt);
+      }
+      if (trailing) {
+        for (const ep of trailing) stmts.push(ep);
       }
       stmts[stmts.length - 1] = addTrailing(stmts[stmts.length - 1], [...pendingLeading, ...flattenWs(finalWs)]);
       return stmts;
     }
   / _ { return []; }
+
+StatementsRestEntry
+  = ";" empties:EmptyStatementRun ws2:_ stmt:TopLevelStatement ws3:_ {
+      return { empties, ws2, stmt, ws3 };
+    }
+
+StatementsTrailing
+  = ";" empties:EmptyStatementRun { return empties; }
+
+EmptyStatementRun
+  = tail:(_ ";")* {
+      return tail.map(() => loc({ kind: 'empty' }));
+    }
 
 // A top-level statement is either an EXPLAIN or a union query with optional INTO OUTFILE, FORMAT, and SETTINGS clauses
 // SETTINGS can appear before FORMAT (inside SELECT) or after FORMAT
@@ -128,6 +142,18 @@ TopLevelStatement
   / InsertStatement
   / DropStatement
   / TruncateStatement
+  / OptimizeStatement
+  / DescribeStatement
+  / ShowCreateStatement
+  / DetachStatement
+  / DeleteStatement
+  / UpdateStatement
+  / CheckStatement
+  / AttachStatement
+  / RenameStatement
+  / ExistsStatement
+  / KillStatement
+  / ExecuteAsStatement
   / OpaqueStatement
   / query:UnionQuery intoOutfile:( _ IntoOutfileClause )? preSettings:( _ SettingsClause )? format:( _ FormatClause )? postSettings:( _ SettingsClause )* {
       let result = query;
@@ -153,6 +179,25 @@ TopLevelStatement
 IntoOutfileClause
   = "INTO"i ![a-zA-Z0-9_] _ "OUTFILE"i ![a-zA-Z0-9_] _ path:StringLiteral ( _ "TRUNCATE"i ![a-zA-Z0-9_] )? { return path; }
 
+// ExecuteAsStatement: EXECUTE AS user <statement>
+// The user name is followed by another DDL statement to run as that user.
+ExecuteAsStatement
+  = "EXECUTE"i ![a-zA-Z0-9_] _ "AS"i ![a-zA-Z0-9_] _ user:AliasName _
+    stmt:( AlterStatement / OptimizeStatement / DescribeStatement / ShowCreateStatement
+         / DetachStatement / AttachStatement / DeleteStatement / UpdateStatement
+         / CheckStatement / RenameStatement / ExistsStatement / KillStatement
+         / TruncateStatement / DropStatement / InsertStatement / CreateStatement
+         / UnionQuery / OpaqueStatement ) {
+      return loc({ kind: 'executeAs', user, statement: stmt });
+    }
+
+// ImplicitSelectStatement: bare expression as a SELECT (requires implicit_select=1).
+// Examples: `1 + 2;`, `count();`, `s;`, `*;`. Wraps the expression in a synthetic SELECT.
+ImplicitSelectStatement
+  = expr:( Asterisk / Expression ) &(_ ";" / _ !.) {
+      return loc({ kind: 'select', select: [expr], implicit: true });
+    }
+
 // SetStatement: SET key = value [, key = value ...] — changes session-level settings
 SetStatement
   = "SET"i ![a-zA-Z0-9_] _ "TRANSACTION"i ![a-zA-Z0-9_] _ "SNAPSHOT"i ![a-zA-Z0-9_] _ snapshot:$[0-9]+ { return loc({ kind: 'transactionControl', snapshot }); }
@@ -174,9 +219,9 @@ SetRoleUserList
 UseStatement
   = "USE"i ![a-zA-Z0-9_] _ db:( QueryParamIdentifier / AliasName ) { return loc({ kind: 'use', database: db }); }
 
-// SystemStatement: SYSTEM FLUSH LOGS, SYSTEM RELOAD CONFIG, etc. — admin commands (body discarded)
+// SystemStatement: SYSTEM FLUSH LOGS, SYSTEM RELOAD CONFIG, etc. — admin commands (body preserved)
 SystemStatement
-  = "SYSTEM"i ![a-zA-Z0-9_] body:$( ![\n;] . )+ { return loc({ kind: 'system', body: body.trim() }); }
+  = "SYSTEM"i ![a-zA-Z0-9_] body:$( ![\n;] . )+ { return loc({ kind: 'system', body: ('SYSTEM ' + body.trim()).trim() }); }
 
 // ── ALTER TABLE statements ──────────────────────────────────────────────────
 
@@ -798,7 +843,7 @@ AlterInPartitionClause
 // OpaqueStatement: access-control and other DDL we don't yet parse structurally.
 // TRUNCATE is intentionally excluded — it's handled by TruncateStatement above.
 OpaqueStatement
-  = keyword:( "ALTER"i / "RENAME"i / "ATTACH"i / "DETACH"i / "OPTIMIZE"i / "CHECK"i / "DESCRIBE"i / "DESC"i / "EXISTS"i / "SHOW"i / "GRANT"i / "REVOKE"i / "EXCHANGE"i / "KILL"i / "UNDO"i / "DELETE"i / "BACKUP"i / "RESTORE"i / "BEGIN"i / "COMMIT"i / "ROLLBACK"i / "WATCH"i / "UNDROP"i / "MOVE"i ) ![a-zA-Z0-9_] _ body:$( ![\n;] . )* { return loc({ kind: 'system', body: (keyword + ' ' + body).trim() }); }
+  = keyword:( "ALTER"i / "ATTACH"i / "DETACH"i / "RENAME"i / "EXCHANGE"i / "CHECK"i / "EXISTS"i / "SHOW"i / "GRANT"i / "REVOKE"i / "KILL"i / "UNDO"i / "BACKUP"i / "RESTORE"i / "BEGIN"i / "COMMIT"i / "ROLLBACK"i / "WATCH"i / "UNDROP"i / "MOVE"i ) ![a-zA-Z0-9_] _ body:$( ![\n;] . )* { return loc({ kind: 'system', body: (keyword + ' ' + body).trim() }); }
 
 // ── DROP statements ─────────────────────────────────────────────────────────
 
@@ -931,6 +976,8 @@ ParallelWithItem
   = InsertStatement
   / DropStatement
   / TruncateStatement
+  / OptimizeStatement
+  / AlterStatement
 
 // TruncateStatement: structural parsing for all TRUNCATE variants
 //   TRUNCATE [TEMPORARY] [TABLE] [IF EXISTS] [db.]table [ON CLUSTER cluster] [SYNC] [SETTINGS ...]
@@ -979,6 +1026,377 @@ TruncateStatement
       if (settings !== null) result.settings = settings[1];
       return loc(result);
     }
+
+// ── OPTIMIZE TABLE ───────────────────────────────────────────────────────────
+// OPTIMIZE TABLE [db.]name [ON CLUSTER cluster] [PARTITION expr | PARTITION ID 'id'] [FINAL] [DEDUPLICATE [BY ...]]
+OptimizeStatement
+  = "OPTIMIZE"i ![a-zA-Z0-9_] _ "TABLE"i ![a-zA-Z0-9_] _ table:TableRef
+    cluster:( _ OnClusterClause )?
+    partition:OptimizePartitionClause?
+    final:( _ ( "FINAL"i / "FORCE"i ) ![a-zA-Z0-9_] )?
+    cleanup:( _ "CLEANUP"i ![a-zA-Z0-9_] )?
+    dedup:OptimizeDeduplicateClause?
+    settings:( _ SettingsClause )? {
+      const result = { kind: 'optimize', table };
+      if (cluster !== null) result.onCluster = cluster[1];
+      if (partition !== null) result.partition = partition;
+      if (final !== null) result.final = true;
+      if (cleanup !== null) result.cleanup = true;
+      if (dedup !== null) {
+        result.deduplicate = true;
+        if (dedup.by) result.deduplicateBy = dedup.by;
+      }
+      if (settings !== null) result.settings = settings[1];
+      return loc(result);
+    }
+
+OptimizePartitionClause
+  = _ "PARTITION"i ![a-zA-Z0-9_] _ "ID"i ![a-zA-Z0-9_] _ lit:StringLiteral {
+      return { kind: 'id', id: lit.value };
+    }
+  / _ "PARTITION"i ![a-zA-Z0-9_] _ "ALL"i ![a-zA-Z0-9_] {
+      return { kind: 'all' };
+    }
+  / _ "PARTITION"i ![a-zA-Z0-9_] _ expr:Expression {
+      return { kind: 'expr', expr };
+    }
+
+OptimizeDeduplicateClause
+  = _ "DEDUPLICATE"i ![a-zA-Z0-9_] by:OptimizeDeduplicateByClause? {
+      return { by: by };
+    }
+
+OptimizeDeduplicateByClause
+  = _ "BY"i ![a-zA-Z0-9_] _ list:ExpressionList { return list; }
+
+// ── DESC / DESCRIBE TABLE ────────────────────────────────────────────────────
+// DESC[RIBE] [TABLE] name | DESC (subquery) | DESC fn(...)
+DescribeStatement
+  = ( "DESCRIBE"i / "DESC"i ) ![a-zA-Z0-9_]
+    ( _ "TABLE"i ![a-zA-Z0-9_] )?
+    _ target:DescribeTarget
+    final:( _ "FINAL"i ![a-zA-Z0-9_] )?
+    preSettings:( _ SettingsClause )?
+    format:( _ FormatClause )?
+    postSettings:( _ SettingsClause )? {
+      const result = { kind: 'describe', target };
+      if (final !== null) result.final = true;
+      if (format !== null) result.format = format[1];
+      const merged = [
+        ...(preSettings !== null ? preSettings[1] : []),
+        ...(postSettings !== null ? postSettings[1] : []),
+      ];
+      if (merged.length > 0) result.settings = merged;
+      // Track whether SETTINGS appeared before FORMAT in source order so we
+      // can re-emit in the same order. If only one is present, this is irrelevant.
+      if (preSettings !== null && format !== null) result.settingsBeforeFormat = true;
+      return loc(result);
+    }
+
+DescribeTarget
+  = "(" _ query:UnionQuery _ ")" { return { kind: 'subquery', query }; }
+  / &( "SELECT"i ![a-zA-Z0-9_] / "WITH"i ![a-zA-Z0-9_] ) query:UnionQuery {
+      return { kind: 'subquery', query };
+    }
+  / func:TableFunctionRef { return { kind: 'function', func }; }
+  / table:TableRef { return { kind: 'table', table }; }
+
+// ── SHOW CREATE ──────────────────────────────────────────────────────────────
+// SHOW CREATE [TABLE|VIEW|DICTIONARY|DATABASE] [db.]name [FORMAT ...] [SETTINGS ...]
+ShowCreateStatement
+  = "SHOW"i ![a-zA-Z0-9_] _ "CREATE"i ![a-zA-Z0-9_] target:ShowCreateTarget
+    preSettings:( _ SettingsClause )?
+    format:( _ FormatClause )?
+    postSettings:( _ SettingsClause )? {
+      const result = target;
+      if (format !== null) result.format = format[1];
+      const merged = [
+        ...(preSettings !== null ? preSettings[1] : []),
+        ...(postSettings !== null ? postSettings[1] : []),
+      ];
+      if (merged.length > 0) result.settings = merged;
+      return loc(result);
+    }
+
+ShowCreateTarget
+  = _ "DATABASE"i ![a-zA-Z0-9_] _ db:( QueryParamIdentifier / AliasName ) {
+      return { kind: 'showCreate', targetType: 'DATABASE', database: db };
+    }
+  / ( _ "TEMPORARY"i ![a-zA-Z0-9_] )? _ targetType:ShowCreateTargetKeyword _ table:TableRef {
+      return { kind: 'showCreate', targetType, table };
+    }
+  / _ "TEMPORARY"i ![a-zA-Z0-9_] _ table:TableRef {
+      return { kind: 'showCreate', targetType: 'TABLE', table };
+    }
+  / _ !ShowCreateAccessControlKeyword table:TableRef {
+      return { kind: 'showCreate', targetType: 'TABLE', table };
+    }
+
+// Keywords that indicate SHOW CREATE targeting an access-control or other
+// object we don't yet parse structurally; these fall through to OpaqueStatement.
+ShowCreateAccessControlKeyword
+  = "USER"i ![a-zA-Z0-9_]
+  / "ROLE"i ![a-zA-Z0-9_]
+  / "QUOTA"i ![a-zA-Z0-9_]
+  / "ROW"i ![a-zA-Z0-9_] _ "POLICY"i
+  / "POLICY"i ![a-zA-Z0-9_]
+  / "SETTINGS"i ![a-zA-Z0-9_] _ "PROFILE"i
+  / "PROFILE"i ![a-zA-Z0-9_]
+  / "NAMED"i ![a-zA-Z0-9_] _ "COLLECTION"i
+  / "WORKLOAD"i ![a-zA-Z0-9_]
+  / "RESOURCE"i ![a-zA-Z0-9_]
+
+ShowCreateTargetKeyword
+  = "TABLE"i ![a-zA-Z0-9_] { return 'TABLE'; }
+  / "VIEW"i ![a-zA-Z0-9_] { return 'VIEW'; }
+  / "DICTIONARY"i ![a-zA-Z0-9_] { return 'DICTIONARY'; }
+
+// ── DETACH ───────────────────────────────────────────────────────────────────
+// DETACH [TABLE|VIEW|DICTIONARY] [IF EXISTS] [db.]name [ON CLUSTER ...] [PERMANENTLY] [SYNC]
+// DETACH DATABASE [IF EXISTS] name [ON CLUSTER ...] [PERMANENTLY] [SYNC]
+DetachStatement
+  = "DETACH"i ![a-zA-Z0-9_] _ "DATABASE"i ![a-zA-Z0-9_]
+    ifExists:( _ "IF"i ![a-zA-Z0-9_] _ "EXISTS"i ![a-zA-Z0-9_] )?
+    _ database:( QueryParamIdentifier / AliasName )
+    cluster:( _ OnClusterClause )?
+    perm:( _ "PERMANENTLY"i ![a-zA-Z0-9_] )?
+    sync:( _ "SYNC"i ![a-zA-Z0-9_] / _ "NO"i ![a-zA-Z0-9_] _ "DELAY"i ![a-zA-Z0-9_] )?
+    &StatementEnd {
+      const result = { kind: 'detach', targetType: 'DATABASE', database };
+      if (ifExists !== null) result.ifExists = true;
+      if (cluster !== null) result.onCluster = cluster[1];
+      if (perm !== null) result.permanently = true;
+      if (sync !== null) result.sync = true;
+      return loc(result);
+    }
+  / "DETACH"i ![a-zA-Z0-9_]
+    targetType:DetachTableKeyword?
+    ifExists:( _ "IF"i ![a-zA-Z0-9_] _ "EXISTS"i ![a-zA-Z0-9_] )?
+    _ table:TableRef
+    cluster:( _ OnClusterClause )?
+    perm:( _ "PERMANENTLY"i ![a-zA-Z0-9_] )?
+    sync:( _ "SYNC"i ![a-zA-Z0-9_] / _ "NO"i ![a-zA-Z0-9_] _ "DELAY"i ![a-zA-Z0-9_] )?
+    &StatementEnd {
+      const result = {
+        kind: 'detach',
+        targetType: targetType !== null ? targetType : 'TABLE',
+        table,
+      };
+      if (ifExists !== null) result.ifExists = true;
+      if (cluster !== null) result.onCluster = cluster[1];
+      if (perm !== null) result.permanently = true;
+      if (sync !== null) result.sync = true;
+      return loc(result);
+    }
+
+DetachTableKeyword
+  = _ ( "TEMPORARY"i ![a-zA-Z0-9_] _ )? "TABLE"i ![a-zA-Z0-9_] { return 'TABLE'; }
+  / _ "VIEW"i ![a-zA-Z0-9_] { return 'VIEW'; }
+  / _ "DICTIONARY"i ![a-zA-Z0-9_] { return 'DICTIONARY'; }
+
+// ── UPDATE (lightweight) ────────────────────────────────────────────────────
+// UPDATE [db.]name [ON CLUSTER cluster] SET col = expr [, ...] WHERE expr [SETTINGS ...]
+UpdateStatement
+  = "UPDATE"i ![a-zA-Z0-9_] _ table:TableRef
+    cluster:( _ OnClusterClause )?
+    _ "SET"i ![a-zA-Z0-9_] _ assignments:AlterAssignmentList
+    _ "WHERE"i ![a-zA-Z0-9_] _ where:Expression
+    settings:( _ SettingsClause )? {
+      const result = { kind: 'update', table, assignments, where };
+      if (cluster !== null) result.onCluster = cluster[1];
+      if (settings !== null) result.settings = settings[1];
+      return loc(result);
+    }
+
+// ── DELETE FROM ──────────────────────────────────────────────────────────────
+// DELETE FROM [db.]name [ON CLUSTER cluster] [IN PARTITION expr] WHERE expr [SETTINGS ...]
+DeleteStatement
+  = "DELETE"i ![a-zA-Z0-9_] _ "FROM"i ![a-zA-Z0-9_] _ table:TableRef
+    cluster:( _ OnClusterClause )?
+    partition:DeleteInPartitionClause?
+    _ "WHERE"i ![a-zA-Z0-9_] _ where:Expression
+    settings:( _ SettingsClause )? {
+      const result = { kind: 'delete', table, where };
+      if (cluster !== null) result.onCluster = cluster[1];
+      if (partition !== null) result.partition = partition;
+      if (settings !== null) result.settings = settings[1];
+      return loc(result);
+    }
+
+DeleteInPartitionClause
+  = _ "IN"i ![a-zA-Z0-9_] _ "PARTITION"i ![a-zA-Z0-9_] _ "ID"i ![a-zA-Z0-9_] _ lit:StringLiteral {
+      return { kind: 'id', id: lit.value };
+    }
+  / _ "IN"i ![a-zA-Z0-9_] _ "PARTITION"i ![a-zA-Z0-9_] _ expr:Expression {
+      return { kind: 'expr', expr };
+    }
+
+// ── CHECK TABLE / CHECK DATABASE / CHECK ALL TABLES ──────────────────────────
+CheckStatement
+  = "CHECK"i ![a-zA-Z0-9_] _ "ALL"i ![a-zA-Z0-9_] _ "TABLES"i ![a-zA-Z0-9_]
+    settings:( _ SettingsClause )? {
+      const result = { kind: 'check', targetType: 'ALL' };
+      if (settings !== null) result.settings = settings[1];
+      return loc(result);
+    }
+  / "CHECK"i ![a-zA-Z0-9_] _ "DATABASE"i ![a-zA-Z0-9_]
+    _ database:( QueryParamIdentifier / AliasName )
+    settings:( _ SettingsClause )? {
+      const result = { kind: 'check', targetType: 'DATABASE', database };
+      if (settings !== null) result.settings = settings[1];
+      return loc(result);
+    }
+  / "CHECK"i ![a-zA-Z0-9_] ( _ "TABLE"i ![a-zA-Z0-9_] )?
+    _ table:TableRef
+    partition:CheckPartitionClause?
+    preSettings:( _ SettingsClause )?
+    format:( _ FormatClause )?
+    postSettings:( _ SettingsClause )?
+    &StatementEnd {
+      const result = { kind: 'check', targetType: 'TABLE', table };
+      if (partition !== null) result.partition = partition;
+      if (format !== null) result.format = format[1];
+      const mergedSettings = [
+        ...(preSettings !== null ? preSettings[1] : []),
+        ...(postSettings !== null ? postSettings[1] : []),
+      ];
+      if (mergedSettings.length > 0) result.settings = mergedSettings;
+      return loc(result);
+    }
+
+CheckPartitionClause
+  = _ "PARTITION"i ![a-zA-Z0-9_] _ "ID"i ![a-zA-Z0-9_] _ lit:StringLiteral {
+      return { kind: 'id', id: lit.value };
+    }
+  / _ "PARTITION"i ![a-zA-Z0-9_] _ expr:Expression {
+      return { kind: 'expr', expr };
+    }
+  / _ "PART"i ![a-zA-Z0-9_] _ lit:StringLiteral {
+      return { kind: 'id', id: lit.value };
+    }
+
+// ── ATTACH ───────────────────────────────────────────────────────────────────
+// ATTACH [TABLE|VIEW|DICTIONARY] [IF NOT EXISTS] [db.]name [UUID '...'] [ON CLUSTER ...]
+// ATTACH DATABASE [IF NOT EXISTS] name [ON CLUSTER ...]
+// Only matches SIMPLE ATTACH forms. Complex ATTACHes (ATTACH MATERIALIZED VIEW
+// with columns/ENGINE/AS SELECT) fall through to OpaqueStatement.
+AttachStatement
+  = "ATTACH"i ![a-zA-Z0-9_] _ "DATABASE"i ![a-zA-Z0-9_]
+    ifne:( _ "IF"i ![a-zA-Z0-9_] _ "NOT"i ![a-zA-Z0-9_] _ "EXISTS"i ![a-zA-Z0-9_] )?
+    _ database:( QueryParamIdentifier / AliasName )
+    cluster:( _ OnClusterClause )?
+    &StatementEnd {
+      const result = { kind: 'attach', targetType: 'DATABASE', database };
+      if (ifne !== null) result.ifNotExists = true;
+      if (cluster !== null) result.onCluster = cluster[1];
+      return loc(result);
+    }
+  / "ATTACH"i ![a-zA-Z0-9_]
+    targetType:AttachTableKeyword
+    ifne:( _ "IF"i ![a-zA-Z0-9_] _ "NOT"i ![a-zA-Z0-9_] _ "EXISTS"i ![a-zA-Z0-9_] )?
+    _ table:TableRef
+    uuid:( _ "UUID"i ![a-zA-Z0-9_] _ StringLiteral )?
+    cluster:( _ OnClusterClause )?
+    &StatementEnd {
+      const result = { kind: 'attach', targetType, table };
+      if (ifne !== null) result.ifNotExists = true;
+      if (uuid !== null) result.uuid = uuid[3].value;
+      if (cluster !== null) result.onCluster = cluster[1];
+      return loc(result);
+    }
+
+// Positive lookahead: current position is the end of a statement (whitespace
+// followed by `;` or EOF). Used by simple statement rules that must not
+// over-consume when additional content (e.g. ENGINE, AS SELECT) follows.
+StatementEnd
+  = _ (";" / !.)
+
+AttachTableKeyword
+  = _ ( "TEMPORARY"i ![a-zA-Z0-9_] _ )? "TABLE"i ![a-zA-Z0-9_] { return 'TABLE'; }
+  / _ "VIEW"i ![a-zA-Z0-9_] { return 'VIEW'; }
+  / _ "DICTIONARY"i ![a-zA-Z0-9_] { return 'DICTIONARY'; }
+
+// ── RENAME TABLE / RENAME DATABASE / RENAME DICTIONARY ───────────────────────
+// The target keyword (TABLE/DATABASE/DICTIONARY) is optional for RENAME (defaults to TABLE).
+RenameStatement
+  = exchange:( "EXCHANGE"i ![a-zA-Z0-9_] { return true; } / "RENAME"i ![a-zA-Z0-9_] { return false; } )
+    targetType:( _ RenameTargetKeyword )?
+    ifExists:( _ "IF"i ![a-zA-Z0-9_] _ "EXISTS"i ![a-zA-Z0-9_] )?
+    _ head:RenamePair tail:( _ "," _ RenamePair )*
+    cluster:( _ OnClusterClause )?
+    settings:( _ SettingsClause )?
+    &StatementEnd {
+      const result = {
+        kind: 'rename',
+        targetType: targetType !== null ? targetType[1] : 'TABLE',
+        pairs: [head, ...tail.map((t) => t[3])],
+      };
+      if (exchange) result.exchange = true;
+      if (ifExists !== null) result.ifExists = true;
+      if (cluster !== null) result.onCluster = cluster[1];
+      if (settings !== null) result.settings = settings[1];
+      return loc(result);
+    }
+
+RenameTargetKeyword
+  = "TABLES"i ![a-zA-Z0-9_] { return 'TABLE'; }
+  / "TABLE"i ![a-zA-Z0-9_] { return 'TABLE'; }
+  / "DATABASE"i ![a-zA-Z0-9_] { return 'DATABASE'; }
+  / "DICTIONARIES"i ![a-zA-Z0-9_] { return 'DICTIONARY'; }
+  / "DICTIONARY"i ![a-zA-Z0-9_] { return 'DICTIONARY'; }
+
+RenamePair
+  = from:TableRef _ ( "TO"i / "AND"i ) ![a-zA-Z0-9_] _ to:TableRef {
+      return { from, to };
+    }
+
+// ── KILL QUERY / KILL MUTATION ───────────────────────────────────────────────
+// KILL (QUERY|MUTATION) [ON CLUSTER cluster] WHERE expr [SYNC|ASYNC|TEST]
+KillStatement
+  = "KILL"i ![a-zA-Z0-9_]
+    _ target:( "QUERY"i { return 'QUERY'; } / "MUTATION"i { return 'MUTATION'; } ) ![a-zA-Z0-9_]
+    cluster:( _ OnClusterClause )?
+    _ "WHERE"i ![a-zA-Z0-9_] _ where:Expression
+    mode:( _ ( "SYNC"i / "ASYNC"i / "TEST"i ) ![a-zA-Z0-9_] )?
+    settings:( _ SettingsClause )?
+    format:( _ FormatClause )?
+    &StatementEnd {
+      const result = { kind: 'kill', target, where };
+      if (cluster !== null) result.onCluster = cluster[1];
+      if (mode !== null) result.mode = mode[1].toUpperCase();
+      if (settings !== null) result.settings = settings[1];
+      if (format !== null) result.format = format[1];
+      return loc(result);
+    }
+
+// ── EXISTS TABLE / VIEW / DATABASE / DICTIONARY ──────────────────────────────
+ExistsStatement
+  = "EXISTS"i ![a-zA-Z0-9_] _ "DATABASE"i ![a-zA-Z0-9_]
+    _ database:( QueryParamIdentifier / AliasName )
+    settings:( _ SettingsClause )? {
+      const result = { kind: 'exists', targetType: 'DATABASE', database };
+      if (settings !== null) result.settings = settings[1];
+      return loc(result);
+    }
+  / "EXISTS"i ![a-zA-Z0-9_]
+    ( _ "TEMPORARY"i ![a-zA-Z0-9_] )?
+    targetType:ExistsTableKeyword?
+    _ table:TableRef
+    settings:( _ SettingsClause )?
+    &StatementEnd {
+      const result = {
+        kind: 'exists',
+        targetType: targetType !== null ? targetType : 'TABLE',
+        table,
+      };
+      if (settings !== null) result.settings = settings[1];
+      return loc(result);
+    }
+
+ExistsTableKeyword
+  = _ "TABLE"i ![a-zA-Z0-9_] { return 'TABLE'; }
+  / _ "VIEW"i ![a-zA-Z0-9_] { return 'VIEW'; }
+  / _ "DICTIONARY"i ![a-zA-Z0-9_] { return 'DICTIONARY'; }
 
 // Unified entry point for all CREATE/REPLACE statements
 CreateStatement
@@ -1029,14 +1447,16 @@ CreateViewStatement
     }
 
 // CreateMaterializedViewStatement: CREATE MATERIALIZED VIEW [IF NOT EXISTS] [db.]name [REFRESH ...] [TO [db.]table] [ENGINE ...] [POPULATE] AS query
+// Also matches ATTACH MATERIALIZED VIEW ... (with attach: true).
 CreateMaterializedViewStatement
-  = "CREATE"i ![a-zA-Z0-9_] orReplace:( _ "OR"i ![a-zA-Z0-9_] _ "REPLACE"i ![a-zA-Z0-9_] )?
+  = leadKw:( "CREATE"i / "ATTACH"i ) ![a-zA-Z0-9_] orReplace:( _ "OR"i ![a-zA-Z0-9_] _ "REPLACE"i ![a-zA-Z0-9_] )?
     _ "MATERIALIZED"i ![a-zA-Z0-9_] _ "VIEW"i ![a-zA-Z0-9_]
     ifne:( _ "IF"i ![a-zA-Z0-9_] _ "NOT"i ![a-zA-Z0-9_] _ "EXISTS"i ![a-zA-Z0-9_] )?
     _ table:TableRef
     uuid:( _ "UUID"i ![a-zA-Z0-9_] _ StringLiteral )?
     cluster:( _ OnClusterClause )?
     refresh:( _ RefreshClause )?
+    toInnerUuid:( _ "TO"i ![a-zA-Z0-9_] _ "INNER"i ![a-zA-Z0-9_] _ "UUID"i ![a-zA-Z0-9_] _ StringLiteral )?
     toTable:( _ "TO"i ![a-zA-Z0-9_] _ TableRef )?
     schema:( _ CreateTableSchema )?
     engine:( _ EngineClause )?
@@ -1046,6 +1466,7 @@ CreateMaterializedViewStatement
     _ KW_AS _ query:UnionQuery
     format:( _ FormatClause )? {
       const result = { kind: 'createMaterializedView', table };
+      if (leadKw.toUpperCase() === 'ATTACH') result.attach = true;
       if (orReplace !== null) result.orReplace = true;
       if (ifne !== null) result.ifNotExists = true;
       if (cluster !== null) result.onCluster = cluster[1];
@@ -1108,8 +1529,20 @@ CreateIndexExprs
   / expr:TernaryExpr { return expr; }
 
 // CreateDictionaryStatement: CREATE [OR REPLACE] DICTIONARY [IF NOT EXISTS] [db.]name (attrs) PRIMARY KEY ... SOURCE(...) LIFETIME(...) LAYOUT(...)
+// Also matches REPLACE DICTIONARY (sets replace: true).
 CreateDictionaryStatement
-  = "CREATE"i ![a-zA-Z0-9_] orReplace:( _ "OR"i ![a-zA-Z0-9_] _ "REPLACE"i ![a-zA-Z0-9_] )?
+  = "REPLACE"i ![a-zA-Z0-9_] _ "DICTIONARY"i ![a-zA-Z0-9_]
+    _ table:TableRef
+    cluster:( _ OnClusterClause )?
+    _ "(" _ attrs:DictAttrList _ ")"
+    _ dictDef:DictDefinition {
+      const result = { kind: 'createDictionary', table, replace: true };
+      if (cluster !== null) result.onCluster = cluster[1];
+      result.dictAttrs = attrs;
+      result.dictDef = dictDef;
+      return loc(result);
+    }
+  / "CREATE"i ![a-zA-Z0-9_] orReplace:( _ "OR"i ![a-zA-Z0-9_] _ "REPLACE"i ![a-zA-Z0-9_] )?
     _ "DICTIONARY"i ![a-zA-Z0-9_]
     ifne:( _ "IF"i ![a-zA-Z0-9_] _ "NOT"i ![a-zA-Z0-9_] _ "EXISTS"i ![a-zA-Z0-9_] )?
     _ table:TableRef
@@ -1647,9 +2080,14 @@ CreateLiveViewStatement
     }
 
 // CreateTableStatement: handles all CREATE TABLE and REPLACE TABLE forms
+// (and ATTACH TABLE forms via the ATTACH alternative in CreateTableHeader).
+// The optional FROM 'path' clause is only valid for ATTACH but accepted here.
 CreateTableStatement
-  = header:CreateTableHeader _ body:CreateTableBody format:( _ FormatClause )? {
+  = header:CreateTableHeader
+    fromPath:( _ "FROM"i ![a-zA-Z0-9_] _ StringLiteral )?
+    _ body:CreateTableBody format:( _ FormatClause )? {
       const result = { ...header, ...body };
+      if (fromPath !== null) result.attachFromPath = fromPath[4].value;
       if (format !== null) result.format = format[1];
       // Promote column-level PRIMARY KEY to primaryKey if no explicit PRIMARY KEY clause
       if (result._columnPrimaryKeys && !result.primaryKey) {
@@ -1661,19 +2099,24 @@ CreateTableStatement
 
 // Header: CREATE [OR REPLACE] [TEMPORARY] TABLE [IF NOT EXISTS] [db.]table [ON CLUSTER ...]
 // Also: REPLACE TABLE [db.]table [ON CLUSTER ...]
+// Also: ATTACH TABLE [IF NOT EXISTS] [db.]table [ON CLUSTER ...] (with attach: true flag)
 CreateTableHeader
-  = "REPLACE"i ![a-zA-Z0-9_] _ "TABLE"i ![a-zA-Z0-9_] _ table:TableRef cluster:( _ OnClusterClause )? {
+  = "REPLACE"i ![a-zA-Z0-9_]
+    temp:( _ "TEMPORARY"i ![a-zA-Z0-9_] )?
+    _ "TABLE"i ![a-zA-Z0-9_] _ table:TableRef cluster:( _ OnClusterClause )? {
       const result = { kind: 'createTable', replace: true, table };
+      if (temp !== null) result.temporary = true;
       if (cluster !== null) result.onCluster = cluster[1];
       return result;
     }
-  / "CREATE"i ![a-zA-Z0-9_] orReplace:( _ "OR"i ![a-zA-Z0-9_] _ "REPLACE"i ![a-zA-Z0-9_] )?
+  / leadKw:( "CREATE"i / "ATTACH"i ) ![a-zA-Z0-9_] orReplace:( _ "OR"i ![a-zA-Z0-9_] _ "REPLACE"i ![a-zA-Z0-9_] )?
     temp:( _ "TEMPORARY"i ![a-zA-Z0-9_] )?
     _ "TABLE"i ![a-zA-Z0-9_]
     ifne:( _ "IF"i ![a-zA-Z0-9_] _ "NOT"i ![a-zA-Z0-9_] _ "EXISTS"i ![a-zA-Z0-9_] )?
     _ table:TableRef
     cluster:( _ OnClusterClause )? {
       const result = { kind: 'createTable', table };
+      if (leadKw.toUpperCase() === 'ATTACH') result.attach = true;
       if (orReplace !== null) result.orReplace = true;
       if (temp !== null) result.temporary = true;
       if (ifne !== null) result.ifNotExists = true;
@@ -2188,9 +2631,11 @@ UnionAllOrDistinct
 UnionQueryAtom
   = "(" beforeQuery:_ query:UnionQuery afterQuery:_ ")" {
       query = addSurroundingWs(query, beforeQuery, afterQuery);
-      // Mark bare parenthesized selects so they can be wrapped in SelectWithUnionQuery
-      // when they appear inside INTERSECT/EXCEPT or UNION DISTINCT
-      if (query.kind === 'select') return { ...query, parenthesized: true };
+      // Mark bare parenthesized selects/intersects so they can be wrapped in
+      // SelectWithUnionQuery when they appear inside INTERSECT/EXCEPT/UNION DISTINCT.
+      if (query.kind === 'select' || query.kind === 'intersect' || query.kind === 'union') {
+        return { ...query, parenthesized: true };
+      }
       return query;
     }
   / ExplainStatement
@@ -4287,13 +4732,13 @@ _ "whitespace"
 
 // Horizontal whitespace + comments (no newlines consumed)
 _HWS
-  = items:([ \t\u00A0\u2003\u3000\uFEFF]+ { return null; } / SingleLineComment / MultiLineComment)* {
+  = items:([ \t\u0085\u00A0\u00AD\u034F\u061C\u115F\u1160\u17B4\u17B5\u180E\u2000-\u200F\u2028\u2029\u202A-\u202F\u205F\u2060-\u2064\u206A-\u206F\u3000\u3164\uFEFF\uFFA0]+ { return null; } / SingleLineComment / MultiLineComment)* {
       return items.filter((item) => item !== null);
     }
 
 // Newline(s) followed by optional horizontal whitespace + comments
 _NLC
-  = [\n\r]+ items:([ \t\u00A0\u2003\u3000\uFEFF]+ { return null; } / SingleLineComment / MultiLineComment)* {
+  = [\n\r]+ items:([ \t\u0085\u00A0\u00AD\u034F\u061C\u115F\u1160\u17B4\u17B5\u180E\u2000-\u200F\u2028\u2029\u202A-\u202F\u205F\u2060-\u2064\u206A-\u206F\u3000\u3164\uFEFF\uFFA0]+ { return null; } / SingleLineComment / MultiLineComment)* {
       return items;
     }
 

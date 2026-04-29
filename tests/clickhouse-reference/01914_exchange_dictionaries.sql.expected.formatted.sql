@@ -55,6 +55,8 @@ FROM `01914_db`.dictionary_1;
 SELECT *
 FROM `01914_db`.dictionary_2;
 
+EXCHANGE DICTIONARY `01914_db`.dictionary_1 AND `01914_db`.dictionary_2;
+
 DROP DICTIONARY `01914_db`.dictionary_1;
 
 DROP DICTIONARY `01914_db`.dictionary_2;

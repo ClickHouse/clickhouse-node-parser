@@ -22,3 +22,7 @@ INSERT INTO weird_projections SELECT
     132 AS account_id,
     toString(account_id) AS user_id
 FROM numbers(10000);
+
+OPTIMIZE TABLE weird_projections FINAL;
+
+DELETE FROM weird_projections WHERE account_id = 134;

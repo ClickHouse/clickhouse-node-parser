@@ -29,6 +29,8 @@ INSERT INTO tab SELECT
 FROM `system`.numbers
 LIMIT 10000;
 
+SHOW CREATE TABLE tab;
+
 ALTER TABLE tab DROP STATISTICS a, b, c, d;
 
 ALTER TABLE tab ADD STATISTICS b TYPE countmin, uniq;

@@ -15,6 +15,8 @@ CREATE TABLE test_alter_drop_comment (
 ALTER TABLE test_alter_drop_comment 
     DROP COLUMN c0, 
     COMMENT COLUMN IF EXISTS c0 'this comment should be silently ignored';
+-- Verify that c0 is dropped and c1, c2 remain
+DESCRIBE test_alter_drop_comment;
 -- Test case 2: COMMENT COLUMN IF EXISTS on non-existent column (should succeed)
 ALTER TABLE test_alter_drop_comment 
     COMMENT COLUMN IF EXISTS non_existent_column 'this should be ignored';
@@ -42,6 +44,7 @@ ALTER TABLE test_alter_drop_comment_mt
     DROP COLUMN status,
     COMMENT COLUMN IF EXISTS status 'dropped status column',
     COMMENT COLUMN IF EXISTS value 'existing value column';
+DESCRIBE test_alter_drop_comment_mt;
 DROP TABLE test_alter_drop_comment_mt;
 -- Test edge case: try to drop and comment the same column without IF EXISTS (should fail)
 CREATE TABLE test_alter_fail (c0 Int, c1 Int) ENGINE = Memory;

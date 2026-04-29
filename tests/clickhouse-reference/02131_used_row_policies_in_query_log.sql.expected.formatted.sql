@@ -44,6 +44,8 @@ DROP ROW POLICY 02131_filter_5 ON 02131_rqtable;
 
 DROP TABLE `02131_rqtable`;
 
+SYSTEM FLUSH LOGS query_log;
+
 SELECT
     query,
     used_row_policies

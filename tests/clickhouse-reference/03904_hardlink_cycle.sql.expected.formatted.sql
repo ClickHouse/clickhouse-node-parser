@@ -24,4 +24,8 @@ ALTER TABLE hardlink_cycle RENAME COLUMN c TO d;
 
 ALTER TABLE hardlink_cycle RENAME COLUMN d TO e;
 
+DETACH TABLE hardlink_cycle;
+
+ATTACH TABLE hardlink_cycle;
+
 DROP TABLE hardlink_cycle;

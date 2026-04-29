@@ -18,6 +18,8 @@ ENGINE = MergeTree ORDER BY tuple();
 INSERT INTO tab SELECT 'tkn' || toString(number) || 'nkt' FROM numbers(200000);
 SELECT count() FROM tab WHERE s LIKE '%888%' SETTINGS use_skip_indexes = 0;
 SELECT count() FROM tab WHERE hasAnyTokens(s, '888');
+SYSTEM CLEAR TEXT INDEX CACHES;
+SYSTEM FLUSH LOGS query_log;
 SELECT
     ProfileEvents['TextIndexHeaderCacheMisses'] > 0,
     ProfileEvents['TextIndexDictionaryBlockCacheMisses'] > 0,

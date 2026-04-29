@@ -31,6 +31,8 @@ ORDER BY
     value ASC,
     sign ASC;
 
+OPTIMIZE TABLE mult_tab FINAL;
+
 SELECT *
 FROM mult_tab;
 

@@ -8,6 +8,13 @@ SET send_logs_level = 'fatal';
 
 DROP TABLE IF EXISTS x;
 
+ATTACH TABLE x
+(
+    key Int
+)
+ENGINE = ReplicatedMergeTree('/tables/{database}/{uuid}', 'r1')
+ORDER BY tuple();
+
 SELECT uuid
 FROM `system`.tables
 WHERE database = currentDatabase()

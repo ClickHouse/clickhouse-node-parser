@@ -17,6 +17,8 @@ INSERT INTO t SELECT
     toString(number)
 FROM numbers(9);
 
+SYSTEM STOP MERGES t;
+
 SET alter_sync = 0;
 
 ALTER TABLE t RENAME COLUMN value1 TO value11;
@@ -26,6 +28,8 @@ SELECT *
 FROM t
 WHERE value11 = '000'
 SETTINGS max_rows_to_read = 0;
+
+SYSTEM START MERGES t;
 
 -- Another ALTER to wait for.
 ALTER TABLE t RENAME COLUMN value11 TO value12 SETTINGS mutations_sync = 2;

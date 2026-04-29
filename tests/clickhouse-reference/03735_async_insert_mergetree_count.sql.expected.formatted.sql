@@ -104,6 +104,8 @@ INSERT INTO src_table;
 
 INSERT INTO src_table;
 
+SYSTEM flush async insert queue src_table;
+
 -- Expecting 8
 SELECT
     'src_table',
@@ -153,6 +155,8 @@ FROM dst_2_01;
 SELECT *
 FROM dst_2_01
 ORDER BY `all` ASC;
+
+SYSTEM flush logs system.query_log;
 
 SELECT
     query,

@@ -47,6 +47,8 @@ SETTINGS
     parallel_replicas_local_plan = 1,
     parallel_replicas_insert_select_local_pipeline = 1;
 
+SYSTEM FLUSH LOGS query_log;
+
 SELECT count()
 FROM `system`.query_log
 WHERE ((current_database = currentDatabase()

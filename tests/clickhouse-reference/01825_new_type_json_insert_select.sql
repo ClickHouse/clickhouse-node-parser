@@ -22,6 +22,7 @@ DROP TABLE type_json_src;
 DROP TABLE type_json_dst;
 CREATE TABLE type_json_dst (data JSON) ENGINE = MergeTree ORDER BY tuple();
 CREATE TABLE type_json_src (data String) ENGINE = MergeTree ORDER BY tuple();
+SYSTEM STOP MERGES type_json_src;
 SET max_threads = 1;
 SET max_insert_threads = 1;
 SET output_format_json_named_tuples_as_objects = 1;

@@ -16,6 +16,8 @@ CREATE INDEX i_a ON t_index (a) TYPE minmax GRANULARITY 2;
 
 CREATE INDEX i_b ON t_index (b) TYPE bloom_filter GRANULARITY 2;
 
+SHOW CREATE TABLE t_index;
+
 SELECT
     table,
     name,
@@ -49,6 +51,10 @@ CREATE TABLE t_index_replica
 ENGINE = ReplicatedMergeTree('/test/2319/{database}', '2')
 ORDER BY a
 SETTINGS add_minmax_index_for_numeric_columns = 0;
+
+SYSTEM sync replica t_index_replica;
+
+SHOW CREATE TABLE t_index_replica;
 
 SELECT
     table,

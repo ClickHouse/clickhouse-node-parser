@@ -15,6 +15,10 @@ CREATE TABLE check_query_comment_column
 )
 ENGINE = TinyLog;
 
+SHOW CREATE TABLE check_query_comment_column;
+
+DESCRIBE TABLE check_query_comment_column;
+
 SELECT
     table,
     name,
@@ -44,4 +48,4 @@ ALTER TABLE check_query_comment_column COMMENT COLUMN first_column 'comment 1_2'
 
 ALTER TABLE check_query_comment_column MODIFY COLUMN first_column COMMENT 'comment 1_3', MODIFY COLUMN second_column COMMENT 'comment 2_3', MODIFY COLUMN third_column COMMENT 'comment 3_3';
 
-ALTER TABLE check_query_comment_column MODIFY COLUMN first_column DEFAULT 1 COMMENT 'comment 1_3', MODIFY COLUMN second_column COMMENT 'comment 2_3', MODIFY COLUMN third_column DEFAULT 1 COMMENT 'comment 3_3';
+ALTER TABLE check_query_comment_column MODIFY COLUMN first_column DEFAULT 1 COMMENT 'comment 1_3', MODIFY COLUMN second_column COMMENT 'comment 2_3', MODIFY COLUMN third_column DEFAULT 1 COMMENT 'comment 3_3'; -- TODO: add here tests with ReplicatedMergeTree({database})

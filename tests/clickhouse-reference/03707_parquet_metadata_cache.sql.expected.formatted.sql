@@ -8,6 +8,8 @@ SYSTEM DROP PARQUET METADATA CACHE will lead to non-deterministic results
 */
 SET log_queries = 1;
 
+SYSTEM DROP PARQUET METADATA CACHE;
+
 -- Triggers caching of the file
 -- should be a cache miss as we load the cache the first time
 SELECT *
@@ -15,6 +17,8 @@ FROM s3(s3_conn, filename = '03707_cache_test.parquet', `format` = 'Parquet')
 SETTINGS
     log_comment = '03707-first-test-query',
     use_parquet_metadata_cache = 1;
+
+SYSTEM FLUSH LOGS query_log;
 
 SELECT
     ProfileEvents['ParquetMetadataCacheHits'] AS hits,

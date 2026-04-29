@@ -14,6 +14,8 @@ FROM sharded_table
 FORMAT Null
 SETTINGS log_comment = '02985_shard_query_start_time_query_1';
 
+SYSTEM FLUSH LOGS query_log;
+
 -- Check that there are 2 queries to shards and for each one query_start_time_microseconds is more recent
 -- than initial_query_start_time_microseconds, and initial_query_start_time_microseconds matches the original query
 -- query_start_time_microseconds

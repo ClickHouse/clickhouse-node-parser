@@ -5,6 +5,7 @@ SELECT * FROM test;
 SELECT name, partition, partition_id FROM system.parts WHERE database = currentDatabase() AND table = 'test' AND active ORDER BY partition;
 ALTER TABLE test MODIFY COLUMN x Enum('hello' = 1, 'world' = 2, 'goodbye' = 3);
 INSERT INTO test VALUES ('goodbye', 'test');
+OPTIMIZE TABLE test FINAL;
 SELECT * FROM test ORDER BY x;
 ALTER TABLE test MODIFY COLUMN x Enum('hello' = 1, 'world' = 2); -- { serverError ALTER_OF_COLUMN_IS_FORBIDDEN }
 ALTER TABLE test MODIFY COLUMN x Enum('hello' = 1, 'world' = 2, 'test' = 3);

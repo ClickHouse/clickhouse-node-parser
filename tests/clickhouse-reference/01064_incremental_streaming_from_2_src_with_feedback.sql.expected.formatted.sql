@@ -111,6 +111,13 @@ LEFT JOIN (
     USING (id)
 GROUP BY id;
 
+-- This query has effect only for existing tables, so it must be located after CREATE.
+SYSTEM STOP MERGES target_table;
+
+SYSTEM STOP MERGES checkouts;
+
+SYSTEM STOP MERGES logins;
+
 -- feed with some initial values
 INSERT INTO logins SELECT
     number AS id,

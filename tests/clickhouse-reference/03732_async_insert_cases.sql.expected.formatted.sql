@@ -33,6 +33,8 @@ FROM `03732_table`;
 
 INSERT INTO `03732_table`;
 
+SYSTEM flush async insert queue 03732_table;
+
 SELECT count(*)
 FROM `03732_table`; -- Expecting 3
 
@@ -62,6 +64,8 @@ ORDER BY id;
 INSERT INTO `03732_table_join`;
 
 INSERT INTO `03732_table_join`;
+
+SYSTEM flush async insert queue 03732_table_join;
 
 CREATE TABLE `03732_table_join_mv_dst`
 (

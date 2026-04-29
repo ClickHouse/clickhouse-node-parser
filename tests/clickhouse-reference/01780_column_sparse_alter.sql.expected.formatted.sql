@@ -39,4 +39,8 @@ ALTER TABLE t_sparse_alter MODIFY COLUMN t UInt16;
 SELECT uniqExact(t)
 FROM t_sparse_alter;
 
+DETACH TABLE t_sparse_alter;
+
+ATTACH TABLE t_sparse_alter;
+
 DROP TABLE t_sparse_alter;

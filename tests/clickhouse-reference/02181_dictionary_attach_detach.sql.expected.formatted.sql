@@ -21,6 +21,14 @@ SOURCE(clickhouse(TABLE '02181_test_table'))
 LIFETIME(0)
 LAYOUT(HASHED());
 
+DETACH TABLE `02181_test_dictionary`; --{serverError CANNOT_DETACH_DICTIONARY_AS_TABLE}
+
+ATTACH TABLE `02181_test_dictionary`; --{serverError INCORRECT_QUERY}
+
+DETACH DICTIONARY `02181_test_dictionary`;
+
+ATTACH DICTIONARY `02181_test_dictionary`;
+
 SELECT *
 FROM `02181_test_dictionary`;
 

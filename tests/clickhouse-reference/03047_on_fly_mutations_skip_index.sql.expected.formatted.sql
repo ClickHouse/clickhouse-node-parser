@@ -16,6 +16,8 @@ CREATE TABLE t_lightweight_mut_3
 ENGINE = ReplicatedMergeTree('/clickhouse/tables/{database}/t_lightweight_mut_3', '1')
 ORDER BY id;
 
+SYSTEM STOP MERGES t_lightweight_mut_3;
+
 INSERT INTO t_lightweight_mut_3;
 
 INSERT INTO t_lightweight_mut_3;
@@ -44,6 +46,8 @@ WHERE like(s, 'Granules: %');
 ALTER TABLE t_lightweight_mut_3 UPDATE v = 1000 WHERE id = 1;
 
 INSERT INTO t_lightweight_mut_3;
+
+SYSTEM SYNC REPLICA t_lightweight_mut_3 PULL;
 
 SELECT
     id,

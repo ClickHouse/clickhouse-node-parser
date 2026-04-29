@@ -87,6 +87,8 @@ ORDER BY
     key ASC,
     value ASC;
 
+SYSTEM stop merges simple_agg_groupArrayLastArray;
+
 INSERT INTO simple_agg_groupArrayLastArray;
 
 SELECT *

@@ -111,6 +111,8 @@ LIMIT 100
 FORMAT Null
 SETTINGS enable_analyzer = 1;
 
+SYSTEM FLUSH LOGS query_log;
+
 SELECT
     '02177_CTE_GLOBAL_ON',
     ProfileEvents['SleepFunctionCalls'] AS sleep_calls,

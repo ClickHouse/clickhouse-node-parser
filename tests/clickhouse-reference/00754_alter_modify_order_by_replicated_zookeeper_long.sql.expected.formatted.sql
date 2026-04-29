@@ -58,6 +58,8 @@ ALTER TABLE summing_r1 ADD COLUMN z UInt32 AFTER y, MODIFY ORDER BY (x, y, -z);
 
 INSERT INTO summing_r1 (x, y, z, val);
 
+SYSTEM SYNC REPLICA summing_r2;
+
 SELECT *
 FROM summing_r2;
 
@@ -70,7 +72,13 @@ ORDER BY
     y ASC,
     z ASC;
 
+SHOW CREATE TABLE summing_r2;
+
+DETACH TABLE summing_r2;
+
 ALTER TABLE summing_r1 ADD COLUMN t UInt32 AFTER z, MODIFY ORDER BY (x, y, t * t) SETTINGS replication_alter_partitions_sync = 2; -- { serverError UNFINISHED }
+
+ATTACH TABLE summing_r2;
 
 DROP TABLE summing_r1;
 

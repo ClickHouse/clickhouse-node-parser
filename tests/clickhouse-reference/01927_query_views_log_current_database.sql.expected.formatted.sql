@@ -97,6 +97,8 @@ INSERT INTO table_d SELECT
     *
 FROM numbers(50);
 
+SYSTEM FLUSH LOGS query_log, query_views_log;
+
 -- CHECK LOGS OF INSERT 1
 SELECT
     'Query log rows' AS stage,

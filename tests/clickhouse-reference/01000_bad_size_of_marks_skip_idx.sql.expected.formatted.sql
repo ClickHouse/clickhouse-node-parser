@@ -26,3 +26,5 @@ FROM bad_skip_idx
 WHERE value = 'xxxxxxxxxx1015'; -- check no exception
 
 ALTER TABLE bad_skip_idx ADD INDEX idx value TYPE bloom_filter(0.01) GRANULARITY 4;
+
+OPTIMIZE TABLE bad_skip_idx FINAL;

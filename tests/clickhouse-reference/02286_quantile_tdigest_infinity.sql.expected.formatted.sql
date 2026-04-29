@@ -75,6 +75,8 @@ FROM (
     )
 GROUP BY A;
 
+OPTIMIZE TABLE issue32107 FINAL;
+
 SELECT quantileTDigest(inf)
 FROM numbers(200);
 

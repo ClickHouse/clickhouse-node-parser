@@ -16,6 +16,8 @@ CREATE TABLE t2
 ENGINE = MergeTree
 ORDER BY x;
 
+SYSTEM STOP MERGES t;
+
 SET max_insert_block_size = 1;
 
 SET min_insert_block_size_rows = 1;

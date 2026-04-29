@@ -35,6 +35,12 @@ WHERE database = currentDatabase()
     AND active
 ORDER BY name ASC;
 
+SYSTEM SYNC REPLICA not_partitioned_replica1_00502 PULL;
+
+SYSTEM SYNC REPLICA not_partitioned_replica2_00502;
+
+OPTIMIZE TABLE not_partitioned_replica1_00502 PARTITION tuple() FINAL;
+
 SELECT
     `partition`,
     name
@@ -88,6 +94,12 @@ WHERE database = currentDatabase()
     AND table = 'partitioned_by_week_replica1'
     AND active
 ORDER BY name ASC;
+
+SYSTEM SYNC REPLICA partitioned_by_week_replica1 PULL;
+
+SYSTEM SYNC REPLICA partitioned_by_week_replica2;
+
+OPTIMIZE TABLE partitioned_by_week_replica1 PARTITION '2000-01-03' FINAL;
 
 SELECT
     `partition`,
@@ -144,6 +156,14 @@ WHERE database = currentDatabase()
     AND active
 ORDER BY name ASC;
 
+SYSTEM SYNC REPLICA partitioned_by_tuple_replica1_00502 PULL;
+
+SYSTEM SYNC REPLICA partitioned_by_tuple_replica2_00502;
+
+OPTIMIZE TABLE partitioned_by_tuple_replica1_00502 PARTITION ('2000-01-01', 1) FINAL;
+
+OPTIMIZE TABLE partitioned_by_tuple_replica1_00502 PARTITION ('2000-01-02', 1) FINAL;
+
 SELECT
     `partition`,
     name
@@ -197,6 +217,12 @@ WHERE database = currentDatabase()
     AND active
 ORDER BY name ASC;
 
+SYSTEM SYNC REPLICA partitioned_by_string_replica1 PULL;
+
+SYSTEM SYNC REPLICA partitioned_by_string_replica2;
+
+OPTIMIZE TABLE partitioned_by_string_replica2 PARTITION 'aaa' FINAL;
+
 SELECT
     `partition`,
     name
@@ -236,6 +262,13 @@ ORDER BY s
 PARTITION BY length(s);
 
 INSERT INTO without_fixed_size_columns_replica1;
+
+-- Wait for replication.
+SYSTEM SYNC REPLICA without_fixed_size_columns_replica1 PULL;
+
+SYSTEM SYNC REPLICA without_fixed_size_columns_replica2;
+
+OPTIMIZE TABLE without_fixed_size_columns_replica2 PARTITION 1 FINAL;
 
 SELECT
     `partition`,

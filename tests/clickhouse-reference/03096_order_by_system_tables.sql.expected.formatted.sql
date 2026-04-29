@@ -1,3 +1,5 @@
+SYSTEM FLUSH LOGS /* all tables */;
+
 -- Check for system tables which have non-default sorting key
 WITH ['asynchronous_metric_log', 'asynchronous_insert_log', 'opentelemetry_span_log', 'coverage_log'] AS known_tables,
 

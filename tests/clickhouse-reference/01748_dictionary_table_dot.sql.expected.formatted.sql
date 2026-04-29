@@ -30,6 +30,9 @@ LAYOUT(COMPLEX_KEY_HASHED());
 
 INSERT INTO `test.txt`;
 
+-- TODO: it does not work without fully qualified name.
+SYSTEM RELOAD DICTIONARY test_01748.test_dict;
+
 SELECT dictGet(test_dict, 'value', (toUInt32(1), toUInt32(2)));
 
 DROP DATABASE test_01748;

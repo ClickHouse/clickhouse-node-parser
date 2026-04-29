@@ -19,6 +19,8 @@ FROM `system`.dropped_tables
 WHERE table = '02681_undrop_mergetree'
 LIMIT 1;
 
+undrop table 02681_undrop_mergetree;
+
 SELECT *
 FROM `02681_undrop_mergetree`
 ORDER BY id ASC;
@@ -36,6 +38,12 @@ ENGINE = MergeTree()
 ORDER BY id;
 
 INSERT INTO `02681_undrop_detach`;
+
+DETACH TABLE `02681_undrop_detach` SYNC;
+
+undrop table 02681_undrop_detach; -- { serverError TABLE_ALREADY_EXISTS }
+
+ATTACH TABLE `02681_undrop_detach`;
 
 ALTER TABLE `02681_undrop_detach` UPDATE num = 2 WHERE id = 1;
 
@@ -66,6 +74,8 @@ FROM `system`.dropped_tables
 WHERE table = '02681_undrop_uuid_on_cluster'
 LIMIT 1;
 
+undrop table 02681_undrop_uuid_on_cluster on cluster test_shard_localhost format Null;
+
 SELECT *
 FROM `02681_undrop_uuid_on_cluster`
 ORDER BY id ASC;
@@ -91,6 +101,8 @@ FROM `system`.dropped_tables
 WHERE table = '02681_undrop_no_uuid_on_cluster'
 LIMIT 1;
 
+undrop table 02681_undrop_no_uuid_on_cluster on cluster test_shard_localhost format Null;
+
 SELECT *
 FROM `02681_undrop_no_uuid_on_cluster`
 ORDER BY id ASC;
@@ -115,6 +127,8 @@ FROM `system`.dropped_tables
 WHERE table = '02681_undrop_replicatedmergetree'
 LIMIT 1;
 
+undrop table 02681_undrop_replicatedmergetree;
+
 SELECT *
 FROM `02681_undrop_replicatedmergetree`
 ORDER BY id ASC;
@@ -138,6 +152,8 @@ FROM `system`.dropped_tables
 WHERE table = '02681_undrop_log'
 LIMIT 1;
 
+undrop table 02681_undrop_log;
+
 SELECT *
 FROM `02681_undrop_log`
 ORDER BY id ASC;
@@ -158,6 +174,8 @@ SELECT table
 FROM `system`.dropped_tables
 WHERE table = '02681_undrop_distributed'
 LIMIT 1;
+
+undrop table 02681_undrop_distributed;
 
 DROP TABLE `02681_undrop_distributed`;
 
@@ -182,6 +200,8 @@ SELECT table
 FROM `system`.dropped_tables
 WHERE table = '02681_undrop_multiple'
 LIMIT 1;
+
+undrop table 02681_undrop_multiple;
 
 SELECT *
 FROM `02681_undrop_multiple`

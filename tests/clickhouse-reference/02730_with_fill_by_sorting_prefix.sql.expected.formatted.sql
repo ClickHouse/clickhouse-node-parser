@@ -30,6 +30,8 @@ ORDER BY
     sensor_id ASC,
     timestamp ASC WITH FILL STEP 1;
 
+SYSTEM stop merges ts;
+
 -- FillingTransform: 6 rows will be processed in 3 chunks with 2 rows each
 INSERT INTO ts;
 

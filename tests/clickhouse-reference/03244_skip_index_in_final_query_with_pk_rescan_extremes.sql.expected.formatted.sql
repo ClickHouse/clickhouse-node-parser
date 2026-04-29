@@ -17,6 +17,8 @@ ENGINE = ReplacingMergeTree
 ORDER BY id
 SETTINGS index_granularity = 2;
 
+SYSTEM STOP MERGES tab1;
+
 INSERT INTO tab1 SELECT
     number,
     number
@@ -98,6 +100,8 @@ ENGINE = ReplacingMergeTree
 ORDER BY (id1, id2, id3)
 SETTINGS index_granularity = 64;
 
+SYSTEM STOP MERGES tab2;
+
 INSERT INTO tab2 SELECT
     (number % 2500),
     (number % 500),
@@ -132,6 +136,8 @@ CREATE TABLE tab3
 ENGINE = ReplacingMergeTree()
 ORDER BY key
 PARTITION BY key;
+
+SYSTEM STOP MERGES tab3;
 
 INSERT INTO tab3 SELECT
     number,

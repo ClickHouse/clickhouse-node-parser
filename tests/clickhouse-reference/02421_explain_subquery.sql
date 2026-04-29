@@ -27,3 +27,4 @@ DROP TABLE t1;
 SET enable_analyzer = 1;
 SELECT count() > 3 FROM (EXPLAIN PIPELINE header = 1 SELECT * FROM system.numbers ORDER BY number DESC) WHERE explain LIKE '%Header: \_\_table1.number UInt64%';
 SELECT (EXPLAIN SYNTAX oneline = 1 SELECT 1) == 'SELECT 1 FROM system.one';
+-- EXPLAIN ESTIMATE is not supported in experimental analyzer

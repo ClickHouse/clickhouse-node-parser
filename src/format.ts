@@ -195,7 +195,33 @@ export function format(statements: Statement[]): string {
         result += s.leadingComments.join('\n') + '\n';
       }
       _endComments = [];
-      result += formatStatement(s, '');
+      let body: string;
+      // Top-level parenthesized intersect/union: format the body without trailing
+      // clauses, wrap in parens, then re-append trailing clauses outside.
+      if (
+        (s.kind === 'union' || s.kind === 'intersect') &&
+        (s as { parenthesized?: boolean }).parenthesized === true
+      ) {
+        const trailing = formatTrailingClauses(s, '');
+        const inner = formatStatement(
+          {
+            ...s,
+            intoOutfile: undefined,
+            preFormatSettings: undefined,
+            format: undefined,
+            postFormatSettings: undefined,
+          } as Statement,
+          '',
+        );
+        body = `(${inner.trimStart()})${trailing}`;
+      } else {
+        body = formatStatement(s, '');
+        // Top-level parenthesized SELECT must preserve its wrapping parens.
+        if (s.kind === 'select' && s.parenthesized) {
+          body = `(${body.trimStart()})`;
+        }
+      }
+      result += body;
       // Flush any remaining end comments before the semicolon
       if (_endComments.length > 0) {
         result += ' ' + _endComments.join(' ');
@@ -281,6 +307,32 @@ export function formatNode(node: ASTNode, indent: string = ''): string {
       return formatInsertStatement(node, indent);
     case 'truncate':
       return formatTruncateStatement(node, indent);
+    case 'optimize':
+      return formatOptimizeStatement(node, indent);
+    case 'describe':
+      return formatDescribeStatement(node, indent);
+    case 'showCreate':
+      return formatShowCreateStatement(node, indent);
+    case 'detach':
+      return formatDetachStatement(node, indent);
+    case 'delete':
+      return formatDeleteStatement(node, indent);
+    case 'update':
+      return formatUpdateStatement(node, indent);
+    case 'check':
+      return formatCheckStatement(node, indent);
+    case 'attach':
+      return formatAttachStatement(node, indent);
+    case 'rename':
+      return formatRenameStatement(node, indent);
+    case 'exists':
+      return formatExistsStatement(node, indent);
+    case 'kill':
+      return formatKillStatement(node, indent);
+    case 'executeAs':
+      return formatExecuteAsStatement(node, indent);
+    case 'empty':
+      return '';
     case 'drop':
       return formatStatement(node, indent);
     case 'alter':
@@ -399,6 +451,19 @@ function formatStatement(stmt: Statement, indent: string): string {
   if (stmt.kind === 'truncate') {
     return formatTruncateStatement(stmt, indent);
   }
+  if (stmt.kind === 'optimize') return formatOptimizeStatement(stmt, indent);
+  if (stmt.kind === 'describe') return formatDescribeStatement(stmt, indent);
+  if (stmt.kind === 'showCreate') return formatShowCreateStatement(stmt, indent);
+  if (stmt.kind === 'detach') return formatDetachStatement(stmt, indent);
+  if (stmt.kind === 'delete') return formatDeleteStatement(stmt, indent);
+  if (stmt.kind === 'update') return formatUpdateStatement(stmt, indent);
+  if (stmt.kind === 'check') return formatCheckStatement(stmt, indent);
+  if (stmt.kind === 'attach') return formatAttachStatement(stmt, indent);
+  if (stmt.kind === 'rename') return formatRenameStatement(stmt, indent);
+  if (stmt.kind === 'exists') return formatExistsStatement(stmt, indent);
+  if (stmt.kind === 'kill') return formatKillStatement(stmt, indent);
+  if (stmt.kind === 'executeAs') return formatExecuteAsStatement(stmt, indent);
+  if (stmt.kind === 'empty') return '';
   if (stmt.kind === 'drop') {
     const fmtRef = (t: import('./ast').TableRef) =>
       t.database ? `${quoteIdent(t.database)}.${quoteIdent(t.table)}` : quoteIdent(t.table);
@@ -764,15 +829,8 @@ function formatAlterStatement(stmt: AlterStatement, indent: string): string {
 }
 
 function formatSystemStatement(stmt: SystemStatement, indent: string): string {
-  // Opaque statements (DROP USER, ALTER, etc.) store the full body including the keyword
-  if (
-    /^(DROP|ALTER|RENAME|ATTACH|DETACH|OPTIMIZE|CHECK|DESCRIBE|DESC|EXISTS|SHOW|GRANT|REVOKE|EXCHANGE|KILL|UNDO|DELETE|BACKUP|RESTORE|BEGIN|COMMIT|ROLLBACK|WATCH|UNDROP|MOVE|TRUNCATE)\b/i.test(
-      stmt.body,
-    )
-  ) {
-    return `${indent}${stmt.body}`;
-  }
-  return `${indent}SYSTEM ${stmt.body}`;
+  // Body always includes the leading keyword (SYSTEM, ALTER, DROP, etc.).
+  return `${indent}${stmt.body}`;
 }
 
 function formatInsertStatement(stmt: InsertStatement, indent: string): string {
@@ -803,7 +861,12 @@ function formatInsertStatement(stmt: InsertStatement, indent: string): string {
   }
   if (stmt.selectQuery) {
     const formatted = formatStatement(stmt.selectQuery, '');
-    if (stmt.selectQuery.kind === 'select' && stmt.selectQuery.parenthesized) {
+    const sq = stmt.selectQuery;
+    const sqParen =
+      (sq.kind === 'select' && sq.parenthesized) ||
+      ((sq.kind === 'intersect' || sq.kind === 'union') &&
+        (sq as { parenthesized?: boolean }).parenthesized === true);
+    if (sqParen) {
       parts.push(`(${formatted})`);
     } else {
       parts.push(formatted);
@@ -813,10 +876,7 @@ function formatInsertStatement(stmt: InsertStatement, indent: string): string {
   return prefixLines.length > 0 ? `${prefixLines.join('\n')}\n${insertLine}` : insertLine;
 }
 
-function formatTruncateStatement(
-  stmt: import('./ast').TruncateStatement,
-  indent: string,
-): string {
+function formatTruncateStatement(stmt: import('./ast').TruncateStatement, indent: string): string {
   const parts: string[] = [`${indent}TRUNCATE`];
   if (stmt.targetType === 'TABLES') {
     if (stmt.allTables) parts.push('ALL');
@@ -838,13 +898,205 @@ function formatTruncateStatement(
     parts.push('TABLE');
     if (stmt.ifExists) parts.push('IF EXISTS');
     const t = stmt.table!;
-    parts.push(t.database ? `${quoteIdent(t.database)}.${quoteIdent(t.table)}` : quoteIdent(t.table));
+    parts.push(
+      t.database ? `${quoteIdent(t.database)}.${quoteIdent(t.table)}` : quoteIdent(t.table),
+    );
     if (stmt.onCluster) parts.push(`ON CLUSTER ${quoteIdent(stmt.onCluster)}`);
     if (stmt.settings && stmt.settings.length > 0) {
       parts.push(`SETTINGS ${formatSettingsList(stmt.settings, indent)}`);
     }
   }
   return parts.join(' ');
+}
+
+function formatOptimizeStatement(stmt: import('./ast').OptimizeStatement, indent: string): string {
+  let result = `${indent}OPTIMIZE TABLE ${formatTableRef(stmt.table)}`;
+  if (stmt.onCluster) result += ` ON CLUSTER ${quoteIdent(stmt.onCluster)}`;
+  if (stmt.partition) {
+    if (stmt.partition.kind === 'id') {
+      result += ` PARTITION ID '${escapeString(stmt.partition.id)}'`;
+    } else if (stmt.partition.kind === 'all') {
+      result += ` PARTITION ALL`;
+    } else {
+      result += ` PARTITION ${formatExpr(stmt.partition.expr, indent)}`;
+    }
+  }
+  if (stmt.final) result += ' FINAL';
+  if (stmt.cleanup) result += ' CLEANUP';
+  if (stmt.deduplicate) {
+    result += ' DEDUPLICATE';
+    if (stmt.deduplicateBy && stmt.deduplicateBy.length > 0) {
+      result += ` BY ${stmt.deduplicateBy.map((e) => formatExpr(e, indent)).join(', ')}`;
+    }
+  }
+  if (stmt.settings && stmt.settings.length > 0) {
+    result += ` SETTINGS ${formatSettingsList(stmt.settings, indent)}`;
+  }
+  return result;
+}
+
+function formatDescribeStatement(stmt: import('./ast').DescribeStatement, indent: string): string {
+  let target: string;
+  if (stmt.target.kind === 'table') {
+    target = formatTableRef(stmt.target.table);
+  } else if (stmt.target.kind === 'function') {
+    const f = stmt.target.func;
+    target = `${f.name}(${f.args.map((a) => formatExpr(a, indent)).join(', ')})`;
+  } else {
+    target = `(${formatStatement(stmt.target.query, '')})`;
+  }
+  let result = `${indent}DESCRIBE TABLE ${target}`;
+  if (stmt.final) result += ' FINAL';
+  const hasSettings = stmt.settings && stmt.settings.length > 0;
+  if (stmt.settingsBeforeFormat) {
+    if (hasSettings) result += ` SETTINGS ${formatSettingsList(stmt.settings!, indent)}`;
+    if (stmt.format) result += ` FORMAT ${stmt.format}`;
+  } else {
+    if (stmt.format) result += ` FORMAT ${stmt.format}`;
+    if (hasSettings) result += ` SETTINGS ${formatSettingsList(stmt.settings!, indent)}`;
+  }
+  return result;
+}
+
+function formatShowCreateStatement(
+  stmt: import('./ast').ShowCreateStatement,
+  indent: string,
+): string {
+  let result: string;
+  if (stmt.targetType === 'DATABASE') {
+    result = `${indent}SHOW CREATE DATABASE ${quoteIdent(stmt.database!)}`;
+  } else {
+    result = `${indent}SHOW CREATE ${stmt.targetType} ${formatTableRef(stmt.table!)}`;
+  }
+  if (stmt.settings && stmt.settings.length > 0) {
+    result += ` SETTINGS ${formatSettingsList(stmt.settings, indent)}`;
+  }
+  if (stmt.format) result += ` FORMAT ${stmt.format}`;
+  return result;
+}
+
+function formatDetachStatement(stmt: import('./ast').DetachStatement, indent: string): string {
+  const parts: string[] = [`${indent}DETACH`, stmt.targetType];
+  if (stmt.ifExists) parts.push('IF EXISTS');
+  if (stmt.targetType === 'DATABASE') {
+    parts.push(quoteIdent(stmt.database!));
+  } else {
+    parts.push(formatTableRef(stmt.table!));
+  }
+  if (stmt.onCluster) parts.push(`ON CLUSTER ${quoteIdent(stmt.onCluster)}`);
+  if (stmt.permanently) parts.push('PERMANENTLY');
+  if (stmt.sync) parts.push('SYNC');
+  return parts.join(' ');
+}
+
+function formatDeleteStatement(stmt: import('./ast').DeleteStatement, indent: string): string {
+  let result = `${indent}DELETE FROM ${formatTableRef(stmt.table)}`;
+  if (stmt.onCluster) result += ` ON CLUSTER ${quoteIdent(stmt.onCluster)}`;
+  if (stmt.partition) {
+    if (stmt.partition.kind === 'id') {
+      result += ` IN PARTITION ID '${escapeString(stmt.partition.id)}'`;
+    } else {
+      result += ` IN PARTITION ${formatExpr(stmt.partition.expr, indent)}`;
+    }
+  }
+  result += ` WHERE ${formatExpr(stmt.where, indent)}`;
+  if (stmt.settings && stmt.settings.length > 0) {
+    result += ` SETTINGS ${formatSettingsList(stmt.settings, indent)}`;
+  }
+  return result;
+}
+
+function formatUpdateStatement(stmt: import('./ast').UpdateStatement, indent: string): string {
+  let result = `${indent}UPDATE ${formatTableRef(stmt.table)}`;
+  if (stmt.onCluster) result += ` ON CLUSTER ${quoteIdent(stmt.onCluster)}`;
+  const sets = stmt.assignments
+    .map((a) => `${quoteIdent(a.column)} = ${formatExpr(a.expr, indent)}`)
+    .join(', ');
+  result += ` SET ${sets} WHERE ${formatExpr(stmt.where, indent)}`;
+  if (stmt.settings && stmt.settings.length > 0) {
+    result += ` SETTINGS ${formatSettingsList(stmt.settings, indent)}`;
+  }
+  return result;
+}
+
+function formatCheckStatement(stmt: import('./ast').CheckStatement, indent: string): string {
+  let result: string;
+  if (stmt.targetType === 'ALL') {
+    result = `${indent}CHECK ALL TABLES`;
+  } else if (stmt.targetType === 'DATABASE') {
+    result = `${indent}CHECK DATABASE ${quoteIdent(stmt.database!)}`;
+  } else {
+    result = `${indent}CHECK TABLE ${formatTableRef(stmt.table!)}`;
+    if (stmt.partition) {
+      if (stmt.partition.kind === 'id') {
+        result += ` PART '${escapeString(stmt.partition.id)}'`;
+      } else {
+        result += ` PARTITION ${formatExpr(stmt.partition.expr, indent)}`;
+      }
+    }
+  }
+  if (stmt.settings && stmt.settings.length > 0) {
+    result += ` SETTINGS ${formatSettingsList(stmt.settings, indent)}`;
+  }
+  if (stmt.format) result += ` FORMAT ${stmt.format}`;
+  return result;
+}
+
+function formatAttachStatement(stmt: import('./ast').AttachStatement, indent: string): string {
+  const parts: string[] = [`${indent}ATTACH`, stmt.targetType];
+  if (stmt.ifNotExists) parts.push('IF NOT EXISTS');
+  if (stmt.targetType === 'DATABASE') {
+    parts.push(quoteIdent(stmt.database!));
+  } else {
+    parts.push(formatTableRef(stmt.table!));
+  }
+  if (stmt.uuid) parts.push(`UUID '${escapeString(stmt.uuid)}'`);
+  if (stmt.onCluster) parts.push(`ON CLUSTER ${quoteIdent(stmt.onCluster)}`);
+  return parts.join(' ');
+}
+
+function formatRenameStatement(stmt: import('./ast').RenameStatement, indent: string): string {
+  const keyword = stmt.exchange ? 'EXCHANGE' : 'RENAME';
+  const pairs = stmt.pairs
+    .map((p) => `${formatTableRef(p.from)} ${stmt.exchange ? 'AND' : 'TO'} ${formatTableRef(p.to)}`)
+    .join(', ');
+  let result = `${indent}${keyword} ${stmt.targetType}`;
+  if (stmt.ifExists) result += ' IF EXISTS';
+  result += ` ${pairs}`;
+  if (stmt.onCluster) result += ` ON CLUSTER ${quoteIdent(stmt.onCluster)}`;
+  if (stmt.settings && stmt.settings.length > 0) {
+    result += ` SETTINGS ${formatSettingsList(stmt.settings, indent)}`;
+  }
+  return result;
+}
+
+function formatExistsStatement(stmt: import('./ast').ExistsStatement, indent: string): string {
+  const target =
+    stmt.targetType === 'DATABASE' ? quoteIdent(stmt.database!) : formatTableRef(stmt.table!);
+  let result = `${indent}EXISTS ${stmt.targetType} ${target}`;
+  if (stmt.settings && stmt.settings.length > 0) {
+    result += ` SETTINGS ${formatSettingsList(stmt.settings, indent)}`;
+  }
+  return result;
+}
+
+function formatExecuteAsStatement(
+  stmt: import('./ast').ExecuteAsStatement,
+  indent: string,
+): string {
+  return `${indent}EXECUTE AS ${quoteIdent(stmt.user)} ${formatStatement(stmt.statement, indent)}`;
+}
+
+function formatKillStatement(stmt: import('./ast').KillStatement, indent: string): string {
+  let result = `${indent}KILL ${stmt.target}`;
+  if (stmt.onCluster) result += ` ON CLUSTER ${quoteIdent(stmt.onCluster)}`;
+  result += ` WHERE ${formatExpr(stmt.where, indent)}`;
+  if (stmt.mode) result += ` ${stmt.mode}`;
+  if (stmt.settings && stmt.settings.length > 0) {
+    result += ` SETTINGS ${formatSettingsList(stmt.settings, indent)}`;
+  }
+  if (stmt.format) result += ` FORMAT ${stmt.format}`;
+  return result;
 }
 
 function formatCreateStatement(
@@ -915,7 +1167,7 @@ function formatCreateMaterializedViewStatement(
   stmt: CreateMaterializedViewStatement,
   indent: string,
 ): string {
-  let result = `${indent}CREATE`;
+  let result = stmt.attach ? `${indent}ATTACH` : `${indent}CREATE`;
   if (stmt.orReplace) result += ' OR REPLACE';
   result += ' MATERIALIZED VIEW';
   if (stmt.ifNotExists) result += ' IF NOT EXISTS';
@@ -980,9 +1232,14 @@ function formatCreateDatabaseStatement(stmt: CreateDatabaseStatement, indent: st
 }
 
 function formatCreateDictionaryStatement(stmt: CreateDictionaryStatement, indent: string): string {
-  let result = `${indent}CREATE`;
-  if (stmt.orReplace) result += ' OR REPLACE';
-  result += ' DICTIONARY';
+  let result: string;
+  if (stmt.replace) {
+    result = `${indent}REPLACE DICTIONARY`;
+  } else {
+    result = `${indent}CREATE`;
+    if (stmt.orReplace) result += ' OR REPLACE';
+    result += ' DICTIONARY';
+  }
   if (stmt.ifNotExists) result += ' IF NOT EXISTS';
   result += ` ${formatTableRef(stmt.table)}`;
   if (stmt.onCluster) result += ` ON CLUSTER ${quoteIdent(stmt.onCluster)}`;
@@ -1277,9 +1534,9 @@ function formatCreateTableStatement(stmt: CreateTableStatement, indent: string):
 
   // Header
   if (stmt.replace) {
-    parts.push(`${indent}REPLACE TABLE`);
+    parts.push(`${indent}REPLACE${stmt.temporary ? ' TEMPORARY' : ''} TABLE`);
   } else {
-    let header = `${indent}CREATE`;
+    let header = stmt.attach ? `${indent}ATTACH` : `${indent}CREATE`;
     if (stmt.orReplace) header += ' OR REPLACE';
     if (stmt.temporary) header += ' TEMPORARY';
     header += ' TABLE';
@@ -1289,6 +1546,11 @@ function formatCreateTableStatement(stmt: CreateTableStatement, indent: string):
 
   // Table name
   parts.push(formatTableRef(stmt.table));
+
+  // ATTACH ... FROM 'path'
+  if (stmt.attachFromPath) {
+    parts.push(`FROM '${stmt.attachFromPath.replace(/'/g, "\\'")}'`);
+  }
 
   // ON CLUSTER
   if (stmt.onCluster) {
@@ -1355,10 +1617,15 @@ function formatCreateTableStatement(stmt: CreateTableStatement, indent: string):
 
   // AS SELECT
   if (stmt.asQuery) {
-    if (stmt.asQuery.kind === 'select' && (stmt.asQuery as SelectStatement).parenthesized) {
-      result += ` AS\n(${formatStatement(stmt.asQuery, indent)})`;
+    const aq = stmt.asQuery;
+    const aqParen =
+      (aq.kind === 'select' && (aq as SelectStatement).parenthesized) ||
+      ((aq.kind === 'intersect' || aq.kind === 'union') &&
+        (aq as { parenthesized?: boolean }).parenthesized === true);
+    if (aqParen) {
+      result += ` AS\n(${formatStatement(aq, indent)})`;
     } else {
-      result += ` AS\n${formatStatement(stmt.asQuery, indent)}`;
+      result += ` AS\n${formatStatement(aq, indent)}`;
     }
   }
 
@@ -1517,15 +1784,19 @@ function formatExplainStatement(stmt: ExplainStatement, indent: string): string 
 function formatUnionStatement(stmt: UnionStatement, indent: string): string {
   const mode = stmt.unionMode === 'DISTINCT' ? 'UNION DISTINCT' : 'UNION ALL';
   let result = stmt.queries
-    .map((q) => {
+    .map((q, i) => {
       let s = formatStatement(q, indent);
       // Prepend leading comments on union members
       if (q.leadingComments && q.leadingComments.length > 0) {
         s = q.leadingComments.join('\n') + '\n' + s;
       }
-      // Wrap nested unions/intersects in parentheses to preserve nesting structure
-      if (q.kind === 'union' || q.kind === 'intersect') return `(${s})`;
+      const explicit = (q as { parenthesized?: boolean }).parenthesized === true;
+      // Always wrap parenthesized selects (they were explicitly parenthesized in source)
       if (q.kind === 'select' && q.parenthesized) return `(${s})`;
+      // Wrap inner unions/intersects when source had explicit parens
+      if (explicit && (q.kind === 'union' || q.kind === 'intersect')) return `(${s})`;
+      // Nested union with a different mode (e.g. UNION ALL inside UNION DISTINCT) needs parens
+      if (q.kind === 'union' && i > 0 && q.unionMode !== stmt.unionMode) return `(${s})`;
       return s;
     })
     .join(`\n${indent}${mode}\n`);
@@ -1536,14 +1807,26 @@ function formatUnionStatement(stmt: UnionStatement, indent: string): string {
 function formatIntersectStatement(stmt: IntersectStatement, indent: string): string {
   const leftStr = formatStatement(stmt.left, indent);
   const rightStr = formatStatement(stmt.right, indent);
-  // Wrap parenthesized selects and nested intersect/except to preserve structure
-  const wrapIntersectChild = (s: Statement, str: string) => {
-    if (s.kind === 'intersect') return `(${str})`;
+  // Wrap children when needed for SQL precedence (INTERSECT > UNION = EXCEPT,
+  // all left-associative) and when the source explicitly parenthesized the child.
+  const wrapLeft = (s: Statement, str: string) => {
+    const explicit = (s as { parenthesized?: boolean }).parenthesized === true;
     if (s.kind === 'select' && s.parenthesized) return `(${str})`;
-    if (s.kind === 'union') return `(${str})`;
+    if (explicit && (s.kind === 'union' || s.kind === 'intersect')) return `(${str})`;
     return str;
   };
-  let result = `${wrapIntersectChild(stmt.left, leftStr)}\n${stmt.op}\n${wrapIntersectChild(stmt.right, rightStr)}`;
+  const wrapRight = (s: Statement, str: string) => {
+    const explicit = (s as { parenthesized?: boolean }).parenthesized === true;
+    if (s.kind === 'select' && s.parenthesized) return `(${str})`;
+    if (explicit && (s.kind === 'union' || s.kind === 'intersect')) return `(${str})`;
+    if (s.kind === 'union') return `(${str})`;
+    if (s.kind === 'intersect') {
+      if (stmt.op === 'INTERSECT') return `(${str})`;
+      if (s.op === 'EXCEPT') return `(${str})`;
+    }
+    return str;
+  };
+  let result = `${wrapLeft(stmt.left, leftStr)}\n${stmt.op}\n${wrapRight(stmt.right, rightStr)}`;
   result += formatTrailingClauses(stmt, indent);
   return result;
 }
@@ -2285,6 +2568,23 @@ function formatFromExpr(from: FromExpr, outerIndent: string): string[] {
 function formatOrderByItemInline(item: OrderByItem, indent: string): string {
   let result = `${formatExpr(item.expr, indent)} ${item.direction}`;
   if (item.collate !== undefined) result += ` COLLATE '${escapeString(item.collate)}'`;
+  if (
+    item.fillFrom !== undefined ||
+    item.fillTo !== undefined ||
+    item.fillStep !== undefined ||
+    item.fillStaleness !== undefined ||
+    item.interpolate !== undefined
+  ) {
+    result += ' WITH FILL';
+    if (item.fillFrom !== undefined) result += ` FROM ${formatExpr(item.fillFrom, indent)}`;
+    if (item.fillTo !== undefined) result += ` TO ${formatExpr(item.fillTo, indent)}`;
+    if (item.fillStep !== undefined) result += ` STEP ${formatExpr(item.fillStep, indent)}`;
+    if (item.fillStaleness !== undefined)
+      result += ` STALENESS ${formatExpr(item.fillStaleness, indent)}`;
+    if (item.interpolate !== undefined) {
+      result += ` INTERPOLATE (${item.interpolate.map((i) => formatInterpolateItem(i, indent)).join(', ')})`;
+    }
+  }
   return result;
 }
 

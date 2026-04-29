@@ -15,6 +15,8 @@ INSERT INTO t_lightweight (d, e);
 
 INSERT INTO t_lightweight (d, e);
 
+UPDATE t_lightweight SET e = CAST('foo', 'Enum8(''foo'' = 1, ''bar'' = 2)') WHERE d = '2018-01-02';
+
 SELECT e
 FROM t_lightweight
 ORDER BY d ASC;

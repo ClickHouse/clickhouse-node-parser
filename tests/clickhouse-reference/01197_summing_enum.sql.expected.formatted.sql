@@ -16,6 +16,8 @@ INSERT INTO summing SELECT
 FROM generateRandom('e Enum(''hello'' = 1, ''world'' = 2)', 1)
 LIMIT 1000;
 
+OPTIMIZE TABLE summing;
+
 SELECT
     k,
     x,

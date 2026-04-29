@@ -13,6 +13,8 @@ ENGINE = MergeTree
 ORDER BY id
 SETTINGS min_rows_for_wide_part = 1000000000, min_bytes_for_wide_part = 10000000000, vertical_merge_algorithm_min_columns_to_activate = 10, index_granularity_bytes = 10485760, index_granularity = 8192, merge_max_block_size = 8192, merge_max_block_size_bytes = 10485760, lock_acquire_timeout_for_background_operations = 600;
 
+SYSTEM stop merges test;
+
 INSERT INTO test SELECT
     number,
     number
@@ -54,6 +56,12 @@ GROUP BY
 ORDER BY
     count() ASC,
     dynamicType(d) ASC;
+
+SYSTEM start merges test;
+
+OPTIMIZE TABLE test FINAL;
+
+;
 
 SELECT '---------------------';
 

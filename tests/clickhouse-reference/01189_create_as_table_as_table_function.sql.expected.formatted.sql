@@ -6,6 +6,10 @@ CREATE TABLE table2 AS numbers(5);
 
 CREATE TABLE table3 AS table2;
 
+SHOW CREATE TABLE table2;
+
+SHOW CREATE TABLE table3;
+
 SELECT
     count(),
     sum(number)

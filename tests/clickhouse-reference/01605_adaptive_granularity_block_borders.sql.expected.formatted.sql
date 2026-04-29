@@ -29,6 +29,8 @@ INSERT INTO adaptive_table SELECT
     if(number > 700, randomPrintableASCII(102400), randomPrintableASCII(1))
 FROM numbers(10000);
 
+OPTIMIZE TABLE adaptive_table FINAL;
+
 SELECT marks
 FROM `system`.parts
 WHERE table = 'adaptive_table'

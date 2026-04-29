@@ -12,6 +12,8 @@ ENGINE = MergeTree
 ORDER BY id
 SETTINGS index_granularity = 32, index_granularity_bytes = '10Mi', ratio_of_defaults_for_sparse_serialization = 0.1, enable_block_number_column = 0, enable_block_offset_column = 0;
 
+SYSTEM STOP MERGES t_sparse_full;
+
 INSERT INTO t_sparse_full SELECT
     number,
     if(number % 10 = 0, number, 0),
@@ -230,6 +232,10 @@ ORDER BY
     u ASC,
     s ASC
 LIMIT 5;
+
+SYSTEM START MERGES t_sparse_full;
+
+OPTIMIZE TABLE t_sparse_full FINAL;
 
 SELECT
     column,

@@ -18,6 +18,8 @@ FROM numbers(100);
 
 ALTER TABLE test UPDATE t = tuple('str', '{"a" : 42}') WHERE id > 90;
 
+OPTIMIZE TABLE test FINAL;
+
 SELECT DISTINCT arrayJoin(JSONDynamicPaths(t.json))
 FROM test;
 

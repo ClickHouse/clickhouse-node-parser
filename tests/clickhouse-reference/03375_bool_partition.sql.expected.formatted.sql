@@ -15,6 +15,8 @@ FROM `system`.parts
 WHERE table = 't0'
     AND database = currentDatabase();
 
+DELETE FROM t0 WHERE c0;
+
 SELECT c0
 FROM t0;
 

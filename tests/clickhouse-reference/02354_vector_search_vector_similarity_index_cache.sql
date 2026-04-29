@@ -4,6 +4,7 @@
 -- Tests the vector index cache.
 
 SET parallel_replicas_local_plan = 1;
+SYSTEM CLEAR VECTOR SIMILARITY INDEX CACHE;
 SELECT metric, value FROM system.metrics WHERE metric = 'VectorSimilarityIndexCacheBytes';
 DROP TABLE IF EXISTS tab;
 CREATE TABLE tab(id Int32, vec Array(Float32), INDEX idx vec TYPE vector_similarity('hnsw', 'L2Distance', 2)) ENGINE = MergeTree ORDER BY id;
@@ -13,6 +14,7 @@ SELECT id, vec, L2Distance(vec, reference_vec)
 FROM tab
 ORDER BY L2Distance(vec, reference_vec)
 LIMIT 3;
+SYSTEM FLUSH LOGS query_log;
 SELECT ProfileEvents['VectorSimilarityIndexCacheHits'], ProfileEvents['VectorSimilarityIndexCacheMisses']
 FROM system.query_log
 WHERE event_date >= yesterday() AND current_database = currentDatabase() AND type = 'QueryFinish' AND query LIKE '%ORDER BY L2Distance%'

@@ -20,6 +20,7 @@ SELECT sum(value) from test_alter_on_mutation;
 INSERT INTO test_alter_on_mutation select toDate('2020-01-05'), number, toString(number) from system.numbers limit 100, 100;
 INSERT INTO test_alter_on_mutation select toDate('2020-01-06'), number, toString(number) from system.numbers limit 100, 100;
 INSERT INTO test_alter_on_mutation select toDate('2020-01-07'), number, toString(number) from system.numbers limit 100, 100;
+OPTIMIZE TABLE test_alter_on_mutation FINAL;
 ALTER TABLE test_alter_on_mutation MODIFY COLUMN value String;
 ALTER TABLE test_alter_on_mutation ADD COLUMN value1 Float64;
 SELECT sum(value1) from test_alter_on_mutation;

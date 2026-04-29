@@ -8,6 +8,8 @@ CREATE TABLE tmp
 ENGINE = TinyLog AS
 SELECT queryID();
 
+SYSTEM FLUSH LOGS query_log;
+
 SELECT query
 FROM `system`.query_log
 WHERE query_id = (

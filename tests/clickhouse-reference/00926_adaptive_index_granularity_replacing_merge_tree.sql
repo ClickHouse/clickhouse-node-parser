@@ -20,6 +20,7 @@ INSERT INTO zero_rows_per_granule (p, k, v1, v2) VALUES ('2018-05-15', 1, 1000, 
 SELECT COUNT(*) FROM zero_rows_per_granule;
 SELECT distinct(marks) from system.parts WHERE table = 'zero_rows_per_granule' and database=currentDatabase() and active=1;
 INSERT INTO zero_rows_per_granule (p, k, v1, v2) VALUES ('2018-05-15', 5, 1000, 2000), ('2018-05-16', 6, 3000, 4000), ('2018-05-17', 7, 5000, 6000), ('2018-05-19', 8, 7000, 8000);
+OPTIMIZE TABLE zero_rows_per_granule FINAL;
 SELECT COUNT(*) FROM zero_rows_per_granule FINAL;
 SELECT sum(marks) from system.parts WHERE table = 'zero_rows_per_granule' and database=currentDatabase() and active=1;
 SELECT '-----';
@@ -42,6 +43,7 @@ INSERT INTO two_rows_per_granule (p, k, v1, v2) VALUES ('2018-05-15', 1, 1000, 2
 SELECT COUNT(*) FROM two_rows_per_granule FINAL;
 SELECT distinct(marks) from system.parts WHERE table = 'two_rows_per_granule' and database=currentDatabase() and active=1;
 INSERT INTO two_rows_per_granule (p, k, v1, v2) VALUES ('2018-05-15', 5, 1000, 2000), ('2018-05-16', 6, 3000, 4000), ('2018-05-17', 7, 5000, 6000), ('2018-05-19', 8, 7000, 8000);
+OPTIMIZE TABLE two_rows_per_granule FINAL;
 DROP TABLE IF EXISTS four_rows_per_granule;
 CREATE TABLE four_rows_per_granule (
   p Date,
@@ -60,8 +62,11 @@ CREATE TABLE four_rows_per_granule (
 INSERT INTO four_rows_per_granule (p, k, v1, v2) VALUES ('2018-05-15', 1, 1000, 2000), ('2018-05-16', 2, 3000, 4000), ('2018-05-17', 3, 5000, 6000), ('2018-05-18', 4, 7000, 8000);
 SELECT COUNT(*) FROM four_rows_per_granule;
 SELECT distinct(marks) from system.parts WHERE table = 'four_rows_per_granule' and database=currentDatabase() and active=1;
+DETACH TABLE four_rows_per_granule;
+ATTACH TABLE four_rows_per_granule;
 INSERT INTO four_rows_per_granule (p, k, v1, v2) VALUES ('2018-05-15', 5, 1000, 2000), ('2018-05-16', 6, 3000, 4000), ('2018-05-17', 7, 5000, 6000), ('2018-05-19', 8, 7000, 8000);
 SELECT sleep(0.5) Format Null;
+OPTIMIZE TABLE four_rows_per_granule FINAL;
 SELECT COUNT(*) FROM four_rows_per_granule FINAL;
 DROP TABLE IF EXISTS huge_granularity_small_blocks;
 CREATE TABLE huge_granularity_small_blocks (
@@ -80,6 +85,9 @@ INSERT INTO huge_granularity_small_blocks (p, k, v1, v2) VALUES ('2018-05-15', 1
 SELECT COUNT(*) FROM huge_granularity_small_blocks;
 SELECT distinct(marks) from system.parts WHERE table = 'huge_granularity_small_blocks' and database=currentDatabase() and active=1;
 INSERT INTO huge_granularity_small_blocks (p, k, v1, v2) VALUES ('2018-05-15', 5, 1000, 2000), ('2018-05-16', 6, 3000, 4000), ('2018-05-17', 7, 5000, 6000), ('2018-05-19', 8, 7000, 8000);
+DETACH TABLE huge_granularity_small_blocks;
+ATTACH TABLE huge_granularity_small_blocks;
+OPTIMIZE TABLE huge_granularity_small_blocks FINAL;
 SELECT COUNT(*) FROM huge_granularity_small_blocks FINAL;
 DROP TABLE IF EXISTS adaptive_granularity_alter;
 CREATE TABLE adaptive_granularity_alter (
@@ -100,7 +108,10 @@ INSERT INTO adaptive_granularity_alter (p, k, v1, v2) VALUES ('2018-05-15', 1, 1
 SELECT COUNT(*) FROM adaptive_granularity_alter;
 SELECT distinct(marks) from system.parts WHERE table = 'adaptive_granularity_alter' and database=currentDatabase() and active=1;
 ALTER TABLE adaptive_granularity_alter MODIFY COLUMN v1 Int16;
+DETACH TABLE adaptive_granularity_alter;
+ATTACH TABLE adaptive_granularity_alter;
 INSERT INTO adaptive_granularity_alter (p, k, v1, v2) VALUES ('2018-05-15', 5, 1000, 2000), ('2018-05-16', 6, 3000, 4000), ('2018-05-17', 7, 5000, 6000), ('2018-05-19', 42, 42, 42);
+OPTIMIZE TABLE adaptive_granularity_alter FINAL;
 ALTER TABLE adaptive_granularity_alter MODIFY COLUMN v2 String;
 INSERT INTO adaptive_granularity_alter (p, k, v1, v2) VALUES ('2018-05-15', 100, 1000, 'aaaa'), ('2018-05-16', 101, 3000, 'bbbb'), ('2018-05-17', 102, 5000, 'cccc'), ('2018-05-19', 103, 7000, 'dddd');
 SELECT k, v2 FROM adaptive_granularity_alter WHERE k >= 100 OR k = 42;

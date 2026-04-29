@@ -9,6 +9,8 @@ ENGINE = MergeTree
 ORDER BY tuple()
 SETTINGS ratio_of_defaults_for_sparse_serialization = 0.8;
 
+SYSTEM STOP MERGES t_sparse_intersect;
+
 INSERT INTO t_sparse_intersect SELECT
     if(number % 10 = 0, number, 0),
     number

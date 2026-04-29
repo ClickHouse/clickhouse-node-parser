@@ -7,4 +7,5 @@ ENGINE = MergeTree
 ORDER BY a
 SETTINGS index_granularity = 8192;
 INSERT INTO t SELECT * FROM numbers_mt(1e3);
+OPTIMIZE TABLE t FINAL;
 DROP TABLE t;

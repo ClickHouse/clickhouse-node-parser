@@ -8,6 +8,8 @@ CREATE TABLE test_nested
 )
 ENGINE = Memory;
 
+DESCRIBE TABLE test_nested;
+
 DROP TABLE test_nested;
 
 DROP TABLE IF EXISTS test_array_tuple;
@@ -17,5 +19,7 @@ CREATE TABLE test_array_tuple
     data Array(Tuple(x UInt64, y UInt64))
 )
 ENGINE = Memory;
+
+DESCRIBE TABLE test_array_tuple;
 
 DROP TABLE test_array_tuple;

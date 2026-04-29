@@ -21,6 +21,7 @@ insert into local_table_2 select 3 from numbers(1000000);
 select id from distributed_table_1 where id in (select id from distributed_table_2) settings enable_add_distinct_to_in_subqueries = 1;
 -- Query with DISTINCT optimization disabled
 select id from distributed_table_1 where id in (select id from distributed_table_2) settings enable_add_distinct_to_in_subqueries = 0;
+SYSTEM FLUSH LOGS query_log;
 -- Compare both NetworkReceiveBytes between with_distinct and without_distinct
 WITH
     -- Get the value for with_distinct

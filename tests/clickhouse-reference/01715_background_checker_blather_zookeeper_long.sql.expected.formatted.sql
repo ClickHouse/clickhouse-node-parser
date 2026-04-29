@@ -18,7 +18,13 @@ CREATE TABLE i20203_2
 ENGINE = ReplicatedMergeTree('/clickhouse/{database}/01715_background_checker_i20203', 'r2')
 ORDER BY tuple();
 
+DETACH TABLE i20203_2;
+
 INSERT INTO i20203_1;
+
+DETACH TABLE i20203_1;
+
+ATTACH TABLE i20203_2;
 
 -- sleep 10 seconds
 SET function_sleep_max_microseconds_per_block = 10000000;
@@ -32,6 +38,8 @@ SELECT num_tries < 200
 FROM `system`.replication_queue
 WHERE table = 'i20203_2'
     AND database = currentDatabase();
+
+ATTACH TABLE i20203_1;
 
 DROP TABLE i20203_1;
 

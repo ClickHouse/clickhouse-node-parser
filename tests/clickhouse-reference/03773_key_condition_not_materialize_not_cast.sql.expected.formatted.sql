@@ -11,6 +11,8 @@ ENGINE = MergeTree
 ORDER BY val
 SETTINGS add_minmax_index_for_numeric_columns = 0;
 
+SYSTEM STOP MERGES t_cast_bug;
+
 INSERT INTO t_cast_bug;
 
 INSERT INTO t_cast_bug;
@@ -37,6 +39,8 @@ SELECT
     val,
     val = 0 AS is_zero
 FROM t_materialize_bug;
+
+SYSTEM STOP MERGES t_materialize_bug;
 
 INSERT INTO t_materialize_bug;
 

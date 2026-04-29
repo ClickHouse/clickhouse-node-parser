@@ -16,6 +16,9 @@ ENGINE = Memory;
 -- This was previously failing with "Cannot find column c0 in ColumnsDescription"
 ALTER TABLE test_alter_drop_comment DROP COLUMN c0, COMMENT COLUMN c0 'this comment should be silently ignored';
 
+-- Verify that c0 is dropped and c1, c2 remain
+DESCRIBE TABLE test_alter_drop_comment;
+
 -- Test case 2: COMMENT COLUMN IF EXISTS on non-existent column (should succeed)
 ALTER TABLE test_alter_drop_comment COMMENT COLUMN non_existent_column 'this should be ignored';
 
@@ -48,6 +51,8 @@ ENGINE = MergeTree()
 ORDER BY id;
 
 ALTER TABLE test_alter_drop_comment_mt DROP COLUMN status, COMMENT COLUMN status 'dropped status column', COMMENT COLUMN value 'existing value column';
+
+DESCRIBE TABLE test_alter_drop_comment_mt;
 
 DROP TABLE test_alter_drop_comment_mt;
 

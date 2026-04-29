@@ -12,6 +12,8 @@ SETTINGS
     max_threads = 1,
     max_block_size = 100;
 
+SYSTEM FLUSH LOGS query_log;
+
 SELECT
     read_rows = written_rows,
     read_rows = result_rows,

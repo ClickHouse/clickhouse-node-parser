@@ -10,4 +10,8 @@ SELECT *
 FROM `union`
 ORDER BY test ASC;
 
+DETACH TABLE `union`;
+
+ATTACH TABLE `union`;
+
 DROP TABLE `union`;

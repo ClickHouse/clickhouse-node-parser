@@ -26,6 +26,10 @@ FROM numbers(100000);
 
 SET enable_parallel_replicas = 1, max_parallel_replicas = 2, cluster_for_parallel_replicas = 'test_cluster_one_shard_three_replicas_localhost', parallel_replicas_for_non_replicated_merge_tree = 1, parallel_replicas_filter_pushdown = 1;
 
+SYSTEM ENABLE FAILPOINT parallel_replicas_wait_for_unused_replicas;
+
+SYSTEM ENABLE FAILPOINT parallel_replicas_check_read_mode_always;
+
 SELECT a
 FROM (
         SELECT

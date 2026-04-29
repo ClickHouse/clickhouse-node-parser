@@ -85,6 +85,7 @@ INSERT INTO simple_agf_aggregating_mt SELECT
     maxMap((arrayMap(i -> toString(i), range(13)), arrayMap(i -> (number + i), range(13))))
 FROM numbers(10000)
 GROUP BY a;
+OPTIMIZE TABLE simple_agf_aggregating_mt FINAL;
 SELECT cityHash64(groupArray(cityHash64(*))) FROM (
   SELECT
     a % 31 AS g,

@@ -70,6 +70,9 @@ INSERT INTO row_limits_fail_fast SELECT
     toString(number)
 FROM numbers(10000);
 
+-- to keep the number of parts predictable
+SYSTEM STOP MERGES row_limits_fail_fast;
+
 SET max_rows_to_read = 1000;
 
 -- Should fail fast during PK filtering - query selects more rows than limit

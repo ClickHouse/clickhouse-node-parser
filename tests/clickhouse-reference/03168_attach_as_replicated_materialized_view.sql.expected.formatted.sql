@@ -37,6 +37,18 @@ FROM monthly_aggregated_data_mv;
 SELECT count()
 FROM hourly_data;
 
+DETACH TABLE hourly_data;
+
+DETACH TABLE monthly_aggregated_data;
+
+ATTACH TABLE hourly_data AS REPLICATED;
+
+ATTACH TABLE monthly_aggregated_data AS REPLICATED;
+
+SYSTEM RESTORE REPLICA hourly_data;
+
+SYSTEM RESTORE REPLICA monthly_aggregated_data;
+
 SELECT
     name,
     engine

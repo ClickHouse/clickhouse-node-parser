@@ -15,6 +15,8 @@ INSERT INTO nested_map (k, `SomeMap.ID`, `SomeMap.Num`);
 
 INSERT INTO nested_map (k, `SomeMap.ID`, `SomeMap.Num`);
 
+OPTIMIZE TABLE nested_map;
+
 SELECT
     `SomeMap.ID`,
     `SomeMap.Num`
@@ -49,6 +51,8 @@ ENGINE = SummingMergeTree(d, k, 8192, (SomeMap));
 INSERT INTO nested_map_explicit (k, SomeIntExcluded, `SomeMap.ID`, `SomeMap.Num`);
 
 INSERT INTO nested_map_explicit (k, SomeIntExcluded, `SomeMap.ID`, `SomeMap.Num`);
+
+OPTIMIZE TABLE nested_map_explicit;
 
 SELECT
     SomeIntExcluded,

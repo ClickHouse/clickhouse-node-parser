@@ -38,6 +38,8 @@ INSERT INTO weird_partitions_02245 (d, id) SELECT
     number
 FROM numbers(1000);
 
+OPTIMIZE TABLE weird_partitions_02245;
+
 SELECT DISTINCT
     _partition_id,
     _partition_value
@@ -67,6 +69,8 @@ WHERE d >= '2022-01-01 00:00:00'
     AND d1 >= '2021-12-31 00:00:00'
     AND d1 < '2022-01-01 00:00:00'
 ORDER BY _partition_id ASC;
+
+;
 
 SELECT DISTINCT _partition_id
 FROM weird_partitions_02245

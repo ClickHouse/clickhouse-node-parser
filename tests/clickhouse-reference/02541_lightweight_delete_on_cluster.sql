@@ -10,3 +10,5 @@ INSERT INTO t1_local VALUES('partition2', 2,4);
 -- { echoOn }
 
 SELECT * FROM t1_local ORDER BY tc1, tc2;
+DELETE FROM t1_local ON CLUSTER test_shard_localhost WHERE tc1 = 1;
+-- { echoOff }

@@ -27,6 +27,8 @@ SETTINGS index_granularity = 111, index_granularity_bytes = 0, compress_primary_
 
 SET send_logs_level = 'warning';
 
+SYSTEM STOP MERGES tab1;
+
 INSERT INTO tab1 (valueDate, bb_ticker, ric) SELECT
     today(),
     number % 1111,

@@ -13,19 +13,33 @@ CREATE TABLE test_table
 ) ENGINE=MergeTree ORDER BY id;
 INSERT INTO test_table VALUES (0, (('value_0_level_1', 'value_1_level_1'), 'value_1_level_0'));
 SELECT '--';
+DESCRIBE (SELECT * FROM test_table);
 SELECT * FROM test_table;
+DESCRIBE (SELECT id, value FROM test_table);
 SELECT id, value FROM test_table;
+DESCRIBE (SELECT value.value_0_level_0, value.value_1_level_0 FROM test_table);
 SELECT value.value_0_level_0, value.value_1_level_0 FROM test_table;
+DESCRIBE (SELECT value AS alias_value, alias_value.value_0_level_0, alias_value.value_1_level_0 FROM test_table);
 SELECT value AS alias_value, alias_value.value_0_level_0, alias_value.value_1_level_0 FROM test_table;
+DESCRIBE (SELECT value AS alias_value, alias_value.* FROM test_table);
 SELECT value AS alias_value, alias_value.* FROM test_table;
+DESCRIBE (SELECT value AS alias_value, alias_value.* APPLY toString FROM test_table);
 SELECT value AS alias_value, alias_value.* APPLY toString FROM test_table;
+DESCRIBE (SELECT value.* FROM test_table);
 SELECT value.* FROM test_table;
+DESCRIBE (SELECT value.* APPLY toString FROM test_table);
 SELECT value.* APPLY toString FROM test_table;
+DESCRIBE (SELECT value.value_0_level_0.value_0_level_1, value.value_0_level_0.value_1_level_1 FROM test_table);
 SELECT value.value_0_level_0.value_0_level_1, value.value_0_level_0.value_1_level_1 FROM test_table;
+DESCRIBE (SELECT value.value_0_level_0 AS alias_value, alias_value.value_0_level_1, alias_value.value_1_level_1 FROM test_table);
 SELECT value.value_0_level_0 AS alias_value, alias_value.value_0_level_1, alias_value.value_1_level_1 FROM test_table;
+DESCRIBE (SELECT value.value_0_level_0 AS alias_value, alias_value.* FROM test_table);
 SELECT value.value_0_level_0 AS alias_value, alias_value.* FROM test_table;
+DESCRIBE (SELECT value.value_0_level_0 AS alias_value, alias_value.* APPLY toString FROM test_table);
 SELECT value.value_0_level_0 AS alias_value, alias_value.* APPLY toString FROM test_table;
+DESCRIBE (SELECT value.value_0_level_0.* FROM test_table);
 SELECT value.value_0_level_0.* FROM test_table;
+DESCRIBE (SELECT value.value_0_level_0.* APPLY toString FROM test_table);
 SELECT value.value_0_level_0.* APPLY toString FROM test_table;
 DROP TABLE test_table;
 CREATE TABLE test_table
@@ -34,6 +48,9 @@ CREATE TABLE test_table
     value Nested (value_0_level_0 Nested(value_0_level_1 String, value_1_level_1 String), value_1_level_0 String)
 ) ENGINE=MergeTree ORDER BY id;
 INSERT INTO test_table VALUES (0, [[('value_0_level_1', 'value_1_level_1')]], ['value_1_level_0']);
+DESCRIBE (SELECT value.value_0_level_0 AS value_alias, value_alias.value_0_level_1, value_alias.value_1_level_1 FROM test_table);
 SELECT value.value_0_level_0 AS value_alias, value_alias.value_0_level_1, value_alias.value_1_level_1 FROM test_table;
+DESCRIBE (SELECT value.value_0_level_0 AS value_alias, value_alias.* FROM test_table);
 SELECT value.value_0_level_0 AS value_alias, value_alias.* FROM test_table;
+DESCRIBE (SELECT value.value_0_level_0 AS value_alias, value_alias.* APPLY toString FROM test_table);
 SELECT value.value_0_level_0 AS value_alias, value_alias.* APPLY toString FROM test_table;

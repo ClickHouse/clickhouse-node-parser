@@ -41,6 +41,8 @@ SELECT arraySort(arrayIntersect([], []))
 FROM array_intersect
 ORDER BY arr ASC;
 
+OPTIMIZE TABLE array_intersect;
+
 SELECT arraySort(arrayIntersect([-100], [156]));
 
 SELECT arraySort(arrayIntersect([1], [257]));

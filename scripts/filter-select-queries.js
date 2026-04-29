@@ -174,7 +174,7 @@ function getLeadingKeyword(statement) {
 }
 
 function isSupportedStatement(statement) {
-  return ['SELECT', 'SET', 'CREATE', 'USE', 'INSERT', 'DROP', 'ALTER', 'WITH', 'TRUNCATE', 'DROP'].includes(getLeadingKeyword(statement));
+  return !['EXPLAIN'].includes(getLeadingKeyword(statement));
 }
 
 /**
@@ -213,6 +213,51 @@ function hasKql(statement) {
   return /kql\(/.test(statement);
 }
 
+/**
+ * SQL keywords that may appear at the start of a statement. Anything else at
+ * the start indicates a bare expression (only valid with implicit_select=1)
+ * or a non-SQL dialect (KQL pipe, PRQL, etc.) — neither of which the parser
+ * accepts structurally.
+ */
+const SQL_LEADING_KEYWORDS = new Set([
+  'SELECT', 'WITH', 'INSERT', 'UPDATE', 'DELETE', 'CREATE', 'REPLACE',
+  'DROP', 'TRUNCATE', 'ALTER', 'ATTACH', 'DETACH', 'SET', 'USE', 'SYSTEM',
+  'EXPLAIN', 'OPTIMIZE', 'DESCRIBE', 'DESC', 'SHOW', 'GRANT', 'REVOKE',
+  'KILL', 'RENAME', 'EXCHANGE', 'CHECK', 'EXISTS', 'BACKUP', 'RESTORE',
+  'UNDROP', 'BEGIN', 'COMMIT', 'ROLLBACK', 'WATCH', 'UNDO', 'MOVE',
+  'EXECUTE', 'FROM',
+]);
+
+/**
+ * Returns true when the statement's first non-comment token is clearly a
+ * bare expression (only valid with `implicit_select=1`):
+ *   - identifier-or-function that is not a known SQL leading keyword
+ *     (e.g. `s;`, `count();`, `upper('x');`)
+ *   - leading number literal (`1;`, `1 + 2;`)
+ *   - leading `*` (`*;`)
+ * Statements that begin with anything else (parens, unicode whitespace, etc.)
+ * are left alone — we'd rather under-filter than mis-flag a real query.
+ */
+function isImplicitSelectExpression(statement) {
+  // Strip block, --, #/#! and // line comments before inspecting the leading
+  // token. (ClickHouse supports `--`, `#`, `#!`, and `//` line comments.)
+  let s = statement
+    .replace(/\/\*[\s\S]*?\*\//g, '')
+    .replace(/\/\/[^\n]*/g, '')
+    .replace(/--[^\n]*/g, '')
+    .replace(/#[^\n]*/g, '')
+    .replace(/^[ \t\r\n]+/, '');
+  if (s === '') return false;
+  // Identifier-led: bare expression iff identifier is not a SQL leading keyword.
+  const idMatch = s.match(/^([A-Za-z_][A-Za-z0-9_]*)/);
+  if (idMatch) return !SQL_LEADING_KEYWORDS.has(idMatch[1].toUpperCase());
+  // Numeric literal at start (e.g. `1;`, `1 + 2;`).
+  if (/^[0-9]/.test(s)) return true;
+  // Bare asterisk (`*;`).
+  if (/^\*\s*;/.test(s)) return true;
+  return false;
+}
+
 const blocklist = [
   // Ridiculous inputs
   '03775_too_large_temporary_files_buffer_size.sql',
@@ -222,8 +267,36 @@ const blocklist = [
   '02474_fix_function_parser_bug.sql',
   // Experimental window views, may be supported in the future
   '01049_window_view_window_functions.sql',
-  // KQL parsing
+  // KQL parsing — these files are entirely written in KQL after `set dialect='kusto'`,
+  // so almost every statement fails to parse as SQL.
+  '02366_kql_datatype.sql',
+  '02366_kql_distinct.sql',
+  '02366_kql_extend.sql',
+  '02366_kql_func_binary.sql',
+  '02366_kql_func_datetime.sql',
+  '02366_kql_func_dynamic.sql',
+  '02366_kql_func_iif.sql',
+  '02366_kql_func_ip.sql',
+  '02366_kql_func_math.sql',
+  '02366_kql_func_scalar.sql',
+  '02366_kql_func_string.sql',
+  '02366_kql_mvexpand.sql',
   '02366_kql_operator_in_sql.sql',
+  '02366_kql_summarize.sql',
+  '02366_kql_tabular.sql',
+  // Mixed-dialect file (PRQL + KQL). The non-SQL branches are unparseable and
+  // the SQL splitter can't separate them cleanly.
+  '02985_dialects_with_distributed_tables.sql',
+  // INSERT INTO ... FORMAT CSV with a non-comma `format_csv_delimiter` puts
+  // raw CSV data containing `;` directly in the SQL stream, which breaks
+  // statement splitting.
+  '00707_float_csv_delimiter.sql',
+  // implicit_select / implicit_table_at_top_level enable bare expressions
+  // (`1+2;`, `s;`, `count();`, `*;`) which our parser rejects. The remaining
+  // valid SQL in these files isn't worth keeping out of sync with the
+  // pre-generated expected outputs.
+  '03227_implicit_select.sql',
+  '03408_implicit_table.sql',
   // Difficult to split
   // '03011_definitive_guide_to_cast.sql',
 ];
@@ -253,7 +326,9 @@ for (const file of sqlFiles) {
       isSupportedStatement(s) &&
       !isStringOnlySelect(s) &&
       !hasClientError(s) &&
-      !hasDisallowedSetting(s) && !hasKql(s),
+      !hasDisallowedSetting(s) &&
+      !hasKql(s) &&
+      !isImplicitSelectExpression(s),
   );
   const removed = statements.length - selectStatements.length;
 

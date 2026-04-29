@@ -10,6 +10,8 @@ create table merge ( CounterID UInt32,  StartDate Date,  Sign Int8,  VisitID UIn
 alter table merge1 add column dummy String after CounterID;
 alter table merge2 add column dummy String after CounterID;
 alter table merge add column dummy String after CounterID;
+describe table merge;
+show create table merge;
 insert into merge1 values (1, 'Hello, Alter Table!','2013-09-19', 1, 0, 2, '2013-09-19 12:43:06', 3);
 select CounterID, dummy from merge where dummy <> '' limit 10;
 alter table merge drop column dummy;

@@ -55,6 +55,8 @@ ENGINE = ReplicatedMergeTree('/clickhouse/{database}/test_01669', 'r2')
 ORDER BY `\\`
 SETTINGS ratio_of_defaults_for_sparse_serialization = 1.0;
 
+SYSTEM SYNC REPLICA test_r2;
+
 SELECT '---';
 
 SELECT *

@@ -16,6 +16,8 @@ INSERT INTO badFixedStringSort;
 
 INSERT INTO badFixedStringSort;
 
+OPTIMIZE TABLE badFixedStringSort FINAL;
+
 SELECT
     hex(uuid5_old),
     subitem

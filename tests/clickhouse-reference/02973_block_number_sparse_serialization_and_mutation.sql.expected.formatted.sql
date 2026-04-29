@@ -23,6 +23,8 @@ INSERT INTO table_with_some_columns SELECT
     number + 10
 FROM numbers(1);
 
+OPTIMIZE TABLE table_with_some_columns FINAL;
+
 INSERT INTO table_with_some_columns SELECT
     rand(),
     number + 222222222

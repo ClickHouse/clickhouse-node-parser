@@ -17,6 +17,8 @@ INSERT INTO t_projection_sparse;
 
 INSERT INTO t_projection_sparse;
 
+OPTIMIZE TABLE t_projection_sparse FINAL;
+
 SELECT count()
 FROM t_projection_sparse
 WHERE finalizeAggregation(val) = 0;

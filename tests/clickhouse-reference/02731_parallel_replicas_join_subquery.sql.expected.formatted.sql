@@ -67,6 +67,8 @@ SETTINGS
     enable_analyzer = 0,
     parallel_replicas_only_with_analyzer = 0;
 
+SYSTEM FLUSH LOGS query_log;
+
 SELECT
     ProfileEvents['ParallelReplicasQueryCount'],
     replaceRegexpAll(query, '_data_(\\d+)_(\\d+)', '_data_') AS query

@@ -18,6 +18,8 @@ INSERT INTO collapsing;
 
 INSERT INTO collapsing;
 
+OPTIMIZE TABLE collapsing PARTITION tuple() FINAL;
+
 SELECT *
 FROM collapsing
 ORDER BY key ASC;

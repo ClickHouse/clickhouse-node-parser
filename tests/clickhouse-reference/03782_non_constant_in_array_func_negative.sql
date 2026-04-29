@@ -138,3 +138,4 @@ SELECT (1, 'b') IN arrayZip([1, 2], ['a', 'b']);
 SELECT number, number IN arrayMap(x -> if(x > 1, x, 0), [0, 1, 2, 3]) FROM numbers(4);
 -- Type mismatch: tuple IN array of scalars
 SELECT (1, 2) IN arrayMap(x -> x, [1, 2, 3]); -- { serverError NO_COMMON_TYPE }
+-- { echoOff }

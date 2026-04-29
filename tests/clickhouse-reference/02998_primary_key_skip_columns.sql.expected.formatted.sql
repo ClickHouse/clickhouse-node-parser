@@ -75,4 +75,8 @@ WHERE database = currentDatabase()
 
 ALTER TABLE test MODIFY SETTING primary_key_ratio_of_unique_prefix_values_to_skip_suffix_columns = 0.9;
 
+DETACH TABLE test;
+
+ATTACH TABLE test;
+
 DROP TABLE test;

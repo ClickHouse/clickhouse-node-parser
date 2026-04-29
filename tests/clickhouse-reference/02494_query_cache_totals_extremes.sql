@@ -1,3 +1,7 @@
+-- Tags: no-parallel
+-- Tag no-parallel: Messes with internal cache
+
+SYSTEM CLEAR QUERY CACHE;
 DROP TABLE IF EXISTS tbl;
 CREATE TABLE tbl (key UInt64, agg UInt64) ENGINE = MergeTree ORDER BY key;
 INSERT INTO tbl VALUES (1, 3), (2, 2), (1, 4), (1, 1);

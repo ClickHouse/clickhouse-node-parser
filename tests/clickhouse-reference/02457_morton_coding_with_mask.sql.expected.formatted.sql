@@ -58,6 +58,18 @@ SETTINGS index_granularity = 8192, index_granularity_bytes = '10Mi';
 INSERT INTO morton_numbers_mask_1_02457 SELECT untuple(mortonDecode((1,2,1,2), mortonEncode((1,2,1,2), n1, n2, n3, n4)))
 FROM morton_numbers_mask_02457;
 
+(SELECT *
+FROM morton_numbers_mask_02457
+UNION DISTINCT
+SELECT *
+FROM morton_numbers_mask_1_02457)
+EXCEPT
+(SELECT *
+FROM morton_numbers_mask_02457
+INTERSECT
+SELECT *
+FROM morton_numbers_mask_1_02457);
+
 CREATE TABLE morton_numbers_mask_02457
 (
     n1 UInt32,
@@ -87,6 +99,18 @@ SETTINGS index_granularity = 8192, index_granularity_bytes = '10Mi';
 
 INSERT INTO morton_numbers_mask_2_02457 SELECT untuple(mortonDecode((1,4), mortonEncode((1,4), n1, n2)))
 FROM morton_numbers_mask_02457;
+
+(SELECT *
+FROM morton_numbers_mask_02457
+UNION DISTINCT
+SELECT *
+FROM morton_numbers_mask_2_02457)
+EXCEPT
+(SELECT *
+FROM morton_numbers_mask_02457
+INTERSECT
+SELECT *
+FROM morton_numbers_mask_2_02457);
 
 CREATE TABLE morton_numbers_mask_02457
 (
@@ -121,3 +145,15 @@ SETTINGS index_granularity = 8192, index_granularity_bytes = '10Mi';
 
 INSERT INTO morton_numbers_mask_3_02457 SELECT untuple(mortonDecode((1,1,2), mortonEncode((1,1,2), n1, n2, n3)))
 FROM morton_numbers_mask_02457;
+
+(SELECT *
+FROM morton_numbers_mask_02457
+UNION DISTINCT
+SELECT *
+FROM morton_numbers_mask_3_02457)
+EXCEPT
+(SELECT *
+FROM morton_numbers_mask_02457
+INTERSECT
+SELECT *
+FROM morton_numbers_mask_3_02457);

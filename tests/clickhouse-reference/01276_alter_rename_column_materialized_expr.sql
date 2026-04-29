@@ -14,6 +14,7 @@ INSERT INTO table_for_rename (date, key, value1, value2) SELECT toDate('2019-10-
 SELECT * FROM table_for_rename ORDER BY key;
 ALTER TABLE table_for_rename RENAME COLUMN value1 TO value4;
 ALTER TABLE table_for_rename RENAME COLUMN value2 TO value5;
+SHOW CREATE TABLE table_for_rename;
 SELECT '-- insert after rename --';
 INSERT INTO table_for_rename (date, key, value4, value5) SELECT toDate('2019-10-01') + number % 3, number, toString(number), toString(number + 1) from numbers(10, 10);
 ALTER TABLE table_for_rename RENAME COLUMN value4 TO value1;

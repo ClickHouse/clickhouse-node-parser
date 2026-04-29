@@ -33,6 +33,10 @@ SELECT count()
 FROM tab
 WHERE hasAnyTokens(s, '888');
 
+SYSTEM CLEAR TEXT INDEX CACHES;
+
+SYSTEM FLUSH LOGS query_log;
+
 SELECT
     ProfileEvents['TextIndexHeaderCacheMisses'] > 0,
     ProfileEvents['TextIndexDictionaryBlockCacheMisses'] > 0,

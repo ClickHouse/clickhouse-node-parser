@@ -78,6 +78,8 @@ INSERT INTO src;
 
 INSERT INTO src;
 
+SYSTEM STOP MERGES dst;
+
 INSERT INTO dst;
 
 ALTER TABLE dst REPLACE PARTITION 1 FROM src;
@@ -90,7 +92,15 @@ SELECT
     uniqExact(_part)
 FROM dst;
 
+SYSTEM START MERGES dst;
+
 SET optimize_throw_if_noop = 1;
+
+OPTIMIZE TABLE dst;
+
+DETACH TABLE dst;
+
+ATTACH TABLE dst;
 
 ALTER TABLE dst DROP PARTITION 0;
 

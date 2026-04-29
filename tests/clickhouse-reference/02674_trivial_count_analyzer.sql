@@ -15,6 +15,7 @@ select count() + 1 from m3;
 drop table m3;
 -- checking queries with FINAL
 create table replacing_m3(a Int64, b UInt64) Engine=ReplacingMergeTree() order by (a, b);
+SYSTEM STOP MERGES replacing_m3;
 select count() from replacing_m3;
 insert into replacing_m3 values (0,0);
 insert into replacing_m3 values (-1,1);

@@ -9,6 +9,8 @@ CREATE TABLE nested_smt
 ENGINE = SummingMergeTree()
 ORDER BY (date);
 
+SYSTEM stop merges nested_smt;
+
 INSERT INTO nested_smt;
 
 INSERT INTO nested_smt;
@@ -20,6 +22,10 @@ ORDER BY val ASC;
 
 SELECT *
 FROM nested_smt FINAL;
+
+SYSTEM start merges nested_smt;
+
+OPTIMIZE TABLE nested_smt FINAL;
 
 SELECT *
 FROM nested_smt;

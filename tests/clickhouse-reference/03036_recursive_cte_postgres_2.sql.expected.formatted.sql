@@ -242,4 +242,4 @@ WITH RECURSIVE t AS (
 )
 
 SELECT *
-FROM t;
+FROM t; -- { echoOff }

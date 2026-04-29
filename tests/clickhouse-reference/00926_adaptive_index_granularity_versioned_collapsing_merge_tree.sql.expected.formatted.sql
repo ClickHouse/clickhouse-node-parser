@@ -29,6 +29,8 @@ WHERE table = 'zero_rows_per_granule'
 
 INSERT INTO zero_rows_per_granule (p, k, v1, v2, Sign, Version);
 
+OPTIMIZE TABLE zero_rows_per_granule FINAL;
+
 SELECT COUNT(*)
 FROM zero_rows_per_granule FINAL;
 
@@ -69,6 +71,8 @@ WHERE table = 'four_rows_per_granule'
 
 INSERT INTO four_rows_per_granule (p, k, v1, v2, Sign, Version);
 
+OPTIMIZE TABLE four_rows_per_granule FINAL;
+
 -- We expect zero marks here, so we might get zero rows if all the parts were
 -- deleted already. This can happen in parallel runs where there may be a long delay
 -- between queries. So we must write the query in such a way that it always returns
@@ -105,6 +109,8 @@ INSERT INTO six_rows_per_granule (p, k, v1, v2, Sign, Version);
 INSERT INTO six_rows_per_granule (p, k, v1, v2, Sign, Version);
 
 INSERT INTO six_rows_per_granule (p, k, v1, v2, Sign, Version);
+
+OPTIMIZE TABLE six_rows_per_granule FINAL;
 
 SELECT COUNT(*)
 FROM six_rows_per_granule;

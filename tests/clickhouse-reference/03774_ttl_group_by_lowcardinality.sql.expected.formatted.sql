@@ -26,6 +26,8 @@ INSERT INTO ttl_group_by__fuzz_13 SELECT
     number
 FROM numbers(100);
 
+OPTIMIZE TABLE ttl_group_by__fuzz_13 FINAL;
+
 SELECT
     d,
     v

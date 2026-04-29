@@ -14,6 +14,8 @@ CREATE TABLE example_table
 ORDER BY id
 SETTINGS max_part_loading_threads = 8;
 
+SHOW CREATE TABLE example_table;
+
 SET default_table_engine = 'Memory';
 
 -- Memory with ORDER BY is wrong
@@ -39,3 +41,5 @@ CREATE TABLE example_table2
     data String
 )
 SETTINGS max_rows_to_keep = 42;
+
+SHOW CREATE TABLE example_table2;

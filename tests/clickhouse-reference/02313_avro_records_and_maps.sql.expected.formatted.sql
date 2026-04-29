@@ -3,6 +3,8 @@ INSERT INTO FUNCTION file(concat(currentDatabase(), '_data_02313.avro')) SELECT 
 FROM numbers(3)
 SETTINGS engine_file_truncate_on_insert = 1;
 
+DESCRIBE TABLE file(concat(currentDatabase(), '_data_02313.avro'));
+
 SELECT *
 FROM file(concat(currentDatabase(), '_data_02313.avro'));
 

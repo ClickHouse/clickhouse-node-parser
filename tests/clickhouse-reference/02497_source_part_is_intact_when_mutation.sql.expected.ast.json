@@ -166,6 +166,24 @@
     }
   },
   {
+    "kind": "check",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "t_source_part_is_intact"
+    },
+    "settings": [
+      {
+        "name": "max_threads",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -183,6 +201,10 @@
       "kind": "tableRef",
       "table": "t_source_part_is_intact"
     }
+  },
+  {
+    "kind": "system",
+    "body": "BEGIN TRANSACTION"
   },
   {
     "kind": "alter",
@@ -226,6 +248,10 @@
     ]
   },
   {
+    "kind": "system",
+    "body": "ROLLBACK"
+  },
+  {
     "kind": "alter",
     "table": {
       "kind": "tableRef",
@@ -255,6 +281,22 @@
     "leadingComments": [
       "-- size of the file serialization.json is different in the new part"
     ]
+  },
+  {
+    "kind": "detach",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "t_source_part_is_intact"
+    }
+  },
+  {
+    "kind": "attach",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "t_source_part_is_intact"
+    }
   },
   {
     "kind": "drop",

@@ -13,7 +13,10 @@ INSERT INTO compression_codec VALUES(1, 'hello', toDate('2018-12-14'), 1.1, 'aaa
 INSERT INTO compression_codec VALUES(2, 'world', toDate('2018-12-15'), 2.2, 'bbb', 6);
 INSERT INTO compression_codec VALUES(3, '!', toDate('2018-12-16'), 3.3, 'ccc', 7);
 SELECT * FROM compression_codec ORDER BY id;
+OPTIMIZE TABLE compression_codec FINAL;
 INSERT INTO compression_codec VALUES(2, '', toDate('2018-12-13'), 4.4, 'ddd', 8);
+DETACH TABLE compression_codec;
+ATTACH TABLE compression_codec;
 SELECT count(*) FROM compression_codec WHERE id = 2 GROUP BY id;
 DROP TABLE IF EXISTS bad_codec;
 DROP TABLE IF EXISTS params_when_no_params;
@@ -56,6 +59,7 @@ CREATE TABLE compression_codec_multiple_more_types (
     data FixedString(12) CODEC(ZSTD, ZSTD, NONE, NONE, NONE, LZ4HC),
     ddd Nested (age UInt8, Name String) CODEC(LZ4, LZ4HC, NONE, NONE, NONE, ZSTD, Delta(8))
 ) ENGINE = MergeTree() ORDER BY tuple();
+SHOW CREATE TABLE compression_codec_multiple_more_types;
 INSERT INTO compression_codec_multiple_more_types VALUES(1.5555555555555, 'hello world!', [77], ['John']);
 INSERT INTO compression_codec_multiple_more_types VALUES(7.1, 'xxxxxxxxxxxx', [127], ['Henry']);
 SELECT * FROM compression_codec_multiple_more_types order by id;
@@ -85,5 +89,6 @@ CREATE TABLE test_default_delta(
     yetothernum Float32 CODEC(Delta),
     ddd Nested (age UInt8, Name String, OName String, BName String) CODEC(Delta(1))
 ) ENGINE = MergeTree() ORDER BY tuple();
+SHOW CREATE TABLE test_default_delta;
 DROP TABLE compression_codec_multiple;
 DROP TABLE compression_codec_multiple_more_types;

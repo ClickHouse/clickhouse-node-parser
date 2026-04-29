@@ -39,6 +39,8 @@ INSERT INTO alter_compression_codec;
 
 INSERT INTO alter_compression_codec;
 
+OPTIMIZE TABLE alter_compression_codec FINAL;
+
 SET allow_suspicious_codecs = 1;
 
 ALTER TABLE alter_compression_codec MODIFY COLUMN alter_column CODEC(ZSTD, LZ4HC, LZ4, LZ4, NONE);
@@ -98,11 +100,17 @@ FROM large_alter_table_00804;
 
 ALTER TABLE large_alter_table_00804 MODIFY COLUMN data CODEC(NONE, LZ4, LZ4HC, ZSTD);
 
+OPTIMIZE TABLE large_alter_table_00804;
+
 SELECT compression_codec
 FROM `system`.`columns`
 WHERE database = currentDatabase()
     AND table = 'large_alter_table_00804'
     AND name = 'data';
+
+DETACH TABLE large_alter_table_00804;
+
+ATTACH TABLE large_alter_table_00804;
 
 SELECT COUNT(hash)
 FROM store_of_hash_00804;

@@ -21,6 +21,8 @@ FROM t
 GROUP BY x
 ORDER BY x ASC;
 
+OPTIMIZE TABLE t FINAL;
+
 SELECT
     x,
     _block_number

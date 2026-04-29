@@ -38,6 +38,12 @@ CREATE TABLE test.hits_stripelog
 )
 ENGINE = StripeLog;
 
+CHECK TABLE test.hits_log;
+
+CHECK TABLE test.hits_tinylog;
+
+CHECK TABLE test.hits_stripelog;
+
 INSERT INTO test.hits_log SELECT
     CounterID,
     AdvEngineID,

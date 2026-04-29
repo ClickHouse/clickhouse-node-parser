@@ -50,6 +50,8 @@ CREATE TABLE mt
 ENGINE = MergeTree
 ORDER BY key;
 
+SYSTEM STOP MERGES mt;
+
 INSERT INTO mt SELECT
     rand(),
     rand()

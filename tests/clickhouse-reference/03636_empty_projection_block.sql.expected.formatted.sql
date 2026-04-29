@@ -14,6 +14,12 @@ ORDER BY id
 TTL ts + toIntervalSecond(0) WHERE isNull(state)
 SETTINGS index_granularity = 8192, deduplicate_merge_projection_mode = 'rebuild';
 
+SYSTEM STOP MERGES post_state;
+
 INSERT INTO post_state;
 
 INSERT INTO post_state;
+
+SYSTEM START MERGES post_state;
+
+OPTIMIZE TABLE post_state;

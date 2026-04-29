@@ -12,6 +12,7 @@ settings
     min_bytes_to_use_direct_io = 1,
     log_query_threads = 1,
     use_uncompressed_cache = 0;
+system flush logs query_log, query_thread_log;
 with queries as (
     select query_id, row_number() over(order by event_time_microseconds) as ordinal
     from system.query_log

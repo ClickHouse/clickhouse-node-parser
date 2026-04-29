@@ -8,6 +8,7 @@ CREATE TABLE IF NOT EXISTS normal
 )
 ENGINE = MergeTree
 ORDER BY tuple() settings index_granularity=1;
+SYSTEM STOP MERGES normal;
 INSERT INTO normal select number as key, number as value from numbers(10000);
 ALTER TABLE normal ADD PROJECTION p_normal (SELECT key, value ORDER BY key);
 INSERT INTO normal select number as key, number as value from numbers(10000, 100);
@@ -28,6 +29,7 @@ CREATE TABLE agg
 )
 ENGINE = MergeTree
 ORDER BY tuple() settings index_granularity=1;
+SYSTEM STOP MERGES agg;
 INSERT INTO agg SELECT number AS key, number AS value FROM numbers(100);
 ALTER TABLE agg ADD PROJECTION p_agg (SELECT key, sum(value) GROUP BY key);
 INSERT INTO agg SELECT number AS key, number AS value FROM numbers(100, 100);

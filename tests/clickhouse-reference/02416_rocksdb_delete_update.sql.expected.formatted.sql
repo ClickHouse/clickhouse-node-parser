@@ -18,7 +18,11 @@ ORDER BY key ASC;
 
 SELECT '-----------';
 
+DELETE FROM `02416_rocksdb` WHERE like(value, 'Some%string');
+
 ALTER TABLE `02416_rocksdb` DELETE WHERE key >= 4;
+
+DELETE FROM `02416_rocksdb` WHERE 1 = 1;
 
 SELECT count()
 FROM `02416_rocksdb`;

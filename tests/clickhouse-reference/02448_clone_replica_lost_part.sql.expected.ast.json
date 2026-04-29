@@ -284,6 +284,13 @@
     "settingsAfterOrderBy": true
   },
   {
+    "kind": "system",
+    "body": "SYSTEM stop replicated sends rmt1",
+    "leadingComments": [
+      "-- insert part only on one replica"
+    ]
+  },
+  {
     "kind": "insert",
     "target": {
       "kind": "table",
@@ -292,6 +299,21 @@
         "table": "rmt1"
       }
     }
+  },
+  {
+    "kind": "detach",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "rmt1"
+    },
+    "trailingComments": [
+      "-- make replica inactive"
+    ]
+  },
+  {
+    "kind": "system",
+    "body": "SYSTEM start replicated sends rmt1"
   },
   {
     "kind": "insert",
@@ -353,6 +375,13 @@
     ]
   },
   {
+    "kind": "system",
+    "body": "SYSTEM sync replica rmt2",
+    "trailingComments": [
+      "-- {serverError TIMEOUT_EXCEEDED}"
+    ]
+  },
+  {
     "kind": "set",
     "settings": [
       {
@@ -396,6 +425,21 @@
       "kind": "tableRef",
       "table": "rmt2"
     }
+  },
+  {
+    "kind": "attach",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "rmt1"
+    },
+    "leadingComments": [
+      "-- rmt1 will mimic rmt2"
+    ]
+  },
+  {
+    "kind": "system",
+    "body": "SYSTEM sync replica rmt1"
   },
   {
     "kind": "select",
@@ -481,6 +525,13 @@
     }
   },
   {
+    "kind": "system",
+    "body": "SYSTEM stop replicated sends rmt2",
+    "leadingComments": [
+      "-- insert parts only on one replica and merge them"
+    ]
+  },
+  {
     "kind": "insert",
     "target": {
       "kind": "table",
@@ -489,6 +540,14 @@
         "table": "rmt2"
       }
     }
+  },
+  {
+    "kind": "optimize",
+    "table": {
+      "kind": "tableRef",
+      "table": "rmt2"
+    },
+    "final": true
   },
   {
     "kind": "select",
@@ -512,6 +571,18 @@
     "trailingComments": [
       "-- increases probability of reproducing the issue"
     ]
+  },
+  {
+    "kind": "detach",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "rmt2"
+    }
+  },
+  {
+    "kind": "system",
+    "body": "SYSTEM start replicated sends rmt2"
   },
   {
     "kind": "insert",
@@ -577,6 +648,25 @@
       "kind": "tableRef",
       "table": "rmt1"
     }
+  },
+  {
+    "kind": "system",
+    "body": "SYSTEM stop fetches rmt1",
+    "leadingComments": [
+      "-- rmt1 will mimic rmt2"
+    ]
+  },
+  {
+    "kind": "attach",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "rmt2"
+    }
+  },
+  {
+    "kind": "system",
+    "body": "SYSTEM start fetches rmt1"
   },
   {
     "kind": "select",
@@ -779,6 +869,17 @@
     }
   },
   {
+    "kind": "system",
+    "body": "SYSTEM stop fetches rmt2",
+    "leadingComments": [
+      "-- rmt1 will mimic rmt2"
+    ]
+  },
+  {
+    "kind": "system",
+    "body": "SYSTEM start fetches rmt2"
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -951,6 +1052,16 @@
         "table": "rmt2"
       }
     }
+  },
+  {
+    "kind": "optimize",
+    "table": {
+      "kind": "tableRef",
+      "table": "rmt2"
+    },
+    "leadingComments": [
+      "-- merge through gap"
+    ]
   },
   {
     "kind": "select",

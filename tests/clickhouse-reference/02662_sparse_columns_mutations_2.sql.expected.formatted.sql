@@ -37,4 +37,6 @@ WHERE s != '';
 
 ALTER TABLE t_sparse_mutations_2 UPDATE s = '' WHERE id % 13 != 0;
 
+OPTIMIZE TABLE t_sparse_mutations_2 FINAL;
+
 DROP TABLE t_sparse_mutations_2;

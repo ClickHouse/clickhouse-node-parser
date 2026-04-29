@@ -18,6 +18,8 @@ SET prefer_localhost_replica = 0;
 INSERT INTO dist_test_01040 SELECT toUInt64(number)
 FROM numbers(2);
 
+SYSTEM FLUSH DISTRIBUTED dist_test_01040;
+
 SELECT *
 FROM dist_test_01040
 ORDER BY key ASC;

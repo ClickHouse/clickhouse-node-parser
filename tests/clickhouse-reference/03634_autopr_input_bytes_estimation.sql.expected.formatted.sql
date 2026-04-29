@@ -131,6 +131,8 @@ SETTINGS optimize_read_in_order = 1, query_plan_read_in_order = 1, log_comment =
 
 SET enable_parallel_replicas = 0, automatic_parallel_replicas_mode = 0;
 
+SYSTEM FLUSH LOGS query_log;
+
 -- Just checking that the estimation is not too far off
 SELECT format('{} {} {}', log_comment, compressed_bytes, statistics_input_bytes)
 FROM (

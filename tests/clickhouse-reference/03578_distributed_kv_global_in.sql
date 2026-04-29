@@ -27,6 +27,7 @@ WHERE key GLOBAL IN (
     SELECT number FROM numbers(3)
 )
 ORDER BY 1, 2;
+SYSTEM FLUSH LOGS query_log;
 SELECT read_rows
 FROM system.query_log
 WHERE current_database = currentDatabase()

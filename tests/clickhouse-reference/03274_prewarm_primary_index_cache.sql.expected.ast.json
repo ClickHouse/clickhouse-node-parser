@@ -199,6 +199,14 @@
     "settingsAfterOrderBy": true
   },
   {
+    "kind": "system",
+    "body": "SYSTEM CLEAR PRIMARY INDEX CACHE"
+  },
+  {
+    "kind": "system",
+    "body": "SYSTEM STOP FETCHES t_prewarm_cache_rmt_2"
+  },
+  {
     "kind": "insert",
     "target": {
       "kind": "table",
@@ -383,6 +391,14 @@
     }
   },
   {
+    "kind": "system",
+    "body": "SYSTEM START FETCHES t_prewarm_cache_rmt_2"
+  },
+  {
+    "kind": "system",
+    "body": "SYSTEM SYNC REPLICA t_prewarm_cache_rmt_2"
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -455,6 +471,57 @@
         }
       ]
     }
+  },
+  {
+    "kind": "optimize",
+    "table": {
+      "kind": "tableRef",
+      "table": "t_prewarm_cache_rmt_1"
+    },
+    "final": true
+  },
+  {
+    "kind": "detach",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "t_prewarm_cache_rmt_1"
+    }
+  },
+  {
+    "kind": "detach",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "t_prewarm_cache_rmt_2"
+    }
+  },
+  {
+    "kind": "attach",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "t_prewarm_cache_rmt_1"
+    }
+  },
+  {
+    "kind": "attach",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "t_prewarm_cache_rmt_2"
+    }
+  },
+  {
+    "kind": "system",
+    "body": "SYSTEM PREWARM PRIMARY INDEX CACHE t_prewarm_cache_rmt_1",
+    "leadingComments": [
+      "--- Check that system query works."
+    ]
+  },
+  {
+    "kind": "system",
+    "body": "SYSTEM FLUSH LOGS query_log"
   },
   {
     "kind": "select",

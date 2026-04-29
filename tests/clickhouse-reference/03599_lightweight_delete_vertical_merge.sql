@@ -19,8 +19,12 @@ SETTINGS
     ratio_of_defaults_for_sparse_serialization = 1.0;
 INSERT INTO t_lwd_vertical SELECT number, rand(), rand(), rand(), rand() FROM numbers(100000);
 SET lightweight_delete_mode = 'alter_update';
+DELETE FROM t_lwd_vertical WHERE id % 4 = 0;
 SELECT count() FROM t_lwd_vertical;
+OPTIMIZE TABLE t_lwd_vertical FINAL;
 SELECT count() FROM system.parts_columns WHERE database = currentDatabase() AND table = 't_lwd_vertical' AND active AND partition_id = 'all' AND column = '_row_exists';
+DELETE FROM t_lwd_vertical WHERE 1;
+SYSTEM FLUSH LOGS part_log;
 SELECT
     merge_algorithm,
     read_rows,

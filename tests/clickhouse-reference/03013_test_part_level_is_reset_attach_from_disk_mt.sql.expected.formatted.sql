@@ -13,6 +13,8 @@ ORDER BY tuple();
 
 INSERT INTO test;
 
+OPTIMIZE TABLE test FINAL;
+
 SELECT part_name
 FROM `system`.parts
 WHERE table = 'test'

@@ -13,6 +13,8 @@ INSERT INTO nnd;
 
 INSERT INTO nnd;
 
+OPTIMIZE TABLE nnd;
+
 -- shall work for precise intervals
 -- INTERVAL 1 SECOND shall be default
 SELECT (

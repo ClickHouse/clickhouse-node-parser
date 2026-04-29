@@ -12,6 +12,7 @@ set wait_for_async_insert = 0;
 set wait_for_async_insert_timeout = 10000, async_insert_max_query_number = 1000, async_insert_max_data_size = 10000000, async_insert_use_adaptive_busy_timeout = 0;
 insert into `test_table with spaces` values (1, 'a'), (2, 'b'), (3, 'c');
 insert into `test_table with spaces` values (2, 'b'), (3, 'c'), (4, 'd');
+system flush async insert queue `test_table with spaces`;
 select '`test_table with spaces`', count() from `test_table with spaces`;
 insert into `test_table with spaces` values (3, 'b'), (4, 'c'), (5, 'd');
 drop table `test_table with spaces`;
@@ -26,6 +27,7 @@ create table `this.is.a.valid.databasename`.`test_table with spaces`
 ORDER by id;
 insert into `this.is.a.valid.databasename`.`test_table with spaces` values (1, 'a'), (2, 'b'), (3, 'c');
 insert into `this.is.a.valid.databasename`.`test_table with spaces` values (2, 'b'), (3, 'c'), (4, 'd');
+system flush async insert queue `this.is.a.valid.databasename`.`test_table with spaces`;
 select '`this.is.a.valid.databasename`.`test_table with spaces`', count() from `this.is.a.valid.databasename`.`test_table with spaces`;
 drop table `this.is.a.valid.databasename`.`test_table with spaces`;
 drop database `this.is.a.valid.databasename`;

@@ -15,6 +15,8 @@ INSERT INTO tab_lc SELECT
     toString(number % 10)
 FROM numbers(20000000);
 
+OPTIMIZE TABLE tab_lc;
+
 SET max_rows_to_read = '21M';
 
 SELECT count()

@@ -35,3 +35,5 @@ ALTER TABLE replicated_mutations_empty_partitions MODIFY COLUMN value UInt64 SET
 
 SELECT sum(value)
 FROM replicated_mutations_empty_partitions;
+
+SHOW CREATE TABLE replicated_mutations_empty_partitions;

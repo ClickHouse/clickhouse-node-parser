@@ -4,7 +4,9 @@ SET use_uncompressed_cache = 0;
 DROP TABLE IF EXISTS t_arr;
 CREATE TABLE t_arr (a Array(UInt32)) ENGINE = MergeTree ORDER BY tuple() SETTINGS min_bytes_for_wide_part = 0;
 INSERT INTO t_arr VALUES ([1]) ([]) ([1, 2, 3]) ([1, 2]);
+SYSTEM CLEAR MARK CACHE;
 SELECT a.size0 FROM t_arr;
+SYSTEM FLUSH LOGS query_log;
 SELECT ProfileEvents['FileOpen']
 FROM system.query_log
 WHERE (type = 'QueryFinish') AND (lower(query) LIKE lower('SELECT a.size0 FROM %t_arr%'))

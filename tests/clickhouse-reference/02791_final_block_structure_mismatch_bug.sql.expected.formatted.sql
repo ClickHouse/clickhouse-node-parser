@@ -16,6 +16,10 @@ FROM test_block_mismatch FINAL;
 
 INSERT INTO test_block_mismatch;
 
+OPTIMIZE TABLE test_block_mismatch FINAL;
+
+SYSTEM stop merges test_block_mismatch;
+
 INSERT INTO test_block_mismatch;
 
 -- variations of the test above with slightly modified table definitions
@@ -36,6 +40,10 @@ FROM test_block_mismatch_sk1 FINAL;
 
 INSERT INTO test_block_mismatch_sk1;
 
+OPTIMIZE TABLE test_block_mismatch_sk1 FINAL;
+
+SYSTEM stop merges test_block_mismatch_sk1;
+
 INSERT INTO test_block_mismatch_sk1;
 
 CREATE TABLE test_block_mismatch_sk2
@@ -54,5 +62,9 @@ SELECT count(*)
 FROM test_block_mismatch_sk2 FINAL;
 
 INSERT INTO test_block_mismatch_sk2;
+
+OPTIMIZE TABLE test_block_mismatch_sk2 FINAL;
+
+SYSTEM stop merges test_block_mismatch_sk2;
 
 INSERT INTO test_block_mismatch_sk2;

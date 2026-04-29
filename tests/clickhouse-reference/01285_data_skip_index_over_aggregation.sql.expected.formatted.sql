@@ -44,6 +44,8 @@ FROM data_01285
 WHERE assumeNotNull(value) = 3
 ORDER BY `ALL` ASC;
 
+OPTIMIZE TABLE data_01285 FINAL;
+
 -- before the fix value_idx contains one range {0, 0}
 -- and hence cannot find these record.
 SELECT *

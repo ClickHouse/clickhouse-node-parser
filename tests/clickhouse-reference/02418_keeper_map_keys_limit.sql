@@ -10,6 +10,7 @@ CREATE TABLE 02418_test_another (key UInt64, value Float64) Engine=KeeperMap('/'
 INSERT INTO 02418_test VALUES (4, 4.4); -- { serverError LIMIT_EXCEEDED }
 INSERT INTO 02418_test_another VALUES (4, 4.4);
 SELECT count() FROM 02418_test_another;
+DELETE FROM 02418_test WHERE key <= 2;
 INSERT INTO 02418_test VALUES (1, 1.1);
 INSERT INTO 02418_test VALUES (2, 1.1); -- { serverError LIMIT_EXCEEDED }
 DROP TABLE 02418_test SYNC;

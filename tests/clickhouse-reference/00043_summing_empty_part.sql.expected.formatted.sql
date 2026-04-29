@@ -14,6 +14,8 @@ INSERT INTO empty_summing;
 
 INSERT INTO empty_summing;
 
+OPTIMIZE TABLE empty_summing;
+
 SELECT *
 FROM empty_summing;
 

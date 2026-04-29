@@ -31,6 +31,8 @@ ALTER TABLE mt UPDATE n = n + (n NOT IN (m)) IN PARTITION ID '1' WHERE 1 SETTING
 
 DROP TABLE m;
 
+OPTIMIZE TABLE mt FINAL;
+
 SELECT
     mutation_id,
     command,

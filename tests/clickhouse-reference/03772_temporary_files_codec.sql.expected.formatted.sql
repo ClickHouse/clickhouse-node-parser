@@ -152,6 +152,8 @@ SETTINGS
     temporary_files_codec = 'LZ4'
 FORMAT Null;
 
+SYSTEM FLUSH LOGS system.query_log;
+
 SELECT
     log_comment,
     ((sumIf(ProfileEvents['ExternalProcessingCompressedBytesTotal'], `Settings`['temporary_files_codec'] = 'LZ4') AS with_compression)) > 0,

@@ -3,6 +3,8 @@ DROP DATABASE IF EXISTS memory_01069;
 CREATE DATABASE memory_01069
 ENGINE = Memory;
 
+SHOW CREATE DATABASE memory_01069;
+
 CREATE TABLE memory_01069.mt
 (
     n UInt8
@@ -29,5 +31,9 @@ FROM memory_01069.file
 ORDER BY n ASC;
 
 DROP TABLE memory_01069.mt;
+
+SHOW CREATE TABLE memory_01069.mt; -- { serverError UNKNOWN_TABLE }
+
+SHOW CREATE TABLE memory_01069.file;
 
 DROP DATABASE memory_01069;

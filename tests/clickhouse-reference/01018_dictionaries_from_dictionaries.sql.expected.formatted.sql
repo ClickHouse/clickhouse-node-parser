@@ -59,6 +59,8 @@ INSERT INTO database_for_dict.table_for_dict SELECT
     number / 2.0
 FROM numbers(100, 100);
 
+SYSTEM RELOAD DICTIONARIES;
+
 CREATE DICTIONARY database_for_dict.dict3
 (
     key_column UInt64 DEFAULT 0,

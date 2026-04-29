@@ -60,6 +60,8 @@ WHERE a IN (
     )
 SETTINGS enable_global_with_statement = 0;
 
+SYSTEM FLUSH LOGS query_log;
+
 SELECT count(read_rows)
 FROM (
         SELECT read_rows

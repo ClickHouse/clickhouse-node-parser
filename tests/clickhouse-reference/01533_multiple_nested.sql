@@ -15,11 +15,15 @@ ORDER BY tuple()
 SETTINGS min_bytes_for_wide_part = 0;
 INSERT INTO nested VALUES ([(1, 'q'), (2, 'w'), (3, 'e')], [(4, [('a', 5), ('s', 6), ('d', 7)])], [([(8, 9), (10, 11)], [('z', 'x'), ('c', 'v')])]);
 INSERT INTO nested VALUES ([(12, 'qq')], [(4, []), (5, [('b', 6), ('n', 7)])], [([], []), ([(44, 55), (66, 77)], [])]);
+OPTIMIZE TABLE nested FINAL;
 SELECT * FROM nested;
 SELECT col1.a, col1.s FROM nested;
 SELECT col2.a, col2.n, col2.n.s, col2.n.b FROM nested;
 SELECT col3.n1, col3.n2, col3.n1.a, col3.n1.b, col3.n2.s, col3.n2.t FROM nested;
+SYSTEM CLEAR MARK CACHE;
 SELECT col1.a FROM nested FORMAT Null;
+-- 4 files: (col1.size0, col1.a) x2
+SYSTEM FLUSH LOGS query_log;
 SELECT ProfileEvents['FileOpen'] - ProfileEvents['CreatedReadBufferDirectIOFailed']
 FROM system.query_log
 WHERE (type = 'QueryFinish') AND (lower(query) LIKE lower('SELECT col1.a FROM %nested%'))

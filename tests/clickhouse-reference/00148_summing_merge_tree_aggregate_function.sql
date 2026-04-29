@@ -20,6 +20,7 @@ select today() as d,
 from numbers(5000)
 group by d, k;
 select count() from summing_merge_tree_aggregate_function;
+optimize table summing_merge_tree_aggregate_function;
 drop table summing_merge_tree_aggregate_function;
 create table summing_merge_tree_aggregate_function (
     d materialized today(),

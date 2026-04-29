@@ -28,6 +28,8 @@ TRUNCATE TABLE dict_src;
 
 INSERT INTO dict_src;
 
+SYSTEM RELOAD DICTIONARY colors;
+
 DROP DICTIONARY IF EXISTS dict_products;
 
 DROP TABLE IF EXISTS src_products;
@@ -75,6 +77,8 @@ ORDER BY
     target_timezone ASC;
 
 ALTER TABLE src_products DELETE WHERE category = 'catA' SETTINGS mutations_sync = 1;
+
+SYSTEM RELOAD DICTIONARY dict_products;
 
 SELECT
     target_category,

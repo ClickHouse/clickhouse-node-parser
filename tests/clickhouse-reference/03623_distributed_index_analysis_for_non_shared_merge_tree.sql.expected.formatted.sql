@@ -35,6 +35,8 @@ SETTINGS
     distributed_index_analysis_for_non_shared_merge_tree = 1
 FORMAT Null;
 
+SYSTEM flush logs query_log;
+
 SELECT format('distributed_index_analysis_for_non_shared_merge_tree={}, DistributedIndexAnalysisMicroseconds>0={}', `Settings`['distributed_index_analysis_for_non_shared_merge_tree'], ProfileEvents['DistributedIndexAnalysisMicroseconds'] > 0)
 FROM `system`.query_log
 WHERE current_database = currentDatabase()

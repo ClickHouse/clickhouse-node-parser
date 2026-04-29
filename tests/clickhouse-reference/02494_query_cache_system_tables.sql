@@ -1,3 +1,7 @@
+-- Tags: no-parallel
+-- Tag no-parallel: Messes with internal cache
+
+SYSTEM CLEAR QUERY CACHE;
 -- Test that the query cache rejects queries that involve system tables.
 SELECT * FROM system.one SETTINGS use_query_cache = 1; -- { serverError QUERY_CACHE_USED_WITH_SYSTEM_TABLE }
 SELECT count(*) FROM system.query_cache;

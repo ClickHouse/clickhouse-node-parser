@@ -1,3 +1,7 @@
+-- Tags: no-parallel
+-- Tag no-parallel: Messes with internal cache
+SYSTEM CLEAR QUERY CACHE;
+
 DROP TABLE IF EXISTS t;
 
 -- Create test table with lot's of rows
@@ -13,6 +17,8 @@ FROM (
         SELECT number % 4 AS n
         FROM numbers(1200)
     );
+
+OPTIMIZE TABLE t FINAL;
 
 -- Run query which, store *compressed* result in query cache
 SELECT '-- insert with enabled compression';

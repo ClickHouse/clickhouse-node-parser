@@ -38,6 +38,8 @@ SELECT
 FROM `03581_data`
 WHERE val_set = 2000;
 
+SYSTEM flush logs query_log;
+
 SELECT read_rows
 FROM `system`.query_log
 WHERE current_database = currentDatabase()

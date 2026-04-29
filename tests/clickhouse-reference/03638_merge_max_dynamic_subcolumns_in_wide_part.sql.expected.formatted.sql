@@ -16,6 +16,8 @@ SELECT
     JSONSharedDataPaths(json)
 FROM test;
 
+OPTIMIZE TABLE test FINAL;
+
 SELECT
     JSONDynamicPaths(json),
     JSONSharedDataPaths(json)

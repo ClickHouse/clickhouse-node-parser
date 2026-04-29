@@ -29,6 +29,8 @@ INSERT INTO users_compact;
 -- { echoOn }
 ALTER TABLE users_compact MODIFY SETTING lightweight_mutation_projection_mode = 'throw';
 
+DELETE FROM users_compact WHERE uid = 1231; -- { serverError SUPPORT_IS_DISABLED }
+
 ALTER TABLE users_compact MODIFY SETTING lightweight_mutation_projection_mode = 'drop';
 
 SELECT *
@@ -54,6 +56,8 @@ WHERE (database = currentDatabase())
 INSERT INTO users_compact;
 
 ALTER TABLE users_compact MODIFY SETTING lightweight_mutation_projection_mode = 'rebuild';
+
+DELETE FROM users_compact WHERE uid = 6666;
 
 -- expecting projection p1, p2
 SELECT
@@ -93,6 +97,8 @@ INSERT INTO users_wide;
 -- { echoOn }
 ALTER TABLE users_wide MODIFY SETTING lightweight_mutation_projection_mode = 'throw';
 
+DELETE FROM users_wide WHERE uid = 1231; -- { serverError SUPPORT_IS_DISABLED }
+
 ALTER TABLE users_wide MODIFY SETTING lightweight_mutation_projection_mode = 'drop';
 
 SELECT *
@@ -118,6 +124,8 @@ WHERE (database = currentDatabase())
 INSERT INTO users_wide;
 
 ALTER TABLE users_wide MODIFY SETTING lightweight_mutation_projection_mode = 'rebuild';
+
+DELETE FROM users_wide WHERE uid = 6666;
 
 -- expecting projection p1, p2
 SELECT

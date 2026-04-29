@@ -51,3 +51,5 @@ SETTINGS
     use_query_cache = 1,
     max_block_size = 1
 FORMAT TSV;
+
+SYSTEM FLUSH LOGS query_log;

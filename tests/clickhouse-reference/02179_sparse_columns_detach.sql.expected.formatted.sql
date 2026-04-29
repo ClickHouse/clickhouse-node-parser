@@ -14,6 +14,8 @@ INSERT INTO t_sparse_detach SELECT
     if(number % 21 = 0, toString(number), '')
 FROM numbers(10000);
 
+OPTIMIZE TABLE t_sparse_detach FINAL;
+
 SELECT count()
 FROM t_sparse_detach
 WHERE s != '';
@@ -26,6 +28,10 @@ WHERE table = 't_sparse_detach'
     AND database = currentDatabase()
     AND active
 ORDER BY column ASC;
+
+DETACH TABLE t_sparse_detach;
+
+ATTACH TABLE t_sparse_detach;
 
 TRUNCATE TABLE t_sparse_detach;
 

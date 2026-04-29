@@ -83,6 +83,8 @@ ENGINE = MergeTree()
 ORDER BY tuple()
 SETTINGS index_granularity = 10;
 
+SYSTEM STOP MERGES tt1;
+
 INSERT INTO tt1 SELECT
     number,
     toString(number),

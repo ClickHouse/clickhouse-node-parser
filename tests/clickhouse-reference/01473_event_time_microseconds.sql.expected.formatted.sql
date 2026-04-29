@@ -15,6 +15,8 @@ FORMAT Null;
 
 SET query_profiler_real_time_period_ns = 1000000000;
 
+SYSTEM FLUSH LOGS metric_log, trace_log, query_log, query_thread_log;
+
 -- query assumes that the event_time field is accurate.
 WITH (
         SELECT

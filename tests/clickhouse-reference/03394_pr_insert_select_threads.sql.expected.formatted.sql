@@ -24,6 +24,8 @@ CREATE TABLE t_rmt_target
 ENGINE = ReplicatedMergeTree('/clickhouse/tables/{database}/t_rmt_target', 'r1')
 ORDER BY tuple();
 
+SYSTEM STOP MERGES t_mt_source;
+
 INSERT INTO t_mt_source SELECT
     number AS k,
     toString(number) AS v
@@ -64,6 +66,8 @@ SETTINGS
     min_insert_block_size_rows = 1000,
     parallel_replicas_local_plan = 1,
     parallel_replicas_insert_select_local_pipeline = 1;
+
+SYSTEM FLUSH LOGS query_log;
 
 SELECT
     if(is_initial_query, 'inital', 'secondary'),

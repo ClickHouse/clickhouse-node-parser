@@ -63,7 +63,7 @@ ENGINE = MergeTree
 ORDER BY (event_type, repo_name, created_at);
 
 WITH top_repos AS (
-((    SELECT repo_name
+    SELECT repo_name
     FROM github_events
     WHERE event_type = 'WatchEvent'
         AND toDate(created_at) = today() - 1
@@ -77,7 +77,7 @@ WITH top_repos AS (
         AND toMonday(created_at) = toMonday(today() - toIntervalWeek(1))
     GROUP BY repo_name
     ORDER BY count() DESC
-    LIMIT 100)
+    LIMIT 100
     UNION DISTINCT
     SELECT repo_name
     FROM github_events
@@ -85,7 +85,7 @@ WITH top_repos AS (
         AND toStartOfMonth(created_at) = toStartOfMonth(today()) - toIntervalMonth(1)
     GROUP BY repo_name
     ORDER BY count() DESC
-    LIMIT 100)
+    LIMIT 100
     UNION DISTINCT
     SELECT repo_name
     FROM github_events

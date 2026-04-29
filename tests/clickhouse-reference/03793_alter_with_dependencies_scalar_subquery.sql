@@ -6,6 +6,7 @@ CREATE TABLE foo_without_dependencies (ts DateTime, x UInt64)
 INSERT INTO foo_without_dependencies (ts, x) SELECT toDateTime('2020-01-01 00:05:00'), number + 1 from system.numbers LIMIT 10;
 ALTER TABLE foo_without_dependencies UPDATE x = 10 WHERE x = (SELECT x from foo_without_dependencies WHERE x = 4);
 SELECT 'foo_without_dependencies', x from foo_without_dependencies ORDER BY x;
+;
 -- With an index
 DROP TABLE IF EXISTS foo_with_index;
 CREATE TABLE foo_with_index (ts DateTime, x UInt64, INDEX minmax_x x TYPE minmax GRANULARITY 1)

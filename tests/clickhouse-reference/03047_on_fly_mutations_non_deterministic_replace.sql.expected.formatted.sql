@@ -15,6 +15,8 @@ CREATE TABLE t_lightweight_mut_5
 ENGINE = MergeTree
 ORDER BY id;
 
+SYSTEM STOP MERGES t_lightweight_mut_5;
+
 INSERT INTO t_lightweight_mut_5;
 
 ALTER TABLE t_lightweight_mut_5 UPDATE v = (
@@ -63,6 +65,8 @@ SELECT
     length(v)
 FROM t_lightweight_mut_5
 ORDER BY id ASC; -- { serverError BAD_ARGUMENTS }
+
+SYSTEM START MERGES t_lightweight_mut_5;
 
 -- Force to wait previous mutations
 ALTER TABLE t_lightweight_mut_5 UPDATE v = v WHERE 1 SETTINGS mutations_sync = 2;

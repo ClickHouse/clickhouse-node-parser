@@ -22,7 +22,14 @@ ENGINE = ReplicatedMergeTree('/test/02448/{database}/rmt', '2')
 ORDER BY tuple()
 SETTINGS min_replicated_logs_to_keep = 1, max_replicated_logs_to_keep = 2, max_cleanup_delay_period = 1, cleanup_delay_period = 0, cleanup_delay_period_random_add = 1, cleanup_thread_preferred_points_per_iteration = 0, old_parts_lifetime = 0, max_parts_to_merge_at_once = 4, merge_selecting_sleep_ms = 1000, max_merge_selecting_sleep_ms = 2000;
 
+-- insert part only on one replica
+SYSTEM stop replicated sends rmt1;
+
 INSERT INTO rmt1;
+
+DETACH TABLE rmt1; -- make replica inactive
+
+SYSTEM start replicated sends rmt1;
 
 -- trigger log rotation, rmt1 will be lost
 INSERT INTO rmt2;
@@ -36,12 +43,19 @@ INSERT INTO rmt2;
 -- check that entry was not removed from the queue (part is not lost)
 SET receive_timeout = 5;
 
+SYSTEM sync replica rmt2; -- {serverError TIMEOUT_EXCEEDED}
+
 SET receive_timeout = 300;
 
 SELECT
     1,
     arraySort(groupArray(n))
 FROM rmt2;
+
+-- rmt1 will mimic rmt2
+ATTACH TABLE rmt1;
+
+SYSTEM sync replica rmt1;
 
 -- check that no parts are lost
 SELECT
@@ -58,11 +72,20 @@ TRUNCATE TABLE rmt1;
 
 TRUNCATE TABLE rmt2;
 
+-- insert parts only on one replica and merge them
+SYSTEM stop replicated sends rmt2;
+
 INSERT INTO rmt2;
+
+OPTIMIZE TABLE rmt2 FINAL;
 
 -- give it a chance to remove source parts
 SELECT sleep(2)
 FORMAT Null; -- increases probability of reproducing the issue
+
+DETACH TABLE rmt2;
+
+SYSTEM start replicated sends rmt2;
 
 -- trigger log rotation, rmt2 will be lost
 INSERT INTO rmt1;
@@ -75,6 +98,13 @@ SELECT
     4,
     arraySort(groupArray(n))
 FROM rmt1;
+
+-- rmt1 will mimic rmt2
+SYSTEM stop fetches rmt1;
+
+ATTACH TABLE rmt2;
+
+SYSTEM start fetches rmt1;
 
 -- check that no parts are lost
 SELECT
@@ -104,6 +134,11 @@ SELECT
     7,
     arraySort(groupArray(n))
 FROM rmt2;
+
+-- rmt1 will mimic rmt2
+SYSTEM stop fetches rmt2;
+
+SYSTEM start fetches rmt2;
 
 -- check that no parts are lost
 SELECT
@@ -135,6 +170,9 @@ INSERT INTO rmt2;
 INSERT INTO rmt2;
 
 INSERT INTO rmt2;
+
+-- merge through gap
+OPTIMIZE TABLE rmt2;
 
 -- give it a chance to cleanup log
 SELECT sleepEachRow(2)

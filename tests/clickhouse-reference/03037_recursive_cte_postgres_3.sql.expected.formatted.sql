@@ -126,4 +126,4 @@ SELECT
 FROM
     t AS t1
 INNER JOIN t AS t2
-    ON (t1.id = t2.id);
+    ON (t1.id = t2.id); -- { echoOff }

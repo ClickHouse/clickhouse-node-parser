@@ -45,6 +45,17 @@ create table morton_numbers_1_02457(
 insert into morton_numbers_1_02457
 select untuple(mortonDecode(8, mortonEncode(n1, n2, n3, n4, n5, n6, n7, n8)))
 from morton_numbers_02457;
+(
+    select * from morton_numbers_02457
+    union distinct
+    select * from morton_numbers_1_02457
+)
+except
+(
+    select * from morton_numbers_02457
+    intersect
+    select * from morton_numbers_1_02457
+);
 insert into morton_numbers_02457
 select n1.number, n2.number, n3.number, n4.number, 0, 0, 0, 0
 from numbers(pow(2, 16)-8,8) n1
@@ -63,6 +74,17 @@ create table morton_numbers_2_02457(
 insert into morton_numbers_2_02457
 select untuple(mortonDecode(4, mortonEncode(n1, n2, n3, n4)))
 from morton_numbers_02457;
+(
+    select n1, n2, n3, n4 from morton_numbers_02457
+    union distinct
+    select n1, n2, n3, n4 from morton_numbers_2_02457
+)
+except
+(
+    select n1, n2, n3, n4 from morton_numbers_02457
+    intersect
+    select n1, n2, n3, n4 from morton_numbers_2_02457
+);
 drop table if exists morton_numbers_2_02457;
 insert into morton_numbers_02457
 select n1.number, n2.number, 0, 0, 0, 0, 0, 0
@@ -81,3 +103,14 @@ create table morton_numbers_3_02457(
 insert into morton_numbers_3_02457
 select untuple(mortonDecode(2, mortonEncode(n1, n2)))
 from morton_numbers_02457;
+(
+    select n1, n2 from morton_numbers_3_02457
+    union distinct
+    select n1, n2 from morton_numbers_3_02457
+)
+except
+(
+    select n1, n2 from morton_numbers_3_02457
+    intersect
+    select n1, n2 from morton_numbers_3_02457
+);

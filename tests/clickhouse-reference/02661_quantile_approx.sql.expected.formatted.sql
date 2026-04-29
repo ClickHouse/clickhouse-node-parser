@@ -110,3 +110,4 @@ FROM numbers(10); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
 SELECT quantilesGK(-100, 0.5, 0.75)(number)
 FROM numbers(10); -- { serverError BAD_ARGUMENTS }
+-- { echoOff }

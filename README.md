@@ -142,7 +142,6 @@ try {
 ### Limitations
 
 - **ClickHouse-only** — this is not a general SQL parser. Syntax from other dialects that ClickHouse doesn't support will not parse.
-- **Unsupported Statement Types** — DDL (ALTER, DROP), DML (INSERT, UPDATE, DELETE), and other non-query statements are not supported at this time (except SET, USE, and SYSTEM).
 - **KQL** — Kusto Query Language syntax is not supported.
 
 ## Development

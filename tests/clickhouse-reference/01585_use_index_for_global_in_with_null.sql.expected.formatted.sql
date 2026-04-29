@@ -24,6 +24,8 @@ INSERT INTO xp SELECT
     NULL,
     100;
 
+OPTIMIZE TABLE xp FINAL;
+
 SET max_rows_to_read = 2;
 
 SELECT *

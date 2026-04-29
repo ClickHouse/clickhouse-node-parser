@@ -15,6 +15,8 @@ INSERT INTO t_json;
 
 INSERT INTO t_json;
 
+OPTIMIZE TABLE t_json FINAL;
+
 SELECT DISTINCT arrayJoin(JSONAllPathsWithTypes(obj)) AS path
 FROM t_json
 ORDER BY path ASC;

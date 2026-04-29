@@ -24,6 +24,8 @@ WHERE database = currentDatabase()
 
 SELECT dictGetUInt64('dict', 'val', toUInt64(0));
 
+SYSTEM RELOAD DICTIONARY dict;
+
 DROP DATABASE IF EXISTS empty_db_01036;
 
 CREATE DATABASE IF NOT EXISTS empty_db_01036;

@@ -8,4 +8,6 @@ set mutations_sync=2, alter_sync=2;
 alter table hardlink_cycle rename column b to c;
 alter table hardlink_cycle rename column c to d;
 alter table hardlink_cycle rename column d to e;
+detach table hardlink_cycle;
+attach table hardlink_cycle;
 drop table hardlink_cycle sync;

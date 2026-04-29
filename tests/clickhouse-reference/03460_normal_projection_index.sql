@@ -31,6 +31,7 @@ INSERT INTO test_simple_projection VALUES (2, '2023-01-01', 102, 'https://exampl
 INSERT INTO test_simple_projection VALUES (3, '2023-01-02', 106, 'https://example.com/page3', 'us_west');
 INSERT INTO test_simple_projection VALUES (4, '2023-01-02', 107, 'https://example.com/page4', 'us_west');
 INSERT INTO test_simple_projection VALUES (5, '2023-01-03', 104, 'https://example.com/page5', 'asia');
+OPTIMIZE TABLE test_simple_projection FINAL;
 -- aggressively use projection index
 SET min_table_rows_to_use_projection_index = 0;
 SELECT trimLeft(explain)
@@ -80,6 +81,7 @@ INSERT INTO test_projection_granule_edge_cases SELECT number + 8, 'other_region'
 INSERT INTO test_projection_granule_edge_cases VALUES (15, 'bol_region', 104);
 -- add more data to ensure projection index is triggered during query planning
 INSERT INTO test_projection_granule_edge_cases SELECT number + 100, 'unknown_region', 999 FROM numbers(1000);
+OPTIMIZE TABLE test_projection_granule_edge_cases FINAL;
 SELECT trimLeft(explain)
 FROM (EXPLAIN projections = 1 SELECT * FROM test_projection_granule_edge_cases WHERE region = 'top_region')
 WHERE explain LIKE '%ReadFromMergeTree%' OR match(explain, '^\s+[A-Z][a-z]+(\s+[A-Z][a-z]+)*:');

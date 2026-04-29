@@ -9,6 +9,8 @@ CREATE TABLE t_ephemeral_enum
 )
 ENGINE = Memory;
 
+DESCRIBE TABLE t_ephemeral_enum FORMAT TSVRaw;
+
 DROP TABLE t_ephemeral_enum;
 
 CREATE TABLE t_ephemeral_enum

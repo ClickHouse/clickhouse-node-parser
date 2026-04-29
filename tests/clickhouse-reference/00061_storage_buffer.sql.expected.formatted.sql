@@ -23,6 +23,8 @@ FROM hits_buffer;
 SELECT count()
 FROM hits_dst;
 
+OPTIMIZE TABLE hits_buffer;
+
 DROP TABLE hits_dst;
 
 DROP TABLE hits_buffer;

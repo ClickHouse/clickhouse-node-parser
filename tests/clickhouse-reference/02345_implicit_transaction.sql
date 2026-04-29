@@ -15,7 +15,9 @@ SELECT 'no_transaction_landing', count() = 10000 FROM landing;
 SELECT 'no_transaction_target', count() < 10000 FROM target;
 TRUNCATE TABLE landing;
 TRUNCATE TABLE target;
+BEGIN TRANSACTION;
 INSERT INTO landing SELECT * FROM numbers(10000); -- { serverError FUNCTION_THROW_IF_VALUE_IS_NON_ZERO }
+ROLLBACK;
 SELECT 'after_transaction_landing', count() FROM landing;
 SELECT 'after_transaction_target', count() FROM target;
 SELECT 'after_implicit_txn_in_query_settings_landing', count() FROM landing;
@@ -26,6 +28,7 @@ SELECT throwIf(number == 0) FROM numbers(100); -- { serverError FUNCTION_THROW_I
 INSERT INTO target SELECT * FROM numbers(10000);
 SELECT 'in_transaction', count() FROM target;
 SELECT 'out_transaction', count() FROM target;
+SYSTEM FLUSH LOGS query_log;
 SELECT
     'implicit_True',
     count() as all,

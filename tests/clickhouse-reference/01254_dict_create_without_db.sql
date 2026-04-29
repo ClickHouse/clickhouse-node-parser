@@ -9,4 +9,5 @@ SOURCE(CLICKHOUSE(HOST 'localhost' PORT tcpPort() USER 'default' TABLE 'dict_dat
 LIFETIME(MIN 0 MAX 0)
 LAYOUT(FLAT());
 SELECT query_count, status FROM system.dictionaries WHERE database = currentDatabase() AND name = 'dict';
+SYSTEM RELOAD DICTIONARY dict;
 SELECT dictGetUInt64('dict', 'val', toUInt64(0));

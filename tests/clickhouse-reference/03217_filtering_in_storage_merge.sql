@@ -7,3 +7,4 @@ CREATE TABLE test_03217_merge_replica_2(x UInt32)
 CREATE TABLE test_03217_all_replicas (x UInt32)
     ENGINE = Merge(currentDatabase(), 'test_03217_merge_replica_*');
 INSERT INTO test_03217_merge_replica_1 SELECT number AS x FROM numbers(10);
+SYSTEM SYNC REPLICA test_03217_merge_replica_2;

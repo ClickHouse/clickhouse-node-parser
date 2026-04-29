@@ -8,11 +8,13 @@ CREATE TABLE test (x Enum('hello' = 1, 'world' = 2), y String) ENGINE = Replicat
 CREATE TABLE test2 (x Enum('hello' = 1, 'world' = 2), y String) ENGINE = ReplicatedMergeTree('/clickhouse/{database}/test_01346/table', 'r2') PARTITION BY x ORDER BY y;
 INSERT INTO test VALUES ('hello', 'test');
 SELECT * FROM test;
+SYSTEM SYNC REPLICA test2;
 SELECT * FROM test2;
 SELECT min_block_number, max_block_number, partition, partition_id FROM system.parts WHERE database = currentDatabase() AND table = 'test' AND active ORDER BY partition;
 SELECT min_block_number, max_block_number, partition, partition_id FROM system.parts WHERE database = currentDatabase() AND table = 'test2' AND active ORDER BY partition;
 ALTER TABLE test MODIFY COLUMN x Enum('hello' = 1, 'world' = 2, 'goodbye' = 3);
 INSERT INTO test VALUES ('goodbye', 'test');
+OPTIMIZE TABLE test FINAL;
 SELECT * FROM test ORDER BY x;
 SELECT * FROM test2 ORDER BY x;
 ALTER TABLE test MODIFY COLUMN x Enum('hello' = 1, 'world' = 2); -- { serverError ALTER_OF_COLUMN_IS_FORBIDDEN }

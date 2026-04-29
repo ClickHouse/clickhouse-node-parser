@@ -32,7 +32,11 @@ FROM numbers(1000);
 
 SET distributed_foreground_insert = 0;
 
+SYSTEM STOP DISTRIBUTED SENDS dist_02482;
+
 INSERT INTO dist_02482;
+
+SYSTEM FLUSH DISTRIBUTED dist_02482;
 
 DROP TABLE tmp_02482;
 

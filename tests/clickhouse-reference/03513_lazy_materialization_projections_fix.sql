@@ -14,6 +14,7 @@ select trimLeft(explain) as s from (EXPLAIN SELECT * FROM tt0 WHERE v = '3' ORDE
 SELECT * FROM tt0 WHERE v = '3' ORDER BY v ASC LIMIT 10;
 DROP TABLE IF EXISTS tt1;
 CREATE TABLE tt1 (k UInt64, v String, blob String) ENGINE=MergeTree() ORDER BY tuple() settings index_granularity=10;
+SYSTEM STOP MERGES tt1;
 INSERT INTO tt1 SELECT number, toString(number), repeat('blob_', number % 10) FROM numbers(1_000);
 ALTER TABLE tt1 ADD PROJECTION proj_v (select * order by v);
 INSERT INTO tt1 SELECT number, toString(number), repeat('blob_', number % 10) FROM numbers(1_000, 1_000);

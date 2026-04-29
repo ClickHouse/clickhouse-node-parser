@@ -87,6 +87,8 @@ ORDER BY id ASC;
 
 ALTER TABLE replicated_table_detach_all1 DROP PARTITION ALL;
 
+SYSTEM SYNC REPLICA replicated_table_detach_all2;
+
 SELECT *
 FROM replicated_table_detach_all2
 ORDER BY id ASC;
@@ -139,6 +141,10 @@ ALTER TABLE partition_all2 DROP COLUMN q IN PARTITION ALL; -- { serverError SUPP
 ALTER TABLE partition_all2 UPDATE q = q + 1 IN PARTITION ALL WHERE p = 1; -- { serverError SUPPORT_IS_DISABLED }
 
 ALTER TABLE partition_all2 FREEZE PARTITION ALL; -- { serverError SUPPORT_IS_DISABLED }
+
+CHECK TABLE partition_all2 PARTITION `ALL`; -- { serverError SUPPORT_IS_DISABLED }
+
+OPTIMIZE TABLE partition_all2 PARTITION ALL; -- { serverError SUPPORT_IS_DISABLED }
 
 DROP TABLE partition_all;
 

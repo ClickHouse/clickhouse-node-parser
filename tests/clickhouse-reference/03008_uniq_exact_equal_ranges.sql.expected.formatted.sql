@@ -81,6 +81,8 @@ INSERT INTO t_uniq_exact SELECT
     rand()
 FROM numbers(300000);
 
+OPTIMIZE TABLE t_uniq_exact FINAL;
+
 SELECT
     a,
     uniqExact(b)

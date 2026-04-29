@@ -26,6 +26,7 @@ set log_queries=1;
 -- └─────────────────────────┴─────────────────────────┘
 create table dist_01756 as system.one engine=Distributed(test_cluster_two_shards, system, one, intHash64(dummy));
 with (select currentDatabase()) as id_no select *, ignore(id_no) from dist_01756 where dummy in (0, 2);
+system flush logs query_log;
 select splitByString('IN', query)[-1] from system.query_log where
     event_date >= yesterday() and
     event_time > now() - interval 1 hour and

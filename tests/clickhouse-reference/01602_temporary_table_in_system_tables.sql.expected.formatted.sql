@@ -32,6 +32,10 @@ ORDER BY
     table ASC,
     name ASC;
 
+SHOW CREATE TABLE test_01602a;
+
+SHOW CREATE TABLE test_01602b;
+
 SELECT COUNT()
 FROM `system`.databases
 WHERE name = '_temporary_and_external_tables';

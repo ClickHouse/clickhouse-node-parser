@@ -1,4 +1,5 @@
 create table t(c Int32, d Bool) Engine=MergeTree order by c;
+system stop merges t;
 insert into t values (1, 0);
 insert into t values (1, 1);
 insert into t values (1, 0)(1, 1);

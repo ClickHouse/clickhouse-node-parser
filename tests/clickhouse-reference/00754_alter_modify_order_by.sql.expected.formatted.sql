@@ -70,4 +70,6 @@ ORDER BY
     y ASC,
     z ASC;
 
+SHOW CREATE TABLE summing;
+
 DROP TABLE summing;

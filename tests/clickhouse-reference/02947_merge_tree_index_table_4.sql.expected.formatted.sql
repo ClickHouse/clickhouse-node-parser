@@ -21,6 +21,8 @@ ENGINE = MergeTree
 ORDER BY (a, b, sipHash64(sp) % 100)
 SETTINGS index_granularity = 3, min_bytes_for_wide_part = 0, min_rows_for_wide_part = 6, ratio_of_defaults_for_sparse_serialization = 0.9, serialization_info_version = 'basic', write_marks_for_substreams_in_compact_parts = 1;
 
+SYSTEM STOP MERGES t_merge_tree_index;
+
 INSERT INTO t_merge_tree_index SELECT
     number % 5,
     number,
@@ -73,5 +75,7 @@ ORDER BY
 FORMAT PrettyCompactNoEscapesMonoBlock;
 
 SET describe_compact_output = 1;
+
+DESCRIBE TABLE mergeTreeIndex(currentDatabase(), t_merge_tree_index, with_marks = true);
 
 DROP TABLE t_merge_tree_index;

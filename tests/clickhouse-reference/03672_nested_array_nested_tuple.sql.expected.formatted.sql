@@ -11,6 +11,8 @@ INSERT INTO nest (nested_field.e1);
 
 ALTER TABLE nest ADD COLUMN `nested_field.e2` Array(Tuple(some_value Int32));
 
+OPTIMIZE TABLE nest FINAL;
+
 SELECT *
 FROM nest;
 
@@ -26,6 +28,8 @@ ORDER BY nested_field.e1;
 INSERT INTO nest_2 (nested_field.e1);
 
 ALTER TABLE nest_2 ADD COLUMN `nested_field.e2` Array(Tuple(some_value Tuple(another_value Int32)));
+
+OPTIMIZE TABLE nest_2 FINAL;
 
 SELECT *
 FROM nest_2;

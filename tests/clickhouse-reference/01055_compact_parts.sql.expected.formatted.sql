@@ -41,6 +41,8 @@ INSERT INTO mt_compact (a, s, n.x, lc) SELECT
     toString(number)
 FROM numbers(5);
 
+OPTIMIZE TABLE mt_compact FINAL;
+
 SELECT
     part_type,
     count()

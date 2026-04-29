@@ -12,3 +12,18 @@ CREATE TABLE tab
     val4 UInt64 ALIAS val
 )
 ENGINE = MergeTree(date, (date, val), 8192);
+
+DESCRIBE TABLE tab;
+
+DESCRIBE TABLE tab;
+
+DESCRIBE TABLE remote('127.0.0.2', currentDatabase(), tab);
+
+DESCRIBE TABLE remote('127.0.0.2', currentDatabase(), tab);
+
+DESCRIBE TABLE (SELECT 1);
+
+DESCRIBE TABLE (SELECT 1);
+
+DESCRIBE TABLE (SELECT *
+FROM `system`.numbers);

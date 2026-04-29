@@ -36,4 +36,5 @@ WITH RECURSIVE search_tree AS (
     FROM remote('127.0.0.{1,2}', currentDatabase(), test_table) t, search_tree st
     WHERE t.parent_id = st.id)
 SELECT * FROM search_tree ORDER BY depth, id, parent_id;
+;
 DROP TABLE test_table;

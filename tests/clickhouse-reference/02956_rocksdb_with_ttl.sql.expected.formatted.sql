@@ -18,3 +18,5 @@ FROM dict_with_ttl;
 -- Nevertheless, query time is unpredictable with different builds, so we can't test it. So we only test that after 3s
 -- we execute OPTIMIZE and the data should be gone.
 SELECT sleep(3);
+
+OPTIMIZE TABLE dict_with_ttl;

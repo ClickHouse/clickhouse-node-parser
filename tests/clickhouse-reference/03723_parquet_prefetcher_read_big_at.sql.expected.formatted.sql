@@ -27,6 +27,9 @@ ORDER BY
 FORMAT Null
 SETTINGS log_comment = 'test_03723_parquet_prefetcher_read_big_at', use_parquet_metadata_cache = 0;
 
+-- Ensure that profiling is available for analysis
+SYSTEM FLUSH LOGS query_log;
+
 -- Check profiling data to visualize what logic has been used
 SELECT
     ProfileEvents['ParquetPrefetcherReadRandomRead'],

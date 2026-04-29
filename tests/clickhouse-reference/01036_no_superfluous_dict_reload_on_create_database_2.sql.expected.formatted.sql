@@ -27,6 +27,8 @@ WHERE database = 'foo 1234'
 
 SELECT dictGetUInt64('foo 1234.dict', 'val', toUInt64(0));
 
+SYSTEM RELOAD DICTIONARY `foo 1234`.dict;
+
 DROP DATABASE IF EXISTS `foo 123`;
 
 CREATE DATABASE `foo 123`;

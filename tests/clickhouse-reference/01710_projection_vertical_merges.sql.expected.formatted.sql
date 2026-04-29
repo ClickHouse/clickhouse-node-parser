@@ -37,6 +37,8 @@ FROM numbers(2000000);
 ALTER TABLE t ADD PROJECTION p_norm (SELECT *
 ORDER BY c1 ASC);
 
+OPTIMIZE TABLE t FINAL;
+
 ALTER TABLE t MATERIALIZE PROJECTION p_norm SETTINGS mutations_sync = 1;
 
 SET optimize_use_projections = 1, max_rows_to_read = 3;

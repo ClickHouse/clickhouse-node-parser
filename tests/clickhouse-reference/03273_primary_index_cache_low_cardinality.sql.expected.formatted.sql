@@ -1,6 +1,8 @@
 -- Tags: no-parallel
 DROP TABLE IF EXISTS t_primary_index_cache;
 
+SYSTEM CLEAR PRIMARY INDEX CACHE;
+
 CREATE TABLE t_primary_index_cache
 (
     a LowCardinality(String),
@@ -30,6 +32,8 @@ FROM t_primary_index_cache
 WHERE a > '1'
     AND b < '99'
 SETTINGS log_comment = '03273_reload_query';
+
+SYSTEM FLUSH LOGS query_log;
 
 SELECT
     ProfileEvents['LoadedPrimaryIndexFiles'],

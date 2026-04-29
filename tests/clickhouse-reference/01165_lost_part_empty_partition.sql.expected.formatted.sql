@@ -20,6 +20,8 @@ ENGINE = ReplicatedMergeTree('/test/01165/{database}/rmt', '2')
 ORDER BY n
 PARTITION BY toYYYYMMDD(d);
 
+SYSTEM stop replicated sends rmt1;
+
 INSERT INTO rmt1; -- { error BAD_ARGUMENTS }
 
 INSERT INTO rmt1 (n) SELECT *
@@ -30,12 +32,16 @@ INSERT INTO rmt1;
 
 DROP TABLE rmt1;
 
+SYSTEM sync replica rmt2;
+
 SELECT lost_part_count
 FROM `system`.replicas
 WHERE database = currentDatabase()
     AND table = 'rmt2';
 
 DROP TABLE rmt2;
+
+SYSTEM FLUSH LOGS text_log;
 
 SELECT count()
 FROM `system`.text_log

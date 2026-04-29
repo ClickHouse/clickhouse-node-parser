@@ -14,7 +14,11 @@ create table rmt2 (n int) engine=ReplicatedMergeTree('/test/02448/{database}/rmt
     max_cleanup_delay_period=1, cleanup_delay_period=0, cleanup_delay_period_random_add=1,
     cleanup_thread_preferred_points_per_iteration=0, old_parts_lifetime=0, max_parts_to_merge_at_once=4,
     merge_selecting_sleep_ms=1000, max_merge_selecting_sleep_ms=2000;
+-- insert part only on one replica
+system stop replicated sends rmt1;
 insert into rmt1 values (1);
+detach table rmt1;      -- make replica inactive
+system start replicated sends rmt1;
 -- trigger log rotation, rmt1 will be lost
 insert into rmt2 values (2);
 insert into rmt2 values (3);
@@ -22,21 +26,34 @@ insert into rmt2 values (4);
 insert into rmt2 values (5);
 -- check that entry was not removed from the queue (part is not lost)
 set receive_timeout=5;
+system sync replica rmt2; -- {serverError TIMEOUT_EXCEEDED}
 set receive_timeout=300;
 select 1, arraySort(groupArray(n)) from rmt2;
+-- rmt1 will mimic rmt2
+attach table rmt1;
+system sync replica rmt1;
 -- check that no parts are lost
 select 2, arraySort(groupArray(n)) from rmt1;
 select 3, arraySort(groupArray(n)) from rmt2;
 truncate table rmt1;
 truncate table rmt2;
+-- insert parts only on one replica and merge them
+system stop replicated sends rmt2;
 insert into rmt2 values (1);
+optimize table rmt2 final;
 -- give it a chance to remove source parts
 select sleep(2) format Null; -- increases probability of reproducing the issue
+detach table rmt2;
+system start replicated sends rmt2;
 -- trigger log rotation, rmt2 will be lost
 insert into rmt1 values (3);
 insert into rmt1 values (4);
 insert into rmt1 values (5);
 select 4, arraySort(groupArray(n)) from rmt1;
+-- rmt1 will mimic rmt2
+system stop fetches rmt1;
+attach table rmt2;
+system start fetches rmt1;
 -- check that no parts are lost
 select 5, arraySort(groupArray(n)) from rmt1;
 select 6, arraySort(groupArray(n)) from rmt2;
@@ -48,6 +65,9 @@ insert into rmt2 values (30);
 insert into rmt2 values (40);
 insert into rmt2 values (50);
 select 7, arraySort(groupArray(n)) from rmt2;
+-- rmt1 will mimic rmt2
+system stop fetches rmt2;
+system start fetches rmt2;
 -- check that no parts are lost
 select 8, arraySort(groupArray(n)) from rmt1;
 select 9, arraySort(groupArray(n)) from rmt2;
@@ -62,6 +82,8 @@ alter table rmt2 drop part 'all_19_19_0';   -- remove 200
 insert into rmt2 values (400);
 insert into rmt2 values (500);
 insert into rmt2 values (600);
+-- merge through gap
+optimize table rmt2;
 -- give it a chance to cleanup log
 
 select sleepEachRow(2) from url('http://localhost:8123/?param_tries={1..10}&query=' || encodeURLComponent(

@@ -34,7 +34,9 @@ ALTER TABLE test_wide DELETE WHERE b = 1; -- { serverError SUPPORT_IS_DISABLED }
 ALTER TABLE test_compact MODIFY SETTING alter_column_secondary_index_mode = 'compatibility';
 ALTER TABLE test_wide MODIFY SETTING alter_column_secondary_index_mode = 'compatibility';
 INSERT INTO test_compact VALUES (1, 100, 6);
+OPTIMIZE TABLE test_compact FINAL;
 INSERT INTO test_wide VALUES (1, 100, 6);
+OPTIMIZE TABLE test_wide FINAL;
 SELECT 'COMPACT BEFORE', * from test_compact;
 SELECT 'WIDE BEFORE', * from test_wide;
 SELECT 'COMPACT AFTER UPDATE', * from test_compact;

@@ -38,6 +38,8 @@ INSERT INTO buffer_ SELECT toUInt64(number)
 FROM `system`.numbers
 LIMIT toUInt64(10e6 + 1); -- { serverError MEMORY_LIMIT_EXCEEDED }
 
+OPTIMIZE TABLE buffer_; -- flush just in case
+
 -- create complex aggregation to fail with Memory limit exceede error while writing to Buffer()
 -- String over UInt64 is enough to trigger the problem.
 CREATE MATERIALIZED VIEW aggregation_

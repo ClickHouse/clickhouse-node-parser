@@ -14,6 +14,10 @@ TTL dt + toIntervalMonth(1),
     dt + toIntervalYear(1)
 SETTINGS min_rows_for_wide_part = 0, min_bytes_for_wide_part = 0, min_bytes_for_full_part_storage = 0;
 
+SHOW CREATE TABLE recompression_table;
+
+SYSTEM STOP TTL MERGES recompression_table;
+
 INSERT INTO recompression_table SELECT
     now(),
     1,
@@ -44,6 +48,8 @@ WHERE table = 'recompression_table'
     AND database = currentDatabase()
 ORDER BY name ASC;
 
+OPTIMIZE TABLE recompression_table FINAL;
+
 ALTER TABLE recompression_table MODIFY TTL dt + toIntervalDay(1) SETTINGS mutations_sync = 2;
 
 SELECT
@@ -54,6 +60,8 @@ WHERE table = 'recompression_table'
     AND active = 1
     AND database = currentDatabase()
 ORDER BY name ASC;
+
+SYSTEM START TTL MERGES recompression_table;
 
 SELECT
     substring(name, 1, length(name) - 4),
@@ -76,6 +84,8 @@ PARTITION BY key
 TTL dt + toIntervalMonth(1),
     dt + toIntervalYear(1)
 SETTINGS min_rows_for_wide_part = 10000, min_bytes_for_full_part_storage = 0;
+
+SYSTEM STOP TTL MERGES recompression_table_compact;
 
 INSERT INTO recompression_table_compact SELECT
     now(),

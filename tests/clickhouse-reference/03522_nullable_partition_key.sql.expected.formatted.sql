@@ -9,6 +9,8 @@ SETTINGS allow_nullable_key = 1;
 
 INSERT INTO t (c0);
 
+OPTIMIZE TABLE t FINAL;
+
 SELECT
     c0,
     _part

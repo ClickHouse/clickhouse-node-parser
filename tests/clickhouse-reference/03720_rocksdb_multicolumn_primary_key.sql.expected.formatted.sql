@@ -477,6 +477,10 @@ PRIMARY KEY (k1, k2);
 
 INSERT INTO `03720_deletes`;
 
+-- Delete single row with full key
+DELETE FROM `03720_deletes` WHERE k1 = 1
+AND k2 = 1;
+
 SELECT COUNT(*)
 FROM `03720_deletes`; -- Should be 4
 
@@ -485,10 +489,16 @@ FROM `03720_deletes`
 WHERE k1 = 1
 ORDER BY val ASC; -- Should be 'b'
 
+-- Delete using tuple equality
+DELETE FROM `03720_deletes` WHERE (k1, k2) = (2, 2);
+
 SELECT val
 FROM `03720_deletes`
 WHERE k1 = 2
 ORDER BY val ASC; -- Should be 'c'
+
+-- Delete using tuple IN
+DELETE FROM `03720_deletes` WHERE (k1, k2) IN ((1, 2), (3, 3));
 
 SELECT val
 FROM `03720_deletes`
@@ -511,8 +521,12 @@ PRIMARY KEY (k1, k2, k3);
 
 INSERT INTO `03720_deletes_three_col`;
 
+DELETE FROM `03720_deletes_three_col` WHERE (k1, k2, k3) = (1, 1, 1);
+
 SELECT COUNT(*)
 FROM `03720_deletes_three_col`; -- Should be 3
+
+DELETE FROM `03720_deletes_three_col` WHERE (k1, k2, k3) IN ((1, 1, 2), (2, 1, 1));
 
 SELECT val
 FROM `03720_deletes_three_col`
@@ -533,6 +547,9 @@ ENGINE = EmbeddedRocksDB
 PRIMARY KEY (k1, k2);
 
 INSERT INTO `03720_deletes_string`;
+
+DELETE FROM `03720_deletes_string` WHERE k1 = 'foo'
+AND k2 = 'bar';
 
 SELECT COUNT(*)
 FROM `03720_deletes_string`; -- Should be 2

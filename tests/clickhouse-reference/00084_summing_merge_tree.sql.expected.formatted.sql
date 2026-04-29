@@ -18,6 +18,8 @@ INSERT INTO summing_merge_tree;
 
 INSERT INTO summing_merge_tree;
 
+OPTIMIZE TABLE summing_merge_tree;
+
 SELECT *
 FROM summing_merge_tree
 ORDER BY
@@ -53,6 +55,8 @@ ENGINE = SummingMergeTree(p, k, 1);
 INSERT INTO summing (k, s);
 
 INSERT INTO summing (k, s);
+
+OPTIMIZE TABLE summing PARTITION 197001;
 
 SELECT
     k,

@@ -110,3 +110,4 @@ SELECT regexpExtract('100-200', '(\\d+)-(\\d+)', -1); -- { serverError INDEX_OF_
 SELECT regexpExtract('100-200', '\\d+-\\d+', 0);
 
 SELECT regexpExtract('100-200', '\\d+-\\d+', 1); -- { serverError INDEX_OF_POSITIONAL_ARGUMENT_IS_OUT_OF_RANGE }
+-- { echoOff }

@@ -14,6 +14,7 @@ INSERT INTO quorum1 VALUES (1, '2018-11-15');
 INSERT INTO quorum1 VALUES (2, '2018-11-15');
 SELECT x FROM quorum1 ORDER BY x;
 SELECT x FROM quorum2 ORDER BY x;
+OPTIMIZE TABLE quorum1 PARTITION '2018-11-15' FINAL;
 SELECT count(*) FROM system.parts WHERE active AND database = currentDatabase() AND table='quorum1';
 INSERT INTO quorum1 VALUES (3, '2018-11-15');
 INSERT INTO quorum1 VALUES (4, '2018-11-15');

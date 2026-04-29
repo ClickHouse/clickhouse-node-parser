@@ -11,6 +11,7 @@ CREATE TABLE tab
 )
 ENGINE = ReplacingMergeTree()
 ORDER BY id;
+SYSTEM STOP MERGES tab;
 INSERT INTO tab VALUES
     (1, 'foo', 'foo'),
     (2, 'bar', 'bar');

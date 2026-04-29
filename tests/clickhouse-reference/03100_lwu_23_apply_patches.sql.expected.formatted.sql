@@ -26,6 +26,12 @@ INSERT INTO t_apply_patches SELECT
     0
 FROM numbers(10000);
 
+UPDATE t_apply_patches SET b = 1 WHERE a % 4 = 0;
+
+UPDATE t_apply_patches SET c = 2 WHERE a % 4 = 0;
+
+UPDATE t_apply_patches SET b = 3, c = 4 WHERE a % 4 = 1;
+
 SELECT
     b,
     c,
@@ -53,6 +59,8 @@ ORDER BY
     c ASC
 SETTINGS apply_patch_parts = 0;
 
+SYSTEM FLUSH LOGS part_log;
+
 SELECT
     ProfileEvents['MutationSomePartColumns'],
     ProfileEvents['MutatedUncompressedBytes'] -- 2 * 8 * 10000 = 160000, because only 2 columns must be affected.
@@ -79,6 +87,12 @@ INSERT INTO t_apply_patches_smt SELECT
     0,
     0
 FROM numbers(10000);
+
+UPDATE t_apply_patches_smt SET b = 1 WHERE a % 4 = 0;
+
+UPDATE t_apply_patches_smt SET c = 2 WHERE a % 4 = 0;
+
+UPDATE t_apply_patches_smt SET b = 3, c = 4 WHERE a % 4 = 1;
 
 SELECT
     b,

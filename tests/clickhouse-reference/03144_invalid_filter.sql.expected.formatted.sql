@@ -24,4 +24,8 @@ SETTINGS
     optimize_using_constraints = true,
     optimize_substitute_columns = true; -- { serverError ILLEGAL_TYPE_OF_COLUMN_FOR_FILTER }
 
+DESCRIBE TABLE (SELECT test_table.COLUMNS(id)
+FROM test_table
+WHERE '2147483647'); -- { serverError ILLEGAL_TYPE_OF_COLUMN_FOR_FILTER }
+
 DROP TABLE test_table;

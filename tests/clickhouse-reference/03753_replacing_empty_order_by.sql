@@ -5,6 +5,7 @@ SET allow_suspicious_primary_key = 0;
 SET allow_suspicious_primary_key = 1;
 CREATE TABLE t_empty_order_key(c0 String, c1 String) ENGINE = ReplacingMergeTree() ORDER BY tuple();
 INSERT INTO TABLE t_empty_order_key (c0, c1) VALUES ('foo', 'bar');
+OPTIMIZE TABLE t_empty_order_key FINAL;
 SELECT * FROM t_empty_order_key ORDER BY c0;
 DROP TABLE t_empty_order_key;
 -- Check with forced vertical merge

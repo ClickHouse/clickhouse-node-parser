@@ -131,6 +131,7 @@ select
    sumState(int8) int8Sum
 from testNullableStates
 group by ts, id;
+OPTIMIZE TABLE testNullableStatesAgg FINAL;
 select count() from testNullableStates;
 select count() from testNullableStatesAgg;
 select ' ---- select without states ---- ';

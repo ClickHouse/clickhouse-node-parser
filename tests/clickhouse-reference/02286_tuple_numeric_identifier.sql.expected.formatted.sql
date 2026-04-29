@@ -7,6 +7,8 @@ CREATE TABLE t_tuple_numeric
 ENGINE = MergeTree
 ORDER BY tuple();
 
+SHOW CREATE TABLE t_tuple_numeric;
+
 INSERT INTO t_tuple_numeric;
 
 SET output_format_json_named_tuples_as_objects = 1;

@@ -39,6 +39,7 @@ SELECT * FROM test WHERE region = 'unknown' AND user_id = 101 ORDER BY ALL SETTI
 SELECT * FROM test WHERE region = 'us_west' AND user_id = 106 ORDER BY ALL SETTINGS log_comment = 'test_3';
 -- test with an OR filter - 3 rows/granules for user_id=101 union 3 rows/granules for 'asia'
 SELECT * FROM test WHERE region = 'asia' OR user_id = 101 ORDER BY ALL SETTINGS log_comment = 'test_4';
+SYSTEM FLUSH LOGS query_log;
 SELECT ProfileEvents['RowsReadByPrewhereReaders'], ProfileEvents['RowsReadByMainReader'] FROM system.query_log WHERE event_date >= yesterday() AND current_database = currentDatabase() AND type = 'QueryFinish' AND log_comment='test_1';
 SELECT ProfileEvents['RowsReadByPrewhereReaders'], ProfileEvents['RowsReadByMainReader'] FROM system.query_log WHERE event_date >= yesterday() AND current_database = currentDatabase() AND type = 'QueryFinish' AND log_comment='test_2';
 SELECT ProfileEvents['RowsReadByPrewhereReaders'], ProfileEvents['RowsReadByMainReader'] FROM system.query_log WHERE event_date >= yesterday() AND current_database = currentDatabase() AND type = 'QueryFinish' AND log_comment='test_3';

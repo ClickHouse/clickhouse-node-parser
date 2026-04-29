@@ -56,6 +56,8 @@ CREATE QUOTA sqllt_quota KEYED BY user_name TO sqllt_role;
 
 CREATE SETTINGS PROFILE sqllt_settings_profile SETTINGS interactive_delay=200000;
 
+GRANT sqllt_role TO sqllt_user;
+
 SET log_profile_events = false;
 
 SET DEFAULT ROLE sqllt_role TO sqllt_user;
@@ -77,6 +79,74 @@ ALTER TABLE sqllt.table DROP COLUMN the_new_col;
 ALTER TABLE sqllt.table UPDATE i = i + 1 WHERE 1;
 
 ALTER TABLE sqllt.table DELETE WHERE i > 65535;
+
+SYSTEM FLUSH LOGS query_log;
+
+SYSTEM STOP MERGES sqllt.table;
+
+SYSTEM START MERGES sqllt.table;
+
+SYSTEM STOP TTL MERGES sqllt.table;
+
+SYSTEM START TTL MERGES sqllt.table;
+
+SYSTEM STOP MOVES sqllt.table;
+
+SYSTEM START MOVES sqllt.table;
+
+SYSTEM STOP FETCHES sqllt.table;
+
+SYSTEM START FETCHES sqllt.table;
+
+SYSTEM STOP REPLICATED SENDS sqllt.table;
+
+SYSTEM START REPLICATED SENDS sqllt.table;
+
+SHOW CREATE TABLE sqllt.table FORMAT Null;
+
+SHOW CREATE DICTIONARY sqllt.dictionary FORMAT Null;
+
+SHOW DATABASES LIKE 'sqllt' FORMAT Null;
+
+SHOW TABLES FROM sqllt FORMAT Null;
+
+SHOW DICTIONARIES FROM sqllt FORMAT Null;
+
+SHOW GRANTS FORMAT Null;
+
+SHOW GRANTS FOR sqllt_user FORMAT Null;
+
+SHOW CREATE USER sqllt_user FORMAT Null;
+
+SHOW CREATE ROLE sqllt_role FORMAT Null;
+
+SHOW CREATE POLICY sqllt_policy FORMAT Null;
+
+SHOW CREATE ROW POLICY sqllt_row_policy FORMAT Null;
+
+SHOW CREATE QUOTA sqllt_quota FORMAT Null;
+
+SHOW CREATE SETTINGS PROFILE sqllt_settings_profile FORMAT Null;
+
+GRANT SELECT ON sqllt.table TO sqllt_user;
+
+GRANT DROP ON sqllt.view TO sqllt_user;
+
+REVOKE SELECT ON sqllt.table FROM sqllt_user;
+
+REVOKE DROP ON sqllt.view FROM sqllt_user;
+
+DESCRIBE TABLE sqllt.table FORMAT Null;
+
+CHECK TABLE sqllt.table FORMAT Null;
+
+DETACH TABLE sqllt.table;
+
+ATTACH TABLE sqllt.table;
+
+RENAME TABLE sqllt.table TO sqllt.table_new;
+
+RENAME TABLE sqllt.table_new TO sqllt.table;
 
 TRUNCATE TABLE sqllt.table;
 

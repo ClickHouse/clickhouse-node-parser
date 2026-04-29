@@ -11,8 +11,12 @@ insert into rmt values (1, 6);
 insert into rmt values (1, 7);
 insert into rmt values (1, 8);
 insert into rmt values (1, 9);
+-- there's nothing to merge in all partitions but '1'
+
+optimize table rmt partition tuple(123);
 set optimize_throw_if_noop=1;
 select sleepEachRow(3) as higher_probability_of_reproducing_the_issue format Null;
+system flush logs zookeeper_log, query_log;
 -- it should not list unneeded partitions where we cannot merge anything
 select * from system.zookeeper_log where path like '/test/02439/' || getMacro('shard') || '/' || currentDatabase() || '/block_numbers/%'
     and op_num in ('List', 'SimpleList', 'FilteredList')

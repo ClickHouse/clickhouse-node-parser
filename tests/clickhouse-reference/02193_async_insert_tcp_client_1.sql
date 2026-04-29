@@ -10,6 +10,7 @@ SET async_insert = 1;
 INSERT INTO t_async_insert_02193_1 VALUES (3, 'ccc');
 INSERT INTO t_async_insert_02193_1 FORMAT JSONEachRow {"id": 4, "s": "ddd"};
 SELECT * FROM t_async_insert_02193_1 ORDER BY id;
+SYSTEM FLUSH LOGS query_log;
 SELECT count(), sum(ProfileEvents['AsyncInsertQuery']) FROM system.query_log
 WHERE
     event_date >= yesterday() AND

@@ -37,6 +37,8 @@ INSERT INTO replacing;
 
 INSERT INTO replacing;
 
+OPTIMIZE TABLE replacing PARTITION '2017-10-23' FINAL;
+
 SELECT *
 FROM replacing;
 
@@ -57,6 +59,10 @@ PARTITION BY toYYYYMM(d);
 INSERT INTO replicated_collapsing;
 
 INSERT INTO replicated_collapsing;
+
+SYSTEM SYNC REPLICA replicated_collapsing PULL;
+
+OPTIMIZE TABLE replicated_collapsing PARTITION 201710 FINAL;
 
 SELECT *
 FROM replicated_collapsing;
@@ -81,6 +87,10 @@ INSERT INTO replicated_versioned_collapsing;
 INSERT INTO replicated_versioned_collapsing;
 
 INSERT INTO replicated_versioned_collapsing;
+
+SYSTEM SYNC REPLICA replicated_versioned_collapsing;
+
+OPTIMIZE TABLE replicated_versioned_collapsing PARTITION 201710 FINAL;
 
 SELECT *
 FROM replicated_versioned_collapsing;

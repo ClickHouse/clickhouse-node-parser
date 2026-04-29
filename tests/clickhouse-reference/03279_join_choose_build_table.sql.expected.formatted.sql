@@ -85,6 +85,8 @@ WHERE sales.product_id = products.id
 SETTINGS log_comment = '03279_join_choose_build_table_idx'
 FORMAT Null;
 
+SYSTEM FLUSH LOGS query_log;
+
 -- condtitions are pushed down, but no filter by index applied
 -- build table is as it's written in query
 SELECT

@@ -55,6 +55,10 @@ DROP TABLE IF EXISTS constrained2;
 
 CREATE TABLE constrained2 AS constrained;
 
+SHOW CREATE TABLE constrained;
+
+SHOW CREATE TABLE constrained2;
+
 INSERT INTO constrained2; -- { serverError VIOLATED_CONSTRAINT }
 
 DROP TABLE constrained2;

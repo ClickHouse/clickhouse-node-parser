@@ -38,6 +38,8 @@ WHERE u64_countmin > 3500
 FORMAT NULL
 SETTINGS use_statistics_cache = 0, log_comment = '03904_empty';
 
+SYSTEM FLUSH LOGS query_log;
+
 -- Expect that no statistics were loaded from disk
 SELECT ProfileEvents['LoadedStatisticsMicroseconds']
 FROM `system`.query_log

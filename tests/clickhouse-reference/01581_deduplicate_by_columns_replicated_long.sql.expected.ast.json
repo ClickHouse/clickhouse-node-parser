@@ -188,6 +188,17 @@
     }
   },
   {
+    "kind": "system",
+    "body": "SYSTEM SYNC REPLICA replicated_deduplicate_by_columns_r2",
+    "leadingComments": [
+      "-- make sure that all data is present on all replicas"
+    ]
+  },
+  {
+    "kind": "system",
+    "body": "SYSTEM SYNC REPLICA replicated_deduplicate_by_columns_r1"
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -348,6 +359,93 @@
           ]
         },
         "direction": "ASC"
+      }
+    ]
+  },
+  {
+    "kind": "optimize",
+    "table": {
+      "kind": "tableRef",
+      "table": "replicated_deduplicate_by_columns_r1"
+    },
+    "final": true,
+    "deduplicate": true,
+    "leadingComments": [
+      "-- NOTE: here and below we need FINAL to force deduplication in such a small set of data in only 1 part.",
+      "-- that should remove full duplicates"
+    ]
+  },
+  {
+    "kind": "optimize",
+    "table": {
+      "kind": "tableRef",
+      "table": "replicated_deduplicate_by_columns_r1"
+    },
+    "final": true,
+    "deduplicate": true,
+    "deduplicateBy": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "id"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "val"
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "optimize",
+    "table": {
+      "kind": "tableRef",
+      "table": "replicated_deduplicate_by_columns_r1"
+    },
+    "final": true,
+    "deduplicate": true,
+    "deduplicateBy": [
+      {
+        "kind": "functionCall",
+        "name": "COLUMNS",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": "[id, val]"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "optimize",
+    "table": {
+      "kind": "tableRef",
+      "table": "replicated_deduplicate_by_columns_r1"
+    },
+    "final": true,
+    "deduplicate": true,
+    "deduplicateBy": [
+      {
+        "kind": "columnsExpr",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": "[i]"
+          }
+        ],
+        "transformers": [
+          {
+            "kind": "except",
+            "columns": [
+              "unique_value"
+            ]
+          }
+        ]
       }
     ]
   },

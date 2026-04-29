@@ -15,6 +15,7 @@ min_bytes_for_wide_part = 0,
 replace_long_file_name_to_hash=0; -- simpler to debug
 INSERT INTO table_with_some_columns SELECT rand(), number + 10 from numbers(100000);
 INSERT INTO table_with_some_columns SELECT rand(), number + 10 from numbers(1);
+OPTIMIZE TABLE table_with_some_columns FINAL;
 INSERT INTO table_with_some_columns SELECT rand(), number+222222222 from numbers(1);
 set alter_sync = 2;
 ALTER TABLE table_with_some_columns DROP COLUMN value0;

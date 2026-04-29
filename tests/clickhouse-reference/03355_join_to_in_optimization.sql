@@ -15,6 +15,7 @@ ORDER BY
     t1.key ASC,
     t1.key2 ASC
 SETTINGS query_plan_use_new_logical_join_step = true, query_plan_convert_join_to_in = true;
+SYSTEM FLUSH LOGS system.query_log;
 SELECT dummy
 FROM
 (

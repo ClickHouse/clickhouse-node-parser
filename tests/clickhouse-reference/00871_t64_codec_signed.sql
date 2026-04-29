@@ -82,4 +82,5 @@ INSERT INTO t64 SELECT (10 - toInt64(intExp2(56)) + number) AS x, x, x, x, x, x,
 INSERT INTO t64 SELECT (64 - toInt64(intExp2(56)) + number) AS x, x, x, x, x, x, x, x FROM numbers(2048);
 INSERT INTO t64 SELECT (64 - toInt64(intExp2(56)) + number) AS x, x, x, x, x, x, x, x FROM numbers(2049);
 INSERT INTO t64 SELECT (1 - toInt64(intExp2(56)) + number) AS x, x, x, x, x, x, x, x FROM numbers(2049);
+OPTIMIZE TABLE t64 FINAL;
 DROP TABLE t64;

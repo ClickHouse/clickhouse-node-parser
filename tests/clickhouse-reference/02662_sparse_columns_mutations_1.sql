@@ -11,4 +11,5 @@ SELECT countIf(s = 'foo'), arraySort(groupUniqArray(s)) FROM t_sparse_mutations_
 ALTER TABLE t_sparse_mutations_1 MODIFY COLUMN s Nullable(String);
 INSERT INTO t_sparse_mutations_1 SELECT 2, number, if (number % 21 = 0, 'foo', '') FROM numbers (10000);
 ALTER TABLE t_sparse_mutations_1 MODIFY COLUMN s String DEFAULT '';
+OPTIMIZE TABLE t_sparse_mutations_1 FINAL;
 DROP TABLE t_sparse_mutations_1;

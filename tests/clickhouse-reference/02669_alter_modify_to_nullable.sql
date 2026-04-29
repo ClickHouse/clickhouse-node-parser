@@ -10,6 +10,7 @@ ORDER BY name;
 SELECT count(s), countIf(s != ''), arraySort(groupUniqArray(s)) FROM t_modify_to_nullable;
 SET mutations_sync = 2;
 ALTER TABLE t_modify_to_nullable MODIFY COLUMN s Nullable(String);
+SYSTEM FLUSH LOGS part_log;
 SELECT part_name, read_rows FROM system.part_log
 WHERE database = currentDatabase() AND table = 't_modify_to_nullable' AND event_type = 'MutatePart'
 ORDER BY part_name;

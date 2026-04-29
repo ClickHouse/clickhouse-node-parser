@@ -49,6 +49,8 @@ INNER JOIN rhs AS t2
 FORMAT Null
 SETTINGS log_comment = '03319_second_query';
 
+SYSTEM flush logs query_log;
+
 SELECT ProfileEvents['HashJoinPreallocatedElementsInHashTables']
 FROM `system`.query_log
 WHERE event_date >= yesterday()

@@ -29,6 +29,10 @@ ORDER BY i ASC) WITH SETTINGS(index_granularity = 9999999999, index_granularity_
 INSERT INTO x1 SELECT number
 FROM numbers(1000);
 
+OPTIMIZE TABLE x1 FINAL;
+
+SYSTEM SYNC REPLICA x2;
+
 SELECT marks
 FROM `system`.projection_parts
 WHERE active
@@ -42,6 +46,10 @@ WHERE active
     AND database = currentDatabase()
     AND table = 'x1'
     AND name = 'p2';
+
+DETACH TABLE x2 SYNC;
+
+ATTACH TABLE x2;
 
 SELECT marks
 FROM `system`.projection_parts

@@ -42,3 +42,4 @@ INNER JOIN (
         FROM `system`.one
     ) AS b
     USING (dummy); -- { serverError NOT_IMPLEMENTED, UNKNOWN_IDENTIFIER }
+-- { echoOff }

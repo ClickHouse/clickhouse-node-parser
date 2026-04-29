@@ -23,6 +23,8 @@ ORDER BY tuple()
 PARTITION BY a % 8
 SETTINGS index_granularity = 8192, index_granularity_bytes = '10Mi';
 
+SYSTEM stop merges t2;
+
 INSERT INTO t2 SELECT number
 FROM numbers_mt(1e6);
 

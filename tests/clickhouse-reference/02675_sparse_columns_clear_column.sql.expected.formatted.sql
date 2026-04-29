@@ -29,7 +29,11 @@ SET alter_sync = 2;
 
 ALTER TABLE t_sparse_columns_clear DROP COLUMN v;
 
+OPTIMIZE TABLE t_sparse_columns_clear FINAL;
+
 DROP TABLE t_sparse_columns_clear;
+
+SYSTEM FLUSH LOGS text_log;
 
 SET max_rows_to_read = 0; -- system.text_log can be really big
 

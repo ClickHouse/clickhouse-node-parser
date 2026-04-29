@@ -64,6 +64,8 @@ SETTINGS
     log_comment = 'nouse-agg'
 FORMAT Null;
 
+SYSTEM FLUSH LOGS query_log;
+
 SELECT toUInt8(ProfileEvents['LoadedStatisticsMicroseconds'] = 0)
 FROM `system`.query_log
 WHERE type = 'QueryFinish'

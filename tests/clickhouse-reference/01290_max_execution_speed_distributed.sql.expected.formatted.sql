@@ -28,6 +28,9 @@ SETTINGS
 SELECT max(t) - min(t) >= 1
 FROM times;
 
+-- Check that the query was also throttled on "remote" servers.
+SYSTEM FLUSH LOGS query_log;
+
 SELECT DISTINCT query_duration_ms >= 500
 FROM `system`.query_log
 WHERE current_database = currentDatabase()

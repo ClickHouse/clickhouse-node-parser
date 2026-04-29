@@ -26,6 +26,8 @@ WHERE a NOT IN (
 
 ALTER TABLE mv_source MODIFY TTL insert_time + toIntervalDay(1);
 
+SYSTEM FLUSH LOGS query_log;
+
 -- This is a fancy way to check that the MV hasn't been called (no functions executed by ALTER)
 SELECT
     ProfileEvents['FunctionExecute'],

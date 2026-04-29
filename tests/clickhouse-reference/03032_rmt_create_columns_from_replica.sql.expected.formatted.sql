@@ -12,3 +12,5 @@ ORDER BY tuple();
 CREATE TABLE data_r2
 ENGINE = ReplicatedMergeTree('/tables/{database}', 'r2')
 ORDER BY tuple();
+
+SHOW CREATE TABLE data_r2 FORMAT LineAsString;

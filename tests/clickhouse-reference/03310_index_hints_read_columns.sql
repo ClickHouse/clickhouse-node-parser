@@ -9,9 +9,11 @@ CREATE TABLE t_index_hint (a UInt64, b UInt64)
 ENGINE = MergeTree ORDER BY a
 SETTINGS index_granularity = 1, min_bytes_for_wide_part = 0, serialization_info_version = 'basic', add_minmax_index_for_numeric_columns=0;
 INSERT INTO t_index_hint SELECT number, number FROM numbers(1000);
+SYSTEM CLEAR MARK CACHE;
 SELECT sum(b) FROM t_index_hint WHERE b >= 100 AND b < 200 SETTINGS max_threads = 1;
 SELECT sum(b) FROM t_index_hint WHERE a >= 100 AND a < 200 AND b >= 100 AND b < 200 SETTINGS max_threads = 1, force_primary_key = 1;
 SELECT sum(b) FROM t_index_hint WHERE indexHint(a >= 100 AND a < 200) AND b >= 100 AND b < 200 SETTINGS max_threads = 1, force_primary_key = 1;
+SYSTEM FLUSH LOGS query_log;
 SELECT
     ProfileEvents['FileOpen'],
     read_rows,
@@ -31,6 +33,7 @@ CREATE TABLE t_index_hint
 ENGINE = MergeTree ORDER BY a
 SETTINGS index_granularity = 1, min_bytes_for_wide_part = 0, serialization_info_version = 'basic';
 INSERT INTO t_index_hint (a, s) VALUES (1, 'Text with my_token') (2, 'Another text');
+SYSTEM CLEAR INDEX MARK CACHE;
 SELECT count() FROM t_index_hint WHERE s LIKE '%my_token%' SETTINGS max_threads = 1;
 SELECT count() FROM t_index_hint WHERE has(s_tokens, 'my_token') AND s LIKE '%my_token%' SETTINGS max_threads = 1, force_data_skipping_indices = 'idx_tokens';
 SELECT count() FROM t_index_hint WHERE indexHint(has(s_tokens, 'my_token')) AND s LIKE '%my_token%' SETTINGS max_threads = 1, force_data_skipping_indices = 'idx_tokens';

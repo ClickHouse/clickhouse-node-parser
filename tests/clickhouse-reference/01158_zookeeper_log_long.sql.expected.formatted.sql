@@ -16,7 +16,11 @@ ENGINE = ReplicatedMergeTree('/test/01158/{database}/rmt', '1')
 ORDER BY n
 SETTINGS cleanup_delay_period = 86400, max_cleanup_delay_period = 86400, replicated_can_become_leader = 0;
 
+SYSTEM sync replica rmt;
+
 INSERT INTO rmt;
+
+SYSTEM flush logs zookeeper_log, query_log;
 
 SELECT
     address,
@@ -136,10 +140,14 @@ ORDER BY
 
 DROP TABLE rmt;
 
+SYSTEM flush logs zookeeper_log;
+
 SELECT count() > 0
 FROM `system`.zookeeper_log
 WHERE like(path, concat('/test/01158/', currentDatabase(), '/rmt%'))
     AND duration_microseconds > 0;
+
+SYSTEM flush logs aggregated_zookeeper_log;
 
 SELECT
     sum(errors[0]) > 0,

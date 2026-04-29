@@ -11,6 +11,8 @@ PARTITION BY id;
 
 INSERT INTO test;
 
+OPTIMIZE TABLE test;
+
 SELECT *
 FROM test
 ORDER BY code ASC;

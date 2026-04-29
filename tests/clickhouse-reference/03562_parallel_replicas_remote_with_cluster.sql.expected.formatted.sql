@@ -26,6 +26,8 @@ SELECT sum(n)
 FROM remote(test_cluster_two_shard_three_replicas_localhost, currentDatabase(), tt)
 SETTINGS log_comment = '03562_152a0cc0-0811-46c9-839e-0f17426a1fc6';
 
+SYSTEM FLUSH LOGS query_log;
+
 SELECT countIf(ProfileEvents['ParallelReplicasQueryCount'] > 0)
 FROM `system`.query_log
 WHERE type = 'QueryFinish'

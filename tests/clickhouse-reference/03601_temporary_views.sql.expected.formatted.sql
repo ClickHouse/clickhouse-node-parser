@@ -19,6 +19,10 @@ SELECT *
 FROM tview_basic
 ORDER BY id ASC;
 
+EXISTS VIEW tview_basic;
+
+SHOW TEMPORARY VIEW tview_basic;
+
 CREATE TEMPORARY VIEW IF NOT EXISTS tview_basic
 AS
 SELECT 0;

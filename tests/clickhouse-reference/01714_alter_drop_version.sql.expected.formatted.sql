@@ -15,5 +15,9 @@ ALTER TABLE alter_drop_version DROP COLUMN ver; --{serverError ALTER_OF_COLUMN_I
 
 ALTER TABLE alter_drop_version RENAME COLUMN ver TO rev; --{serverError ALTER_OF_COLUMN_IS_FORBIDDEN}
 
+DETACH TABLE alter_drop_version;
+
+ATTACH TABLE alter_drop_version;
+
 SELECT *
 FROM alter_drop_version;

@@ -16,6 +16,8 @@ INSERT INTO t_block_number_proj SELECT
     number
 FROM numbers(1000);
 
+OPTIMIZE TABLE t_block_number_proj FINAL;
+
 ALTER TABLE t_block_number_proj ADD PROJECTION p (SELECT
     a,
     b
@@ -47,6 +49,8 @@ ORDER BY a
 SETTINGS enable_block_number_column = 1, min_bytes_for_wide_part = 0, index_granularity = 128;
 
 INSERT INTO t_block_number_ttl;
+
+OPTIMIZE TABLE t_block_number_ttl FINAL;
 
 ALTER TABLE t_block_number_ttl MODIFY TTL d + toIntervalMonth(1);
 

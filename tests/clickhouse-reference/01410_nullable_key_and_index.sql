@@ -15,6 +15,7 @@ SELECT * FROM nullable_key WHERE k IS NOT NULL;
 SET max_rows_to_read = 5;
 SELECT * FROM nullable_key WHERE k > 10;
 SELECT * FROM nullable_key WHERE k < 10;
+OPTIMIZE TABLE nullable_key FINAL;
 SET max_rows_to_read = 4; -- one additional left mark needs to be read
 SELECT * FROM nullable_key WHERE k IN (10, 20) SETTINGS transform_null_in = 1;
 SELECT * FROM nullable_key WHERE k IN (3, NULL) SETTINGS transform_null_in = 1;
@@ -50,3 +51,4 @@ CREATE TABLE invalid_array_null (id Array(Nullable(String))) ENGINE = MergeTree 
 CREATE TABLE invalid_tuple_null (id Tuple(Nullable(String), UInt8)) ENGINE = MergeTree ORDER BY id; -- { serverError ILLEGAL_COLUMN }
 CREATE TABLE invalid_map_null (id Map(UInt8, Nullable(String))) ENGINE = MergeTree ORDER BY id; -- { serverError ILLEGAL_COLUMN }
 CREATE TABLE invalid_simple_agg_state_null (id SimpleAggregateFunction(sum, Nullable(UInt64))) ENGINE = MergeTree ORDER BY id; -- { serverError DATA_TYPE_CANNOT_BE_USED_IN_KEY }
+-- AggregateFunctions are not comparable and cannot be used in key expressions. No need to test it.

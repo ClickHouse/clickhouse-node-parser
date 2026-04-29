@@ -273,6 +273,178 @@
     ]
   },
   {
+    "kind": "optimize",
+    "table": {
+      "kind": "tableRef",
+      "table": "full_duplicates"
+    },
+    "deduplicate": true,
+    "deduplicateBy": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "pk"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "sk"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "val"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "mat"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "alias"
+        ]
+      }
+    ],
+    "leadingComments": [
+      "-- ERROR cases"
+    ],
+    "trailingComments": [
+      "-- { serverError NO_SUCH_COLUMN_IN_TABLE } -- alias column is present"
+    ]
+  },
+  {
+    "kind": "optimize",
+    "table": {
+      "kind": "tableRef",
+      "table": "full_duplicates"
+    },
+    "deduplicate": true,
+    "deduplicateBy": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "sk"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "val"
+        ]
+      }
+    ],
+    "trailingComments": [
+      "-- { serverError THERE_IS_NO_COLUMN } -- primary key column is missing"
+    ]
+  },
+  {
+    "kind": "optimize",
+    "table": {
+      "kind": "tableRef",
+      "table": "full_duplicates"
+    },
+    "deduplicate": true,
+    "deduplicateBy": [
+      {
+        "kind": "asterisk",
+        "transformers": [
+          {
+            "kind": "except",
+            "columns": [
+              "pk",
+              "sk",
+              "val",
+              "mat",
+              "alias",
+              "partition_key"
+            ]
+          }
+        ]
+      }
+    ],
+    "trailingComments": [
+      "-- { serverError EMPTY_LIST_OF_COLUMNS_QUERIED } -- list is empty"
+    ]
+  },
+  {
+    "kind": "optimize",
+    "table": {
+      "kind": "tableRef",
+      "table": "full_duplicates"
+    },
+    "deduplicate": true,
+    "deduplicateBy": [
+      {
+        "kind": "asterisk",
+        "transformers": [
+          {
+            "kind": "except",
+            "columns": [
+              "pk"
+            ]
+          }
+        ]
+      }
+    ],
+    "trailingComments": [
+      "-- { serverError THERE_IS_NO_COLUMN } -- primary key column is missing [1]"
+    ]
+  },
+  {
+    "kind": "optimize",
+    "table": {
+      "kind": "tableRef",
+      "table": "full_duplicates"
+    },
+    "deduplicate": true,
+    "deduplicateBy": [
+      {
+        "kind": "asterisk",
+        "transformers": [
+          {
+            "kind": "except",
+            "columns": [
+              "sk"
+            ]
+          }
+        ]
+      }
+    ],
+    "trailingComments": [
+      "-- { serverError THERE_IS_NO_COLUMN } -- sorting key column is missing [1]"
+    ]
+  },
+  {
+    "kind": "optimize",
+    "table": {
+      "kind": "tableRef",
+      "table": "full_duplicates"
+    },
+    "deduplicate": true,
+    "deduplicateBy": [
+      {
+        "kind": "asterisk",
+        "transformers": [
+          {
+            "kind": "except",
+            "columns": [
+              "partition_key"
+            ]
+          }
+        ]
+      }
+    ],
+    "trailingComments": [
+      "-- { serverError THERE_IS_NO_COLUMN } -- partitioning column is missing [1]"
+    ]
+  },
+  {
     "kind": "insert",
     "target": {
       "kind": "table",
@@ -295,6 +467,15 @@
     }
   },
   {
+    "kind": "optimize",
+    "table": {
+      "kind": "tableRef",
+      "table": "full_duplicates"
+    },
+    "final": true,
+    "deduplicate": true
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -313,6 +494,83 @@
       "kind": "tableRef",
       "table": "full_duplicates"
     }
+  },
+  {
+    "kind": "optimize",
+    "table": {
+      "kind": "tableRef",
+      "table": "full_duplicates"
+    },
+    "final": true,
+    "deduplicate": true,
+    "deduplicateBy": [
+      {
+        "kind": "asterisk"
+      }
+    ]
+  },
+  {
+    "kind": "optimize",
+    "table": {
+      "kind": "tableRef",
+      "table": "full_duplicates"
+    },
+    "final": true,
+    "deduplicate": true,
+    "deduplicateBy": [
+      {
+        "kind": "asterisk",
+        "transformers": [
+          {
+            "kind": "except",
+            "columns": [
+              "mat"
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "optimize",
+    "table": {
+      "kind": "tableRef",
+      "table": "full_duplicates"
+    },
+    "final": true,
+    "deduplicate": true,
+    "deduplicateBy": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "pk"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "sk"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "val"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "mat"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "partition_key"
+        ]
+      }
+    ]
   },
   {
     "kind": "drop",
@@ -448,6 +706,15 @@
     }
   },
   {
+    "kind": "optimize",
+    "table": {
+      "kind": "tableRef",
+      "table": "partial_duplicates"
+    },
+    "final": true,
+    "deduplicate": true
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -470,6 +737,77 @@
     }
   },
   {
+    "kind": "optimize",
+    "table": {
+      "kind": "tableRef",
+      "table": "partial_duplicates"
+    },
+    "final": true,
+    "deduplicate": true,
+    "deduplicateBy": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "pk"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "sk"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "val"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "mat"
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "optimize",
+    "table": {
+      "kind": "tableRef",
+      "table": "partial_duplicates"
+    },
+    "final": true,
+    "deduplicate": true,
+    "deduplicateBy": [
+      {
+        "kind": "asterisk"
+      }
+    ]
+  },
+  {
+    "kind": "optimize",
+    "table": {
+      "kind": "tableRef",
+      "table": "partial_duplicates"
+    },
+    "final": true,
+    "deduplicate": true,
+    "deduplicateBy": [
+      {
+        "kind": "asterisk",
+        "transformers": [
+          {
+            "kind": "except",
+            "columns": [
+              "mat"
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -480,6 +818,80 @@
       "kind": "tableRef",
       "table": "partial_duplicates"
     }
+  },
+  {
+    "kind": "optimize",
+    "table": {
+      "kind": "tableRef",
+      "table": "partial_duplicates"
+    },
+    "final": true,
+    "deduplicate": true,
+    "deduplicateBy": [
+      {
+        "kind": "columnsExpr",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": ".*"
+          }
+        ],
+        "transformers": [
+          {
+            "kind": "except",
+            "columns": [
+              "mat"
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "optimize",
+    "table": {
+      "kind": "tableRef",
+      "table": "partial_duplicates"
+    },
+    "final": true,
+    "deduplicate": true,
+    "deduplicateBy": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "pk"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "sk"
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "optimize",
+    "table": {
+      "kind": "tableRef",
+      "table": "partial_duplicates"
+    },
+    "final": true,
+    "deduplicate": true,
+    "deduplicateBy": [
+      {
+        "kind": "functionCall",
+        "name": "COLUMNS",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": ".*k"
+          }
+        ]
+      }
+    ]
   },
   {
     "kind": "drop",

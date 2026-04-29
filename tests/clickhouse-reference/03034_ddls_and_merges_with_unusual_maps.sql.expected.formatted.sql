@@ -35,6 +35,9 @@ INSERT INTO tab;
 
 INSERT INTO tab;
 
+-- Test merge
+OPTIMIZE TABLE tab FINAL;
+
 SELECT *
 FROM tab
 ORDER BY

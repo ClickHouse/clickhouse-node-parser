@@ -18,6 +18,8 @@ INSERT INTO test_table SELECT
     '',
     tuple(toNullable('xxx')) AS x;
 
+OPTIMIZE TABLE test_table FINAL;
+
 SELECT *
 FROM test_table FINAL;
 

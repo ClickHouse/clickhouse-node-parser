@@ -68,6 +68,18 @@ SETTINGS index_granularity = 8192, index_granularity_bytes = '10Mi';
 INSERT INTO morton_numbers_1_02457 SELECT untuple(mortonDecode(8, mortonEncode(n1, n2, n3, n4, n5, n6, n7, n8)))
 FROM morton_numbers_02457;
 
+(SELECT *
+FROM morton_numbers_02457
+UNION DISTINCT
+SELECT *
+FROM morton_numbers_1_02457)
+EXCEPT
+(SELECT *
+FROM morton_numbers_02457
+INTERSECT
+SELECT *
+FROM morton_numbers_1_02457);
+
 INSERT INTO morton_numbers_02457 SELECT
     n1.number,
     n2.number,
@@ -96,6 +108,34 @@ SETTINGS index_granularity = 8192, index_granularity_bytes = '10Mi';
 
 INSERT INTO morton_numbers_2_02457 SELECT untuple(mortonDecode(4, mortonEncode(n1, n2, n3, n4)))
 FROM morton_numbers_02457;
+
+(SELECT
+    n1,
+    n2,
+    n3,
+    n4
+FROM morton_numbers_02457
+UNION DISTINCT
+SELECT
+    n1,
+    n2,
+    n3,
+    n4
+FROM morton_numbers_2_02457)
+EXCEPT
+(SELECT
+    n1,
+    n2,
+    n3,
+    n4
+FROM morton_numbers_02457
+INTERSECT
+SELECT
+    n1,
+    n2,
+    n3,
+    n4
+FROM morton_numbers_2_02457);
 
 DROP TABLE IF EXISTS morton_numbers_2_02457;
 
@@ -127,3 +167,23 @@ SETTINGS index_granularity = 8192, index_granularity_bytes = '10Mi';
 
 INSERT INTO morton_numbers_3_02457 SELECT untuple(mortonDecode(2, mortonEncode(n1, n2)))
 FROM morton_numbers_02457;
+
+(SELECT
+    n1,
+    n2
+FROM morton_numbers_3_02457
+UNION DISTINCT
+SELECT
+    n1,
+    n2
+FROM morton_numbers_3_02457)
+EXCEPT
+(SELECT
+    n1,
+    n2
+FROM morton_numbers_3_02457
+INTERSECT
+SELECT
+    n1,
+    n2
+FROM morton_numbers_3_02457);

@@ -29,6 +29,14 @@ ENGINE = ReplicatedMergeTree('/clickhouse/tables/{database}/test_00062/alter', '
 
 INSERT INTO replicated_alter1;
 
+DESCRIBE TABLE replicated_alter1;
+
+SHOW CREATE TABLE replicated_alter1;
+
+DESCRIBE TABLE replicated_alter2;
+
+SHOW CREATE TABLE replicated_alter2;
+
 SELECT *
 FROM replicated_alter1
 ORDER BY k ASC;

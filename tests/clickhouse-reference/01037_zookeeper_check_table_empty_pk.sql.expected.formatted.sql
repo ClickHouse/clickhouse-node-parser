@@ -17,6 +17,8 @@ ORDER BY tuple();
 
 INSERT INTO mt_without_pk;
 
+CHECK TABLE mt_without_pk SETTINGS max_threads = 1;
+
 DROP TABLE IF EXISTS replicated_mt_without_pk;
 
 CREATE TABLE replicated_mt_without_pk
@@ -28,3 +30,5 @@ ENGINE = ReplicatedMergeTree('/clickhouse/tables/{database}/test_01037/replicate
 ORDER BY tuple();
 
 INSERT INTO replicated_mt_without_pk;
+
+CHECK TABLE replicated_mt_without_pk SETTINGS max_threads = 1;

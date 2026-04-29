@@ -88,6 +88,8 @@ ORDER BY n ASC
 SETTINGS log_comment = '02402_external_disk_mertrics/grace_join'
 FORMAT Null;
 
+SYSTEM FLUSH LOGS query_log;
+
 SELECT if(any(ProfileEvents['ExternalProcessingFilesTotal']) >= 1
     AND any(ProfileEvents['ExternalProcessingCompressedBytesTotal']) >= 100000
     AND any(ProfileEvents['ExternalProcessingUncompressedBytesTotal']) >= 100000
@@ -128,6 +130,9 @@ WHERE current_database = currentDatabase()
     AND like(log_comment, '02402_external_disk_mertrics/%join')
     AND ilike(query, 'SELECT%2097152%')
     AND type = 'QueryFinish';
+
+-- Do not check values because they can be not recorded, just existence
+SYSTEM FLUSH LOGS metric_log;
 
 SELECT
     CurrentMetric_TemporaryFilesForAggregation,

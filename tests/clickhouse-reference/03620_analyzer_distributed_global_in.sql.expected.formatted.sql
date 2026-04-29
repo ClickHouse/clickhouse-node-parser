@@ -130,6 +130,8 @@ FROM (
             )
     );
 
+SYSTEM flush logs query_log;
+
 -- SKIP: current_database = currentDatabase()
 SELECT normalizeQuery(replace(query, currentDatabase(), 'default'))
 FROM `system`.query_log

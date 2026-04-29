@@ -40,6 +40,8 @@ SOURCE(clickhouse(host '127.0.0.1' port tcpPort() table 'data' db 'db_01527_rang
 LIFETIME(0)
 LAYOUT(HASHED());
 
+SYSTEM reload dictionary db_01527_ranges.dict;
+
 SELECT _shard_num
 FROM dist_01527
 WHERE key = 0;

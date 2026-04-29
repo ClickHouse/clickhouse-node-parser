@@ -36,6 +36,8 @@ SELECT count()
 FROM t_sparse
 WHERE notEmpty(s);
 
+SYSTEM STOP MERGES t_sparse;
+
 INSERT INTO t_sparse SELECT
     number,
     number,

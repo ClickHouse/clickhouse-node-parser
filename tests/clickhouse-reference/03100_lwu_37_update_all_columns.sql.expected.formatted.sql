@@ -12,6 +12,8 @@ INSERT INTO t0 (c0);
 
 SET enable_lightweight_update = 1;
 
+UPDATE t0 SET c0 = 1 WHERE 1;
+
 SELECT c0
 FROM t0
 ORDER BY c0 ASC;

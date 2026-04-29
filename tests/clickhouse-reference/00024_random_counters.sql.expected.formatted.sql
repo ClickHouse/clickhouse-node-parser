@@ -6000,6 +6000,8 @@ SELECT
 FROM test.visits
 WHERE CounterID = 14121177;
 
+SYSTEM CLEAR UNCOMPRESSED CACHE;
+
 SET local_filesystem_read_method = 'pread_threadpool';
 
 SET min_bytes_to_use_direct_io = 1;

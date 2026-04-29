@@ -11,6 +11,8 @@ ENGINE = AggregatingMergeTree()
 ORDER BY key
 SETTINGS index_granularity = 8192;
 
+SYSTEM STOP MERGES data;
+
 -- generate 50% of marks that cannot be skipped with v1_index
 -- this will create a gap in marks
 INSERT INTO data SELECT

@@ -6,6 +6,7 @@ create table xp(i Nullable(UInt64), j UInt64) engine MergeTree order by i settin
 create table xp_d as xp engine Distributed(test_shard_localhost, currentDatabase(), xp);
 insert into xp select number, number + 2 from numbers(10);
 insert into xp select null, 100;
+optimize table xp final;
 set max_rows_to_read = 2;
 select * from xp where i in [0, 1];
 select * from xp where i global in [0, 1];

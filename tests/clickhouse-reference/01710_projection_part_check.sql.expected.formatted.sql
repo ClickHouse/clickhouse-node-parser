@@ -23,6 +23,8 @@ INSERT INTO tp SELECT
     number
 FROM numbers(5);
 
+CHECK TABLE tp SETTINGS check_query_single_value_result = 0, max_threads = 1;
+
 DROP TABLE tp;
 
 CREATE TABLE tp

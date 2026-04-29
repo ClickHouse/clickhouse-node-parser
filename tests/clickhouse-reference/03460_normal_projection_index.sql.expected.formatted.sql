@@ -34,6 +34,8 @@ INSERT INTO test_simple_projection;
 
 INSERT INTO test_simple_projection;
 
+OPTIMIZE TABLE test_simple_projection FINAL;
+
 -- aggressively use projection index
 SET min_table_rows_to_use_projection_index = 0;
 
@@ -159,6 +161,8 @@ INSERT INTO test_projection_granule_edge_cases SELECT
     'unknown_region',
     999
 FROM numbers(1000);
+
+OPTIMIZE TABLE test_projection_granule_edge_cases FINAL;
 
 SELECT trimLeft(`explain`)
 FROM (

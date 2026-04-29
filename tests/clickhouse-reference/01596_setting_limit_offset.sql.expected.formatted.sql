@@ -13,6 +13,8 @@ FROM numbers(100);
 INSERT INTO test SELECT number
 FROM numbers(10, 100);
 
+OPTIMIZE TABLE test FINAL;
+
 -- Only set limit
 SET limit = 5;
 

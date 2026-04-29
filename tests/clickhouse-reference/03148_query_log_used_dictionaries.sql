@@ -16,6 +16,7 @@ SETTINGS
     enable_analyzer = 1,
     log_comment = 'simple_with_analyzer'
 FORMAT Null;
+SYSTEM FLUSH LOGS query_log;
 SELECT log_comment, used_dictionaries
 FROM system.query_log
 WHERE current_database = currentDatabase()

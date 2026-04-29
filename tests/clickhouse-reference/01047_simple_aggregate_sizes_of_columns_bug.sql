@@ -4,4 +4,5 @@ INSERT INTO column_size_bug VALUES(now(),1);
 ALTER TABLE column_size_bug DELETE WHERE value=1;
 -- wait for DELETE
 SELECT sleep(1);
+OPTIMIZE TABLE column_size_bug;
 DROP TABLE column_size_bug;

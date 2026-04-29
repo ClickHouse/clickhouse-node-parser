@@ -1,3 +1,6 @@
+-- { echoOn }
+SYSTEM STOP MERGES tbl;
+
 -- simple test case
 CREATE TABLE IF NOT EXISTS replacing_mt
 (

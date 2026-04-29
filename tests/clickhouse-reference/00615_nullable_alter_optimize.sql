@@ -11,4 +11,5 @@ INSERT INTO test_00615 (dt,id, key,data) VALUES ('2000-01-01', 100, 'key', 10050
 alter table test_00615 drop column data;
 alter table test_00615 add column data Nullable(Float64);
 SELECT * FROM test_00615 ORDER BY data NULLS FIRST;
+OPTIMIZE TABLE test_00615;
 DROP TABLE test_00615;

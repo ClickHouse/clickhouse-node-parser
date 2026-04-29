@@ -27,4 +27,8 @@ LEFT JOIN `join`
 GROUP BY loyalty
 ORDER BY loyalty ASC;
 
+DETACH TABLE `join`;
+
+ATTACH TABLE `join`;
+
 DROP TABLE `join`;

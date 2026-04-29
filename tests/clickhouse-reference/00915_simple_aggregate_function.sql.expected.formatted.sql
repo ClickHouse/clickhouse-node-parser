@@ -28,6 +28,8 @@ SELECT toTypeName(val)
 FROM simple
 LIMIT 1;
 
+OPTIMIZE TABLE simple FINAL;
+
 CREATE TABLE simple
 (
     id UInt64,
@@ -86,6 +88,8 @@ INSERT INTO with_overflow SELECT
     1,
     1
 FROM numbers(256);
+
+OPTIMIZE TABLE with_overflow FINAL;
 
 SELECT
     'with_overflow',

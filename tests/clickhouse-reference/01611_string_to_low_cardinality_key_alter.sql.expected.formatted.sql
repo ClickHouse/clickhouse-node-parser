@@ -13,6 +13,12 @@ INSERT INTO table_with_lc_key;
 
 ALTER TABLE table_with_lc_key MODIFY COLUMN lc_key String;
 
+SHOW CREATE TABLE table_with_lc_key;
+
+DETACH TABLE table_with_lc_key;
+
+ATTACH TABLE table_with_lc_key;
+
 SELECT *
 FROM table_with_lc_key
 WHERE enum_key > 0
@@ -38,6 +44,12 @@ ORDER BY (int_key, str_key);
 INSERT INTO table_with_string_key;
 
 ALTER TABLE table_with_string_key MODIFY COLUMN str_key LowCardinality(String);
+
+SHOW CREATE TABLE table_with_string_key;
+
+DETACH TABLE table_with_string_key;
+
+ATTACH TABLE table_with_string_key;
 
 SELECT *
 FROM table_with_string_key

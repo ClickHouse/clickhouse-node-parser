@@ -35,6 +35,10 @@ ALTER TABLE merge_distributed1 ADD COLUMN dummy String AFTER CounterID;
 
 ALTER TABLE merge_distributed ADD COLUMN dummy String AFTER CounterID;
 
+DESCRIBE TABLE merge_distributed;
+
+SHOW CREATE TABLE merge_distributed;
+
 INSERT INTO merge_distributed1;
 
 SELECT

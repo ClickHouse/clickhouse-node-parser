@@ -25,6 +25,10 @@ SELECT 'Test select text + hasAnyTokens:', text FROM tab WHERE hasAnyTokens(text
 SELECT 'Test hasToken and hasToken:', count() FROM tab WHERE hasToken(text, 'Alick') and hasToken(text, 'Blick');
 SELECT 'Test hasAnyTokens or hasToken:', count() FROM tab WHERE hasAnyTokens(text, ['Blick']) or hasToken(text, 'Alick');
 SELECT 'Test NOT hasAllTokens:', count() FROM tab WHERE NOT hasAllTokens(text, ['Blick']);
+----------------------------------------------------
+-- Now check the logs all at once (one by one is too slow)
+----------------------------------------------------
+SYSTEM FLUSH LOGS text_log;
 SELECT message
 FROM (
      SELECT event_time_microseconds, message FROM system.text_log

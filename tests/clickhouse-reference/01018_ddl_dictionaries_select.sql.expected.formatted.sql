@@ -53,6 +53,10 @@ WHERE key_column = 14;
 SELECT countDistinct((dictGetUInt8(concat({CLICKHOUSE_DATABASE:String}, '.dict1'), 'second_column', toUInt64(number))))
 FROM numbers(100);
 
+DETACH DICTIONARY {CLICKHOUSE_DATABASE:Identifier}.dict1;
+
+ATTACH DICTIONARY {CLICKHOUSE_DATABASE:Identifier}.dict1;
+
 DROP DICTIONARY {CLICKHOUSE_DATABASE:Identifier}.dict1;
 
 -- SOURCE(CLICKHOUSE(...)) uses default params if not specified
@@ -152,3 +156,5 @@ SELECT
     dictGet(n, 'some_column', toUInt64(12));
 
 DROP TABLE {CLICKHOUSE_DATABASE:Identifier}.table_for_dict;
+
+SYSTEM RELOAD DICTIONARY {CLICKHOUSE_DATABASE:Identifier}.dict3; -- {serverError UNKNOWN_TABLE}

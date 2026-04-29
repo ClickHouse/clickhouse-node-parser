@@ -14,9 +14,12 @@ INSERT INTO quorum1 VALUES (1, '2018-11-15');
 INSERT INTO quorum1 VALUES (2, '2018-11-15');
 INSERT INTO quorum1 VALUES (3, '2018-12-16');
 SET insert_quorum_timeout=0;
+SYSTEM STOP FETCHES quorum1;
 INSERT INTO quorum2 VALUES (4, toDate('2018-12-16')); -- { serverError UNKNOWN_STATUS_OF_INSERT }
 SELECT x FROM quorum1 ORDER BY x;
 SELECT x FROM quorum2 ORDER BY x;
 SET select_sequential_consistency=0;
+SYSTEM START FETCHES quorum1;
+SYSTEM SYNC REPLICA quorum1;
 DROP TABLE quorum1;
 DROP TABLE quorum2;

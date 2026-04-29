@@ -11,6 +11,8 @@ ENGINE = MergeTree
 ORDER BY t
 SETTINGS index_granularity = 1;
 
+SYSTEM STOP MERGES tab;
+
 INSERT INTO tab SELECT toDateTime('2024-01-10') + number
 FROM numbers(10000);
 

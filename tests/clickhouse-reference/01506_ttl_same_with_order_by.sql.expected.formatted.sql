@@ -10,11 +10,17 @@ ORDER BY (toStartOfHour(timestamp), timestamp)
 PARTITION BY toYYYYMMDD(timestamp)
 TTL toStartOfHour(timestamp) + toIntervalHour(1);
 
-INSERT INTO derived_metrics_local;
+SYSTEM STOP MERGES derived_metrics_local;
 
 INSERT INTO derived_metrics_local;
 
 INSERT INTO derived_metrics_local;
+
+INSERT INTO derived_metrics_local;
+
+SYSTEM START MERGES derived_metrics_local;
+
+OPTIMIZE TABLE derived_metrics_local FINAL;
 
 SELECT *
 FROM derived_metrics_local;

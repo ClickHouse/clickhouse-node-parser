@@ -10,6 +10,8 @@ INSERT INTO test_01676.table (x) VALUES (2);
 INSERT INTO test_01676.table VALUES (toUInt64(3), toUInt64(15));
 SELECT * FROM test_01676.table ORDER BY x;
 SELECT status FROM system.dictionaries WHERE database='test_01676' AND name='dict';
+DETACH DATABASE test_01676;
+ATTACH DATABASE test_01676;
 -- It can be not loaded, or not even finish attaching in case of asynchronous tables loading.
 SELECT COALESCE((SELECT status FROM system.dictionaries WHERE database='test_01676' AND name='dict')::Nullable(String), 'NOT_LOADED');
 INSERT INTO test_01676.table (x) VALUES (toInt64(4));

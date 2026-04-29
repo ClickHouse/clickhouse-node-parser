@@ -3,6 +3,7 @@ create table test (stamp Date) engine MergeTree order by stamp;
 insert into test select '2024-10-30' from numbers(100);
 insert into test select '2024-11-19' from numbers(100);
 insert into test select '2149-06-06' from numbers(100);
+optimize table test final;
 -- { echoOn }
 -- implicit toDateTime (always saturate)
 select count() from test where stamp >= parseDateTimeBestEffort('2024-11-01');

@@ -39,3 +39,4 @@ SELECT materialize([toNullable(1)]) AS x, arrayElementOrNull(x, toNullable(1)) A
 SELECT [toNullable(1)] AS x, arrayElementOrNull(x, materialize(toNullable(1))) AS y;
 SELECT materialize([toNullable(1)]) AS x, arrayElementOrNull(x, materialize(toNullable(1))) AS y;
 select arrayElementOrNull(m, 0), materialize(map('key', 42)) as m; -- {serverError ILLEGAL_TYPE_OF_ARGUMENT}
+-- { echoOff }

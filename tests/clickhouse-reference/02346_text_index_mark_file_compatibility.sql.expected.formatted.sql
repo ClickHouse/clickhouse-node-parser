@@ -20,6 +20,8 @@ INSERT INTO tab SELECT
     multiIf(number % 3 = 0, 'aa', number % 3 = 1, 'bb', 'cc') AS str
 FROM numbers(1024000);
 
+OPTIMIZE TABLE tab FINAL;
+
 SELECT count()
 FROM tab
 WHERE hasToken(str, 'aa'); -- this must not return an error

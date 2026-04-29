@@ -14,6 +14,7 @@ select table, partition_id, name, rows from system.parts where database=currentD
 SET mutations_sync = 1;
 alter table rmt update s = 's'||toString(n) where 1;
 alter table rmt replace partition '0' from mt;
+system sync replica rmt;
 alter table rmt drop column s;
 select mutation_id, command, parts_to_do_names, parts_to_do, is_done from system.mutations where database=currentDatabase() and table='rmt';
 drop table rmt sync;

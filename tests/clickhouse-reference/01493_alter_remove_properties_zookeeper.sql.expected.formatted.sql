@@ -27,9 +27,19 @@ ENGINE = ReplicatedMergeTree('/clickhouse/{database}/test_01493/r_prop_table', '
 ORDER BY tuple()
 TTL column_comment + toIntervalMonth(2);
 
+SHOW CREATE TABLE r_prop_table1;
+
+SHOW CREATE TABLE r_prop_table2;
+
 INSERT INTO r_prop_table1 (column_codec, column_comment, column_ttl);
 
+SYSTEM SYNC REPLICA r_prop_table2;
+
 ALTER TABLE r_prop_table1 MODIFY COLUMN column_comment;
+
+DETACH TABLE r_prop_table1;
+
+ATTACH TABLE r_prop_table1;
 
 ALTER TABLE r_prop_table2 MODIFY COLUMN column_codec;
 
@@ -44,11 +54,19 @@ SELECT
 FROM r_prop_table1
 ORDER BY column_ttl ASC;
 
+DETACH TABLE r_prop_table2;
+
+ATTACH TABLE r_prop_table2;
+
 ALTER TABLE r_prop_table2 MODIFY COLUMN column_ttl;
 
 ALTER TABLE r_prop_table1 REMOVE TTL;
 
 INSERT INTO r_prop_table1 (column_codec, column_comment, column_ttl);
+
+OPTIMIZE TABLE r_prop_table2 FINAL;
+
+SYSTEM SYNC REPLICA r_prop_table1;
 
 SELECT COUNT()
 FROM r_prop_table1;

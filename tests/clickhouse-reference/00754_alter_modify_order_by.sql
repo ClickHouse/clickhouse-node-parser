@@ -24,4 +24,5 @@ INSERT INTO summing(x, y, z, val) values (1, 2, 0, 10), (1, 2, 1, 30), (1, 2, 2,
 SELECT * FROM summing;
 INSERT INTO summing(x, y, z, val) values (1, 2, 0, 20), (1, 2, 2, 50);
 SELECT * FROM summing FINAL ORDER BY x, y, z;
+SHOW CREATE TABLE summing;
 DROP TABLE summing;

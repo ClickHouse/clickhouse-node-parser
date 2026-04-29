@@ -16,4 +16,6 @@ INSERT INTO tab (s);
 
 INSERT INTO tab (s);
 
+OPTIMIZE TABLE tab FINAL;
+
 DROP TABLE tab;

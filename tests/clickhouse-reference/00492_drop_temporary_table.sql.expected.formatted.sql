@@ -14,6 +14,8 @@ FROM temp_tab;
 
 SET send_logs_level = 'fatal';
 
+EXISTS TABLE temp_tab;
+
 DROP TABLE temp_tab;
 
 SET send_logs_level = 'warning';

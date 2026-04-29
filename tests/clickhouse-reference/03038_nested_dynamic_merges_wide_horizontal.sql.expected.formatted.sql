@@ -10,6 +10,8 @@ SET enable_named_columns_in_function_tuple = 0;
 
 DROP TABLE IF EXISTS test;
 
+;
+
 CREATE TABLE test
 (
     id UInt64,
@@ -18,6 +20,8 @@ CREATE TABLE test
 ENGINE = MergeTree
 ORDER BY id
 SETTINGS min_rows_for_wide_part = 1, min_bytes_for_wide_part = 1, lock_acquire_timeout_for_background_operations = 600;
+
+SYSTEM stop merges test;
 
 INSERT INTO test SELECT
     number,
@@ -51,6 +55,10 @@ GROUP BY
 ORDER BY
     count() ASC,
     type ASC;
+
+SYSTEM start merges test;
+
+OPTIMIZE TABLE test FINAL;
 
 SELECT '---------------------';
 

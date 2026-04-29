@@ -18,11 +18,15 @@ INSERT INTO test_table SELECT
     number + 1
 FROM numbers(15);
 
+OPTIMIZE TABLE test_table;
+
 SELECT COUNT()
 FROM `system`.parts
 WHERE database = currentDatabase()
     AND table = 'test_table'
     AND active = 1;
+
+SYSTEM STOP MERGES test_table;
 
 SELECT '--';
 

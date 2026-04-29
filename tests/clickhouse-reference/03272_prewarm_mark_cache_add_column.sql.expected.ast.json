@@ -61,6 +61,17 @@
     "settingsAfterOrderBy": true
   },
   {
+    "kind": "system",
+    "body": "SYSTEM CLEAR MARK CACHE",
+    "leadingComments": [
+      "-- Drop mark cache because it may be full and we will fail to add new entries to it."
+    ]
+  },
+  {
+    "kind": "system",
+    "body": "SYSTEM STOP MERGES t_prewarm_add_column"
+  },
+  {
     "kind": "insert",
     "target": {
       "kind": "table",
@@ -101,6 +112,22 @@
     }
   },
   {
+    "kind": "detach",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "t_prewarm_add_column"
+    }
+  },
+  {
+    "kind": "attach",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "t_prewarm_add_column"
+    }
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -123,6 +150,10 @@
         "direction": "ASC"
       }
     ]
+  },
+  {
+    "kind": "system",
+    "body": "SYSTEM FLUSH LOGS query_log"
   },
   {
     "kind": "select",

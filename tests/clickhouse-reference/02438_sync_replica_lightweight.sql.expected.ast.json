@@ -134,6 +134,14 @@
     "settingsAfterOrderBy": true
   },
   {
+    "kind": "system",
+    "body": "SYSTEM stop replicated sends rmt1"
+  },
+  {
+    "kind": "system",
+    "body": "SYSTEM stop merges rmt2"
+  },
+  {
     "kind": "set",
     "settings": [
       {
@@ -165,6 +173,13 @@
         "table": "rmt1"
       }
     }
+  },
+  {
+    "kind": "system",
+    "body": "SYSTEM sync replica rmt2 pull",
+    "trailingComments": [
+      "-- does not wait"
+    ]
   },
   {
     "kind": "select",
@@ -326,6 +341,29 @@
     ]
   },
   {
+    "kind": "system",
+    "body": "SYSTEM sync replica rmt1 pull"
+  },
+  {
+    "kind": "optimize",
+    "table": {
+      "kind": "tableRef",
+      "table": "rmt1"
+    },
+    "final": true
+  },
+  {
+    "kind": "system",
+    "body": "SYSTEM start replicated sends rmt1"
+  },
+  {
+    "kind": "system",
+    "body": "SYSTEM sync replica rmt2 lightweight",
+    "trailingComments": [
+      "-- waits for fetches, not merges"
+    ]
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -396,6 +434,14 @@
     ]
   },
   {
+    "kind": "system",
+    "body": "SYSTEM start merges rmt2"
+  },
+  {
+    "kind": "system",
+    "body": "SYSTEM sync replica rmt2"
+  },
+  {
     "kind": "insert",
     "target": {
       "kind": "table",
@@ -404,6 +450,18 @@
         "table": "rmt2"
       }
     }
+  },
+  {
+    "kind": "optimize",
+    "table": {
+      "kind": "tableRef",
+      "table": "rmt2"
+    },
+    "final": true
+  },
+  {
+    "kind": "system",
+    "body": "SYSTEM sync replica rmt1 strict"
   },
   {
     "kind": "select",

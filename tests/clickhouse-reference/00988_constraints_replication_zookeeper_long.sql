@@ -16,6 +16,8 @@ CREATE TABLE replicated_constraints2
 ) ENGINE = ReplicatedMergeTree('/clickhouse/tables/{database}/test_00988/alter_constraints', 'r2') ORDER BY (a);
 INSERT INTO replicated_constraints1 VALUES (1, 2);
 INSERT INTO replicated_constraints2 VALUES (3, 4);
+SYSTEM SYNC REPLICA replicated_constraints1;
+SYSTEM SYNC REPLICA replicated_constraints2;
 INSERT INTO replicated_constraints1 VALUES (10, 10); -- { serverError VIOLATED_CONSTRAINT }
 ALTER TABLE replicated_constraints1 DROP CONSTRAINT a_constraint SETTINGS alter_sync=2;
 INSERT INTO replicated_constraints2 VALUES (10, 10);

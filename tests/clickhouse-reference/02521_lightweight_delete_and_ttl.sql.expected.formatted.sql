@@ -22,6 +22,8 @@ INSERT INTO lwd_test_02521 SELECT
     now()
 FROM numbers(50000);
 
+OPTIMIZE TABLE lwd_test_02521 FINAL SETTINGS mutations_sync = 1;
+
 SET mutations_sync = 1;
 
 -- { echoOn }
@@ -37,6 +39,8 @@ SELECT
     'Count',
     count()
 FROM lwd_test_02521;
+
+DELETE FROM lwd_test_02521 WHERE id < 25000;
 
 ALTER TABLE lwd_test_02521 MODIFY TTL event_time + toIntervalMonth(1) SETTINGS mutations_sync = 1;
 

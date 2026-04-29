@@ -22,11 +22,17 @@ SELECT *
 FROM mv_00508
 ORDER BY x ASC;
 
+-- Detach MV and see if the data is still readable
+DETACH TABLE mv_00508;
+
 SELECT *
 FROM dst
 ORDER BY x ASC;
 
 USE default;
+
+-- Reattach MV (shortcut)
+ATTACH TABLE {CLICKHOUSE_DATABASE:Identifier}.mv_00508;
 
 INSERT INTO {CLICKHOUSE_DATABASE:Identifier}.src;
 

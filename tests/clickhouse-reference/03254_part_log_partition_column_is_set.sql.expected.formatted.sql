@@ -13,6 +13,8 @@ INSERT INTO test (x, y);
 
 INSERT INTO test (x, y);
 
+OPTIMIZE TABLE test FINAL;
+
 INSERT INTO test (x, y);
 
 ALTER TABLE test DROP PARTITION 2;
@@ -28,6 +30,8 @@ ORDER BY `ALL` ASC;
 TRUNCATE TABLE test;
 
 DROP TABLE test;
+
+SYSTEM FLUSH LOGS part_log;
 
 -- SELECT * FROM system.part_log WHERE database = currentDatabase() FORMAT Vertical;
 SELECT DISTINCT throwIf(empty(`partition`))

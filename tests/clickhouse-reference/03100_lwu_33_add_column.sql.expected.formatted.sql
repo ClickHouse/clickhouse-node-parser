@@ -15,7 +15,11 @@ FROM numbers(100000);
 
 ALTER TABLE t_lwu_add_column ADD COLUMN b UInt64;
 
+UPDATE t_lwu_add_column SET b = 1 WHERE a % 2 = 0;
+
 ALTER TABLE t_lwu_add_column ADD COLUMN c Array(String);
+
+UPDATE t_lwu_add_column SET b = 2, c = ['a', 'b', 'c'] WHERE a % 3 = 0;
 
 SELECT
     a % 6 AS n,

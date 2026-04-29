@@ -16,6 +16,8 @@ FROM numbers(5);
 INSERT INTO test SELECT materialize('{"aa1" : 42, "aa2" : 42, "aa3" : 42, "aa4" : 42, "aa5" : 42, "aa6" : 42, "aa7" : 42, "aa8" : 42, "a" : [{"c" : 42}]}')
 FROM numbers(5);
 
+OPTIMIZE TABLE test FINAL;
+
 SELECT JSONAllPaths(arrayJoin(json.`a[]`))
 FROM test;
 

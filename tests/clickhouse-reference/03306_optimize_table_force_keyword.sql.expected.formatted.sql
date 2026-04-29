@@ -9,6 +9,10 @@ INSERT INTO tab;
 
 INSERT INTO tab;
 
+-- To force merge, traditionally keyword 'FINAL' is used.
+-- Test that FORCE works as well.
+OPTIMIZE TABLE tab FINAL;
+
 SELECT count(*)
 FROM `system`.parts
 WHERE database = currentDatabase()

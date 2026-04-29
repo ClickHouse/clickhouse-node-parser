@@ -7,6 +7,8 @@ SET query_profiler_real_time_period_ns = 100000000;
 
 SELECT sleep(1);
 
+SYSTEM FLUSH LOGS trace_log;
+
 SELECT COUNT(*) > 1
 FROM `system`.trace_log
 WHERE isNotNull(build_id);

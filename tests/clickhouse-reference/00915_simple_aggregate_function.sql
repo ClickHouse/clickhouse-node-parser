@@ -6,6 +6,7 @@ insert into simple select number,number from system.numbers limit 10;
 select * from simple;
 select * from simple final order by id;
 select toTypeName(val) from simple limit 1;
+optimize table simple final;
 create table simple (
     id UInt64,
     nullable_str SimpleAggregateFunction(anyLast,Nullable(String)),
@@ -33,5 +34,6 @@ create table with_overflow (
     s SimpleAggregateFunction(sumWithOverflow, UInt8)
 ) engine AggregatingMergeTree order by id;
 insert into with_overflow select 1, 1 from numbers(256);
+optimize table with_overflow final;
 select 'with_overflow', * from with_overflow;
 drop table with_overflow;

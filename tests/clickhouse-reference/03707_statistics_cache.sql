@@ -41,6 +41,7 @@ ALTER TABLE sc_unused ADD STATISTICS val TYPE MinMax;
 ALTER TABLE sc_unused MATERIALIZE STATISTICS ALL;
 SELECT sum(val) FROM sc_unused
 SETTINGS use_statistics_cache = 0, log_comment = 'nouse-agg' FORMAT Null;
+SYSTEM FLUSH LOGS query_log;
 SELECT toUInt8(ProfileEvents['LoadedStatisticsMicroseconds'] = 0)
 FROM system.query_log
 WHERE type = 'QueryFinish' AND current_database = currentDatabase() AND log_comment = 'nouse-agg'

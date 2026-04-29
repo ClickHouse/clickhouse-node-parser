@@ -54,6 +54,10 @@ ORDER BY (value, key); -- { serverError DATA_TYPE_CANNOT_BE_USED_IN_KEY }
 
 SET allow_suspicious_primary_key = 1;
 
+DETACH TABLE data;
+
+ATTACH TABLE data;
+
 DROP TABLE data;
 
 -- ALTER AggregatingMergeTree

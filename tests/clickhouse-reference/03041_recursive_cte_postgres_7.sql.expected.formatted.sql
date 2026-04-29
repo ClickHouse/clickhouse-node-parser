@@ -173,4 +173,4 @@ iter AS (
 )
 
 SELECT *
-FROM iter;
+FROM iter; -- { echoOff }

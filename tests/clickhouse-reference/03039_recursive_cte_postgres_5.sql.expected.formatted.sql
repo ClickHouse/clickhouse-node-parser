@@ -175,4 +175,4 @@ z AS (
 
 SELECT *
 FROM z
-ORDER BY id ASC;
+ORDER BY id ASC; -- { echoOff }

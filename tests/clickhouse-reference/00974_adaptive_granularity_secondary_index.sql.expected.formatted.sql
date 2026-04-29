@@ -20,6 +20,8 @@ INSERT INTO indexed_table SELECT
     concat('hhhhhhhhhhhhhhhhhhhhhhhhh', 'xxxxxxxxxxxxxxxxxxxxxxxxxxxx', 'yyyyyyyyyyyyyyyyyyyyyyyyyy', toString(rand()))
 FROM numbers(1000);
 
+OPTIMIZE TABLE indexed_table FINAL;
+
 SELECT COUNT()
 FROM indexed_table
 WHERE like(log_message, '%x%');
@@ -45,6 +47,8 @@ INSERT INTO another_indexed_table SELECT
     toDateTime('2019-05-27 10:00:00') + number % 100,
     concat('hhhhhhhhhhhhhhhhhhhhhhhhh', 'xxxxxxxxxxxxxxxxxxxxxxxxxxxx', 'yyyyyyyyyyyyyyyyyyyyyyyyyy', toString(rand()))
 FROM numbers(1000);
+
+OPTIMIZE TABLE another_indexed_table FINAL;
 
 SELECT COUNT()
 FROM another_indexed_table

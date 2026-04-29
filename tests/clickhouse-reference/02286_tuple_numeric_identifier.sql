@@ -1,5 +1,6 @@
 DROP TABLE IF EXISTS t_tuple_numeric;
 CREATE TABLE t_tuple_numeric (t Tuple(`1` Tuple(`2` Int, `3` Int), `4` Int)) ENGINE = MergeTree ORDER BY tuple();
+SHOW CREATE TABLE t_tuple_numeric;
 INSERT INTO t_tuple_numeric VALUES (((2, 3), 4));
 SET output_format_json_named_tuples_as_objects = 1;
 SELECT * FROM t_tuple_numeric FORMAT JSONEachRow;

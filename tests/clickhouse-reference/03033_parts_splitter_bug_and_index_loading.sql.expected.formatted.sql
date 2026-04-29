@@ -7,6 +7,8 @@ ENGINE = MergeTree
 ORDER BY (a, b)
 SETTINGS index_granularity = 1;
 
+SYSTEM stop merges t;
+
 -- for this part the first columns is useless, so we have to use both
 INSERT INTO t SELECT
     42,
@@ -18,6 +20,11 @@ INSERT INTO t SELECT
     number,
     number
 FROM numbers_mt(100);
+
+-- force reloading index
+DETACH TABLE t;
+
+ATTACH TABLE t;
 
 SET merge_tree_min_bytes_for_concurrent_read = 1, merge_tree_min_rows_for_concurrent_read = 1, merge_tree_read_split_ranges_into_intersecting_and_non_intersecting_injection_probability = 1.0, max_threads = 4;
 

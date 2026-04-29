@@ -9,6 +9,7 @@ CREATE TABLE tab
 ENGINE = MergeTree
 ORDER BY t
 SETTINGS index_granularity = 1;
+SYSTEM STOP MERGES tab;
 INSERT INTO tab SELECT toDateTime('2024-01-10') + number FROM numbers(10000);
 INSERT INTO tab SELECT toDateTime('2024-01-30') + number FROM numbers(10000);
 INSERT INTO tab SELECT toDateTime('2024-01-20') + number FROM numbers(10000);

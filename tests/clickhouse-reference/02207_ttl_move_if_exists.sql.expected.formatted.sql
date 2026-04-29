@@ -8,3 +8,5 @@ CREATE TABLE t_ttl_move_if_exists
 ENGINE = MergeTree
 ORDER BY tuple()
 TTL d;
+
+SHOW CREATE TABLE t_ttl_move_if_exists;

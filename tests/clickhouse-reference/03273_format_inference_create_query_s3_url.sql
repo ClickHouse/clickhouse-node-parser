@@ -2,6 +2,7 @@
 
 drop table if exists test;
 create table test engine=S3('http://localhost:11111/test/json_data');
+show create table test;
 drop table test;
 create table test engine=S3('http://localhost:11111/test/json_data', NOSIGN);
 create table test engine=S3('http://localhost:11111/test/json_data', auto);

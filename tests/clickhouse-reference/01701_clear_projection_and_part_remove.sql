@@ -13,5 +13,7 @@ alter table tp_1 clear projection pp;
 alter table tp_1 drop projection pp;
 -- Now, we don't load projection pp for attached part, but it is written on disk
 alter table tp_1 attach partition '0';
+-- Make this part obsolete
+optimize table tp_1 final;
 -- Now, DROP TABLE triggers part removal
 drop table tp_1;

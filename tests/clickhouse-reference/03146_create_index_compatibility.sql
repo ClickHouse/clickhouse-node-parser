@@ -7,4 +7,5 @@ CREATE INDEX i3 ON t_index_3146 (a DESC, b ASC) TYPE minmax;
 CREATE INDEX i4 ON t_index_3146 a TYPE minmax;
 CREATE INDEX i5 ON t_index_3146 (a); -- ignored
 CREATE INDEX i6 ON t_index_3146 (a DESC, b ASC); -- ignored
+SHOW CREATE TABLE t_index_3146;
 DROP TABLE t_index_3146;

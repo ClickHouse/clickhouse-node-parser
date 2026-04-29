@@ -48,6 +48,10 @@ INSERT INTO minmax_idx2;
 
 INSERT INTO minmax_idx1;
 
+SYSTEM SYNC REPLICA minmax_idx1;
+
+SYSTEM SYNC REPLICA minmax_idx2;
+
 INSERT INTO minmax_idx1;
 
 INSERT INTO minmax_idx1;
@@ -59,6 +63,10 @@ INSERT INTO minmax_idx1;
 INSERT INTO minmax_idx2;
 
 INSERT INTO minmax_idx2;
+
+OPTIMIZE TABLE minmax_idx1;
+
+OPTIMIZE TABLE minmax_idx2;
 
 /* simple select */
 SELECT *

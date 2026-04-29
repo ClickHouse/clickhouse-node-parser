@@ -16,5 +16,8 @@ ENGINE = MergeTree()
 ORDER BY id
 TTL ts + toIntervalSecond(0) WHERE state IS NULL
 SETTINGS index_granularity = 8192, deduplicate_merge_projection_mode='rebuild';
+SYSTEM STOP MERGES post_state;
 INSERT INTO post_state VALUES ('2024-01-01 00:00:00', 1, NULL);
 INSERT INTO post_state VALUES ('2024-01-01 00:00:00', 1, 1);
+SYSTEM START MERGES post_state;
+OPTIMIZE TABLE post_state;

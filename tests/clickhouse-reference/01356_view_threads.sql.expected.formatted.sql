@@ -21,6 +21,8 @@ FROM table_01356_view_threads
 GROUP BY gg
 ORDER BY gg ASC;
 
+SYSTEM flush logs query_log;
+
 SELECT length(thread_ids) >= 1
 FROM `system`.query_log
 WHERE current_database = currentDatabase()

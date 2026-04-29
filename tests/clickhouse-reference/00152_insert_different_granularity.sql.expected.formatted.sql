@@ -148,6 +148,12 @@ INSERT INTO fixed_granularity_table SELECT *
 FROM test.hits
 LIMIT 10; -- should still have non adaptive granularity
 
+-- We have removed testing of OPTIMIZE because it's too heavy on very slow builds (debug + coverage + thread fuzzer with sleeps)
+-- OPTIMIZE TABLE fixed_granularity_table FINAL; -- and even after optimize
+DETACH TABLE fixed_granularity_table;
+
+ATTACH TABLE fixed_granularity_table;
+
 ALTER TABLE fixed_granularity_table DROP PARTITION 201403;
 
 ALTER TABLE fixed_granularity_table ATTACH PARTITION 201403;

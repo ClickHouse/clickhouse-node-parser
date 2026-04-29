@@ -15,6 +15,8 @@ FROM numbers(1000);
 
 SET mutations_sync = 2;
 
+DELETE FROM t_lwd_mutations WHERE id % 10 = 0;
+
 SELECT
     count(),
     sum(v),
@@ -31,6 +33,8 @@ WHERE database = currentDatabase()
     AND active;
 
 ALTER TABLE t_lwd_mutations UPDATE v = 1 WHERE id % 4 = 0, DELETE WHERE id % 10 = 1;
+
+DELETE FROM t_lwd_mutations WHERE id % 10 = 2;
 
 ALTER TABLE t_lwd_mutations UPDATE v = 1 WHERE id % 4 = 1, DELETE WHERE id % 10 = 3;
 

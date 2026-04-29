@@ -51,6 +51,8 @@ INSERT INTO data_a_02187 SELECT *
 FROM `system`.one
 SETTINGS max_threads = 1;
 
+SYSTEM FLUSH LOGS query_log, query_views_log;
+
 SELECT
     'VALUES',
     query_duration_ms >= 250

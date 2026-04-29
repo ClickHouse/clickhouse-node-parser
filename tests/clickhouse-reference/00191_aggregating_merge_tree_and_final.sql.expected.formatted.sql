@@ -36,6 +36,8 @@ SELECT
 FROM aggregating_00191 FINAL
 ORDER BY k ASC;
 
+OPTIMIZE TABLE aggregating_00191 FINAL;
+
 SELECT
     k,
     finalizeAggregation(u)

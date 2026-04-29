@@ -1,6 +1,7 @@
 -- Tags: no-fasttest
 -- Tag no-fasttest: Depends on AWS
 set enable_time_time64_type=1, session_timezone='UTC';
+desc paimonS3(s3_conn, filename='paimon_all_types');
 SELECT f_boolean,
 f_char,
 f_varchar,

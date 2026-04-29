@@ -17,6 +17,10 @@ SET min_insert_block_size_rows = 64, optimize_trivial_insert_select = 1;
 INSERT INTO t0 (c1) SELECT number
 FROM numbers(500);
 
+BACKUP TABLE t0 TO Disk('backups', '03760_backup_tar_archive.tar') FORMAT Null;
+
+RESTORE TABLE t0 AS t1 FROM Disk('backups', '03760_backup_tar_archive.tar') FORMAT Null;
+
 SELECT *
 FROM t1
 ORDER BY c1 ASC

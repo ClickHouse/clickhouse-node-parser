@@ -22,3 +22,5 @@ INSERT INTO sparse_tuple SELECT number, (if (number % 20 = 0, number, 0), (if (n
 SELECT t.a FROM sparse_tuple WHERE t.b.u != 0 ORDER BY id LIMIT 5;
 SELECT t.b.s FROM sparse_tuple ORDER BY id LIMIT 5;
 SELECT t.b.s FROM sparse_tuple WHERE t.b.u != 0 ORDER BY id LIMIT 5;
+DETACH TABLE sparse_tuple;
+ATTACH TABLE sparse_tuple;

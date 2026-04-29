@@ -12,6 +12,8 @@ ORDER BY tuple();
 
 INSERT INTO t;
 
+SYSTEM stop merges t;
+
 SET alter_sync = 0;
 
 ALTER TABLE t RENAME COLUMN j TO k;

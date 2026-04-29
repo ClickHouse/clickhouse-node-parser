@@ -14,6 +14,8 @@ ALTER TABLE alter_ttl ADD COLUMN s String;
 
 ALTER TABLE alter_ttl MODIFY COLUMN s String TTL toDate('2020-01-01');
 
+SHOW CREATE TABLE alter_ttl;
+
 DROP TABLE alter_ttl;
 
 CREATE TABLE alter_ttl

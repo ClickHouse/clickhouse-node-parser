@@ -26,4 +26,7 @@ FROM numbers(120000);
 
 SET max_memory_usage = '10Mi', max_untracked_memory = 0;
 
+-- It fails iff memory is tracked in OPTIMIZE query, but it doesn't. OPTIMIZE query doesn't rely on query context.
+OPTIMIZE TABLE data_01641 FINAL;
+
 DROP TABLE data_01641;

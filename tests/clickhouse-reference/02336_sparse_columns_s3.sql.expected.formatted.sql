@@ -119,6 +119,8 @@ INSERT INTO t_sparse_s3 SELECT
     ''
 FROM numbers(24576);
 
+OPTIMIZE TABLE t_sparse_s3 FINAL;
+
 SELECT serialization_kind
 FROM `system`.parts_columns
 WHERE table = 't_sparse_s3'

@@ -10,6 +10,8 @@ SET param_new_db_name = `02661_db1`;
 
 CREATE DATABASE {old_db_name:Identifier};
 
+RENAME DATABASE {old_db_name:Identifier} TO {new_db_name:Identifier};
+
 SELECT name
 FROM `system`.databases
 WHERE name = {new_db_name:String};
@@ -29,6 +31,8 @@ CREATE TABLE {new_db_name:Identifier}.{old_tbl_name:Identifier}
 )
 ENGINE = MergeTree
 ORDER BY tuple();
+
+RENAME TABLE {new_db_name:Identifier}.{old_tbl_name:Identifier} TO {new_db_name:Identifier}.{new_tbl_name:Identifier};
 
 -- NOTE: no 'database = currentDatabase()' on purpose
 SELECT name
@@ -54,8 +58,14 @@ SOURCE(null())
 LIFETIME(0)
 LAYOUT(FLAT());
 
+RENAME DICTIONARY {new_db_name:Identifier}.{old_dict_name:Identifier} TO {new_db_name:Identifier}.{new_dict_name:Identifier};
+
 SELECT name
 FROM `system`.dictionaries
 WHERE name = {new_dict_name:String};
+
+EXCHANGE TABLE {new_db_name:Identifier}.{old_tbl_name:Identifier} AND {new_db_name:Identifier}.{new_tbl_name:Identifier};
+
+EXCHANGE DICTIONARY {new_db_name:Identifier}.{old_dict_name:Identifier} AND {new_db_name:Identifier}.{new_dict_name:Identifier};
 
 DROP DATABASE {new_db_name:Identifier};

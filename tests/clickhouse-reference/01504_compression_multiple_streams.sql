@@ -11,11 +11,15 @@ ORDER BY tuple()
 SETTINGS min_rows_for_wide_part = 0, min_bytes_for_wide_part = 0;
 INSERT INTO columns_with_multiple_streams VALUES(1, 1, [[1]], tuple(1, [1]));
 SELECT * FROM columns_with_multiple_streams;
+DETACH TABLE columns_with_multiple_streams;
+ATTACH TABLE columns_with_multiple_streams;
 ALTER TABLE columns_with_multiple_streams MODIFY COLUMN field1 Nullable(UInt8);
 INSERT INTO columns_with_multiple_streams VALUES(2, 2, [[2]], tuple(2, [2]));
+SHOW CREATE TABLE columns_with_multiple_streams;
 SELECT * FROM columns_with_multiple_streams ORDER BY field0;
 ALTER TABLE columns_with_multiple_streams MODIFY COLUMN field3 CODEC(Delta, Default);
 INSERT INTO columns_with_multiple_streams VALUES(3, 3, [[3]], tuple(3, [3]));
+OPTIMIZE TABLE columns_with_multiple_streams FINAL;
 DROP TABLE IF EXISTS columns_with_multiple_streams_compact;
 CREATE TABLE columns_with_multiple_streams_compact (
   field0 Nullable(Int64) CODEC(Delta(2), LZ4),
@@ -28,8 +32,11 @@ ORDER BY tuple()
 SETTINGS min_rows_for_wide_part = 100000, min_bytes_for_wide_part = 100000;
 INSERT INTO columns_with_multiple_streams_compact VALUES(1, 1, [[1]], tuple(1, [1]));
 SELECT * FROM columns_with_multiple_streams_compact;
+DETACH TABLE columns_with_multiple_streams_compact;
+ATTACH TABLE columns_with_multiple_streams_compact;
 ALTER TABLE columns_with_multiple_streams_compact MODIFY COLUMN field1 Nullable(UInt8);
 INSERT INTO columns_with_multiple_streams_compact VALUES(2, 2, [[2]], tuple(2, [2]));
+SHOW CREATE TABLE columns_with_multiple_streams_compact;
 SELECT * FROM columns_with_multiple_streams_compact ORDER BY field0;
 ALTER TABLE columns_with_multiple_streams_compact MODIFY COLUMN field3 CODEC(Delta, Default);
 INSERT INTO columns_with_multiple_streams_compact VALUES(3, 3, [[3]], tuple(3, [3]));
@@ -53,4 +60,5 @@ ENGINE = MergeTree
 ORDER BY tuple();
 INSERT INTO columns_with_multiple_streams_bad_case VALUES(1), (2);
 INSERT INTO columns_with_multiple_streams_bad_case VALUES(3);
+OPTIMIZE TABLE columns_with_multiple_streams_bad_case FINAL;
 SELECT * FROM columns_with_multiple_streams_bad_case ORDER BY field0;

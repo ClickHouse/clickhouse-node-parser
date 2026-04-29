@@ -20,5 +20,6 @@ ALTER TABLE tab DROP STATISTICS a, b;
 SELECT name, column, statistics from system.parts_columns where (database = currentDatabase()) AND (table = 'tab');
 ALTER TABLE tab ADD STATISTICS a, b TYPE tdigest;
 ALTER TABLE tab MATERIALIZE STATISTICS ALL;
+OPTIMIZE TABLE tab FINAL;
 ALTER TABLE tab RENAME COLUMN b TO c;
 SELECT replaceRegexpAll(explain, '__table1\.', '') FROM (EXPLAIN actions=1 SELECT count(*) FROM tab WHERE c < 10 and a < 10) WHERE explain LIKE '%Prewhere%'; -- checks a first, then c (statistics used)

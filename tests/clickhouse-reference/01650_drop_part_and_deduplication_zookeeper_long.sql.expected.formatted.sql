@@ -15,6 +15,8 @@ ENGINE = ReplicatedMergeTree('/clickhouse/{database}/01650_drop_part_and_dedupli
 ORDER BY key
 PARTITION BY partitioner;
 
+SYSTEM STOP MERGES partitioned_table;
+
 INSERT INTO partitioned_table;
 
 INSERT INTO partitioned_table;

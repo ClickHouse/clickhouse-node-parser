@@ -18,6 +18,8 @@ SELECT generateRandomStructure(materialize(5), 42); -- {serverError ILLEGAL_COLU
 
 SELECT generateRandomStructure(5, materialize(42)); -- {serverError ILLEGAL_COLUMN}
 
+DESCRIBE TABLE generateRandom(10000000);
+
 SELECT *
 FROM generateRandom(10000000)
 LIMIT 1;

@@ -552,6 +552,14 @@
     }
   },
   {
+    "kind": "system",
+    "body": "SYSTEM sync replica shard_1.from_0"
+  },
+  {
+    "kind": "system",
+    "body": "SYSTEM sync replica shard_1.from_1"
+  },
+  {
     "kind": "createTable",
     "table": {
       "kind": "tableRef",
@@ -712,6 +720,15 @@
     "settingsAfterOrderBy": true
   },
   {
+    "kind": "detach",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "database": "shard_1",
+      "table": "to"
+    }
+  },
+  {
     "kind": "alter",
     "table": {
       "kind": "tableRef",
@@ -812,6 +829,46 @@
     "format": "Null"
   },
   {
+    "kind": "optimize",
+    "table": {
+      "kind": "tableRef",
+      "database": "shard_0",
+      "table": "from_0"
+    }
+  },
+  {
+    "kind": "optimize",
+    "table": {
+      "kind": "tableRef",
+      "database": "shard_1",
+      "table": "from_0"
+    }
+  },
+  {
+    "kind": "optimize",
+    "table": {
+      "kind": "tableRef",
+      "database": "shard_0",
+      "table": "from_1"
+    }
+  },
+  {
+    "kind": "optimize",
+    "table": {
+      "kind": "tableRef",
+      "database": "shard_1",
+      "table": "from_1"
+    }
+  },
+  {
+    "kind": "optimize",
+    "table": {
+      "kind": "tableRef",
+      "database": "shard_0",
+      "table": "to"
+    }
+  },
+  {
     "kind": "set",
     "settings": [
       {
@@ -828,6 +885,10 @@
       "-- can log Warning about metadata version on disk. It's normal situation",
       "-- and test shouldn't rarely fail because of it."
     ]
+  },
+  {
+    "kind": "system",
+    "body": "SYSTEM restart replica shard_0.to"
   },
   {
     "kind": "select",
@@ -847,5 +908,14 @@
     "leadingComments": [
       "-- Doesn't lead to test flakyness, because we don't check anything after it"
     ]
+  },
+  {
+    "kind": "attach",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "database": "shard_1",
+      "table": "to"
+    }
   }
 ]

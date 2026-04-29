@@ -11,6 +11,8 @@ PRIMARY KEY (eventType, timestamp)
 ORDER BY (eventType, timestamp, key)
 SETTINGS index_granularity = 1;
 
+SYSTEM STOP MERGES test_table;
+
 INSERT INTO test_table;
 
 INSERT INTO test_table;

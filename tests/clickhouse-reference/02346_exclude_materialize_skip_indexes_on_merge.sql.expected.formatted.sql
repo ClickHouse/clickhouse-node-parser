@@ -28,6 +28,8 @@ INSERT INTO tab SELECT
     number / 50
 FROM numbers(100);
 
+OPTIMIZE TABLE tab FINAL; -- { serverError CANNOT_PARSE_TEXT }
+
 TRUNCATE TABLE tab;
 
 CREATE VIEW explain_indexes
@@ -49,6 +51,8 @@ WHERE (like(`explain`, '%Name%'))
     OR (like(`explain`, '%Granules%'))
     OR (like(`explain`, '%Range%'));
 
+SYSTEM STOP MERGES tab;
+
 ALTER TABLE tab MODIFY SETTING exclude_materialize_skip_indexes_on_merge = 'idx_a';
 
 INSERT INTO tab SELECT
@@ -58,6 +62,8 @@ FROM numbers(100, 100);
 
 SELECT *
 FROM explain_indexes;
+
+SYSTEM START MERGES tab;
 
 ALTER TABLE tab MATERIALIZE INDEX idx_a;
 

@@ -21,6 +21,8 @@ INSERT INTO test;
 
 SET enable_lightweight_update = 1;
 
+UPDATE test SET document = '{"name":"aaa", "age":15, "country": "USA"}' WHERE id = 1;
+
 SELECT *
 FROM test
 WHERE document.name = 'aaa'

@@ -10,6 +10,8 @@ CREATE TABLE t
 ENGINE = MergeTree
 ORDER BY tuple();
 
+SYSTEM stop merges t;
+
 INSERT INTO t SELECT *
 FROM numbers_mt(1e3);
 

@@ -10,6 +10,7 @@ CREATE TABLE t_async_insert_alter (id Int64, v1 Int64) ENGINE = MergeTree ORDER 
 
 INSERT INTO t_async_insert_alter VALUES (42, 24);
 ALTER TABLE t_async_insert_alter ADD COLUMN value2 Int64;
+SYSTEM FLUSH ASYNC INSERT QUEUE t_async_insert_alter;
 SELECT * FROM t_async_insert_alter ORDER BY id;
 -- MODIFY COLUMN
 
@@ -19,5 +20,6 @@ ALTER TABLE t_async_insert_alter MODIFY COLUMN value2 String;
 
 INSERT INTO t_async_insert_alter VALUES ('100', '200', '300');
 ALTER TABLE t_async_insert_alter DROP COLUMN value2;
+SYSTEM FLUSH LOGS asynchronous_insert_log;
 SELECT query, data_kind, status FROM system.asynchronous_insert_log WHERE database = currentDatabase() AND table = 't_async_insert_alter' ORDER BY event_time_microseconds;
 DROP TABLE t_async_insert_alter;

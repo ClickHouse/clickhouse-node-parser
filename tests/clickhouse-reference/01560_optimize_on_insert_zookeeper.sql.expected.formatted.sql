@@ -25,6 +25,8 @@ PARTITION BY date;
 
 INSERT INTO empty2;
 
+SYSTEM SYNC REPLICA empty1;
+
 SELECT *
 FROM empty1
 ORDER BY key ASC;
@@ -50,3 +52,11 @@ FROM `system`.parts
 WHERE table = 'empty2'
     AND database = currentDatabase()
     AND active = 1;
+
+DETACH TABLE empty1;
+
+DETACH TABLE empty2;
+
+ATTACH TABLE empty1;
+
+ATTACH TABLE empty2;

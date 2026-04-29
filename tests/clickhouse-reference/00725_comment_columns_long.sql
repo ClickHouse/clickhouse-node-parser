@@ -11,6 +11,8 @@ CREATE TABLE check_query_comment_column
     fourth_column UInt8 COMMENT 'comment 4',
     fifth_column UInt8
   ) ENGINE = TinyLog;
+SHOW CREATE TABLE check_query_comment_column;
+DESCRIBE TABLE check_query_comment_column;
 SELECT table, name, comment
 FROM system.columns
 WHERE table = 'check_query_comment_column' AND database = currentDatabase()
@@ -49,3 +51,4 @@ ALTER TABLE check_query_comment_column
   MODIFY COLUMN first_column DEFAULT 1 COMMENT 'comment 1_3',
   MODIFY COLUMN second_column COMMENT 'comment 2_3',            -- We can't change default value of partition key.
   MODIFY COLUMN third_column DEFAULT 1 COMMENT 'comment 3_3';
+-- TODO: add here tests with ReplicatedMergeTree({database})

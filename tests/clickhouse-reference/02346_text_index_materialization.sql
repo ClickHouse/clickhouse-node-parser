@@ -29,6 +29,9 @@ SELECT trim(explain) FROM
     EXPLAIN indexes = 1 SELECT count() FROM tab WHERE text LIKE '%v322%'
 )
 WHERE explain ILIKE '%Granules%';
+CHECK TABLE tab SETTINGS check_query_single_value_result = 1;
+-- ------------------------------------------------------------
+OPTIMIZE TABLE tab FINAL;
 -- ------------------------------------------------------------
 SET mutations_sync = 2;
 ALTER TABLE tab CLEAR INDEX idx_text;

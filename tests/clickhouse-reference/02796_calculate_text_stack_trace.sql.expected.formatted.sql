@@ -5,6 +5,8 @@ SELECT
     'Hello',
     throwIf(1); -- { serverError FUNCTION_THROW_IF_VALUE_IS_NON_ZERO }
 
+SYSTEM FLUSH LOGS query_log, text_log;
+
 SELECT length(stack_trace) > 1000
 FROM `system`.query_log
 WHERE current_database = currentDatabase()

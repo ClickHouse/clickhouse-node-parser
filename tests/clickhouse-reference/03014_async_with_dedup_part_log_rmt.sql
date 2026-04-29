@@ -5,6 +5,7 @@ SET wait_for_async_insert = 1;
 SET async_insert_deduplicate = 1;
 SELECT '-- Inserted part --';
 INSERT INTO 03014_async_with_dedup_part_log VALUES (2);
+SYSTEM FLUSH LOGS part_log;
 SELECT error, count() FROM system.part_log
 WHERE table = '03014_async_with_dedup_part_log' AND database = currentDatabase() AND event_type = 'NewPart'
 GROUP BY error

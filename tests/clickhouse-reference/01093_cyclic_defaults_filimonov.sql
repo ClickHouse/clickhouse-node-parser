@@ -7,6 +7,7 @@ CREATE TABLE test
     `a4` UInt64 ALIAS a3 + 1
 )
 ENGINE = Log; -- { serverError CYCLIC_ALIASES }
+
 CREATE TABLE pythagoras
 (
     `a` Float64 DEFAULT sqrt((c * c) - (b * b)),
@@ -14,3 +15,5 @@ CREATE TABLE pythagoras
     `c` Float64 DEFAULT sqrt((a * a) + (b * b))
 )
 ENGINE = Log; -- { serverError CYCLIC_ALIASES }
+
+-- TODO: It works but should not: CREATE TABLE test (a DEFAULT b, b DEFAULT a) ENGINE = Memory

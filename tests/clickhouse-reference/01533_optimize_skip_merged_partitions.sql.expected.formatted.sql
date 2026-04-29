@@ -21,6 +21,8 @@ INSERT INTO optimize_final SELECT
     number + 5
 FROM numbers(5);
 
+OPTIMIZE TABLE optimize_final FINAL;
+
 INSERT INTO optimize_final SELECT
     toDate('2000-01-01'),
     number

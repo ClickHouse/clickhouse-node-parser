@@ -30,6 +30,8 @@ FROM table_01323_many_parts
 LIMIT 10
 FORMAT Null;
 
+SYSTEM flush logs query_log;
+
 SELECT peak_threads_usage <= 4
 FROM `system`.query_log
 WHERE current_database = currentDatabase()

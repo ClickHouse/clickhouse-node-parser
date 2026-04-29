@@ -45,6 +45,8 @@ SELECT
     n::Decimal128(20) / 123456789012345 AS d128
 FROM numbers(10000);
 
+DESCRIBE TABLE file('02892.orc');
+
 -- Go over all types individually
 -- { echoOn }
 SELECT
@@ -728,4 +730,4 @@ SELECT
     min(string_or_null),
     max(string_or_null)
 FROM file('02892.orc', ORC, 'number UInt64, string_or_null LowCardinality(Nullable(String))')
-WHERE (like(string_or_null, 'I am%'));
+WHERE (like(string_or_null, 'I am%')); -- { echoOff }

@@ -118,6 +118,8 @@ ORDER BY x ASC;
 
 DROP TABLE t_nullable_keys_6;
 
+SYSTEM FLUSH LOGS query_log;
+
 SELECT
     splitByChar('.', tables[1])[2] AS table,
     ProfileEvents['AggregationOptimizedEqualRangesOfKeys'] > 0

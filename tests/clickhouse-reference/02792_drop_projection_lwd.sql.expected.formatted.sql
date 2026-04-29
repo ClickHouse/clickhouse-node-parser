@@ -17,8 +17,16 @@ INSERT INTO t_projections_lwd SELECT
     number
 FROM numbers(100);
 
+-- LWD does not work, as expected
+DELETE FROM t_projections_lwd WHERE a = 1; -- { serverError SUPPORT_IS_DISABLED }
+
+KILL MUTATION WHERE database = currentDatabase()
+AND table = 't_projections_lwd' SYNC FORMAT Null;
+
 -- drop projection
 ALTER TABLE t_projections_lwd DROP PROJECTION p;
+
+DELETE FROM t_projections_lwd WHERE a = 2;
 
 SELECT count()
 FROM t_projections_lwd;

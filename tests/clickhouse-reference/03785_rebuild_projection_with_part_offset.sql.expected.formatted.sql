@@ -31,4 +31,6 @@ INNER JOIN mergeTreeProjection(currentDatabase(), test, p) AS r
     USING (a)
 SETTINGS enable_analyzer = 1;
 
+OPTIMIZE TABLE test FINAL;
+
 DROP TABLE test;

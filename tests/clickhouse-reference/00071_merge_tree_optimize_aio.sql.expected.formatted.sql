@@ -56,6 +56,8 @@ LIMIT 50;
 
 SET min_bytes_to_use_direct_io = 8192;
 
+OPTIMIZE TABLE hits_snippet;
+
 SELECT
     EventTime,
     EventDate,

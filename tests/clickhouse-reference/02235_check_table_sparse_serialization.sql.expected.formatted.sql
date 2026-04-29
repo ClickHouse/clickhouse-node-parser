@@ -8,6 +8,8 @@ ENGINE = MergeTree
 ORDER BY tuple()
 SETTINGS ratio_of_defaults_for_sparse_serialization = 0.9;
 
+SYSTEM STOP MERGES t_sparse_02235;
+
 INSERT INTO t_sparse_02235 SELECT 1
 FROM numbers(1000);
 
@@ -24,5 +26,7 @@ WHERE database = currentDatabase()
 ORDER BY
     name ASC,
     column ASC;
+
+CHECK TABLE t_sparse_02235 SETTINGS check_query_single_value_result = 0, max_threads = 1;
 
 DROP TABLE t_sparse_02235;

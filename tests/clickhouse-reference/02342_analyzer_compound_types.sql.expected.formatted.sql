@@ -39,18 +39,37 @@ INSERT INTO test_table;
 
 SELECT '--';
 
+DESCRIBE TABLE (SELECT *
+FROM test_table);
+
 SELECT *
 FROM test_table;
+
+DESCRIBE TABLE (SELECT
+    id,
+    value
+FROM test_table);
 
 SELECT
     id,
     value
 FROM test_table;
 
+DESCRIBE TABLE (SELECT
+    value.value_0_level_0,
+    value.value_1_level_0
+FROM test_table);
+
 SELECT
     value.value_0_level_0,
     value.value_1_level_0
 FROM test_table;
+
+DESCRIBE TABLE (SELECT
+    value AS alias_value,
+    alias_value.value_0_level_0,
+    alias_value.value_1_level_0
+FROM test_table);
 
 SELECT
     value AS alias_value,
@@ -58,26 +77,53 @@ SELECT
     alias_value.value_1_level_0
 FROM test_table;
 
+DESCRIBE TABLE (SELECT
+    value AS alias_value,
+    alias_value.*
+FROM test_table);
+
 SELECT
     value AS alias_value,
     alias_value.*
 FROM test_table;
+
+DESCRIBE TABLE (SELECT
+    value AS alias_value,
+    alias_value.* APPLY(toString)
+FROM test_table);
 
 SELECT
     value AS alias_value,
     alias_value.* APPLY(toString)
 FROM test_table;
 
+DESCRIBE TABLE (SELECT value.*
+FROM test_table);
+
 SELECT value.*
 FROM test_table;
 
+DESCRIBE TABLE (SELECT value.* APPLY(toString)
+FROM test_table);
+
 SELECT value.* APPLY(toString)
 FROM test_table;
+
+DESCRIBE TABLE (SELECT
+    value.value_0_level_0.value_0_level_1,
+    value.value_0_level_0.value_1_level_1
+FROM test_table);
 
 SELECT
     value.value_0_level_0.value_0_level_1,
     value.value_0_level_0.value_1_level_1
 FROM test_table;
+
+DESCRIBE TABLE (SELECT
+    value.value_0_level_0 AS alias_value,
+    alias_value.value_0_level_1,
+    alias_value.value_1_level_1
+FROM test_table);
 
 SELECT
     value.value_0_level_0 AS alias_value,
@@ -85,18 +131,34 @@ SELECT
     alias_value.value_1_level_1
 FROM test_table;
 
+DESCRIBE TABLE (SELECT
+    value.value_0_level_0 AS alias_value,
+    alias_value.*
+FROM test_table);
+
 SELECT
     value.value_0_level_0 AS alias_value,
     alias_value.*
 FROM test_table;
+
+DESCRIBE TABLE (SELECT
+    value.value_0_level_0 AS alias_value,
+    alias_value.* APPLY(toString)
+FROM test_table);
 
 SELECT
     value.value_0_level_0 AS alias_value,
     alias_value.* APPLY(toString)
 FROM test_table;
 
+DESCRIBE TABLE (SELECT value.value_0_level_0.*
+FROM test_table);
+
 SELECT value.value_0_level_0.*
 FROM test_table;
+
+DESCRIBE TABLE (SELECT value.value_0_level_0.* APPLY(toString)
+FROM test_table);
 
 SELECT value.value_0_level_0.* APPLY(toString)
 FROM test_table;
@@ -113,16 +175,32 @@ ORDER BY id;
 
 INSERT INTO test_table;
 
+DESCRIBE TABLE (SELECT
+    value.value_0_level_0 AS value_alias,
+    value_alias.value_0_level_1,
+    value_alias.value_1_level_1
+FROM test_table);
+
 SELECT
     value.value_0_level_0 AS value_alias,
     value_alias.value_0_level_1,
     value_alias.value_1_level_1
 FROM test_table;
 
+DESCRIBE TABLE (SELECT
+    value.value_0_level_0 AS value_alias,
+    value_alias.*
+FROM test_table);
+
 SELECT
     value.value_0_level_0 AS value_alias,
     value_alias.*
 FROM test_table;
+
+DESCRIBE TABLE (SELECT
+    value.value_0_level_0 AS value_alias,
+    value_alias.* APPLY(toString)
+FROM test_table);
 
 SELECT
     value.value_0_level_0 AS value_alias,

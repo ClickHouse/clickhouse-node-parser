@@ -70,6 +70,8 @@ ORDER BY
     _table ASC,
     n ASC;
 
+SHOW CREATE TABLE `01902_db_repr`.t_merge;
+
 SELECT
     _database,
     _table,
@@ -139,6 +141,8 @@ ORDER BY
     _database ASC,
     _table ASC,
     n ASC;
+
+SHOW CREATE TABLE `01902_db_repr`.t_merge_1;
 
 SELECT
     _database,

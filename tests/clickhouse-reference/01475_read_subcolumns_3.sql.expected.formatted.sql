@@ -18,6 +18,11 @@ SELECT count()
 FROM null_subcolumns
 PREWHERE n.`null`;
 
+-- Check, that subcolumns will be available after restart.
+DETACH TABLE null_subcolumns;
+
+ATTACH TABLE null_subcolumns;
+
 DROP TABLE null_subcolumns;
 
 DROP TABLE IF EXISTS map_subcolumns;
@@ -47,6 +52,10 @@ WHERE arrayMax(m.values) > 3;
 SELECT count()
 FROM map_subcolumns
 PREWHERE arrayMax(m.values) > 3;
+
+DETACH TABLE map_subcolumns;
+
+ATTACH TABLE map_subcolumns;
 
 SELECT
     id,

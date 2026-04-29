@@ -51,6 +51,10 @@ CREATE TABLE distributed_tf AS cluster(concat('test', '_', 'shard_localhost'), '
 
 INSERT INTO buffer;
 
+DETACH TABLE buffer; -- trigger flushing
+
+ATTACH TABLE buffer;
+
 CREATE TABLE url
 (
     n UInt64,
@@ -89,6 +93,26 @@ LAYOUT(CACHE(SIZE_IN_CELLS 1));
 -- TODO make fuzz test from this
 CREATE TABLE rich_syntax AS remote('localhos{x|y|t}', cluster(concat('test', '_', 'shard_localhost'), remote('127.0.0.{1..4}', if(toString(40 + 2) NOT IN ('hello', dictGetString(concat(currentDatabase(), '.dict'), 'col', toUInt64('0001'))), currentDatabase(), 'FAIL'), extract('123view456', '[a-z]+'))));
 
+SHOW CREATE TABLE file;
+
+SHOW CREATE TABLE buffer;
+
+SHOW CREATE TABLE merge;
+
+SHOW CREATE TABLE merge_tf;
+
+SHOW CREATE TABLE distributed;
+
+SHOW CREATE TABLE distributed_tf;
+
+SHOW CREATE TABLE url;
+
+SHOW CREATE TABLE rich_syntax;
+
+SHOW CREATE VIEW view;
+
+SHOW CREATE TABLE dict;
+
 -- remote(localhost) --> cluster(test_shard_localhost) |-> remote(127.0.0.1) --> view |-> subquery --> merge |-> distributed --> file (1)
 --                                                     |                              |                      |-> distributed_tf -> buffer (1) -> file (1)
 --                                                     |                              |-> file (1)
@@ -100,6 +124,9 @@ SETTINGS enable_parallel_replicas = 0;
 SELECT sum(n)
 FROM rich_syntax
 SETTINGS serialize_query_plan = 0;
+
+-- Clear cache to avoid future errors in the logs
+SYSTEM CLEAR DNS CACHE;
 
 DROP TABLE file;
 

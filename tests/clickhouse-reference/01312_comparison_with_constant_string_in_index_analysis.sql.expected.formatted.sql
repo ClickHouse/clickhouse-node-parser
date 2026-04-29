@@ -18,6 +18,8 @@ SETTINGS index_granularity = 1000, index_granularity_bytes = '10Mi';
 INSERT INTO test SELECT *
 FROM numbers(1000000);
 
+OPTIMIZE TABLE test;
+
 SET max_rows_to_read = 2000;
 
 SELECT count()

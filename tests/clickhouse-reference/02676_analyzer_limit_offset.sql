@@ -3,6 +3,7 @@ DROP TABLE IF EXISTS test;
 CREATE TABLE test (i UInt64) Engine = MergeTree() order by i;
 INSERT INTO test SELECT number FROM numbers(100);
 INSERT INTO test SELECT number FROM numbers(10,100);
+OPTIMIZE TABLE test FINAL;
 -- Only set limit
 SET limit = 5;
 SELECT * FROM test ORDER BY i; -- 5 rows

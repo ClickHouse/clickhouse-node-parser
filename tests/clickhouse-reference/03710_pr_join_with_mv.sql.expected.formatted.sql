@@ -77,6 +77,25 @@ FROM numbers(10);
 
 SET enable_parallel_replicas = 1, max_parallel_replicas = 3, cluster_for_parallel_replicas = 'test_cluster_one_shard_three_replicas_localhost', parallel_replicas_for_non_replicated_merge_tree = 1;
 
+(SELECT *
+FROM
+    mv
+INNER JOIN n3
+    ON mv.k = n3.key
+ORDER BY
+    mv.k ASC,
+    n3.key ASC)
+EXCEPT
+(SELECT *
+FROM
+    mv
+INNER JOIN n3
+    ON mv.k = n3.key
+ORDER BY
+    mv.k ASC,
+    n3.key ASC
+SETTINGS enable_parallel_replicas = 0);
+
 -- materailzed view with inner table
 CREATE MATERIALIZED VIEW mv2
 AS
@@ -89,6 +108,25 @@ FROM
 INNER JOIN n2
     ON n1.key = n2.key
 ORDER BY n1.key ASC;
+
+(SELECT *
+FROM
+    mv2
+INNER JOIN n3
+    ON mv2.k = n3.key
+ORDER BY
+    mv2.k ASC,
+    n3.key ASC)
+EXCEPT
+(SELECT *
+FROM
+    mv2
+INNER JOIN n3
+    ON mv2.k = n3.key
+ORDER BY
+    mv2.k ASC,
+    n3.key ASC
+SETTINGS enable_parallel_replicas = 0);
 
 DROP TABLE mv2;
 

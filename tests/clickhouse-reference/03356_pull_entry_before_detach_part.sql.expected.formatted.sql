@@ -11,6 +11,10 @@ CREATE TABLE t1
 ENGINE = ReplicatedMergeTree('/clickhouse/tables/{database}/test_03356/t1', '1')
 ORDER BY tuple();
 
+SYSTEM STOP PULLING REPLICATION LOG t1;
+
 INSERT INTO t1;
+
+SYSTEM START PULLING REPLICATION LOG t1;
 
 ALTER TABLE t1 DROP PART 'all_0_0_0';

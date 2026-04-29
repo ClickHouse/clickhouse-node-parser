@@ -5,6 +5,7 @@ set log_queries=1;
 -- fast -- no logging
 --
 select '01546_log_queries_min_query_duration_ms-fast' format Null;
+system flush logs query_log, query_thread_log;
 -- No logging, since the query is fast enough.
 select count()
 from system.query_log

@@ -105,6 +105,8 @@ SELECT
     reinterpret(toDecimal64(5, 2), 'Decimal64(2)'),
     reinterpret('1', 'Decimal64(2)');
 
+;
+
 SELECT
     reinterpret(toDecimal128(5, 2), 'Decimal128(2)'),
     reinterpret('1', 'Decimal128(2)');

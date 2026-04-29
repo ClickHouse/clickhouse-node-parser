@@ -1271,6 +1271,8 @@ export type UnionStatement = {
   unionMode?: 'DISTINCT';
   /** Query execution settings. */
   settings?: SettingItem[];
+  /** True when this union was wrapped in parentheses. */
+  parenthesized?: boolean;
 } & TrailingClauses &
   NodeMetadata;
 
@@ -1288,6 +1290,8 @@ export type IntersectStatement = {
   left: QueryStatement;
   /** The right query. */
   right: QueryStatement;
+  /** True when this intersect/except was wrapped in parentheses. */
+  parenthesized?: boolean;
 } & TrailingClauses &
   NodeMetadata;
 
@@ -1616,6 +1620,8 @@ type CreateCommonFields = {
   orReplace?: boolean;
   ifNotExists?: boolean;
   onCluster?: string;
+  /** `true` when the statement was written as `ATTACH` rather than `CREATE`. */
+  attach?: boolean;
 } & NodeMetadata;
 
 export type TableOrderByItem = { expr: Expression; dir?: 'ASC' | 'DESC' };
@@ -1659,6 +1665,8 @@ export type CreateTableStatement = {
   asQuery?: QueryStatement;
   asTableFunction?: { name: string; args: Expression[] };
   empty?: boolean;
+  /** ATTACH TABLE ... FROM 'path' — only valid with attach: true. */
+  attachFromPath?: string;
 } & StorageClauses &
   CreateCommonFields;
 
@@ -1713,6 +1721,7 @@ export type CreateIndexStatement = {
 /** `CREATE DICTIONARY`. */
 export type CreateDictionaryStatement = {
   kind: 'createDictionary';
+  replace?: boolean;
   table: TableRef;
   dictAttrs: {
     name: string;
@@ -2205,6 +2214,7 @@ export type ParallelWithStatement = {
     | TruncateStatement
     | DropStatement
     | AlterStatement
+    | OptimizeStatement
   )[];
 } & NodeMetadata;
 
@@ -2292,6 +2302,201 @@ export type DropStatement = {
 } & NodeMetadata;
 
 /**
+ * OPTIMIZE TABLE: forces merges/deduplication.
+ *
+ * @example `OPTIMIZE TABLE t FINAL DEDUPLICATE BY a`
+ */
+export type OptimizeStatement = {
+  kind: 'optimize';
+  table: TableRef;
+  onCluster?: string;
+  /** PARTITION expr | PARTITION ID 'id' | PARTITION ALL. */
+  partition?: { kind: 'expr'; expr: Expression } | { kind: 'id'; id: string } | { kind: 'all' };
+  final?: boolean;
+  cleanup?: boolean;
+  deduplicate?: boolean;
+  /** Expressions for `DEDUPLICATE BY (...)`. */
+  deduplicateBy?: Expression[];
+  settings?: SettingItem[];
+} & NodeMetadata;
+
+/**
+ * DESC/DESCRIBE TABLE: returns table columns/types.
+ *
+ * @example `DESC TABLE t`
+ * @example `DESC (SELECT 1)`
+ */
+export type DescribeStatement = {
+  kind: 'describe';
+  target:
+    | { kind: 'table'; table: TableRef }
+    | { kind: 'function'; func: TableFunctionRef }
+    | { kind: 'subquery'; query: QueryStatement };
+  final?: boolean;
+  format?: string;
+  settings?: SettingItem[];
+  /** True when SETTINGS appeared before FORMAT in source. */
+  settingsBeforeFormat?: boolean;
+} & NodeMetadata;
+
+/**
+ * SHOW CREATE for tables, databases, views, dictionaries.
+ *
+ * @example `SHOW CREATE TABLE t`
+ */
+export type ShowCreateStatement = {
+  kind: 'showCreate';
+  targetType: 'TABLE' | 'DATABASE' | 'VIEW' | 'DICTIONARY';
+  /** Set for TABLE/VIEW/DICTIONARY. */
+  table?: TableRef;
+  /** Set for DATABASE. */
+  database?: Identifier;
+  format?: string;
+  settings?: SettingItem[];
+} & NodeMetadata;
+
+/**
+ * DETACH TABLE/VIEW/DICTIONARY/DATABASE.
+ *
+ * @example `DETACH TABLE t`
+ */
+export type DetachStatement = {
+  kind: 'detach';
+  targetType: 'TABLE' | 'VIEW' | 'DICTIONARY' | 'DATABASE';
+  table?: TableRef;
+  database?: Identifier;
+  ifExists?: boolean;
+  onCluster?: string;
+  permanently?: boolean;
+  sync?: boolean;
+} & NodeMetadata;
+
+/**
+ * DELETE FROM table WHERE expr — lightweight delete.
+ *
+ * @example `DELETE FROM t WHERE x = 1`
+ */
+export type DeleteStatement = {
+  kind: 'delete';
+  table: TableRef;
+  onCluster?: string;
+  partition?: { kind: 'expr'; expr: Expression } | { kind: 'id'; id: string };
+  where: Expression;
+  settings?: SettingItem[];
+} & NodeMetadata;
+
+/**
+ * UPDATE table SET col = expr [, ...] WHERE expr — lightweight update.
+ *
+ * @example `UPDATE t SET a = a + 1 WHERE b > 0`
+ */
+export type UpdateStatement = {
+  kind: 'update';
+  table: TableRef;
+  onCluster?: string;
+  assignments: { column: string; expr: Expression }[];
+  where: Expression;
+  settings?: SettingItem[];
+} & NodeMetadata;
+
+/**
+ * CHECK TABLE/DATABASE/ALL TABLES.
+ *
+ * @example `CHECK TABLE t`
+ * @example `CHECK ALL TABLES`
+ */
+export type CheckStatement = {
+  kind: 'check';
+  targetType: 'TABLE' | 'DATABASE' | 'ALL';
+  table?: TableRef;
+  database?: Identifier;
+  /** PARTITION expr or PART 'id' (ignored in explain output). */
+  partition?: { kind: 'expr'; expr: Expression } | { kind: 'id'; id: string };
+  settings?: SettingItem[];
+  /** Optional FORMAT clause name. */
+  format?: string;
+} & NodeMetadata;
+
+/**
+ * ATTACH TABLE/VIEW/DICTIONARY/DATABASE.
+ *
+ * @example `ATTACH TABLE t`
+ */
+export type AttachStatement = {
+  kind: 'attach';
+  targetType: 'TABLE' | 'VIEW' | 'DICTIONARY' | 'DATABASE';
+  table?: TableRef;
+  database?: Identifier;
+  ifNotExists?: boolean;
+  onCluster?: string;
+  uuid?: string;
+} & NodeMetadata;
+
+/**
+ * RENAME TABLE/DATABASE/DICTIONARY src TO dst [, ...].
+ *
+ * @example `RENAME TABLE a TO b, c TO d`
+ */
+export type RenameStatement = {
+  kind: 'rename';
+  targetType: 'TABLE' | 'DATABASE' | 'DICTIONARY';
+  /** One or more `from -> to` pairs. */
+  pairs: Array<{ from: TableRef; to: TableRef }>;
+  ifExists?: boolean;
+  onCluster?: string;
+  exchange?: boolean;
+  settings?: SettingItem[];
+} & NodeMetadata;
+
+/**
+ * EXISTS TABLE/VIEW/DATABASE/DICTIONARY.
+ *
+ * @example `EXISTS TABLE t`
+ */
+export type ExistsStatement = {
+  kind: 'exists';
+  targetType: 'TABLE' | 'VIEW' | 'DATABASE' | 'DICTIONARY';
+  table?: TableRef;
+  database?: Identifier;
+  settings?: SettingItem[];
+} & NodeMetadata;
+
+/**
+ * EXECUTE AS user <statement> — run a statement under a different user's permissions.
+ *
+ * @example `EXECUTE AS some_user ALTER TABLE t UPDATE x = 1 WHERE y = 0`
+ */
+export type ExecuteAsStatement = {
+  kind: 'executeAs';
+  user: string;
+  statement: Statement;
+} & NodeMetadata;
+
+/**
+ * KILL QUERY or KILL MUTATION.
+ *
+ * @example `KILL QUERY WHERE query_id = 'abc' SYNC`
+ */
+export type KillStatement = {
+  kind: 'kill';
+  target: 'QUERY' | 'MUTATION';
+  onCluster?: string;
+  where: Expression;
+  mode?: 'SYNC' | 'ASYNC' | 'TEST';
+  settings?: SettingItem[];
+  format?: string;
+} & NodeMetadata;
+
+/**
+ * An empty statement — a bare `;` between real statements. Preserved so AST
+ * indices align with ClickHouse's EXPLAIN AST output (which emits an error
+ * placeholder for the empty statement).
+ */
+export type EmptyStatement = {
+  kind: 'empty';
+} & NodeMetadata;
+
+/**
  * Union of all top-level statement types.
  *
  * Use the `kind` field to discriminate between variants.
@@ -2309,7 +2514,20 @@ export type Statement =
   | ParallelWithStatement
   | InsertStatement
   | TruncateStatement
-  | DropStatement;
+  | DropStatement
+  | OptimizeStatement
+  | DescribeStatement
+  | ShowCreateStatement
+  | DetachStatement
+  | DeleteStatement
+  | UpdateStatement
+  | CheckStatement
+  | AttachStatement
+  | RenameStatement
+  | ExistsStatement
+  | KillStatement
+  | ExecuteAsStatement
+  | EmptyStatement;
 
 // ── AST node kind map ────────────────────────────────────────────────────────
 
@@ -2379,6 +2597,19 @@ export interface ASTNodeKindMap {
   insert: InsertStatement;
   truncate: TruncateStatement;
   drop: DropStatement;
+  optimize: OptimizeStatement;
+  describe: DescribeStatement;
+  showCreate: ShowCreateStatement;
+  detach: DetachStatement;
+  delete: DeleteStatement;
+  update: UpdateStatement;
+  check: CheckStatement;
+  attach: AttachStatement;
+  rename: RenameStatement;
+  exists: ExistsStatement;
+  kill: KillStatement;
+  executeAs: ExecuteAsStatement;
+  empty: EmptyStatement;
   columnDef: ColumnDef;
   constraintDef: ConstraintDef;
   indexDef: IndexDef;
@@ -2441,6 +2672,7 @@ export const UnionStatementSchema: z.ZodType<UnionStatement> = z.lazy(() =>
     queries: z.array(QueryStatementSchema),
     unionMode: z.literal('DISTINCT').optional(),
     settings: z.array(SettingItemSchema).optional(),
+    parenthesized: z.boolean().optional(),
     ...TrailingClausesFields,
     ...ExprMetadataFields,
   }),
@@ -2453,6 +2685,7 @@ export const IntersectStatementSchema: z.ZodType<IntersectStatement> = z.lazy(()
     op: z.union([z.literal('INTERSECT'), z.literal('EXCEPT')]),
     left: QueryStatementSchema,
     right: QueryStatementSchema,
+    parenthesized: z.boolean().optional(),
     ...TrailingClausesFields,
     ...ExprMetadataFields,
   }),
@@ -2810,6 +3043,7 @@ const CreateCommonFields = {
   orReplace: z.boolean().optional(),
   ifNotExists: z.boolean().optional(),
   onCluster: z.string().optional(),
+  attach: z.boolean().optional(),
   ...ExprMetadataFields,
 };
 
@@ -2826,6 +3060,7 @@ export const CreateTableStatementSchema: z.ZodType<CreateTableStatement> = z.laz
     asQuery: QueryStatementSchema.optional(),
     asTableFunction: z.object({ name: z.string(), args: z.array(ExpressionSchema) }).optional(),
     empty: z.boolean().optional(),
+    attachFromPath: z.string().optional(),
     ...StorageClausesFields,
     ...CreateCommonFields,
   }),
@@ -2893,6 +3128,7 @@ export const CreateIndexStatementSchema: z.ZodType<CreateIndexStatement> = z.laz
 export const CreateDictionaryStatementSchema: z.ZodType<CreateDictionaryStatement> = z.lazy(() =>
   z.object({
     kind: z.literal('createDictionary'),
+    replace: z.boolean().optional(),
     table: TableRefSchema,
     dictAttrs: z.array(
       z.object({
@@ -3326,6 +3562,7 @@ export const ParallelWithStatementSchema: z.ZodType<ParallelWithStatement> = z.l
         TruncateStatementSchema,
         DropStatementSchema,
         AlterStatementSchema,
+        OptimizeStatementSchema,
       ]),
     ),
     ...ExprMetadataFields,
@@ -3388,6 +3625,195 @@ export const DropStatementSchema: z.ZodType<DropStatement> = z.lazy(() =>
   }),
 );
 
+/** Zod schema for {@link OptimizeStatement}. */
+export const OptimizeStatementSchema: z.ZodType<OptimizeStatement> = z.lazy(() =>
+  z.object({
+    kind: z.literal('optimize'),
+    table: TableRefSchema,
+    onCluster: z.string().optional(),
+    partition: z
+      .union([
+        z.object({ kind: z.literal('expr'), expr: ExpressionSchema }),
+        z.object({ kind: z.literal('id'), id: z.string() }),
+        z.object({ kind: z.literal('all') }),
+      ])
+      .optional(),
+    final: z.boolean().optional(),
+    cleanup: z.boolean().optional(),
+    deduplicate: z.boolean().optional(),
+    deduplicateBy: z.array(ExpressionSchema).optional(),
+    settings: z.array(SettingItemSchema).optional(),
+    ...ExprMetadataFields,
+  }),
+);
+
+/** Zod schema for {@link DescribeStatement}. */
+export const DescribeStatementSchema: z.ZodType<DescribeStatement> = z.lazy(() =>
+  z.object({
+    kind: z.literal('describe'),
+    target: z.union([
+      z.object({ kind: z.literal('table'), table: TableRefSchema }),
+      z.object({ kind: z.literal('function'), func: TableFunctionRefSchema }),
+      z.object({ kind: z.literal('subquery'), query: QueryStatementSchema }),
+    ]),
+    final: z.boolean().optional(),
+    format: z.string().optional(),
+    settings: z.array(SettingItemSchema).optional(),
+    settingsBeforeFormat: z.boolean().optional(),
+    ...ExprMetadataFields,
+  }),
+);
+
+/** Zod schema for {@link ShowCreateStatement}. */
+export const ShowCreateStatementSchema: z.ZodType<ShowCreateStatement> = z.lazy(() =>
+  z.object({
+    kind: z.literal('showCreate'),
+    targetType: z.enum(['TABLE', 'DATABASE', 'VIEW', 'DICTIONARY']),
+    table: TableRefSchema.optional(),
+    database: IdentifierSchema.optional(),
+    format: z.string().optional(),
+    settings: z.array(SettingItemSchema).optional(),
+    ...ExprMetadataFields,
+  }),
+);
+
+/** Zod schema for {@link DetachStatement}. */
+export const DetachStatementSchema: z.ZodType<DetachStatement> = z.lazy(() =>
+  z.object({
+    kind: z.literal('detach'),
+    targetType: z.enum(['TABLE', 'VIEW', 'DICTIONARY', 'DATABASE']),
+    table: TableRefSchema.optional(),
+    database: IdentifierSchema.optional(),
+    ifExists: z.boolean().optional(),
+    onCluster: z.string().optional(),
+    permanently: z.boolean().optional(),
+    sync: z.boolean().optional(),
+    ...ExprMetadataFields,
+  }),
+);
+
+/** Zod schema for {@link DeleteStatement}. */
+export const DeleteStatementSchema: z.ZodType<DeleteStatement> = z.lazy(() =>
+  z.object({
+    kind: z.literal('delete'),
+    table: TableRefSchema,
+    onCluster: z.string().optional(),
+    partition: z
+      .union([
+        z.object({ kind: z.literal('expr'), expr: ExpressionSchema }),
+        z.object({ kind: z.literal('id'), id: z.string() }),
+      ])
+      .optional(),
+    where: ExpressionSchema,
+    settings: z.array(SettingItemSchema).optional(),
+    ...ExprMetadataFields,
+  }),
+);
+
+/** Zod schema for {@link UpdateStatement}. */
+export const UpdateStatementSchema: z.ZodType<UpdateStatement> = z.lazy(() =>
+  z.object({
+    kind: z.literal('update'),
+    table: TableRefSchema,
+    onCluster: z.string().optional(),
+    assignments: z.array(z.object({ column: z.string(), expr: ExpressionSchema })),
+    where: ExpressionSchema,
+    settings: z.array(SettingItemSchema).optional(),
+    ...ExprMetadataFields,
+  }),
+);
+
+/** Zod schema for {@link CheckStatement}. */
+export const CheckStatementSchema: z.ZodType<CheckStatement> = z.lazy(() =>
+  z.object({
+    kind: z.literal('check'),
+    targetType: z.enum(['TABLE', 'DATABASE', 'ALL']),
+    table: TableRefSchema.optional(),
+    database: IdentifierSchema.optional(),
+    partition: z
+      .union([
+        z.object({ kind: z.literal('expr'), expr: ExpressionSchema }),
+        z.object({ kind: z.literal('id'), id: z.string() }),
+      ])
+      .optional(),
+    settings: z.array(SettingItemSchema).optional(),
+    format: z.string().optional(),
+    ...ExprMetadataFields,
+  }),
+);
+
+/** Zod schema for {@link AttachStatement}. */
+export const AttachStatementSchema: z.ZodType<AttachStatement> = z.lazy(() =>
+  z.object({
+    kind: z.literal('attach'),
+    targetType: z.enum(['TABLE', 'VIEW', 'DICTIONARY', 'DATABASE']),
+    table: TableRefSchema.optional(),
+    database: IdentifierSchema.optional(),
+    ifNotExists: z.boolean().optional(),
+    onCluster: z.string().optional(),
+    uuid: z.string().optional(),
+    ...ExprMetadataFields,
+  }),
+);
+
+/** Zod schema for {@link RenameStatement}. */
+export const RenameStatementSchema: z.ZodType<RenameStatement> = z.lazy(() =>
+  z.object({
+    kind: z.literal('rename'),
+    targetType: z.enum(['TABLE', 'DATABASE', 'DICTIONARY']),
+    pairs: z.array(z.object({ from: TableRefSchema, to: TableRefSchema })),
+    ifExists: z.boolean().optional(),
+    onCluster: z.string().optional(),
+    exchange: z.boolean().optional(),
+    settings: z.array(SettingItemSchema).optional(),
+    ...ExprMetadataFields,
+  }),
+);
+
+/** Zod schema for {@link ExistsStatement}. */
+export const ExistsStatementSchema: z.ZodType<ExistsStatement> = z.lazy(() =>
+  z.object({
+    kind: z.literal('exists'),
+    targetType: z.enum(['TABLE', 'VIEW', 'DATABASE', 'DICTIONARY']),
+    table: TableRefSchema.optional(),
+    database: IdentifierSchema.optional(),
+    settings: z.array(SettingItemSchema).optional(),
+    ...ExprMetadataFields,
+  }),
+);
+
+/** Zod schema for {@link KillStatement}. */
+export const KillStatementSchema: z.ZodType<KillStatement> = z.lazy(() =>
+  z.object({
+    kind: z.literal('kill'),
+    target: z.enum(['QUERY', 'MUTATION']),
+    onCluster: z.string().optional(),
+    where: ExpressionSchema,
+    mode: z.enum(['SYNC', 'ASYNC', 'TEST']).optional(),
+    settings: z.array(SettingItemSchema).optional(),
+    format: z.string().optional(),
+    ...ExprMetadataFields,
+  }),
+);
+
+/** Zod schema for {@link ExecuteAsStatement}. */
+export const ExecuteAsStatementSchema: z.ZodType<ExecuteAsStatement> = z.lazy(() =>
+  z.object({
+    kind: z.literal('executeAs'),
+    user: z.string(),
+    statement: StatementSchema,
+    ...ExprMetadataFields,
+  }),
+);
+
+/** Zod schema for {@link EmptyStatement}. */
+export const EmptyStatementSchema: z.ZodType<EmptyStatement> = z.lazy(() =>
+  z.object({
+    kind: z.literal('empty'),
+    ...ExprMetadataFields,
+  }),
+);
+
 /** Zod schema for {@link Statement}. */
 export const StatementSchema: z.ZodType<Statement> = z.lazy(() =>
   z.union([
@@ -3406,6 +3832,19 @@ export const StatementSchema: z.ZodType<Statement> = z.lazy(() =>
     InsertStatementSchema,
     TruncateStatementSchema,
     DropStatementSchema,
+    OptimizeStatementSchema,
+    DescribeStatementSchema,
+    ShowCreateStatementSchema,
+    DetachStatementSchema,
+    DeleteStatementSchema,
+    UpdateStatementSchema,
+    CheckStatementSchema,
+    AttachStatementSchema,
+    RenameStatementSchema,
+    ExistsStatementSchema,
+    KillStatementSchema,
+    ExecuteAsStatementSchema,
+    EmptyStatementSchema,
   ]),
 );
 

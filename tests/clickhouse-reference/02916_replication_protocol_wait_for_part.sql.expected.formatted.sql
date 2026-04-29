@@ -22,6 +22,8 @@ INSERT INTO tableIn;
 
 INSERT INTO tableIn;
 
+SYSTEM sync replica tableOut;
+
 SELECT count()
 FROM tableOut;
 

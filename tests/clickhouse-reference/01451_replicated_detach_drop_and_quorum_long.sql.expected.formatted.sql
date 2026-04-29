@@ -25,6 +25,8 @@ SETTINGS max_replicated_merges_in_queue = 0;
 
 INSERT INTO replica1 SETTINGS insert_keeper_fault_injection_probability = 0;
 
+SYSTEM SYNC REPLICA replica2;
+
 SELECT name
 FROM `system`.parts
 WHERE table = 'replica2'

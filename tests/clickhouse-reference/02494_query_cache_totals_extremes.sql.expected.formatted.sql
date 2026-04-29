@@ -1,3 +1,7 @@
+-- Tags: no-parallel
+-- Tag no-parallel: Messes with internal cache
+SYSTEM CLEAR QUERY CACHE;
+
 DROP TABLE IF EXISTS tbl;
 
 CREATE TABLE tbl

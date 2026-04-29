@@ -31,6 +31,8 @@ WHERE database = 'memory_db';
 
 SET use_query_condition_cache = 1;
 
+SYSTEM CLEAR QUERY CONDITION CACHE;
+
 SELECT count(*)
 FROM `system`.query_condition_cache; -- no entry
 

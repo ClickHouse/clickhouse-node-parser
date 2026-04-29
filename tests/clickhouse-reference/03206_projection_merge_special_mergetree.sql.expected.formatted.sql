@@ -18,6 +18,8 @@ INSERT INTO tp SELECT
     1
 FROM numbers(3);
 
+OPTIMIZE TABLE tp DEDUPLICATE; -- { serverError SUPPORT_IS_DISABLED }
+
 DROP TABLE tp;
 
 CREATE TABLE tp
@@ -73,6 +75,8 @@ CREATE TABLE tp
 ENGINE = ReplacingMergeTree
 ORDER BY type
 SETTINGS deduplicate_merge_projection_mode = 'drop';
+
+OPTIMIZE TABLE tp FINAL;
 
 -- expecting no projection
 SELECT name

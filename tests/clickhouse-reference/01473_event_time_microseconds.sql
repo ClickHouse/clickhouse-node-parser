@@ -11,6 +11,7 @@ SET query_profiler_real_time_period_ns = 100000000;
 -- a long enough query to trigger the query profiler and to record trace log
 SELECT sleep(2) FORMAT Null;
 SET query_profiler_real_time_period_ns = 1000000000;
+SYSTEM FLUSH LOGS metric_log, trace_log, query_log, query_thread_log;
 -- query assumes that the event_time field is accurate.
 WITH (
         SELECT event_time_microseconds, event_time

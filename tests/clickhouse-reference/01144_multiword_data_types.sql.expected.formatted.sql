@@ -23,6 +23,8 @@ CREATE TABLE multiword_types
 )
 ENGINE = Memory;
 
+SHOW CREATE TABLE multiword_types;
+
 INSERT INTO multiword_types (a);
 
 SELECT toTypeName(tuple(*))
@@ -45,6 +47,8 @@ CREATE TABLE unsigned_types
     l BIGINT UNSIGNED
 )
 ENGINE = Memory;
+
+SHOW CREATE TABLE unsigned_types;
 
 INSERT INTO unsigned_types (a);
 

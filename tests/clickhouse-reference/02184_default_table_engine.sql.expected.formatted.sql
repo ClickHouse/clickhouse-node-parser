@@ -10,6 +10,8 @@ CREATE TABLE table_02184
 
 SET default_table_engine = 'Log';
 
+SHOW CREATE TABLE table_02184;
+
 DROP TABLE table_02184;
 
 SET default_table_engine = 'MergeTree';
@@ -26,6 +28,8 @@ CREATE TABLE test_optimize_exception
 )
 ORDER BY date
 PARTITION BY toYYYYMM(date);
+
+SHOW CREATE TABLE test_optimize_exception;
 
 DROP TABLE test_optimize_exception;
 
@@ -53,6 +57,8 @@ CREATE TABLE numbers1 AS
 SELECT number
 FROM numbers(10);
 
+SHOW CREATE TABLE numbers1;
+
 SELECT avg(number)
 FROM numbers1;
 
@@ -67,6 +73,8 @@ FROM numbers(10);
 SELECT sum(number)
 FROM numbers2;
 
+SHOW CREATE TABLE numbers2;
+
 DROP TABLE numbers2;
 
 CREATE TABLE numbers3
@@ -76,6 +84,8 @@ FROM numbers(10);
 
 SELECT sum(number)
 FROM numbers3;
+
+SHOW CREATE TABLE numbers3;
 
 DROP TABLE numbers3;
 
@@ -114,6 +124,8 @@ SELECT
 FROM test_table
 WHERE EventDate < '2013-01-01';
 
+SHOW CREATE TABLE test_view_filtered;
+
 INSERT INTO test_table (EventDate, UTCEventTime);
 
 SELECT *
@@ -142,6 +154,10 @@ CREATE TABLE t1 AS test_view;
 CREATE TABLE t2 AS test_view
 ENGINE = Memory;
 
+SHOW CREATE TABLE t1;
+
+SHOW CREATE TABLE t2;
+
 DROP TABLE test_table;
 
 DROP TABLE t1;
@@ -162,7 +178,11 @@ CREATE TABLE mt
     PRIMARY KEY(a, coalesce(b, 'test'))
 );
 
+SHOW CREATE TABLE mt;
+
 CREATE TABLE mt2 AS mt;
+
+SHOW CREATE TABLE mt2;
 
 DROP TABLE mt;
 
@@ -170,6 +190,8 @@ CREATE TEMPORARY TABLE tmp
 (
     n int
 );
+
+SHOW CREATE TABLE tmp;
 
 CREATE TEMPORARY TABLE tmp1
 (
@@ -200,10 +222,16 @@ CREATE TABLE log
     n int
 );
 
+SHOW CREATE TABLE log;
+
 CREATE TABLE log1 AS log;
+
+SHOW CREATE TABLE log1;
 
 CREATE TABLE mem AS log1
 ENGINE = Memory;
+
+SHOW CREATE TABLE mem;
 
 DROP TABLE log;
 
@@ -226,12 +254,20 @@ CREATE TABLE mem
 ENGINE = Memory AS
 SELECT 1 AS n;
 
+SHOW CREATE TABLE mem;
+
 CREATE TABLE val AS values('n int', 1, 2);
 
 CREATE TABLE val2 AS val;
 
 CREATE TABLE log AS val
 ENGINE = Log;
+
+SHOW CREATE TABLE val;
+
+SHOW CREATE TABLE val2;
+
+SHOW CREATE TABLE log;
 
 DROP TABLE val;
 
@@ -256,6 +292,10 @@ ORDER BY n
 SETTINGS min_bytes_for_wide_part = 123
 SETTINGS log_queries = 1;
 
+SHOW CREATE TABLE kek;
+
+SHOW CREATE TABLE lol;
+
 DROP TABLE kek;
 
 DROP TABLE lol;
@@ -266,3 +306,5 @@ CREATE TEMPORARY TABLE tmp_log
 (
     n int
 );
+
+SHOW CREATE TABLE tmp_log;

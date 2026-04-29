@@ -27,6 +27,10 @@ ENGINE = ReplicatedMergeTree(concat('/clickhouse/tables/from_1_', currentDatabas
 ORDER BY x
 SETTINGS old_parts_lifetime = 1, max_cleanup_delay_period = 1, cleanup_delay_period = 1, shared_merge_tree_disable_merges_and_mutations_assignment = 1;
 
+SYSTEM stop merges shard_0.from_1;
+
+SYSTEM stop merges shard_1.from_1;
+
 INSERT INTO shard_0.from_1 SELECT number + 20
 FROM numbers(10);
 
@@ -38,6 +42,8 @@ FROM numbers(10);
 
 INSERT INTO shard_0.from_1 SELECT number + 50
 FROM numbers(10);
+
+SYSTEM sync replica shard_1.from_1;
 
 CREATE TABLE shard_0.to
 (
@@ -55,7 +61,11 @@ ENGINE = ReplicatedMergeTree(concat('/clickhouse/tables/to_', currentDatabase())
 ORDER BY x
 SETTINGS old_parts_lifetime = 1, max_cleanup_delay_period = 1, cleanup_delay_period = 1, max_parts_to_merge_at_once = 2;
 
+DETACH TABLE shard_1.to;
+
 ALTER TABLE shard_0.from_1 ON CLUSTER test_cluster_two_shards_different_databases MOVE PARTITION tuple() TO TABLE shard_0.to SETTINGS distributed_ddl_output_mode = 'never_throw', distributed_ddl_task_timeout = 1 FORMAT Null;
+
+OPTIMIZE TABLE shard_0.to;
 
 SELECT
     name,
@@ -71,9 +81,15 @@ ORDER BY name ASC;
 -- and test shouldn't rarely fail because of it.
 SET send_logs_level = 'error';
 
+SYSTEM restart replica shard_0.to;
+
 -- Doesn't lead to test flakyness, because we don't check content in table
 -- which doesn't depend on any background operation
 SELECT sleep(3);
+
+ATTACH TABLE shard_1.to;
+
+SYSTEM sync replica shard_1.to;
 
 SELECT
     count(),

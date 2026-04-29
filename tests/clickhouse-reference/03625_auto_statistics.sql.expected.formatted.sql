@@ -13,6 +13,8 @@ ENGINE = MergeTree
 ORDER BY id
 SETTINGS enable_block_number_column = 0, enable_block_offset_column = 0, auto_statistics_types = 'uniq,minmax';
 
+SYSTEM STOP MERGES test_table;
+
 INSERT INTO test_table SELECT
     number,
     if(rand() % 100 = 0, 'foo', ''),
@@ -53,3 +55,11 @@ SELECT
     uniqExact(v3)
 FROM test_table
 WHERE NOT ignore(*);
+
+SYSTEM START MERGES test_table;
+
+OPTIMIZE TABLE test_table FINAL;
+
+DETACH TABLE test_table;
+
+ATTACH TABLE test_table;

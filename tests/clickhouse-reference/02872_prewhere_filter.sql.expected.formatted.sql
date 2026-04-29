@@ -9,6 +9,8 @@ CREATE TABLE data
 ENGINE = AggregatingMergeTree()
 ORDER BY key;
 
+SYSTEM stop merges data;
+
 INSERT INTO data;
 
 INSERT INTO data;

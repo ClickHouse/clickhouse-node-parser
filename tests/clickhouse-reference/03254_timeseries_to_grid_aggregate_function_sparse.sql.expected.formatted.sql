@@ -177,6 +177,11 @@ SELECT
 FROM ts_data_agg FINAL
 ORDER BY k ASC;
 
+-- Reload table and check that the data is the same (i.e. serialize-deserialize worked correctly)
+DETACH TABLE ts_data_agg;
+
+ATTACH TABLE ts_data_agg;
+
 -- Check that -Merge returns the same result as the result form original table
 SELECT timeSeriesResampleToGridWithStaleness(100, 200, 10, 15)(timestamp, value)
 FROM ts_data;

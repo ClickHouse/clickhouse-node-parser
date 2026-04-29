@@ -97,4 +97,6 @@ ORDER BY
     id ASC,
     parent_id ASC;
 
+;
+
 DROP TABLE test_table;

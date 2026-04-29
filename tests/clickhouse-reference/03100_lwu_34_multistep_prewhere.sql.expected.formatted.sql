@@ -26,6 +26,12 @@ INSERT INTO t_lwu_multistep SELECT
     number % 2
 FROM numbers(100000);
 
+UPDATE t_lwu_multistep SET a = a + 1 WHERE 1;
+
+UPDATE t_lwu_multistep SET b = b + 1 WHERE b < 50000;
+
+UPDATE t_lwu_multistep SET c = c + 1000000 WHERE c < 50000;
+
 SELECT count()
 FROM t_lwu_multistep
 WHERE a = 1

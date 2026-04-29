@@ -1,5 +1,7 @@
 SET log_queries = 1;
 
+SYSTEM flush logs query_log;
+
 SELECT count()
 FROM `system`.query_log
 WHERE current_database = currentDatabase()

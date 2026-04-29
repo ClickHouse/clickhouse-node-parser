@@ -18,6 +18,8 @@ ENGINE = MergeTree
 ORDER BY (x, y, z)
 SETTINGS index_granularity = 8192, index_granularity_bytes = 10485760, add_minmax_index_for_numeric_columns = 0;
 
+SYSTEM STOP MERGES t;
+
 INSERT INTO t SELECT
     number,
     number,
@@ -44,6 +46,8 @@ SETTINGS
     max_threads = 1,
     optimize_read_in_order = 1,
     log_comment = 'preliminary merge, no filter';
+
+SYSTEM FLUSH LOGS query_log;
 
 SELECT read_rows
 FROM `system`.query_log
@@ -132,6 +136,8 @@ ENGINE = MergeTree
 ORDER BY (a, b)
 SETTINGS index_granularity = 3;
 
+SYSTEM STOP MERGES fixed_prefix;
+
 INSERT INTO fixed_prefix;
 
 SELECT
@@ -169,6 +175,8 @@ ENGINE = MergeTree
 ORDER BY (A, negate(B))
 SETTINGS index_granularity = 1;
 
+SYSTEM STOP MERGES function_pk;
+
 INSERT INTO function_pk;
 
 INSERT INTO function_pk;
@@ -200,6 +208,8 @@ CREATE TABLE distinct_in_order
 ENGINE = MergeTree
 ORDER BY (a, b)
 SETTINGS index_granularity = 8192, index_granularity_bytes = '10Mi';
+
+SYSTEM STOP MERGES distinct_in_order;
 
 INSERT INTO distinct_in_order SELECT
     number % number,

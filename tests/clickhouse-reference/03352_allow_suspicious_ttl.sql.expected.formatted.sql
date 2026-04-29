@@ -28,3 +28,5 @@ ENGINE = ReplicatedMergeTree('/clickhouse/tables/{database}/test_ttl_00933', 'r1
 ORDER BY d; -- { serverError BAD_ARGUMENTS }
 
 ALTER TABLE replicated_ttl_00933 MODIFY COLUMN a Int32 TTL now() + toIntervalDay(1); -- { serverError BAD_ARGUMENTS }
+
+SHOW CREATE TABLE replicated_ttl_00933;

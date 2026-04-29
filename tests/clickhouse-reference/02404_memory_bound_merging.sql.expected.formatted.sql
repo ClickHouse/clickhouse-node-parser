@@ -21,6 +21,8 @@ CREATE TABLE t
 ENGINE = MergeTree
 ORDER BY a;
 
+SYSTEM stop merges t;
+
 INSERT INTO t SELECT
     number,
     number

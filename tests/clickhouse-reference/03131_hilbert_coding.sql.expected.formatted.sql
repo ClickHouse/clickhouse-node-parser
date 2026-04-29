@@ -38,6 +38,26 @@ SETTINGS index_granularity = 8192, index_granularity_bytes = '10Mi';
 INSERT INTO hilbert_numbers_1_03131 SELECT untuple(hilbertDecode(2, hilbertEncode(n1, n2)))
 FROM hilbert_numbers_03131;
 
+(SELECT
+    n1,
+    n2
+FROM hilbert_numbers_03131
+UNION DISTINCT
+SELECT
+    n1,
+    n2
+FROM hilbert_numbers_1_03131)
+EXCEPT
+(SELECT
+    n1,
+    n2
+FROM hilbert_numbers_03131
+INTERSECT
+SELECT
+    n1,
+    n2
+FROM hilbert_numbers_1_03131);
+
 SELECT hilbertEncode(); -- { serverError TOO_FEW_ARGUMENTS_FOR_FUNCTION }
 
 SELECT hilbertEncode(1, 2, 3); -- { serverError TOO_MANY_ARGUMENTS_FOR_FUNCTION }

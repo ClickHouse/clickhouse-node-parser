@@ -43,6 +43,8 @@ SETTINGS force_optimize_projection_name = 'projection_name';
 SELECT 1
 SETTINGS force_optimize_projection_name = 'projection_name';
 
+SYSTEM FLUSH LOGS query_log;
+
 SELECT read_rows
 FROM `system`.query_log
 WHERE current_database = currentDatabase()

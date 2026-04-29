@@ -22,5 +22,7 @@ SELECT '--';
 SELECT name, value FROM system.zookeeper
 WHERE path = (SELECT replica_path FROM system.replicas WHERE database = currentDatabase() AND table = 'test_table_replicated_second')
 AND name = 'metadata_version' FORMAT Vertical;
+SYSTEM RESTART REPLICA test_table_replicated_second;
 ALTER TABLE test_table_replicated_second ADD COLUMN insert_time_updated DateTime;
+DESCRIBE test_table_replicated_second;
 DROP TABLE test_table_replicated_second;

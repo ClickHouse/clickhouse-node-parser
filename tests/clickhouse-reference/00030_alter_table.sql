@@ -8,6 +8,7 @@ ALTER TABLE alter_test ADD COLUMN Added1 UInt32 AFTER Added0;
 ALTER TABLE alter_test ADD COLUMN AddedNested1 Nested(A UInt32, B UInt64) AFTER Added2;
 ALTER TABLE alter_test ADD COLUMN AddedNested1.C Array(String) AFTER AddedNested1.B;
 ALTER TABLE alter_test ADD COLUMN AddedNested2 Nested(A UInt32, B UInt64) AFTER AddedNested1;
+DESC TABLE alter_test;
 ALTER TABLE alter_test DROP COLUMN ToDrop;
 ALTER TABLE alter_test MODIFY COLUMN Added0 String;
 ALTER TABLE alter_test DROP COLUMN NestedColumn.A;

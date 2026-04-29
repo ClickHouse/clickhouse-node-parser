@@ -23,3 +23,5 @@ FROM ttl_sparse_repro;
 
 SELECT sleep(3)
 FORMAT Null;
+
+OPTIMIZE TABLE ttl_sparse_repro FINAL;

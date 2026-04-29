@@ -89,6 +89,8 @@ INSERT INTO simple_agf_summing_mt SELECT
 FROM numbers(10000)
 GROUP BY a;
 
+OPTIMIZE TABLE simple_agf_summing_mt FINAL;
+
 SELECT cityHash64(groupArray(cityHash64(*)))
 FROM (
         SELECT

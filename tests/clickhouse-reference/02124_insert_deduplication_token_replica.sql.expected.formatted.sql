@@ -17,6 +17,8 @@ SELECT *
 FROM insert_dedup_token1
 ORDER BY id ASC;
 
+SYSTEM FLUSH LOGS system.part_log;
+
 SELECT DISTINCT exception
 FROM `system`.part_log
 WHERE table = 'insert_dedup_token1'
@@ -37,6 +39,8 @@ CREATE TABLE insert_dedup_token2
 )
 ENGINE = ReplicatedMergeTree('/clickhouse/tables/{database}/insert_dedup_token', 'r2')
 ORDER BY id;
+
+SYSTEM SYNC REPLICA insert_dedup_token2;
 
 INSERT INTO insert_dedup_token2; -- deduplicated by data digest
 

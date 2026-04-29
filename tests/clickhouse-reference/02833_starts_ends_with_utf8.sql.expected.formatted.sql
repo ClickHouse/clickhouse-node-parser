@@ -25,4 +25,4 @@ SELECT endsWithUTF8('123', '23');
 
 SELECT endsWithUTF8('123', '32');
 
-SELECT endsWithUTF8('123', '');
+SELECT endsWithUTF8('123', ''); -- { echoOff }

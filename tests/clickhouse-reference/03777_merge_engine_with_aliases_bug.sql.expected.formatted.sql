@@ -30,6 +30,8 @@ INSERT INTO test2 SELECT
     44,
     45;
 
+DESCRIBE TABLE merge(currentDatabase(), '^test.*');
+
 SELECT *
 FROM merge(currentDatabase(), '^test.*')
 ORDER BY `all` ASC;

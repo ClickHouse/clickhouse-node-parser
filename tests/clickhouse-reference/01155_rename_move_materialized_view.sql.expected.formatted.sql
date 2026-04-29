@@ -69,6 +69,8 @@ ENGINE = Distributed(test_shard_localhost, test_01155_ordinary, src);
 
 INSERT INTO dist (s);
 
+SYSTEM FLUSH DISTRIBUTED  dist;
+
 CREATE DICTIONARY dict
 (
     s String,
@@ -94,6 +96,8 @@ ORDER BY
 
 SELECT dictGet('test_01155_ordinary.dict', 'x', 'before moving tables');
 
+RENAME DICTIONARY test_01155_ordinary.dict TO test_01155_ordinary.dict1;
+
 SELECT dictGet('test_01155_ordinary.dict1', 'x', 'before moving tables');
 
 SELECT
@@ -103,9 +107,25 @@ SELECT
 FROM `system`.dictionaries
 WHERE database = 'test_01155_ordinary';
 
+RENAME TABLE test_01155_ordinary.dict1 TO test_01155_ordinary.dict;
+
+SHOW TABLES FROM test_01155_ordinary;
+
+RENAME TABLE test_01155_ordinary.mv1 TO test_01155_atomic.mv1;
+
+RENAME TABLE test_01155_ordinary.mv2 TO test_01155_atomic.mv2;
+
+RENAME TABLE test_01155_ordinary.dst TO test_01155_atomic.dst;
+
+RENAME TABLE test_01155_ordinary.src TO test_01155_atomic.src;
+
 SET check_table_dependencies = 0; -- Otherwise we'll get error "test_01155_ordinary.dict depends on test_01155_ordinary.dist" in the next line.
 
+RENAME TABLE test_01155_ordinary.dist TO test_01155_atomic.dist;
+
 SET check_table_dependencies = 1;
+
+RENAME DICTIONARY test_01155_ordinary.dict TO test_01155_atomic.dict;
 
 SELECT substr(name, 1, 10)
 FROM `system`.tables
@@ -132,6 +152,8 @@ ORDER BY
 
 SELECT dictGet('test_01155_ordinary.dict', 'x', 'after moving tables'); -- { serverError BAD_ARGUMENTS }
 
+RENAME DATABASE test_01155_atomic TO test_01155_ordinary;
+
 INSERT INTO dist (s);
 
 SELECT *
@@ -154,10 +176,26 @@ SELECT
 FROM `system`.tables
 WHERE like(database, 'test_01155_%');
 
+RENAME DATABASE test_01155_ordinary TO test_01155_atomic;
+
 -- Creation of a database with Ordinary engine emits a warning.
 SET send_logs_level = 'fatal';
 
 SET send_logs_level = 'warning';
+
+SHOW CREATE DATABASE test_01155_atomic;
+
+RENAME TABLE test_01155_atomic.mv1 TO test_01155_ordinary.mv1;
+
+RENAME TABLE test_01155_atomic.mv2 TO test_01155_ordinary.mv2;
+
+RENAME TABLE test_01155_atomic.dst TO test_01155_ordinary.dst;
+
+RENAME TABLE test_01155_atomic.src TO test_01155_ordinary.src;
+
+RENAME TABLE test_01155_atomic.dist TO test_01155_ordinary.dist;
+
+RENAME DICTIONARY test_01155_atomic.dict TO test_01155_ordinary.dict;
 
 INSERT INTO dist (s);
 
@@ -174,3 +212,5 @@ ORDER BY
     s ASC;
 
 SELECT dictGet('test_01155_ordinary.dict', 'x', 'after renaming tables');
+
+SHOW TABLES FROM test_01155_atomic;

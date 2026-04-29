@@ -66,4 +66,4 @@ OFFSET 2;
 SELECT *
 FROM numbers(10)
 LIMIT 5
-OFFSET 2;
+OFFSET 2; -- { echoOff }

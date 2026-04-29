@@ -18,6 +18,8 @@ SELECT *
 FROM test_01344
 WHERE x = 'Hello, world';
 
+SYSTEM FLUSH LOGS query_log;
+
 SELECT ProfileEvents['CreatedReadBufferMMap'] AS value
 FROM `system`.query_log
 WHERE current_database = currentDatabase()

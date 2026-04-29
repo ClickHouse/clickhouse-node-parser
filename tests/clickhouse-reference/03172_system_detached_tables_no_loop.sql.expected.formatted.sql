@@ -70,6 +70,24 @@ CREATE TABLE test_no_loop.t8
 ENGINE = MergeTree
 ORDER BY c0;
 
+DETACH TABLE test_no_loop.t0;
+
+DETACH TABLE test_no_loop.t1;
+
+DETACH TABLE test_no_loop.t2;
+
+DETACH TABLE test_no_loop.t3;
+
+DETACH TABLE test_no_loop.t4;
+
+DETACH TABLE test_no_loop.t5;
+
+DETACH TABLE test_no_loop.t6;
+
+DETACH TABLE test_no_loop.t7;
+
+DETACH TABLE test_no_loop.t8;
+
 SELECT count(*)
 FROM `system`.detached_tables
 WHERE database = 'test_no_loop';
@@ -102,6 +120,12 @@ CREATE TABLE test_no_loop_2.t2
 )
 ENGINE = MergeTree
 ORDER BY c0;
+
+DETACH TABLE test_no_loop_2.t0;
+
+DETACH TABLE test_no_loop_2.t1;
+
+DETACH TABLE test_no_loop_2.t2;
 
 SELECT count(*)
 FROM `system`.detached_tables

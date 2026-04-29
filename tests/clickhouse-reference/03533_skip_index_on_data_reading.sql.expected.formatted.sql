@@ -64,6 +64,8 @@ WHERE region = 'asia'
 ORDER BY `ALL` ASC
 SETTINGS log_comment = 'test_4';
 
+SYSTEM FLUSH LOGS query_log;
+
 SELECT
     ProfileEvents['RowsReadByPrewhereReaders'],
     ProfileEvents['RowsReadByMainReader']

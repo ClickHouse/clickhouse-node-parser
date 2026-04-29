@@ -38,6 +38,9 @@ SETTINGS
     max_bytes_before_external_sort = '32M',
     max_block_size = 1048576;
 
+-- This query is heavy, let's do it only once
+SYSTEM FLUSH LOGS query_log;
+
 SELECT ProfileEvents['ExternalSortWritePart']
 FROM `system`.query_log
 WHERE type != 'QueryStart'

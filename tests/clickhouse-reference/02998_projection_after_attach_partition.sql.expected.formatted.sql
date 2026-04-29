@@ -49,6 +49,10 @@ INSERT INTO visits_order SELECT
     number * 3
 FROM numbers(1, 10);
 
+-- Merge all parts so that projections can no longer help filter them,
+-- which will result in projections not being used.
+OPTIMIZE TABLE visits_order FINAL;
+
 ALTER TABLE visits_order_dst REPLACE PARTITION ID '2' FROM visits_order;
 
 SET enable_analyzer = 0;

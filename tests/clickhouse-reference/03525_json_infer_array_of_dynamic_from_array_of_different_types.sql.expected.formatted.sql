@@ -1,16 +1,22 @@
 SET enable_analyzer = 1;
 
+DESCRIBE TABLE format(JSONEachRow, '{"a" : [42, "hello", [1, 2, 3]]}');
+
 SELECT
     a,
     toTypeName(a),
     arrayMap(x -> dynamicType(x), a)
 FROM format(JSONEachRow, '{"a" : [42, "hello", [1, 2, 3]]}');
 
+DESCRIBE TABLE format(JSONEachRow, '{"a" : [42, "hello"]}');
+
 SELECT
     a,
     toTypeName(a),
     arrayMap(x -> dynamicType(x), a)
 FROM format(JSONEachRow, '{"a" : [42, "hello"]}');
+
+DESCRIBE TABLE format(JSONEachRow, '{"a" : [42, "hello", {"b" : 42}]}');
 
 SELECT
     a,

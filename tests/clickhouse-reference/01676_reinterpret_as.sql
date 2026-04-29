@@ -27,6 +27,7 @@ SELECT reinterpret(0, 'DateTime(''Asia/Istanbul'')'), reinterpret('', 'DateTime(
 SELECT reinterpret(0, 'DateTime64(3, ''Asia/Istanbul'')'), reinterpret('', 'DateTime64(3, ''Asia/Istanbul'')');
 SELECT reinterpret(toDecimal32(5, 2), 'Decimal32(2)'), reinterpret('1', 'Decimal32(2)');
 SELECT reinterpret(toDecimal64(5, 2), 'Decimal64(2)'), reinterpret('1', 'Decimal64(2)');
+;
 SELECT reinterpret(toDecimal128(5, 2), 'Decimal128(2)'), reinterpret('1', 'Decimal128(2)');
 SELECT reinterpret(toDecimal256(5, 2), 'Decimal256(2)'), reinterpret('1', 'Decimal256(2)');
 SELECT reinterpret(toDateTime64(0, 0), 'Decimal64(2)');

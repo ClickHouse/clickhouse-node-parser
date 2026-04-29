@@ -20,6 +20,8 @@ FROM `03595_data`
 FORMAT Null
 SETTINGS local_filesystem_read_method = 'pread_threadpool', min_bytes_to_use_direct_io = 1, log_query_threads = 1, use_uncompressed_cache = 0;
 
+SYSTEM flush logs query_log, query_thread_log;
+
 WITH queries AS (
     SELECT
         query_id,

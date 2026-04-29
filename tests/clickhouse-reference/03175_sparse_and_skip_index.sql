@@ -15,20 +15,32 @@ SETTINGS
     min_bytes_for_wide_part = 0,
     enable_block_number_column = 0,
     enable_block_offset_column = 0;
+
+SYSTEM STOP MERGES t_bloom_filter;
+
 -- Create at least one part
 INSERT INTO t_bloom_filter
 SELECT
     number % 100 as key, -- 100 unique keys
     rand() % 100 as value -- 100 unique values
 FROM numbers(15_000);
+
 -- And another part
 INSERT INTO t_bloom_filter
 SELECT
     number % 100 as key, -- 100 unique keys
     rand() % 100 as value -- 100 unique values
 FROM numbers(15_000, 15_000);
+
+SYSTEM START MERGES t_bloom_filter;
+
+-- Merge everything into a single part
+OPTIMIZE TABLE t_bloom_filter FINAL;
+
 -- Check sparse serialization
 SELECT column, serialization_kind FROM system.parts_columns WHERE database = currentDatabase() AND table = 't_bloom_filter' AND active ORDER BY column;
+
 SELECT COUNT() FROM t_bloom_filter WHERE key = 1;
+
 -- Check bloom filter non-zero size
 SELECT COUNT() FROM system.parts WHERE database = currentDatabase() AND table = 't_bloom_filter' AND secondary_indices_uncompressed_bytes > 200 AND active;

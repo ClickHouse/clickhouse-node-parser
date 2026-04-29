@@ -21,6 +21,7 @@ LAYOUT(DIRECT())
 SOURCE(CLICKHOUSE(DB '01914_db' TABLE 'table_2'));
 SELECT * FROM 01914_db.dictionary_1;
 SELECT * FROM 01914_db.dictionary_2;
+EXCHANGE DICTIONARIES 01914_db.dictionary_1 AND 01914_db.dictionary_2;
 DROP DICTIONARY 01914_db.dictionary_1;
 DROP DICTIONARY 01914_db.dictionary_2;
 DROP TABLE 01914_db.table_1;

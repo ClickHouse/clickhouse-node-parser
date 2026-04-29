@@ -2,6 +2,7 @@
 
 SET allow_introspection_functions = 0;
 SELECT addressToLineWithInlines(1); -- { serverError FUNCTION_NOT_ALLOWED }
+
 SET allow_introspection_functions = 1;
 SET query_profiler_real_time_period_ns = 0;
 SET query_profiler_cpu_time_period_ns = 1000000;
@@ -9,7 +10,9 @@ SET log_queries = 1, max_rows_to_read = 0;
 SELECT count() FROM numbers_mt(10000000000) SETTINGS log_comment='02161_test_case';
 SET log_queries = 0;
 SET query_profiler_cpu_time_period_ns = 0;
+SYSTEM FLUSH LOGS query_log, trace_log;
 SET max_execution_time = 300;
+
 WITH
     lineWithInlines AS
     (
@@ -19,3 +22,5 @@ WITH
         )
     )
 SELECT 'has inlines:', or(max(length(lineWithInlines)) > 1, max(locate(lineWithInlines[1], ':')) = 0) FROM lineWithInlines SETTINGS short_circuit_function_evaluation='enable';
+-- `max(length(lineWithInlines)) > 1` check there is any inlines.
+-- `max(locate(lineWithInlines[1], ':')) = 0` check whether none could get a symbol.

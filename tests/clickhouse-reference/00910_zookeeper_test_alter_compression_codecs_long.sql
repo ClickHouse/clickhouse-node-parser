@@ -14,9 +14,11 @@ CREATE TABLE alter_compression_codec2 (
 ) ENGINE = ReplicatedMergeTree('/clickhouse/tables/{database}/test_00910/'||currentDatabase()||'alter_compression_codecs/{shard}', '2_{replica}') PARTITION BY somedate ORDER BY id;
 INSERT INTO alter_compression_codec1 VALUES('2018-01-01', 1);
 INSERT INTO alter_compression_codec1 VALUES('2018-01-01', 2);
+SYSTEM SYNC REPLICA alter_compression_codec2;
 SELECT * FROM alter_compression_codec1 ORDER BY id;
 SELECT * FROM alter_compression_codec2 ORDER BY id;
 ALTER TABLE alter_compression_codec1 ADD COLUMN alter_column String DEFAULT 'default_value' CODEC(ZSTD);
+SYSTEM SYNC REPLICA alter_compression_codec1;
 SELECT compression_codec FROM system.columns WHERE table = 'alter_compression_codec1' AND name = 'alter_column' AND database = currentDatabase();
 SELECT compression_codec FROM system.columns WHERE table = 'alter_compression_codec2' AND name = 'alter_column' AND database = currentDatabase();
 INSERT INTO alter_compression_codec1 VALUES('2018-01-01', 3, '3');

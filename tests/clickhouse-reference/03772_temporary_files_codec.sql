@@ -43,6 +43,7 @@ JOIN (SELECT number AS key FROM numbers(200_000)) t2
 USING key
 SETTINGS log_comment='03772_temporary_files_codec/partial_merge_join', temporary_files_codec = 'LZ4'
 FORMAT Null;
+SYSTEM FLUSH LOGS system.query_log;
 SELECT
     log_comment,
     (sumIf(ProfileEvents['ExternalProcessingCompressedBytesTotal'], Settings['temporary_files_codec'] = 'LZ4') AS with_compression) > 0,

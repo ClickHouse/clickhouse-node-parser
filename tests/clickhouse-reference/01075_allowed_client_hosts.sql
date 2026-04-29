@@ -2,6 +2,7 @@
 
 DROP USER IF EXISTS test_user_01075, test_user_01075_x, test_user_01075_x@localhost, test_user_01075_x@'192.168.23.15';
 CREATE USER test_user_01075;
+SHOW CREATE USER test_user_01075;
 ALTER USER test_user_01075 HOST ANY;
 ALTER USER test_user_01075 HOST NONE;
 ALTER USER test_user_01075 HOST LOCAL;
@@ -17,6 +18,9 @@ ALTER USER test_user_01075 HOST REGEXP '.*\.anothersite2\.com', REGEXP '.*\.anot
 ALTER USER test_user_01075 HOST REGEXP '.*\.anothersite3\.com' HOST REGEXP '.*\.anothersite3\.org';
 DROP USER test_user_01075;
 CREATE USER test_user_01075_x@localhost;
+SHOW CREATE USER test_user_01075_x@localhost;
 ALTER USER test_user_01075_x@localhost RENAME TO test_user_01075_x@'%';
+SHOW CREATE USER test_user_01075_x;
 ALTER USER test_user_01075_x RENAME TO test_user_01075_x@'192.168.23.15';
+SHOW CREATE USER 'test_user_01075_x@192.168.23.15';
 DROP USER 'test_user_01075_x@192.168.23.15';

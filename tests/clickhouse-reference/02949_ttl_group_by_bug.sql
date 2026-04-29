@@ -7,6 +7,7 @@ ORDER BY (key, toStartOfInterval(ts, toIntervalMinute(3)), ts)
 TTL ts + INTERVAL 5 MINUTE GROUP BY key, toStartOfInterval(ts, toIntervalMinute(3))
 SET value = sum(value), min_value = min(min_value), max_value = max(max_value),  ts=min(toStartOfInterval(ts, toIntervalMinute(3)));
 INSERT INTO ttl_group_by_bug(key, ts, value) SELECT number%5 as key, now() - interval 10 minute + number, 0 FROM numbers(1000);
+OPTIMIZE TABLE ttl_group_by_bug FINAL;
 SELECT *
 FROM
 (

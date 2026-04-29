@@ -43,6 +43,7 @@ create temporary table basic_types_02735 as select * from generateRandom('
     ipv4 IPv4,
     ipv6 IPv6') limit 1011;
 insert into function file(basic_types_02735.parquet) select * from basic_types_02735 settings output_format_parquet_datetime_as_uint32 = 1;
+desc file(basic_types_02735.parquet);
 select (select sum(cityHash64(*)) from basic_types_02735) - (select sum(cityHash64(*)) from file(basic_types_02735.parquet));
 drop table basic_types_02735;
 -- DateTime values don't roundtrip (without output_format_parquet_datetime_as_uint32) because we
@@ -50,6 +51,7 @@ drop table basic_types_02735;
 drop table if exists datetime_02735;
 create temporary table datetime_02735 as select * from generateRandom('datetime DateTime') limit 1011;
 insert into function file(datetime_02735.parquet) select * from datetime_02735;
+desc file(datetime_02735.parquet);
 select (select sum(cityHash64(toDateTime64(datetime, 3))) from datetime_02735) - (select sum(cityHash64(*)) from file(datetime_02735.parquet));
 select (select sum(cityHash64(*)) from datetime_02735) - (select sum(cityHash64(*)) from file(datetime_02735.parquet, Parquet, 'datetime DateTime'));
 drop table datetime_02735;
@@ -168,6 +170,8 @@ insert into function file(datetime64_02735.parquet) select
     toDateTime64(number, 0) as s,
     toDateTime64(number / 1e7, 7) as dus
     from numbers(2000);
+desc file(datetime64_02735.parquet);
 select sum(cityHash64(*)) from file(datetime64_02735.parquet);
 insert into function file(date_as_uint16.parquet) select toDate('2025-08-12') as d settings output_format_parquet_date_as_uint16 = 1;
 select * from file(date_as_uint16.parquet);
+desc file(date_as_uint16.parquet);

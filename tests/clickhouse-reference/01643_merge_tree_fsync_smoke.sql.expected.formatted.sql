@@ -14,6 +14,8 @@ INSERT INTO data_01643;
 SELECT *
 FROM data_01643;
 
+OPTIMIZE TABLE data_01643 FINAL;
+
 DROP TABLE data_01643;
 
 CREATE TABLE data_01643
@@ -61,3 +63,6 @@ INSERT INTO data_01643;
 SELECT *
 FROM data_01643
 ORDER BY key ASC;
+
+-- vertical merge does not supports deduplicate, hence no FINAL
+OPTIMIZE TABLE data_01643;

@@ -9,6 +9,8 @@ ORDER BY tuple()
 TTL d + toIntervalDay(10)
 SETTINGS remove_empty_parts = 0;
 
+SYSTEM STOP MERGES ttl;
+
 INSERT INTO ttl;
 
 SELECT
@@ -21,6 +23,10 @@ SELECT
 FROM `system`.parts
 WHERE database = currentDatabase()
     AND table = 'ttl';
+
+SYSTEM START MERGES ttl;
+
+OPTIMIZE TABLE ttl FINAL;
 
 SELECT
     `rows`,

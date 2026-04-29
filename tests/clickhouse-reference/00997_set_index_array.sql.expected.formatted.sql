@@ -19,6 +19,8 @@ INSERT INTO set_array SELECT
 FROM `system`.numbers
 LIMIT 1000000;
 
+OPTIMIZE TABLE set_array FINAL;
+
 SET max_rows_to_read = 8192;
 
 SELECT count()

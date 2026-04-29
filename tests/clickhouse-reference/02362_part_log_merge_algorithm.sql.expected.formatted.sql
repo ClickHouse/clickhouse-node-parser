@@ -8,6 +8,10 @@ SETTINGS old_parts_lifetime = 600, vertical_merge_algorithm_min_rows_to_activate
 
 INSERT INTO data_horizontal;
 
+OPTIMIZE TABLE data_horizontal FINAL;
+
+SYSTEM FLUSH LOGS part_log;
+
 SELECT
     table,
     part_name,
@@ -32,6 +36,8 @@ SETTINGS index_granularity_bytes = 0, enable_mixed_granularity_parts = 0, min_by
 INSERT INTO data_vertical;
 
 INSERT INTO data_vertical;
+
+OPTIMIZE TABLE data_vertical FINAL;
 
 SELECT
     table,

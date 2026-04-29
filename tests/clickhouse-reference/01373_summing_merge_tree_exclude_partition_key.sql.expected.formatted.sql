@@ -13,6 +13,8 @@ ORDER BY (d)
 PARTITION BY (a)
 SETTINGS index_granularity = 8192, index_granularity_bytes = '10Mi';
 
+SYSTEM STOP MERGES tt_01373;
+
 INSERT INTO tt_01373 SELECT
     number % 13,
     number % 17,
@@ -33,6 +35,10 @@ SELECT
 FROM tt_01373 FINAL
 GROUP BY a
 ORDER BY a ASC;
+
+SYSTEM START MERGES tt_01373;
+
+OPTIMIZE TABLE tt_01373 FINAL;
 
 SELECT
     a,

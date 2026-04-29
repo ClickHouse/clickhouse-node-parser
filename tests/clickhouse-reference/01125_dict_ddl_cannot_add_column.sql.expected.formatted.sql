@@ -28,3 +28,5 @@ FROM somedict;
 -- No dictionary columns
 SELECT 1
 FROM somedict;
+
+SHOW TABLES;

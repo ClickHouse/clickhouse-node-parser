@@ -20,6 +20,8 @@ ALTER TABLE alter_default ADD COLUMN value DEFAULT '10'; --{serverError BAD_ARGU
 
 ALTER TABLE alter_default ADD COLUMN value String DEFAULT '10';
 
+SHOW CREATE TABLE alter_default;
+
 SELECT sum(CAST(value AS UInt64))
 FROM alter_default;
 

@@ -10,3 +10,4 @@ CREATE TABLE 02266_auto_add_nullable
     val5 LowCardinality(Nullable(Int8)) DEFAULT NULL
 )
 ENGINE = MergeTree order by tuple();
+DESCRIBE TABLE 02266_auto_add_nullable;

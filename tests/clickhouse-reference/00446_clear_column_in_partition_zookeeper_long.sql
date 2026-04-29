@@ -14,6 +14,7 @@ SELECT sleep(1) FORMAT Null;
 CREATE TABLE clear_column1 (d Date, i Int64) ENGINE = ReplicatedMergeTree('/clickhouse/{database}/test_00446/tables/clear_column', '1') ORDER BY d PARTITION by toYYYYMM(d) SETTINGS min_bytes_for_wide_part = 0;
 CREATE TABLE clear_column2 (d Date, i Int64) ENGINE = ReplicatedMergeTree('/clickhouse/{database}/test_00446/tables/clear_column', '2') ORDER BY d PARTITION by toYYYYMM(d) SETTINGS min_bytes_for_wide_part = 0;
 INSERT INTO clear_column1 (d) VALUES ('2000-01-01'), ('2000-02-01');
+SYSTEM SYNC REPLICA clear_column2;
 SET replication_alter_partitions_sync=2;
 ALTER TABLE clear_column1 ADD COLUMN s String;
 ALTER TABLE clear_column1 CLEAR COLUMN s IN PARTITION '200001';
@@ -26,6 +27,8 @@ ALTER TABLE clear_column1 CLEAR COLUMN s IN PARTITION '200002';
 SELECT DISTINCT * FROM clear_column2 ORDER BY d, i, s;
 SELECT sum(data_uncompressed_bytes) FROM system.columns WHERE database=currentDatabase() AND table LIKE 'clear_column_' AND (name = 'i' OR name = 's') GROUP BY table;
 SET optimize_throw_if_noop = 1;
+OPTIMIZE TABLE clear_column1 PARTITION '200001';
+OPTIMIZE TABLE clear_column1 PARTITION '200002';
 -- clear column in empty partition should be Ok
 ALTER TABLE clear_column1 CLEAR COLUMN s IN PARTITION '200012', CLEAR COLUMN i IN PARTITION '200012';
 -- Drop empty partition also Ok

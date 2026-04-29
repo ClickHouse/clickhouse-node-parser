@@ -50,6 +50,14 @@ INSERT INTO lc_big_dict SELECT toString(number)
 FROM `system`.numbers
 LIMIT 1000000;
 
+DETACH TABLE lc_small_dict;
+
+DETACH TABLE lc_big_dict;
+
+ATTACH TABLE lc_small_dict;
+
+ATTACH TABLE lc_big_dict;
+
 SELECT sum(toUInt64OrZero(str))
 FROM lc_small_dict;
 

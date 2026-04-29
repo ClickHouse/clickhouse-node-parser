@@ -99,3 +99,7 @@ FROM sparse_tuple
 WHERE t.b.u != 0
 ORDER BY id ASC
 LIMIT 5;
+
+DETACH TABLE sparse_tuple;
+
+ATTACH TABLE sparse_tuple;

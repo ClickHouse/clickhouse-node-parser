@@ -1,6 +1,7 @@
 -- { echoOn }
 
 SET enable_analyzer = 1;
+
 DROP TABLE IF EXISTS tree;
 CREATE TABLE tree
 (
@@ -8,7 +9,9 @@ CREATE TABLE tree
     link Nullable(UInt64),
     data String
 ) ENGINE=MergeTree ORDER BY ();
+
 INSERT INTO tree VALUES (0, NULL, 'ROOT'), (1, 0, 'Child_1'), (2, 0, 'Child_2'), (3, 1, 'Child_1_1');
+
 WITH RECURSIVE search_tree AS (
     SELECT id, link, data
     FROM tree t
@@ -19,7 +22,9 @@ WITH RECURSIVE search_tree AS (
     WHERE t.link = st.id
 )
 SELECT * FROM search_tree;
+
 SELECT '--';
+
 WITH RECURSIVE search_tree AS (
     SELECT id, link, data, [t.id] AS path
     FROM tree t
@@ -30,7 +35,9 @@ WITH RECURSIVE search_tree AS (
     WHERE t.link = st.id
 )
 SELECT * FROM search_tree;
+
 DROP TABLE tree;
+
 /**
   * Based on https://github.com/postgres/postgres/blob/master/src/test/regress/sql/with.sql, license:
   *
@@ -80,6 +87,7 @@ CREATE TABLE department (
     name String -- department name
 )
 ENGINE=MergeTree ORDER BY ();
+
 INSERT INTO department VALUES (0, NULL, 'ROOT');
 INSERT INTO department VALUES (1, 0, 'A');
 INSERT INTO department VALUES (2, 1, 'B');
@@ -88,6 +96,8 @@ INSERT INTO department VALUES (4, 2, 'D');
 INSERT INTO department VALUES (5, 0, 'E');
 INSERT INTO department VALUES (6, 4, 'F');
 INSERT INTO department VALUES (7, 5, 'G');
+
+
 -- extract all departments under 'A'. Result should be A, B, C, D and F
 WITH RECURSIVE subdepartment AS
 (
@@ -101,6 +111,7 @@ WITH RECURSIVE subdepartment AS
         WHERE d.parent_department = sd.id
 )
 SELECT * FROM subdepartment ORDER BY name;
+
 -- extract all departments under 'A' with "level" number
 WITH RECURSIVE subdepartment AS
 (
@@ -114,6 +125,7 @@ WITH RECURSIVE subdepartment AS
         WHERE d.parent_department = sd.id
 )
 SELECT * FROM subdepartment ORDER BY name;
+
 -- extract all departments under 'A' with "level" number.
 -- Only shows level 2 or more
 WITH RECURSIVE subdepartment AS
@@ -128,6 +140,7 @@ WITH RECURSIVE subdepartment AS
         WHERE d.parent_department = sd.id
 )
 SELECT * FROM subdepartment WHERE level >= 2 ORDER BY name;
+
 -- "RECURSIVE" is ignored if the query has no self-reference
 WITH RECURSIVE subdepartment AS
 (
@@ -135,6 +148,7 @@ WITH RECURSIVE subdepartment AS
     SELECT * FROM department WHERE name = 'A'
 )
 SELECT * FROM subdepartment ORDER BY name;
+
 -- corner case in which sub-WITH gets initialized first
 SELECT * FROM
 (
@@ -146,6 +160,7 @@ SELECT * FROM
       )
   SELECT * FROM q LIMIT 24
 ) ORDER BY id, parent_department, name;
+
 SELECT * FROM
 (
   WITH RECURSIVE q AS (
@@ -160,3 +175,5 @@ SELECT * FROM
       )
   SELECT * FROM q LIMIT 32
 ) ORDER BY id, parent_department, name;
+
+-- { echoOff }

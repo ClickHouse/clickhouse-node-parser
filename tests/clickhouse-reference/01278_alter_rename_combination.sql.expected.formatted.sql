@@ -15,6 +15,8 @@ INSERT INTO rename_table;
 -- replace one with other
 ALTER TABLE rename_table RENAME COLUMN value1 TO old_value1, RENAME COLUMN value2 TO value1;
 
+SHOW CREATE TABLE rename_table;
+
 SELECT *
 FROM rename_table
 FORMAT TSVWithNames;
@@ -46,6 +48,8 @@ SETTINGS min_rows_for_wide_part = 10000;
 INSERT INTO rename_table_polymorphic;
 
 ALTER TABLE rename_table_polymorphic RENAME COLUMN value1 TO old_value1, RENAME COLUMN value2 TO value1;
+
+SHOW CREATE TABLE rename_table_polymorphic;
 
 SELECT *
 FROM rename_table_polymorphic

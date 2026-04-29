@@ -15,6 +15,7 @@ INSERT INTO test VALUES (1, '{"name":"foo", "age":15}');
 INSERT INTO test VALUES (2, '{"name":"boo", "age":15}');
 INSERT INTO test VALUES (3, '{"name":"bar", "age":15}');
 SET enable_lightweight_update = 1;
+UPDATE test SET document = '{"name":"aaa", "age":15, "country": "USA"}' WHERE id = 1;
 SELECT * FROM test
 WHERE document.name = 'aaa' OR document.name = 'boo'
 ORDER BY id

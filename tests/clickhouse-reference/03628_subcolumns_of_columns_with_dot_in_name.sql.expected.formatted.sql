@@ -64,6 +64,8 @@ ORDER BY my.json.b::Int32 ASC;
 
 INSERT INTO test (my.json) SELECT '{"a" : 43, "b" : 43}';
 
+OPTIMIZE TABLE test FINAL;
+
 ALTER TABLE test MODIFY COLUMN `my.json` JSON(a UInt32, b UInt32); -- {serverError ALTER_OF_COLUMN_IS_FORBIDDEN}
 
 ALTER TABLE test UPDATE `my.json` = '{}' WHERE 1; -- {serverError CANNOT_UPDATE_COLUMN}

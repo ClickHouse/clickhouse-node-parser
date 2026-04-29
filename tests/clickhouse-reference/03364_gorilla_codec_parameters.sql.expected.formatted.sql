@@ -14,6 +14,14 @@ CREATE TABLE `03364_delta`
 ENGINE = MergeTree()
 ORDER BY tuple();
 
+DETACH TABLE `03364_gorilla`;
+
+DETACH TABLE `03364_delta`;
+
+ATTACH TABLE `03364_gorilla`;
+
+ATTACH TABLE `03364_delta`;
+
 DROP TABLE `03364_gorilla`;
 
 DROP TABLE `03364_delta`;

@@ -13,6 +13,8 @@ INSERT INTO table_merge_tree_02525;
 
 INSERT INTO table_merge_tree_02525;
 
+OPTIMIZE TABLE table_merge_tree_02525 FINAL;
+
 SELECT *
 FROM table_merge_tree_02525;
 

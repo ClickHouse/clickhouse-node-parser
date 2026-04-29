@@ -32,6 +32,9 @@ INSERT INTO t_virtual_row_sparse_pk SELECT
     'data'
 FROM numbers(81920);
 
+-- Force the merge to ensure we have a single part with optimized index
+OPTIMIZE TABLE t_virtual_row_sparse_pk FINAL;
+
 -- This query uses read_in_order_use_virtual_row optimization
 -- It should work even when the index doesn't have all primary key columns
 SELECT

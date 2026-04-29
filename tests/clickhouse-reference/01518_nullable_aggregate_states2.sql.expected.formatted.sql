@@ -143,6 +143,8 @@ GROUP BY
     ts,
     id;
 
+OPTIMIZE TABLE testNullableStatesAgg FINAL;
+
 SELECT count()
 FROM testNullableStates;
 

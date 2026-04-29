@@ -45,6 +45,8 @@ INSERT INTO proj_agg_02343 SELECT
     number
 FROM numbers(100000);
 
+OPTIMIZE TABLE proj_agg_02343 FINAL;
+
 -- { echoOff }
 CREATE TABLE t
 (
@@ -53,8 +55,12 @@ CREATE TABLE t
 ENGINE = MergeTree
 ORDER BY (a);
 
+SYSTEM stop merges t;
+
 CREATE TABLE dist_t AS t
 ENGINE = Distributed(test_cluster_two_shards, currentDatabase(), t, a % 2);
+
+SYSTEM stop merges dist_t;
 
 INSERT INTO dist_t SELECT number
 FROM numbers_mt(10);

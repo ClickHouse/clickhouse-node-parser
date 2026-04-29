@@ -38,3 +38,4 @@ ENGINE = MergeTree
 ORDER BY tuple()
 SETTINGS index_granularity = 8192;
 INSERT INTO t2 (a) VALUES ('OK');
+-- { echoOff }

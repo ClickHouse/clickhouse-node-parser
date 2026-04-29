@@ -3,6 +3,8 @@ FROM numbers(10)
 WHERE number > 15
     AND test_function(number, number) == 4;
 
+SYSTEM FLUSH LOGS query_log;
+
 SELECT ProfileEvents['ExecuteShellCommand']
 FROM `system`.query_log
 WHERE current_database = currentDatabase()

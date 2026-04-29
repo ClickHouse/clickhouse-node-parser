@@ -13,6 +13,9 @@ ORDER BY key;
 INSERT INTO data_01513 SELECT number % 10e3
 FROM numbers(2e6);
 
+-- reduce number of parts to 1
+OPTIMIZE TABLE data_01513 FINAL;
+
 -- this is enough to trigger non-reusable Chunk in Arena.
 SET max_memory_usage = '500M';
 

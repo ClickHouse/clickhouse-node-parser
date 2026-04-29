@@ -11,4 +11,8 @@ ENGINE = ReplicatedMergeTree('/clickhouse/tables/{database}/test_01646/data_0164
 ORDER BY s
 PARTITION BY x;
 
+SYSTEM RESTART REPLICAS;
+
+DESCRIBE TABLE data_01646;
+
 DROP TABLE data_01646;

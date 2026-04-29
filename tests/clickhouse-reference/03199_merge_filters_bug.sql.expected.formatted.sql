@@ -74,3 +74,5 @@ WHERE (fs1 IN ('test'))
 SETTINGS
     enable_multiple_prewhere_read_steps = 1,
     query_plan_merge_filters = 1;
+
+OPTIMIZE TABLE t1 FINAL;

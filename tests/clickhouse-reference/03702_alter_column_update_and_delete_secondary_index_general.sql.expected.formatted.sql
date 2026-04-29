@@ -55,7 +55,11 @@ ALTER TABLE test_wide MODIFY SETTING alter_column_secondary_index_mode = 'compat
 
 INSERT INTO test_compact;
 
+OPTIMIZE TABLE test_compact FINAL;
+
 INSERT INTO test_wide;
+
+OPTIMIZE TABLE test_wide FINAL;
 
 SELECT
     'COMPACT BEFORE',

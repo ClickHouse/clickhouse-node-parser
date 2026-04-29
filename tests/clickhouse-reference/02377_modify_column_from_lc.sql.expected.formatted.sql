@@ -32,6 +32,10 @@ INSERT INTO t_modify_from_lc_2 SELECT
     number
 FROM numbers(100000);
 
+OPTIMIZE TABLE t_modify_from_lc_1 FINAL;
+
+OPTIMIZE TABLE t_modify_from_lc_2 FINAL;
+
 ALTER TABLE t_modify_from_lc_1 MODIFY COLUMN a UInt32;
 
 -- Check that dictionary of LowCardinality is actually

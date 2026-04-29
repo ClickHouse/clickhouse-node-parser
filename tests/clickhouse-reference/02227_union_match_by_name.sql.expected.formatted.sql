@@ -11,4 +11,4 @@ FROM (
             y,
             NULL AS x,
             1 AS y
-    );
+    ); -- { echoOff }

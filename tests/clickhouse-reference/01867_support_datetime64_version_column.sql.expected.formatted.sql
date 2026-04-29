@@ -23,6 +23,8 @@ INSERT INTO replacing;
 
 INSERT INTO replacing;
 
+OPTIMIZE TABLE replacing FINAL;
+
 SELECT *
 FROM replacing;
 

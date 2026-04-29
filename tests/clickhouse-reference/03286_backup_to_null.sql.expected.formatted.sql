@@ -9,4 +9,8 @@ ORDER BY tuple();
 
 INSERT INTO t1;
 
+BACKUP TABLE t1 TO Null FORMAT Null;
+
 DROP TABLE t1;
+
+RESTORE TABLE t1 FROM Null FORMAT Null; -- { serverError BACKUP_NOT_FOUND }

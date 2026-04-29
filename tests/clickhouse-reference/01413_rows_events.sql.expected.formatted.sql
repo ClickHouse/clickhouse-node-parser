@@ -14,6 +14,8 @@ SETTINGS add_minmax_index_for_numeric_columns = 0;
 
 INSERT INTO rows_events_test;
 
+SYSTEM FLUSH LOGS query_log;
+
 SELECT written_rows
 FROM `system`.query_log
 WHERE current_database = currentDatabase()

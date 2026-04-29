@@ -28,8 +28,20 @@ SET mutations_sync = 0;
 
 SET check_query_single_value_result = 1;
 
+DELETE FROM merge_table_standard_delete WHERE id = 10;
+
 SELECT COUNT()
 FROM merge_table_standard_delete;
+
+DETACH TABLE merge_table_standard_delete;
+
+ATTACH TABLE merge_table_standard_delete;
+
+CHECK TABLE merge_table_standard_delete;
+
+DELETE FROM merge_table_standard_delete WHERE name IN ('1', '2', '3', '4');
+
+DELETE FROM merge_table_standard_delete WHERE 1;
 
 DROP TABLE merge_table_standard_delete;
 
@@ -65,6 +77,16 @@ ORDER BY part_type ASC;
 
 SELECT '-----lightweight mutation type-----';
 
+DELETE FROM t_light WHERE c % 5 = 1;
+
+DETACH TABLE t_light;
+
+ATTACH TABLE t_light;
+
+CHECK TABLE t_light;
+
+DELETE FROM t_light WHERE c = 4;
+
 ALTER TABLE t_light MATERIALIZE INDEX i_c SETTINGS mutations_sync = 2;
 
 ALTER TABLE t_light UPDATE b = -1 WHERE a < 3 SETTINGS mutations_sync = 2;
@@ -96,6 +118,8 @@ WHERE database = currentDatabase()
     AND table = 't_light'
 ORDER BY name ASC;
 
+OPTIMIZE TABLE t_light FINAL SETTINGS mutations_sync = 2;
+
 SELECT
     table,
     `partition`,
@@ -123,6 +147,14 @@ INSERT INTO t_large SELECT
     number + 1,
     number + 1
 FROM numbers(100000);
+
+DELETE FROM t_large WHERE a = 50000;
+
+DETACH TABLE t_large;
+
+ATTACH TABLE t_large;
+
+CHECK TABLE t_large;
 
 ALTER TABLE t_large UPDATE b = -2 WHERE and(greaterOrEquals(a, 1000), lessOrEquals(a, 1005)) SETTINGS mutations_sync = 2;
 

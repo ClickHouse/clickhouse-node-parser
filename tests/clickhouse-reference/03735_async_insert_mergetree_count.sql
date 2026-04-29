@@ -60,6 +60,7 @@ TO dst_2_01
 as select id, sum(c) as c from dst_1_1 GROUP BY id;
 insert into src_table values (1, 'Alice'), (2, 'Bob'), (1, 'Alice');
 insert into src_table values (3, 'Charlie'), (4, 'David'), (3, 'Charlie');
+system flush async insert queue src_table;
 -- Expecting 8
 select 'src_table', count(*) from src_table;
 select * from src_table order by all;
@@ -75,6 +76,7 @@ select * from dst_1_2 order by all;
 -- Expecting 6
 select 'dst_2_01', count(*) from dst_2_01;
 select * from dst_2_01 order by all;
+system flush logs system.query_log;
 select query, query_kind, exception_code from system.query_log
 where
     has(databases, currentDatabase())

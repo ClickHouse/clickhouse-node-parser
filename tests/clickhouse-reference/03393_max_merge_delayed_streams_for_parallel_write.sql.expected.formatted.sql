@@ -1,3 +1,9 @@
+-- Tags: no-fasttest, long, no-parallel, no-flaky-check, no-msan
+-- - no-fasttest -- S3 is required
+-- - no-flaky-check -- not compatible with ThreadFuzzer
+-- The real example with metric_log with 1200+ columns!
+SYSTEM flush logs system.metric_log;
+
 CREATE TABLE metric_log AS `system`.metric_log
 ENGINE = MergeTree
 ORDER BY tuple()
@@ -7,6 +13,10 @@ SETTINGS storage_policy = 's3_no_cache', min_rows_for_wide_part = 0, min_bytes_f
 INSERT INTO metric_log SELECT *
 FROM generateRandom()
 LIMIT 10;
+
+OPTIMIZE TABLE metric_log FINAL;
+
+SYSTEM flush logs part_log;
 
 SELECT
     'max_merge_delayed_streams_for_parallel_write=100' AS test,

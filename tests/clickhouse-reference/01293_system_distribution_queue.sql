@@ -6,8 +6,11 @@ create table null_01293 (key Int) engine=Null();
 create table dist_01293 as null_01293 engine=Distributed(test_cluster_two_shards, currentDatabase(), null_01293, key);
 -- no rows, since no active monitor
 select * from system.distribution_queue where database = currentDatabase();
+system stop distributed sends dist_01293;
 insert into dist_01293 select * from numbers(10);
 select is_blocked, error_count, data_files, data_compressed_bytes>100, broken_data_files, broken_data_compressed_bytes from system.distribution_queue where database = currentDatabase();
+system flush distributed dist_01293;
 select is_blocked, error_count, data_files, data_compressed_bytes, broken_data_files, broken_data_compressed_bytes from system.distribution_queue where database = currentDatabase();
+system start distributed sends dist_01293;
 drop table null_01293;
 drop table dist_01293;

@@ -16,6 +16,8 @@ FROM numbers(5);
 INSERT INTO test SELECT '{"a" : 42, "b" : [1, 2, 3]}'
 FROM numbers(5);
 
+OPTIMIZE TABLE test FINAL;
+
 SELECT DISTINCT
     dynamicType(json.b) AS type,
     isDynamicElementInSharedData(json.b)

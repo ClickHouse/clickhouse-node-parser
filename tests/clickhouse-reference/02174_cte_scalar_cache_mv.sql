@@ -32,6 +32,7 @@ SELECT k, l, m, n, count()
 FROM t2
 GROUP BY k, l, m, n
 ORDER BY k, l, m, n;
+SYSTEM FLUSH LOGS query_log;
 -- The main query should have a cache miss and 3 global hits
 -- The MV is executed 20 times (100 / 5) and each run does 1 miss and 4 hits to the LOCAL cache
 -- In addition to this, to prepare the MV, there is an extra preparation to get the list of columns via

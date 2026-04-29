@@ -73,4 +73,4 @@ SELECT
 SELECT
     'Year' AS mysql_type,
     CAST(2007 AS YEAR) AS result,
-    toTypeName(result) AS native_type;
+    toTypeName(result) AS native_type; -- select 'Time' as mysql_type, cast('12:45' as time) as result, toTypeName(result) as native_type;

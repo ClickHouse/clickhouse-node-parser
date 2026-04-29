@@ -48,10 +48,20 @@ ENGINE = ReplacingMergeTree()
 ORDER BY id
 PARTITION BY toYYYYMM(date_stat);
 
+SHOW TABLES FROM shard_0;
+
+SHOW TABLES FROM shard_1;
+
+SHOW CREATE TABLE shard_0.demo_loan_01568;
+
+SHOW CREATE TABLE shard_1.demo_loan_01568;
+
 CREATE TABLE demo_loan_01568_dist AS shard_0.demo_loan_01568
 ENGINE = Distributed('test_cluster_two_shards_different_databases', '', 'demo_loan_01568', id % 2);
 
 INSERT INTO demo_loan_01568_dist;
+
+SYSTEM FLUSH DISTRIBUTED demo_loan_01568_dist;
 
 SELECT *
 FROM demo_loan_01568_dist

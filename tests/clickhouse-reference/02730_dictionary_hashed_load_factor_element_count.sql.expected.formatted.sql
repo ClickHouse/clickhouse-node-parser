@@ -33,6 +33,8 @@ SOURCE(clickhouse(TABLE 'dict_data'))
 LIFETIME(MIN 0 MAX 0)
 LAYOUT(HASHED(SHARDS 32));
 
+SYSTEM RELOAD DICTIONARY dict_sharded;
+
 SELECT
     name,
     length(attribute.names),
@@ -57,6 +59,8 @@ PRIMARY KEY key
 SOURCE(clickhouse(TABLE 'dict_data'))
 LIFETIME(MIN 0 MAX 0)
 LAYOUT(HASHED(SHARDS 32));
+
+SYSTEM RELOAD DICTIONARY dict_sharded_multi;
 
 SELECT
     name,

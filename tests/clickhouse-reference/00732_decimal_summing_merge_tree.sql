@@ -9,6 +9,7 @@ CREATE TABLE decimal_sum
 ) Engine = SummingMergeTree(date, (date), 8192);
 INSERT INTO decimal_sum VALUES ('2001-01-01', 1, 1, -1);
 INSERT INTO decimal_sum VALUES ('2001-01-01', 1, -1, -1);
+OPTIMIZE TABLE decimal_sum;
 SELECT * FROM decimal_sum;
 INSERT INTO decimal_sum VALUES ('2001-01-01', -2, 1, 2);
 INSERT INTO decimal_sum VALUES ('2001-01-01', 0, -1, 0);

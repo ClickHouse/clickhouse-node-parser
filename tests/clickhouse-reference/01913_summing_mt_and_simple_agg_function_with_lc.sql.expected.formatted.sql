@@ -17,3 +17,5 @@ SELECT
 FROM smta;
 
 INSERT INTO smta (k, city);
+
+OPTIMIZE TABLE smta;

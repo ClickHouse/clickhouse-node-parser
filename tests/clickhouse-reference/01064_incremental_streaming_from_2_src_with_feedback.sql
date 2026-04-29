@@ -74,6 +74,10 @@ AS
    FROM checkouts
    LEFT JOIN (SELECT id, maxMerge(latest_login_time) as current_latest_login_time FROM target_table WHERE id IN (SELECT id FROM checkouts) GROUP BY id) USING (id)
    GROUP BY id;
+-- This query has effect only for existing tables, so it must be located after CREATE.
+SYSTEM STOP MERGES target_table;
+SYSTEM STOP MERGES checkouts;
+SYSTEM STOP MERGES logins;
 -- feed with some initial values
 INSERT INTO logins SELECT number as id,    '2000-01-01 08:00:00' from numbers(50000);
 INSERT INTO checkouts SELECT number as id, '2000-01-01 10:00:00' from numbers(50000);

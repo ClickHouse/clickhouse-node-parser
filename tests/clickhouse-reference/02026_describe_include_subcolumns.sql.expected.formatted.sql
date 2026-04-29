@@ -13,4 +13,8 @@ CREATE TABLE t_desc_subcolumns
 ENGINE = MergeTree
 ORDER BY d;
 
+DESCRIBE TABLE t_desc_subcolumns FORMAT PrettyCompactNoEscapes;
+
+DESCRIBE TABLE t_desc_subcolumns FORMAT PrettyCompactNoEscapes SETTINGS describe_include_subcolumns = 1;
+
 DROP TABLE t_desc_subcolumns;

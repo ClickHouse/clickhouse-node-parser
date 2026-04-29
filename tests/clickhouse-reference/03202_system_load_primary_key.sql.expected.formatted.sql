@@ -47,6 +47,12 @@ WHERE database = currentDatabase()
     AND table IN ('test', 'test2')
 ORDER BY table ASC;
 
+SYSTEM UNLOAD PRIMARY KEY;
+
+SYSTEM LOAD PRIMARY KEY;
+
+SYSTEM LOAD PRIMARY KEY test;
+
 DROP TABLE test;
 
 DROP TABLE test2;

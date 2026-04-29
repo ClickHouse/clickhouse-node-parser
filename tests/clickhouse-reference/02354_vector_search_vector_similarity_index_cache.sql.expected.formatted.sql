@@ -3,6 +3,8 @@
 -- Tests the vector index cache.
 SET parallel_replicas_local_plan = 1;
 
+SYSTEM CLEAR VECTOR SIMILARITY INDEX CACHE;
+
 SELECT
     metric,
     value
@@ -31,6 +33,8 @@ SELECT
 FROM tab
 ORDER BY L2Distance(vec, reference_vec) ASC
 LIMIT 3;
+
+SYSTEM FLUSH LOGS query_log;
 
 SELECT
     ProfileEvents['VectorSimilarityIndexCacheHits'],

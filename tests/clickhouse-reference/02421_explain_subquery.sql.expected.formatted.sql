@@ -131,4 +131,4 @@ WHERE like(`explain`, '%Header: \\_\\_table1.number UInt64%');
 SELECT (
         EXPLAIN SYNTAX oneline = 1
         SELECT 1
-    ) == 'SELECT 1 FROM system.one';
+    ) == 'SELECT 1 FROM system.one'; -- EXPLAIN ESTIMATE is not supported in experimental analyzer

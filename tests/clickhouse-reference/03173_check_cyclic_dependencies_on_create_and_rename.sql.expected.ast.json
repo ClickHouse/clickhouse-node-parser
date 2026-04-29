@@ -346,6 +346,63 @@
     ]
   },
   {
+    "kind": "createDictionary",
+    "table": {
+      "kind": "tableRef",
+      "table": "test_dict"
+    },
+    "replace": true,
+    "dictAttrs": [
+      {
+        "name": "id",
+        "type": {
+          "name": "UInt64"
+        }
+      },
+      {
+        "name": "value",
+        "type": {
+          "name": "String"
+        }
+      }
+    ],
+    "dictDef": {
+      "primaryKey": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "id"
+          ]
+        }
+      ],
+      "source": {
+        "name": "clickhouse",
+        "pairs": [
+          {
+            "name": "TABLE",
+            "value": {
+              "kind": "columnRef",
+              "parts": [
+                "view"
+              ]
+            }
+          }
+        ]
+      },
+      "layout": {
+        "name": "FLAT",
+        "pairs": []
+      },
+      "lifetime": {
+        "min": 0,
+        "max": 1000
+      }
+    },
+    "trailingComments": [
+      "-- {serverError INFINITE_LOOP}"
+    ]
+  },
+  {
     "kind": "drop",
     "targetType": "DICTIONARY",
     "table": {
@@ -406,6 +463,26 @@
         "max": 1000
       }
     }
+  },
+  {
+    "kind": "rename",
+    "targetType": "DICTIONARY",
+    "pairs": [
+      {
+        "from": {
+          "kind": "tableRef",
+          "table": "test_dict"
+        },
+        "to": {
+          "kind": "tableRef",
+          "table": "test_dict_2"
+        }
+      }
+    ],
+    "exchange": true,
+    "trailingComments": [
+      "-- {serverError INFINITE_LOOP}"
+    ]
   },
   {
     "kind": "drop",
@@ -476,6 +553,25 @@
       "kind": "tableRef",
       "table": "test_dict"
     }
+  },
+  {
+    "kind": "rename",
+    "targetType": "DICTIONARY",
+    "pairs": [
+      {
+        "from": {
+          "kind": "tableRef",
+          "table": "test_dict_2"
+        },
+        "to": {
+          "kind": "tableRef",
+          "table": "test_dict"
+        }
+      }
+    ],
+    "trailingComments": [
+      "-- {serverError INFINITE_LOOP}"
+    ]
   },
   {
     "kind": "drop",

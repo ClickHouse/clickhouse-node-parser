@@ -10,6 +10,8 @@ ORDER BY (key + 0);
 
 INSERT INTO data_01292;
 
+OPTIMIZE TABLE data_01292 FINAL;
+
 SELECT *
 FROM data_01292
 WHERE key > 0;

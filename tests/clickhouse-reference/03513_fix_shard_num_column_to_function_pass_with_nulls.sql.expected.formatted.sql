@@ -33,4 +33,5 @@ FROM
 FULL JOIN (
         SELECT 1 AS c0
     ) AS tx
-    ON true;
+    ON true; -- This doesn't work, but it is a separate bug https://github.com/ClickHouse/ClickHouse/issues/80691
+-- SELECT t1._shard_num % t1._shard_num FROM t1 FULL JOIN (SELECT 1 AS c0) tx ON TRUE ORDER BY t1._shard_num;

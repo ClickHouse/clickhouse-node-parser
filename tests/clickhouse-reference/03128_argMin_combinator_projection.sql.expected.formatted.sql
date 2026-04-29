@@ -43,6 +43,8 @@ CREATE TABLE combinator_argMin_table_r2
 ENGINE = ReplicatedMergeTree('/clickhouse/tables/{database}/test_03128/combinator_argMin_table', 'r2')
 ORDER BY (id);
 
+SYSTEM SYNC REPLICA combinator_argMin_table_r2;
+
 SET parallel_replicas_local_plan = 1, parallel_replicas_support_projection = 1, optimize_aggregation_in_order = 0;
 
 SELECT

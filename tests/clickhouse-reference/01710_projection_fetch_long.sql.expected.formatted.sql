@@ -34,6 +34,8 @@ INSERT INTO tp_1 SELECT
     number
 FROM numbers(3);
 
+SYSTEM sync replica tp_2;
+
 SELECT *
 FROM tp_2
 ORDER BY x ASC;
@@ -55,6 +57,8 @@ WHERE database = currentDatabase()
     AND table = 'tp_2'
     AND name = 'pp'
     AND active;
+
+SHOW CREATE TABLE tp_2;
 
 -- all other three operations are mutations
 SET mutations_sync = 2;

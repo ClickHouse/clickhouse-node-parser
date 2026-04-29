@@ -10,5 +10,9 @@ AS SELECT number AS x
 FROM numbers(3)
 UNION ALL
 SELECT rand64() AS x;
+
+SYSTEM WAIT VIEW 03221_rmv;
+
 SELECT read_rows, total_rows, progress FROM system.view_refreshes WHERE database = currentDatabase() and view = '03221_rmv';
+
 DROP TABLE 03221_rmv;

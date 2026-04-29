@@ -11,6 +11,8 @@ ORDER BY a
 PARTITION BY d
 SETTINGS min_bytes_for_wide_part = 0, min_rows_for_wide_part = 0, materialize_ttl_recalculate_only = 0;
 
+SYSTEM stop ttl merges ttl_test_02129;
+
 INSERT INTO ttl_test_02129 SELECT
     number,
     '',
@@ -52,3 +54,7 @@ SETTINGS min_bytes_for_wide_part = 0, min_rows_for_wide_part = 0, materialize_tt
 ALTER TABLE ttl_test_02129 ADD COLUMN c Int64 SETTINGS mutations_sync = 2, alter_sync = 2;
 
 ALTER TABLE ttl_test_02129 MODIFY TTL (d + toIntervalMonth(1)) WHERE c = 1 SETTINGS mutations_sync = 2, alter_sync = 2;
+
+SYSTEM start ttl merges ttl_test_02129;
+
+OPTIMIZE TABLE ttl_test_02129 FINAL;

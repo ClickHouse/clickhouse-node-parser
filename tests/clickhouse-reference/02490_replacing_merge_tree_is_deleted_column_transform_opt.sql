@@ -13,6 +13,8 @@ SETTINGS index_granularity=512;
 -- insert 10000 rows in partition 'A' and delete half of them and merge the 2 parts
 INSERT INTO tab SELECT 'A', number, number, 1, 0 FROM numbers(10000);
 INSERT INTO tab SELECT 'A', number, number + 1, 2, IF(number % 2 = 0, 0, 1) FROM numbers(10000);
+OPTIMIZE TABLE tab SETTINGS mutations_sync = 2;
+SYSTEM STOP MERGES tab;
 -- insert 10000 rows in partition 'B' and delete half of them, but keep 2 parts
 INSERT INTO tab SELECT 'B', number+1000000, number, 1, 0 FROM numbers(10000);
 INSERT INTO tab SELECT 'B', number+1000000, number + 1, 2, IF(number % 2 = 0, 0, 1) FROM numbers(10000);
@@ -45,3 +47,5 @@ SETTINGS do_not_merge_across_partitions_select_final=0,split_intersecting_parts_
 SELECT count()
 FROM tab FINAL
 SETTINGS do_not_merge_across_partitions_select_final=1,split_intersecting_parts_ranges_into_layers_final=1;
+SYSTEM START MERGES tab;
+OPTIMIZE TABLE tab FINAL SETTINGS mutations_sync = 2;

@@ -24,11 +24,17 @@ SETTINGS old_parts_lifetime = 0, cleanup_delay_period = 300, max_cleanup_delay_p
 
 INSERT INTO mutate_and_zero_copy_replication1;
 
+SYSTEM SYNC REPLICA mutate_and_zero_copy_replication2;
+
 SET mutations_sync = 2;
 
 ALTER TABLE mutate_and_zero_copy_replication1 UPDATE a = 2 WHERE 1;
 
 DROP TABLE mutate_and_zero_copy_replication1;
+
+DETACH TABLE mutate_and_zero_copy_replication2;
+
+ATTACH TABLE mutate_and_zero_copy_replication2;
 
 SELECT *
 FROM mutate_and_zero_copy_replication2

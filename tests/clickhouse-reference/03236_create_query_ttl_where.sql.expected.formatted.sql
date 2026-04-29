@@ -13,4 +13,6 @@ TTL timestamp + toIntervalSecond(2) WHERE a IN (
     LIMIT 100000
 );
 
+SHOW CREATE TABLE ttl;
+
 DROP TABLE ttl;

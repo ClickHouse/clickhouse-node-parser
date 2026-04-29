@@ -7,6 +7,9 @@ CREATE TABLE ipv4_test
 )
 ENGINE = Memory;
 
+-- ipv4_ column shoud have type 'IPv4'
+SHOW CREATE TABLE ipv4_test;
+
 INSERT INTO ipv4_test (ipv4_);
 
 SELECT
@@ -48,6 +51,9 @@ CREATE TABLE ipv6_test
     ipv6_ IPv6
 )
 ENGINE = Memory;
+
+-- ipv6_ column shoud have type 'IPv6'
+SHOW CREATE TABLE ipv6_test;
 
 INSERT INTO ipv6_test;
 

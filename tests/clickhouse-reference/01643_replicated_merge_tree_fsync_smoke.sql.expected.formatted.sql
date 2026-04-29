@@ -25,8 +25,12 @@ ORDER BY key;
 
 INSERT INTO rep_fsync_r1;
 
+SYSTEM sync replica rep_fsync_r2;
+
 SELECT *
 FROM rep_fsync_r2;
+
+OPTIMIZE TABLE rep_fsync_r1 FINAL;
 
 DROP TABLE rep_fsync_r1;
 
@@ -117,3 +121,6 @@ INSERT INTO rep_fsync_r2;
 SELECT *
 FROM rep_fsync_r2
 ORDER BY key ASC;
+
+-- vertical merge does not supports deduplicate, hence no FINAL
+OPTIMIZE TABLE rep_fsync_r1;

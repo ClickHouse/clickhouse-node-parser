@@ -4,6 +4,12 @@ DROP TABLE IF EXISTS test;
 
 INSERT INTO FUNCTION file('01721_file/test/data.TSV', 'TSV', 'id UInt32');
 
+ATTACH TABLE test FROM '01721_file/test'
+(
+    id UInt8
+)
+ENGINE = File(TSV);
+
 INSERT INTO test;
 
 INSERT INTO test;

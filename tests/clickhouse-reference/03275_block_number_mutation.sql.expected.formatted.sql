@@ -16,6 +16,8 @@ INSERT INTO t_block_number_delete SELECT
     now() - toIntervalMinute(number)
 FROM numbers(10);
 
+OPTIMIZE TABLE t_block_number_delete FINAL;
+
 ALTER TABLE t_block_number_delete DELETE WHERE x < 2;
 
 SELECT
@@ -40,6 +42,10 @@ WHERE database = currentDatabase()
     AND active
 GROUP BY column
 ORDER BY column ASC;
+
+DETACH TABLE t_block_number_delete;
+
+ATTACH TABLE t_block_number_delete;
 
 DROP TABLE t_block_number_delete;
 

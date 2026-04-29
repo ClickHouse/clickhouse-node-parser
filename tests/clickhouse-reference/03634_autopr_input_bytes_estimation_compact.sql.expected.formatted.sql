@@ -85,6 +85,8 @@ SETTINGS log_comment = 'query_8';
 
 SET enable_parallel_replicas = 0, automatic_parallel_replicas_mode = 0;
 
+SYSTEM FLUSH LOGS query_log;
+
 -- Just checking that the estimation is not too far off
 SELECT format('{} {} {}', log_comment, compressed_bytes, statistics_input_bytes)
 FROM (

@@ -23,6 +23,8 @@ ENGINE = Buffer(currentDatabase(), data, 2, 2, 4, 100000, 1000000, 10e9, 10e9, 3
 SELECT sleep(5)
 FORMAT Null;
 
+OPTIMIZE TABLE empty_buffer;
+
 DROP TABLE empty_buffer;
 
 DROP TABLE IF EXISTS empty_buffer_zero_time;
@@ -35,6 +37,8 @@ ENGINE = Buffer(currentDatabase(), data, 2, 0, 0, 100000, 1000000, 10e9, 10e9, 0
 
 SELECT sleep(1)
 FORMAT Null;
+
+OPTIMIZE TABLE empty_buffer_zero_time;
 
 DROP TABLE empty_buffer_zero_time;
 
@@ -75,6 +79,8 @@ ENGINE = Buffer(currentDatabase(), data, 2, 2, 4, 100000, 1000000, 10e9, 10e9, 3
 INSERT INTO buffer_flush_by_flush_time;
 
 DROP TABLE buffer_flush_by_flush_time;
+
+SYSTEM flush logs text_log;
 
 -- to avoid flakiness we only check that number of logs < 20, instead of some strict values
 SELECT

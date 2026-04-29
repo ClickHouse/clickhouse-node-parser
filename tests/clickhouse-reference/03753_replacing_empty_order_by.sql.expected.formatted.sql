@@ -15,6 +15,8 @@ ORDER BY tuple();
 
 INSERT INTO t_empty_order_key (c0, c1);
 
+OPTIMIZE TABLE t_empty_order_key FINAL;
+
 SELECT *
 FROM t_empty_order_key
 ORDER BY c0 ASC;

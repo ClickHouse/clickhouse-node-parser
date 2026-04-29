@@ -43,6 +43,8 @@ WHERE (like(`explain`, '%Name%'))
 
 SET exclude_materialize_skip_indexes_on_insert = 'idx_a';
 
+SYSTEM STOP MERGES tab;
+
 INSERT INTO tab SELECT
     number,
     number / 50
@@ -55,6 +57,10 @@ FROM numbers(100, 100);
 
 SELECT *
 FROM explain_indexes;
+
+SYSTEM START MERGES tab;
+
+OPTIMIZE TABLE tab FINAL;
 
 TRUNCATE TABLE tab;
 
@@ -73,6 +79,8 @@ INSERT INTO tab SELECT
     number / 50
 FROM numbers(100, 100)
 SETTINGS exclude_materialize_skip_indexes_on_insert = '`id,x_b`';
+
+SYSTEM FLUSH LOGS query_log;
 
 SELECT count()
 FROM `system`.query_log

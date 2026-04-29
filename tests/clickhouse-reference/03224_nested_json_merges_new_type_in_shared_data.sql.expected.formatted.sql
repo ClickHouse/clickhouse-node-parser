@@ -17,6 +17,8 @@ FROM numbers(5);
 INSERT INTO test SELECT materialize('{"a1" : 42, "a2" : 42, "a3" : 42, "a4" : 42, "a5" : 42, "a6" : 42, "a7" : 42, "a8" : 42, "a" : [{"c" : 42}]}')::JSON(max_dynamic_paths=8)
 FROM numbers(5);
 
+OPTIMIZE TABLE test FINAL;
+
 SELECT DISTINCT
     dynamicType(json.a) AS type,
     isDynamicElementInSharedData(json.a)

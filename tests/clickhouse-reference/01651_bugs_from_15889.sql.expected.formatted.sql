@@ -74,6 +74,9 @@ INSERT INTO trace_log;
 
 SET allow_introspection_functions = 1;
 
+-- make sure query_log exists
+SYSTEM FLUSH LOGS query_log;
+
 WITH concat(addressToLine(arrayJoin(trace) AS addr), '#') AS symbol
 
 SELECT count() > 7

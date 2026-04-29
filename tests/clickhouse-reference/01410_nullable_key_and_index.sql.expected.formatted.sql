@@ -57,6 +57,8 @@ SELECT *
 FROM nullable_key
 WHERE k < 10;
 
+OPTIMIZE TABLE nullable_key FINAL;
+
 SET max_rows_to_read = 4; -- one additional left mark needs to be read
 
 SELECT *
@@ -199,3 +201,4 @@ CREATE TABLE invalid_simple_agg_state_null
 )
 ENGINE = MergeTree
 ORDER BY id; -- { serverError DATA_TYPE_CANNOT_BE_USED_IN_KEY }
+-- AggregateFunctions are not comparable and cannot be used in key expressions. No need to test it.

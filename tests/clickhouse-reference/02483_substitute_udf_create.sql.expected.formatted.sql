@@ -18,6 +18,8 @@ CREATE TABLE `02483_substitute_udf`
 ENGINE = MergeTree()
 ORDER BY id;
 
+DESCRIBE TABLE `02483_substitute_udf`;
+
 INSERT INTO `02483_substitute_udf` (id, number);
 
 SELECT *

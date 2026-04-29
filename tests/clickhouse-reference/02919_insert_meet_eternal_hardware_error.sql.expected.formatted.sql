@@ -11,7 +11,16 @@ ORDER BY (KeyID);
 
 INSERT INTO t_hardware_error;
 
+-- Data is written to ZK but the connection fails right after and we can't recover it
+SYSTEM enable failpoint replicated_merge_tree_commit_zk_fail_after_op;
+
+SYSTEM enable failpoint replicated_merge_tree_commit_zk_fail_when_recovering_from_hw_fault;
+
 INSERT INTO t_hardware_error; -- {serverError UNKNOWN_STATUS_OF_INSERT}
+
+SYSTEM disable failpoint replicated_commit_zk_fail_after_op;
+
+SYSTEM disable failpoint replicated_merge_tree_commit_zk_fail_when_recovering_from_hw_fault;
 
 INSERT INTO t_hardware_error;
 

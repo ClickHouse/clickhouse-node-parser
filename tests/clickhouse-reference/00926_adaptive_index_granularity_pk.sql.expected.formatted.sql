@@ -164,6 +164,12 @@ FROM large_alter_table_00926;
 
 ALTER TABLE large_alter_table_00926 MODIFY COLUMN data CODEC(NONE, LZ4, LZ4HC, ZSTD);
 
+OPTIMIZE TABLE large_alter_table_00926;
+
+DETACH TABLE large_alter_table_00926;
+
+ATTACH TABLE large_alter_table_00926;
+
 SELECT COUNT(hash)
 FROM store_of_hash_00926;
 

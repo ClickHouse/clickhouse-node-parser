@@ -22,6 +22,8 @@ SELECT *
 FROM t_async_insert_02193_1
 ORDER BY id ASC;
 
+SYSTEM FLUSH LOGS query_log;
+
 SELECT
     count(),
     sum(ProfileEvents['AsyncInsertQuery'])

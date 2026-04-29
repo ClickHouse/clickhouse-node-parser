@@ -15,6 +15,8 @@ INSERT INTO tab SELECT
     1
 FROM numbers(1e7);
 
+OPTIMIZE TABLE tab FINAL;
+
 WITH (60 * 60) * 24 AS d
 
 SELECT

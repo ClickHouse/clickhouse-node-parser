@@ -46,4 +46,6 @@ ARRAY JOIN n
 WHERE like(n.x, '%Hello%')
 ORDER BY n.x ASC;
 
+OPTIMIZE TABLE alter_00147;
+
 DROP TABLE alter_00147;

@@ -7,6 +7,8 @@ CREATE TABLE data_order_by_proj_incomp
 ENGINE = MergeTree()
 ORDER BY t;
 
+SYSTEM stop merges data_order_by_proj_incomp;
+
 INSERT INTO data_order_by_proj_incomp;
 
 ALTER TABLE data_order_by_proj_incomp ADD PROJECTION tSort (SELECT *
@@ -31,4 +33,4 @@ SELECT t
 FROM data_order_by_proj_incomp
 WHERE t > 0
 ORDER BY t ASC
-SETTINGS max_threads = 1;
+SETTINGS max_threads = 1; -- { echoOff }

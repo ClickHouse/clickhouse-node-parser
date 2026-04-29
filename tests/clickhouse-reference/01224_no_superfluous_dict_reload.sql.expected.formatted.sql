@@ -40,6 +40,10 @@ SELECT *
 FROM `system`.tables
 FORMAT Null;
 
+SHOW CREATE TABLE dict_db_01224.dict FORMAT TSVRaw;
+
+SHOW CREATE TABLE dict_db_01224_dictionary.`dict_db_01224.dict` FORMAT TSVRaw;
+
 SELECT
     engine,
     like(metadata_path, '%metadata/dict\\_db\\_01224/dict.sql'),

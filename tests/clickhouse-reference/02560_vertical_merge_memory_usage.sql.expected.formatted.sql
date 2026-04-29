@@ -611,6 +611,10 @@ INSERT INTO tvm SELECT
     number + 299
 FROM numbers(20);
 
+OPTIMIZE TABLE tvm FINAL;
+
+SYSTEM flush logs part_log;
+
 -- should be about 4MB
 SELECT
     formatReadableSize(peak_memory_usage),

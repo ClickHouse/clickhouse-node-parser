@@ -11,6 +11,8 @@ ENGINE = MergeTree
 ORDER BY id
 SETTINGS ratio_of_defaults_for_sparse_serialization = 0.9;
 
+SYSTEM STOP MERGES t_sparse_distinct;
+
 INSERT INTO t_sparse_distinct SELECT
     number,
     number % 6

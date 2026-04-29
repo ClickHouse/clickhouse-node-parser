@@ -206,6 +206,10 @@
     }
   },
   {
+    "kind": "system",
+    "body": "SYSTEM stop distributed sends dist_in"
+  },
+  {
     "kind": "createTable",
     "table": {
       "kind": "tableRef",
@@ -333,6 +337,17 @@
       "-- due to pushing to MV with aggregation the query needs ~300MiB",
       "-- but it will be done in background via \"system flush distributed\""
     ]
+  },
+  {
+    "kind": "system",
+    "body": "SYSTEM flush distributed dist_in",
+    "trailingComments": [
+      "-- { serverError MEMORY_LIMIT_EXCEEDED }"
+    ]
+  },
+  {
+    "kind": "system",
+    "body": "SYSTEM flush distributed dist_in settings max_memory_usage=0"
   },
   {
     "kind": "select",

@@ -15,6 +15,7 @@ ENGINE = MergeTree ORDER BY tuple() SETTINGS index_granularity = 4, materialize_
 -- negative test case
 ALTER TABLE tab MODIFY SETTING exclude_materialize_skip_indexes_on_merge ='!@#$^#$&#$$%$,,.,3.45,45.';
 INSERT INTO tab SELECT number, number / 50 FROM numbers(100);
+OPTIMIZE TABLE tab FINAL; -- { serverError CANNOT_PARSE_TEXT }
 TRUNCATE TABLE tab;
 CREATE VIEW explain_indexes
 AS SELECT trimLeft(explain) AS explain
@@ -28,9 +29,11 @@ FROM
     ))
 )
 WHERE (explain LIKE '%Name%') OR (explain LIKE '%Description%') OR (explain LIKE '%Parts%') OR (explain LIKE '%Granules%') OR (explain LIKE '%Range%');
+SYSTEM STOP MERGES tab;
 ALTER TABLE tab MODIFY SETTING exclude_materialize_skip_indexes_on_merge = 'idx_a';
 INSERT INTO tab SELECT number, number / 50 FROM numbers(100, 100);
 SELECT * FROM explain_indexes;
+SYSTEM START MERGES tab;
 ALTER TABLE tab MATERIALIZE INDEX idx_a;
 ALTER TABLE tab MODIFY SETTING exclude_materialize_skip_indexes_on_merge = 'idx_a, `id,x_b`';
 DROP TABLE tab;

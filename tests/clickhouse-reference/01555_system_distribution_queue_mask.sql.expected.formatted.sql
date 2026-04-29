@@ -20,7 +20,12 @@ CREATE TABLE dist_01555
 )
 ENGINE = Distributed(test_cluster_with_incorrect_pw, currentDatabase(), data_01555, key);
 
+SYSTEM stop distributed sends dist_01555;
+
 INSERT INTO dist_01555;
+
+-- since test_cluster_with_incorrect_pw contains incorrect password ignore error
+SYSTEM flush distributed dist_01555; -- { serverError AUTHENTICATION_FAILED }
 
 SELECT
     length(splitByChar('*', data_path)),

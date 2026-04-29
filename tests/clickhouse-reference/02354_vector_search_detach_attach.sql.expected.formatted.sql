@@ -14,6 +14,10 @@ SETTINGS index_granularity = 8192;
 
 INSERT INTO tab;
 
+DETACH TABLE tab SYNC;
+
+ATTACH TABLE tab;
+
 WITH [0.0, 2.0] AS reference_vec
 
 SELECT

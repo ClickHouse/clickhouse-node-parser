@@ -14,6 +14,8 @@ SETTINGS compress_marks = 0;
 
 INSERT INTO tab (str);
 
+OPTIMIZE TABLE tab FINAL;
+
 -- to double check: `ll -h $(find . -name "*text_idx*")` from build dir
 -- sum up .mrk* or .cmrk* files to get marks_bytes
 -- sum up .idx files for data_compressed_bytes

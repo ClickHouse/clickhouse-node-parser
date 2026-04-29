@@ -13,13 +13,19 @@ ORDER BY id
 PARTITION BY id % 2
 SETTINGS enable_block_number_column = 1, enable_block_offset_column = 1, apply_patches_on_merge = 1;
 
+SYSTEM STOP MERGES lwu_on_fly;
+
 INSERT INTO lwu_on_fly SELECT
     number,
     number,
     concat('c', number)
 FROM numbers(10);
 
+UPDATE lwu_on_fly SET u = 0 WHERE id % 3 = 2;
+
 ALTER TABLE lwu_on_fly DELETE WHERE id IN (4, 5) SETTINGS mutations_sync = 0;
+
+UPDATE lwu_on_fly SET u = 0 WHERE id % 3 = 1;
 
 SELECT *
 FROM lwu_on_fly

@@ -18,6 +18,8 @@ INSERT INTO merge_tree;
 
 ALTER TABLE merge_tree ADD COLUMN dummy String AFTER CounterID;
 
+DESCRIBE TABLE merge_tree;
+
 INSERT INTO merge_tree;
 
 SELECT

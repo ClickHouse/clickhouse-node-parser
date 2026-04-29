@@ -14,6 +14,7 @@ LIFETIME(MIN 0 MAX 0)
 LAYOUT(FLAT());
 SELECT query_count FROM system.dictionaries WHERE database = 'foo 1234' AND name = 'dict';
 SELECT dictGetUInt64('foo 1234.dict', 'val', toUInt64(0));
+SYSTEM RELOAD DICTIONARY `foo 1234`.dict;
 DROP DATABASE IF EXISTS `foo 123`;
 CREATE DATABASE `foo 123`;
 DROP DICTIONARY `foo 1234`.dict;

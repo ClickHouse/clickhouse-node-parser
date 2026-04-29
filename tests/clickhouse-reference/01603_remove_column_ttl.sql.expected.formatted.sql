@@ -14,6 +14,8 @@ INSERT INTO table_with_column_ttl;
 
 INSERT INTO table_with_column_ttl;
 
+OPTIMIZE TABLE table_with_column_ttl FINAL;
+
 SELECT
     UserID,
     Age
@@ -21,6 +23,8 @@ FROM table_with_column_ttl
 ORDER BY UserID ASC;
 
 ALTER TABLE table_with_column_ttl MODIFY COLUMN Age;
+
+SHOW CREATE TABLE table_with_column_ttl;
 
 INSERT INTO table_with_column_ttl;
 

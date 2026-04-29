@@ -16,6 +16,8 @@ SELECT
 
 SET log_queries = 0;
 
+SYSTEM FLUSH LOGS trace_log, query_log;
+
 WITH concat(addressToLine(arrayJoin(trace) AS addr), '#', demangle(addressToSymbol(addr))) AS symbol
 
 SELECT count() > 0

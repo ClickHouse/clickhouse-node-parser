@@ -36,6 +36,17 @@ create table morton_numbers_mask_1_02457(
 insert into morton_numbers_mask_1_02457
 select untuple(mortonDecode((1,2,1,2), mortonEncode((1,2,1,2), n1, n2, n3, n4)))
 from morton_numbers_mask_02457;
+(
+    select * from morton_numbers_mask_02457
+    union distinct
+    select * from morton_numbers_mask_1_02457
+)
+except
+(
+    select * from morton_numbers_mask_02457
+    intersect
+    select * from morton_numbers_mask_1_02457
+);
 create table morton_numbers_mask_02457(
     n1 UInt32,
     n2 UInt8
@@ -57,6 +68,17 @@ create table morton_numbers_mask_2_02457(
 insert into morton_numbers_mask_2_02457
 select untuple(mortonDecode((1,4), mortonEncode((1,4), n1, n2)))
 from morton_numbers_mask_02457;
+(
+    select * from morton_numbers_mask_02457
+    union distinct
+    select * from morton_numbers_mask_2_02457
+)
+except
+(
+    select * from morton_numbers_mask_02457
+                      intersect
+        select * from morton_numbers_mask_2_02457
+);
 create table morton_numbers_mask_02457(
     n1 UInt16,
     n2 UInt16,
@@ -81,3 +103,14 @@ create table morton_numbers_mask_3_02457(
 insert into morton_numbers_mask_3_02457
 select untuple(mortonDecode((1,1,2), mortonEncode((1,1,2), n1, n2, n3)))
 from morton_numbers_mask_02457;
+(
+    select * from morton_numbers_mask_02457
+    union distinct
+    select * from morton_numbers_mask_3_02457
+)
+except
+(
+    select * from morton_numbers_mask_02457
+    intersect
+    select * from morton_numbers_mask_3_02457
+);

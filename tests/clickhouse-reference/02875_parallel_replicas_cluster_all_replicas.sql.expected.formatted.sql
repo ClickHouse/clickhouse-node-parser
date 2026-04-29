@@ -18,6 +18,8 @@ SELECT count()
 FROM clusterAllReplicas('test_cluster_two_shard_three_replicas_localhost', currentDatabase(), tt)
 SETTINGS log_comment = '02875_190aed82-2423-413b-ad4c-24dcca50f65b';
 
+SYSTEM FLUSH LOGS query_log;
+
 SELECT countIf(ProfileEvents['ParallelReplicasQueryCount'] > 0)
 FROM `system`.query_log
 WHERE type = 'QueryFinish'

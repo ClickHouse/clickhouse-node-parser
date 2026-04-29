@@ -19,6 +19,12 @@ CREATE TABLE no_insertable
 )
 ENGINE = Memory; -- { serverError EMPTY_LIST_OF_COLUMNS_PASSED }
 
+ATTACH TABLE no_insertable
+(
+    a Int MATERIALIZED 1
+)
+ENGINE = Memory;
+
 CREATE TABLE insertable
 (
     a Int EPHEMERAL,

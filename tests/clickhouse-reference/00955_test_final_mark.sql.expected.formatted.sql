@@ -32,6 +32,8 @@ WHERE table = 'mt_with_pk'
 
 INSERT INTO mt_with_pk (d, x, y, z, `n.Age`, `n.Name`);
 
+OPTIMIZE TABLE mt_with_pk FINAL;
+
 ALTER TABLE mt_with_pk MODIFY COLUMN y Array(String);
 
 INSERT INTO mt_with_pk (d, x, y, z, `n.Age`, `n.Name`);
@@ -140,6 +142,8 @@ WHERE table = 'mt_without_pk'
 
 INSERT INTO mt_without_pk (d, x, y, z, `n.Age`, `n.Name`);
 
+OPTIMIZE TABLE mt_without_pk FINAL;
+
 DROP TABLE IF EXISTS mt_with_small_granularity;
 
 CREATE TABLE mt_with_small_granularity
@@ -169,3 +173,5 @@ WHERE table = 'mt_with_small_granularity'
     AND database = currentDatabase();
 
 INSERT INTO mt_with_small_granularity (d, x, y, z, `n.Age`, `n.Name`);
+
+OPTIMIZE TABLE mt_with_small_granularity FINAL;

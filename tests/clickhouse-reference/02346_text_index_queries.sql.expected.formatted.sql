@@ -32,10 +32,16 @@ WHERE table == 'tab'
     AND database = currentDatabase()
 LIMIT 1;
 
+-- throw in a random consistency check
+CHECK TABLE tab SETTINGS check_query_single_value_result = 1;
+
 -- search text index with ==
 SELECT *
 FROM tab
 WHERE s == 'Alick a01';
+
+-- check the query only read 1 granules (2 rows total; each granule has 2 rows)
+SYSTEM FLUSH LOGS query_log;
 
 SELECT read_rows == 2
 FROM `system`.query_log
@@ -143,6 +149,8 @@ INSERT INTO tab;
 INSERT INTO tab;
 
 ALTER TABLE tab ADD INDEX af s TYPE text(tokenizer = ngrams(2)) GRANULARITY 1 SETTINGS mutations_sync = 2;
+
+OPTIMIZE TABLE tab FINAL;
 
 -- check text index was created
 SELECT

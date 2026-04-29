@@ -19,6 +19,8 @@ INSERT INTO partitioned_by_tuple;
 
 INSERT INTO partitioned_by_tuple;
 
+OPTIMIZE TABLE partitioned_by_tuple;
+
 SELECT *
 FROM partitioned_by_tuple
 ORDER BY
@@ -26,5 +28,7 @@ ORDER BY
     x ASC,
     w ASC,
     y ASC;
+
+OPTIMIZE TABLE partitioned_by_tuple FINAL;
 
 DROP TABLE partitioned_by_tuple;

@@ -9,6 +9,8 @@ ENGINE = ReplacingMergeTree
 ORDER BY (dt, id)
 PARTITION BY toYYYYMM(dt);
 
+SYSTEM STOP merges test_table;
+
 INSERT INTO test_table;
 
 INSERT INTO test_table;

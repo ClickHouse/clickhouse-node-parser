@@ -160,3 +160,4 @@ SELECT substringIndexUTF8('富强，民主，文明', '', 2); -- { serverError B
 SELECT substringIndexUTF8('富强，民主，文明', materialize('，'), 2); -- { serverError ILLEGAL_COLUMN }
 
 SELECT substringIndexUTF8('富强，民主，文明', '，', CAST(2 AS Int128)); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
+-- { echoOff }

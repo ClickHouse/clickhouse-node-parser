@@ -13,6 +13,8 @@ CREATE TABLE tab
 ENGINE = ReplacingMergeTree()
 ORDER BY id;
 
+SYSTEM STOP MERGES tab;
+
 INSERT INTO tab;
 
 INSERT INTO tab;

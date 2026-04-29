@@ -13,5 +13,7 @@ INSERT INTO test_virtual_columns;
 SELECT _part_offset
 FROM test_virtual_columns;
 
+DELETE FROM test_virtual_columns WHERE a = 1;
+
 -- { echoOff }
 DROP TABLE test_virtual_columns;

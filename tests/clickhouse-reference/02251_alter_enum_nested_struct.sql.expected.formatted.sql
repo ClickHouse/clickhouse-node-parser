@@ -18,6 +18,12 @@ SELECT *
 FROM alter_enum_array
 ORDER BY Key ASC;
 
+DETACH TABLE alter_enum_array;
+
+ATTACH TABLE alter_enum_array;
+
+OPTIMIZE TABLE alter_enum_array FINAL;
+
 SELECT COUNT()
 FROM `system`.mutations
 WHERE table = 'alter_enum_array'

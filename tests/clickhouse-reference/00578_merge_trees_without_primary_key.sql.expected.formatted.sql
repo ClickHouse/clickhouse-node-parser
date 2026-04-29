@@ -15,6 +15,8 @@ INSERT INTO unsorted;
 
 INSERT INTO unsorted;
 
+OPTIMIZE TABLE unsorted PARTITION tuple() FINAL;
+
 SELECT *
 FROM unsorted;
 
@@ -42,6 +44,8 @@ FROM unsorted_replacing FINAL;
 
 SELECT '---';
 
+OPTIMIZE TABLE unsorted_replacing PARTITION tuple() FINAL;
+
 SELECT *
 FROM unsorted_replacing;
 
@@ -66,6 +70,8 @@ INSERT INTO unsorted_collapsing;
 
 SELECT *
 FROM unsorted_collapsing FINAL;
+
+OPTIMIZE TABLE unsorted_collapsing PARTITION tuple() FINAL;
 
 SELECT *
 FROM unsorted_collapsing;

@@ -11,8 +11,12 @@ ENGINE = MergeTree()
 ORDER BY key
 TTL date + 14;
 
+SHOW CREATE TABLE data_02230_ttl FORMAT TSVRaw;
+
 CREATE TABLE null_02230_ttl AS data_02230_ttl
 ENGINE = Null();
+
+SHOW CREATE TABLE null_02230_ttl FORMAT TSVRaw;
 
 DROP TABLE data_02230_ttl;
 
@@ -32,8 +36,13 @@ ENGINE = MergeTree()
 ORDER BY key
 TTL date + 14;
 
+SHOW CREATE TABLE data_02230_column_ttl FORMAT TSVRaw;
+
 CREATE TABLE null_02230_column_ttl AS data_02230_column_ttl
 ENGINE = Null();
+
+-- check that order of columns is the same
+SHOW CREATE TABLE null_02230_column_ttl FORMAT TSVRaw;
 
 DROP TABLE data_02230_column_ttl;
 

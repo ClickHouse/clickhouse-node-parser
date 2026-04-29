@@ -13,6 +13,8 @@ ENGINE = MergeTree
 ORDER BY id
 SETTINGS min_rows_for_wide_part = 1000000000, min_bytes_for_wide_part = 10000000000, lock_acquire_timeout_for_background_operations = 600;
 
+SYSTEM stop merges test;
+
 INSERT INTO test SELECT
     number,
     number
@@ -27,6 +29,10 @@ INSERT INTO test SELECT
     number,
     range(number % 10 + 1)
 FROM numbers(400000, 200000);
+
+SYSTEM start merges test;
+
+OPTIMIZE TABLE test FINAL;
 
 SELECT
     count(),

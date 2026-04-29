@@ -9,6 +9,7 @@ SETTINGS
     ratio_of_defaults_for_sparse_serialization = 1.0,
     serialization_info_version = 'basic',
     compact_parts_max_granules_to_buffer = 1;
+SYSTEM STOP MERGES t_merge_tree_index;
 INSERT INTO t_merge_tree_index SELECT number % 5, number, 'v' || toString(number * number) FROM numbers(10);
 INSERT INTO t_merge_tree_index SELECT number % 5, number, 'v' || toString(number * number) FROM numbers(10, 10);
 SET output_format_pretty_named_tuples_as_json = 0;

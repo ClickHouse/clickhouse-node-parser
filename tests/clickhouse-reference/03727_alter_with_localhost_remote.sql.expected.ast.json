@@ -100,5 +100,96 @@
         "table": "secret"
       }
     }
+  },
+  {
+    "kind": "system",
+    "body": "GRANT ALTER UPDATE ON normal TO test_03727"
+  },
+  {
+    "kind": "system",
+    "body": "GRANT READ ON REMOTE to test_03727"
+  },
+  {
+    "kind": "system",
+    "body": "GRANT CREATE TEMPORARY TABLE ON *.* TO test_03727"
+  },
+  {
+    "kind": "executeAs",
+    "user": "test_03727",
+    "statement": {
+      "kind": "alter",
+      "table": {
+        "kind": "tableRef",
+        "table": "normal"
+      },
+      "commands": [
+        {
+          "kind": "alterCommand",
+          "commandType": "UPDATE",
+          "assignments": [
+            {
+              "column": "s",
+              "expr": {
+                "kind": "subqueryExpr",
+                "query": {
+                  "kind": "select",
+                  "select": [
+                    {
+                      "kind": "asterisk"
+                    }
+                  ],
+                  "from": {
+                    "kind": "tableFunctionRef",
+                    "name": "remote",
+                    "args": [
+                      {
+                        "kind": "literal",
+                        "type": "String",
+                        "value": "localhost"
+                      },
+                      {
+                        "kind": "functionCall",
+                        "name": "currentDatabase",
+                        "args": []
+                      },
+                      {
+                        "kind": "literal",
+                        "type": "String",
+                        "value": "secret"
+                      }
+                    ]
+                  },
+                  "limit": {
+                    "count": {
+                      "kind": "literal",
+                      "type": "UInt64",
+                      "value": "1"
+                    }
+                  }
+                }
+              }
+            }
+          ],
+          "where": {
+            "kind": "binaryExpr",
+            "op": "=",
+            "left": {
+              "kind": "columnRef",
+              "parts": [
+                "n"
+              ]
+            },
+            "right": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "1"
+            }
+          }
+        }
+      ]
+    },
+    "trailingComments": [
+      "-- { serverError ACCESS_DENIED }"
+    ]
   }
 ]

@@ -8,6 +8,8 @@ CREATE TABLE add_table
 ENGINE = MergeTree()
 ORDER BY key;
 
+SHOW CREATE TABLE add_table;
+
 ALTER TABLE add_table ADD COLUMN value1 UInt64;
 
 ALTER TABLE add_table ADD COLUMN key String, ADD COLUMN value1 UInt64;

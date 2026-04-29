@@ -6,9 +6,13 @@ DROP TABLE IF EXISTS table_from_numbers;
 
 CREATE TABLE table_from_remote AS remote('localhost', 'system', 'numbers');
 
+SHOW CREATE TABLE table_from_remote;
+
 ALTER TABLE table_from_remote ADD COLUMN col UInt8;
 
 CREATE TABLE table_from_numbers AS numbers(1000);
+
+SHOW CREATE TABLE table_from_numbers;
 
 ALTER TABLE table_from_numbers ADD COLUMN col UInt8; --{serverError NOT_IMPLEMENTED}
 
@@ -18,5 +22,7 @@ ORDER BY tuple() AS
 SELECT number
 FROM `system`.numbers
 LIMIT 1;
+
+SHOW CREATE TABLE table_from_select;
 
 ALTER TABLE table_from_select ADD COLUMN col UInt8;

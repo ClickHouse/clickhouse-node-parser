@@ -15,6 +15,7 @@ SETTINGS min_rows_for_wide_part = 1, min_bytes_for_wide_part = 1, vertical_merge
 INSERT INTO test SELECT 42, 'str', tuple(42, [1, 2, 3]), '{"a" : 42, "b" : ["a", "b", "c"], "d" : "Hello", "e" : 42, "f" : [{"g" : 42, "k" : [1, 2, 3]}]}', [1, 2, 3], [1, 2, 3];
 SELECT column, type, substreams, filenames FROM system.parts_columns where database=currentDatabase() and table = 'test' and active;
 SELECT '-------------------------------------------------------------------------';
+OPTIMIZE TABLE test FINAL;
 ALTER TABLE test MODIFY SETTING vertical_merge_algorithm_min_rows_to_activate=1, vertical_merge_algorithm_min_columns_to_activate=1;
 ALTER TABLE test ADD COLUMN x Array(UInt32);
 ALTER TABLE test DROP COLUMN int;

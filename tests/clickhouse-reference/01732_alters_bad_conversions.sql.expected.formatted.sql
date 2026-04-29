@@ -13,6 +13,8 @@ INSERT INTO bad_conversions;
 
 ALTER TABLE bad_conversions MODIFY COLUMN a Array(String); -- { serverError TYPE_MISMATCH }
 
+SHOW CREATE TABLE bad_conversions;
+
 SELECT count()
 FROM `system`.mutations
 WHERE table = 'bad_conversions'
@@ -28,6 +30,8 @@ ORDER BY tuple();
 INSERT INTO bad_conversions_2;
 
 ALTER TABLE bad_conversions_2 MODIFY COLUMN e Enum('bar' = 1, 'foo' = 2); -- { serverError CANNOT_CONVERT_TYPE }
+
+SHOW CREATE TABLE bad_conversions_2;
 
 SELECT count()
 FROM `system`.mutations

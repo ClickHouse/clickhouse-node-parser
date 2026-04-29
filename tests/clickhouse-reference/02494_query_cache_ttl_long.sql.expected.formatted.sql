@@ -1,3 +1,9 @@
+-- Tags: no-fasttest, no-parallel, long
+-- Tag no-fasttest: Test runtime is > 6 sec
+-- Tag long: Test runtime is > 6 sec
+-- Tag no-parallel: Messes with internal cache
+SYSTEM CLEAR QUERY CACHE;
+
 -- Cache query result into query cache with a TTL of 3 sec
 SELECT 1
 SETTINGS

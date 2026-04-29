@@ -118,6 +118,54 @@
     ]
   },
   {
+    "kind": "parallelWith",
+    "queries": [
+      {
+        "kind": "optimize",
+        "table": {
+          "kind": "tableRef",
+          "table": "test_table"
+        },
+        "final": true,
+        "deduplicate": true,
+        "deduplicateBy": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "key"
+            ]
+          },
+          {
+            "kind": "columnRef",
+            "parts": [
+              "value"
+            ]
+          }
+        ]
+      },
+      {
+        "kind": "optimize",
+        "table": {
+          "kind": "tableRef",
+          "table": "t2"
+        },
+        "settings": [
+          {
+            "name": "max_threads",
+            "value": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "10"
+            }
+          }
+        ]
+      }
+    ],
+    "trailingComments": [
+      "-- { serverError INVALID_TRANSACTION, NOT_IMPLEMENTED }"
+    ]
+  },
+  {
     "kind": "truncate",
     "targetType": "TABLE",
     "table": {

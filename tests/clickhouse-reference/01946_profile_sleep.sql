@@ -1,6 +1,7 @@
 SET log_queries=1;
 SET log_profile_events=true;
 SELECT 'SLEEP #1 TEST', sleep(0.001) FORMAT Null;
+SYSTEM FLUSH LOGS query_log;
 SELECT 'SLEEP #1 CHECK', ProfileEvents['SleepFunctionCalls'] as calls, ProfileEvents['SleepFunctionMicroseconds'] as microseconds
 FROM system.query_log
 WHERE query like '%SELECT ''SLEEP #1 TEST''%'

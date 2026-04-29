@@ -32,9 +32,15 @@ INSERT INTO t_compact_bytes_s3 SELECT
     number
 FROM numbers(512 * 32 * 40);
 
+SYSTEM CLEAR MARK CACHE;
+
+OPTIMIZE TABLE t_compact_bytes_s3 FINAL;
+
 SELECT count()
 FROM t_compact_bytes_s3
 WHERE NOT ignore(c2, c4);
+
+SYSTEM FLUSH LOGS query_log;
 
 -- Errors in S3 requests will be automatically retried, however ProfileEvents can be wrong. That is why we subtract errors.
 SELECT

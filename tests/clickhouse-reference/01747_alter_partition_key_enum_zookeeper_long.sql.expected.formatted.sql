@@ -26,6 +26,10 @@ WHERE product = 'PS';
 
 INSERT INTO report;
 
+DETACH TABLE report;
+
+ATTACH TABLE report;
+
 DROP TABLE IF EXISTS replicated_report;
 
 CREATE TABLE replicated_report
@@ -52,3 +56,7 @@ FROM replicated_report
 WHERE product = 'PS';
 
 INSERT INTO replicated_report;
+
+DETACH TABLE replicated_report;
+
+ATTACH TABLE replicated_report;

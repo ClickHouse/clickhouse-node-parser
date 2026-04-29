@@ -38,6 +38,7 @@ LIFETIME(MIN 1 MAX 10)
 LAYOUT(HASHED());
 SELECT count(*) FROM database_for_dict.dict2;
 INSERT INTO database_for_dict.table_for_dict SELECT number, number % 17, toString(number * number), number / 2.0 from numbers(100, 100);
+SYSTEM RELOAD DICTIONARIES;
 CREATE DICTIONARY database_for_dict.dict3
 (
   key_column UInt64 DEFAULT 0,

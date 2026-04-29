@@ -19,4 +19,12 @@ ORDER BY n ASC;
 
 ALTER TABLE test_alter_decimal MODIFY COLUMN d Decimal(18, 8);
 
+SHOW CREATE TABLE test_alter_decimal;
+
+DETACH TABLE test_alter_decimal;
+
+ATTACH TABLE test_alter_decimal;
+
 INSERT INTO test_alter_decimal;
+
+OPTIMIZE TABLE test_alter_decimal FINAL;

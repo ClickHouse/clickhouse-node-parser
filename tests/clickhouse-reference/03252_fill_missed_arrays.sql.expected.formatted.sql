@@ -18,4 +18,6 @@ SELECT count()
 FROM t_fill_arrays
 WHERE NOT ignore(arrCol, mapCol.values);
 
+OPTIMIZE TABLE t_fill_arrays FINAL;
+
 DROP TABLE t_fill_arrays;

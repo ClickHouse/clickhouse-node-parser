@@ -154,6 +154,8 @@ LEFT JOIN attributes AS t1
     ON t1.OtherId = t0.Idu32n
 SETTINGS log_comment = '03712_nested_loop_join_merge_tree_full_scan';
 
+SYSTEM FLUSH LOGS system.query_log;
+
 SELECT
     -- Indexed lookup, right table is not fully scanned
     if(read_rows < 1000000, 'OK', format('Fail: {} rows read, query_id={}', read_rows, query_id)),

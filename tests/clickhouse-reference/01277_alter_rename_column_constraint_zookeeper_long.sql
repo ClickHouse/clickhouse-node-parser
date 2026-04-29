@@ -16,9 +16,11 @@ PARTITION BY date
 ORDER BY key;
 INSERT INTO table_for_rename1 SELECT toDate('2019-10-01') + number % 3, number, toString(number), toString(number + 1), toString(number + 2) from numbers(9);
 INSERT INTO table_for_rename1 SELECT toDate('2019-10-01') + number % 3, number, toString(number), toString(number + 1), toString(number) from numbers(9);
+; --{serverError VIOLATED_CONSTRAINT}
 SELECT * FROM table_for_rename1 ORDER BY key;
 ALTER TABLE table_for_rename1 RENAME COLUMN value1 TO value4;
 ALTER TABLE table_for_rename1 RENAME COLUMN value2 TO value5;
+SHOW CREATE TABLE table_for_rename1;
 SELECT '-- insert after rename --';
 INSERT INTO table_for_rename1 SELECT toDate('2019-10-01') + number % 3, number, toString(number), toString(number + 1), toString(number + 2) from numbers(10, 10);
 INSERT INTO table_for_rename1 SELECT toDate('2019-10-01') + number % 3, number, toString(number), toString(number + 1), toString(number) from numbers(10, 10);

@@ -26,11 +26,17 @@ FROM numbers(100);
 
 SET mutations_sync = 0;
 
+DELETE FROM replicated_table_r1 WHERE id = 10;
+
 SELECT COUNT()
 FROM replicated_table_r1;
 
 SELECT COUNT()
 FROM replicated_table_r2;
+
+DELETE FROM replicated_table_r2 WHERE name IN ('1', '2', '3', '4');
+
+DELETE FROM replicated_table_r1 WHERE 1;
 
 DROP TABLE IF EXISTS t_light_r1;
 
@@ -64,6 +70,10 @@ INSERT INTO t_light_r1 SELECT
     number
 FROM numbers(10);
 
+DELETE FROM t_light_r1 WHERE c % 5 = 1;
+
+DELETE FROM t_light_r2 WHERE c = 4;
+
 SELECT '-----Check that select and merge with lightweight delete.-----';
 
 SELECT count(*)
@@ -76,6 +86,8 @@ ORDER BY a ASC;
 SELECT *
 FROM t_light_r2
 ORDER BY a ASC;
+
+OPTIMIZE TABLE t_light_r1 FINAL SETTINGS mutations_sync = 2;
 
 CREATE TABLE t_light_sync_r1
 (
@@ -95,6 +107,8 @@ INSERT INTO t_light_sync_r1 SELECT
     number
 FROM numbers(10);
 
+DELETE FROM t_light_sync_r1 WHERE c % 3 = 1;
+
 CREATE TABLE t_light_sync_r2
 (
     a int,
@@ -106,6 +120,8 @@ ENGINE = ReplicatedMergeTree('/test/02352/{database}/t_sync', '2')
 ORDER BY a
 PARTITION BY c % 5
 SETTINGS min_bytes_for_wide_part = 0;
+
+SYSTEM SYNC REPLICA t_light_sync_r2;
 
 SELECT *
 FROM t_light_sync_r2

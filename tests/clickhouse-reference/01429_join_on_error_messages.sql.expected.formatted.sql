@@ -34,4 +34,4 @@ INNER JOIN (
     OR a = c; -- { serverError NOT_IMPLEMENTED }
 
 -- works for a = b OR a = b because of equivalent disjunct optimization
-SET join_algorithm = 'grace_hash';
+SET join_algorithm = 'grace_hash'; -- works for a = b OR a = b because of equivalent disjunct optimization

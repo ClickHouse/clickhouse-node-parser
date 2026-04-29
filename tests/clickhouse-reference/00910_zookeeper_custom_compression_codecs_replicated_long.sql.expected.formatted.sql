@@ -37,6 +37,8 @@ INSERT INTO compression_codec_replicated1;
 
 INSERT INTO compression_codec_replicated1;
 
+SYSTEM SYNC REPLICA compression_codec_replicated2;
+
 SELECT *
 FROM compression_codec_replicated1
 ORDER BY id ASC;
@@ -45,7 +47,13 @@ SELECT *
 FROM compression_codec_replicated2
 ORDER BY id ASC;
 
+OPTIMIZE TABLE compression_codec_replicated1 FINAL;
+
 INSERT INTO compression_codec_replicated1;
+
+DETACH TABLE compression_codec_replicated1;
+
+ATTACH TABLE compression_codec_replicated1;
 
 SELECT count(*)
 FROM compression_codec_replicated1
@@ -85,6 +93,8 @@ ORDER BY tuple();
 
 INSERT INTO compression_codec_multiple_replicated2;
 
+SYSTEM SYNC REPLICA compression_codec_multiple_replicated1;
+
 SELECT *
 FROM compression_codec_multiple_replicated2
 ORDER BY id ASC;
@@ -100,6 +110,8 @@ INSERT INTO compression_codec_multiple_replicated1 SELECT
     5.5 * number
 FROM `system`.numbers
 LIMIT 10000;
+
+SYSTEM SYNC REPLICA compression_codec_multiple_replicated2;
 
 SELECT count(*)
 FROM compression_codec_multiple_replicated1;
@@ -137,6 +149,8 @@ CREATE TABLE compression_codec_multiple_more_types_replicated
 )
 ENGINE = ReplicatedMergeTree('/clickhouse/tables/{database}/test_00910/compression_codec_multiple_more_types_replicated', '1')
 ORDER BY tuple();
+
+SHOW CREATE TABLE compression_codec_multiple_more_types_replicated;
 
 INSERT INTO compression_codec_multiple_more_types_replicated;
 

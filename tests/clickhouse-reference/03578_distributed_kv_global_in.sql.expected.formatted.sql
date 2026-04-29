@@ -42,6 +42,8 @@ ORDER BY
     1 ASC,
     2 ASC;
 
+SYSTEM FLUSH LOGS query_log;
+
 SELECT read_rows
 FROM `system`.query_log
 WHERE current_database = currentDatabase()

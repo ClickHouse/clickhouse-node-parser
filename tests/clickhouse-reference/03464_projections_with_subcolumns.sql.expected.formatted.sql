@@ -71,6 +71,8 @@ SELECT json
 FROM test
 WHERE json.`c[]`.d.:Int64 = [1];
 
+OPTIMIZE TABLE test FINAL;
+
 DROP TABLE test;
 
 SELECT '------------------------------------------------------------------';

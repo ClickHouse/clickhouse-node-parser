@@ -13,6 +13,8 @@ INSERT INTO ttl_with_default;
 SELECT sleep(0.7)
 FORMAT Null; -- wait if very fast merge happen
 
+OPTIMIZE TABLE ttl_with_default FINAL;
+
 SELECT a
 FROM ttl_with_default
 ORDER BY a ASC;

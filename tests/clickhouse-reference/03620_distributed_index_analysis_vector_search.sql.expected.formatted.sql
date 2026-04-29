@@ -15,6 +15,8 @@ ENGINE = MergeTree
 ORDER BY id
 SETTINGS index_granularity = 8, distributed_index_analysis_min_parts_to_activate = 0, distributed_index_analysis_min_indexes_size_to_activate = 10;
 
+SYSTEM STOP MERGES dist_vec;
+
 INSERT INTO dist_vec SELECT
     number,
     [number/100, number/100]
@@ -40,6 +42,9 @@ SETTINGS
     distributed_index_analysis = 1,
     max_parallel_replicas = 3,
     cluster_for_parallel_replicas = 'parallel_replicas';
+
+-- Common from 03620_distributed_index_analysis.sql
+SYSTEM flush logs query_log;
 
 SELECT format('distributed_index_analysis={}, DistributedIndexAnalysisMicroseconds>0={}, DistributedIndexAnalysisMissingParts={}, DistributedIndexAnalysisScheduledReplicas={}, DistributedIndexAnalysisFailedReplicas>0={}', `Settings`['distributed_index_analysis'], ProfileEvents['DistributedIndexAnalysisMicroseconds'] > 0, ProfileEvents['DistributedIndexAnalysisMissingParts'], ProfileEvents['DistributedIndexAnalysisScheduledReplicas'], ProfileEvents['DistributedIndexAnalysisFailedReplicas'] > 0)
 FROM `system`.query_log

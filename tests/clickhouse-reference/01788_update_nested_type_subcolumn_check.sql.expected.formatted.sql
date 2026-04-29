@@ -40,6 +40,9 @@ ALTER TABLE test_wide_nested UPDATE `info.id` = `info.age` WHERE id = 3;
 
 ALTER TABLE test_wide_nested UPDATE `info.id` = [100,200], `info.age` = [10,20,30], `info.name` = ['a','b','c'] WHERE id = 0; -- { serverError UNFINISHED }
 
+KILL MUTATION WHERE table = 'test_wide_nested'
+AND database = currentDatabase() FORMAT Null;
+
 DROP TABLE test_wide_nested;
 
 ALTER TABLE test_wide_nested ADD COLUMN `info2.id` Array(Int);

@@ -31,6 +31,10 @@ WHERE database = currentDatabase()
 INSERT INTO test2 SELECT randomString(1000)
 FROM numbers(100000);
 
+SYSTEM UNLOAD PRIMARY KEY {CLICKHOUSE_DATABASE:Identifier}.test;
+
+SYSTEM UNLOAD PRIMARY KEY {CLICKHOUSE_DATABASE:Identifier}.test2;
+
 SELECT s != ''
 FROM test
 LIMIT 1;

@@ -8,6 +8,8 @@ CREATE TABLE no_prop_table
 ENGINE = MergeTree()
 ORDER BY tuple();
 
+SHOW CREATE TABLE no_prop_table;
+
 -- just nothing happened
 ALTER TABLE no_prop_table MODIFY COLUMN some_column; --{serverError BAD_ARGUMENTS}
 
@@ -31,6 +33,8 @@ CREATE TABLE r_no_prop_table
 )
 ENGINE = ReplicatedMergeTree('/clickhouse/{database}/test/01493_r_no_prop_table', '1')
 ORDER BY tuple();
+
+SHOW CREATE TABLE r_no_prop_table;
 
 ALTER TABLE r_no_prop_table MODIFY COLUMN some_column; --{serverError BAD_ARGUMENTS}
 

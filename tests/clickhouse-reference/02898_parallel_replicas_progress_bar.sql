@@ -7,6 +7,9 @@ CREATE TABLE t3(k UInt32, v String) ENGINE ReplicatedMergeTree('/02898_parallel_
 insert into t1 select number, toString(number) from numbers(1000, 1000);
 insert into t2 select number, toString(number) from numbers(2000, 1000);
 insert into t3 select number, toString(number) from numbers(3000, 1000);
+system sync replica t1;
+system sync replica t2;
+system sync replica t3;
 SET enable_parallel_replicas=1, max_parallel_replicas=3, cluster_for_parallel_replicas='test_cluster_one_shard_three_replicas_localhost';
 SET parallel_replicas_local_plan=0; -- corresponding logs about total rows are written only during interaction with remote nodes
 -- but with local plan a query execution can be finished locally even before we get response from remote node
@@ -14,6 +17,8 @@ SET parallel_replicas_only_with_analyzer = 0;  -- necessary for CI run with disa
 SET parallel_replicas_for_non_replicated_merge_tree = 0; -- To avoid https://github.com/ClickHouse/ClickHouse/issues/93193
 -- default coordinator
 SELECT count(), min(k), max(k), avg(k) FROM t1 SETTINGS log_comment='02898_default_190aed82-2423-413b-ad4c-24dcca50f65b';
+-- check logs
+SYSTEM FLUSH LOGS text_log, query_log;
 SET max_rows_to_read = 0; -- system.text_log can be really big
 SELECT count() > 0 FROM system.text_log
 WHERE query_id in (select query_id from system.query_log where current_database = currentDatabase() AND log_comment='02898_default_190aed82-2423-413b-ad4c-24dcca50f65b' and event_date >= yesterday())

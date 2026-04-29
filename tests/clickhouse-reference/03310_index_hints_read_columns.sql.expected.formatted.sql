@@ -21,6 +21,8 @@ INSERT INTO t_index_hint SELECT
     number
 FROM numbers(1000);
 
+SYSTEM CLEAR MARK CACHE;
+
 SELECT sum(b)
 FROM t_index_hint
 WHERE b >= 100
@@ -47,6 +49,8 @@ SETTINGS
     max_threads = 1,
     force_primary_key = 1;
 
+SYSTEM FLUSH LOGS query_log;
+
 SELECT
     ProfileEvents['FileOpen'],
     read_rows,
@@ -69,6 +73,8 @@ ORDER BY a
 SETTINGS index_granularity = 1, min_bytes_for_wide_part = 0, serialization_info_version = 'basic';
 
 INSERT INTO t_index_hint (a, s);
+
+SYSTEM CLEAR INDEX MARK CACHE;
 
 SELECT count()
 FROM t_index_hint

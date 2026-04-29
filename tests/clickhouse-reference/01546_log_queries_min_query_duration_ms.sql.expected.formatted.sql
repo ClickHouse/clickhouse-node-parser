@@ -10,6 +10,8 @@ SET log_queries = 1;
 SELECT '01546_log_queries_min_query_duration_ms-fast'
 FORMAT Null;
 
+SYSTEM flush logs query_log, query_thread_log;
+
 -- No logging, since the query is fast enough.
 SELECT count()
 FROM `system`.query_log

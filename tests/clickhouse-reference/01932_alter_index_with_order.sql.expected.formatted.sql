@@ -23,3 +23,7 @@ ALTER TABLE alter_index_test ADD INDEX index_b b TYPE minmax GRANULARITY 1;
 ALTER TABLE alter_index_test ADD INDEX index_c c TYPE set(0) GRANULARITY 2 AFTER index_b;
 
 ALTER TABLE alter_index_test ADD INDEX index_d d TYPE set(0) GRANULARITY 1;
+
+DETACH TABLE alter_index_test;
+
+ATTACH TABLE alter_index_test;

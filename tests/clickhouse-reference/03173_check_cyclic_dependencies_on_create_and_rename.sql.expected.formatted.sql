@@ -57,6 +57,16 @@ SOURCE(clickhouse(TABLE view))
 LIFETIME(MIN 0 MAX 1000)
 LAYOUT(FLAT()); -- {serverError INFINITE_LOOP}
 
+REPLACE DICTIONARY test_dict
+(
+    id UInt64,
+    value String
+)
+PRIMARY KEY id
+SOURCE(clickhouse(TABLE view))
+LIFETIME(MIN 0 MAX 1000)
+LAYOUT(FLAT()); -- {serverError INFINITE_LOOP}
+
 DROP DICTIONARY IF EXISTS test_dict_2;
 
 CREATE DICTIONARY test_dict_2
@@ -68,6 +78,8 @@ PRIMARY KEY id
 SOURCE(clickhouse(TABLE view))
 LIFETIME(MIN 0 MAX 1000)
 LAYOUT(FLAT());
+
+EXCHANGE DICTIONARY test_dict AND test_dict_2; -- {serverError INFINITE_LOOP}
 
 DROP DICTIONARY test_dict_2;
 
@@ -82,6 +94,8 @@ LIFETIME(MIN 0 MAX 1000)
 LAYOUT(FLAT());
 
 DROP DICTIONARY test_dict;
+
+RENAME DICTIONARY test_dict_2 TO test_dict; -- {serverError INFINITE_LOOP}
 
 DROP VIEW view;
 

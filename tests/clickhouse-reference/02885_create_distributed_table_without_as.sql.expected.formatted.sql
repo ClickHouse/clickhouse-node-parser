@@ -14,6 +14,8 @@ ORDER BY key;
 CREATE TABLE dist_tbl
 ENGINE = Distributed('test_shard_localhost', currentDatabase(), 'local_tbl', rand());
 
+SHOW CREATE TABLE dist_tbl;
+
 INSERT INTO dist_tbl (key) SETTINGS distributed_foreground_insert = 1;
 
 SELECT *

@@ -14,5 +14,7 @@ INSERT INTO test SELECT
     toString(number)
 FROM numbers(1000000);
 
+DELETE FROM test WHERE id % 2 = 0 SETTINGS mutations_sync = 0;
+
 SELECT count()
 FROM test;

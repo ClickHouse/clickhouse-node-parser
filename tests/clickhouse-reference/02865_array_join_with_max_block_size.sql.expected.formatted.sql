@@ -41,4 +41,4 @@ GROUP BY ((m + n)) % 10;
 
 SET max_block_size = 1000, enable_unaligned_array_join = true;
 
-SET max_block_size = 100000, enable_unaligned_array_join = true;
+SET max_block_size = 100000, enable_unaligned_array_join = true; -- { echoOff }

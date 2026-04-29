@@ -18,12 +18,20 @@ WHERE s NOT IN (`set`);
 
 INSERT INTO `set`;
 
+RENAME TABLE `set` TO set2;
+
 SELECT arrayJoin(['Hello', 'test', 'World', 'world', 'abc', 'xyz']) AS s
 WHERE s IN (set2);
 
 INSERT INTO set2;
 
 INSERT INTO set2;
+
+DETACH TABLE set2;
+
+ATTACH TABLE set2;
+
+RENAME TABLE set2 TO `set`;
 
 CREATE TABLE tab
 (

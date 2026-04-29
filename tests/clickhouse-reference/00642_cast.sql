@@ -26,6 +26,8 @@ CREATE TABLE cast
         )
     )
 ) ENGINE = MergeTree ORDER BY e;
+SHOW CREATE TABLE cast FORMAT TSVRaw;
+DESC TABLE cast;
 INSERT INTO cast (x) VALUES (1);
 SELECT * FROM cast;
 DROP TABLE cast;

@@ -27,11 +27,17 @@ ORDER BY u64;
 
 INSERT INTO minmax_idx;
 
+SYSTEM SYNC REPLICA minmax_idx_r;
+
 ALTER TABLE minmax_idx ADD INDEX idx1 u64 * i32 TYPE minmax GRANULARITY 10;
 
 ALTER TABLE minmax_idx_r ADD INDEX idx2 u64 + i32 TYPE minmax GRANULARITY 10;
 
 ALTER TABLE minmax_idx ADD INDEX idx3 u64 - i32 TYPE minmax GRANULARITY 10 AFTER idx1;
+
+SHOW CREATE TABLE minmax_idx;
+
+SHOW CREATE TABLE minmax_idx_r;
 
 SELECT *
 FROM minmax_idx
@@ -52,6 +58,8 @@ INSERT INTO minmax_idx;
 INSERT INTO minmax_idx_r;
 
 INSERT INTO minmax_idx;
+
+SYSTEM SYNC REPLICA minmax_idx;
 
 SELECT *
 FROM minmax_idx
@@ -89,9 +97,17 @@ CREATE TABLE minmax_idx2_r
 ENGINE = ReplicatedMergeTree('/clickhouse/tables/{database}/test_00836/indices_alter2', 'r2')
 ORDER BY u64;
 
+SHOW CREATE TABLE minmax_idx2;
+
+SHOW CREATE TABLE minmax_idx2_r;
+
 INSERT INTO minmax_idx2;
 
 INSERT INTO minmax_idx2_r;
+
+SYSTEM SYNC REPLICA minmax_idx2;
+
+SYSTEM SYNC REPLICA minmax_idx2_r;
 
 SELECT *
 FROM minmax_idx2

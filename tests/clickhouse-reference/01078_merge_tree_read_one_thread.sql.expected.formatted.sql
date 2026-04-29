@@ -41,6 +41,8 @@ FORMAT Null; -- sleep a bit to wait possible merges after insert
 
 SET max_threads = 1;
 
+OPTIMIZE TABLE t FINAL;
+
 SELECT sum(a)
 FROM t
 WHERE a IN (0, 3)

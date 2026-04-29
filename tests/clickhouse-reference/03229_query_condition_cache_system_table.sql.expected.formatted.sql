@@ -23,6 +23,8 @@ SELECT '--- with move to PREWHERE';
 
 SET optimize_move_to_prewhere = true;
 
+SYSTEM CLEAR QUERY CONDITION CACHE;
+
 SELECT count(*)
 FROM tab
 WHERE b = 10000

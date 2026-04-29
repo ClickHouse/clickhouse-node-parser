@@ -64,6 +64,8 @@ FROM source_table;
 -- Re-insert data
 INSERT INTO source_table;
 
+RENAME TABLE alias_1 TO alias_3;
+
 SELECT *
 FROM alias_3
 ORDER BY id ASC;
@@ -85,6 +87,8 @@ INSERT INTO alias_4;
 
 INSERT INTO alias_4;
 
+OPTIMIZE TABLE alias_4 FINAL;
+
 SELECT count() AS parts_after
 FROM `system`.parts
 WHERE database = currentDatabase()
@@ -95,6 +99,8 @@ SELECT count()
 FROM alias_4;
 
 ALTER TABLE alias_4 MODIFY SETTING max_bytes_to_merge_at_max_space_in_pool = 1000000;
+
+SHOW CREATE TABLE source_table FORMAT TSVRaw;
 
 ALTER TABLE alias_4 UPDATE value = 'updated' WHERE id = 1 SETTINGS mutations_sync = 1;
 
@@ -191,6 +197,12 @@ SELECT *
 FROM alias_b_exchange
 ORDER BY value ASC;
 
+-- EXCHANGE the alias
+EXCHANGE TABLE alias_a_exchange AND alias_b_exchange;
+
+-- EXCHANGE the source tables
+EXCHANGE TABLE table_a_exchange AND table_b_exchange;
+
 DROP TABLE alias_a_exchange;
 
 DROP TABLE alias_b_exchange;
@@ -223,6 +235,12 @@ ORDER BY id ASC;
 SELECT *
 FROM source_attach
 ORDER BY id ASC;
+
+-- DETACH the alias table
+DETACH TABLE alias_attach;
+
+-- ATTACH the table back
+ATTACH TABLE alias_attach;
 
 -- Insert through alias after ATTACH
 INSERT INTO alias_attach;

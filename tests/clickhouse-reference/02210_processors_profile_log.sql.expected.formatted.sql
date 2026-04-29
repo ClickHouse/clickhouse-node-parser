@@ -4,6 +4,8 @@ SETTINGS
     log_queries = 1,
     log_queries_min_type = 'QUERY_FINISH';
 
+SYSTEM FLUSH LOGS query_log, processors_profile_log;
+
 WITH (
         SELECT query_id
         FROM `system`.query_log

@@ -15,9 +15,13 @@ SETTINGS
     enable_block_offset_column = 1;
 SET mutations_sync = 2;
 INSERT INTO t_apply_patches SELECT number, 0, 0, 0 FROM numbers(10000);
+UPDATE t_apply_patches SET b = 1 WHERE a % 4 = 0;
+UPDATE t_apply_patches SET c = 2 WHERE a % 4 = 0;
+UPDATE t_apply_patches SET b = 3, c = 4 WHERE a % 4 = 1;
 SELECT b, c, count() FROM t_apply_patches GROUP BY b, c ORDER BY b, c;
 ALTER TABLE t_apply_patches APPLY PATCHES;
 SELECT b, c, count() FROM t_apply_patches GROUP BY b, c ORDER BY b, c SETTINGS apply_patch_parts = 0;
+SYSTEM FLUSH LOGS part_log;
 SELECT
     ProfileEvents['MutationSomePartColumns'],
     ProfileEvents['MutatedUncompressedBytes'] -- 2 * 8 * 10000 = 160000, because only 2 columns must be affected.
@@ -33,6 +37,9 @@ SETTINGS
     enable_block_number_column = 1,
     enable_block_offset_column = 1;
 INSERT INTO t_apply_patches_smt SELECT number, 0, 0, 0 FROM numbers(10000);
+UPDATE t_apply_patches_smt SET b = 1 WHERE a % 4 = 0;
+UPDATE t_apply_patches_smt SET c = 2 WHERE a % 4 = 0;
+UPDATE t_apply_patches_smt SET b = 3, c = 4 WHERE a % 4 = 1;
 SELECT b, c, count() FROM t_apply_patches_smt GROUP BY b, c ORDER BY b, c;
 ALTER TABLE t_apply_patches_smt APPLY PATCHES;
 SELECT

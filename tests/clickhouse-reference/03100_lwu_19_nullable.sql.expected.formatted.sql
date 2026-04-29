@@ -14,6 +14,8 @@ SETTINGS enable_block_number_column = 1, enable_block_offset_column = 1;
 
 INSERT INTO mutation_table (id, price);
 
+UPDATE mutation_table SET price = 150 WHERE id = 1;
+
 SELECT *
 FROM mutation_table;
 
@@ -36,8 +38,18 @@ ORDER BY
     dt ASC,
     name ASC;
 
-INSERT INTO mutation_table (name, dt);
+UPDATE mutation_table SET dt = toDateOrNull('2020-08-02') WHERE name = 'car';
 
 INSERT INTO mutation_table (name, dt);
 
 INSERT INTO mutation_table (name, dt);
+
+UPDATE mutation_table SET dt = toDateOrNull('2020-08-03') WHERE name = 'car'
+AND isNull(dt);
+
+UPDATE mutation_table SET dt = toDateOrNull('2020-08-04') WHERE name = 'car'
+OR isNull(dt);
+
+INSERT INTO mutation_table (name, dt);
+
+UPDATE mutation_table SET dt = NULL WHERE isNotNull(name);

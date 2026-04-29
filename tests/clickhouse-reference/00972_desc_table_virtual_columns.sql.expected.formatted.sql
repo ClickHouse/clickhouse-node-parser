@@ -7,4 +7,7 @@ CREATE TABLE upyachka
 )
 ENGINE = Memory;
 
+-- Merge table has virtual column `_table`
+DESCRIBE TABLE merge(currentDatabase(), 'upyachka');
+
 DROP TABLE upyachka;

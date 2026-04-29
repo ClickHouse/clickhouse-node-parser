@@ -19,3 +19,4 @@ ALTER TABLE replicated_mutations_empty_partitions DROP PARTITION '5';
 ALTER TABLE replicated_mutations_empty_partitions DROP PARTITION '9';
 ALTER TABLE replicated_mutations_empty_partitions MODIFY COLUMN value UInt64 SETTINGS replication_alter_partitions_sync=2;
 SELECT sum(value) FROM replicated_mutations_empty_partitions;
+SHOW CREATE TABLE replicated_mutations_empty_partitions;

@@ -74,4 +74,6 @@ FROM test_ttl_group_by01763
 WHERE key = 3
     AND ts <= today() - toIntervalDay(30);
 
+OPTIMIZE TABLE test_ttl_group_by01763 FINAL;
+
 DROP TABLE test_ttl_group_by01763;

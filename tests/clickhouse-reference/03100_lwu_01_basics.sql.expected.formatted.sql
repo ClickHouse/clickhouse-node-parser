@@ -33,6 +33,8 @@ SET apply_patch_parts = 1;
 
 SET max_threads = 1;
 
+UPDATE t_shared SET c2 = c1 * c1 WHERE id % 2 = 0;
+
 SELECT *
 FROM t_shared
 ORDER BY id ASC;
@@ -45,7 +47,13 @@ WHERE database = currentDatabase()
     AND table = 't_shared'
 ORDER BY name ASC;
 
+DETACH TABLE t_shared;
+
+ATTACH TABLE t_shared;
+
 ALTER TABLE t_shared APPLY PATCHES SETTINGS mutations_sync = 2;
+
+SYSTEM FLUSH LOGS query_log;
 
 SELECT ProfileEvents['ReadTasksWithAppliedPatches']
 FROM `system`.query_log

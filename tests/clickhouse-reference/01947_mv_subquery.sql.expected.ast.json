@@ -338,6 +338,160 @@
     ]
   },
   {
+    "kind": "describe",
+    "target": {
+      "kind": "subquery",
+      "query": {
+        "kind": "select",
+        "select": [
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": "1947 #3 QUERY - TRUE"
+          },
+          {
+            "kind": "columnRef",
+            "parts": [
+              "id"
+            ]
+          },
+          {
+            "kind": "alias",
+            "expr": {
+              "kind": "binaryExpr",
+              "op": "-",
+              "left": {
+                "kind": "columnRef",
+                "parts": [
+                  "src",
+                  "value"
+                ]
+              },
+              "right": {
+                "kind": "columnRef",
+                "parts": [
+                  "deltas_sum"
+                ]
+              }
+            },
+            "alias": "delta"
+          }
+        ],
+        "from": {
+          "left": {
+            "kind": "tableRef",
+            "table": "src"
+          },
+          "kind": "joinExpr",
+          "joinType": "LEFT",
+          "right": {
+            "kind": "subqueryFrom",
+            "query": {
+              "kind": "select",
+              "select": [
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "id"
+                  ]
+                },
+                {
+                  "kind": "alias",
+                  "expr": {
+                    "kind": "functionCall",
+                    "name": "sum",
+                    "args": [
+                      {
+                        "kind": "columnRef",
+                        "parts": [
+                          "delta"
+                        ]
+                      }
+                    ]
+                  },
+                  "alias": "deltas_sum"
+                }
+              ],
+              "from": {
+                "kind": "tableRef",
+                "table": "dst"
+              },
+              "where": {
+                "kind": "inExpr",
+                "negated": false,
+                "expr": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "id"
+                  ]
+                },
+                "values": {
+                  "kind": "subqueryExpr",
+                  "query": {
+                    "kind": "select",
+                    "select": [
+                      {
+                        "kind": "columnRef",
+                        "parts": [
+                          "id"
+                        ]
+                      }
+                    ],
+                    "from": {
+                      "kind": "tableRef",
+                      "table": "src"
+                    },
+                    "where": {
+                      "kind": "unaryExpr",
+                      "op": "NOT",
+                      "expr": {
+                        "kind": "functionCall",
+                        "name": "sleepEachRow",
+                        "args": [
+                          {
+                            "kind": "literal",
+                            "type": "Float64",
+                            "value": "0.001"
+                          }
+                        ]
+                      }
+                    }
+                  }
+                }
+              },
+              "groupBy": {
+                "kind": "expressions",
+                "items": [
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "id"
+                    ]
+                  }
+                ]
+              }
+            },
+            "alias": "_a"
+          },
+          "constraint": {
+            "kind": "using",
+            "columns": [
+              "id"
+            ]
+          }
+        }
+      }
+    },
+    "format": "Null",
+    "leadingComments": [
+      "-- Describe should not need to call sleep"
+    ]
+  },
+  {
+    "kind": "system",
+    "body": "SYSTEM FLUSH LOGS query_log"
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -948,6 +1102,156 @@
     },
     "leadingComments": [
       "-- Inserting 2 numbers should require 2 calls to sleep"
+    ]
+  },
+  {
+    "kind": "describe",
+    "target": {
+      "kind": "subquery",
+      "query": {
+        "kind": "select",
+        "select": [
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": "1947 #3 QUERY - FALSE"
+          },
+          {
+            "kind": "columnRef",
+            "parts": [
+              "id"
+            ]
+          },
+          {
+            "kind": "alias",
+            "expr": {
+              "kind": "binaryExpr",
+              "op": "-",
+              "left": {
+                "kind": "columnRef",
+                "parts": [
+                  "src",
+                  "value"
+                ]
+              },
+              "right": {
+                "kind": "columnRef",
+                "parts": [
+                  "deltas_sum"
+                ]
+              }
+            },
+            "alias": "delta"
+          }
+        ],
+        "from": {
+          "left": {
+            "kind": "tableRef",
+            "table": "src"
+          },
+          "kind": "joinExpr",
+          "joinType": "LEFT",
+          "right": {
+            "kind": "subqueryFrom",
+            "query": {
+              "kind": "select",
+              "select": [
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "id"
+                  ]
+                },
+                {
+                  "kind": "alias",
+                  "expr": {
+                    "kind": "functionCall",
+                    "name": "sum",
+                    "args": [
+                      {
+                        "kind": "columnRef",
+                        "parts": [
+                          "delta"
+                        ]
+                      }
+                    ]
+                  },
+                  "alias": "deltas_sum"
+                }
+              ],
+              "from": {
+                "kind": "tableRef",
+                "table": "dst"
+              },
+              "where": {
+                "kind": "inExpr",
+                "negated": false,
+                "expr": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "id"
+                  ]
+                },
+                "values": {
+                  "kind": "subqueryExpr",
+                  "query": {
+                    "kind": "select",
+                    "select": [
+                      {
+                        "kind": "columnRef",
+                        "parts": [
+                          "id"
+                        ]
+                      }
+                    ],
+                    "from": {
+                      "kind": "tableRef",
+                      "table": "src"
+                    },
+                    "where": {
+                      "kind": "unaryExpr",
+                      "op": "NOT",
+                      "expr": {
+                        "kind": "functionCall",
+                        "name": "sleepEachRow",
+                        "args": [
+                          {
+                            "kind": "literal",
+                            "type": "Float64",
+                            "value": "0.001"
+                          }
+                        ]
+                      }
+                    }
+                  }
+                }
+              },
+              "groupBy": {
+                "kind": "expressions",
+                "items": [
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "id"
+                    ]
+                  }
+                ]
+              }
+            },
+            "alias": "_a"
+          },
+          "constraint": {
+            "kind": "using",
+            "columns": [
+              "id"
+            ]
+          }
+        }
+      }
+    },
+    "format": "Null",
+    "leadingComments": [
+      "-- Describe should not need to call sleep"
     ]
   },
   {

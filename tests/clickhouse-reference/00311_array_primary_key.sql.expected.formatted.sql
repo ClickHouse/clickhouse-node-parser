@@ -27,4 +27,8 @@ SELECT *
 FROM array_pk
 ORDER BY n ASC;
 
+DETACH TABLE array_pk;
+
+ATTACH TABLE array_pk;
+
 DROP TABLE array_pk;

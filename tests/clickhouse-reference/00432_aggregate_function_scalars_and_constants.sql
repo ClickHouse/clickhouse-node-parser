@@ -10,6 +10,7 @@ INSERT INTO agg_func_col (k, af_avg1) VALUES (2, arrayReduce('avgState', [101]))
 ALTER TABLE agg_func_col ADD COLUMN af_gua AggregateFunction(groupUniqArray, String) DEFAULT arrayReduce('groupUniqArrayState', ['---', '---']);
 SELECT k, sumMerge(d), avgMerge(af_avg1), groupUniqArrayMerge(af_gua) FROM agg_func_col GROUP BY k ORDER BY k;
 INSERT INTO agg_func_col (k, af_avg1, af_gua) VALUES (3, arrayReduce('avgState', [102, 102]), arrayReduce('groupUniqArrayState', ['igua', 'igua']));
+OPTIMIZE TABLE agg_func_col;
 SELECT arrayReduce('groupUniqArrayIf', ['---', '---', 't1'], [1, 1, 0]);
 SELECT arrayReduce('groupUniqArrayMergeIf',
 	[arrayReduce('groupUniqArrayState', ['---', '---']), arrayReduce('groupUniqArrayState', ['t1', 't'])],

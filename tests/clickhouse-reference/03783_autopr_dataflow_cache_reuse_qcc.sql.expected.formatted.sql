@@ -34,6 +34,9 @@ INSERT INTO t SELECT
     number
 FROM numbers(1e6);
 
+-- Try to avoid eviction of relevant cache entries
+SYSTEM CLEAR QUERY CONDITION CACHE;
+
 --set send_logs_level='trace', send_logs_source_regexp = 'optimize|SelectExecutor';
 SELECT SUM(value)
 FROM t
@@ -71,6 +74,8 @@ FORMAT Null
 SETTINGS log_comment = '03783_autopr_dataflow_cache_reuse_query_3'; -- stats available, don't apply since no benefit
 
 SET enable_parallel_replicas = 0, automatic_parallel_replicas_mode = 0;
+
+SYSTEM FLUSH LOGS query_log;
 
 SELECT
     log_comment AS query,

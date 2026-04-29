@@ -19,3 +19,6 @@ ORDER BY (key);
 INSERT INTO lightweight_test VALUES (now(), 'val', 'key');
 INSERT INTO keys VALUES ('key');
 SELECT key, value FROM lightweight_test ORDER BY key;
+UPDATE lightweight_test
+SET value = 'UPDATED-1'
+WHERE key IN (SELECT key FROM keys);

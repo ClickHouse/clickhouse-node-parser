@@ -41,6 +41,8 @@ WHERE database = currentDatabase()
     AND table = 'test_03217_system_tables_replica_1'
     AND like(replica_name, 'r1%');
 
+SYSTEM FLUSH LOGS query_log;
+
 -- argMax is necessary to make the test repeatable
 -- StorageSystemTables
 SELECT argMax(read_rows, event_time_microseconds)

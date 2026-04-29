@@ -10,6 +10,9 @@ create table m as mt1 engine = Merge(currentDatabase(), '^(mt1|b)$');
 -- insert some data
 insert into mt1 values(1, 1), (2, 2);
 insert into b   values(3, 3), (4, 4);
+OPTIMIZE TABLE b;
+OPTIMIZE TABLE mt1;
+OPTIMIZE TABLE mt2;
 -- do select
 select f1, f2
 from m

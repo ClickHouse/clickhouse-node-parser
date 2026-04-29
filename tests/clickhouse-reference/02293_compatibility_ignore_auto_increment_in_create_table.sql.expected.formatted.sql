@@ -18,6 +18,8 @@ CREATE TABLE ignore_auto_increment
 ENGINE = MergeTree()
 ORDER BY tuple();
 
+DESCRIBE TABLE ignore_auto_increment;
+
 CREATE TABLE ignore_auto_increment
 (
     id int,

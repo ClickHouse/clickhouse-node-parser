@@ -10,6 +10,8 @@ SELECT intDiv(b, c) FROM test_filter WHERE c != 0;
 SELECT intDiv(b, c) FROM test_filter PREWHERE c != 0;
 SELECT intDiv(b, c) FROM test_filter PREWHERE c != 0 WHERE b%2 != 0;
 SET mutations_sync = 2;
+-- Delete all rows where division by zero could occur
+DELETE FROM test_filter WHERE c = 0;
 SELECT * FROM test_filter PREWHERE intDiv(b, c) > 0;
 SELECT * FROM test_filter PREWHERE b != 0 WHERE intDiv(b, c) > 0;
 -- { echoOff }

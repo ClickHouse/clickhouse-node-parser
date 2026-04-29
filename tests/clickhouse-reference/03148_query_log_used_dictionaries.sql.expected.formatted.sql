@@ -17,6 +17,8 @@ SETTINGS
     log_comment = 'simple_with_analyzer'
 FORMAT Null;
 
+SYSTEM FLUSH LOGS query_log;
+
 SELECT
     log_comment,
     used_dictionaries

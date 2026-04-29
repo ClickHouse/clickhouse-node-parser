@@ -10,10 +10,16 @@ ENGINE = MergeTree
 ORDER BY a
 SETTINGS index_granularity = 256, index_granularity_bytes = '10Mi', merge_max_block_size = 100;
 
+SYSTEM STOP MERGES skip_idx_comp_parts;
+
 INSERT INTO skip_idx_comp_parts SELECT
     number,
     number
 FROM numbers(200);
+
+SYSTEM START MERGES skip_idx_comp_parts;
+
+OPTIMIZE TABLE skip_idx_comp_parts FINAL;
 
 SELECT count()
 FROM skip_idx_comp_parts

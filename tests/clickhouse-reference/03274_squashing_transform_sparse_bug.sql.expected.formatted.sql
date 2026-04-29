@@ -19,6 +19,8 @@ ENGINE = MergeTree
 ORDER BY x
 SETTINGS ratio_of_defaults_for_sparse_serialization = 0.5;
 
+SYSTEM STOP MERGES t0;
+
 INSERT INTO t0 SELECT
     if(number % 2 = 0, 0, number) AS x,
     (x, 0)

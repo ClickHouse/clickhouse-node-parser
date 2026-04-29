@@ -65,6 +65,8 @@ INSERT INTO test SELECT
     multiIf(number % 3 == 0, number, number % 3 == 1, concat('str_', toString(number)), NULL)
 FROM numbers(12, 3);
 
+OPTIMIZE TABLE test FINAL;
+
 SELECT
     x,
     y,

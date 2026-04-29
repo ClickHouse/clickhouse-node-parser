@@ -145,6 +145,10 @@ WHERE database = 'test_truncate_database'
 SELECT *
 FROM dest_dictionary;
 
+SHOW TABLES FROM test_truncate_database;
+
+SHOW DICTIONARIES FROM test_truncate_database;
+
 TRUNCATE DATABASE test_truncate_database;
 
 SELECT *

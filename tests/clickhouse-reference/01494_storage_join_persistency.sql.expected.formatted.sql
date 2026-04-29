@@ -12,6 +12,10 @@ ENGINE = Join(`ANY`, `LEFT`, k);
 
 INSERT INTO `join`;
 
+DETACH TABLE `join`;
+
+ATTACH TABLE `join`;
+
 SELECT *
 FROM `join`;
 

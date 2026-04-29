@@ -15,7 +15,13 @@ ALTER TABLE default_table MODIFY COLUMN enum_column Enum8('undefined' = 0, 'fox'
 
 INSERT INTO default_table (id);
 
+DETACH TABLE default_table;
+
+ATTACH TABLE default_table;
+
 SELECT COUNT()
 FROM default_table;
 
 ALTER TABLE default_table MODIFY COLUMN enum_column Enum8('undefined' = 0, 'fox' = 1, 'index' = 2) DEFAULT 'fox';
+
+SHOW CREATE TABLE default_table;

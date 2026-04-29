@@ -21,6 +21,10 @@ ENGINE = Set();
 
 INSERT INTO `set`;
 
+DETACH TABLE `set`;
+
+ATTACH TABLE `set`;
+
 SELECT number
 FROM number
 WHERE number IN (`set`)

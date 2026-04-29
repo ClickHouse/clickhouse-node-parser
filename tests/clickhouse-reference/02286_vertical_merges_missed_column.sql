@@ -12,6 +12,7 @@ settings
     min_bytes_for_wide_part=0;
 INSERT INTO t_vertical_merges SELECT NULL, 1;
 ALTER TABLE t_vertical_merges ADD COLUMN c String;
+OPTIMIZE TABLE t_vertical_merges FINAL;
 SELECT a, b, c FROM t_vertical_merges;
 CREATE TABLE t_vertical_merges
 (

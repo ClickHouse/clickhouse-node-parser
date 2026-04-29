@@ -24,9 +24,11 @@ CREATE TABLE distributed_01099_b AS local_01099_b ENGINE = Distributed('test_clu
 SELECT number, count(number) FROM local_01099_b group by number order by number;
 CREATE TABLE distributed_01099_a AS local_01099_a ENGINE = Distributed('test_cluster_two_shards', currentDatabase(), local_01099_a, rand());
 CREATE TABLE distributed_01099_b AS local_01099_b ENGINE = Distributed('test_cluster_two_shards', currentDatabase(), local_01099_b, rand());
+SYSTEM STOP DISTRIBUTED SENDS distributed_01099_b;
 SET prefer_localhost_replica=0; -- to require distributed send for local replica too
 SET prefer_localhost_replica=1;
 SELECT number, count(number) FROM distributed_01099_b group by number order by number;
+SYSTEM FLUSH DISTRIBUTED distributed_01099_b;
 CREATE TABLE local_01099_a (number UInt64) ENGINE = MergeTree() ORDER BY number;
 CREATE TABLE local_01099_b (number UInt64) ENGINE = MergeTree() ORDER BY number;
 CREATE TABLE distributed_01099_a AS local_01099_a ENGINE = Distributed('test_cluster_1_shard_3_replicas_1_unavailable', currentDatabase(), local_01099_a, rand());

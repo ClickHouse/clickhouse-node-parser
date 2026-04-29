@@ -16,6 +16,7 @@ CREATE TABLE tab
 SETTINGS min_bytes_for_wide_part = 0, enable_vertical_merge_algorithm = 0; -- TODO: there is a bug in vertical merge with statistics.
 INSERT INTO tab SELECT number, -number FROM system.numbers LIMIT 10000;
 SELECT replaceRegexpAll(explain, '__table1\.', '') FROM (EXPLAIN actions=1 SELECT count(*) FROM tab WHERE b < 10 and a < 10) WHERE explain LIKE '%Prewhere%'; -- checks b first, then a (statistics not used)
+OPTIMIZE TABLE tab FINAL;
 TRUNCATE TABLE tab;
 SET mutations_sync = 2;
 ALTER TABLE tab MATERIALIZE STATISTICS a, b;

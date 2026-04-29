@@ -16,6 +16,8 @@ CREATE TABLE buf
 )
 ENGINE = Buffer(currentDatabase(), buf_dest, 16, 3, 20, 2000000, 20000000, 100000000, 300000000);
 
+;
+
 INSERT INTO buf (timestamp);
 
 ALTER TABLE buf_dest ADD COLUMN s String;

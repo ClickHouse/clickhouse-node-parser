@@ -13,6 +13,8 @@ CREATE TABLE tab
 ENGINE = SummingMergeTree()
 ORDER BY id;
 
+SYSTEM STOP MERGES tab;
+
 INSERT INTO tab;
 
 SELECT '-- direct read disabled';
@@ -28,6 +30,10 @@ FROM tab
 WHERE hasToken(key, 'bar');
 
 SET use_skip_indexes_on_data_read = 1;
+
+SYSTEM START MERGES tab;
+
+OPTIMIZE TABLE tab FINAL; -- emulate merge
 
 SELECT value
 FROM tab

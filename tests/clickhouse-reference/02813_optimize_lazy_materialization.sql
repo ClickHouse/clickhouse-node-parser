@@ -489,6 +489,7 @@ CREATE TABLE optimize_lazy_materialization_with_sparse_data_type
 )
 ENGINE MergeTree() ORDER BY a
 SETTINGS ratio_of_defaults_for_sparse_serialization = 0.01;
+;
 INSERT INTO optimize_lazy_materialization_with_sparse_data_type
 SELECT
     number,

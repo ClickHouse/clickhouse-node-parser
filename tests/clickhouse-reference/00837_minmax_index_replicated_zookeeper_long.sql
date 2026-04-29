@@ -41,12 +41,16 @@ INSERT INTO minmax_idx2 VALUES (3, 5, 6.9, 1.57, 'bac', 'c', '2017-01-01');
 INSERT INTO minmax_idx2 VALUES (4, 2, 4.5, 2.5, 'abc', 'a', '2016-01-01');
 INSERT INTO minmax_idx2 VALUES (13, 5, 4.7, 6.5, 'cba', 'b', '2015-01-01');
 INSERT INTO minmax_idx1 VALUES (5, 5, 6.9, 1.57, 'bac', 'c', '2014-11-11');
+SYSTEM SYNC REPLICA minmax_idx1;
+SYSTEM SYNC REPLICA minmax_idx2;
 INSERT INTO minmax_idx1 VALUES (6, 2, 4.5, 2.5, 'abc', 'a', '2014-02-11');
 INSERT INTO minmax_idx1 VALUES (1, 5, 4.7, 6.5, 'cba', 'b', '2014-03-11');
 INSERT INTO minmax_idx1 VALUES (7, 5, 6.9, 1.57, 'bac', 'c', '2014-04-11');
 INSERT INTO minmax_idx1 VALUES (8, 2, 4.5, 2.5, 'abc', 'a', '2014-05-11');
 INSERT INTO minmax_idx2 VALUES (12, 5, 4.7, 6.5, 'cba', 'b', '2014-06-11');
 INSERT INTO minmax_idx2 VALUES (9, 5, 6.9, 1.57, 'bac', 'c', '2014-07-11');
+OPTIMIZE TABLE minmax_idx1;
+OPTIMIZE TABLE minmax_idx2;
 /* simple select */
 SELECT * FROM minmax_idx1 WHERE i32 = 5 AND i32 + f64 < 12 AND 3 < d AND d < 7 AND (s = 'bac' OR s = 'cba') ORDER BY dt;
 SELECT * FROM minmax_idx2 WHERE i32 = 5 AND i32 + f64 < 12 AND 3 < d AND d < 7 AND (s = 'bac' OR s = 'cba') ORDER BY dt;

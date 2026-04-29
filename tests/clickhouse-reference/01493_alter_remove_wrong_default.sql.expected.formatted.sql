@@ -20,3 +20,5 @@ ALTER TABLE default_table MODIFY COLUMN value1; --{serverError BAD_ARGUMENTS}
 ALTER TABLE default_table MODIFY COLUMN value2; --{serverError BAD_ARGUMENTS}
 
 ALTER TABLE default_table MODIFY COLUMN value2; --{serverError BAD_ARGUMENTS}
+
+SHOW CREATE TABLE default_table;

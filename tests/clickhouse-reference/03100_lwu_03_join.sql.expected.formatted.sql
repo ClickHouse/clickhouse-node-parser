@@ -18,6 +18,8 @@ SETTINGS enable_block_number_column = 1, enable_block_offset_column = 1, apply_p
 
 INSERT INTO t_shared;
 
+UPDATE t_shared SET c1 = 100 WHERE id = 1;
+
 SELECT
     name,
     `rows`
@@ -33,7 +35,13 @@ ORDER BY id ASC;
 
 INSERT INTO t_shared;
 
+UPDATE t_shared SET c1 = 200 WHERE id = 5;
+
+OPTIMIZE TABLE t_shared PARTITION ID 'all' FINAL;
+
 DROP TABLE t_shared;
+
+SYSTEM FLUSH LOGS query_log;
 
 SELECT mapSort(mapFilter((k, v) -> k IN ('ReadTasksWithAppliedPatches', 'PatchesAppliedInAllReadTasks', 'PatchesMergeAppliedInAllReadTasks', 'PatchesJoinAppliedInAllReadTasks'), ProfileEvents))
 FROM `system`.query_log

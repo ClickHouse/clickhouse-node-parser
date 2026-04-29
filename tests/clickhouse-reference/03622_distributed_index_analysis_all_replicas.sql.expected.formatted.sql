@@ -13,6 +13,8 @@ ORDER BY key
 PARTITION BY key % 200
 SETTINGS distributed_index_analysis_min_parts_to_activate = 0, distributed_index_analysis_min_indexes_size_to_activate = 0;
 
+SYSTEM stop merges test_10m;
+
 INSERT INTO test_10m SELECT
     number,
     number * 100
@@ -45,6 +47,9 @@ FROM test_10m;
 SELECT sum(key)
 FROM test_10m
 WHERE key = 1;
+
+-- { echoOff }
+SYSTEM flush logs query_log;
 
 SELECT
     normalizeQuery(query) AS q,

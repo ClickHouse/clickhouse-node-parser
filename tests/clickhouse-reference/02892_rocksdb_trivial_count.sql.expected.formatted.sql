@@ -27,6 +27,11 @@ SETTINGS
 
 SET optimize_trivial_approximate_count_query = 1;
 
+-- needs more data to see total_bytes or just detach and attach the table
+DETACH TABLE dict SYNC;
+
+ATTACH TABLE dict;
+
 SELECT
     total_rows,
     total_bytes > 0

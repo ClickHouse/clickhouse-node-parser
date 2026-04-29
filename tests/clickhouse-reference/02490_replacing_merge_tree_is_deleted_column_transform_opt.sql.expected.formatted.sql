@@ -31,6 +31,10 @@ INSERT INTO tab SELECT
     IF(number % 2 = 0, 0, 1)
 FROM numbers(10000);
 
+OPTIMIZE TABLE tab SETTINGS mutations_sync = 2;
+
+SYSTEM STOP MERGES tab;
+
 -- insert 10000 rows in partition 'B' and delete half of them, but keep 2 parts
 INSERT INTO tab SELECT
     'B',
@@ -115,3 +119,7 @@ FROM tab FINAL
 SETTINGS
     do_not_merge_across_partitions_select_final = 1,
     split_intersecting_parts_ranges_into_layers_final = 1;
+
+SYSTEM START MERGES tab;
+
+OPTIMIZE TABLE tab FINAL SETTINGS mutations_sync = 2;

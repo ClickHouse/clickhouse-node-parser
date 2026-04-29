@@ -22,3 +22,4 @@ SELECT 'Unsigned' AS mysql_type, CAST(52 AS UNSIGNED) AS result, toTypeName(resu
 -- SELECT 'Signed integer' AS mysql_type, CAST(51 AS SIGNED INTEGER) AS result, toTypeName(result) AS native_type;
 -- SELECT 'Unsigned integer' AS mysql_type, CAST(53 AS UNSIGNED INTEGER) AS result, toTypeName(result) AS native_type;
 SELECT 'Year' AS mysql_type, CAST(2007 AS YEAR) AS result, toTypeName(result) AS native_type;
+-- select 'Time' as mysql_type, cast('12:45' as time) as result, toTypeName(result) as native_type;

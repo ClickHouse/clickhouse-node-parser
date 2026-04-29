@@ -21,6 +21,8 @@ INSERT INTO ttl_where SELECT
     number
 FROM numbers(10);
 
+OPTIMIZE TABLE ttl_where FINAL;
+
 SELECT *
 FROM ttl_where
 ORDER BY
@@ -53,6 +55,8 @@ INSERT INTO ttl_group_by SELECT
     number,
     number
 FROM numbers(100);
+
+OPTIMIZE TABLE ttl_group_by FINAL;
 
 SELECT *
 FROM ttl_group_by

@@ -13,6 +13,10 @@ ENGINE = MergeTree()
 ORDER BY tuple()
 TTL column_comment + toIntervalMonth(2);
 
+SHOW CREATE TABLE prop_table;
+
+SYSTEM STOP TTL MERGES prop_table;
+
 INSERT INTO prop_table (column_codec, column_comment, column_ttl);
 
 SELECT
@@ -53,6 +57,10 @@ INSERT INTO prop_table (column_materialized, column_alias, column_codec, column_
 ALTER TABLE prop_table REMOVE TTL;
 
 ALTER TABLE prop_table MODIFY COLUMN column_ttl;
+
+SYSTEM START TTL MERGES prop_table;
+
+OPTIMIZE TABLE prop_table FINAL;
 
 SELECT COUNT()
 FROM prop_table;

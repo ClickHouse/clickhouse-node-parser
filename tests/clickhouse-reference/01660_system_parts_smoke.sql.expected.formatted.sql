@@ -26,6 +26,8 @@ CREATE TABLE data_01660
 ENGINE = MergeTree()
 ORDER BY key;
 
+SYSTEM STOP MERGES data_01660;
+
 -- Empty
 SELECT _state
 FROM `system`.parts
@@ -65,6 +67,10 @@ FROM `system`.parts
 WHERE database = currentDatabase()
     AND table = 'data_01660'
 ORDER BY name ASC;
+
+SYSTEM START MERGES data_01660;
+
+OPTIMIZE TABLE data_01660 FINAL;
 
 SELECT
     count(),

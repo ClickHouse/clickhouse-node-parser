@@ -21,6 +21,8 @@ LIMIT 100000;
 
 INSERT INTO github_events;
 
+OPTIMIZE TABLE github_events FINAL;
+
 SELECT count()
 FROM github_events
 WHERE (repo_name = 'apache/pulsar')

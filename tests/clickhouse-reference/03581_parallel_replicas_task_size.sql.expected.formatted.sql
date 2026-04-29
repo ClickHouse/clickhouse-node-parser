@@ -10,6 +10,8 @@ ENGINE = MergeTree
 ORDER BY a
 SETTINGS storage_policy = 's3_cache', min_rows_for_wide_part = 10000, min_bytes_for_wide_part = 0;
 
+SYSTEM STOP MERGES t;
+
 INSERT INTO t SELECT
     *,
     randomString(100)
@@ -39,6 +41,8 @@ SELECT *
 FROM t
 FORMAT Null
 SETTINGS log_comment = 'parallel_replicas_task_size_82982938';
+
+SYSTEM FLUSH LOGS query_log;
 
 -- The objective is to check that we request enough marks with each request. Obviously, the more we request, the less requests we will have.
 -- Before the fix, in this particular case we made ~ 70 requests, now it should be <= 15 (25 is used to ensure no flakyness).

@@ -28,6 +28,11 @@ FROM test_table;
 
 DROP TABLE test_table;
 
+DETACH TABLE mview;
+
+/* Check that we don't get an exception with the option. */
+ATTACH TABLE mview;
+
 INSERT INTO test_table;
 
 SELECT

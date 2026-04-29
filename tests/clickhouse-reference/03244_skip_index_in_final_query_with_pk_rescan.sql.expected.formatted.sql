@@ -14,6 +14,8 @@ CREATE TABLE t_final_query_tbl
 ENGINE = ReplacingMergeTree
 ORDER BY id;
 
+SYSTEM STOP MERGES t_final_query_tbl;
+
 INSERT INTO t_final_query_tbl SELECT
     number,
     if(number = 100444, 98889991, number)
@@ -78,6 +80,8 @@ CREATE TABLE t_final_query_tbl2
 )
 ENGINE = ReplacingMergeTree
 ORDER BY (id1, id2, id3);
+
+SYSTEM STOP MERGES t_final_query_tbl2;
 
 INSERT INTO t_final_query_tbl2 SELECT
     substr(lower(hex(MD5(toString(trunc(number / 1000))))), 1, 10),

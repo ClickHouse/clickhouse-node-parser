@@ -17,6 +17,8 @@ SELECT *
 FROM qbits
 ORDER BY id ASC;
 
+OPTIMIZE TABLE qbits FINAL;
+
 DROP TABLE qbits;
 
 CREATE TABLE qbits

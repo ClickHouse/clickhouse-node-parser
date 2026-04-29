@@ -12,4 +12,8 @@ SELECT *
 FROM t_create_as_tuple
 ORDER BY number ASC;
 
+DETACH TABLE t_create_as_tuple;
+
+ATTACH TABLE t_create_as_tuple;
+
 DROP TABLE t_create_as_tuple;

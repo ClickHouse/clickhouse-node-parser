@@ -13,6 +13,10 @@ LIMIT 1;
 SELECT *
 FROM log;
 
+DETACH TABLE log;
+
+ATTACH TABLE log;
+
 INSERT INTO log;
 
 DROP TABLE log;

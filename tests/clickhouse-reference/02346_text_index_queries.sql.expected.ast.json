@@ -239,6 +239,27 @@
     ]
   },
   {
+    "kind": "check",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "tab"
+    },
+    "settings": [
+      {
+        "name": "check_query_single_value_result",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ],
+    "leadingComments": [
+      "-- throw in a random consistency check"
+    ]
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -266,6 +287,13 @@
     },
     "leadingComments": [
       "-- search text index with =="
+    ]
+  },
+  {
+    "kind": "system",
+    "body": "SYSTEM FLUSH LOGS query_log",
+    "leadingComments": [
+      "-- check the query only read 1 granules (2 rows total; each granule has 2 rows)"
     ]
   },
   {
@@ -1363,6 +1391,14 @@
         }
       }
     ]
+  },
+  {
+    "kind": "optimize",
+    "table": {
+      "kind": "tableRef",
+      "table": "tab"
+    },
+    "final": true
   },
   {
     "kind": "select",

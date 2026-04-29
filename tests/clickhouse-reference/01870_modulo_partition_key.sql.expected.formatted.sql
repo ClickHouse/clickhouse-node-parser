@@ -99,6 +99,10 @@ WHERE table = 'table3'
     AND database = currentDatabase()
 ORDER BY p ASC;
 
+DETACH TABLE table3;
+
+ATTACH TABLE table3;
+
 DROP TABLE IF EXISTS table4;
 
 CREATE TABLE table4

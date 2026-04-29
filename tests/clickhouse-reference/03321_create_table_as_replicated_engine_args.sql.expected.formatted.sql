@@ -22,4 +22,6 @@ SET database_replicated_allow_replicated_engine_arguments = 0;
 
 CREATE TABLE t2 AS t1;
 
+SHOW CREATE TABLE t2;
+
 DROP DATABASE {CLICKHOUSE_DATABASE:Identifier};

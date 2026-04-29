@@ -8,6 +8,8 @@ ENGINE = MergeTree
 ORDER BY string_value
 SETTINGS index_granularity = 8192, index_granularity_bytes = '10Mi';
 
+SYSTEM stop merges test_table;
+
 INSERT INTO test_table SELECT *
 FROM (
         SELECT 'test_value_1'
@@ -38,5 +40,7 @@ ORDER BY
     constant_value ASC,
     string_value ASC
 SETTINGS max_threads = 1;
+
+SYSTEM start merges test_table;
 
 DROP TABLE test_table;

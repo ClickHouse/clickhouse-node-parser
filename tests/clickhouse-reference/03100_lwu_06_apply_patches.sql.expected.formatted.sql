@@ -25,9 +25,13 @@ INSERT INTO t_shared SELECT
     number
 FROM numbers(20, 10);
 
+UPDATE t_shared SET c1 = id + 100 WHERE id % 2 = 0;
+
 SET mutations_sync = 2;
 
 ALTER TABLE t_shared APPLY PATCHES, UPDATE c1 = 2000 WHERE id % 10 = 0;
+
+UPDATE t_shared SET c1 = id + 1000 WHERE id % 3 = 0;
 
 SELECT *
 FROM t_shared
@@ -47,5 +51,7 @@ WHERE database = currentDatabase()
     AND table = 't_shared'
     AND active
 ORDER BY name ASC;
+
+OPTIMIZE TABLE t_shared PARTITION ID 'all' FINAL;
 
 DROP TABLE t_shared;

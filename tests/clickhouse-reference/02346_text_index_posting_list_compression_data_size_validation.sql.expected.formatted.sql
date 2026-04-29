@@ -79,6 +79,10 @@ INSERT INTO tab_uncompressed SELECT
     multiIf(number IN (0, 777), 'rare2', number IN (1, 2, 3, 4, 5), 'rare5', 'noise') AS str
 FROM numbers(2000);
 
+OPTIMIZE TABLE tab_bitpacking FINAL;
+
+OPTIMIZE TABLE tab_uncompressed FINAL;
+
 -- Compare the size of the text index for the same dataset with vs. without compression.
 SELECT
     table,

@@ -25,6 +25,8 @@ INSERT INTO tab SELECT
     number / 50
 FROM numbers(100, 100);
 
+OPTIMIZE TABLE tab FINAL;
+
 SELECT count()
 FROM tab
 WHERE a >= 110
@@ -56,6 +58,8 @@ WHERE database = currentDatabase()
 ALTER TABLE tab MODIFY SETTING materialize_skip_indexes_on_merge = 0;
 
 TRUNCATE TABLE tab;
+
+SYSTEM FLUSH LOGS query_log;
 
 SELECT
     count(),

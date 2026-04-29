@@ -41,3 +41,13 @@ FROM
     ) AS tx
 INNER JOIN t0
     ON tx.c0 = t0.c0;
+
+(SELECT
+    1 AS x,
+    x AS y
+FROM remote('localhost', currentDatabase(), t0) AS tx)
+UNION ALL
+(SELECT
+    1,
+    c0
+FROM t0);

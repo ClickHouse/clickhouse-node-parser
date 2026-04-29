@@ -6,6 +6,8 @@ SELECT
     2,
     3;
 
+SYSTEM FLUSH LOGS query_log, text_log;
+
 SELECT
     type,
     script_query_number,

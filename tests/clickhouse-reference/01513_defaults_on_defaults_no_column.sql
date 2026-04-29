@@ -15,3 +15,5 @@ SELECT 1 from defaults_on_defaults where length(`Arr.C4`) = 0;
 ALTER TABLE defaults_on_defaults ADD COLUMN `ArrLen` UInt64 DEFAULT length(`Arr.C4`);
 SELECT 1 from defaults_on_defaults where ArrLen = 0;
 SELECT * from defaults_on_defaults where ArrLen = 0;
+SHOW CREATE TABLE defaults_on_defaults;
+OPTIMIZE TABLE defaults_on_defaults FINAL;

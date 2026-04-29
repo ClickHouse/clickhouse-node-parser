@@ -10,6 +10,8 @@ CREATE TABLE t_lightweight_mut_2
 ENGINE = MergeTree
 ORDER BY id;
 
+SYSTEM STOP MERGES t_lightweight_mut_2;
+
 INSERT INTO t_lightweight_mut_2;
 
 ALTER TABLE t_lightweight_mut_2 UPDATE v = rand() WHERE 1;
@@ -27,6 +29,9 @@ WHERE database = currentDatabase()
     AND table = 't_lightweight_mut_2'
     AND NOT is_done
     AND NOT is_killed;
+
+KILL MUTATION WHERE database = currentDatabase()
+AND table = 't_lightweight_mut_2' FORMAT Null;
 
 ALTER TABLE t_lightweight_mut_2 UPDATE v = (
     SELECT sum(number)

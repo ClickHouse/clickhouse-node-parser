@@ -33,6 +33,8 @@ INSERT INTO `02418_test_another`;
 SELECT count()
 FROM `02418_test_another`;
 
+DELETE FROM `02418_test` WHERE key <= 2;
+
 INSERT INTO `02418_test`;
 
 INSERT INTO `02418_test`; -- { serverError LIMIT_EXCEEDED }

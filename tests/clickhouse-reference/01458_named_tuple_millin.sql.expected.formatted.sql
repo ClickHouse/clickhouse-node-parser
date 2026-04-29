@@ -6,6 +6,10 @@ CREATE TABLE tuple
 )
 ENGINE = Memory;
 
+SHOW CREATE TABLE tuple;
+
+DESCRIBE TABLE tuple;
+
 DROP TABLE tuple;
 
 CREATE TABLE tuple

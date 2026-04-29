@@ -13,6 +13,8 @@ INSERT INTO t_final_replacing;
 
 INSERT INTO t_final_replacing;
 
+OPTIMIZE TABLE t_final_replacing FINAL;
+
 SET optimize_read_in_order = 0;
 
 SET split_parts_ranges_into_intersecting_and_non_intersecting_final = 0, split_intersecting_parts_ranges_into_layers_final = 0;

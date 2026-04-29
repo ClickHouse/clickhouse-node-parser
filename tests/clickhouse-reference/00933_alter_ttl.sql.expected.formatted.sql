@@ -14,13 +14,17 @@ SETTINGS remove_empty_parts = 0;
 
 ALTER TABLE ttl MODIFY TTL d + toIntervalDay(1);
 
-INSERT INTO ttl;
+SHOW CREATE TABLE ttl;
 
 INSERT INTO ttl;
 
 INSERT INTO ttl;
 
 INSERT INTO ttl;
+
+INSERT INTO ttl;
+
+OPTIMIZE TABLE ttl PARTITION 10 FINAL;
 
 SELECT *
 FROM ttl
@@ -41,6 +45,8 @@ PARTITION BY toDayOfMonth(d)
 SETTINGS remove_empty_parts = 0;
 
 ALTER TABLE ttl MODIFY COLUMN a Int TTL d + toIntervalDay(1);
+
+DESCRIBE TABLE ttl;
 
 ALTER TABLE ttl MODIFY COLUMN d Int TTL d + toIntervalDay(1); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 

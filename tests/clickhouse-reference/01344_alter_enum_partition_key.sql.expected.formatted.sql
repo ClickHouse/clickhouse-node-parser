@@ -28,6 +28,8 @@ ALTER TABLE test MODIFY COLUMN x Enum('hello' = 1, 'world' = 2, 'goodbye' = 3);
 
 INSERT INTO test;
 
+OPTIMIZE TABLE test FINAL;
+
 SELECT *
 FROM test
 ORDER BY x ASC;

@@ -46,6 +46,9 @@ SETTINGS
     max_threads = 1,
     log_comment = 'test read in order asc with parallel replicas';
 
+-- Check we don't read more mark in parallel replicas
+SYSTEM FLUSH LOGS query_log;
+
 SET parallel_replicas_for_non_replicated_merge_tree = 0;
 
 SELECT count(1)

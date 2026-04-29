@@ -10,7 +10,12 @@ SET insert_keeper_fault_injection_probability = 0;
 
 INSERT INTO mut;
 
+SYSTEM stop merges mut;
+
 ALTER TABLE mut UPDATE n = 2 WHERE n = 1;
+
+-- it will create MUTATE_PART entry, but will not execute it
+SYSTEM sync replica mut pull;
 
 SELECT
     mutation_id,
@@ -41,11 +46,17 @@ FORMAT Null;
 -- it will not execute MUTATE_PART, because another mutation is currently executing (in tmp)
 ALTER TABLE mut MODIFY SETTING max_number_of_mutations_for_replica = 1;
 
+DETACH TABLE mut;
+
+ATTACH TABLE mut;
+
 -- mutation should not be finished yet
 SELECT *
 FROM mut;
 
 ALTER TABLE mut MODIFY SETTING max_number_of_mutations_for_replica = 100;
+
+SYSTEM sync replica mut;
 
 SELECT
     mutation_id,

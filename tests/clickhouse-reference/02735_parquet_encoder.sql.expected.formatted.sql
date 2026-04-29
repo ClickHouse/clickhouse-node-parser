@@ -57,6 +57,8 @@ INSERT INTO FUNCTION file(basic_types_02735.parquet) SELECT *
 FROM basic_types_02735
 SETTINGS output_format_parquet_datetime_as_uint32 = 1;
 
+DESCRIBE TABLE file(basic_types_02735.parquet);
+
 SELECT (
         SELECT sum(cityHash64(*))
         FROM basic_types_02735
@@ -78,6 +80,8 @@ LIMIT 1011;
 
 INSERT INTO FUNCTION file(datetime_02735.parquet) SELECT *
 FROM datetime_02735;
+
+DESCRIBE TABLE file(datetime_02735.parquet);
 
 SELECT (
         SELECT sum(cityHash64(toDateTime64(datetime, 3)))
@@ -414,6 +418,8 @@ INSERT INTO FUNCTION file(datetime64_02735.parquet) SELECT
     toDateTime64(number / 1e7, 7) AS dus
 FROM numbers(2000);
 
+DESCRIBE TABLE file(datetime64_02735.parquet);
+
 SELECT sum(cityHash64(*))
 FROM file(datetime64_02735.parquet);
 
@@ -422,3 +428,5 @@ SETTINGS output_format_parquet_date_as_uint16 = 1;
 
 SELECT *
 FROM file(date_as_uint16.parquet);
+
+DESCRIBE TABLE file(date_as_uint16.parquet);

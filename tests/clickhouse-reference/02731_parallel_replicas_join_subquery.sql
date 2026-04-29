@@ -43,6 +43,7 @@ GROUP BY key, value1, value2
 ORDER BY key, value1, value2
 LIMIT 10
 SETTINGS enable_parallel_replicas = 1, enable_analyzer=0, parallel_replicas_only_with_analyzer=0;
+SYSTEM FLUSH LOGS query_log;
 SELECT ProfileEvents['ParallelReplicasQueryCount'], replaceRegexpAll(query, '_data_(\d+)_(\d+)', '_data_') as query
 FROM system.query_log
 WHERE

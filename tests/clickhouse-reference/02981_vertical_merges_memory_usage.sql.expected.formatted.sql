@@ -22,6 +22,10 @@ INSERT INTO t_vertical_merge_memory SELECT
     arrayMap(x -> repeat('a', 50), range(1000))
 FROM numbers(3001);
 
+OPTIMIZE TABLE t_vertical_merge_memory FINAL;
+
+SYSTEM FLUSH LOGS part_log;
+
 SELECT
     merge_algorithm,
     if(peak_memory_usage < 500 * 1024 * 1024, 'OK', format('FAIL: memory usage: {}', formatReadableSize(peak_memory_usage)))

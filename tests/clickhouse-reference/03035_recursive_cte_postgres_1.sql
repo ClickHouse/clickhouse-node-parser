@@ -33,6 +33,7 @@
 -- { echoOn }
 
 SET enable_analyzer = 1;
+
 -- WITH RECURSIVE
 
 -- sum of 1..100
@@ -42,30 +43,35 @@ UNION ALL
     SELECT n+1 FROM t WHERE n < 100
 )
 SELECT sum(n) FROM t;
+
 WITH RECURSIVE t AS (
     SELECT 1 AS n
 UNION ALL
     SELECT n+1 FROM t WHERE n < 5
 )
 SELECT * FROM t;
+
 -- This'd be an infinite loop, but outside query reads only as much as needed
 WITH RECURSIVE t AS (
     SELECT 1 AS n
 UNION ALL
     SELECT n+1 FROM t)
 SELECT * FROM t LIMIT 10;
+
 WITH RECURSIVE t AS (
     SELECT 'foo' AS n
 UNION ALL
     SELECT n || ' bar' FROM t WHERE length(n) < 20
 )
 SELECT n, toTypeName(n) FROM t;
+
 WITH RECURSIVE t AS (
     SELECT '7' AS n
 UNION ALL
     SELECT n+1 FROM t WHERE n < 10
 )
 SELECT n, toTypeName(n) FROM t; -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
+
 -- Deeply nested WITH caused a list-munging problem in v13
 -- Detection of cross-references and self-references
 WITH RECURSIVE w1 AS
@@ -85,3 +91,5 @@ WITH RECURSIVE w1 AS
    SELECT * FROM w3)
   SELECT * FROM w2)
 SELECT * FROM w1;
+
+-- { echoOff }

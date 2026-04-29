@@ -131,22 +131,31 @@ DROP TABLE 03720_partial_key;
 DROP TABLE IF EXISTS 03720_deletes;
 CREATE TABLE 03720_deletes (k1 UInt32, k2 UInt32, val String) ENGINE=EmbeddedRocksDB PRIMARY KEY (k1, k2);
 INSERT INTO 03720_deletes VALUES (1, 1, 'a'), (1, 2, 'b'), (2, 1, 'c'), (2, 2, 'd'), (3, 3, 'e');
+-- Delete single row with full key
+DELETE FROM 03720_deletes WHERE k1 = 1 AND k2 = 1;
 SELECT COUNT(*) FROM 03720_deletes; -- Should be 4
 SELECT val FROM 03720_deletes WHERE k1 = 1 ORDER BY val; -- Should be 'b'
+-- Delete using tuple equality
+DELETE FROM 03720_deletes WHERE (k1, k2) = (2, 2);
 SELECT val FROM 03720_deletes WHERE k1 = 2 ORDER BY val; -- Should be 'c'
+-- Delete using tuple IN
+DELETE FROM 03720_deletes WHERE (k1, k2) IN ((1, 2), (3, 3));
 SELECT val FROM 03720_deletes ORDER BY val; -- Should be 'c'
 DROP TABLE 03720_deletes;
 -- DELETE with three-column primary key
 DROP TABLE IF EXISTS 03720_deletes_three_col;
 CREATE TABLE 03720_deletes_three_col (k1 UInt32, k2 UInt32, k3 UInt32, val String) ENGINE=EmbeddedRocksDB PRIMARY KEY (k1, k2, k3);
 INSERT INTO 03720_deletes_three_col VALUES (1, 1, 1, 'a'), (1, 1, 2, 'b'), (1, 2, 1, 'c'), (2, 1, 1, 'd');
+DELETE FROM 03720_deletes_three_col WHERE (k1, k2, k3) = (1, 1, 1);
 SELECT COUNT(*) FROM 03720_deletes_three_col; -- Should be 3
+DELETE FROM 03720_deletes_three_col WHERE (k1, k2, k3) IN ((1, 1, 2), (2, 1, 1));
 SELECT val FROM 03720_deletes_three_col ORDER BY val; -- Should be 'c'
 DROP TABLE 03720_deletes_three_col;
 -- DELETE with string keys
 DROP TABLE IF EXISTS 03720_deletes_string;
 CREATE TABLE 03720_deletes_string (k1 String, k2 String, val UInt32) ENGINE=EmbeddedRocksDB PRIMARY KEY (k1, k2);
 INSERT INTO 03720_deletes_string VALUES ('foo', 'bar', 1), ('foo', 'baz', 2), ('qux', 'bar', 3);
+DELETE FROM 03720_deletes_string WHERE k1 = 'foo' AND k2 = 'bar';
 SELECT COUNT(*) FROM 03720_deletes_string; -- Should be 2
 SELECT val FROM 03720_deletes_string WHERE k1 = 'foo' ORDER BY val; -- Should be 2
 DROP TABLE 03720_deletes_string;

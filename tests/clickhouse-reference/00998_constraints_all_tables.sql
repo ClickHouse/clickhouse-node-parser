@@ -11,5 +11,7 @@ CREATE TABLE constrained (URL String, CONSTRAINT is_censor CHECK domainWithoutWW
 CREATE TABLE constrained (URL String, CONSTRAINT is_censor CHECK domainWithoutWWW(URL) = 'censor.net', CONSTRAINT is_utf8 CHECK isValidUTF8(URL)) ENGINE = Log;
 DROP TABLE IF EXISTS constrained2;
 CREATE TABLE constrained2 AS constrained;
+SHOW CREATE TABLE constrained;
+SHOW CREATE TABLE constrained2;
 INSERT INTO constrained2 VALUES ('https://www.censor.net/?q=upyachka'), ('Hello'), ('test'); -- { serverError VIOLATED_CONSTRAINT }
 DROP TABLE constrained2;

@@ -15,3 +15,9 @@ FROM test_00599
 WHERE id = (
         SELECT 1
     );
+
+DETACH TABLE test_view_00599;
+
+ATTACH TABLE test_view_00599;
+
+SHOW CREATE TABLE test_view_00599;

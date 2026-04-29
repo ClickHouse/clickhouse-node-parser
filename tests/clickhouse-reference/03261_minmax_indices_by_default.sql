@@ -109,6 +109,9 @@ SETTINGS add_minmax_index_for_numeric_columns = FALSE,
          add_minmax_index_for_string_columns = FALSE,
          add_minmax_index_for_temporal_columns = FALSE;
 SELECT name,type,expr,data_compressed_bytes FROM system.data_skipping_indices WHERE table = 'tbl6' AND database = currentDatabase();
+-- check that ATTACH of such tables will not throw "uses a reserved index name" error
+DETACH TABLE tbl1;
+ATTACH TABLE tbl1;
 DROP TABLE tbl1;
 DROP TABLE tbl2;
 DROP TABLE tbl3;

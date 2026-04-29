@@ -1,3 +1,4 @@
+
 /**
   * Based on https://github.com/postgres/postgres/blob/master/src/test/regress/sql/with.sql, license:
   *
@@ -33,6 +34,7 @@
 -- { echoOn }
 
 SET enable_analyzer = 1;
+
 --
 -- test multiple WITH queries
 --
@@ -40,23 +42,27 @@ WITH RECURSIVE
   y AS (SELECT 1 AS id),
   x AS (SELECT * FROM y UNION ALL SELECT id+1 FROM x WHERE id < 5)
 SELECT * FROM x ORDER BY id;
+
 -- forward reference OK
 WITH RECURSIVE
     x AS (SELECT * FROM y UNION ALL SELECT id+1 FROM x WHERE id < 5),
     y AS (SELECT 1 AS id)
  SELECT * FROM x ORDER BY id;
+
 WITH RECURSIVE
    x AS
      (SELECT 1 AS id UNION ALL SELECT id+1 FROM x WHERE id < 5),
    y AS
      (SELECT 1 AS id UNION ALL SELECT id+1 FROM y WHERE id < 10)
  SELECT y.*, x.* FROM y LEFT JOIN x USING (id) ORDER BY y.id;
+
 WITH RECURSIVE
    x AS
      (SELECT 1 AS id UNION ALL SELECT id+1 FROM x WHERE id < 5),
    y AS
      (SELECT 1 AS id UNION ALL SELECT id+1 FROM x WHERE id < 10)
  SELECT y.*, x.* FROM y LEFT JOIN x USING (id) ORDER BY y.id;
+
 WITH RECURSIVE
    x AS
      (SELECT 1 AS id UNION ALL SELECT id+1 FROM x WHERE id < 3 ),
@@ -65,6 +71,7 @@ WITH RECURSIVE
    z AS
      (SELECT * FROM x UNION ALL SELECT id+1 FROM z WHERE id < 10)
  SELECT * FROM z ORDER BY id;
+
 WITH RECURSIVE
    x AS
      (SELECT 1 AS id UNION ALL SELECT id+1 FROM x WHERE id < 3 ),
@@ -73,3 +80,5 @@ WITH RECURSIVE
    z AS
      (SELECT * FROM y UNION ALL SELECT id+1 FROM z WHERE id < 10)
  SELECT * FROM z ORDER BY id;
+
+-- { echoOff }

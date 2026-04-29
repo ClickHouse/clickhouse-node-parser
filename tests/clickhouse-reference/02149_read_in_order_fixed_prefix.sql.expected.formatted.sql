@@ -107,6 +107,8 @@ ENGINE = MergeTree
 ORDER BY (a, b)
 SETTINGS index_granularity = 3, index_granularity_bytes = '10Mi';
 
+SYSTEM STOP MERGES t_read_in_order;
+
 INSERT INTO t_read_in_order;
 
 SELECT

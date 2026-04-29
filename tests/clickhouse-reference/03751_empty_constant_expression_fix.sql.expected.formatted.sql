@@ -41,3 +41,6 @@ SELECT ((materialize(16)
     AND 16))
     AND -1
     AND toNullable(16);
+
+DESCRIBE TABLE file(materialize(1)
+AND 0); -- { serverError BAD_ARGUMENTS }

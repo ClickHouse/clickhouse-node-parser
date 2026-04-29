@@ -16,6 +16,8 @@ FROM numbers(10000);
 
 SET mutations_sync = 2;
 
+DELETE FROM t_sparse_mutation WHERE id % 2 = 0;
+
 SELECT
     count(),
     sum(v)
@@ -30,5 +32,7 @@ WHERE database = currentDatabase()
 ALTER TABLE t_sparse_mutation UPDATE v = v * 2 WHERE id % 5 = 0;
 
 ALTER TABLE t_sparse_mutation DELETE WHERE id % 3 = 0;
+
+OPTIMIZE TABLE t_sparse_mutation FINAL;
 
 DROP TABLE t_sparse_mutation;

@@ -8,6 +8,8 @@ CREATE TABLE test
 ENGINE = MergeTree
 ORDER BY tuple();
 
+SHOW CREATE TABLE test;
+
 DROP TABLE test;
 
 CREATE TABLE test

@@ -10,6 +10,8 @@ ALTER TABLE rmt ADD INDEX idx1 date(ts) TYPE MinMax GRANULARITY 1;
 
 CREATE INDEX idx2 ON rmt (date(ts)) TYPE MinMax GRANULARITY 1;
 
+SYSTEM restart replica rmt;
+
 CREATE TABLE rmt2
 (
     n int,

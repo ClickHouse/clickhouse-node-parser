@@ -10,9 +10,13 @@ ORDER BY (KeyID);
 
 INSERT INTO t_hardware_error;
 
+SYSTEM enable failpoint replicated_merge_tree_commit_zk_fail_after_op;
+
 INSERT INTO t_hardware_error;
 
 SELECT count()
 FROM t_hardware_error;
+
+SYSTEM disable failpoint replicated_commit_zk_fail_after_op;
 
 DROP TABLE t_hardware_error;

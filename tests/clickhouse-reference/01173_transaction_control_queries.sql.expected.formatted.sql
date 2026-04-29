@@ -17,6 +17,12 @@ CREATE TABLE mt2
 ENGINE = MergeTree
 ORDER BY n;
 
+commit; -- { serverError INVALID_TRANSACTION } -- no transaction
+
+rollback; -- { serverError INVALID_TRANSACTION }
+
+begin transaction;
+
 INSERT INTO mt1;
 
 INSERT INTO mt2;

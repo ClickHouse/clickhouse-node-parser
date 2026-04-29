@@ -4,6 +4,8 @@ DROP TABLE IF EXISTS test;
 CREATE TABLE test
 ENGINE = S3('http://localhost:11111/test/json_data');
 
+SHOW CREATE TABLE test;
+
 DROP TABLE test;
 
 CREATE TABLE test

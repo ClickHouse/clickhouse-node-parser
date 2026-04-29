@@ -16,6 +16,8 @@ INSERT INTO check_codec SELECT
     number * 2
 FROM numbers(1000);
 
+CHECK TABLE check_codec SETTINGS max_threads = 1;
+
 DROP TABLE check_codec;
 
 CREATE TABLE check_codec

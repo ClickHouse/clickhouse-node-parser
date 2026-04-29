@@ -14,6 +14,8 @@ ENGINE = MergeTree
 ORDER BY id
 SETTINGS min_rows_for_wide_part = 1, min_bytes_for_wide_part = 1, vertical_merge_algorithm_min_rows_to_activate = 1, vertical_merge_algorithm_min_columns_to_activate = 1, index_granularity_bytes = 28437532, merge_max_block_size = 3520, index_granularity = 26762;
 
+SYSTEM stop merges test;
+
 INSERT INTO test SELECT
     number,
     toJSONString(map('a', number))
@@ -28,6 +30,10 @@ INSERT INTO test SELECT
     number,
     toJSONString(map('b', arrayMap(x -> map('d', x), range(number % 5 + 1))))
 FROM numbers(50000);
+
+SYSTEM start merges test;
+
+OPTIMIZE TABLE test FINAL;
 
 SELECT *
 FROM (

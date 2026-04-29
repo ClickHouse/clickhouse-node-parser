@@ -9,6 +9,8 @@ CREATE TABLE alter_column_02126
 ENGINE = MergeTree
 ORDER BY a;
 
+SHOW CREATE TABLE alter_column_02126;
+
 ALTER TABLE alter_column_02126 MODIFY COLUMN x Float32;
 
 ALTER TABLE alter_column_02126 MODIFY COLUMN x Float64, MODIFY COLUMN y Float32;

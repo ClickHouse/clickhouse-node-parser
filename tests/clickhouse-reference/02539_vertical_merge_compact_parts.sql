@@ -10,6 +10,8 @@ SETTINGS
     allow_vertical_merges_from_compact_to_wide_parts = 1,
     min_bytes_for_full_part_storage = 0;
 INSERT INTO t_compact_vertical_merge SELECT number, toString(number), range(number % 10) FROM numbers(40);
+OPTIMIZE TABLE t_compact_vertical_merge FINAL;
+SYSTEM FLUSH LOGS part_log;
 WITH splitByChar('_', part_name) AS name_parts,
     name_parts[2]::UInt64 AS min_block,
     name_parts[3]::UInt64 AS max_block

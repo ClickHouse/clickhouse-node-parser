@@ -22,6 +22,8 @@ INSERT INTO summing_mt_aggregating_column SELECT
     [555, 999],
     groupArrayArrayState([toUInt64(55), toUInt64(99)]);
 
+OPTIMIZE TABLE summing_mt_aggregating_column FINAL;
+
 SELECT
     Key,
     any(Value),

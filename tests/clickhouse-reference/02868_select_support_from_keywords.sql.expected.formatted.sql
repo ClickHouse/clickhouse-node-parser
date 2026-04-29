@@ -28,6 +28,8 @@ SELECT
     to
 FROM cte;
 
+SHOW CREATE TABLE test_view;
+
 DROP TABLE test_view;
 
 DROP TABLE test_table;

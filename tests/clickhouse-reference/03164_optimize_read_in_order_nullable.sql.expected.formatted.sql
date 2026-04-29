@@ -17,6 +17,8 @@ INSERT INTO `03164_users`;
 
 INSERT INTO `03164_users`;
 
+OPTIMIZE TABLE `03164_users` FINAL;
+
 SELECT '-- Reproducer result:';
 
 SELECT *
@@ -37,6 +39,9 @@ ORDER BY (c1, c2)
 SETTINGS allow_nullable_key = 1;
 
 INSERT INTO `03164_multi_key`;
+
+-- Just in case
+OPTIMIZE TABLE `03164_multi_key` FINAL;
 
 SELECT
     c1,

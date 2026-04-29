@@ -17,6 +17,7 @@ ORDER BY (x, y, z)
 SETTINGS index_granularity = 8192,
 index_granularity_bytes = 10485760,
 add_minmax_index_for_numeric_columns=0;
+SYSTEM STOP MERGES t;
 INSERT INTO t SELECT
     number,
     number,
@@ -40,6 +41,7 @@ read_in_order_two_level_merge_threshold = 0,  --force preliminary merge
 max_threads = 1,
 optimize_read_in_order = 1,
 log_comment = 'preliminary merge, no filter';
+SYSTEM FLUSH LOGS query_log;
 SELECT read_rows
 FROM system.query_log
 WHERE current_database = currentDatabase()
@@ -109,6 +111,7 @@ DROP TABLE IF EXISTS fixed_prefix;
 CREATE TABLE fixed_prefix(a UInt32, b UInt32)
 ENGINE = MergeTree ORDER BY (a, b)
 SETTINGS index_granularity = 3;
+SYSTEM STOP MERGES fixed_prefix;
 INSERT INTO fixed_prefix VALUES (0, 100), (1, 2), (1, 3), (1, 4), (2, 5);
 SELECT a, b
 FROM fixed_prefix
@@ -133,6 +136,7 @@ CREATE TABLE function_pk
 )
 ENGINE = MergeTree ORDER BY (A, -B)
 SETTINGS index_granularity = 1;
+SYSTEM STOP MERGES function_pk;
 INSERT INTO function_pk values(1,1);
 INSERT INTO function_pk values(1,3);
 INSERT INTO function_pk values(1,2);
@@ -157,6 +161,7 @@ ENGINE = MergeTree
 ORDER BY (a, b)
 SETTINGS index_granularity = 8192,
 index_granularity_bytes = '10Mi';
+SYSTEM STOP MERGES distinct_in_order;
 INSERT INTO distinct_in_order SELECT
     number % number,
     number % 5,

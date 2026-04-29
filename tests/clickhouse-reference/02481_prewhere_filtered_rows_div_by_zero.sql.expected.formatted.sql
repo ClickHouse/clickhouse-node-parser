@@ -44,6 +44,9 @@ WHERE b % 2 != 0;
 
 SET mutations_sync = 2;
 
+-- Delete all rows where division by zero could occur
+DELETE FROM test_filter WHERE c = 0;
+
 SELECT *
 FROM test_filter
 PREWHERE intDiv(b, c) > 0;

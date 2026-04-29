@@ -52,3 +52,4 @@ SELECT if(dummy IN (SELECT 1) AS in_expression, 11, 22) FROM system.one;
 SELECT if(dummy IN (SELECT 1) AS in_expression, in_expression, 22) FROM system.one;
 SELECT if(dummy IN (SELECT 1) AS in_expression, 11, in_expression) FROM system.one;
 SELECT if(dummy IN (SELECT 1) AS in_expression, in_expression, in_expression) FROM system.one;
+--{echoOff}

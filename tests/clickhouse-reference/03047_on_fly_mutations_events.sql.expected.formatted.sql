@@ -15,6 +15,8 @@ CREATE TABLE t_lightweight_mut_7
 ENGINE = ReplicatedMergeTree('/clickhouse/tables/{database}/t_lightweight_mut_7', '1')
 ORDER BY id;
 
+SYSTEM STOP MERGES t_lightweight_mut_7;
+
 INSERT INTO t_lightweight_mut_7 SELECT
     number,
     number
@@ -24,8 +26,12 @@ ALTER TABLE t_lightweight_mut_7 UPDATE v = 3 WHERE id % 5 = 0;
 
 ALTER TABLE t_lightweight_mut_7 DELETE WHERE v % 3 = 0;
 
+SYSTEM SYNC REPLICA t_lightweight_mut_7 PULL;
+
 SELECT count()
 FROM t_lightweight_mut_7;
+
+SYSTEM START MERGES t_lightweight_mut_7;
 
 ALTER TABLE t_lightweight_mut_7 UPDATE v = v WHERE 1 SETTINGS mutations_sync = 2;
 
@@ -46,6 +52,8 @@ SELECT
     3,
     sum(v)
 FROM t_lightweight_mut_7;
+
+SYSTEM FLUSH LOGS query_log;
 
 SELECT
     query,

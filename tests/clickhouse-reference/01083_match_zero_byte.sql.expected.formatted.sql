@@ -27,4 +27,4 @@ SELECT
 SELECT
     number AS char_code,
     extract(concat(char(char_code), ' key="v" ') AS haystack, 'key="(.*?)"') AS needle
-FROM numbers(256);
+FROM numbers(256); -- every other chars codes (except of zero byte) works ok

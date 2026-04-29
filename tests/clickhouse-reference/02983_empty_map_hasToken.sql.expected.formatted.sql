@@ -19,6 +19,8 @@ INSERT INTO test SELECT
     map('content-type', 'x')
 FROM numbers(1e2);
 
+OPTIMIZE TABLE test FINAL;
+
 SELECT count()
 FROM test
 PREWHERE hasToken(h['user-agent'], 'bulk')

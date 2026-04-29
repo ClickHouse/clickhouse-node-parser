@@ -38,6 +38,8 @@ ALTER TABLE table_for_rename RENAME COLUMN value1 TO value4;
 
 ALTER TABLE table_for_rename RENAME COLUMN value2 TO value5;
 
+SHOW CREATE TABLE table_for_rename;
+
 SELECT '-- insert after rename --';
 
 INSERT INTO table_for_rename SELECT

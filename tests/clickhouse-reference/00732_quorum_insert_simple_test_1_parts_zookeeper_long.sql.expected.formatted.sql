@@ -42,6 +42,8 @@ SELECT x
 FROM quorum2
 ORDER BY x ASC;
 
+OPTIMIZE TABLE quorum1 PARTITION '2018-11-15' FINAL;
+
 SELECT count(*)
 FROM `system`.parts
 WHERE active

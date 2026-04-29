@@ -19,4 +19,10 @@ GROUP BY
     table,
     column;
 
+DETACH TABLE audit_size_column;
+
+ATTACH TABLE audit_size_column;
+
+SHOW TABLE audit_size_column FORMAT Raw;
+
 DROP TABLE audit_size_column;

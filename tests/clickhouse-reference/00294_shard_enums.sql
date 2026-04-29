@@ -8,6 +8,7 @@ create table enums (
     e Enum8('world' = 2, 'hello' = 1), sign Enum8('minus' = -1, 'plus' = 1),
     letter Enum16('a' = 0, 'b' = 1, 'c' = 2, '*' = -256)
 ) engine = MergeTree(d, k, 1);
+desc table enums;
 -- insert default values
 insert into enums (k) values (0);
 select * from enums;

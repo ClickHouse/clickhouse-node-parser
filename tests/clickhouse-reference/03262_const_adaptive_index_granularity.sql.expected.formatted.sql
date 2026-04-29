@@ -31,6 +31,8 @@ WHERE database = currentDatabase()
     AND table = 't_index_granularity'
     AND active;
 
+OPTIMIZE TABLE t_index_granularity FINAL;
+
 DROP TABLE t_index_granularity;
 
 CREATE TABLE t_index_granularity

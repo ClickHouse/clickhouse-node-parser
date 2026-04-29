@@ -71,10 +71,15 @@ INSERT INTO realtimebuff (amount, transID, userID, appID, appName, transType, or
 SELECT sum(amount) = 100
 FROM realtimebuff;
 
+OPTIMIZE TABLE realtimebuff;
+
 -- Data has been flushed from Buffer table to the Distributed table and can possibly being sent to 0, 1 or 2 shards.
 -- Both shards reside on localhost in the same table.
 SELECT sum(amount) IN (0, 100, 200)
 FROM realtimebuff;
+
+-- Data has been sent to all shards.
+SYSTEM FLUSH DISTRIBUTED realtimedistributed;
 
 SELECT sum(amount) = 200
 FROM realtimebuff;

@@ -5,6 +5,7 @@ drop table if exists test;
 create table test (json JSON(max_dynamic_paths=8)) engine=MergeTree order by tuple() settings min_rows_for_wide_part = 1, min_bytes_for_wide_part = 1;
 insert into test select materialize('{"a" : 42}')::JSON(max_dynamic_paths=8) from numbers(5);
 insert into test select materialize('{"a1" : 42, "a2" : 42, "a3" : 42, "a4" : 42, "a5" : 42, "a6" : 42, "a7" : 42, "a8" : 42, "a" : [{"c" : 42}]}')::JSON(max_dynamic_paths=8) from numbers(5);
+optimize table test final;
 select distinct dynamicType(json.a) as type, isDynamicElementInSharedData(json.a) from test order by type;
 insert into test select materialize('{"a1" : 42, "a2" : 42, "a3" : 42, "a4" : 42, "a5" : 42, "a6" : 42, "a7" : 42, "a8" : 42, "a" : [{"d" : 42}]}')::JSON(max_dynamic_paths=8) from numbers(5);
 select distinct JSONSharedDataPaths(arrayJoin(json.a[])) as path from test order by path;

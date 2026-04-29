@@ -76,6 +76,8 @@ CREATE TABLE t_missed_subcolumns
 ENGINE = MergeTree
 ORDER BY id;
 
+SYSTEM STOP MERGES t_missed_subcolumns;
+
 INSERT INTO t_missed_subcolumns;
 
 ALTER TABLE t_missed_subcolumns ADD COLUMN t Tuple(a String, b String) DEFAULT ('foo', 'bar');

@@ -1,6 +1,8 @@
 -- { echoOn }
 SET enable_analyzer = 1;
 
+SYSTEM STOP MERGES tbl;
+
 -- simple test case
 CREATE TABLE IF NOT EXISTS replacing_mt
 (

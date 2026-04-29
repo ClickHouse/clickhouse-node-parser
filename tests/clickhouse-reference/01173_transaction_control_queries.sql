@@ -4,6 +4,9 @@ drop table if exists mt1;
 drop table if exists mt2;
 create table mt1 (n Int64) engine=MergeTree order by n;
 create table mt2 (n Int64) engine=MergeTree order by n;
+commit; -- { serverError INVALID_TRANSACTION } -- no transaction
+rollback; -- { serverError INVALID_TRANSACTION }
+begin transaction;
 insert into mt1 values (1);
 insert into mt2 values (10);
 select 'commit', arraySort(groupArray(n)) from (select n from mt1 union all select * from mt2);

@@ -2,6 +2,8 @@
 -- Create user with mix both implicit and explicit auth type, starting with with
 CREATE USER u_03174_multiple_auth_show_create IDENTIFIED BY '1', BY '2', BY '3', BY '4';
 
+SHOW CREATE USER u_03174_multiple_auth_show_create;
+
 DROP USER IF EXISTS u_03174_multiple_auth_show_create;
 
 -- Create user with mix both implicit and explicit auth type, starting with by

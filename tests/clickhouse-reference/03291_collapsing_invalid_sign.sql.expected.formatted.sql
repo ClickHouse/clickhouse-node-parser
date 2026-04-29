@@ -52,6 +52,8 @@ INSERT INTO t0 (c1, c0);
 SELECT *
 FROM t0 FINAL;
 
+DELETE FROM t0 WHERE true;
+
 SELECT *
 FROM t0;
 
@@ -70,6 +72,8 @@ ORDER BY tuple()
 SETTINGS enable_vertical_merge_algorithm = 1, vertical_merge_algorithm_min_rows_to_activate = 0, vertical_merge_algorithm_min_bytes_to_activate = 0, vertical_merge_algorithm_min_columns_to_activate = 0, min_bytes_for_wide_part = 0;
 
 INSERT INTO t_03291_collapsing_invalid_sign_vertical_merge;
+
+OPTIMIZE TABLE t_03291_collapsing_invalid_sign_vertical_merge;
 
 DROP TABLE t_03291_collapsing_invalid_sign_vertical_merge;
 

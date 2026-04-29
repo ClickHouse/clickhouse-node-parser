@@ -44,6 +44,8 @@ SETTINGS
     parallel_replicas_for_non_replicated_merge_tree = 1,
     parallel_replicas_local_plan = 0;
 
+SYSTEM FLUSH LOGS query_log;
+
 SELECT count()
 FROM `system`.query_log
 WHERE ((current_database = currentDatabase()

@@ -41,6 +41,8 @@ ORDER BY `format` ASC;
 SELECT count()
 FROM t_async_inserts_flush;
 
+SYSTEM FLUSH ASYNC INSERT QUEUE;
+
 SELECT count()
 FROM `system`.asynchronous_inserts
 WHERE database = currentDatabase()

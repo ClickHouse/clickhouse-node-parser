@@ -38,6 +38,8 @@ INNER JOIN mergeTreeProjection(currentDatabase(), test, p) AS r
     USING (a)
 SETTINGS enable_analyzer = 1;
 
+OPTIMIZE TABLE test FINAL;
+
 ALTER TABLE test ADD PROJECTION p2 (SELECT
     a,
     b,

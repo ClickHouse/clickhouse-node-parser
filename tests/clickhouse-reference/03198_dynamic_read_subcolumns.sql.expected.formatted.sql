@@ -16,6 +16,8 @@ SETTINGS min_bytes_for_wide_part = 0;
 
 INSERT INTO test_dynamic;
 
+SYSTEM CLEAR MARK CACHE;
+
 SELECT d.String
 FROM test_dynamic
 SETTINGS enable_analyzer = 1;
@@ -23,6 +25,8 @@ SETTINGS enable_analyzer = 1;
 SELECT d.String
 FROM test_dynamic
 SETTINGS enable_analyzer = 0;
+
+SYSTEM FLUSH LOGS query_log;
 
 SELECT ProfileEvents['FileOpen']
 FROM `system`.query_log

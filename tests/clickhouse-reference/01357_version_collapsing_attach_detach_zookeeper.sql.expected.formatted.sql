@@ -23,3 +23,7 @@ WHERE path = concat('/clickhouse/', currentDatabase(), '/versioned_collapsing_ta
 
 SELECT COUNT()
 FROM versioned_collapsing_table;
+
+DETACH TABLE versioned_collapsing_table;
+
+ATTACH TABLE versioned_collapsing_table;

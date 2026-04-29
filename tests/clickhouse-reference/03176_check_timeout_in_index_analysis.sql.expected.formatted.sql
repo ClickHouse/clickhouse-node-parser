@@ -20,6 +20,8 @@ WHERE database = currentDatabase()
     AND table = 't_03176'
     AND active;
 
+SYSTEM FLUSH LOGS query_log;
+
 -- Check that q1 was fast, q2 was slow and q3 had timeout
 SELECT
     log_comment,

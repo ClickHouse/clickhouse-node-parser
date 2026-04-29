@@ -19,6 +19,8 @@ ORDER BY
     _part_index ASC,
     x ASC;
 
+OPTIMIZE TABLE merge;
+
 DROP TABLE merge;
 
 INSERT INTO merge (x) SELECT number AS x

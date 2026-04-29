@@ -70,6 +70,8 @@ CREATE TABLE type_json_src
 ENGINE = MergeTree
 ORDER BY tuple();
 
+SYSTEM STOP MERGES type_json_src;
+
 SET max_threads = 1;
 
 SET max_insert_threads = 1;

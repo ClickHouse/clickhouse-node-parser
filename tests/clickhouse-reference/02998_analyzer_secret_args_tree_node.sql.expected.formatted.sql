@@ -3,4 +3,4 @@
 -- { echoOn }
 SET enable_analyzer = 1;
 
-SET format_display_secrets_in_show_and_select = 1;
+SET format_display_secrets_in_show_and_select = 1; -- { echoOff }

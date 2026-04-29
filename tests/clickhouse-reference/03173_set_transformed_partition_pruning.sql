@@ -13,7 +13,9 @@ INSERT INTO 03173_single_function
 SELECT toDate('2000-01-01') + 10 * number FROM numbers(50)
 UNION ALL
 SELECT toDate('2100-01-01') + 10 * number FROM numbers(50);
+OPTIMIZE TABLE 03173_single_function FINAL;
 SELECT count() FROM 03173_single_function WHERE dt IN ('2024-01-20', '2024-05-25') SETTINGS log_comment='03173_single_function';
+SYSTEM FLUSH LOGS query_log;
 SELECT ProfileEvents['SelectedParts'] FROM system.query_log WHERE type = 'QueryFinish' AND current_database = currentDatabase() AND log_comment = '03173_single_function';
 DROP TABLE IF EXISTS 03173_nested_function;
 CREATE TABLE 03173_nested_function(
@@ -23,6 +25,7 @@ ENGINE = MergeTree
 ORDER BY tuple()
 PARTITION BY xxHash32(id) % 3;
 INSERT INTO 03173_nested_function SELECT number FROM numbers(100);
+OPTIMIZE TABLE 03173_nested_function FINAL;
 SELECT count() FROM 03173_nested_function WHERE id IN (10) SETTINGS log_comment='03173_nested_function';
 SELECT count() FROM 03173_nested_function WHERE xxHash32(id) IN (2158931063, 1449383981) SETTINGS log_comment='03173_nested_function_subexpr';
 SELECT ProfileEvents['SelectedParts'] FROM system.query_log WHERE type = 'QueryFinish' AND current_database = currentDatabase() AND log_comment = '03173_nested_function';
@@ -36,6 +39,7 @@ ENGINE = MergeTree
 ORDER BY tuple()
 PARTITION BY xxHash32(id) % 3;
 INSERT INTO 03173_nested_function_lc SELECT number FROM numbers(100);
+OPTIMIZE TABLE 03173_nested_function_lc FINAL;
 SELECT count() FROM 03173_nested_function_lc WHERE id IN (10) SETTINGS log_comment='03173_nested_function_lc';
 SELECT count() FROM 03173_nested_function_lc WHERE xxHash32(id) IN (2158931063, 1449383981) SETTINGS log_comment='03173_nested_function_subexpr_lc';
 SELECT ProfileEvents['SelectedParts'] FROM system.query_log WHERE type = 'QueryFinish' AND current_database = currentDatabase() AND log_comment = '03173_nested_function_lc';
@@ -49,6 +53,7 @@ ORDER BY tuple()
 PARTITION BY xxHash32(id) % 3
 SETTINGS allow_nullable_key=1;
 INSERT INTO 03173_nested_function_null SELECT number FROM numbers(100);
+OPTIMIZE TABLE 03173_nested_function_null FINAL;
 SELECT count() FROM 03173_nested_function_null WHERE id IN (10) SETTINGS log_comment='03173_nested_function_null';
 SELECT count() FROM 03173_nested_function_null WHERE xxHash32(id) IN (2158931063, 1449383981) SETTINGS log_comment='03173_nested_function_subexpr_null';
 SELECT ProfileEvents['SelectedParts'] FROM system.query_log WHERE type = 'QueryFinish' AND current_database = currentDatabase() AND log_comment = '03173_nested_function_null';
@@ -62,6 +67,7 @@ ORDER BY tuple()
 PARTITION BY xxHash32(id) % 3
 SETTINGS allow_nullable_key=1;
 INSERT INTO 03173_nested_function_lc_null SELECT number FROM numbers(100);
+OPTIMIZE TABLE 03173_nested_function_lc_null FINAL;
 SELECT count() FROM 03173_nested_function_lc_null WHERE id IN (10) SETTINGS log_comment='03173_nested_function_lc_null';
 SELECT count() FROM 03173_nested_function_lc_null WHERE xxHash32(id) IN (2158931063, 1449383981) SETTINGS log_comment='03173_nested_function_subexpr_lc_null';
 SELECT ProfileEvents['SelectedParts'] FROM system.query_log WHERE type = 'QueryFinish' AND current_database = currentDatabase() AND log_comment = '03173_nested_function_lc_null';
@@ -74,6 +80,7 @@ ENGINE = MergeTree
 ORDER BY tuple()
 PARTITION BY xxHash32(id) % 3;
 INSERT INTO 03173_nonsafe_cast SELECT number FROM numbers(100);
+OPTIMIZE TABLE 03173_nonsafe_cast FINAL;
 SELECT count() FROM 03173_nonsafe_cast WHERE id IN (SELECT '50' UNION ALL SELECT '99') SETTINGS log_comment='03173_nonsafe_cast';
 SELECT ProfileEvents['SelectedParts'] FROM system.query_log WHERE type = 'QueryFinish' AND current_database = currentDatabase() AND log_comment = '03173_nonsafe_cast';
 DROP TABLE IF EXISTS 03173_multiple_partition_cols;
@@ -85,6 +92,7 @@ ENGINE = MergeTree
 ORDER BY tuple()
 PARTITION BY (intDiv(key1, 50), xxHash32(key2) % 3);
 INSERT INTO 03173_multiple_partition_cols SELECT number, number FROM numbers(100);
+OPTIMIZE TABLE 03173_multiple_partition_cols FINAL;
 SELECT count() FROM 03173_multiple_partition_cols WHERE key2 IN (4) SETTINGS log_comment='03173_multiple_columns';
 SELECT count() FROM 03173_multiple_partition_cols WHERE xxHash32(key2) IN (4251411170) SETTINGS log_comment='03173_multiple_columns_subexpr';
 SELECT ProfileEvents['SelectedParts'] FROM system.query_log WHERE type = 'QueryFinish' AND current_database = currentDatabase() AND log_comment = '03173_multiple_columns';
@@ -100,6 +108,7 @@ ENGINE = MergeTree
 ORDER BY tuple()
 PARTITION BY xxHash32(id) % 3;
 INSERT INTO 03173_base_data_source SELECT number FROM numbers(100);
+OPTIMIZE TABLE 03173_base_data_source FINAL;
 DROP TABLE IF EXISTS 03173_low_cardinality_set;
 CREATE TABLE 03173_low_cardinality_set (id LowCardinality(Int32)) ENGINE=Memory AS SELECT 10;
 SELECT count() FROM 03173_base_data_source WHERE id IN (SELECT id FROM 03173_low_cardinality_set) SETTINGS log_comment='03173_low_cardinality_set';
@@ -146,5 +155,6 @@ ENGINE = MergeTree
 ORDER BY tuple()
 PARTITION BY xxHash32(id) % 3;
 INSERT INTO 03173_empty_transform SELECT number FROM numbers(6);
+OPTIMIZE TABLE 03173_empty_transform FINAL;
 SELECT id FROM 03173_empty_transform WHERE xxHash32(id) % 3 IN (xxHash32(2::Int32) % 3) SETTINGS log_comment='03173_empty_transform';
 SELECT ProfileEvents['SelectedParts'] FROM system.query_log WHERE type = 'QueryFinish' AND current_database = currentDatabase() AND log_comment = '03173_empty_transform';

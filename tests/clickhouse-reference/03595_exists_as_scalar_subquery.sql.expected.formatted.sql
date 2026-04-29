@@ -48,6 +48,8 @@ SETTINGS execute_exists_as_scalar_subquery = 1;
 
 SET force_primary_key = 0;
 
+SYSTEM flush logs query_log;
+
 SELECT concat('ScalarSubqueriesGlobalCacheHit ', ProfileEvents['ScalarSubqueriesGlobalCacheHit'])
 FROM `system`.query_log
 WHERE type != 'QueryStart'

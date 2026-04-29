@@ -31,6 +31,8 @@ INSERT INTO table_for_rename1 SELECT
     toString(number)
 FROM numbers(9);
 
+; --{serverError VIOLATED_CONSTRAINT}
+
 SELECT *
 FROM table_for_rename1
 ORDER BY key ASC;
@@ -38,6 +40,8 @@ ORDER BY key ASC;
 ALTER TABLE table_for_rename1 RENAME COLUMN value1 TO value4;
 
 ALTER TABLE table_for_rename1 RENAME COLUMN value2 TO value5;
+
+SHOW CREATE TABLE table_for_rename1;
 
 SELECT '-- insert after rename --';
 

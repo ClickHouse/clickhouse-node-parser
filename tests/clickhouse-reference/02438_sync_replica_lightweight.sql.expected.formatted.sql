@@ -22,11 +22,17 @@ ENGINE = ReplicatedMergeTree('/test/{database}/02438/', '2')
 ORDER BY tuple()
 SETTINGS cache_populated_by_fetch = 0;
 
+SYSTEM stop replicated sends rmt1;
+
+SYSTEM stop merges rmt2;
+
 SET insert_keeper_fault_injection_probability = 0;
 
 INSERT INTO rmt1;
 
 INSERT INTO rmt1;
+
+SYSTEM sync replica rmt2 pull; -- does not wait
 
 SELECT
     type,
@@ -52,6 +58,14 @@ ORDER BY n ASC;
 
 SET optimize_throw_if_noop = 1;
 
+SYSTEM sync replica rmt1 pull;
+
+OPTIMIZE TABLE rmt1 FINAL;
+
+SYSTEM start replicated sends rmt1;
+
+SYSTEM sync replica rmt2 lightweight; -- waits for fetches, not merges
+
 SELECT
     3,
     n,
@@ -65,7 +79,15 @@ SELECT
 FROM rmt2
 ORDER BY n ASC;
 
+SYSTEM start merges rmt2;
+
+SYSTEM sync replica rmt2;
+
 INSERT INTO rmt2;
+
+OPTIMIZE TABLE rmt2 FINAL;
+
+SYSTEM sync replica rmt1 strict;
 
 SELECT
     5,

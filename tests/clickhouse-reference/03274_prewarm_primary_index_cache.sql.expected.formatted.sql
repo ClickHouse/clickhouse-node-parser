@@ -25,6 +25,10 @@ ORDER BY a
 PARTITION BY a % 2
 SETTINGS prewarm_primary_key_cache = 1, use_primary_key_cache = 1;
 
+SYSTEM CLEAR PRIMARY INDEX CACHE;
+
+SYSTEM STOP FETCHES t_prewarm_cache_rmt_2;
+
 -- Check that prewarm works on insert.
 INSERT INTO t_prewarm_cache_rmt_1 SELECT
     number,
@@ -43,11 +47,30 @@ FROM `system`.parts
 WHERE database = currentDatabase()
     AND table IN ('t_prewarm_cache_rmt_1', 't_prewarm_cache_rmt_2');
 
+SYSTEM START FETCHES t_prewarm_cache_rmt_2;
+
+SYSTEM SYNC REPLICA t_prewarm_cache_rmt_2;
+
 SELECT count()
 FROM t_prewarm_cache_rmt_2
 WHERE a % 2 = 0
     AND a > 100
     AND a < 1000;
+
+OPTIMIZE TABLE t_prewarm_cache_rmt_1 FINAL;
+
+DETACH TABLE t_prewarm_cache_rmt_1;
+
+DETACH TABLE t_prewarm_cache_rmt_2;
+
+ATTACH TABLE t_prewarm_cache_rmt_1;
+
+ATTACH TABLE t_prewarm_cache_rmt_2;
+
+--- Check that system query works.
+SYSTEM PREWARM PRIMARY INDEX CACHE t_prewarm_cache_rmt_1;
+
+SYSTEM FLUSH LOGS query_log;
 
 SELECT ProfileEvents['LoadedPrimaryIndexFiles']
 FROM `system`.query_log

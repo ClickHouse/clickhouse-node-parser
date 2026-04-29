@@ -15,6 +15,8 @@ SET mutations_sync = 2;
 
 SET max_threads = 1;
 
+DELETE FROM table_02513 WHERE n % 10 = 0;
+
 -- { echoOn }
 SELECT *
 FROM table_02513;

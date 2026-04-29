@@ -26,6 +26,8 @@ SELECT
 FROM test
 SETTINGS log_comment = '02950_parallel_replicas_used_replicas_count';
 
+SYSTEM FLUSH LOGS query_log;
+
 SELECT ProfileEvents['ParallelReplicasUsedCount'] > 0
 FROM `system`.query_log
 WHERE type = 'QueryFinish'

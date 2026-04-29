@@ -28,6 +28,7 @@ INSERT INTO t_proj VALUES
     (3, 'us', 103),
     (4, 'us', 106),
     (5, 'asia', 200);
+OPTIMIZE TABLE t_proj FINAL;
 -- Pick projection based on both filters
 SELECT trimLeft(explain)
 FROM (EXPLAIN projections = 1 SELECT * FROM t_proj WHERE region = 'eu' AND user_id = 101)
@@ -72,6 +73,7 @@ INSERT INTO t_gran SELECT number + 8, 'other' FROM numbers(6);
 INSERT INTO t_gran VALUES (15, 'bot');
 -- Extra data to ensure projection index is chosen
 INSERT INTO t_gran SELECT number + 100, 'zzz' FROM numbers(1000);
+OPTIMIZE TABLE t_gran FINAL;
 SELECT trimLeft(explain)
 FROM (EXPLAIN projections = 1 SELECT * FROM t_gran WHERE region = 'top')
 WHERE explain LIKE '%ReadFromMergeTree%' OR match(explain, '^\s+[A-Z][a-z]+(\s+[A-Z][a-z]+)*:');
@@ -137,11 +139,15 @@ CREATE TABLE t_repl2
 )
 ENGINE = ReplicatedMergeTree('/clickhouse/{database}/test/proj', 'r2')
 ORDER BY id;
+SYSTEM SYNC REPLICA t_repl2;
 -- check projection part exists on both replicas
 SELECT table, name
 FROM system.projection_parts
 WHERE database = currentDatabase() AND table IN ('t_repl', 't_repl2')
 ORDER BY ALL;
+DETACH TABLE t_repl2 SYNC;
+ATTACH TABLE t_repl2;
+DESC mergeTreeProjection(currentDatabase(), t_repl2, region_proj);
 DROP TABLE t_repl SYNC;
 DROP TABLE t_repl2 SYNC;
 ------------------------------------------------------------------------------

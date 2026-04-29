@@ -1,5 +1,6 @@
 DROP TABLE IF EXISTS const_node;
 CREATE TABLE const_node (`v` Nullable(UInt8)) ENGINE = MergeTree ORDER BY tuple();
+SYSTEM STOP MERGES const_node;
 INSERT INTO const_node VALUES (1);
 INSERT INTO const_node VALUES (2);
 INSERT INTO const_node VALUES (3);

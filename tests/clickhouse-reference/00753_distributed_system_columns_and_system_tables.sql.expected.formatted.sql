@@ -7,6 +7,8 @@ ENGINE = Null();
 CREATE TABLE check_system_tables AS check_system_tables_null
 ENGINE = Distributed(test_shard_localhost, currentDatabase(), check_system_tables_null);
 
+SYSTEM STOP DISTRIBUTED SENDS check_system_tables;
+
 SELECT
     total_bytes,
     total_rows
@@ -24,6 +26,8 @@ SELECT
 FROM `system`.tables
 WHERE database = currentDatabase()
     AND name = 'check_system_tables';
+
+SYSTEM FLUSH DISTRIBUTED check_system_tables;
 
 DROP TABLE check_system_tables_null;
 

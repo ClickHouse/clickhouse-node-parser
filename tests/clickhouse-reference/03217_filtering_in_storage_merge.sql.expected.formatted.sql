@@ -20,3 +20,5 @@ ENGINE = Merge(currentDatabase(), 'test_03217_merge_replica_*');
 
 INSERT INTO test_03217_merge_replica_1 SELECT number AS x
 FROM numbers(10);
+
+SYSTEM SYNC REPLICA test_03217_merge_replica_2;

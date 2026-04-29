@@ -14,6 +14,8 @@ ALTER TABLE test_alter MODIFY COLUMN s DEFAULT 'Hello';
 
 ALTER TABLE test_alter MODIFY COLUMN x DEFAULT '2000-01-01';
 
+DESCRIBE TABLE test_alter;
+
 DROP TABLE test_alter;
 
 DROP TABLE IF EXISTS test_alter_r1;
@@ -41,6 +43,14 @@ PARTITION BY x;
 ALTER TABLE test_alter_r1 MODIFY COLUMN s DEFAULT 'Hello' SETTINGS replication_alter_partitions_sync = 2;
 
 ALTER TABLE test_alter_r2 MODIFY COLUMN x DEFAULT '2000-01-01' SETTINGS replication_alter_partitions_sync = 2;
+
+DESCRIBE TABLE test_alter_r1;
+
+DESCRIBE TABLE test_alter_r2;
+
+SYSTEM RESTART REPLICA test_alter_r1;
+
+SYSTEM RESTART REPLICA test_alter_r2;
 
 DROP TABLE test_alter_r1;
 

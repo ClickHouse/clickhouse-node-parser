@@ -23,6 +23,14 @@ SOURCE(clickhouse(HOST 'localhost' PORT tcpPort() USER 'default' TABLE 'table_fo
 LIFETIME(MIN 1 MAX 10)
 LAYOUT(FLAT());
 
+DETACH TABLE database_for_dict.dict1; -- { serverError CANNOT_DETACH_DICTIONARY_AS_TABLE }
+
+DETACH DICTIONARY database_for_dict.dict1;
+
+ATTACH TABLE database_for_dict.dict1; -- { serverError INCORRECT_QUERY }
+
+ATTACH DICTIONARY database_for_dict.dict1;
+
 DROP DICTIONARY database_for_dict.dict1;
 
 DROP TABLE database_for_dict.table_for_dict;

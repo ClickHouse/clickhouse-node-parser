@@ -23,4 +23,6 @@ SELECT count()
 FROM test_01307
 WHERE val = '2';
 
+OPTIMIZE TABLE test_01307 FINAL;
+
 DROP TABLE test_01307;

@@ -23,6 +23,7 @@ select * from test;
 select * from test order by my.json.a;
 select * from test order by my.json.b::Int32;
 insert into test (my.json) select '{"a" : 43, "b" : 43}';
+optimize table test final;
 alter table test modify column my.json JSON(a UInt32, b UInt32); -- {serverError ALTER_OF_COLUMN_IS_FORBIDDEN}
 alter table test update `my.json` = '{}' where 1; -- {serverError CANNOT_UPDATE_COLUMN}
 create table test

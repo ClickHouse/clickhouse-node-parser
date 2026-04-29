@@ -6,6 +6,8 @@ CREATE TABLE t
 ENGINE = MergeTree
 ORDER BY c;
 
+SYSTEM stop merges t;
+
 INSERT INTO t;
 
 INSERT INTO t;

@@ -43,6 +43,12 @@ INSERT INTO t3 SELECT
     toString(number)
 FROM numbers(3000, 1000);
 
+SYSTEM sync replica t1;
+
+SYSTEM sync replica t2;
+
+SYSTEM sync replica t3;
+
 SET enable_parallel_replicas = 1, max_parallel_replicas = 3, cluster_for_parallel_replicas = 'test_cluster_one_shard_three_replicas_localhost';
 
 SET parallel_replicas_local_plan = 0; -- corresponding logs about total rows are written only during interaction with remote nodes
@@ -60,6 +66,9 @@ SELECT
     avg(k)
 FROM t1
 SETTINGS log_comment = '02898_default_190aed82-2423-413b-ad4c-24dcca50f65b';
+
+-- check logs
+SYSTEM FLUSH LOGS text_log, query_log;
 
 SET max_rows_to_read = 0; -- system.text_log can be really big
 

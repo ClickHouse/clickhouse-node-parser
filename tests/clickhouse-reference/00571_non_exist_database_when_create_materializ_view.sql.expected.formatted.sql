@@ -39,6 +39,10 @@ FROM {CLICKHOUSE_DATABASE:Identifier}.test_00571;
 SELECT *
 FROM {CLICKHOUSE_DATABASE:Identifier}.test_materialized_00571;
 
+DETACH TABLE {CLICKHOUSE_DATABASE:Identifier}.test_materialized_00571;
+
+ATTACH TABLE {CLICKHOUSE_DATABASE:Identifier}.test_materialized_00571;
+
 DROP TABLE IF EXISTS {CLICKHOUSE_DATABASE:Identifier}.test_00571;
 
 DROP TABLE IF EXISTS {CLICKHOUSE_DATABASE:Identifier}.test_materialized_00571;

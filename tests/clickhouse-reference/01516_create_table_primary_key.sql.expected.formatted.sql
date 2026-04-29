@@ -23,12 +23,30 @@ ORDER BY v;
 
 INSERT INTO primary_key_test;
 
+DETACH TABLE primary_key_test;
+
+ATTACH TABLE primary_key_test
+(
+    v Int32,
+    PRIMARY KEY(v)
+)
+ENGINE = ReplacingMergeTree
+ORDER BY v;
+
 SELECT *
 FROM primary_key_test FINAL;
 
 DROP TABLE primary_key_test;
 
 CREATE TABLE primary_key_test
+(
+    v Int32
+)
+ENGINE = ReplacingMergeTree
+ORDER BY v
+PRIMARY KEY v;
+
+ATTACH TABLE primary_key_test
 (
     v Int32
 )
@@ -47,7 +65,25 @@ ORDER BY (v1, v2);
 
 INSERT INTO primary_key_test;
 
+ATTACH TABLE primary_key_test
+(
+    v1 Int32,
+    v2 Int32,
+    PRIMARY KEY(v1, v2)
+)
+ENGINE = ReplacingMergeTree
+ORDER BY (v1, v2);
+
 CREATE TABLE primary_key_test
+(
+    v1 Int32,
+    v2 Int32
+)
+ENGINE = ReplacingMergeTree
+ORDER BY (v1, v2)
+PRIMARY KEY (v1, v2);
+
+ATTACH TABLE primary_key_test
 (
     v1 Int32,
     v2 Int32

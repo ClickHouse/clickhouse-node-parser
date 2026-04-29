@@ -190,6 +190,8 @@ FROM (
         FROM numbers(20)
     );
 
+; -- { serverError BAD_ARGUMENTS }
+
 SELECT
     a,
     b,

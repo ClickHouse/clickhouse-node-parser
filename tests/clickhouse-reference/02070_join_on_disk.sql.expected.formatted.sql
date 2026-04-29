@@ -12,6 +12,8 @@ SET max_block_size = 1000;
 
 DROP TABLE IF EXISTS join_on_disk;
 
+SYSTEM STOP MERGES join_on_disk;
+
 CREATE TABLE join_on_disk
 (
     id Int

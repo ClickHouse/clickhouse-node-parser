@@ -1,4 +1,5 @@
 DROP TABLE IF EXISTS simple_agf_any_summing_mt;
+
 CREATE TABLE simple_agf_any_summing_mt
 (
     a Int64,
@@ -9,6 +10,7 @@ CREATE TABLE simple_agf_any_summing_mt
 )
 ENGINE = SummingMergeTree
 ORDER BY a;
+
 INSERT INTO simple_agf_any_summing_mt SELECT
     a,
     any_respect_nulls(any_simple),
@@ -25,6 +27,7 @@ FROM
         NULL::Nullable(UInt64) AS anyLast_agg
 )
 GROUP BY a;
+
 INSERT INTO simple_agf_any_summing_mt SELECT
     number % 51 as a,
     any_respect_nulls(toNullable(number)),
@@ -33,6 +36,7 @@ INSERT INTO simple_agf_any_summing_mt SELECT
     anyLast_respect_nullsState(toNullable(number)),
 FROM numbers(10000)
 GROUP BY a;
+
 INSERT INTO simple_agf_any_summing_mt SELECT
     a,
     any_respect_nulls(any_simple),
@@ -49,6 +53,9 @@ FROM
         NULL::Nullable(UInt64) AS anyLast_agg
 )
 GROUP BY a;
+
+OPTIMIZE TABLE simple_agf_any_summing_mt FINAL;
+
 SELECT
     a,
     any_respect_nulls(any_simple),

@@ -11,6 +11,8 @@ ORDER BY n;
 
 SET insert_keeper_fault_injection_probability = 0;
 
+SYSTEM stop merges mut;
+
 INSERT INTO mut;
 
 ALTER TABLE mut DELETE WHERE n = 10;
@@ -33,6 +35,8 @@ SETTINGS
     http_make_head_request = 0
 FORMAT Null;
 
+SYSTEM sync replica mut pull;
+
 SELECT
     type,
     new_part_name,
@@ -42,7 +46,11 @@ WHERE database = currentDatabase()
     AND table = 'mut'
     AND type != 'GET_PART';
 
+SYSTEM start merges mut;
+
 SET receive_timeout = 30;
+
+SYSTEM sync replica mut;
 
 SELECT *
 FROM mut;

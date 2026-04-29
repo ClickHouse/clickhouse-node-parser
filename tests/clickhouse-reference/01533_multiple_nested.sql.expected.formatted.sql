@@ -22,6 +22,8 @@ INSERT INTO nested;
 
 INSERT INTO nested;
 
+OPTIMIZE TABLE nested FINAL;
+
 SELECT *
 FROM nested;
 
@@ -46,9 +48,14 @@ SELECT
     col3.n2.t
 FROM nested;
 
+SYSTEM CLEAR MARK CACHE;
+
 SELECT col1.a
 FROM nested
 FORMAT Null;
+
+-- 4 files: (col1.size0, col1.a) x2
+SYSTEM FLUSH LOGS query_log;
 
 SELECT ProfileEvents['FileOpen'] - ProfileEvents['CreatedReadBufferDirectIOFailed']
 FROM `system`.query_log

@@ -36,6 +36,8 @@ SELECT
 FROM `system`.numbers
 LIMIT 2; -- Cached
 
+SYSTEM FLUSH LOGS query_log;
+
 SELECT
     read_rows,
     query

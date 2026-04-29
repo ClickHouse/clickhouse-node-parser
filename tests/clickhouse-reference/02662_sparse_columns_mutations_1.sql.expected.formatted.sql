@@ -45,4 +45,6 @@ FROM numbers(10000);
 
 ALTER TABLE t_sparse_mutations_1 MODIFY COLUMN s String DEFAULT '';
 
+OPTIMIZE TABLE t_sparse_mutations_1 FINAL;
+
 DROP TABLE t_sparse_mutations_1;

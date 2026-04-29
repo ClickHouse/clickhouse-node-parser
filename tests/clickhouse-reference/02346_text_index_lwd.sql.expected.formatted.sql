@@ -13,6 +13,8 @@ ORDER BY tuple();
 
 INSERT INTO tab (s);
 
+DELETE FROM tab WHERE true;
+
 INSERT INTO tab (s);
 
 INSERT INTO tab (s);
@@ -25,6 +27,8 @@ FROM numbers(5);
 INSERT INTO tab (s) SELECT s
 FROM generateRandom('s FixedString(37)', 12734763443271340066, 25, 2)
 LIMIT 3;
+
+OPTIMIZE TABLE tab FINAL;
 
 SELECT count()
 FROM tab

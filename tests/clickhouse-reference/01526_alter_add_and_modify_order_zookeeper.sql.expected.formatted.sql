@@ -20,10 +20,16 @@ SETTINGS index_granularity = 8192;
 
 INSERT INTO table_for_alter;
 
+DETACH TABLE table_for_alter;
+
+ATTACH TABLE table_for_alter;
+
 SELECT *
 FROM table_for_alter;
 
 ALTER TABLE table_for_alter ADD COLUMN `order` UInt32, MODIFY ORDER BY (d, order);
+
+SHOW CREATE TABLE table_for_alter;
 
 ALTER TABLE table_for_alter ADD COLUMN datum UInt32, MODIFY ORDER BY (d, order, datum);
 

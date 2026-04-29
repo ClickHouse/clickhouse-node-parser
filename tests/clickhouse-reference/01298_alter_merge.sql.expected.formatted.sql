@@ -52,6 +52,10 @@ ALTER TABLE merge2 ADD COLUMN dummy String AFTER CounterID;
 
 ALTER TABLE merge ADD COLUMN dummy String AFTER CounterID;
 
+DESCRIBE TABLE merge;
+
+SHOW CREATE TABLE merge;
+
 INSERT INTO merge1;
 
 SELECT

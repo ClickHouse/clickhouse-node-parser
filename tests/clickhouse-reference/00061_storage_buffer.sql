@@ -11,5 +11,6 @@ CREATE TABLE hits_buffer AS hits_dst ENGINE = Buffer(current_database(), hits_ds
 INSERT INTO hits_buffer SELECT * FROM test.hits WHERE CounterID = 800784;
 SELECT count() FROM hits_buffer;
 SELECT count() FROM hits_dst;
+OPTIMIZE TABLE hits_buffer;
 DROP TABLE hits_dst;
 DROP TABLE hits_buffer;

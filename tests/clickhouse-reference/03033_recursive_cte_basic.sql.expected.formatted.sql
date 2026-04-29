@@ -98,3 +98,4 @@ SELECT n
 FROM recursive_cte
 FORMAT Null
 SETTINGS max_recursive_cte_evaluation_depth = 5; -- { serverError TOO_DEEP_RECURSION }
+-- { echoOff }

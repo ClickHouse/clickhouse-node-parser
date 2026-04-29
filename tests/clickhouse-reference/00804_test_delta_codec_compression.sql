@@ -16,6 +16,8 @@ CREATE TABLE default_codec_synthetic
 set max_insert_threads = 1;
 INSERT INTO delta_codec_synthetic SELECT number FROM system.numbers LIMIT 5000000;
 INSERT INTO default_codec_synthetic SELECT number FROM system.numbers LIMIT 5000000;
+OPTIMIZE TABLE delta_codec_synthetic FINAL;
+OPTIMIZE TABLE default_codec_synthetic FINAL;
 SELECT
     floor(big_size / small_size) AS ratio
 FROM
@@ -42,6 +44,8 @@ CREATE TABLE default_codec_float
 ) ENGINE MergeTree() ORDER BY tuple() SETTINGS min_bytes_for_wide_part = 0, compress_marks = false, compress_primary_key = false, ratio_of_defaults_for_sparse_serialization = 1, enable_block_number_column = 0, auto_statistics_types = '', add_minmax_index_for_numeric_columns=0;
 INSERT INTO delta_codec_float SELECT number FROM numbers(1547510400, 500000) WHERE number % 3 == 0 OR number % 5 == 0 OR number % 7 == 0 OR number % 11 == 0;
 INSERT INTO default_codec_float SELECT * from delta_codec_float;
+OPTIMIZE TABLE delta_codec_float FINAL;
+OPTIMIZE TABLE default_codec_float FINAL;
 SELECT
     floor(big_size / small_size) as ratio
 FROM
@@ -67,6 +71,8 @@ CREATE TABLE default_codec_string
 ) ENGINE MergeTree() ORDER BY tuple() SETTINGS min_bytes_for_wide_part = 0, compress_marks = false, compress_primary_key = false, ratio_of_defaults_for_sparse_serialization = 1, enable_block_number_column = 0, auto_statistics_types = '', add_minmax_index_for_numeric_columns=0;
 INSERT INTO delta_codec_string SELECT concat(toString(number), toString(number % 100)) FROM numbers(1547510400, 500000);
 INSERT INTO default_codec_string SELECT * from delta_codec_string;
+OPTIMIZE TABLE delta_codec_string FINAL;
+OPTIMIZE TABLE default_codec_string FINAL;
 SELECT
     floor(big_size / small_size) as ratio
 FROM

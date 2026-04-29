@@ -24,6 +24,8 @@ SOURCE(clickhouse(host 'localhost' port tcpPort() user 'default' db currentDatab
 LIFETIME(MIN 600 MAX 600)
 LAYOUT(HASHED());
 
+SHOW CREATE TABLE dict;
+
 CREATE TABLE table
 (
     col MATERIALIZED dictGet(concat(currentDatabase(), '.dict'), 'value', toUInt32(1)),
@@ -31,6 +33,8 @@ CREATE TABLE table
 )
 ENGINE = MergeTree()
 ORDER BY tuple();
+
+SHOW CREATE TABLE table;
 
 SELECT *
 FROM dictionary('dict');
@@ -41,6 +45,8 @@ DROP TABLE view; -- {serverError HAVE_DEPENDENT_OBJECTS}
 INSERT INTO view;
 
 DROP DICTIONARY dict; -- {serverError HAVE_DEPENDENT_OBJECTS}
+
+SYSTEM RELOAD DICTIONARY dict;
 
 SELECT *
 FROM dictionary('dict')

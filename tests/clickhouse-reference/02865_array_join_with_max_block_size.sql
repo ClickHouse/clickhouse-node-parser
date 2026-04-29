@@ -5,3 +5,4 @@ SELECT n % 10, count(1) from (SELECT range(0, number) as x FROM numbers(1000)) L
 SELECT (m+n) % 10, count(1) from (SELECT range(0, number+1) as x, range(0, number+2) as y FROM numbers(100)) ARRAY JOIN x as m, y as n group by (m+n) % 10;
 set max_block_size = 1000, enable_unaligned_array_join = true;
 set max_block_size = 100000, enable_unaligned_array_join = true;
+-- { echoOff }

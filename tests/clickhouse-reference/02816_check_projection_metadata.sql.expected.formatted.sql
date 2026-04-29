@@ -12,3 +12,5 @@ CREATE TABLE kek
 )
 ENGINE = MergeTree
 ORDER BY (id, dt, uuid); -- {serverError ILLEGAL_COLUMN }
+-- this query could segfault or throw LOGICAL_ERROR previously, when we did not check projection PK
+-- insert into kek select * from generageRandom(10000);

@@ -8,7 +8,13 @@ SETTINGS
     apply_patches_on_merge = 1,
     shared_merge_tree_disable_merges_and_mutations_assignment = 1;
 INSERT INTO t_lwu_sequence SELECT number, number FROM numbers(10);
+UPDATE t_lwu_sequence SET b = 500 WHERE a = 5;
+UPDATE t_lwu_sequence SET b = 501 WHERE a = 5;
+UPDATE t_lwu_sequence SET b = 502 WHERE a = 5;
+UPDATE t_lwu_sequence SET b = 503 WHERE a = 5;
 SELECT b FROM t_lwu_sequence WHERE a = 5 SETTINGS apply_patch_parts = 0;
 SELECT b FROM t_lwu_sequence WHERE a = 5 SETTINGS apply_patch_parts = 1;
 SELECT count(), sum(rows) FROM system.parts WHERE database = currentDatabase() AND table = 't_lwu_sequence' AND startsWith(name, 'patch') AND active;
+OPTIMIZE TABLE t_lwu_sequence PARTITION ID 'patch-d9dff7d4cface4172f96b0bae7cb2e83-all' FINAL;
+OPTIMIZE TABLE t_lwu_sequence PARTITION ID 'all' FINAL;
 DROP TABLE t_lwu_sequence;

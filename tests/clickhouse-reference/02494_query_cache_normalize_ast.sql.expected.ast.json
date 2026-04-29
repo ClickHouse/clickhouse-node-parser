@@ -1,5 +1,14 @@
 [
   {
+    "kind": "system",
+    "body": "SYSTEM CLEAR QUERY CACHE",
+    "leadingComments": [
+      "-- Tags: no-parallel",
+      "-- Tag no-parallel: Messes with internal cache",
+      "-- Start with empty query cache (QC)"
+    ]
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -110,6 +119,14 @@
           "value": "16"
         }
       }
+    ]
+  },
+  {
+    "kind": "system",
+    "body": "SYSTEM FLUSH LOGS query_log",
+    "leadingComments": [
+      "-- Technically, both SELECT queries have different ASTs, leading to different QC keys. QC does some AST normalization (erase all",
+      "-- QC-related settings) such that the keys match regardless. Verify by checking that the second query caused a QC hit."
     ]
   },
   {

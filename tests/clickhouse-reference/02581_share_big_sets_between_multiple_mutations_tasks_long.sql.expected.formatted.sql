@@ -48,6 +48,9 @@ WHERE database = currentDatabase()
     AND active
 ORDER BY name ASC;
 
+-- Start multiple mutations simultaneously
+SYSTEM STOP MERGES 02581_trips;
+
 ALTER TABLE `02581_trips` UPDATE description = '5' WHERE id IN (
     SELECT ((number * 10 + 5))::UInt32
     FROM numbers(10000000)
@@ -68,10 +71,17 @@ ALTER TABLE `02581_trips` UPDATE description = '8' WHERE id IN (
     FROM numbers(10000000)
 ) SETTINGS mutations_sync = 0;
 
+SYSTEM START MERGES 02581_trips;
+
 -- Wait for mutations to finish
 SELECT count()
 FROM `02581_trips`
 SETTINGS select_sequential_consistency = 1;
+
+DELETE FROM `02581_trips` WHERE id IN (
+    SELECT ((number * 10 + 9))::UInt32
+    FROM numbers(10000000)
+) SETTINGS lightweight_deletes_sync = 2;
 
 SELECT
     count(),
@@ -83,6 +93,8 @@ ORDER BY _part ASC
 SETTINGS select_sequential_consistency = 1;
 
 SET max_rows_to_read = 0; -- system.text_log can be really big
+
+SYSTEM FLUSH LOGS text_log;
 
 -- Check that in every mutation there were parts that built sets (log messages like 'Created Set with 10000000 entries from 10000000 rows in 0.388989187 sec.' )
 -- and parts that shared sets (log messages like 'Got set from cache in 0.388930505 sec.' )

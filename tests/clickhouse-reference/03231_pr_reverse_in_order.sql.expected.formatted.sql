@@ -11,6 +11,8 @@ CREATE TABLE checks
 ENGINE = ReplicatedMergeTree('/clickhouse/{database}/checks', '{replica}')
 ORDER BY check_start_time;
 
+SYSTEM STOP MERGES checks;
+
 INSERT INTO checks SELECT
     'asan',
     if(number % 2, 'success', 'fail'),

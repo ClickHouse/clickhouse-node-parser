@@ -50,6 +50,8 @@ INSERT INTO table_join SELECT
     toString(number)
 FROM numbers(10000);
 
+SYSTEM flush async insert queue 03733_table_join;
+
 SELECT count(*)
 FROM table_join; -- Expecting 400000
 
@@ -78,6 +80,8 @@ INSERT INTO src_table;
 
 INSERT INTO src_table;
 
+SYSTEM flush async insert queue src_table;
+
 SELECT count(*)
 FROM src_table; -- Expecting 2
 
@@ -87,6 +91,8 @@ FROM table_join_mv_dst; -- Expecting 20000
 INSERT INTO src_table;
 
 INSERT INTO src_table;
+
+SYSTEM flush logs system.query_log;
 
 SELECT
     query,

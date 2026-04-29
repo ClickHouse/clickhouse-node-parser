@@ -7,6 +7,8 @@ CREATE TABLE trailing_comma_1
 ENGINE = MergeTree()
 ORDER BY tuple();
 
+DESCRIBE TABLE trailing_comma_1;
+
 DROP TABLE trailing_comma_1;
 
 DROP TABLE IF EXISTS trailing_comma_2;
@@ -17,6 +19,8 @@ CREATE TABLE trailing_comma_2
 )
 ENGINE = MergeTree()
 ORDER BY tuple();
+
+DESCRIBE TABLE trailing_comma_2;
 
 DROP TABLE trailing_comma_2;
 
@@ -29,5 +33,7 @@ CREATE TABLE trailing_comma_3
 )
 ENGINE = MergeTree()
 ORDER BY tuple();
+
+DESCRIBE TABLE trailing_comma_3;
 
 DROP TABLE trailing_comma_3;

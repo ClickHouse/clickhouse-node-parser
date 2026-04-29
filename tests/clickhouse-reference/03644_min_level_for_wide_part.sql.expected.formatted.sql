@@ -27,6 +27,8 @@ WHERE database = currentDatabase()
 
 INSERT INTO t_03644_min_level_for_wide_part;
 
+OPTIMIZE TABLE t_03644_min_level_for_wide_part FINAL;
+
 SET optimize_on_insert = 1;
 
 CREATE TABLE t_03644_min_level_for_wide_part_rmt
@@ -52,6 +54,8 @@ WHERE database = currentDatabase()
     AND active;
 
 INSERT INTO t_03644_min_level_for_wide_part_rmt;
+
+OPTIMIZE TABLE t_03644_min_level_for_wide_part_rmt FINAL;
 
 DROP TABLE t_03644_min_level_for_wide_part;
 

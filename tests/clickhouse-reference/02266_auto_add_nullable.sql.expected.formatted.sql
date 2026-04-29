@@ -13,3 +13,5 @@ CREATE TABLE `02266_auto_add_nullable`
 )
 ENGINE = MergeTree
 ORDER BY tuple();
+
+DESCRIBE TABLE `02266_auto_add_nullable`;

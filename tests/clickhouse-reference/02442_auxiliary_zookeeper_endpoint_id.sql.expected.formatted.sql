@@ -35,6 +35,8 @@ INSERT INTO t1_r1 SELECT *
 FROM generateRandom('x Int32')
 LIMIT 10013;
 
+SYSTEM sync replica t1_r2;
+
 SELECT count()
 FROM t1_r2;
 

@@ -20,6 +20,8 @@ FROM data
 SETTINGS load_marks_asynchronously = 1
 FORMAT Null; /* 1 */
 
+SYSTEM flush logs query_log;
+
 SELECT
     query,
     ProfileEvents['BackgroundLoadingMarksTasks'] > 0 AS async,

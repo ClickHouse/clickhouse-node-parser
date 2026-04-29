@@ -18,6 +18,16 @@ SELECT count()
 FROM t_prewarm_columns
 WHERE NOT ignore(*);
 
+SYSTEM CLEAR MARK CACHE;
+
+DETACH TABLE t_prewarm_columns;
+
+ATTACH TABLE t_prewarm_columns;
+
+SYSTEM PREWARM MARK CACHE t_prewarm_columns;
+
+SYSTEM FLUSH LOGS query_log;
+
 SELECT ProfileEvents['LoadedMarksCount']
 FROM `system`.query_log
 WHERE current_database = currentDatabase()

@@ -22,6 +22,9 @@ INSERT INTO testing SELECT
     number % 2
 FROM numbers(5);
 
+-- { echoOn }
+OPTIMIZE TABLE testing FINAL;
+
 SELECT c
 FROM testing
 ORDER BY d ASC;
@@ -32,11 +35,20 @@ ORDER BY
     e ASC,
     d ASC;
 
+-- update all columns used by proj_1
+UPDATE testing SET c = c + 1, d = d + 2 WHERE 1;
+
 SELECT *
 FROM `system`.mutations
 WHERE database = currentDatabase()
     AND table = 'testing'
     AND NOT is_done;
+
+-- update only one column
+UPDATE testing SET d = d - 1 WHERE 1;
+
+-- update only another one column
+UPDATE testing SET c = c - 1 WHERE 1;
 
 -- { echoOff }
 DROP TABLE testing;

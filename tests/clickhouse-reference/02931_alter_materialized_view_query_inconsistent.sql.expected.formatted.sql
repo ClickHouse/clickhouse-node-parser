@@ -29,3 +29,7 @@ ALTER TABLE pipe MODIFY QUERY SELECT
     v * 2 AS v,
     1 AS v2
 FROM src;
+
+DESCRIBE TABLE pipe;
+
+SHOW CREATE TABLE pipe;

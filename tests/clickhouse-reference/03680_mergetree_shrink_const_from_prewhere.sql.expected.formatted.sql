@@ -7,6 +7,8 @@ CREATE TABLE const_node
 ENGINE = MergeTree
 ORDER BY tuple();
 
+SYSTEM STOP MERGES const_node;
+
 INSERT INTO const_node;
 
 INSERT INTO const_node;

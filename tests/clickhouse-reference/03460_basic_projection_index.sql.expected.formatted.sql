@@ -26,6 +26,8 @@ SETTINGS index_granularity = 1, min_bytes_for_wide_part = 0, min_bytes_for_full_
 
 INSERT INTO t_proj;
 
+OPTIMIZE TABLE t_proj FINAL;
+
 -- Pick projection based on both filters
 SELECT trimLeft(`explain`)
 FROM (
@@ -132,6 +134,8 @@ INSERT INTO t_gran SELECT
     number + 100,
     'zzz'
 FROM numbers(1000);
+
+OPTIMIZE TABLE t_gran FINAL;
 
 SELECT trimLeft(`explain`)
 FROM (
@@ -261,6 +265,8 @@ CREATE TABLE t_repl2
 ENGINE = ReplicatedMergeTree('/clickhouse/{database}/test/proj', 'r2')
 ORDER BY id;
 
+SYSTEM SYNC REPLICA t_repl2;
+
 -- check projection part exists on both replicas
 SELECT
     table,
@@ -269,6 +275,12 @@ FROM `system`.projection_parts
 WHERE database = currentDatabase()
     AND table IN ('t_repl', 't_repl2')
 ORDER BY `ALL` ASC;
+
+DETACH TABLE t_repl2 SYNC;
+
+ATTACH TABLE t_repl2;
+
+DESCRIBE TABLE mergeTreeProjection(currentDatabase(), t_repl2, region_proj);
 
 DROP TABLE t_repl;
 

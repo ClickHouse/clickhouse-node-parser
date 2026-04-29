@@ -12,6 +12,8 @@ INSERT INTO FUNCTION file(concat(currentDatabase(), '_02906.orc'), 'ORC') SELECT
     CAST(if(number % 10 = 0, map(number::String, tuple(NULL, NULL, NULL)), map(number::String, tuple(number::String, number::Float64, number::Int64))) AS Map(String, Tuple(a Nullable(String), b Nullable(Float64), c Nullable(Int64)))) AS map_tuple_column
 FROM numbers(100);
 
+DESCRIBE TABLE file(concat(currentDatabase(), '_02906.orc'));
+
 -- { echoOn }
 -- Test primitive types
 SELECT
@@ -67,4 +69,4 @@ WHERE int64_column % 15 = 0;
 
 SELECT map_tuple_column
 FROM file(concat(currentDatabase(), '_02906.orc'), 'ORC', 'int64_column Int64, map_tuple_column Map(String, Tuple(b Nullable(Float64), c Nullable(Int64), d Nullable(String)))')
-WHERE int64_column % 15 = 0;
+WHERE int64_column % 15 = 0; -- { echoOff }

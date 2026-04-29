@@ -20,6 +20,8 @@ ALTER TABLE rename_table_multiple RENAME COLUMN value1 TO value1_string;
 
 ALTER TABLE rename_table_multiple MODIFY COLUMN value1_string String;
 
+SHOW CREATE TABLE rename_table_multiple;
+
 SELECT *
 FROM rename_table_multiple
 FORMAT TSVWithNames;
@@ -58,6 +60,8 @@ ALTER TABLE rename_table_multiple_compact MODIFY COLUMN value1 String, RENAME CO
 ALTER TABLE rename_table_multiple_compact RENAME COLUMN value1 TO value1_string;
 
 ALTER TABLE rename_table_multiple_compact MODIFY COLUMN value1_string String;
+
+SHOW CREATE TABLE rename_table_multiple_compact;
 
 SELECT *
 FROM rename_table_multiple_compact

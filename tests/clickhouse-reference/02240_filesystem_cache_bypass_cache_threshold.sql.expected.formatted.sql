@@ -1,3 +1,7 @@
+-- Tags: no-parallel, no-fasttest, no-object-storage, no-random-settings
+-- { echo }
+SYSTEM CLEAR FILESYSTEM CACHE;
+
 SET enable_filesystem_cache_on_write_operations = 0;
 
 DROP TABLE IF EXISTS test;

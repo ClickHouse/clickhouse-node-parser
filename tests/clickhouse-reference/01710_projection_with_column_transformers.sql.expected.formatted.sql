@@ -8,4 +8,10 @@ CREATE TABLE foo
 ENGINE = MergeTree
 ORDER BY bar;
 
+SHOW CREATE TABLE foo;
+
+DETACH TABLE foo;
+
+ATTACH TABLE foo;
+
 DROP TABLE foo;

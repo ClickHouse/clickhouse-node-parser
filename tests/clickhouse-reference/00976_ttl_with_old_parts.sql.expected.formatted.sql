@@ -23,6 +23,8 @@ ALTER TABLE ttl MODIFY TTL d + toIntervalDay(1);
 SELECT sleep(1)
 FORMAT Null; -- wait if very fast merge happen
 
+OPTIMIZE TABLE ttl PARTITION 10 FINAL;
+
 SELECT *
 FROM ttl
 ORDER BY

@@ -1,3 +1,7 @@
+-- Tags: no-parallel
+-- Tag no-parallel: Messes with internal cache
+SYSTEM CLEAR QUERY CACHE;
+
 SELECT '-- query_cache_nondeterministic_function_handling = throw';
 
 SELECT count(now())

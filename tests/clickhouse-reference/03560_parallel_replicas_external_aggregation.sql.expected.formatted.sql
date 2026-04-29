@@ -17,6 +17,8 @@ INSERT INTO t_proj_external_agg SELECT
     number
 FROM numbers(50000);
 
+SYSTEM STOP MERGES t_proj_external_agg;
+
 ALTER TABLE t_proj_external_agg ADD PROJECTION aaaa (SELECT
     k1,
     k2,
@@ -34,6 +36,8 @@ INSERT INTO t_proj_external_agg SELECT
     number
 FROM numbers(100000)
 LIMIT 50000, 100000;
+
+SYSTEM ENABLE FAILPOINT slowdown_parallel_replicas_local_plan_read;
 
 SELECT
     k1,
@@ -54,3 +58,5 @@ SETTINGS
     max_bytes_before_external_group_by = 1,
     max_bytes_ratio_before_external_group_by = 0,
     group_by_two_level_threshold = 1;
+
+SYSTEM DISABLE FAILPOINT slowdown_parallel_replicas_local_plan_read;

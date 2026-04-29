@@ -16,6 +16,8 @@ SET enable_analyzer = 1;
 
 SET materialize_skip_indexes_on_insert = 0;
 
+SYSTEM STOP MERGES t_skip_index_insert;
+
 INSERT INTO t_skip_index_insert SELECT
     number,
     number / 50
@@ -32,6 +34,10 @@ WHERE a >= 110
     AND a < 130
     AND b = 2;
 
+SYSTEM START MERGES t_skip_index_insert;
+
+OPTIMIZE TABLE t_skip_index_insert FINAL;
+
 TRUNCATE TABLE t_skip_index_insert;
 
 SET mutations_sync = 2;
@@ -39,6 +45,8 @@ SET mutations_sync = 2;
 ALTER TABLE t_skip_index_insert MATERIALIZE INDEX idx_a;
 
 ALTER TABLE t_skip_index_insert MATERIALIZE INDEX idx_b;
+
+SYSTEM FLUSH LOGS query_log;
 
 SELECT
     count(),

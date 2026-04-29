@@ -90,6 +90,10 @@ GROUP BY
     gsv,
     po_created_at;
 
+DETACH TABLE view_order_attribution;
+
+ATTACH TABLE view_order_attribution;
+
 DROP TABLE view_order_attribution;
 
 DROP TABLE order_attribution;

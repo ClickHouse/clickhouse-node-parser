@@ -41,4 +41,4 @@ GROUP BY
     number % 2
 ORDER BY k ASC;
 
-SET optimize_group_by_function_keys = 0;
+SET optimize_group_by_function_keys = 0; -- TODO - test with similar variables of different tables (collision)

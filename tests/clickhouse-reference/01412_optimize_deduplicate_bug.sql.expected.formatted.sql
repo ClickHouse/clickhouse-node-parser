@@ -10,5 +10,7 @@ ORDER BY x;
 
 INSERT INTO tesd_dedupl;
 
+OPTIMIZE TABLE tesd_dedupl DEDUPLICATE;
+
 SELECT *
 FROM tesd_dedupl;

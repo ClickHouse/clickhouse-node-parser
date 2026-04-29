@@ -43,6 +43,12 @@ INSERT INTO t3 SELECT
     toString(number)
 FROM numbers(3000, 1000);
 
+SYSTEM sync replica t1;
+
+SYSTEM sync replica t2;
+
+SYSTEM sync replica t3;
+
 -- w/o parallel replicas
 SELECT
     k,

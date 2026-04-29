@@ -13,6 +13,8 @@ ENGINE = MergeTree()
 ORDER BY key
 SETTINGS merge_selector_base = 1000, index_granularity = 8192, min_bytes_for_wide_part = 1e9, index_granularity_bytes = 10e6, distributed_index_analysis_min_parts_to_activate = 0, distributed_index_analysis_min_indexes_size_to_activate = 0;
 
+SYSTEM stop merges test_1m;
+
 INSERT INTO test_1m SELECT
     number,
     number * 100

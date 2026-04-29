@@ -19,6 +19,10 @@ CREATE TABLE x_as AS x
 ENGINE = MergeTree
 SETTINGS enable_block_number_column = 1, enable_block_offset_column = 1;
 
+SHOW CREATE TABLE x FORMAT TSVRaw;
+
+SHOW CREATE TABLE x_as FORMAT TSVRaw;
+
 DROP TABLE x;
 
 DROP TABLE x_as;

@@ -41,6 +41,8 @@ FROM test_02381_compress
 WHERE a = 1000
 LIMIT 1;
 
+OPTIMIZE TABLE test_02381_compress FINAL;
+
 -- Compare the size of marks on disk
 SELECT
     table,
@@ -71,6 +73,8 @@ FROM test_02381
 WHERE a = 10000
 LIMIT 1;
 
+OPTIMIZE TABLE test_02381 FINAL;
+
 -- Test compact part
 DROP TABLE IF EXISTS test_02381_compact;
 
@@ -92,3 +96,5 @@ INSERT INTO test_02381_compact;
 SELECT *
 FROM test_02381_compact
 ORDER BY a ASC;
+
+OPTIMIZE TABLE test_02381_compact FINAL;

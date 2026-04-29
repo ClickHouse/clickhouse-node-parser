@@ -33,6 +33,8 @@ INSERT INTO t_index_agg_func SELECT
     initializeAggregation('avgState', toUInt64(number % 20))
 FROM numbers(1000, 1000);
 
+OPTIMIZE TABLE t_index_agg_func FINAL;
+
 SELECT count()
 FROM `system`.parts
 WHERE table = 't_index_agg_func'

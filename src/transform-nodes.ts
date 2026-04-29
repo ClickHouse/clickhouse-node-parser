@@ -84,6 +84,19 @@ export interface NodePositionMap {
   insert: Statement;
   truncate: Statement;
   drop: Statement;
+  optimize: Statement;
+  describe: Statement;
+  showCreate: Statement;
+  detach: Statement;
+  delete: Statement;
+  update: Statement;
+  check: Statement;
+  attach: Statement;
+  rename: Statement;
+  exists: Statement;
+  kill: Statement;
+  executeAs: Statement;
+  empty: Statement;
 
   // CREATE TABLE element nodes
   columnDef: TableElement;

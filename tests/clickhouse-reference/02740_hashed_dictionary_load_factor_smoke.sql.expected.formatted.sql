@@ -64,6 +64,10 @@ SOURCE(clickhouse(TABLE test_table))
 LIFETIME(0)
 LAYOUT(SPARSE_HASHED(MAX_LOAD_FACTOR 0.90));
 
+SHOW CREATE TABLE test_sparse_dictionary_load_factor;
+
+SYSTEM RELOAD DICTIONARY test_sparse_dictionary_load_factor;
+
 SELECT element_count
 FROM `system`.dictionaries
 WHERE database = currentDatabase()
@@ -87,6 +91,10 @@ SOURCE(clickhouse(TABLE test_table))
 LIFETIME(0)
 LAYOUT(HASHED(MAX_LOAD_FACTOR 0.90));
 
+SHOW CREATE TABLE test_dictionary_load_factor;
+
+SYSTEM RELOAD DICTIONARY test_dictionary_load_factor;
+
 SELECT element_count
 FROM `system`.dictionaries
 WHERE database = currentDatabase()
@@ -109,6 +117,10 @@ PRIMARY KEY key
 SOURCE(clickhouse(TABLE test_table_nullable))
 LIFETIME(0)
 LAYOUT(HASHED(MAX_LOAD_FACTOR 0.90));
+
+SHOW CREATE TABLE test_dictionary_load_factor_nullable;
+
+SYSTEM RELOAD DICTIONARY test_dictionary_load_factor_nullable;
 
 SELECT element_count
 FROM `system`.dictionaries
@@ -134,6 +146,10 @@ SOURCE(clickhouse(TABLE test_table_complex))
 LIFETIME(0)
 LAYOUT(COMPLEX_KEY_HASHED(MAX_LOAD_FACTOR 0.90));
 
+SYSTEM RELOAD DICTIONARY test_complex_dictionary_load_factor;
+
+SHOW CREATE TABLE test_complex_dictionary_load_factor;
+
 SELECT element_count
 FROM `system`.dictionaries
 WHERE database = currentDatabase()
@@ -156,6 +172,9 @@ PRIMARY KEY key
 SOURCE(clickhouse(TABLE test_table_string))
 LIFETIME(0)
 LAYOUT(HASHED(MAX_LOAD_FACTOR 1));
+
+-- should because of MAX_LOAD_FACTOR is 1 (maximum allowed value is 0.99)
+SYSTEM RELOAD DICTIONARY test_dictionary_load_factor_string; -- { serverError BAD_ARGUMENTS }
 
 DROP DICTIONARY test_dictionary_load_factor_string;
 

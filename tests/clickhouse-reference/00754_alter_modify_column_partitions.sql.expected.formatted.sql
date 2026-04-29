@@ -18,6 +18,8 @@ INSERT INTO alter_column (x, y) SELECT
 FROM `system`.numbers
 LIMIT 50;
 
+SHOW CREATE TABLE alter_column;
+
 SELECT *
 FROM alter_column
 ORDER BY _part ASC;

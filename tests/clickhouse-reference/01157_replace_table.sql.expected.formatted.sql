@@ -26,11 +26,51 @@ CREATE TABLE buf
 )
 ENGINE = Buffer(currentDatabase(), dist, 1, 10, 100, 10, 100, 1000, 1000);
 
-INSERT INTO buf;
+SYSTEM stop distributed sends dist;
 
 INSERT INTO buf;
 
+REPLACE TABLE buf
+(
+    n int
+)
+ENGINE = Distributed(test_shard_localhost, currentDatabase(), dist);
+
+REPLACE TABLE dist
+(
+    n int
+)
+ENGINE = Buffer(currentDatabase(), t, 1, 10, 100, 10, 100, 1000, 1000);
+
+SYSTEM stop distributed sends buf;
+
 INSERT INTO buf;
+
+REPLACE TABLE buf
+(
+    n int
+)
+ENGINE = Buffer(currentDatabase(), dist, 1, 10, 100, 10, 100, 1000, 1000);
+
+REPLACE TABLE dist
+(
+    n int
+)
+ENGINE = Distributed(test_shard_localhost, currentDatabase(), t);
+
+INSERT INTO buf;
+
+REPLACE TABLE buf
+(
+    n int
+)
+ENGINE = Null;
+
+REPLACE TABLE dist
+(
+    n int
+)
+ENGINE = Null;
 
 SELECT *
 FROM t
@@ -63,6 +103,18 @@ ORDER BY n ASC;
 
 -- table is not replaced if select fails
 INSERT INTO t (n);
+
+REPLACE TABLE `join`
+ENGINE = Join(`ANY`, `INNER`, n) AS
+SELECT *
+FROM t
+WHERE throwIf(n); -- { serverError FUNCTION_THROW_IF_VALUE_IS_NON_ZERO }
+
+-- table is replaced
+REPLACE TABLE `join`
+ENGINE = Join(`ANY`, `INNER`, n) AS
+SELECT *
+FROM t;
 
 SELECT name
 FROM `system`.tables

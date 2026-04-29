@@ -551,4 +551,7 @@ FROM decimal; -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 SELECT 1
 LIMIT 0;
 
-DROP TABLE decimal;
+DROP TABLE decimal; -- TODO: sumMap
+-- TODO: other quantile(s)
+-- TODO: groupArray, groupArrayInsertAt, groupUniqArray
+-- TODO: topK

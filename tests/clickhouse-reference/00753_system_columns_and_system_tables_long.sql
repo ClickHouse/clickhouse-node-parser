@@ -61,6 +61,7 @@ CREATE TABLE check_system_tables (key UInt16) ENGINE = Buffer(
 );
 INSERT INTO check_system_tables SELECT * FROM numbers_mt(50);
 SELECT lifetime_bytes, lifetime_rows FROM system.tables WHERE name = 'check_system_tables' AND database = currentDatabase();
+OPTIMIZE TABLE check_system_tables; -- flush
 INSERT INTO check_system_tables SELECT * FROM numbers_mt(101); -- direct block write (due to min_rows exceeded)
 DROP TABLE check_system_tables_null;
 CREATE TABLE check_system_tables Engine=Set() AS SELECT * FROM numbers(50);

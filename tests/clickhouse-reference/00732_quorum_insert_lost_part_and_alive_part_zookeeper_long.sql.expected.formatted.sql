@@ -38,6 +38,8 @@ INSERT INTO quorum1;
 
 SET insert_quorum_timeout = 0;
 
+SYSTEM STOP FETCHES quorum1;
+
 INSERT INTO quorum2; -- { serverError UNKNOWN_STATUS_OF_INSERT }
 
 SELECT x
@@ -49,6 +51,10 @@ FROM quorum2
 ORDER BY x ASC;
 
 SET select_sequential_consistency = 0;
+
+SYSTEM START FETCHES quorum1;
+
+SYSTEM SYNC REPLICA quorum1;
 
 DROP TABLE quorum1;
 

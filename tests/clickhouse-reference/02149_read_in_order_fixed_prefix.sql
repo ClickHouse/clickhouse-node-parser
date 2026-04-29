@@ -20,6 +20,7 @@ SELECT date, i FROM t_read_in_order WHERE date = '2020-10-12' ORDER BY i DESC LI
 CREATE TABLE t_read_in_order(a UInt32, b UInt32)
 ENGINE = MergeTree ORDER BY (a, b)
 SETTINGS index_granularity = 3, index_granularity_bytes = '10Mi';
+SYSTEM STOP MERGES t_read_in_order;
 INSERT INTO t_read_in_order VALUES (0, 100), (1, 2), (1, 3), (1, 4), (2, 5);
 SELECT a, b FROM t_read_in_order WHERE a = 1 ORDER BY b SETTINGS read_in_order_two_level_merge_threshold = 1;
 SELECT a, b FROM t_read_in_order WHERE a = 1 ORDER BY b DESC SETTINGS read_in_order_two_level_merge_threshold = 1;

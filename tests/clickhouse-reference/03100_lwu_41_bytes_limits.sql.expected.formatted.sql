@@ -16,6 +16,12 @@ INSERT INTO t_lwu_bytes_limits SELECT
     randomPrintableASCII(10)
 FROM numbers(1000000);
 
+UPDATE t_lwu_bytes_limits SET s = 'foo' WHERE id = 1000;
+
+UPDATE t_lwu_bytes_limits SET s = 'foo' WHERE id = 101000;
+
+UPDATE t_lwu_bytes_limits SET s = randomPrintableASCII(100) WHERE 1; -- { serverError TOO_LARGE_LIGHTWEIGHT_UPDATES }
+
 SELECT id
 FROM t_lwu_bytes_limits
 WHERE s = 'foo'

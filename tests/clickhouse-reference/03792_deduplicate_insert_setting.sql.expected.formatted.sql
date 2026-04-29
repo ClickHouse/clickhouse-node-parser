@@ -52,6 +52,8 @@ SET async_insert_use_adaptive_busy_timeout = 0, async_insert_busy_timeout_min_ms
 
 SET async_insert_deduplicate = 1;
 
+SYSTEM FLUSH ASYNC INSERT QUEUE test;
+
 SELECT
     'case: async insert, async_insert_deduplicate=1 is main setting',
     *

@@ -18,4 +18,5 @@ DROP ROW POLICY 02131_filter_3 ON 02131_rqtable;
 DROP ROW POLICY 02131_filter_4 ON 02131_rqtable;
 DROP ROW POLICY 02131_filter_5 ON 02131_rqtable;
 DROP TABLE 02131_rqtable;
+SYSTEM FLUSH LOGS query_log;
 SELECT query, used_row_policies FROM system.query_log WHERE current_database == currentDatabase() AND type == 'QueryStart' AND query_kind == 'Select' ORDER BY event_time_microseconds;

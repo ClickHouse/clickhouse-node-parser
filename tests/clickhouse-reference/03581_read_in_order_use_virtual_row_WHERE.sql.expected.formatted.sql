@@ -36,6 +36,8 @@ SETTINGS
     optimize_move_to_prewhere = 0,
     max_threads = 2;
 
+SYSTEM flush logs query_log, processors_profile_log;
+
 WITH (
         SELECT query_id
         FROM `system`.query_log

@@ -133,6 +133,13 @@
     "settingsAfterOrderBy": true
   },
   {
+    "kind": "system",
+    "body": "SYSTEM STOP MERGES t_prewhere_const_patches",
+    "leadingComments": [
+      "-- Stop merges to ensure patch parts are preserved"
+    ]
+  },
+  {
     "kind": "insert",
     "target": {
       "kind": "table",
@@ -176,6 +183,91 @@
             "value": "10000"
           }
         ]
+      }
+    }
+  },
+  {
+    "kind": "update",
+    "table": {
+      "kind": "tableRef",
+      "table": "t_prewhere_const_patches"
+    },
+    "assignments": [
+      {
+        "column": "b",
+        "expr": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ],
+    "where": {
+      "kind": "binaryExpr",
+      "op": "=",
+      "left": {
+        "kind": "binaryExpr",
+        "op": "%",
+        "left": {
+          "kind": "columnRef",
+          "parts": [
+            "a"
+          ]
+        },
+        "right": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "4"
+        }
+      },
+      "right": {
+        "kind": "literal",
+        "type": "UInt64",
+        "value": "0"
+      }
+    },
+    "leadingComments": [
+      "-- Apply some lightweight updates to create patch parts"
+    ]
+  },
+  {
+    "kind": "update",
+    "table": {
+      "kind": "tableRef",
+      "table": "t_prewhere_const_patches"
+    },
+    "assignments": [
+      {
+        "column": "c",
+        "expr": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "2"
+        }
+      }
+    ],
+    "where": {
+      "kind": "binaryExpr",
+      "op": "=",
+      "left": {
+        "kind": "binaryExpr",
+        "op": "%",
+        "left": {
+          "kind": "columnRef",
+          "parts": [
+            "a"
+          ]
+        },
+        "right": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "4"
+        }
+      },
+      "right": {
+        "kind": "literal",
+        "type": "UInt64",
+        "value": "0"
       }
     }
   },

@@ -54,6 +54,10 @@ FROM modify_sample_replicated SAMPLE 0.1; -- { serverError SAMPLING_NOT_SUPPORTE
 
 ALTER TABLE modify_sample_replicated MODIFY SAMPLE BY x;
 
+DETACH TABLE modify_sample_replicated;
+
+ATTACH TABLE modify_sample_replicated;
+
 ALTER TABLE modify_sample_replicated MODIFY SAMPLE BY d; -- { serverError BAD_ARGUMENTS }
 
 ALTER TABLE modify_sample_replicated MODIFY SAMPLE BY y;

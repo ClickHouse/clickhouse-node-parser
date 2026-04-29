@@ -170,6 +170,9 @@ ORDER BY `ALL` ASC;
 
 SELECT sleep(3);
 
+--- INSERT_WAS_DEDUPLICATED = 389
+SYSTEM FLUSH LOGS part_log;
+
 SELECT
     table,
     name,

@@ -15,6 +15,8 @@ INSERT INTO t_sample_final SELECT *
 FROM generateRandom('CounterID UInt32, UserID UInt64, Version UInt64', 1, 10, 2)
 LIMIT 10;
 
+OPTIMIZE TABLE t_sample_final FINAL;
+
 SET send_logs_level = 'error';
 
 SET split_parts_ranges_into_intersecting_and_non_intersecting_final = 0, split_intersecting_parts_ranges_into_layers_final = 0;

@@ -18,5 +18,9 @@ ALTER TABLE test MODIFY SETTING ratio_of_defaults_for_sparse_serialization = 1.0
 
 ALTER TABLE test UPDATE b = 0 WHERE 1 SETTINGS mutations_sync = 2;
 
+DETACH TABLE test;
+
+ATTACH TABLE test;
+
 SELECT *
 FROM test;

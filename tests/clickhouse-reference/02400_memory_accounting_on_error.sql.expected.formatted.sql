@@ -7,6 +7,8 @@ SETTINGS
     max_block_size = 65505,
     log_queries = 1; -- { serverError MEMORY_LIMIT_EXCEEDED }
 
+SYSTEM FLUSH LOGS query_log;
+
 SELECT *
 FROM `system`.query_log
 WHERE event_date >= yesterday()

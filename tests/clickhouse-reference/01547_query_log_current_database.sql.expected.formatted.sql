@@ -22,6 +22,8 @@ SET log_queries = 0;
 
 SET log_query_threads = 0;
 
+SYSTEM flush logs query_log, query_thread_log;
+
 SELECT count()
 FROM `system`.query_log
 WHERE like(query, 'select ''01547_query_log_current_database%')

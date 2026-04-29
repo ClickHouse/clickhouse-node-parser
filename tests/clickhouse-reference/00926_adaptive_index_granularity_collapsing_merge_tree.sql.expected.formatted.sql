@@ -28,6 +28,8 @@ WHERE table = 'zero_rows_per_granule'
 
 INSERT INTO zero_rows_per_granule (p, k, v1, v2, Sign);
 
+OPTIMIZE TABLE zero_rows_per_granule FINAL;
+
 SELECT COUNT(*)
 FROM zero_rows_per_granule FINAL;
 
@@ -66,6 +68,8 @@ WHERE table = 'four_rows_per_granule'
     AND active = 1;
 
 INSERT INTO four_rows_per_granule (p, k, v1, v2, Sign);
+
+OPTIMIZE TABLE four_rows_per_granule FINAL;
 
 SELECT sum(marks)
 FROM `system`.parts

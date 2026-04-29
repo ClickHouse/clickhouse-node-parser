@@ -11,6 +11,8 @@ CREATE TABLE IF NOT EXISTS decimal
 )
 ENGINE = Memory;
 
+DESCRIBE TABLE decimal;
+
 INSERT INTO decimal (a);
 
 SELECT *

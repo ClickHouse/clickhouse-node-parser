@@ -13,9 +13,13 @@ ORDER BY tuple();
 
 INSERT INTO tab (c);
 
+DELETE FROM tab WHERE true;
+
 INSERT INTO tab (c);
 
 ALTER TABLE tab ADD STATISTICS c TYPE countmin;
+
+OPTIMIZE TABLE tab;
 
 SELECT 1
 FROM tab

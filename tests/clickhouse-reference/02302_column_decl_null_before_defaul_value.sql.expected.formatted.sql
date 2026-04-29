@@ -7,6 +7,8 @@ CREATE TABLE null_before
 ENGINE = MergeTree()
 ORDER BY tuple();
 
+DESCRIBE TABLE null_before;
+
 CREATE TABLE null_before
 (
     id INT NOT NULL

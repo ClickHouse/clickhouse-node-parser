@@ -1,3 +1,6 @@
+#!/usr/bin/env -S ${HOME}/clickhouse-client --queries-file
+DROP TABLE IF EXISTS with_fill_date__fuzz_0;
+
 CREATE TABLE with_fill_date__fuzz_0
 (
     d Date,

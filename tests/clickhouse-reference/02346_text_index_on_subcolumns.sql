@@ -9,6 +9,7 @@ CREATE TABLE tab
 ENGINE = SummingMergeTree() ORDER BY (id);
 INSERT INTO TABLE tab (id, c0) VALUES (1, ('a aa aaa', 'b bb bbb'));
 INSERT INTO TABLE tab (id, c0) VALUES (1, ('c cc ccc', 'd dd ddd'));
+OPTIMIZE TABLE tab FINAL;
 SELECT id FROM tab WHERE hasAllTokens(c0.c1, 'aa aaa') SETTINGS force_data_skipping_indices = 'i0';
 DROP TABLE tab;
 CREATE TABLE tab

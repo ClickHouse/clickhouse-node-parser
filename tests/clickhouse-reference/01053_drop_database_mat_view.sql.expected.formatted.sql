@@ -16,6 +16,8 @@ SELECT
     today() AS day,
     'mystring' AS str;
 
+show tables from {CLICKHOUSE_DATABASE:Identifier};
+
 CREATE MATERIALIZED VIEW {CLICKHOUSE_DATABASE:Identifier}.my_materialized_view
 ENGINE = MergeTree(day, (day), 8192)
 AS

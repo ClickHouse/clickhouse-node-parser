@@ -39,3 +39,7 @@ PRIMARY KEY n1
 SOURCE(clickhouse(HOST 'localhost' PORT 9000 DB 'test_db' TABLE 'table_01' USER 'default'))
 LIFETIME(MIN 1 MAX 10)
 LAYOUT(FLAT());
+
+DESCRIBE TABLE test_dictionary0;
+
+DESCRIBE TABLE test_dictionary3;

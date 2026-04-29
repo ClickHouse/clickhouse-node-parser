@@ -33,6 +33,8 @@ ORDER BY j
 PARTITION BY 1000 / i
 SETTINGS allow_floating_point_partition_key = true;
 
+;
+
 CREATE TABLE binary_op_mono3
 (
     i int,

@@ -267,6 +267,8 @@ SELECT
     dictGet(dict_name, 'u64', k),
     dictGet(dict_name, ('i8', 'i16', 'i32'), k);
 
+;
+
 SELECT
     'dictGetOrDefault',
     'complex_cache_ints' AS dict_name,

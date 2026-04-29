@@ -32,6 +32,8 @@ FROM `system`.parts
 WHERE database = currentDatabase()
     AND table IN ('test', 'test2');
 
+SYSTEM UNLOAD PRIMARY KEY;
+
 SELECT
     primary_key_bytes_in_memory,
     primary_key_bytes_in_memory_allocated

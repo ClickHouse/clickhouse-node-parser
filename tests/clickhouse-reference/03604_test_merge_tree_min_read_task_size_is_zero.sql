@@ -7,4 +7,6 @@ ENGINE = MergeTree()
 ORDER BY tuple()
 SETTINGS enable_block_number_column = 1, enable_block_offset_column = 1;
 INSERT INTO TABLE `03604_test` (c0) VALUES (1);
+DELETE FROM `03604_test` WHERE c0 = 2;
+UPDATE `03604_test` SET c0 = 3 WHERE TRUE;
 DROP TABLE `03604_test`;

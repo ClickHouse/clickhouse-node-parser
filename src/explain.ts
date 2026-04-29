@@ -1541,7 +1541,7 @@ function createDictionaryQueryNode(stmt: CreateDictionaryStatement): ExplainNode
   const children: ExplainNode[] = [];
 
   // Label
-  let label = 'CreateQuery';
+  let label = stmt.attach ? 'AttachQuery' : 'CreateQuery';
   if (stmt.table.database) {
     label += ` ${id(stmt.table.database)} ${id(stmt.table.table)}`;
     children.push(n(`Identifier ${id(stmt.table.database)}`));
@@ -1685,7 +1685,7 @@ function createDatabaseQueryNode(stmt: CreateDatabaseStatement): ExplainNode {
 
 function createViewQueryNode(stmt: CreateViewStatement): ExplainNode {
   const children: ExplainNode[] = [];
-  let label = 'CreateQuery';
+  let label = stmt.attach ? 'AttachQuery' : 'CreateQuery';
   if (stmt.table.database) {
     label += ` ${id(stmt.table.database)} ${id(stmt.table.table)}`;
     children.push(n(`Identifier ${id(stmt.table.database)}`));
@@ -1715,7 +1715,7 @@ function createViewQueryNode(stmt: CreateViewStatement): ExplainNode {
 
 function createMaterializedViewQueryNode(stmt: CreateMaterializedViewStatement): ExplainNode {
   const children: ExplainNode[] = [];
-  let label = 'CreateQuery';
+  let label = stmt.attach ? 'AttachQuery' : 'CreateQuery';
   if (stmt.table.database) {
     label += ` ${id(stmt.table.database)} ${id(stmt.table.table)}`;
     children.push(n(`Identifier ${id(stmt.table.database)}`));
@@ -1854,7 +1854,7 @@ function createMaterializedViewQueryNode(stmt: CreateMaterializedViewStatement):
 function createTableQueryNode(stmt: CreateTableStatement): ExplainNode {
   const children: ExplainNode[] = [];
 
-  let label = 'CreateQuery';
+  let label = stmt.attach ? 'AttachQuery' : 'CreateQuery';
   if (stmt.table.database) {
     label += ` ${id(stmt.table.database)} ${id(stmt.table.table)}`;
     children.push(n(`Identifier ${id(stmt.table.database)}`));
@@ -2032,6 +2032,16 @@ function parallelWithQueryNode(stmt: ParallelWithStatement): ExplainNode {
       : first.database !== undefined
         ? id(first.database)
         : '';
+  } else if (first?.kind === 'optimize') {
+    kindPrefix = 'OptimizeQuery_';
+    let suffix = id(first.table.table);
+    if (first.final) suffix += '_final';
+    if (first.cleanup) suffix += '_cleanup';
+    if (first.deduplicate) suffix += '_deduplicate';
+    firstTable = suffix;
+  } else if (first?.kind === 'alter') {
+    kindPrefix = 'AlterQuery_';
+    firstTable = first.table ? id(first.table.table) : '';
   } else {
     kindPrefix = 'CreateQuery';
     firstTable = first?.kind === 'createTable' ? id(first.table.table) : '';
@@ -2420,7 +2430,9 @@ function alterCommandNode(cmd: AlterCommand): ExplainNode {
 // Build AlterQuery explain node
 function alterQueryNode(stmt: AlterStatement): ExplainNode {
   const t = stmt.table;
-  const label = t.database ? `AlterQuery ${id(t.database)} ${id(t.table)}` : `AlterQuery  ${id(t.table)}`;
+  const label = t.database
+    ? `AlterQuery ${id(t.database)} ${id(t.table)}`
+    : `AlterQuery  ${id(t.table)}`;
 
   const children: ExplainNode[] = [];
 
@@ -2453,6 +2465,7 @@ function stmtNode(stmt: Statement): ExplainNode {
   if (stmt.kind === 'explain') return explainStmtNode(stmt);
   if (stmt.kind === 'transactionControl') return n('ASTTransactionControl');
   if (stmt.kind === 'setRole') return n('SetRoleQuery');
+  if (stmt.kind === 'empty') return n('');
   if (stmt.kind === 'set') {
     return n('Set');
   }
@@ -2513,6 +2526,246 @@ function stmtNode(stmt: Statement): ExplainNode {
       }
       return n('SYSTEM query');
     }
+    // SHOW variants
+    if (/^SHOW\s/i.test(stmt.body)) {
+      // SHOW CREATE USER/ROLE/QUOTA/etc. → "<DDL> QUOTA query" labels
+      const showCreateACMatch = stmt.body.match(
+        /^SHOW\s+CREATE\s+(USERS|USER|ROLES|ROLE|QUOTAS|QUOTA|ROW\s+POLICIES|ROW\s+POLICY|POLICIES|POLICY|SETTINGS\s+PROFILES|SETTINGS\s+PROFILE|PROFILES|PROFILE|NAMED\s+COLLECTIONS|NAMED\s+COLLECTION)\b/i,
+      );
+      if (showCreateACMatch) {
+        const rawKey = showCreateACMatch[1].toUpperCase().replace(/\s+/g, ' ');
+        // Normalize aliases: POLICY → ROW POLICY, PROFILE → SETTINGS PROFILE.
+        const keyAliases: Record<string, string> = {
+          POLICY: 'ROW POLICY',
+          POLICIES: 'ROW POLICIES',
+          PROFILE: 'SETTINGS PROFILE',
+          PROFILES: 'SETTINGS PROFILES',
+        };
+        const key = keyAliases[rawKey] || rawKey;
+        // The body after the keyword is the name list (and optional FORMAT clause).
+        const afterKeyword = stmt.body.slice(showCreateACMatch[0].length);
+        const formatMatch = afterKeyword.match(/\bFORMAT\s+([A-Za-z_][A-Za-z0-9_]*)\s*$/i);
+        const hasFormat = formatMatch !== null;
+        const nameList = hasFormat
+          ? afterKeyword.slice(0, formatMatch.index).trim()
+          : afterKeyword.trim();
+        const isMulti = /,/.test(nameList);
+        // ROW POLICY: PLURAL with FORMAT, SINGULAR without (regardless of name count).
+        // Others: PLURAL when multi-name and no FORMAT; SINGULAR otherwise.
+        let usePlural: boolean;
+        if (key === 'ROW POLICY' || key === 'ROW POLICIES') {
+          usePlural = hasFormat;
+        } else {
+          usePlural = isMulti && !hasFormat;
+        }
+        const labels: Record<string, [string, string]> = {
+          USER: ['SHOW CREATE USER query', 'SHOW CREATE USERS query'],
+          USERS: ['SHOW CREATE USER query', 'SHOW CREATE USERS query'],
+          ROLE: ['SHOW CREATE ROLE query', 'SHOW CREATE ROLES query'],
+          ROLES: ['SHOW CREATE ROLE query', 'SHOW CREATE ROLES query'],
+          QUOTA: ['SHOW CREATE QUOTA query', 'SHOW CREATE QUOTAS query'],
+          QUOTAS: ['SHOW CREATE QUOTA query', 'SHOW CREATE QUOTAS query'],
+          'ROW POLICY': ['SHOW CREATE ROW POLICY query', 'SHOW CREATE ROW POLICIES query'],
+          'ROW POLICIES': ['SHOW CREATE ROW POLICY query', 'SHOW CREATE ROW POLICIES query'],
+          'SETTINGS PROFILE': [
+            'SHOW CREATE SETTINGS PROFILE query',
+            'SHOW CREATE SETTINGS PROFILES query',
+          ],
+          'SETTINGS PROFILES': [
+            'SHOW CREATE SETTINGS PROFILE query',
+            'SHOW CREATE SETTINGS PROFILES query',
+          ],
+          'NAMED COLLECTION': ['ShowCreateNamedCollectionQuery', 'ShowCreateNamedCollectionQuery'],
+          'NAMED COLLECTIONS': ['ShowCreateNamedCollectionQuery', 'ShowCreateNamedCollectionQuery'],
+        };
+        const pair = labels[key];
+        const label = pair ? pair[usePlural ? 1 : 0] : 'SYSTEM query';
+        if (hasFormat && formatMatch) {
+          return n(label, [n(`Identifier ${formatMatch[1]}`)]);
+        }
+        return n(label);
+      }
+      if (/^SHOW\s+GRANTS\b/i.test(stmt.body)) {
+        const formatMatch = stmt.body.match(/\bFORMAT\s+([A-Za-z_][A-Za-z0-9_]*)\s*$/i);
+        if (formatMatch) return n('ShowGrantsQuery', [n(`Identifier ${formatMatch[1]}`)]);
+        return n('ShowGrantsQuery');
+      }
+      if (/^SHOW\s+FUNCTIONS\b/i.test(stmt.body)) return n('ShowFunctions');
+      if (/^SHOW\s+(?:EXTENDED\s+|FULL\s+)?(?:COLUMNS|FIELDS)\b/i.test(stmt.body))
+        return n('ShowColumns');
+      if (/^SHOW\s+(?:EXTENDED\s+)?(?:INDEX|INDEXES|INDICES|KEYS)\b/i.test(stmt.body))
+        return n('ShowColumns');
+      if (/^SHOW\s+PRIVILEGES\b/i.test(stmt.body)) return n('ShowPrivilegesQuery');
+      if (/^SHOW\s+SETTING\b/i.test(stmt.body)) return n('ShowSetting');
+      // SHOW [CHANGED] SETTINGS → ShowTables
+      if (/^SHOW\s+(?:CHANGED\s+)?SETTINGS\b/i.test(stmt.body)) return n('ShowTables');
+      if (/^SHOW\s+ENGINES\b/i.test(stmt.body)) return n('ShowEngines');
+      if (/^SHOW\s+PROCESSLIST\b/i.test(stmt.body)) return n('ShowProcesslist');
+      if (/^SHOW\s+MERGES\b/i.test(stmt.body)) return n('ShowMerges');
+      if (/^SHOW\s+CLUSTERS?\b/i.test(stmt.body)) return n('ShowTables');
+      if (/^SHOW\s+ACCESS\b/i.test(stmt.body)) return n('ShowAccessQuery');
+      if (/^SHOW\s+(?:CURRENT\s+)?ROLES?\b/i.test(stmt.body)) return n('ShowTables');
+      if (/^SHOW\s+USERS?\b/i.test(stmt.body)) return n('ShowTables');
+      if (/^SHOW\s+QUOTAS?\b/i.test(stmt.body)) return n('ShowTables');
+      if (/^SHOW\s+(?:ROW\s+)?POLIC(?:Y|IES)\b/i.test(stmt.body)) return n('ShowTables');
+      if (/^SHOW\s+(?:SETTINGS\s+)?PROFILES?\b/i.test(stmt.body)) return n('ShowTables');
+      if (/^SHOW\s+(?:NAMED\s+)?COLLECTIONS?\b/i.test(stmt.body)) return n('ShowTables');
+      if (/^SHOW\s+WARNINGS?\b/i.test(stmt.body)) return n('ShowTables');
+      // SHOW TABLES/DATABASES/DICTIONARIES [FROM db [LIKE/NOT LIKE 'x']] [SETTINGS ...] [FORMAT fmt]
+      if (/^SHOW\s+(?:TEMPORARY\s+)?(TABLES|DATABASES|DICTIONARIES)\b/i.test(stmt.body)) {
+        const fromMatch = stmt.body.match(/\b(?:FROM|IN)\s+([A-Za-z_][A-Za-z0-9_]*)\b/i);
+        const formatMatch = stmt.body.match(/\bFORMAT\s+([A-Za-z_][A-Za-z0-9_]*)\s*$/i);
+        const hasSettings = /\bSETTINGS\b/i.test(stmt.body);
+        const children: ExplainNode[] = [];
+        if (fromMatch) children.push(n(`Identifier ${fromMatch[1]}`));
+        if (hasSettings) children.push(n('Set'));
+        if (formatMatch) children.push(n(`Identifier ${formatMatch[1]}`));
+        if (children.length > 0) return n('ShowTables', children);
+        return n('ShowTables');
+      }
+      // SHOW TABLE name / SHOW TEMPORARY VIEW name → equivalent to SHOW CREATE TABLE/VIEW
+      const showTableMatch = stmt.body.match(
+        /^SHOW\s+(TABLE|TEMPORARY\s+VIEW|VIEW)\s+(?:([A-Za-z_][A-Za-z0-9_]*)\.)?([A-Za-z_][A-Za-z0-9_]*)\b/i,
+      );
+      if (showTableMatch) {
+        const kw = showTableMatch[1].toUpperCase().replace(/\s+/g, ' ');
+        const db = showTableMatch[2];
+        const tbl = showTableMatch[3];
+        const children: ExplainNode[] = [];
+        if (db) children.push(n(`Identifier ${db}`));
+        children.push(n(`Identifier ${tbl}`));
+        const formatMatch = stmt.body.match(/\bFORMAT\s+([A-Za-z_][A-Za-z0-9_]*)\s*$/i);
+        if (formatMatch) children.push(n(`Identifier ${formatMatch[1]}`));
+        const prefix = kw === 'TABLE' ? 'ShowCreateTableQuery' : 'ShowCreateViewQuery';
+        const label = db ? `${prefix} ${db} ${tbl}` : `${prefix}  ${tbl}`;
+        return n(label, children);
+      }
+      // SHOW DATABASE name → equivalent to SHOW CREATE DATABASE
+      const showDbMatch = stmt.body.match(/^SHOW\s+DATABASE\s+([A-Za-z_][A-Za-z0-9_]*)\b/i);
+      if (showDbMatch) {
+        const db = showDbMatch[1];
+        const children: ExplainNode[] = [n(`Identifier ${db}`)];
+        const formatMatch = stmt.body.match(/\bFORMAT\s+([A-Za-z_][A-Za-z0-9_]*)\s*$/i);
+        if (formatMatch) children.push(n(`Identifier ${formatMatch[1]}`));
+        return n(`ShowCreateDatabaseQuery ${db} `, children);
+      }
+      return n('SYSTEM query');
+    }
+    // SYSTEM subcommands that target a specific table or dictionary include
+    // Identifier children in the explain output.
+    if (/^SYSTEM\s/i.test(stmt.body)) {
+      // RELOAD DICTIONARY foo / RELOAD DICTIONARIES foo — ClickHouse duplicates the name
+      // Supports bare identifiers, `backtick-quoted`, and qualified db.dict.
+      const dictMatch = stmt.body.match(
+        /^SYSTEM\s+(?:RELOAD\s+DICTIONAR(?:Y|IES)|DROP\s+DICTIONARY\s+CACHE)(?!\s+ON\s+CLUSTER\b)\s+(?:`([^`]+)`|([A-Za-z_][A-Za-z0-9_]*))(?:\.(?:`([^`]+)`|([A-Za-z_][A-Za-z0-9_]*)))?\b/i,
+      );
+      if (dictMatch) {
+        const db = dictMatch[1] || dictMatch[2];
+        const tbl = dictMatch[3] || dictMatch[4];
+        if (tbl) {
+          return n('SYSTEM query', [
+            n(`Identifier ${db}`),
+            n(`Identifier ${tbl}`),
+            n(`Identifier ${db}`),
+            n(`Identifier ${tbl}`),
+          ]);
+        }
+        return n('SYSTEM query', [n(`Identifier ${db}`), n(`Identifier ${db}`)]);
+      }
+      // DISTRIBUTED commands also duplicate the table name in the explain output.
+      const distMatch = stmt.body.match(
+        /\b(?:FLUSH\s+DISTRIBUTED|STOP\s+DISTRIBUTED\s+SENDS|START\s+DISTRIBUTED\s+SENDS|LOAD\s+PRIMARY\s+KEY|UNLOAD\s+PRIMARY\s+KEY|RESTORE\s+REPLICA)(?:\s+ON\s+CLUSTER\s+[A-Za-z_0-9][A-Za-z0-9_]*)?\s+([A-Za-z_0-9][A-Za-z0-9_]*(?:\.[A-Za-z_0-9][A-Za-z0-9_]*)?)(?:\s|$|;)/i,
+      );
+      if (distMatch) {
+        const tbl = distMatch[1];
+        const hasSettings = /\bSETTINGS\b/i.test(stmt.body);
+        const parts = tbl.split('.');
+        const children: ExplainNode[] =
+          parts.length === 2
+            ? [
+                n(`Identifier ${parts[0]}`),
+                n(`Identifier ${parts[1]}`),
+                n(`Identifier ${parts[0]}`),
+                n(`Identifier ${parts[1]}`),
+              ]
+            : [n(`Identifier ${tbl}`), n(`Identifier ${tbl}`)];
+        if (hasSettings) children.push(n('Set'));
+        return n('SYSTEM query', children);
+      }
+      const tableMatch = stmt.body.match(
+        /\b(?:SYNC\s+REPLICA|SYNC\s+DATABASE\s+REPLICA|STOP\s+(?:MERGES|FETCHES|MOVES|REPLICATED\s+SENDS|REPLICATION\s+QUEUES|TTL\s+MERGES|PULLING\s+REPLICATION\s+LOG|CLEANUP)|START\s+(?:MERGES|FETCHES|MOVES|REPLICATED\s+SENDS|REPLICATION\s+QUEUES|TTL\s+MERGES|PULLING\s+REPLICATION\s+LOG|CLEANUP)|RESTART\s+REPLICA|DROP\s+REPLICA|WAIT\s+LOADING\s+PARTS|PREWARM\s+MARK\s+CACHE|PREWARM\s+PRIMARY\s+INDEX\s+CACHE|REFRESH\s+VIEW|WAIT\s+VIEW|STOP\s+VIEW|START\s+VIEW|CANCEL\s+VIEW)\s+([A-Za-z_0-9][A-Za-z0-9_]*(?:\.[A-Za-z_0-9][A-Za-z0-9_]*)?)(?:\s|$|;)/i,
+      );
+      if (tableMatch) {
+        const tbl = tableMatch[1];
+        const parts = tbl.split('.');
+        if (parts.length === 2) {
+          return n('SYSTEM query', [n(`Identifier ${parts[0]}`), n(`Identifier ${parts[1]}`)]);
+        }
+        return n('SYSTEM query', [n(`Identifier ${tbl}`)]);
+      }
+      return n('SYSTEM query');
+    }
+    // KILL QUERY / KILL MUTATION (fallback when not structurally parsed)
+    if (/^KILL\s/i.test(stmt.body)) {
+      return n('KillQueryQuery');
+    }
+    // BACKUP / RESTORE — extract the TO/FROM destination function and FORMAT.
+    if (/^BACKUP\s/i.test(stmt.body) || /^RESTORE\s/i.test(stmt.body)) {
+      const isRestore = /^RESTORE\s/i.test(stmt.body);
+      const label = isRestore ? 'RestoreQuery' : 'BackupQuery';
+      // Strip trailing FORMAT clause from body so it doesn't bleed into destination match.
+      const formatMatch = stmt.body.match(/\bFORMAT\s+([A-Za-z_][A-Za-z0-9_]*)\s*$/i);
+      let bodyNoFormat = formatMatch ? stmt.body.slice(0, formatMatch.index).trimEnd() : stmt.body;
+      // Strip trailing SETTINGS clause too.
+      const settingsIdx = bodyNoFormat.search(/\bSETTINGS\b/i);
+      if (settingsIdx > 0) bodyNoFormat = bodyNoFormat.slice(0, settingsIdx).trimEnd();
+      // Destination: ` TO|FROM <Name>[('<arg>'[, ...])]` at the end of body.
+      const destMatch = bodyNoFormat.match(
+        /\b(?:TO|FROM)\s+([A-Za-z_][A-Za-z0-9_]*)(\s*\([^)]*\))?\s*$/i,
+      );
+      const children: ExplainNode[] = [];
+      if (destMatch) {
+        const fnName = destMatch[1];
+        const argsPart = destMatch[2] || '';
+        const args: ExplainNode[] = [];
+        const argsRegex = /'([^']*)'/g;
+        let m;
+        while ((m = argsRegex.exec(argsPart)) !== null) {
+          args.push(n(`Literal '${m[1]}'`));
+        }
+        const fnChildren =
+          args.length > 0 ? [n('ExpressionList', args)] : argsPart ? [n('ExpressionList')] : [];
+        children.push(n(`Function ${fnName}`, fnChildren));
+      }
+      if (formatMatch) children.push(n(`Identifier ${formatMatch[1]}`));
+      if (children.length > 0) return n(label, children);
+      return n(label);
+    }
+    // GRANT / REVOKE
+    if (/^GRANT\s/i.test(stmt.body)) return n('GrantQuery');
+    if (/^REVOKE\s/i.test(stmt.body)) return n('GrantQuery');
+    // Transaction control (BEGIN / COMMIT / ROLLBACK)
+    if (/^(BEGIN|COMMIT|ROLLBACK)\b/i.test(stmt.body)) return n('ASTTransactionControl');
+    // UNDROP TABLE [db.]name [UUID '...'] [ON CLUSTER ...] [FORMAT name]
+    if (/^UNDROP\s/i.test(stmt.body)) {
+      const m = stmt.body.match(
+        /^UNDROP\s+TABLE\s+(?:([A-Za-z_0-9][A-Za-z0-9_]*)\.)?([A-Za-z_0-9][A-Za-z0-9_]*)/i,
+      );
+      if (m) {
+        const db = m[1];
+        const tbl = m[2];
+        const children: ExplainNode[] = [];
+        if (db) children.push(n(`Identifier ${db}`));
+        children.push(n(`Identifier ${tbl}`));
+        const formatMatch = stmt.body.match(/\bFORMAT\s+([A-Za-z_][A-Za-z0-9_]*)\s*$/i);
+        if (formatMatch) children.push(n(`Identifier ${formatMatch[1]}`));
+        const label = db ? `UndropQuery ${db}.${tbl}` : `UndropQuery  ${tbl}`;
+        return n(label, children);
+      }
+      return n('UndropQuery');
+    }
+    // EXCHANGE TABLES/DICTIONARIES as system fallback
+    if (/^EXCHANGE\s/i.test(stmt.body)) return n('Rename');
     return n('SYSTEM query');
   }
   if (stmt.kind === 'use')
@@ -2563,8 +2816,242 @@ function stmtNode(stmt: Statement): ExplainNode {
     }
     // DATABASE or TABLES: label format is "TruncateQuery <db> " (single space + trailing space)
     const db = stmt.database!;
-    const children = [n(`Identifier ${db}`)];
-    return n(`TruncateQuery ${db} `, children);
+    const children = [n(`Identifier ${id(db)}`)];
+    return n(`TruncateQuery ${id(db)} `, children);
+  }
+  if (stmt.kind === 'optimize') {
+    const t = stmt.table;
+    const children: ExplainNode[] = [];
+    if (stmt.partition) {
+      if (stmt.partition.kind === 'id') {
+        children.push(
+          n(`Partition_ID Literal_'${stmt.partition.id}'`, [n(`Literal '${stmt.partition.id}'`)]),
+        );
+      } else if (stmt.partition.kind === 'all') {
+        children.push(n('Partition_ID '));
+      } else {
+        children.push(n('Partition', [exprNode(stmt.partition.expr)]));
+      }
+    }
+    if (t.database) children.push(n(`Identifier ${id(t.database)}`));
+    children.push(n(`Identifier ${id(t.table)}`));
+    if (stmt.settings && stmt.settings.length > 0) children.push(n('Set'));
+    let suffix = id(t.table);
+    if (stmt.final) suffix += '_final';
+    if (stmt.cleanup) suffix += '_cleanup';
+    if (stmt.deduplicate) suffix += '_deduplicate';
+    const label = t.database
+      ? `OptimizeQuery ${id(t.database)} ${suffix}`
+      : `OptimizeQuery  ${suffix}`;
+    return n(label, children);
+  }
+  if (stmt.kind === 'describe') {
+    let child: ExplainNode;
+    if (stmt.target.kind === 'table') {
+      const t = stmt.target.table;
+      child = n('TableExpression', [
+        n(
+          t.database
+            ? `TableIdentifier ${id(t.database)}.${id(t.table)}`
+            : `TableIdentifier ${id(t.table)}`,
+        ),
+      ]);
+    } else if (stmt.target.kind === 'function') {
+      const func = stmt.target.func;
+      const argsNodes = func.args.map(exprNode);
+      child = n('TableExpression', [n(`Function ${func.name}`, [n('ExpressionList', argsNodes)])]);
+    } else {
+      child = n('TableExpression', [n('Subquery', [stmtNode(stmt.target.query as Statement)])]);
+    }
+    const children: ExplainNode[] = [child];
+    const hasSettings = stmt.settings && stmt.settings.length > 0;
+    if (stmt.settingsBeforeFormat) {
+      if (hasSettings) children.push(n('Set'));
+      if (stmt.format) children.push(n(`Identifier ${stmt.format}`));
+    } else {
+      if (stmt.format) children.push(n(`Identifier ${stmt.format}`));
+      if (hasSettings) children.push(n('Set'));
+    }
+    return n('DescribeQuery', children);
+  }
+  if (stmt.kind === 'showCreate') {
+    if (stmt.targetType === 'DATABASE') {
+      const db = stmt.database!;
+      const children = [n(`Identifier ${id(db)}`)];
+      if (stmt.settings && stmt.settings.length > 0) children.push(n('Set'));
+      if (stmt.format) children.push(n(`Identifier ${stmt.format}`));
+      return n(`ShowCreateDatabaseQuery ${id(db)} `, children);
+    }
+    const t = stmt.table!;
+    const labelMap: Record<string, string> = {
+      TABLE: 'ShowCreateTableQuery',
+      VIEW: 'ShowCreateViewQuery',
+      DICTIONARY: 'ShowCreateDictionaryQuery',
+    };
+    const prefix = labelMap[stmt.targetType];
+    const children: ExplainNode[] = [];
+    if (t.database) children.push(n(`Identifier ${id(t.database)}`));
+    children.push(n(`Identifier ${id(t.table)}`));
+    if (stmt.settings && stmt.settings.length > 0) children.push(n('Set'));
+    if (stmt.format) children.push(n(`Identifier ${stmt.format}`));
+    const label = t.database
+      ? `${prefix} ${id(t.database)} ${id(t.table)}`
+      : `${prefix}  ${id(t.table)}`;
+    return n(label, children);
+  }
+  if (stmt.kind === 'detach') {
+    if (stmt.targetType === 'DATABASE') {
+      const db = stmt.database!;
+      return n(`DetachQuery ${id(db)} `, [n(`Identifier ${id(db)}`)]);
+    }
+    const t = stmt.table!;
+    const children: ExplainNode[] = [];
+    if (t.database) children.push(n(`Identifier ${id(t.database)}`));
+    children.push(n(`Identifier ${id(t.table)}`));
+    const label = t.database
+      ? `DetachQuery ${id(t.database)} ${id(t.table)}`
+      : `DetachQuery  ${id(t.table)}`;
+    return n(label, children);
+  }
+  if (stmt.kind === 'delete') {
+    const t = stmt.table;
+    const children: ExplainNode[] = [];
+    if (stmt.partition) {
+      if (stmt.partition.kind === 'id') {
+        children.push(
+          n(`Partition_ID Literal_'${stmt.partition.id}'`, [n(`Literal '${stmt.partition.id}'`)]),
+        );
+      } else {
+        children.push(n('Partition', [exprNode(stmt.partition.expr)]));
+      }
+    }
+    children.push(exprNode(stmt.where));
+    if (t.database) children.push(n(`Identifier ${id(t.database)}`));
+    children.push(n(`Identifier ${id(t.table)}`));
+    if (stmt.settings && stmt.settings.length > 0) children.push(n('Set'));
+    const label = t.database
+      ? `DeleteQuery ${id(t.database)} ${id(t.table)}`
+      : `DeleteQuery  ${id(t.table)}`;
+    return n(label, children);
+  }
+  if (stmt.kind === 'update') {
+    const t = stmt.table;
+    const children: ExplainNode[] = [];
+    if (t.database) children.push(n(`Identifier ${id(t.database)}`));
+    children.push(n(`Identifier ${id(t.table)}`));
+    children.push(exprNode(stmt.where));
+    const assignNodes = stmt.assignments.map((a) =>
+      n(`Assignment ${a.column}`, [exprNode(a.expr)]),
+    );
+    children.push(n('ExpressionList', assignNodes));
+    if (stmt.settings && stmt.settings.length > 0) children.push(n('Set'));
+    const label = t.database
+      ? `UpdateQuery ${id(t.database)} ${id(t.table)}`
+      : `UpdateQuery  ${id(t.table)}`;
+    return n(label, children);
+  }
+  if (stmt.kind === 'check') {
+    if (stmt.targetType === 'ALL') return n('CheckAllQuery');
+    if (stmt.targetType === 'DATABASE') {
+      const db = stmt.database!;
+      const children = [n(`Identifier ${id(db)}`)];
+      if (stmt.settings && stmt.settings.length > 0) children.push(n('Set'));
+      return n(`CheckQuery ${id(db)} `, children);
+    }
+    const t = stmt.table!;
+    const children: ExplainNode[] = [];
+    if (t.database) children.push(n(`Identifier ${id(t.database)}`));
+    children.push(n(`Identifier ${id(t.table)}`));
+    if (stmt.format) children.push(n(`Identifier ${stmt.format}`));
+    if (stmt.settings && stmt.settings.length > 0) children.push(n('Set'));
+    const label = t.database
+      ? `CheckQuery ${id(t.database)} ${id(t.table)}`
+      : `CheckQuery  ${id(t.table)}`;
+    return n(label, children);
+  }
+  if (stmt.kind === 'attach') {
+    if (stmt.targetType === 'DATABASE') {
+      const db = stmt.database!;
+      return n(`AttachQuery ${id(db)} `, [n(`Identifier ${id(db)}`)]);
+    }
+    const t = stmt.table!;
+    const children: ExplainNode[] = [];
+    if (t.database) children.push(n(`Identifier ${id(t.database)}`));
+    children.push(n(`Identifier ${id(t.table)}`));
+    const label = t.database
+      ? `AttachQuery ${id(t.database)} ${id(t.table)}`
+      : `AttachQuery ${id(t.table)}`;
+    return n(label, children);
+  }
+  if (stmt.kind === 'rename') {
+    const children: ExplainNode[] = [];
+    for (const p of stmt.pairs) {
+      if (p.from.database) children.push(n(`Identifier ${id(p.from.database)}`));
+      children.push(n(`Identifier ${id(p.from.table)}`));
+      if (p.to.database) children.push(n(`Identifier ${id(p.to.database)}`));
+      children.push(n(`Identifier ${id(p.to.table)}`));
+    }
+    if (stmt.settings && stmt.settings.length > 0) children.push(n('Set'));
+    return n('Rename', children);
+  }
+  if (stmt.kind === 'executeAs') {
+    return n('ExecuteAsQuery', [
+      n('UserNameWithHost', [n(`Identifier ${stmt.user}`)]),
+      stmtNode(stmt.statement),
+    ]);
+  }
+  if (stmt.kind === 'kill') {
+    // Label: KillQueryQuery Function_<name> <mode>
+    // The function name is taken from the where expression's function call.
+    let fnName = '';
+    const where = stmt.where as Expression;
+    if (where.kind === 'functionCall') fnName = where.name;
+    else if (where.kind === 'binaryExpr') {
+      const opMap: Record<string, string> = {
+        '=': 'equals',
+        '!=': 'notEquals',
+        '<>': 'notEquals',
+        '<': 'less',
+        '>': 'greater',
+        '<=': 'lessOrEquals',
+        '>=': 'greaterOrEquals',
+        AND: 'and',
+        OR: 'or',
+      };
+      fnName = opMap[where.op] || where.op.toLowerCase();
+    } else if (where.kind === 'naryExpr') {
+      fnName = where.op === 'AND' ? 'and' : 'or';
+    }
+    const mode = stmt.mode ?? 'ASYNC';
+    const label = `KillQueryQuery Function_${fnName} ${mode}`;
+    const children: ExplainNode[] = [exprNode(stmt.where)];
+    if (stmt.settings && stmt.settings.length > 0) children.push(n('Set'));
+    if (stmt.format) children.push(n(`Identifier ${stmt.format}`));
+    return n(label, children);
+  }
+  if (stmt.kind === 'exists') {
+    const labelMap: Record<string, string> = {
+      TABLE: 'ExistsTableQuery',
+      VIEW: 'ExistsViewQuery',
+      DATABASE: 'ExistsDatabaseQuery',
+      DICTIONARY: 'ExistsDictionaryQuery',
+    };
+    const prefix = labelMap[stmt.targetType];
+    if (stmt.targetType === 'DATABASE') {
+      const db = stmt.database!;
+      const children: ExplainNode[] = [n(`Identifier ${id(db)}`)];
+      if (stmt.settings && stmt.settings.length > 0) children.push(n('Set'));
+      return n(`${prefix} ${id(db)} `, children);
+    }
+    const t = stmt.table!;
+    const children: ExplainNode[] = [];
+    if (t.database) children.push(n(`Identifier ${id(t.database)}`));
+    children.push(n(`Identifier ${id(t.table)}`));
+    if (stmt.settings && stmt.settings.length > 0) children.push(n('Set'));
+    const label = t.database
+      ? `${prefix} ${id(t.database)} ${id(t.table)}`
+      : `${prefix}  ${id(t.table)}`;
+    return n(label, children);
   }
   if (stmt.kind === 'drop') {
     // DROP FUNCTION and DROP INDEX have their own label formats
@@ -2640,12 +3127,20 @@ function stmtNode(stmt: Statement): ExplainNode {
       // Parenthesized selects in intersect/except context get wrapped
       if (s.parenthesized) wrapInSWU = true;
     } else if (s.kind === 'intersect') {
-      const lw = s.op === 'EXCEPT' || (s.op === 'INTERSECT' && s.left.kind === 'intersect');
-      const rw = s.op === 'INTERSECT' && s.right.kind === 'intersect';
+      const leftParen = (s.left as { parenthesized?: boolean }).parenthesized === true;
+      const rightParen = (s.right as { parenthesized?: boolean }).parenthesized === true;
+      const lw =
+        s.op === 'EXCEPT' ||
+        (s.op === 'INTERSECT' && s.left.kind === 'intersect') ||
+        (s.left.kind === 'intersect' && leftParen);
+      const rw =
+        (s.op === 'INTERSECT' && s.right.kind === 'intersect') ||
+        (s.right.kind === 'intersect' && rightParen);
       node = n('SelectIntersectExceptQuery', [
         renderIntersectChild(s.left, lw),
         renderIntersectChild(s.right, rw),
       ]);
+      if ((s as { parenthesized?: boolean }).parenthesized) wrapInSWU = true;
     } else {
       node = stmtNode(s);
     }

@@ -16,6 +16,8 @@ FROM numbers(100);
 INSERT INTO test SELECT '2149-06-06'
 FROM numbers(100);
 
+OPTIMIZE TABLE test FINAL;
+
 -- { echoOn }
 -- implicit toDateTime (always saturate)
 SELECT count()

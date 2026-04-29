@@ -26,6 +26,10 @@ FROM numbers(1000);
 
 SET distributed_foreground_insert = 0;
 
+SYSTEM STOP DISTRIBUTED SENDS dist_01781;
+
+SYSTEM FLUSH DISTRIBUTED dist_01781;
+
 DROP TABLE tmp_01781;
 
 DROP TABLE dist_01781;

@@ -45,6 +45,11 @@ ALTER TABLE t_mt DROP PART 'all_1_1_0';
 
 ALTER TABLE t_mt DROP PART 'all_2_2_0';
 
+-- reattach
+DETACH TABLE t_mt;
+
+ATTACH TABLE t_mt;
+
 -- system.metrics
 SELECT value > 0
 FROM `system`.metrics

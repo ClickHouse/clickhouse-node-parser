@@ -68,6 +68,8 @@ FROM needle_table;
 SELECT dictGet(regexp_dict1, ('name', 'version'), key)
 FROM needle_table;
 
+SYSTEM RELOAD dictionary regexp_dict1; -- { serverError INCORRECT_DICTIONARY_DEFINITION  }
+
 TRUNCATE TABLE regexp_dictionary_source_table;
 
 INSERT INTO regexp_dictionary_source_table;

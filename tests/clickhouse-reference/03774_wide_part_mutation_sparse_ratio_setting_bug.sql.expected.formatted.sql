@@ -14,6 +14,10 @@ INSERT INTO test SELECT
     number
 FROM numbers(10);
 
+DETACH TABLE test;
+
+ATTACH TABLE test;
+
 ALTER TABLE test UPDATE b = 42 WHERE 1 SETTINGS mutations_sync = 2;
 
 SELECT *

@@ -21,6 +21,8 @@ SELECT *
 FROM test FINAL
 ORDER BY uid ASC;
 
+OPTIMIZE TABLE test FINAL CLEANUP;
+
 SELECT *
 FROM test
 ORDER BY uid ASC;
@@ -68,6 +70,8 @@ ENGINE = ReplacingMergeTree(version, is_deleted)
 ORDER BY (uid)
 SETTINGS clean_deleted_rows = 'Always', allow_experimental_replacing_merge_with_cleanup = 1;
 
+OPTIMIZE TABLE test FINAL;
+
 -- d6 has to be removed since we set clean_deleted_rows as 'Always'
 SELECT *
 FROM test
@@ -94,6 +98,10 @@ INSERT INTO testCleanupR1 (*);
 
 INSERT INTO testCleanupR1 (*);
 
+SYSTEM SYNC REPLICA testCleanupR1; -- Avoid "Cannot select parts for optimization: Entry for part all_2_2_0 hasn't been read from the replication log yet"
+
+OPTIMIZE TABLE testCleanupR1 FINAL CLEANUP;
+
 SELECT *
 FROM testCleanupR1
 ORDER BY uid ASC;
@@ -112,6 +120,10 @@ ORDER BY col1
 SETTINGS clean_deleted_rows = 'Always', allow_experimental_replacing_merge_with_cleanup = 1;
 
 INSERT INTO testSettingsR1 (*);
+
+SYSTEM SYNC REPLICA testSettingsR1; -- Avoid "Cannot select parts for optimization: Entry for part all_2_2_0 hasn't been read from the replication log yet"
+
+OPTIMIZE TABLE testSettingsR1 FINAL;
 
 SELECT *
 FROM testSettingsR1
@@ -187,6 +199,10 @@ SETTINGS clean_deleted_rows = 'Always', allow_experimental_replacing_merge_with_
 
 INSERT INTO testMT (*);
 
+OPTIMIZE TABLE testMT FINAL CLEANUP; -- { serverError CANNOT_ASSIGN_OPTIMIZE }
+
+OPTIMIZE TABLE testMT FINAL;
+
 SELECT *
 FROM testMT
 ORDER BY uid ASC;
@@ -203,6 +219,10 @@ SETTINGS clean_deleted_rows = 'Always', allow_experimental_replacing_merge_with_
 
 INSERT INTO testSummingMT (*);
 
+OPTIMIZE TABLE testSummingMT FINAL CLEANUP; -- { serverError CANNOT_ASSIGN_OPTIMIZE }
+
+OPTIMIZE TABLE testSummingMT FINAL;
+
 SELECT *
 FROM testSummingMT
 ORDER BY uid ASC;
@@ -218,6 +238,10 @@ ORDER BY (uid)
 SETTINGS clean_deleted_rows = 'Always', allow_experimental_replacing_merge_with_cleanup = 1;
 
 INSERT INTO testAggregatingMT (*);
+
+OPTIMIZE TABLE testAggregatingMT FINAL CLEANUP; -- { serverError CANNOT_ASSIGN_OPTIMIZE }
+
+OPTIMIZE TABLE testAggregatingMT FINAL;
 
 SELECT *
 FROM testAggregatingMT
@@ -236,6 +260,10 @@ SETTINGS clean_deleted_rows = 'Always', allow_experimental_replacing_merge_with_
 
 INSERT INTO testCollapsingMT (*);
 
+OPTIMIZE TABLE testCollapsingMT FINAL CLEANUP; -- { serverError CANNOT_ASSIGN_OPTIMIZE }
+
+OPTIMIZE TABLE testCollapsingMT FINAL;
+
 SELECT *
 FROM testCollapsingMT
 ORDER BY uid ASC;
@@ -252,6 +280,10 @@ ORDER BY (uid)
 SETTINGS clean_deleted_rows = 'Always', allow_experimental_replacing_merge_with_cleanup = 1;
 
 INSERT INTO testVersionedCMT (*);
+
+OPTIMIZE TABLE testVersionedCMT FINAL CLEANUP; -- { serverError CANNOT_ASSIGN_OPTIMIZE }
+
+OPTIMIZE TABLE testVersionedCMT FINAL;
 
 SELECT *
 FROM testVersionedCMT

@@ -11,6 +11,8 @@ ENGINE = MergeTree
 ORDER BY key
 SETTINGS ratio_of_defaults_for_sparse_serialization = 0.0, vertical_merge_algorithm_min_rows_to_activate = 1, vertical_merge_algorithm_min_columns_to_activate = 1, allow_vertical_merges_from_compact_to_wide_parts = 1, min_bytes_for_wide_part = 0, enable_block_number_column = 0, enable_block_offset_column = 0;
 
+SYSTEM STOP MERGES t_bloom_filter;
+
 -- Create at least one part
 INSERT INTO t_bloom_filter SELECT
     number % 100 AS key, -- 100 unique keys
@@ -22,6 +24,11 @@ INSERT INTO t_bloom_filter SELECT
     number % 100 AS key, -- 100 unique keys
     rand() % 100 AS value -- 100 unique values
 FROM numbers(15000, 15000);
+
+SYSTEM START MERGES t_bloom_filter;
+
+-- Merge everything into a single part
+OPTIMIZE TABLE t_bloom_filter FINAL;
 
 -- Check sparse serialization
 SELECT

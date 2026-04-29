@@ -11,12 +11,15 @@ CREATE TABLE quorum2(x UInt32, y Date) ENGINE ReplicatedMergeTree('/clickhouse/t
 SET insert_quorum=2, insert_quorum_parallel=0;
 SET select_sequential_consistency=1;
 SET insert_quorum_timeout=0;
+SYSTEM STOP FETCHES quorum1;
 INSERT INTO quorum2 VALUES (1, '2018-11-15'); -- { serverError UNKNOWN_STATUS_OF_INSERT }
 SELECT count(*) FROM quorum1;
 SELECT count(*) FROM quorum2;
 SET select_sequential_consistency=0;
 SELECT x FROM quorum2 ORDER BY x;
 SET insert_quorum_timeout=100;
+SYSTEM START FETCHES quorum1;
+SYSTEM SYNC REPLICA quorum1;
 SELECT x FROM quorum1 ORDER BY x;
 DROP TABLE quorum1;
 DROP TABLE quorum2;

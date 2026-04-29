@@ -12,6 +12,8 @@ ENGINE = MergeTree()
 ORDER BY key
 SETTINGS distributed_index_analysis_min_parts_to_activate = 0, distributed_index_analysis_min_indexes_size_to_activate = 0;
 
+SYSTEM stop merges test_10m;
+
 INSERT INTO test_10m SELECT
     number,
     number * 100
@@ -47,6 +49,9 @@ SETTINGS
     allow_experimental_parallel_reading_from_replicas = 1,
     distributed_index_analysis = 1,
     cluster_for_parallel_replicas = 'test_cluster_one_shard_two_replicas';
+
+-- { echoOff }
+SYSTEM flush logs query_log;
 
 SELECT
     anyIf(normalizeQuery(query), is_initial_query) AS q,

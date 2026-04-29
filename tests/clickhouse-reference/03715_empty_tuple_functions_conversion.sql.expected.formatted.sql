@@ -37,6 +37,8 @@ ENGINE = MergeTree()
 ORDER BY tuple()
 SETTINGS enable_block_number_column = 1, enable_block_offset_column = 1;
 
+UPDATE t1 SET c0 = tuple() WHERE true;
+
 INSERT INTO t1 (c0);
 
 SELECT *

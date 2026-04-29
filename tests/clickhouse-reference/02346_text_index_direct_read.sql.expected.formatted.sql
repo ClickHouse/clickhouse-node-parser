@@ -80,6 +80,11 @@ SELECT
 FROM tab
 WHERE NOT hasAllTokens(text, ['Blick']);
 
+----------------------------------------------------
+-- Now check the logs all at once (one by one is too slow)
+----------------------------------------------------
+SYSTEM FLUSH LOGS text_log;
+
 SELECT message
 FROM (
         SELECT

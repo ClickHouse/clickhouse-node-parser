@@ -17,6 +17,8 @@ INSERT INTO test SELECT '{"a" : 42}';
 
 INSERT INTO test SELECT '{"a" : [1, 2, 3]}';
 
+OPTIMIZE TABLE test;
+
 SELECT *
 FROM test
 ORDER BY toString(json) ASC;

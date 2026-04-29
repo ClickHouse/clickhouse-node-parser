@@ -20,6 +20,8 @@ INSERT INTO index_compact SELECT
     toString(number)
 FROM numbers(30);
 
+OPTIMIZE TABLE index_compact FINAL;
+
 SELECT count()
 FROM index_compact
 WHERE b < 10;

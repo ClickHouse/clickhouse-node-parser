@@ -35,6 +35,8 @@ SELECT
 FROM ephemeral
 GROUP BY key;
 
+SYSTEM stop distributed sends dist_in;
+
 CREATE TABLE dist_out AS data
 ENGINE = Distributed(test_shard_localhost, currentDatabase(), data);
 
@@ -52,6 +54,10 @@ LIMIT 3e6
 SETTINGS
     max_block_size = 3e6,
     max_memory_usage = '100Mi';
+
+SYSTEM flush distributed dist_in; -- { serverError MEMORY_LIMIT_EXCEEDED }
+
+SYSTEM flush distributed dist_in settings max_memory_usage=0;
 
 SELECT count()
 FROM dist_out;

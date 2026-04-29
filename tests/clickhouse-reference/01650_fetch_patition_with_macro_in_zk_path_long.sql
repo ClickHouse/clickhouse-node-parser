@@ -15,6 +15,7 @@ SELECT partition_id
 FROM system.detached_parts
 WHERE (table = 'restore_01640') AND (database = currentDatabase());
 ALTER TABLE restore_01640 ATTACH PARTITION tuple(toYYYYMM(toDate('2021-01-01'))) SETTINGS insert_keeper_fault_injection_probability=0;
+;
 SELECT _part, * FROM restore_01640;
 DROP TABLE test_01640;
 DROP TABLE restore_01640;

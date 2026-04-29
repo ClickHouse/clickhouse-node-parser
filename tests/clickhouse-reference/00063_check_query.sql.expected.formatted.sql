@@ -12,6 +12,17 @@ ENGINE = TinyLog;
 
 INSERT INTO check_query_tiny_log;
 
+CHECK TABLE check_query_tiny_log;
+
+CHECK TABLE check_query_tiny_log PARTITION tuple(); -- { serverError NOT_IMPLEMENTED }
+
+CHECK TABLE check_query_tiny_log PART 'all_0_0_0'; -- { serverError NOT_IMPLEMENTED }
+
+-- Settings and FORMAT are supported
+CHECK TABLE check_query_tiny_log SETTINGS max_threads = 16;
+
+CHECK TABLE check_query_tiny_log SETTINGS max_threads = 8, check_query_single_value_result = 0 FORMAT Null;
+
 DROP TABLE IF EXISTS check_query_log;
 
 CREATE TABLE check_query_log
@@ -22,6 +33,8 @@ CREATE TABLE check_query_log
 ENGINE = Log;
 
 INSERT INTO check_query_log;
+
+CHECK TABLE check_query_log;
 
 DROP TABLE check_query_log;
 

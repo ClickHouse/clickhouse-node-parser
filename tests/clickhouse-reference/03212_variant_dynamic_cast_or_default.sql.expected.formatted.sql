@@ -124,6 +124,8 @@ INSERT INTO t (d);
 
 INSERT INTO t (d);
 
+OPTIMIZE TABLE t FINAL;
+
 WITH (
         SELECT count()
         FROM t

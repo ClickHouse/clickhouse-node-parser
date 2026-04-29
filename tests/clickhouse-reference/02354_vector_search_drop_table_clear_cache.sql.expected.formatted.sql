@@ -8,6 +8,8 @@ SET parallel_replicas_local_plan = 1; -- this setting is randomized, set it expl
 
 DROP TABLE IF EXISTS tab;
 
+SYSTEM CLEAR VECTOR SIMILARITY INDEX CACHE;
+
 CREATE TABLE tab
 (
     id Int32,
@@ -43,4 +45,6 @@ SELECT
     name,
     value
 FROM `system`.metrics
-WHERE like(name, '%VectorSimilarityIndexCacheBytes%');
+WHERE like(name, '%VectorSimilarityIndexCacheBytes%'); -- ALTER TABLE ... DROP INDEX <vector index> and MERGE PARTS will also clear
+-- any corresponding loaded granules in the vector index cache. These happen
+-- in the background as mutations and unused parts are deleted after "old_parts_lifetime"

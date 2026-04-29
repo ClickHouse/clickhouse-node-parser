@@ -88,6 +88,8 @@ SELECT '4_2' l, t, v
 FROM mv_3_1;
 INSERT INTO landing SELECT 1 as timestamp, 1 AS value FROM numbers(10) ORDER BY ALL;
 SELECT sleep(3);
+--- INSERT_WAS_DEDUPLICATED = 389
+SYSTEM FLUSH LOGS part_log;
 SELECT table, name, error FROM system.part_log
 WHERE database = currentDatabase() and error != 389
 ORDER BY table, name;

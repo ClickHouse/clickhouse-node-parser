@@ -29,3 +29,8 @@ SELECT
     value
 FROM lightweight_test
 ORDER BY key ASC;
+
+UPDATE lightweight_test SET value = 'UPDATED-1' WHERE key IN (
+    SELECT key
+    FROM keys
+);

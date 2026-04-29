@@ -13,6 +13,8 @@ PRIMARY KEY id;
 
 INSERT INTO test_projection_deduplicate;
 
+OPTIMIZE TABLE test_projection_deduplicate DEDUPLICATE; -- { serverError SUPPORT_IS_DISABLED }
+
 SELECT *
 FROM test_projection_deduplicate;
 

@@ -19,4 +19,6 @@ ALTER TABLE data ADD COLUMN `features_legacy_Map.id` Array(UInt8), ADD COLUMN `f
 
 ALTER TABLE data DROP COLUMN legacy_features_Map SETTINGS mutations_sync = 2;
 
+OPTIMIZE TABLE data FINAL;
+
 DROP TABLE data;

@@ -1,4 +1,5 @@
 create table test (number UInt64) engine=MergeTree order by number;
+system stop merges test;
 INSERT INTO test select number from numbers(100000);
 select '-- count';
 SELECT count(), _part FROM test GROUP BY _part ORDER BY _part;

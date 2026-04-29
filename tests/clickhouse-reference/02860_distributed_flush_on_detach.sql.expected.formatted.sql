@@ -17,13 +17,21 @@ CREATE TABLE dist
 )
 ENGINE = Distributed(test_shard_localhost, currentDatabase(), data);
 
+SYSTEM stop distributed sends dist;
+
 -- check that FLUSH DISTRIBUTED does flushing anyway
 INSERT INTO dist;
 
 SELECT *
 FROM data;
 
+SYSTEM flush distributed dist;
+
 TRUNCATE TABLE data;
+
+DETACH TABLE dist;
+
+ATTACH TABLE dist;
 
 -- check flush_on_detach=0
 DROP TABLE dist;

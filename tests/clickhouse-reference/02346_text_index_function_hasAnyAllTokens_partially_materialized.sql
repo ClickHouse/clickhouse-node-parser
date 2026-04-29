@@ -28,6 +28,7 @@ FROM
     ))
 )
 WHERE (explain LIKE '%Name%') OR (explain LIKE '%Description%') OR (explain LIKE '%Parts%') OR (explain LIKE '%Granules%') OR (explain LIKE '%Range%');
+SYSTEM STOP MERGES tab;
 -- bar# will be parsed differently by different tokenizers, e.g. splitbyString -> 'bar#'; splitByNonAlpha -> 'bar'
 -- we want to test that the search functions will use the same tokenizer on un-materialized column parts
 INSERT INTO tab(id, message)

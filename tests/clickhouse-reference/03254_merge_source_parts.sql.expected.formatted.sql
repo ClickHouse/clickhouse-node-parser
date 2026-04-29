@@ -10,6 +10,10 @@ INSERT INTO test;
 
 INSERT INTO test;
 
+OPTIMIZE TABLE test FINAL;
+
+SYSTEM FLUSH LOGS part_log;
+
 SELECT
     ProfileEvents['Merge'],
     ProfileEvents['MergeSourceParts'],

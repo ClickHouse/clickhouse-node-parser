@@ -15,6 +15,8 @@ CREATE TABLE enums
 )
 ENGINE = MergeTree(d, k, 1);
 
+DESCRIBE TABLE enums;
+
 -- insert default values
 INSERT INTO enums (k);
 

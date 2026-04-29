@@ -17,6 +17,8 @@ SELECT *
 FROM test_local_blob_log
 ORDER BY a ASC;
 
+SYSTEM FLUSH LOGS blob_storage_log;
+
 -- Check that upload events were logged
 SELECT
     'Upload events:',

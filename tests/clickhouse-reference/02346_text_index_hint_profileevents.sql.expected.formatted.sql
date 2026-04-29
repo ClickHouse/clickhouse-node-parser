@@ -30,6 +30,8 @@ SELECT count()
 FROM tab
 WHERE like(s, '%7777%');
 
+SYSTEM FLUSH LOGS query_log;
+
 SELECT
     ProfileEvents['TextIndexUseHint'] > 0,
     ProfileEvents['TextIndexDiscardHint'] > 0

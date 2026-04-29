@@ -17,6 +17,10 @@ ALTER TABLE test ADD COLUMN s1 String DEFAULT 'def' SETTINGS alter_sync = 2;
 
 ALTER TABLE test MATERIALIZE COLUMN s1 SETTINGS mutations_sync = 1;
 
+DETACH TABLE test;
+
+ATTACH TABLE test;
+
 SELECT
     max(s),
     max(s1)

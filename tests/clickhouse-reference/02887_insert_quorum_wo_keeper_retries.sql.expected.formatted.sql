@@ -1,3 +1,7 @@
+-- Tags: zookeeper, no-parallel, no-shared-merge-tree
+# no-shared-merge-tree: quorum logic is specifit to replicated tables
+DROP TABLE IF EXISTS quorum1;
+
 DROP TABLE IF EXISTS quorum2;
 
 CREATE TABLE quorum1
@@ -19,6 +23,8 @@ SET insert_keeper_fault_injection_probability = 0;
 SET insert_keeper_max_retries = 0;
 
 SET insert_quorum = 2;
+
+SYSTEM enable failpoint replicated_merge_tree_insert_quorum_fail_0;
 
 INSERT INTO quorum1; -- {serverError UNKNOWN_STATUS_OF_INSERT}
 

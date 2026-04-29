@@ -35,6 +35,8 @@ SELECT v
 FROM replica1
 ORDER BY v ASC;
 
+SYSTEM SYNC REPLICA replica2;
+
 ALTER TABLE replica2 DROP PART 'all_1_1_0';
 
 SELECT name
@@ -44,6 +46,8 @@ WHERE table = 'replica2'
 
 ALTER TABLE replica2 ATTACH PART 'all_1_1_0' SETTINGS insert_keeper_fault_injection_probability = 0;
 
+SYSTEM SYNC REPLICA replica1;
+
 SELECT '-- drop part --';
 
 ALTER TABLE replica1 DROP PART 'all_3_3_0';
@@ -51,6 +55,8 @@ ALTER TABLE replica1 DROP PART 'all_3_3_0';
 ALTER TABLE replica1 ATTACH PART 'all_3_3_0'; -- { serverError BAD_DATA_PART_NAME }
 
 ALTER TABLE replica1 MODIFY SETTING max_replicated_merges_in_queue = 1;
+
+OPTIMIZE TABLE replica1 FINAL;
 
 SELECT name
 FROM `system`.parts

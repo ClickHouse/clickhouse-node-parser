@@ -190,6 +190,9 @@ ALTER TABLE tab MODIFY STATISTICS f64 TYPE minmax;
 ALTER TABLE tab ADD STATISTICS a TYPE minmax; -- { serverError ILLEGAL_STATISTICS }
 ALTER TABLE tab MODIFY STATISTICS a TYPE minmax; -- { serverError ILLEGAL_STATISTICS }
 ALTER TABLE tab MODIFY COLUMN f64_tdigest UInt64;
+-- Finally, do a full-circle test of a good case. Print table definition after each step.
+-- Intentionally specifying _two_ columns and _two_ statistics types to have that also tested.
+SHOW CREATE TABLE tab;
 ALTER TABLE tab ADD STATISTICS f64, f32 TYPE tdigest, uniq;
 ALTER TABLE tab MODIFY STATISTICS f64, f32 TYPE tdigest, uniq;
 ALTER TABLE tab CLEAR STATISTICS f64, f32;

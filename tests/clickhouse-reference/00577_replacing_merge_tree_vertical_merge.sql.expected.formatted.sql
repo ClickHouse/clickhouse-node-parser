@@ -21,6 +21,8 @@ SELECT *
 FROM tab_00577
 ORDER BY version ASC;
 
+OPTIMIZE TABLE tab_00577 FINAL CLEANUP;
+
 SELECT *
 FROM tab_00577;
 
@@ -43,6 +45,10 @@ INSERT INTO testCleanupR1 (*);
 INSERT INTO testCleanupR1 (*);
 
 INSERT INTO testCleanupR1 (*);
+
+SYSTEM SYNC REPLICA testCleanupR1; -- Avoid "Cannot select parts for optimization: Entry for part all_2_2_0 hasn't been read from the replication log yet"
+
+OPTIMIZE TABLE testCleanupR1 FINAL CLEANUP;
 
 SELECT *
 FROM testCleanupR1

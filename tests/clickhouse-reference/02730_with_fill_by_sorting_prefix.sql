@@ -11,6 +11,7 @@ create table ts (sensor_id UInt64, timestamp UInt64, value Float64) ENGINE=Merge
 insert into ts VALUES (1, 10, 1), (1, 12, 2), (3, 5, 1), (3, 7, 3), (5, 1, 1), (5, 3, 1);
 -- FillingTransform: 6 rows will be processed in 1 chunks
 select * from ts order by sensor_id, timestamp with fill step 1;
+system stop merges ts;
 -- FillingTransform: 6 rows will be processed in 3 chunks with 2 rows each
 insert into ts VALUES (1, 10, 1), (1, 12, 1);
 insert into ts VALUES (3, 5, 1), (3, 7, 1);

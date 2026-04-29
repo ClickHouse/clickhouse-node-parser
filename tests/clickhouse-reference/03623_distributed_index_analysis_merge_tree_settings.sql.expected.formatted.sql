@@ -106,6 +106,8 @@ ENGINE = MergeTree()
 ORDER BY key
 SETTINGS merge_selector_base = 1000, index_granularity = 8192, min_bytes_for_wide_part = 1e9, index_granularity_bytes = 10e6, distributed_index_analysis_min_parts_to_activate = 10, distributed_index_analysis_min_indexes_size_to_activate = 0;
 
+SYSTEM stop merges dist_idx_parts;
+
 INSERT INTO dist_idx_parts SELECT
     number,
     number * 100
@@ -132,6 +134,8 @@ CREATE TABLE dist_idx_pk_size
 ENGINE = MergeTree()
 ORDER BY (key, value)
 SETTINGS index_granularity = 200, min_bytes_for_wide_part = 0, index_granularity_bytes = 10e6, distributed_index_analysis_min_parts_to_activate = 0, distributed_index_analysis_min_indexes_size_to_activate = 500e3, compress_primary_key = 0;
+
+SYSTEM stop merges dist_idx_pk_size;
 
 INSERT INTO dist_idx_pk_size SELECT
     number::String,
@@ -164,6 +168,8 @@ CREATE TABLE dist_idx_skipping_idx_size
 ENGINE = MergeTree()
 SETTINGS index_granularity = 100000, min_bytes_for_wide_part = 0, index_granularity_bytes = 10e6, distributed_index_analysis_min_parts_to_activate = 0, distributed_index_analysis_min_indexes_size_to_activate = '10M';
 
+SYSTEM stop merges dist_idx_skipping_idx_size;
+
 INSERT INTO dist_idx_skipping_idx_size SELECT
     number::String,
     repeat('a', 100)
@@ -183,6 +189,8 @@ SETTINGS distributed_index_analysis = 1
 FORMAT Null;
 
 DROP TABLE dist_idx_skipping_idx_size;
+
+SYSTEM flush logs query_log;
 
 SELECT
     tables,

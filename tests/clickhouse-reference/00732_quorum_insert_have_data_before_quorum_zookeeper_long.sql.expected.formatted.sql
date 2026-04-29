@@ -32,6 +32,8 @@ INSERT INTO quorum1;
 
 INSERT INTO quorum1;
 
+SYSTEM SYNC REPLICA quorum2;
+
 SET select_sequential_consistency = 1;
 
 SELECT x

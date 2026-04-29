@@ -16,6 +16,8 @@ ENGINE = ReplacingMergeTree
 ORDER BY id
 SETTINGS index_granularity = 64;
 
+SYSTEM STOP MERGES rmt1;
+
 -- insert primary key id = 1..10000
 INSERT INTO rmt1 SELECT
     number + 1,

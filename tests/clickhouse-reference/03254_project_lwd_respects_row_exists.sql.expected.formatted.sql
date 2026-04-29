@@ -17,6 +17,8 @@ SETTINGS lightweight_mutation_projection_mode = 'rebuild', min_bytes_for_wide_pa
 
 INSERT INTO users_compact;
 
+DELETE FROM users_compact WHERE uid = 1231;
+
 SELECT
     age,
     count()
@@ -47,6 +49,8 @@ ORDER BY uid
 SETTINGS lightweight_mutation_projection_mode = 'rebuild', min_bytes_for_wide_part = 0;
 
 INSERT INTO users_wide;
+
+DELETE FROM users_wide WHERE uid = 1231;
 
 SELECT
     age,

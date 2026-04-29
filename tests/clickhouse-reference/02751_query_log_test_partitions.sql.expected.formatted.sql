@@ -22,6 +22,8 @@ SELECT *
 FROM `02751_query_log_test_partitions`
 WHERE a = 3;
 
+SYSTEM FLUSH LOGS query_log;
+
 SELECT
     --Remove the prefix string which is a mutable database name.
     arrayStringConcat(arrayPopFront(splitByString('.', partitions[1])), '.')

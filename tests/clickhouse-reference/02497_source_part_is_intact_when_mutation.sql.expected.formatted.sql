@@ -19,15 +19,25 @@ INSERT INTO t_source_part_is_intact SELECT
     if(number % 11 = 0, number, 0)
 FROM numbers(2000);
 
+CHECK TABLE t_source_part_is_intact SETTINGS max_threads = 1;
+
 SELECT
     1,
     count()
 FROM t_source_part_is_intact;
 
+BEGIN TRANSACTION;
+
 -- size of the file serialization.json is the same in the new part but checksum is different
 ALTER TABLE t_source_part_is_intact UPDATE u = 0 WHERE u != 0;
 
+ROLLBACK;
+
 -- size of the file serialization.json is different in the new part
 ALTER TABLE t_source_part_is_intact UPDATE u = 1 WHERE 1;
+
+DETACH TABLE t_source_part_is_intact;
+
+ATTACH TABLE t_source_part_is_intact;
 
 DROP TABLE t_source_part_is_intact;

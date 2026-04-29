@@ -22,6 +22,8 @@ CREATE TABLE dep
 ENGINE = ReplicatedMergeTree('/test/02433/{database}/dep', '1')
 ORDER BY tuple();
 
+SHOW CREATE TABLE dep;
+
 TRUNCATE TABLE id_join;
 
 CREATE TABLE dep2
@@ -32,6 +34,8 @@ CREATE TABLE dep2
 )
 ENGINE = ReplicatedMergeTree('/test/02433/{database}/dep', '2')
 ORDER BY tuple();
+
+SHOW CREATE TABLE dep2;
 
 -- Ensure that a table name cannot be passed to IN as string literal
 CREATE TABLE test

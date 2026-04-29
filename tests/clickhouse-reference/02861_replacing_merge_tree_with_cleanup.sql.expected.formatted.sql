@@ -16,6 +16,8 @@ INSERT INTO test (*);
 -- Insert previous version of 'd6' but only v=3 is_deleted=false will remain
 INSERT INTO test (*);
 
+OPTIMIZE TABLE test FINAL CLEANUP;
+
 SELECT *
 FROM test
 ORDER BY uid ASC;

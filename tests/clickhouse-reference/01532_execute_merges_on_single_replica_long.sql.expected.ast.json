@@ -148,6 +148,10 @@
     ]
   },
   {
+    "kind": "system",
+    "body": "SYSTEM SYNC REPLICA execute_on_single_replica_r2"
+  },
+  {
     "kind": "set",
     "settings": [
       {
@@ -158,6 +162,57 @@
           "value": "1"
         }
       }
+    ]
+  },
+  {
+    "kind": "optimize",
+    "table": {
+      "kind": "tableRef",
+      "table": "execute_on_single_replica_r1"
+    },
+    "final": true,
+    "leadingComments": [
+      "/* all_0_0_1 - will be merged by r1, and downloaded by r2 */"
+    ]
+  },
+  {
+    "kind": "optimize",
+    "table": {
+      "kind": "tableRef",
+      "table": "execute_on_single_replica_r2"
+    },
+    "final": true,
+    "leadingComments": [
+      "/* all_0_0_2 - will be merged by r1, and downloaded by r2 */"
+    ]
+  },
+  {
+    "kind": "system",
+    "body": "SYSTEM SYNC REPLICA execute_on_single_replica_r1"
+  },
+  {
+    "kind": "system",
+    "body": "SYSTEM STOP REPLICATION QUEUES execute_on_single_replica_r2"
+  },
+  {
+    "kind": "optimize",
+    "table": {
+      "kind": "tableRef",
+      "table": "execute_on_single_replica_r1"
+    },
+    "final": true,
+    "settings": [
+      {
+        "name": "replication_alter_partitions_sync",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      }
+    ],
+    "leadingComments": [
+      "/* all_0_0_5 - should be merged by r2, but it has replication queue stopped, so r1 do the merge */"
     ]
   },
   {
@@ -347,6 +402,10 @@
     ]
   },
   {
+    "kind": "system",
+    "body": "SYSTEM START REPLICATION QUEUES execute_on_single_replica_r2"
+  },
+  {
     "kind": "alter",
     "table": {
       "kind": "tableRef",
@@ -404,6 +463,10 @@
         }
       }
     ]
+  },
+  {
+    "kind": "system",
+    "body": "SYSTEM FLUSH LOGS part_log"
   },
   {
     "kind": "select",

@@ -10,6 +10,8 @@ CREATE TABLE test
 ENGINE = MergeTree
 ORDER BY id;
 
+DESCRIBE TABLE test;
+
 ALTER TABLE test MODIFY COLUMN `abc.1` String AFTER abc;
 
 ALTER TABLE test MODIFY COLUMN `abc.2` String AFTER abc;

@@ -34,6 +34,8 @@ GROUP BY
 SELECT count()
 FROM summing_merge_tree_aggregate_function;
 
+OPTIMIZE TABLE summing_merge_tree_aggregate_function;
+
 DROP TABLE summing_merge_tree_aggregate_function;
 
 CREATE TABLE summing_merge_tree_aggregate_function

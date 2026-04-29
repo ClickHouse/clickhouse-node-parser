@@ -11,6 +11,8 @@ DROP TABLE tab;
 CREATE TABLE tab (m1 Map(Float32, String), m2 Map(LowCardinality(String), String)) ENGINE = MergeTree ORDER BY (m1, m2);
 INSERT INTO tab VALUES (map(1.0, 'a'), map('b', 'b'));
 INSERT INTO tab VALUES (map(2.0, 'aa'), map('bb', 'bb'));
+-- Test merge
+OPTIMIZE TABLE tab FINAL;
 SELECT * FROM tab ORDER BY m1, m2;
 CREATE TABLE tab (m1 Map(Float32, String), m2 Map(LowCardinality(String), String)) ENGINE = MergeTree ORDER BY tuple();
 INSERT INTO tab VALUES (map(1.0, 'a'), map('b', 'b')), (map(2.0, 'aa'), map('bb', 'bb'));

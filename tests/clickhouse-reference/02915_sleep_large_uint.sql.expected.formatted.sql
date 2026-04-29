@@ -10,3 +10,5 @@ SET max_rows_to_read = 0;
 SELECT sleepEachRow(pow(2, 31))
 FROM numbers(9007199254740992)
 SETTINGS function_sleep_max_microseconds_per_block = 8589934592000000000; -- { serverError TOO_SLOW }
+-- Another corner case, but it requires lots of memory to run (huge block size)
+-- SELECT sleepEachRow(pow(2, 31)) from numbers(17179869184) settings max_block_size = 17179869184, function_sleep_max_microseconds_per_block = 8589934592000000000; -- { serverError TOO_SLOW }

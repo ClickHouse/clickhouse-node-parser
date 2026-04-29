@@ -24,6 +24,8 @@ FORMAT Null;
 
 SET log_queries = 0;
 
+SYSTEM FLUSH LOGS query_log;
+
 -- 1 for PullingAsyncPipelineExecutor::pull
 SELECT
     throwIf(count() != 1, 'no query was logged'),

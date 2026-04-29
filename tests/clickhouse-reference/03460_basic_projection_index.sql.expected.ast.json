@@ -183,6 +183,14 @@
     }
   },
   {
+    "kind": "optimize",
+    "table": {
+      "kind": "tableRef",
+      "table": "t_proj"
+    },
+    "final": true
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -1110,6 +1118,14 @@
     "leadingComments": [
       "-- Extra data to ensure projection index is chosen"
     ]
+  },
+  {
+    "kind": "optimize",
+    "table": {
+      "kind": "tableRef",
+      "table": "t_gran"
+    },
+    "final": true
   },
   {
     "kind": "select",
@@ -2115,6 +2131,10 @@
     ]
   },
   {
+    "kind": "system",
+    "body": "SYSTEM SYNC REPLICA t_repl2"
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -2193,6 +2213,52 @@
     "leadingComments": [
       "-- check projection part exists on both replicas"
     ]
+  },
+  {
+    "kind": "detach",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "t_repl2"
+    },
+    "sync": true
+  },
+  {
+    "kind": "attach",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "t_repl2"
+    }
+  },
+  {
+    "kind": "describe",
+    "target": {
+      "kind": "function",
+      "func": {
+        "kind": "tableFunctionRef",
+        "name": "mergeTreeProjection",
+        "args": [
+          {
+            "kind": "functionCall",
+            "name": "currentDatabase",
+            "args": []
+          },
+          {
+            "kind": "columnRef",
+            "parts": [
+              "t_repl2"
+            ]
+          },
+          {
+            "kind": "columnRef",
+            "parts": [
+              "region_proj"
+            ]
+          }
+        ]
+      }
+    }
   },
   {
     "kind": "drop",

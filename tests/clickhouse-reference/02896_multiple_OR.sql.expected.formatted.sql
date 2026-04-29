@@ -55,4 +55,4 @@ WHERE like(text_field, '%this%')
 
 SELECT *
 FROM forms
-WHERE like(text_field, '%this%');
+WHERE like(text_field, '%this%'); -- { echoOff }

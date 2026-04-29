@@ -24,4 +24,8 @@ ORDER BY id ASC;
 
 ALTER TABLE t_nested_modify MODIFY COLUMN `n.b` String;
 
+DETACH TABLE t_nested_modify;
+
+ATTACH TABLE t_nested_modify;
+
 DROP TABLE t_nested_modify;

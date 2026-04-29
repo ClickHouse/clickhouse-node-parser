@@ -14,4 +14,6 @@ GROUP BY
     PRODUCT_ID,
     DATE_SOLD);
 
+SHOW CREATE TABLE sales;
+
 DROP TABLE sales;

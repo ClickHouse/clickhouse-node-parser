@@ -27,6 +27,8 @@ SETTINGS
     max_block_size = 100
 FORMAT Null; -- { serverError MEMORY_LIMIT_EXCEEDED }
 
+SYSTEM FLUSH LOGS query_log;
+
 SELECT arraySort(used_aggregate_functions)
 FROM `system`.query_log
 WHERE current_database = currentDatabase()

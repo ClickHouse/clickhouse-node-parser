@@ -116,6 +116,8 @@ SETTINGS log_comment = '03783_autopr_dataflow_cache_reuse_query_7'; -- stats ava
 
 SET enable_parallel_replicas = 0, automatic_parallel_replicas_mode = 0;
 
+SYSTEM FLUSH LOGS query_log;
+
 SELECT
     log_comment AS query,
     ProfileEvents['RuntimeDataflowStatisticsInputBytes'] > 0 AS stats_collected,

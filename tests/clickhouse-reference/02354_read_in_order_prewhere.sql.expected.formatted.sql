@@ -11,6 +11,8 @@ ENGINE = MergeTree()
 ORDER BY (ID, Type, Num)
 PARTITION BY toYYYYMMDD(t);
 
+SYSTEM stop merges order;
+
 INSERT INTO `order` SELECT
     number % 2000,
     1,

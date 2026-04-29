@@ -69,6 +69,8 @@ SELECT ilike('ощщЁё', '%щ%');
 
 SELECT ilike('ощЩЁё', '%ё%');
 
+SHOW TABLES NOT ILIKE '%';
+
 CREATE TABLE test1
 (
     x UInt8
@@ -80,3 +82,7 @@ CREATE TABLE test2
     x UInt8
 )
 ENGINE = Memory;
+
+SHOW TABLES ILIKE 'tES%';
+
+SHOW TABLES NOT ILIKE 'TeS%';

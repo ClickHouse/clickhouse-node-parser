@@ -17,6 +17,8 @@ SET automatic_parallel_replicas_min_bytes_per_replica='1Mi';
 -- External aggregation is not supported at the moment, i.e., no statistics will be reported
 SET max_bytes_before_external_group_by=0, max_bytes_ratio_before_external_group_by=0;
 INSERT INTO t SELECT 'ololokekkekkek' || toString(number % 10), number FROM numbers(1e6);
+-- Try to avoid eviction of relevant cache entries
+SYSTEM CLEAR QUERY CONDITION CACHE;
 --set send_logs_level='trace', send_logs_source_regexp = 'optimize|SelectExecutor';
 SELECT SUM(value) FROM t FORMAT Null SETTINGS log_comment='03783_autopr_dataflow_cache_reuse_query_0'; -- empty cache, don't apply optimization, collect stats
 SELECT SUM(value) FROM t FORMAT Null SETTINGS log_comment='03783_autopr_dataflow_cache_reuse_query_1'; -- stats available, apply
@@ -31,6 +33,7 @@ SELECT SUM(value) FROM t WHERE value = 42 FORMAT Null SETTINGS log_comment='0378
 SELECT SUM(value) FROM t WHERE value = 42 FORMAT Null;
 SELECT SUM(value) FROM t WHERE value = 42 FORMAT Null SETTINGS log_comment='03783_autopr_dataflow_cache_reuse_query_3'; -- stats available, don't apply since no benefit
 SET enable_parallel_replicas=0, automatic_parallel_replicas_mode=0;
+SYSTEM FLUSH LOGS query_log;
 SELECT log_comment query, ProfileEvents['RuntimeDataflowStatisticsInputBytes'] > 0 stats_collected, ProfileEvents['ParallelReplicasUsedCount'] > 0 pr_used
 FROM system.query_log
 WHERE (event_date >= yesterday()) AND (event_time >= (NOW() - toIntervalMinute(15))) AND (current_database = currentDatabase()) AND (log_comment LIKE '03783_autopr_dataflow_cache_reuse_query_%') AND (type = 'QueryFinish')

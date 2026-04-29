@@ -7,3 +7,5 @@ CREATE TABLE BannerDict
     CompaignID UInt64
 )
 ENGINE = ODBC('DSN=pgconn;Database=postgres', bannerdict); -- {serverError NUMBER_OF_ARGUMENTS_DOESNT_MATCH}
+
+SHOW CREATE TABLE BannerDict;

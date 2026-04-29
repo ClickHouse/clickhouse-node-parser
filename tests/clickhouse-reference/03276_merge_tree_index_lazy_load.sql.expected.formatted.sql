@@ -11,6 +11,10 @@ SETTINGS index_granularity = 4, index_granularity_bytes = '10M', primary_key_laz
 INSERT INTO t_index_lazy_load SELECT number
 FROM numbers(15);
 
+DETACH TABLE t_index_lazy_load;
+
+ATTACH TABLE t_index_lazy_load;
+
 SELECT
     name,
     primary_key_bytes_in_memory

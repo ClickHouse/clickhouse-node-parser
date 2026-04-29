@@ -30,6 +30,8 @@ SELECT
 FROM foo_without_dependencies
 ORDER BY x ASC;
 
+;
+
 -- With an index
 DROP TABLE IF EXISTS foo_with_index;
 

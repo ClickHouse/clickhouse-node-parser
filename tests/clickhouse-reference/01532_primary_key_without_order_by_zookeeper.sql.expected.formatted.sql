@@ -9,6 +9,8 @@ CREATE TABLE merge_tree_pk
 ENGINE = ReplacingMergeTree()
 PRIMARY KEY key;
 
+SHOW CREATE TABLE merge_tree_pk;
+
 INSERT INTO merge_tree_pk;
 
 INSERT INTO merge_tree_pk;
@@ -20,6 +22,10 @@ ORDER BY
     value ASC;
 
 INSERT INTO merge_tree_pk;
+
+DETACH TABLE merge_tree_pk;
+
+ATTACH TABLE merge_tree_pk;
 
 SELECT *
 FROM merge_tree_pk FINAL
@@ -37,6 +43,8 @@ CREATE TABLE merge_tree_pk_sql
 )
 ENGINE = ReplacingMergeTree();
 
+SHOW CREATE TABLE merge_tree_pk_sql;
+
 INSERT INTO merge_tree_pk_sql;
 
 INSERT INTO merge_tree_pk_sql;
@@ -48,6 +56,10 @@ ORDER BY
     value ASC;
 
 INSERT INTO merge_tree_pk_sql;
+
+DETACH TABLE merge_tree_pk_sql;
+
+ATTACH TABLE merge_tree_pk_sql;
 
 SELECT *
 FROM merge_tree_pk_sql FINAL
@@ -71,6 +83,8 @@ CREATE TABLE replicated_merge_tree_pk_sql
 )
 ENGINE = ReplicatedReplacingMergeTree('/clickhouse/tables/{database}/01532_primary_key_without', 'r1');
 
+SHOW CREATE TABLE replicated_merge_tree_pk_sql;
+
 INSERT INTO replicated_merge_tree_pk_sql;
 
 INSERT INTO replicated_merge_tree_pk_sql;
@@ -82,6 +96,10 @@ ORDER BY
     value ASC;
 
 INSERT INTO replicated_merge_tree_pk_sql;
+
+DETACH TABLE replicated_merge_tree_pk_sql;
+
+ATTACH TABLE replicated_merge_tree_pk_sql;
 
 SELECT *
 FROM replicated_merge_tree_pk_sql FINAL

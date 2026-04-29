@@ -18,6 +18,8 @@ SETTINGS allow_nullable_key = 1, index_granularity = 2, allow_experimental_rever
 INSERT INTO x1 SELECT *
 FROM numbers(100);
 
+OPTIMIZE TABLE x1 FINAL;
+
 SELECT *
 FROM x1
 WHERE i = 3;
@@ -49,6 +51,8 @@ INSERT INTO x2 SELECT
     number % 10,
     number + 1000
 FROM numbers(100);
+
+OPTIMIZE TABLE x2 FINAL;
 
 SELECT *
 FROM x2

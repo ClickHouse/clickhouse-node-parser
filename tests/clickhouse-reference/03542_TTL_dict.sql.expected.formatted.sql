@@ -32,6 +32,8 @@ TTL event_date + toIntervalMonth(1) WHERE NOT dictHas(concat({CLICKHOUSE_DATABAS
 
 INSERT INTO ttl_dict;
 
+OPTIMIZE TABLE ttl_dict FINAL;
+
 SELECT id
 FROM ttl_dict
 ORDER BY id ASC;

@@ -32,6 +32,8 @@ OR b < 500;
 SELECT count()
 FROM t_delete_empty_part;
 
+SYSTEM FLUSH LOGS part_log;
+
 SELECT
     part_name,
     ProfileEvents['MutationTotalParts'],

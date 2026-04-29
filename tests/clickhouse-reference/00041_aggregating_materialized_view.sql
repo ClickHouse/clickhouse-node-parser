@@ -48,5 +48,6 @@ FROM test.visits
 WHERE CounterID = 942285
 GROUP BY StartDate
 ORDER BY StartDate;
+OPTIMIZE TABLE basic;
 DROP TABLE visits_null;
 DROP TABLE basic;

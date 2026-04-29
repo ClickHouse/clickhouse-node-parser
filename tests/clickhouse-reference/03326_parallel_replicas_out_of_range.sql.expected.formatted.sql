@@ -2,6 +2,8 @@
 -- we have a separate test run with them and they will be enabled automatically.
 SET enable_analyzer = 1;
 
+SYSTEM FLUSH LOGS query_log;
+
 SELECT
     count(materialize(toLowCardinality(1))) AS num,
     hostName() AS hostName

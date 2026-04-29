@@ -89,6 +89,7 @@ CREATE TABLE test_dict_db.table1
 ENGINE = MergeTree
 ORDER BY (col1, col2, col3, col4, col5);
 SET input_format_null_as_default = 1;
+SYSTEM RELOAD DICTIONARY test_dict_db.table1_dict;
 SELECT
     dictGet('test_dict_db.table1_dict', 'col6', (col1, col2, col3, col4, col5)),
     dictGet('test_dict_db.table1_dict', 'col7', (col1, col2, col3, col4, col5)),

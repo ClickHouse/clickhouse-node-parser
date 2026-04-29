@@ -18,6 +18,8 @@ ENGINE = MergeTree()
 ORDER BY id
 SETTINGS non_replicated_deduplication_window = 1000, min_bytes_for_wide_part = 10000, min_rows_for_wide_part = 10000, serialization_info_version = 'basic', string_serialization_version = 'with_size_stream';
 
+SYSTEM STOP MERGES 03710_database.03711_join_with;
+
 INSERT INTO `03710_database`.`03711_join_with`;
 
 INSERT INTO `03710_database`.`03711_join_with`;
@@ -32,6 +34,8 @@ ENGINE = MergeTree()
 ORDER BY id
 SETTINGS non_replicated_deduplication_window = 1000, min_bytes_for_wide_part = 10000, min_rows_for_wide_part = 10000, serialization_info_version = 'basic', string_serialization_version = 'with_size_stream';
 
+SYSTEM STOP MERGES 03710_database.03711_table;
+
 DROP TABLE IF EXISTS `03710_database`.`03711_mv_table_1`;
 
 CREATE TABLE `03710_database`.`03711_mv_table_1`
@@ -43,6 +47,8 @@ ENGINE = MergeTree()
 ORDER BY id
 SETTINGS non_replicated_deduplication_window = 1000, min_bytes_for_wide_part = 10000, min_rows_for_wide_part = 10000, serialization_info_version = 'basic', string_serialization_version = 'with_size_stream';
 
+SYSTEM STOP MERGES 03710_database.03711_mv_table_1;
+
 DROP TABLE IF EXISTS `03710_database`.`03711_mv_table_2`;
 
 CREATE TABLE `03710_database`.`03711_mv_table_2`
@@ -53,6 +59,8 @@ CREATE TABLE `03710_database`.`03711_mv_table_2`
 ENGINE = MergeTree()
 ORDER BY id
 SETTINGS non_replicated_deduplication_window = 1000, min_bytes_for_wide_part = 10000, min_rows_for_wide_part = 10000, serialization_info_version = 'basic', string_serialization_version = 'with_size_stream';
+
+SYSTEM STOP MERGES 03710_database.03711_mv_table_2;
 
 DROP TABLE IF EXISTS `03710_database`.`03711_mv_1`;
 
@@ -93,6 +101,8 @@ SET min_insert_block_size_rows = 0;
 SET min_insert_block_size_bytes = 0;
 
 INSERT INTO `03710_database`.`03711_table`;
+
+SYSTEM FLUSH LOGS part_log;
 
 SELECT
     table,

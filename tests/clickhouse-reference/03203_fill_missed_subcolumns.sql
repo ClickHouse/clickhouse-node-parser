@@ -20,6 +20,7 @@ SELECT n.b.size0 FROM t_missed_subcolumns ORDER BY id;
 -- subcolumns and custom defaults
 
 CREATE TABLE t_missed_subcolumns (id UInt64) ENGINE = MergeTree ORDER BY id;
+SYSTEM STOP MERGES t_missed_subcolumns;
 INSERT INTO t_missed_subcolumns VALUES (1);
 ALTER TABLE t_missed_subcolumns ADD COLUMN t Tuple(a String, b String) DEFAULT ('foo', 'bar');
 INSERT INTO t_missed_subcolumns VALUES (2, ('aaa', 'bbb'));

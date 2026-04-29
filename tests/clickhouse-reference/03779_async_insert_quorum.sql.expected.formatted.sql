@@ -39,11 +39,17 @@ INSERT INTO table1;
 
 INSERT INTO table1;
 
-INSERT INTO table2;
+SYSTEM FLUSH ASYNC INSERT QUEUE table1;
 
 INSERT INTO table2;
 
 INSERT INTO table2;
+
+INSERT INTO table2;
+
+SYSTEM FLUSH ASYNC INSERT QUEUE table2;
+
+SYSTEM FLUSH LOGS system.query_log;
 
 SELECT
     'q1',
@@ -71,9 +77,13 @@ WHERE type = 'QueryFinish'
 ORDER BY event_time DESC
 FORMAT Vertical;
 
+SYSTEM STOP FETCHES table1;
+
 SET wait_for_async_insert = 1, insert_quorum_timeout = 1;
 
 INSERT INTO table2; -- { serverError UNKNOWN_STATUS_OF_INSERT }
+
+SYSTEM START FETCHES table1;
 
 DROP TABLE table1;
 

@@ -22,3 +22,9 @@ SELECT *
 FROM test_qualify
 QUALIFY row_number() OVER (ORDER BY number ASC) = 50
 SETTINGS enable_analyzer = 0; -- { serverError NOT_IMPLEMENTED }
+
+DELETE FROM test_qualify WHERE number IN (
+    SELECT number
+    FROM test_qualify
+    QUALIFY row_number() OVER (ORDER BY number ASC) = 50
+) SETTINGS validate_mutation_query = 0; -- { serverError UNFINISHED }

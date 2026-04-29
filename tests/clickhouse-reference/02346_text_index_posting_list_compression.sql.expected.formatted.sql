@@ -76,6 +76,10 @@ INSERT INTO tab_uncompressed SELECT
     multiIf(number IN (0, 777), 'rare2', number IN (1, 2, 3, 4, 5), 'rare5', 'noise') AS str
 FROM numbers(2000);
 
+OPTIMIZE TABLE tab_bitpacking FINAL;
+
+OPTIMIZE TABLE tab_uncompressed FINAL;
+
 -- Validates that a very large/high-frequency posting list is decoded correctly by checking the count in the compressed table matches the uncompressed baseline.
 SELECT
     (

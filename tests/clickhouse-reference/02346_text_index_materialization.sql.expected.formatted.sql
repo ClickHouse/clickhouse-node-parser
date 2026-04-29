@@ -56,6 +56,11 @@ FROM (
     )
 WHERE ilike(`explain`, '%Granules%');
 
+CHECK TABLE tab SETTINGS check_query_single_value_result = 1;
+
+-- ------------------------------------------------------------
+OPTIMIZE TABLE tab FINAL;
+
 -- ------------------------------------------------------------
 SET mutations_sync = 2;
 

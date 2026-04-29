@@ -30,6 +30,10 @@ SELECT
     max(s)
 FROM codecs;
 
+DETACH TABLE codecs;
+
+ATTACH TABLE codecs;
+
 DROP TABLE codecs;
 
 CREATE TABLE codecs

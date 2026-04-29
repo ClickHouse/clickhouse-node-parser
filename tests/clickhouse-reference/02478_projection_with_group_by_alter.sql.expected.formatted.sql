@@ -26,6 +26,9 @@ INSERT INTO testing SELECT
     number % 2
 FROM numbers(5);
 
+-- { echoOn }
+OPTIMIZE TABLE testing FINAL;
+
 SELECT c
 FROM testing
 ORDER BY d ASC;

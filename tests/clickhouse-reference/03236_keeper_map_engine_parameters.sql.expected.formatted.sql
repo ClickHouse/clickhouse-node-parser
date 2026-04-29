@@ -9,4 +9,6 @@ CREATE TABLE `03236_keeper_map_engine_parameters`
 ENGINE = KeeperMap(concat('/', currentDatabase(), '/test2417'))
 PRIMARY KEY key;
 
+SHOW CREATE TABLE `03236_keeper_map_engine_parameters`;
+
 DROP TABLE `03236_keeper_map_engine_parameters`;

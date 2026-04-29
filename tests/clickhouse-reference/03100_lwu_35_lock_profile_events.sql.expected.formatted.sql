@@ -15,8 +15,12 @@ SET lightweight_delete_mode = 'lightweight_update_force';
 INSERT INTO t_lwu_lock_profile_events SELECT number
 FROM numbers(100000);
 
+DELETE FROM t_lwu_lock_profile_events WHERE id < 10000;
+
 SELECT count()
 FROM t_lwu_lock_profile_events;
+
+SYSTEM FLUSH LOGS query_log;
 
 SELECT
     ProfileEvents['PatchesAcquireLockTries'],

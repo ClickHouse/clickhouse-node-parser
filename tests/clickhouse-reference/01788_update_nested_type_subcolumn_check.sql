@@ -19,6 +19,7 @@ alter table test_wide_nested update `info.id` = [100,200,300], `info.age` = `inf
 alter table test_wide_nested update `info.id` = [100,200], `info.age`=[68,72] where id = 3;
 alter table test_wide_nested update `info.id` = `info.age` where id = 3;
 alter table test_wide_nested update `info.id` = [100,200], `info.age` = [10,20,30], `info.name` = ['a','b','c']  where id = 0; -- { serverError UNFINISHED }
+kill mutation where table = 'test_wide_nested' and database = currentDatabase() format Null;
 DROP TABLE test_wide_nested;
 ALTER TABLE test_wide_nested ADD COLUMN `info2.id` Array(Int);
 ALTER TABLE test_wide_nested ADD COLUMN `info2.name` Array(String);

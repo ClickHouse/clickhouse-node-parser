@@ -16,4 +16,8 @@ FROM b
 WHERE x = 1
     AND y = 'b';
 
+DETACH TABLE b;
+
+ATTACH TABLE b;
+
 DROP TABLE b;

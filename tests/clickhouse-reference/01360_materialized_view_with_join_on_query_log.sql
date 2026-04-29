@@ -7,6 +7,7 @@ CREATE TABLE expected_times (QUERY_GROUP_ID String, max_query_duration_ms UInt64
 INSERT INTO expected_times VALUES('main_dashboard_top_query', 500), ('main_dashboard_bottom_query', 500);
 SET log_queries=1;
 SELECT 1;
+SYSTEM FLUSH LOGS query_log;
 -- NOTE: can be rewritten using log_queries_min_query_duration_ms
 
 CREATE MATERIALIZED VIEW slow_log Engine=Memory AS

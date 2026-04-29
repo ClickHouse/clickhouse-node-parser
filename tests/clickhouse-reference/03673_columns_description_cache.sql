@@ -16,5 +16,8 @@ insert into t_mt values (20, '20');
 -- now let's try to remove ColumnsDescription with old structure
 alter table t_mt detach part 'all_1_1_0';
 alter table t_mt detach part 'all_2_2_0';
+-- reattach
+detach table t_mt;
+attach table t_mt;
 -- system.metrics
 select value > 0 from system.metrics where metric = 'ColumnsDescriptionsCacheSize';

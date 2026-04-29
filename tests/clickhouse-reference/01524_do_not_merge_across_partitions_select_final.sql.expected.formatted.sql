@@ -56,6 +56,8 @@ INSERT INTO select_final SELECT
     'updated'
 FROM numbers(2);
 
+OPTIMIZE TABLE select_final FINAL;
+
 INSERT INTO select_final SELECT
     toDate('2020-01-01'),
     number,

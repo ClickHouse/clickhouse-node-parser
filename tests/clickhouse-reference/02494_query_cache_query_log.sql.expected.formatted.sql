@@ -1,7 +1,13 @@
+-- Tags: no-parallel
+-- Tag no-parallel: Messes with internal cache
+SYSTEM CLEAR QUERY CACHE;
+
 -- DROP TABLE system.query_log; -- debugging
 SELECT '-- Run a query with query cache not enabled';
 
 SELECT 124437993;
+
+SYSTEM FLUSH LOGS query_log;
 
 -- Field 'query_cache_usage' should be 'None'
 SELECT

@@ -11,6 +11,8 @@ ORDER BY a
 PARTITION BY a % 2
 SETTINGS use_primary_key_cache = 1, prewarm_primary_key_cache = 0, index_granularity = 64, index_granularity_bytes = '10M', min_bytes_for_wide_part = 0;
 
+SYSTEM CLEAR PRIMARY INDEX CACHE;
+
 INSERT INTO t_primary_index_cache SELECT
     number,
     number
@@ -38,6 +40,8 @@ FROM t_primary_index_cache
 WHERE a > 100
     AND a < 200
     AND a % 2 = 0;
+
+SYSTEM FLUSH LOGS query_log;
 
 SELECT
     ProfileEvents['LoadedPrimaryIndexFiles'],

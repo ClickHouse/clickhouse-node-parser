@@ -34,6 +34,8 @@ INSERT INTO test SELECT
 FROM numbers(990)
 GROUP BY number;
 
+SYSTEM FLUSH LOGS query_log;
+
 SELECT
     'UInt64',
     read_rows,

@@ -17,4 +17,8 @@ INSERT INTO deduplication (x);
 SELECT *
 FROM deduplication;
 
+DETACH TABLE deduplication;
+
+ATTACH TABLE deduplication;
+
 DROP TABLE deduplication;

@@ -18,4 +18,6 @@ SELECT
 FROM test.hits SEMI LEFT JOIN join USING UserID
 GROUP BY loyalty
 ORDER BY loyalty ASC;
+DETACH TABLE join;
+ATTACH TABLE join;
 DROP TABLE join;

@@ -27,6 +27,8 @@ SELECT
     'foo'
 FROM numbers(10);
 
+;
+
 CREATE DICTIONARY dict_flat_simple
 (
     v0 UInt16,
@@ -37,6 +39,8 @@ PRIMARY KEY v0
 SOURCE(clickhouse(TABLE 'dict_data'))
 LIFETIME(0)
 LAYOUT(FLAT());
+
+SYSTEM RELOAD DICTIONARY dict_flat_simple;
 
 SELECT
     name,
@@ -58,6 +62,8 @@ SOURCE(clickhouse(TABLE 'dict_data'))
 LIFETIME(0)
 LAYOUT(HASHED());
 
+SYSTEM RELOAD DICTIONARY dict_hashed_simple_Decimal128;
+
 SELECT
     name,
     type
@@ -77,6 +83,8 @@ PRIMARY KEY v2
 SOURCE(clickhouse(TABLE 'dict_data'))
 LIFETIME(0)
 LAYOUT(HASHED());
+
+SYSTEM RELOAD DICTIONARY dict_hashed_simple_Float32;
 
 SELECT
     name,
@@ -98,6 +106,8 @@ SOURCE(clickhouse(TABLE 'dict_data'))
 LIFETIME(0)
 LAYOUT(HASHED());
 
+SYSTEM RELOAD DICTIONARY dict_hashed_simple_String;
+
 SELECT
     name,
     type
@@ -117,6 +127,8 @@ PRIMARY KEY v0, v1
 SOURCE(clickhouse(TABLE 'dict_data'))
 LIFETIME(0)
 LAYOUT(HASHED());
+
+SYSTEM RELOAD DICTIONARY dict_hashed_simple_auto_convert;
 
 SELECT
     name,

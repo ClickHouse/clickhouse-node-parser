@@ -8,3 +8,5 @@ ENGINE = MergeTree()
 ORDER BY tuple();
 
 ALTER TABLE t MODIFY COLUMN a DateTime ALIAS c1;
+
+SHOW CREATE TABLE t;

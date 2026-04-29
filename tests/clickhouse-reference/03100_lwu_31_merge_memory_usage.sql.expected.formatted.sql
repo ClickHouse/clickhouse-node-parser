@@ -19,6 +19,12 @@ INSERT INTO t_lwu_memory SELECT
     ''
 FROM numbers(5000000);
 
+OPTIMIZE TABLE t_lwu_memory FINAL;
+
+UPDATE t_lwu_memory SET value = toString(id) WHERE 1;
+
+OPTIMIZE TABLE t_lwu_memory PARTITION ID 'patch-193eaced72cfb2f63d65ea2798b72338-all' FINAL;
+
 SELECT count()
 FROM `system`.parts
 WHERE database = currentDatabase()

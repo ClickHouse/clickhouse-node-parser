@@ -24,6 +24,8 @@ PARTITION BY (id % 200, (id % 200) % 10, toInt32(round((id % 200) / 2, 0))) ORDE
 INSERT INTO table3 SELECT number-205, number FROM numbers(10);
 INSERT INTO table3 SELECT number-205, number FROM numbers(400, 10);
 SELECT partition as p FROM system.parts WHERE table='table3' and database=currentDatabase() ORDER BY p;
+DETACH TABLE table3;
+ATTACH TABLE table3;
 DROP TABLE IF EXISTS table4 SYNC;
 CREATE TABLE table4 (id Int64, v UInt64, s String,
 INDEX a (id * 2, s) TYPE minmax GRANULARITY 3

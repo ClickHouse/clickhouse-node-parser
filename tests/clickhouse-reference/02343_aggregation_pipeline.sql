@@ -31,8 +31,11 @@ CREATE TABLE proj_agg_02343
 ENGINE = MergeTree
 ORDER BY tuple();
 INSERT INTO proj_agg_02343 SELECT 1, number % 2, number % 4, number FROM numbers(100000);
+OPTIMIZE TABLE proj_agg_02343 FINAL;
 -- { echoOff }
 
 create table t(a UInt64) engine = MergeTree order by (a);
+system stop merges t;
 create table dist_t as t engine = Distributed(test_cluster_two_shards, currentDatabase(), t, a % 2);
+system stop merges dist_t;
 insert into dist_t select number from numbers_mt(10);

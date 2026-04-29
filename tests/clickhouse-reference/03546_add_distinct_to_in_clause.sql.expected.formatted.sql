@@ -74,6 +74,8 @@ WHERE id IN (
     )
 SETTINGS enable_add_distinct_to_in_subqueries = 0;
 
+SYSTEM FLUSH LOGS query_log;
+
 -- Compare both NetworkReceiveBytes between with_distinct and without_distinct
 -- Get the value for with_distinct
 WITH (

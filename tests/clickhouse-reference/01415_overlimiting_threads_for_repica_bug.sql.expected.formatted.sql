@@ -11,6 +11,8 @@ FROM remote('127.0.0.{1|2}', numbers_mt(1000000))
 GROUP BY number % 2
 ORDER BY number % 2 ASC;
 
+SYSTEM flush logs query_log;
+
 SELECT length(thread_ids) >= 1
 FROM `system`.query_log
 WHERE current_database = currentDatabase()

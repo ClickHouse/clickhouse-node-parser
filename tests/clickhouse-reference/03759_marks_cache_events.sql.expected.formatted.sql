@@ -22,10 +22,17 @@ FROM data
 FORMAT Null
 SETTINGS load_marks_asynchronously = 0;
 
+-- drop marks cache
+DETACH TABLE data;
+
+ATTACH TABLE data;
+
 SELECT *
 FROM data
 FORMAT Null
 SETTINGS load_marks_asynchronously = 1;
+
+SYSTEM flush logs query_log;
 
 SELECT
     query_kind,
@@ -38,6 +45,14 @@ WHERE current_database = currentDatabase()
     AND type != 'QueryStart'
 ORDER BY event_time_microseconds ASC
 FORMAT CSVWithNames;
+
+--
+-- metrics for merges
+--
+-- only hits
+OPTIMIZE TABLE data FINAL;
+
+SYSTEM flush logs part_log;
 
 SELECT
     part_name,

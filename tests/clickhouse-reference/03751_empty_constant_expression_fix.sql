@@ -16,3 +16,4 @@ SELECT materialize(toLowCardinality(1)) AND 0;
 SELECT materialize(1) AND toLowCardinality(0);
 -- Test nested expressions
 SELECT (materialize(16) AND (toLowCardinality(-1) AND 16) AND 1 AND (-0. AND 255) AND 16) AND -1 AND toNullable(16);
+DESCRIBE TABLE file(materialize(1) AND 0); -- { serverError BAD_ARGUMENTS }

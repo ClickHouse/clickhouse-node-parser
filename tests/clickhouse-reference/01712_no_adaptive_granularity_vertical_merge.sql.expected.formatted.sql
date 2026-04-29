@@ -13,6 +13,8 @@ INSERT INTO old_school_table;
 
 INSERT INTO old_school_table;
 
+OPTIMIZE TABLE old_school_table FINAL;
+
 SELECT *
 FROM old_school_table
 ORDER BY key ASC;

@@ -17,3 +17,5 @@ SELECT *
 FROM kek;
 
 INSERT INTO kek;
+
+DELETE FROM kekv WHERE a = 1; -- { serverError BAD_ARGUMENTS}

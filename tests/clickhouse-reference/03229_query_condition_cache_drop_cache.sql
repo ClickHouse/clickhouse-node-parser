@@ -5,6 +5,8 @@
 -- Tests that SYSTEM CLEAR QUERY CONDITION CACHE works
 
 SET allow_experimental_analyzer = 1;
+-- (it's silly to use what will be tested below but we have to assume other tests cluttered the query cache)
+SYSTEM CLEAR QUERY CONDITION CACHE;
 DROP TABLE IF EXISTS tab;
 CREATE TABLE tab (a Int64, b Int64) ENGINE = MergeTree ORDER BY a;
 INSERT INTO tab SELECT number, number FROM numbers(1_000_000); -- 1 mio rows sounds like a lot but the QCC doesn't cache anything if there is less data

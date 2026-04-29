@@ -1,5 +1,7 @@
 SET output_format_pretty_fallback_to_vertical = 0;
+
 DROP TABLE IF EXISTS t_desc_subcolumns;
+
 CREATE TABLE t_desc_subcolumns
 (
     d Date,
@@ -9,4 +11,10 @@ CREATE TABLE t_desc_subcolumns
     t Tuple(s String, a Array(Tuple(a UInt32, b UInt32))) CODEC(ZSTD)
 )
 ENGINE = MergeTree ORDER BY d;
+
+DESCRIBE TABLE t_desc_subcolumns FORMAT PrettyCompactNoEscapes;
+
+DESCRIBE TABLE t_desc_subcolumns FORMAT PrettyCompactNoEscapes
+SETTINGS describe_include_subcolumns = 1;
+
 DROP TABLE t_desc_subcolumns;

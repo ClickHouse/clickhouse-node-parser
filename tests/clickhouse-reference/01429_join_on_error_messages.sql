@@ -5,3 +5,4 @@ SELECT 1 FROM (select 1 a) A JOIN (select 1 b, 1 c) B ON a = b OR a = c; -- { se
 -- works for a = b OR a = b because of equivalent disjunct optimization
 
 SET join_algorithm = 'grace_hash';
+-- works for a = b OR a = b because of equivalent disjunct optimization

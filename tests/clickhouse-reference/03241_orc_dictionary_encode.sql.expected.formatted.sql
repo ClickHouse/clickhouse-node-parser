@@ -15,6 +15,10 @@ SETTINGS
     output_format_orc_dictionary_key_size_threshold = 0.1,
     engine_file_truncate_on_insert = 1;
 
+DESCRIBE TABLE file(concat(currentDatabase(), '_03241_data1_without_dict.orc'));
+
+DESCRIBE TABLE file(concat(currentDatabase(), '_03241_data1_with_dict.orc'));
+
 SELECT
     c,
     count(1)
@@ -56,6 +60,10 @@ FROM numbers(100000)
 SETTINGS
     output_format_orc_dictionary_key_size_threshold = 0.1,
     engine_file_truncate_on_insert = 1;
+
+DESCRIBE TABLE file(concat(currentDatabase(), '_03241_data2_without_dict.orc'));
+
+DESCRIBE TABLE file(concat(currentDatabase(), '_03241_data2_with_dict.orc'));
 
 SELECT
     c,

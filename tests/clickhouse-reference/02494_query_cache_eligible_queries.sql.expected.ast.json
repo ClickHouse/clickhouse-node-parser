@@ -1,5 +1,13 @@
 [
   {
+    "kind": "system",
+    "body": "SYSTEM CLEAR QUERY CACHE",
+    "leadingComments": [
+      "-- Tags: no-parallel",
+      "-- Tag no-parallel: Messes with internal cache"
+    ]
+  },
+  {
     "kind": "drop",
     "targetType": "TABLE",
     "table": {
@@ -206,6 +214,139 @@
     }
   },
   {
+    "kind": "system",
+    "body": "SHOW TABLES SETTINGS use_query_cache = true",
+    "leadingComments": [
+      "-- SHOW"
+    ]
+  },
+  {
+    "kind": "check",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "eligible_test"
+    },
+    "settings": [
+      {
+        "name": "use_query_cache",
+        "value": {
+          "kind": "literal",
+          "type": "Bool",
+          "value": "1"
+        }
+      },
+      {
+        "name": "check_query_single_value_result",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ],
+    "leadingComments": [
+      "-- CHECK"
+    ]
+  },
+  {
+    "kind": "describe",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "eligible_test"
+      }
+    },
+    "settings": [
+      {
+        "name": "use_query_cache",
+        "value": {
+          "kind": "literal",
+          "type": "Bool",
+          "value": "1"
+        }
+      }
+    ],
+    "leadingComments": [
+      "-- DESCRIBE"
+    ]
+  },
+  {
+    "kind": "exists",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "eligible_test"
+    },
+    "settings": [
+      {
+        "name": "use_query_cache",
+        "value": {
+          "kind": "literal",
+          "type": "Bool",
+          "value": "1"
+        }
+      }
+    ],
+    "leadingComments": [
+      "-- EXISTS"
+    ]
+  },
+  {
+    "kind": "kill",
+    "target": "QUERY",
+    "where": {
+      "kind": "binaryExpr",
+      "op": "=",
+      "left": {
+        "kind": "columnRef",
+        "parts": [
+          "query_id"
+        ]
+      },
+      "right": {
+        "kind": "literal",
+        "type": "String",
+        "value": "3-857d-4a57-9ee0-3c7da5d60a90"
+      }
+    },
+    "settings": [
+      {
+        "name": "use_query_cache",
+        "value": {
+          "kind": "literal",
+          "type": "Bool",
+          "value": "1"
+        }
+      }
+    ],
+    "leadingComments": [
+      "-- KILL"
+    ]
+  },
+  {
+    "kind": "optimize",
+    "table": {
+      "kind": "tableRef",
+      "table": "eligible_test"
+    },
+    "final": true,
+    "settings": [
+      {
+        "name": "use_query_cache",
+        "value": {
+          "kind": "literal",
+          "type": "Bool",
+          "value": "1"
+        }
+      }
+    ],
+    "leadingComments": [
+      "-- OPTIMIZE"
+    ]
+  },
+  {
     "kind": "truncate",
     "targetType": "TABLE",
     "table": {
@@ -224,6 +365,35 @@
     ],
     "leadingComments": [
       "-- TRUNCATE"
+    ]
+  },
+  {
+    "kind": "rename",
+    "targetType": "TABLE",
+    "pairs": [
+      {
+        "from": {
+          "kind": "tableRef",
+          "table": "eligible_test"
+        },
+        "to": {
+          "kind": "tableRef",
+          "table": "eligible_test2"
+        }
+      }
+    ],
+    "settings": [
+      {
+        "name": "use_query_cache",
+        "value": {
+          "kind": "literal",
+          "type": "Bool",
+          "value": "1"
+        }
+      }
+    ],
+    "leadingComments": [
+      "-- RENAME"
     ]
   },
   {

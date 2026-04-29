@@ -77,6 +77,7 @@ FROM
 );
 SELECT uniqMerge(Uniq), uniqThetaMerge(UniqThetaSketch) FROM stored_aggregates;
 SELECT d, uniqMerge(Uniq), uniqThetaMerge(UniqThetaSketch) FROM stored_aggregates GROUP BY d ORDER BY d;
+OPTIMIZE TABLE stored_aggregates;
 DROP TABLE stored_aggregates;
 -- complex
 CREATE TABLE stored_aggregates
@@ -133,5 +134,6 @@ group by d, k;
 -- prime number 53 to avoid resonanse between %3 and %53
 insert into summing_merge_tree_null select number % 3, 1, number % 53 from numbers(999999);
 select k, sum(c), uniqMerge(un), uniqThetaMerge(ut) from summing_merge_tree_aggregate_function group by k order by k;
+optimize table summing_merge_tree_aggregate_function;
 drop table summing_merge_tree_aggregate_function;
 drop table summing_merge_tree_null;

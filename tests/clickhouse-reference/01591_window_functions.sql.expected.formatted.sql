@@ -586,6 +586,8 @@ ORDER BY number ASC
 WINDOW w AS (PARTITION BY p ORDER BY number ASC ROWS BETWEEN UNBOUNDED PRECEDING AND UNBOUNDED PRECEDING)
 SETTINGS max_block_size = 3;
 
+;
+
 -- careful with auto-application of Null combinator
 SELECT lagInFrame(toNullable(1)) OVER ();
 

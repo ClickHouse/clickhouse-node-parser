@@ -25,7 +25,12 @@ PRIMARY KEY key_column
 SOURCE(CLICKHOUSE(HOST 'localhost' PORT tcpPort() USER 'default' TABLE 'table_for_dict' PASSWORD '' DB 'database_for_dict_01018'))
 LIFETIME(MIN 1 MAX 10)
 LAYOUT(FLAT());
+SHOW CREATE DICTIONARY db_01018.dict1;
+SHOW DICTIONARIES FROM db_01018 LIKE 'dict1';
+EXISTS DICTIONARY db_01018.dict1;
 SELECT database, name FROM system.dictionaries WHERE database='db_01018' AND name LIKE 'dict1';
+DETACH DICTIONARY db_01018.dict1;
+ATTACH DICTIONARY db_01018.dict1;
 DROP DICTIONARY IF EXISTS db_01018.dict1;
 CREATE DATABASE memory_db ENGINE = Memory;
 CREATE DICTIONARY memory_db.dict2
@@ -38,6 +43,9 @@ PRIMARY KEY key_column
 SOURCE(CLICKHOUSE(HOST 'localhost' PORT tcpPort() USER 'default' TABLE 'table_for_dict' PASSWORD '' DB 'database_for_dict_01018'))
 LIFETIME(MIN 1 MAX 10)
 LAYOUT(FLAT());
+SHOW CREATE DICTIONARY memory_db.dict2;
+SHOW DICTIONARIES FROM memory_db LIKE 'dict2';
+EXISTS DICTIONARY memory_db.dict2;
 SELECT database, name FROM system.dictionaries WHERE database='memory_db' AND name LIKE 'dict2';
 CREATE DICTIONARY db_01018.dict4
 (
@@ -49,5 +57,6 @@ PRIMARY KEY key_column
 SOURCE(CLICKHOUSE(HOST 'localhost' PORT tcpPort() USER 'default' TABLE 'table_for_dict' PASSWORD '' DB 'database_for_dict_01018'))
 LIFETIME(MIN 1 MAX 10)
 LAYOUT(FLAT());
+SHOW DICTIONARIES FROM db_01018;
 DROP DICTIONARY memory_db.dict2;
 DROP TABLE IF EXISTS database_for_dict_01018.table_for_dict;

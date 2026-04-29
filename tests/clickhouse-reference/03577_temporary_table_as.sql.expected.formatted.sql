@@ -16,3 +16,5 @@ SET default_temporary_table_engine = 'MergeTree';
 CREATE TEMPORARY TABLE test3 AS test;
 
 DROP TABLE test;
+
+SHOW CREATE TABLE test3;

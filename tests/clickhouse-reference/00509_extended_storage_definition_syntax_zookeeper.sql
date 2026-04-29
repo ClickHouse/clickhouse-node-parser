@@ -15,6 +15,7 @@ CREATE TABLE replacing(d Date, x UInt32, s String) ENGINE = ReplacingMergeTree O
 INSERT INTO replacing VALUES ('2017-10-23', 1, 'a');
 INSERT INTO replacing VALUES ('2017-10-23', 1, 'b');
 INSERT INTO replacing VALUES ('2017-10-23', 1, 'c');
+OPTIMIZE TABLE replacing PARTITION '2017-10-23' FINAL;
 SELECT * FROM replacing;
 DROP TABLE replacing;
 DROP TABLE IF EXISTS replicated_collapsing;
@@ -23,6 +24,8 @@ CREATE TABLE replicated_collapsing(d Date, x UInt32, sign Int8)
     PARTITION BY toYYYYMM(d) ORDER BY d;
 INSERT INTO replicated_collapsing VALUES ('2017-10-23', 1, 1);
 INSERT INTO replicated_collapsing VALUES ('2017-10-23', 1, -1), ('2017-10-23', 2, 1);
+SYSTEM SYNC REPLICA replicated_collapsing PULL;
+OPTIMIZE TABLE replicated_collapsing PARTITION 201710 FINAL;
 SELECT * FROM replicated_collapsing;
 DROP TABLE replicated_collapsing;
 DROP TABLE IF EXISTS replicated_versioned_collapsing;
@@ -32,6 +35,8 @@ CREATE TABLE replicated_versioned_collapsing(d Date, x UInt32, sign Int8, versio
 INSERT INTO replicated_versioned_collapsing VALUES ('2017-10-23', 1, 1, 0);
 INSERT INTO replicated_versioned_collapsing VALUES ('2017-10-23', 1, -1, 0), ('2017-10-23', 2, 1, 0);
 INSERT INTO replicated_versioned_collapsing VALUES ('2017-10-23', 1, -1, 1), ('2017-10-23', 2, 1, 2);
+SYSTEM SYNC REPLICA replicated_versioned_collapsing;
+OPTIMIZE TABLE replicated_versioned_collapsing PARTITION 201710 FINAL;
 SELECT * FROM replicated_versioned_collapsing;
 DROP TABLE replicated_versioned_collapsing;
 DROP TABLE IF EXISTS with_settings;

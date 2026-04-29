@@ -15,6 +15,8 @@ SETTINGS allow_nullable_key = 1;
 
 INSERT INTO t0 (c0);
 
+DELETE FROM t0 WHERE c0 = 1;
+
 DROP TABLE t0;
 
 -- Test 2: Using toLowCardinality with Nullable in PARTITION BY

@@ -15,6 +15,8 @@ INSERT INTO tab (id, c0);
 
 INSERT INTO tab (id, c0);
 
+OPTIMIZE TABLE tab FINAL;
+
 SELECT id
 FROM tab
 WHERE hasAllTokens(c0.c1, 'aa aaa')

@@ -30,6 +30,8 @@ INSERT INTO test;
 SELECT *
 FROM test;
 
+SYSTEM SYNC REPLICA test2;
+
 SELECT *
 FROM test2;
 
@@ -58,6 +60,8 @@ ORDER BY `partition` ASC;
 ALTER TABLE test MODIFY COLUMN x Enum('hello' = 1, 'world' = 2, 'goodbye' = 3);
 
 INSERT INTO test;
+
+OPTIMIZE TABLE test FINAL;
 
 SELECT *
 FROM test

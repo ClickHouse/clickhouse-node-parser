@@ -19,6 +19,8 @@ ALTER TABLE tab ADD INDEX idx_text lower(s1) TYPE text(tokenizer = splitByNonAlp
 
 INSERT INTO tab;
 
+OPTIMIZE TABLE tab FINAL;
+
 SELECT id
 FROM tab
 WHERE hasAllTokens(lower(s1), 'a')

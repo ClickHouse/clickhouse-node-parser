@@ -33,6 +33,7 @@
 -- { echoOn }
 
 SET enable_analyzer = 1;
+
 WITH RECURSIVE foo AS
     (SELECT 1 AS i
     UNION ALL
@@ -40,6 +41,7 @@ WITH RECURSIVE foo AS
           UNION ALL
        SELECT i+1 FROM foo WHERE i < 5)
 ) SELECT * FROM foo;
+
 WITH RECURSIVE foo AS
     (SELECT 1 AS i
     UNION ALL
@@ -48,6 +50,7 @@ WITH RECURSIVE foo AS
           UNION ALL
        SELECT i+1 FROM foo WHERE i < 5) AS t
 ) SELECT * FROM foo;
+
 WITH RECURSIVE foo AS
     (SELECT 1 AS i
     UNION ALL
@@ -55,6 +58,7 @@ WITH RECURSIVE foo AS
           EXCEPT
        SELECT i+1 FROM foo WHERE i < 5)
 ) SELECT * FROM foo;
+
 WITH RECURSIVE foo AS
     (SELECT 1 AS i
     UNION ALL
@@ -62,6 +66,7 @@ WITH RECURSIVE foo AS
           INTERSECT
        SELECT i+1 FROM foo WHERE i < 5)
 ) SELECT * FROM foo;
+
 --
 -- test for nested-recursive-WITH bug
 --
@@ -76,6 +81,7 @@ WITH RECURSIVE t AS (
     SELECT j+1 FROM t WHERE j < 10
 )
 SELECT * FROM t;
+
 --
 -- Test CTEs read in non-initialization orders
 --
@@ -105,3 +111,5 @@ WITH RECURSIVE
     )
   )
 SELECT * FROM iter;
+
+-- { echoOff }

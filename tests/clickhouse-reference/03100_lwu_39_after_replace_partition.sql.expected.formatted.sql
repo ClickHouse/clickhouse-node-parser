@@ -14,6 +14,8 @@ INSERT INTO t_lwu_replace (c0);
 
 ALTER TABLE t_lwu_replace REPLACE PARTITION ID '0' FROM t_lwu_replace;
 
+UPDATE t_lwu_replace SET c0 = 2 WHERE true;
+
 SELECT *
 FROM t_lwu_replace
 ORDER BY c0 ASC;

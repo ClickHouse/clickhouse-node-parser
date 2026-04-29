@@ -19,6 +19,8 @@ FROM numbers(10000000);
 
 ALTER TABLE table_with_single_pk DELETE WHERE key % 77 = 0 SETTINGS mutations_sync = 1;
 
+SYSTEM FLUSH LOGS part_log;
+
 -- Memory usage for all mutations must be almost constant and less than
 -- read_bytes
 SELECT arrayDistinct(groupArray(if(read_bytes >= peak_memory_usage, [1], [read_bytes, peak_memory_usage])))

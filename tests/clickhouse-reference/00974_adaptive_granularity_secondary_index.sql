@@ -14,6 +14,7 @@ SELECT
     toDateTime('2019-05-27 10:00:00') + number % 100,
     concat('hhhhhhhhhhhhhhhhhhhhhhhhh', 'xxxxxxxxxxxxxxxxxxxxxxxxxxxx', 'yyyyyyyyyyyyyyyyyyyyyyyyyy', toString(rand()))
 FROM numbers(1000);
+OPTIMIZE TABLE indexed_table FINAL;
 SELECT COUNT() FROM indexed_table WHERE log_message like '%x%';
 DROP TABLE IF EXISTS another_indexed_table;
 CREATE TABLE another_indexed_table
@@ -34,4 +35,5 @@ SELECT
   toDateTime('2019-05-27 10:00:00') + number % 100,
   concat('hhhhhhhhhhhhhhhhhhhhhhhhh', 'xxxxxxxxxxxxxxxxxxxxxxxxxxxx', 'yyyyyyyyyyyyyyyyyyyyyyyyyy', toString(rand()))
   FROM numbers(1000);
+OPTIMIZE TABLE another_indexed_table FINAL;
 SELECT COUNT() FROM another_indexed_table WHERE log_message like '%x%';

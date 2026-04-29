@@ -19,6 +19,8 @@ SET parallel_replicas_for_cluster_engines = 0;
 SELECT count()
 FROM s3(s3_conn, filename = 'test_02496_*', `format` = Parquet, structure = 'a UInt64');
 
+SYSTEM FLUSH LOGS query_log;
+
 SELECT
     ProfileEvents['S3HeadObject'],
     ProfileEvents['S3ListObjects'],

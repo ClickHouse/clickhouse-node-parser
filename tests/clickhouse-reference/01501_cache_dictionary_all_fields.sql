@@ -52,6 +52,7 @@ INSERT INTO db_01501.table_cache_dict VALUES (3, 222, 333, 444, 555, -111, -222,
 INSERT INTO db_01501.table_cache_dict VALUES (4, 2222, 3333, 4444, 5555, -1111, -2222, -3333, -4444, '4bd3829f-0669-43b7-b884-a8e034a68224', '1987-06-28', '2000-02-28 23:42:25', 'MergeTree', 52.001, 3237554213.5, toDecimal32('4e-5', 5), toDecimal64('4e-15', 15), toDecimal128('4e-35', 35), 1);
 INSERT INTO db_01501.table_cache_dict VALUES (5, 22222, 33333, 44444, 55555, -11111, -22222, -33333, -44444, 'ff99a408-78bb-4939-93cc-65e657e347c6', '1991-06-28', '2007-02-28 23:42:25', 'dictionary', 33.333, 3222193713.7, toDecimal32('5e-5', 5), toDecimal64('5e-15', 15), toDecimal128('5e-35', 35), 1);
 SELECT arrayDistinct(groupArray(dictGetUInt8('db_01501.cache_dict', 'UInt8_', toUInt64(number)))) from numbers(10);
+system reload dictionaries;
 SELECT arrayDistinct(groupArray(dictGetUInt16('db_01501.cache_dict', 'UInt16_', toUInt64(number)))) from numbers(10);
 SELECT arrayDistinct(groupArray(dictGetUInt32('db_01501.cache_dict', 'UInt32_', toUInt64(number)))) from numbers(10);
 SELECT arrayDistinct(groupArray(dictGetUInt64('db_01501.cache_dict', 'UInt64_', toUInt64(number)))) from numbers(10);

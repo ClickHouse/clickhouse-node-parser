@@ -7,6 +7,9 @@ CREATE TABLE bool_test
 )
 ENGINE = Memory;
 
+-- value column shoud have type 'Bool'
+SHOW CREATE TABLE bool_test;
+
 INSERT INTO bool_test (value, f);
 
 INSERT INTO bool_test (value, f);

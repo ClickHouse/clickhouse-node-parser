@@ -34,6 +34,8 @@ INSERT INTO t SELECT
     number + 1
 FROM numbers(10);
 
+SYSTEM clear query condition cache;
+
 SELECT j
 FROM t
 WHERE j > 3

@@ -32,6 +32,10 @@ SELECT *
 FROM mv
 ORDER BY n ASC;
 
+DETACH TABLE mv;
+
+ATTACH TABLE mv;
+
 INSERT INTO src;
 
 DROP TABLE mv;
@@ -49,6 +53,22 @@ ENGINE = MergeTree
 ORDER BY n
 PARTITION BY n % 10;
 
+ATTACH MATERIALIZED VIEW mv
+(
+    n Int32,
+    n2 Int64
+)
+ENGINE = MergeTree
+ORDER BY n
+PARTITION BY n % 10
+AS
+SELECT
+    n,
+    n * n AS n2
+FROM src;
+
+SHOW CREATE TABLE mv;
+
 CREATE TABLE `.inner_id.e15f3ab5-6cae-4df3-b879-f40deafd82c2`
 (
     n Int32,
@@ -57,5 +77,33 @@ CREATE TABLE `.inner_id.e15f3ab5-6cae-4df3-b879-f40deafd82c2`
 ENGINE = MergeTree
 ORDER BY n
 PARTITION BY n % 10;
+
+ATTACH MATERIALIZED VIEW mv
+(
+    n Int32,
+    n2 Int64
+)
+ENGINE = MergeTree
+ORDER BY n
+PARTITION BY n % 10
+AS
+SELECT
+    n,
+    n * n AS n2
+FROM src;
+
+ATTACH MATERIALIZED VIEW mv
+(
+    n Int32,
+    n2 Int64
+)
+ENGINE = MergeTree
+ORDER BY n
+PARTITION BY n % 10
+AS
+SELECT
+    n,
+    n * n AS n2
+FROM src; -- { serverError BAD_ARGUMENTS }
 
 DROP TABLE src;

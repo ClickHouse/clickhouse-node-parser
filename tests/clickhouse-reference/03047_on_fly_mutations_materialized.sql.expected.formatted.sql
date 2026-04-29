@@ -13,6 +13,8 @@ CREATE TABLE t_update_materialized
 ENGINE = ReplicatedMergeTree('/clickhouse/tables/{database}/t_update_materialized', '1')
 ORDER BY id;
 
+SYSTEM STOP MERGES t_update_materialized;
+
 INSERT INTO t_update_materialized (id, c1);
 
 SELECT
@@ -29,6 +31,8 @@ FROM t_update_materialized
 ORDER BY id ASC;
 
 ALTER TABLE t_update_materialized UPDATE c1 = 2 WHERE id = 1;
+
+SYSTEM SYNC REPLICA t_update_materialized PULL;
 
 SELECT
     id,

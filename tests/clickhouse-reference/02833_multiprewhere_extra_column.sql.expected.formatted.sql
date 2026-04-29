@@ -22,9 +22,13 @@ INSERT INTO t_multi_prewhere SELECT
     number
 FROM numbers(10000);
 
+SYSTEM clear mark cache;
+
 SELECT sum(b)
 FROM t_multi_prewhere
 PREWHERE a < 5000;
+
+SYSTEM flush logs query_log;
 
 SELECT ProfileEvents['FileOpen']
 FROM `system`.query_log

@@ -54,6 +54,8 @@ ALTER TABLE rmt UPDATE s = concat('s', toString(n)) WHERE 1;
 
 ALTER TABLE rmt REPLACE PARTITION '0' FROM mt;
 
+SYSTEM sync replica rmt;
+
 ALTER TABLE rmt DROP COLUMN s;
 
 SELECT

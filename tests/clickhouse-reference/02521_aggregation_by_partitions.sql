@@ -9,18 +9,21 @@ set optimize_trivial_insert_select = 1;
 set allow_prefetched_read_pool_for_remote_filesystem = 0;
 set allow_prefetched_read_pool_for_local_filesystem = 0;
 create table t1(a UInt32) engine=MergeTree order by tuple() partition by a % 4 settings index_granularity = 8192, index_granularity_bytes = 10485760;
+system stop merges t1;
 insert into t1 select number from numbers_mt(1e6);
 -- { echoOff }
 
 select count() from (select throwIf(count() != 2) from t1 group by a);
 drop table t1;
 create table t2(a UInt32) engine=MergeTree order by tuple() partition by a % 8 SETTINGS index_granularity = 8192, index_granularity_bytes = '10Mi';
+system stop merges t2;
 insert into t2 select number from numbers_mt(1e6);
 -- { echoOff }
 
 select count() from (select throwIf(count() != 2) from t2 group by a);
 drop table t2;
 create table t3(a UInt32) engine=MergeTree order by tuple() partition by a % 16 SETTINGS index_granularity = 8192, index_granularity_bytes = '10Mi';
+system stop merges t3;
 insert into t3 select number from numbers_mt(1e6);
 -- { echoOff }
 
@@ -33,18 +36,21 @@ drop table t3;
 
 set optimize_aggregation_in_order = 1;
 create table t4(a UInt32) engine=MergeTree order by a partition by a % 4 SETTINGS index_granularity = 8192, index_granularity_bytes = '10Mi';
+system stop merges t4;
 insert into t4 select number from numbers_mt(1e6);
 -- { echoOff }
 
 select count() from (select throwIf(count() != 2) from t4 group by a);
 drop table t4;
 create table t5(a UInt32) engine=MergeTree order by a partition by a % 8 SETTINGS index_granularity = 8192, index_granularity_bytes = '10Mi';
+system stop merges t5;
 insert into t5 select number from numbers_mt(1e6);
 -- { echoOff }
 
 select count() from (select throwIf(count() != 2) from t5 group by a);
 drop table t5;
 create table t6(a UInt32) engine=MergeTree order by a partition by a % 16 SETTINGS index_granularity = 8192, index_granularity_bytes = '10Mi';
+system stop merges t6;
 insert into t6 select number from numbers_mt(1e6);
 -- { echoOff }
 

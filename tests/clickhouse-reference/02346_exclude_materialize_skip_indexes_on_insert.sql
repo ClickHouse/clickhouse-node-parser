@@ -25,14 +25,18 @@ FROM
 )
 WHERE (explain LIKE '%Name%') OR (explain LIKE '%Description%') OR (explain LIKE '%Parts%') OR (explain LIKE '%Granules%') OR (explain LIKE '%Range%');
 SET exclude_materialize_skip_indexes_on_insert='idx_a';
+SYSTEM STOP MERGES tab;
 INSERT INTO tab SELECT number, number / 50 FROM numbers(100);
 INSERT INTO tab SELECT number, number / 50 FROM numbers(100, 100);
 SELECT * FROM explain_indexes;
+SYSTEM START MERGES tab;
+OPTIMIZE TABLE tab FINAL;
 TRUNCATE TABLE tab;
 ALTER TABLE tab MATERIALIZE INDEX idx_a;
 ALTER TABLE tab MATERIALIZE INDEX `id,x_b`;
 INSERT INTO tab SELECT number, number / 50 FROM numbers(100) SETTINGS exclude_materialize_skip_indexes_on_insert='`id,x_b`';
 INSERT INTO tab SELECT number, number / 50 FROM numbers(100, 100) SETTINGS exclude_materialize_skip_indexes_on_insert='`id,x_b`';
+SYSTEM FLUSH LOGS query_log;
 SELECT count()
 FROM system.query_log
 WHERE current_database = currentDatabase()

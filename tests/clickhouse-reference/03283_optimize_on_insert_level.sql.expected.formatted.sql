@@ -13,6 +13,8 @@ ENGINE = ReplacingMergeTree
 ORDER BY a
 SETTINGS index_granularity = 1;
 
+SYSTEM STOP MERGES t_optimize_level;
+
 INSERT INTO t_optimize_level;
 
 INSERT INTO t_optimize_level;

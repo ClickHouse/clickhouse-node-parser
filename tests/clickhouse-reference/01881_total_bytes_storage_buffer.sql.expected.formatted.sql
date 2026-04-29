@@ -14,4 +14,6 @@ WHERE name = 'test_buffer_table'
 INSERT INTO test_buffer_table SELECT number
 FROM numbers(1000);
 
+OPTIMIZE TABLE test_buffer_table;
+
 DROP TABLE test_buffer_table;

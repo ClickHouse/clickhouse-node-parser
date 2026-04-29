@@ -14,14 +14,20 @@ CREATE TABLE test
 ENGINE = MergeTree
 ORDER BY tuple()
 SETTINGS index_granularity = 8192;
+
 CREATE VIEW test_view
 AS SELECT *
 FROM test;
+
 SET prefer_localhost_replica = 0;
 SET serialize_query_plan = 0;
+
 SELECT max(i1)
 FROM remote('localhost', currentDatabase(), test_view)
 SETTINGS log_comment = 'THIS IS A COMMENT TO MARK THE INITIAL QUERY';
+
+SYSTEM FLUSH LOGS query_log;
+
 SELECT columns
 FROM system.query_log
 WHERE

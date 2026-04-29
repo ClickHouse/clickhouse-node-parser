@@ -51,6 +51,8 @@ SELECT count()
 FROM tab
 WHERE hasAnyTokens(message, 'text_000');
 
+SYSTEM FLUSH LOGS query_log;
+
 SELECT *
 FROM text_index_cache_stats(filter = 'text_000');
 
@@ -67,6 +69,8 @@ WHERE hasAnyTokens(message, 'text_127');
 
 SELECT *
 FROM text_index_cache_stats(filter = 'text_127');
+
+SYSTEM CLEAR TEXT INDEX DICTIONARY CACHE;
 
 SELECT count()
 FROM tab

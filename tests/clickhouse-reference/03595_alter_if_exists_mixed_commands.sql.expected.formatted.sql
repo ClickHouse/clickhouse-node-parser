@@ -15,6 +15,8 @@ ENGINE = Memory;
 -- This should succeed - DROP removes x, COMMENT with IF EXISTS should be silently ignored
 ALTER TABLE test_alter_mixed DROP COLUMN x, COMMENT COLUMN x 'test comment';
 
+DESCRIBE TABLE test_alter_mixed;
+
 DROP TABLE test_alter_mixed;
 
 -- Test 2: Multiple operations with mixed types in sequence

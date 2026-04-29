@@ -12,6 +12,8 @@ INSERT INTO FUNCTION file(concat(currentDatabase(), '02977_1.csv')) SELECT
     tuple('222', 33, map('abc', 5))
 SETTINGS engine_file_truncate_on_insert = 1;
 
+DESCRIBE TABLE file(concat(currentDatabase(), '02977_1.csv'));
+
 SELECT *
 FROM file(concat(currentDatabase(), '02977_1.csv'))
 SETTINGS max_threads = 1;

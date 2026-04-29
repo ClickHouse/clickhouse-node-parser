@@ -9,6 +9,8 @@ ENGINE = MergeTree
 ORDER BY id
 SETTINGS enable_block_number_column = 1, enable_block_offset_column = 1;
 
+SYSTEM STOP MERGES t_lwu_delete;
+
 INSERT INTO t_lwu_delete SELECT
     number,
     number
@@ -23,3 +25,9 @@ FROM t_lwu_delete;
 
 SELECT count()
 FROM t_lwu_delete;
+
+DELETE FROM t_lwu_delete WHERE id % 4 = 1;
+
+UPDATE t_lwu_delete SET v = v + 1000 WHERE id % 10 = 0;
+
+DELETE FROM t_lwu_delete WHERE id % 2 = 0;

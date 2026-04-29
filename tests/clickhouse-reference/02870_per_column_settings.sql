@@ -16,6 +16,7 @@ CREATE TABLE tab
 ENGINE = ReplicatedMergeTree('/clickhouse/tables/{database}/tab/2870', 'r1')
 ORDER BY id
 SETTINGS min_bytes_for_wide_part = 1;
+SHOW CREATE tab;
 INSERT INTO TABLE tab SELECT number, randomPrintableASCII(1000), randomPrintableASCII(10), rand(number), rand(number+1), rand(number+2) FROM numbers(1000);
 SELECT count() FROM tab;
 SELECT formatQuery('ALTER TABLE tab MODIFY COLUMN long_string MODIFY SETTING min_compress_block_size = 8192;');

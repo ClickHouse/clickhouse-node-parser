@@ -13,8 +13,12 @@ SETTINGS min_bytes_for_wide_part = 0;
 
 INSERT INTO t_arr;
 
+SYSTEM CLEAR MARK CACHE;
+
 SELECT a.size0
 FROM t_arr;
+
+SYSTEM FLUSH LOGS query_log;
 
 SELECT ProfileEvents['FileOpen']
 FROM `system`.query_log

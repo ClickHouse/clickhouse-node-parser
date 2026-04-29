@@ -33,6 +33,8 @@ WHERE ((k = 1
     OR s = 23))
 SETTINGS enable_analyzer = 1;
 
+;
+
 SELECT *
 FROM (
         SELECT *

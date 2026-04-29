@@ -4,6 +4,7 @@ CREATE TABLE IF NOT EXISTS merge (d Date DEFAULT '2000-01-01', x UInt64) ENGINE 
 INSERT INTO merge (x) VALUES (1), (2), (3);
 INSERT INTO merge (x) VALUES (4), (5), (6);
 SELECT * FROM merge ORDER BY _part_index, x;
+OPTIMIZE TABLE merge;
 DROP TABLE merge;
 INSERT INTO merge (x) SELECT number      AS x FROM system.numbers LIMIT 10;
 INSERT INTO merge (x) SELECT number + 10 AS x FROM system.numbers LIMIT 10;

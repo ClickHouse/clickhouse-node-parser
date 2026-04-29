@@ -17,6 +17,10 @@ INSERT INTO t_patch_join_cache SELECT
     ''
 FROM numbers(3000000);
 
+UPDATE t_patch_join_cache SET s = 'foo' WHERE 1;
+
+OPTIMIZE TABLE t_patch_join_cache PARTITION ID 'all' FINAL SETTINGS optimize_throw_if_noop = 1;
+
 SELECT count()
 FROM t_patch_join_cache
 WHERE s = 'foo'

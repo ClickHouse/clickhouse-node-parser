@@ -31,6 +31,20 @@ SETTINGS min_bytes_for_wide_part = 0, min_bytes_for_full_part_storage = 0;
 -- after, 20100101_0_0_0 will have ttl.txt and value.bin
 INSERT INTO ttl_02265;
 
+-- after, 20100101_0_0_1 will not have neither ttl.txt nor value.bin
+OPTIMIZE TABLE ttl_02265 FINAL;
+
+SYSTEM sync replica ttl_02265 STRICT;
+
+SYSTEM sync replica ttl_02265_r2 STRICT;
+
+-- after detach/attach it will not have TTL in-memory, and will not have ttl.txt
+DETACH TABLE ttl_02265;
+
+ATTACH TABLE ttl_02265;
+
+SYSTEM flush logs part_log;
+
 SELECT *
 FROM `system`.part_log
 WHERE database = currentDatabase()

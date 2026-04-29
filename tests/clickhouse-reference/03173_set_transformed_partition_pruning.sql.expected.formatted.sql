@@ -18,10 +18,14 @@ UNION ALL
 SELECT toDate('2100-01-01') + 10 * number
 FROM numbers(50);
 
+OPTIMIZE TABLE `03173_single_function` FINAL;
+
 SELECT count()
 FROM `03173_single_function`
 WHERE dt IN ('2024-01-20', '2024-05-25')
 SETTINGS log_comment = '03173_single_function';
+
+SYSTEM FLUSH LOGS query_log;
 
 SELECT ProfileEvents['SelectedParts']
 FROM `system`.query_log
@@ -41,6 +45,8 @@ PARTITION BY xxHash32(id) % 3;
 
 INSERT INTO `03173_nested_function` SELECT number
 FROM numbers(100);
+
+OPTIMIZE TABLE `03173_nested_function` FINAL;
 
 SELECT count()
 FROM `03173_nested_function`
@@ -79,6 +85,8 @@ PARTITION BY xxHash32(id) % 3;
 INSERT INTO `03173_nested_function_lc` SELECT number
 FROM numbers(100);
 
+OPTIMIZE TABLE `03173_nested_function_lc` FINAL;
+
 SELECT count()
 FROM `03173_nested_function_lc`
 WHERE id IN (10)
@@ -114,6 +122,8 @@ SETTINGS allow_nullable_key = 1;
 
 INSERT INTO `03173_nested_function_null` SELECT number
 FROM numbers(100);
+
+OPTIMIZE TABLE `03173_nested_function_null` FINAL;
 
 SELECT count()
 FROM `03173_nested_function_null`
@@ -151,6 +161,8 @@ SETTINGS allow_nullable_key = 1;
 INSERT INTO `03173_nested_function_lc_null` SELECT number
 FROM numbers(100);
 
+OPTIMIZE TABLE `03173_nested_function_lc_null` FINAL;
+
 SELECT count()
 FROM `03173_nested_function_lc_null`
 WHERE id IN (10)
@@ -186,6 +198,8 @@ PARTITION BY xxHash32(id) % 3;
 INSERT INTO `03173_nonsafe_cast` SELECT number
 FROM numbers(100);
 
+OPTIMIZE TABLE `03173_nonsafe_cast` FINAL;
+
 SELECT count()
 FROM `03173_nonsafe_cast`
 WHERE id IN (
@@ -216,6 +230,8 @@ INSERT INTO `03173_multiple_partition_cols` SELECT
     number,
     number
 FROM numbers(100);
+
+OPTIMIZE TABLE `03173_multiple_partition_cols` FINAL;
 
 SELECT count()
 FROM `03173_multiple_partition_cols`
@@ -254,6 +270,8 @@ PARTITION BY xxHash32(id) % 3;
 
 INSERT INTO `03173_base_data_source` SELECT number
 FROM numbers(100);
+
+OPTIMIZE TABLE `03173_base_data_source` FINAL;
 
 DROP TABLE IF EXISTS `03173_low_cardinality_set`;
 
@@ -392,6 +410,8 @@ PARTITION BY xxHash32(id) % 3;
 
 INSERT INTO `03173_empty_transform` SELECT number
 FROM numbers(6);
+
+OPTIMIZE TABLE `03173_empty_transform` FINAL;
 
 SELECT id
 FROM `03173_empty_transform`

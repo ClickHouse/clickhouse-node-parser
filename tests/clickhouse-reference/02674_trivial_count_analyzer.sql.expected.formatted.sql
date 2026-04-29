@@ -53,6 +53,8 @@ CREATE TABLE replacing_m3
 ENGINE = ReplacingMergeTree()
 ORDER BY (a, b);
 
+SYSTEM STOP MERGES replacing_m3;
+
 SELECT count()
 FROM replacing_m3;
 

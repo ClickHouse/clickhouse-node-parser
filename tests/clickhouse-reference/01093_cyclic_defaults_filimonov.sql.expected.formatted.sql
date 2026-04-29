@@ -15,3 +15,4 @@ CREATE TABLE pythagoras
     c Float64 DEFAULT sqrt((a * a) + (b * b))
 )
 ENGINE = Log; -- { serverError CYCLIC_ALIASES }
+-- TODO: It works but should not: CREATE TABLE test (a DEFAULT b, b DEFAULT a) ENGINE = Memory

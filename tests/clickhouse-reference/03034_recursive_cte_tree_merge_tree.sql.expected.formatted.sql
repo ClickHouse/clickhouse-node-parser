@@ -264,4 +264,4 @@ FROM (
 ORDER BY
     id ASC,
     parent_department ASC,
-    name ASC;
+    name ASC; -- { echoOff }

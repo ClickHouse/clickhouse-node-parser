@@ -1,5 +1,12 @@
+-- Tags: no-parallel
+-- Tag no-parallel: Messes with internal cache
+-- Start with empty query cache QC
+SYSTEM CLEAR QUERY CACHE;
+
 SELECT 1
 SETTINGS use_query_cache = true;
+
+SYSTEM FLUSH LOGS query_log;
 
 SELECT
     ProfileEvents['QueryCacheHits'],

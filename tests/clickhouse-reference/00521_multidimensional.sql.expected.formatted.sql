@@ -21,6 +21,8 @@ SELECT *
 FROM multidimensional
 ORDER BY t ASC;
 
+OPTIMIZE TABLE multidimensional;
+
 DROP TABLE multidimensional;
 
 CREATE TABLE multidimensional

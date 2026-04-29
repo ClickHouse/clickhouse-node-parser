@@ -42,6 +42,12 @@ INSERT INTO t_detach_attach_patches;
 
 INSERT INTO t_detach_attach_patches;
 
+UPDATE t_detach_attach_patches SET b = b + 1 WHERE a = 1;
+
+UPDATE t_detach_attach_patches SET c = c + 2 WHERE a = 2;
+
+UPDATE t_detach_attach_patches SET b = b + 3, c = c + 3 WHERE 1;
+
 SELECT *
 FROM t_detach_attach_patches
 ORDER BY `ALL` ASC;

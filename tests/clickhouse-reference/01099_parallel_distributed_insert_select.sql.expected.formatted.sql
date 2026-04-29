@@ -69,6 +69,8 @@ ENGINE = Distributed('test_cluster_two_shards', currentDatabase(), local_01099_a
 CREATE TABLE distributed_01099_b AS local_01099_b
 ENGINE = Distributed('test_cluster_two_shards', currentDatabase(), local_01099_b, rand());
 
+SYSTEM STOP DISTRIBUTED SENDS distributed_01099_b;
+
 SET prefer_localhost_replica = 0; -- to require distributed send for local replica too
 
 SET prefer_localhost_replica = 1;
@@ -79,6 +81,8 @@ SELECT
 FROM distributed_01099_b
 GROUP BY number
 ORDER BY number ASC;
+
+SYSTEM FLUSH DISTRIBUTED distributed_01099_b;
 
 CREATE TABLE local_01099_a
 (

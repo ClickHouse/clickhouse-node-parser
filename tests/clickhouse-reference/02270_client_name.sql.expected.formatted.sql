@@ -4,6 +4,8 @@ SETTINGS
     log_queries_min_type = 'QUERY_FINISH'
 FORMAT Null;
 
+SYSTEM flush logs query_log;
+
 SELECT client_name
 FROM `system`.query_log
 WHERE current_database = currentDatabase()

@@ -40,6 +40,12 @@ FROM (
         SELECT arrayJoin(['hello', 'world'])
     );
 
+EXCHANGE TABLE t1 AND t3; -- { serverError UNKNOWN_TABLE }
+
+EXCHANGE TABLE t4 AND t2; -- { serverError UNKNOWN_TABLE }
+
+RENAME TABLE t0 TO t1; -- { serverError TABLE_ALREADY_EXISTS }
+
 DROP TABLE t1;
 
 SELECT *
@@ -47,6 +53,12 @@ FROM t1;
 
 SELECT *
 FROM t2;
+
+EXCHANGE TABLE t1 AND t2;
+
+RENAME TABLE t1 TO t1tmp, t2 TO t2tmp;
+
+RENAME TABLE t1tmp TO t2, t2tmp TO t1;
 
 DROP DATABASE IF EXISTS test_01109_other_atomic;
 
@@ -81,6 +93,16 @@ FROM (
 
 CREATE TABLE test_01109_ordinary.t4 AS t1;
 
+EXCHANGE TABLE test_01109_other_atomic.t3 AND test_01109_ordinary.t4; -- { serverError NOT_IMPLEMENTED }
+
+EXCHANGE TABLE test_01109_ordinary.t4 AND test_01109_other_atomic.t3; -- { serverError NOT_IMPLEMENTED }
+
+EXCHANGE TABLE test_01109_ordinary.t4 AND test_01109_ordinary.t4; -- { serverError NOT_IMPLEMENTED }
+
+EXCHANGE TABLE t1 AND test_01109_other_atomic.t3;
+
+EXCHANGE TABLE t2 AND t2;
+
 SELECT *
 FROM test_01109_other_atomic.t3;
 
@@ -99,6 +121,12 @@ ENGINE = Log() AS
 SELECT *
 FROM `system`.numbers
 LIMIT 2;
+
+RENAME TABLE t0_tmp TO t1; -- { serverError UNKNOWN_TABLE }
+
+RENAME TABLE IF EXISTS t0_tmp TO t1;
+
+RENAME TABLE IF EXISTS t0 TO t1;
 
 DROP DATABASE test_01109;
 

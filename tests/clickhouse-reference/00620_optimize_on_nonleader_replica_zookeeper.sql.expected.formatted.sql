@@ -31,7 +31,23 @@ INSERT INTO rename1;
 
 INSERT INTO rename1;
 
+SYSTEM SYNC REPLICA rename1 PULL; -- Avoid "Cannot select parts for optimization: Entry for part 0_1_1_0 hasn't been read from the replication log yet"
+
+SYSTEM SYNC REPLICA rename2;
+
+OPTIMIZE TABLE rename1 FINAL;
+
+OPTIMIZE TABLE rename2 FINAL;
+
 SELECT *
 FROM rename1;
 
+RENAME TABLE rename2 TO rename3;
+
 INSERT INTO rename1;
+
+SYSTEM SYNC REPLICA rename3; -- Make "rename3" to see all data parts.
+
+OPTIMIZE TABLE rename3;
+
+SYSTEM SYNC REPLICA rename1; -- Make "rename1" to see and process all scheduled merges.

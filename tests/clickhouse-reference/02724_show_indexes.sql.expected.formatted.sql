@@ -23,6 +23,18 @@ SETTINGS add_minmax_index_for_numeric_columns = 0;
 
 SELECT '--- Aliases of SHOW INDEX';
 
+SHOW INDEX FROM tbl;
+
+SHOW INDEXES FROM tbl;
+
+SHOW INDICES FROM tbl;
+
+SHOW KEYS FROM tbl;
+
+SHOW EXTENDED INDEX FROM tbl;
+
+SHOW INDEX FROM tbl WHERE index_type LIKE '%minmax%';
+
 DROP TABLE IF EXISTS `$4@^7`;
 
 CREATE TABLE `$4@^7`
@@ -32,6 +44,8 @@ CREATE TABLE `$4@^7`
 ENGINE = MergeTree
 ORDER BY c
 SETTINGS add_minmax_index_for_numeric_columns = 0;
+
+SHOW INDEX FROM `$4@^7`;
 
 DROP TABLE `$4@^7`;
 
@@ -44,6 +58,8 @@ CREATE TABLE `NULL`
 ENGINE = MergeTree
 ORDER BY c
 SETTINGS add_minmax_index_for_numeric_columns = 0;
+
+SHOW INDEX FROM NULL;
 
 DROP TABLE `NULL`;
 
@@ -65,6 +81,8 @@ ENGINE = MergeTree
 PRIMARY KEY (c, a)
 SETTINGS add_minmax_index_for_numeric_columns = 0;
 
+SHOW INDEX FROM `tab.with.dots`;
+
 DROP TABLE `tab.with.dots`;
 
 DROP DATABASE IF EXISTS `'`;
@@ -78,6 +96,10 @@ CREATE TABLE `'`.`'`
 ENGINE = MergeTree
 ORDER BY c
 SETTINGS add_minmax_index_for_numeric_columns = 0;
+
+SHOW INDEX FROM `'` FROM `'`;
+
+SHOW INDEX FROM `'`.`'`; -- abbreviated form
 
 DROP TABLE `'`.`'`;
 
@@ -100,6 +122,10 @@ CREATE TABLE database_123456789abcde.tbl
 ENGINE = MergeTree
 PRIMARY KEY a
 SETTINGS add_minmax_index_for_numeric_columns = 0;
+
+SHOW INDEX FROM tbl FROM database_123456789abcde;
+
+SHOW INDEX FROM database_123456789abcde.tbl;
 
 DROP DATABASE database_123456789abcde;
 

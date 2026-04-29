@@ -12,6 +12,8 @@ SETTINGS index_granularity = 2;
 INSERT INTO test_part_granule_offset SELECT number
 FROM numbers(101);
 
+OPTIMIZE TABLE test_part_granule_offset FINAL;
+
 SELECT _part_granule_offset
 FROM test_part_granule_offset
 WHERE n < 10

@@ -28,4 +28,7 @@ ORDER BY value ASC;
 
 ALTER TABLE mutation_table MODIFY COLUMN value UInt64 SETTINGS mutations_sync = 2; --{serverError UNFINISHED}
 
+KILL MUTATION WHERE table = 'mutation_table'
+AND database = currentDatabase();
+
 ALTER TABLE mutation_table MODIFY COLUMN value String SETTINGS mutations_sync = 2;

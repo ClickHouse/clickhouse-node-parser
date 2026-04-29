@@ -27,6 +27,10 @@ SET max_block_size = 64, max_insert_block_size = 64, min_insert_block_size_rows 
 INSERT INTO part_log_profile_events_r1 SELECT number
 FROM numbers(1000);
 
+SYSTEM SYNC REPLICA part_log_profile_events_r2;
+
+SYSTEM FLUSH LOGS part_log;
+
 SELECT count() > 1
     AND SUM(ProfileEvents['ZooKeeperTransactions']) >= 4
 FROM `system`.part_log

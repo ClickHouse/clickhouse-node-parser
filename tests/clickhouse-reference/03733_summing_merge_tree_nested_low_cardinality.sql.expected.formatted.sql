@@ -11,5 +11,7 @@ INSERT INTO sums (key, sumOfSums, sumsMap.key, sumsMap.sum);
 
 INSERT INTO sums (key, sumOfSums, sumsMap.key, sumsMap.sum);
 
+OPTIMIZE TABLE sums;
+
 SELECT *
 FROM sums;

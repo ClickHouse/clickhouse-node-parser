@@ -10,6 +10,8 @@ INSERT INTO dict_03204 SELECT
     number
 FROM numbers(10);
 
+OPTIMIZE TABLE dict_03204;
+
 SELECT *
 FROM dict_03204
 ORDER BY k ASC;

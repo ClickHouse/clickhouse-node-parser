@@ -11,3 +11,4 @@ ENGINE = MergeTree ORDER BY id
 SETTINGS index_granularity = 8192, enable_block_number_column = 1, enable_block_offset_column = 1;
 INSERT INTO t_lwu_condition_cache (exists) SELECT 0 FROM numbers(100000);
 SELECT count() FROM t_lwu_condition_cache WHERE exists;
+UPDATE t_lwu_condition_cache SET exists = 1 WHERE 1;

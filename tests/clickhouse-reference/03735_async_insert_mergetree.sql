@@ -14,6 +14,7 @@ SETTINGS non_replicated_deduplication_window = 10000;
 insert into src_table values (1, 'Alice'), (2, 'Bob'), (1, 'Alice');
 insert into src_table values (1, 'Alice');
 insert into src_table values (2, 'Bob');
+system flush async insert queue src_table;
 -- Expecting 2
 select 'src_table', count(*) from src_table;
 create table dst_1_0
@@ -77,6 +78,7 @@ select * from dst_1_2 order by all;
 -- Expecting 6
 select 'dst_2_01', count(*) from dst_2_01;
 select * from dst_2_01 order by all;
+system flush logs system.query_log;
 select query, query_kind, exception_code,
     read_rows, written_rows,
     ProfileEvents['QueriesWithSubqueries'] as QueriesWithSubqueries,

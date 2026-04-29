@@ -28,6 +28,8 @@ ALTER TABLE t MODIFY COLUMN age Nullable(Int32); -- { serverError ALTER_OF_COLUM
 -- Cannot ALTER, uniq(Int16) is not compatible with uniq(Int32).
 ALTER TABLE t MODIFY COLUMN i Int32; -- { serverError CANNOT_CONVERT_TYPE }
 
+SYSTEM STOP MERGES t;
+
 SET alter_sync = 0;
 
 -- Can ALTER, count(Int16) is compatible with count(Int32).
@@ -39,6 +41,8 @@ FROM t
 GROUP BY
     name,
     age;
+
+SYSTEM START MERGES t;
 
 SET alter_sync = 1;
 

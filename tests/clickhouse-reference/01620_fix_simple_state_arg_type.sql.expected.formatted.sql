@@ -14,6 +14,8 @@ INSERT INTO ay;
 
 INSERT INTO ay;
 
+OPTIMIZE TABLE ay;
+
 SELECT *
 FROM ay;
 

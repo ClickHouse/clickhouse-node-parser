@@ -256,4 +256,9 @@ CREATE TABLE tab
 ENGINE = MergeTree
 ORDER BY (product_id, metric, asset_id, toYYYYMMDD(date));
 
+DETACH TABLE tab;
+
 SET allow_nonconst_timezone_arguments = 0;
+
+-- ATTACH TABLE doesn't check the default expressions
+ATTACH TABLE tab;

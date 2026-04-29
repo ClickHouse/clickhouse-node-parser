@@ -19,6 +19,8 @@ ORDER BY id ASC
 FORMAT Null
 SETTINGS max_threads = 1024, max_streams_to_max_threads_ratio = 10000000;
 
+SYSTEM FLUSH LOGS query_log;
+
 SELECT *
 FROM `system`.query_log
 WHERE `Settings`['max_streams_to_max_threads_ratio'] = '10000000'

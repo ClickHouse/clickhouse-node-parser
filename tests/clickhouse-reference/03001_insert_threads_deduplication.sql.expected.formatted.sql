@@ -22,6 +22,8 @@ CREATE TABLE landing_dist
 )
 ENGINE = Distributed('test_cluster_two_shards', currentDatabase(), 'landing', rand());
 
+SYSTEM STOP MERGES landing; -- Stopping merges to force 3 parts
+
 INSERT INTO landing (status, id, timestamp) SELECT *
 FROM generateRandom()
 LIMIT 1;

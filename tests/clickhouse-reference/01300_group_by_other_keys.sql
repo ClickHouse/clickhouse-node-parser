@@ -7,3 +7,4 @@ SELECT round(avg(log(2) * number), 6) AS k FROM numbers(10000000) GROUP BY (numb
 SELECT round(avg(log(2) * number), 6) AS k FROM numbers(10000000) GROUP BY (number % 2) * (number % 3), number % 3, number % 2 ORDER BY k;
 SELECT round(avg(log(2) * number), 6) AS k FROM numbers(10000000) GROUP BY (number % 2) % 3, number % 2 ORDER BY k;
 set optimize_group_by_function_keys = 0;
+-- TODO - test with similar variables of different tables (collision)

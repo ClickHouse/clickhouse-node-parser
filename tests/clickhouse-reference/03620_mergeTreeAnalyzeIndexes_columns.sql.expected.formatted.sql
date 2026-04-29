@@ -10,6 +10,8 @@ CREATE TABLE data
 ENGINE = MergeTree()
 ORDER BY key;
 
+SYSTEM stop merges data;
+
 INSERT INTO data SELECT
     *,
     * + 1000000

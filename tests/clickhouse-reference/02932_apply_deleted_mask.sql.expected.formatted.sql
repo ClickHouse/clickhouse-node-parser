@@ -30,7 +30,11 @@ WHERE database = currentDatabase()
     AND table = 't_materialize_delete'
     AND active;
 
+DELETE FROM t_materialize_delete WHERE id % 7 = 3;
+
 ALTER TABLE t_materialize_delete APPLY DELETED MASK;
+
+DELETE FROM t_materialize_delete WHERE id % 7 = 4;
 
 ALTER TABLE t_materialize_delete APPLY DELETED MASK IN PARTITION 5;
 

@@ -19,6 +19,8 @@ CREATE TABLE data2
 ENGINE = ReplicatedMergeTree('/tables/{database}/{table}', 'r1')
 ORDER BY tuple();
 
+SYSTEM stop merges data1;
+
 INSERT INTO data1 SELECT *
 FROM numbers(100)
 SETTINGS
@@ -40,6 +42,8 @@ SELECT
 FROM `system`.detached_parts
 WHERE database = currentDatabase()
     AND table = 'data2';
+
+SYSTEM flush logs query_log;
 
 SELECT
     'FETCH PARTITION uses multiple threads',

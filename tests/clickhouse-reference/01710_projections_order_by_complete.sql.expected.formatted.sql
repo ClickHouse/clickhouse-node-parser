@@ -10,6 +10,8 @@ CREATE TABLE data_proj_order_by_comp
 ENGINE = MergeTree()
 ORDER BY tuple();
 
+SYSTEM stop merges data_proj_order_by_comp;
+
 INSERT INTO data_proj_order_by_comp;
 
 INSERT INTO data_proj_order_by_comp;
@@ -31,4 +33,4 @@ SELECT t
 FROM data_proj_order_by_comp
 WHERE t > 0
 ORDER BY t ASC
-SETTINGS max_threads = 1;
+SETTINGS max_threads = 1; -- { echoOff }

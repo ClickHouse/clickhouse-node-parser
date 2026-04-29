@@ -15,6 +15,11 @@ INSERT INTO bloom_filter_sizing_pk SELECT
     number AS value -- whatever
 FROM numbers(100000);
 
+--
+-- Merge everything into a single part
+--
+OPTIMIZE TABLE bloom_filter_sizing_pk FINAL;
+
 SELECT COUNT()
 FROM bloom_filter_sizing_pk
 WHERE key = 1;
@@ -45,6 +50,11 @@ INSERT INTO bloom_filter_sizing_sec SELECT
     rand() % 100 AS key2, -- 100 unique keys
     number AS value -- whatever
 FROM numbers(100000);
+
+--
+-- Merge everything into a single part
+--
+OPTIMIZE TABLE bloom_filter_sizing_sec FINAL;
 
 SELECT COUNT()
 FROM bloom_filter_sizing_sec

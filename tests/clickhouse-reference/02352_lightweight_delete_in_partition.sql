@@ -8,5 +8,7 @@ INSERT INTO t_replicated_merge_tree select '2024-08-01', '1', toString(number) F
 INSERT INTO t_replicated_merge_tree select '2024-08-02', '1', toString(number)  FROM numbers(100);
 SELECT COUNT() FROM t_merge_tree;
 SELECT COUNT() FROM t_replicated_merge_tree;
+DELETE FROM t_merge_tree IN PARTITION '2024-08-01' WHERE id = '1';
+DELETE FROM t_replicated_merge_tree IN PARTITION '2024-08-01' WHERE id = '1';
 DROP TABLE t_merge_tree SYNC;
 DROP TABLE t_replicated_merge_tree SYNC;

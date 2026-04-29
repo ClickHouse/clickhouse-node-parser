@@ -29,6 +29,8 @@ SETTINGS
     parallel_view_processing = 1,
     use_concurrency_control = 0;
 
+SYSTEM flush logs query_log;
+
 SELECT peak_threads_usage >= 10
 FROM `system`.query_log
 WHERE event_date >= yesterday()

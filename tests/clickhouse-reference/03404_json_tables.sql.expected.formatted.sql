@@ -9,6 +9,8 @@ ORDER BY (c0); -- { serverError DATA_TYPE_CANNOT_BE_USED_IN_KEY }
 
 INSERT INTO t0 (c0); -- { serverError UNKNOWN_TABLE }
 
+DELETE FROM t0 WHERE true; -- { serverError UNKNOWN_TABLE }
+
 DROP TABLE t0; -- { serverError UNKNOWN_TABLE }
 
 SELECT '---';

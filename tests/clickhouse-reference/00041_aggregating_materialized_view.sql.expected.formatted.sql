@@ -60,6 +60,8 @@ WHERE CounterID = 942285
 GROUP BY StartDate
 ORDER BY StartDate ASC;
 
+OPTIMIZE TABLE basic;
+
 DROP TABLE visits_null;
 
 DROP TABLE basic;

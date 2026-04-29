@@ -16,6 +16,8 @@ SELECT * FROM report  WHERE product = 'IU';
 ALTER TABLE report MODIFY COLUMN product Enum8('IU' = 1, 'WS' = 2, 'PS' = 3);
 SELECT * FROM report WHERE product = 'PS';
 INSERT INTO report VALUES ('PS', 'jeep', 'Grand Cherokee', toDateTime('2005-10-03 15:00:00'));
+DETACH TABLE report;
+ATTACH TABLE report;
 DROP TABLE IF EXISTS replicated_report;
 CREATE TABLE replicated_report
 (
@@ -32,3 +34,5 @@ SELECT * FROM replicated_report  WHERE product = 'IU';
 ALTER TABLE replicated_report MODIFY COLUMN product Enum8('IU' = 1, 'WS' = 2, 'PS' = 3) SETTINGS alter_sync=2;
 SELECT * FROM replicated_report WHERE product = 'PS';
 INSERT INTO replicated_report VALUES ('PS', 'jeep', 'Grand Cherokee', toDateTime('2005-10-03 15:00:00'));
+DETACH TABLE replicated_report;
+ATTACH TABLE replicated_report;

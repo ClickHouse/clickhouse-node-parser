@@ -38,3 +38,7 @@ WHERE ArrLen = 0;
 SELECT *
 FROM defaults_on_defaults
 WHERE ArrLen = 0;
+
+SHOW CREATE TABLE defaults_on_defaults;
+
+OPTIMIZE TABLE defaults_on_defaults FINAL;

@@ -10,6 +10,8 @@ INSERT INTO FUNCTION file(concat(currentDatabase(), '_data_02314.csv')) SELECT
     number + 2
 FROM numbers(5);
 
+DESCRIBE TABLE file(concat(currentDatabase(), '_data_02314.csv')) SETTINGS input_format_csv_skip_first_lines = 5;
+
 SELECT *
 FROM file(concat(currentDatabase(), '_data_02314.csv'))
 ORDER BY c1 ASC
@@ -26,6 +28,8 @@ INSERT INTO FUNCTION file(concat(currentDatabase(), '_data_02314.tsv')) SELECT
     number + 1,
     number + 2
 FROM numbers(5);
+
+DESCRIBE TABLE file(concat(currentDatabase(), '_data_02314.tsv')) SETTINGS input_format_tsv_skip_first_lines = 5;
 
 SELECT *
 FROM file(concat(currentDatabase(), '_data_02314.tsv'))

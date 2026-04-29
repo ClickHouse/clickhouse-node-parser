@@ -12,6 +12,8 @@ SETTINGS enable_block_number_column = 1, min_bytes_for_wide_part = 0;
 
 INSERT INTO t_block_number_mut;
 
+OPTIMIZE TABLE t_block_number_mut FINAL;
+
 ALTER TABLE t_block_number_mut UPDATE n = n + 1 WHERE 1;
 
 SELECT *

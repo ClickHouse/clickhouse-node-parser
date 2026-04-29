@@ -16,6 +16,7 @@ ORDER BY 02484_plusone(id)
 PARTITION BY 02484_plustwo(id)
 SAMPLE BY 02484_plusone(id)
 TTL 02484_plusthreemonths(dt);
+SHOW CREATE TABLE 02484_substitute_udf;
 CREATE FUNCTION 02484_plusthree AS (a) -> a + 3;
 ALTER TABLE 02484_substitute_udf ADD COLUMN id2 UInt64, MODIFY ORDER BY (02484_plusone(id), 02484_plusthree(id2));
 CREATE FUNCTION 02484_plusthreedays AS (a) -> a + INTERVAL 3 DAY;

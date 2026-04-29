@@ -10,6 +10,8 @@ SETTINGS index_granularity_bytes = 0;
 
 ALTER TABLE mt_compact MODIFY SETTING min_rows_for_wide_part = 1000; -- { serverError NOT_IMPLEMENTED }
 
+SHOW CREATE TABLE mt_compact;
+
 CREATE TABLE mt_compact_2
 (
     a Int,

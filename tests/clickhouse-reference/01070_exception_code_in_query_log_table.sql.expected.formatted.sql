@@ -9,6 +9,8 @@ CREATE TABLE test_table_for_01070_exception_code_in_query_log_table
 )
 ENGINE = Memory();
 
+SYSTEM FLUSH LOGS query_log;
+
 SELECT exception_code
 FROM `system`.query_log
 WHERE current_database = currentDatabase()

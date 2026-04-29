@@ -22,8 +22,12 @@ FROM numbers(100000);
 
 SET lightweight_delete_mode = 'alter_update';
 
+DELETE FROM t_lwd_vertical WHERE id % 4 = 0;
+
 SELECT count()
 FROM t_lwd_vertical;
+
+OPTIMIZE TABLE t_lwd_vertical FINAL;
 
 SELECT count()
 FROM `system`.parts_columns
@@ -32,6 +36,10 @@ WHERE database = currentDatabase()
     AND active
     AND partition_id = 'all'
     AND column = '_row_exists';
+
+DELETE FROM t_lwd_vertical WHERE 1;
+
+SYSTEM FLUSH LOGS part_log;
 
 SELECT
     merge_algorithm,

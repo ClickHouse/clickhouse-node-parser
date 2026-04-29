@@ -8,6 +8,8 @@ INSERT INTO FUNCTION file(concat(current_database(), '_03259.orc'), 'ORC') SELEC
     if(number % 2 = 0, NULL, toDate32(number)) AS date_field
 FROM numbers(10);
 
+DESCRIBE TABLE file(concat(current_database(), '_03259.orc'), 'ORC');
+
 SELECT date_field
 FROM file(concat(current_database(), '_03259.orc'), 'ORC')
 ORDER BY number ASC;

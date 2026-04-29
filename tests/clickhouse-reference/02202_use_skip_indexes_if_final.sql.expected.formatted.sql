@@ -10,6 +10,8 @@ ENGINE = AggregatingMergeTree()
 ORDER BY key
 PARTITION BY key;
 
+SYSTEM STOP MERGES data_02201;
+
 INSERT INTO data_02201 SELECT
     number,
     number

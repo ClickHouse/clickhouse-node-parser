@@ -1,3 +1,8 @@
+-- Tags: no-parallel
+-- Tag no-parallel: Messes with internal cache
+-- Test for Bug 56258
+SYSTEM CLEAR QUERY CACHE;
+
 SELECT '-- Bug 56258: Check literals (ASTLiteral)';
 
 SELECT 10

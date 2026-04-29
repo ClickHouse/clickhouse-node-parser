@@ -32,10 +32,15 @@ INSERT INTO rmt;
 
 INSERT INTO rmt;
 
+-- there's nothing to merge in all partitions but '1'
+OPTIMIZE TABLE rmt PARTITION tuple(123);
+
 SET optimize_throw_if_noop = 1;
 
 SELECT sleepEachRow(3) AS higher_probability_of_reproducing_the_issue
 FORMAT Null;
+
+SYSTEM flush logs zookeeper_log, query_log;
 
 -- it should not list unneeded partitions where we cannot merge anything
 SELECT *

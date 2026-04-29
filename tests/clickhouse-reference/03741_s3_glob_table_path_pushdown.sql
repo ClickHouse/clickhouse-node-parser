@@ -40,6 +40,7 @@ SELECT count() FROM 03741_data WHERE _path IN ('test/03741_data/file1.parquet', 
 SETTINGS s3_path_filter_limit = 1;
 SELECT count() FROM 03741_data WHERE _path IN ('test/03741_data/file1.parquet', 'test/03741_data/file2.parquet')
 SETTINGS s3_path_filter_limit = 2;
+SYSTEM FLUSH LOGS query_log;
 SELECT ProfileEvents['S3ListObjects'], ProfileEvents['EngineFileLikeReadFiles']
 FROM system.query_log
 WHERE current_database = currentDatabase()

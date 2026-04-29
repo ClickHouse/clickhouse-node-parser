@@ -12,6 +12,8 @@ INSERT INTO t (d, s, c);
 
 INSERT INTO t (d, s, c);
 
+OPTIMIZE TABLE t;
+
 SELECT *
 FROM t;
 

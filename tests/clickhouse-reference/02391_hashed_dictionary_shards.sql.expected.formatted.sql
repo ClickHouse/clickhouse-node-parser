@@ -64,6 +64,10 @@ SOURCE(clickhouse(TABLE test_table))
 LIFETIME(0)
 LAYOUT(SPARSE_HASHED(SHARDS 10));
 
+SHOW CREATE TABLE test_dictionary_10_shards;
+
+SYSTEM RELOAD DICTIONARY test_dictionary_10_shards;
+
 SELECT element_count
 FROM `system`.dictionaries
 WHERE database = currentDatabase()
@@ -86,6 +90,10 @@ PRIMARY KEY key
 SOURCE(clickhouse(TABLE test_table_nullable))
 LIFETIME(0)
 LAYOUT(SPARSE_HASHED(SHARDS 10));
+
+SHOW CREATE TABLE test_dictionary_10_shards_nullable;
+
+SYSTEM RELOAD DICTIONARY test_dictionary_10_shards_nullable;
 
 SELECT element_count
 FROM `system`.dictionaries
@@ -111,6 +119,10 @@ SOURCE(clickhouse(TABLE test_table_complex))
 LIFETIME(0)
 LAYOUT(COMPLEX_KEY_SPARSE_HASHED(SHARDS 10));
 
+SYSTEM RELOAD DICTIONARY test_complex_dictionary_10_shards;
+
+SHOW CREATE TABLE test_complex_dictionary_10_shards;
+
 SELECT element_count
 FROM `system`.dictionaries
 WHERE database = currentDatabase()
@@ -134,6 +146,8 @@ SOURCE(clickhouse(TABLE test_table_string))
 LIFETIME(0)
 LAYOUT(SPARSE_HASHED(SHARDS 10));
 
+SYSTEM RELOAD DICTIONARY test_dictionary_10_shards_string;
+
 DROP DICTIONARY test_dictionary_10_shards_string;
 
 DROP DICTIONARY IF EXISTS test_dictionary_10_shards_incremental;
@@ -147,6 +161,8 @@ PRIMARY KEY key
 SOURCE(clickhouse(TABLE test_table_last_access UPDATE_FIELD last_access))
 LIFETIME(0)
 LAYOUT(SPARSE_HASHED(SHARDS 10));
+
+SYSTEM RELOAD DICTIONARY test_dictionary_10_shards_incremental; -- { serverError BAD_ARGUMENTS }
 
 DROP DICTIONARY test_dictionary_10_shards_incremental;
 

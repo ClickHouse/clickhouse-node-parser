@@ -20,6 +20,8 @@ WHERE database = currentDatabase()
     AND active
 ORDER BY name ASC;
 
+OPTIMIZE TABLE not_partitioned PARTITION tuple() FINAL;
+
 SELECT sum(x)
 FROM not_partitioned;
 
@@ -57,6 +59,8 @@ WHERE database = currentDatabase()
     AND active
 ORDER BY name ASC;
 
+OPTIMIZE TABLE partitioned_by_week PARTITION '2000-01-03' FINAL;
+
 SELECT sum(x)
 FROM partitioned_by_week;
 
@@ -89,6 +93,10 @@ WHERE database = currentDatabase()
     AND active
 ORDER BY name ASC;
 
+OPTIMIZE TABLE partitioned_by_tuple PARTITION ('2000-01-01', 1) FINAL;
+
+OPTIMIZE TABLE partitioned_by_tuple PARTITION ('2000-01-02', 1) FINAL;
+
 SELECT sum(y)
 FROM partitioned_by_tuple;
 
@@ -119,6 +127,8 @@ WHERE database = currentDatabase()
     AND table = 'partitioned_by_string'
     AND active
 ORDER BY name ASC;
+
+OPTIMIZE TABLE partitioned_by_string PARTITION 'aaa' FINAL;
 
 SELECT sum(x)
 FROM partitioned_by_string;

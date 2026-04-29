@@ -35,6 +35,8 @@ SET distributed_foreground_insert = 1;
 
 INSERT INTO t_distr;
 
+SYSTEM FLUSH DISTRIBUTED t_distr;
+
 SELECT *
 FROM t_distr
 ORDER BY a ASC;

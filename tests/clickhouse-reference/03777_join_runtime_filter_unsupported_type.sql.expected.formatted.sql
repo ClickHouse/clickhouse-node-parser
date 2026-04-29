@@ -27,6 +27,8 @@ SETTINGS
     join_runtime_filter_exact_values_limit = 100,
     log_comment = 'Q1';
 
+SYSTEM FLUSH LOGS system.query_log;
+
 SELECT
     ProfileEvents['RuntimeFilterRowsChecked'],
     ProfileEvents['RuntimeFilterRowsSkipped']

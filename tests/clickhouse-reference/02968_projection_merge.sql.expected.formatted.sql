@@ -23,6 +23,8 @@ INSERT INTO tp SELECT
     2
 FROM numbers(3);
 
+OPTIMIZE TABLE tp FINAL;
+
 SET parallel_replicas_local_plan = 1, parallel_replicas_support_projection = 1, optimize_aggregation_in_order = 0;
 
 SELECT
@@ -135,3 +137,5 @@ INSERT INTO tp SELECT
     number % 3,
     2
 FROM numbers(3);
+
+OPTIMIZE TABLE tp FINAL DEDUPLICATE BY type;

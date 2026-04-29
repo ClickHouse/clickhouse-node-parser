@@ -19,6 +19,16 @@ CREATE TABLE rmt
 ENGINE = ReplicatedMergeTree('/clickhouse/test_01148/{shard}/{database}/{table}', '{replica}')
 ORDER BY n;
 
+SHOW CREATE TABLE rmt;
+
+RENAME TABLE rmt TO rmt1;
+
+DETACH TABLE rmt1;
+
+ATTACH TABLE rmt1;
+
+SHOW CREATE TABLE rmt1;
+
 CREATE TABLE rmt
 (
     n UInt64,
@@ -34,6 +44,12 @@ CREATE TABLE rmt
 )
 ENGINE = ReplicatedMergeTree('{default_path_test}test_01148', '{default_name_test}')
 ORDER BY n;
+
+RENAME TABLE rmt TO rmt2; -- { serverError NOT_IMPLEMENTED }
+
+DETACH TABLE rmt;
+
+ATTACH TABLE rmt;
 
 SET distributed_ddl_output_mode = 'none';
 
@@ -53,6 +69,12 @@ CREATE TABLE test_01148_atomic.rmt3 AS test_01148_atomic.rmt2; -- { serverError 
 
 CREATE TABLE test_01148_atomic.rmt4 ON CLUSTER test_shard_localhost AS test_01148_atomic.rmt2;
 
+SHOW CREATE TABLE test_01148_atomic.rmt2;
+
+RENAME TABLE test_01148_atomic.rmt4 TO test_01148_atomic.rmt3;
+
+SHOW CREATE TABLE test_01148_atomic.rmt3;
+
 DROP DATABASE IF EXISTS test_01148_ordinary;
 
 SET allow_deprecated_database_ordinary = 1;
@@ -60,6 +82,8 @@ SET allow_deprecated_database_ordinary = 1;
 -- Creation of a database with Ordinary engine emits a warning.
 CREATE DATABASE test_01148_ordinary
 ENGINE = Ordinary;
+
+RENAME TABLE test_01148_atomic.rmt3 TO test_01148_ordinary.rmt3; -- { serverError NOT_IMPLEMENTED }
 
 DROP DATABASE test_01148_ordinary;
 
@@ -84,5 +108,7 @@ ORDER BY (director_id, movie_id)
 SETTINGS index_granularity = 8192;
 
 CREATE TABLE imdb_01148.anything AS imdb_01148.movie_directors;
+
+SHOW CREATE TABLE imdb_01148.anything;
 
 DROP DATABASE imdb_01148;

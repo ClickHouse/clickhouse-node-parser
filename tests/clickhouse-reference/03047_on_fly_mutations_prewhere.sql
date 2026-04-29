@@ -12,3 +12,4 @@ ALTER TABLE t_update_prewhere UPDATE c2 = c3 - c1  WHERE c3 < 10000;
 SELECT sum(c2) FROM t_update_prewhere PREWHERE c1 != 0 WHERE c2 % 5 = 1;
 SET mutations_sync = 0;
 SET apply_mutations_on_fly = 1;
+SYSTEM STOP MERGES t_update_prewhere;

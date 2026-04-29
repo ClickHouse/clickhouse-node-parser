@@ -4,6 +4,7 @@ DROP TABLE IF EXISTS t_optimize_level;
 CREATE TABLE t_optimize_level (a UInt64, b UInt64)
 ENGINE = ReplacingMergeTree ORDER BY a
 SETTINGS index_granularity = 1;
+SYSTEM STOP MERGES t_optimize_level;
 INSERT INTO t_optimize_level VALUES (1, 1) (1, 2) (2, 3);
 INSERT INTO t_optimize_level VALUES (4, 3) (5, 4);
 SELECT _part, a, b FROM t_optimize_level ORDER BY a;

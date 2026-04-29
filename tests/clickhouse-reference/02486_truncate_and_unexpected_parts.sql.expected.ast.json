@@ -164,6 +164,14 @@
     "settingsAfterOrderBy": true
   },
   {
+    "kind": "system",
+    "body": "SYSTEM stop cleanup rmt"
+  },
+  {
+    "kind": "system",
+    "body": "SYSTEM stop merges rmt1"
+  },
+  {
     "kind": "insert",
     "target": {
       "kind": "table",
@@ -233,6 +241,48 @@
   },
   {
     "kind": "truncate",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "rmt1"
+    }
+  },
+  {
+    "kind": "system",
+    "body": "SYSTEM sync replica rmt"
+  },
+  {
+    "kind": "system",
+    "body": "SYSTEM sync replica rmt1"
+  },
+  {
+    "kind": "detach",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "rmt"
+    },
+    "sync": true
+  },
+  {
+    "kind": "detach",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "rmt1"
+    },
+    "sync": true
+  },
+  {
+    "kind": "attach",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "rmt"
+    }
+  },
+  {
+    "kind": "attach",
     "targetType": "TABLE",
     "table": {
       "kind": "tableRef",
@@ -407,6 +457,10 @@
     "settingsAfterOrderBy": true
   },
   {
+    "kind": "system",
+    "body": "SYSTEM sync replica rmt1 lightweight"
+  },
+  {
     "kind": "alter",
     "table": {
       "kind": "tableRef",
@@ -458,6 +512,10 @@
         }
       }
     ]
+  },
+  {
+    "kind": "system",
+    "body": "SYSTEM sync replica rmt2"
   },
   {
     "kind": "createTable",
@@ -570,6 +628,14 @@
     }
   },
   {
+    "kind": "system",
+    "body": "SYSTEM stop cleanup rmt3"
+  },
+  {
+    "kind": "system",
+    "body": "SYSTEM sync replica rmt3 pull"
+  },
+  {
     "kind": "alter",
     "table": {
       "kind": "tableRef",
@@ -586,6 +652,31 @@
         }
       }
     ]
+  },
+  {
+    "kind": "optimize",
+    "table": {
+      "kind": "tableRef",
+      "table": "rmt3"
+    },
+    "final": true
+  },
+  {
+    "kind": "detach",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "rmt3"
+    },
+    "sync": true
+  },
+  {
+    "kind": "attach",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "rmt3"
+    }
   },
   {
     "kind": "select",

@@ -11,6 +11,8 @@ CREATE TABLE modify_sample_replicated (d Date DEFAULT '2000-01-01', x UInt8, y U
 INSERT INTO modify_sample_replicated (x, y) SELECT toUInt8(number) AS x, toUInt64(number) as y FROM system.numbers LIMIT 256;
 SELECT count(), min(x), max(x), sum(x), uniqExact(x) FROM modify_sample_replicated SAMPLE 0.1; -- { serverError SAMPLING_NOT_SUPPORTED }
 ALTER TABLE modify_sample_replicated MODIFY SAMPLE BY x;
+DETACH TABLE modify_sample_replicated;
+ATTACH TABLE modify_sample_replicated;
 ALTER TABLE modify_sample_replicated MODIFY SAMPLE BY d;  -- { serverError BAD_ARGUMENTS }
 ALTER TABLE modify_sample_replicated MODIFY SAMPLE BY y;
 SELECT count(), min(y), max(y), sum(y), uniqExact(y) FROM modify_sample_replicated SAMPLE 0.1;

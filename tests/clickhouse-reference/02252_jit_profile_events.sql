@@ -2,7 +2,9 @@
 
 SET compile_expressions = 1;
 SET min_count_to_compile_expression = 0;
+SYSTEM CLEAR COMPILED EXPRESSION CACHE;
 SELECT number + number + number FROM numbers(1);
+SYSTEM FLUSH LOGS query_log;
 SELECT ProfileEvents['CompileFunction'] FROM system.query_log WHERE
     current_database = currentDatabase()
     AND type = 'QueryFinish'

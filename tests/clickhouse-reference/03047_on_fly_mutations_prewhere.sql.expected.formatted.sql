@@ -46,3 +46,5 @@ WHERE c2 % 5 = 1;
 SET mutations_sync = 0;
 
 SET apply_mutations_on_fly = 1;
+
+SYSTEM STOP MERGES t_update_prewhere;

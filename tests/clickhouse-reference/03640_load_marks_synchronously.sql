@@ -8,6 +8,7 @@
 create table data (key int) engine=MergeTree() order by key settings prewarm_mark_cache=0, index_granularity=1000;
 insert into data select * from numbers(1000);
 select * from data settings load_marks_asynchronously=1 format Null /* 1 */;
+system flush logs query_log;
 select query, ProfileEvents['BackgroundLoadingMarksTasks']>0 async, ProfileEvents['MarksTasksFromCache']>0 sync
 from system.query_log
 where current_database = currentDatabase() and query_kind = 'Select' and type != 'QueryStart'

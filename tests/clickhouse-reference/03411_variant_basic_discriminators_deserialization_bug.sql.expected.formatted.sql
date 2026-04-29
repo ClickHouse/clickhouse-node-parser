@@ -12,6 +12,8 @@ SETTINGS use_compact_variant_discriminators_serialization = 0, index_granularity
 
 INSERT INTO t0 (c0);
 
+OPTIMIZE TABLE t0 FINAL;
+
 SELECT c0
 FROM t0;
 

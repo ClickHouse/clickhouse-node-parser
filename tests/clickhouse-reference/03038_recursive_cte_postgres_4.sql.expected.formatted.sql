@@ -91,4 +91,4 @@ WITH RECURSIVE search_graph AS (
 
 SELECT *
 FROM search_graph
-ORDER BY path ASC;
+ORDER BY path ASC; -- { echoOff }

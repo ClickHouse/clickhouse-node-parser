@@ -34,6 +34,10 @@ INSERT INTO default_codec_synthetic SELECT number
 FROM `system`.numbers
 LIMIT 5000000;
 
+OPTIMIZE TABLE delta_codec_synthetic FINAL;
+
+OPTIMIZE TABLE default_codec_synthetic FINAL;
+
 SELECT floor(big_size / small_size) AS ratio
 FROM
     (
@@ -102,6 +106,10 @@ WHERE number % 3 == 0
 INSERT INTO default_codec_float SELECT *
 FROM delta_codec_float;
 
+OPTIMIZE TABLE delta_codec_float FINAL;
+
+OPTIMIZE TABLE default_codec_float FINAL;
+
 SELECT floor(big_size / small_size) AS ratio
 FROM
     (
@@ -165,6 +173,10 @@ FROM numbers(1547510400, 500000);
 
 INSERT INTO default_codec_string SELECT *
 FROM delta_codec_string;
+
+OPTIMIZE TABLE delta_codec_string FINAL;
+
+OPTIMIZE TABLE default_codec_string FINAL;
 
 SELECT floor(big_size / small_size) AS ratio
 FROM

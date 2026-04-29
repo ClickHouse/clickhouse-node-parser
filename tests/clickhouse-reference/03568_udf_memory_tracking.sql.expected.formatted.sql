@@ -10,6 +10,8 @@ FROM numbers(200)
 FORMAT Null
 SETTINGS max_threads = 1, max_block_size = 1;
 
+SYSTEM FLUSH LOGS query_log;
+
 SELECT
     count() AS queries,
     min(memory_usage) < 20000000 AS min_less_then_20mb,

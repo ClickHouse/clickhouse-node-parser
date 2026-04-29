@@ -4,11 +4,14 @@ CREATE TABLE 03164_users (uid Nullable(Int16), name String, age Int16) ENGINE=Me
 INSERT INTO 03164_users VALUES (1, 'John', 33);
 INSERT INTO 03164_users VALUES (2, 'Ksenia', 48);
 INSERT INTO 03164_users VALUES (NULL, 'Mark', 50);
+OPTIMIZE TABLE 03164_users FINAL;
 SELECT '-- Reproducer result:';
 SELECT * FROM 03164_users ORDER BY uid ASC NULLS FIRST LIMIT 10 SETTINGS optimize_read_in_order = 1;
 DROP TABLE IF EXISTS 03164_multi_key;
 CREATE TABLE 03164_multi_key (c1 Nullable(UInt32), c2 Nullable(UInt32)) ENGINE = MergeTree ORDER BY (c1, c2) SETTINGS allow_nullable_key=1;
 INSERT INTO 03164_multi_key VALUES (0, 0), (1, NULL), (NULL, 2), (NULL, NULL), (4, 4);
+-- Just in case
+OPTIMIZE TABLE 03164_multi_key FINAL;
 SELECT c1, c2
 FROM 03164_multi_key
 ORDER BY c1 ASC NULLS LAST, c2 ASC NULLS LAST

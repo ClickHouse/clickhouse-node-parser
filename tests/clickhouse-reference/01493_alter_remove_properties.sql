@@ -11,6 +11,8 @@ CREATE TABLE prop_table
 ENGINE MergeTree()
 ORDER BY tuple()
 TTL column_comment + INTERVAL 2 MONTH;
+SHOW CREATE TABLE prop_table;
+SYSTEM STOP TTL MERGES prop_table;
 INSERT INTO prop_table (column_codec, column_comment, column_ttl) VALUES ('str', toDate('2019-10-01'), 1);
 SELECT column_default, column_materialized, column_alias, column_codec, column_comment, column_ttl FROM prop_table;
 ALTER TABLE prop_table MODIFY COLUMN column_comment REMOVE COMMENT;
@@ -24,4 +26,6 @@ ALTER TABLE prop_table MODIFY COLUMN column_default REMOVE DEFAULT;
 INSERT INTO prop_table (column_materialized, column_alias, column_codec, column_comment, column_ttl) VALUES (22, 55, 'tsr', toDate('2020-03-01'), 4);
 ALTER TABLE prop_table REMOVE TTL;
 ALTER TABLE prop_table MODIFY COLUMN column_ttl REMOVE TTL;
+SYSTEM START TTL MERGES prop_table;
+OPTIMIZE TABLE prop_table FINAL;
 SELECT COUNT() FROM prop_table;

@@ -39,4 +39,6 @@ FROM (
     )
 GROUP BY d;
 
+OPTIMIZE TABLE stored_aggregates;
+
 DROP TABLE stored_aggregates;

@@ -11,6 +11,8 @@ ORDER BY a;
 
 INSERT INTO `02863_delayed_source`;
 
+SYSTEM ENABLE FAILPOINT use_delayed_remote_source;
+
 SELECT sum(a)
 FROM remote('127.0.0.4', currentDatabase(), '02863_delayed_source')
 WITH TOTALS
@@ -32,5 +34,7 @@ ORDER BY a ASC
 LIMIT 1
 FORMAT JSON
 SETTINGS output_format_write_statistics = 0;
+
+SYSTEM DISABLE FAILPOINT use_delayed_remote_source;
 
 DROP TABLE `02863_delayed_source`;

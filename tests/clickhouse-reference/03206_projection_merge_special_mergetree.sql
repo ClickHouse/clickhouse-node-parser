@@ -6,6 +6,7 @@ CREATE TABLE tp (
     PROJECTION p (select sum(eventcnt), type group by type)
 ) engine = MergeTree order by type;
 INSERT INTO tp SELECT number%3, 1 FROM numbers(3);
+OPTIMIZE TABLE tp DEDUPLICATE;  -- { serverError SUPPORT_IS_DISABLED }
 DROP TABLE tp;
 CREATE TABLE tp (
     type Int32,
@@ -32,6 +33,7 @@ CREATE TABLE tp (
     PROJECTION p (select sum(eventcnt), type group by type)
 ) engine = ReplacingMergeTree order by type
 SETTINGS deduplicate_merge_projection_mode = 'drop';
+OPTIMIZE TABLE tp FINAL;
 -- expecting no projection
 SELECT
     name

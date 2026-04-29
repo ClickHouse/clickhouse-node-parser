@@ -9,6 +9,8 @@ ENGINE = ReplicatedMergeTree('/clickhouse/tables/{database}/03717_table', '1')
 ORDER BY id
 SETTINGS min_bytes_for_wide_part = 10000, min_rows_for_wide_part = 10000, serialization_info_version = 'basic', string_serialization_version = 'with_size_stream';
 
+SYSTEM STOP MERGES 03717_table;
+
 DROP TABLE IF EXISTS `03717_mv_table_odd`;
 
 CREATE TABLE `03717_mv_table_odd`
@@ -18,6 +20,8 @@ CREATE TABLE `03717_mv_table_odd`
 ENGINE = ReplicatedMergeTree('/clickhouse/tables/{database}/03717_mv_table_odd', '1')
 ORDER BY value
 SETTINGS min_bytes_for_wide_part = 10000, min_rows_for_wide_part = 10000, serialization_info_version = 'basic', string_serialization_version = 'with_size_stream';
+
+SYSTEM STOP MERGES 03717_mv_table_odd;
 
 DROP TABLE IF EXISTS `03717_mv_odd`;
 
@@ -38,6 +42,8 @@ ENGINE = ReplicatedMergeTree('/clickhouse/tables/{database}/03717_mv_table_even'
 ORDER BY value
 SETTINGS min_bytes_for_wide_part = 10000, min_rows_for_wide_part = 10000, serialization_info_version = 'basic', string_serialization_version = 'with_size_stream';
 
+SYSTEM STOP MERGES 03717_mv_table_even;
+
 DROP TABLE IF EXISTS `03717_mv_even`;
 
 CREATE MATERIALIZED VIEW `03717_mv_even`
@@ -56,6 +62,8 @@ CREATE TABLE `03717_mv_table_all`
 ENGINE = ReplicatedMergeTree('/clickhouse/tables/{database}/03717_mv_table_all', '1')
 ORDER BY value
 SETTINGS min_bytes_for_wide_part = 10000, min_rows_for_wide_part = 10000, serialization_info_version = 'basic', string_serialization_version = 'with_size_stream';
+
+SYSTEM STOP MERGES 03717_mv_table_all;
 
 DROP TABLE IF EXISTS `03717_mv_all`;
 
@@ -84,6 +92,9 @@ INSERT INTO `03717_table`;
 INSERT INTO `03717_table`;
 
 INSERT INTO `03717_table`;
+
+--- those inserts might be in different async queue shards, they all would be flushed, but each shard produces separate part
+SYSTEM FLUSH ASYNC INSERT QUEUE 03717_table;
 
 INSERT INTO `03717_table`;
 

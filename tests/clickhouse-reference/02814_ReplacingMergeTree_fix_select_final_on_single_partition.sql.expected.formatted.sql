@@ -26,6 +26,9 @@ INSERT INTO t SELECT
     1
 FROM numbers(1e2);
 
+-- Put everything in one partition
+OPTIMIZE TABLE t FINAL;
+
 SELECT count()
 FROM t;
 

@@ -10,8 +10,11 @@ CREATE TABLE nested
 ) ENGINE = MergeTree ORDER BY tuple();
 INSERT INTO nested VALUES (['Hello', 'World'], [['a'], ['b', 'c']], [['PU', 'US'], ['OTHER']]);
 SELECT * FROM nested;
+DETACH TABLE nested;
+ATTACH TABLE nested;
 INSERT INTO nested VALUES (['GoodBye'], [['1', '2']], [['PU', 'US', 'OTHER']]);
 SELECT * FROM nested ORDER BY column.name;
+OPTIMIZE TABLE nested PARTITION tuple() FINAL;
 CREATE TABLE nested
 (
     column Nested

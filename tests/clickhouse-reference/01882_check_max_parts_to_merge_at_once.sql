@@ -9,7 +9,11 @@ CREATE TABLE limited_merge_table
 ENGINE = MergeTree()
 ORDER BY key
 SETTINGS max_parts_to_merge_at_once = 3;
+SYSTEM STOP MERGES limited_merge_table;
 INSERT INTO limited_merge_table SELECT number FROM numbers(100);
+SYSTEM START MERGES limited_merge_table;
+OPTIMIZE TABLE limited_merge_table FINAL;
+SYSTEM FLUSH LOGS part_log;
 SELECT COUNT() FROM limited_merge_table;
 -- final optimize FINAL will merge all parts, but all previous merges must merge <= 3 parts.
 -- During concurrent run only one final merge can happen, thats why we have this `if`.

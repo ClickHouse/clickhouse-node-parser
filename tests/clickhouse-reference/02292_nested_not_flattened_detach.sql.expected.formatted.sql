@@ -8,4 +8,12 @@ CREATE TABLE t_nested_detach
 )
 ENGINE = Log;
 
+SHOW CREATE TABLE t_nested_detach;
+
+DESCRIBE TABLE t_nested_detach;
+
 SET flatten_nested = 1;
+
+DETACH TABLE t_nested_detach;
+
+ATTACH TABLE t_nested_detach;

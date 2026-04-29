@@ -49,6 +49,29 @@ INSERT INTO src SELECT
     1
 FROM numbers(2);
 
+-- Describe should not need to call sleep
+DESCRIBE TABLE (SELECT
+    '1947 #3 QUERY - TRUE',
+    id,
+    src.value - deltas_sum AS delta
+FROM
+    src
+LEFT JOIN (
+        SELECT
+            id,
+            sum(delta) AS deltas_sum
+        FROM dst
+        WHERE id IN (
+                SELECT id
+                FROM src
+                WHERE NOT sleepEachRow(0.001)
+            )
+        GROUP BY id
+    ) AS _a
+    USING (id)) FORMAT Null;
+
+SYSTEM FLUSH LOGS query_log;
+
 SELECT
     '1947 #1 CHECK - TRUE' AS test,
     ProfileEvents['SleepFunctionCalls'] AS sleep_calls,
@@ -114,6 +137,27 @@ INSERT INTO src SELECT
     number + 200 AS id,
     1
 FROM numbers(2);
+
+-- Describe should not need to call sleep
+DESCRIBE TABLE (SELECT
+    '1947 #3 QUERY - FALSE',
+    id,
+    src.value - deltas_sum AS delta
+FROM
+    src
+LEFT JOIN (
+        SELECT
+            id,
+            sum(delta) AS deltas_sum
+        FROM dst
+        WHERE id IN (
+                SELECT id
+                FROM src
+                WHERE NOT sleepEachRow(0.001)
+            )
+        GROUP BY id
+    ) AS _a
+    USING (id)) FORMAT Null;
 
 SELECT
     '1947 #1 CHECK - FALSE' AS test,

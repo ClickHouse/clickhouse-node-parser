@@ -70,6 +70,8 @@ SETTINGS min_bytes_for_wide_part = 0;
 
 INSERT INTO clear_column1 (d);
 
+SYSTEM SYNC REPLICA clear_column2;
+
 SET replication_alter_partitions_sync = 2;
 
 ALTER TABLE clear_column1 ADD COLUMN s String;
@@ -109,6 +111,10 @@ WHERE database = currentDatabase()
 GROUP BY table;
 
 SET optimize_throw_if_noop = 1;
+
+OPTIMIZE TABLE clear_column1 PARTITION '200001';
+
+OPTIMIZE TABLE clear_column1 PARTITION '200002';
 
 -- clear column in empty partition should be Ok
 ALTER TABLE clear_column1 DROP COLUMN s IN PARTITION '200012', DROP COLUMN i IN PARTITION '200012';

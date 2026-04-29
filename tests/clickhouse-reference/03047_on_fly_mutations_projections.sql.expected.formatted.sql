@@ -13,6 +13,8 @@ CREATE TABLE t_update_projections
 ENGINE = ReplicatedMergeTree('/clickhouse/tables/{database}/t_update_projections', '1')
 ORDER BY tuple();
 
+SYSTEM STOP MERGES t_update_projections;
+
 INSERT INTO t_update_projections SELECT
     number,
     number
@@ -23,6 +25,8 @@ FROM t_update_projections
 SETTINGS force_optimize_projection = 1;
 
 ALTER TABLE t_update_projections UPDATE v = v * v WHERE id % 2 = 1;
+
+SYSTEM SYNC REPLICA t_update_projections PULL;
 
 SELECT sum(v)
 FROM t_update_projections;

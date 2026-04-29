@@ -1,5 +1,6 @@
 DROP TABLE IF EXISTS view_order_attribution;
 DROP TABLE IF EXISTS order_attribution;
+
 CREATE TABLE order_attribution
 (
     `order_product_event_id` String,
@@ -24,6 +25,7 @@ CREATE TABLE order_attribution
 ENGINE = ReplacingMergeTree(_version)
 ORDER BY (brand_id, campaign_id, event_type, latest_ad_created_at, user_id, order_product_event_id, ad_event_id)
 SETTINGS index_granularity = 8192;
+
 CREATE VIEW view_order_attribution
 (
     `order_product_event_id` String,
@@ -105,5 +107,8 @@ GROUP BY
     gmv,
     gsv,
     po_created_at;
+
+DETACH TABLE view_order_attribution;
+ATTACH TABLE view_order_attribution;
 DROP TABLE view_order_attribution;
 DROP TABLE order_attribution;

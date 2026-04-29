@@ -12,11 +12,17 @@ INSERT INTO nested;
 SELECT *
 FROM nested;
 
+DETACH TABLE nested;
+
+ATTACH TABLE nested;
+
 INSERT INTO nested;
 
 SELECT *
 FROM nested
 ORDER BY column.name ASC;
+
+OPTIMIZE TABLE nested PARTITION tuple() FINAL;
 
 CREATE TABLE nested
 (

@@ -22,6 +22,8 @@ INSERT INTO t50 SELECT
     ''
 FROM numbers(150);
 
+OPTIMIZE TABLE t50 FINAL;
+
 SELECT
     a,
     b

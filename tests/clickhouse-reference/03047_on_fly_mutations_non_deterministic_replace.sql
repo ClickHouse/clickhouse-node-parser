@@ -5,6 +5,7 @@ SET mutations_execute_nondeterministic_on_initiator = 1;
 -- SELECT sum(...)
 
 CREATE TABLE t_lightweight_mut_5 (id UInt64, v UInt64) ENGINE = MergeTree ORDER BY id;
+SYSTEM STOP MERGES t_lightweight_mut_5;
 INSERT INTO t_lightweight_mut_5 VALUES (10, 20);
 ALTER TABLE t_lightweight_mut_5 UPDATE v = (SELECT sum(number) FROM numbers(100)) WHERE 1;
 SELECT id, v FROM t_lightweight_mut_5 ORDER BY id;
@@ -19,6 +20,7 @@ INSERT INTO t_lightweight_mut_5 VALUES (10, [20]);
 ALTER TABLE t_lightweight_mut_5 UPDATE v = (SELECT groupArray(number) FROM numbers(10)) WHERE 1;
 ALTER TABLE t_lightweight_mut_5 UPDATE v = (SELECT groupArray(number) FROM numbers(10000)) WHERE 1;
 SELECT id, length(v) FROM t_lightweight_mut_5 ORDER BY id; -- { serverError BAD_ARGUMENTS }
+SYSTEM START MERGES t_lightweight_mut_5;
 -- Force to wait previous mutations
 ALTER TABLE t_lightweight_mut_5 UPDATE v = v WHERE 1 SETTINGS mutations_sync = 2;
 -- SELECT uniqExactState(...)

@@ -1,5 +1,15 @@
 [
   {
+    "kind": "system",
+    "body": "SYSTEM flush logs system.metric_log",
+    "leadingComments": [
+      "-- Tags: no-fasttest, long, no-parallel, no-flaky-check, no-msan",
+      "-- - no-fasttest -- S3 is required",
+      "-- - no-flaky-check -- not compatible with ThreadFuzzer",
+      "-- The real example with metric_log with 1200+ columns!"
+    ]
+  },
+  {
     "kind": "createTable",
     "table": {
       "kind": "tableRef",
@@ -140,6 +150,18 @@
         }
       }
     }
+  },
+  {
+    "kind": "optimize",
+    "table": {
+      "kind": "tableRef",
+      "table": "metric_log"
+    },
+    "final": true
+  },
+  {
+    "kind": "system",
+    "body": "SYSTEM flush logs part_log"
   },
   {
     "kind": "select",

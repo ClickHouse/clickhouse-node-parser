@@ -29,6 +29,8 @@ INSERT INTO alter_compression_codec1;
 
 INSERT INTO alter_compression_codec1;
 
+SYSTEM SYNC REPLICA alter_compression_codec2;
+
 SELECT *
 FROM alter_compression_codec1
 ORDER BY id ASC;
@@ -38,6 +40,8 @@ FROM alter_compression_codec2
 ORDER BY id ASC;
 
 ALTER TABLE alter_compression_codec1 ADD COLUMN alter_column String DEFAULT 'default_value' CODEC(ZSTD);
+
+SYSTEM SYNC REPLICA alter_compression_codec1;
 
 SELECT compression_codec
 FROM `system`.`columns`

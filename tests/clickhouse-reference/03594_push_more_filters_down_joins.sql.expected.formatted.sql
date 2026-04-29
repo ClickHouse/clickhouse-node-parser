@@ -53,6 +53,8 @@ WHERE true
     AND (t3.status IN ('BACKLOG'))
 SETTINGS log_comment = '03594_push_more_filters_down_joins';
 
+SYSTEM FLUSH LOGS query_log;
+
 SELECT throwIf(ProfileEvents['JoinResultRowCount'] != 0)
 FROM `system`.query_log
 WHERE log_comment = '03594_push_more_filters_down_joins'

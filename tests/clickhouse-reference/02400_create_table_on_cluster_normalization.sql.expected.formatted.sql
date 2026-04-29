@@ -19,9 +19,13 @@ INSERT INTO local_t_l5ydey;
 
 INSERT INTO t_l5ydey;
 
+SYSTEM flush distributed t_l5ydey;
+
 SELECT *
 FROM t_l5ydey
 ORDER BY c_qv5rv ASC;
+
+SHOW CREATE TABLE t_l5ydey;
 
 -- Correct error code if creating database with the same path as table has
 CREATE DATABASE local_t_l5ydey

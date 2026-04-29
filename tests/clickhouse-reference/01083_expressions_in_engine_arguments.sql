@@ -18,6 +18,8 @@ CREATE TABLE merge_tf as merge(currentDatabase(), '.*');
 CREATE TABLE distributed (n Int8) ENGINE = Distributed(test_shard_localhost, currentDatabase(), 'fi' || 'le');
 CREATE TABLE distributed_tf as cluster('test' || '_' || 'shard_localhost', '', 'buf' || 'fer');
 INSERT INTO buffer VALUES (1);
+DETACH TABLE buffer;        -- trigger flushing
+ATTACH TABLE buffer;
 CREATE TABLE url (n UInt64, col String) ENGINE=URL
 (
     replace
@@ -54,12 +56,24 @@ CREATE TABLE rich_syntax as remote
         )
     )
 );
+SHOW CREATE file;
+SHOW CREATE buffer;
+SHOW CREATE merge;
+SHOW CREATE merge_tf;
+SHOW CREATE distributed;
+SHOW CREATE distributed_tf;
+SHOW CREATE url;
+SHOW CREATE rich_syntax;
+SHOW CREATE VIEW view;
+SHOW CREATE dict;
 -- remote(localhost) --> cluster(test_shard_localhost) |-> remote(127.0.0.1) --> view |-> subquery --> merge |-> distributed --> file (1)
 --                                                     |                              |                      |-> distributed_tf -> buffer (1) -> file (1)
 --                                                     |                              |-> file (1)
 --                                                     |-> remote(127.0.0.2) --> ...
 SELECT sum(n) from rich_syntax settings enable_parallel_replicas=0;
 SELECT sum(n) from rich_syntax settings serialize_query_plan=0;
+-- Clear cache to avoid future errors in the logs
+SYSTEM CLEAR DNS CACHE;
 DROP TABLE file;
 DROP DICTIONARY dict;
 DROP TABLE url;

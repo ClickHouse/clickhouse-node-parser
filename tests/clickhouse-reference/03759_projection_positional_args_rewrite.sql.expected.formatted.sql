@@ -22,7 +22,11 @@ ORDER BY a;
 
 INSERT INTO test_proj_positional;
 
+DETACH TABLE test_proj_positional;
+
 SET enable_positional_arguments_for_projections = 0;
+
+ATTACH TABLE test_proj_positional;
 
 SELECT *
 FROM test_proj_positional

@@ -24,6 +24,7 @@ insert into table_join select 1 as id, toString(number) from numbers(10000);
 insert into table_join select 2 as id, toString(number) from numbers(10000);
 insert into table_join select 3 as id, toString(number) from numbers(10000);
 insert into table_join select 4 as id, toString(number) from numbers(10000);
+system flush async insert queue 03733_table_join;
 select count(*) from table_join;  -- Expecting 400000
 create table table_join_mv_dst
 (
@@ -38,10 +39,12 @@ TO table_join_mv_dst
 as select t1.id as id, t1.name as name, t2.surname as surname from src_table as t1 join table_join as t2 using id;
 insert into src_table values (1, 'Alice');
 insert into src_table values (2, 'Bob');
+system flush async insert queue src_table;
 select count(*) from src_table;             -- Expecting 2
 select count(*) from table_join_mv_dst; -- Expecting 20000
 insert into src_table values (1, 'Alice'), (2, 'Bob'), (3, 'Charlie'), (4, 'David');
 insert into src_table values (1, 'Alice'), (1, 'Alice'), (1, 'Alice'), (1, 'Alice');
+system flush logs system.query_log;
 select query, type, exception_code from system.query_log
 where
     has(databases, currentDatabase())

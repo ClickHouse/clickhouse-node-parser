@@ -58,6 +58,8 @@ SELECT
 FROM tab
 WHERE like(str, '% 34567 %');
 
+SYSTEM FLUSH LOGS query_log;
+
 SELECT
     sum(ProfileEvents['ParallelReplicasUsedCount']) > 0,
     sum(ProfileEvents['TextIndexUsedEmbeddedPostings']) > 0

@@ -15,6 +15,8 @@ SELECT '-- Inserted part --';
 
 INSERT INTO `03014_async_with_dedup_part_log`;
 
+SYSTEM FLUSH LOGS part_log;
+
 SELECT
     error,
     count()

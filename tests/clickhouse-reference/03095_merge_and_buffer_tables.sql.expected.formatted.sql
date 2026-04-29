@@ -28,6 +28,12 @@ INSERT INTO mt1;
 
 INSERT INTO b;
 
+OPTIMIZE TABLE b;
+
+OPTIMIZE TABLE mt1;
+
+OPTIMIZE TABLE mt2;
+
 -- do select
 SELECT
     f1,

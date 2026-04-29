@@ -34,6 +34,8 @@ INSERT INTO ttl_00933_1;
 SELECT sleep(1.1)
 FORMAT Null;
 
+OPTIMIZE TABLE ttl_00933_1 FINAL;
+
 SELECT
     a,
     b
@@ -110,6 +112,8 @@ ENGINE = MergeTree
 ORDER BY tuple()
 PARTITION BY tuple()
 SETTINGS min_bytes_for_wide_part = 0;
+
+SHOW CREATE TABLE ttl_00933_1;
 
 INSERT INTO ttl_00933_1;
 

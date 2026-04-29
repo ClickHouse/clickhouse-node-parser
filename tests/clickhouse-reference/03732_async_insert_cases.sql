@@ -22,6 +22,7 @@ create materialized view 03732_table_mv
 TO 03732_table_mv_dst
 as select * from 03732_table;
 insert into 03732_table values (1, 'Alice'), (2, 'Bob'), (1, 'Alice');
+system flush async insert queue 03732_table;
 select count(*) from 03732_table;        -- Expecting 3
 select count(*) from 03732_table_mv_dst;     -- Expecting 3
 insert into 03732_table values (3, 'Charlie'), (4, 'David'), (3, 'Charlie');
@@ -39,6 +40,7 @@ engine = ReplicatedMergeTree('/clickhouse/tables/test/{database}/03732_table_joi
 order by id;
 insert into 03732_table_join values (1, 'Smith'), (2, 'Johnson');
 insert into 03732_table_join values (3, 'Williams'), (4, 'Brown');
+system flush async insert queue 03732_table_join;
 create table 03732_table_join_mv_dst
 (
     id      UInt32,

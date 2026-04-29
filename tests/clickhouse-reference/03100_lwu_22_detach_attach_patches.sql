@@ -25,6 +25,9 @@ INSERT INTO t_detach_attach_patches VALUES (2, 1, 1, 1) (2, 2, 2, 2);
 INSERT INTO t_detach_attach_patches VALUES (3, 1, 1, 1) (3, 2, 2, 2);
 INSERT INTO t_detach_attach_patches VALUES (4, 1, 1, 1) (4, 2, 2, 2);
 INSERT INTO t_detach_attach_patches VALUES (5, 1, 1, 1) (5, 2, 2, 2);
+UPDATE t_detach_attach_patches SET b = b + 1 WHERE a = 1;
+UPDATE t_detach_attach_patches SET c = c + 2 WHERE a = 2;
+UPDATE t_detach_attach_patches SET b = b + 3, c = c + 3 WHERE 1;
 SELECT * FROM t_detach_attach_patches ORDER BY ALL;
 ALTER TABLE t_detach_attach_patches DETACH PARTITION 0; -- { serverError SUPPORT_IS_DISABLED }
 ALTER TABLE t_detach_attach_patches APPLY PATCHES IN PARTITION 0;

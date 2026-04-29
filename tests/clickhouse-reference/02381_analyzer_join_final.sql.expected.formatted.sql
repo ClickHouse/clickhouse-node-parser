@@ -11,6 +11,8 @@ ENGINE = SummingMergeTree(value)
 ORDER BY id
 SAMPLE BY id;
 
+SYSTEM STOP MERGES test_table_join_1;
+
 INSERT INTO test_table_join_1;
 
 INSERT INTO test_table_join_1;
@@ -25,6 +27,8 @@ CREATE TABLE test_table_join_2
 ENGINE = SummingMergeTree(value)
 ORDER BY id
 SAMPLE BY id;
+
+SYSTEM STOP MERGES test_table_join_2;
 
 INSERT INTO test_table_join_2;
 

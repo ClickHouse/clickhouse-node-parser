@@ -44,6 +44,8 @@ SELECT
     n::Decimal256(40) / 123456789012345 / 678901234567890 AS d256
 FROM numbers(10000);
 
+DESCRIBE TABLE file('02841.parquet');
+
 SELECT
     count(),
     sum(number)

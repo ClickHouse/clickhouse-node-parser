@@ -19,6 +19,8 @@ CREATE TABLE child
 )
 ENGINE = MergeTree;
 
+SHOW CREATE TABLE child;
+
 CREATE TABLE child2
 (
     id int,
@@ -28,6 +30,8 @@ CREATE TABLE child2
 )
 ENGINE = MergeTree;
 
+SHOW CREATE TABLE child2;
+
 CREATE TABLE child3
 (
     id int,
@@ -36,6 +40,8 @@ CREATE TABLE child3
     PRIMARY KEY(id)
 )
 ENGINE = MergeTree;
+
+SHOW CREATE TABLE child3;
 
 DROP TABLE child3;
 

@@ -15,6 +15,10 @@ CREATE TABLE {CLICKHOUSE_DATABASE:Identifier}.B
 )
 ENGINE = TinyLog;
 
+SHOW TABLES FROM {CLICKHOUSE_DATABASE:Identifier};
+
+SHOW TABLES IN system WHERE engine LIKE '%System%' AND name IN ('numbers', 'one') AND database = 'system';
+
 SELECT
     name,
     toUInt32(metadata_modification_time) > 0,

@@ -69,6 +69,8 @@ GROUP BY a
 ORDER BY a ASC
 SETTINGS max_threads = 1;
 
+SYSTEM FLUSH LOGS query_log;
+
 SELECT
     used_aggregate_functions[1] AS func,
     `Settings`['max_threads'] AS threads,

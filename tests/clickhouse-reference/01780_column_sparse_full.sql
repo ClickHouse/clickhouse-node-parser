@@ -9,6 +9,7 @@ SETTINGS index_granularity = 32,
     ratio_of_defaults_for_sparse_serialization = 0.1,
     enable_block_number_column = 0,
     enable_block_offset_column = 0;
+SYSTEM STOP MERGES t_sparse_full;
 INSERT INTO t_sparse_full
 SELECT
     number,
@@ -54,6 +55,8 @@ SELECT id, u, s FROM (SELECT number * 2 AS u FROM numbers(10)) AS t1
 FULL JOIN t_sparse_full USING(u) ORDER BY id, u, s LIMIT 5;
 SELECT id, u, s FROM (SELECT u FROM t_sparse_full) AS t1
 FULL JOIN t_sparse_full USING(u) ORDER BY id, u, s LIMIT 5;
+SYSTEM START MERGES t_sparse_full;
+OPTIMIZE TABLE t_sparse_full FINAL;
 SELECT column, serialization_kind
 FROM system.parts_columns WHERE table = 't_sparse_full' AND database = currentDatabase() AND active
 ORDER BY name, column;

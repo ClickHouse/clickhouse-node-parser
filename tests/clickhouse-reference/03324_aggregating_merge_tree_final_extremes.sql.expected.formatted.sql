@@ -12,6 +12,8 @@ SETTINGS allow_nullable_key = 1;
 
 INSERT INTO t03324 (c0);
 
+OPTIMIZE TABLE t03324 FINAL SETTINGS optimize_throw_if_noop = 1;
+
 SELECT c0
 FROM t03324 FINAL
 ORDER BY c0 DESC

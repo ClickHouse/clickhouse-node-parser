@@ -16,4 +16,6 @@ INSERT INTO test SELECT
     1,
     10;
 
+OPTIMIZE TABLE test FINAL;
+
 DROP TABLE test;

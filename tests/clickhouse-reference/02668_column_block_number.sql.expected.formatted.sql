@@ -25,6 +25,8 @@ SET mutations_sync = 1;
 
 ALTER TABLE test UPDATE a = 0 WHERE id < 4;
 
+OPTIMIZE TABLE test FINAL;
+
 SELECT
     *,
     _block_number,

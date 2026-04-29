@@ -14,6 +14,8 @@ FROM numbers(8);
 INSERT INTO t_block_offset SELECT number * 2
 FROM numbers(8, 8);
 
+OPTIMIZE TABLE t_block_offset FINAL;
+
 SELECT
     _part,
     _block_number,

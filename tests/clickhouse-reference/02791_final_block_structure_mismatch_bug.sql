@@ -10,6 +10,8 @@ ORDER BY (toDate(b), a);
 INSERT INTO test_block_mismatch VALUES (1, toDateTime('2023-01-01 12:12:12'));
 SELECT count(*) FROM test_block_mismatch FINAL;
 INSERT INTO test_block_mismatch VALUES (1, toDateTime('2023-02-02 12:12:12'));
+optimize table test_block_mismatch final;
+system stop merges test_block_mismatch;
 INSERT INTO test_block_mismatch VALUES (2, toDateTime('2023-01-01 12:12:12'));
 -- variations of the test above with slightly modified table definitions
 
@@ -25,6 +27,8 @@ ORDER BY (toDate(b), a);
 INSERT INTO test_block_mismatch_sk1  VALUES (1, toDateTime('2023-01-01 12:12:12'));
 SELECT count(*) FROM test_block_mismatch_sk1 FINAL;
 INSERT INTO test_block_mismatch_sk1 VALUES (1, toDateTime('2023-02-02 12:12:12'));
+optimize table test_block_mismatch_sk1 final;
+system stop merges test_block_mismatch_sk1;
 INSERT INTO test_block_mismatch_sk1 VALUES (2, toDateTime('2023-01-01 12:12:12'));
 CREATE TABLE test_block_mismatch_sk2
 (
@@ -38,4 +42,6 @@ ORDER BY (a, toDate(b));
 INSERT INTO test_block_mismatch_sk2  VALUES (1, toDateTime('2023-01-01 12:12:12'));
 SELECT count(*) FROM test_block_mismatch_sk2 FINAL;
 INSERT INTO test_block_mismatch_sk2 VALUES (1, toDateTime('2023-02-02 12:12:12'));
+optimize table test_block_mismatch_sk2 final;
+system stop merges test_block_mismatch_sk2;
 INSERT INTO test_block_mismatch_sk2 VALUES (2, toDateTime('2023-01-01 12:12:12'));

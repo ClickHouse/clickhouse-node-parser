@@ -75,4 +75,6 @@ CREATE TABLE tab
 )
 ENGINE = Memory;
 
+SHOW COLUMNS FROM tab;
+
 DROP TABLE tab;

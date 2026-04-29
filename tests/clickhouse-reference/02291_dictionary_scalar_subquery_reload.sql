@@ -23,6 +23,7 @@ LIFETIME(MIN 0 MAX 1)
 LAYOUT(FLAT());
 SELECT * FROM test_dictionary;
 INSERT INTO test_dictionary_source_table VALUES (4, '4');
+SYSTEM RELOAD DICTIONARY test_dictionary;
 DROP DICTIONARY test_dictionary;
 DROP VIEW test_dictionary_view;
 DROP TABLE test_dictionary_source_table;

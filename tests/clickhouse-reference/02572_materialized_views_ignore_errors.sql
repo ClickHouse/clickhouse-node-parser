@@ -12,6 +12,8 @@ create materialized view push_to_proxy_mv_02572 to proxy_02572 as select * from 
 -- { echoOn }
 select * from data_02572 order by key;
 insert into data_02572 settings materialized_views_ignore_errors=1 values (2);
+-- check system.query_views_log
+system flush logs query_views_log;
 -- lower(status) to pass through clickhouse-test "exception" check
 select lower(status::String), errorCodeToName(exception_code)
 from system.query_views_log where

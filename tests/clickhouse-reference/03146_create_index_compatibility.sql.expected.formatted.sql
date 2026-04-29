@@ -22,4 +22,6 @@ CREATE INDEX i5 ON t_index_3146 (a); -- ignored
 
 CREATE INDEX i6 ON t_index_3146 (tuple(a, b)); -- ignored
 
+SHOW CREATE TABLE t_index_3146;
+
 DROP TABLE t_index_3146;

@@ -2,6 +2,7 @@
 -- msan: too slow
 
 DROP TABLE IF EXISTS tab_00625;
+
 set allow_deprecated_syntax_for_merge_tree=1;
 CREATE TABLE tab_00625
 (
@@ -12,6 +13,7 @@ CREATE TABLE tab_00625
     v UInt64)
 )
 ENGINE = SummingMergeTree(date, (date, key), 1);
+
 INSERT INTO tab_00625 SELECT
     today(),
     number,
@@ -19,6 +21,7 @@ INSERT INTO tab_00625 SELECT
     [number]
 FROM system.numbers
 LIMIT 8190;
+
 INSERT INTO tab_00625 SELECT
     today(),
     number + 8190,
@@ -26,4 +29,7 @@ INSERT INTO tab_00625 SELECT
     [number + 8190]
 FROM system.numbers
 LIMIT 10;
+
+OPTIMIZE TABLE tab_00625;
+
 DROP TABLE tab_00625;
