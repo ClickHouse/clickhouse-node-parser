@@ -1,3 +1,49 @@
+SET joined_subquery_requires_alias = 0;
+
+SET any_join_distinct_right_table_keys = 0;
+
+DROP TABLE IF EXISTS tab1;
+
+DROP TABLE IF EXISTS tab2;
+
+DROP TABLE IF EXISTS tab3;
+
+CREATE TABLE tab1
+(
+    a1 Int32,
+    b1 Int32
+)
+ENGINE = MergeTree
+ORDER BY a1;
+
+CREATE TABLE tab2
+(
+    a2 Int32,
+    b2 Int32
+)
+ENGINE = MergeTree
+ORDER BY a2;
+
+CREATE TABLE tab3
+(
+    a3 Int32,
+    b3 Int32
+)
+ENGINE = MergeTree
+ORDER BY a3;
+
+INSERT INTO tab1;
+
+INSERT INTO tab2;
+
+INSERT INTO tab2;
+
+INSERT INTO tab3;
+
+INSERT INTO tab3;
+
+INSERT INTO tab3;
+
 SELECT
     a2,
     b2
@@ -174,6 +220,8 @@ RIGHT JOIN tab2
 ORDER BY
     a2 ASC,
     b2 + 1 ASC;
+
+SET any_join_distinct_right_table_keys = 1;
 
 SELECT b3
 FROM
@@ -184,3 +232,9 @@ RIGHT JOIN tab3
 ORDER BY
     a3 ASC,
     b3 ASC;
+
+DROP TABLE tab1;
+
+DROP TABLE tab2;
+
+DROP TABLE tab3;

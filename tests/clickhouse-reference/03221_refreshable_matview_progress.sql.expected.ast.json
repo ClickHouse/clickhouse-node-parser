@@ -1,5 +1,77 @@
 [
   {
+    "kind": "createMaterializedView",
+    "table": {
+      "kind": "tableRef",
+      "table": "03221_rmv"
+    },
+    "refresh": "AFTER 10 SECOND",
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "x",
+        "type": {
+          "name": "UInt64"
+        }
+      }
+    ],
+    "engine": {
+      "name": "Memory"
+    },
+    "asQuery": {
+      "kind": "union",
+      "queries": [
+        {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "alias",
+              "expr": {
+                "kind": "columnRef",
+                "parts": [
+                  "number"
+                ]
+              },
+              "alias": "x"
+            }
+          ],
+          "from": {
+            "kind": "tableFunctionRef",
+            "name": "numbers",
+            "args": [
+              {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "3"
+              }
+            ]
+          }
+        },
+        {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "alias",
+              "expr": {
+                "kind": "functionCall",
+                "name": "rand64",
+                "args": []
+              },
+              "alias": "x"
+            }
+          ]
+        }
+      ]
+    },
+    "leadingComments": [
+      "-- Tags: no-replicated-database, no-ordinary-database"
+    ]
+  },
+  {
+    "kind": "system",
+    "body": "SYSTEM WAIT VIEW 03221_rmv"
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -61,6 +133,14 @@
           }
         }
       ]
+    }
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "03221_rmv"
     }
   }
 ]

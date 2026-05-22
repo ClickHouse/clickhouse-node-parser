@@ -1,3 +1,105 @@
+Set
+
+DropQuery  test_table (children 1)
+ Identifier test_table
+
+DropQuery  numbers (children 1)
+ Identifier numbers
+
+DropQuery  test_mv (children 1)
+ Identifier test_mv
+
+DropQuery  src (children 1)
+ Identifier src
+
+DropQuery  dst (children 1)
+ Identifier dst
+
+DropQuery  mv (children 1)
+ Identifier mv
+
+DropQuery  dist (children 1)
+ Identifier dist
+
+CreateQuery test_table (children 3)
+ Identifier test_table
+ Columns definition (children 1)
+  ExpressionList (children 2)
+   ColumnDeclaration key (children 1)
+    DataType UInt32
+   ColumnDeclaration value (children 1)
+    DataType Decimal (children 1)
+     ExpressionList (children 2)
+      Literal UInt64_16
+      Literal UInt64_6
+ Storage definition (children 2)
+  Function SummingMergeTree (children 1)
+   ExpressionList
+  Identifier key
+
+CreateQuery numbers (children 3)
+ Identifier numbers
+ Columns definition (children 1)
+  ExpressionList (children 1)
+   ColumnDeclaration number (children 1)
+    DataType UInt64
+ Storage definition (children 1)
+  Function Memory
+
+CreateQuery test_mv (children 4)
+ Identifier test_mv
+ Columns definition (children 1)
+  ExpressionList (children 2)
+   ColumnDeclaration number (children 1)
+    DataType UInt64
+   ColumnDeclaration value (children 1)
+    DataType Decimal (children 1)
+     ExpressionList (children 2)
+      Literal UInt64_38
+      Literal UInt64_6
+ SelectWithUnionQuery (children 1)
+  ExpressionList (children 1)
+   SelectQuery (children 3)
+    ExpressionList (children 2)
+     Identifier number
+     Function sum (alias value) (children 1)
+      ExpressionList (children 1)
+       Identifier number
+    TablesInSelectQuery (children 1)
+     TablesInSelectQueryElement (children 1)
+      TableExpression (children 1)
+       Subquery (children 1)
+        SelectWithUnionQuery (children 1)
+         ExpressionList (children 1)
+          SelectQuery (children 2)
+           ExpressionList (children 2)
+            Asterisk
+            Function toDecimal64 (alias val) (children 1)
+             ExpressionList (children 2)
+              Identifier number
+              Literal UInt64_6
+           TablesInSelectQuery (children 1)
+            TablesInSelectQueryElement (children 1)
+             TableExpression (children 1)
+              TableIdentifier numbers
+    ExpressionList (children 1)
+     Identifier number
+ ViewTargets
+
+InsertQuery   (children 2)
+ Identifier numbers
+ SelectWithUnionQuery (children 1)
+  ExpressionList (children 1)
+   SelectQuery (children 2)
+    ExpressionList (children 1)
+     Asterisk
+    TablesInSelectQuery (children 1)
+     TablesInSelectQueryElement (children 1)
+      TableExpression (children 1)
+       Function numbers (children 1)
+        ExpressionList (children 1)
+         Literal UInt64_100000
+
 SelectWithUnionQuery (children 1)
  ExpressionList (children 1)
   SelectQuery (children 2)
@@ -48,6 +150,107 @@ SelectWithUnionQuery (children 1)
                     TableIdentifier numbers
           ExpressionList (children 1)
            Identifier number
+
+CreateQuery src (children 3)
+ Identifier src
+ Columns definition (children 1)
+  ExpressionList (children 2)
+   ColumnDeclaration n (children 1)
+    DataType UInt64
+   ColumnDeclaration s (children 1)
+    DataType FixedString (children 1)
+     ExpressionList (children 1)
+      Literal UInt64_16
+ Storage definition (children 1)
+  Function Memory
+
+CreateQuery dst (children 3)
+ Identifier dst
+ Columns definition (children 1)
+  ExpressionList (children 2)
+   ColumnDeclaration n (children 1)
+    DataType UInt8
+   ColumnDeclaration s (children 1)
+    DataType String
+ Storage definition (children 1)
+  Function Memory
+
+CreateQuery mv (children 4)
+ Identifier mv
+ Columns definition (children 1)
+  ExpressionList (children 1)
+   ColumnDeclaration n (children 1)
+    DataType String
+ SelectWithUnionQuery (children 1)
+  ExpressionList (children 1)
+   SelectQuery (children 2)
+    ExpressionList (children 1)
+     Asterisk
+    TablesInSelectQuery (children 1)
+     TablesInSelectQueryElement (children 1)
+      TableExpression (children 1)
+       TableIdentifier src
+ ViewTargets
+
+CreateQuery dist (children 3)
+ Identifier dist
+ Columns definition (children 1)
+  ExpressionList (children 1)
+   ColumnDeclaration n (children 1)
+    DataType Int128
+ Storage definition (children 1)
+  Function Distributed (children 1)
+   ExpressionList (children 3)
+    Identifier test_cluster_two_shards
+    Function currentDatabase (children 1)
+     ExpressionList
+    Identifier mv
+
+InsertQuery   (children 2)
+ Identifier src
+ SelectWithUnionQuery (children 1)
+  ExpressionList (children 1)
+   SelectQuery (children 2)
+    ExpressionList (children 2)
+     Identifier number
+     Function toString (children 1)
+      ExpressionList (children 1)
+       Identifier number
+    TablesInSelectQuery (children 1)
+     TablesInSelectQueryElement (children 1)
+      TableExpression (children 1)
+       Function numbers (children 1)
+        ExpressionList (children 1)
+         Literal UInt64_1000
+
+InsertQuery   (children 2)
+ Identifier mv
+ SelectWithUnionQuery (children 1)
+  ExpressionList (children 1)
+   SelectQuery (children 2)
+    ExpressionList (children 1)
+     Function toString (children 1)
+      ExpressionList (children 1)
+       Function plus (children 1)
+        ExpressionList (children 2)
+         Identifier number
+         Literal UInt64_1000
+    TablesInSelectQuery (children 1)
+     TablesInSelectQueryElement (children 1)
+      TableExpression (children 1)
+       Function numbers (children 1)
+        ExpressionList (children 1)
+         Literal UInt64_1000
+
+InsertQuery   (children 2)
+ Identifier mv
+ SelectWithUnionQuery (children 1)
+  ExpressionList (children 1)
+   SelectQuery (children 1)
+    ExpressionList (children 1)
+     Function arrayJoin (children 1)
+      ExpressionList (children 1)
+       Literal Array_['42', 'test']
 
 SelectWithUnionQuery (children 1)
  ExpressionList (children 1)
@@ -168,3 +371,24 @@ SelectWithUnionQuery (children 1)
     TablesInSelectQueryElement (children 1)
      TableExpression (children 1)
       TableIdentifier dist
+
+DropQuery  test_table (children 1)
+ Identifier test_table
+
+DropQuery  numbers (children 1)
+ Identifier numbers
+
+DropQuery  test_mv (children 1)
+ Identifier test_mv
+
+DropQuery  src (children 1)
+ Identifier src
+
+DropQuery  dst (children 1)
+ Identifier dst
+
+DropQuery  mv (children 1)
+ Identifier mv
+
+DropQuery  dist (children 1)
+ Identifier dist

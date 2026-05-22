@@ -1,5 +1,113 @@
 [
   {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "t_subcolumns_sizes"
+    },
+    "ifExists": true,
+    "leadingComments": [
+      "-- Tags: no-fasttest"
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "t_subcolumns_sizes"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "id",
+        "type": {
+          "name": "UInt64"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "arr",
+        "type": {
+          "name": "Array",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "UInt64"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "n",
+        "type": {
+          "name": "Nullable",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "String"
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "id"
+          ]
+        }
+      }
+    ],
+    "settings": [
+      {
+        "name": "min_bytes_for_wide_part",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      },
+      {
+        "name": "serialization_info_version",
+        "value": {
+          "kind": "literal",
+          "type": "String",
+          "value": "basic"
+        }
+      },
+      {
+        "name": "ratio_of_defaults_for_sparse_serialization",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ],
+    "settingsAfterOrderBy": true
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "t_subcolumns_sizes"
+      }
+    }
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -53,7 +161,7 @@
         "database": "system",
         "table": "parts_columns"
       },
-      "kind": "arrayJoin",
+      "kind": "arrayJoinExpr",
       "joinType": "ARRAY",
       "expressions": [
         {
@@ -265,7 +373,7 @@
         "database": "system",
         "table": "parts_columns"
       },
-      "kind": "arrayJoin",
+      "kind": "arrayJoinExpr",
       "joinType": "ARRAY",
       "expressions": [
         {

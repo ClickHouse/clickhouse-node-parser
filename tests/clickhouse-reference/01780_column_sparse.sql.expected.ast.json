@@ -1,5 +1,365 @@
 [
   {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "t_sparse"
+    },
+    "ifExists": true,
+    "leadingComments": [
+      "-- { echo }"
+    ]
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "t_sparse_1"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "t_sparse"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "id",
+        "type": {
+          "name": "UInt64"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "u",
+        "type": {
+          "name": "UInt64"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "s",
+        "type": {
+          "name": "String"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "arr1",
+        "type": {
+          "name": "Array",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "String"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "arr2",
+        "type": {
+          "name": "Array",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "UInt64"
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "functionCall",
+          "name": "tuple",
+          "args": []
+        }
+      }
+    ],
+    "settings": [
+      {
+        "name": "ratio_of_defaults_for_sparse_serialization",
+        "value": {
+          "kind": "literal",
+          "type": "Float64",
+          "value": "0.1"
+        }
+      }
+    ],
+    "settingsAfterOrderBy": true
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "t_sparse"
+      }
+    },
+    "selectQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "number"
+          ]
+        },
+        {
+          "kind": "functionCall",
+          "name": "if",
+          "args": [
+            {
+              "kind": "binaryExpr",
+              "op": "=",
+              "left": {
+                "kind": "binaryExpr",
+                "op": "%",
+                "left": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "number"
+                  ]
+                },
+                "right": {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "10"
+                }
+              },
+              "right": {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "0"
+              }
+            },
+            {
+              "kind": "columnRef",
+              "parts": [
+                "number"
+              ]
+            },
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "0"
+            }
+          ]
+        },
+        {
+          "kind": "functionCall",
+          "name": "if",
+          "args": [
+            {
+              "kind": "binaryExpr",
+              "op": "=",
+              "left": {
+                "kind": "binaryExpr",
+                "op": "%",
+                "left": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "number"
+                  ]
+                },
+                "right": {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "5"
+                }
+              },
+              "right": {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "0"
+              }
+            },
+            {
+              "kind": "functionCall",
+              "name": "toString",
+              "args": [
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "number"
+                  ]
+                }
+              ]
+            },
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": ""
+            }
+          ]
+        },
+        {
+          "kind": "functionCall",
+          "name": "if",
+          "args": [
+            {
+              "kind": "binaryExpr",
+              "op": "=",
+              "left": {
+                "kind": "binaryExpr",
+                "op": "%",
+                "left": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "number"
+                  ]
+                },
+                "right": {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "7"
+                }
+              },
+              "right": {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "0"
+              }
+            },
+            {
+              "kind": "functionCall",
+              "name": "arrayMap",
+              "args": [
+                {
+                  "kind": "lambdaExpr",
+                  "params": [
+                    "x"
+                  ],
+                  "body": {
+                    "kind": "functionCall",
+                    "name": "toString",
+                    "args": [
+                      {
+                        "kind": "columnRef",
+                        "parts": [
+                          "x"
+                        ]
+                      }
+                    ]
+                  }
+                },
+                {
+                  "kind": "functionCall",
+                  "name": "range",
+                  "args": [
+                    {
+                      "kind": "binaryExpr",
+                      "op": "%",
+                      "left": {
+                        "kind": "columnRef",
+                        "parts": [
+                          "number"
+                        ]
+                      },
+                      "right": {
+                        "kind": "literal",
+                        "type": "UInt64",
+                        "value": "10"
+                      }
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "kind": "arrayLiteral",
+              "elements": [],
+              "source": "[]"
+            }
+          ]
+        },
+        {
+          "kind": "functionCall",
+          "name": "if",
+          "args": [
+            {
+              "kind": "binaryExpr",
+              "op": "=",
+              "left": {
+                "kind": "binaryExpr",
+                "op": "%",
+                "left": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "number"
+                  ]
+                },
+                "right": {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "12"
+                }
+              },
+              "right": {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "0"
+              }
+            },
+            {
+              "kind": "functionCall",
+              "name": "range",
+              "args": [
+                {
+                  "kind": "binaryExpr",
+                  "op": "%",
+                  "left": {
+                    "kind": "columnRef",
+                    "parts": [
+                      "number"
+                    ]
+                  },
+                  "right": {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "10"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "arrayLiteral",
+              "elements": [],
+              "source": "[]"
+            }
+          ]
+        }
+      ],
+      "from": {
+        "kind": "tableFunctionRef",
+        "name": "numbers",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "200"
+          }
+        ]
+      }
+    }
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -168,7 +528,7 @@
         ]
       },
       "right": {
-        "kind": "array",
+        "kind": "arrayLiteral",
         "elements": [],
         "source": "[]"
       }
@@ -207,7 +567,7 @@
         ]
       },
       "right": {
-        "kind": "array",
+        "kind": "arrayLiteral",
         "elements": [],
         "source": "[]"
       }
@@ -383,7 +743,7 @@
         ]
       },
       "right": {
-        "kind": "array",
+        "kind": "arrayLiteral",
         "elements": [],
         "source": "[]"
       }
@@ -397,6 +757,62 @@
     }
   },
   {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "t_sparse_1"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "id",
+        "type": {
+          "name": "UInt64"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "v",
+        "type": {
+          "name": "Int64"
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "functionCall",
+          "name": "tuple",
+          "args": []
+        }
+      }
+    ],
+    "settings": [
+      {
+        "name": "ratio_of_defaults_for_sparse_serialization",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      }
+    ],
+    "settingsAfterOrderBy": true
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "t_sparse_1"
+      }
+    }
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -544,6 +960,22 @@
         "type": "UInt64",
         "value": "5"
       }
+    }
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "t_sparse"
+    }
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "t_sparse_1"
     }
   }
 ]

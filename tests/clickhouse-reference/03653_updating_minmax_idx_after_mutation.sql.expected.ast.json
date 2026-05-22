@@ -1,5 +1,64 @@
 [
   {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "test"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "test"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "time",
+        "type": {
+          "name": "DateTime"
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "partitionBy": {
+      "kind": "functionCall",
+      "name": "toYYYYMM",
+      "args": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "time"
+          ]
+        }
+      ]
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "functionCall",
+          "name": "tuple",
+          "args": []
+        }
+      }
+    ]
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "test"
+      }
+    }
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -55,6 +114,55 @@
           ]
         }
       ]
+    }
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "mutations_sync",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "alter",
+    "table": {
+      "kind": "tableRef",
+      "table": "test"
+    },
+    "commands": [
+      {
+        "kind": "alterCommand",
+        "commandType": "DELETE",
+        "where": {
+          "kind": "binaryExpr",
+          "op": ">=",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "time"
+            ]
+          },
+          "right": {
+            "kind": "literal",
+            "type": "String",
+            "value": "2000-01-01 02:00:00"
+          }
+        }
+      }
+    ]
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "test"
     }
   }
 ]

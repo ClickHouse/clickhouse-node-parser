@@ -1,5 +1,221 @@
 [
   {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "testing"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "testing"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "a",
+        "type": {
+          "name": "String"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "b",
+        "type": {
+          "name": "String"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "c",
+        "type": {
+          "name": "Int32"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "d",
+        "type": {
+          "name": "Int32"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "e",
+        "type": {
+          "name": "Int32"
+        }
+      },
+      {
+        "kind": "projectionDef",
+        "name": "proj_1",
+        "query": {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "c"
+              ]
+            }
+          ],
+          "orderBy": [
+            {
+              "kind": "orderByItem",
+              "expr": {
+                "kind": "columnRef",
+                "parts": [
+                  "d"
+                ]
+              },
+              "direction": "ASC"
+            }
+          ]
+        }
+      },
+      {
+        "kind": "projectionDef",
+        "name": "proj_2",
+        "query": {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "c"
+              ]
+            }
+          ],
+          "orderBy": [
+            {
+              "kind": "orderByItem",
+              "expr": {
+                "kind": "columnRef",
+                "parts": [
+                  "e"
+                ]
+              },
+              "direction": "ASC"
+            },
+            {
+              "kind": "orderByItem",
+              "expr": {
+                "kind": "columnRef",
+                "parts": [
+                  "d"
+                ]
+              },
+              "direction": "ASC"
+            }
+          ]
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree",
+      "args": []
+    },
+    "primaryKey": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "a"
+        ]
+      }
+    ],
+    "settings": [
+      {
+        "name": "min_bytes_for_wide_part",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      }
+    ],
+    "settingsAfterOrderBy": true
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "testing"
+      }
+    },
+    "selectQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "number"
+          ]
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "number"
+          ]
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "number"
+          ]
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "number"
+          ]
+        },
+        {
+          "kind": "binaryExpr",
+          "op": "%",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "number"
+            ]
+          },
+          "right": {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "2"
+          }
+        }
+      ],
+      "from": {
+        "kind": "tableFunctionRef",
+        "name": "numbers",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "5"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "kind": "optimize",
+    "table": {
+      "kind": "tableRef",
+      "table": "testing"
+    },
+    "final": true,
+    "leadingComments": [
+      "-- { echoOn }"
+    ]
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -64,6 +280,75 @@
     ]
   },
   {
+    "kind": "alter",
+    "table": {
+      "kind": "tableRef",
+      "table": "testing"
+    },
+    "commands": [
+      {
+        "kind": "alterCommand",
+        "commandType": "UPDATE",
+        "assignments": [
+          {
+            "column": "c",
+            "expr": {
+              "kind": "binaryExpr",
+              "op": "+",
+              "left": {
+                "kind": "columnRef",
+                "parts": [
+                  "c"
+                ]
+              },
+              "right": {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "1"
+              }
+            }
+          },
+          {
+            "column": "d",
+            "expr": {
+              "kind": "binaryExpr",
+              "op": "+",
+              "left": {
+                "kind": "columnRef",
+                "parts": [
+                  "d"
+                ]
+              },
+              "right": {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "2"
+              }
+            }
+          }
+        ],
+        "where": {
+          "kind": "literal",
+          "type": "Bool",
+          "value": "1"
+        }
+      }
+    ],
+    "settings": [
+      {
+        "name": "mutations_sync",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "2"
+        }
+      }
+    ],
+    "leadingComments": [
+      "-- update all columns used by proj_1"
+    ]
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -121,5 +406,118 @@
         }
       ]
     }
+  },
+  {
+    "kind": "alter",
+    "table": {
+      "kind": "tableRef",
+      "table": "testing"
+    },
+    "commands": [
+      {
+        "kind": "alterCommand",
+        "commandType": "UPDATE",
+        "assignments": [
+          {
+            "column": "d",
+            "expr": {
+              "kind": "binaryExpr",
+              "op": "-",
+              "left": {
+                "kind": "columnRef",
+                "parts": [
+                  "d"
+                ]
+              },
+              "right": {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "1"
+              }
+            }
+          }
+        ],
+        "where": {
+          "kind": "literal",
+          "type": "Bool",
+          "value": "1"
+        }
+      }
+    ],
+    "settings": [
+      {
+        "name": "mutations_sync",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "2"
+        }
+      }
+    ],
+    "leadingComments": [
+      "-- update only one column"
+    ]
+  },
+  {
+    "kind": "alter",
+    "table": {
+      "kind": "tableRef",
+      "table": "testing"
+    },
+    "commands": [
+      {
+        "kind": "alterCommand",
+        "commandType": "UPDATE",
+        "assignments": [
+          {
+            "column": "c",
+            "expr": {
+              "kind": "binaryExpr",
+              "op": "-",
+              "left": {
+                "kind": "columnRef",
+                "parts": [
+                  "c"
+                ]
+              },
+              "right": {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "1"
+              }
+            }
+          }
+        ],
+        "where": {
+          "kind": "literal",
+          "type": "Bool",
+          "value": "1"
+        }
+      }
+    ],
+    "settings": [
+      {
+        "name": "mutations_sync",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "2"
+        }
+      }
+    ],
+    "leadingComments": [
+      "-- update only another one column"
+    ]
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "testing"
+    },
+    "leadingComments": [
+      "-- { echoOff }"
+    ]
   }
 ]

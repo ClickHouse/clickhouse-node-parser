@@ -1,4 +1,4 @@
-
+-- { echoOn }
 -- empty
 select parseDateTimeInJodaSyntax(' ', ' ', 'UTC') = toDateTime('1970-01-01', 'UTC');
 -- era
@@ -185,6 +185,8 @@ select parseDateTimeInJodaSyntaxOrNull('2001 invalid 366 2000', 'yyyy D yyyy', '
 -- Error handling
 select parseDateTimeInJodaSyntax(); -- { serverError NUMBER_OF_ARGUMENTS_DOESNT_MATCH }
 select parseDateTimeInJodaSyntax('12 AM', 'h a', 'UTC', 'a fourth argument'); -- { serverError NUMBER_OF_ARGUMENTS_DOESNT_MATCH }
+-- The format string argument is optional
+set session_timezone = 'UTC'; -- don't randomize the session timezone
 select parseDateTimeInJodaSyntax('2021-01-04 23:12:34') = toDateTime('2021-01-04 23:12:34');
 select parseDateTimeInJodaSyntax('2024-10-09 10:30:10-0812'); -- { serverError CANNOT_PARSE_DATETIME }
 -- timezone and timezone offset
@@ -270,3 +272,6 @@ select parseDateTime64InJodaSyntax('2300-01-01 00:00:00', 'yyyy-MM-dd HH:mm:ss')
 -- Test parseDateTimeInJodaSyntax with 3 repetitions in format and 4 digits year
 select parseDateTimeInJodaSyntax('2025', 'YYY', 'UTC') = toDateTime('2025-01-01', 'UTC');
 select parseDateTimeInJodaSyntax('2025', 'xxx', 'UTC') = toDateTime('2024-12-30', 'UTC');
+-- -------------------------------------------------------------------------------------------------------------------------
+
+-- { echoOff }

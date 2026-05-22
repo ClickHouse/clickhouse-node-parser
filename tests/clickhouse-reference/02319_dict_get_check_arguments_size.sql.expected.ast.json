@@ -1,5 +1,110 @@
 [
   {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "dictionary_source_table"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "dictionary_source_table"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "id",
+        "type": {
+          "name": "UInt64"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "value",
+        "type": {
+          "name": "String"
+        }
+      }
+    ],
+    "engine": {
+      "name": "TinyLog"
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "dictionary_source_table"
+      }
+    }
+  },
+  {
+    "kind": "drop",
+    "targetType": "DICTIONARY",
+    "table": {
+      "kind": "tableRef",
+      "table": "test_dictionary"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "createDictionary",
+    "table": {
+      "kind": "tableRef",
+      "table": "test_dictionary"
+    },
+    "dictAttrs": [
+      {
+        "name": "id",
+        "type": {
+          "name": "UInt64"
+        }
+      },
+      {
+        "name": "value",
+        "type": {
+          "name": "String"
+        }
+      }
+    ],
+    "dictDef": {
+      "primaryKey": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "id"
+          ]
+        }
+      ],
+      "layout": {
+        "name": "FLAT",
+        "pairs": []
+      },
+      "source": {
+        "name": "clickhouse",
+        "pairs": [
+          {
+            "name": "TABLE",
+            "value": {
+              "kind": "literal",
+              "type": "String",
+              "value": "dictionary_source_table"
+            }
+          }
+        ]
+      },
+      "lifetime": {
+        "value": 0
+      }
+    }
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -54,6 +159,9 @@
           }
         ]
       }
+    ],
+    "trailingComments": [
+      "--{serverError NUMBER_OF_ARGUMENTS_DOESNT_MATCH}"
     ]
   },
   {
@@ -121,7 +229,168 @@
           }
         ]
       }
+    ],
+    "trailingComments": [
+      "--{serverError NUMBER_OF_ARGUMENTS_DOESNT_MATCH}"
     ]
+  },
+  {
+    "kind": "drop",
+    "targetType": "DICTIONARY",
+    "table": {
+      "kind": "tableRef",
+      "table": "test_dictionary"
+    }
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "dictionary_source_table"
+    }
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "dictionary_source_table"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "key",
+        "type": {
+          "name": "UInt64"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "start",
+        "type": {
+          "name": "UInt64"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "end",
+        "type": {
+          "name": "UInt64"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "value",
+        "type": {
+          "name": "String"
+        }
+      }
+    ],
+    "engine": {
+      "name": "TinyLog"
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "dictionary_source_table"
+      }
+    }
+  },
+  {
+    "kind": "drop",
+    "targetType": "DICTIONARY",
+    "table": {
+      "kind": "tableRef",
+      "table": "range_hashed_dictionary"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "createDictionary",
+    "table": {
+      "kind": "tableRef",
+      "table": "range_hashed_dictionary"
+    },
+    "dictAttrs": [
+      {
+        "name": "key",
+        "type": {
+          "name": "UInt64"
+        }
+      },
+      {
+        "name": "start",
+        "type": {
+          "name": "UInt64"
+        }
+      },
+      {
+        "name": "end",
+        "type": {
+          "name": "UInt64"
+        }
+      },
+      {
+        "name": "value",
+        "type": {
+          "name": "String"
+        }
+      }
+    ],
+    "dictDef": {
+      "primaryKey": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "key"
+          ]
+        }
+      ],
+      "source": {
+        "name": "clickhouse",
+        "pairs": [
+          {
+            "name": "TABLE",
+            "value": {
+              "kind": "literal",
+              "type": "String",
+              "value": "dictionary_source_table"
+            }
+          }
+        ]
+      },
+      "layout": {
+        "name": "RANGE_HASHED",
+        "pairs": []
+      },
+      "range": [
+        {
+          "name": "MIN",
+          "value": {
+            "kind": "columnRef",
+            "parts": [
+              "start"
+            ]
+          }
+        },
+        {
+          "name": "MAX",
+          "value": {
+            "kind": "columnRef",
+            "parts": [
+              "end"
+            ]
+          }
+        }
+      ],
+      "lifetime": {
+        "value": 0
+      }
+    }
   },
   {
     "kind": "select",
@@ -200,6 +469,9 @@
           }
         ]
       }
+    ],
+    "trailingComments": [
+      "--{serverError NUMBER_OF_ARGUMENTS_DOESNT_MATCH}"
     ]
   },
   {
@@ -289,6 +561,17 @@
           }
         ]
       }
+    ],
+    "trailingComments": [
+      "--{serverError NUMBER_OF_ARGUMENTS_DOESNT_MATCH}"
     ]
+  },
+  {
+    "kind": "drop",
+    "targetType": "DICTIONARY",
+    "table": {
+      "kind": "tableRef",
+      "table": "range_hashed_dictionary"
+    }
   }
 ]

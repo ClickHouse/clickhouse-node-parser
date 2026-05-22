@@ -1,3 +1,32 @@
+-- Tags: distributed
+DROP TABLE IF EXISTS table_1;
+
+DROP TABLE IF EXISTS table_2;
+
+DROP TABLE IF EXISTS v_numbers;
+
+DROP TABLE IF EXISTS mv_table;
+
+SET max_rows_to_read = 0;
+
+CREATE TABLE table_1
+(
+    x UInt32,
+    y String
+)
+ENGINE = MergeTree
+ORDER BY x;
+
+INSERT INTO table_1;
+
+CREATE TABLE distr_table
+(
+    x UInt32,
+    y String
+)
+ENGINE = Distributed(test_cluster_two_shards, currentDatabase(), 'table_1');
+
+-- { echoOn }
 SELECT *
 FROM table_1;
 
@@ -162,6 +191,14 @@ SELECT dummy
 FROM `system`.one
 SETTINGS additional_table_filters = map('system.one', 'dummy in (select number from numbers(2))');
 
+-- { echoOff }
+CREATE VIEW v_numbers
+AS
+SELECT number + 1 AS x
+FROM `system`.numbers
+LIMIT 5;
+
+-- { echoOn }
 SELECT *
 FROM v_numbers;
 
@@ -177,6 +214,30 @@ SELECT *
 FROM v_numbers
 SETTINGS additional_table_filters = map('system.numbers', 'number != 3', 'v_numbers', 'x != 3');
 
+-- { echoOff }
+CREATE TABLE table_2
+(
+    x UInt32,
+    y String
+)
+ENGINE = MergeTree
+ORDER BY x;
+
+INSERT INTO table_2;
+
+CREATE MATERIALIZED VIEW mv_table
+TO table_2
+(
+    x UInt32,
+    y String
+)
+AS
+SELECT *
+FROM table_1;
+
+-- additional filter for inner tables for Materialized View does not work because it does not create internal interpreter
+-- probably it is expected
+-- { echoOn }
 SELECT *
 FROM mv_table;
 
@@ -192,6 +253,17 @@ SELECT *
 FROM mv_table
 SETTINGS additional_table_filters = map('table_2', 'x != 5');
 
+-- { echoOff }
+CREATE TABLE m_table
+(
+    x UInt32,
+    y String
+)
+ENGINE = Merge(currentDatabase(), '^table_');
+
+-- additional filter for inner tables for Merge does not work because it does not create internal interpreter
+-- probably it is expected
+-- { echoOn }
 SELECT *
 FROM m_table
 ORDER BY x ASC;
@@ -236,6 +308,7 @@ FROM m_table
 ORDER BY x ASC
 SETTINGS additional_table_filters = map('m_table', 'x != 4', 'table_1', 'x != 2', 'table_2', 'x != 5');
 
+-- additional_result_filter
 SELECT *
 FROM table_1
 SETTINGS additional_result_filter = 'x != 2';

@@ -1,5 +1,318 @@
 [
   {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "t_lightweight"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "enable_lightweight_update",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "t_lightweight"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "id",
+        "type": {
+          "name": "UInt64"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "c1",
+        "type": {
+          "name": "UInt64"
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "id"
+          ]
+        }
+      }
+    ],
+    "settings": [
+      {
+        "name": "enable_block_number_column",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      },
+      {
+        "name": "enable_block_offset_column",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ],
+    "settingsAfterOrderBy": true
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "t_lightweight"
+      }
+    },
+    "selectQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "number"
+          ]
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "number"
+          ]
+        }
+      ],
+      "from": {
+        "kind": "tableFunctionRef",
+        "name": "numbers",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "20"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "kind": "update",
+    "table": {
+      "kind": "tableRef",
+      "table": "t_lightweight"
+    },
+    "assignments": [
+      {
+        "column": "c1",
+        "expr": {
+          "kind": "binaryExpr",
+          "op": "+",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "c1"
+            ]
+          },
+          "right": {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "100"
+          }
+        }
+      }
+    ],
+    "where": {
+      "kind": "binaryExpr",
+      "op": "=",
+      "left": {
+        "kind": "binaryExpr",
+        "op": "%",
+        "left": {
+          "kind": "columnRef",
+          "parts": [
+            "id"
+          ]
+        },
+        "right": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "2"
+        }
+      },
+      "right": {
+        "kind": "literal",
+        "type": "UInt64",
+        "value": "0"
+      }
+    }
+  },
+  {
+    "kind": "update",
+    "table": {
+      "kind": "tableRef",
+      "table": "t_lightweight"
+    },
+    "assignments": [
+      {
+        "column": "c1",
+        "expr": {
+          "kind": "binaryExpr",
+          "op": "+",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "c1"
+            ]
+          },
+          "right": {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "1000"
+          }
+        }
+      }
+    ],
+    "where": {
+      "kind": "binaryExpr",
+      "op": "=",
+      "left": {
+        "kind": "binaryExpr",
+        "op": "%",
+        "left": {
+          "kind": "columnRef",
+          "parts": [
+            "id"
+          ]
+        },
+        "right": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "3"
+        }
+      },
+      "right": {
+        "kind": "literal",
+        "type": "UInt64",
+        "value": "0"
+      }
+    }
+  },
+  {
+    "kind": "update",
+    "table": {
+      "kind": "tableRef",
+      "table": "t_lightweight"
+    },
+    "assignments": [
+      {
+        "column": "c1",
+        "expr": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "10000"
+        }
+      }
+    ],
+    "where": {
+      "kind": "binaryExpr",
+      "op": "=",
+      "left": {
+        "kind": "columnRef",
+        "parts": [
+          "id"
+        ]
+      },
+      "right": {
+        "kind": "literal",
+        "type": "UInt64",
+        "value": "10"
+      }
+    }
+  },
+  {
+    "kind": "update",
+    "table": {
+      "kind": "tableRef",
+      "table": "t_lightweight"
+    },
+    "assignments": [
+      {
+        "column": "c1",
+        "expr": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "13000"
+        }
+      }
+    ],
+    "where": {
+      "kind": "binaryExpr",
+      "op": "=",
+      "left": {
+        "kind": "columnRef",
+        "parts": [
+          "id"
+        ]
+      },
+      "right": {
+        "kind": "literal",
+        "type": "UInt64",
+        "value": "10"
+      }
+    }
+  },
+  {
+    "kind": "update",
+    "table": {
+      "kind": "tableRef",
+      "table": "t_lightweight"
+    },
+    "assignments": [
+      {
+        "column": "c1",
+        "expr": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "15000"
+        }
+      }
+    ],
+    "where": {
+      "kind": "binaryExpr",
+      "op": "=",
+      "left": {
+        "kind": "columnRef",
+        "parts": [
+          "id"
+        ]
+      },
+      "right": {
+        "kind": "literal",
+        "type": "UInt64",
+        "value": "15"
+      }
+    }
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -110,6 +423,18 @@
     ]
   },
   {
+    "kind": "optimize",
+    "table": {
+      "kind": "tableRef",
+      "table": "t_lightweight"
+    },
+    "partition": {
+      "kind": "id",
+      "id": "patch-3e1a7650697c132eb044cc6f1d82bc92-all"
+    },
+    "final": true
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -137,6 +462,14 @@
           "id"
         ]
       }
+    }
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "t_lightweight"
     }
   }
 ]

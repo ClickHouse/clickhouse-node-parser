@@ -1,0 +1,209 @@
+[
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "test_alter_mixed"
+    },
+    "ifExists": true,
+    "leadingComments": [
+      "-- Tags: no-replicated-database",
+      "-- Test runtime IF EXISTS checks for mixed replicated/non-replicated ALTER commands",
+      "-- This test verifies that IF EXISTS clauses work correctly when mixing different types",
+      "-- of ALTER operations (replicated and non-replicated) in the same statement"
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "test_alter_mixed"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "x",
+        "type": {
+          "name": "Int32"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "y",
+        "type": {
+          "name": "String"
+        }
+      }
+    ],
+    "engine": {
+      "name": "Memory"
+    },
+    "leadingComments": [
+      "-- Test 1: COMMENT COLUMN IF EXISTS with column deleted by previous command"
+    ]
+  },
+  {
+    "kind": "alter",
+    "table": {
+      "kind": "tableRef",
+      "table": "test_alter_mixed"
+    },
+    "commands": [
+      {
+        "kind": "alterCommand",
+        "commandType": "DROP_COLUMN",
+        "columnName": "x"
+      },
+      {
+        "kind": "alterCommand",
+        "commandType": "COMMENT_COLUMN",
+        "columnName": "x",
+        "comment": {
+          "kind": "literal",
+          "type": "String",
+          "value": "test comment"
+        }
+      }
+    ],
+    "leadingComments": [
+      "-- This should succeed - DROP removes x, COMMENT with IF EXISTS should be silently ignored"
+    ]
+  },
+  {
+    "kind": "describe",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "test_alter_mixed"
+      }
+    }
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "test_alter_mixed"
+    }
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "test_alter_mixed"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "a",
+        "type": {
+          "name": "Int32"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "b",
+        "type": {
+          "name": "String"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "c",
+        "type": {
+          "name": "Float64"
+        }
+      }
+    ],
+    "engine": {
+      "name": "Memory"
+    },
+    "leadingComments": [
+      "-- Test 2: Multiple operations with mixed types in sequence"
+    ]
+  },
+  {
+    "kind": "alter",
+    "table": {
+      "kind": "tableRef",
+      "table": "test_alter_mixed"
+    },
+    "commands": [
+      {
+        "kind": "alterCommand",
+        "commandType": "DROP_COLUMN",
+        "columnName": "a"
+      },
+      {
+        "kind": "alterCommand",
+        "commandType": "DROP_COLUMN",
+        "columnName": "a"
+      },
+      {
+        "kind": "alterCommand",
+        "commandType": "MODIFY_COLUMN",
+        "column": {
+          "kind": "columnDef",
+          "name": "a",
+          "type": {
+            "name": "Int64"
+          }
+        }
+      },
+      {
+        "kind": "alterCommand",
+        "commandType": "COMMENT_COLUMN",
+        "columnName": "a",
+        "comment": {
+          "kind": "literal",
+          "type": "String",
+          "value": "should be ignored"
+        }
+      },
+      {
+        "kind": "alterCommand",
+        "commandType": "RENAME_COLUMN",
+        "oldName": "a",
+        "newName": "a_renamed"
+      },
+      {
+        "kind": "alterCommand",
+        "commandType": "MODIFY_COLUMN",
+        "column": {
+          "kind": "columnDef",
+          "name": "b",
+          "type": {
+            "name": "String"
+          },
+          "defaultKind": "DEFAULT",
+          "defaultExpr": {
+            "kind": "literal",
+            "type": "String",
+            "value": "test"
+          }
+        }
+      },
+      {
+        "kind": "alterCommand",
+        "commandType": "DROP_COLUMN",
+        "columnName": "c"
+      },
+      {
+        "kind": "alterCommand",
+        "commandType": "MODIFY_COLUMN",
+        "column": {
+          "kind": "columnDef",
+          "name": "c",
+          "type": {
+            "name": "Float32"
+          }
+        }
+      }
+    ],
+    "leadingComments": [
+      "-- Complex case: multiple drops and modifications including comments"
+    ]
+  }
+]

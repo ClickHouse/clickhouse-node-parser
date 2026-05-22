@@ -1,5 +1,979 @@
 [
   {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "enable_full_text_index",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ],
+    "leadingComments": [
+      "-- This test compares two identical tables that differ only in the text index posting-list compression setting (posting_list_codec).",
+      "-- The inserted data covers a range of posting-list shapes:",
+      "-- - very large lists (aa/bb/cc),",
+      "-- - a block-boundary case (129 hits = 128 + tail),",
+      "-- - a medium non-aligned size (1003 hits),",
+      "-- - a single-hit list, and",
+      "-- - very sparse lists (2 and 5 hits).",
+      "-- After OPTIMIZE FINAL to stabilize on-disk parts, each hasToken() query validates that the compressed",
+      "-- and uncompressed tables return identical counts (and matches expected exact counts for key tokens),",
+      "-- ensuring correctness across full blocks, tail blocks, and small-N cases."
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "use_skip_indexes_on_data_read",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "use_query_condition_cache",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "tab_bitpacking"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "tab_uncompressed"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "tab_bitpacking"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "ts",
+        "type": {
+          "name": "DateTime"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "str",
+        "type": {
+          "name": "String"
+        }
+      },
+      {
+        "kind": "indexDef",
+        "name": "inv_idx",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "str"
+          ]
+        },
+        "indexType": {
+          "name": "text",
+          "args": [
+            {
+              "kind": "binaryExpr",
+              "op": "=",
+              "left": {
+                "kind": "columnRef",
+                "parts": [
+                  "tokenizer"
+                ]
+              },
+              "right": {
+                "kind": "literal",
+                "type": "String",
+                "value": "splitByNonAlpha"
+              }
+            },
+            {
+              "kind": "binaryExpr",
+              "op": "=",
+              "left": {
+                "kind": "columnRef",
+                "parts": [
+                  "posting_list_codec"
+                ]
+              },
+              "right": {
+                "kind": "literal",
+                "type": "String",
+                "value": "bitpacking"
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "ts"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "tab_uncompressed"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "ts",
+        "type": {
+          "name": "DateTime"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "str",
+        "type": {
+          "name": "String"
+        }
+      },
+      {
+        "kind": "indexDef",
+        "name": "inv_idx",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "str"
+          ]
+        },
+        "indexType": {
+          "name": "text",
+          "args": [
+            {
+              "kind": "binaryExpr",
+              "op": "=",
+              "left": {
+                "kind": "columnRef",
+                "parts": [
+                  "tokenizer"
+                ]
+              },
+              "right": {
+                "kind": "literal",
+                "type": "String",
+                "value": "splitByNonAlpha"
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "ts"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "tab_bitpacking"
+      }
+    },
+    "selectQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "2026-01-09 10:00:00"
+        },
+        {
+          "kind": "alias",
+          "expr": {
+            "kind": "functionCall",
+            "name": "multiIf",
+            "args": [
+              {
+                "kind": "binaryExpr",
+                "op": "=",
+                "left": {
+                  "kind": "binaryExpr",
+                  "op": "%",
+                  "left": {
+                    "kind": "columnRef",
+                    "parts": [
+                      "number"
+                    ]
+                  },
+                  "right": {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "3"
+                  }
+                },
+                "right": {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "0"
+                }
+              },
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "aa"
+              },
+              {
+                "kind": "binaryExpr",
+                "op": "=",
+                "left": {
+                  "kind": "binaryExpr",
+                  "op": "%",
+                  "left": {
+                    "kind": "columnRef",
+                    "parts": [
+                      "number"
+                    ]
+                  },
+                  "right": {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "3"
+                  }
+                },
+                "right": {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "1"
+                }
+              },
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "bb"
+              },
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "cc"
+              }
+            ]
+          },
+          "alias": "str"
+        }
+      ],
+      "from": {
+        "kind": "tableFunctionRef",
+        "name": "numbers",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "10000"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "tab_uncompressed"
+      }
+    },
+    "selectQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "2026-01-09 11:00:00"
+        },
+        {
+          "kind": "alias",
+          "expr": {
+            "kind": "functionCall",
+            "name": "multiIf",
+            "args": [
+              {
+                "kind": "binaryExpr",
+                "op": "=",
+                "left": {
+                  "kind": "binaryExpr",
+                  "op": "%",
+                  "left": {
+                    "kind": "columnRef",
+                    "parts": [
+                      "number"
+                    ]
+                  },
+                  "right": {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "3"
+                  }
+                },
+                "right": {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "0"
+                }
+              },
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "aa"
+              },
+              {
+                "kind": "binaryExpr",
+                "op": "=",
+                "left": {
+                  "kind": "binaryExpr",
+                  "op": "%",
+                  "left": {
+                    "kind": "columnRef",
+                    "parts": [
+                      "number"
+                    ]
+                  },
+                  "right": {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "3"
+                  }
+                },
+                "right": {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "1"
+                }
+              },
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "bb"
+              },
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "cc"
+              }
+            ]
+          },
+          "alias": "str"
+        }
+      ],
+      "from": {
+        "kind": "tableFunctionRef",
+        "name": "numbers",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "10000"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "tab_bitpacking"
+      }
+    },
+    "selectQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "2026-01-09 12:00:00"
+        },
+        {
+          "kind": "alias",
+          "expr": {
+            "kind": "functionCall",
+            "name": "multiIf",
+            "args": [
+              {
+                "kind": "binaryExpr",
+                "op": "<",
+                "left": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "number"
+                  ]
+                },
+                "right": {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "129"
+                }
+              },
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "tail129"
+              },
+              {
+                "kind": "binaryExpr",
+                "op": "=",
+                "left": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "number"
+                  ]
+                },
+                "right": {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "129"
+                }
+              },
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "single"
+              },
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "noise"
+              }
+            ]
+          },
+          "alias": "str"
+        }
+      ],
+      "from": {
+        "kind": "tableFunctionRef",
+        "name": "numbers",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "512"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "tab_uncompressed"
+      }
+    },
+    "selectQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "2026-01-09 13:00:00"
+        },
+        {
+          "kind": "alias",
+          "expr": {
+            "kind": "functionCall",
+            "name": "multiIf",
+            "args": [
+              {
+                "kind": "binaryExpr",
+                "op": "<",
+                "left": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "number"
+                  ]
+                },
+                "right": {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "129"
+                }
+              },
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "tail129"
+              },
+              {
+                "kind": "binaryExpr",
+                "op": "=",
+                "left": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "number"
+                  ]
+                },
+                "right": {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "129"
+                }
+              },
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "single"
+              },
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "noise"
+              }
+            ]
+          },
+          "alias": "str"
+        }
+      ],
+      "from": {
+        "kind": "tableFunctionRef",
+        "name": "numbers",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "512"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "tab_bitpacking"
+      }
+    },
+    "selectQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "2026-01-09 14:00:00"
+        },
+        {
+          "kind": "alias",
+          "expr": {
+            "kind": "functionCall",
+            "name": "if",
+            "args": [
+              {
+                "kind": "binaryExpr",
+                "op": "<",
+                "left": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "number"
+                  ]
+                },
+                "right": {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "1003"
+                }
+              },
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "mid1003"
+              },
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "noise"
+              }
+            ]
+          },
+          "alias": "str"
+        }
+      ],
+      "from": {
+        "kind": "tableFunctionRef",
+        "name": "numbers",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "1500"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "tab_uncompressed"
+      }
+    },
+    "selectQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "2026-01-09 15:00:00"
+        },
+        {
+          "kind": "alias",
+          "expr": {
+            "kind": "functionCall",
+            "name": "if",
+            "args": [
+              {
+                "kind": "binaryExpr",
+                "op": "<",
+                "left": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "number"
+                  ]
+                },
+                "right": {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "1003"
+                }
+              },
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "mid1003"
+              },
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "noise"
+              }
+            ]
+          },
+          "alias": "str"
+        }
+      ],
+      "from": {
+        "kind": "tableFunctionRef",
+        "name": "numbers",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "1500"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "tab_bitpacking"
+      }
+    },
+    "selectQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "2026-01-09 16:00:00"
+        },
+        {
+          "kind": "alias",
+          "expr": {
+            "kind": "functionCall",
+            "name": "multiIf",
+            "args": [
+              {
+                "kind": "inExpr",
+                "negated": false,
+                "expr": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "number"
+                  ]
+                },
+                "values": [
+                  {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "0"
+                  },
+                  {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "777"
+                  }
+                ]
+              },
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "rare2"
+              },
+              {
+                "kind": "inExpr",
+                "negated": false,
+                "expr": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "number"
+                  ]
+                },
+                "values": [
+                  {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "1"
+                  },
+                  {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "2"
+                  },
+                  {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "3"
+                  },
+                  {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "4"
+                  },
+                  {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "5"
+                  }
+                ]
+              },
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "rare5"
+              },
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "noise"
+              }
+            ]
+          },
+          "alias": "str"
+        }
+      ],
+      "from": {
+        "kind": "tableFunctionRef",
+        "name": "numbers",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "2000"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "tab_uncompressed"
+      }
+    },
+    "selectQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "2026-01-09 17:00:00"
+        },
+        {
+          "kind": "alias",
+          "expr": {
+            "kind": "functionCall",
+            "name": "multiIf",
+            "args": [
+              {
+                "kind": "inExpr",
+                "negated": false,
+                "expr": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "number"
+                  ]
+                },
+                "values": [
+                  {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "0"
+                  },
+                  {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "777"
+                  }
+                ]
+              },
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "rare2"
+              },
+              {
+                "kind": "inExpr",
+                "negated": false,
+                "expr": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "number"
+                  ]
+                },
+                "values": [
+                  {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "1"
+                  },
+                  {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "2"
+                  },
+                  {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "3"
+                  },
+                  {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "4"
+                  },
+                  {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "5"
+                  }
+                ]
+              },
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "rare5"
+              },
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "noise"
+              }
+            ]
+          },
+          "alias": "str"
+        }
+      ],
+      "from": {
+        "kind": "tableFunctionRef",
+        "name": "numbers",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "2000"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "kind": "optimize",
+    "table": {
+      "kind": "tableRef",
+      "table": "tab_bitpacking"
+    },
+    "final": true
+  },
+  {
+    "kind": "optimize",
+    "table": {
+      "kind": "tableRef",
+      "table": "tab_uncompressed"
+    },
+    "final": true
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -99,6 +1073,9 @@
         },
         "alias": "ok_aa"
       }
+    ],
+    "leadingComments": [
+      "-- Validates that a very large/high-frequency posting list is decoded correctly by checking the count in the compressed table matches the uncompressed baseline."
     ]
   },
   {
@@ -233,6 +1210,9 @@
         },
         "alias": "ok_tail129_eq"
       }
+    ],
+    "leadingComments": [
+      "-- Tests the block-boundary case (expected 129 hits, i.e. one full 128-value block plus a 1-value tail) and verifies compressed vs uncompressed counts are identical."
     ]
   },
   {
@@ -355,6 +1335,9 @@
         },
         "alias": "ok_mid1003_eq"
       }
+    ],
+    "leadingComments": [
+      "-- Tests a medium-length, non-aligned posting list (expected 1003 hits) to cover multi-block + non-trivial tail handling; also checks equality with the uncompressed table."
     ]
   },
   {
@@ -477,6 +1460,9 @@
         },
         "alias": "ok_single_eq"
       }
+    ],
+    "leadingComments": [
+      "-- Tests the single-element posting list case (expected 1 hit) and ensures compressed and uncompressed results match."
     ]
   },
   {
@@ -599,6 +1585,9 @@
         },
         "alias": "ok_rare2_eq"
       }
+    ],
+    "leadingComments": [
+      "-- Tests a very small/sparse posting list (expected 2 hits) and checks compressed equals uncompressed."
     ]
   },
   {
@@ -721,6 +1710,25 @@
         },
         "alias": "ok_rare5_eq"
       }
+    ],
+    "leadingComments": [
+      "-- Tests another small-N posting list (expected 5 hits) to cover additional short-list behavior; also checks compressed equals uncompressed."
     ]
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "tab_bitpacking"
+    }
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "tab_uncompressed"
+    }
   }
 ]

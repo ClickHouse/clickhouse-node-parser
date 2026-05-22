@@ -1,5 +1,22 @@
 [
   {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "log_queries",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "system",
+    "body": "SYSTEM flush logs query_log"
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -84,20 +101,6 @@
     "kind": "select",
     "select": [
       {
-        "kind": "literal",
-        "type": "String",
-        "value": "01231_log_queries_min_type/EXCEPTION_BEFORE_START"
-      }
-    ]
-  },
-  {
-    "kind": "system",
-    "body": "flush logs query_log"
-  },
-  {
-    "kind": "select",
-    "select": [
-      {
         "kind": "functionCall",
         "name": "count",
         "args": []
@@ -163,6 +166,32 @@
     }
   },
   {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "max_rows_to_read",
+        "value": {
+          "kind": "literal",
+          "type": "String",
+          "value": "100K"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "log_queries_min_type",
+        "value": {
+          "kind": "literal",
+          "type": "String",
+          "value": "EXCEPTION_WHILE_PROCESSING"
+        }
+      }
+    ]
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -194,7 +223,23 @@
         "type": "Float64",
         "value": "1e6"
       }
-    }
+    },
+    "trailingComments": [
+      "-- { serverError TOO_MANY_ROWS }"
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "max_rows_to_read",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      }
+    ]
   },
   {
     "kind": "select",
@@ -280,19 +325,6 @@
     }
   },
   {
-    "kind": "set",
-    "settings": [
-      {
-        "name": "max_rows_to_read",
-        "value": {
-          "kind": "literal",
-          "type": "String",
-          "value": "100K"
-        }
-      }
-    ]
-  },
-  {
     "kind": "select",
     "select": [
       {
@@ -324,23 +356,9 @@
         "type": "Float64",
         "value": "1e6"
       }
-    }
-  },
-  {
-    "kind": "system",
-    "body": "flush logs query_log"
-  },
-  {
-    "kind": "set",
-    "settings": [
-      {
-        "name": "max_rows_to_read",
-        "value": {
-          "kind": "literal",
-          "type": "UInt64",
-          "value": "0"
-        }
-      }
+    },
+    "trailingComments": [
+      "-- { serverError TOO_MANY_ROWS }"
     ]
   },
   {

@@ -51,4 +51,4 @@ FROM numbers(1, 10);
 SELECT number DIV negate(number)
 FROM numbers(1, 10);
 
-SELECT -1 DIV 0;
+SELECT -1 DIV 0; -- { serverError ILLEGAL_DIVISION }

@@ -1,7 +1,9 @@
-SELECT if();
+SET send_logs_level = 'fatal';
 
-SELECT if(1);
+SELECT if(); -- { serverError NUMBER_OF_ARGUMENTS_DOESNT_MATCH }
 
-SELECT if(1, 1);
+SELECT if(1); -- { serverError NUMBER_OF_ARGUMENTS_DOESNT_MATCH }
+
+SELECT if(1, 1); -- { serverError NUMBER_OF_ARGUMENTS_DOESNT_MATCH }
 
 SELECT if(1, 1, 1);

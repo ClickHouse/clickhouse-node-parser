@@ -1,5 +1,173 @@
 [
   {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "enable_analyzer",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ],
+    "leadingComments": [
+      "-- https://github.com/ClickHouse/ClickHouse/issues/47422"
+    ]
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "test"
+    },
+    "temporary": true,
+    "ifExists": true
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "test"
+    },
+    "temporary": true,
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "a",
+        "type": {
+          "name": "Float32"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "id",
+        "type": {
+          "name": "UInt64"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "test"
+      }
+    }
+  },
+  {
+    "kind": "select",
+    "with": [
+      {
+        "kind": "cteExpr",
+        "name": "a",
+        "expr": {
+          "kind": "functionCall",
+          "name": "avg",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "a"
+              ]
+            }
+          ],
+          "window": {}
+        }
+      }
+    ],
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "a"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "id"
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "test"
+    },
+    "settings": [
+      {
+        "name": "allow_experimental_window_functions",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ],
+    "leadingComments": [
+      "-- alias clash (a is redefined in CTE)",
+      "-- 21.8: no error, bad result",
+      "-- 21.9 and newer: error \"Block structure mismatch in (columns with identical name must have identical structure) stream\""
+    ]
+  },
+  {
+    "kind": "select",
+    "with": [
+      {
+        "kind": "cteExpr",
+        "name": "a2",
+        "expr": {
+          "kind": "functionCall",
+          "name": "avg",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "a"
+              ]
+            }
+          ],
+          "window": {}
+        }
+      }
+    ],
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "a2"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "id"
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "test"
+    },
+    "settings": [
+      {
+        "name": "allow_experimental_window_functions",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ],
+    "leadingComments": [
+      "-- no aliases clash, good result"
+    ]
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -39,6 +207,9 @@
           "value": "1"
         }
       }
+    ],
+    "leadingComments": [
+      "-- aliases clash without CTE"
     ]
   }
 ]

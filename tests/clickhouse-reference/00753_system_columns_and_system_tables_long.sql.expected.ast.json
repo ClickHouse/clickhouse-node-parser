@@ -1,5 +1,140 @@
 [
   {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "output_format_pretty_row_numbers",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      }
+    ],
+    "leadingComments": [
+      "-- Tags: long, no-object-storage, no-random-merge-tree-settings"
+    ]
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "check_system_tables"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "check_system_tables"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "name1",
+        "type": {
+          "name": "UInt8"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "name2",
+        "type": {
+          "name": "UInt8"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "name3",
+        "type": {
+          "name": "UInt8"
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree",
+      "args": []
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "name1"
+          ]
+        }
+      }
+    ],
+    "partitionBy": {
+      "kind": "columnRef",
+      "parts": [
+        "name2"
+      ]
+    },
+    "sampleBy": {
+      "kind": "columnRef",
+      "parts": [
+        "name1"
+      ]
+    },
+    "settings": [
+      {
+        "name": "min_bytes_for_wide_part",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      },
+      {
+        "name": "compress_marks",
+        "value": {
+          "kind": "literal",
+          "type": "Bool",
+          "value": "0"
+        }
+      },
+      {
+        "name": "compress_primary_key",
+        "value": {
+          "kind": "literal",
+          "type": "Bool",
+          "value": "0"
+        }
+      },
+      {
+        "name": "ratio_of_defaults_for_sparse_serialization",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      },
+      {
+        "name": "serialization_info_version",
+        "value": {
+          "kind": "literal",
+          "type": "String",
+          "value": "basic"
+        }
+      },
+      {
+        "name": "auto_statistics_types",
+        "value": {
+          "kind": "literal",
+          "type": "String",
+          "value": ""
+        }
+      }
+    ],
+    "settingsAfterOrderBy": true,
+    "leadingComments": [
+      "-- Check MergeTree declaration in new format"
+    ]
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -166,6 +301,16 @@
     "format": "PrettyCompactNoEscapes"
   },
   {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "check_system_tables"
+      }
+    }
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -228,6 +373,106 @@
         }
       ]
     }
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "check_system_tables"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "date",
+        "type": {
+          "name": "Date"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "value",
+        "type": {
+          "name": "String"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "version",
+        "type": {
+          "name": "UInt64"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "sign",
+        "type": {
+          "name": "Int8"
+        }
+      }
+    ],
+    "engine": {
+      "name": "VersionedCollapsingMergeTree",
+      "args": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "sign"
+          ]
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "version"
+          ]
+        }
+      ]
+    },
+    "partitionBy": {
+      "kind": "columnRef",
+      "parts": [
+        "date"
+      ]
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "date"
+          ]
+        }
+      }
+    ],
+    "settings": [
+      {
+        "name": "compress_marks",
+        "value": {
+          "kind": "literal",
+          "type": "Bool",
+          "value": "0"
+        }
+      },
+      {
+        "name": "compress_primary_key",
+        "value": {
+          "kind": "literal",
+          "type": "Bool",
+          "value": "0"
+        }
+      },
+      {
+        "name": "auto_statistics_types",
+        "value": {
+          "kind": "literal",
+          "type": "String",
+          "value": ""
+        }
+      }
+    ],
+    "settingsAfterOrderBy": true,
+    "leadingComments": [
+      "-- Check VersionedCollapsingMergeTree"
+    ]
   },
   {
     "kind": "select",
@@ -307,6 +552,130 @@
     "format": "PrettyCompactNoEscapes"
   },
   {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "allow_deprecated_syntax_for_merge_tree",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ],
+    "leadingComments": [
+      "-- Check MergeTree declaration in old format"
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "check_system_tables"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "Event",
+        "type": {
+          "name": "Date"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "UserId",
+        "type": {
+          "name": "UInt32"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "Counter",
+        "type": {
+          "name": "UInt32"
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree",
+      "args": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "Event"
+          ]
+        },
+        {
+          "kind": "functionCall",
+          "name": "intHash32",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "UserId"
+              ]
+            }
+          ]
+        },
+        {
+          "kind": "tupleLiteral",
+          "elements": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "Counter"
+              ]
+            },
+            {
+              "kind": "columnRef",
+              "parts": [
+                "Event"
+              ]
+            },
+            {
+              "kind": "functionCall",
+              "name": "intHash32",
+              "args": [
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "UserId"
+                  ]
+                }
+              ]
+            }
+          ],
+          "source": "(Counter, Event, intHash32(UserId))"
+        },
+        {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "8192"
+        }
+      ]
+    }
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "check_system_tables"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "key",
+        "type": {
+          "name": "UInt8"
+        }
+      }
+    ],
+    "engine": {
+      "name": "TinyLog",
+      "args": []
+    }
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -365,6 +734,209 @@
     }
   },
   {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "check_system_tables"
+      }
+    }
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "check_system_tables"
+    }
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "check_system_tables"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "key",
+        "type": {
+          "name": "UInt8"
+        }
+      }
+    ],
+    "engine": {
+      "name": "Log",
+      "args": []
+    }
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "check_system_tables"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "key",
+        "type": {
+          "name": "UInt8"
+        }
+      }
+    ],
+    "engine": {
+      "name": "StripeLog",
+      "args": []
+    }
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "check_system_tables"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "key",
+        "type": {
+          "name": "UInt16"
+        }
+      }
+    ],
+    "engine": {
+      "name": "Memory",
+      "args": []
+    }
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "check_system_tables_null"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "check_system_tables_null"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "key",
+        "type": {
+          "name": "UInt16"
+        }
+      }
+    ],
+    "engine": {
+      "name": "Null",
+      "args": []
+    }
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "check_system_tables"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "key",
+        "type": {
+          "name": "UInt16"
+        }
+      }
+    ],
+    "engine": {
+      "name": "Buffer",
+      "args": [
+        {
+          "kind": "functionCall",
+          "name": "currentDatabase",
+          "args": []
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "check_system_tables_null"
+          ]
+        },
+        {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "2"
+        },
+        {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        },
+        {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "100"
+        },
+        {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "100"
+        },
+        {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "100"
+        },
+        {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        },
+        {
+          "kind": "literal",
+          "type": "Float64",
+          "value": "1e6"
+        }
+      ]
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "check_system_tables"
+      }
+    },
+    "selectQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "asterisk"
+        }
+      ],
+      "from": {
+        "kind": "tableFunctionRef",
+        "name": "numbers_mt",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "50"
+          }
+        ]
+      }
+    }
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -420,6 +992,176 @@
           }
         }
       ]
+    }
+  },
+  {
+    "kind": "optimize",
+    "table": {
+      "kind": "tableRef",
+      "table": "check_system_tables"
+    },
+    "trailingComments": [
+      "-- flush"
+    ]
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "check_system_tables"
+      }
+    },
+    "selectQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "asterisk"
+        }
+      ],
+      "from": {
+        "kind": "tableFunctionRef",
+        "name": "numbers_mt",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "101"
+          }
+        ]
+      }
+    },
+    "trailingComments": [
+      "-- direct block write (due to min_rows exceeded)"
+    ]
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "check_system_tables_null"
+    }
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "check_system_tables"
+    },
+    "engine": {
+      "name": "Set",
+      "args": []
+    },
+    "asQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "asterisk"
+        }
+      ],
+      "from": {
+        "kind": "tableFunctionRef",
+        "name": "numbers",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "50"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "check_system_tables"
+      }
+    },
+    "selectQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "binaryExpr",
+          "op": "+",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "number"
+            ]
+          },
+          "right": {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "50"
+          }
+        }
+      ],
+      "from": {
+        "kind": "tableFunctionRef",
+        "name": "numbers",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "50"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "check_system_tables"
+    },
+    "engine": {
+      "name": "Join",
+      "args": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "ANY"
+          ]
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "LEFT"
+          ]
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "number"
+          ]
+        }
+      ]
+    },
+    "asQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "asterisk"
+        }
+      ],
+      "from": {
+        "kind": "tableFunctionRef",
+        "name": "numbers",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "50"
+          }
+        ]
+      }
     }
   },
   {
@@ -512,6 +1254,148 @@
           }
         }
       ]
+    }
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "check_system_tables"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "name1",
+        "type": {
+          "name": "UInt8"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "name2",
+        "type": {
+          "name": "UInt8"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "name3",
+        "type": {
+          "name": "UInt8"
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree",
+      "args": []
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "name1"
+          ]
+        }
+      }
+    ],
+    "partitionBy": {
+      "kind": "columnRef",
+      "parts": [
+        "name2"
+      ]
+    },
+    "sampleBy": {
+      "kind": "columnRef",
+      "parts": [
+        "name1"
+      ]
+    },
+    "settings": [
+      {
+        "name": "min_bytes_for_wide_part",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      },
+      {
+        "name": "compress_marks",
+        "value": {
+          "kind": "literal",
+          "type": "Bool",
+          "value": "0"
+        }
+      },
+      {
+        "name": "compress_primary_key",
+        "value": {
+          "kind": "literal",
+          "type": "Bool",
+          "value": "0"
+        }
+      },
+      {
+        "name": "ratio_of_defaults_for_sparse_serialization",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ],
+    "settingsAfterOrderBy": true,
+    "leadingComments": [
+      "-- Build MergeTree table for Materialized view"
+    ]
+  },
+  {
+    "kind": "createMaterializedView",
+    "table": {
+      "kind": "tableRef",
+      "table": "check_system_tables_mv"
+    },
+    "engine": {
+      "name": "MergeTree",
+      "args": []
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "name2"
+          ]
+        }
+      }
+    ],
+    "asQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "name1"
+          ]
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "name2"
+          ]
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "name3"
+          ]
+        }
+      ],
+      "from": {
+        "kind": "tableRef",
+        "table": "check_system_tables"
+      }
     }
   },
   {
@@ -658,6 +1542,14 @@
           }
         }
       ]
+    }
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "check_system_tables_mv"
     }
   }
 ]

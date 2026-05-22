@@ -1,5 +1,83 @@
 [
   {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "local_02175"
+    },
+    "ifExists": true,
+    "leadingComments": [
+      "-- Tags: shard"
+    ]
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "dist_02175"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "local_02175"
+    },
+    "engine": {
+      "name": "Memory",
+      "args": []
+    },
+    "asQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "asterisk"
+        }
+      ],
+      "from": {
+        "kind": "tableRef",
+        "database": "system",
+        "table": "one"
+      }
+    }
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "dist_02175"
+    },
+    "asTable": {
+      "kind": "tableRef",
+      "table": "local_02175"
+    },
+    "engine": {
+      "name": "Distributed",
+      "args": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "test_cluster_two_shards"
+          ]
+        },
+        {
+          "kind": "functionCall",
+          "name": "currentDatabase",
+          "args": []
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "local_02175"
+          ]
+        }
+      ]
+    }
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -12,7 +90,38 @@
         "table": "dist_02175",
         "alias": "l"
       },
-      "kind": "join",
+      "kind": "joinExpr",
+      "joinType": "INNER",
+      "right": {
+        "kind": "tableRef",
+        "table": "local_02175",
+        "alias": "r"
+      },
+      "constraint": {
+        "kind": "using",
+        "columns": [
+          "dummy"
+        ]
+      }
+    },
+    "leadingComments": [
+      "-- { echoOn }"
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "asterisk"
+      }
+    ],
+    "from": {
+      "left": {
+        "kind": "tableRef",
+        "table": "dist_02175",
+        "alias": "l"
+      },
+      "kind": "joinExpr",
       "joinType": "INNER",
       "right": {
         "kind": "tableRef",
@@ -36,35 +145,7 @@
     ],
     "from": {
       "left": {
-        "kind": "tableRef",
-        "table": "dist_02175",
-        "alias": "l"
-      },
-      "kind": "join",
-      "joinType": "INNER",
-      "right": {
-        "kind": "tableRef",
-        "table": "local_02175",
-        "alias": "r"
-      },
-      "constraint": {
-        "kind": "using",
-        "columns": [
-          "dummy"
-        ]
-      }
-    }
-  },
-  {
-    "kind": "select",
-    "select": [
-      {
-        "kind": "asterisk"
-      }
-    ],
-    "from": {
-      "left": {
-        "kind": "tableFunction",
+        "kind": "tableFunctionRef",
         "name": "remote",
         "args": [
           {
@@ -86,7 +167,7 @@
         ],
         "alias": "l"
       },
-      "kind": "join",
+      "kind": "joinExpr",
       "joinType": "INNER",
       "right": {
         "kind": "tableRef",
@@ -99,7 +180,10 @@
           "dummy"
         ]
       }
-    }
+    },
+    "leadingComments": [
+      "-- explicit database for distributed table"
+    ]
   },
   {
     "kind": "select",
@@ -110,7 +194,7 @@
     ],
     "from": {
       "left": {
-        "kind": "tableFunction",
+        "kind": "tableFunctionRef",
         "name": "remote",
         "args": [
           {
@@ -132,7 +216,7 @@
         ],
         "alias": "l"
       },
-      "kind": "join",
+      "kind": "joinExpr",
       "joinType": "INNER",
       "right": {
         "kind": "tableRef",
@@ -145,6 +229,25 @@
           "dummy"
         ]
       }
+    }
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "local_02175"
+    },
+    "leadingComments": [
+      "-- { echoOff }"
+    ]
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "dist_02175"
     }
   }
 ]

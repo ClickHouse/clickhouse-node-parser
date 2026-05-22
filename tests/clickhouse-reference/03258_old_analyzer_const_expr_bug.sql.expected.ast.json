@@ -1,0 +1,423 @@
+[
+  {
+    "kind": "select",
+    "with": [
+      {
+        "kind": "cteExpr",
+        "name": "interval_start",
+        "expr": {
+          "kind": "functionCall",
+          "name": "multiIf",
+          "args": [
+            {
+              "kind": "binaryExpr",
+              "op": "=",
+              "left": {
+                "kind": "literal",
+                "type": "String",
+                "value": "-1"
+              },
+              "right": {
+                "kind": "literal",
+                "type": "String",
+                "value": "-1"
+              }
+            },
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "10080"
+            },
+            {
+              "kind": "binaryExpr",
+              "op": "=",
+              "left": {
+                "kind": "literal",
+                "type": "String",
+                "value": "-1"
+              },
+              "right": {
+                "kind": "literal",
+                "type": "String",
+                "value": "7"
+              }
+            },
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "60"
+            },
+            {
+              "kind": "binaryExpr",
+              "op": "=",
+              "left": {
+                "kind": "literal",
+                "type": "String",
+                "value": "-1"
+              },
+              "right": {
+                "kind": "literal",
+                "type": "String",
+                "value": "1"
+              }
+            },
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "5"
+            },
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "1440"
+            }
+          ]
+        },
+        "trailingComments": [
+          "-- noqa"
+        ]
+      },
+      {
+        "kind": "cteExpr",
+        "name": "days_run",
+        "expr": {
+          "kind": "functionCall",
+          "name": "multiIf",
+          "args": [
+            {
+              "kind": "binaryExpr",
+              "op": "=",
+              "left": {
+                "kind": "literal",
+                "type": "String",
+                "value": "-1"
+              },
+              "right": {
+                "kind": "literal",
+                "type": "String",
+                "value": "-1"
+              }
+            },
+            {
+              "kind": "castExpr",
+              "expr": {
+                "kind": "functionCall",
+                "name": "CEIL",
+                "args": [
+                  {
+                    "kind": "binaryExpr",
+                    "op": "/",
+                    "left": {
+                      "kind": "binaryExpr",
+                      "op": "-",
+                      "left": {
+                        "kind": "functionCall",
+                        "name": "today",
+                        "args": []
+                      },
+                      "right": {
+                        "kind": "functionCall",
+                        "name": "toDate",
+                        "args": [
+                          {
+                            "kind": "literal",
+                            "type": "String",
+                            "value": "2017-06-22"
+                          }
+                        ]
+                      },
+                      "parenthesized": true
+                    },
+                    "right": {
+                      "kind": "literal",
+                      "type": "UInt64",
+                      "value": "7"
+                    }
+                  }
+                ]
+              },
+              "type": "UInt16",
+              "operator": true
+            },
+            {
+              "kind": "binaryExpr",
+              "op": "=",
+              "left": {
+                "kind": "literal",
+                "type": "String",
+                "value": "-1"
+              },
+              "right": {
+                "kind": "literal",
+                "type": "String",
+                "value": "7"
+              }
+            },
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "168"
+            },
+            {
+              "kind": "binaryExpr",
+              "op": "=",
+              "left": {
+                "kind": "literal",
+                "type": "String",
+                "value": "-1"
+              },
+              "right": {
+                "kind": "literal",
+                "type": "String",
+                "value": "1"
+              }
+            },
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "288"
+            },
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "90"
+            }
+          ]
+        },
+        "trailingComments": [
+          "-- noqa:L045"
+        ]
+      },
+      {
+        "kind": "cteSubquery",
+        "name": "block_time",
+        "query": {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "functionCall",
+              "name": "arrayJoin",
+              "args": [
+                {
+                  "kind": "functionCall",
+                  "name": "arrayMap",
+                  "args": [
+                    {
+                      "kind": "lambdaExpr",
+                      "params": [
+                        "i"
+                      ],
+                      "body": {
+                        "kind": "functionCall",
+                        "name": "toDateTime",
+                        "args": [
+                          {
+                            "kind": "binaryExpr",
+                            "op": "-",
+                            "left": {
+                              "kind": "functionCall",
+                              "name": "toStartOfInterval",
+                              "args": [
+                                {
+                                  "kind": "functionCall",
+                                  "name": "now",
+                                  "args": []
+                                },
+                                {
+                                  "kind": "functionCall",
+                                  "name": "toIntervalMinute",
+                                  "args": [
+                                    {
+                                      "kind": "columnRef",
+                                      "parts": [
+                                        "interval_start"
+                                      ]
+                                    }
+                                  ]
+                                }
+                              ]
+                            },
+                            "right": {
+                              "kind": "binaryExpr",
+                              "op": "*",
+                              "left": {
+                                "kind": "binaryExpr",
+                                "op": "*",
+                                "left": {
+                                  "kind": "columnRef",
+                                  "parts": [
+                                    "interval_start"
+                                  ]
+                                },
+                                "right": {
+                                  "kind": "literal",
+                                  "type": "UInt64",
+                                  "value": "60"
+                                }
+                              },
+                              "right": {
+                                "kind": "columnRef",
+                                "parts": [
+                                  "i"
+                                ]
+                              }
+                            }
+                          },
+                          {
+                            "kind": "literal",
+                            "type": "String",
+                            "value": "UTC"
+                          }
+                        ]
+                      }
+                    },
+                    {
+                      "kind": "functionCall",
+                      "name": "range",
+                      "args": [
+                        {
+                          "kind": "columnRef",
+                          "parts": [
+                            "days_run"
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "kind": "cteSubquery",
+        "name": "sales",
+        "query": {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "alias",
+              "expr": {
+                "kind": "functionCall",
+                "name": "toDateTime",
+                "args": [
+                  {
+                    "kind": "functionCall",
+                    "name": "toStartOfInterval",
+                    "args": [
+                      {
+                        "kind": "functionCall",
+                        "name": "now",
+                        "args": []
+                      },
+                      {
+                        "kind": "functionCall",
+                        "name": "toIntervalMinute",
+                        "args": [
+                          {
+                            "kind": "columnRef",
+                            "parts": [
+                              "interval_start"
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "kind": "literal",
+                    "type": "String",
+                    "value": "UTC"
+                  }
+                ]
+              },
+              "alias": "block_time"
+            }
+          ],
+          "from": {
+            "kind": "tableFunctionRef",
+            "name": "numbers",
+            "args": [
+              {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "1"
+              }
+            ]
+          },
+          "groupBy": {
+            "kind": "expressions",
+            "items": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "block_time"
+                ]
+              }
+            ]
+          },
+          "orderBy": [
+            {
+              "kind": "orderByItem",
+              "expr": {
+                "kind": "columnRef",
+                "parts": [
+                  "block_time"
+                ]
+              },
+              "direction": "ASC"
+            }
+          ]
+        }
+      }
+    ],
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "block_time"
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "sales"
+    },
+    "where": {
+      "kind": "binaryExpr",
+      "op": ">=",
+      "left": {
+        "kind": "columnRef",
+        "parts": [
+          "block_time"
+        ]
+      },
+      "right": {
+        "kind": "subqueryExpr",
+        "query": {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "functionCall",
+              "name": "MIN",
+              "args": [
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "block_time"
+                  ]
+                }
+              ]
+            }
+          ],
+          "from": {
+            "kind": "tableRef",
+            "table": "sales"
+          }
+        }
+      }
+    },
+    "format": "Null"
+  }
+]

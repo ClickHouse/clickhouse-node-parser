@@ -1,3 +1,62 @@
+SET enable_analyzer = 1;
+
+DROP TABLE IF EXISTS table1;
+
+DROP TABLE IF EXISTS table2;
+
+DROP TABLE IF EXISTS table3;
+
+DROP TABLE IF EXISTS table5;
+
+CREATE TABLE table1
+(
+    a UInt32
+)
+ENGINE = Memory;
+
+CREATE TABLE table2
+(
+    a UInt32,
+    b UInt32
+)
+ENGINE = Memory;
+
+CREATE TABLE table3
+(
+    b UInt32,
+    c UInt32
+)
+ENGINE = Memory;
+
+CREATE TABLE table5
+(
+    a UInt32,
+    b UInt32,
+    c UInt32
+)
+ENGINE = Memory;
+
+INSERT INTO table1 SELECT number
+FROM numbers(21);
+
+INSERT INTO table2 SELECT
+    number * 2,
+    number * 20
+FROM numbers(11);
+
+INSERT INTO table3 SELECT
+    number * 30,
+    number * 300
+FROM numbers(10);
+
+INSERT INTO table5 SELECT
+    number * 5,
+    number * 50,
+    number * 500
+FROM numbers(10);
+
+SET joined_subquery_requires_alias = 1;
+
 SELECT
     t1.a,
     t2.b,
@@ -159,3 +218,11 @@ INNER JOIN table2 AS t2
 INNER JOIN table3 AS t3
     ON t2_b = t3_b
 ORDER BY t1.a ASC;
+
+DROP TABLE table1;
+
+DROP TABLE table2;
+
+DROP TABLE table3;
+
+DROP TABLE table5;

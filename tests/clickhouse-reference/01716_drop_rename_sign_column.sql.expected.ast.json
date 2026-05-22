@@ -1,0 +1,127 @@
+[
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "signed_table"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "signed_table"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "k",
+        "type": {
+          "name": "UInt32"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "v",
+        "type": {
+          "name": "String"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "s",
+        "type": {
+          "name": "Int8"
+        }
+      }
+    ],
+    "engine": {
+      "name": "CollapsingMergeTree",
+      "args": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "s"
+          ]
+        }
+      ]
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "k"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "signed_table"
+      }
+    },
+    "columns": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "k"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "v"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "s"
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "alter",
+    "table": {
+      "kind": "tableRef",
+      "table": "signed_table"
+    },
+    "commands": [
+      {
+        "kind": "alterCommand",
+        "commandType": "DROP_COLUMN",
+        "columnName": "s"
+      }
+    ],
+    "trailingComments": [
+      "--{serverError ALTER_OF_COLUMN_IS_FORBIDDEN}"
+    ]
+  },
+  {
+    "kind": "alter",
+    "table": {
+      "kind": "tableRef",
+      "table": "signed_table"
+    },
+    "commands": [
+      {
+        "kind": "alterCommand",
+        "commandType": "RENAME_COLUMN",
+        "oldName": "s",
+        "newName": "s1"
+      }
+    ],
+    "trailingComments": [
+      "--{serverError ALTER_OF_COLUMN_IS_FORBIDDEN}"
+    ]
+  }
+]

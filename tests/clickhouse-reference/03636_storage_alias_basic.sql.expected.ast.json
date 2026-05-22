@@ -1,5 +1,133 @@
 [
   {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "source_table"
+    },
+    "ifExists": true,
+    "leadingComments": [
+      "-- { echo }",
+      "-- Tags: long"
+    ]
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "alias_1"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "alias_2"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "alias_3"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "alias_4"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "allow_experimental_alias_table_engine",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "source_table"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "id",
+        "type": {
+          "name": "UInt32"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "value",
+        "type": {
+          "name": "String"
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "id"
+          ]
+        }
+      }
+    ],
+    "leadingComments": [
+      "-- Create source table"
+    ]
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "source_table"
+      }
+    }
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "alias_1"
+    },
+    "engine": {
+      "name": "Alias",
+      "args": [
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "source_table"
+        }
+      ]
+    }
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -22,6 +150,28 @@
         "direction": "ASC"
       }
     ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "alias_2"
+    },
+    "engine": {
+      "name": "Alias",
+      "args": [
+        {
+          "kind": "functionCall",
+          "name": "currentDatabase",
+          "args": []
+        },
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "source_table"
+        }
+      ]
+    }
   },
   {
     "kind": "select",
@@ -48,6 +198,16 @@
     ]
   },
   {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "alias_1"
+      }
+    }
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -68,6 +228,42 @@
           ]
         },
         "direction": "ASC"
+      }
+    ]
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "alias_2"
+      }
+    }
+  },
+  {
+    "kind": "alter",
+    "table": {
+      "kind": "tableRef",
+      "table": "alias_1"
+    },
+    "commands": [
+      {
+        "kind": "alterCommand",
+        "commandType": "ADD_COLUMN",
+        "column": {
+          "kind": "columnDef",
+          "name": "status",
+          "type": {
+            "name": "String"
+          },
+          "defaultKind": "DEFAULT",
+          "defaultExpr": {
+            "kind": "literal",
+            "type": "String",
+            "value": "active"
+          }
+        }
       }
     ]
   },
@@ -111,6 +307,24 @@
     ]
   },
   {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "alias_1"
+      }
+    }
+  },
+  {
+    "kind": "truncate",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "alias_1"
+    }
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -123,6 +337,35 @@
       "kind": "tableRef",
       "table": "source_table"
     }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "source_table"
+      }
+    },
+    "leadingComments": [
+      "-- Re-insert data"
+    ]
+  },
+  {
+    "kind": "rename",
+    "targetType": "TABLE",
+    "pairs": [
+      {
+        "from": {
+          "kind": "tableRef",
+          "table": "alias_1"
+        },
+        "to": {
+          "kind": "tableRef",
+          "table": "alias_3"
+        }
+      }
+    ]
   },
   {
     "kind": "select",
@@ -149,6 +392,39 @@
     ]
   },
   {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "alias_2"
+    }
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "alias_3"
+    }
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "alias_4"
+    },
+    "engine": {
+      "name": "Alias",
+      "args": [
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "source_table"
+        }
+      ]
+    }
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -171,6 +447,44 @@
         "direction": "ASC"
       }
     ]
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "alias_4"
+      }
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "alias_4"
+      }
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "alias_4"
+      }
+    }
+  },
+  {
+    "kind": "optimize",
+    "table": {
+      "kind": "tableRef",
+      "table": "alias_4"
+    },
+    "final": true
   },
   {
     "kind": "select",
@@ -248,6 +562,86 @@
     }
   },
   {
+    "kind": "alter",
+    "table": {
+      "kind": "tableRef",
+      "table": "alias_4"
+    },
+    "commands": [
+      {
+        "kind": "alterCommand",
+        "commandType": "MODIFY_SETTING",
+        "settings": [
+          {
+            "name": "max_bytes_to_merge_at_max_space_in_pool",
+            "value": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "1000000"
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "showCreate",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "source_table"
+    },
+    "format": "TSVRaw"
+  },
+  {
+    "kind": "alter",
+    "table": {
+      "kind": "tableRef",
+      "table": "alias_4"
+    },
+    "commands": [
+      {
+        "kind": "alterCommand",
+        "commandType": "UPDATE",
+        "assignments": [
+          {
+            "column": "value",
+            "expr": {
+              "kind": "literal",
+              "type": "String",
+              "value": "updated"
+            }
+          }
+        ],
+        "where": {
+          "kind": "binaryExpr",
+          "op": "=",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "id"
+            ]
+          },
+          "right": {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "1"
+          }
+        }
+      }
+    ],
+    "settings": [
+      {
+        "name": "mutations_sync",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -290,6 +684,44 @@
     }
   },
   {
+    "kind": "alter",
+    "table": {
+      "kind": "tableRef",
+      "table": "alias_4"
+    },
+    "commands": [
+      {
+        "kind": "alterCommand",
+        "commandType": "DELETE",
+        "where": {
+          "kind": "binaryExpr",
+          "op": "=",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "id"
+            ]
+          },
+          "right": {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "2"
+          }
+        }
+      }
+    ],
+    "settings": [
+      {
+        "name": "mutations_sync",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -319,6 +751,106 @@
     }
   },
   {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "source_partitioned"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "alias_part"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "source_partitioned"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "date",
+        "type": {
+          "name": "Date"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "id",
+        "type": {
+          "name": "UInt32"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "value",
+        "type": {
+          "name": "String"
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "partitionBy": {
+      "kind": "functionCall",
+      "name": "toYYYYMM",
+      "args": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "date"
+          ]
+        }
+      ]
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "id"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "alias_part"
+    },
+    "engine": {
+      "name": "Alias",
+      "args": [
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "source_partitioned"
+        }
+      ]
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "alias_part"
+      }
+    }
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -330,6 +862,130 @@
     "from": {
       "kind": "tableRef",
       "table": "alias_part"
+    }
+  },
+  {
+    "kind": "alter",
+    "table": {
+      "kind": "tableRef",
+      "table": "alias_part"
+    },
+    "commands": [
+      {
+        "kind": "alterCommand",
+        "commandType": "DROP_PARTITION",
+        "partition": {
+          "partitionKind": "expr",
+          "expr": {
+            "kind": "literal",
+            "type": "String",
+            "value": "202401"
+          }
+        }
+      }
+    ]
+  },
+  {
+    "kind": "alter",
+    "table": {
+      "kind": "tableRef",
+      "table": "alias_part"
+    },
+    "commands": [
+      {
+        "kind": "alterCommand",
+        "commandType": "ATTACH_PARTITION",
+        "partition": {
+          "partitionKind": "expr",
+          "expr": {
+            "kind": "literal",
+            "type": "String",
+            "value": "202401"
+          }
+        }
+      }
+    ]
+  },
+  {
+    "kind": "alter",
+    "table": {
+      "kind": "tableRef",
+      "table": "alias_part"
+    },
+    "commands": [
+      {
+        "kind": "alterCommand",
+        "commandType": "DROP_PARTITION",
+        "partition": {
+          "partitionKind": "expr",
+          "expr": {
+            "kind": "literal",
+            "type": "String",
+            "value": "202403"
+          }
+        }
+      }
+    ]
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "alias_4"
+      }
+    },
+    "selectQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "binaryExpr",
+          "op": "+",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "id"
+            ]
+          },
+          "right": {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "100"
+          }
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "value"
+          ]
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "status"
+          ]
+        }
+      ],
+      "from": {
+        "kind": "tableRef",
+        "table": "source_table"
+      },
+      "where": {
+        "kind": "binaryExpr",
+        "op": "<=",
+        "left": {
+          "kind": "columnRef",
+          "parts": [
+            "id"
+          ]
+        },
+        "right": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "10"
+        }
+      }
     }
   },
   {
@@ -359,6 +1015,161 @@
         "type": "UInt64",
         "value": "100"
       }
+    }
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "table_a_exchange"
+    },
+    "ifExists": true,
+    "leadingComments": [
+      "-- Test: EXCHANGE TABLES"
+    ]
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "table_b_exchange"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "alias_a_exchange"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "alias_b_exchange"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "table_a_exchange"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "value",
+        "type": {
+          "name": "String"
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree",
+      "args": []
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "value"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "table_b_exchange"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "value",
+        "type": {
+          "name": "String"
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree",
+      "args": []
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "value"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "table_a_exchange"
+      }
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "table_b_exchange"
+      }
+    }
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "alias_a_exchange"
+    },
+    "engine": {
+      "name": "Alias",
+      "args": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "table_a_exchange"
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "alias_b_exchange"
+    },
+    "engine": {
+      "name": "Alias",
+      "args": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "table_b_exchange"
+          ]
+        }
+      ]
     }
   },
   {
@@ -410,6 +1221,159 @@
     ]
   },
   {
+    "kind": "rename",
+    "targetType": "TABLE",
+    "pairs": [
+      {
+        "from": {
+          "kind": "tableRef",
+          "table": "alias_a_exchange"
+        },
+        "to": {
+          "kind": "tableRef",
+          "table": "alias_b_exchange"
+        }
+      }
+    ],
+    "exchange": true,
+    "leadingComments": [
+      "-- EXCHANGE the alias"
+    ]
+  },
+  {
+    "kind": "rename",
+    "targetType": "TABLE",
+    "pairs": [
+      {
+        "from": {
+          "kind": "tableRef",
+          "table": "table_a_exchange"
+        },
+        "to": {
+          "kind": "tableRef",
+          "table": "table_b_exchange"
+        }
+      }
+    ],
+    "exchange": true,
+    "leadingComments": [
+      "-- EXCHANGE the source tables"
+    ]
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "alias_a_exchange"
+    }
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "alias_b_exchange"
+    }
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "table_a_exchange"
+    }
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "table_b_exchange"
+    }
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "source_attach"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "alias_attach"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "source_attach"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "id",
+        "type": {
+          "name": "UInt32"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "data",
+        "type": {
+          "name": "String"
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "id"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "source_attach"
+      }
+    }
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "alias_attach"
+    },
+    "engine": {
+      "name": "Alias",
+      "args": [
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "source_attach"
+        }
+      ]
+    }
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -458,6 +1422,140 @@
     ]
   },
   {
+    "kind": "detach",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "alias_attach"
+    },
+    "leadingComments": [
+      "-- DETACH the alias table"
+    ]
+  },
+  {
+    "kind": "attach",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "alias_attach"
+    },
+    "leadingComments": [
+      "-- ATTACH the table back"
+    ]
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "alias_attach"
+      }
+    },
+    "leadingComments": [
+      "-- Insert through alias after ATTACH"
+    ]
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "alias_attach"
+    }
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "source_attach"
+    }
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "self_ref_test"
+    },
+    "engine": {
+      "name": "Alias",
+      "args": [
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "self_ref_test"
+        }
+      ]
+    },
+    "trailingComments": [
+      "-- { serverError BAD_ARGUMENTS }"
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "metadata_target"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "id",
+        "type": {
+          "name": "UInt32"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "value",
+        "type": {
+          "name": "String"
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "id"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "metadata_alias"
+    },
+    "engine": {
+      "name": "Alias",
+      "args": [
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "metadata_target"
+        }
+      ]
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "metadata_target"
+      }
+    }
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -479,6 +1577,35 @@
         },
         "direction": "ASC"
       }
+    ]
+  },
+  {
+    "kind": "alter",
+    "table": {
+      "kind": "tableRef",
+      "table": "metadata_target"
+    },
+    "commands": [
+      {
+        "kind": "alterCommand",
+        "commandType": "ADD_COLUMN",
+        "column": {
+          "kind": "columnDef",
+          "name": "extra",
+          "type": {
+            "name": "String"
+          },
+          "defaultKind": "DEFAULT",
+          "defaultExpr": {
+            "kind": "literal",
+            "type": "String",
+            "value": "data1"
+          }
+        }
+      }
+    ],
+    "leadingComments": [
+      "-- ALTER target table DIRECTLY (not through alias)"
     ]
   },
   {
@@ -546,6 +1673,84 @@
     ]
   },
   {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "metadata_alias"
+      }
+    },
+    "leadingComments": [
+      "-- INSERT through alias with new column should work"
+    ]
+  },
+  {
+    "kind": "alter",
+    "table": {
+      "kind": "tableRef",
+      "table": "metadata_target"
+    },
+    "commands": [
+      {
+        "kind": "alterCommand",
+        "commandType": "ADD_COLUMN",
+        "column": {
+          "kind": "columnDef",
+          "name": "num",
+          "type": {
+            "name": "UInt32"
+          },
+          "defaultKind": "DEFAULT",
+          "defaultExpr": {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "0"
+          }
+        }
+      }
+    ]
+  },
+  {
+    "kind": "alter",
+    "table": {
+      "kind": "tableRef",
+      "table": "metadata_target"
+    },
+    "commands": [
+      {
+        "kind": "alterCommand",
+        "commandType": "MODIFY_COLUMN",
+        "column": {
+          "kind": "columnDef",
+          "name": "extra",
+          "type": {
+            "name": "String"
+          },
+          "defaultKind": "DEFAULT",
+          "defaultExpr": {
+            "kind": "literal",
+            "type": "String",
+            "value": "data2"
+          }
+        }
+      }
+    ]
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "metadata_alias"
+      }
+    },
+    "leadingComments": [
+      "-- Insert with all columns"
+    ]
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -594,6 +1799,36 @@
     }
   },
   {
+    "kind": "alter",
+    "table": {
+      "kind": "tableRef",
+      "table": "metadata_target"
+    },
+    "commands": [
+      {
+        "kind": "alterCommand",
+        "commandType": "DROP_COLUMN",
+        "columnName": "num"
+      }
+    ],
+    "leadingComments": [
+      "-- DROP COLUMN on target"
+    ]
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "metadata_alias"
+      }
+    },
+    "leadingComments": [
+      "-- INSERT after DROP should work (without dropped column)"
+    ]
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -636,6 +1871,103 @@
     }
   },
   {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "metadata_alias"
+    }
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "metadata_target"
+    }
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "alias_with_missing_target"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "temp_target"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "temp_target"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "id",
+        "type": {
+          "name": "UInt32"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "value",
+        "type": {
+          "name": "String"
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "id"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "temp_target"
+      }
+    }
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "alias_with_missing_target"
+    },
+    "engine": {
+      "name": "Alias",
+      "args": [
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "temp_target"
+        }
+      ]
+    }
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -658,6 +1990,14 @@
         "direction": "ASC"
       }
     ]
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "temp_target"
+    }
   },
   {
     "kind": "select",
@@ -977,6 +2317,285 @@
     }
   },
   {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "alias_with_missing_target"
+    }
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "mv_test_from_alias"
+    },
+    "ifExists": true,
+    "leadingComments": [
+      "-- Test: Materialized views on both Alias and target table"
+    ]
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "mv_test_from_target"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "mv_test_alias_dest"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "mv_test_target_dest"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "mv_test_alias"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "mv_test_source"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "mv_test_source"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "id",
+        "type": {
+          "name": "UInt32"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "value",
+        "type": {
+          "name": "String"
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "id"
+          ]
+        }
+      }
+    ],
+    "leadingComments": [
+      "-- Create source table and alias"
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "mv_test_alias"
+    },
+    "engine": {
+      "name": "Alias",
+      "args": [
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "mv_test_source"
+        }
+      ]
+    }
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "mv_test_alias_dest"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "id",
+        "type": {
+          "name": "UInt32"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "value",
+        "type": {
+          "name": "String"
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "id"
+          ]
+        }
+      }
+    ],
+    "leadingComments": [
+      "-- Create destination tables for MVs"
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "mv_test_target_dest"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "id",
+        "type": {
+          "name": "UInt32"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "value",
+        "type": {
+          "name": "String"
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "id"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createMaterializedView",
+    "table": {
+      "kind": "tableRef",
+      "table": "mv_test_from_alias"
+    },
+    "toTable": {
+      "kind": "tableRef",
+      "table": "mv_test_alias_dest"
+    },
+    "asQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "id"
+          ]
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "value"
+          ]
+        }
+      ],
+      "from": {
+        "kind": "tableRef",
+        "table": "mv_test_alias"
+      }
+    },
+    "leadingComments": [
+      "-- Create MV on Alias table"
+    ]
+  },
+  {
+    "kind": "createMaterializedView",
+    "table": {
+      "kind": "tableRef",
+      "table": "mv_test_from_target"
+    },
+    "toTable": {
+      "kind": "tableRef",
+      "table": "mv_test_target_dest"
+    },
+    "asQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "id"
+          ]
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "value"
+          ]
+        }
+      ],
+      "from": {
+        "kind": "tableRef",
+        "table": "mv_test_source"
+      }
+    },
+    "leadingComments": [
+      "-- Create MV on target table (mv_test_source)"
+    ]
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "mv_test_alias"
+      }
+    },
+    "leadingComments": [
+      "-- Test: Insert into mv_test_alias should trigger BOTH MVs"
+    ]
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -1023,5 +2642,66 @@
         "direction": "ASC"
       }
     ]
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "mv_test_source"
+      }
+    },
+    "leadingComments": [
+      "-- Test: Insert into mv_test_source should trigger only target MV"
+    ]
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "mv_test_from_alias"
+    }
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "mv_test_from_target"
+    }
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "mv_test_alias_dest"
+    }
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "mv_test_target_dest"
+    }
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "mv_test_alias"
+    }
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "mv_test_source"
+    }
   }
 ]

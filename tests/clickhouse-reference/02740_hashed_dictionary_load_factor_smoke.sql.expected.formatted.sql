@@ -1,3 +1,73 @@
+DROP TABLE IF EXISTS test_table;
+
+CREATE TABLE test_table
+(
+    key UInt64,
+    value UInt16
+)
+ENGINE = Memory() AS
+SELECT
+    number,
+    number
+FROM numbers(1e5);
+
+DROP TABLE IF EXISTS test_table_nullable;
+
+CREATE TABLE test_table_nullable
+(
+    key UInt64,
+    value Nullable(UInt16)
+)
+ENGINE = Memory() AS
+SELECT
+    number,
+    if(number % 2 == 0, NULL, number)
+FROM numbers(1e5);
+
+DROP TABLE IF EXISTS test_table_string;
+
+CREATE TABLE test_table_string
+(
+    key String,
+    value UInt16
+)
+ENGINE = Memory() AS
+SELECT
+    concat('foo', number::String),
+    number
+FROM numbers(1e5);
+
+DROP TABLE IF EXISTS test_table_complex;
+
+CREATE TABLE test_table_complex
+(
+    key_1 UInt64,
+    key_2 UInt64,
+    value UInt16
+)
+ENGINE = Memory() AS
+SELECT
+    number,
+    number,
+    number
+FROM numbers(1e5);
+
+DROP DICTIONARY IF EXISTS test_sparse_dictionary_load_factor;
+
+CREATE DICTIONARY test_sparse_dictionary_load_factor
+(
+    key UInt64,
+    value UInt16
+)
+PRIMARY KEY key
+SOURCE(clickhouse(TABLE test_table))
+LIFETIME(0)
+LAYOUT(SPARSE_HASHED(MAX_LOAD_FACTOR 0.90));
+
+SHOW CREATE TABLE test_sparse_dictionary_load_factor;
+
+SYSTEM RELOAD DICTIONARY test_sparse_dictionary_load_factor;
+
 SELECT element_count
 FROM `system`.dictionaries
 WHERE database = currentDatabase()
@@ -6,6 +76,24 @@ WHERE database = currentDatabase()
 SELECT count()
 FROM test_table
 WHERE dictGet('test_sparse_dictionary_load_factor', 'value', key) != value;
+
+DROP DICTIONARY test_sparse_dictionary_load_factor;
+
+DROP DICTIONARY IF EXISTS test_dictionary_load_factor;
+
+CREATE DICTIONARY test_dictionary_load_factor
+(
+    key UInt64,
+    value UInt16
+)
+PRIMARY KEY key
+SOURCE(clickhouse(TABLE test_table))
+LIFETIME(0)
+LAYOUT(HASHED(MAX_LOAD_FACTOR 0.90));
+
+SHOW CREATE TABLE test_dictionary_load_factor;
+
+SYSTEM RELOAD DICTIONARY test_dictionary_load_factor;
 
 SELECT element_count
 FROM `system`.dictionaries
@@ -16,6 +104,24 @@ SELECT count()
 FROM test_table
 WHERE dictGet('test_dictionary_load_factor', 'value', key) != value;
 
+DROP DICTIONARY test_dictionary_load_factor;
+
+DROP DICTIONARY IF EXISTS test_dictionary_load_factor_nullable;
+
+CREATE DICTIONARY test_dictionary_load_factor_nullable
+(
+    key UInt64,
+    value Nullable(UInt16)
+)
+PRIMARY KEY key
+SOURCE(clickhouse(TABLE test_table_nullable))
+LIFETIME(0)
+LAYOUT(HASHED(MAX_LOAD_FACTOR 0.90));
+
+SHOW CREATE TABLE test_dictionary_load_factor_nullable;
+
+SYSTEM RELOAD DICTIONARY test_dictionary_load_factor_nullable;
+
 SELECT element_count
 FROM `system`.dictionaries
 WHERE database = currentDatabase()
@@ -25,6 +131,25 @@ SELECT count()
 FROM test_table_nullable
 WHERE dictGet('test_dictionary_load_factor_nullable', 'value', key) != value;
 
+DROP DICTIONARY test_dictionary_load_factor_nullable;
+
+DROP DICTIONARY IF EXISTS test_complex_dictionary_load_factor;
+
+CREATE DICTIONARY test_complex_dictionary_load_factor
+(
+    key_1 UInt64,
+    key_2 UInt64,
+    value UInt16
+)
+PRIMARY KEY key_1, key_2
+SOURCE(clickhouse(TABLE test_table_complex))
+LIFETIME(0)
+LAYOUT(COMPLEX_KEY_HASHED(MAX_LOAD_FACTOR 0.90));
+
+SYSTEM RELOAD DICTIONARY test_complex_dictionary_load_factor;
+
+SHOW CREATE TABLE test_complex_dictionary_load_factor;
+
 SELECT element_count
 FROM `system`.dictionaries
 WHERE database = currentDatabase()
@@ -33,3 +158,30 @@ WHERE database = currentDatabase()
 SELECT count()
 FROM test_table_complex
 WHERE dictGet('test_complex_dictionary_load_factor', 'value', (key_1, key_2)) != value;
+
+DROP DICTIONARY test_complex_dictionary_load_factor;
+
+DROP DICTIONARY IF EXISTS test_dictionary_load_factor_string;
+
+CREATE DICTIONARY test_dictionary_load_factor_string
+(
+    key String,
+    value UInt16
+)
+PRIMARY KEY key
+SOURCE(clickhouse(TABLE test_table_string))
+LIFETIME(0)
+LAYOUT(HASHED(MAX_LOAD_FACTOR 1));
+
+-- should because of MAX_LOAD_FACTOR is 1 (maximum allowed value is 0.99)
+SYSTEM RELOAD DICTIONARY test_dictionary_load_factor_string; -- { serverError BAD_ARGUMENTS }
+
+DROP DICTIONARY test_dictionary_load_factor_string;
+
+DROP TABLE test_table;
+
+DROP TABLE test_table_nullable;
+
+DROP TABLE test_table_string;
+
+DROP TABLE test_table_complex;

@@ -1,5 +1,48 @@
 [
   {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "max_bytes_to_read",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "600000000"
+        }
+      }
+    ],
+    "leadingComments": [
+      "-- Tags: stateful, no-parallel-replicas, long",
+      "-- Requires investigation (max_bytes_to_read is not respected)"
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "optimize_move_to_prewhere",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "enable_multiple_prewhere_read_steps",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -268,6 +311,138 @@
   },
   {
     "kind": "select",
+    "with": [
+      {
+        "kind": "cteExpr",
+        "name": "xyz",
+        "expr": {
+          "kind": "functionCall",
+          "name": "toTimeZone",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "EventTime"
+              ]
+            },
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "Asia/Dubai"
+            }
+          ]
+        }
+      }
+    ],
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "uniq",
+        "args": [
+          {
+            "kind": "asterisk"
+          }
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "database": "test",
+      "table": "hits"
+    },
+    "where": {
+      "kind": "naryExpr",
+      "op": "AND",
+      "operands": [
+        {
+          "kind": "binaryExpr",
+          "op": ">=",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "xyz"
+            ]
+          },
+          "right": {
+            "kind": "literal",
+            "type": "String",
+            "value": "2014-03-20 00:00:00"
+          }
+        },
+        {
+          "kind": "binaryExpr",
+          "op": "<",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "xyz"
+            ]
+          },
+          "right": {
+            "kind": "literal",
+            "type": "String",
+            "value": "2014-03-21 00:00:00"
+          }
+        },
+        {
+          "kind": "binaryExpr",
+          "op": "=",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "EventDate"
+            ]
+          },
+          "right": {
+            "kind": "literal",
+            "type": "String",
+            "value": "2014-03-21"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "optimize_move_to_prewhere",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "enable_multiple_prewhere_read_steps",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "use_query_condition_cache",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "select",
     "select": [
       {
         "kind": "functionCall",
@@ -359,7 +534,10 @@
           }
         }
       ]
-    }
+    },
+    "trailingComments": [
+      "-- { serverError TOO_MANY_BYTES }"
+    ]
   },
   {
     "kind": "select",
@@ -454,6 +632,9 @@
           }
         }
       ]
-    }
+    },
+    "trailingComments": [
+      "-- { serverError TOO_MANY_BYTES }"
+    ]
   }
 ]

@@ -1,5 +1,193 @@
 [
   {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "insert_keeper_fault_injection_probability",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      }
+    ],
+    "leadingComments": [
+      "-- Tags: zookeeper"
+    ],
+    "trailingComments": [
+      "-- disable fault injection; part ids are non-deterministic in case of insert retries"
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "send_logs_level",
+        "value": {
+          "kind": "literal",
+          "type": "String",
+          "value": "error"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "mt"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "rmt"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "mt"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "n",
+        "type": {
+          "name": "UInt64"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "s",
+        "type": {
+          "name": "String"
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "partitionBy": {
+      "kind": "functionCall",
+      "name": "intDiv",
+      "args": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "n"
+          ]
+        },
+        {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "10"
+        }
+      ]
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "n"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "mt"
+      }
+    }
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "rmt"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "n",
+        "type": {
+          "name": "UInt64"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "s",
+        "type": {
+          "name": "String"
+        }
+      }
+    ],
+    "engine": {
+      "name": "ReplicatedMergeTree",
+      "args": [
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "/clickhouse/test_01149_{database}/rmt"
+        },
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "r1"
+        }
+      ]
+    },
+    "partitionBy": {
+      "kind": "functionCall",
+      "name": "intDiv",
+      "args": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "n"
+          ]
+        },
+        {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "10"
+        }
+      ]
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "n"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "rmt"
+      }
+    }
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -138,6 +326,108 @@
     ]
   },
   {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "mutations_sync",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "alter",
+    "table": {
+      "kind": "tableRef",
+      "table": "rmt"
+    },
+    "commands": [
+      {
+        "kind": "alterCommand",
+        "commandType": "UPDATE",
+        "assignments": [
+          {
+            "column": "s",
+            "expr": {
+              "kind": "functionCall",
+              "name": "concat",
+              "args": [
+                {
+                  "kind": "literal",
+                  "type": "String",
+                  "value": "s"
+                },
+                {
+                  "kind": "functionCall",
+                  "name": "toString",
+                  "args": [
+                    {
+                      "kind": "columnRef",
+                      "parts": [
+                        "n"
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          }
+        ],
+        "where": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "alter",
+    "table": {
+      "kind": "tableRef",
+      "table": "rmt"
+    },
+    "commands": [
+      {
+        "kind": "alterCommand",
+        "commandType": "REPLACE_PARTITION",
+        "partition": {
+          "partitionKind": "expr",
+          "expr": {
+            "kind": "literal",
+            "type": "String",
+            "value": "0"
+          }
+        },
+        "fromTable": {
+          "kind": "tableRef",
+          "table": "mt"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "system",
+    "body": "SYSTEM sync replica rmt"
+  },
+  {
+    "kind": "alter",
+    "table": {
+      "kind": "tableRef",
+      "table": "rmt"
+    },
+    "commands": [
+      {
+        "kind": "alterCommand",
+        "commandType": "DROP_COLUMN",
+        "columnName": "s"
+      }
+    ]
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -211,6 +501,79 @@
           }
         }
       ]
+    }
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "rmt"
+    }
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "replication_alter_partitions_sync",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "rmt"
+      }
+    }
+  },
+  {
+    "kind": "alter",
+    "table": {
+      "kind": "tableRef",
+      "table": "rmt"
+    },
+    "commands": [
+      {
+        "kind": "alterCommand",
+        "commandType": "DROP_PARTITION",
+        "partition": {
+          "partitionKind": "expr",
+          "expr": {
+            "kind": "literal",
+            "type": "String",
+            "value": "0"
+          }
+        }
+      }
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "replication_alter_partitions_sync",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "mt"
     }
   }
 ]

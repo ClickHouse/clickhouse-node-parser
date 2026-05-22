@@ -1,3 +1,28 @@
+-- Tags: no-parallel-replicas
+DROP TABLE IF EXISTS t_lwd_indexes;
+
+SET enable_lightweight_update = 1;
+
+CREATE TABLE t_lwd_indexes
+(
+    key UInt64,
+    value String,
+    INDEX idx_key key TYPE minmax GRANULARITY 1,
+    INDEX idx_value value TYPE bloom_filter(0.001) GRANULARITY 1
+)
+ENGINE = MergeTree
+ORDER BY tuple()
+SETTINGS index_granularity = 128, index_granularity_bytes = '10M', min_bytes_for_wide_part = 0, enable_block_number_column = 1, enable_block_offset_column = 1;
+
+INSERT INTO t_lwd_indexes SELECT
+    number,
+    concat('v', toString(number))
+FROM numbers(10000);
+
+DELETE FROM t_lwd_indexes WHERE key < 500 SETTINGS lightweight_delete_mode = 'alter_update';
+
+DELETE FROM t_lwd_indexes WHERE key < 5000 SETTINGS lightweight_delete_mode = 'lightweight_update_force';
+
 SELECT count()
 FROM t_lwd_indexes
 WHERE key = 1000
@@ -57,3 +82,5 @@ FROM (
         SETTINGS force_data_skipping_indices = 'idx_value'
     )
 WHERE like(`explain`, '%Granules%');
+
+DROP TABLE t_lwd_indexes;

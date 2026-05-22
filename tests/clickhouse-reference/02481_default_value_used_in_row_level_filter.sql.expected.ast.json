@@ -1,5 +1,144 @@
 [
   {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "test_rlp"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "test_rlp"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "a",
+        "type": {
+          "name": "Int32"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "b",
+        "type": {
+          "name": "Int32"
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree",
+      "args": []
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "a"
+          ]
+        }
+      }
+    ],
+    "settings": [
+      {
+        "name": "index_granularity",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "5"
+        }
+      },
+      {
+        "name": "index_granularity_bytes",
+        "value": {
+          "kind": "literal",
+          "type": "String",
+          "value": "10Mi"
+        }
+      }
+    ],
+    "settingsAfterOrderBy": true
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "test_rlp"
+      }
+    },
+    "selectQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "number"
+          ]
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "number"
+          ]
+        }
+      ],
+      "from": {
+        "kind": "tableFunctionRef",
+        "name": "numbers",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "15"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "kind": "alter",
+    "table": {
+      "kind": "tableRef",
+      "table": "test_rlp"
+    },
+    "commands": [
+      {
+        "kind": "alterCommand",
+        "commandType": "ADD_COLUMN",
+        "column": {
+          "kind": "columnDef",
+          "name": "c",
+          "type": {
+            "name": "Int32"
+          },
+          "defaultKind": "DEFAULT",
+          "defaultExpr": {
+            "kind": "binaryExpr",
+            "op": "+",
+            "left": {
+              "kind": "columnRef",
+              "parts": [
+                "b"
+              ]
+            },
+            "right": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "10"
+            }
+          }
+        }
+      }
+    ]
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -62,6 +201,58 @@
             "value": "5"
           }
         }
+      ]
+    },
+    "leadingComments": [
+      "-- { echoOn }"
+    ]
+  },
+  {
+    "kind": "system",
+    "body": "DROP POLICY IF EXISTS test_rlp_policy ON test_rlp"
+  },
+  {
+    "kind": "createRowPolicy",
+    "targets": [
+      {
+        "names": [
+          "test_rlp_policy"
+        ],
+        "table": {
+          "kind": "tableRef",
+          "table": "test_rlp"
+        }
+      }
+    ],
+    "hasRowKeyword": true,
+    "using": {
+      "kind": "binaryExpr",
+      "op": "==",
+      "left": {
+        "kind": "binaryExpr",
+        "op": "%",
+        "left": {
+          "kind": "columnRef",
+          "parts": [
+            "c"
+          ]
+        },
+        "right": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "2"
+        }
+      },
+      "right": {
+        "kind": "literal",
+        "type": "UInt64",
+        "value": "0"
+      }
+    },
+    "to": {
+      "kind": "names",
+      "names": [
+        "default"
       ]
     }
   },
@@ -145,6 +336,21 @@
         "type": "UInt64",
         "value": "5"
       }
+    }
+  },
+  {
+    "kind": "system",
+    "body": "DROP POLICY test_rlp_policy ON test_rlp",
+    "leadingComments": [
+      "-- { echoOff }"
+    ]
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "test_rlp"
     }
   }
 ]

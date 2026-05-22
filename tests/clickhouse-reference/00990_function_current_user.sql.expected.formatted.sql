@@ -1,3 +1,4 @@
+-- Since the actual user name is unknown, have to perform just smoke tests
 SELECT isNotNull(currentUser());
 
 SELECT length(currentUser()) > 0;

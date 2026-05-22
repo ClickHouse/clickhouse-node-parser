@@ -1,0 +1,168 @@
+[
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "test"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "raw_id",
+        "type": {
+          "name": "String"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "columns_n",
+        "type": {
+          "name": "Nested",
+          "args": [
+            {
+              "kind": "namedField",
+              "name": "col_1",
+              "type": {
+                "name": "Nullable",
+                "args": [
+                  {
+                    "kind": "type",
+                    "type": {
+                      "name": "String"
+                    }
+                  }
+                ]
+              }
+            },
+            {
+              "kind": "namedField",
+              "name": "col_2",
+              "type": {
+                "name": "Nullable",
+                "args": [
+                  {
+                    "kind": "type",
+                    "type": {
+                      "name": "String"
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "raw_id"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "test"
+      }
+    }
+  },
+  {
+    "kind": "select",
+    "with": [
+      {
+        "kind": "cteExpr",
+        "name": "issue",
+        "expr": {
+          "kind": "functionCall",
+          "name": "like",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "t"
+              ]
+            },
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "%_1%"
+            }
+          ]
+        }
+      }
+    ],
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "raw_id"
+        ]
+      },
+      {
+        "kind": "functionCall",
+        "name": "arrayFilter",
+        "args": [
+          {
+            "kind": "lambdaExpr",
+            "params": [
+              "t",
+              "t2"
+            ],
+            "body": {
+              "kind": "unaryExpr",
+              "op": "NOT",
+              "expr": {
+                "kind": "columnRef",
+                "parts": [
+                  "issue"
+                ]
+              },
+              "parenthesized": true
+            }
+          },
+          {
+            "kind": "columnRef",
+            "parts": [
+              "columns_n",
+              "col_1"
+            ]
+          },
+          {
+            "kind": "columnRef",
+            "parts": [
+              "columns_n",
+              "col_2"
+            ]
+          }
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "test"
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "raw_id"
+          ]
+        },
+        "direction": "ASC"
+      }
+    ]
+  }
+]

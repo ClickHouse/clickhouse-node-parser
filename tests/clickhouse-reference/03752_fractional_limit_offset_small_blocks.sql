@@ -1,6 +1,8 @@
+SET max_block_size = 10;
 SELECT number FROM numbers(20) ORDER BY number LIMIT 0.5;
 SELECT number FROM numbers(20) ORDER BY number LIMIT 0.9;
 SELECT number FROM numbers(10) ORDER BY number LIMIT 0.1;
+SET max_block_size = 3;
 SELECT number FROM numbers(20) ORDER BY number LIMIT 0.5 OFFSET 5;
 SELECT number FROM numbers(20) ORDER BY number LIMIT 0.25 OFFSET 12;
 SELECT number FROM numbers(20) ORDER BY number LIMIT 0.5 OFFSET 10;

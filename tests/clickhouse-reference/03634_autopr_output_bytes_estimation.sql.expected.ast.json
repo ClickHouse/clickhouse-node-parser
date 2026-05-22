@@ -1,5 +1,109 @@
 [
   {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "enable_parallel_replicas",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      },
+      {
+        "name": "automatic_parallel_replicas_mode",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "2"
+        }
+      },
+      {
+        "name": "parallel_replicas_local_plan",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      },
+      {
+        "name": "parallel_replicas_index_analysis_only_on_coordinator",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      },
+      {
+        "name": "parallel_replicas_for_non_replicated_merge_tree",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      },
+      {
+        "name": "max_parallel_replicas",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "3"
+        }
+      },
+      {
+        "name": "cluster_for_parallel_replicas",
+        "value": {
+          "kind": "literal",
+          "type": "String",
+          "value": "parallel_replicas"
+        }
+      }
+    ],
+    "leadingComments": [
+      "-- Tags: stateful, long, no-msan"
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "max_bytes_before_external_group_by",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      },
+      {
+        "name": "max_bytes_ratio_before_external_group_by",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      }
+    ],
+    "leadingComments": [
+      "-- External aggregation is not supported as of now"
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "max_threads",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      }
+    ],
+    "leadingComments": [
+      "-- Override randomized max_threads to avoid timeout on slow builds (ASan)"
+    ]
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -130,6 +234,10 @@
           "value": "query_10"
         }
       }
+    ],
+    "leadingComments": [
+      "-- Unsupported at the moment, refer to comments in `RuntimeDataflowStatisticsCacheUpdater::recordAggregationStateSizes`",
+      "-- SELECT COUNT(DISTINCT SearchPhrase) FROM test.hits FORMAT Null SETTINGS log_comment='query_5';"
     ]
   },
   {
@@ -965,6 +1073,615 @@
           "value": "query_43"
         }
       }
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "enable_parallel_replicas",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      },
+      {
+        "name": "automatic_parallel_replicas_mode",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      }
+    ],
+    "leadingComments": [
+      "-- Unsupported case: filtering by set built from subquery",
+      "--SELECT * FROM test.hits WHERE CounterID IN (SELECT CounterID % 1000 FROM test.hits) FORMAT Null SETTINGS log_comment='query_44';"
+    ]
+  },
+  {
+    "kind": "system",
+    "body": "SYSTEM FLUSH LOGS query_log"
+  },
+  {
+    "kind": "select",
+    "with": [
+      {
+        "kind": "cteExpr",
+        "name": "expected_bytes",
+        "expr": {
+          "kind": "arrayLiteral",
+          "elements": [
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "96"
+            },
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "500000"
+            },
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "11189312"
+            },
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "2359808"
+            },
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "64"
+            },
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "29920"
+            },
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "82456"
+            },
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "20000"
+            },
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "31064320"
+            },
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "275251200"
+            },
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "48271331",
+              "trailingComments": [
+                "/*, 641835*/"
+              ]
+            }
+          ],
+          "source": "[96, 500000, 11189312, 2359808, 64, 29920, 82456, 20000, 31064320, 275251200, 48271331/*, 641835*/]"
+        }
+      },
+      {
+        "kind": "cteExpr",
+        "name": "res",
+        "expr": {
+          "kind": "functionCall",
+          "name": "arrayJoin",
+          "args": [
+            {
+              "kind": "functionCall",
+              "name": "arrayMap",
+              "args": [
+                {
+                  "kind": "lambdaExpr",
+                  "params": [
+                    "x"
+                  ],
+                  "body": {
+                    "kind": "tupleLiteral",
+                    "elements": [
+                      {
+                        "kind": "functionCall",
+                        "name": "untuple",
+                        "args": [
+                          {
+                            "kind": "functionCall",
+                            "name": "tupleElement",
+                            "args": [
+                              {
+                                "kind": "columnRef",
+                                "parts": [
+                                  "x"
+                                ]
+                              },
+                              {
+                                "kind": "literal",
+                                "type": "UInt64",
+                                "value": "1"
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "kind": "functionCall",
+                        "name": "tupleElement",
+                        "args": [
+                          {
+                            "kind": "columnRef",
+                            "parts": [
+                              "x"
+                            ]
+                          },
+                          {
+                            "kind": "literal",
+                            "type": "UInt64",
+                            "value": "2"
+                          }
+                        ]
+                      }
+                    ],
+                    "source": "(untuple(x.1), x.2)"
+                  }
+                },
+                {
+                  "kind": "functionCall",
+                  "name": "arrayZip",
+                  "args": [
+                    {
+                      "kind": "columnRef",
+                      "parts": [
+                        "res"
+                      ]
+                    },
+                    {
+                      "kind": "columnRef",
+                      "parts": [
+                        "expected_bytes"
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ],
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "format",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": "{} {} {}"
+          },
+          {
+            "kind": "functionCall",
+            "name": "tupleElement",
+            "args": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "res"
+                ]
+              },
+              {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "1"
+              }
+            ]
+          },
+          {
+            "kind": "functionCall",
+            "name": "tupleElement",
+            "args": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "res"
+                ]
+              },
+              {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "2"
+              }
+            ]
+          },
+          {
+            "kind": "functionCall",
+            "name": "tupleElement",
+            "args": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "res"
+                ]
+              },
+              {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "3"
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "from": {
+      "kind": "subqueryFrom",
+      "query": {
+        "kind": "select",
+        "select": [
+          {
+            "kind": "alias",
+            "expr": {
+              "kind": "functionCall",
+              "name": "groupArray",
+              "args": [
+                {
+                  "kind": "tupleLiteral",
+                  "elements": [
+                    {
+                      "kind": "columnRef",
+                      "parts": [
+                        "log_comment"
+                      ]
+                    },
+                    {
+                      "kind": "columnRef",
+                      "parts": [
+                        "output_bytes"
+                      ]
+                    }
+                  ],
+                  "source": "(log_comment, output_bytes)"
+                }
+              ]
+            },
+            "alias": "res"
+          }
+        ],
+        "from": {
+          "kind": "subqueryFrom",
+          "query": {
+            "kind": "select",
+            "select": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "log_comment"
+                ]
+              },
+              {
+                "kind": "alias",
+                "expr": {
+                  "kind": "functionCall",
+                  "name": "arrayElement",
+                  "args": [
+                    {
+                      "kind": "columnRef",
+                      "parts": [
+                        "ProfileEvents"
+                      ]
+                    },
+                    {
+                      "kind": "literal",
+                      "type": "String",
+                      "value": "RuntimeDataflowStatisticsOutputBytes"
+                    }
+                  ]
+                },
+                "alias": "output_bytes"
+              }
+            ],
+            "from": {
+              "kind": "tableRef",
+              "database": "system",
+              "table": "query_log"
+            },
+            "where": {
+              "kind": "naryExpr",
+              "op": "AND",
+              "operands": [
+                {
+                  "kind": "binaryExpr",
+                  "op": ">=",
+                  "left": {
+                    "kind": "columnRef",
+                    "parts": [
+                      "event_date"
+                    ]
+                  },
+                  "right": {
+                    "kind": "functionCall",
+                    "name": "yesterday",
+                    "args": []
+                  },
+                  "parenthesized": true
+                },
+                {
+                  "kind": "binaryExpr",
+                  "op": ">=",
+                  "left": {
+                    "kind": "columnRef",
+                    "parts": [
+                      "event_time"
+                    ]
+                  },
+                  "right": {
+                    "kind": "binaryExpr",
+                    "op": "-",
+                    "left": {
+                      "kind": "functionCall",
+                      "name": "NOW",
+                      "args": []
+                    },
+                    "right": {
+                      "kind": "functionCall",
+                      "name": "toIntervalMinute",
+                      "args": [
+                        {
+                          "kind": "literal",
+                          "type": "UInt64",
+                          "value": "15"
+                        }
+                      ]
+                    },
+                    "parenthesized": true
+                  },
+                  "parenthesized": true
+                },
+                {
+                  "kind": "binaryExpr",
+                  "op": "=",
+                  "left": {
+                    "kind": "columnRef",
+                    "parts": [
+                      "current_database"
+                    ]
+                  },
+                  "right": {
+                    "kind": "functionCall",
+                    "name": "currentDatabase",
+                    "args": []
+                  },
+                  "parenthesized": true
+                },
+                {
+                  "kind": "functionCall",
+                  "name": "like",
+                  "args": [
+                    {
+                      "kind": "columnRef",
+                      "parts": [
+                        "log_comment"
+                      ]
+                    },
+                    {
+                      "kind": "literal",
+                      "type": "String",
+                      "value": "query_%"
+                    }
+                  ],
+                  "parenthesized": true
+                },
+                {
+                  "kind": "binaryExpr",
+                  "op": "=",
+                  "left": {
+                    "kind": "columnRef",
+                    "parts": [
+                      "type"
+                    ]
+                  },
+                  "right": {
+                    "kind": "literal",
+                    "type": "String",
+                    "value": "QueryFinish"
+                  },
+                  "parenthesized": true
+                }
+              ]
+            },
+            "orderBy": [
+              {
+                "kind": "orderByItem",
+                "expr": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "event_time_microseconds"
+                  ]
+                },
+                "direction": "ASC"
+              }
+            ]
+          }
+        }
+      }
+    },
+    "where": {
+      "kind": "naryExpr",
+      "op": "AND",
+      "operands": [
+        {
+          "kind": "binaryExpr",
+          "op": ">",
+          "left": {
+            "kind": "binaryExpr",
+            "op": "/",
+            "left": {
+              "kind": "functionCall",
+              "name": "greatest",
+              "args": [
+                {
+                  "kind": "functionCall",
+                  "name": "tupleElement",
+                  "args": [
+                    {
+                      "kind": "columnRef",
+                      "parts": [
+                        "res"
+                      ]
+                    },
+                    {
+                      "kind": "literal",
+                      "type": "UInt64",
+                      "value": "2"
+                    }
+                  ]
+                },
+                {
+                  "kind": "functionCall",
+                  "name": "tupleElement",
+                  "args": [
+                    {
+                      "kind": "columnRef",
+                      "parts": [
+                        "res"
+                      ]
+                    },
+                    {
+                      "kind": "literal",
+                      "type": "UInt64",
+                      "value": "3"
+                    }
+                  ]
+                }
+              ]
+            },
+            "right": {
+              "kind": "functionCall",
+              "name": "least",
+              "args": [
+                {
+                  "kind": "functionCall",
+                  "name": "tupleElement",
+                  "args": [
+                    {
+                      "kind": "columnRef",
+                      "parts": [
+                        "res"
+                      ]
+                    },
+                    {
+                      "kind": "literal",
+                      "type": "UInt64",
+                      "value": "2"
+                    }
+                  ]
+                },
+                {
+                  "kind": "functionCall",
+                  "name": "tupleElement",
+                  "args": [
+                    {
+                      "kind": "columnRef",
+                      "parts": [
+                        "res"
+                      ]
+                    },
+                    {
+                      "kind": "literal",
+                      "type": "UInt64",
+                      "value": "3"
+                    }
+                  ]
+                }
+              ]
+            },
+            "parenthesized": true
+          },
+          "right": {
+            "kind": "literal",
+            "type": "Float64",
+            "value": "2.5"
+          }
+        },
+        {
+          "kind": "unaryExpr",
+          "op": "NOT",
+          "expr": {
+            "kind": "naryExpr",
+            "op": "AND",
+            "operands": [
+              {
+                "kind": "binaryExpr",
+                "op": "<",
+                "left": {
+                  "kind": "functionCall",
+                  "name": "tupleElement",
+                  "args": [
+                    {
+                      "kind": "columnRef",
+                      "parts": [
+                        "res"
+                      ]
+                    },
+                    {
+                      "kind": "literal",
+                      "type": "UInt64",
+                      "value": "2"
+                    }
+                  ]
+                },
+                "right": {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "100"
+                }
+              },
+              {
+                "kind": "binaryExpr",
+                "op": "<",
+                "left": {
+                  "kind": "functionCall",
+                  "name": "tupleElement",
+                  "args": [
+                    {
+                      "kind": "columnRef",
+                      "parts": [
+                        "res"
+                      ]
+                    },
+                    {
+                      "kind": "literal",
+                      "type": "UInt64",
+                      "value": "3"
+                    }
+                  ]
+                },
+                "right": {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "100"
+                }
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "leadingComments": [
+      "-- Just checking that the estimation is not too far off"
     ]
   }
 ]

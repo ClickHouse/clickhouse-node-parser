@@ -1,5 +1,119 @@
 [
   {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "users"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "users"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "name",
+        "type": {
+          "name": "String"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "score",
+        "type": {
+          "name": "UInt8"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "user_level",
+        "type": {
+          "name": "String"
+        },
+        "defaultKind": "ALIAS",
+        "defaultExpr": {
+          "kind": "functionCall",
+          "name": "multiIf",
+          "args": [
+            {
+              "kind": "binaryExpr",
+              "op": "<=",
+              "left": {
+                "kind": "columnRef",
+                "parts": [
+                  "score"
+                ]
+              },
+              "right": {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "3"
+              }
+            },
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "LOW"
+            },
+            {
+              "kind": "binaryExpr",
+              "op": "<=",
+              "left": {
+                "kind": "columnRef",
+                "parts": [
+                  "score"
+                ]
+              },
+              "right": {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "6"
+              }
+            },
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "MEDIUM"
+            },
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "HIGH"
+            }
+          ]
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "name"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "users"
+      }
+    }
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -46,7 +160,7 @@
       }
     ],
     "from": {
-      "kind": "tableFunction",
+      "kind": "tableFunctionRef",
       "name": "remote",
       "args": [
         {

@@ -12,3 +12,11 @@ SELECT
     materialize(100000000)
     AND 0,
     arrayFold((acc, x) -> x, [0, 1], toUInt8(0));
+
+DESCRIBE TABLE format(((((toLowCardinality(0)
+OR NULL))
+OR inf
+OR 2))
+OR greatCircleAngle(materialize(0), 45, 1, 45)
+OR greatCircleAngle(toNullable(toUInt256(0)), 45, 1, 45)
+OR 0, JSONEachRow, toFixedString('\n{"a": "Hello", "b": 111}\n{"a": "World", "b": 123}\n{"a": "Hello", "b": 111}\n{"a": "World", "b": 123}\n', materialize(101))); -- { serverError ILLEGAL_COLUMN }

@@ -1,3 +1,33 @@
+DROP TABLE IF EXISTS dst_sparse;
+
+DROP TABLE IF EXISTS mytable_sparse;
+
+CREATE TABLE dst_sparse
+(
+    id Int64,
+    budget Tuple(currencyCode String)
+)
+ENGINE = MergeTree
+ORDER BY id
+SETTINGS ratio_of_defaults_for_sparse_serialization = 0.9, serialization_info_version = 'basic' AS
+SELECT
+    number,
+    arrayJoin([tuple('')])
+FROM numbers(999);
+
+INSERT INTO dst_sparse;
+
+OPTIMIZE TABLE dst_sparse FINAL;
+
+CREATE TABLE mytable_sparse
+ENGINE = MergeTree
+ORDER BY id
+SETTINGS ratio_of_defaults_for_sparse_serialization = 1.0, serialization_info_version = 'basic' AS
+SELECT
+    id,
+    budget
+FROM dst_sparse;
+
 SELECT count()
 FROM mytable_sparse;
 
@@ -13,3 +43,12 @@ WHERE database = currentDatabase()
     AND active
     AND column = 'budget'
 ORDER BY table ASC;
+
+CREATE TABLE mytable_sparse
+ENGINE = MergeTree
+ORDER BY id
+SETTINGS ratio_of_defaults_for_sparse_serialization = 0.9, serialization_info_version = 'basic' AS
+SELECT
+    id,
+    budget
+FROM dst_sparse;

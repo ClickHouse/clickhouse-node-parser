@@ -1,5 +1,122 @@
 [
   {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "e"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "e"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "a",
+        "type": {
+          "name": "UInt64"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "t",
+        "type": {
+          "name": "DateTime"
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "partitionBy": {
+      "kind": "functionCall",
+      "name": "toDate",
+      "args": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "t"
+          ]
+        }
+      ]
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "functionCall",
+          "name": "tuple",
+          "args": []
+        }
+      }
+    ],
+    "leadingComments": [
+      "-- https://github.com/ClickHouse/ClickHouse/issues/36891"
+    ]
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "e"
+      }
+    },
+    "selectQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        },
+        {
+          "kind": "binaryExpr",
+          "op": "+",
+          "left": {
+            "kind": "functionCall",
+            "name": "toDateTime",
+            "args": [
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "2020-02-01 12:00:01"
+              }
+            ]
+          },
+          "right": {
+            "kind": "functionCall",
+            "name": "toIntervalMonth",
+            "args": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "number"
+                ]
+              }
+            ]
+          }
+        }
+      ],
+      "from": {
+        "kind": "tableFunctionRef",
+        "name": "numbers",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "10"
+          }
+        ]
+      }
+    }
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -72,7 +189,7 @@
         "kind": "tableRef",
         "table": "e"
       },
-      "kind": "join",
+      "kind": "joinExpr",
       "joinType": "INNER",
       "right": {
         "kind": "subqueryFrom",
@@ -202,7 +319,7 @@
         "kind": "tableRef",
         "table": "e"
       },
-      "kind": "join",
+      "kind": "joinExpr",
       "joinType": "INNER",
       "right": {
         "kind": "subqueryFrom",
@@ -342,7 +459,7 @@
         "kind": "tableRef",
         "table": "e"
       },
-      "kind": "join",
+      "kind": "joinExpr",
       "joinType": "INNER",
       "right": {
         "kind": "subqueryFrom",
@@ -467,7 +584,7 @@
         "kind": "tableRef",
         "table": "e"
       },
-      "kind": "join",
+      "kind": "joinExpr",
       "joinType": "INNER",
       "right": {
         "kind": "subqueryFrom",
@@ -549,7 +666,7 @@
         "kind": "tableRef",
         "table": "e"
       },
-      "kind": "join",
+      "kind": "joinExpr",
       "joinType": "INNER",
       "right": {
         "kind": "subqueryFrom",
@@ -625,7 +742,7 @@
         "kind": "tableRef",
         "table": "e"
       },
-      "kind": "join",
+      "kind": "joinExpr",
       "joinType": "INNER",
       "right": {
         "kind": "subqueryFrom",
@@ -707,7 +824,7 @@
         "kind": "tableRef",
         "table": "e"
       },
-      "kind": "join",
+      "kind": "joinExpr",
       "joinType": "INNER",
       "right": {
         "kind": "subqueryFrom",

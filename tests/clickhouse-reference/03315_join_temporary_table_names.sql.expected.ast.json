@@ -1,5 +1,240 @@
 [
   {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "T1"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "T2"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "T1"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "A",
+        "type": {
+          "name": "Int32"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "B",
+        "type": {
+          "name": "Int32"
+        }
+      }
+    ],
+    "engine": {
+      "name": "Memory",
+      "args": []
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "T1"
+      }
+    }
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "T2"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "A",
+        "type": {
+          "name": "Int32"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "B",
+        "type": {
+          "name": "Int32"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "C",
+        "type": {
+          "name": "Int32"
+        }
+      }
+    ],
+    "engine": {
+      "name": "Memory",
+      "args": []
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "T2"
+      }
+    }
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "T1"
+    },
+    "temporary": true,
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "A",
+        "type": {
+          "name": "Int32"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "B",
+        "type": {
+          "name": "Int32"
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "A"
+          ]
+        }
+      }
+    ],
+    "asQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "alias",
+          "expr": {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "1"
+          },
+          "alias": "A"
+        },
+        {
+          "kind": "alias",
+          "expr": {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "2"
+          },
+          "alias": "B"
+        }
+      ]
+    }
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "T2"
+    },
+    "temporary": true,
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "A",
+        "type": {
+          "name": "Int32"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "B",
+        "type": {
+          "name": "Int32"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "C",
+        "type": {
+          "name": "Int32"
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "A"
+          ]
+        }
+      }
+    ],
+    "asQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "alias",
+          "expr": {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "1"
+          },
+          "alias": "A"
+        },
+        {
+          "kind": "alias",
+          "expr": {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "2"
+          },
+          "alias": "B"
+        },
+        {
+          "kind": "alias",
+          "expr": {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "3"
+          },
+          "alias": "C"
+        }
+      ]
+    }
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -11,7 +246,7 @@
         "kind": "tableRef",
         "table": "T1"
       },
-      "kind": "join",
+      "kind": "joinExpr",
       "joinType": "FULL",
       "right": {
         "kind": "tableRef",
@@ -65,7 +300,7 @@
         "kind": "tableRef",
         "table": "T1"
       },
-      "kind": "join",
+      "kind": "joinExpr",
       "joinType": "FULL",
       "right": {
         "kind": "tableRef",
@@ -104,11 +339,15 @@
         "kind": "tableRef",
         "table": "T1"
       },
-      "kind": "join",
+      "kind": "joinExpr",
       "joinType": "FULL",
       "right": {
         "kind": "tableRef",
-        "database": "{CLICKHOUSE_DATABASE:Identifier}",
+        "database": {
+          "kind": "queryParam",
+          "name": "CLICKHOUSE_DATABASE",
+          "type": "Identifier"
+        },
         "table": "T2"
       },
       "constraint": {
@@ -157,10 +396,14 @@
     "from": {
       "left": {
         "kind": "tableRef",
-        "database": "{CLICKHOUSE_DATABASE:Identifier}",
+        "database": {
+          "kind": "queryParam",
+          "name": "CLICKHOUSE_DATABASE",
+          "type": "Identifier"
+        },
         "table": "T1"
       },
-      "kind": "join",
+      "kind": "joinExpr",
       "joinType": "FULL",
       "right": {
         "kind": "tableRef",

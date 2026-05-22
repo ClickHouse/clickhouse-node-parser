@@ -1,3 +1,17 @@
+DROP TABLE IF EXISTS `03657_gby_overflow`;
+
+CREATE TABLE `03657_gby_overflow`
+(
+    key UInt64,
+    val UInt16
+)
+ENGINE = MergeTree
+ORDER BY tuple() AS
+SELECT
+    number,
+    0
+FROM numbers(100000);
+
 SELECT
     key,
     any(val)
@@ -12,3 +26,5 @@ SETTINGS
     max_block_size = 100,
     group_by_two_level_threshold = 1000000000,
     group_by_two_level_threshold_bytes = 1000000000;
+
+DROP TABLE `03657_gby_overflow`;

@@ -1,3 +1,15 @@
+CREATE TABLE mytable
+(
+    operand Float64,
+    low Float64,
+    high Float64,
+    count UInt64,
+    PRIMARY KEY(operand, low, high, count)
+)
+ENGINE = MergeTree();
+
+INSERT INTO mytable;
+
 SELECT
     operand,
     low,
@@ -9,6 +21,7 @@ WHERE count != 0;
 
 SELECT '----------';
 
+-- zero is not valid for count
 SELECT
     operand,
     low,
@@ -16,22 +29,27 @@ SELECT
     count,
     WIDTH_BUCKET(operand, low, high, count)
 FROM mytable
-WHERE count = 0;
+WHERE count = 0; -- { serverError BAD_ARGUMENTS }
 
-SELECT WIDTH_BUCKET(0, 10, nan, 10);
+-- operand, low and high cannot be NaN
+SELECT WIDTH_BUCKET(0, 10, nan, 10); -- { serverError BAD_ARGUMENTS }
 
-SELECT WIDTH_BUCKET(nan, 0, 10, 10);
+SELECT WIDTH_BUCKET(nan, 0, 10, 10); -- { serverError BAD_ARGUMENTS }
 
-SELECT WIDTH_BUCKET(0, nan, 10, 10);
+SELECT WIDTH_BUCKET(0, nan, 10, 10); -- { serverError BAD_ARGUMENTS }
 
-SELECT WIDTH_BUCKET(1, -inf, 10, 10);
+-- low and high cannot be Inf
+SELECT WIDTH_BUCKET(1, -inf, 10, 10); -- { serverError BAD_ARGUMENTS }
 
-SELECT WIDTH_BUCKET(1, 0, inf, 10);
+-- low and high cannot be Inf
+SELECT WIDTH_BUCKET(1, 0, inf, 10); -- { serverError BAD_ARGUMENTS }
 
+-- operand can be Inf
 SELECT WIDTH_BUCKET(-inf, 0, 10, 10);
 
 SELECT WIDTH_BUCKET(inf, 0, 10, 10);
 
+-- IntXX types
 SELECT
     toInt64(operand) AS operand,
     toInt32(low) AS low,
@@ -41,6 +59,7 @@ SELECT
 FROM mytable
 WHERE count != 0;
 
+-- UIntXX types
 SELECT
     toUInt8(toInt8(operand)) AS operand,
     toUInt16(toInt16(low)) AS low,
@@ -50,18 +69,19 @@ SELECT
 FROM mytable
 WHERE count != 0;
 
-SELECT WIDTH_BUCKET(1, 2, 3, -1);
+SELECT WIDTH_BUCKET(1, 2, 3, -1); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
-SELECT WIDTH_BUCKET(1, 2, 3, 1.3);
+SELECT WIDTH_BUCKET(1, 2, 3, 1.3); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
-SELECT WIDTH_BUCKET('a', 1, 2, 3);
+SELECT WIDTH_BUCKET('a', 1, 2, 3); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
-SELECT WIDTH_BUCKET(1, toUInt128(42), 2, 3);
+SELECT WIDTH_BUCKET(1, toUInt128(42), 2, 3); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
-SELECT WIDTH_BUCKET(1, 2, toInt128(42), 3);
+SELECT WIDTH_BUCKET(1, 2, toInt128(42), 3); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
-SELECT WIDTH_BUCKET(1, 2, 3, toInt256(42));
+SELECT WIDTH_BUCKET(1, 2, 3, toInt256(42)); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
+-- Return type checks
 SELECT toTypeName(WIDTH_BUCKET(1, 2, 3, toUInt8(1)));
 
 SELECT toTypeName(WIDTH_BUCKET(1, 2, 3, toUInt16(1)));
@@ -70,6 +90,7 @@ SELECT toTypeName(WIDTH_BUCKET(1, 2, 3, toUInt32(1)));
 
 SELECT toTypeName(WIDTH_BUCKET(1, 2, 3, toUInt64(1)));
 
+-- Test handling ColumnConst
 SELECT WIDTH_BUCKET(1, low, high, count)
 FROM mytable
 WHERE count != 0;

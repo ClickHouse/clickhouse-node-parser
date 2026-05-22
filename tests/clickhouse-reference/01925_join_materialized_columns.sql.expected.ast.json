@@ -1,5 +1,325 @@
 [
   {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "t1"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "t2"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "t1"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "time",
+        "type": {
+          "name": "DateTime"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "foo",
+        "type": {
+          "name": "String"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "dimension_1",
+        "type": {
+          "name": "String"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "dt",
+        "type": {
+          "name": "Date"
+        },
+        "defaultKind": "MATERIALIZED",
+        "defaultExpr": {
+          "kind": "functionCall",
+          "name": "toDate",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "time"
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "dt1",
+        "type": {
+          "name": "Date"
+        },
+        "defaultKind": "MATERIALIZED",
+        "defaultExpr": {
+          "kind": "functionCall",
+          "name": "toDayOfYear",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "time"
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "aliascol1",
+        "defaultKind": "ALIAS",
+        "defaultExpr": {
+          "kind": "functionCall",
+          "name": "concat",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "foo"
+              ]
+            },
+            {
+              "kind": "columnRef",
+              "parts": [
+                "dimension_1"
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "time_alias",
+        "type": {
+          "name": "DateTime"
+        },
+        "defaultKind": "ALIAS",
+        "defaultExpr": {
+          "kind": "columnRef",
+          "parts": [
+            "time"
+          ]
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree",
+      "args": []
+    },
+    "partitionBy": {
+      "kind": "functionCall",
+      "name": "toYYYYMM",
+      "args": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "dt"
+          ]
+        }
+      ]
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "dt"
+          ]
+        }
+      },
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "foo"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "t2"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "time",
+        "type": {
+          "name": "DateTime"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "bar",
+        "type": {
+          "name": "String"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "dimension_2",
+        "type": {
+          "name": "String"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "dt",
+        "type": {
+          "name": "Date"
+        },
+        "defaultKind": "MATERIALIZED",
+        "defaultExpr": {
+          "kind": "functionCall",
+          "name": "toDate",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "time"
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "dt2",
+        "type": {
+          "name": "Date"
+        },
+        "defaultKind": "MATERIALIZED",
+        "defaultExpr": {
+          "kind": "functionCall",
+          "name": "toDayOfYear",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "time"
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "aliascol2",
+        "defaultKind": "ALIAS",
+        "defaultExpr": {
+          "kind": "functionCall",
+          "name": "concat",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "bar"
+              ]
+            },
+            {
+              "kind": "columnRef",
+              "parts": [
+                "dimension_2"
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "time_alias",
+        "type": {
+          "name": "DateTime"
+        },
+        "defaultKind": "ALIAS",
+        "defaultExpr": {
+          "kind": "columnRef",
+          "parts": [
+            "time"
+          ]
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree",
+      "args": []
+    },
+    "partitionBy": {
+      "kind": "functionCall",
+      "name": "toYYYYMM",
+      "args": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "dt"
+          ]
+        }
+      ]
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "dt"
+          ]
+        }
+      },
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "bar"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "t1"
+      }
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "t2"
+      }
+    }
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -11,7 +331,7 @@
         "kind": "tableRef",
         "table": "t1"
       },
-      "kind": "join",
+      "kind": "joinExpr",
       "joinType": "INNER",
       "right": {
         "kind": "tableRef",
@@ -91,7 +411,7 @@
         "kind": "tableRef",
         "table": "t1"
       },
-      "kind": "join",
+      "kind": "joinExpr",
       "joinType": "INNER",
       "right": {
         "kind": "tableRef",
@@ -159,7 +479,7 @@
         "kind": "tableRef",
         "table": "t1"
       },
-      "kind": "join",
+      "kind": "joinExpr",
       "joinType": "INNER",
       "right": {
         "kind": "tableRef",
@@ -213,7 +533,7 @@
         "kind": "tableRef",
         "table": "t1"
       },
-      "kind": "join",
+      "kind": "joinExpr",
       "joinType": "INNER",
       "right": {
         "kind": "tableRef",
@@ -278,7 +598,7 @@
         "kind": "tableRef",
         "table": "t1"
       },
-      "kind": "join",
+      "kind": "joinExpr",
       "joinType": "INNER",
       "right": {
         "kind": "tableRef",
@@ -338,7 +658,7 @@
         "kind": "tableRef",
         "table": "t1"
       },
-      "kind": "join",
+      "kind": "joinExpr",
       "joinType": "INNER",
       "right": {
         "kind": "tableRef",
@@ -398,7 +718,7 @@
         "kind": "tableRef",
         "table": "t1"
       },
-      "kind": "join",
+      "kind": "joinExpr",
       "joinType": "INNER",
       "right": {
         "kind": "tableRef",
@@ -485,7 +805,7 @@
         "kind": "tableRef",
         "table": "t1"
       },
-      "kind": "join",
+      "kind": "joinExpr",
       "joinType": "INNER",
       "right": {
         "kind": "tableRef",
@@ -553,7 +873,7 @@
         "kind": "tableRef",
         "table": "t1"
       },
-      "kind": "join",
+      "kind": "joinExpr",
       "joinType": "INNER",
       "right": {
         "kind": "tableRef",
@@ -629,7 +949,7 @@
         "kind": "tableRef",
         "table": "t1"
       },
-      "kind": "join",
+      "kind": "joinExpr",
       "joinType": "INNER",
       "right": {
         "kind": "tableRef",
@@ -696,7 +1016,7 @@
         "kind": "tableRef",
         "table": "t1"
       },
-      "kind": "join",
+      "kind": "joinExpr",
       "joinType": "INNER",
       "right": {
         "kind": "tableRef",
@@ -739,7 +1059,7 @@
         "kind": "tableRef",
         "table": "t1"
       },
-      "kind": "join",
+      "kind": "joinExpr",
       "joinType": "INNER",
       "right": {
         "kind": "tableRef",
@@ -782,7 +1102,7 @@
         "kind": "tableRef",
         "table": "t1"
       },
-      "kind": "join",
+      "kind": "joinExpr",
       "joinType": "INNER",
       "right": {
         "kind": "tableRef",
@@ -825,7 +1145,7 @@
         "kind": "tableRef",
         "table": "t1"
       },
-      "kind": "join",
+      "kind": "joinExpr",
       "joinType": "INNER",
       "right": {
         "kind": "tableRef",
@@ -859,7 +1179,7 @@
         "kind": "tableRef",
         "table": "t1"
       },
-      "kind": "join",
+      "kind": "joinExpr",
       "joinType": "INNER",
       "right": {
         "kind": "tableRef",
@@ -907,7 +1227,7 @@
         "kind": "tableRef",
         "table": "t1"
       },
-      "kind": "join",
+      "kind": "joinExpr",
       "joinType": "INNER",
       "right": {
         "kind": "tableRef",
@@ -955,7 +1275,7 @@
         "kind": "tableRef",
         "table": "t1"
       },
-      "kind": "join",
+      "kind": "joinExpr",
       "joinType": "INNER",
       "right": {
         "kind": "tableRef",
@@ -1003,7 +1323,7 @@
         "kind": "tableRef",
         "table": "t1"
       },
-      "kind": "join",
+      "kind": "joinExpr",
       "joinType": "INNER",
       "right": {
         "kind": "tableRef",
@@ -1050,7 +1370,7 @@
         "kind": "tableRef",
         "table": "t1"
       },
-      "kind": "join",
+      "kind": "joinExpr",
       "joinType": "INNER",
       "right": {
         "kind": "tableRef",
@@ -1086,6 +1406,9 @@
           "value": "0"
         }
       }
+    ],
+    "trailingComments": [
+      "-- { serverError AMBIGUOUS_COLUMN_NAME }"
     ]
   },
   {
@@ -1107,7 +1430,7 @@
         "kind": "tableRef",
         "table": "t1"
       },
-      "kind": "join",
+      "kind": "joinExpr",
       "joinType": "INNER",
       "right": {
         "kind": "tableRef",
@@ -1164,7 +1487,7 @@
         "kind": "tableRef",
         "table": "t1"
       },
-      "kind": "join",
+      "kind": "joinExpr",
       "joinType": "INNER",
       "right": {
         "kind": "tableRef",
@@ -1226,7 +1549,7 @@
         "kind": "tableRef",
         "table": "t1"
       },
-      "kind": "join",
+      "kind": "joinExpr",
       "joinType": "INNER",
       "right": {
         "kind": "tableRef",

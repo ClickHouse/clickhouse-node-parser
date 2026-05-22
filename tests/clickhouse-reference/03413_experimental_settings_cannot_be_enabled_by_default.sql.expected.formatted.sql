@@ -1,3 +1,7 @@
+-- Tags: no-random-settings
+-- It is not allowed to have experimental settings enabled by default.
+-- However, some settings in the experimental tier are meant to control another experimental feature, and then they can be enabled as long as the feature itself is disabled.
+-- These are in the exceptions list inside NOT IN.
 SELECT
     name,
     value

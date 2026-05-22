@@ -1,0 +1,63 @@
+CREATE TABLE IF NOT EXISTS test
+(
+    a UInt64
+)
+ENGINE = MergeTree()
+ORDER BY a;
+
+INSERT INTO test (a) SELECT 1
+FROM numbers(1000);
+
+ALTER TABLE test ADD COLUMN b Float64 AFTER a, MODIFY ORDER BY (a, b);
+
+ALTER TABLE test MODIFY COLUMN b DEFAULT rand64() % 100000;
+
+ALTER TABLE test MATERIALIZE COLUMN b; -- { serverError CANNOT_UPDATE_COLUMN }
+
+DROP TABLE IF EXISTS test;
+
+CREATE TABLE IF NOT EXISTS tab
+(
+    x UInt32,
+    y UInt32
+)
+ENGINE = MergeTree
+ORDER BY tuple();
+
+CREATE DICTIONARY IF NOT EXISTS dict
+(
+    x UInt32,
+    y UInt32
+)
+PRIMARY KEY x
+SOURCE(clickhouse(table 'tab'))
+LIFETIME(MIN 0 MAX 1000)
+LAYOUT(FLAT());
+
+INSERT INTO tab;
+
+SYSTEM RELOAD DICTIONARY dict;
+
+CREATE TABLE IF NOT EXISTS tab2
+(
+    x UInt32,
+    y UInt32 MATERIALIZED dictGet(dict, 'y', x)
+)
+ENGINE = MergeTree
+ORDER BY (y);
+
+INSERT INTO tab2 (x);
+
+TRUNCATE TABLE tab;
+
+INSERT INTO tab;
+
+SET mutations_sync = 2;
+
+ALTER TABLE tab2 MATERIALIZE COLUMN y; -- { serverError CANNOT_UPDATE_COLUMN }
+
+DROP TABLE IF EXISTS tab2;
+
+DROP DICTIONARY IF EXISTS dict;
+
+DROP TABLE IF EXISTS tab;

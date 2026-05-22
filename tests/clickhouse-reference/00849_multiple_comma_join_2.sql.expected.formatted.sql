@@ -1,3 +1,48 @@
+SET enable_optimize_predicate_expression = 0;
+
+SET convert_query_to_cnf = 0;
+
+SET cross_to_inner_join_rewrite = 1;
+
+DROP TABLE IF EXISTS t1;
+
+DROP TABLE IF EXISTS t2;
+
+DROP TABLE IF EXISTS t3;
+
+DROP TABLE IF EXISTS t4;
+
+CREATE TABLE t1
+(
+    a UInt32,
+    b Nullable(Int32)
+)
+ENGINE = Memory;
+
+CREATE TABLE t2
+(
+    a UInt32,
+    b Nullable(Int32)
+)
+ENGINE = Memory;
+
+CREATE TABLE t3
+(
+    a UInt32,
+    b Nullable(Int32)
+)
+ENGINE = Memory;
+
+CREATE TABLE t4
+(
+    a UInt32,
+    b Nullable(Int32)
+)
+ENGINE = Memory;
+
+SET enable_analyzer = 0;
+
+--- EXPLAIN SYNTAX (old AST based optimization)
 SELECT
     countIf(like(`explain`, '%COMMA%')
     OR like(`explain`, '%CROSS%')),
@@ -225,6 +270,8 @@ FROM (
         CROSS JOIN t3
     );
 
+-- {echoOn}
+--- EXPLAIN QUERY TREE
 SELECT
     countIf(like(`explain`, '%COMMA%')
     OR like(`explain`, '%CROSS%')),
@@ -466,6 +513,17 @@ FROM (
         CROSS JOIN t3
     )
 SETTINGS enable_analyzer = 1;
+
+-- {echoOff}
+INSERT INTO t1;
+
+INSERT INTO t2;
+
+INSERT INTO t3;
+
+INSERT INTO t4;
+
+SET enable_analyzer = 1;
 
 SELECT *
 FROM
@@ -566,3 +624,11 @@ ORDER BY
     t2.b ASC,
     t3.b ASC,
     t4.b ASC;
+
+DROP TABLE t1;
+
+DROP TABLE t2;
+
+DROP TABLE t3;
+
+DROP TABLE t4;

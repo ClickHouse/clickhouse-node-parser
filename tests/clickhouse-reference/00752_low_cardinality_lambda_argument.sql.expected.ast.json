@@ -1,5 +1,101 @@
 [
   {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "allow_suspicious_low_cardinality_types",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "lc_lambda"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "lc_lambda"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "arr",
+        "type": {
+          "name": "Array",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "LowCardinality",
+                "args": [
+                  {
+                    "kind": "type",
+                    "type": {
+                      "name": "UInt64"
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "engine": {
+      "name": "Memory"
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "lc_lambda"
+      }
+    },
+    "selectQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "functionCall",
+          "name": "range",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "number"
+              ]
+            }
+          ]
+        }
+      ],
+      "from": {
+        "kind": "tableRef",
+        "database": "system",
+        "table": "numbers"
+      },
+      "limit": {
+        "count": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "10"
+        }
+      }
+    }
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -51,6 +147,71 @@
     }
   },
   {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "test_array"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "test_array"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "resources_host",
+        "type": {
+          "name": "Array",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "LowCardinality",
+                "args": [
+                  {
+                    "kind": "type",
+                    "type": {
+                      "name": "String"
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree",
+      "args": []
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "resources_host"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "test_array"
+      }
+    }
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -63,7 +224,7 @@
               "i"
             ],
             "body": {
-              "kind": "array",
+              "kind": "arrayLiteral",
               "elements": [
                 {
                   "kind": "functionCall",
@@ -176,7 +337,7 @@
                         }
                       },
                       {
-                        "kind": "array",
+                        "kind": "arrayLiteral",
                         "elements": [],
                         "source": "[]"
                       }
@@ -194,7 +355,7 @@
             }
           },
           {
-            "kind": "array",
+            "kind": "arrayLiteral",
             "elements": [],
             "source": "[]"
           }

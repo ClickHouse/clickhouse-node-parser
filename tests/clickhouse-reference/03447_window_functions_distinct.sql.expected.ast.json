@@ -23,7 +23,7 @@
       }
     ],
     "from": {
-      "kind": "tableFunction",
+      "kind": "tableFunctionRef",
       "name": "numbers",
       "args": [
         {
@@ -88,7 +88,7 @@
       }
     ],
     "from": {
-      "kind": "tableFunction",
+      "kind": "tableFunctionRef",
       "name": "numbers",
       "args": [
         {
@@ -115,6 +115,133 @@
         "direction": "ASC"
       }
     ]
+  },
+  {
+    "kind": "select",
+    "with": [
+      {
+        "kind": "cteExpr",
+        "name": "x",
+        "expr": {
+          "kind": "binaryExpr",
+          "op": "%",
+          "left": {
+            "kind": "functionCall",
+            "name": "intHash64",
+            "args": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "number"
+                ]
+              }
+            ]
+          },
+          "right": {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "10"
+          }
+        }
+      }
+    ],
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "x"
+        ]
+      },
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "sumDistinct",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "x"
+              ]
+            }
+          ],
+          "window": {
+            "orderBy": [
+              {
+                "kind": "orderByItem",
+                "expr": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "number"
+                  ]
+                },
+                "direction": "ASC"
+              }
+            ],
+            "frame": {
+              "frameType": "rows",
+              "start": {
+                "kind": "unbounded"
+              },
+              "end": {
+                "kind": "currentRow"
+              }
+            }
+          }
+        },
+        "alias": "a"
+      },
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "sumDistinct",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "x"
+              ]
+            }
+          ],
+          "window": {
+            "orderBy": [
+              {
+                "kind": "orderByItem",
+                "expr": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "number"
+                  ]
+                },
+                "direction": "ASC"
+              }
+            ],
+            "frame": {
+              "frameType": "rows",
+              "start": {
+                "kind": "currentRow"
+              },
+              "end": {
+                "kind": "unbounded"
+              }
+            }
+          }
+        },
+        "alias": "b"
+      }
+    ],
+    "from": {
+      "kind": "tableFunctionRef",
+      "name": "numbers",
+      "args": [
+        {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "10"
+        }
+      ]
+    }
   },
   {
     "kind": "select",
@@ -205,7 +332,7 @@
           }
         ],
         "from": {
-          "kind": "tableFunction",
+          "kind": "tableFunctionRef",
           "name": "numbers",
           "args": [
             {
@@ -274,7 +401,7 @@
           {
             "kind": "alias",
             "expr": {
-              "kind": "array",
+              "kind": "arrayLiteral",
               "elements": [
                 {
                   "kind": "functionCall",
@@ -316,7 +443,7 @@
           }
         ],
         "from": {
-          "kind": "tableFunction",
+          "kind": "tableFunctionRef",
           "name": "numbers",
           "args": [
             {
@@ -440,7 +567,7 @@
           }
         ],
         "from": {
-          "kind": "tableFunction",
+          "kind": "tableFunctionRef",
           "name": "numbers",
           "args": [
             {
@@ -462,6 +589,520 @@
           ]
         },
         "direction": "ASC"
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "with": [
+      {
+        "kind": "cteExpr",
+        "name": "a",
+        "expr": {
+          "kind": "functionCall",
+          "name": "arrayReduce",
+          "args": [
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "sumDistinctState"
+            },
+            {
+              "kind": "arrayLiteral",
+              "elements": [
+                {
+                  "kind": "binaryExpr",
+                  "op": "+",
+                  "left": {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "1"
+                  },
+                  "right": {
+                    "kind": "columnRef",
+                    "parts": [
+                      "number"
+                    ]
+                  }
+                },
+                {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "2"
+                },
+                {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "3"
+                }
+              ],
+              "source": "[1 + number, 2, 3]"
+            }
+          ]
+        }
+      },
+      {
+        "kind": "cteExpr",
+        "name": "b",
+        "expr": {
+          "kind": "functionCall",
+          "name": "arrayReduce",
+          "args": [
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "sumDistinctState"
+            },
+            {
+              "kind": "arrayLiteral",
+              "elements": [
+                {
+                  "kind": "binaryExpr",
+                  "op": "+",
+                  "left": {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "2"
+                  },
+                  "right": {
+                    "kind": "columnRef",
+                    "parts": [
+                      "number"
+                    ]
+                  }
+                },
+                {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "3"
+                },
+                {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "4"
+                }
+              ],
+              "source": "[2 + number, 3, 4]"
+            }
+          ]
+        }
+      }
+    ],
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "finalizeAggregation",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "a"
+            ]
+          }
+        ]
+      },
+      {
+        "kind": "functionCall",
+        "name": "finalizeAggregation",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "b"
+            ]
+          }
+        ]
+      },
+      {
+        "kind": "functionCall",
+        "name": "finalizeAggregation",
+        "args": [
+          {
+            "kind": "binaryExpr",
+            "op": "+",
+            "left": {
+              "kind": "columnRef",
+              "parts": [
+                "a"
+              ]
+            },
+            "right": {
+              "kind": "columnRef",
+              "parts": [
+                "b"
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "kind": "functionCall",
+        "name": "finalizeAggregation",
+        "args": [
+          {
+            "kind": "binaryExpr",
+            "op": "*",
+            "left": {
+              "kind": "columnRef",
+              "parts": [
+                "a"
+              ]
+            },
+            "right": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "2"
+            }
+          }
+        ]
+      },
+      {
+        "kind": "functionCall",
+        "name": "finalizeAggregation",
+        "args": [
+          {
+            "kind": "binaryExpr",
+            "op": "*",
+            "left": {
+              "kind": "columnRef",
+              "parts": [
+                "b"
+              ]
+            },
+            "right": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "2"
+            }
+          }
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableFunctionRef",
+      "name": "numbers",
+      "args": [
+        {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "10"
+        }
+      ]
+    }
+  },
+  {
+    "kind": "select",
+    "with": [
+      {
+        "kind": "cteExpr",
+        "name": "a",
+        "expr": {
+          "kind": "functionCall",
+          "name": "arrayReduce",
+          "args": [
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "sumDistinctState"
+            },
+            {
+              "kind": "arrayLiteral",
+              "elements": [
+                {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "1"
+                },
+                {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "2"
+                },
+                {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "3"
+                }
+              ],
+              "source": "[1, 2, 3]"
+            }
+          ]
+        }
+      },
+      {
+        "kind": "cteExpr",
+        "name": "b",
+        "expr": {
+          "kind": "functionCall",
+          "name": "arrayReduce",
+          "args": [
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "sumDistinctState"
+            },
+            {
+              "kind": "arrayLiteral",
+              "elements": [
+                {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "2"
+                },
+                {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "3"
+                },
+                {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "4"
+                }
+              ],
+              "source": "[2, 3, 4]"
+            }
+          ]
+        }
+      },
+      {
+        "kind": "cteExpr",
+        "name": "c",
+        "expr": {
+          "kind": "functionCall",
+          "name": "arrayReduce",
+          "args": [
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "sumDistinctState"
+            },
+            {
+              "kind": "arrayLiteral",
+              "elements": [
+                {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "3"
+                },
+                {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "4"
+                },
+                {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "5"
+                }
+              ],
+              "source": "[3, 4, 5]"
+            }
+          ]
+        }
+      }
+    ],
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "finalizeAggregation",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "a"
+            ]
+          }
+        ]
+      },
+      {
+        "kind": "functionCall",
+        "name": "finalizeAggregation",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "b"
+            ]
+          }
+        ]
+      },
+      {
+        "kind": "functionCall",
+        "name": "finalizeAggregation",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "c"
+            ]
+          }
+        ]
+      },
+      {
+        "kind": "functionCall",
+        "name": "finalizeAggregation",
+        "args": [
+          {
+            "kind": "binaryExpr",
+            "op": "+",
+            "left": {
+              "kind": "columnRef",
+              "parts": [
+                "a"
+              ]
+            },
+            "right": {
+              "kind": "columnRef",
+              "parts": [
+                "b"
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "kind": "functionCall",
+        "name": "finalizeAggregation",
+        "args": [
+          {
+            "kind": "binaryExpr",
+            "op": "+",
+            "left": {
+              "kind": "columnRef",
+              "parts": [
+                "a"
+              ]
+            },
+            "right": {
+              "kind": "columnRef",
+              "parts": [
+                "c"
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "kind": "functionCall",
+        "name": "finalizeAggregation",
+        "args": [
+          {
+            "kind": "binaryExpr",
+            "op": "+",
+            "left": {
+              "kind": "columnRef",
+              "parts": [
+                "b"
+              ]
+            },
+            "right": {
+              "kind": "columnRef",
+              "parts": [
+                "c"
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "kind": "functionCall",
+        "name": "finalizeAggregation",
+        "args": [
+          {
+            "kind": "binaryExpr",
+            "op": "+",
+            "left": {
+              "kind": "binaryExpr",
+              "op": "+",
+              "left": {
+                "kind": "columnRef",
+                "parts": [
+                  "a"
+                ]
+              },
+              "right": {
+                "kind": "columnRef",
+                "parts": [
+                  "b"
+                ]
+              },
+              "parenthesized": true
+            },
+            "right": {
+              "kind": "columnRef",
+              "parts": [
+                "c"
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "kind": "functionCall",
+        "name": "finalizeAggregation",
+        "args": [
+          {
+            "kind": "binaryExpr",
+            "op": "+",
+            "left": {
+              "kind": "binaryExpr",
+              "op": "+",
+              "left": {
+                "kind": "columnRef",
+                "parts": [
+                  "b"
+                ]
+              },
+              "right": {
+                "kind": "columnRef",
+                "parts": [
+                  "c"
+                ]
+              },
+              "parenthesized": true
+            },
+            "right": {
+              "kind": "columnRef",
+              "parts": [
+                "a"
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "kind": "functionCall",
+        "name": "finalizeAggregation",
+        "args": [
+          {
+            "kind": "binaryExpr",
+            "op": "+",
+            "left": {
+              "kind": "binaryExpr",
+              "op": "+",
+              "left": {
+                "kind": "columnRef",
+                "parts": [
+                  "c"
+                ]
+              },
+              "right": {
+                "kind": "columnRef",
+                "parts": [
+                  "a"
+                ]
+              },
+              "parenthesized": true
+            },
+            "right": {
+              "kind": "columnRef",
+              "parts": [
+                "b"
+              ]
+            }
+          }
+        ]
       }
     ]
   }

@@ -1,3 +1,14 @@
+SET enable_analyzer = 1;
+
+CREATE TABLE mt
+(
+    names Array(String)
+)
+ENGINE = MergeTree
+ORDER BY names;
+
+INSERT INTO mt;
+
 SELECT tag1 AS part_name
 FROM (
         SELECT

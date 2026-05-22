@@ -1,5 +1,174 @@
 [
   {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "tab"
+    },
+    "ifExists": true,
+    "leadingComments": [
+      "-- Test that MergeTreeReaderIndex correctly handles the last granule",
+      "-- when use_const_adaptive_granularity=1 and index_granularity_bytes=0",
+      "-- (the last mark in the granularity may report more rows than actually exist).",
+      "-- Tags: no-parallel-replicas"
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "tab"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "id",
+        "type": {
+          "name": "Int32"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "v1",
+        "type": {
+          "name": "Int32"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "v2",
+        "type": {
+          "name": "Int32"
+        }
+      },
+      {
+        "kind": "indexDef",
+        "name": "v1idx",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "v1"
+          ]
+        },
+        "indexType": {
+          "name": "minmax"
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "id"
+          ]
+        }
+      }
+    ],
+    "settings": [
+      {
+        "name": "index_granularity",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "64"
+        }
+      },
+      {
+        "name": "min_bytes_for_wide_part",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      },
+      {
+        "name": "min_bytes_for_full_part_storage",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      },
+      {
+        "name": "max_bytes_to_merge_at_max_space_in_pool",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      },
+      {
+        "name": "use_const_adaptive_granularity",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      },
+      {
+        "name": "index_granularity_bytes",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      }
+    ],
+    "settingsAfterOrderBy": true
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "tab"
+      }
+    },
+    "selectQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "number"
+          ]
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "number"
+          ]
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "number"
+          ]
+        }
+      ],
+      "from": {
+        "kind": "tableFunctionRef",
+        "name": "numbers",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "10000"
+          }
+        ]
+      }
+    },
+    "leadingComments": [
+      "-- 10000 rows: 156 full granules of 64 + 1 partial granule of 16 rows"
+    ]
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -55,6 +224,19 @@
           "value": "0"
         }
       }
+    ],
+    "leadingComments": [
+      "-- This query triggers lazy materialization with index reader as the first reader in the chain.",
+      "-- The bug was that the index reader reported 64 rows for the last granule (instead of 16),",
+      "-- causing a mismatch with the actual data reader."
     ]
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "tab"
+    }
   }
 ]

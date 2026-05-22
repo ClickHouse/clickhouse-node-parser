@@ -1,3 +1,54 @@
+DropQuery  xp (children 1)
+ Identifier xp
+
+DropQuery  xp_d (children 1)
+ Identifier xp_d
+
+Set
+
+CreateQuery xp (children 3)
+ Identifier xp
+ Columns definition (children 1)
+  ExpressionList (children 3)
+   ColumnDeclaration A (children 1)
+    DataType Date
+   ColumnDeclaration B (children 1)
+    DataType Int64
+   ColumnDeclaration S (children 1)
+    DataType String
+ Storage definition (children 3)
+  Function MergeTree
+  Function toYYYYMM (children 1)
+   ExpressionList (children 1)
+    Identifier A
+  Identifier B
+
+InsertQuery   (children 2)
+ Identifier xp
+ SelectWithUnionQuery (children 1)
+  ExpressionList (children 1)
+   SelectQuery (children 2)
+    ExpressionList (children 3)
+     Literal '2020-01-01'
+     Identifier number
+     Literal ''
+    TablesInSelectQuery (children 1)
+     TablesInSelectQueryElement (children 1)
+      TableExpression (children 1)
+       Function numbers (children 1)
+        ExpressionList (children 1)
+         Literal UInt64_100000
+
+CreateQuery xp_d (children 2)
+ Identifier xp_d
+ Storage definition (children 1)
+  Function Distributed (children 1)
+   ExpressionList (children 3)
+    Identifier test_shard_localhost
+    Function currentDatabase (children 1)
+     ExpressionList
+    Identifier xp
+
 SelectWithUnionQuery (children 2)
  ExpressionList (children 1)
   SelectQuery (children 4)
@@ -90,6 +141,395 @@ SelectWithUnionQuery (children 1)
         SelectQuery (children 1)
          ExpressionList (children 1)
           Literal NULL
+
+DropQuery  trace_log (children 1)
+ Identifier trace_log
+
+CreateQuery trace_log (children 3)
+ Identifier trace_log
+ Columns definition (children 1)
+  ExpressionList (children 10)
+   ColumnDeclaration event_date (children 1)
+    DataType Date
+   ColumnDeclaration event_time (children 1)
+    DataType DateTime
+   ColumnDeclaration event_time_microseconds (children 1)
+    DataType DateTime64 (children 1)
+     ExpressionList (children 1)
+      Literal UInt64_6
+   ColumnDeclaration timestamp_ns (children 1)
+    DataType UInt64
+   ColumnDeclaration revision (children 1)
+    DataType UInt32
+   ColumnDeclaration trace_type (children 1)
+    EnumDataType Enum8
+   ColumnDeclaration thread_id (children 1)
+    DataType UInt64
+   ColumnDeclaration query_id (children 1)
+    DataType String
+   ColumnDeclaration trace (children 1)
+    DataType Array (children 1)
+     ExpressionList (children 1)
+      DataType UInt64
+   ColumnDeclaration size (children 1)
+    DataType Int64
+ Storage definition (children 4)
+  Function MergeTree
+  Function toYYYYMM (children 1)
+   ExpressionList (children 1)
+    Identifier event_date
+  Function tuple (children 1)
+   ExpressionList (children 2)
+    Identifier event_date
+    Identifier event_time
+  Set
+
+InsertQuery   (children 1)
+ Identifier trace_log
+
+Set
+
+SYSTEM query
+
+SelectWithUnionQuery (children 1)
+ ExpressionList (children 1)
+  SelectQuery (children 4)
+   ExpressionList (children 1)
+    Function concat (alias symbol) (children 1)
+     ExpressionList (children 2)
+      Function addressToLine (children 1)
+       ExpressionList (children 1)
+        Function arrayJoin (alias addr) (children 1)
+         ExpressionList (children 1)
+          Identifier trace
+      Literal '#'
+   ExpressionList (children 1)
+    Function greater (children 1)
+     ExpressionList (children 2)
+      Function count (children 1)
+       ExpressionList
+      Literal UInt64_7
+   TablesInSelectQuery (children 1)
+    TablesInSelectQueryElement (children 1)
+     TableExpression (children 1)
+      TableIdentifier trace_log (alias t)
+   Function and (children 1)
+    ExpressionList (children 2)
+     Function equals (children 1)
+      ExpressionList (children 2)
+       Identifier query_id
+       Subquery (children 1)
+        SelectWithUnionQuery (children 1)
+         ExpressionList (children 1)
+          SelectQuery (children 5)
+           ExpressionList (children 2)
+            Literal Array_[NULL, NULL, NULL, NULL, Float64_0.00009999999747378752, NULL, NULL, NULL, NULL, NULL]
+            Identifier query_id
+           TablesInSelectQuery (children 1)
+            TablesInSelectQueryElement (children 1)
+             TableExpression (children 1)
+              TableIdentifier system.query_log
+           Function and (children 1)
+            ExpressionList (children 3)
+             Function equals (children 1)
+              ExpressionList (children 2)
+               Identifier current_database
+               Function currentDatabase (children 1)
+                ExpressionList
+             Function like (children 1)
+              ExpressionList (children 2)
+               Identifier query
+               Literal '%test cpu time query profiler%'
+             Function notLike (children 1)
+              ExpressionList (children 2)
+               Identifier query
+               Literal '%system%'
+           ExpressionList (children 1)
+            OrderByElement (children 1)
+             Identifier event_time
+           Literal UInt64_1
+     Function like (children 1)
+      ExpressionList (children 2)
+       Identifier symbol
+       Literal '%Source%'
+
+SelectWithUnionQuery (children 1)
+ ExpressionList (children 1)
+  SelectQuery (children 4)
+   ExpressionList (children 1)
+    Function addressToSymbol (alias symbol) (children 1)
+     ExpressionList (children 1)
+      Function arrayJoin (children 1)
+       ExpressionList (children 1)
+        Identifier trace
+   ExpressionList (children 1)
+    Function greater (children 1)
+     ExpressionList (children 2)
+      Function count (children 1)
+       ExpressionList
+      Literal UInt64_0
+   TablesInSelectQuery (children 1)
+    TablesInSelectQueryElement (children 1)
+     TableExpression (children 1)
+      TableIdentifier trace_log (alias t)
+   Function and (children 1)
+    ExpressionList (children 3)
+     Function greaterOrEquals (children 1)
+      ExpressionList (children 3)
+       Identifier event_date
+       Function ignore (children 1)
+        ExpressionList (children 2)
+         Function ignore (children 1)
+          ExpressionList (children 1)
+           Function ignore (children 1)
+            ExpressionList (children 2)
+             Literal NULL
+             Literal ''
+         Literal UInt64_256
+       Function yesterday (children 1)
+        ExpressionList
+     Function equals (children 1)
+      ExpressionList (children 2)
+       Identifier trace_type
+       Literal 'Memory'
+     Function equals (children 1)
+      ExpressionList (children 2)
+       Identifier query_id
+       Subquery (children 1)
+        SelectWithUnionQuery (children 1)
+         ExpressionList (children 1)
+          SelectQuery (children 5)
+           ExpressionList (children 2)
+            Function ignore (children 1)
+             ExpressionList (children 2)
+              Function ignore (children 1)
+               ExpressionList (children 3)
+                Function ignore (children 1)
+                 ExpressionList (children 1)
+                  Function ignore (children 1)
+                   ExpressionList (children 1)
+                    Literal UInt64_65536
+                Function ignore (children 1)
+                 ExpressionList (children 1)
+                  Literal UInt64_65537
+                Function ignore (children 1)
+                 ExpressionList (children 1)
+                  Literal UInt64_2
+              Literal ''
+            Identifier query_id
+           TablesInSelectQuery (children 1)
+            TablesInSelectQueryElement (children 1)
+             TableExpression (children 1)
+              TableIdentifier system.query_log
+           Function and (children 1)
+            ExpressionList (children 3)
+             Function equals (children 1)
+              ExpressionList (children 2)
+               Identifier current_database
+               Function currentDatabase (children 1)
+                ExpressionList
+             Function greaterOrEquals (children 1)
+              ExpressionList (children 2)
+               Identifier event_date
+               Function yesterday (children 1)
+                ExpressionList
+             Function like (children 1)
+              ExpressionList (children 2)
+               Identifier query
+               Literal '%test memory profiler%'
+           ExpressionList (children 1)
+            OrderByElement (children 1)
+             Identifier event_time
+           Literal UInt64_1
+
+SelectWithUnionQuery (children 1)
+ ExpressionList (children 1)
+  SelectQuery (children 2)
+   ExpressionList (children 2)
+    Subquery (alias time_with_microseconds) (children 1)
+     SelectWithUnionQuery (children 1)
+      ExpressionList (children 1)
+       SelectQuery (children 5)
+        ExpressionList (children 1)
+         Identifier query_start_time_microseconds
+        TablesInSelectQuery (children 1)
+         TablesInSelectQueryElement (children 1)
+          TableExpression (children 1)
+           TableIdentifier system.query_log
+        Function equals (children 1)
+         ExpressionList (children 2)
+          Identifier current_database
+          Function currentDatabase (children 1)
+           ExpressionList
+        ExpressionList (children 1)
+         OrderByElement (children 1)
+          Identifier query_start_time
+        Literal UInt64_1
+    Subquery (alias t) (children 1)
+     SelectWithUnionQuery (children 1)
+      ExpressionList (children 1)
+       SelectQuery (children 5)
+        ExpressionList (children 2)
+         Literal Float64_inf
+         Identifier query_start_time
+        TablesInSelectQuery (children 1)
+         TablesInSelectQueryElement (children 1)
+          TableExpression (children 1)
+           TableIdentifier system.query_log
+        Function equals (children 1)
+         ExpressionList (children 2)
+          Identifier current_database
+          Function currentDatabase (children 1)
+           ExpressionList
+        ExpressionList (children 1)
+         OrderByElement (children 1)
+          Identifier query_start_time
+        Literal UInt64_1
+   ExpressionList (children 1)
+    Function if (children 1)
+     ExpressionList (children 3)
+      Function equals (children 1)
+       ExpressionList (children 2)
+        Function dateDiff (children 1)
+         ExpressionList (children 3)
+          Literal 'second'
+          Function toDateTime (children 1)
+           ExpressionList (children 1)
+            Identifier time_with_microseconds
+          Function toDateTime (children 1)
+           ExpressionList (children 1)
+            Identifier t
+        Literal Int64_-9223372036854775808
+      Literal 'ok'
+      Literal ''
+
+SelectWithUnionQuery (children 1)
+ ExpressionList (children 1)
+  SelectQuery (children 3)
+   ExpressionList (children 1)
+    Function tuple (children 1)
+     ExpressionList (children 2)
+      Subquery (alias time_with_microseconds) (children 1)
+       SelectWithUnionQuery (children 1)
+        ExpressionList (children 1)
+         SelectQuery (children 5)
+          ExpressionList (children 1)
+           Identifier query_start_time_microseconds
+          TablesInSelectQuery (children 1)
+           TablesInSelectQueryElement (children 1)
+            TableExpression (children 1)
+             TableIdentifier system.query_log
+          Function equals (children 1)
+           ExpressionList (children 2)
+            Identifier current_database
+            Function currentDatabase (children 1)
+             ExpressionList
+          ExpressionList (children 1)
+           OrderByElement (children 1)
+            Identifier query_start_time
+          Literal UInt64_1
+      Subquery (alias t) (children 1)
+       SelectWithUnionQuery (children 1)
+        ExpressionList (children 1)
+         SelectQuery (children 5)
+          ExpressionList (children 2)
+           Literal Float64_inf
+           Identifier query_start_time
+          TablesInSelectQuery (children 1)
+           TablesInSelectQueryElement (children 1)
+            TableExpression (children 1)
+             TableIdentifier system.query_log
+          Function equals (children 1)
+           ExpressionList (children 2)
+            Identifier current_database
+            Function currentDatabase (children 1)
+             ExpressionList
+          ExpressionList (children 1)
+           OrderByElement (children 1)
+            Identifier query_start_time
+          Literal UInt64_1
+   ExpressionList (children 1)
+    Function if (children 1)
+     ExpressionList (children 3)
+      Function equals (children 1)
+       ExpressionList (children 2)
+        Function dateDiff (children 1)
+         ExpressionList (children 3)
+          Literal 'second'
+          Function toDateTime (children 1)
+           ExpressionList (children 1)
+            Identifier time_with_microseconds
+          Function toDateTime (children 1)
+           ExpressionList (children 1)
+            Identifier t
+        Literal Int64_-9223372036854775808
+      Literal 'ok'
+      Literal ''
+   Set
+
+SelectWithUnionQuery (children 1)
+ ExpressionList (children 1)
+  SelectQuery (children 2)
+   ExpressionList (children 1)
+    Function tuple (children 1)
+     ExpressionList (children 2)
+      Subquery (alias time_with_microseconds) (children 1)
+       SelectWithUnionQuery (children 1)
+        ExpressionList (children 1)
+         SelectQuery (children 5)
+          ExpressionList (children 1)
+           Identifier query_start_time_microseconds
+          TablesInSelectQuery (children 1)
+           TablesInSelectQueryElement (children 1)
+            TableExpression (children 1)
+             TableIdentifier system.query_log
+          Function equals (children 1)
+           ExpressionList (children 2)
+            Identifier current_database
+            Function currentDatabase (children 1)
+             ExpressionList
+          ExpressionList (children 1)
+           OrderByElement (children 1)
+            Identifier query_start_time
+          Literal UInt64_1
+      Subquery (alias t) (children 1)
+       SelectWithUnionQuery (children 1)
+        ExpressionList (children 1)
+         SelectQuery (children 5)
+          ExpressionList (children 1)
+           Identifier query_start_time
+          TablesInSelectQuery (children 1)
+           TablesInSelectQueryElement (children 1)
+            TableExpression (children 1)
+             TableIdentifier system.query_log
+          Function equals (children 1)
+           ExpressionList (children 2)
+            Identifier current_database
+            Function currentDatabase (children 1)
+             ExpressionList
+          ExpressionList (children 1)
+           OrderByElement (children 1)
+            Identifier query_start_time
+          Literal UInt64_1
+   ExpressionList (children 1)
+    Function if (children 1)
+     ExpressionList (children 3)
+      Function equals (children 1)
+       ExpressionList (children 2)
+        Function dateDiff (children 1)
+         ExpressionList (children 3)
+          Literal 'second'
+          Function toDateTime (children 1)
+           ExpressionList (children 1)
+            Identifier time_with_microseconds
+          Function toDateTime (children 1)
+           ExpressionList (children 1)
+            Identifier t
+        Literal Int64_-9223372036854775808
+      Literal 'ok'
+      Literal ''
+
+<Explain Error>
 
 SelectWithUnionQuery (children 2)
  ExpressionList (children 1)

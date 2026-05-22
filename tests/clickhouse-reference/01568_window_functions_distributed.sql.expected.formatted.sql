@@ -1,3 +1,5 @@
+-- Tags: distributed
+-- { echo }
 SELECT row_number() OVER (ORDER BY dummy ASC) AS x
 FROM (
         SELECT *
@@ -13,6 +15,16 @@ SELECT max(identity(dummy + 1)) OVER () AS x
 FROM remote('127.0.0.{1,2}', `system`, one)
 ORDER BY x ASC;
 
+DROP TABLE IF EXISTS t_01568;
+
+CREATE TABLE t_01568
+ENGINE = Memory AS
+SELECT
+    intDiv(number, 3) AS p,
+    modulo(number, 3) AS o,
+    number
+FROM numbers(9);
+
 SELECT
     sum(number) AS x,
     max(number) AS y
@@ -20,14 +32,14 @@ FROM t_01568
 ORDER BY
     x ASC,
     y ASC
-WINDOW w AS (partition by p);
+WINDOW w AS (PARTITION BY p);
 
 SELECT
     sum(number),
     max(number)
 FROM t_01568
 ORDER BY p ASC
-WINDOW w AS (partition by p);
+WINDOW w AS (PARTITION BY p);
 
 SELECT
     sum(number) AS x,
@@ -36,7 +48,7 @@ FROM remote('127.0.0.{1,2}', '', t_01568)
 ORDER BY
     x ASC,
     y ASC
-WINDOW w AS (partition by p);
+WINDOW w AS (PARTITION BY p);
 
 SELECT
     sum(number) AS x,
@@ -45,7 +57,7 @@ FROM remote('127.0.0.{1,2}', '', t_01568)
 ORDER BY
     x ASC,
     y ASC
-WINDOW w AS (partition by p)
+WINDOW w AS (PARTITION BY p)
 SETTINGS max_threads = 1;
 
 SELECT DISTINCT
@@ -55,8 +67,9 @@ FROM remote('127.0.0.{1,2}', '', t_01568)
 ORDER BY
     x ASC,
     y ASC
-WINDOW w AS (partition by p);
+WINDOW w AS (PARTITION BY p);
 
+-- window functions + aggregation w/shards
 SELECT groupArray(groupArray(number)) OVER (ROWS UNBOUNDED PRECEDING) AS x
 FROM remote('127.0.0.{1,2}', '', t_01568)
 GROUP BY mod(number, 3)
@@ -72,8 +85,9 @@ SELECT groupArray(groupArray(number)) OVER (ROWS UNBOUNDED PRECEDING) AS x
 FROM remote('127.0.0.{1,2}', '', t_01568)
 GROUP BY mod(number, 3)
 ORDER BY x ASC
-SETTINGS distributed_group_by_no_merge = 2;
+SETTINGS distributed_group_by_no_merge = 2; -- { serverError NOT_IMPLEMENTED }
 
+-- proper ORDER BY w/window functions
 SELECT
     p,
     o,
@@ -82,3 +96,5 @@ FROM remote('127.0.0.{1,2}', '', t_01568)
 ORDER BY
     p ASC,
     o ASC;
+
+DROP TABLE t_01568;

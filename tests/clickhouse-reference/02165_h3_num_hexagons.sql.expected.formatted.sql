@@ -1,3 +1,4 @@
+-- Tags: no-fasttest
 SELECT h3NumHexagons(0);
 
 SELECT h3NumHexagons(1);
@@ -30,4 +31,4 @@ SELECT h3NumHexagons(14);
 
 SELECT h3NumHexagons(15);
 
-SELECT h3NumHexagons(16);
+SELECT h3NumHexagons(16); -- { serverError ARGUMENT_OUT_OF_BOUND }

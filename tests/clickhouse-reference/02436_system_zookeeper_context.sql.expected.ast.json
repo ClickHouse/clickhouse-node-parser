@@ -1,5 +1,165 @@
 [
   {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "mt"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "mt"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "n",
+        "type": {
+          "name": "int"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "s",
+        "type": {
+          "name": "String"
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "n"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "mt"
+      }
+    }
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "allow_nondeterministic_mutations",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "alter",
+    "table": {
+      "kind": "tableRef",
+      "table": "mt"
+    },
+    "commands": [
+      {
+        "kind": "alterCommand",
+        "commandType": "UPDATE",
+        "assignments": [
+          {
+            "column": "s",
+            "expr": {
+              "kind": "subqueryExpr",
+              "query": {
+                "kind": "select",
+                "select": [
+                  {
+                    "kind": "functionCall",
+                    "name": "toString",
+                    "args": [
+                      {
+                        "kind": "functionCall",
+                        "name": "groupArray",
+                        "args": [
+                          {
+                            "kind": "functionCall",
+                            "name": "tuple",
+                            "args": [
+                              {
+                                "kind": "asterisk"
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ],
+                "from": {
+                  "kind": "tableRef",
+                  "database": "system",
+                  "table": "zookeeper"
+                },
+                "where": {
+                  "kind": "binaryExpr",
+                  "op": "=",
+                  "left": {
+                    "kind": "columnRef",
+                    "parts": [
+                      "path"
+                    ]
+                  },
+                  "right": {
+                    "kind": "literal",
+                    "type": "String",
+                    "value": "/"
+                  }
+                }
+              }
+            }
+          }
+        ],
+        "where": {
+          "kind": "binaryExpr",
+          "op": "=",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "n"
+            ]
+          },
+          "right": {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "1"
+          }
+        }
+      }
+    ],
+    "settings": [
+      {
+        "name": "mutations_sync",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "2"
+        }
+      }
+    ]
+  },
+  {
     "kind": "select",
     "distinct": {
       "kind": "distinct"
@@ -13,6 +173,14 @@
       }
     ],
     "from": {
+      "kind": "tableRef",
+      "table": "mt"
+    }
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
       "kind": "tableRef",
       "table": "mt"
     }

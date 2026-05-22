@@ -1,5 +1,116 @@
 [
   {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "max_threads",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "max_insert_threads",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "max_block_size",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "65536"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "allow_experimental_analyzer",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "test_limit_by_all"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "test_limit_by_all"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "id",
+        "type": {
+          "name": "Int32"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "category",
+        "type": {
+          "name": "String"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "value",
+        "type": {
+          "name": "Int32"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "name",
+        "type": {
+          "name": "String"
+        }
+      }
+    ],
+    "engine": {
+      "name": "Memory"
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "test_limit_by_all"
+      }
+    }
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -64,7 +175,10 @@
         "value": "1"
       },
       "by": []
-    }
+    },
+    "leadingComments": [
+      "-- Test 1: Basic LIMIT BY ALL usage"
+    ]
   },
   {
     "kind": "select",
@@ -145,7 +259,10 @@
         "value": "1"
       },
       "by": []
-    }
+    },
+    "leadingComments": [
+      "-- Test 2: LIMIT BY ALL with aggregate functions (should ignore aggregates)"
+    ]
   },
   {
     "kind": "select",
@@ -233,7 +350,10 @@
         "value": "2"
       },
       "by": []
-    }
+    },
+    "leadingComments": [
+      "-- Test 3: LIMIT BY ALL with computed column - make deterministic by ordering by value"
+    ]
   },
   {
     "kind": "select",
@@ -319,7 +439,10 @@
           ]
         }
       ]
-    }
+    },
+    "leadingComments": [
+      "-- Test 5: Explicit column list (should be equivalent to test 4)"
+    ]
   },
   {
     "kind": "select",
@@ -434,7 +557,10 @@
         "type": "UInt64",
         "value": "3"
       }
-    }
+    },
+    "leadingComments": [
+      "-- Test 8: LIMIT BY ALL with window function - make deterministic"
+    ]
   },
   {
     "kind": "select",
@@ -516,7 +642,10 @@
         "value": "1"
       },
       "by": []
-    }
+    },
+    "leadingComments": [
+      "-- Test 9: LIMIT BY ALL with WHERE clause - make deterministic"
+    ]
   },
   {
     "kind": "select",
@@ -805,7 +934,7 @@
         "kind": "select",
         "with": [
           {
-            "kind": "expr",
+            "kind": "cteExpr",
             "name": "d",
             "expr": {
               "kind": "functionCall",
@@ -1146,6 +1275,68 @@
         "value": "1"
       },
       "by": []
+    },
+    "leadingComments": [
+      "-- Only-aggregate SELECT -> expect syntax error 62"
+    ],
+    "trailingComments": [
+      "-- { serverError 62 }"
+    ]
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "test_limit_by_all_tags"
+    },
+    "ifExists": true,
+    "leadingComments": [
+      "-- JOIN + ARRAY JOIN"
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "test_limit_by_all_tags"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "id",
+        "type": {
+          "name": "Int32"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "tags",
+        "type": {
+          "name": "Array",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "String"
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "engine": {
+      "name": "Memory"
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "test_limit_by_all_tags"
+      }
     }
   },
   {
@@ -1172,7 +1363,7 @@
           "table": "test_limit_by_all",
           "alias": "t"
         },
-        "kind": "join",
+        "kind": "joinExpr",
         "joinType": "LEFT",
         "right": {
           "kind": "tableRef",
@@ -1186,7 +1377,7 @@
           ]
         }
       },
-      "kind": "arrayJoin",
+      "kind": "arrayJoinExpr",
       "joinType": "ARRAY",
       "expressions": [
         {
@@ -1243,6 +1434,108 @@
       },
       "by": []
     }
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "test_limit_by_all_tags"
+    }
+  },
+  {
+    "kind": "select",
+    "with": [
+      {
+        "kind": "cteExpr",
+        "name": "h",
+        "expr": {
+          "kind": "functionCall",
+          "name": "toStartOfHour",
+          "args": [
+            {
+              "kind": "functionCall",
+              "name": "toDateTime",
+              "args": [
+                {
+                  "kind": "literal",
+                  "type": "String",
+                  "value": "2025-01-01 12:00:00"
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ],
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "h"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "category"
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "test_limit_by_all"
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "h"
+          ]
+        },
+        "direction": "ASC"
+      },
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "category"
+          ]
+        },
+        "direction": "ASC"
+      },
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "value"
+          ]
+        },
+        "direction": "ASC"
+      }
+    ],
+    "limitBy": {
+      "count": {
+        "kind": "literal",
+        "type": "UInt64",
+        "value": "1"
+      },
+      "by": []
+    },
+    "settings": [
+      {
+        "name": "enable_positional_arguments",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      }
+    ]
   },
   {
     "kind": "select",
@@ -1611,7 +1904,10 @@
           ]
         }
       ]
-    }
+    },
+    "trailingComments": [
+      "-- { serverError NOT_IMPLEMENTED }"
+    ]
   },
   {
     "kind": "select",
@@ -1678,7 +1974,10 @@
         "value": "0"
       },
       "by": []
-    }
+    },
+    "leadingComments": [
+      "-- Should give no result"
+    ]
   },
   {
     "kind": "select",
@@ -1777,6 +2076,19 @@
     }
   },
   {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "test_limit_by_all"
+      }
+    },
+    "leadingComments": [
+      "-- NULL key handling"
+    ]
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -1835,6 +2147,14 @@
         "value": "1"
       },
       "by": []
+    }
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "test_limit_by_all"
     }
   }
 ]

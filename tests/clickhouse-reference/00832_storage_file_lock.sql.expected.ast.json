@@ -1,5 +1,41 @@
 [
   {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "file"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "file"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "number",
+        "type": {
+          "name": "UInt64"
+        }
+      }
+    ],
+    "engine": {
+      "name": "File",
+      "args": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "TSV"
+          ]
+        }
+      ]
+    }
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -7,6 +43,27 @@
       }
     ],
     "from": {
+      "kind": "tableRef",
+      "table": "file"
+    },
+    "trailingComments": [
+      "-- { serverError FILE_DOESNT_EXIST }"
+    ]
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "file"
+      }
+    }
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
       "kind": "tableRef",
       "table": "file"
     }

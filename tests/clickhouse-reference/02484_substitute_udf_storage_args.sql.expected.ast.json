@@ -1,0 +1,428 @@
+[
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "02484_substitute_udf"
+    },
+    "ifExists": true,
+    "leadingComments": [
+      "-- Tags: no-parallel"
+    ]
+  },
+  {
+    "kind": "drop",
+    "targetType": "FUNCTION",
+    "table": {
+      "kind": "tableRef",
+      "table": "02484_plusone"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "drop",
+    "targetType": "FUNCTION",
+    "table": {
+      "kind": "tableRef",
+      "table": "02484_plustwo"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "drop",
+    "targetType": "FUNCTION",
+    "table": {
+      "kind": "tableRef",
+      "table": "02484_plusthree"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "drop",
+    "targetType": "FUNCTION",
+    "table": {
+      "kind": "tableRef",
+      "table": "02484_plusthreemonths"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "drop",
+    "targetType": "FUNCTION",
+    "table": {
+      "kind": "tableRef",
+      "table": "02484_plusthreedays"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "createFunction",
+    "name": "02484_plusone",
+    "functionExpr": {
+      "kind": "lambdaExpr",
+      "params": [
+        "a"
+      ],
+      "body": {
+        "kind": "binaryExpr",
+        "op": "+",
+        "left": {
+          "kind": "columnRef",
+          "parts": [
+            "a"
+          ]
+        },
+        "right": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    }
+  },
+  {
+    "kind": "createFunction",
+    "name": "02484_plustwo",
+    "functionExpr": {
+      "kind": "lambdaExpr",
+      "params": [
+        "a"
+      ],
+      "body": {
+        "kind": "binaryExpr",
+        "op": "+",
+        "left": {
+          "kind": "columnRef",
+          "parts": [
+            "a"
+          ]
+        },
+        "right": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "2"
+        }
+      }
+    }
+  },
+  {
+    "kind": "createFunction",
+    "name": "02484_plusthreemonths",
+    "functionExpr": {
+      "kind": "lambdaExpr",
+      "params": [
+        "a"
+      ],
+      "body": {
+        "kind": "binaryExpr",
+        "op": "+",
+        "left": {
+          "kind": "columnRef",
+          "parts": [
+            "a"
+          ]
+        },
+        "right": {
+          "kind": "functionCall",
+          "name": "toIntervalMonth",
+          "args": [
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "3"
+            }
+          ]
+        }
+      }
+    }
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "02484_substitute_udf"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "id",
+        "type": {
+          "name": "UInt32"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "dt",
+        "type": {
+          "name": "DateTime"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "number",
+        "type": {
+          "name": "UInt32"
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree",
+      "args": []
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "functionCall",
+          "name": "02484_plusone",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "id"
+              ]
+            }
+          ]
+        }
+      }
+    ],
+    "partitionBy": {
+      "kind": "functionCall",
+      "name": "02484_plustwo",
+      "args": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "id"
+          ]
+        }
+      ]
+    },
+    "sampleBy": {
+      "kind": "functionCall",
+      "name": "02484_plusone",
+      "args": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "id"
+          ]
+        }
+      ]
+    },
+    "ttl": [
+      {
+        "expr": {
+          "kind": "functionCall",
+          "name": "02484_plusthreemonths",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "dt"
+              ]
+            }
+          ]
+        }
+      }
+    ],
+    "leadingComments": [
+      "-- { echo }"
+    ]
+  },
+  {
+    "kind": "showCreate",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "02484_substitute_udf"
+    }
+  },
+  {
+    "kind": "createFunction",
+    "name": "02484_plusthree",
+    "functionExpr": {
+      "kind": "lambdaExpr",
+      "params": [
+        "a"
+      ],
+      "body": {
+        "kind": "binaryExpr",
+        "op": "+",
+        "left": {
+          "kind": "columnRef",
+          "parts": [
+            "a"
+          ]
+        },
+        "right": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "3"
+        }
+      }
+    }
+  },
+  {
+    "kind": "alter",
+    "table": {
+      "kind": "tableRef",
+      "table": "02484_substitute_udf"
+    },
+    "commands": [
+      {
+        "kind": "alterCommand",
+        "commandType": "ADD_COLUMN",
+        "column": {
+          "kind": "columnDef",
+          "name": "id2",
+          "type": {
+            "name": "UInt64"
+          }
+        }
+      },
+      {
+        "kind": "alterCommand",
+        "commandType": "MODIFY_ORDER_BY",
+        "expr": {
+          "kind": "tupleLiteral",
+          "elements": [
+            {
+              "kind": "functionCall",
+              "name": "02484_plusone",
+              "args": [
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "id"
+                  ]
+                }
+              ]
+            },
+            {
+              "kind": "functionCall",
+              "name": "02484_plusthree",
+              "args": [
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "id2"
+                  ]
+                }
+              ]
+            }
+          ],
+          "source": "(02484_plusone(id), 02484_plusthree(id2))"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createFunction",
+    "name": "02484_plusthreedays",
+    "functionExpr": {
+      "kind": "lambdaExpr",
+      "params": [
+        "a"
+      ],
+      "body": {
+        "kind": "binaryExpr",
+        "op": "+",
+        "left": {
+          "kind": "columnRef",
+          "parts": [
+            "a"
+          ]
+        },
+        "right": {
+          "kind": "functionCall",
+          "name": "toIntervalDay",
+          "args": [
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "3"
+            }
+          ]
+        }
+      }
+    }
+  },
+  {
+    "kind": "alter",
+    "table": {
+      "kind": "tableRef",
+      "table": "02484_substitute_udf"
+    },
+    "commands": [
+      {
+        "kind": "alterCommand",
+        "commandType": "MODIFY_TTL",
+        "ttl": [
+          {
+            "expr": {
+              "kind": "functionCall",
+              "name": "02484_plusthreedays",
+              "args": [
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "dt"
+                  ]
+                }
+              ]
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "02484_substitute_udf"
+    }
+  },
+  {
+    "kind": "drop",
+    "targetType": "FUNCTION",
+    "table": {
+      "kind": "tableRef",
+      "table": "02484_plusone"
+    }
+  },
+  {
+    "kind": "drop",
+    "targetType": "FUNCTION",
+    "table": {
+      "kind": "tableRef",
+      "table": "02484_plustwo"
+    }
+  },
+  {
+    "kind": "drop",
+    "targetType": "FUNCTION",
+    "table": {
+      "kind": "tableRef",
+      "table": "02484_plusthree"
+    }
+  },
+  {
+    "kind": "drop",
+    "targetType": "FUNCTION",
+    "table": {
+      "kind": "tableRef",
+      "table": "02484_plusthreemonths"
+    }
+  },
+  {
+    "kind": "drop",
+    "targetType": "FUNCTION",
+    "table": {
+      "kind": "tableRef",
+      "table": "02484_plusthreedays"
+    }
+  }
+]

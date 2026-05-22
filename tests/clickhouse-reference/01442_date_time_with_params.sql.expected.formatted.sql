@@ -1,3 +1,21 @@
+DROP TABLE IF EXISTS test;
+
+CREATE TABLE test
+(
+    a DateTime,
+    b DateTime(),
+    c DateTime(2),
+    d DateTime('Asia/Istanbul'),
+    e DateTime(3, 'Asia/Istanbul'),
+    f DateTime32,
+    g DateTime32('Asia/Istanbul'),
+    h DateTime(0)
+)
+ENGINE = MergeTree
+ORDER BY a;
+
+INSERT INTO test;
+
 SELECT
     a,
     toTypeName(a),
@@ -47,7 +65,7 @@ SELECT
 
 SELECT
     parseDateTimeBestEffort('<Empty>', 3) AS a,
-    toTypeName(a);
+    toTypeName(a); -- {serverError CANNOT_PARSE_DATETIME}
 
 SELECT
     parseDateTimeBestEffort('2020-05-14T03:37:03', 3, 'UTC') AS a,
@@ -239,7 +257,7 @@ SELECT
 
 SELECT
     parseDateTime32BestEffort('<Empty>') AS a,
-    toTypeName(a);
+    toTypeName(a); -- {serverError CANNOT_PARSE_DATETIME}
 
 SELECT
     parseDateTime32BestEffort('2020-05-14T03:37:03', 'UTC') AS a,

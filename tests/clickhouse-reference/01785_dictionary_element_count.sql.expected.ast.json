@@ -1,5 +1,157 @@
 [
   {
+    "kind": "drop",
+    "targetType": "DATABASE",
+    "table": {
+      "kind": "tableRef",
+      "table": "01785_db"
+    },
+    "ifExists": true,
+    "leadingComments": [
+      "-- Tags: no-parallel"
+    ]
+  },
+  {
+    "kind": "createDatabase",
+    "name": "01785_db"
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "database": "01785_db",
+      "table": "simple_key_source_table"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "database": "01785_db",
+      "table": "simple_key_source_table"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "id",
+        "type": {
+          "name": "UInt64"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "value",
+        "type": {
+          "name": "String"
+        }
+      }
+    ],
+    "engine": {
+      "name": "TinyLog",
+      "args": []
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "database": "01785_db",
+        "table": "simple_key_source_table"
+      }
+    }
+  },
+  {
+    "kind": "drop",
+    "targetType": "DICTIONARY",
+    "table": {
+      "kind": "tableRef",
+      "database": "01785_db",
+      "table": "simple_key_flat_dictionary"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "createDictionary",
+    "table": {
+      "kind": "tableRef",
+      "database": "01785_db",
+      "table": "simple_key_flat_dictionary"
+    },
+    "dictAttrs": [
+      {
+        "name": "id",
+        "type": {
+          "name": "UInt64"
+        }
+      },
+      {
+        "name": "value",
+        "type": {
+          "name": "String"
+        }
+      }
+    ],
+    "dictDef": {
+      "primaryKey": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "id"
+          ]
+        }
+      ],
+      "source": {
+        "name": "clickhouse",
+        "pairs": [
+          {
+            "name": "HOST",
+            "value": {
+              "kind": "literal",
+              "type": "String",
+              "value": "localhost"
+            }
+          },
+          {
+            "name": "PORT",
+            "value": {
+              "kind": "functionCall",
+              "name": "tcpPort",
+              "args": []
+            }
+          },
+          {
+            "name": "DB",
+            "value": {
+              "kind": "literal",
+              "type": "String",
+              "value": "01785_db"
+            }
+          },
+          {
+            "name": "TABLE",
+            "value": {
+              "kind": "literal",
+              "type": "String",
+              "value": "simple_key_source_table"
+            }
+          }
+        ]
+      },
+      "layout": {
+        "name": "FLAT",
+        "pairs": []
+      },
+      "lifetime": {
+        "min": 0,
+        "max": 1000
+      }
+    }
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -77,6 +229,92 @@
     }
   },
   {
+    "kind": "drop",
+    "targetType": "DICTIONARY",
+    "table": {
+      "kind": "tableRef",
+      "database": "01785_db",
+      "table": "simple_key_flat_dictionary"
+    }
+  },
+  {
+    "kind": "createDictionary",
+    "table": {
+      "kind": "tableRef",
+      "database": "01785_db",
+      "table": "simple_key_hashed_dictionary"
+    },
+    "dictAttrs": [
+      {
+        "name": "id",
+        "type": {
+          "name": "UInt64"
+        }
+      },
+      {
+        "name": "value",
+        "type": {
+          "name": "String"
+        }
+      }
+    ],
+    "dictDef": {
+      "primaryKey": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "id"
+          ]
+        }
+      ],
+      "source": {
+        "name": "clickhouse",
+        "pairs": [
+          {
+            "name": "HOST",
+            "value": {
+              "kind": "literal",
+              "type": "String",
+              "value": "localhost"
+            }
+          },
+          {
+            "name": "PORT",
+            "value": {
+              "kind": "functionCall",
+              "name": "tcpPort",
+              "args": []
+            }
+          },
+          {
+            "name": "DB",
+            "value": {
+              "kind": "literal",
+              "type": "String",
+              "value": "01785_db"
+            }
+          },
+          {
+            "name": "TABLE",
+            "value": {
+              "kind": "literal",
+              "type": "String",
+              "value": "simple_key_source_table"
+            }
+          }
+        ]
+      },
+      "layout": {
+        "name": "HASHED",
+        "pairs": []
+      },
+      "lifetime": {
+        "min": 0,
+        "max": 1000
+      }
+    }
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -151,6 +389,101 @@
           }
         }
       ]
+    }
+  },
+  {
+    "kind": "drop",
+    "targetType": "DICTIONARY",
+    "table": {
+      "kind": "tableRef",
+      "database": "01785_db",
+      "table": "simple_key_hashed_dictionary"
+    }
+  },
+  {
+    "kind": "createDictionary",
+    "table": {
+      "kind": "tableRef",
+      "database": "01785_db",
+      "table": "simple_key_cache_dictionary"
+    },
+    "dictAttrs": [
+      {
+        "name": "id",
+        "type": {
+          "name": "UInt64"
+        }
+      },
+      {
+        "name": "value",
+        "type": {
+          "name": "String"
+        }
+      }
+    ],
+    "dictDef": {
+      "primaryKey": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "id"
+          ]
+        }
+      ],
+      "source": {
+        "name": "clickhouse",
+        "pairs": [
+          {
+            "name": "HOST",
+            "value": {
+              "kind": "literal",
+              "type": "String",
+              "value": "localhost"
+            }
+          },
+          {
+            "name": "PORT",
+            "value": {
+              "kind": "functionCall",
+              "name": "tcpPort",
+              "args": []
+            }
+          },
+          {
+            "name": "DB",
+            "value": {
+              "kind": "literal",
+              "type": "String",
+              "value": "01785_db"
+            }
+          },
+          {
+            "name": "TABLE",
+            "value": {
+              "kind": "literal",
+              "type": "String",
+              "value": "simple_key_source_table"
+            }
+          }
+        ]
+      },
+      "layout": {
+        "name": "CACHE",
+        "pairs": [
+          {
+            "name": "SIZE_IN_CELLS",
+            "value": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "100000"
+            }
+          }
+        ]
+      },
+      "lifetime": {
+        "min": 0,
+        "max": 1000
+      }
     }
   },
   {
@@ -260,6 +593,169 @@
     }
   },
   {
+    "kind": "drop",
+    "targetType": "DICTIONARY",
+    "table": {
+      "kind": "tableRef",
+      "database": "01785_db",
+      "table": "simple_key_cache_dictionary"
+    }
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "database": "01785_db",
+      "table": "simple_key_source_table"
+    }
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "database": "01785_db",
+      "table": "complex_key_source_table"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "database": "01785_db",
+      "table": "complex_key_source_table"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "id",
+        "type": {
+          "name": "UInt64"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "id_key",
+        "type": {
+          "name": "String"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "value",
+        "type": {
+          "name": "String"
+        }
+      }
+    ],
+    "engine": {
+      "name": "TinyLog",
+      "args": []
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "database": "01785_db",
+        "table": "complex_key_source_table"
+      }
+    }
+  },
+  {
+    "kind": "createDictionary",
+    "table": {
+      "kind": "tableRef",
+      "database": "01785_db",
+      "table": "complex_key_hashed_dictionary"
+    },
+    "dictAttrs": [
+      {
+        "name": "id",
+        "type": {
+          "name": "UInt64"
+        }
+      },
+      {
+        "name": "id_key",
+        "type": {
+          "name": "String"
+        }
+      },
+      {
+        "name": "value",
+        "type": {
+          "name": "String"
+        }
+      }
+    ],
+    "dictDef": {
+      "primaryKey": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "id"
+          ]
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "id_key"
+          ]
+        }
+      ],
+      "source": {
+        "name": "clickhouse",
+        "pairs": [
+          {
+            "name": "HOST",
+            "value": {
+              "kind": "literal",
+              "type": "String",
+              "value": "localhost"
+            }
+          },
+          {
+            "name": "PORT",
+            "value": {
+              "kind": "functionCall",
+              "name": "tcpPort",
+              "args": []
+            }
+          },
+          {
+            "name": "DB",
+            "value": {
+              "kind": "literal",
+              "type": "String",
+              "value": "01785_db"
+            }
+          },
+          {
+            "name": "TABLE",
+            "value": {
+              "kind": "literal",
+              "type": "String",
+              "value": "complex_key_source_table"
+            }
+          }
+        ]
+      },
+      "layout": {
+        "name": "COMPLEX_KEY_HASHED",
+        "pairs": []
+      },
+      "lifetime": {
+        "min": 0,
+        "max": 1000
+      }
+    }
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -334,6 +830,32 @@
           }
         }
       ]
+    }
+  },
+  {
+    "kind": "drop",
+    "targetType": "DICTIONARY",
+    "table": {
+      "kind": "tableRef",
+      "database": "01785_db",
+      "table": "complex_key_hashed_dictionary"
+    }
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "database": "01785_db",
+      "table": "complex_key_source_table"
+    }
+  },
+  {
+    "kind": "drop",
+    "targetType": "DATABASE",
+    "table": {
+      "kind": "tableRef",
+      "table": "01785_db"
     }
   }
 ]

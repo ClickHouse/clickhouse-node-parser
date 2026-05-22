@@ -7,6 +7,11 @@
         "type": "String",
         "value": "-- Negative tests"
       }
+    ],
+    "leadingComments": [
+      "-- Tags: no-fasttest",
+      "-- no-fasttest: requires idna library",
+      "-- See also 02932_idna.sql"
     ]
   },
   {
@@ -17,6 +22,9 @@
         "name": "punycodeEncode",
         "args": []
       }
+    ],
+    "trailingComments": [
+      "-- { serverError NUMBER_OF_ARGUMENTS_DOESNT_MATCH }"
     ]
   },
   {
@@ -27,6 +35,9 @@
         "name": "punycodeDecode",
         "args": []
       }
+    ],
+    "trailingComments": [
+      "-- { serverError NUMBER_OF_ARGUMENTS_DOESNT_MATCH }"
     ]
   },
   {
@@ -37,6 +48,9 @@
         "name": "tryPunycodeDecode",
         "args": []
       }
+    ],
+    "trailingComments": [
+      "-- { serverError NUMBER_OF_ARGUMENTS_DOESNT_MATCH }"
     ]
   },
   {
@@ -53,6 +67,9 @@
           }
         ]
       }
+    ],
+    "trailingComments": [
+      "-- { serverError ILLEGAL_TYPE_OF_ARGUMENT }"
     ]
   },
   {
@@ -69,6 +86,9 @@
           }
         ]
       }
+    ],
+    "trailingComments": [
+      "-- { serverError ILLEGAL_TYPE_OF_ARGUMENT }"
     ]
   },
   {
@@ -85,6 +105,9 @@
           }
         ]
       }
+    ],
+    "trailingComments": [
+      "-- { serverError ILLEGAL_TYPE_OF_ARGUMENT }"
     ]
   },
   {
@@ -106,6 +129,9 @@
           }
         ]
       }
+    ],
+    "trailingComments": [
+      "-- { serverError NUMBER_OF_ARGUMENTS_DOESNT_MATCH }"
     ]
   },
   {
@@ -127,6 +153,9 @@
           }
         ]
       }
+    ],
+    "trailingComments": [
+      "-- { serverError NUMBER_OF_ARGUMENTS_DOESNT_MATCH }"
     ]
   },
   {
@@ -148,6 +177,9 @@
           }
         ]
       }
+    ],
+    "trailingComments": [
+      "-- { serverError NUMBER_OF_ARGUMENTS_DOESNT_MATCH }"
     ]
   },
   {
@@ -175,6 +207,9 @@
           }
         ]
       }
+    ],
+    "trailingComments": [
+      "-- { serverError NOT_IMPLEMENTED }"
     ]
   },
   {
@@ -202,6 +237,9 @@
           }
         ]
       }
+    ],
+    "trailingComments": [
+      "-- { serverError NOT_IMPLEMENTED }"
     ]
   },
   {
@@ -229,6 +267,9 @@
           }
         ]
       }
+    ],
+    "trailingComments": [
+      "-- { serverError NOT_IMPLEMENTED }"
     ]
   },
   {
@@ -291,6 +332,10 @@
         },
         "alias": "original_try"
       }
+    ],
+    "leadingComments": [
+      "-- The test cases originate from the ada idna unit tests:",
+      "-- - https://github.com/ada-url/idna/blob/8cd03ef867dbd06be87bd61df9cf69aa1182ea21/tests/fixtures/utf8_punycode_alternating.txt"
     ]
   },
   {
@@ -1705,6 +1750,9 @@
           }
         ]
       }
+    ],
+    "trailingComments": [
+      "-- { serverError BAD_ARGUMENTS }"
     ]
   },
   {
@@ -1787,6 +1835,54 @@
     "format": "Vertical"
   },
   {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "tab"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "tab"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "str",
+        "type": {
+          "name": "String"
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "str"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "tab"
+      }
+    }
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -1850,6 +1946,53 @@
     }
   },
   {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "tab"
+    }
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "tab"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "puny",
+        "type": {
+          "name": "String"
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "puny"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "tab"
+      }
+    }
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -1878,7 +2021,10 @@
     "from": {
       "kind": "tableRef",
       "table": "tab"
-    }
+    },
+    "trailingComments": [
+      "-- { serverError BAD_ARGUMENTS }"
+    ]
   },
   {
     "kind": "select",

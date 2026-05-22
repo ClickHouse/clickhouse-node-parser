@@ -1,5 +1,88 @@
 [
   {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "enable_analyzer",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "with": [
+      {
+        "kind": "cteExpr",
+        "name": "four",
+        "expr": {
+          "kind": "functionCall",
+          "name": "pow",
+          "args": [
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "2"
+            },
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "2"
+            }
+          ]
+        }
+      }
+    ],
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "pow",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "four"
+            ]
+          },
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "2"
+          }
+        ]
+      },
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "2"
+        },
+        "alias": "two"
+      },
+      {
+        "kind": "functionCall",
+        "name": "pow",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "two"
+            ]
+          },
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "2"
+          }
+        ]
+      }
+    ]
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -21,7 +104,7 @@
         "kind": "select",
         "with": [
           {
-            "kind": "expr",
+            "kind": "cteExpr",
             "name": "four",
             "expr": {
               "kind": "functionCall",
@@ -91,6 +174,85 @@
   },
   {
     "kind": "select",
+    "with": [
+      {
+        "kind": "cteExpr",
+        "name": "four",
+        "expr": {
+          "kind": "subqueryExpr",
+          "query": {
+            "kind": "select",
+            "select": [
+              {
+                "kind": "functionCall",
+                "name": "pow",
+                "args": [
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "two"
+                    ]
+                  },
+                  {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "2"
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      }
+    ],
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "pow",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "four"
+            ]
+          },
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "2"
+          }
+        ]
+      },
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "2"
+        },
+        "alias": "two"
+      },
+      {
+        "kind": "functionCall",
+        "name": "pow",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "two"
+            ]
+          },
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "2"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "select",
     "select": [
       {
         "kind": "columnRef",
@@ -111,7 +273,7 @@
         "kind": "select",
         "with": [
           {
-            "kind": "expr",
+            "kind": "cteExpr",
             "name": "four",
             "expr": {
               "kind": "subqueryExpr",
@@ -189,6 +351,39 @@
   },
   {
     "kind": "select",
+    "with": [
+      {
+        "kind": "cteExpr",
+        "name": "str",
+        "expr": {
+          "kind": "literal",
+          "type": "String",
+          "value": "string"
+        }
+      }
+    ],
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "concat",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "str"
+            ]
+          },
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": "_abc"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "select",
     "select": [
       {
         "kind": "columnRef",
@@ -203,7 +398,7 @@
         "kind": "select",
         "with": [
           {
-            "kind": "expr",
+            "kind": "cteExpr",
             "name": "str",
             "expr": {
               "kind": "literal",

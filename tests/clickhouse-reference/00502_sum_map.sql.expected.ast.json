@@ -1,5 +1,98 @@
 [
   {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "send_logs_level",
+        "value": {
+          "kind": "literal",
+          "type": "String",
+          "value": "fatal"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "sum_map"
+    },
+    "ifExists": true,
+    "leadingComments": [
+      "-- { echoOn }"
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "sum_map"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "date",
+        "type": {
+          "name": "Date"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "timeslot",
+        "type": {
+          "name": "DateTime"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "statusMap",
+        "type": {
+          "name": "Nested",
+          "args": [
+            {
+              "kind": "namedField",
+              "name": "status",
+              "type": {
+                "name": "UInt16"
+              }
+            },
+            {
+              "kind": "namedField",
+              "name": "requests",
+              "type": {
+                "name": "UInt64"
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "functionCall",
+          "name": "tuple",
+          "args": []
+        }
+      }
+    ]
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "sum_map"
+      }
+    }
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -82,7 +175,7 @@
         "name": "sumMap",
         "args": [
           {
-            "kind": "tuple",
+            "kind": "tupleLiteral",
             "elements": [
               {
                 "kind": "columnRef",
@@ -328,7 +421,7 @@
         "name": "sumMapFiltered",
         "params": [
           {
-            "kind": "array",
+            "kind": "arrayLiteral",
             "elements": [
               {
                 "kind": "literal",
@@ -370,7 +463,7 @@
         "name": "sumMapFiltered",
         "params": [
           {
-            "kind": "array",
+            "kind": "arrayLiteral",
             "elements": [
               {
                 "kind": "literal",
@@ -412,6 +505,84 @@
     "from": {
       "kind": "tableRef",
       "table": "sum_map"
+    }
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "sum_map"
+    }
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "sum_map_overflow"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "sum_map_overflow"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "events",
+        "type": {
+          "name": "Array",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "UInt8"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "counts",
+        "type": {
+          "name": "Array",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "UInt8"
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "functionCall",
+          "name": "tuple",
+          "args": []
+        }
+      }
+    ]
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "sum_map_overflow"
+      }
     }
   },
   {
@@ -469,6 +640,14 @@
     }
   },
   {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "sum_map_overflow"
+    }
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -498,7 +677,7 @@
           {
             "kind": "alias",
             "expr": {
-              "kind": "array",
+              "kind": "arrayLiteral",
               "elements": [
                 {
                   "kind": "functionCall",
@@ -524,7 +703,7 @@
           {
             "kind": "alias",
             "expr": {
-              "kind": "array",
+              "kind": "arrayLiteral",
               "elements": [
                 {
                   "kind": "literal",
@@ -570,7 +749,7 @@
           {
             "kind": "alias",
             "expr": {
-              "kind": "array",
+              "kind": "arrayLiteral",
               "elements": [
                 {
                   "kind": "functionCall",
@@ -596,7 +775,7 @@
           {
             "kind": "alias",
             "expr": {
-              "kind": "array",
+              "kind": "arrayLiteral",
               "elements": [
                 {
                   "kind": "literal",
@@ -642,7 +821,7 @@
           {
             "kind": "alias",
             "expr": {
-              "kind": "array",
+              "kind": "arrayLiteral",
               "elements": [
                 {
                   "kind": "functionCall",
@@ -668,7 +847,7 @@
           {
             "kind": "alias",
             "expr": {
-              "kind": "array",
+              "kind": "arrayLiteral",
               "elements": [
                 {
                   "kind": "literal",
@@ -714,7 +893,7 @@
           {
             "kind": "alias",
             "expr": {
-              "kind": "array",
+              "kind": "arrayLiteral",
               "elements": [
                 {
                   "kind": "functionCall",
@@ -740,7 +919,7 @@
           {
             "kind": "alias",
             "expr": {
-              "kind": "array",
+              "kind": "arrayLiteral",
               "elements": [
                 {
                   "kind": "literal",
@@ -786,7 +965,7 @@
           {
             "kind": "alias",
             "expr": {
-              "kind": "array",
+              "kind": "arrayLiteral",
               "elements": [
                 {
                   "kind": "functionCall",
@@ -812,7 +991,7 @@
           {
             "kind": "alias",
             "expr": {
-              "kind": "array",
+              "kind": "arrayLiteral",
               "elements": [
                 {
                   "kind": "literal",
@@ -858,7 +1037,7 @@
           {
             "kind": "alias",
             "expr": {
-              "kind": "array",
+              "kind": "arrayLiteral",
               "elements": [
                 {
                   "kind": "functionCall",
@@ -884,7 +1063,7 @@
           {
             "kind": "alias",
             "expr": {
-              "kind": "array",
+              "kind": "arrayLiteral",
               "elements": [
                 {
                   "kind": "literal",
@@ -930,7 +1109,7 @@
           {
             "kind": "alias",
             "expr": {
-              "kind": "array",
+              "kind": "arrayLiteral",
               "elements": [
                 {
                   "kind": "functionCall",
@@ -956,7 +1135,7 @@
           {
             "kind": "alias",
             "expr": {
-              "kind": "array",
+              "kind": "arrayLiteral",
               "elements": [
                 {
                   "kind": "literal",
@@ -1002,7 +1181,7 @@
           {
             "kind": "alias",
             "expr": {
-              "kind": "array",
+              "kind": "arrayLiteral",
               "elements": [
                 {
                   "kind": "functionCall",
@@ -1044,7 +1223,7 @@
           {
             "kind": "alias",
             "expr": {
-              "kind": "array",
+              "kind": "arrayLiteral",
               "elements": [
                 {
                   "kind": "literal",
@@ -1095,7 +1274,7 @@
           {
             "kind": "alias",
             "expr": {
-              "kind": "array",
+              "kind": "arrayLiteral",
               "elements": [
                 {
                   "kind": "functionCall",
@@ -1153,7 +1332,7 @@
           {
             "kind": "alias",
             "expr": {
-              "kind": "array",
+              "kind": "arrayLiteral",
               "elements": [
                 {
                   "kind": "literal",
@@ -1176,6 +1355,75 @@
             "alias": "cnt"
           }
         ]
+      }
+    }
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "sum_map_decimal"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "sum_map_decimal"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "statusMap",
+        "type": {
+          "name": "Nested",
+          "args": [
+            {
+              "kind": "namedField",
+              "name": "goal_id",
+              "type": {
+                "name": "UInt16"
+              }
+            },
+            {
+              "kind": "namedField",
+              "name": "revenue",
+              "type": {
+                "name": "Decimal32",
+                "args": [
+                  {
+                    "kind": "literal",
+                    "value": "5"
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "functionCall",
+          "name": "tuple",
+          "args": []
+        }
+      }
+    ]
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "sum_map_decimal"
       }
     }
   },
@@ -1238,6 +1486,86 @@
     }
   },
   {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "sum_map_decimal"
+    }
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "sum_map_decimal_nullable"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "statusMap",
+        "type": {
+          "name": "Nested",
+          "args": [
+            {
+              "kind": "namedField",
+              "name": "goal_id",
+              "type": {
+                "name": "UInt16"
+              }
+            },
+            {
+              "kind": "namedField",
+              "name": "revenue",
+              "type": {
+                "name": "Nullable",
+                "args": [
+                  {
+                    "kind": "type",
+                    "type": {
+                      "name": "Decimal",
+                      "args": [
+                        {
+                          "kind": "literal",
+                          "value": "9"
+                        },
+                        {
+                          "kind": "literal",
+                          "value": "5"
+                        }
+                      ]
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "functionCall",
+          "name": "tuple",
+          "args": []
+        }
+      }
+    ]
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "sum_map_decimal_nullable"
+      }
+    }
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -1262,6 +1590,14 @@
       }
     ],
     "from": {
+      "kind": "tableRef",
+      "table": "sum_map_decimal_nullable"
+    }
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
       "kind": "tableRef",
       "table": "sum_map_decimal_nullable"
     }

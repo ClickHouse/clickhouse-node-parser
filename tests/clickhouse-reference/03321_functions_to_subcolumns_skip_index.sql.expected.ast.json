@@ -1,5 +1,134 @@
 [
   {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "bloom_filter_test"
+    },
+    "ifExists": true,
+    "leadingComments": [
+      "-- Tags: no-parallel-replicas"
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "bloom_filter_test"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "id",
+        "type": {
+          "name": "UInt64"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "m",
+        "type": {
+          "name": "Map",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "String"
+              }
+            },
+            {
+              "kind": "type",
+              "type": {
+                "name": "String"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "kind": "indexDef",
+        "name": "idx_mk",
+        "expr": {
+          "kind": "functionCall",
+          "name": "mapKeys",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "m"
+              ]
+            }
+          ]
+        },
+        "indexType": {
+          "name": "bloom_filter"
+        },
+        "granularity": 1
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "id"
+          ]
+        }
+      }
+    ],
+    "settings": [
+      {
+        "name": "index_granularity",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ],
+    "settingsAfterOrderBy": true
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "bloom_filter_test"
+      }
+    }
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "enable_analyzer",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "optimize_functions_to_subcolumns",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -36,6 +165,9 @@
               "kind": "columnRef",
               "parts": [
                 "id"
+              ],
+              "trailingComments": [
+                "-- 'm' not in projection columns"
               ]
             }
           ],
@@ -100,6 +232,9 @@
         "kind": "columnRef",
         "parts": [
           "id"
+        ],
+        "trailingComments": [
+          "-- 'm' not in projection columns"
         ]
       }
     ],
@@ -171,7 +306,10 @@
           "kind": "select",
           "select": [
             {
-              "kind": "asterisk"
+              "kind": "asterisk",
+              "trailingComments": [
+                "-- 'm' in projection columns"
+              ]
             }
           ],
           "from": {
@@ -232,7 +370,10 @@
     "kind": "select",
     "select": [
       {
-        "kind": "asterisk"
+        "kind": "asterisk",
+        "trailingComments": [
+          "-- 'm' in projection columns"
+        ]
       }
     ],
     "from": {
@@ -268,5 +409,13 @@
         "direction": "ASC"
       }
     ]
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "bloom_filter_test"
+    }
   }
 ]

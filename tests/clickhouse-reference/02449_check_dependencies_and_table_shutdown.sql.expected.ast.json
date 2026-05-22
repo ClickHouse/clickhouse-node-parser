@@ -1,5 +1,262 @@
 [
   {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "table"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "drop",
+    "targetType": "DICTIONARY",
+    "table": {
+      "kind": "tableRef",
+      "table": "dict"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "view"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "view"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "id",
+        "type": {
+          "name": "UInt32"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "value",
+        "type": {
+          "name": "String"
+        }
+      }
+    ],
+    "engine": {
+      "name": "ReplicatedMergeTree",
+      "args": [
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "/test/2449/{database}"
+        },
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "1"
+        }
+      ]
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "id"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "view"
+      }
+    }
+  },
+  {
+    "kind": "createDictionary",
+    "table": {
+      "kind": "tableRef",
+      "table": "dict"
+    },
+    "dictAttrs": [
+      {
+        "name": "id",
+        "type": {
+          "name": "UInt32"
+        }
+      },
+      {
+        "name": "value",
+        "type": {
+          "name": "String"
+        }
+      }
+    ],
+    "dictDef": {
+      "primaryKey": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "id"
+          ]
+        }
+      ],
+      "source": {
+        "name": "clickhouse",
+        "pairs": [
+          {
+            "name": "host",
+            "value": {
+              "kind": "literal",
+              "type": "String",
+              "value": "localhost"
+            }
+          },
+          {
+            "name": "port",
+            "value": {
+              "kind": "functionCall",
+              "name": "tcpPort",
+              "args": []
+            }
+          },
+          {
+            "name": "user",
+            "value": {
+              "kind": "literal",
+              "type": "String",
+              "value": "default"
+            }
+          },
+          {
+            "name": "db",
+            "value": {
+              "kind": "functionCall",
+              "name": "currentDatabase",
+              "args": []
+            }
+          },
+          {
+            "name": "table",
+            "value": {
+              "kind": "literal",
+              "type": "String",
+              "value": "view"
+            }
+          }
+        ]
+      },
+      "layout": {
+        "name": "HASHED",
+        "pairs": []
+      },
+      "lifetime": {
+        "min": 600,
+        "max": 600
+      }
+    }
+  },
+  {
+    "kind": "showCreate",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "dict"
+    }
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "table"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "col",
+        "defaultKind": "MATERIALIZED",
+        "defaultExpr": {
+          "kind": "functionCall",
+          "name": "dictGet",
+          "args": [
+            {
+              "kind": "functionCall",
+              "name": "concat",
+              "args": [
+                {
+                  "kind": "functionCall",
+                  "name": "currentDatabase",
+                  "args": []
+                },
+                {
+                  "kind": "literal",
+                  "type": "String",
+                  "value": ".dict"
+                }
+              ]
+            },
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "value"
+            },
+            {
+              "kind": "functionCall",
+              "name": "toUInt32",
+              "args": [
+                {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "1"
+                }
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "phys",
+        "type": {
+          "name": "Int"
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree",
+      "args": []
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "functionCall",
+          "name": "tuple",
+          "args": []
+        }
+      }
+    ]
+  },
+  {
+    "kind": "showCreate",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "table"
+    }
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -7,7 +264,7 @@
       }
     ],
     "from": {
-      "kind": "tableFunction",
+      "kind": "tableFunctionRef",
       "name": "dictionary",
       "args": [
         {
@@ -19,6 +276,45 @@
     }
   },
   {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "view"
+    },
+    "trailingComments": [
+      "-- {serverError HAVE_DEPENDENT_OBJECTS}"
+    ]
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "view"
+      }
+    },
+    "leadingComments": [
+      "-- check that table is not readonly"
+    ]
+  },
+  {
+    "kind": "drop",
+    "targetType": "DICTIONARY",
+    "table": {
+      "kind": "tableRef",
+      "table": "dict"
+    },
+    "trailingComments": [
+      "-- {serverError HAVE_DEPENDENT_OBJECTS}"
+    ]
+  },
+  {
+    "kind": "system",
+    "body": "SYSTEM RELOAD DICTIONARY dict"
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -26,7 +322,7 @@
       }
     ],
     "from": {
-      "kind": "tableFunction",
+      "kind": "tableFunctionRef",
       "name": "dictionary",
       "args": [
         {
@@ -48,5 +344,13 @@
         "direction": "ASC"
       }
     ]
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "table"
+    }
   }
 ]

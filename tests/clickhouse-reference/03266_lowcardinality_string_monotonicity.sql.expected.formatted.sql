@@ -1,3 +1,15 @@
+DROP TABLE IF EXISTS test_lc_pk;
+
+CREATE TABLE test_lc_pk
+(
+    s String
+)
+ENGINE = MergeTree
+ORDER BY s;
+
+INSERT INTO test_lc_pk SELECT toString(number)
+FROM numbers(1e6);
+
 SELECT trimLeft(`explain`)
 FROM (
         SELECT *
@@ -7,7 +19,7 @@ FROM (
                 WHERE CAST(s, 'LowCardinality(String)') = '42'
             ))
     )
-WHERE like(`explain`, '%Condition%');
+WHERE like(`explain`, '%Condition%'); -- We basically try to verify that we have our column as the key in explain indexes (we don't read all data)
 
 SELECT trimLeft(`explain`)
 FROM (
@@ -19,3 +31,5 @@ FROM (
             ))
     )
 WHERE like(`explain`, '%Condition%');
+
+DROP TABLE test_lc_pk;

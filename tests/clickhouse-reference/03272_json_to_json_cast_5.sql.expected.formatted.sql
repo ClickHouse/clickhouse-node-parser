@@ -1,3 +1,19 @@
+SET enable_json_type = 1;
+
+SET enable_analyzer = 1;
+
+SET output_format_native_write_json_as_string = 0;
+
+DROP TABLE IF EXISTS test;
+
+CREATE TABLE test
+(
+    json JSON(max_dynamic_paths = 4, k1 UInt32, k2 String)
+)
+ENGINE = Memory;
+
+INSERT INTO test;
+
 SELECT
     json::JSON(max_dynamic_paths=5, k2 DateTime, k3 UInt32, k6 Bool, k0 UInt32, SKIP k5, SKIP k8) AS json2,
     JSONDynamicPaths(json2),
@@ -149,3 +165,5 @@ SELECT
     json2.k8,
     json2.k9
 FROM test;
+
+DROP TABLE test;

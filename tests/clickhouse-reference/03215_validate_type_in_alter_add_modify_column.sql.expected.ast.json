@@ -1,0 +1,194 @@
+[
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "allow_suspicious_low_cardinality_types",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "allow_suspicious_fixed_string_types",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "test"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "test"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "id",
+        "type": {
+          "name": "UInt64"
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "id"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "kind": "alter",
+    "table": {
+      "kind": "tableRef",
+      "table": "test"
+    },
+    "commands": [
+      {
+        "kind": "alterCommand",
+        "commandType": "ADD_COLUMN",
+        "column": {
+          "kind": "columnDef",
+          "name": "bad",
+          "type": {
+            "name": "LowCardinality",
+            "args": [
+              {
+                "kind": "type",
+                "type": {
+                  "name": "UInt8"
+                }
+              }
+            ]
+          }
+        }
+      }
+    ],
+    "trailingComments": [
+      "-- {serverError SUSPICIOUS_TYPE_FOR_LOW_CARDINALITY}"
+    ]
+  },
+  {
+    "kind": "alter",
+    "table": {
+      "kind": "tableRef",
+      "table": "test"
+    },
+    "commands": [
+      {
+        "kind": "alterCommand",
+        "commandType": "ADD_COLUMN",
+        "column": {
+          "kind": "columnDef",
+          "name": "bad",
+          "type": {
+            "name": "FixedString",
+            "args": [
+              {
+                "kind": "literal",
+                "value": "10000"
+              }
+            ]
+          }
+        }
+      }
+    ],
+    "trailingComments": [
+      "-- {serverError ILLEGAL_COLUMN}"
+    ]
+  },
+  {
+    "kind": "alter",
+    "table": {
+      "kind": "tableRef",
+      "table": "test"
+    },
+    "commands": [
+      {
+        "kind": "alterCommand",
+        "commandType": "MODIFY_COLUMN",
+        "column": {
+          "kind": "columnDef",
+          "name": "id",
+          "type": {
+            "name": "LowCardinality",
+            "args": [
+              {
+                "kind": "type",
+                "type": {
+                  "name": "UInt8"
+                }
+              }
+            ]
+          }
+        }
+      }
+    ],
+    "trailingComments": [
+      "-- {serverError SUSPICIOUS_TYPE_FOR_LOW_CARDINALITY}"
+    ]
+  },
+  {
+    "kind": "alter",
+    "table": {
+      "kind": "tableRef",
+      "table": "test"
+    },
+    "commands": [
+      {
+        "kind": "alterCommand",
+        "commandType": "MODIFY_COLUMN",
+        "column": {
+          "kind": "columnDef",
+          "name": "id",
+          "type": {
+            "name": "FixedString",
+            "args": [
+              {
+                "kind": "literal",
+                "value": "10000"
+              }
+            ]
+          }
+        }
+      }
+    ],
+    "trailingComments": [
+      "-- {serverError ILLEGAL_COLUMN}"
+    ]
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "test"
+    }
+  }
+]

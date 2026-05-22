@@ -1,0 +1,79 @@
+[
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "most_ordinary_mt"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "most_ordinary_mt"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "Key",
+        "type": {
+          "name": "UInt64"
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree",
+      "args": []
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "functionCall",
+          "name": "tuple",
+          "args": []
+        }
+      }
+    ]
+  },
+  {
+    "kind": "alter",
+    "table": {
+      "kind": "tableRef",
+      "table": "most_ordinary_mt"
+    },
+    "commands": [
+      {
+        "kind": "alterCommand",
+        "commandType": "RESET_SETTING",
+        "settingNames": [
+          "ttl"
+        ]
+      }
+    ],
+    "trailingComments": [
+      "--{serverError BAD_ARGUMENTS}"
+    ]
+  },
+  {
+    "kind": "alter",
+    "table": {
+      "kind": "tableRef",
+      "table": "most_ordinary_mt"
+    },
+    "commands": [
+      {
+        "kind": "alterCommand",
+        "commandType": "RESET_SETTING",
+        "settingNames": [
+          "allow_remote_fs_zero_copy_replication",
+          "xxx"
+        ]
+      }
+    ],
+    "trailingComments": [
+      "--{serverError BAD_ARGUMENTS}"
+    ]
+  }
+]

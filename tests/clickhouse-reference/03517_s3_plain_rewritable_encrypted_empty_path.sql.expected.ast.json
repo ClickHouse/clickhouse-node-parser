@@ -1,5 +1,70 @@
 [
   {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "t0"
+    },
+    "ifExists": true,
+    "leadingComments": [
+      "-- Tags: no-fasttest, no-shared-merge-tree",
+      "-- Tag no-fasttest: requires S3",
+      "-- Tag no-shared-merge-tree: does not support replication"
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "t0"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "c0",
+        "type": {
+          "name": "Int32"
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree",
+      "args": []
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "c0"
+          ]
+        }
+      }
+    ],
+    "settings": [
+      {
+        "name": "disk",
+        "value": {
+          "kind": "literal",
+          "type": "String",
+          "value": "disk_encrypted_03517"
+        }
+      }
+    ],
+    "settingsAfterOrderBy": true
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "t0"
+      }
+    }
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -7,6 +72,14 @@
       }
     ],
     "from": {
+      "kind": "tableRef",
+      "table": "t0"
+    }
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
       "kind": "tableRef",
       "table": "t0"
     }

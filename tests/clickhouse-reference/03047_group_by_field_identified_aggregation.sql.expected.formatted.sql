@@ -1,3 +1,6 @@
+-- https://github.com/ClickHouse/ClickHouse/issues/32639
+SET enable_analyzer = 1;
+
 SELECT
     if(0
     AND id, 1, 2) AS a,

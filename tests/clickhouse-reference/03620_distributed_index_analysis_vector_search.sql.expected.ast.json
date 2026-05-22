@@ -1,5 +1,216 @@
 [
   {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "allow_experimental_parallel_reading_from_replicas",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      }
+    ],
+    "leadingComments": [
+      "-- Tags: no-fasttest"
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "enable_analyzer",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "dist_vec"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "dist_vec"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "id",
+        "type": {
+          "name": "UInt32"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "vec",
+        "type": {
+          "name": "Array",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "Float32"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "kind": "indexDef",
+        "name": "idx_vec",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "vec"
+          ]
+        },
+        "indexType": {
+          "name": "vector_similarity",
+          "args": [
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "hnsw"
+            },
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "L2Distance"
+            },
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "2"
+            }
+          ]
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "id"
+          ]
+        }
+      }
+    ],
+    "settings": [
+      {
+        "name": "index_granularity",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "8"
+        }
+      },
+      {
+        "name": "distributed_index_analysis_min_parts_to_activate",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      },
+      {
+        "name": "distributed_index_analysis_min_indexes_size_to_activate",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "10"
+        }
+      }
+    ],
+    "settingsAfterOrderBy": true
+  },
+  {
+    "kind": "system",
+    "body": "SYSTEM STOP MERGES dist_vec"
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "dist_vec"
+      }
+    },
+    "selectQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "number"
+          ]
+        },
+        {
+          "kind": "arrayLiteral",
+          "elements": [
+            {
+              "kind": "binaryExpr",
+              "op": "/",
+              "left": {
+                "kind": "columnRef",
+                "parts": [
+                  "number"
+                ]
+              },
+              "right": {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "100"
+              }
+            },
+            {
+              "kind": "binaryExpr",
+              "op": "/",
+              "left": {
+                "kind": "columnRef",
+                "parts": [
+                  "number"
+                ]
+              },
+              "right": {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "100"
+              }
+            }
+          ],
+          "source": "[number/100, number/100]"
+        }
+      ],
+      "from": {
+        "kind": "tableFunctionRef",
+        "name": "numbers",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "100"
+          }
+        ]
+      }
+    }
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -24,7 +235,7 @@
               ]
             },
             {
-              "kind": "array",
+              "kind": "arrayLiteral",
               "elements": [
                 {
                   "kind": "literal",
@@ -87,7 +298,7 @@
               ]
             },
             {
-              "kind": "array",
+              "kind": "arrayLiteral",
               "elements": [
                 {
                   "kind": "literal",
@@ -140,7 +351,7 @@
               ]
             },
             {
-              "kind": "array",
+              "kind": "arrayLiteral",
               "elements": [
                 {
                   "kind": "literal",
@@ -200,6 +411,13 @@
           "value": "parallel_replicas"
         }
       }
+    ]
+  },
+  {
+    "kind": "system",
+    "body": "SYSTEM flush logs query_log",
+    "leadingComments": [
+      "-- Common from 03620_distributed_index_analysis.sql"
     ]
   },
   {
@@ -641,6 +859,9 @@
           }
         }
       }
-    }
+    },
+    "leadingComments": [
+      "-- Presence of this metric confirms vector index was used after index analysis"
+    ]
   }
 ]

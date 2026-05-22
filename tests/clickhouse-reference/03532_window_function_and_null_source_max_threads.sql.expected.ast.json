@@ -1,5 +1,35 @@
 [
   {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "empty"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "n",
+        "type": {
+          "name": "UInt64"
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree",
+      "args": []
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "n"
+          ]
+        }
+      }
+    ]
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -24,7 +54,7 @@
           "kind": "select",
           "with": [
             {
-              "kind": "subquery",
+              "kind": "cteSubquery",
               "name": "nums",
               "query": {
                 "kind": "select",
@@ -58,7 +88,7 @@
                     "table": "empty",
                     "alias": "n1"
                   },
-                  "kind": "join",
+                  "kind": "joinExpr",
                   "joinType": "CROSS",
                   "right": {
                     "kind": "tableRef",
@@ -107,7 +137,7 @@
               }
             },
             {
-              "kind": "subquery",
+              "kind": "cteSubquery",
               "name": "window1",
               "query": {
                 "kind": "select",
@@ -184,7 +214,7 @@
               }
             },
             {
-              "kind": "subquery",
+              "kind": "cteSubquery",
               "name": "window2",
               "query": {
                 "kind": "select",
@@ -317,7 +347,53 @@
         "type": "UInt64",
         "value": "3"
       }
-    }
+    },
+    "leadingComments": [
+      "-- A query that reproduces the problem, it has a JOIN of two empty tables followed by some window functions.",
+      "-- Before the fix max_threads limit was lost and the resulting pipeline was resized multiple times multiplying the number of streams by 20",
+      "-- So the result of the EXPLAIN below looked like this:",
+      "--",
+      "--(Expression)",
+      "--ExpressionTransform × 160000",
+      "--  (Window)",
+      "--  Resize 400 → 160000",
+      "--    WindowTransform × 400",
+      "--      (Sorting)",
+      "--      MergeSortingTransform × 400",
+      "--        LimitsCheckingTransform × 400",
+      "--          PartialSortingTransform × 400",
+      "--            Resize × 400 400 → 1",
+      "--              ScatterByPartitionTransform × 400 1 → 400",
+      "--                (Expression)",
+      "--                ExpressionTransform × 400",
+      "--                  (Window)",
+      "--                  Resize 20 → 400",
+      "--                    WindowTransform × 20",
+      "--                      (Sorting)",
+      "--                      MergeSortingTransform × 20",
+      "--                        LimitsCheckingTransform × 20",
+      "--                          PartialSortingTransform × 20",
+      "--                            Resize × 20 20 → 1",
+      "--                              ScatterByPartitionTransform × 20 1 → 20",
+      "--                                (Expression)",
+      "--                                ExpressionTransform × 20",
+      "--                                  (Expression)",
+      "--                                  ExpressionTransform × 20",
+      "--                                    (Join)",
+      "--                                    SimpleSquashingTransform × 20",
+      "--                                      ColumnPermuteTransform × 20",
+      "--                                        JoiningTransform × 20 2 → 1",
+      "--                                          Resize 1 → 20",
+      "--                                            (Expression)",
+      "--                                            ExpressionTransform",
+      "--                                              (Expression)",
+      "--                                              ExpressionTransform",
+      "--                                                (ReadFromPreparedSource)",
+      "--                                                NullSource 0 → 1",
+      "--                                            (Expression)",
+      "--                                            Resize × 2 20 → 1",
+      "--                                              ....."
+    ]
   },
   {
     "kind": "select",
@@ -344,7 +420,7 @@
           "kind": "select",
           "with": [
             {
-              "kind": "subquery",
+              "kind": "cteSubquery",
               "name": "nums",
               "query": {
                 "kind": "select",
@@ -378,7 +454,7 @@
                     "table": "empty",
                     "alias": "n1"
                   },
-                  "kind": "join",
+                  "kind": "joinExpr",
                   "joinType": "CROSS",
                   "right": {
                     "kind": "tableRef",
@@ -427,7 +503,7 @@
               }
             },
             {
-              "kind": "subquery",
+              "kind": "cteSubquery",
               "name": "window1",
               "query": {
                 "kind": "select",
@@ -504,7 +580,7 @@
               }
             },
             {
-              "kind": "subquery",
+              "kind": "cteSubquery",
               "name": "window2",
               "query": {
                 "kind": "select",
@@ -637,7 +713,13 @@
         "type": "UInt64",
         "value": "3"
       }
-    }
+    },
+    "leadingComments": [
+      "-- Same query by with crazy max_threads"
+    ],
+    "trailingComments": [
+      "-- {serverError LIMIT_EXCEEDED}"
+    ]
   },
   {
     "kind": "select",
@@ -664,7 +746,7 @@
           "kind": "select",
           "with": [
             {
-              "kind": "subquery",
+              "kind": "cteSubquery",
               "name": "nums",
               "query": {
                 "kind": "select",
@@ -698,7 +780,7 @@
                     "table": "empty",
                     "alias": "n1"
                   },
-                  "kind": "join",
+                  "kind": "joinExpr",
                   "joinType": "CROSS",
                   "right": {
                     "kind": "tableRef",
@@ -747,7 +829,7 @@
               }
             },
             {
-              "kind": "subquery",
+              "kind": "cteSubquery",
               "name": "window1",
               "query": {
                 "kind": "select",
@@ -824,7 +906,7 @@
               }
             },
             {
-              "kind": "subquery",
+              "kind": "cteSubquery",
               "name": "window2",
               "query": {
                 "kind": "select",
@@ -957,6 +1039,14 @@
         "type": "UInt64",
         "value": "1"
       }
+    }
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "empty"
     }
   }
 ]

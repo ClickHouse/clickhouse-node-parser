@@ -1,5 +1,142 @@
 [
   {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "test_00609"
+    },
+    "ifExists": true,
+    "leadingComments": [
+      "-- Tags: no-ordinary-database, no-parallel"
+    ]
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "test_mv_00609"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "test_00609"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "a",
+        "type": {
+          "name": "Int8"
+        }
+      }
+    ],
+    "engine": {
+      "name": "Memory"
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "test_00609"
+      }
+    }
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "database_replicated_allow_explicit_uuid",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "3"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "allow_deprecated_syntax_for_merge_tree",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createMaterializedView",
+    "table": {
+      "kind": "tableRef",
+      "table": "test_mv_00609"
+    },
+    "engine": {
+      "name": "MergeTree",
+      "args": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "date"
+          ]
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "a"
+          ],
+          "parenthesized": true
+        },
+        {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "8192"
+        }
+      ]
+    },
+    "populate": true,
+    "asQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "a"
+          ]
+        },
+        {
+          "kind": "alias",
+          "expr": {
+            "kind": "functionCall",
+            "name": "toDate",
+            "args": [
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "2000-01-01"
+              }
+            ]
+          },
+          "alias": "date"
+        }
+      ],
+      "from": {
+        "kind": "tableRef",
+        "table": "test_00609"
+      }
+    }
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -9,7 +146,10 @@
     "from": {
       "kind": "tableRef",
       "table": "test_mv_00609"
-    }
+    },
+    "trailingComments": [
+      "-- OK"
+    ]
   },
   {
     "kind": "select",
@@ -49,7 +189,10 @@
           }
         }
       }
-    }
+    },
+    "trailingComments": [
+      "-- EMPTY (bug)"
+    ]
   },
   {
     "kind": "select",
@@ -89,6 +232,25 @@
           }
         }
       }
+    },
+    "trailingComments": [
+      "-- OK"
+    ]
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "test_00609"
+    }
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "test_mv_00609"
     }
   }
 ]

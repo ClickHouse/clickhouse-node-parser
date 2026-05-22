@@ -1,5 +1,79 @@
 [
   {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "alter_sync",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "2"
+        }
+      }
+    ],
+    "leadingComments": [
+      "-- Tags: no-shared-merge-tree"
+    ]
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "test"
+    },
+    "ifExists": true,
+    "leadingComments": [
+      "-- {echoOn}"
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "test"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "a",
+        "type": {
+          "name": "Int"
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "functionCall",
+          "name": "tuple",
+          "args": []
+        }
+      }
+    ]
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "test"
+      }
+    }
+  },
+  {
+    "kind": "optimize",
+    "table": {
+      "kind": "tableRef",
+      "table": "test"
+    },
+    "final": true
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -56,5 +130,62 @@
         }
       ]
     }
+  },
+  {
+    "kind": "alter",
+    "table": {
+      "kind": "tableRef",
+      "table": "test"
+    },
+    "commands": [
+      {
+        "kind": "alterCommand",
+        "commandType": "DROP_PARTITION",
+        "partName": {
+          "kind": "literal",
+          "type": "String",
+          "value": "all_1_1_1"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "alter",
+    "table": {
+      "kind": "tableRef",
+      "table": "test"
+    },
+    "commands": [
+      {
+        "kind": "alterCommand",
+        "commandType": "ATTACH_PARTITION",
+        "partName": {
+          "kind": "literal",
+          "type": "String",
+          "value": "all_1_1_1"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "alter",
+    "table": {
+      "kind": "tableRef",
+      "table": "test"
+    },
+    "commands": [
+      {
+        "kind": "alterCommand",
+        "commandType": "ATTACH_PARTITION",
+        "partition": {
+          "partitionKind": "expr",
+          "expr": {
+            "kind": "functionCall",
+            "name": "tuple",
+            "args": []
+          }
+        }
+      }
+    ]
   }
 ]

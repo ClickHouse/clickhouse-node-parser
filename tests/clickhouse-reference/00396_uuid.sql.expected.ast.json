@@ -421,6 +421,109 @@
   },
   {
     "kind": "select",
+    "with": [
+      {
+        "kind": "cteExpr",
+        "name": "uuid",
+        "expr": {
+          "kind": "functionCall",
+          "name": "generateUUIDv4",
+          "args": []
+        }
+      },
+      {
+        "kind": "cteExpr",
+        "name": "str",
+        "expr": {
+          "kind": "functionCall",
+          "name": "identity",
+          "args": [
+            {
+              "kind": "functionCall",
+              "name": "lower",
+              "args": [
+                {
+                  "kind": "functionCall",
+                  "name": "hex",
+                  "args": [
+                    {
+                      "kind": "functionCall",
+                      "name": "reverse",
+                      "args": [
+                        {
+                          "kind": "functionCall",
+                          "name": "reinterpretAsString",
+                          "args": [
+                            {
+                              "kind": "columnRef",
+                              "parts": [
+                                "uuid"
+                              ]
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "kind": "cteExpr",
+        "name": "uuid2",
+        "expr": {
+          "kind": "functionCall",
+          "name": "reinterpretAsUUID",
+          "args": [
+            {
+              "kind": "functionCall",
+              "name": "reverse",
+              "args": [
+                {
+                  "kind": "functionCall",
+                  "name": "unhex",
+                  "args": [
+                    {
+                      "kind": "columnRef",
+                      "parts": [
+                        "str"
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ],
+    "select": [
+      {
+        "kind": "binaryExpr",
+        "op": "=",
+        "left": {
+          "kind": "columnRef",
+          "parts": [
+            "uuid"
+          ]
+        },
+        "right": {
+          "kind": "columnRef",
+          "parts": [
+            "uuid2"
+          ]
+        }
+      }
+    ],
+    "leadingComments": [
+      "-- conversion back and forth to big-endian hex string"
+    ]
+  },
+  {
+    "kind": "select",
     "select": [
       {
         "kind": "literal",

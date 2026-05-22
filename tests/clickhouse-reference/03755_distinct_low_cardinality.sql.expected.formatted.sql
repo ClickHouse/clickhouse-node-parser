@@ -1,3 +1,21 @@
+-- { echoOn }
+DROP TABLE IF EXISTS distinct_lc_basic;
+
+CREATE TABLE distinct_lc_basic
+(
+    id UInt32,
+    s String,
+    lc LowCardinality(String)
+)
+ENGINE = MergeTree
+ORDER BY id;
+
+INSERT INTO distinct_lc_basic SELECT
+    number,
+    toString(intDiv(number, 10)),
+    toLowCardinality(toString(intDiv(number, 10)))
+FROM numbers(100000);
+
 SELECT (
         SELECT count()
         FROM (
@@ -26,6 +44,23 @@ SELECT (
             )
     );
 
+DROP TABLE IF EXISTS distinct_lc_low_cardinality;
+
+CREATE TABLE distinct_lc_low_cardinality
+(
+    id UInt32,
+    s String,
+    lc LowCardinality(String)
+)
+ENGINE = MergeTree
+ORDER BY id;
+
+INSERT INTO distinct_lc_low_cardinality SELECT
+    number,
+    toString(number % 3),
+    toLowCardinality(toString(number % 3))
+FROM numbers(100000);
+
 SELECT (
         SELECT count()
         FROM (
@@ -53,6 +88,23 @@ SELECT (
                 FROM distinct_lc_low_cardinality
             )
     );
+
+DROP TABLE IF EXISTS distinct_lc_nullable;
+
+CREATE TABLE distinct_lc_nullable
+(
+    id UInt32,
+    s Nullable(String),
+    lc LowCardinality(Nullable(String))
+)
+ENGINE = MergeTree
+ORDER BY id;
+
+INSERT INTO distinct_lc_nullable SELECT
+    number,
+    if(number % 10 = 0, NULL, toString(intDiv(number, 7))),
+    toLowCardinality(if(number % 10 = 0, NULL, toString(intDiv(number, 7))))
+FROM numbers(100000);
 
 SELECT (
         SELECT count()
@@ -174,6 +226,23 @@ SELECT (
             )
     );
 
+DROP TABLE IF EXISTS distinct_lc_mixed;
+
+CREATE TABLE distinct_lc_mixed
+(
+    id UInt32,
+    k1 LowCardinality(String),
+    k2 UInt32
+)
+ENGINE = MergeTree
+ORDER BY id;
+
+INSERT INTO distinct_lc_mixed SELECT
+    number,
+    toLowCardinality(toString(intDiv(number, 10))),
+    number % 5
+FROM numbers(100000);
+
 SELECT (
         SELECT count()
         FROM (
@@ -197,6 +266,23 @@ SELECT (
         SELECT uniqExact(k1)
         FROM distinct_lc_mixed
     );
+
+DROP TABLE IF EXISTS distinct_lc_all_same;
+
+CREATE TABLE distinct_lc_all_same
+(
+    id UInt32,
+    s String,
+    lc LowCardinality(String)
+)
+ENGINE = MergeTree
+ORDER BY id;
+
+INSERT INTO distinct_lc_all_same SELECT
+    number,
+    'x',
+    toLowCardinality('x')
+FROM numbers(100000);
 
 SELECT (
         SELECT count()
@@ -225,6 +311,23 @@ SELECT (
                 FROM distinct_lc_all_same
             )
     );
+
+DROP TABLE IF EXISTS distinct_lc_sparse_nulls;
+
+CREATE TABLE distinct_lc_sparse_nulls
+(
+    id UInt32,
+    s Nullable(String),
+    lc LowCardinality(Nullable(String))
+)
+ENGINE = MergeTree
+ORDER BY id;
+
+INSERT INTO distinct_lc_sparse_nulls SELECT
+    number,
+    if(number IN (0, 1, 2, 3, 4), NULL, toString(number % 1000)),
+    toLowCardinality(if(number IN (0, 1, 2, 3, 4), NULL, toString(number % 1000)))
+FROM numbers(100000);
 
 SELECT (
         SELECT count()

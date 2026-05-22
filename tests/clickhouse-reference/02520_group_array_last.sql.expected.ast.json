@@ -1,5 +1,14 @@
 [
   {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "simple_agg_groupArrayLastArray"
+    },
+    "ifExists": true
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -25,7 +34,7 @@
       }
     ],
     "from": {
-      "kind": "tableFunction",
+      "kind": "tableFunctionRef",
       "name": "numbers",
       "args": [
         {
@@ -34,7 +43,14 @@
           "value": "5"
         }
       ]
-    }
+    },
+    "leadingComments": [
+      "-- { echo }",
+      "-- BAD_ARGUMENTS"
+    ],
+    "trailingComments": [
+      "-- { serverError BAD_ARGUMENTS }"
+    ]
   },
   {
     "kind": "select",
@@ -44,7 +60,7 @@
         "name": "groupArrayLastArray",
         "args": [
           {
-            "kind": "array",
+            "kind": "arrayLiteral",
             "elements": [
               {
                 "kind": "binaryExpr",
@@ -68,7 +84,7 @@
       }
     ],
     "from": {
-      "kind": "tableFunction",
+      "kind": "tableFunctionRef",
       "name": "numbers",
       "args": [
         {
@@ -77,7 +93,10 @@
           "value": "5"
         }
       ]
-    }
+    },
+    "trailingComments": [
+      "-- { serverError BAD_ARGUMENTS }"
+    ]
   },
   {
     "kind": "select",
@@ -112,7 +131,54 @@
       }
     ],
     "from": {
-      "kind": "tableFunction",
+      "kind": "tableFunctionRef",
+      "name": "numbers",
+      "args": [
+        {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "5"
+        }
+      ]
+    },
+    "leadingComments": [
+      "-- groupArrayLast by number"
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "groupArrayLast",
+        "params": [
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "3"
+          }
+        ],
+        "args": [
+          {
+            "kind": "binaryExpr",
+            "op": "+",
+            "left": {
+              "kind": "columnRef",
+              "parts": [
+                "number"
+              ]
+            },
+            "right": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "1"
+            }
+          }
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableFunctionRef",
       "name": "numbers",
       "args": [
         {
@@ -156,51 +222,7 @@
       }
     ],
     "from": {
-      "kind": "tableFunction",
-      "name": "numbers",
-      "args": [
-        {
-          "kind": "literal",
-          "type": "UInt64",
-          "value": "5"
-        }
-      ]
-    }
-  },
-  {
-    "kind": "select",
-    "select": [
-      {
-        "kind": "functionCall",
-        "name": "groupArrayLast",
-        "params": [
-          {
-            "kind": "literal",
-            "type": "UInt64",
-            "value": "3"
-          }
-        ],
-        "args": [
-          {
-            "kind": "binaryExpr",
-            "op": "+",
-            "left": {
-              "kind": "columnRef",
-              "parts": [
-                "number"
-              ]
-            },
-            "right": {
-              "kind": "literal",
-              "type": "UInt64",
-              "value": "1"
-            }
-          }
-        ]
-      }
-    ],
-    "from": {
-      "kind": "tableFunction",
+      "kind": "tableFunctionRef",
       "name": "numbers",
       "args": [
         {
@@ -250,7 +272,7 @@
       }
     ],
     "from": {
-      "kind": "tableFunction",
+      "kind": "tableFunctionRef",
       "name": "numbers",
       "args": [
         {
@@ -259,7 +281,10 @@
           "value": "5"
         }
       ]
-    }
+    },
+    "leadingComments": [
+      "-- groupArrayLast by String"
+    ]
   },
   {
     "kind": "select",
@@ -300,7 +325,7 @@
       }
     ],
     "from": {
-      "kind": "tableFunction",
+      "kind": "tableFunctionRef",
       "name": "numbers",
       "args": [
         {
@@ -326,7 +351,7 @@
         ],
         "args": [
           {
-            "kind": "array",
+            "kind": "arrayLiteral",
             "elements": [
               {
                 "kind": "literal",
@@ -363,6 +388,9 @@
           }
         ]
       }
+    ],
+    "leadingComments": [
+      "-- groupArrayLastArray"
     ]
   },
   {
@@ -380,7 +408,7 @@
         ],
         "args": [
           {
-            "kind": "array",
+            "kind": "arrayLiteral",
             "elements": [
               {
                 "kind": "literal",
@@ -456,7 +484,7 @@
       }
     ],
     "from": {
-      "kind": "tableFunction",
+      "kind": "tableFunctionRef",
       "name": "remote",
       "args": [
         {
@@ -478,7 +506,7 @@
                   }
                 ],
                 "from": {
-                  "kind": "tableFunction",
+                  "kind": "tableFunctionRef",
                   "name": "numbers",
                   "args": [
                     {
@@ -493,7 +521,13 @@
           ]
         }
       ]
-    }
+    },
+    "leadingComments": [
+      "-- groupArrayLastMerge",
+      "-- [10,8,9] + [10,8,9]     => [10,10,9] => [10,10,8] => [9,10,8]",
+      "--     ^          ^                  ^      ^^",
+      "-- (position to insert at)"
+    ]
   },
   {
     "kind": "select",
@@ -538,7 +572,7 @@
       }
     ],
     "from": {
-      "kind": "tableFunction",
+      "kind": "tableFunctionRef",
       "name": "remote",
       "args": [
         {
@@ -560,7 +594,7 @@
                   }
                 ],
                 "from": {
-                  "kind": "tableFunction",
+                  "kind": "tableFunctionRef",
                   "name": "numbers",
                   "args": [
                     {
@@ -594,7 +628,7 @@
           ],
           "args": [
             {
-              "kind": "array",
+              "kind": "arrayLiteral",
               "elements": [
                 {
                   "kind": "binaryExpr",
@@ -620,7 +654,7 @@
       }
     ],
     "from": {
-      "kind": "tableFunction",
+      "kind": "tableFunctionRef",
       "name": "remote",
       "args": [
         {
@@ -642,7 +676,7 @@
                   }
                 ],
                 "from": {
-                  "kind": "tableFunction",
+                  "kind": "tableFunctionRef",
                   "name": "numbers",
                   "args": [
                     {
@@ -696,7 +730,7 @@
       }
     ],
     "from": {
-      "kind": "tableFunction",
+      "kind": "tableFunctionRef",
       "name": "remote",
       "args": [
         {
@@ -718,7 +752,7 @@
                   }
                 ],
                 "from": {
-                  "kind": "tableFunction",
+                  "kind": "tableFunctionRef",
                   "name": "numbers",
                   "args": [
                     {
@@ -778,7 +812,7 @@
       }
     ],
     "from": {
-      "kind": "tableFunction",
+      "kind": "tableFunctionRef",
       "name": "remote",
       "args": [
         {
@@ -800,7 +834,7 @@
                   }
                 ],
                 "from": {
-                  "kind": "tableFunction",
+                  "kind": "tableFunctionRef",
                   "name": "numbers",
                   "args": [
                     {
@@ -834,7 +868,7 @@
           ],
           "args": [
             {
-              "kind": "array",
+              "kind": "arrayLiteral",
               "elements": [
                 {
                   "kind": "binaryExpr",
@@ -860,7 +894,7 @@
       }
     ],
     "from": {
-      "kind": "tableFunction",
+      "kind": "tableFunctionRef",
       "name": "remote",
       "args": [
         {
@@ -882,7 +916,7 @@
                   }
                 ],
                 "from": {
-                  "kind": "tableFunction",
+                  "kind": "tableFunctionRef",
                   "name": "numbers",
                   "args": [
                     {
@@ -897,6 +931,84 @@
           ]
         }
       ]
+    }
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "simple_agg_groupArrayLastArray"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "key",
+        "type": {
+          "name": "Int"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "value",
+        "type": {
+          "name": "SimpleAggregateFunction",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "groupArrayLastArray",
+                "args": [
+                  {
+                    "kind": "literal",
+                    "value": "5"
+                  }
+                ]
+              }
+            },
+            {
+              "kind": "type",
+              "type": {
+                "name": "Array",
+                "args": [
+                  {
+                    "kind": "type",
+                    "type": {
+                      "name": "UInt64"
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "engine": {
+      "name": "AggregatingMergeTree",
+      "args": []
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "key"
+          ]
+        }
+      }
+    ],
+    "leadingComments": [
+      "-- SimpleAggregateFunction"
+    ]
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "simple_agg_groupArrayLastArray"
+      }
     }
   },
   {
@@ -932,6 +1044,20 @@
         "direction": "ASC"
       }
     ]
+  },
+  {
+    "kind": "system",
+    "body": "SYSTEM stop merges simple_agg_groupArrayLastArray"
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "simple_agg_groupArrayLastArray"
+      }
+    }
   },
   {
     "kind": "select",

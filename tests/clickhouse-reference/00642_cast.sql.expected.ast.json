@@ -95,6 +95,114 @@
     ]
   },
   {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "cast"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "cast"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "x",
+        "type": {
+          "name": "UInt8"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "e",
+        "type": {
+          "name": "Enum8",
+          "args": [
+            {
+              "kind": "enumValues",
+              "values": [
+                {
+                  "name": "hello",
+                  "value": "1"
+                },
+                {
+                  "name": "world",
+                  "value": "2"
+                }
+              ]
+            }
+          ]
+        },
+        "defaultKind": "DEFAULT",
+        "defaultExpr": {
+          "kind": "castExpr",
+          "expr": {
+            "kind": "columnRef",
+            "parts": [
+              "x"
+            ]
+          },
+          "type": "Enum8(\n            'hello' = 1,\n            'world' = 2\n        )"
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "e"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "kind": "showCreate",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "cast"
+    },
+    "format": "TSVRaw"
+  },
+  {
+    "kind": "describe",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "cast"
+      }
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "cast"
+      }
+    },
+    "columns": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "x"
+        ]
+      }
+    ]
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -102,6 +210,14 @@
       }
     ],
     "from": {
+      "kind": "tableRef",
+      "table": "cast"
+    }
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
       "kind": "tableRef",
       "table": "cast"
     }

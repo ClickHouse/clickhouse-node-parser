@@ -1,3 +1,13 @@
+DROP TABLE IF EXISTS test_00681;
+
+CREATE TABLE test_00681
+(
+    x Int32
+)
+ENGINE = Log;
+
+INSERT INTO test_00681;
+
 SELECT a1
 FROM (
         SELECT
@@ -10,3 +20,5 @@ FROM (
             x
         FROM test_00681
     );
+
+DROP TABLE test_00681;

@@ -1,3 +1,20 @@
+SET any_join_distinct_right_table_keys = 1;
+
+SET joined_subquery_requires_alias = 0;
+
+DROP TABLE IF EXISTS series;
+
+CREATE TABLE series
+(
+    i UInt32,
+    x_value Float64,
+    y_value Float64
+)
+ENGINE = Memory;
+
+INSERT INTO series (i, x_value, y_value);
+
+/* varSamp */
 SELECT varSamp(x_value)
 FROM (
         SELECT x_value
@@ -20,6 +37,7 @@ FROM (
         FROM series
     );
 
+/* stddevSamp */
 SELECT stddevSamp(x_value)
 FROM (
         SELECT x_value
@@ -42,6 +60,7 @@ FROM (
         FROM series
     );
 
+/* skewSamp */
 SELECT skewSamp(x_value)
 FROM (
         SELECT x_value
@@ -64,6 +83,7 @@ FROM (
         FROM series
     );
 
+/* kurtSamp */
 SELECT kurtSamp(x_value)
 FROM (
         SELECT x_value
@@ -86,6 +106,7 @@ FROM (
         FROM series
     );
 
+/* varPop */
 SELECT varPop(x_value)
 FROM (
         SELECT x_value
@@ -108,6 +129,7 @@ FROM (
         FROM series
     );
 
+/* stddevPop */
 SELECT stddevPop(x_value)
 FROM (
         SELECT x_value
@@ -130,6 +152,7 @@ FROM (
         FROM series
     );
 
+/* skewPop */
 SELECT skewPop(x_value)
 FROM (
         SELECT x_value
@@ -152,6 +175,7 @@ FROM (
         FROM series
     );
 
+/* kurtPop */
 SELECT kurtPop(x_value)
 FROM (
         SELECT x_value
@@ -174,6 +198,7 @@ FROM (
         FROM series
     );
 
+/* covarSamp */
 SELECT covarSamp(x_value, y_value)
 FROM (
         SELECT
@@ -226,6 +251,7 @@ INNER JOIN (
     )
     USING (ID2);
 
+/* covarPop */
 SELECT covarPop(x_value, y_value)
 FROM (
         SELECT
@@ -278,6 +304,7 @@ INNER JOIN (
     )
     USING (ID2);
 
+/* corr */
 SELECT corr(x_value, y_value)
 FROM (
         SELECT
@@ -299,6 +326,7 @@ FROM (
 SELECT round(abs(corr(x_value, y_value) - covarPop(x_value, y_value) / ((stddevPop(x_value) * stddevPop(y_value)))), 6)
 FROM series;
 
+/* quantile AND quantileExact */
 SELECT '----quantile----';
 
 SELECT quantileExactIf(number, number > 0)
@@ -321,3 +349,5 @@ FROM numbers(90);
 
 SELECT quantileIf(toFloat64(number), number > 100)
 FROM numbers(90);
+
+DROP TABLE series;

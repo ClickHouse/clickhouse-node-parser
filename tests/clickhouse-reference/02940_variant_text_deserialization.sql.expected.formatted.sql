@@ -1,3 +1,9 @@
+SET allow_experimental_variant_type = 1;
+
+SET allow_suspicious_variant_types = 1;
+
+SET session_timezone = 'UTC';
+
 SELECT
     v,
     variantElement(v, 'String')

@@ -1,5 +1,43 @@
 [
   {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "visits"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "visits"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "str",
+        "type": {
+          "name": "String"
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "str"
+          ]
+        }
+      }
+    ]
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -13,7 +51,7 @@
         "kind": "tableRef",
         "table": "visits"
       },
-      "kind": "arrayJoin",
+      "kind": "arrayJoinExpr",
       "joinType": "ARRAY",
       "expressions": [
         {
@@ -56,7 +94,7 @@
                     }
                   },
                   {
-                    "kind": "array",
+                    "kind": "arrayLiteral",
                     "elements": [
                       {
                         "kind": "literal",
@@ -78,7 +116,7 @@
       "kind": "inExpr",
       "negated": false,
       "expr": {
-        "kind": "tuple",
+        "kind": "tupleLiteral",
         "elements": [
           {
             "kind": "columnRef",
@@ -119,6 +157,14 @@
         }
       ],
       "parenthesized": true
+    }
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "visits"
     }
   }
 ]

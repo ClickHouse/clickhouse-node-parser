@@ -16,7 +16,7 @@ SELECT categoricalInformationValue(c1, c2)
 FROM VALUES((0, 0), (NULL, 1));
 
 SELECT categoricalInformationValue(c1, c2)
-FROM VALUES((NULL, 1));
+FROM VALUES((NULL, 1)); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
 SELECT categoricalInformationValue(dummy, dummy);
 
@@ -33,7 +33,7 @@ SELECT groupUniqArray(*)
 FROM VALUES(NULL);
 
 SELECT categoricalInformationValue(c1, c2)
-FROM VALUES((NULL, NULL));
+FROM VALUES((NULL, NULL)); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
 SELECT categoricalInformationValue(c1, c2)
 FROM VALUES((0, 0), (NULL, 0));

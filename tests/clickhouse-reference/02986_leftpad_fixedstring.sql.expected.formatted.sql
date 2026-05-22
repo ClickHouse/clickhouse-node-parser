@@ -1,3 +1,4 @@
+-- https://github.com/ClickHouse/ClickHouse/issues/59604
 SELECT
     leftPad(toFixedString('abc', 3), 0),
     leftPad('abc', CAST('0', 'Int32'));
@@ -28,6 +29,7 @@ SELECT
     hex(rightPadUTF8(s, number)) = result
 FROM numbers(20);
 
+-- I'm not confident the behaviour should be like this. I'm only testing memory problems
 SELECT
     hex(leftPadUTF8(toFixedString('abc34324' AS s, 8), number, '🇪🇸')) AS result,
     hex(leftPadUTF8(s, number, '🇪🇸')) = result

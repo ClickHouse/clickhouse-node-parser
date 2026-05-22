@@ -1,5 +1,148 @@
 [
   {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "02181_test_table"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "02181_test_table"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "id",
+        "type": {
+          "name": "UInt64"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "value",
+        "type": {
+          "name": "String"
+        }
+      }
+    ],
+    "engine": {
+      "name": "TinyLog"
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "02181_test_table"
+      }
+    }
+  },
+  {
+    "kind": "drop",
+    "targetType": "DICTIONARY",
+    "table": {
+      "kind": "tableRef",
+      "table": "02181_test_dictionary"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "createDictionary",
+    "table": {
+      "kind": "tableRef",
+      "table": "02181_test_dictionary"
+    },
+    "dictAttrs": [
+      {
+        "name": "id",
+        "type": {
+          "name": "UInt64"
+        }
+      },
+      {
+        "name": "value",
+        "type": {
+          "name": "String"
+        }
+      }
+    ],
+    "dictDef": {
+      "primaryKey": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "id"
+          ]
+        }
+      ],
+      "source": {
+        "name": "clickhouse",
+        "pairs": [
+          {
+            "name": "TABLE",
+            "value": {
+              "kind": "literal",
+              "type": "String",
+              "value": "02181_test_table"
+            }
+          }
+        ]
+      },
+      "layout": {
+        "name": "HASHED",
+        "pairs": []
+      },
+      "lifetime": {
+        "value": 0
+      }
+    }
+  },
+  {
+    "kind": "detach",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "02181_test_dictionary"
+    },
+    "trailingComments": [
+      "--{serverError CANNOT_DETACH_DICTIONARY_AS_TABLE}"
+    ]
+  },
+  {
+    "kind": "attach",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "02181_test_dictionary"
+    },
+    "trailingComments": [
+      "--{serverError INCORRECT_QUERY}"
+    ]
+  },
+  {
+    "kind": "detach",
+    "targetType": "DICTIONARY",
+    "table": {
+      "kind": "tableRef",
+      "table": "02181_test_dictionary"
+    }
+  },
+  {
+    "kind": "attach",
+    "targetType": "DICTIONARY",
+    "table": {
+      "kind": "tableRef",
+      "table": "02181_test_dictionary"
+    }
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -9,6 +152,22 @@
     "from": {
       "kind": "tableRef",
       "table": "02181_test_dictionary"
+    }
+  },
+  {
+    "kind": "drop",
+    "targetType": "DICTIONARY",
+    "table": {
+      "kind": "tableRef",
+      "table": "02181_test_dictionary"
+    }
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "02181_test_table"
     }
   }
 ]

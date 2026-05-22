@@ -1,3 +1,28 @@
+DROP TABLE IF EXISTS t_00725_3;
+
+DROP TABLE IF EXISTS z_00725_3;
+
+CREATE TABLE t_00725_3
+(
+    a Int64,
+    b Int64
+)
+ENGINE = TinyLog;
+
+INSERT INTO t_00725_3;
+
+INSERT INTO t_00725_3;
+
+CREATE TABLE z_00725_3
+(
+    c Int64,
+    d Int64,
+    e Int64
+)
+ENGINE = TinyLog;
+
+INSERT INTO z_00725_3;
+
 SELECT *
 FROM
     t_00725_3

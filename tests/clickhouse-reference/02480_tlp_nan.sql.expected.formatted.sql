@@ -1,3 +1,4 @@
+-- {echo}
 SELECT
     sqrt(-1) AS x,
     NOT x,

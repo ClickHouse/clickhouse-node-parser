@@ -1,5 +1,239 @@
 [
   {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "max_rows_to_read",
+        "value": {
+          "kind": "literal",
+          "type": "String",
+          "value": "101M"
+        }
+      }
+    ],
+    "leadingComments": [
+      "-- Tags: long, no-tsan, no-msan, no-asan, no-ubsan, no-debug, no-coverage, no-object-storage, no-random-merge-tree-settings, no-random-settings"
+    ]
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "t_2354_dist_with_external_aggr"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "t_2354_dist_with_external_aggr"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "a",
+        "type": {
+          "name": "UInt64"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "b",
+        "type": {
+          "name": "String"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "c",
+        "type": {
+          "name": "FixedString",
+          "args": [
+            {
+              "kind": "literal",
+              "value": "100"
+            }
+          ]
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "functionCall",
+          "name": "tuple",
+          "args": []
+        }
+      }
+    ],
+    "settings": [
+      {
+        "name": "index_granularity",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "8192"
+        }
+      },
+      {
+        "name": "index_granularity_bytes",
+        "value": {
+          "kind": "literal",
+          "type": "String",
+          "value": "10Mi"
+        }
+      }
+    ],
+    "settingsAfterOrderBy": true
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "t_2354_dist_with_external_aggr"
+      }
+    },
+    "selectQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "number"
+          ]
+        },
+        {
+          "kind": "alias",
+          "expr": {
+            "kind": "functionCall",
+            "name": "toString",
+            "args": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "number"
+                ]
+              }
+            ]
+          },
+          "alias": "s"
+        },
+        {
+          "kind": "functionCall",
+          "name": "toFixedString",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "s"
+              ]
+            },
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "100"
+            }
+          ]
+        }
+      ],
+      "from": {
+        "kind": "tableFunctionRef",
+        "name": "numbers_mt",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "Float64",
+            "value": "5e7"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "max_bytes_before_external_group_by",
+        "value": {
+          "kind": "literal",
+          "type": "String",
+          "value": "2G"
+        }
+      },
+      {
+        "name": "max_bytes_ratio_before_external_group_by",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      },
+      {
+        "name": "max_threads",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "16"
+        }
+      },
+      {
+        "name": "aggregation_memory_efficient_merge_threads",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "16"
+        }
+      },
+      {
+        "name": "distributed_aggregation_memory_efficient",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      },
+      {
+        "name": "prefer_localhost_replica",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      },
+      {
+        "name": "group_by_two_level_threshold",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "100000"
+        }
+      },
+      {
+        "name": "group_by_two_level_threshold_bytes",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1000000"
+        }
+      },
+      {
+        "name": "max_block_size",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "65505"
+        }
+      }
+    ]
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -38,7 +272,7 @@
       }
     ],
     "from": {
-      "kind": "tableFunction",
+      "kind": "tableFunctionRef",
       "name": "remote",
       "args": [
         {
@@ -108,6 +342,20 @@
           "value": "0"
         }
       }
+    ],
+    "leadingComments": [
+      "-- whole aggregation state of local aggregation uncompressed is 5.8G",
+      "-- it is hard to provide an accurate estimation for memory usage, so 5G is just the actual value taken from the logs + delta",
+      "-- also avoid using localhost, so the queries will go over separate connections",
+      "-- (otherwise the memory usage for merge will be counted together with the localhost query)"
     ]
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "t_2354_dist_with_external_aggr"
+    }
   }
 ]

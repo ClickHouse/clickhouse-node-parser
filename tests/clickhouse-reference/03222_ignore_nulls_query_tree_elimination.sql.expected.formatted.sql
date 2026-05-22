@@ -1,3 +1,16 @@
+#!/usr/bin/env -S ${HOME}/clickhouse-client --queries-file
+DROP TABLE IF EXISTS with_fill_date__fuzz_0;
+
+CREATE TABLE with_fill_date__fuzz_0
+(
+    d Date,
+    d32 Nullable(Int32),
+    d33 Int32
+)
+ENGINE = Memory;
+
+INSERT INTO with_fill_date__fuzz_0;
+
 SELECT count()
 FROM with_fill_date__fuzz_0
 ORDER BY

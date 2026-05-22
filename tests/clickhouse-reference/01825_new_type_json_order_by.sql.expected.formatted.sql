@@ -1,3 +1,6 @@
+-- Tags: no-fasttest
+SET enable_json_type = 1;
+
 SELECT dummy
 FROM `system`.one
 ORDER BY materialize('{"k":"v"}'::JSON) ASC;

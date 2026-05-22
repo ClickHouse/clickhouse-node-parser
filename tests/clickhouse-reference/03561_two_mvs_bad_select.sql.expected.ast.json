@@ -1,0 +1,182 @@
+[
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "tables": [
+      {
+        "kind": "tableRef",
+        "table": "03561_t0"
+      },
+      {
+        "kind": "tableRef",
+        "table": "03561_t1"
+      },
+      {
+        "kind": "tableRef",
+        "table": "03561_v0"
+      },
+      {
+        "kind": "tableRef",
+        "table": "03561_v1"
+      }
+    ],
+    "ifExists": true
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "allow_materialized_view_with_bad_select",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "03561_t0"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "c0",
+        "type": {
+          "name": "Int"
+        }
+      }
+    ],
+    "engine": {
+      "name": "Memory"
+    }
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "03561_t1"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "c0",
+        "type": {
+          "name": "Int"
+        }
+      }
+    ],
+    "engine": {
+      "name": "Memory"
+    }
+  },
+  {
+    "kind": "createMaterializedView",
+    "table": {
+      "kind": "tableRef",
+      "table": "03561_v0"
+    },
+    "toTable": {
+      "kind": "tableRef",
+      "table": "03561_t0"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "c0",
+        "type": {
+          "name": "Int"
+        }
+      }
+    ],
+    "asQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "alias",
+          "expr": {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "1"
+          },
+          "alias": "c0"
+        }
+      ],
+      "from": {
+        "kind": "tableRef",
+        "table": "03561_t0"
+      },
+      "parenthesized": true
+    }
+  },
+  {
+    "kind": "createMaterializedView",
+    "table": {
+      "kind": "tableRef",
+      "table": "03561_v1"
+    },
+    "toTable": {
+      "kind": "tableRef",
+      "table": "03561_t1"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "c0",
+        "type": {
+          "name": "Int"
+        }
+      }
+    ],
+    "asQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "alias",
+          "expr": {
+            "kind": "functionCall",
+            "name": "grouping",
+            "args": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "c0"
+                ]
+              }
+            ]
+          },
+          "alias": "c0"
+        }
+      ],
+      "from": {
+        "kind": "tableRef",
+        "table": "03561_t0"
+      },
+      "parenthesized": true
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "03561_t0"
+      }
+    },
+    "columns": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "c0"
+        ]
+      }
+    ],
+    "trailingComments": [
+      "-- { serverError TOO_DEEP_RECURSION }"
+    ]
+  }
+]

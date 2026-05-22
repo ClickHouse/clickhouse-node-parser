@@ -1,5 +1,254 @@
 [
   {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "users"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "session_timezone",
+        "value": {
+          "kind": "literal",
+          "type": "String",
+          "value": "UTC"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "users"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "uid",
+        "type": {
+          "name": "Int16"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "d",
+        "type": {
+          "name": "DateTime",
+          "args": [
+            {
+              "kind": "literal",
+              "value": "'UTC'"
+            }
+          ]
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "uid"
+          ]
+        }
+      }
+    ],
+    "ttl": [
+      {
+        "expr": {
+          "kind": "binaryExpr",
+          "op": "+",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "d"
+            ]
+          },
+          "right": {
+            "kind": "functionCall",
+            "name": "toIntervalMonth",
+            "args": [
+              {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "1"
+              }
+            ]
+          }
+        },
+        "where": {
+          "kind": "binaryExpr",
+          "op": "=",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "uid"
+            ]
+          },
+          "right": {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "1"
+          }
+        }
+      }
+    ],
+    "settings": [
+      {
+        "name": "merge_with_ttl_timeout",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      },
+      {
+        "name": "min_bytes_for_wide_part",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      },
+      {
+        "name": "vertical_merge_algorithm_min_rows_to_activate",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      },
+      {
+        "name": "vertical_merge_algorithm_min_columns_to_activate",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      }
+    ],
+    "settingsAfterOrderBy": true
+  },
+  {
+    "kind": "system",
+    "body": "SYSTEM STOP TTL MERGES users"
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "users"
+      }
+    },
+    "selectQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "functionCall",
+          "name": "arrayJoin",
+          "args": [
+            {
+              "kind": "arrayLiteral",
+              "elements": [
+                {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "1"
+                },
+                {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "2"
+                }
+              ],
+              "source": "[1,2]"
+            }
+          ]
+        },
+        {
+          "kind": "functionCall",
+          "name": "toDateTime",
+          "args": [
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "2020-01-01 00:00:00"
+            },
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "UTC"
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "users"
+      }
+    },
+    "selectQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "functionCall",
+          "name": "arrayJoin",
+          "args": [
+            {
+              "kind": "arrayLiteral",
+              "elements": [
+                {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "2"
+                },
+                {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "3"
+                }
+              ],
+              "source": "[2,3]"
+            }
+          ]
+        },
+        {
+          "kind": "functionCall",
+          "name": "toDateTime",
+          "args": [
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "2020-01-01 00:00:00"
+            },
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "UTC"
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -112,6 +361,63 @@
         "direction": "ASC"
       }
     ]
+  },
+  {
+    "kind": "system",
+    "body": "SYSTEM START TTL MERGES users"
+  },
+  {
+    "kind": "optimize",
+    "table": {
+      "kind": "tableRef",
+      "table": "users"
+    },
+    "final": true
+  },
+  {
+    "kind": "optimize",
+    "table": {
+      "kind": "tableRef",
+      "table": "users"
+    },
+    "settings": [
+      {
+        "name": "optimize_throw_if_noop",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ],
+    "leadingComments": [
+      "-- Cannot assign merge because there is one part and all",
+      "-- TTLs that should be applied are already applied.",
+      "-- Previously it would succeed for TTL with WHERE."
+    ],
+    "trailingComments": [
+      "-- { serverError CANNOT_ASSIGN_OPTIMIZE }"
+    ]
+  },
+  {
+    "kind": "detach",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "users"
+    }
+  },
+  {
+    "kind": "attach",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "users"
+    }
+  },
+  {
+    "kind": "system",
+    "body": "SYSTEM FLUSH LOGS part_log"
   },
   {
     "kind": "select",

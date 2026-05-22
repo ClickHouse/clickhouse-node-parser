@@ -1,3 +1,14 @@
+DROP TABLE IF EXISTS t;
+
+CREATE TABLE t
+(
+    item_id UInt64,
+    price_sold Float32,
+    date Date
+)
+ENGINE = MergeTree
+ORDER BY item_id;
+
 SELECT item_id
 FROM
     (
@@ -203,6 +214,8 @@ FULL JOIN (
     ) AS rr
     USING (id);
 
+INSERT INTO t;
+
 SELECT *
 FROM
     (
@@ -334,3 +347,5 @@ LEFT JOIN (
     ) AS r
     ON l.item_id = r.item_id
 ORDER BY `ALL` ASC;
+
+DROP TABLE t;

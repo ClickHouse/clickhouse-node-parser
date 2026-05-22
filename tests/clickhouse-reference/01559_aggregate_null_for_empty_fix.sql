@@ -21,3 +21,4 @@ FROM
     FROM system.one
     WHERE not 1
 );
+SET aggregate_functions_null_for_empty=1;

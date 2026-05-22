@@ -1,5 +1,66 @@
 [
   {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "test1__fuzz_37"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "test1__fuzz_37"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "i",
+        "type": {
+          "name": "Date"
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "i"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "test1__fuzz_37"
+      }
+    }
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "enable_analyzer",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      }
+    ]
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -25,7 +86,7 @@
               "value": "NULL"
             },
             {
-              "kind": "tuple",
+              "kind": "tupleLiteral",
               "elements": [
                 {
                   "kind": "functionCall",
@@ -37,10 +98,10 @@
                       "value": "NULL"
                     },
                     {
-                      "kind": "tuple",
+                      "kind": "tupleLiteral",
                       "elements": [
                         {
-                          "kind": "tuple",
+                          "kind": "tupleLiteral",
                           "elements": [
                             {
                               "kind": "literal",
@@ -129,7 +190,7 @@
                   "value": "NULL"
                 },
                 {
-                  "kind": "tuple",
+                  "kind": "tupleLiteral",
                   "elements": [
                     {
                       "kind": "functionCall",
@@ -166,10 +227,10 @@
           "value": "test_dicti\\0nary"
         },
         {
-          "kind": "tuple",
+          "kind": "tupleLiteral",
           "elements": [
             {
-              "kind": "tuple",
+              "kind": "tupleLiteral",
               "elements": [
                 {
                   "kind": "literal",
@@ -200,7 +261,7 @@
                   "value": "NULL"
                 },
                 {
-                  "kind": "tuple",
+                  "kind": "tupleLiteral",
                   "elements": [
                     {
                       "kind": "functionCall",
@@ -255,7 +316,10 @@
           "source": "(('', materialize(NULL)), dictHas(NULL, (dictHas(NULL, tuple(materialize(NULL))), 'KeyKeyKeyKeyKeyKeyKeyKey')), materialize(NULL))"
         }
       ]
-    }
+    },
+    "trailingComments": [
+      "-- { serverError BAD_ARGUMENTS }"
+    ]
   },
   {
     "kind": "select",
@@ -296,6 +360,30 @@
           ]
         }
       ]
+    },
+    "trailingComments": [
+      "-- { serverError BAD_ARGUMENTS }"
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "enable_analyzer",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "test1__fuzz_37"
     }
   }
 ]

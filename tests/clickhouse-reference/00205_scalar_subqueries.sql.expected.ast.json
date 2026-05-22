@@ -1,5 +1,18 @@
 [
   {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "send_logs_level",
+        "value": {
+          "kind": "literal",
+          "type": "String",
+          "value": "fatal"
+        }
+      }
+    ]
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -111,7 +124,7 @@
                       "value": "Hello"
                     },
                     {
-                      "kind": "array",
+                      "kind": "arrayLiteral",
                       "elements": [
                         {
                           "kind": "literal",
@@ -403,6 +416,12 @@
           ]
         }
       }
+    ],
+    "leadingComments": [
+      "-- SELECT (SELECT uniqState(''));"
+    ],
+    "trailingComments": [
+      "-- { serverError FUNCTION_THROW_IF_VALUE_IS_NON_ZERO }"
     ]
   },
   {
@@ -426,6 +445,9 @@
           }
         }
       }
+    ],
+    "leadingComments": [
+      "-- Scalar subquery with 0 rows must return Null"
     ]
   },
   {
@@ -465,7 +487,7 @@
           "kind": "select",
           "select": [
             {
-              "kind": "array",
+              "kind": "arrayLiteral",
               "elements": [
                 {
                   "kind": "literal",
@@ -483,6 +505,12 @@
           }
         }
       }
+    ],
+    "leadingComments": [
+      "-- But array can't be inside nullable"
+    ],
+    "trailingComments": [
+      "-- { serverError INCORRECT_RESULT_OF_SCALAR_SUBQUERY }"
     ]
   },
   {
@@ -506,6 +534,9 @@
           ]
         }
       }
+    ],
+    "leadingComments": [
+      "-- Works for not-empty casle"
     ]
   },
   {
@@ -517,7 +548,7 @@
           "kind": "select",
           "select": [
             {
-              "kind": "array",
+              "kind": "arrayLiteral",
               "elements": [
                 {
                   "kind": "literal",
@@ -548,7 +579,7 @@
             }
           ],
           "from": {
-            "kind": "tableFunction",
+            "kind": "tableFunctionRef",
             "name": "numbers",
             "args": [
               {
@@ -560,6 +591,12 @@
           }
         }
       }
+    ],
+    "leadingComments": [
+      "-- Several rows"
+    ],
+    "trailingComments": [
+      "-- { serverError INCORRECT_RESULT_OF_SCALAR_SUBQUERY }"
     ]
   }
 ]

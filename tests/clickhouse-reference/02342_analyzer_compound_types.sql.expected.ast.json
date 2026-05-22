@@ -1,5 +1,18 @@
 [
   {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "enable_analyzer",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -9,7 +22,7 @@
           "name": "cast",
           "args": [
             {
-              "kind": "tuple",
+              "kind": "tupleLiteral",
               "elements": [
                 {
                   "kind": "literal",
@@ -59,7 +72,7 @@
           "name": "cast",
           "args": [
             {
-              "kind": "tuple",
+              "kind": "tupleLiteral",
               "elements": [
                 {
                   "kind": "literal",
@@ -112,7 +125,7 @@
           "name": "cast",
           "args": [
             {
-              "kind": "tuple",
+              "kind": "tupleLiteral",
               "elements": [
                 {
                   "kind": "literal",
@@ -171,7 +184,7 @@
           "name": "cast",
           "args": [
             {
-              "kind": "tuple",
+              "kind": "tupleLiteral",
               "elements": [
                 {
                   "kind": "literal",
@@ -230,7 +243,7 @@
           "name": "cast",
           "args": [
             {
-              "kind": "tuple",
+              "kind": "tupleLiteral",
               "elements": [
                 {
                   "kind": "literal",
@@ -288,7 +301,7 @@
           "name": "cast",
           "args": [
             {
-              "kind": "tuple",
+              "kind": "tupleLiteral",
               "elements": [
                 {
                   "kind": "literal",
@@ -337,6 +350,93 @@
     ]
   },
   {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "test_table"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "test_table"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "id",
+        "type": {
+          "name": "UInt64"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "value",
+        "type": {
+          "name": "Tuple",
+          "args": [
+            {
+              "kind": "namedField",
+              "name": "value_0_level_0",
+              "type": {
+                "name": "Tuple",
+                "args": [
+                  {
+                    "kind": "namedField",
+                    "name": "value_0_level_1",
+                    "type": {
+                      "name": "String"
+                    }
+                  },
+                  {
+                    "kind": "namedField",
+                    "name": "value_1_level_1",
+                    "type": {
+                      "name": "String"
+                    }
+                  }
+                ]
+              }
+            },
+            {
+              "kind": "namedField",
+              "name": "value_1_level_0",
+              "type": {
+                "name": "String"
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "id"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "test_table"
+      }
+    }
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -345,6 +445,24 @@
         "value": "--"
       }
     ]
+  },
+  {
+    "kind": "describe",
+    "target": {
+      "kind": "subquery",
+      "query": {
+        "kind": "select",
+        "select": [
+          {
+            "kind": "asterisk"
+          }
+        ],
+        "from": {
+          "kind": "tableRef",
+          "table": "test_table"
+        }
+      }
+    }
   },
   {
     "kind": "select",
@@ -356,6 +474,33 @@
     "from": {
       "kind": "tableRef",
       "table": "test_table"
+    }
+  },
+  {
+    "kind": "describe",
+    "target": {
+      "kind": "subquery",
+      "query": {
+        "kind": "select",
+        "select": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "id"
+            ]
+          },
+          {
+            "kind": "columnRef",
+            "parts": [
+              "value"
+            ]
+          }
+        ],
+        "from": {
+          "kind": "tableRef",
+          "table": "test_table"
+        }
+      }
     }
   },
   {
@@ -380,6 +525,35 @@
     }
   },
   {
+    "kind": "describe",
+    "target": {
+      "kind": "subquery",
+      "query": {
+        "kind": "select",
+        "select": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "value",
+              "value_0_level_0"
+            ]
+          },
+          {
+            "kind": "columnRef",
+            "parts": [
+              "value",
+              "value_1_level_0"
+            ]
+          }
+        ],
+        "from": {
+          "kind": "tableRef",
+          "table": "test_table"
+        }
+      }
+    }
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -400,6 +574,45 @@
     "from": {
       "kind": "tableRef",
       "table": "test_table"
+    }
+  },
+  {
+    "kind": "describe",
+    "target": {
+      "kind": "subquery",
+      "query": {
+        "kind": "select",
+        "select": [
+          {
+            "kind": "alias",
+            "expr": {
+              "kind": "columnRef",
+              "parts": [
+                "value"
+              ]
+            },
+            "alias": "alias_value"
+          },
+          {
+            "kind": "columnRef",
+            "parts": [
+              "alias_value",
+              "value_0_level_0"
+            ]
+          },
+          {
+            "kind": "columnRef",
+            "parts": [
+              "alias_value",
+              "value_1_level_0"
+            ]
+          }
+        ],
+        "from": {
+          "kind": "tableRef",
+          "table": "test_table"
+        }
+      }
     }
   },
   {
@@ -433,6 +646,37 @@
     "from": {
       "kind": "tableRef",
       "table": "test_table"
+    }
+  },
+  {
+    "kind": "describe",
+    "target": {
+      "kind": "subquery",
+      "query": {
+        "kind": "select",
+        "select": [
+          {
+            "kind": "alias",
+            "expr": {
+              "kind": "columnRef",
+              "parts": [
+                "value"
+              ]
+            },
+            "alias": "alias_value"
+          },
+          {
+            "kind": "qualifiedAsterisk",
+            "parts": [
+              "alias_value"
+            ]
+          }
+        ],
+        "from": {
+          "kind": "tableRef",
+          "table": "test_table"
+        }
+      }
     }
   },
   {
@@ -458,6 +702,48 @@
     "from": {
       "kind": "tableRef",
       "table": "test_table"
+    }
+  },
+  {
+    "kind": "describe",
+    "target": {
+      "kind": "subquery",
+      "query": {
+        "kind": "select",
+        "select": [
+          {
+            "kind": "alias",
+            "expr": {
+              "kind": "columnRef",
+              "parts": [
+                "value"
+              ]
+            },
+            "alias": "alias_value"
+          },
+          {
+            "kind": "qualifiedAsterisk",
+            "parts": [
+              "alias_value"
+            ],
+            "transformers": [
+              {
+                "kind": "apply",
+                "func": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "toString"
+                  ]
+                }
+              }
+            ]
+          }
+        ],
+        "from": {
+          "kind": "tableRef",
+          "table": "test_table"
+        }
+      }
     }
   },
   {
@@ -497,6 +783,27 @@
     }
   },
   {
+    "kind": "describe",
+    "target": {
+      "kind": "subquery",
+      "query": {
+        "kind": "select",
+        "select": [
+          {
+            "kind": "qualifiedAsterisk",
+            "parts": [
+              "value"
+            ]
+          }
+        ],
+        "from": {
+          "kind": "tableRef",
+          "table": "test_table"
+        }
+      }
+    }
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -509,6 +816,38 @@
     "from": {
       "kind": "tableRef",
       "table": "test_table"
+    }
+  },
+  {
+    "kind": "describe",
+    "target": {
+      "kind": "subquery",
+      "query": {
+        "kind": "select",
+        "select": [
+          {
+            "kind": "qualifiedAsterisk",
+            "parts": [
+              "value"
+            ],
+            "transformers": [
+              {
+                "kind": "apply",
+                "func": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "toString"
+                  ]
+                }
+              }
+            ]
+          }
+        ],
+        "from": {
+          "kind": "tableRef",
+          "table": "test_table"
+        }
+      }
     }
   },
   {
@@ -535,6 +874,37 @@
     "from": {
       "kind": "tableRef",
       "table": "test_table"
+    }
+  },
+  {
+    "kind": "describe",
+    "target": {
+      "kind": "subquery",
+      "query": {
+        "kind": "select",
+        "select": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "value",
+              "value_0_level_0",
+              "value_0_level_1"
+            ]
+          },
+          {
+            "kind": "columnRef",
+            "parts": [
+              "value",
+              "value_0_level_0",
+              "value_1_level_1"
+            ]
+          }
+        ],
+        "from": {
+          "kind": "tableRef",
+          "table": "test_table"
+        }
+      }
     }
   },
   {
@@ -563,6 +933,46 @@
     }
   },
   {
+    "kind": "describe",
+    "target": {
+      "kind": "subquery",
+      "query": {
+        "kind": "select",
+        "select": [
+          {
+            "kind": "alias",
+            "expr": {
+              "kind": "columnRef",
+              "parts": [
+                "value",
+                "value_0_level_0"
+              ]
+            },
+            "alias": "alias_value"
+          },
+          {
+            "kind": "columnRef",
+            "parts": [
+              "alias_value",
+              "value_0_level_1"
+            ]
+          },
+          {
+            "kind": "columnRef",
+            "parts": [
+              "alias_value",
+              "value_1_level_1"
+            ]
+          }
+        ],
+        "from": {
+          "kind": "tableRef",
+          "table": "test_table"
+        }
+      }
+    }
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -597,6 +1007,38 @@
     }
   },
   {
+    "kind": "describe",
+    "target": {
+      "kind": "subquery",
+      "query": {
+        "kind": "select",
+        "select": [
+          {
+            "kind": "alias",
+            "expr": {
+              "kind": "columnRef",
+              "parts": [
+                "value",
+                "value_0_level_0"
+              ]
+            },
+            "alias": "alias_value"
+          },
+          {
+            "kind": "qualifiedAsterisk",
+            "parts": [
+              "alias_value"
+            ]
+          }
+        ],
+        "from": {
+          "kind": "tableRef",
+          "table": "test_table"
+        }
+      }
+    }
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -620,6 +1062,49 @@
     "from": {
       "kind": "tableRef",
       "table": "test_table"
+    }
+  },
+  {
+    "kind": "describe",
+    "target": {
+      "kind": "subquery",
+      "query": {
+        "kind": "select",
+        "select": [
+          {
+            "kind": "alias",
+            "expr": {
+              "kind": "columnRef",
+              "parts": [
+                "value",
+                "value_0_level_0"
+              ]
+            },
+            "alias": "alias_value"
+          },
+          {
+            "kind": "qualifiedAsterisk",
+            "parts": [
+              "alias_value"
+            ],
+            "transformers": [
+              {
+                "kind": "apply",
+                "func": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "toString"
+                  ]
+                }
+              }
+            ]
+          }
+        ],
+        "from": {
+          "kind": "tableRef",
+          "table": "test_table"
+        }
+      }
     }
   },
   {
@@ -660,6 +1145,28 @@
     }
   },
   {
+    "kind": "describe",
+    "target": {
+      "kind": "subquery",
+      "query": {
+        "kind": "select",
+        "select": [
+          {
+            "kind": "qualifiedAsterisk",
+            "parts": [
+              "value",
+              "value_0_level_0"
+            ]
+          }
+        ],
+        "from": {
+          "kind": "tableRef",
+          "table": "test_table"
+        }
+      }
+    }
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -673,6 +1180,39 @@
     "from": {
       "kind": "tableRef",
       "table": "test_table"
+    }
+  },
+  {
+    "kind": "describe",
+    "target": {
+      "kind": "subquery",
+      "query": {
+        "kind": "select",
+        "select": [
+          {
+            "kind": "qualifiedAsterisk",
+            "parts": [
+              "value",
+              "value_0_level_0"
+            ],
+            "transformers": [
+              {
+                "kind": "apply",
+                "func": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "toString"
+                  ]
+                }
+              }
+            ]
+          }
+        ],
+        "from": {
+          "kind": "tableRef",
+          "table": "test_table"
+        }
+      }
     }
   },
   {
@@ -700,6 +1240,132 @@
     "from": {
       "kind": "tableRef",
       "table": "test_table"
+    }
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "test_table"
+    }
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "test_table"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "id",
+        "type": {
+          "name": "UInt64"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "value",
+        "type": {
+          "name": "Nested",
+          "args": [
+            {
+              "kind": "namedField",
+              "name": "value_0_level_0",
+              "type": {
+                "name": "Nested",
+                "args": [
+                  {
+                    "kind": "namedField",
+                    "name": "value_0_level_1",
+                    "type": {
+                      "name": "String"
+                    }
+                  },
+                  {
+                    "kind": "namedField",
+                    "name": "value_1_level_1",
+                    "type": {
+                      "name": "String"
+                    }
+                  }
+                ]
+              }
+            },
+            {
+              "kind": "namedField",
+              "name": "value_1_level_0",
+              "type": {
+                "name": "String"
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "id"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "test_table"
+      }
+    }
+  },
+  {
+    "kind": "describe",
+    "target": {
+      "kind": "subquery",
+      "query": {
+        "kind": "select",
+        "select": [
+          {
+            "kind": "alias",
+            "expr": {
+              "kind": "columnRef",
+              "parts": [
+                "value",
+                "value_0_level_0"
+              ]
+            },
+            "alias": "value_alias"
+          },
+          {
+            "kind": "columnRef",
+            "parts": [
+              "value_alias",
+              "value_0_level_1"
+            ]
+          },
+          {
+            "kind": "columnRef",
+            "parts": [
+              "value_alias",
+              "value_1_level_1"
+            ]
+          }
+        ],
+        "from": {
+          "kind": "tableRef",
+          "table": "test_table"
+        }
+      }
     }
   },
   {
@@ -734,6 +1400,38 @@
     "from": {
       "kind": "tableRef",
       "table": "test_table"
+    }
+  },
+  {
+    "kind": "describe",
+    "target": {
+      "kind": "subquery",
+      "query": {
+        "kind": "select",
+        "select": [
+          {
+            "kind": "alias",
+            "expr": {
+              "kind": "columnRef",
+              "parts": [
+                "value",
+                "value_0_level_0"
+              ]
+            },
+            "alias": "value_alias"
+          },
+          {
+            "kind": "qualifiedAsterisk",
+            "parts": [
+              "value_alias"
+            ]
+          }
+        ],
+        "from": {
+          "kind": "tableRef",
+          "table": "test_table"
+        }
+      }
     }
   },
   {
@@ -760,6 +1458,49 @@
     "from": {
       "kind": "tableRef",
       "table": "test_table"
+    }
+  },
+  {
+    "kind": "describe",
+    "target": {
+      "kind": "subquery",
+      "query": {
+        "kind": "select",
+        "select": [
+          {
+            "kind": "alias",
+            "expr": {
+              "kind": "columnRef",
+              "parts": [
+                "value",
+                "value_0_level_0"
+              ]
+            },
+            "alias": "value_alias"
+          },
+          {
+            "kind": "qualifiedAsterisk",
+            "parts": [
+              "value_alias"
+            ],
+            "transformers": [
+              {
+                "kind": "apply",
+                "func": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "toString"
+                  ]
+                }
+              }
+            ]
+          }
+        ],
+        "from": {
+          "kind": "tableRef",
+          "table": "test_table"
+        }
+      }
     }
   },
   {

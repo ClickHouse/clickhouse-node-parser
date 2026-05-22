@@ -1,3 +1,4 @@
+-- Tags: no-fasttest
 SELECT map(1, 2, 3, 4) AS m
 FORMAT JSONEachRow;
 
@@ -51,6 +52,15 @@ SELECT
     map(11::Int128, 'v1', 22::Int128, 'v2') AS m,
     toJSONString(m) AS s,
     isValidJSON(s);
+
+CREATE TEMPORARY TABLE map_json
+(
+    m1 Map(String, UInt64),
+    m2 Map(UInt32, UInt32),
+    m3 Map(Date, String)
+);
+
+INSERT INTO map_json;
 
 SELECT
     m1,

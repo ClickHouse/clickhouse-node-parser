@@ -1,3 +1,26 @@
+-- https://github.com/ClickHouse/ClickHouse/issues/60223
+CREATE TABLE test
+(
+    t String,
+    id String,
+    h Map(String, String)
+)
+ENGINE = MergeTree
+ORDER BY (t, id)
+SETTINGS index_granularity = 4096;
+
+INSERT INTO test;
+
+INSERT INTO test;
+
+INSERT INTO test SELECT
+    'xxx',
+    number,
+    map('content-type', 'x')
+FROM numbers(1e2);
+
+OPTIMIZE TABLE test FINAL;
+
 SELECT count()
 FROM test
 PREWHERE hasToken(h['user-agent'], 'bulk')

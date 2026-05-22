@@ -1,3 +1,5 @@
+-- Tags: no-fasttest
+-- no-fasttest: upper/lowerUTF8 use ICU
 SELECT lower('aaaaaaaaaaaaaaa012345789,.!aaaa' AS str) = str;
 
 SELECT lowerUTF8('aaaaaaaaaaaaaaa012345789,.!aaaa' AS str) = str;
@@ -82,12 +84,15 @@ FROM
     `system`.one
 ARRAY JOIN range(16384) AS n;
 
+-- Turkish language
 SELECT upperUTF8('ır') = 'IR';
 
 SELECT lowerUTF8('ır') = 'ır';
 
+-- German language
 SELECT upper('öäüß') = 'öäüß';
 
 SELECT lower('ÖÄÜẞ') = 'ÖÄÜẞ';
 
+-- Bug 68680
 SELECT lengthUTF8(lowerUTF8('Ä\0'));

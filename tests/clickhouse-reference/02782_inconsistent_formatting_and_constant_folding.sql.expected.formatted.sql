@@ -6,6 +6,21 @@ SELECT
     -0.,
     toTypeName(-0.);
 
+DROP TABLE IF EXISTS t4;
+
+DROP TABLE IF EXISTS t7;
+
+CREATE TABLE t4
+(
+    c26 String
+)
+ENGINE = Log;
+
+CREATE VIEW t7
+AS
+SELECT max(ref_3.c26) AS c_2_c46_1
+FROM t4 AS ref_3;
+
 SELECT c_7_c4585_14 AS c_4_c4593_5
 FROM (
         SELECT
@@ -36,3 +51,7 @@ FROM (
         GROUP BY ref_0.c_2_c46_1
     )
 WHERE x <= multiIf(true, 1, exp10(x) <= 1, 1, 1);
+
+DROP TABLE t7;
+
+DROP TABLE t4;

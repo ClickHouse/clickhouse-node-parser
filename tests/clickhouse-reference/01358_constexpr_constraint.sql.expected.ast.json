@@ -1,0 +1,128 @@
+[
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "constrained"
+    },
+    "temporary": true,
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "URL",
+        "type": {
+          "name": "String"
+        }
+      },
+      {
+        "kind": "constraintDef",
+        "name": "identity",
+        "constraintType": "CHECK",
+        "expr": {
+          "kind": "binaryExpr",
+          "op": "=",
+          "left": {
+            "kind": "functionCall",
+            "name": "domainWithoutWWW",
+            "args": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "URL"
+                ]
+              }
+            ]
+          },
+          "right": {
+            "kind": "functionCall",
+            "name": "domainWithoutWWW",
+            "args": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "URL"
+                ]
+              }
+            ]
+          }
+        }
+      },
+      {
+        "kind": "constraintDef",
+        "name": "is_utf8",
+        "constraintType": "CHECK",
+        "expr": {
+          "kind": "functionCall",
+          "name": "isValidUTF8",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "URL"
+              ]
+            }
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "constrained"
+      }
+    }
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "constrained"
+    },
+    "temporary": true
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "constrained"
+    },
+    "temporary": true,
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "x",
+        "type": {
+          "name": "UInt8"
+        }
+      },
+      {
+        "kind": "constraintDef",
+        "name": "bogus",
+        "constraintType": "CHECK",
+        "expr": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "constrained"
+      }
+    },
+    "trailingComments": [
+      "-- { serverError VIOLATED_CONSTRAINT }"
+    ]
+  }
+]

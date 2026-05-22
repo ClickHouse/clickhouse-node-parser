@@ -10,6 +10,17 @@ SELECT
     'a\0\0\0\0' < 'a\0\0\0',
     'a\0\0\0\0' > 'a\0\0\0';
 
+DROP TABLE IF EXISTS strings_00469;
+
+CREATE TABLE strings_00469
+(
+    x String,
+    y String
+)
+ENGINE = TinyLog;
+
+INSERT INTO strings_00469;
+
 SELECT
     x < y,
     x > y
@@ -34,3 +45,5 @@ FROM strings_00469
 ORDER BY
     x ASC,
     y ASC;
+
+DROP TABLE strings_00469;

@@ -1,5 +1,114 @@
 [
   {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "test02315"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "test02315"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "a",
+        "type": {
+          "name": "UInt64"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "b",
+        "type": {
+          "name": "UInt64"
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree",
+      "args": []
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "a"
+          ]
+        }
+      },
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "b"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "test02315"
+      }
+    },
+    "selectQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "alias",
+          "expr": {
+            "kind": "binaryExpr",
+            "op": "%",
+            "left": {
+              "kind": "columnRef",
+              "parts": [
+                "number"
+              ]
+            },
+            "right": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "2"
+            }
+          },
+          "alias": "a"
+        },
+        {
+          "kind": "alias",
+          "expr": {
+            "kind": "columnRef",
+            "parts": [
+              "number"
+            ]
+          },
+          "alias": "b"
+        }
+      ],
+      "from": {
+        "kind": "tableFunctionRef",
+        "name": "numbers",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "10"
+          }
+        ]
+      }
+    }
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -78,7 +187,7 @@
       {
         "kind": "orderByItem",
         "expr": {
-          "kind": "tuple",
+          "kind": "tupleLiteral",
           "elements": [
             {
               "kind": "columnRef",
@@ -113,6 +222,9 @@
           "value": "0"
         }
       }
+    ],
+    "leadingComments": [
+      "-- { echoOn }"
     ]
   },
   {
@@ -189,7 +301,7 @@
       {
         "kind": "orderByItem",
         "expr": {
-          "kind": "tuple",
+          "kind": "tupleLiteral",
           "elements": [
             {
               "kind": "columnRef",
@@ -311,7 +423,7 @@
       {
         "kind": "orderByItem",
         "expr": {
-          "kind": "tuple",
+          "kind": "tupleLiteral",
           "elements": [
             {
               "kind": "columnRef",
@@ -354,6 +466,17 @@
           "value": "1"
         }
       }
+    ]
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "test02315"
+    },
+    "leadingComments": [
+      "-- { echoOff }"
     ]
   }
 ]

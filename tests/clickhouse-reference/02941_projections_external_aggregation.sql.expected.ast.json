@@ -1,5 +1,289 @@
 [
   {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "t_proj_external"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "t_proj_external"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "k1",
+        "type": {
+          "name": "UInt32"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "k2",
+        "type": {
+          "name": "UInt32"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "k3",
+        "type": {
+          "name": "UInt32"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "value",
+        "type": {
+          "name": "UInt32"
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "functionCall",
+          "name": "tuple",
+          "args": []
+        }
+      }
+    ]
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "t_proj_external"
+      }
+    },
+    "selectQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        },
+        {
+          "kind": "binaryExpr",
+          "op": "%",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "number"
+            ]
+          },
+          "right": {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "2"
+          }
+        },
+        {
+          "kind": "binaryExpr",
+          "op": "%",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "number"
+            ]
+          },
+          "right": {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "4"
+          }
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "number"
+          ]
+        }
+      ],
+      "from": {
+        "kind": "tableFunctionRef",
+        "name": "numbers",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "50000"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "kind": "system",
+    "body": "SYSTEM STOP MERGES t_proj_external"
+  },
+  {
+    "kind": "alter",
+    "table": {
+      "kind": "tableRef",
+      "table": "t_proj_external"
+    },
+    "commands": [
+      {
+        "kind": "alterCommand",
+        "commandType": "ADD_PROJECTION",
+        "projection": {
+          "kind": "projectionDef",
+          "name": "aaaa",
+          "query": {
+            "kind": "select",
+            "select": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "k1"
+                ]
+              },
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "k2"
+                ]
+              },
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "k3"
+                ]
+              },
+              {
+                "kind": "functionCall",
+                "name": "sum",
+                "args": [
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "value"
+                    ]
+                  }
+                ]
+              }
+            ],
+            "groupBy": {
+              "kind": "expressions",
+              "items": [
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "k1"
+                  ]
+                },
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "k2"
+                  ]
+                },
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "k3"
+                  ]
+                }
+              ]
+            }
+          }
+        }
+      }
+    ]
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "t_proj_external"
+      }
+    },
+    "selectQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        },
+        {
+          "kind": "binaryExpr",
+          "op": "%",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "number"
+            ]
+          },
+          "right": {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "2"
+          }
+        },
+        {
+          "kind": "binaryExpr",
+          "op": "%",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "number"
+            ]
+          },
+          "right": {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "4"
+          }
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "number"
+          ]
+        }
+      ],
+      "from": {
+        "kind": "tableFunctionRef",
+        "name": "numbers",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "100000"
+          }
+        ]
+      },
+      "offset": {
+        "kind": "literal",
+        "type": "UInt64",
+        "value": "100000"
+      },
+      "limit": {
+        "count": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "50000"
+        },
+        "commaSyntax": true
+      }
+    }
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -465,6 +749,34 @@
           "kind": "literal",
           "type": "UInt64",
           "value": "1"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "system",
+    "body": "SYSTEM START MERGES t_proj_external"
+  },
+  {
+    "kind": "alter",
+    "table": {
+      "kind": "tableRef",
+      "table": "t_proj_external"
+    },
+    "commands": [
+      {
+        "kind": "alterCommand",
+        "commandType": "MATERIALIZE_PROJECTION",
+        "projectionName": "aaaa"
+      }
+    ],
+    "settings": [
+      {
+        "name": "mutations_sync",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "2"
         }
       }
     ]

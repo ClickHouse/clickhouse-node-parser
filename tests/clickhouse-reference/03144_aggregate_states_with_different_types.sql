@@ -1,3 +1,5 @@
+SET enable_analyzer = 1;
+
 select * APPLY hex
 from (
   select (
@@ -10,6 +12,7 @@ from (
   ) as col2
 from numbers(1)
 );
+
 SELECT *
 FROM
 (

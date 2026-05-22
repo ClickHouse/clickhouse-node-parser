@@ -1,0 +1,494 @@
+[
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "opentelemetry_span_log_9997438610282160742"
+    },
+    "ifExists": true,
+    "leadingComments": [
+      "-- https://github.com/ClickHouse/ClickHouse/issues/89599"
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "opentelemetry_span_log_9997438610282160742"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "pull_request_number",
+        "type": {
+          "name": "UInt32"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "commit_sha",
+        "type": {
+          "name": "String"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "check_start_time",
+        "type": {
+          "name": "DateTime"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "check_name",
+        "type": {
+          "name": "LowCardinality",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "String"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "instance_type",
+        "type": {
+          "name": "LowCardinality",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "String"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "trace_id",
+        "type": {
+          "name": "UUID"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "span_id",
+        "type": {
+          "name": "UInt64"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "parent_span_id",
+        "type": {
+          "name": "UInt64"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "operation_name",
+        "type": {
+          "name": "LowCardinality",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "String"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "kind",
+        "type": {
+          "name": "Enum8",
+          "args": [
+            {
+              "kind": "enumValues",
+              "values": [
+                {
+                  "name": "INTERNAL",
+                  "value": "0"
+                },
+                {
+                  "name": "SERVER",
+                  "value": "1"
+                },
+                {
+                  "name": "CLIENT",
+                  "value": "2"
+                },
+                {
+                  "name": "PRODUCER",
+                  "value": "3"
+                },
+                {
+                  "name": "CONSUMER",
+                  "value": "4"
+                }
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "start_time_us",
+        "type": {
+          "name": "UInt64"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "finish_time_us",
+        "type": {
+          "name": "UInt64"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "finish_date",
+        "type": {
+          "name": "Date"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "attribute",
+        "type": {
+          "name": "Map",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "LowCardinality",
+                "args": [
+                  {
+                    "kind": "type",
+                    "type": {
+                      "name": "String"
+                    }
+                  }
+                ]
+              }
+            },
+            {
+              "kind": "type",
+              "type": {
+                "name": "String"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "attribute.names",
+        "type": {
+          "name": "Array",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "LowCardinality",
+                "args": [
+                  {
+                    "kind": "type",
+                    "type": {
+                      "name": "String"
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        "defaultKind": "ALIAS",
+        "defaultExpr": {
+          "kind": "functionCall",
+          "name": "mapKeys",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "attribute"
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "attribute.values",
+        "type": {
+          "name": "Array",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "String"
+              }
+            }
+          ]
+        },
+        "defaultKind": "ALIAS",
+        "defaultExpr": {
+          "kind": "functionCall",
+          "name": "mapValues",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "attribute"
+              ]
+            }
+          ]
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree",
+      "args": []
+    },
+    "partitionBy": {
+      "kind": "functionCall",
+      "name": "toYYYYMM",
+      "args": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "finish_date"
+          ]
+        }
+      ]
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "check_name"
+          ]
+        }
+      },
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "finish_date"
+          ]
+        }
+      },
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "finish_time_us"
+          ]
+        }
+      },
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "trace_id"
+          ]
+        }
+      }
+    ],
+    "settings": [
+      {
+        "name": "index_granularity",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "8192"
+        }
+      },
+      {
+        "name": "old_parts_lifetime",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "60"
+        }
+      }
+    ],
+    "settingsAfterOrderBy": true
+  },
+  {
+    "kind": "alter",
+    "table": {
+      "kind": "tableRef",
+      "table": "opentelemetry_span_log_9997438610282160742"
+    },
+    "commands": [
+      {
+        "kind": "alterCommand",
+        "commandType": "MODIFY_SETTING",
+        "settings": [
+          {
+            "name": "use_const_adaptive_granularity",
+            "value": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "1"
+            }
+          }
+        ]
+      }
+    ],
+    "leadingComments": [
+      "-- attribute.values column may conflict with subcolumn \"values\" of attribute map"
+    ]
+  },
+  {
+    "kind": "alter",
+    "table": {
+      "kind": "tableRef",
+      "table": "opentelemetry_span_log_9997438610282160742"
+    },
+    "commands": [
+      {
+        "kind": "alterCommand",
+        "commandType": "RENAME_COLUMN",
+        "oldName": "span_id",
+        "newName": "span_id2"
+      }
+    ]
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "opentelemetry_span_log_compact"
+    },
+    "ifExists": true,
+    "leadingComments": [
+      "-- attribute.values column (due to it comes first in the definition) will conflict with subcolumn \"values\" of attribute map"
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "opentelemetry_span_log_compact"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "attribute.names",
+        "type": {
+          "name": "Array",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "LowCardinality",
+                "args": [
+                  {
+                    "kind": "type",
+                    "type": {
+                      "name": "String"
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        "defaultKind": "ALIAS",
+        "defaultExpr": {
+          "kind": "functionCall",
+          "name": "mapKeys",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "attribute"
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "attribute.values",
+        "type": {
+          "name": "Array",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "String"
+              }
+            }
+          ]
+        },
+        "defaultKind": "ALIAS",
+        "defaultExpr": {
+          "kind": "functionCall",
+          "name": "mapValues",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "attribute"
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "attribute",
+        "type": {
+          "name": "Map",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "LowCardinality",
+                "args": [
+                  {
+                    "kind": "type",
+                    "type": {
+                      "name": "String"
+                    }
+                  }
+                ]
+              }
+            },
+            {
+              "kind": "type",
+              "type": {
+                "name": "String"
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "functionCall",
+          "name": "tuple",
+          "args": []
+        }
+      }
+    ]
+  }
+]

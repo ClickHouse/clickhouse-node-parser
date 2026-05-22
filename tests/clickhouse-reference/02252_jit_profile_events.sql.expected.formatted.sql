@@ -1,5 +1,14 @@
+-- Tags: no-fasttest, no-parallel, no-msan
+SET compile_expressions = 1;
+
+SET min_count_to_compile_expression = 0;
+
+SYSTEM CLEAR COMPILED EXPRESSION CACHE;
+
 SELECT number + number + number
 FROM numbers(1);
+
+SYSTEM FLUSH LOGS query_log;
 
 SELECT ProfileEvents['CompileFunction']
 FROM `system`.query_log
@@ -9,6 +18,10 @@ WHERE current_database = currentDatabase()
     AND event_date >= yesterday()
     AND event_time > now() - toIntervalMinute(10)
 LIMIT 1;
+
+SET compile_aggregate_expressions = 1;
+
+SET min_count_to_compile_aggregate_expression = 0;
 
 SELECT
     avg(number),

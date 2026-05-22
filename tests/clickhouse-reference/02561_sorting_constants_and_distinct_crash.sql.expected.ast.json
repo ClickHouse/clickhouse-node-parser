@@ -1,5 +1,145 @@
 [
   {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "test_table"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "test_table"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "string_value",
+        "type": {
+          "name": "String"
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "string_value"
+          ]
+        }
+      }
+    ],
+    "settings": [
+      {
+        "name": "index_granularity",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "8192"
+        }
+      },
+      {
+        "name": "index_granularity_bytes",
+        "value": {
+          "kind": "literal",
+          "type": "String",
+          "value": "10Mi"
+        }
+      }
+    ],
+    "settingsAfterOrderBy": true
+  },
+  {
+    "kind": "system",
+    "body": "SYSTEM stop merges test_table"
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "test_table"
+      }
+    },
+    "selectQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "asterisk"
+        }
+      ],
+      "from": {
+        "kind": "subqueryFrom",
+        "query": {
+          "kind": "union",
+          "queries": [
+            {
+              "kind": "select",
+              "select": [
+                {
+                  "kind": "literal",
+                  "type": "String",
+                  "value": "test_value_1"
+                }
+              ],
+              "from": {
+                "kind": "tableFunctionRef",
+                "name": "numbers_mt",
+                "args": [
+                  {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "250000"
+                  }
+                ]
+              }
+            },
+            {
+              "kind": "select",
+              "select": [
+                {
+                  "kind": "literal",
+                  "type": "String",
+                  "value": "test_value_2"
+                }
+              ],
+              "from": {
+                "kind": "tableFunctionRef",
+                "name": "numbers_mt",
+                "args": [
+                  {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "2000000"
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      },
+      "orderBy": [
+        {
+          "kind": "orderByItem",
+          "expr": {
+            "kind": "functionCall",
+            "name": "rand",
+            "args": []
+          },
+          "direction": "ASC"
+        }
+      ]
+    }
+  },
+  {
     "kind": "select",
     "distinct": {
       "kind": "distinct"
@@ -144,5 +284,17 @@
         }
       }
     ]
+  },
+  {
+    "kind": "system",
+    "body": "SYSTEM start merges test_table"
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "test_table"
+    }
   }
 ]

@@ -1,5 +1,74 @@
 [
   {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "merge_tree_read_split_ranges_into_intersecting_and_non_intersecting_injection_probability",
+        "value": {
+          "kind": "literal",
+          "type": "Float64",
+          "value": "0.0"
+        }
+      }
+    ],
+    "leadingComments": [
+      "-- Tags: no-object-storage"
+    ]
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "data_02233"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "data_02233"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "parent_key",
+        "type": {
+          "name": "Int"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "child_key",
+        "type": {
+          "name": "Int"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "value",
+        "type": {
+          "name": "Int"
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree",
+      "args": []
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "parent_key"
+          ]
+        }
+      }
+    ]
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -77,6 +146,9 @@
           "value": "1"
         }
       }
+    ],
+    "leadingComments": [
+      "-- before inserting data, it may produce empty header"
     ]
   },
   {
@@ -158,6 +230,71 @@
           "value": "1"
         }
       }
+    ]
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "data_02233"
+      }
+    },
+    "selectQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "binaryExpr",
+          "op": "%",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "number"
+            ]
+          },
+          "right": {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "10"
+          }
+        },
+        {
+          "kind": "binaryExpr",
+          "op": "%",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "number"
+            ]
+          },
+          "right": {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "3"
+          }
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "number"
+          ]
+        }
+      ],
+      "from": {
+        "kind": "tableFunctionRef",
+        "name": "numbers",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "100"
+          }
+        ]
+      }
+    },
+    "leadingComments": [
+      "-- { echoOn }"
     ]
   },
   {
@@ -508,6 +645,9 @@
           "value": "1"
         }
       }
+    ],
+    "leadingComments": [
+      "-- fuzzer"
     ]
   },
   {
@@ -599,6 +739,17 @@
           "value": "1"
         }
       }
+    ]
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "data_02233"
+    },
+    "leadingComments": [
+      "-- { echoOff }"
     ]
   }
 ]

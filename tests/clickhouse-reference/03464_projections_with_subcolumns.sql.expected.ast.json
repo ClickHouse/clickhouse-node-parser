@@ -1,5 +1,384 @@
 [
   {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "enable_analyzer",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ],
+    "leadingComments": [
+      "-- Tags: long"
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "mutations_sync",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "parallel_replicas_local_plan",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      },
+      {
+        "name": "parallel_replicas_support_projection",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      },
+      {
+        "name": "optimize_aggregation_in_order",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "test"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "test"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "a",
+        "type": {
+          "name": "UInt32"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "json",
+        "type": {
+          "name": "JSON",
+          "args": [
+            {
+              "kind": "namedField",
+              "name": "a",
+              "type": {
+                "name": "UInt32"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "t",
+        "type": {
+          "name": "Tuple",
+          "args": [
+            {
+              "kind": "namedField",
+              "name": "a",
+              "type": {
+                "name": "UInt32"
+              }
+            },
+            {
+              "kind": "namedField",
+              "name": "b",
+              "type": {
+                "name": "UInt32"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "kind": "projectionDef",
+        "name": "p1",
+        "query": {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "json"
+              ]
+            }
+          ],
+          "orderBy": [
+            {
+              "kind": "orderByItem",
+              "expr": {
+                "kind": "columnRef",
+                "parts": [
+                  "json",
+                  "a"
+                ]
+              },
+              "direction": "ASC"
+            }
+          ]
+        }
+      },
+      {
+        "kind": "projectionDef",
+        "name": "p2",
+        "query": {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "t"
+              ]
+            }
+          ],
+          "orderBy": [
+            {
+              "kind": "orderByItem",
+              "expr": {
+                "kind": "columnRef",
+                "parts": [
+                  "t",
+                  "a"
+                ]
+              },
+              "direction": "ASC"
+            }
+          ]
+        }
+      },
+      {
+        "kind": "projectionDef",
+        "name": "p3",
+        "query": {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "json"
+              ]
+            }
+          ],
+          "orderBy": [
+            {
+              "kind": "orderByItem",
+              "expr": {
+                "kind": "jsonSubcolumn",
+                "expr": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "json",
+                    "c[]",
+                    "d"
+                  ]
+                },
+                "type": "Int64"
+              },
+              "direction": "ASC"
+            }
+          ]
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "functionCall",
+          "name": "tuple",
+          "args": []
+        }
+      }
+    ],
+    "settings": [
+      {
+        "name": "index_granularity",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ],
+    "settingsAfterOrderBy": true
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "test"
+      }
+    },
+    "selectQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "number"
+          ]
+        },
+        {
+          "kind": "functionCall",
+          "name": "toJSONString",
+          "args": [
+            {
+              "kind": "functionCall",
+              "name": "map",
+              "args": [
+                {
+                  "kind": "literal",
+                  "type": "String",
+                  "value": "a"
+                },
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "number"
+                  ]
+                },
+                {
+                  "kind": "literal",
+                  "type": "String",
+                  "value": "b"
+                },
+                {
+                  "kind": "literal",
+                  "type": "String",
+                  "value": "str"
+                },
+                {
+                  "kind": "literal",
+                  "type": "String",
+                  "value": "c"
+                },
+                {
+                  "kind": "arrayLiteral",
+                  "elements": [
+                    {
+                      "kind": "castExpr",
+                      "expr": {
+                        "kind": "functionCall",
+                        "name": "toJSONString",
+                        "args": [
+                          {
+                            "kind": "functionCall",
+                            "name": "map",
+                            "args": [
+                              {
+                                "kind": "literal",
+                                "type": "String",
+                                "value": "d"
+                              },
+                              {
+                                "kind": "castExpr",
+                                "expr": {
+                                  "kind": "columnRef",
+                                  "parts": [
+                                    "number"
+                                  ]
+                                },
+                                "type": "UInt32",
+                                "operator": true
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      "type": "JSON",
+                      "operator": true
+                    }
+                  ],
+                  "source": "[toJSONString(map('d', number::UInt32))::JSON]"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "kind": "functionCall",
+          "name": "tuple",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "number"
+              ]
+            },
+            {
+              "kind": "columnRef",
+              "parts": [
+                "number"
+              ]
+            }
+          ]
+        }
+      ],
+      "from": {
+        "kind": "tableFunctionRef",
+        "name": "numbers",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "100"
+          }
+        ]
+      },
+      "settings": [
+        {
+          "name": "use_variant_as_common_type",
+          "value": {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "1"
+          }
+        },
+        {
+          "name": "output_format_json_quote_64bit_integers",
+          "value": {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "0"
+          }
+        }
+      ]
+    }
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -274,7 +653,7 @@
               "type": "Int64"
             },
             "right": {
-              "kind": "array",
+              "kind": "arrayLiteral",
               "elements": [
                 {
                   "kind": "literal",
@@ -336,7 +715,7 @@
         "type": "Int64"
       },
       "right": {
-        "kind": "array",
+        "kind": "arrayLiteral",
         "elements": [
           {
             "kind": "literal",
@@ -349,6 +728,22 @@
     }
   },
   {
+    "kind": "optimize",
+    "table": {
+      "kind": "tableRef",
+      "table": "test"
+    },
+    "final": true
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "test"
+    }
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -356,6 +751,671 @@
         "type": "String",
         "value": "------------------------------------------------------------------"
       }
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "test"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "a",
+        "type": {
+          "name": "UInt32"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "json",
+        "type": {
+          "name": "JSON",
+          "args": [
+            {
+              "kind": "namedField",
+              "name": "a",
+              "type": {
+                "name": "UInt32"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "t",
+        "type": {
+          "name": "Tuple",
+          "args": [
+            {
+              "kind": "namedField",
+              "name": "a",
+              "type": {
+                "name": "UInt32"
+              }
+            },
+            {
+              "kind": "namedField",
+              "name": "b",
+              "type": {
+                "name": "UInt32"
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "functionCall",
+          "name": "tuple",
+          "args": []
+        }
+      }
+    ],
+    "settings": [
+      {
+        "name": "index_granularity",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ],
+    "settingsAfterOrderBy": true
+  },
+  {
+    "kind": "alter",
+    "table": {
+      "kind": "tableRef",
+      "table": "test"
+    },
+    "commands": [
+      {
+        "kind": "alterCommand",
+        "commandType": "ADD_PROJECTION",
+        "projection": {
+          "kind": "projectionDef",
+          "name": "p1",
+          "query": {
+            "kind": "select",
+            "select": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "json"
+                ]
+              }
+            ],
+            "orderBy": [
+              {
+                "kind": "orderByItem",
+                "expr": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "json",
+                    "a"
+                  ]
+                },
+                "direction": "ASC"
+              }
+            ]
+          }
+        }
+      }
+    ]
+  },
+  {
+    "kind": "alter",
+    "table": {
+      "kind": "tableRef",
+      "table": "test"
+    },
+    "commands": [
+      {
+        "kind": "alterCommand",
+        "commandType": "MATERIALIZE_PROJECTION",
+        "projectionName": "p1"
+      }
+    ]
+  },
+  {
+    "kind": "alter",
+    "table": {
+      "kind": "tableRef",
+      "table": "test"
+    },
+    "commands": [
+      {
+        "kind": "alterCommand",
+        "commandType": "ADD_PROJECTION",
+        "projection": {
+          "kind": "projectionDef",
+          "name": "p2",
+          "query": {
+            "kind": "select",
+            "select": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "t"
+                ]
+              }
+            ],
+            "orderBy": [
+              {
+                "kind": "orderByItem",
+                "expr": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "t",
+                    "a"
+                  ]
+                },
+                "direction": "ASC"
+              }
+            ]
+          }
+        }
+      }
+    ]
+  },
+  {
+    "kind": "alter",
+    "table": {
+      "kind": "tableRef",
+      "table": "test"
+    },
+    "commands": [
+      {
+        "kind": "alterCommand",
+        "commandType": "MATERIALIZE_PROJECTION",
+        "projectionName": "p2"
+      }
+    ]
+  },
+  {
+    "kind": "alter",
+    "table": {
+      "kind": "tableRef",
+      "table": "test"
+    },
+    "commands": [
+      {
+        "kind": "alterCommand",
+        "commandType": "ADD_PROJECTION",
+        "projection": {
+          "kind": "projectionDef",
+          "name": "p3",
+          "query": {
+            "kind": "select",
+            "select": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "json"
+                ]
+              }
+            ],
+            "orderBy": [
+              {
+                "kind": "orderByItem",
+                "expr": {
+                  "kind": "jsonSubcolumn",
+                  "expr": {
+                    "kind": "columnRef",
+                    "parts": [
+                      "json",
+                      "c[]",
+                      "d"
+                    ]
+                  },
+                  "type": "Int64"
+                },
+                "direction": "ASC"
+              }
+            ]
+          }
+        }
+      }
+    ]
+  },
+  {
+    "kind": "alter",
+    "table": {
+      "kind": "tableRef",
+      "table": "test"
+    },
+    "commands": [
+      {
+        "kind": "alterCommand",
+        "commandType": "MATERIALIZE_PROJECTION",
+        "projectionName": "p3"
+      }
+    ]
+  },
+  {
+    "kind": "alter",
+    "table": {
+      "kind": "tableRef",
+      "table": "test"
+    },
+    "commands": [
+      {
+        "kind": "alterCommand",
+        "commandType": "ADD_PROJECTION",
+        "projection": {
+          "kind": "projectionDef",
+          "name": "p",
+          "query": {
+            "kind": "select",
+            "select": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "json",
+                  "b"
+                ]
+              }
+            ],
+            "orderBy": [
+              {
+                "kind": "orderByItem",
+                "expr": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "json",
+                    "a"
+                  ]
+                },
+                "direction": "ASC"
+              }
+            ]
+          }
+        }
+      }
+    ],
+    "trailingComments": [
+      "-- {serverError NOT_IMPLEMENTED}"
+    ]
+  },
+  {
+    "kind": "alter",
+    "table": {
+      "kind": "tableRef",
+      "table": "test"
+    },
+    "commands": [
+      {
+        "kind": "alterCommand",
+        "commandType": "ADD_PROJECTION",
+        "projection": {
+          "kind": "projectionDef",
+          "name": "p",
+          "query": {
+            "kind": "select",
+            "select": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "t",
+                  "a"
+                ]
+              }
+            ],
+            "orderBy": [
+              {
+                "kind": "orderByItem",
+                "expr": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "json",
+                    "a"
+                  ]
+                },
+                "direction": "ASC"
+              }
+            ]
+          }
+        }
+      }
+    ],
+    "trailingComments": [
+      "-- {serverError NOT_IMPLEMENTED}"
+    ]
+  },
+  {
+    "kind": "alter",
+    "table": {
+      "kind": "tableRef",
+      "table": "test"
+    },
+    "commands": [
+      {
+        "kind": "alterCommand",
+        "commandType": "ADD_PROJECTION",
+        "projection": {
+          "kind": "projectionDef",
+          "name": "p",
+          "query": {
+            "kind": "select",
+            "select": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "a"
+                ]
+              }
+            ],
+            "orderBy": [
+              {
+                "kind": "orderByItem",
+                "expr": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "json",
+                    "a"
+                  ]
+                },
+                "direction": "ASC"
+              }
+            ]
+          }
+        }
+      }
+    ],
+    "trailingComments": [
+      "-- {serverError NOT_IMPLEMENTED}"
+    ]
+  },
+  {
+    "kind": "alter",
+    "table": {
+      "kind": "tableRef",
+      "table": "test"
+    },
+    "commands": [
+      {
+        "kind": "alterCommand",
+        "commandType": "ADD_PROJECTION",
+        "projection": {
+          "kind": "projectionDef",
+          "name": "p",
+          "query": {
+            "kind": "select",
+            "select": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "t",
+                  "b"
+                ]
+              }
+            ],
+            "orderBy": [
+              {
+                "kind": "orderByItem",
+                "expr": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "t",
+                    "a"
+                  ]
+                },
+                "direction": "ASC"
+              }
+            ]
+          }
+        }
+      }
+    ],
+    "trailingComments": [
+      "-- {serverError NOT_IMPLEMENTED}"
+    ]
+  },
+  {
+    "kind": "alter",
+    "table": {
+      "kind": "tableRef",
+      "table": "test"
+    },
+    "commands": [
+      {
+        "kind": "alterCommand",
+        "commandType": "ADD_PROJECTION",
+        "projection": {
+          "kind": "projectionDef",
+          "name": "p",
+          "query": {
+            "kind": "select",
+            "select": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "json",
+                  "a"
+                ]
+              }
+            ],
+            "orderBy": [
+              {
+                "kind": "orderByItem",
+                "expr": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "t",
+                    "a"
+                  ]
+                },
+                "direction": "ASC"
+              }
+            ]
+          }
+        }
+      }
+    ],
+    "trailingComments": [
+      "-- {serverError NOT_IMPLEMENTED}"
+    ]
+  },
+  {
+    "kind": "alter",
+    "table": {
+      "kind": "tableRef",
+      "table": "test"
+    },
+    "commands": [
+      {
+        "kind": "alterCommand",
+        "commandType": "ADD_PROJECTION",
+        "projection": {
+          "kind": "projectionDef",
+          "name": "p",
+          "query": {
+            "kind": "select",
+            "select": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "a"
+                ]
+              }
+            ],
+            "orderBy": [
+              {
+                "kind": "orderByItem",
+                "expr": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "t",
+                    "a"
+                  ]
+                },
+                "direction": "ASC"
+              }
+            ]
+          }
+        }
+      }
+    ],
+    "trailingComments": [
+      "-- {serverError NOT_IMPLEMENTED}"
+    ]
+  },
+  {
+    "kind": "alter",
+    "table": {
+      "kind": "tableRef",
+      "table": "test"
+    },
+    "commands": [
+      {
+        "kind": "alterCommand",
+        "commandType": "ADD_PROJECTION",
+        "projection": {
+          "kind": "projectionDef",
+          "name": "p",
+          "query": {
+            "kind": "select",
+            "select": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "json",
+                  "a"
+                ]
+              }
+            ],
+            "orderBy": [
+              {
+                "kind": "orderByItem",
+                "expr": {
+                  "kind": "jsonSubcolumn",
+                  "expr": {
+                    "kind": "columnRef",
+                    "parts": [
+                      "json",
+                      "c[]",
+                      "d"
+                    ]
+                  },
+                  "type": "Int64"
+                },
+                "direction": "ASC"
+              }
+            ]
+          }
+        }
+      }
+    ],
+    "trailingComments": [
+      "-- {serverError NOT_IMPLEMENTED}"
+    ]
+  },
+  {
+    "kind": "alter",
+    "table": {
+      "kind": "tableRef",
+      "table": "test"
+    },
+    "commands": [
+      {
+        "kind": "alterCommand",
+        "commandType": "ADD_PROJECTION",
+        "projection": {
+          "kind": "projectionDef",
+          "name": "p",
+          "query": {
+            "kind": "select",
+            "select": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "t",
+                  "a"
+                ]
+              }
+            ],
+            "orderBy": [
+              {
+                "kind": "orderByItem",
+                "expr": {
+                  "kind": "jsonSubcolumn",
+                  "expr": {
+                    "kind": "columnRef",
+                    "parts": [
+                      "json",
+                      "c[]",
+                      "d"
+                    ]
+                  },
+                  "type": "Int64"
+                },
+                "direction": "ASC"
+              }
+            ]
+          }
+        }
+      }
+    ],
+    "trailingComments": [
+      "-- {serverError NOT_IMPLEMENTED}"
+    ]
+  },
+  {
+    "kind": "alter",
+    "table": {
+      "kind": "tableRef",
+      "table": "test"
+    },
+    "commands": [
+      {
+        "kind": "alterCommand",
+        "commandType": "ADD_PROJECTION",
+        "projection": {
+          "kind": "projectionDef",
+          "name": "p",
+          "query": {
+            "kind": "select",
+            "select": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "a"
+                ]
+              }
+            ],
+            "orderBy": [
+              {
+                "kind": "orderByItem",
+                "expr": {
+                  "kind": "jsonSubcolumn",
+                  "expr": {
+                    "kind": "columnRef",
+                    "parts": [
+                      "json",
+                      "c[]",
+                      "d"
+                    ]
+                  },
+                  "type": "Int64"
+                },
+                "direction": "ASC"
+              }
+            ]
+          }
+        }
+      }
+    ],
+    "trailingComments": [
+      "-- {serverError NOT_IMPLEMENTED}"
     ]
   }
 ]

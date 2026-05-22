@@ -1,0 +1,356 @@
+[
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "tab"
+    },
+    "ifExists": true,
+    "leadingComments": [
+      "-- Tags: no-fasttest, no-ordinary-database, no-tsan",
+      "-- no-tsan: generating data takes too long",
+      "-- Tests correctness of vector similarity index with > 1 mark"
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "tab"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "id",
+        "type": {
+          "name": "Int32"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "vec",
+        "type": {
+          "name": "Array",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "Float32"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "kind": "indexDef",
+        "name": "idx",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "vec"
+          ]
+        },
+        "indexType": {
+          "name": "vector_similarity",
+          "args": [
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "hnsw"
+            },
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "L2Distance"
+            },
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "2"
+            }
+          ]
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "id"
+          ]
+        }
+      }
+    ],
+    "settings": [
+      {
+        "name": "index_granularity",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "8192"
+        }
+      },
+      {
+        "name": "index_granularity_bytes",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "10485760"
+        }
+      }
+    ],
+    "settingsAfterOrderBy": true
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "tab"
+      }
+    },
+    "selectQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "number"
+          ]
+        },
+        {
+          "kind": "arrayLiteral",
+          "elements": [
+            {
+              "kind": "functionCall",
+              "name": "toFloat32",
+              "args": [
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "number"
+                  ]
+                }
+              ]
+            },
+            {
+              "kind": "literal",
+              "type": "Float64",
+              "value": "0.0"
+            }
+          ],
+          "source": "[toFloat32(number), 0.0]"
+        }
+      ],
+      "from": {
+        "kind": "tableFunctionRef",
+        "name": "numbers",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "10000"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "kind": "select",
+    "with": [
+      {
+        "kind": "cteExpr",
+        "name": "reference_vec",
+        "expr": {
+          "kind": "arrayLiteral",
+          "elements": [
+            {
+              "kind": "literal",
+              "type": "Float64",
+              "value": "1.0"
+            },
+            {
+              "kind": "literal",
+              "type": "Float64",
+              "value": "0.0"
+            }
+          ],
+          "source": "[1.0, 0.0]"
+        }
+      }
+    ],
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "id"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "vec"
+        ]
+      },
+      {
+        "kind": "functionCall",
+        "name": "L2Distance",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "vec"
+            ]
+          },
+          {
+            "kind": "columnRef",
+            "parts": [
+              "reference_vec"
+            ]
+          }
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "tab"
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "functionCall",
+          "name": "L2Distance",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "vec"
+              ]
+            },
+            {
+              "kind": "columnRef",
+              "parts": [
+                "reference_vec"
+              ]
+            }
+          ]
+        },
+        "direction": "ASC"
+      }
+    ],
+    "limit": {
+      "count": {
+        "kind": "literal",
+        "type": "UInt64",
+        "value": "1"
+      }
+    }
+  },
+  {
+    "kind": "select",
+    "with": [
+      {
+        "kind": "cteExpr",
+        "name": "reference_vec",
+        "expr": {
+          "kind": "arrayLiteral",
+          "elements": [
+            {
+              "kind": "literal",
+              "type": "Float64",
+              "value": "9000.0"
+            },
+            {
+              "kind": "literal",
+              "type": "Float64",
+              "value": "0.0"
+            }
+          ],
+          "source": "[9000.0, 0.0]"
+        }
+      }
+    ],
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "id"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "vec"
+        ]
+      },
+      {
+        "kind": "functionCall",
+        "name": "L2Distance",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "vec"
+            ]
+          },
+          {
+            "kind": "columnRef",
+            "parts": [
+              "reference_vec"
+            ]
+          }
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "tab"
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "functionCall",
+          "name": "L2Distance",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "vec"
+              ]
+            },
+            {
+              "kind": "columnRef",
+              "parts": [
+                "reference_vec"
+              ]
+            }
+          ]
+        },
+        "direction": "ASC"
+      }
+    ],
+    "limit": {
+      "count": {
+        "kind": "literal",
+        "type": "UInt64",
+        "value": "1"
+      }
+    }
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "tab"
+    }
+  }
+]

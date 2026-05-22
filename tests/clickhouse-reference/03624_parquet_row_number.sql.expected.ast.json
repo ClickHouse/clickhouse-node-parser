@@ -1,5 +1,102 @@
 [
   {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "engine_file_truncate_on_insert",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ],
+    "leadingComments": [
+      "-- Tags: no-fasttest"
+    ]
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "function",
+      "func": {
+        "kind": "tableFunctionRef",
+        "name": "file",
+        "args": [
+          {
+            "kind": "functionCall",
+            "name": "concat",
+            "args": [
+              {
+                "kind": "functionCall",
+                "name": "current_database",
+                "args": []
+              },
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "03624_parquet_row_number.parquet"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "selectQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "alias",
+          "expr": {
+            "kind": "binaryExpr",
+            "op": "*",
+            "left": {
+              "kind": "columnRef",
+              "parts": [
+                "number"
+              ]
+            },
+            "right": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "10"
+            }
+          },
+          "alias": "x"
+        }
+      ],
+      "from": {
+        "kind": "tableFunctionRef",
+        "name": "numbers",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "20"
+          }
+        ]
+      },
+      "settings": [
+        {
+          "name": "max_threads",
+          "value": {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "1"
+          }
+        },
+        {
+          "name": "output_format_parquet_row_group_size",
+          "value": {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "5"
+          }
+        }
+      ]
+    }
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -16,7 +113,7 @@
       }
     ],
     "from": {
-      "kind": "tableFunction",
+      "kind": "tableFunctionRef",
       "name": "file",
       "args": [
         {

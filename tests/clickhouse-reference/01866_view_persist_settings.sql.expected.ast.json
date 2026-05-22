@@ -1,5 +1,703 @@
 [
   {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "view_no_nulls"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "view_no_nulls_set"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "view_nulls_set"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "view_nulls"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "join_use_nulls",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createView",
+    "table": {
+      "kind": "tableRef",
+      "table": "view_no_nulls"
+    },
+    "orReplace": true,
+    "asQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "asterisk"
+        }
+      ],
+      "from": {
+        "left": {
+          "kind": "subqueryFrom",
+          "query": {
+            "kind": "select",
+            "select": [
+              {
+                "kind": "alias",
+                "expr": {
+                  "kind": "binaryExpr",
+                  "op": "+",
+                  "left": {
+                    "kind": "columnRef",
+                    "parts": [
+                      "number"
+                    ]
+                  },
+                  "right": {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "1"
+                  }
+                },
+                "alias": "a"
+              },
+              {
+                "kind": "alias",
+                "expr": {
+                  "kind": "binaryExpr",
+                  "op": "+",
+                  "left": {
+                    "kind": "columnRef",
+                    "parts": [
+                      "number"
+                    ]
+                  },
+                  "right": {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "11"
+                  }
+                },
+                "alias": "b"
+              }
+            ],
+            "from": {
+              "kind": "tableFunctionRef",
+              "name": "numbers",
+              "args": [
+                {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "2"
+                }
+              ]
+            }
+          },
+          "alias": "t1"
+        },
+        "kind": "joinExpr",
+        "joinType": "FULL",
+        "right": {
+          "kind": "subqueryFrom",
+          "query": {
+            "kind": "select",
+            "select": [
+              {
+                "kind": "alias",
+                "expr": {
+                  "kind": "binaryExpr",
+                  "op": "+",
+                  "left": {
+                    "kind": "columnRef",
+                    "parts": [
+                      "number"
+                    ]
+                  },
+                  "right": {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "2"
+                  }
+                },
+                "alias": "a"
+              },
+              {
+                "kind": "alias",
+                "expr": {
+                  "kind": "binaryExpr",
+                  "op": "+",
+                  "left": {
+                    "kind": "columnRef",
+                    "parts": [
+                      "number"
+                    ]
+                  },
+                  "right": {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "22"
+                  }
+                },
+                "alias": "c"
+              }
+            ],
+            "from": {
+              "kind": "tableFunctionRef",
+              "name": "numbers",
+              "args": [
+                {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "2"
+                }
+              ]
+            }
+          },
+          "alias": "t2"
+        },
+        "constraint": {
+          "kind": "using",
+          "columns": [
+            "a"
+          ]
+        }
+      },
+      "orderBy": [
+        {
+          "kind": "orderByItem",
+          "expr": {
+            "kind": "columnRef",
+            "parts": [
+              "a"
+            ]
+          },
+          "direction": "ASC"
+        }
+      ]
+    }
+  },
+  {
+    "kind": "createView",
+    "table": {
+      "kind": "tableRef",
+      "table": "view_nulls_set"
+    },
+    "orReplace": true,
+    "asQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "asterisk"
+        }
+      ],
+      "from": {
+        "left": {
+          "kind": "subqueryFrom",
+          "query": {
+            "kind": "select",
+            "select": [
+              {
+                "kind": "alias",
+                "expr": {
+                  "kind": "binaryExpr",
+                  "op": "+",
+                  "left": {
+                    "kind": "columnRef",
+                    "parts": [
+                      "number"
+                    ]
+                  },
+                  "right": {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "1"
+                  }
+                },
+                "alias": "a"
+              },
+              {
+                "kind": "alias",
+                "expr": {
+                  "kind": "binaryExpr",
+                  "op": "+",
+                  "left": {
+                    "kind": "columnRef",
+                    "parts": [
+                      "number"
+                    ]
+                  },
+                  "right": {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "11"
+                  }
+                },
+                "alias": "b"
+              }
+            ],
+            "from": {
+              "kind": "tableFunctionRef",
+              "name": "numbers",
+              "args": [
+                {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "2"
+                }
+              ]
+            }
+          },
+          "alias": "t1"
+        },
+        "kind": "joinExpr",
+        "joinType": "FULL",
+        "right": {
+          "kind": "subqueryFrom",
+          "query": {
+            "kind": "select",
+            "select": [
+              {
+                "kind": "alias",
+                "expr": {
+                  "kind": "binaryExpr",
+                  "op": "+",
+                  "left": {
+                    "kind": "columnRef",
+                    "parts": [
+                      "number"
+                    ]
+                  },
+                  "right": {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "2"
+                  }
+                },
+                "alias": "a"
+              },
+              {
+                "kind": "alias",
+                "expr": {
+                  "kind": "binaryExpr",
+                  "op": "+",
+                  "left": {
+                    "kind": "columnRef",
+                    "parts": [
+                      "number"
+                    ]
+                  },
+                  "right": {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "22"
+                  }
+                },
+                "alias": "c"
+              }
+            ],
+            "from": {
+              "kind": "tableFunctionRef",
+              "name": "numbers",
+              "args": [
+                {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "2"
+                }
+              ]
+            }
+          },
+          "alias": "t2"
+        },
+        "constraint": {
+          "kind": "using",
+          "columns": [
+            "a"
+          ]
+        }
+      },
+      "orderBy": [
+        {
+          "kind": "orderByItem",
+          "expr": {
+            "kind": "columnRef",
+            "parts": [
+              "a"
+            ]
+          },
+          "direction": "ASC"
+        }
+      ],
+      "settings": [
+        {
+          "name": "join_use_nulls",
+          "value": {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "1"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "join_use_nulls",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createView",
+    "table": {
+      "kind": "tableRef",
+      "table": "view_nulls"
+    },
+    "orReplace": true,
+    "asQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "asterisk"
+        }
+      ],
+      "from": {
+        "left": {
+          "kind": "subqueryFrom",
+          "query": {
+            "kind": "select",
+            "select": [
+              {
+                "kind": "alias",
+                "expr": {
+                  "kind": "binaryExpr",
+                  "op": "+",
+                  "left": {
+                    "kind": "columnRef",
+                    "parts": [
+                      "number"
+                    ]
+                  },
+                  "right": {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "1"
+                  }
+                },
+                "alias": "a"
+              },
+              {
+                "kind": "alias",
+                "expr": {
+                  "kind": "binaryExpr",
+                  "op": "+",
+                  "left": {
+                    "kind": "columnRef",
+                    "parts": [
+                      "number"
+                    ]
+                  },
+                  "right": {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "11"
+                  }
+                },
+                "alias": "b"
+              }
+            ],
+            "from": {
+              "kind": "tableFunctionRef",
+              "name": "numbers",
+              "args": [
+                {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "2"
+                }
+              ]
+            }
+          },
+          "alias": "t1"
+        },
+        "kind": "joinExpr",
+        "joinType": "FULL",
+        "right": {
+          "kind": "subqueryFrom",
+          "query": {
+            "kind": "select",
+            "select": [
+              {
+                "kind": "alias",
+                "expr": {
+                  "kind": "binaryExpr",
+                  "op": "+",
+                  "left": {
+                    "kind": "columnRef",
+                    "parts": [
+                      "number"
+                    ]
+                  },
+                  "right": {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "2"
+                  }
+                },
+                "alias": "a"
+              },
+              {
+                "kind": "alias",
+                "expr": {
+                  "kind": "binaryExpr",
+                  "op": "+",
+                  "left": {
+                    "kind": "columnRef",
+                    "parts": [
+                      "number"
+                    ]
+                  },
+                  "right": {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "22"
+                  }
+                },
+                "alias": "c"
+              }
+            ],
+            "from": {
+              "kind": "tableFunctionRef",
+              "name": "numbers",
+              "args": [
+                {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "2"
+                }
+              ]
+            }
+          },
+          "alias": "t2"
+        },
+        "constraint": {
+          "kind": "using",
+          "columns": [
+            "a"
+          ]
+        }
+      },
+      "orderBy": [
+        {
+          "kind": "orderByItem",
+          "expr": {
+            "kind": "columnRef",
+            "parts": [
+              "a"
+            ]
+          },
+          "direction": "ASC"
+        }
+      ]
+    }
+  },
+  {
+    "kind": "createView",
+    "table": {
+      "kind": "tableRef",
+      "table": "view_no_nulls_set"
+    },
+    "orReplace": true,
+    "asQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "asterisk"
+        }
+      ],
+      "from": {
+        "left": {
+          "kind": "subqueryFrom",
+          "query": {
+            "kind": "select",
+            "select": [
+              {
+                "kind": "alias",
+                "expr": {
+                  "kind": "binaryExpr",
+                  "op": "+",
+                  "left": {
+                    "kind": "columnRef",
+                    "parts": [
+                      "number"
+                    ]
+                  },
+                  "right": {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "1"
+                  }
+                },
+                "alias": "a"
+              },
+              {
+                "kind": "alias",
+                "expr": {
+                  "kind": "binaryExpr",
+                  "op": "+",
+                  "left": {
+                    "kind": "columnRef",
+                    "parts": [
+                      "number"
+                    ]
+                  },
+                  "right": {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "11"
+                  }
+                },
+                "alias": "b"
+              }
+            ],
+            "from": {
+              "kind": "tableFunctionRef",
+              "name": "numbers",
+              "args": [
+                {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "2"
+                }
+              ]
+            }
+          },
+          "alias": "t1"
+        },
+        "kind": "joinExpr",
+        "joinType": "FULL",
+        "right": {
+          "kind": "subqueryFrom",
+          "query": {
+            "kind": "select",
+            "select": [
+              {
+                "kind": "alias",
+                "expr": {
+                  "kind": "binaryExpr",
+                  "op": "+",
+                  "left": {
+                    "kind": "columnRef",
+                    "parts": [
+                      "number"
+                    ]
+                  },
+                  "right": {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "2"
+                  }
+                },
+                "alias": "a"
+              },
+              {
+                "kind": "alias",
+                "expr": {
+                  "kind": "binaryExpr",
+                  "op": "+",
+                  "left": {
+                    "kind": "columnRef",
+                    "parts": [
+                      "number"
+                    ]
+                  },
+                  "right": {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "22"
+                  }
+                },
+                "alias": "c"
+              }
+            ],
+            "from": {
+              "kind": "tableFunctionRef",
+              "name": "numbers",
+              "args": [
+                {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "2"
+                }
+              ]
+            }
+          },
+          "alias": "t2"
+        },
+        "constraint": {
+          "kind": "using",
+          "columns": [
+            "a"
+          ]
+        }
+      },
+      "orderBy": [
+        {
+          "kind": "orderByItem",
+          "expr": {
+            "kind": "columnRef",
+            "parts": [
+              "a"
+            ]
+          },
+          "direction": "ASC"
+        }
+      ],
+      "settings": [
+        {
+          "name": "join_use_nulls",
+          "value": {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "0"
+          }
+        }
+      ]
+    }
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -9,7 +707,10 @@
     "from": {
       "kind": "tableRef",
       "table": "view_no_nulls"
-    }
+    },
+    "trailingComments": [
+      "-- { serverError INCORRECT_QUERY }"
+    ]
   },
   {
     "kind": "select",
@@ -43,6 +744,70 @@
       }
     ],
     "from": {
+      "kind": "tableRef",
+      "table": "view_nulls"
+    }
+  },
+  {
+    "kind": "detach",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "view_no_nulls"
+    }
+  },
+  {
+    "kind": "detach",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "view_no_nulls_set"
+    }
+  },
+  {
+    "kind": "detach",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "view_nulls_set"
+    }
+  },
+  {
+    "kind": "detach",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "view_nulls"
+    }
+  },
+  {
+    "kind": "attach",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "view_no_nulls"
+    }
+  },
+  {
+    "kind": "attach",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "view_no_nulls_set"
+    }
+  },
+  {
+    "kind": "attach",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "view_nulls_set"
+    }
+  },
+  {
+    "kind": "attach",
+    "targetType": "TABLE",
+    "table": {
       "kind": "tableRef",
       "table": "view_nulls"
     }

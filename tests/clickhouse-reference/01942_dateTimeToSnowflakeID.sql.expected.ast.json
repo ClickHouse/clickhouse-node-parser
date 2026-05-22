@@ -1,5 +1,50 @@
 [
   {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "session_timezone",
+        "value": {
+          "kind": "literal",
+          "type": "String",
+          "value": "UTC"
+        }
+      }
+    ],
+    "trailingComments": [
+      "-- disable timezone randomization"
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "enable_analyzer",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ],
+    "trailingComments": [
+      "-- The old path formats the result with different whitespaces"
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "output_format_pretty_single_large_number_tip_threshold",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      }
+    ]
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -17,6 +62,9 @@
         "name": "dateTimeToSnowflakeID",
         "args": []
       }
+    ],
+    "trailingComments": [
+      "-- {serverError NUMBER_OF_ARGUMENTS_DOESNT_MATCH}"
     ]
   },
   {
@@ -27,6 +75,9 @@
         "name": "dateTime64ToSnowflakeID",
         "args": []
       }
+    ],
+    "trailingComments": [
+      "-- {serverError NUMBER_OF_ARGUMENTS_DOESNT_MATCH}"
     ]
   },
   {
@@ -43,6 +94,9 @@
           }
         ]
       }
+    ],
+    "trailingComments": [
+      "-- {serverError ILLEGAL_TYPE_OF_ARGUMENT}"
     ]
   },
   {
@@ -59,6 +113,9 @@
           }
         ]
       }
+    ],
+    "trailingComments": [
+      "-- {serverError ILLEGAL_TYPE_OF_ARGUMENT}"
     ]
   },
   {
@@ -80,6 +137,9 @@
           }
         ]
       }
+    ],
+    "trailingComments": [
+      "-- {serverError ILLEGAL_TYPE_OF_ARGUMENT}"
     ]
   },
   {
@@ -101,6 +161,9 @@
           }
         ]
       }
+    ],
+    "trailingComments": [
+      "-- {serverError ILLEGAL_TYPE_OF_ARGUMENT}"
     ]
   },
   {
@@ -127,6 +190,9 @@
           }
         ]
       }
+    ],
+    "trailingComments": [
+      "-- {serverError NUMBER_OF_ARGUMENTS_DOESNT_MATCH}"
     ]
   },
   {
@@ -153,6 +219,9 @@
           }
         ]
       }
+    ],
+    "trailingComments": [
+      "-- {serverError NUMBER_OF_ARGUMENTS_DOESNT_MATCH}"
     ]
   },
   {
@@ -197,6 +266,606 @@
           }
         ]
       }
+    ]
+  },
+  {
+    "kind": "select",
+    "with": [
+      {
+        "kind": "cteExpr",
+        "name": "dt",
+        "expr": {
+          "kind": "functionCall",
+          "name": "toDateTime",
+          "args": [
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "2021-08-15 18:57:56"
+            }
+          ]
+        }
+      },
+      {
+        "kind": "cteExpr",
+        "name": "dt64",
+        "expr": {
+          "kind": "functionCall",
+          "name": "toDateTime64",
+          "args": [
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "2021-08-15 18:57:56.492"
+            },
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "3"
+            }
+          ]
+        }
+      },
+      {
+        "kind": "cteExpr",
+        "name": "twitter_epoch",
+        "expr": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1288834974657"
+        }
+      }
+    ],
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "dt"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "dt64"
+        ]
+      },
+      {
+        "kind": "functionCall",
+        "name": "dateTimeToSnowflakeID",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "dt"
+            ]
+          }
+        ]
+      },
+      {
+        "kind": "functionCall",
+        "name": "dateTime64ToSnowflakeID",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "dt64"
+            ]
+          }
+        ]
+      },
+      {
+        "kind": "functionCall",
+        "name": "dateTimeToSnowflakeID",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "dt"
+            ]
+          },
+          {
+            "kind": "columnRef",
+            "parts": [
+              "twitter_epoch"
+            ]
+          }
+        ]
+      },
+      {
+        "kind": "functionCall",
+        "name": "dateTime64ToSnowflakeID",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "dt64"
+            ]
+          },
+          {
+            "kind": "columnRef",
+            "parts": [
+              "twitter_epoch"
+            ]
+          }
+        ]
+      }
+    ],
+    "format": "Vertical"
+  },
+  {
+    "kind": "select",
+    "with": [
+      {
+        "kind": "cteExpr",
+        "name": "dt64_0",
+        "expr": {
+          "kind": "functionCall",
+          "name": "toDateTime64",
+          "args": [
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "2021-08-15 18:57:56.492"
+            },
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "0"
+            },
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "UTC"
+            }
+          ]
+        }
+      },
+      {
+        "kind": "cteExpr",
+        "name": "dt64_1",
+        "expr": {
+          "kind": "functionCall",
+          "name": "toDateTime64",
+          "args": [
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "2021-08-15 18:57:56.492"
+            },
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "1"
+            },
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "UTC"
+            }
+          ]
+        }
+      },
+      {
+        "kind": "cteExpr",
+        "name": "dt64_2",
+        "expr": {
+          "kind": "functionCall",
+          "name": "toDateTime64",
+          "args": [
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "2021-08-15 18:57:56.492"
+            },
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "2"
+            },
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "UTC"
+            }
+          ]
+        }
+      },
+      {
+        "kind": "cteExpr",
+        "name": "dt64_3",
+        "expr": {
+          "kind": "functionCall",
+          "name": "toDateTime64",
+          "args": [
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "2021-08-15 18:57:56.492"
+            },
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "3"
+            },
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "UTC"
+            }
+          ]
+        }
+      },
+      {
+        "kind": "cteExpr",
+        "name": "dt64_4",
+        "expr": {
+          "kind": "functionCall",
+          "name": "toDateTime64",
+          "args": [
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "2021-08-15 18:57:56.492"
+            },
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "4"
+            },
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "UTC"
+            }
+          ]
+        }
+      }
+    ],
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "dateTime64ToSnowflakeID",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "dt64_0"
+            ]
+          }
+        ]
+      },
+      {
+        "kind": "functionCall",
+        "name": "dateTime64ToSnowflakeID",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "dt64_1"
+            ]
+          }
+        ]
+      },
+      {
+        "kind": "functionCall",
+        "name": "dateTime64ToSnowflakeID",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "dt64_2"
+            ]
+          }
+        ]
+      },
+      {
+        "kind": "functionCall",
+        "name": "dateTime64ToSnowflakeID",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "dt64_3"
+            ]
+          }
+        ]
+      },
+      {
+        "kind": "functionCall",
+        "name": "dateTime64ToSnowflakeID",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "dt64_4"
+            ]
+          }
+        ]
+      }
+    ],
+    "format": "Vertical"
+  },
+  {
+    "kind": "select",
+    "with": [
+      {
+        "kind": "cteExpr",
+        "name": "dt64_0",
+        "expr": {
+          "kind": "functionCall",
+          "name": "now64",
+          "args": [
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "0"
+            }
+          ]
+        }
+      },
+      {
+        "kind": "cteExpr",
+        "name": "dt64_1",
+        "expr": {
+          "kind": "functionCall",
+          "name": "now64",
+          "args": [
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "1"
+            }
+          ]
+        }
+      },
+      {
+        "kind": "cteExpr",
+        "name": "dt64_2",
+        "expr": {
+          "kind": "functionCall",
+          "name": "now64",
+          "args": [
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "2"
+            }
+          ]
+        }
+      },
+      {
+        "kind": "cteExpr",
+        "name": "dt64_3",
+        "expr": {
+          "kind": "functionCall",
+          "name": "now64",
+          "args": [
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "3"
+            }
+          ]
+        }
+      }
+    ],
+    "select": [
+      {
+        "kind": "binaryExpr",
+        "op": "==",
+        "left": {
+          "kind": "functionCall",
+          "name": "snowflakeIDToDateTime64",
+          "args": [
+            {
+              "kind": "functionCall",
+              "name": "dateTime64ToSnowflakeID",
+              "args": [
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "dt64_0"
+                  ]
+                }
+              ]
+            },
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "0"
+            },
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "UTC"
+            }
+          ]
+        },
+        "right": {
+          "kind": "columnRef",
+          "parts": [
+            "dt64_0"
+          ]
+        }
+      },
+      {
+        "kind": "binaryExpr",
+        "op": "==",
+        "left": {
+          "kind": "functionCall",
+          "name": "snowflakeIDToDateTime64",
+          "args": [
+            {
+              "kind": "functionCall",
+              "name": "dateTime64ToSnowflakeID",
+              "args": [
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "dt64_1"
+                  ]
+                }
+              ]
+            },
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "0"
+            },
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "UTC"
+            }
+          ]
+        },
+        "right": {
+          "kind": "columnRef",
+          "parts": [
+            "dt64_1"
+          ]
+        }
+      },
+      {
+        "kind": "binaryExpr",
+        "op": "==",
+        "left": {
+          "kind": "functionCall",
+          "name": "snowflakeIDToDateTime64",
+          "args": [
+            {
+              "kind": "functionCall",
+              "name": "dateTime64ToSnowflakeID",
+              "args": [
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "dt64_2"
+                  ]
+                }
+              ]
+            },
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "0"
+            },
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "UTC"
+            }
+          ]
+        },
+        "right": {
+          "kind": "columnRef",
+          "parts": [
+            "dt64_2"
+          ]
+        }
+      },
+      {
+        "kind": "binaryExpr",
+        "op": "==",
+        "left": {
+          "kind": "functionCall",
+          "name": "snowflakeIDToDateTime64",
+          "args": [
+            {
+              "kind": "functionCall",
+              "name": "dateTime64ToSnowflakeID",
+              "args": [
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "dt64_3"
+                  ]
+                }
+              ]
+            },
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "0"
+            },
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "UTC"
+            }
+          ]
+        },
+        "right": {
+          "kind": "columnRef",
+          "parts": [
+            "dt64_3"
+          ]
+        }
+      }
+    ],
+    "format": "Vertical",
+    "leadingComments": [
+      "-- DateTime64-to-SnowflakeID-to-DateTime64 is idempotent if the scale is <=3 (millisecond precision)"
+    ]
+  },
+  {
+    "kind": "select",
+    "with": [
+      {
+        "kind": "cteExpr",
+        "name": "dt64_4",
+        "expr": {
+          "kind": "functionCall",
+          "name": "toDateTime64",
+          "args": [
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "2023-11-11 11:11:11.1231"
+            },
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "4"
+            },
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "UTC"
+            }
+          ]
+        }
+      }
+    ],
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "dt64_4"
+        ]
+      },
+      {
+        "kind": "functionCall",
+        "name": "snowflakeIDToDateTime64",
+        "args": [
+          {
+            "kind": "functionCall",
+            "name": "dateTime64ToSnowflakeID",
+            "args": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "dt64_4"
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "format": "Vertical",
+    "leadingComments": [
+      "-- not idempotent"
     ]
   }
 ]

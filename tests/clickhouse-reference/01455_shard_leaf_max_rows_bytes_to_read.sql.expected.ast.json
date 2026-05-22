@@ -1,5 +1,26 @@
 [
   {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "prefer_localhost_replica",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      }
+    ],
+    "leadingComments": [
+      "-- Tags: shard",
+      "-- Leaf limits is unreliable w/ prefer_localhost_replica=1.",
+      "-- Since in this case initial query and the query on the local node (to the",
+      "-- underlying table) has the same counters, so if query on the remote node",
+      "-- will be finished before local, then local node will already have some rows",
+      "-- read, and leaf limit will fail."
+    ]
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -18,7 +39,7 @@
           }
         ],
         "from": {
-          "kind": "tableFunction",
+          "kind": "tableFunctionRef",
           "name": "remote",
           "args": [
             {
@@ -53,6 +74,9 @@
           "value": "1"
         }
       }
+    ],
+    "trailingComments": [
+      "-- { serverError TOO_MANY_ROWS }"
     ]
   },
   {
@@ -74,7 +98,7 @@
           }
         ],
         "from": {
-          "kind": "tableFunction",
+          "kind": "tableFunctionRef",
           "name": "remote",
           "args": [
             {
@@ -109,6 +133,9 @@
           "value": "1"
         }
       }
+    ],
+    "trailingComments": [
+      "-- { serverError TOO_MANY_BYTES }"
     ]
   },
   {
@@ -130,7 +157,7 @@
           }
         ],
         "from": {
-          "kind": "tableFunction",
+          "kind": "tableFunctionRef",
           "name": "remote",
           "args": [
             {
@@ -186,7 +213,7 @@
           }
         ],
         "from": {
-          "kind": "tableFunction",
+          "kind": "tableFunctionRef",
           "name": "remote",
           "args": [
             {
@@ -242,7 +269,7 @@
           }
         ],
         "from": {
-          "kind": "tableFunction",
+          "kind": "tableFunctionRef",
           "name": "remote",
           "args": [
             {
@@ -277,6 +304,9 @@
           "value": "1"
         }
       }
+    ],
+    "trailingComments": [
+      "-- { serverError TOO_MANY_ROWS }"
     ]
   },
   {
@@ -298,7 +328,7 @@
           }
         ],
         "from": {
-          "kind": "tableFunction",
+          "kind": "tableFunctionRef",
           "name": "remote",
           "args": [
             {
@@ -333,6 +363,9 @@
           "value": "1"
         }
       }
+    ],
+    "trailingComments": [
+      "-- { serverError TOO_MANY_BYTES }"
     ]
   },
   {
@@ -354,7 +387,7 @@
           }
         ],
         "from": {
-          "kind": "tableFunction",
+          "kind": "tableFunctionRef",
           "name": "remote",
           "args": [
             {
@@ -410,7 +443,7 @@
           }
         ],
         "from": {
-          "kind": "tableFunction",
+          "kind": "tableFunctionRef",
           "name": "remote",
           "args": [
             {
@@ -448,6 +481,161 @@
     ]
   },
   {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "test_local"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "test_distributed"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "allow_deprecated_syntax_for_merge_tree",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "test_local"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "date",
+        "type": {
+          "name": "Date"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "value",
+        "type": {
+          "name": "UInt32"
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree",
+      "args": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "date"
+          ]
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "date"
+          ]
+        },
+        {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "8192"
+        }
+      ]
+    }
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "test_distributed"
+    },
+    "asTable": {
+      "kind": "tableRef",
+      "table": "test_local"
+    },
+    "engine": {
+      "name": "Distributed",
+      "args": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "test_cluster_two_shards"
+          ]
+        },
+        {
+          "kind": "functionCall",
+          "name": "currentDatabase",
+          "args": []
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "test_local"
+          ]
+        },
+        {
+          "kind": "functionCall",
+          "name": "rand",
+          "args": []
+        }
+      ]
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "test_local"
+      }
+    },
+    "selectQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "2000-08-01"
+        },
+        {
+          "kind": "alias",
+          "expr": {
+            "kind": "columnRef",
+            "parts": [
+              "number"
+            ]
+          },
+          "alias": "value"
+        }
+      ],
+      "from": {
+        "kind": "tableFunctionRef",
+        "name": "numbers",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "50000"
+          }
+        ]
+      }
+    }
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -480,6 +668,9 @@
           "value": "40000"
         }
       }
+    ],
+    "trailingComments": [
+      "-- { serverError TOO_MANY_ROWS }"
     ]
   },
   {
@@ -515,6 +706,9 @@
           "value": "40000"
         }
       }
+    ],
+    "trailingComments": [
+      "-- { serverError TOO_MANY_BYTES }"
     ]
   },
   {
@@ -550,6 +744,9 @@
           "value": "60000"
         }
       }
+    ],
+    "trailingComments": [
+      "-- { serverError TOO_MANY_ROWS }"
     ]
   },
   {
@@ -620,6 +817,9 @@
           "value": "100000"
         }
       }
+    ],
+    "trailingComments": [
+      "-- { serverError TOO_MANY_BYTES }"
     ]
   },
   {

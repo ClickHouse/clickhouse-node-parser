@@ -1,5 +1,136 @@
 [
   {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "raw_data"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "id",
+        "type": {
+          "name": "UInt8"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "data",
+        "type": {
+          "name": "String"
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "id"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "raw_data"
+      }
+    },
+    "selectQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "number"
+          ]
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "number"
+          ]
+        }
+      ],
+      "from": {
+        "kind": "tableFunctionRef",
+        "name": "numbers",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "10"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "kind": "createView",
+    "table": {
+      "kind": "tableRef",
+      "table": "raw_data_parameterized"
+    },
+    "asQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "asterisk"
+        }
+      ],
+      "from": {
+        "kind": "tableRef",
+        "table": "raw_data"
+      },
+      "where": {
+        "kind": "naryExpr",
+        "op": "AND",
+        "operands": [
+          {
+            "kind": "binaryExpr",
+            "op": ">=",
+            "left": {
+              "kind": "columnRef",
+              "parts": [
+                "id"
+              ]
+            },
+            "right": {
+              "kind": "queryParam",
+              "name": "id_from",
+              "type": "UInt8"
+            },
+            "parenthesized": true
+          },
+          {
+            "kind": "binaryExpr",
+            "op": "<=",
+            "left": {
+              "kind": "columnRef",
+              "parts": [
+                "id"
+              ]
+            },
+            "right": {
+              "kind": "queryParam",
+              "name": "id_to",
+              "type": "UInt8"
+            },
+            "parenthesized": true
+          }
+        ]
+      }
+    }
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -11,7 +142,7 @@
       }
     ],
     "from": {
-      "kind": "tableFunction",
+      "kind": "tableFunctionRef",
       "name": "raw_data_parameterized",
       "args": [
         {

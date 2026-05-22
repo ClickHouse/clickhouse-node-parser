@@ -1,3 +1,15 @@
+-- https://github.com/ClickHouse/ClickHouse/issues/4596
+SET enable_analyzer = 1;
+
+CREATE TABLE a1
+(
+    ANIMAL Nullable(String)
+)
+ENGINE = MergeTree
+ORDER BY tuple();
+
+INSERT INTO a1;
+
 SELECT count()
 FROM
     a1 AS a

@@ -22,6 +22,6 @@ FROM (
         SELECT 2
     );
 
-SELECT isConstant();
+SELECT isConstant(); -- { serverError NUMBER_OF_ARGUMENTS_DOESNT_MATCH }
 
-SELECT isConstant(1, 2);
+SELECT isConstant(1, 2); -- { serverError NUMBER_OF_ARGUMENTS_DOESNT_MATCH }

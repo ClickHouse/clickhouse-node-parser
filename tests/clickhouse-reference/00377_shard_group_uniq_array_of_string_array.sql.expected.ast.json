@@ -1,5 +1,280 @@
 [
   {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "max_rows_to_read",
+        "value": {
+          "kind": "literal",
+          "type": "String",
+          "value": "55M"
+        }
+      }
+    ],
+    "leadingComments": [
+      "-- Tags: shard, long"
+    ]
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "group_uniq_arr_str"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "group_uniq_arr_str"
+    },
+    "engine": {
+      "name": "Memory"
+    },
+    "asQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "alias",
+          "expr": {
+            "kind": "functionCall",
+            "name": "hex",
+            "args": [
+              {
+                "kind": "functionCall",
+                "name": "intHash32",
+                "args": [
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "g"
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          "alias": "id"
+        },
+        {
+          "kind": "alias",
+          "expr": {
+            "kind": "functionCall",
+            "name": "if",
+            "args": [
+              {
+                "kind": "binaryExpr",
+                "op": "==",
+                "left": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "c"
+                  ]
+                },
+                "right": {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "0"
+                }
+              },
+              {
+                "kind": "arrayLiteral",
+                "elements": [
+                  {
+                    "kind": "functionCall",
+                    "name": "hex",
+                    "args": [
+                      {
+                        "kind": "columnRef",
+                        "parts": [
+                          "v"
+                        ]
+                      }
+                    ]
+                  }
+                ],
+                "source": "[hex(v)]"
+              },
+              {
+                "kind": "functionCall",
+                "name": "if",
+                "args": [
+                  {
+                    "kind": "binaryExpr",
+                    "op": "==",
+                    "left": {
+                      "kind": "columnRef",
+                      "parts": [
+                        "c"
+                      ]
+                    },
+                    "right": {
+                      "kind": "literal",
+                      "type": "UInt64",
+                      "value": "1"
+                    }
+                  },
+                  {
+                    "kind": "functionCall",
+                    "name": "emptyArrayString",
+                    "args": []
+                  },
+                  {
+                    "kind": "arrayLiteral",
+                    "elements": [
+                      {
+                        "kind": "functionCall",
+                        "name": "hex",
+                        "args": [
+                          {
+                            "kind": "columnRef",
+                            "parts": [
+                              "v"
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "kind": "functionCall",
+                        "name": "hex",
+                        "args": [
+                          {
+                            "kind": "columnRef",
+                            "parts": [
+                              "v"
+                            ]
+                          }
+                        ]
+                      }
+                    ],
+                    "source": "[hex(v), hex(v)]"
+                  }
+                ]
+              }
+            ]
+          },
+          "alias": "v"
+        }
+      ],
+      "from": {
+        "kind": "subqueryFrom",
+        "query": {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "alias",
+              "expr": {
+                "kind": "functionCall",
+                "name": "intDiv",
+                "args": [
+                  {
+                    "kind": "binaryExpr",
+                    "op": "%",
+                    "left": {
+                      "kind": "columnRef",
+                      "parts": [
+                        "number"
+                      ]
+                    },
+                    "right": {
+                      "kind": "literal",
+                      "type": "UInt64",
+                      "value": "1000000"
+                    }
+                  },
+                  {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "100"
+                  }
+                ]
+              },
+              "alias": "v"
+            },
+            {
+              "kind": "alias",
+              "expr": {
+                "kind": "functionCall",
+                "name": "intDiv",
+                "args": [
+                  {
+                    "kind": "binaryExpr",
+                    "op": "%",
+                    "left": {
+                      "kind": "columnRef",
+                      "parts": [
+                        "number"
+                      ]
+                    },
+                    "right": {
+                      "kind": "literal",
+                      "type": "UInt64",
+                      "value": "100"
+                    }
+                  },
+                  {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "10"
+                  }
+                ]
+              },
+              "alias": "g"
+            },
+            {
+              "kind": "alias",
+              "expr": {
+                "kind": "binaryExpr",
+                "op": "%",
+                "left": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "number"
+                  ]
+                },
+                "right": {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "10"
+                }
+              },
+              "alias": "c"
+            }
+          ],
+          "from": {
+            "kind": "tableRef",
+            "database": "system",
+            "table": "numbers"
+          },
+          "where": {
+            "kind": "binaryExpr",
+            "op": "<",
+            "left": {
+              "kind": "columnRef",
+              "parts": [
+                "c"
+              ]
+            },
+            "right": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "3"
+            }
+          },
+          "limit": {
+            "count": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "10000000"
+            }
+          }
+        }
+      }
+    }
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -72,7 +347,7 @@
       }
     ],
     "from": {
-      "kind": "tableFunction",
+      "kind": "tableFunctionRef",
       "name": "remote",
       "args": [
         {

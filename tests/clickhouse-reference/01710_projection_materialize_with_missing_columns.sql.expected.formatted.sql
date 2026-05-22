@@ -1,0 +1,18 @@
+DROP TABLE IF EXISTS x;
+
+CREATE TABLE x
+(
+    i int
+)
+ENGINE = MergeTree
+ORDER BY tuple();
+
+INSERT INTO x;
+
+ALTER TABLE x ADD COLUMN j int;
+
+ALTER TABLE x ADD PROJECTION p_agg (SELECT sum(j));
+
+ALTER TABLE x MATERIALIZE PROJECTION p_agg SETTINGS mutations_sync = 1;
+
+DROP TABLE x;

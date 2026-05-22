@@ -1,16 +1,110 @@
+DROP TABLE IF EXISTS columns_with_multiple_streams;
+
+SET mutations_sync = 2;
+
+CREATE TABLE columns_with_multiple_streams
+(
+    field0 Nullable(Int64) CODEC(Delta(2), LZ4),
+    field1 Nullable(Int64) CODEC(Delta, LZ4),
+    field2 Array(Array(Int64)) CODEC(Delta, LZ4),
+    field3 Tuple(UInt32, Array(UInt64)) CODEC(T64, Default)
+)
+ENGINE = MergeTree
+ORDER BY tuple()
+SETTINGS min_rows_for_wide_part = 0, min_bytes_for_wide_part = 0;
+
+INSERT INTO columns_with_multiple_streams;
+
 SELECT *
 FROM columns_with_multiple_streams;
+
+DETACH TABLE columns_with_multiple_streams;
+
+ATTACH TABLE columns_with_multiple_streams;
+
+ALTER TABLE columns_with_multiple_streams MODIFY COLUMN field1 Nullable(UInt8);
+
+INSERT INTO columns_with_multiple_streams;
+
+SHOW CREATE TABLE columns_with_multiple_streams;
 
 SELECT *
 FROM columns_with_multiple_streams
 ORDER BY field0 ASC;
 
+ALTER TABLE columns_with_multiple_streams MODIFY COLUMN field3 CODEC(Delta, Default);
+
+INSERT INTO columns_with_multiple_streams;
+
+OPTIMIZE TABLE columns_with_multiple_streams FINAL;
+
+DROP TABLE IF EXISTS columns_with_multiple_streams_compact;
+
+CREATE TABLE columns_with_multiple_streams_compact
+(
+    field0 Nullable(Int64) CODEC(Delta(2), LZ4),
+    field1 Nullable(Int64) CODEC(Delta, LZ4),
+    field2 Array(Array(Int64)) CODEC(Delta, LZ4),
+    field3 Tuple(UInt32, Array(UInt64)) CODEC(Delta, Default)
+)
+ENGINE = MergeTree
+ORDER BY tuple()
+SETTINGS min_rows_for_wide_part = 100000, min_bytes_for_wide_part = 100000;
+
+INSERT INTO columns_with_multiple_streams_compact;
+
 SELECT *
 FROM columns_with_multiple_streams_compact;
+
+DETACH TABLE columns_with_multiple_streams_compact;
+
+ATTACH TABLE columns_with_multiple_streams_compact;
+
+ALTER TABLE columns_with_multiple_streams_compact MODIFY COLUMN field1 Nullable(UInt8);
+
+INSERT INTO columns_with_multiple_streams_compact;
+
+SHOW CREATE TABLE columns_with_multiple_streams_compact;
 
 SELECT *
 FROM columns_with_multiple_streams_compact
 ORDER BY field0 ASC;
+
+ALTER TABLE columns_with_multiple_streams_compact MODIFY COLUMN field3 CODEC(Delta, Default);
+
+INSERT INTO columns_with_multiple_streams_compact;
+
+DROP TABLE IF EXISTS columns_with_multiple_streams_bad_case;
+
+-- validation still works, non-sense codecs checked
+CREATE TABLE columns_with_multiple_streams_bad_case
+(
+    field0 Nullable(String) CODEC(Delta, LZ4)
+)
+ENGINE = MergeTree
+ORDER BY tuple(); --{serverError BAD_ARGUMENTS}
+
+CREATE TABLE columns_with_multiple_streams_bad_case
+(
+    field0 Tuple(Array(UInt64), String) CODEC(T64, LZ4)
+)
+ENGINE = MergeTree
+ORDER BY tuple(); --{serverError ILLEGAL_SYNTAX_FOR_CODEC_TYPE}
+
+SET allow_suspicious_codecs = 1;
+
+CREATE TABLE columns_with_multiple_streams_bad_case
+(
+    field0 Nullable(UInt64) CODEC(Delta)
+)
+ENGINE = MergeTree
+ORDER BY tuple();
+
+INSERT INTO columns_with_multiple_streams_bad_case;
+
+INSERT INTO columns_with_multiple_streams_bad_case;
+
+OPTIMIZE TABLE columns_with_multiple_streams_bad_case FINAL;
 
 SELECT *
 FROM columns_with_multiple_streams_bad_case

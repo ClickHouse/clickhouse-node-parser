@@ -1,16 +1,16 @@
 SELECT '-- Negative tests';
 
-SELECT arrayDotProduct([1, 2]);
+SELECT arrayDotProduct([1, 2]); -- { serverError NUMBER_OF_ARGUMENTS_DOESNT_MATCH }
 
-SELECT arrayDotProduct([1, 2], 'abc');
+SELECT arrayDotProduct([1, 2], 'abc'); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
-SELECT arrayDotProduct('abc', [1, 2]);
+SELECT arrayDotProduct('abc', [1, 2]); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
-SELECT arrayDotProduct([1, 2], ['abc', 'def']);
+SELECT arrayDotProduct([1, 2], ['abc', 'def']); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
-SELECT arrayDotProduct([1, 2], [3, 4, 5]);
+SELECT arrayDotProduct([1, 2], [3, 4, 5]); -- { serverError SIZES_OF_ARRAYS_DONT_MATCH }
 
-SELECT dotProduct([1, 2], (3, 4, 5));
+SELECT dotProduct([1, 2], (3, 4, 5)); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
 SELECT
     [1, 2, 3]::Array(UInt8) AS x,
@@ -72,6 +72,7 @@ SELECT
     dotProduct(x, y) AS res,
     toTypeName(res);
 
+-- empty arrays
 SELECT
     []::Array(Float32) AS x,
     []::Array(Float32) AS y,
@@ -178,7 +179,19 @@ SELECT scalarProduct([1, 2, 3], [4, 5, 6]);
 
 SELECT scalarProduct((1, 2, 3), (4, 5, 6));
 
-SELECT arrayDotProduct([1, 2, 3], [4, 5, 6]);
+SELECT arrayDotProduct([1, 2, 3], [4, 5, 6]); -- actually no alias but the internal function for arrays
+
+DROP TABLE IF EXISTS tab;
+
+CREATE TABLE tab
+(
+    id UInt64,
+    vec Array(Float32)
+)
+ENGINE = MergeTree
+ORDER BY id;
+
+INSERT INTO tab;
 
 SELECT
     id,
@@ -215,3 +228,5 @@ SELECT
     arrayDotProduct([5, 2, 2, 3, 5, 1, 2, 3, 5, 1, 2, 3, 5, 1, 2, 3, 5, 1, 2]::Array(UInt32), vec)
 FROM tab
 ORDER BY id ASC;
+
+DROP TABLE tab;

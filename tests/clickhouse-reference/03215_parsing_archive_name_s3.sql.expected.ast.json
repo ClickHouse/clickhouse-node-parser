@@ -1,5 +1,65 @@
 [
   {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "s3_truncate_on_insert",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ],
+    "leadingComments": [
+      "-- Tags: no-fasttest",
+      "-- Tag no-fasttest: Depends on AWS"
+    ]
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "function",
+      "func": {
+        "kind": "tableFunctionRef",
+        "name": "s3",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "s3_conn"
+            ]
+          },
+          {
+            "kind": "binaryExpr",
+            "op": "=",
+            "left": {
+              "kind": "columnRef",
+              "parts": [
+                "filename"
+              ]
+            },
+            "right": {
+              "kind": "literal",
+              "type": "String",
+              "value": "::03215_archive.csv"
+            }
+          }
+        ]
+      }
+    },
+    "selectQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      ]
+    }
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -16,7 +76,7 @@
       }
     ],
     "from": {
-      "kind": "tableFunction",
+      "kind": "tableFunctionRef",
       "name": "s3",
       "args": [
         {
@@ -46,7 +106,7 @@
       {
         "kind": "orderByItem",
         "expr": {
-          "kind": "tuple",
+          "kind": "tupleLiteral",
           "elements": [
             {
               "kind": "columnRef",
@@ -84,7 +144,7 @@
       }
     ],
     "from": {
-      "kind": "tableFunction",
+      "kind": "tableFunctionRef",
       "name": "s3",
       "args": [
         {
@@ -114,7 +174,7 @@
       {
         "kind": "orderByItem",
         "expr": {
-          "kind": "tuple",
+          "kind": "tupleLiteral",
           "elements": [
             {
               "kind": "columnRef",
@@ -133,7 +193,53 @@
         },
         "direction": "ASC"
       }
+    ],
+    "trailingComments": [
+      "-- { serverError S3_ERROR }"
     ]
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "function",
+      "func": {
+        "kind": "tableFunctionRef",
+        "name": "s3",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "s3_conn"
+            ]
+          },
+          {
+            "kind": "binaryExpr",
+            "op": "=",
+            "left": {
+              "kind": "columnRef",
+              "parts": [
+                "filename"
+              ]
+            },
+            "right": {
+              "kind": "literal",
+              "type": "String",
+              "value": "test::03215_archive.csv"
+            }
+          }
+        ]
+      }
+    },
+    "selectQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      ]
+    }
   },
   {
     "kind": "select",
@@ -152,7 +258,7 @@
       }
     ],
     "from": {
-      "kind": "tableFunction",
+      "kind": "tableFunctionRef",
       "name": "s3",
       "args": [
         {
@@ -182,7 +288,7 @@
       {
         "kind": "orderByItem",
         "expr": {
-          "kind": "tuple",
+          "kind": "tupleLiteral",
           "elements": [
             {
               "kind": "columnRef",
@@ -204,6 +310,59 @@
     ]
   },
   {
+    "kind": "insert",
+    "target": {
+      "kind": "function",
+      "func": {
+        "kind": "tableFunctionRef",
+        "name": "s3",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "s3_conn"
+            ]
+          },
+          {
+            "kind": "binaryExpr",
+            "op": "=",
+            "left": {
+              "kind": "columnRef",
+              "parts": [
+                "filename"
+              ]
+            },
+            "right": {
+              "kind": "literal",
+              "type": "String",
+              "value": "test.zip::03215_archive.csv"
+            }
+          }
+        ]
+      }
+    },
+    "insertSettings": [
+      {
+        "name": "allow_archive_path_syntax",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      }
+    ],
+    "selectQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      ]
+    }
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -220,7 +379,7 @@
       }
     ],
     "from": {
-      "kind": "tableFunction",
+      "kind": "tableFunctionRef",
       "name": "s3",
       "args": [
         {
@@ -250,7 +409,7 @@
       {
         "kind": "orderByItem",
         "expr": {
-          "kind": "tuple",
+          "kind": "tupleLiteral",
           "elements": [
             {
               "kind": "columnRef",

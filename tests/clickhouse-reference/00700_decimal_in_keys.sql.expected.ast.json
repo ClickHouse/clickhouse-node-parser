@@ -1,5 +1,138 @@
 [
   {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "decimal"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "decimal"
+    },
+    "ifNotExists": true,
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "d1",
+        "type": {
+          "name": "DECIMAL",
+          "args": [
+            {
+              "kind": "literal",
+              "value": "9"
+            },
+            {
+              "kind": "literal",
+              "value": "8"
+            }
+          ]
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "d2",
+        "type": {
+          "name": "DECIMAL",
+          "args": [
+            {
+              "kind": "literal",
+              "value": "18"
+            },
+            {
+              "kind": "literal",
+              "value": "8"
+            }
+          ]
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "d3",
+        "type": {
+          "name": "DECIMAL",
+          "args": [
+            {
+              "kind": "literal",
+              "value": "38"
+            },
+            {
+              "kind": "literal",
+              "value": "8"
+            }
+          ]
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "partitionBy": {
+      "kind": "functionCall",
+      "name": "toInt32",
+      "args": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "d1"
+          ]
+        }
+      ]
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "d2"
+          ]
+        }
+      },
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "d3"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "decimal"
+      }
+    },
+    "columns": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "d1"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "d2"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "d3"
+        ]
+      }
+    ]
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -240,6 +373,113 @@
     }
   },
   {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "decimal"
+      }
+    },
+    "columns": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "d1"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "d2"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "d3"
+        ]
+      }
+    ],
+    "selectQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "functionCall",
+          "name": "toDecimal32",
+          "args": [
+            {
+              "kind": "binaryExpr",
+              "op": "%",
+              "left": {
+                "kind": "columnRef",
+                "parts": [
+                  "number"
+                ]
+              },
+              "right": {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "10"
+              }
+            },
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "8"
+            }
+          ]
+        },
+        {
+          "kind": "functionCall",
+          "name": "toDecimal64",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "number"
+              ]
+            },
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "8"
+            }
+          ]
+        },
+        {
+          "kind": "functionCall",
+          "name": "toDecimal128",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "number"
+              ]
+            },
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "8"
+            }
+          ]
+        }
+      ],
+      "from": {
+        "kind": "tableRef",
+        "database": "system",
+        "table": "numbers"
+      },
+      "limit": {
+        "count": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "50"
+        }
+      }
+    }
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -373,5 +613,13 @@
         "direction": "ASC"
       }
     ]
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "decimal"
+    }
   }
 ]

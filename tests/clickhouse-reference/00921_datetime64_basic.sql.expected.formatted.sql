@@ -1,32 +1,55 @@
-SELECT CAST(1 AS DateTime64('abc'));
+DROP TABLE IF EXISTS A;
 
-SELECT CAST(1 AS DateTime64(100));
+SELECT CAST(1 AS DateTime64('abc')); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT } # Invalid scale parameter type
 
-SELECT CAST(1 AS DateTime64(-1));
+SELECT CAST(1 AS DateTime64(100)); -- { serverError ARGUMENT_OUT_OF_BOUND } # too big scale
 
-SELECT CAST(1 AS DateTime64(3, 'qqq'));
+SELECT CAST(1 AS DateTime64(-1)); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT } # signed scale parameter type
 
-SELECT toDateTime64('2019-09-16 19:20:11.234', 'abc');
+SELECT CAST(1 AS DateTime64(3, 'qqq')); -- { serverError BAD_ARGUMENTS } # invalid timezone
 
-SELECT toDateTime64('2019-09-16 19:20:11.234', 100);
+SELECT toDateTime64('2019-09-16 19:20:11.234', 'abc'); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT } # invalid scale
 
-SELECT toDateTime64(CAST([['CLb5Ph ']], 'String'), uniqHLL12('2Gs1V', 752));
+SELECT toDateTime64('2019-09-16 19:20:11.234', 100); -- { serverError ARGUMENT_OUT_OF_BOUND } # too big scale
 
-SELECT toDateTime64('2019-09-16 19:20:11.234', 3, 'qqq');
+SELECT toDateTime64(CAST([['CLb5Ph ']], 'String'), uniqHLL12('2Gs1V', 752)); -- { serverError ILLEGAL_COLUMN } # non-const string and non-const scale
 
-SELECT ignore(now64(gccMurmurHash()));
+SELECT toDateTime64('2019-09-16 19:20:11.234', 3, 'qqq'); -- { serverError BAD_ARGUMENTS } # invalid timezone
 
-SELECT ignore(now64('abcd'));
+SELECT ignore(now64(gccMurmurHash())); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT } # Illegal argument type
+
+SELECT ignore(now64('abcd')); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT } # Illegal argument type
 
 SELECT ignore(now64(number))
 FROM `system`.numbers
-LIMIT 10;
+LIMIT 10; -- { serverError ILLEGAL_TYPE_OF_ARGUMENT } # Illegal argument type
 
-SELECT ignore(now64(3, 'invalid timezone'));
+SELECT ignore(now64(3, 'invalid timezone')); -- { serverError BAD_ARGUMENTS }
 
-SELECT ignore(now64(3, 1111));
+SELECT ignore(now64(3, 1111)); -- { serverError ILLEGAL_COLUMN } # invalid timezone parameter type
 
-SELECT toDateTime64('2019-09-16 19:20:11', 3, 'UTC');
+WITH 'UTC' AS timezone
+
+SELECT
+    timezone,
+    timeZoneOf(now64(3, timezone)) == timezone;
+
+WITH 'Europe/Minsk' AS timezone
+
+SELECT
+    timezone,
+    timeZoneOf(now64(3, timezone)) == timezone;
+
+SELECT toDateTime64('2019-09-16 19:20:11', 3, 'UTC'); -- this now works OK and produces timestamp with no subsecond part
+
+CREATE TABLE A
+(
+    t DateTime64(3, 'UTC')
+)
+ENGINE = MergeTree()
+ORDER BY t;
+
+INSERT INTO A (t);
 
 SELECT
     toString(t, 'UTC'),
@@ -39,3 +62,5 @@ FROM A
 ORDER BY t ASC;
 
 SELECT toDateTime64('2019-09-16 19:20:11.234', 3, 'Europe/Minsk');
+
+DROP TABLE A;

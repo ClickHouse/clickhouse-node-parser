@@ -1,3 +1,7 @@
+SET enable_analyzer = 0;
+
+SET join_algorithm = 'hash';
+
 SELECT
     toTypeName(materialize(js1.k)),
     toTypeName(materialize(js2.k)),
@@ -135,3 +139,7 @@ FULL JOIN (
 ORDER BY
     js1.k ASC,
     js2.k ASC;
+
+SET join_algorithm = 'partial_merge';
+
+SET enable_analyzer = 1;

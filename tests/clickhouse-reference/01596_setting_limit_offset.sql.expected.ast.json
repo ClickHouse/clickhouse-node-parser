@@ -1,5 +1,137 @@
 [
   {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "test"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "test"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "i",
+        "type": {
+          "name": "UInt64"
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree",
+      "args": []
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "i"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "test"
+      }
+    },
+    "selectQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "number"
+          ]
+        }
+      ],
+      "from": {
+        "kind": "tableFunctionRef",
+        "name": "numbers",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "100"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "test"
+      }
+    },
+    "selectQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "number"
+          ]
+        }
+      ],
+      "from": {
+        "kind": "tableFunctionRef",
+        "name": "numbers",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "10"
+          },
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "100"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "kind": "optimize",
+    "table": {
+      "kind": "tableRef",
+      "table": "test"
+    },
+    "final": true
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "limit",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "5"
+        }
+      }
+    ],
+    "leadingComments": [
+      "-- Only set limit"
+    ]
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -21,6 +153,9 @@
         },
         "direction": "ASC"
       }
+    ],
+    "trailingComments": [
+      "-- 5 rows"
     ]
   },
   {
@@ -50,7 +185,10 @@
       "kind": "literal",
       "type": "UInt64",
       "value": "20"
-    }
+    },
+    "trailingComments": [
+      "-- 5 rows"
+    ]
   },
   {
     "kind": "select",
@@ -113,6 +251,9 @@
         },
         "direction": "ASC"
       }
+    ],
+    "trailingComments": [
+      "-- 5 rows"
     ]
   },
   {
@@ -149,7 +290,10 @@
       "kind": "literal",
       "type": "UInt64",
       "value": "192"
-    }
+    },
+    "trailingComments": [
+      "-- 4 rows"
+    ]
   },
   {
     "kind": "select",
@@ -185,7 +329,10 @@
       "kind": "literal",
       "type": "UInt64",
       "value": "195"
-    }
+    },
+    "trailingComments": [
+      "-- 5 rows"
+    ]
   },
   {
     "kind": "select",
@@ -233,6 +380,35 @@
     }
   },
   {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "limit",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      }
+    ],
+    "leadingComments": [
+      "-- Only set offset"
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "offset",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "195"
+        }
+      }
+    ]
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -261,7 +437,23 @@
         "type": "UInt64",
         "value": "100"
       }
-    }
+    },
+    "trailingComments": [
+      "-- no result"
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "offset",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "10"
+        }
+      }
+    ]
   },
   {
     "kind": "select",
@@ -297,7 +489,10 @@
       "kind": "literal",
       "type": "UInt64",
       "value": "100"
-    }
+    },
+    "trailingComments": [
+      "-- 10 rows"
+    ]
   },
   {
     "kind": "select",
@@ -333,7 +528,10 @@
       "kind": "literal",
       "type": "UInt64",
       "value": "100"
-    }
+    },
+    "trailingComments": [
+      "-- 1 rows"
+    ]
   },
   {
     "kind": "select",
@@ -435,6 +633,22 @@
     }
   },
   {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "limit",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "10"
+        }
+      }
+    ],
+    "leadingComments": [
+      "-- offset and limit together"
+    ]
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -468,7 +682,10 @@
       "kind": "literal",
       "type": "UInt64",
       "value": "50"
-    }
+    },
+    "trailingComments": [
+      "-- 10 rows"
+    ]
   },
   {
     "kind": "select",
@@ -504,7 +721,10 @@
       "kind": "literal",
       "type": "UInt64",
       "value": "190"
-    }
+    },
+    "trailingComments": [
+      "-- 0 rows"
+    ]
   },
   {
     "kind": "select",
@@ -540,7 +760,10 @@
       "kind": "literal",
       "type": "UInt64",
       "value": "185"
-    }
+    },
+    "trailingComments": [
+      "-- 5 rows"
+    ]
   },
   {
     "kind": "select",
@@ -576,6 +799,17 @@
       "kind": "literal",
       "type": "UInt64",
       "value": "5"
+    },
+    "trailingComments": [
+      "-- 8 rows"
+    ]
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "test"
     }
   }
 ]

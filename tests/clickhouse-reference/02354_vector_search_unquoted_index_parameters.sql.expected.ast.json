@@ -1,0 +1,346 @@
+[
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "tab1"
+    },
+    "ifExists": true,
+    "leadingComments": [
+      "-- Tags: no-fasttest, no-ordinary-database",
+      "-- Tests that quoted and unquoted parameters can be passed to vector search indexes."
+    ]
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "tab2"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "tab1"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "id",
+        "type": {
+          "name": "Int32"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "vec",
+        "type": {
+          "name": "Array",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "Float32"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "kind": "indexDef",
+        "name": "vec_idx",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "vec"
+          ]
+        },
+        "indexType": {
+          "name": "vector_similarity",
+          "args": [
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "hnsw"
+            },
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "L2Distance"
+            },
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "1"
+            }
+          ]
+        }
+      }
+    ],
+    "primaryKeyInSchema": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "id"
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "tab2"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "id",
+        "type": {
+          "name": "Int32"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "vec",
+        "type": {
+          "name": "Array",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "Float32"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "kind": "indexDef",
+        "name": "vec_idx",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "vec"
+          ]
+        },
+        "indexType": {
+          "name": "vector_similarity",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "hnsw"
+              ]
+            },
+            {
+              "kind": "columnRef",
+              "parts": [
+                "L2Distance"
+              ]
+            },
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "1"
+            }
+          ]
+        }
+      }
+    ],
+    "primaryKeyInSchema": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "id"
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "tab1"
+    }
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "tab2"
+    }
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "tab1"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "id",
+        "type": {
+          "name": "Int32"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "vec",
+        "type": {
+          "name": "Array",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "Float32"
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "primaryKeyInSchema": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "id"
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "tab2"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "id",
+        "type": {
+          "name": "Int32"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "vec",
+        "type": {
+          "name": "Array",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "Float32"
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "primaryKeyInSchema": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "id"
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "alter",
+    "table": {
+      "kind": "tableRef",
+      "table": "tab1"
+    },
+    "commands": [
+      {
+        "kind": "alterCommand",
+        "commandType": "ADD_INDEX",
+        "index": {
+          "kind": "indexDef",
+          "name": "idx1",
+          "expr": {
+            "kind": "columnRef",
+            "parts": [
+              "vec"
+            ]
+          },
+          "indexType": {
+            "name": "vector_similarity",
+            "args": [
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "hnsw"
+              },
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "L2Distance"
+              },
+              {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "1"
+              }
+            ]
+          }
+        }
+      }
+    ]
+  },
+  {
+    "kind": "alter",
+    "table": {
+      "kind": "tableRef",
+      "table": "tab2"
+    },
+    "commands": [
+      {
+        "kind": "alterCommand",
+        "commandType": "ADD_INDEX",
+        "index": {
+          "kind": "indexDef",
+          "name": "idx2",
+          "expr": {
+            "kind": "columnRef",
+            "parts": [
+              "vec"
+            ]
+          },
+          "indexType": {
+            "name": "vector_similarity",
+            "args": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "hnsw"
+                ]
+              },
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "L2Distance"
+                ]
+              },
+              {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "1"
+              }
+            ]
+          }
+        }
+      }
+    ]
+  }
+]

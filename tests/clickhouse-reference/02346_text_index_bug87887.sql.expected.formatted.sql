@@ -1,3 +1,24 @@
+-- Test for Bugs 87887 and 88119
+SET enable_full_text_index = 1;
+
+SET use_skip_indexes_on_data_read = 1;
+
+SET use_skip_indexes = 1;
+
+SET query_plan_direct_read_from_text_index = 1;
+
+DROP TABLE IF EXISTS tab;
+
+CREATE TABLE tab
+(
+    c0 LowCardinality(String),
+    INDEX i0 c0 TYPE text(tokenizer = 'splitByNonAlpha')
+)
+ENGINE = MergeTree
+ORDER BY tuple();
+
+INSERT INTO tab (c0);
+
 SELECT
     'Test hasToken(text, text):',
     count()
@@ -27,3 +48,5 @@ SELECT
     count()
 FROM tab
 WHERE hasToken(c0, NULL);
+
+DROP TABLE tab;

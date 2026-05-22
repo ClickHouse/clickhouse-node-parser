@@ -1,2 +1,14 @@
+DROP TABLE IF EXISTS test_00688;
+
+CREATE TABLE test_00688
+(
+    a UInt8
+)
+ENGINE = Memory;
+
+INSERT INTO test_00688;
+
 SELECT multiIf(a = 1, 0, NULL)
 FROM test_00688;
+
+DROP TABLE test_00688;

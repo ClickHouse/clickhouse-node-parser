@@ -1,5 +1,43 @@
 [
   {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "enable_analyzer",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "describe",
+    "target": {
+      "kind": "subquery",
+      "query": {
+        "kind": "select",
+        "select": [
+          {
+            "kind": "binaryExpr",
+            "op": "+",
+            "left": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "1"
+            },
+            "right": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "1"
+            }
+          }
+        ]
+      }
+    }
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -29,6 +67,33 @@
     ]
   },
   {
+    "kind": "describe",
+    "target": {
+      "kind": "subquery",
+      "query": {
+        "kind": "select",
+        "select": [
+          {
+            "kind": "binaryExpr",
+            "op": "+",
+            "left": {
+              "kind": "columnRef",
+              "parts": [
+                "dummy"
+              ]
+            },
+            "right": {
+              "kind": "columnRef",
+              "parts": [
+                "dummy"
+              ]
+            }
+          }
+        ]
+      }
+    }
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -48,6 +113,88 @@
         }
       }
     ]
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "test_table"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "test_table"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "id",
+        "type": {
+          "name": "UInt64"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "value",
+        "type": {
+          "name": "String"
+        }
+      }
+    ],
+    "engine": {
+      "name": "TinyLog"
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "test_table"
+      }
+    }
+  },
+  {
+    "kind": "describe",
+    "target": {
+      "kind": "subquery",
+      "query": {
+        "kind": "select",
+        "select": [
+          {
+            "kind": "binaryExpr",
+            "op": "+",
+            "left": {
+              "kind": "columnRef",
+              "parts": [
+                "id"
+              ]
+            },
+            "right": {
+              "kind": "functionCall",
+              "name": "length",
+              "args": [
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "value"
+                  ]
+                }
+              ]
+            }
+          }
+        ],
+        "from": {
+          "kind": "tableRef",
+          "table": "test_table"
+        }
+      }
+    }
   },
   {
     "kind": "select",
@@ -78,6 +225,57 @@
     "from": {
       "kind": "tableRef",
       "table": "test_table"
+    }
+  },
+  {
+    "kind": "describe",
+    "target": {
+      "kind": "subquery",
+      "query": {
+        "kind": "select",
+        "select": [
+          {
+            "kind": "functionCall",
+            "name": "concat",
+            "args": [
+              {
+                "kind": "functionCall",
+                "name": "concat",
+                "args": [
+                  {
+                    "kind": "functionCall",
+                    "name": "toString",
+                    "args": [
+                      {
+                        "kind": "columnRef",
+                        "parts": [
+                          "id"
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "kind": "literal",
+                    "type": "String",
+                    "value": "_"
+                  }
+                ]
+              },
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "value"
+                ],
+                "parenthesized": true
+              }
+            ]
+          }
+        ],
+        "from": {
+          "kind": "tableRef",
+          "table": "test_table"
+        }
+      }
     }
   },
   {

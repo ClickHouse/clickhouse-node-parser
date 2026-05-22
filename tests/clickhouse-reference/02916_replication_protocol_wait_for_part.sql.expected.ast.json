@@ -1,5 +1,156 @@
 [
   {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "tableIn"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "n",
+        "type": {
+          "name": "int"
+        }
+      }
+    ],
+    "engine": {
+      "name": "ReplicatedMergeTree",
+      "args": [
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "/test/02916/{database}/table"
+        },
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "1"
+        }
+      ]
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "functionCall",
+          "name": "tuple",
+          "args": []
+        }
+      }
+    ],
+    "settings": [
+      {
+        "name": "storage_policy",
+        "value": {
+          "kind": "literal",
+          "type": "String",
+          "value": "s3_cache"
+        }
+      },
+      {
+        "name": "sleep_before_commit_local_part_in_replicated_table_ms",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "5000"
+        }
+      }
+    ],
+    "settingsAfterOrderBy": true,
+    "leadingComments": [
+      "-- Tags: no-replicated-database, no-fasttest, no-shared-merge-tree",
+      "-- Tag no-replicated-database: different number of replicas"
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "tableOut"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "n",
+        "type": {
+          "name": "int"
+        }
+      }
+    ],
+    "engine": {
+      "name": "ReplicatedMergeTree",
+      "args": [
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "/test/02916/{database}/table"
+        },
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "2"
+        }
+      ]
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "functionCall",
+          "name": "tuple",
+          "args": []
+        }
+      }
+    ],
+    "settings": [
+      {
+        "name": "storage_policy",
+        "value": {
+          "kind": "literal",
+          "type": "String",
+          "value": "s3_cache"
+        }
+      }
+    ],
+    "settingsAfterOrderBy": true
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "send_logs_level",
+        "value": {
+          "kind": "literal",
+          "type": "String",
+          "value": "error"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "tableIn"
+      }
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "tableIn"
+      }
+    }
+  },
+  {
+    "kind": "system",
+    "body": "SYSTEM sync replica tableOut"
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -9,6 +160,22 @@
       }
     ],
     "from": {
+      "kind": "tableRef",
+      "table": "tableOut"
+    }
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "tableIn"
+    }
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
       "kind": "tableRef",
       "table": "tableOut"
     }

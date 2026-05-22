@@ -1,0 +1,235 @@
+[
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "optimize_use_projections",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      },
+      {
+        "name": "force_optimize_projection",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "tp"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "tp"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "type",
+        "type": {
+          "name": "Int32"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "device",
+        "type": {
+          "name": "UUID"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "cnt",
+        "type": {
+          "name": "UInt64"
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "type"
+          ]
+        }
+      },
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "device"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "tp"
+      }
+    },
+    "selectQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "binaryExpr",
+          "op": "%",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "number"
+            ]
+          },
+          "right": {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "3"
+          }
+        },
+        {
+          "kind": "functionCall",
+          "name": "generateUUIDv4",
+          "args": []
+        },
+        {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      ],
+      "from": {
+        "kind": "tableFunctionRef",
+        "name": "numbers",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "300"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "kind": "alter",
+    "table": {
+      "kind": "tableRef",
+      "table": "tp"
+    },
+    "commands": [
+      {
+        "kind": "alterCommand",
+        "commandType": "ADD_PROJECTION",
+        "projection": {
+          "kind": "projectionDef",
+          "name": "uniq_city_proj",
+          "query": {
+            "kind": "select",
+            "select": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "type"
+                ]
+              },
+              {
+                "kind": "functionCall",
+                "name": "uniq",
+                "args": [
+                  {
+                    "kind": "functionCall",
+                    "name": "cityHash64",
+                    "args": [
+                      {
+                        "kind": "columnRef",
+                        "parts": [
+                          "device"
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "kind": "functionCall",
+                "name": "sum",
+                "args": [
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "cnt"
+                    ]
+                  }
+                ]
+              }
+            ],
+            "groupBy": {
+              "kind": "expressions",
+              "items": [
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "type"
+                  ]
+                }
+              ]
+            }
+          }
+        }
+      }
+    ]
+  },
+  {
+    "kind": "alter",
+    "table": {
+      "kind": "tableRef",
+      "table": "tp"
+    },
+    "commands": [
+      {
+        "kind": "alterCommand",
+        "commandType": "MATERIALIZE_PROJECTION",
+        "projectionName": "uniq_city_proj"
+      }
+    ],
+    "settings": [
+      {
+        "name": "mutations_sync",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "tp"
+    }
+  }
+]

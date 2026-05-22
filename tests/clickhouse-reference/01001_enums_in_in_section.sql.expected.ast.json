@@ -1,0 +1,174 @@
+[
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "enums"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "enums"
+    },
+    "asTableFunction": {
+      "name": "VALUES",
+      "args": [
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "x Enum8('hello' = 0, 'world' = 1, 'foo' = -1), y String"
+        },
+        {
+          "kind": "tupleLiteral",
+          "elements": [
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "hello"
+            },
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "find me"
+            }
+          ],
+          "source": "('hello', 'find me')"
+        },
+        {
+          "kind": "tupleLiteral",
+          "elements": [
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "0"
+            },
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "and me"
+            }
+          ],
+          "source": "(0, 'and me')"
+        },
+        {
+          "kind": "tupleLiteral",
+          "elements": [
+            {
+              "kind": "literal",
+              "type": "Int64",
+              "value": "-1"
+            },
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "also me"
+            }
+          ],
+          "source": "(-1, 'also me')"
+        },
+        {
+          "kind": "tupleLiteral",
+          "elements": [
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "world"
+            },
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "don't find me"
+            }
+          ],
+          "source": "('world', 'don\\'t find me')"
+        }
+      ]
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "y"
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "enums"
+    },
+    "where": {
+      "kind": "inExpr",
+      "negated": false,
+      "expr": {
+        "kind": "columnRef",
+        "parts": [
+          "x"
+        ]
+      },
+      "values": [
+        {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        },
+        {
+          "kind": "literal",
+          "type": "Int64",
+          "value": "-1"
+        }
+      ]
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "y"
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "enums"
+    },
+    "where": {
+      "kind": "inExpr",
+      "negated": false,
+      "expr": {
+        "kind": "columnRef",
+        "parts": [
+          "x"
+        ]
+      },
+      "values": [
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "hello"
+        },
+        {
+          "kind": "literal",
+          "type": "Int64",
+          "value": "-1"
+        }
+      ]
+    }
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "enums"
+    }
+  }
+]

@@ -1,9 +1,11 @@
 import * as fs from 'fs';
 import * as path from 'path';
 import { format, formatExplain, parse } from '../src/index';
+import { stripMeta } from './helpers';
 
 const CLICKHOUSE_DIR = path.join(__dirname, 'clickhouse-reference');
 const QUERY_PARAMS = '<Query Parameters>';
+const EXPLAIN_ERROR = '<Explain Error>';
 
 function discoverCases(): string[] {
   if (!fs.existsSync(CLICKHOUSE_DIR)) return [];
@@ -38,6 +40,7 @@ describe('clickhouse tests', () => {
       for (let i = 0; i < expectedEntries.length; i++) {
         const expected = expectedEntries[i].trimEnd();
         if (expected === QUERY_PARAMS) continue;
+        if (expected === EXPLAIN_ERROR) continue;
         const actual = formatExplain([statements[i]]).trimEnd();
         expect(actual).toBe(expected);
       }
@@ -50,7 +53,7 @@ describe('clickhouse tests', () => {
       const statements = parse(sql);
 
       const expectedAst = JSON.parse(fs.readFileSync(astPath, 'utf-8'));
-      expect(statements).toEqual(expectedAst);
+      expect(stripMeta(statements)).toEqual(expectedAst);
     });
 
     it(`${fileName} - format`, () => {
@@ -70,7 +73,7 @@ describe('clickhouse tests', () => {
 
       const sqlFormatted = format(statements);
       const reparsed = parse(sqlFormatted);
-      expect(reparsed).toEqual(statements);
+      expect(stripMeta(reparsed)).toEqual(stripMeta(statements));
     });
   }
 });

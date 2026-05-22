@@ -1,5 +1,166 @@
 [
   {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "cat_hist"
+    },
+    "ifExists": true,
+    "leadingComments": [
+      "-- Tags: distributed",
+      "-- test from https://github.com/ClickHouse/ClickHouse/issues/11755#issuecomment-700850254"
+    ]
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "prod_hist"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "products_l"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "products"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "cat_hist"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "categoryId",
+        "type": {
+          "name": "UUID"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "categoryName",
+        "type": {
+          "name": "String"
+        }
+      }
+    ],
+    "engine": {
+      "name": "Memory"
+    }
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "prod_hist"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "categoryId",
+        "type": {
+          "name": "UUID"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "productId",
+        "type": {
+          "name": "UUID"
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "productId"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "products_l"
+    },
+    "asTable": {
+      "kind": "tableRef",
+      "table": "prod_hist"
+    },
+    "engine": {
+      "name": "Distributed",
+      "args": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "test_cluster_two_shards"
+          ]
+        },
+        {
+          "kind": "functionCall",
+          "name": "currentDatabase",
+          "args": []
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "prod_hist"
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "products"
+    },
+    "asTable": {
+      "kind": "tableRef",
+      "table": "prod_hist"
+    },
+    "engine": {
+      "name": "Merge",
+      "args": [
+        {
+          "kind": "functionCall",
+          "name": "currentDatabase",
+          "args": []
+        },
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "^products_"
+        }
+      ]
+    }
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -12,7 +173,7 @@
         "table": "products",
         "alias": "p"
       },
-      "kind": "join",
+      "kind": "joinExpr",
       "joinType": "LEFT",
       "right": {
         "kind": "tableRef",
@@ -40,7 +201,7 @@
         "table": "products",
         "alias": "p"
       },
-      "kind": "join",
+      "kind": "joinExpr",
       "joinType": "LEFT",
       "right": {
         "kind": "tableRef",
@@ -53,6 +214,38 @@
           "categoryId"
         ]
       }
+    }
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "cat_hist"
+    }
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "prod_hist"
+    }
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "products_l"
+    }
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "products"
     }
   }
 ]

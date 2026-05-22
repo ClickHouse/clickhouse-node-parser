@@ -1,5 +1,82 @@
 [
   {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "mytable"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "operand",
+        "type": {
+          "name": "Float64"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "low",
+        "type": {
+          "name": "Float64"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "high",
+        "type": {
+          "name": "Float64"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "count",
+        "type": {
+          "name": "UInt64"
+        }
+      }
+    ],
+    "primaryKeyInSchema": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "operand"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "low"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "high"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "count"
+        ]
+      }
+    ],
+    "engine": {
+      "name": "MergeTree",
+      "args": []
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "mytable"
+      }
+    }
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -163,7 +240,13 @@
         "type": "UInt64",
         "value": "0"
       }
-    }
+    },
+    "leadingComments": [
+      "-- zero is not valid for count"
+    ],
+    "trailingComments": [
+      "-- { serverError BAD_ARGUMENTS }"
+    ]
   },
   {
     "kind": "select",
@@ -194,6 +277,12 @@
           }
         ]
       }
+    ],
+    "leadingComments": [
+      "-- operand, low and high cannot be NaN"
+    ],
+    "trailingComments": [
+      "-- { serverError BAD_ARGUMENTS }"
     ]
   },
   {
@@ -225,6 +314,9 @@
           }
         ]
       }
+    ],
+    "trailingComments": [
+      "-- { serverError BAD_ARGUMENTS }"
     ]
   },
   {
@@ -256,6 +348,9 @@
           }
         ]
       }
+    ],
+    "trailingComments": [
+      "-- { serverError BAD_ARGUMENTS }"
     ]
   },
   {
@@ -287,6 +382,12 @@
           }
         ]
       }
+    ],
+    "leadingComments": [
+      "-- low and high cannot be Inf"
+    ],
+    "trailingComments": [
+      "-- { serverError BAD_ARGUMENTS }"
     ]
   },
   {
@@ -318,6 +419,12 @@
           }
         ]
       }
+    ],
+    "leadingComments": [
+      "-- low and high cannot be Inf"
+    ],
+    "trailingComments": [
+      "-- { serverError BAD_ARGUMENTS }"
     ]
   },
   {
@@ -349,6 +456,9 @@
           }
         ]
       }
+    ],
+    "leadingComments": [
+      "-- operand can be Inf"
     ]
   },
   {
@@ -488,7 +598,10 @@
         "type": "UInt64",
         "value": "0"
       }
-    }
+    },
+    "leadingComments": [
+      "-- IntXX types"
+    ]
   },
   {
     "kind": "select",
@@ -614,7 +727,10 @@
         "type": "UInt64",
         "value": "0"
       }
-    }
+    },
+    "leadingComments": [
+      "-- UIntXX types"
+    ]
   },
   {
     "kind": "select",
@@ -645,6 +761,9 @@
           }
         ]
       }
+    ],
+    "trailingComments": [
+      "-- { serverError ILLEGAL_TYPE_OF_ARGUMENT }"
     ]
   },
   {
@@ -676,6 +795,9 @@
           }
         ]
       }
+    ],
+    "trailingComments": [
+      "-- { serverError ILLEGAL_TYPE_OF_ARGUMENT }"
     ]
   },
   {
@@ -707,6 +829,9 @@
           }
         ]
       }
+    ],
+    "trailingComments": [
+      "-- { serverError ILLEGAL_TYPE_OF_ARGUMENT }"
     ]
   },
   {
@@ -744,6 +869,9 @@
           }
         ]
       }
+    ],
+    "trailingComments": [
+      "-- { serverError ILLEGAL_TYPE_OF_ARGUMENT }"
     ]
   },
   {
@@ -781,6 +909,9 @@
           }
         ]
       }
+    ],
+    "trailingComments": [
+      "-- { serverError ILLEGAL_TYPE_OF_ARGUMENT }"
     ]
   },
   {
@@ -818,6 +949,9 @@
           }
         ]
       }
+    ],
+    "trailingComments": [
+      "-- { serverError ILLEGAL_TYPE_OF_ARGUMENT }"
     ]
   },
   {
@@ -861,6 +995,9 @@
           }
         ]
       }
+    ],
+    "leadingComments": [
+      "-- Return type checks"
     ]
   },
   {
@@ -1043,7 +1180,10 @@
         "type": "UInt64",
         "value": "0"
       }
-    }
+    },
+    "leadingComments": [
+      "-- Test handling ColumnConst"
+    ]
   },
   {
     "kind": "select",

@@ -1,5 +1,38 @@
+-- Tags: distributed
+-- TODO: correct testing with real unique shards
+SET optimize_distributed_group_by_sharding_key = 1;
+
+-- Some queries in this test require sorting after aggregation.
+SET max_bytes_before_external_group_by = 0;
+
+SET max_bytes_ratio_before_external_group_by = 0;
+
+DROP TABLE IF EXISTS dist_01247;
+
+DROP TABLE IF EXISTS data_01247;
+
+CREATE TABLE data_01247 AS `system`.numbers
+ENGINE = Memory();
+
+INSERT INTO data_01247 SELECT *
+FROM `system`.numbers
+LIMIT 2;
+
+CREATE TABLE dist_01247 AS data_01247
+ENGINE = Distributed(test_cluster_two_shards, currentDatabase(), data_01247, number);
+
+-- since data is not inserted via distributed it will have duplicates
+-- (and this is how we ensure that this optimization will work)
+SET max_distributed_connections = 1;
+
+SET prefer_localhost_replica = 0;
+
+SET enable_positional_arguments = 0;
+
 SELECT *
 FROM dist_01247;
+
+SET optimize_skip_unused_shards = 1;
 
 SELECT
     count(),
@@ -200,6 +233,16 @@ GROUP BY number
 WITH TOTALS
 LIMIT 1;
 
+CREATE TABLE data_01247
+ENGINE = Memory() AS
+SELECT
+    number AS key,
+    0 AS value
+FROM numbers(2);
+
+CREATE TABLE dist_01247 AS data_01247
+ENGINE = Distributed(test_cluster_two_shards, currentDatabase(), data_01247, key);
+
 SELECT *
 FROM dist_01247
 GROUP BY
@@ -224,7 +267,7 @@ FROM remote('127.{1,2}', view((
     )), cityHash64(k1, k2))
 GROUP BY
     k1,
-    k2;
+    k2; -- optimization applied
 
 SELECT
     k1,
@@ -236,7 +279,7 @@ FROM remote('127.{1,2}', view((
             2 AS k2,
             3 AS v
     )), cityHash64(k1, k2))
-GROUP BY k1;
+GROUP BY k1; -- optimization does not applied
 
 SELECT DISTINCT
     k1,
@@ -246,7 +289,7 @@ FROM remote('127.{1,2}', view((
             1 AS k1,
             2 AS k2,
             3 AS v
-    )), cityHash64(k1, k2));
+    )), cityHash64(k1, k2)); -- optimization applied
 
 SELECT DISTINCT ON (k1) k2
 FROM remote('127.{1,2}', view((
@@ -254,10 +297,14 @@ FROM remote('127.{1,2}', view((
             1 AS k1,
             2 AS k2,
             3 AS v
-    )), cityHash64(k1, k2));
+    )), cityHash64(k1, k2)); -- optimization does not applied
 
 SELECT
     key,
     sum(sum(value)) OVER (ROWS UNBOUNDED PRECEDING)
 FROM dist_01247
 GROUP BY key;
+
+DROP TABLE dist_01247;
+
+DROP TABLE data_01247;

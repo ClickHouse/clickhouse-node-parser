@@ -1,5 +1,166 @@
 [
   {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "t"
+    },
+    "ifExists": true,
+    "leadingComments": [
+      "-- Tags: no-tsan, no-asan, no-msan, no-ubsan, no-sanitize-coverage, no-parallel-replicas",
+      "-- no sanitizers -- memory consumption is unpredicatable with sanitizers"
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "t"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "s",
+        "type": {
+          "name": "String"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "n",
+        "type": {
+          "name": "UInt8"
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "functionCall",
+          "name": "tuple",
+          "args": []
+        }
+      }
+    ]
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "t"
+      }
+    },
+    "selectQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "alias",
+          "expr": {
+            "kind": "functionCall",
+            "name": "repeat",
+            "args": [
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "x"
+              },
+              {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "100"
+              }
+            ]
+          },
+          "alias": "s"
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "number"
+          ]
+        }
+      ],
+      "from": {
+        "kind": "tableFunctionRef",
+        "name": "numbers_mt",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "Float64",
+            "value": "3e5"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "max_result_rows",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      },
+      {
+        "name": "max_result_bytes",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      },
+      {
+        "name": "max_block_size",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "65409"
+        }
+      },
+      {
+        "name": "max_threads",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "32"
+        }
+      },
+      {
+        "name": "join_algorithm",
+        "value": {
+          "kind": "literal",
+          "type": "String",
+          "value": "parallel_hash"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "max_memory_usage",
+        "value": {
+          "kind": "literal",
+          "type": "String",
+          "value": "5Gi"
+        }
+      }
+    ],
+    "trailingComments": [
+      "-- on my machine with max_joined_block_size_rows=65K I see consumption of ~1G,"
+    ]
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -12,7 +173,7 @@
         "table": "t",
         "alias": "t1"
       },
-      "kind": "join",
+      "kind": "joinExpr",
       "joinType": "INNER",
       "right": {
         "kind": "tableRef",
@@ -51,6 +212,9 @@
           "value": "65409"
         }
       }
+    ],
+    "leadingComments": [
+      "-- without this limit (i.e. max_joined_block_size_rows=0) consumption is ~8-10G"
     ]
   }
 ]

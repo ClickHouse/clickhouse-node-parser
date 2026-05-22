@@ -1,5 +1,425 @@
 [
   {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "t_00751"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "t_mv_00751"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "u_00751"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "v_00751"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "t_00751"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "date",
+        "type": {
+          "name": "Date"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "platform",
+        "type": {
+          "name": "Enum8",
+          "args": [
+            {
+              "kind": "enumValues",
+              "values": [
+                {
+                  "name": "a",
+                  "value": "0"
+                },
+                {
+                  "name": "b",
+                  "value": "1"
+                }
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "app",
+        "type": {
+          "name": "Enum8",
+          "args": [
+            {
+              "kind": "enumValues",
+              "values": [
+                {
+                  "name": "a",
+                  "value": "0"
+                },
+                {
+                  "name": "b",
+                  "value": "1"
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ],
+    "engine": {
+      "name": "Memory"
+    }
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "u_00751"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "app",
+        "type": {
+          "name": "Enum8",
+          "args": [
+            {
+              "kind": "enumValues",
+              "values": [
+                {
+                  "name": "a",
+                  "value": "0"
+                },
+                {
+                  "name": "b",
+                  "value": "1"
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ],
+    "engine": {
+      "name": "Memory"
+    }
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "v_00751"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "platform",
+        "type": {
+          "name": "Enum8",
+          "args": [
+            {
+              "kind": "enumValues",
+              "values": [
+                {
+                  "name": "a",
+                  "value": "0"
+                },
+                {
+                  "name": "b",
+                  "value": "1"
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ],
+    "engine": {
+      "name": "Memory"
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "u_00751"
+      }
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "v_00751"
+      }
+    }
+  },
+  {
+    "kind": "createMaterializedView",
+    "table": {
+      "kind": "tableRef",
+      "table": "t_mv_00751"
+    },
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "date"
+          ]
+        }
+      }
+    ],
+    "asQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "date"
+          ]
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "platform"
+          ]
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "app"
+          ]
+        }
+      ],
+      "from": {
+        "kind": "tableRef",
+        "table": "t_00751"
+      },
+      "where": {
+        "kind": "naryExpr",
+        "op": "AND",
+        "operands": [
+          {
+            "kind": "binaryExpr",
+            "op": "=",
+            "left": {
+              "kind": "columnRef",
+              "parts": [
+                "app"
+              ]
+            },
+            "right": {
+              "kind": "subqueryExpr",
+              "query": {
+                "kind": "select",
+                "select": [
+                  {
+                    "kind": "functionCall",
+                    "name": "min",
+                    "args": [
+                      {
+                        "kind": "columnRef",
+                        "parts": [
+                          "app"
+                        ]
+                      }
+                    ]
+                  }
+                ],
+                "from": {
+                  "kind": "tableRef",
+                  "table": "u_00751"
+                }
+              }
+            }
+          },
+          {
+            "kind": "binaryExpr",
+            "op": "=",
+            "left": {
+              "kind": "columnRef",
+              "parts": [
+                "platform"
+              ]
+            },
+            "right": {
+              "kind": "subqueryExpr",
+              "query": {
+                "kind": "select",
+                "select": [
+                  {
+                    "kind": "subqueryExpr",
+                    "query": {
+                      "kind": "select",
+                      "select": [
+                        {
+                          "kind": "functionCall",
+                          "name": "min",
+                          "args": [
+                            {
+                              "kind": "columnRef",
+                              "parts": [
+                                "platform"
+                              ]
+                            }
+                          ]
+                        }
+                      ],
+                      "from": {
+                        "kind": "tableRef",
+                        "table": "v_00751"
+                      }
+                    }
+                  }
+                ]
+              }
+            }
+          }
+        ]
+      }
+    }
+  },
+  {
+    "kind": "showCreate",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "database": {
+        "kind": "queryParam",
+        "name": "CLICKHOUSE_DATABASE",
+        "type": "Identifier"
+      },
+      "table": "t_mv_00751"
+    },
+    "format": "TabSeparatedRaw"
+  },
+  {
+    "kind": "use",
+    "database": "default"
+  },
+  {
+    "kind": "detach",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "database": {
+        "kind": "queryParam",
+        "name": "CLICKHOUSE_DATABASE",
+        "type": "Identifier"
+      },
+      "table": "t_mv_00751"
+    }
+  },
+  {
+    "kind": "attach",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "database": {
+        "kind": "queryParam",
+        "name": "CLICKHOUSE_DATABASE",
+        "type": "Identifier"
+      },
+      "table": "t_mv_00751"
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "database": {
+          "kind": "queryParam",
+          "name": "CLICKHOUSE_DATABASE",
+          "type": "Identifier"
+        },
+        "table": "t_00751"
+      }
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "database": {
+          "kind": "queryParam",
+          "name": "CLICKHOUSE_DATABASE",
+          "type": "Identifier"
+        },
+        "table": "u_00751"
+      }
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "database": {
+          "kind": "queryParam",
+          "name": "CLICKHOUSE_DATABASE",
+          "type": "Identifier"
+        },
+        "table": "v_00751"
+      }
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "database": {
+          "kind": "queryParam",
+          "name": "CLICKHOUSE_DATABASE",
+          "type": "Identifier"
+        },
+        "table": "t_00751"
+      }
+    }
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -8,7 +428,11 @@
     ],
     "from": {
       "kind": "tableRef",
-      "database": "{CLICKHOUSE_DATABASE:Identifier}",
+      "database": {
+        "kind": "queryParam",
+        "name": "CLICKHOUSE_DATABASE",
+        "type": "Identifier"
+      },
       "table": "t_00751"
     },
     "orderBy": [
@@ -33,7 +457,11 @@
     ],
     "from": {
       "kind": "tableRef",
-      "database": "{CLICKHOUSE_DATABASE:Identifier}",
+      "database": {
+        "kind": "queryParam",
+        "name": "CLICKHOUSE_DATABASE",
+        "type": "Identifier"
+      },
       "table": "t_mv_00751"
     },
     "orderBy": [
@@ -48,5 +476,57 @@
         "direction": "ASC"
       }
     ]
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "database": {
+        "kind": "queryParam",
+        "name": "CLICKHOUSE_DATABASE",
+        "type": "Identifier"
+      },
+      "table": "t_00751"
+    }
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "database": {
+        "kind": "queryParam",
+        "name": "CLICKHOUSE_DATABASE",
+        "type": "Identifier"
+      },
+      "table": "t_mv_00751"
+    }
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "database": {
+        "kind": "queryParam",
+        "name": "CLICKHOUSE_DATABASE",
+        "type": "Identifier"
+      },
+      "table": "u_00751"
+    }
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "database": {
+        "kind": "queryParam",
+        "name": "CLICKHOUSE_DATABASE",
+        "type": "Identifier"
+      },
+      "table": "v_00751"
+    }
   }
 ]

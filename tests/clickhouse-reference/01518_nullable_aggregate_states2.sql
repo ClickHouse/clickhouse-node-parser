@@ -1,3 +1,137 @@
+DROP TABLE IF EXISTS testNullableStates;
+DROP TABLE IF EXISTS testNullableStatesAgg;
+CREATE TABLE testNullableStates (
+   ts DateTime,
+   id String,
+   string Nullable(String),
+   float64 Nullable(Float64),
+   float32 Nullable(Float32),
+   decimal325 Nullable(Decimal32(5)),
+   date Nullable(Date),
+   datetime Nullable(DateTime),
+   datetime64 Nullable(DateTime64),
+   int64 Nullable(Int64),
+   int32 Nullable(Int32),
+   int16 Nullable(Int16),
+   int8 Nullable(Int8))
+ENGINE=MergeTree PARTITION BY toStartOfDay(ts) ORDER BY id;
+INSERT INTO testNullableStates SELECT
+    toDateTime('2020-01-01 00:00:00') + number AS ts,
+    toString(number % 999) AS id,
+    toString(number) AS string,
+    number / 333 AS float64,
+    number / 333 AS float32,
+    number / 333 AS decimal325,
+    toDate(ts),
+    ts,
+    ts,
+    number,
+    toInt32(number),
+    toInt16(number),
+    toInt8(number)
+FROM numbers(100000);
+INSERT INTO testNullableStates SELECT
+    toDateTime('2020-01-01 00:00:00') + number AS ts,
+    toString(number % 999 - 5) AS id,
+    NULL AS string,
+    NULL AS float64,
+    NULL AS float32,
+    NULL AS decimal325,
+    NULL,
+    NULL,
+    NULL,
+    NULL,
+    NULL,
+    NULL,
+    NULL
+FROM numbers(500);
+CREATE TABLE testNullableStatesAgg
+(
+    `ts` DateTime,
+    `id` String,
+    `stringMin` AggregateFunction(min, Nullable(String)),
+    `stringMax` AggregateFunction(max, Nullable(String)),
+    `float64Min` AggregateFunction(min, Nullable(Float64)),
+    `float64Max` AggregateFunction(max, Nullable(Float64)),
+    `float64Avg` AggregateFunction(avg, Nullable(Float64)),
+    `float64Sum` AggregateFunction(sum, Nullable(Float64)),
+    `float32Min` AggregateFunction(min, Nullable(Float32)),
+    `float32Max` AggregateFunction(max, Nullable(Float32)),
+    `float32Avg` AggregateFunction(avg, Nullable(Float32)),
+    `float32Sum` AggregateFunction(sum, Nullable(Float32)),
+    `decimal325Min` AggregateFunction(min, Nullable(Decimal32(5))),
+    `decimal325Max` AggregateFunction(max, Nullable(Decimal32(5))),
+    `decimal325Avg` AggregateFunction(avg, Nullable(Decimal32(5))),
+    `decimal325Sum` AggregateFunction(sum, Nullable(Decimal32(5))),
+    `dateMin` AggregateFunction(min, Nullable(Date)),
+    `dateMax` AggregateFunction(max, Nullable(Date)),
+    `datetimeMin` AggregateFunction(min, Nullable(DateTime)),
+    `datetimeMax` AggregateFunction(max, Nullable(DateTime)),
+    `datetime64Min` AggregateFunction(min, Nullable(datetime64)),
+    `datetime64Max` AggregateFunction(max, Nullable(datetime64)),
+    `int64Min` AggregateFunction(min, Nullable(Int64)),
+    `int64Max` AggregateFunction(max, Nullable(Int64)),
+    `int64Avg` AggregateFunction(avg, Nullable(Int64)),
+    `int64Sum` AggregateFunction(sum, Nullable(Int64)),
+    `int32Min` AggregateFunction(min, Nullable(Int32)),
+    `int32Max` AggregateFunction(max, Nullable(Int32)),
+    `int32Avg` AggregateFunction(avg, Nullable(Int32)),
+    `int32Sum` AggregateFunction(sum, Nullable(Int32)),
+    `int16Min` AggregateFunction(min, Nullable(Int16)),
+    `int16Max` AggregateFunction(max, Nullable(Int16)),
+    `int16Avg` AggregateFunction(avg, Nullable(Int16)),
+    `int16Sum` AggregateFunction(sum, Nullable(Int16)),
+    `int8Min` AggregateFunction(min, Nullable(Int8)),
+    `int8Max` AggregateFunction(max, Nullable(Int8)),
+    `int8Avg` AggregateFunction(avg, Nullable(Int8)),
+    `int8Sum` AggregateFunction(sum, Nullable(Int8))
+)
+ENGINE = AggregatingMergeTree()
+PARTITION BY toStartOfDay(ts)
+ORDER BY id;
+insert into testNullableStatesAgg
+select
+   ts DateTime,
+   id String,
+   minState(string) stringMin,
+   maxState(string) stringMax,
+   minState(float64) float64Min,
+   maxState(float64) float64Max,
+   avgState(float64) float64Avg,
+   sumState(float64) float64Sum,
+   minState(float32) float32Min,
+   maxState(float32) float32Max,
+   avgState(float32) float32Avg,
+   sumState(float32) float32Sum,
+   minState(decimal325) decimal325Min,
+   maxState(decimal325) decimal325Max,
+   avgState(decimal325) decimal325Avg,
+   sumState(decimal325) decimal325Sum,
+   minState(date) dateMin,
+   maxState(date) dateMax,
+   minState(datetime) datetimeMin,
+   maxState(datetime) datetimeMax,
+   minState(datetime64) datetime64Min,
+   maxState(datetime64) datetime64Max,
+   minState(int64) int64Min,
+   maxState(int64) int64Max,
+   avgState(int64) int64Avg,
+   sumState(int64) int64Sum,
+   minState(int32) int32Min,
+   maxState(int32) int32Max,
+   avgState(int32) int32Avg,
+   sumState(int32) int32Sum,
+   minState(int16) int16Min,
+   maxState(int16) int16Max,
+   avgState(int16) int16Avg,
+   sumState(int16) int16Sum,
+   minState(int8) int8Min,
+   maxState(int8) int8Max,
+   avgState(int8) int8Avg,
+   sumState(int8) int8Sum
+from testNullableStates
+group by ts, id;
+OPTIMIZE TABLE testNullableStatesAgg FINAL;
 select count() from testNullableStates;
 select count() from testNullableStatesAgg;
 select ' ---- select without states ---- ';
@@ -241,3 +375,5 @@ SELECT count(),
     sumMerge(int8Sum)
 FROM testNullableStatesAgg
 WHERE id = '-22';
+DROP TABLE testNullableStates;
+DROP TABLE testNullableStatesAgg;

@@ -1,5 +1,271 @@
 [
   {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "02581_trips"
+    },
+    "ifExists": true,
+    "leadingComments": [
+      "-- Tags: long, no-debug, no-tsan, no-asan, no-ubsan, no-msan, no-parallel, no-sanitize-coverage",
+      "-- no-parallel because the sets use a lot of memory, which may interfere with other tests"
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "02581_trips"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "id",
+        "type": {
+          "name": "UInt32"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "description",
+        "type": {
+          "name": "String"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "id2",
+        "type": {
+          "name": "UInt32"
+        }
+      }
+    ],
+    "primaryKeyInSchema": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "id"
+        ]
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "id"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "02581_trips"
+      }
+    },
+    "selectQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "number"
+          ]
+        },
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": ""
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "number"
+          ]
+        }
+      ],
+      "from": {
+        "kind": "tableFunctionRef",
+        "name": "numbers",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "10000"
+          }
+        ]
+      }
+    },
+    "leadingComments": [
+      "-- Make multiple parts"
+    ]
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "02581_trips"
+      }
+    },
+    "selectQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "binaryExpr",
+          "op": "+",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "number"
+            ]
+          },
+          "right": {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "10000000"
+          }
+        },
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": ""
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "number"
+          ]
+        }
+      ],
+      "from": {
+        "kind": "tableFunctionRef",
+        "name": "numbers",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "10000"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "02581_trips"
+      }
+    },
+    "selectQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "binaryExpr",
+          "op": "+",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "number"
+            ]
+          },
+          "right": {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "20000000"
+          }
+        },
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": ""
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "number"
+          ]
+        }
+      ],
+      "from": {
+        "kind": "tableFunctionRef",
+        "name": "numbers",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "10000"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "02581_trips"
+      }
+    },
+    "selectQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "binaryExpr",
+          "op": "+",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "number"
+            ]
+          },
+          "right": {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "30000000"
+          }
+        },
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": ""
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "number"
+          ]
+        }
+      ],
+      "from": {
+        "kind": "tableFunctionRef",
+        "name": "numbers",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "10000"
+          }
+        ]
+      }
+    }
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -99,6 +365,375 @@
     ]
   },
   {
+    "kind": "system",
+    "body": "SYSTEM STOP MERGES 02581_trips",
+    "leadingComments": [
+      "-- Start multiple mutations simultaneously"
+    ]
+  },
+  {
+    "kind": "alter",
+    "table": {
+      "kind": "tableRef",
+      "table": "02581_trips"
+    },
+    "commands": [
+      {
+        "kind": "alterCommand",
+        "commandType": "UPDATE",
+        "assignments": [
+          {
+            "column": "description",
+            "expr": {
+              "kind": "literal",
+              "type": "String",
+              "value": "5"
+            }
+          }
+        ],
+        "where": {
+          "kind": "inExpr",
+          "negated": false,
+          "expr": {
+            "kind": "columnRef",
+            "parts": [
+              "id"
+            ]
+          },
+          "values": {
+            "kind": "subqueryExpr",
+            "query": {
+              "kind": "select",
+              "select": [
+                {
+                  "kind": "castExpr",
+                  "expr": {
+                    "kind": "binaryExpr",
+                    "op": "+",
+                    "left": {
+                      "kind": "binaryExpr",
+                      "op": "*",
+                      "left": {
+                        "kind": "columnRef",
+                        "parts": [
+                          "number"
+                        ]
+                      },
+                      "right": {
+                        "kind": "literal",
+                        "type": "UInt64",
+                        "value": "10"
+                      }
+                    },
+                    "right": {
+                      "kind": "literal",
+                      "type": "UInt64",
+                      "value": "5"
+                    },
+                    "parenthesized": true
+                  },
+                  "type": "UInt32",
+                  "operator": true
+                }
+              ],
+              "from": {
+                "kind": "tableFunctionRef",
+                "name": "numbers",
+                "args": [
+                  {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "10000000"
+                  }
+                ]
+              }
+            }
+          }
+        }
+      }
+    ],
+    "settings": [
+      {
+        "name": "mutations_sync",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "alter",
+    "table": {
+      "kind": "tableRef",
+      "table": "02581_trips"
+    },
+    "commands": [
+      {
+        "kind": "alterCommand",
+        "commandType": "UPDATE",
+        "assignments": [
+          {
+            "column": "description",
+            "expr": {
+              "kind": "literal",
+              "type": "String",
+              "value": "6"
+            }
+          }
+        ],
+        "where": {
+          "kind": "inExpr",
+          "negated": false,
+          "expr": {
+            "kind": "columnRef",
+            "parts": [
+              "id"
+            ]
+          },
+          "values": {
+            "kind": "subqueryExpr",
+            "query": {
+              "kind": "select",
+              "select": [
+                {
+                  "kind": "castExpr",
+                  "expr": {
+                    "kind": "binaryExpr",
+                    "op": "+",
+                    "left": {
+                      "kind": "binaryExpr",
+                      "op": "*",
+                      "left": {
+                        "kind": "columnRef",
+                        "parts": [
+                          "number"
+                        ]
+                      },
+                      "right": {
+                        "kind": "literal",
+                        "type": "UInt64",
+                        "value": "10"
+                      }
+                    },
+                    "right": {
+                      "kind": "literal",
+                      "type": "UInt64",
+                      "value": "6"
+                    },
+                    "parenthesized": true
+                  },
+                  "type": "UInt32",
+                  "operator": true
+                }
+              ],
+              "from": {
+                "kind": "tableFunctionRef",
+                "name": "numbers",
+                "args": [
+                  {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "10000000"
+                  }
+                ]
+              }
+            }
+          }
+        }
+      }
+    ],
+    "settings": [
+      {
+        "name": "mutations_sync",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "alter",
+    "table": {
+      "kind": "tableRef",
+      "table": "02581_trips"
+    },
+    "commands": [
+      {
+        "kind": "alterCommand",
+        "commandType": "DELETE",
+        "where": {
+          "kind": "inExpr",
+          "negated": false,
+          "expr": {
+            "kind": "columnRef",
+            "parts": [
+              "id"
+            ]
+          },
+          "values": {
+            "kind": "subqueryExpr",
+            "query": {
+              "kind": "select",
+              "select": [
+                {
+                  "kind": "castExpr",
+                  "expr": {
+                    "kind": "binaryExpr",
+                    "op": "+",
+                    "left": {
+                      "kind": "binaryExpr",
+                      "op": "*",
+                      "left": {
+                        "kind": "columnRef",
+                        "parts": [
+                          "number"
+                        ]
+                      },
+                      "right": {
+                        "kind": "literal",
+                        "type": "UInt64",
+                        "value": "10"
+                      }
+                    },
+                    "right": {
+                      "kind": "literal",
+                      "type": "UInt64",
+                      "value": "7"
+                    },
+                    "parenthesized": true
+                  },
+                  "type": "UInt32",
+                  "operator": true
+                }
+              ],
+              "from": {
+                "kind": "tableFunctionRef",
+                "name": "numbers",
+                "args": [
+                  {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "10000000"
+                  }
+                ]
+              }
+            }
+          }
+        }
+      }
+    ],
+    "settings": [
+      {
+        "name": "mutations_sync",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "alter",
+    "table": {
+      "kind": "tableRef",
+      "table": "02581_trips"
+    },
+    "commands": [
+      {
+        "kind": "alterCommand",
+        "commandType": "UPDATE",
+        "assignments": [
+          {
+            "column": "description",
+            "expr": {
+              "kind": "literal",
+              "type": "String",
+              "value": "8"
+            }
+          }
+        ],
+        "where": {
+          "kind": "inExpr",
+          "negated": false,
+          "expr": {
+            "kind": "columnRef",
+            "parts": [
+              "id"
+            ]
+          },
+          "values": {
+            "kind": "subqueryExpr",
+            "query": {
+              "kind": "select",
+              "select": [
+                {
+                  "kind": "castExpr",
+                  "expr": {
+                    "kind": "binaryExpr",
+                    "op": "+",
+                    "left": {
+                      "kind": "binaryExpr",
+                      "op": "*",
+                      "left": {
+                        "kind": "columnRef",
+                        "parts": [
+                          "number"
+                        ]
+                      },
+                      "right": {
+                        "kind": "literal",
+                        "type": "UInt64",
+                        "value": "10"
+                      }
+                    },
+                    "right": {
+                      "kind": "literal",
+                      "type": "UInt64",
+                      "value": "8"
+                    },
+                    "parenthesized": true
+                  },
+                  "type": "UInt32",
+                  "operator": true
+                }
+              ],
+              "from": {
+                "kind": "tableFunctionRef",
+                "name": "numbers",
+                "args": [
+                  {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "10000000"
+                  }
+                ]
+              }
+            }
+          }
+        }
+      }
+    ],
+    "settings": [
+      {
+        "name": "mutations_sync",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "system",
+    "body": "SYSTEM START MERGES 02581_trips"
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -118,6 +753,85 @@
           "kind": "literal",
           "type": "UInt64",
           "value": "1"
+        }
+      }
+    ],
+    "leadingComments": [
+      "-- Wait for mutations to finish"
+    ]
+  },
+  {
+    "kind": "delete",
+    "table": {
+      "kind": "tableRef",
+      "table": "02581_trips"
+    },
+    "where": {
+      "kind": "inExpr",
+      "negated": false,
+      "expr": {
+        "kind": "columnRef",
+        "parts": [
+          "id"
+        ]
+      },
+      "values": {
+        "kind": "subqueryExpr",
+        "query": {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "castExpr",
+              "expr": {
+                "kind": "binaryExpr",
+                "op": "+",
+                "left": {
+                  "kind": "binaryExpr",
+                  "op": "*",
+                  "left": {
+                    "kind": "columnRef",
+                    "parts": [
+                      "number"
+                    ]
+                  },
+                  "right": {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "10"
+                  }
+                },
+                "right": {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "9"
+                },
+                "parenthesized": true
+              },
+              "type": "UInt32",
+              "operator": true
+            }
+          ],
+          "from": {
+            "kind": "tableFunctionRef",
+            "name": "numbers",
+            "args": [
+              {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "10000000"
+              }
+            ]
+          }
+        }
+      }
+    },
+    "settings": [
+      {
+        "name": "lightweight_deletes_sync",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "2"
         }
       }
     ]
@@ -189,5 +903,355 @@
         }
       }
     ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "max_rows_to_read",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      }
+    ],
+    "trailingComments": [
+      "-- system.text_log can be really big"
+    ]
+  },
+  {
+    "kind": "system",
+    "body": "SYSTEM FLUSH LOGS text_log"
+  },
+  {
+    "kind": "select",
+    "with": [
+      {
+        "kind": "cteExpr",
+        "name": "table_uuid",
+        "expr": {
+          "kind": "subqueryExpr",
+          "query": {
+            "kind": "select",
+            "select": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "uuid"
+                ]
+              }
+            ],
+            "from": {
+              "kind": "tableRef",
+              "database": "system",
+              "table": "tables"
+            },
+            "where": {
+              "kind": "naryExpr",
+              "op": "AND",
+              "operands": [
+                {
+                  "kind": "binaryExpr",
+                  "op": "=",
+                  "left": {
+                    "kind": "columnRef",
+                    "parts": [
+                      "database"
+                    ]
+                  },
+                  "right": {
+                    "kind": "functionCall",
+                    "name": "currentDatabase",
+                    "args": []
+                  },
+                  "parenthesized": true
+                },
+                {
+                  "kind": "binaryExpr",
+                  "op": "=",
+                  "left": {
+                    "kind": "columnRef",
+                    "parts": [
+                      "name"
+                    ]
+                  },
+                  "right": {
+                    "kind": "literal",
+                    "type": "String",
+                    "value": "02581_trips"
+                  },
+                  "parenthesized": true
+                }
+              ]
+            }
+          }
+        }
+      }
+    ],
+    "select": [
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "CAST",
+          "args": [
+            {
+              "kind": "functionCall",
+              "name": "arrayElement",
+              "args": [
+                {
+                  "kind": "functionCall",
+                  "name": "splitByChar",
+                  "args": [
+                    {
+                      "kind": "literal",
+                      "type": "String",
+                      "value": "_"
+                    },
+                    {
+                      "kind": "columnRef",
+                      "parts": [
+                        "query_id"
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "5"
+                }
+              ]
+            },
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "UInt64"
+            }
+          ]
+        },
+        "alias": "mutation_version",
+        "trailingComments": [
+          "-- '5521485f-8a40-4aba-87a2-00342c369563::all_3_3_0_6'"
+        ]
+      },
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "binaryExpr",
+          "op": ">=",
+          "left": {
+            "kind": "functionCall",
+            "name": "sum",
+            "args": [
+              {
+                "kind": "functionCall",
+                "name": "like",
+                "args": [
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "message"
+                    ]
+                  },
+                  {
+                    "kind": "literal",
+                    "type": "String",
+                    "value": "Created Set with % entries%"
+                  }
+                ]
+              }
+            ]
+          },
+          "right": {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "1"
+          }
+        },
+        "alias": "has_parts_for_which_set_was_built"
+      },
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "binaryExpr",
+          "op": ">=",
+          "left": {
+            "kind": "functionCall",
+            "name": "sum",
+            "args": [
+              {
+                "kind": "functionCall",
+                "name": "like",
+                "args": [
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "message"
+                    ]
+                  },
+                  {
+                    "kind": "literal",
+                    "type": "String",
+                    "value": "Got set from cache%"
+                  }
+                ]
+              }
+            ]
+          },
+          "right": {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "1"
+          }
+        },
+        "alias": "has_parts_that_shared_set"
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "database": "system",
+      "table": "text_log"
+    },
+    "where": {
+      "kind": "naryExpr",
+      "op": "AND",
+      "operands": [
+        {
+          "kind": "functionCall",
+          "name": "like",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "query_id"
+              ]
+            },
+            {
+              "kind": "functionCall",
+              "name": "concat",
+              "args": [
+                {
+                  "kind": "functionCall",
+                  "name": "CAST",
+                  "args": [
+                    {
+                      "kind": "columnRef",
+                      "parts": [
+                        "table_uuid"
+                      ]
+                    },
+                    {
+                      "kind": "literal",
+                      "type": "String",
+                      "value": "String"
+                    }
+                  ]
+                },
+                {
+                  "kind": "literal",
+                  "type": "String",
+                  "value": "::all\\\\_%"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "kind": "binaryExpr",
+          "op": ">=",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "event_date"
+            ]
+          },
+          "right": {
+            "kind": "functionCall",
+            "name": "yesterday",
+            "args": []
+          },
+          "parenthesized": true
+        },
+        {
+          "kind": "naryExpr",
+          "op": "OR",
+          "operands": [
+            {
+              "kind": "functionCall",
+              "name": "like",
+              "args": [
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "message"
+                  ]
+                },
+                {
+                  "kind": "literal",
+                  "type": "String",
+                  "value": "Created Set with % entries%"
+                }
+              ]
+            },
+            {
+              "kind": "functionCall",
+              "name": "like",
+              "args": [
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "message"
+                  ]
+                },
+                {
+                  "kind": "literal",
+                  "type": "String",
+                  "value": "Got set from cache%"
+                }
+              ]
+            }
+          ],
+          "parenthesized": true
+        }
+      ]
+    },
+    "groupBy": {
+      "kind": "expressions",
+      "items": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "mutation_version"
+          ]
+        }
+      ]
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "mutation_version"
+          ]
+        },
+        "direction": "ASC"
+      }
+    ],
+    "format": "TSVWithNames",
+    "leadingComments": [
+      "-- Check that in every mutation there were parts that built sets (log messages like 'Created Set with 10000000 entries from 10000000 rows in 0.388989187 sec.' )",
+      "-- and parts that shared sets (log messages like 'Got set from cache in 0.388930505 sec.' )"
+    ]
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "02581_trips"
+    }
   }
 ]

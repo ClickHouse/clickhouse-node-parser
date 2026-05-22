@@ -1,5 +1,9 @@
+SET log_queries = 1;
+
 SELECT count() > 0
 FROM `system`.`settings`;
+
+SYSTEM flush logs query_log;
 
 SELECT
     result_rows,

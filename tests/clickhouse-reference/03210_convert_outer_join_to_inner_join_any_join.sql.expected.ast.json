@@ -1,5 +1,143 @@
 [
   {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "user_country"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "user_transactions"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "user_country"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "user_id",
+        "type": {
+          "name": "UInt64"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "country",
+        "type": {
+          "name": "String"
+        }
+      }
+    ],
+    "engine": {
+      "name": "ReplacingMergeTree"
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "user_id"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "user_transactions"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "user_id",
+        "type": {
+          "name": "UInt64"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "transaction_id",
+        "type": {
+          "name": "String"
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "user_id"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "user_country"
+      }
+    },
+    "columns": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "user_id"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "country"
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "user_transactions"
+      }
+    },
+    "columns": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "user_id"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "transaction_id"
+        ]
+      }
+    ]
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -11,7 +149,7 @@
         "kind": "tableRef",
         "table": "user_transactions"
       },
-      "kind": "join",
+      "kind": "joinExpr",
       "joinType": "LEFT",
       "right": {
         "kind": "tableRef",
@@ -71,6 +209,28 @@
         },
         "direction": "ASC"
       }
+    ],
+    "leadingComments": [
+      "-- Expected 3 rows, got only 1. Removing 'ANY' and adding 'FINAL' fixes",
+      "-- the issue (but it is not always possible). Moving filter by 'country' to",
+      "-- an outer query doesn't help. Query without filter by 'country' works",
+      "-- as expected (returns 3 rows)."
     ]
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "user_country"
+    }
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "user_transactions"
+    }
   }
 ]

@@ -1,5 +1,276 @@
 [
   {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "test_table"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "test_view"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "test_view_filtered"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "allow_deprecated_syntax_for_merge_tree",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "test_table"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "EventDate",
+        "type": {
+          "name": "Date"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "CounterID",
+        "type": {
+          "name": "UInt32"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "UserID",
+        "type": {
+          "name": "UInt64"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "EventTime",
+        "type": {
+          "name": "DateTime",
+          "args": [
+            {
+              "kind": "literal",
+              "value": "'America/Los_Angeles'"
+            }
+          ]
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "UTCEventTime",
+        "type": {
+          "name": "DateTime",
+          "args": [
+            {
+              "kind": "literal",
+              "value": "'UTC'"
+            }
+          ]
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree",
+      "args": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "EventDate"
+          ]
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "CounterID"
+          ]
+        },
+        {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "8192"
+        }
+      ]
+    }
+  },
+  {
+    "kind": "createMaterializedView",
+    "table": {
+      "kind": "tableRef",
+      "table": "test_view"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "Rows",
+        "type": {
+          "name": "UInt64"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "MaxHitTime",
+        "type": {
+          "name": "DateTime",
+          "args": [
+            {
+              "kind": "literal",
+              "value": "'America/Los_Angeles'"
+            }
+          ]
+        }
+      }
+    ],
+    "engine": {
+      "name": "Memory"
+    },
+    "asQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "alias",
+          "expr": {
+            "kind": "functionCall",
+            "name": "count",
+            "args": []
+          },
+          "alias": "Rows"
+        },
+        {
+          "kind": "alias",
+          "expr": {
+            "kind": "functionCall",
+            "name": "max",
+            "args": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "UTCEventTime"
+                ]
+              }
+            ]
+          },
+          "alias": "MaxHitTime"
+        }
+      ],
+      "from": {
+        "kind": "tableRef",
+        "table": "test_table"
+      }
+    }
+  },
+  {
+    "kind": "createMaterializedView",
+    "table": {
+      "kind": "tableRef",
+      "table": "test_view_filtered"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "EventDate",
+        "type": {
+          "name": "Date"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "CounterID",
+        "type": {
+          "name": "UInt32"
+        }
+      }
+    ],
+    "engine": {
+      "name": "Memory"
+    },
+    "populate": true,
+    "asQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "CounterID"
+          ]
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "EventDate"
+          ]
+        }
+      ],
+      "from": {
+        "kind": "tableRef",
+        "table": "test_table"
+      },
+      "where": {
+        "kind": "binaryExpr",
+        "op": "<",
+        "left": {
+          "kind": "columnRef",
+          "parts": [
+            "EventDate"
+          ]
+        },
+        "right": {
+          "kind": "literal",
+          "type": "String",
+          "value": "2013-01-01"
+        }
+      }
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "test_table"
+      }
+    },
+    "columns": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "EventDate"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "UTCEventTime"
+        ]
+      }
+    ]
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -33,6 +304,411 @@
     "from": {
       "kind": "tableRef",
       "table": "test_view_filtered"
+    }
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "test_table"
+    }
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "test_view"
+    }
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "test_view_filtered"
+    }
+  },
+  {
+    "kind": "createDatabase",
+    "name": {
+      "kind": "queryParam",
+      "name": "CLICKHOUSE_DATABASE_1",
+      "type": "Identifier"
+    },
+    "ifNotExists": true,
+    "leadingComments": [
+      "-- Check only sophisticated constructors and desctructors:"
+    ]
+  },
+  {
+    "kind": "use",
+    "database": {
+      "kind": "queryParam",
+      "name": "CLICKHOUSE_DATABASE_1",
+      "type": "Identifier"
+    }
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "tmp"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "tmp_mv"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "tmp_mv2"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "tmp_mv3"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "tmp_mv4"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": ".inner.tmp_mv"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": ".inner.tmp_mv2"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": ".inner.tmp_mv3"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": ".inner.tmp_mv4"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "tmp"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "date",
+        "type": {
+          "name": "Date"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "name",
+        "type": {
+          "name": "String"
+        }
+      }
+    ],
+    "engine": {
+      "name": "Memory"
+    }
+  },
+  {
+    "kind": "createMaterializedView",
+    "table": {
+      "kind": "tableRef",
+      "table": "tmp_mv"
+    },
+    "engine": {
+      "name": "AggregatingMergeTree",
+      "args": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "date"
+          ]
+        },
+        {
+          "kind": "tupleLiteral",
+          "elements": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "date"
+              ]
+            },
+            {
+              "kind": "columnRef",
+              "parts": [
+                "name"
+              ]
+            }
+          ],
+          "source": "(date, name)"
+        },
+        {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "8192"
+        }
+      ]
+    },
+    "asQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "date"
+          ]
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "name"
+          ]
+        },
+        {
+          "kind": "alias",
+          "expr": {
+            "kind": "functionCall",
+            "name": "countState",
+            "args": []
+          },
+          "alias": "cc"
+        }
+      ],
+      "from": {
+        "kind": "tableRef",
+        "table": "tmp"
+      },
+      "groupBy": {
+        "kind": "expressions",
+        "items": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "date"
+            ]
+          },
+          {
+            "kind": "columnRef",
+            "parts": [
+              "name"
+            ]
+          }
+        ]
+      }
+    }
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "tmp_mv2"
+    },
+    "asTable": {
+      "kind": "tableRef",
+      "table": "tmp_mv"
+    }
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "tmp_mv3"
+    },
+    "asTable": {
+      "kind": "tableRef",
+      "table": "tmp_mv"
+    },
+    "engine": {
+      "name": "Memory"
+    }
+  },
+  {
+    "kind": "createMaterializedView",
+    "table": {
+      "kind": "tableRef",
+      "table": "tmp_mv4"
+    },
+    "engine": {
+      "name": "AggregatingMergeTree",
+      "args": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "date"
+          ]
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "date"
+          ]
+        },
+        {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "8192"
+        }
+      ]
+    },
+    "populate": true,
+    "asQuery": {
+      "kind": "select",
+      "distinct": {
+        "kind": "distinct"
+      },
+      "select": [
+        {
+          "kind": "asterisk"
+        }
+      ],
+      "from": {
+        "kind": "tableRef",
+        "table": "tmp_mv"
+      }
+    }
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "tmp_mv"
+    }
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "tmp_mv2"
+    }
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "tmp_mv3"
+    }
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "tmp_mv4"
+    }
+  },
+  {
+    "kind": "exists",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": ".inner.tmp_mv"
+    }
+  },
+  {
+    "kind": "exists",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": ".inner.tmp_mv2"
+    }
+  },
+  {
+    "kind": "exists",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": ".inner.tmp_mv3"
+    }
+  },
+  {
+    "kind": "exists",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": ".inner.tmp_mv4"
+    }
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "tmp"
+    }
+  },
+  {
+    "kind": "drop",
+    "targetType": "DATABASE",
+    "table": {
+      "kind": "tableRef",
+      "table": {
+        "kind": "queryParam",
+        "name": "CLICKHOUSE_DATABASE",
+        "type": "Identifier"
+      }
+    }
+  },
+  {
+    "kind": "drop",
+    "targetType": "DATABASE",
+    "table": {
+      "kind": "tableRef",
+      "table": {
+        "kind": "queryParam",
+        "name": "CLICKHOUSE_DATABASE_1",
+        "type": "Identifier"
+      }
     }
   }
 ]

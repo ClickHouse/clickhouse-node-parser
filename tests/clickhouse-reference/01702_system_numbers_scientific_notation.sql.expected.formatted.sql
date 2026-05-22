@@ -8,12 +8,12 @@ FORMAT Null;
 
 SELECT *
 FROM numbers_mt('100')
-FORMAT Null;
+FORMAT Null; -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
 SELECT *
 FROM numbers_mt(inf)
-FORMAT Null;
+FORMAT Null; -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
 SELECT *
 FROM numbers_mt(nan)
-FORMAT Null;
+FORMAT Null; -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }

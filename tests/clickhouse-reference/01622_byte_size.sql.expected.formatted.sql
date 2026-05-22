@@ -1,3 +1,29 @@
+DROP TABLE IF EXISTS test_byte_size_number0;
+
+CREATE TABLE test_byte_size_number0
+(
+    key Int32,
+    u8 UInt8,
+    u16 UInt16,
+    u32 UInt32,
+    u64 UInt64,
+    u256 UInt256,
+    i8 Int8,
+    i16 Int16,
+    i32 Int32,
+    i64 Int64,
+    i128 Int128,
+    i256 Int256,
+    f32 Float32,
+    f64 Float64
+)
+ENGINE = MergeTree
+ORDER BY key;
+
+INSERT INTO test_byte_size_number0;
+
+INSERT INTO test_byte_size_number0;
+
 SELECT
     key,
     toTypeName(u8),
@@ -39,6 +65,29 @@ SELECT
 FROM test_byte_size_number0
 ORDER BY key ASC;
 
+DROP TABLE IF EXISTS test_byte_size_number1;
+
+CREATE TABLE test_byte_size_number1
+(
+    key Int32,
+    date Date,
+    dt DateTime,
+    dt64 DateTime64(3),
+    en8 Enum8('a' = 1, 'b' = 2, 'c' = 3, 'd' = 4),
+    en16 Enum16('c' = 100, 'l' = 101, 'i' = 102, 'ck' = 103, 'h' = 104, 'o' = 105, 'u' = 106, 's' = 107, 'e' = 108),
+    dec32 Decimal32(4),
+    dec64 Decimal64(8),
+    dec128 Decimal128(16),
+    dec256 Decimal256(16),
+    uuid UUID
+)
+ENGINE = MergeTree
+ORDER BY key;
+
+INSERT INTO test_byte_size_number1;
+
+INSERT INTO test_byte_size_number1;
+
 SELECT
     key,
     byteSize(*),
@@ -79,6 +128,23 @@ SELECT
     toTypeName(generateUUIDv4()),
     byteSize(generateUUIDv4());
 
+DROP TABLE IF EXISTS test_byte_size_string;
+
+CREATE TABLE test_byte_size_string
+(
+    key Int32,
+    str1 String,
+    str2 String,
+    fstr1 FixedString(8),
+    fstr2 FixedString(8)
+)
+ENGINE = MergeTree
+ORDER BY key;
+
+INSERT INTO test_byte_size_string;
+
+INSERT INTO test_byte_size_string;
+
 SELECT
     key,
     byteSize(*),
@@ -101,6 +167,31 @@ SELECT
     byteSize('a'),
     'abcde',
     byteSize('abcde');
+
+-- simple arrays --
+DROP TABLE IF EXISTS test_byte_size_array;
+
+CREATE TABLE test_byte_size_array
+(
+    key Int32,
+    uints8 Array(UInt8),
+    ints8 Array(Int8),
+    ints32 Array(Int32),
+    floats32 Array(Float32),
+    decs32 Array(Decimal32(4)),
+    dates Array(Date),
+    uuids Array(UUID)
+)
+ENGINE = MergeTree
+ORDER BY key;
+
+INSERT INTO test_byte_size_array;
+
+INSERT INTO test_byte_size_array;
+
+INSERT INTO test_byte_size_array;
+
+INSERT INTO test_byte_size_array;
 
 SELECT
     key,
@@ -147,6 +238,28 @@ SELECT
     [toUUID('61f0c404-5cb3-11e7-907b-a6006ad3dba0'),toUUID('61f0c404-5cb3-11e7-907b-a6006ad3dba0')],
     byteSize([toUUID('61f0c404-5cb3-11e7-907b-a6006ad3dba0'),toUUID('61f0c404-5cb3-11e7-907b-a6006ad3dba0')]);
 
+-- complex arrays --
+DROP TABLE IF EXISTS test_byte_size_complex_array;
+
+CREATE TABLE test_byte_size_complex_array
+(
+    key Int32,
+    ints Array(Int32),
+    int_ints Array(Array(Int32)),
+    strs Array(String),
+    str_strs Array(Array(String))
+)
+ENGINE = MergeTree
+ORDER BY key;
+
+INSERT INTO test_byte_size_complex_array;
+
+INSERT INTO test_byte_size_complex_array;
+
+INSERT INTO test_byte_size_complex_array;
+
+INSERT INTO test_byte_size_complex_array;
+
 SELECT
     key,
     byteSize(*),
@@ -163,6 +276,7 @@ SELECT
     toTypeName([[], [1,2], [0,0x10000]]),
     byteSize([[], [1,2], [0,0x10000]]);
 
+-- select key, byteSize(*), strs, byteSize(strs), str_strs, byteSize(str_strs) from test_byte_size_complex_array order by key;
 SELECT
     key,
     byteSize(*),
@@ -177,6 +291,26 @@ SELECT
     'constants:',
     [[], [''], ['','a']],
     byteSize([[], [''], ['','a']]);
+
+-- others --
+DROP TABLE IF EXISTS test_byte_size_other;
+
+CREATE TABLE test_byte_size_other
+(
+    key Int32,
+    opt_int32 Nullable(Int32),
+    opt_str Nullable(String),
+    tuple Tuple(Int32, Nullable(String)),
+    strings LowCardinality(String)
+)
+ENGINE = MergeTree
+ORDER BY key;
+
+INSERT INTO test_byte_size_other;
+
+INSERT INTO test_byte_size_other;
+
+INSERT INTO test_byte_size_other;
 
 SELECT
     key,
@@ -206,6 +340,29 @@ SELECT
     toLowCardinality('abced'),
     toTypeName(toLowCardinality('abced')),
     byteSize(toLowCardinality('abced'));
+
+-- more complex fields --
+DROP TABLE IF EXISTS test_byte_size_more_complex;
+
+CREATE TABLE test_byte_size_more_complex
+(
+    key Int32,
+    complex1 Array(Tuple(Nullable(FixedString(4)), Array(Tuple(Nullable(String), String))))
+)
+ENGINE = MergeTree
+ORDER BY key;
+
+INSERT INTO test_byte_size_more_complex;
+
+INSERT INTO test_byte_size_more_complex;
+
+INSERT INTO test_byte_size_more_complex;
+
+INSERT INTO test_byte_size_more_complex;
+
+INSERT INTO test_byte_size_more_complex;
+
+INSERT INTO test_byte_size_more_complex;
 
 SELECT
     key,

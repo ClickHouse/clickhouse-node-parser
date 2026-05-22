@@ -1,5 +1,81 @@
 [
   {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "test_lc_pk"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "test_lc_pk"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "s",
+        "type": {
+          "name": "String"
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "s"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "test_lc_pk"
+      }
+    },
+    "selectQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "functionCall",
+          "name": "toString",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "number"
+              ]
+            }
+          ]
+        }
+      ],
+      "from": {
+        "kind": "tableFunctionRef",
+        "name": "numbers",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "Float64",
+            "value": "1e6"
+          }
+        ]
+      }
+    }
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -25,7 +101,7 @@
           }
         ],
         "from": {
-          "kind": "tableFunction",
+          "kind": "tableFunctionRef",
           "name": "viewExplain",
           "args": [
             {
@@ -101,7 +177,10 @@
           "value": "%Condition%"
         }
       ]
-    }
+    },
+    "trailingComments": [
+      "-- We basically try to verify that we have our column as the key in explain indexes (we don't read all data)"
+    ]
   },
   {
     "kind": "select",
@@ -129,7 +208,7 @@
           }
         ],
         "from": {
-          "kind": "tableFunction",
+          "kind": "tableFunctionRef",
           "name": "viewExplain",
           "args": [
             {
@@ -205,6 +284,14 @@
           "value": "%Condition%"
         }
       ]
+    }
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "test_lc_pk"
     }
   }
 ]

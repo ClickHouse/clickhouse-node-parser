@@ -1,3 +1,9 @@
+-- Tags: no-fasttest
+-- no-fasttest: json type needs rapidjson library, geo types need s2 geometry
+SET enable_json_type = 1;
+
+SET allow_suspicious_low_cardinality_types = 1;
+
 SELECT '-- Const string + non-const arbitrary type';
 
 SELECT format('The {0} to all questions is {1}.', 'answer', materialize(42::Int8));
@@ -86,8 +92,21 @@ SELECT format('The {0} to all questions is {1}.', 'answer', materialize([[(20, 2
 
 SELECT format('The {0} to all questions is {1}.', 'answer', materialize([[[(0, 0), (10, 0), (10, 10), (0, 10)]], [[(20, 20), (50, 20), (50, 50), (20, 50)],[(30, 30), (50, 50), (50, 30)]]]::MultiPolygon));
 
+DROP TABLE IF EXISTS format_nested;
+
+CREATE TABLE format_nested
+(
+    attrs Nested(k String, v String)
+)
+ENGINE = MergeTree
+ORDER BY tuple();
+
+INSERT INTO format_nested;
+
 SELECT format('The {0} to all questions is {1}.', attrs.k, attrs.v)
 FROM format_nested;
+
+DROP TABLE format_nested;
 
 SELECT format('The {0} to all questions is {1}', NULL, NULL);
 

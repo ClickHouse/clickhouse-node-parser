@@ -1,0 +1,902 @@
+[
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "send_logs_level",
+        "value": {
+          "kind": "literal",
+          "type": "String",
+          "value": "fatal"
+        }
+      }
+    ],
+    "leadingComments": [
+      "-- Tags: no-parallel"
+    ]
+  },
+  {
+    "kind": "drop",
+    "targetType": "DATABASE",
+    "table": {
+      "kind": "tableRef",
+      "table": "test_01249"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "allow_deprecated_database_ordinary",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createDatabase",
+    "name": "test_01249",
+    "engine": {
+      "name": "Ordinary"
+    },
+    "leadingComments": [
+      "-- Creation of a database with Ordinary engine emits a warning."
+    ],
+    "trailingComments": [
+      "-- Full ATTACH requires UUID with Atomic"
+    ]
+  },
+  {
+    "kind": "use",
+    "database": "test_01249"
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "bloom_filter_idx_good"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "u64",
+        "type": {
+          "name": "UInt64"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "i32",
+        "type": {
+          "name": "Int32"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "f64",
+        "type": {
+          "name": "Float64"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "d",
+        "type": {
+          "name": "Decimal",
+          "args": [
+            {
+              "kind": "literal",
+              "value": "10"
+            },
+            {
+              "kind": "literal",
+              "value": "2"
+            }
+          ]
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "s",
+        "type": {
+          "name": "String"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "e",
+        "type": {
+          "name": "Enum8",
+          "args": [
+            {
+              "kind": "enumValues",
+              "values": [
+                {
+                  "name": "a",
+                  "value": "1"
+                },
+                {
+                  "name": "b",
+                  "value": "2"
+                },
+                {
+                  "name": "c",
+                  "value": "3"
+                }
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "dt",
+        "type": {
+          "name": "Date"
+        }
+      },
+      {
+        "kind": "indexDef",
+        "name": "bloom_filter_a",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "i32"
+          ]
+        },
+        "indexType": {
+          "name": "bloom_filter",
+          "args": [
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "0"
+            },
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "1"
+            }
+          ]
+        },
+        "granularity": 1
+      }
+    ],
+    "engine": {
+      "name": "MergeTree",
+      "args": []
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "u64"
+          ]
+        }
+      }
+    ],
+    "settings": [
+      {
+        "name": "index_granularity",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "8192"
+        }
+      }
+    ],
+    "settingsAfterOrderBy": true,
+    "trailingComments": [
+      "-- { serverError NUMBER_OF_ARGUMENTS_DOESNT_MATCH }"
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "bloom_filter_idx_good"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "u64",
+        "type": {
+          "name": "UInt64"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "i32",
+        "type": {
+          "name": "Int32"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "f64",
+        "type": {
+          "name": "Float64"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "d",
+        "type": {
+          "name": "Decimal",
+          "args": [
+            {
+              "kind": "literal",
+              "value": "10"
+            },
+            {
+              "kind": "literal",
+              "value": "2"
+            }
+          ]
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "s",
+        "type": {
+          "name": "String"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "e",
+        "type": {
+          "name": "Enum8",
+          "args": [
+            {
+              "kind": "enumValues",
+              "values": [
+                {
+                  "name": "a",
+                  "value": "1"
+                },
+                {
+                  "name": "b",
+                  "value": "2"
+                },
+                {
+                  "name": "c",
+                  "value": "3"
+                }
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "dt",
+        "type": {
+          "name": "Date"
+        }
+      },
+      {
+        "kind": "indexDef",
+        "name": "bloom_filter_a",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "i32"
+          ]
+        },
+        "indexType": {
+          "name": "bloom_filter",
+          "args": [
+            {
+              "kind": "literal",
+              "type": "Float64",
+              "value": "-0.1"
+            }
+          ]
+        },
+        "granularity": 1
+      }
+    ],
+    "engine": {
+      "name": "MergeTree",
+      "args": []
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "u64"
+          ]
+        }
+      }
+    ],
+    "settings": [
+      {
+        "name": "index_granularity",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "8192"
+        }
+      }
+    ],
+    "settingsAfterOrderBy": true,
+    "trailingComments": [
+      "-- { serverError BAD_ARGUMENTS }"
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "bloom_filter_idx_good"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "u64",
+        "type": {
+          "name": "UInt64"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "i32",
+        "type": {
+          "name": "Int32"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "f64",
+        "type": {
+          "name": "Float64"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "d",
+        "type": {
+          "name": "Decimal",
+          "args": [
+            {
+              "kind": "literal",
+              "value": "10"
+            },
+            {
+              "kind": "literal",
+              "value": "2"
+            }
+          ]
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "s",
+        "type": {
+          "name": "String"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "e",
+        "type": {
+          "name": "Enum8",
+          "args": [
+            {
+              "kind": "enumValues",
+              "values": [
+                {
+                  "name": "a",
+                  "value": "1"
+                },
+                {
+                  "name": "b",
+                  "value": "2"
+                },
+                {
+                  "name": "c",
+                  "value": "3"
+                }
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "dt",
+        "type": {
+          "name": "Date"
+        }
+      },
+      {
+        "kind": "indexDef",
+        "name": "bloom_filter_a",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "i32"
+          ]
+        },
+        "indexType": {
+          "name": "bloom_filter",
+          "args": [
+            {
+              "kind": "literal",
+              "type": "Float64",
+              "value": "1.01"
+            }
+          ]
+        },
+        "granularity": 1
+      }
+    ],
+    "engine": {
+      "name": "MergeTree",
+      "args": []
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "u64"
+          ]
+        }
+      }
+    ],
+    "settings": [
+      {
+        "name": "index_granularity",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "8192"
+        }
+      }
+    ],
+    "settingsAfterOrderBy": true,
+    "trailingComments": [
+      "-- { serverError BAD_ARGUMENTS }"
+    ]
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "bloom_filter_idx_good"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "bloom_filter_idx_good"
+    },
+    "attach": true,
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "u64",
+        "type": {
+          "name": "UInt64"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "i32",
+        "type": {
+          "name": "Int32"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "f64",
+        "type": {
+          "name": "Float64"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "d",
+        "type": {
+          "name": "Decimal",
+          "args": [
+            {
+              "kind": "literal",
+              "value": "10"
+            },
+            {
+              "kind": "literal",
+              "value": "2"
+            }
+          ]
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "s",
+        "type": {
+          "name": "String"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "e",
+        "type": {
+          "name": "Enum8",
+          "args": [
+            {
+              "kind": "enumValues",
+              "values": [
+                {
+                  "name": "a",
+                  "value": "1"
+                },
+                {
+                  "name": "b",
+                  "value": "2"
+                },
+                {
+                  "name": "c",
+                  "value": "3"
+                }
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "dt",
+        "type": {
+          "name": "Date"
+        }
+      },
+      {
+        "kind": "indexDef",
+        "name": "bloom_filter_a",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "i32"
+          ]
+        },
+        "indexType": {
+          "name": "bloom_filter",
+          "args": [
+            {
+              "kind": "literal",
+              "type": "Float64",
+              "value": "0."
+            },
+            {
+              "kind": "literal",
+              "type": "Float64",
+              "value": "1."
+            }
+          ]
+        },
+        "granularity": 1
+      }
+    ],
+    "engine": {
+      "name": "MergeTree",
+      "args": []
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "u64"
+          ]
+        }
+      }
+    ],
+    "settings": [
+      {
+        "name": "index_granularity",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "8192"
+        }
+      }
+    ],
+    "settingsAfterOrderBy": true
+  },
+  {
+    "kind": "showCreate",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "bloom_filter_idx_good"
+    }
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "bloom_filter_idx_good"
+    },
+    "attach": true,
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "u64",
+        "type": {
+          "name": "UInt64"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "i32",
+        "type": {
+          "name": "Int32"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "f64",
+        "type": {
+          "name": "Float64"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "d",
+        "type": {
+          "name": "Decimal",
+          "args": [
+            {
+              "kind": "literal",
+              "value": "10"
+            },
+            {
+              "kind": "literal",
+              "value": "2"
+            }
+          ]
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "s",
+        "type": {
+          "name": "String"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "e",
+        "type": {
+          "name": "Enum8",
+          "args": [
+            {
+              "kind": "enumValues",
+              "values": [
+                {
+                  "name": "a",
+                  "value": "1"
+                },
+                {
+                  "name": "b",
+                  "value": "2"
+                },
+                {
+                  "name": "c",
+                  "value": "3"
+                }
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "dt",
+        "type": {
+          "name": "Date"
+        }
+      },
+      {
+        "kind": "indexDef",
+        "name": "bloom_filter_a",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "i32"
+          ]
+        },
+        "indexType": {
+          "name": "bloom_filter",
+          "args": [
+            {
+              "kind": "literal",
+              "type": "Float64",
+              "value": "-0.1"
+            }
+          ]
+        },
+        "granularity": 1
+      }
+    ],
+    "engine": {
+      "name": "MergeTree",
+      "args": []
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "u64"
+          ]
+        }
+      }
+    ],
+    "settings": [
+      {
+        "name": "index_granularity",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "8192"
+        }
+      }
+    ],
+    "settingsAfterOrderBy": true
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "bloom_filter_idx_good"
+    },
+    "attach": true,
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "u64",
+        "type": {
+          "name": "UInt64"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "i32",
+        "type": {
+          "name": "Int32"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "f64",
+        "type": {
+          "name": "Float64"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "d",
+        "type": {
+          "name": "Decimal",
+          "args": [
+            {
+              "kind": "literal",
+              "value": "10"
+            },
+            {
+              "kind": "literal",
+              "value": "2"
+            }
+          ]
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "s",
+        "type": {
+          "name": "String"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "e",
+        "type": {
+          "name": "Enum8",
+          "args": [
+            {
+              "kind": "enumValues",
+              "values": [
+                {
+                  "name": "a",
+                  "value": "1"
+                },
+                {
+                  "name": "b",
+                  "value": "2"
+                },
+                {
+                  "name": "c",
+                  "value": "3"
+                }
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "dt",
+        "type": {
+          "name": "Date"
+        }
+      },
+      {
+        "kind": "indexDef",
+        "name": "bloom_filter_a",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "i32"
+          ]
+        },
+        "indexType": {
+          "name": "bloom_filter",
+          "args": [
+            {
+              "kind": "literal",
+              "type": "Float64",
+              "value": "1.01"
+            }
+          ]
+        },
+        "granularity": 1
+      }
+    ],
+    "engine": {
+      "name": "MergeTree",
+      "args": []
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "u64"
+          ]
+        }
+      }
+    ],
+    "settings": [
+      {
+        "name": "index_granularity",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "8192"
+        }
+      }
+    ],
+    "settingsAfterOrderBy": true
+  },
+  {
+    "kind": "drop",
+    "targetType": "DATABASE",
+    "table": {
+      "kind": "tableRef",
+      "table": "test_01249"
+    }
+  }
+]

@@ -1,3 +1,5 @@
+SET max_block_size = 65409;
+
 SELECT count()
 FROM (
         SELECT number
@@ -18,6 +20,10 @@ FROM (
         FROM numbers_mt(2000)
         LIMIT 0.1
     );
+
+SET max_block_size = 10;
+
+SET max_block_size = 3;
 
 SELECT count()
 FROM (

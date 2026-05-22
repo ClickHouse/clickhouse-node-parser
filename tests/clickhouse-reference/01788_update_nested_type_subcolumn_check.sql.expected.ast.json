@@ -1,5 +1,262 @@
 [
   {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "test_wide_nested"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "test_wide_nested"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "id",
+        "type": {
+          "name": "Int"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "info.id",
+        "type": {
+          "name": "Array",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "Int"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "info.name",
+        "type": {
+          "name": "Array",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "String"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "info.age",
+        "type": {
+          "name": "Array",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "Int"
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "functionCall",
+          "name": "tuple",
+          "args": []
+        }
+      }
+    ],
+    "settings": [
+      {
+        "name": "min_bytes_for_wide_part",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      }
+    ],
+    "settingsAfterOrderBy": true
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "mutations_sync",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "test_wide_nested"
+      }
+    },
+    "selectQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "number"
+          ]
+        },
+        {
+          "kind": "arrayLiteral",
+          "elements": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "number"
+              ]
+            },
+            {
+              "kind": "binaryExpr",
+              "op": "+",
+              "left": {
+                "kind": "columnRef",
+                "parts": [
+                  "number"
+                ]
+              },
+              "right": {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "1"
+              }
+            }
+          ],
+          "source": "[number,number + 1]"
+        },
+        {
+          "kind": "arrayLiteral",
+          "elements": [
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "aa"
+            },
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "bb"
+            }
+          ],
+          "source": "['aa','bb']"
+        },
+        {
+          "kind": "arrayLiteral",
+          "elements": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "number"
+              ]
+            },
+            {
+              "kind": "binaryExpr",
+              "op": "*",
+              "left": {
+                "kind": "columnRef",
+                "parts": [
+                  "number"
+                ]
+              },
+              "right": {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "2"
+              }
+            }
+          ],
+          "source": "[number,number * 2]"
+        }
+      ],
+      "from": {
+        "kind": "tableFunctionRef",
+        "name": "numbers",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "5"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "kind": "alter",
+    "table": {
+      "kind": "tableRef",
+      "table": "test_wide_nested"
+    },
+    "commands": [
+      {
+        "kind": "alterCommand",
+        "commandType": "UPDATE",
+        "assignments": [
+          {
+            "column": "info.id",
+            "expr": {
+              "kind": "arrayLiteral",
+              "elements": [
+                {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "100"
+                },
+                {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "200"
+                }
+              ],
+              "source": "[100,200]"
+            }
+          }
+        ],
+        "where": {
+          "kind": "binaryExpr",
+          "op": "=",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "id"
+            ]
+          },
+          "right": {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "1"
+          }
+        }
+      }
+    ]
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -39,6 +296,108 @@
     ]
   },
   {
+    "kind": "alter",
+    "table": {
+      "kind": "tableRef",
+      "table": "test_wide_nested"
+    },
+    "commands": [
+      {
+        "kind": "alterCommand",
+        "commandType": "UPDATE",
+        "assignments": [
+          {
+            "column": "info.id",
+            "expr": {
+              "kind": "arrayLiteral",
+              "elements": [
+                {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "100"
+                },
+                {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "200"
+                },
+                {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "300"
+                }
+              ],
+              "source": "[100,200,300]"
+            }
+          },
+          {
+            "column": "info.age",
+            "expr": {
+              "kind": "arrayLiteral",
+              "elements": [
+                {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "10"
+                },
+                {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "20"
+                },
+                {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "30"
+                }
+              ],
+              "source": "[10,20,30]"
+            }
+          },
+          {
+            "column": "info.name",
+            "expr": {
+              "kind": "arrayLiteral",
+              "elements": [
+                {
+                  "kind": "literal",
+                  "type": "String",
+                  "value": "a"
+                },
+                {
+                  "kind": "literal",
+                  "type": "String",
+                  "value": "b"
+                },
+                {
+                  "kind": "literal",
+                  "type": "String",
+                  "value": "c"
+                }
+              ],
+              "source": "['a','b','c']"
+            }
+          }
+        ],
+        "where": {
+          "kind": "binaryExpr",
+          "op": "=",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "id"
+            ]
+          },
+          "right": {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "2"
+          }
+        }
+      }
+    ]
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -49,6 +408,689 @@
       "kind": "tableRef",
       "table": "test_wide_nested"
     }
+  },
+  {
+    "kind": "alter",
+    "table": {
+      "kind": "tableRef",
+      "table": "test_wide_nested"
+    },
+    "commands": [
+      {
+        "kind": "alterCommand",
+        "commandType": "UPDATE",
+        "assignments": [
+          {
+            "column": "info.id",
+            "expr": {
+              "kind": "arrayLiteral",
+              "elements": [
+                {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "100"
+                },
+                {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "200"
+                },
+                {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "300"
+                }
+              ],
+              "source": "[100,200,300]"
+            }
+          },
+          {
+            "column": "info.age",
+            "expr": {
+              "kind": "columnRef",
+              "parts": [
+                "info.id"
+              ]
+            }
+          },
+          {
+            "column": "info.name",
+            "expr": {
+              "kind": "arrayLiteral",
+              "elements": [
+                {
+                  "kind": "literal",
+                  "type": "String",
+                  "value": "a"
+                },
+                {
+                  "kind": "literal",
+                  "type": "String",
+                  "value": "b"
+                },
+                {
+                  "kind": "literal",
+                  "type": "String",
+                  "value": "c"
+                }
+              ],
+              "source": "['a','b','c']"
+            }
+          }
+        ],
+        "where": {
+          "kind": "binaryExpr",
+          "op": "=",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "id"
+            ]
+          },
+          "right": {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "2"
+          }
+        }
+      }
+    ]
+  },
+  {
+    "kind": "alter",
+    "table": {
+      "kind": "tableRef",
+      "table": "test_wide_nested"
+    },
+    "commands": [
+      {
+        "kind": "alterCommand",
+        "commandType": "UPDATE",
+        "assignments": [
+          {
+            "column": "info.id",
+            "expr": {
+              "kind": "arrayLiteral",
+              "elements": [
+                {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "100"
+                },
+                {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "200"
+                }
+              ],
+              "source": "[100,200]"
+            }
+          },
+          {
+            "column": "info.age",
+            "expr": {
+              "kind": "arrayLiteral",
+              "elements": [
+                {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "68"
+                },
+                {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "72"
+                }
+              ],
+              "source": "[68,72]"
+            }
+          }
+        ],
+        "where": {
+          "kind": "binaryExpr",
+          "op": "=",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "id"
+            ]
+          },
+          "right": {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "3"
+          }
+        }
+      }
+    ]
+  },
+  {
+    "kind": "alter",
+    "table": {
+      "kind": "tableRef",
+      "table": "test_wide_nested"
+    },
+    "commands": [
+      {
+        "kind": "alterCommand",
+        "commandType": "UPDATE",
+        "assignments": [
+          {
+            "column": "info.id",
+            "expr": {
+              "kind": "columnRef",
+              "parts": [
+                "info.age"
+              ]
+            }
+          }
+        ],
+        "where": {
+          "kind": "binaryExpr",
+          "op": "=",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "id"
+            ]
+          },
+          "right": {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "3"
+          }
+        }
+      }
+    ]
+  },
+  {
+    "kind": "alter",
+    "table": {
+      "kind": "tableRef",
+      "table": "test_wide_nested"
+    },
+    "commands": [
+      {
+        "kind": "alterCommand",
+        "commandType": "UPDATE",
+        "assignments": [
+          {
+            "column": "info.id",
+            "expr": {
+              "kind": "arrayLiteral",
+              "elements": [
+                {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "100"
+                },
+                {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "200"
+                }
+              ],
+              "source": "[100,200]"
+            }
+          },
+          {
+            "column": "info.age",
+            "expr": {
+              "kind": "arrayLiteral",
+              "elements": [
+                {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "10"
+                },
+                {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "20"
+                },
+                {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "30"
+                }
+              ],
+              "source": "[10,20,30]"
+            }
+          },
+          {
+            "column": "info.name",
+            "expr": {
+              "kind": "arrayLiteral",
+              "elements": [
+                {
+                  "kind": "literal",
+                  "type": "String",
+                  "value": "a"
+                },
+                {
+                  "kind": "literal",
+                  "type": "String",
+                  "value": "b"
+                },
+                {
+                  "kind": "literal",
+                  "type": "String",
+                  "value": "c"
+                }
+              ],
+              "source": "['a','b','c']"
+            }
+          }
+        ],
+        "where": {
+          "kind": "binaryExpr",
+          "op": "=",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "id"
+            ]
+          },
+          "right": {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "0"
+          }
+        }
+      }
+    ],
+    "trailingComments": [
+      "-- { serverError UNFINISHED }"
+    ]
+  },
+  {
+    "kind": "kill",
+    "target": "MUTATION",
+    "where": {
+      "kind": "naryExpr",
+      "op": "AND",
+      "operands": [
+        {
+          "kind": "binaryExpr",
+          "op": "=",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "table"
+            ]
+          },
+          "right": {
+            "kind": "literal",
+            "type": "String",
+            "value": "test_wide_nested"
+          }
+        },
+        {
+          "kind": "binaryExpr",
+          "op": "=",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "database"
+            ]
+          },
+          "right": {
+            "kind": "functionCall",
+            "name": "currentDatabase",
+            "args": []
+          }
+        }
+      ]
+    },
+    "format": "Null"
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "test_wide_nested"
+    }
+  },
+  {
+    "kind": "alter",
+    "table": {
+      "kind": "tableRef",
+      "table": "test_wide_nested"
+    },
+    "commands": [
+      {
+        "kind": "alterCommand",
+        "commandType": "ADD_COLUMN",
+        "column": {
+          "kind": "columnDef",
+          "name": "info2.id",
+          "type": {
+            "name": "Array",
+            "args": [
+              {
+                "kind": "type",
+                "type": {
+                  "name": "Int"
+                }
+              }
+            ]
+          }
+        }
+      }
+    ]
+  },
+  {
+    "kind": "alter",
+    "table": {
+      "kind": "tableRef",
+      "table": "test_wide_nested"
+    },
+    "commands": [
+      {
+        "kind": "alterCommand",
+        "commandType": "ADD_COLUMN",
+        "column": {
+          "kind": "columnDef",
+          "name": "info2.name",
+          "type": {
+            "name": "Array",
+            "args": [
+              {
+                "kind": "type",
+                "type": {
+                  "name": "String"
+                }
+              }
+            ]
+          }
+        }
+      }
+    ]
+  },
+  {
+    "kind": "alter",
+    "table": {
+      "kind": "tableRef",
+      "table": "test_wide_nested"
+    },
+    "commands": [
+      {
+        "kind": "alterCommand",
+        "commandType": "UPDATE",
+        "assignments": [
+          {
+            "column": "info2.id",
+            "expr": {
+              "kind": "columnRef",
+              "parts": [
+                "info.id"
+              ]
+            }
+          },
+          {
+            "column": "info2.name",
+            "expr": {
+              "kind": "columnRef",
+              "parts": [
+                "info.name"
+              ]
+            }
+          }
+        ],
+        "where": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "alter",
+    "table": {
+      "kind": "tableRef",
+      "table": "test_wide_nested"
+    },
+    "commands": [
+      {
+        "kind": "alterCommand",
+        "commandType": "UPDATE",
+        "assignments": [
+          {
+            "column": "info.id",
+            "expr": {
+              "kind": "arrayLiteral",
+              "elements": [
+                {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "100"
+                },
+                {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "200"
+                },
+                {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "300"
+                }
+              ],
+              "source": "[100,200,300]"
+            }
+          },
+          {
+            "column": "info.age",
+            "expr": {
+              "kind": "arrayLiteral",
+              "elements": [
+                {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "10"
+                },
+                {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "20"
+                },
+                {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "30"
+                }
+              ],
+              "source": "[10,20,30]"
+            }
+          }
+        ],
+        "where": {
+          "kind": "binaryExpr",
+          "op": "=",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "id"
+            ]
+          },
+          "right": {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "1"
+          }
+        }
+      }
+    ],
+    "trailingComments": [
+      "-- { serverError UNFINISHED }"
+    ]
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "test_wide_not_nested"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "test_wide_not_nested"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "id",
+        "type": {
+          "name": "Int"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "info.id",
+        "type": {
+          "name": "Int"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "info.name",
+        "type": {
+          "name": "String"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "info.age",
+        "type": {
+          "name": "Int"
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "functionCall",
+          "name": "tuple",
+          "args": []
+        }
+      }
+    ],
+    "settings": [
+      {
+        "name": "min_bytes_for_wide_part",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      }
+    ],
+    "settingsAfterOrderBy": true
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "test_wide_not_nested"
+      }
+    },
+    "selectQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "number"
+          ]
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "number"
+          ]
+        },
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "aa"
+        },
+        {
+          "kind": "binaryExpr",
+          "op": "*",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "number"
+            ]
+          },
+          "right": {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "2"
+          }
+        }
+      ],
+      "from": {
+        "kind": "tableFunctionRef",
+        "name": "numbers",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "5"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "kind": "alter",
+    "table": {
+      "kind": "tableRef",
+      "table": "test_wide_not_nested"
+    },
+    "commands": [
+      {
+        "kind": "alterCommand",
+        "commandType": "UPDATE",
+        "assignments": [
+          {
+            "column": "info.name",
+            "expr": {
+              "kind": "literal",
+              "type": "String",
+              "value": "bb"
+            }
+          }
+        ],
+        "where": {
+          "kind": "binaryExpr",
+          "op": "=",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "id"
+            ]
+          },
+          "right": {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "1"
+          }
+        }
+      }
+    ]
   },
   {
     "kind": "select",
@@ -73,5 +1115,13 @@
         "direction": "ASC"
       }
     ]
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "test_wide_not_nested"
+    }
   }
 ]

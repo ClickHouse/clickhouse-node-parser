@@ -1,3 +1,131 @@
+DropQuery  local_table_1 (children 1)
+ Identifier local_table_1
+
+DropQuery  local_table_2 (children 1)
+ Identifier local_table_2
+
+DropQuery  distributed_table_1 (children 1)
+ Identifier distributed_table_1
+
+DropQuery  distributed_table_2 (children 1)
+ Identifier distributed_table_2
+
+Set
+
+Set
+
+Set
+
+Set
+
+Set
+
+Set
+
+CreateQuery local_table_1 (children 3)
+ Identifier local_table_1
+ Columns definition (children 1)
+  ExpressionList (children 1)
+   ColumnDeclaration id (children 1)
+    DataType int
+ Storage definition (children 2)
+  Function MergeTree
+  Identifier id
+
+CreateQuery local_table_2 (children 3)
+ Identifier local_table_2
+ Columns definition (children 1)
+  ExpressionList (children 1)
+   ColumnDeclaration id (children 1)
+    DataType int
+ Storage definition (children 2)
+  Function MergeTree
+  Identifier id
+
+CreateQuery distributed_table_1 (children 3)
+ Identifier distributed_table_1
+ Columns definition (children 1)
+  ExpressionList (children 1)
+   ColumnDeclaration id (children 1)
+    DataType int
+ Storage definition (children 1)
+  Function Distributed (children 1)
+   ExpressionList (children 3)
+    Identifier test_cluster_two_shard_three_replicas_localhost
+    Function currentDatabase (children 1)
+     ExpressionList
+    Identifier local_table_1
+
+CreateQuery distributed_table_2 (children 3)
+ Identifier distributed_table_2
+ Columns definition (children 1)
+  ExpressionList (children 1)
+   ColumnDeclaration id (children 1)
+    DataType int
+ Storage definition (children 1)
+  Function Distributed (children 1)
+   ExpressionList (children 3)
+    Identifier test_cluster_two_shard_three_replicas_localhost
+    Function currentDatabase (children 1)
+     ExpressionList
+    Identifier local_table_2
+
+InsertQuery   (children 2)
+ Identifier local_table_1
+ SelectWithUnionQuery (children 1)
+  ExpressionList (children 1)
+   SelectQuery (children 2)
+    ExpressionList (children 1)
+     Identifier number
+    TablesInSelectQuery (children 1)
+     TablesInSelectQueryElement (children 1)
+      TableExpression (children 1)
+       Function numbers (children 1)
+        ExpressionList (children 1)
+         Literal UInt64_100
+
+InsertQuery   (children 2)
+ Identifier local_table_2
+ SelectWithUnionQuery (children 1)
+  ExpressionList (children 1)
+   SelectQuery (children 2)
+    ExpressionList (children 1)
+     Literal UInt64_1
+    TablesInSelectQuery (children 1)
+     TablesInSelectQueryElement (children 1)
+      TableExpression (children 1)
+       Function numbers (children 1)
+        ExpressionList (children 1)
+         Literal UInt64_1000000
+
+InsertQuery   (children 2)
+ Identifier local_table_2
+ SelectWithUnionQuery (children 1)
+  ExpressionList (children 1)
+   SelectQuery (children 2)
+    ExpressionList (children 1)
+     Literal UInt64_2
+    TablesInSelectQuery (children 1)
+     TablesInSelectQueryElement (children 1)
+      TableExpression (children 1)
+       Function numbers (children 1)
+        ExpressionList (children 1)
+         Literal UInt64_1000000
+
+InsertQuery   (children 2)
+ Identifier local_table_2
+ SelectWithUnionQuery (children 1)
+  ExpressionList (children 1)
+   SelectQuery (children 2)
+    ExpressionList (children 1)
+     Literal UInt64_3
+    TablesInSelectQuery (children 1)
+     TablesInSelectQueryElement (children 1)
+      TableExpression (children 1)
+       Function numbers (children 1)
+        ExpressionList (children 1)
+         Literal UInt64_1000000
+
 SelectWithUnionQuery (children 1)
  ExpressionList (children 1)
   SelectQuery (children 4)
@@ -45,3 +173,97 @@ SelectWithUnionQuery (children 1)
            TableExpression (children 1)
             TableIdentifier distributed_table_2
    Set
+
+SYSTEM query
+
+SelectWithUnionQuery (children 1)
+ ExpressionList (children 1)
+  SelectQuery (children 2)
+   ExpressionList (children 2)
+    Subquery (alias q1) (children 1)
+     SelectWithUnionQuery (children 1)
+      ExpressionList (children 1)
+       SelectQuery (children 5)
+        ExpressionList (children 2)
+         Identifier read_rows
+         Identifier ProfileEvents
+        TablesInSelectQuery (children 1)
+         TablesInSelectQueryElement (children 1)
+          TableExpression (children 1)
+           TableIdentifier system.query_log
+        Function and (children 1)
+         ExpressionList (children 4)
+          Function equals (children 1)
+           ExpressionList (children 2)
+            Identifier current_database
+            Function currentDatabase (children 1)
+             ExpressionList
+          Function like (children 1)
+           ExpressionList (children 2)
+            Identifier query
+            Literal '%select id from distributed_table_1 where id in (select id from distributed_table_2) settings enable_add_distinct_to_in_subqueries = 1%'
+          Function equals (children 1)
+           ExpressionList (children 2)
+            Identifier type
+            Literal 'QueryFinish'
+          Identifier is_initial_query
+        ExpressionList (children 1)
+         OrderByElement (children 1)
+          Identifier event_time
+        Literal UInt64_1
+    Subquery (alias q2) (children 1)
+     SelectWithUnionQuery (children 1)
+      ExpressionList (children 1)
+       SelectQuery (children 5)
+        ExpressionList (children 2)
+         Identifier read_rows
+         Identifier ProfileEvents
+        TablesInSelectQuery (children 1)
+         TablesInSelectQueryElement (children 1)
+          TableExpression (children 1)
+           TableIdentifier system.query_log
+        Function and (children 1)
+         ExpressionList (children 4)
+          Function equals (children 1)
+           ExpressionList (children 2)
+            Identifier current_database
+            Function currentDatabase (children 1)
+             ExpressionList
+          Function like (children 1)
+           ExpressionList (children 2)
+            Identifier query
+            Literal '%select id from distributed_table_1 where id in (select id from distributed_table_2) settings enable_add_distinct_to_in_subqueries = 0%'
+          Function equals (children 1)
+           ExpressionList (children 2)
+            Identifier type
+            Literal 'QueryFinish'
+          Identifier is_initial_query
+        ExpressionList (children 1)
+         OrderByElement (children 1)
+          Identifier event_time
+        Literal UInt64_1
+   ExpressionList (children 3)
+    Function less (alias read_rows_optimization_effective) (children 1)
+     ExpressionList (children 2)
+      Identifier q1.read_rows
+      Identifier q2.read_rows
+    Function less (alias send_optimization_effective) (children 1)
+     ExpressionList (children 2)
+      Function arrayElement (children 1)
+       ExpressionList (children 2)
+        Identifier q1.ProfileEvents
+        Literal 'NetworkSendBytes'
+      Function arrayElement (children 1)
+       ExpressionList (children 2)
+        Identifier q2.ProfileEvents
+        Literal 'NetworkSendBytes'
+    Function less (alias recv_optimization_effective) (children 1)
+     ExpressionList (children 2)
+      Function arrayElement (children 1)
+       ExpressionList (children 2)
+        Identifier q1.ProfileEvents
+        Literal 'NetworkReceiveBytes'
+      Function arrayElement (children 1)
+       ExpressionList (children 2)
+        Identifier q2.ProfileEvents
+        Literal 'NetworkReceiveBytes'

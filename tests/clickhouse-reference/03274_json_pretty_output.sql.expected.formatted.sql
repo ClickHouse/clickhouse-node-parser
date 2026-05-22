@@ -1,3 +1,9 @@
+SET enable_named_columns_in_function_tuple = 1;
+
+SET output_format_write_statistics = 0;
+
+SET enable_analyzer = 1;
+
 SELECT
     tuple(1 AS b, 2 AS c) AS a,
     map('e', 3, 'f', 4) AS d,

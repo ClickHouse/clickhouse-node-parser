@@ -1,5 +1,144 @@
 [
   {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "test"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "test"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "stamp",
+        "type": {
+          "name": "Date"
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "stamp"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "test"
+      }
+    },
+    "selectQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "2024-10-30"
+        }
+      ],
+      "from": {
+        "kind": "tableFunctionRef",
+        "name": "numbers",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "100"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "test"
+      }
+    },
+    "selectQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "2024-11-19"
+        }
+      ],
+      "from": {
+        "kind": "tableFunctionRef",
+        "name": "numbers",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "100"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "test"
+      }
+    },
+    "selectQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "2149-06-06"
+        }
+      ],
+      "from": {
+        "kind": "tableFunctionRef",
+        "name": "numbers",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "100"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "kind": "optimize",
+    "table": {
+      "kind": "tableRef",
+      "table": "test"
+    },
+    "final": true
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -32,7 +171,11 @@
           }
         ]
       }
-    }
+    },
+    "leadingComments": [
+      "-- { echoOn }",
+      "-- implicit toDateTime (always saturate)"
+    ]
   },
   {
     "kind": "select",
@@ -185,6 +328,118 @@
           "value": "throw"
         }
       }
+    ],
+    "trailingComments": [
+      "-- { serverError VALUE_IS_OUT_OF_RANGE_OF_DATA_TYPE }"
+    ]
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "test"
+    }
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "test"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "stamp",
+        "type": {
+          "name": "Date"
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "stamp"
+          ]
+        }
+      }
+    ],
+    "settings": [
+      {
+        "name": "index_granularity",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "20"
+        }
+      }
+    ],
+    "settingsAfterOrderBy": true
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "test"
+      }
+    },
+    "selectQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "number"
+          ]
+        }
+      ],
+      "from": {
+        "kind": "tableFunctionRef",
+        "name": "numbers",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "65536"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "session_timezone",
+        "value": {
+          "kind": "literal",
+          "type": "String",
+          "value": "UTC"
+        }
+      }
+    ],
+    "trailingComments": [
+      "-- The following tests are timezone sensitive"
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "optimize_use_implicit_projections",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      }
     ]
   },
   {
@@ -230,6 +485,9 @@
           "value": "1"
         }
       }
+    ],
+    "leadingComments": [
+      "-- Boundary at UNIX epoch"
     ]
   },
   {
@@ -316,6 +574,9 @@
           "value": "1"
         }
       }
+    ],
+    "leadingComments": [
+      "-- Arbitrary DateTime"
     ]
   },
   {
@@ -402,6 +663,9 @@
           "value": "1"
         }
       }
+    ],
+    "leadingComments": [
+      "-- Extreme value beyond supported range"
     ]
   },
   {
@@ -488,6 +752,9 @@
           "value": "1"
         }
       }
+    ],
+    "leadingComments": [
+      "-- Negative timestamp"
     ]
   },
   {
@@ -574,6 +841,9 @@
           "value": "1"
         }
       }
+    ],
+    "leadingComments": [
+      "-- Pre-Gregorian date"
     ]
   },
   {
@@ -660,6 +930,9 @@
           "value": "1"
         }
       }
+    ],
+    "leadingComments": [
+      "-- UNIX epoch"
     ]
   },
   {
@@ -746,6 +1019,9 @@
           "value": "1"
         }
       }
+    ],
+    "leadingComments": [
+      "-- Modern date within supported range"
     ]
   },
   {
@@ -832,6 +1108,9 @@
           "value": "1"
         }
       }
+    ],
+    "leadingComments": [
+      "-- Far future but still valid"
     ]
   },
   {
@@ -918,6 +1197,9 @@
           "value": "1"
         }
       }
+    ],
+    "leadingComments": [
+      "-- Maximum 32-bit timestamp"
     ]
   },
   {
@@ -1004,6 +1286,9 @@
           "value": "1"
         }
       }
+    ],
+    "leadingComments": [
+      "-- Minimum Date boundary"
     ]
   },
   {
@@ -1090,6 +1375,9 @@
           "value": "1"
         }
       }
+    ],
+    "leadingComments": [
+      "-- Maximum Date boundary"
     ]
   },
   {
@@ -1182,6 +1470,9 @@
           "value": "1"
         }
       }
+    ],
+    "leadingComments": [
+      "-- Convert stamp to Date"
     ]
   },
   {
@@ -1280,6 +1571,12 @@
           "value": "1"
         }
       }
+    ],
+    "leadingComments": [
+      "-- Convert stamp to DateTime (This will overflow and should not use primary key)"
+    ],
+    "trailingComments": [
+      "-- { serverError INDEX_NOT_USED }"
     ]
   },
   {
@@ -1372,6 +1669,9 @@
           "value": "1"
         }
       }
+    ],
+    "leadingComments": [
+      "-- Exact Date match"
     ]
   },
   {
@@ -1458,6 +1758,9 @@
           "value": "1"
         }
       }
+    ],
+    "leadingComments": [
+      "-- Exact DateTime match"
     ]
   },
   {
@@ -1544,6 +1847,9 @@
           "value": "1"
         }
       }
+    ],
+    "leadingComments": [
+      "-- Invalid DateTime (negative)"
     ]
   },
   {
@@ -1630,6 +1936,9 @@
           "value": "1"
         }
       }
+    ],
+    "leadingComments": [
+      "-- Extremely large DateTime"
     ]
   },
   {
@@ -1716,6 +2025,9 @@
           "value": "1"
         }
       }
+    ],
+    "leadingComments": [
+      "-- NULL DateTime"
     ]
   },
   {
@@ -1802,6 +2114,9 @@
           "value": "1"
         }
       }
+    ],
+    "leadingComments": [
+      "-- NULL Date"
     ]
   },
   {

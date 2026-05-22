@@ -1,5 +1,121 @@
 [
   {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "source_data"
+    },
+    "ifExists": true,
+    "leadingComments": [
+      "--- See also tests/queries/0_stateless/01581_deduplicate_by_columns_replicated.sql",
+      "--- local case",
+      "-- Just in case if previous tests run left some stuff behind."
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "source_data"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "pk",
+        "type": {
+          "name": "Int32"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "sk",
+        "type": {
+          "name": "Int32"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "val",
+        "type": {
+          "name": "UInt32"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "partition_key",
+        "type": {
+          "name": "UInt32"
+        },
+        "defaultKind": "DEFAULT",
+        "defaultExpr": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ],
+    "primaryKeyInSchema": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "pk"
+        ]
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "pk"
+          ]
+        }
+      },
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "sk"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "source_data"
+      }
+    },
+    "columns": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "pk"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "sk"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "val"
+        ]
+      }
+    ]
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -19,6 +135,347 @@
     }
   },
   {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "full_duplicates"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "full_duplicates"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "pk",
+        "type": {
+          "name": "Int32"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "sk",
+        "type": {
+          "name": "Int32"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "val",
+        "type": {
+          "name": "UInt32"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "partition_key",
+        "type": {
+          "name": "UInt32"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "mat",
+        "type": {
+          "name": "UInt32"
+        },
+        "defaultKind": "MATERIALIZED",
+        "defaultExpr": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "12345"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "alias",
+        "type": {
+          "name": "UInt32"
+        },
+        "defaultKind": "ALIAS",
+        "defaultExpr": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "2"
+        }
+      }
+    ],
+    "primaryKeyInSchema": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "pk"
+        ]
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "partitionBy": {
+      "kind": "binaryExpr",
+      "op": "+",
+      "left": {
+        "kind": "columnRef",
+        "parts": [
+          "partition_key"
+        ]
+      },
+      "right": {
+        "kind": "literal",
+        "type": "UInt64",
+        "value": "1"
+      },
+      "parenthesized": true
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "pk"
+          ]
+        }
+      },
+      {
+        "expr": {
+          "kind": "functionCall",
+          "name": "toString",
+          "args": [
+            {
+              "kind": "binaryExpr",
+              "op": "*",
+              "left": {
+                "kind": "columnRef",
+                "parts": [
+                  "sk"
+                ]
+              },
+              "right": {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "10"
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "leadingComments": [
+      "-- table with duplicates on MATERIALIZED columns"
+    ],
+    "trailingComments": [
+      "-- silly order key to ensure that key column is checked even when it is a part of expression. See [1] below."
+    ]
+  },
+  {
+    "kind": "optimize",
+    "table": {
+      "kind": "tableRef",
+      "table": "full_duplicates"
+    },
+    "deduplicate": true,
+    "deduplicateBy": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "pk"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "sk"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "val"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "mat"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "alias"
+        ]
+      }
+    ],
+    "leadingComments": [
+      "-- ERROR cases"
+    ],
+    "trailingComments": [
+      "-- { serverError NO_SUCH_COLUMN_IN_TABLE } -- alias column is present"
+    ]
+  },
+  {
+    "kind": "optimize",
+    "table": {
+      "kind": "tableRef",
+      "table": "full_duplicates"
+    },
+    "deduplicate": true,
+    "deduplicateBy": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "sk"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "val"
+        ]
+      }
+    ],
+    "trailingComments": [
+      "-- { serverError THERE_IS_NO_COLUMN } -- primary key column is missing"
+    ]
+  },
+  {
+    "kind": "optimize",
+    "table": {
+      "kind": "tableRef",
+      "table": "full_duplicates"
+    },
+    "deduplicate": true,
+    "deduplicateBy": [
+      {
+        "kind": "asterisk",
+        "transformers": [
+          {
+            "kind": "except",
+            "columns": [
+              "pk",
+              "sk",
+              "val",
+              "mat",
+              "alias",
+              "partition_key"
+            ]
+          }
+        ]
+      }
+    ],
+    "trailingComments": [
+      "-- { serverError EMPTY_LIST_OF_COLUMNS_QUERIED } -- list is empty"
+    ]
+  },
+  {
+    "kind": "optimize",
+    "table": {
+      "kind": "tableRef",
+      "table": "full_duplicates"
+    },
+    "deduplicate": true,
+    "deduplicateBy": [
+      {
+        "kind": "asterisk",
+        "transformers": [
+          {
+            "kind": "except",
+            "columns": [
+              "pk"
+            ]
+          }
+        ]
+      }
+    ],
+    "trailingComments": [
+      "-- { serverError THERE_IS_NO_COLUMN } -- primary key column is missing [1]"
+    ]
+  },
+  {
+    "kind": "optimize",
+    "table": {
+      "kind": "tableRef",
+      "table": "full_duplicates"
+    },
+    "deduplicate": true,
+    "deduplicateBy": [
+      {
+        "kind": "asterisk",
+        "transformers": [
+          {
+            "kind": "except",
+            "columns": [
+              "sk"
+            ]
+          }
+        ]
+      }
+    ],
+    "trailingComments": [
+      "-- { serverError THERE_IS_NO_COLUMN } -- sorting key column is missing [1]"
+    ]
+  },
+  {
+    "kind": "optimize",
+    "table": {
+      "kind": "tableRef",
+      "table": "full_duplicates"
+    },
+    "deduplicate": true,
+    "deduplicateBy": [
+      {
+        "kind": "asterisk",
+        "transformers": [
+          {
+            "kind": "except",
+            "columns": [
+              "partition_key"
+            ]
+          }
+        ]
+      }
+    ],
+    "trailingComments": [
+      "-- { serverError THERE_IS_NO_COLUMN } -- partitioning column is missing [1]"
+    ]
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "full_duplicates"
+      }
+    },
+    "selectQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "asterisk"
+        }
+      ],
+      "from": {
+        "kind": "tableRef",
+        "table": "source_data"
+      }
+    }
+  },
+  {
+    "kind": "optimize",
+    "table": {
+      "kind": "tableRef",
+      "table": "full_duplicates"
+    },
+    "final": true,
+    "deduplicate": true
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -29,6 +486,233 @@
       "kind": "tableRef",
       "table": "full_duplicates"
     }
+  },
+  {
+    "kind": "truncate",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "full_duplicates"
+    }
+  },
+  {
+    "kind": "optimize",
+    "table": {
+      "kind": "tableRef",
+      "table": "full_duplicates"
+    },
+    "final": true,
+    "deduplicate": true,
+    "deduplicateBy": [
+      {
+        "kind": "asterisk"
+      }
+    ]
+  },
+  {
+    "kind": "optimize",
+    "table": {
+      "kind": "tableRef",
+      "table": "full_duplicates"
+    },
+    "final": true,
+    "deduplicate": true,
+    "deduplicateBy": [
+      {
+        "kind": "asterisk",
+        "transformers": [
+          {
+            "kind": "except",
+            "columns": [
+              "mat"
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "optimize",
+    "table": {
+      "kind": "tableRef",
+      "table": "full_duplicates"
+    },
+    "final": true,
+    "deduplicate": true,
+    "deduplicateBy": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "pk"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "sk"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "val"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "mat"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "partition_key"
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "partial_duplicates"
+    },
+    "ifExists": true,
+    "leadingComments": [
+      "--DROP TABLE full_duplicates;",
+      "-- Now to the partial duplicates when MATERIALIZED column alway has unique value."
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "partial_duplicates"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "pk",
+        "type": {
+          "name": "Int32"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "sk",
+        "type": {
+          "name": "Int32"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "val",
+        "type": {
+          "name": "UInt32"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "partition_key",
+        "type": {
+          "name": "UInt32"
+        },
+        "defaultKind": "DEFAULT",
+        "defaultExpr": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "mat",
+        "type": {
+          "name": "UInt32"
+        },
+        "defaultKind": "MATERIALIZED",
+        "defaultExpr": {
+          "kind": "functionCall",
+          "name": "rand",
+          "args": []
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "alias",
+        "type": {
+          "name": "UInt32"
+        },
+        "defaultKind": "ALIAS",
+        "defaultExpr": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "2"
+        }
+      }
+    ],
+    "primaryKeyInSchema": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "pk"
+        ]
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "pk"
+          ]
+        }
+      },
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "sk"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "partial_duplicates"
+      }
+    },
+    "selectQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "asterisk"
+        }
+      ],
+      "from": {
+        "kind": "tableRef",
+        "table": "source_data"
+      }
+    }
+  },
+  {
+    "kind": "optimize",
+    "table": {
+      "kind": "tableRef",
+      "table": "partial_duplicates"
+    },
+    "final": true,
+    "deduplicate": true
   },
   {
     "kind": "select",
@@ -45,6 +729,85 @@
     }
   },
   {
+    "kind": "truncate",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "partial_duplicates"
+    }
+  },
+  {
+    "kind": "optimize",
+    "table": {
+      "kind": "tableRef",
+      "table": "partial_duplicates"
+    },
+    "final": true,
+    "deduplicate": true,
+    "deduplicateBy": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "pk"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "sk"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "val"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "mat"
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "optimize",
+    "table": {
+      "kind": "tableRef",
+      "table": "partial_duplicates"
+    },
+    "final": true,
+    "deduplicate": true,
+    "deduplicateBy": [
+      {
+        "kind": "asterisk"
+      }
+    ]
+  },
+  {
+    "kind": "optimize",
+    "table": {
+      "kind": "tableRef",
+      "table": "partial_duplicates"
+    },
+    "final": true,
+    "deduplicate": true,
+    "deduplicateBy": [
+      {
+        "kind": "asterisk",
+        "transformers": [
+          {
+            "kind": "except",
+            "columns": [
+              "mat"
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -54,6 +817,104 @@
     "from": {
       "kind": "tableRef",
       "table": "partial_duplicates"
+    }
+  },
+  {
+    "kind": "optimize",
+    "table": {
+      "kind": "tableRef",
+      "table": "partial_duplicates"
+    },
+    "final": true,
+    "deduplicate": true,
+    "deduplicateBy": [
+      {
+        "kind": "columnsExpr",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": ".*"
+          }
+        ],
+        "transformers": [
+          {
+            "kind": "except",
+            "columns": [
+              "mat"
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "optimize",
+    "table": {
+      "kind": "tableRef",
+      "table": "partial_duplicates"
+    },
+    "final": true,
+    "deduplicate": true,
+    "deduplicateBy": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "pk"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "sk"
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "optimize",
+    "table": {
+      "kind": "tableRef",
+      "table": "partial_duplicates"
+    },
+    "final": true,
+    "deduplicate": true,
+    "deduplicateBy": [
+      {
+        "kind": "functionCall",
+        "name": "COLUMNS",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": ".*k"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "full_duplicates"
+    }
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "partial_duplicates"
+    }
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "source_data"
     }
   }
 ]

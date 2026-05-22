@@ -1,5 +1,120 @@
 [
   {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "test_variant_compatible"
+    },
+    "ifExists": true,
+    "leadingComments": [
+      "-- Test that Variant throws exceptions on type mismatches like Dynamic does.",
+      "-- This fixes issue https://github.com/ClickHouse/ClickHouse/issues/95839 where incompatible types caused LOGICAL_ERROR.",
+      "-- Old behavior: returned NULL, causing logical errors in some cases.",
+      "-- New behavior: throws proper exceptions on incompatible types."
+    ]
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "test_variant_incompatible"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "test_variant_array"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "enable_variant_type",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "allow_suspicious_variant_types",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "allow_suspicious_types_in_order_by",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "test_variant_compatible"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "v",
+        "type": {
+          "name": "Variant",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "UInt64"
+              }
+            },
+            {
+              "kind": "type",
+              "type": {
+                "name": "Float64"
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "engine": {
+      "name": "Memory"
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "test_variant_compatible"
+      }
+    }
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -203,7 +318,7 @@
       }
     ],
     "from": {
-      "kind": "tableFunction",
+      "kind": "tableFunctionRef",
       "name": "numbers",
       "args": [
         {
@@ -212,7 +327,10 @@
           "value": "2"
         }
       ]
-    }
+    },
+    "trailingComments": [
+      "-- {serverError ILLEGAL_TYPE_OF_ARGUMENT}"
+    ]
   },
   {
     "kind": "select",
@@ -222,10 +340,10 @@
         "name": "arrayRemove",
         "args": [
           {
-            "kind": "array",
+            "kind": "arrayLiteral",
             "elements": [
               {
-                "kind": "array",
+                "kind": "arrayLiteral",
                 "elements": [
                   {
                     "kind": "literal",
@@ -241,7 +359,7 @@
                 "source": "[1, 2]"
               },
               {
-                "kind": "array",
+                "kind": "arrayLiteral",
                 "elements": [
                   {
                     "kind": "literal",
@@ -260,10 +378,10 @@
             "source": "[[1, 2], [3, 4]]"
           },
           {
-            "kind": "array",
+            "kind": "arrayLiteral",
             "elements": [
               {
-                "kind": "array",
+                "kind": "arrayLiteral",
                 "elements": [
                   {
                     "kind": "literal",
@@ -278,6 +396,9 @@
           }
         ]
       }
+    ],
+    "trailingComments": [
+      "-- {serverError ILLEGAL_TYPE_OF_ARGUMENT}"
     ]
   },
   {
@@ -288,13 +409,13 @@
         "name": "arrayRemove",
         "args": [
           {
-            "kind": "array",
+            "kind": "arrayLiteral",
             "elements": [
               {
-                "kind": "array",
+                "kind": "arrayLiteral",
                 "elements": [
                   {
-                    "kind": "array",
+                    "kind": "arrayLiteral",
                     "elements": [
                       {
                         "kind": "functionCall",
@@ -348,10 +469,10 @@
                 "source": "[[isNotDistinctFrom(16, isNotDistinctFrom(16, assumeNotNull(isNotNull(materialize(8)))))]]"
               },
               {
-                "kind": "array",
+                "kind": "arrayLiteral",
                 "elements": [
                   {
-                    "kind": "array",
+                    "kind": "arrayLiteral",
                     "elements": [
                       {
                         "kind": "functionCall",
@@ -406,7 +527,7 @@
                 "source": "[[materialize(toUInt128(8)), equals(2, isNull(isZeroOrNull(*)))], *]"
               },
               {
-                "kind": "array",
+                "kind": "arrayLiteral",
                 "elements": [
                   {
                     "kind": "functionCall",
@@ -454,12 +575,12 @@
                     ]
                   },
                   {
-                    "kind": "array",
+                    "kind": "arrayLiteral",
                     "elements": [],
                     "source": "[]"
                   },
                   {
-                    "kind": "array",
+                    "kind": "arrayLiteral",
                     "elements": [
                       {
                         "kind": "functionCall",
@@ -483,7 +604,7 @@
                             }
                           },
                           {
-                            "kind": "array",
+                            "kind": "arrayLiteral",
                             "elements": [
                               {
                                 "kind": "literal",
@@ -502,7 +623,7 @@
                 "source": "[isNotDistinctFrom(isNull(assumeNotNull(16)), isNotDistinctFrom(isZeroOrNull(NULL), 16)), [], [arrayMap(x -> materialize(0), [NULL])]]"
               },
               {
-                "kind": "array",
+                "kind": "arrayLiteral",
                 "elements": [
                   {
                     "kind": "functionCall",
@@ -516,7 +637,7 @@
                     ]
                   },
                   {
-                    "kind": "array",
+                    "kind": "arrayLiteral",
                     "elements": [
                       {
                         "kind": "functionCall",
@@ -539,17 +660,17 @@
             "source": "[[[isNotDistinctFrom(16, isNotDistinctFrom(16, assumeNotNull(isNotNull(materialize(8)))))]], [[materialize(toUInt128(8)), equals(2, isNull(isZeroOrNull(*)))], *], [isNotDistinctFrom(isNull(assumeNotNull(16)), isNotDistinctFrom(isZeroOrNull(NULL), 16)), [], [arrayMap(x -> materialize(0), [NULL])]], [isZeroOrNull(8), [isZeroOrNull(8)]]]"
           },
           {
-            "kind": "array",
+            "kind": "arrayLiteral",
             "elements": [
               {
-                "kind": "array",
+                "kind": "arrayLiteral",
                 "elements": [
                   {
                     "kind": "functionCall",
                     "name": "arrayRemove",
                     "args": [
                       {
-                        "kind": "array",
+                        "kind": "arrayLiteral",
                         "elements": [
                           {
                             "kind": "literal",
@@ -645,7 +766,53 @@
           }
         ]
       }
+    ],
+    "trailingComments": [
+      "-- {serverError ILLEGAL_TYPE_OF_ARGUMENT}"
     ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "test_variant_incompatible"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "v",
+        "type": {
+          "name": "Variant",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "UInt64"
+              }
+            },
+            {
+              "kind": "type",
+              "type": {
+                "name": "String"
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "engine": {
+      "name": "Memory"
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "test_variant_incompatible"
+      }
+    }
   },
   {
     "kind": "select",
@@ -669,7 +836,10 @@
     "from": {
       "kind": "tableRef",
       "table": "test_variant_incompatible"
-    }
+    },
+    "trailingComments": [
+      "-- {serverError ILLEGAL_TYPE_OF_ARGUMENT}"
+    ]
   },
   {
     "kind": "select",
@@ -693,6 +863,60 @@
     "from": {
       "kind": "tableRef",
       "table": "test_variant_incompatible"
+    },
+    "trailingComments": [
+      "-- {serverError NO_COMMON_TYPE}"
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "test_variant_array"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "v",
+        "type": {
+          "name": "Variant",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "UInt64"
+              }
+            },
+            {
+              "kind": "type",
+              "type": {
+                "name": "Array",
+                "args": [
+                  {
+                    "kind": "type",
+                    "type": {
+                      "name": "String"
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "engine": {
+      "name": "Memory"
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "test_variant_array"
+      }
     }
   },
   {
@@ -703,7 +927,7 @@
         "name": "arrayRemove",
         "args": [
           {
-            "kind": "array",
+            "kind": "arrayLiteral",
             "elements": [
               {
                 "kind": "literal",
@@ -730,6 +954,9 @@
     "from": {
       "kind": "tableRef",
       "table": "test_variant_array"
-    }
+    },
+    "trailingComments": [
+      "-- {serverError ILLEGAL_TYPE_OF_ARGUMENT}"
+    ]
   }
 ]

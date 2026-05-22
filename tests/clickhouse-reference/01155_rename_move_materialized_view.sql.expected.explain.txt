@@ -1,3 +1,179 @@
+Set
+
+Set
+
+Set
+
+DropQuery test_01155_ordinary  (children 1)
+ Identifier test_01155_ordinary
+
+DropQuery test_01155_atomic  (children 1)
+ Identifier test_01155_atomic
+
+Set
+
+CreateQuery test_01155_ordinary  (children 2)
+ Identifier test_01155_ordinary
+ Storage definition (children 1)
+  Function Ordinary
+
+CreateQuery test_01155_atomic  (children 2)
+ Identifier test_01155_atomic
+ Storage definition (children 1)
+  Function Atomic
+
+UseQuery test_01155_ordinary (children 1)
+ Identifier test_01155_ordinary
+
+CreateQuery src (children 3)
+ Identifier src
+ Columns definition (children 1)
+  ExpressionList (children 2)
+   ColumnDeclaration s (children 1)
+    DataType String
+   ColumnDeclaration x (children 2)
+    DataType String
+    Literal 'a'
+ Storage definition (children 3)
+  Function MergeTree (children 1)
+   ExpressionList
+  Function tuple (children 1)
+   ExpressionList
+  Identifier s
+
+CreateQuery mv1 (children 4)
+ Identifier mv1
+ Columns definition (children 1)
+  ExpressionList (children 2)
+   ColumnDeclaration s (children 1)
+    DataType String
+   ColumnDeclaration x (children 2)
+    DataType String
+    Literal 'b'
+ SelectWithUnionQuery (children 1)
+  ExpressionList (children 1)
+   SelectQuery (children 2)
+    ExpressionList (children 1)
+     Function concat (alias s) (children 1)
+      ExpressionList (children 2)
+       Function tupleElement (children 1)
+        ExpressionList (children 2)
+         Function tuple (children 1)
+          ExpressionList (children 1)
+           Asterisk
+         Literal UInt64_1
+       Literal 'mv1'
+    TablesInSelectQuery (children 1)
+     TablesInSelectQueryElement (children 1)
+      TableExpression (children 1)
+       TableIdentifier src
+ ViewTargets (children 1)
+  Storage definition (children 3)
+   Function MergeTree (children 1)
+    ExpressionList
+   Function tuple (children 1)
+    ExpressionList
+   Identifier s
+
+CreateQuery dst (children 3)
+ Identifier dst
+ Columns definition (children 1)
+  ExpressionList (children 2)
+   ColumnDeclaration s (children 1)
+    DataType String
+   ColumnDeclaration x (children 2)
+    DataType String
+    Literal 'c'
+ Storage definition (children 3)
+  Function MergeTree (children 1)
+   ExpressionList
+  Function tuple (children 1)
+   ExpressionList
+  Identifier s
+
+CreateQuery mv2 (children 4)
+ Identifier mv2
+ Columns definition (children 1)
+  ExpressionList (children 2)
+   ColumnDeclaration s (children 1)
+    DataType String
+   ColumnDeclaration x (children 2)
+    DataType String
+    Literal 'd'
+ SelectWithUnionQuery (children 1)
+  ExpressionList (children 1)
+   SelectQuery (children 2)
+    ExpressionList (children 1)
+     Function concat (alias s) (children 1)
+      ExpressionList (children 2)
+       Function tupleElement (children 1)
+        ExpressionList (children 2)
+         Function tuple (children 1)
+          ExpressionList (children 1)
+           Asterisk
+         Literal UInt64_1
+       Literal 'mv2'
+    TablesInSelectQuery (children 1)
+     TablesInSelectQueryElement (children 1)
+      TableExpression (children 1)
+       TableIdentifier src
+ ViewTargets
+
+CreateQuery dist (children 3)
+ Identifier dist
+ Columns definition (children 1)
+  ExpressionList (children 2)
+   ColumnDeclaration s (children 1)
+    DataType String
+   ColumnDeclaration x (children 2)
+    DataType String
+    Literal 'asdf'
+ Storage definition (children 1)
+  Function Distributed (children 1)
+   ExpressionList (children 3)
+    Identifier test_shard_localhost
+    Identifier test_01155_ordinary
+    Identifier src
+
+InsertQuery   (children 2)
+ Identifier dist
+ ExpressionList (children 1)
+  Identifier s
+
+SYSTEM query (children 2)
+ Identifier dist
+ Identifier dist
+
+CreateQuery dict (children 3)
+ Identifier dict
+ ExpressionList (children 2)
+  DictionaryAttributeDeclaration s (children 1)
+   DataType String
+  DictionaryAttributeDeclaration x (children 2)
+   DataType String
+   Literal 'qwerty'
+ Dictionary definition (children 4)
+  ExpressionList (children 1)
+   Identifier s
+  FunctionWithKeyValueArguments  clickhouse (children 1)
+   ExpressionList (children 5)
+    pair (children 1)
+     Literal 'localhost'
+    pair (children 1)
+     Function tcpPort (children 1)
+      ExpressionList
+    pair (children 1)
+     Literal 'default'
+    pair (children 1)
+     Literal 'dist'
+    pair (children 1)
+     Literal 'test_01155_ordinary'
+  Dictionary lifetime
+  Dictionary layout (children 1)
+   ExpressionList (children 1)
+    pair (children 1)
+     Literal UInt64_123
+
 SelectWithUnionQuery (children 1)
  ExpressionList (children 1)
   SelectQuery (children 3)
@@ -43,6 +219,12 @@ SelectWithUnionQuery (children 1)
       Literal 'x'
       Literal 'before moving tables'
 
+Rename (children 4)
+ Identifier test_01155_ordinary
+ Identifier dict
+ Identifier test_01155_ordinary
+ Identifier dict1
+
 SelectWithUnionQuery (children 1)
  ExpressionList (children 1)
   SelectQuery (children 1)
@@ -68,6 +250,55 @@ SelectWithUnionQuery (children 1)
     ExpressionList (children 2)
      Identifier database
      Literal 'test_01155_ordinary'
+
+Rename (children 4)
+ Identifier test_01155_ordinary
+ Identifier dict1
+ Identifier test_01155_ordinary
+ Identifier dict
+
+ShowTables (children 1)
+ Identifier test_01155_ordinary
+
+Rename (children 4)
+ Identifier test_01155_ordinary
+ Identifier mv1
+ Identifier test_01155_atomic
+ Identifier mv1
+
+Rename (children 4)
+ Identifier test_01155_ordinary
+ Identifier mv2
+ Identifier test_01155_atomic
+ Identifier mv2
+
+Rename (children 4)
+ Identifier test_01155_ordinary
+ Identifier dst
+ Identifier test_01155_atomic
+ Identifier dst
+
+Rename (children 4)
+ Identifier test_01155_ordinary
+ Identifier src
+ Identifier test_01155_atomic
+ Identifier src
+
+Set
+
+Rename (children 4)
+ Identifier test_01155_ordinary
+ Identifier dist
+ Identifier test_01155_atomic
+ Identifier dist
+
+Set
+
+Rename (children 4)
+ Identifier test_01155_ordinary
+ Identifier dict
+ Identifier test_01155_atomic
+ Identifier dict
 
 SelectWithUnionQuery (children 1)
  ExpressionList (children 1)
@@ -105,6 +336,18 @@ SelectWithUnionQuery (children 1)
      Identifier database
      Literal 'test_01155_atomic'
 
+DropQuery test_01155_ordinary  (children 1)
+ Identifier test_01155_ordinary
+
+UseQuery default (children 1)
+ Identifier default
+
+InsertQuery   (children 3)
+ Identifier test_01155_atomic
+ Identifier src
+ ExpressionList (children 1)
+  Identifier s
+
 SelectWithUnionQuery (children 1)
  ExpressionList (children 1)
   SelectQuery (children 3)
@@ -140,6 +383,15 @@ SelectWithUnionQuery (children 1)
       Literal 'test_01155_ordinary.dict'
       Literal 'x'
       Literal 'after moving tables'
+
+Rename (children 2)
+ Identifier test_01155_atomic
+ Identifier test_01155_ordinary
+
+InsertQuery   (children 2)
+ Identifier dist
+ ExpressionList (children 1)
+  Identifier s
 
 SelectWithUnionQuery (children 1)
  ExpressionList (children 1)
@@ -205,6 +457,58 @@ SelectWithUnionQuery (children 1)
      Identifier database
      Literal 'test_01155_%'
 
+Rename (children 2)
+ Identifier test_01155_ordinary
+ Identifier test_01155_atomic
+
+Set
+
+Set
+
+ShowCreateDatabaseQuery test_01155_atomic  (children 1)
+ Identifier test_01155_atomic
+
+Rename (children 4)
+ Identifier test_01155_atomic
+ Identifier mv1
+ Identifier test_01155_ordinary
+ Identifier mv1
+
+Rename (children 4)
+ Identifier test_01155_atomic
+ Identifier mv2
+ Identifier test_01155_ordinary
+ Identifier mv2
+
+Rename (children 4)
+ Identifier test_01155_atomic
+ Identifier dst
+ Identifier test_01155_ordinary
+ Identifier dst
+
+Rename (children 4)
+ Identifier test_01155_atomic
+ Identifier src
+ Identifier test_01155_ordinary
+ Identifier src
+
+Rename (children 4)
+ Identifier test_01155_atomic
+ Identifier dist
+ Identifier test_01155_ordinary
+ Identifier dist
+
+Rename (children 4)
+ Identifier test_01155_atomic
+ Identifier dict
+ Identifier test_01155_ordinary
+ Identifier dict
+
+InsertQuery   (children 2)
+ Identifier dist
+ ExpressionList (children 1)
+  Identifier s
+
 SelectWithUnionQuery (children 1)
  ExpressionList (children 1)
   SelectQuery (children 3)
@@ -249,3 +553,6 @@ SelectWithUnionQuery (children 1)
       Literal 'test_01155_ordinary.dict'
       Literal 'x'
       Literal 'after renaming tables'
+
+ShowTables (children 1)
+ Identifier test_01155_atomic

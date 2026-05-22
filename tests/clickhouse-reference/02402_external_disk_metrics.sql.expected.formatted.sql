@@ -1,3 +1,10 @@
+-- Tags: no-parallel, no-fasttest, long, no-random-settings
+SET max_bytes_before_external_sort = 33554432;
+
+SET max_bytes_ratio_before_external_sort = 0;
+
+SET max_block_size = 1048576;
+
 SELECT number
 FROM (
         SELECT number
@@ -7,6 +14,16 @@ ORDER BY number * 1234567890123456789 ASC
 LIMIT 2097142, 10
 SETTINGS log_comment = '02402_external_disk_mertrics/sort'
 FORMAT Null;
+
+SET max_bytes_before_external_group_by = '100M';
+
+SET max_bytes_ratio_before_external_group_by = 0;
+
+SET max_memory_usage = '410M';
+
+SET group_by_two_level_threshold = '100K';
+
+SET group_by_two_level_threshold_bytes = '50M';
 
 SELECT
     sum(k),
@@ -24,6 +41,12 @@ FROM (
     )
 SETTINGS log_comment = '02402_external_disk_mertrics/aggregation'
 FORMAT Null;
+
+SET join_algorithm = 'partial_merge';
+
+SET default_max_bytes_in_join = 0;
+
+SET max_bytes_in_join = '10M';
 
 SELECT
     n,
@@ -44,6 +67,8 @@ ORDER BY n ASC
 SETTINGS log_comment = '02402_external_disk_mertrics/partial_merge_join'
 FORMAT Null;
 
+SET join_algorithm = 'grace_hash', grace_hash_join_initial_buckets = 32, grace_hash_join_max_buckets = 32;
+
 SELECT
     n,
     j * 2097152
@@ -62,6 +87,8 @@ LEFT JOIN (
 ORDER BY n ASC
 SETTINGS log_comment = '02402_external_disk_mertrics/grace_join'
 FORMAT Null;
+
+SYSTEM FLUSH LOGS query_log;
 
 SELECT if(any(ProfileEvents['ExternalProcessingFilesTotal']) >= 1
     AND any(ProfileEvents['ExternalProcessingCompressedBytesTotal']) >= 100000
@@ -103,6 +130,9 @@ WHERE current_database = currentDatabase()
     AND like(log_comment, '02402_external_disk_mertrics/%join')
     AND ilike(query, 'SELECT%2097152%')
     AND type = 'QueryFinish';
+
+-- Do not check values because they can be not recorded, just existence
+SYSTEM FLUSH LOGS metric_log;
 
 SELECT
     CurrentMetric_TemporaryFilesForAggregation,

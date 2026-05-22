@@ -22,6 +22,8 @@ SELECT reverse([]);
 
 SELECT reverse([[[[]]]]);
 
+SET send_logs_level = 'fatal';
+
 SELECT
     '[RE7',
     (
@@ -38,4 +40,4 @@ SELECT
     (
         SELECT *
         FROM file()
-    );
+    ); -- { serverError NUMBER_OF_ARGUMENTS_DOESNT_MATCH }

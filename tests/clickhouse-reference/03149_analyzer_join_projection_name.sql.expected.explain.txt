@@ -1,3 +1,78 @@
+DropQuery  groups_dict (children 1)
+ Identifier groups_dict
+
+DropQuery  users (children 1)
+ Identifier users
+
+DropQuery  groups (children 1)
+ Identifier groups
+
+CreateQuery users (children 3)
+ Identifier users
+ Columns definition (children 1)
+  ExpressionList (children 4)
+   ColumnDeclaration uid (children 1)
+    DataType Int16
+   ColumnDeclaration name (children 1)
+    DataType String
+   ColumnDeclaration gid (children 1)
+    DataType LowCardinality (children 1)
+     ExpressionList (children 1)
+      DataType String
+   ColumnDeclaration gname (children 1)
+    DataType LowCardinality (children 1)
+     ExpressionList (children 1)
+      DataType String
+ Storage definition (children 2)
+  Function MergeTree
+  Function tuple (children 1)
+   ExpressionList
+
+CreateQuery groups (children 3)
+ Identifier groups
+ Columns definition (children 1)
+  ExpressionList (children 2)
+   ColumnDeclaration gid (children 1)
+    DataType LowCardinality (children 1)
+     ExpressionList (children 1)
+      DataType String
+   ColumnDeclaration gname (children 1)
+    DataType LowCardinality (children 1)
+     ExpressionList (children 1)
+      DataType String
+ Storage definition (children 2)
+  Function MergeTree
+  Function tuple (children 1)
+   ExpressionList
+
+CreateQuery groups_dict (children 3)
+ Identifier groups_dict
+ ExpressionList (children 2)
+  DictionaryAttributeDeclaration gid (children 1)
+   DataType String
+  DictionaryAttributeDeclaration gname (children 1)
+   DataType String
+ Dictionary definition (children 4)
+  ExpressionList (children 2)
+   Identifier gid
+   Identifier gname
+  FunctionWithKeyValueArguments  clickhouse (children 1)
+   ExpressionList (children 2)
+    pair (children 1)
+     Literal 'groups'
+    pair (children 1)
+     Function currentDatabase (children 1)
+      ExpressionList
+  Dictionary lifetime
+  Dictionary layout (children 1)
+   ExpressionList
+
+InsertQuery   (children 1)
+ Identifier groups
+
+InsertQuery   (children 1)
+ Identifier users
+
 SelectWithUnionQuery (children 2)
  ExpressionList (children 1)
   SelectQuery (children 2)
@@ -39,3 +114,5 @@ SelectWithUnionQuery (children 2)
        Identifier gid
        Identifier gname
  Identifier PrettyCompactMonoBlock
+
+<Explain Error>

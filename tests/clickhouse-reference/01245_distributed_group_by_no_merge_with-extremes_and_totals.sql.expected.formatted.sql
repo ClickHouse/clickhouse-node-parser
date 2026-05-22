@@ -1,3 +1,4 @@
+-- Tags: distributed
 SELECT sum(number)
 FROM (
         SELECT *
@@ -14,6 +15,8 @@ FROM (
         SETTINGS distributed_group_by_no_merge = 1
     )
 WITH TOTALS;
+
+SET distributed_group_by_no_merge = 0, extremes = 0;
 
 SELECT sum(number)
 FROM (
@@ -102,3 +105,9 @@ FROM (
         FROM remote('127.0.0.{2,3}', numbers(5))
     )
 WITH TOTALS;
+
+SET distributed_group_by_no_merge = 1, extremes = 0;
+
+SET distributed_group_by_no_merge = 0, extremes = 1;
+
+SET distributed_group_by_no_merge = 1, extremes = 1;

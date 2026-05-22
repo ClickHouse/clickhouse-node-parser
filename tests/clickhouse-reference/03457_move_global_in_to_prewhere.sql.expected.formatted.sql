@@ -1,3 +1,30 @@
+DROP TABLE IF EXISTS `03457_data`;
+
+DROP TABLE IF EXISTS `03457_filter`;
+
+SET parallel_replicas_local_plan = 1;
+
+CREATE TABLE `03457_filter`
+(
+    key UInt64
+)
+ENGINE = Memory AS
+SELECT 3
+UNION ALL
+SELECT 23;
+
+CREATE TABLE `03457_data`
+(
+    key UInt64,
+    val String
+)
+ENGINE = MergeTree
+ORDER BY key AS
+SELECT
+    number,
+    randomString(2048)
+FROM numbers(100);
+
 SELECT
     key,
     length(val)
@@ -91,3 +118,7 @@ FROM (
             )
     )
 WHERE like(`explain`, '%Prewhere filter column: globalNotIn%');
+
+DROP TABLE `03457_data`;
+
+DROP TABLE `03457_filter`;

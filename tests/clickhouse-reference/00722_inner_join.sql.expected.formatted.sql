@@ -1,3 +1,14 @@
+-- Tags: no-parallel
+SET enable_analyzer = 1;
+
+DROP TABLE IF EXISTS one;
+
+CREATE TABLE one
+(
+    dummy UInt8
+)
+ENGINE = Memory;
+
 SELECT
     database,
     t.name
@@ -103,6 +114,8 @@ WHERE x = 'system'
     AND t.name = 'one'
 SETTINGS join_default_strictness = 'ALL'
 FORMAT PrettyCompactNoEscapes;
+
+SET join_default_strictness = 'ALL';
 
 SELECT
     database,
@@ -228,3 +241,5 @@ FROM
 INNER JOIN `system`.databases AS db
     ON db.name = t.database
 WHERE t.name = 'one';
+
+DROP TABLE one;

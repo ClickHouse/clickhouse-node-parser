@@ -1,51 +1,71 @@
 [
   {
-    "kind": "select",
-    "select": [
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "tab"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "tab"
+    },
+    "tableElements": [
       {
-        "kind": "columnRef",
-        "parts": [
-          "x"
-        ]
-      }
-    ],
-    "from": {
-      "left": {
-        "kind": "tableRef",
-        "table": "tab"
+        "kind": "columnDef",
+        "name": "x",
+        "type": {
+          "name": "UInt64"
+        }
       },
-      "kind": "arrayJoin",
-      "joinType": "ARRAY",
-      "expressions": [
-        {
-          "kind": "columnRef",
-          "parts": [
-            "arr"
+      {
+        "kind": "columnDef",
+        "name": "arr.a",
+        "type": {
+          "name": "Array",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "UInt64"
+              }
+            }
           ]
         }
-      ]
-    },
-    "prewhere": {
-      "kind": "binaryExpr",
-      "op": "!=",
-      "left": {
-        "kind": "columnRef",
-        "parts": [
-          "x"
-        ]
       },
-      "right": {
-        "kind": "literal",
-        "type": "UInt64",
-        "value": "0"
+      {
+        "kind": "columnDef",
+        "name": "arr.b",
+        "type": {
+          "name": "Array",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "UInt64"
+              }
+            }
+          ]
+        }
       }
+    ],
+    "engine": {
+      "name": "MergeTree"
     },
-    "where": {
-      "kind": "columnRef",
-      "parts": [
-        "arr"
-      ]
-    }
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "x"
+          ]
+        }
+      }
+    ]
   },
   {
     "kind": "select",
@@ -62,7 +82,58 @@
         "kind": "tableRef",
         "table": "tab"
       },
-      "kind": "arrayJoin",
+      "kind": "arrayJoinExpr",
+      "joinType": "ARRAY",
+      "expressions": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "arr"
+          ]
+        }
+      ]
+    },
+    "prewhere": {
+      "kind": "binaryExpr",
+      "op": "!=",
+      "left": {
+        "kind": "columnRef",
+        "parts": [
+          "x"
+        ]
+      },
+      "right": {
+        "kind": "literal",
+        "type": "UInt64",
+        "value": "0"
+      }
+    },
+    "where": {
+      "kind": "columnRef",
+      "parts": [
+        "arr"
+      ]
+    },
+    "trailingComments": [
+      "-- { serverError UNKNOWN_IDENTIFIER, 59 }"
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "x"
+        ]
+      }
+    ],
+    "from": {
+      "left": {
+        "kind": "tableRef",
+        "table": "tab"
+      },
+      "kind": "arrayJoinExpr",
       "joinType": "ARRAY",
       "expressions": [
         {
@@ -93,6 +164,9 @@
         "type": "UInt64",
         "value": "0"
       }
-    }
+    },
+    "trailingComments": [
+      "-- { serverError UNKNOWN_IDENTIFIER, 59 }"
+    ]
   }
 ]

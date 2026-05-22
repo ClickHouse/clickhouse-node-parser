@@ -1,5 +1,167 @@
 [
   {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "lwd_merge"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "lwd_merge"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "id",
+        "type": {
+          "name": "UInt64"
+        },
+        "codec": [
+          {
+            "name": "NONE"
+          }
+        ]
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "id"
+          ]
+        }
+      }
+    ],
+    "settings": [
+      {
+        "name": "max_bytes_to_merge_at_min_space_in_pool",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "80000"
+        }
+      },
+      {
+        "name": "max_bytes_to_merge_at_max_space_in_pool",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "80000"
+        }
+      },
+      {
+        "name": "exclude_deleted_rows_for_part_size_in_merge",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      }
+    ],
+    "settingsAfterOrderBy": true
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "lwd_merge"
+      }
+    },
+    "selectQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "number"
+          ]
+        }
+      ],
+      "from": {
+        "kind": "tableFunctionRef",
+        "name": "numbers",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "10000"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "lwd_merge"
+      }
+    },
+    "selectQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "number"
+          ]
+        }
+      ],
+      "from": {
+        "kind": "tableFunctionRef",
+        "name": "numbers",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "10000"
+          },
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "10000"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "optimize_throw_if_noop",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "optimize",
+    "table": {
+      "kind": "tableRef",
+      "table": "lwd_merge"
+    },
+    "trailingComments": [
+      "-- { serverError CANNOT_ASSIGN_OPTIMIZE }"
+    ]
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -64,5 +226,93 @@
         }
       ]
     }
+  },
+  {
+    "kind": "delete",
+    "table": {
+      "kind": "tableRef",
+      "table": "lwd_merge"
+    },
+    "where": {
+      "kind": "binaryExpr",
+      "op": ">",
+      "left": {
+        "kind": "binaryExpr",
+        "op": "%",
+        "left": {
+          "kind": "columnRef",
+          "parts": [
+            "id"
+          ]
+        },
+        "right": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "10"
+        }
+      },
+      "right": {
+        "kind": "literal",
+        "type": "UInt64",
+        "value": "0"
+      }
+    }
+  },
+  {
+    "kind": "alter",
+    "table": {
+      "kind": "tableRef",
+      "table": "lwd_merge"
+    },
+    "commands": [
+      {
+        "kind": "alterCommand",
+        "commandType": "MODIFY_SETTING",
+        "settings": [
+          {
+            "name": "exclude_deleted_rows_for_part_size_in_merge",
+            "value": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "1"
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "delete",
+    "table": {
+      "kind": "tableRef",
+      "table": "lwd_merge"
+    },
+    "where": {
+      "kind": "binaryExpr",
+      "op": "==",
+      "left": {
+        "kind": "binaryExpr",
+        "op": "%",
+        "left": {
+          "kind": "columnRef",
+          "parts": [
+            "id"
+          ]
+        },
+        "right": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "100"
+        }
+      },
+      "right": {
+        "kind": "literal",
+        "type": "UInt64",
+        "value": "0"
+      }
+    },
+    "leadingComments": [
+      "-- delete again because deleted rows will be counted in mutation"
+    ]
   }
 ]

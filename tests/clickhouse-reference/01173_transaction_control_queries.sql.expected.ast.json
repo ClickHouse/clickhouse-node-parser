@@ -1,5 +1,122 @@
 [
   {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "mt1"
+    },
+    "ifExists": true,
+    "leadingComments": [
+      "-- Tags: no-ordinary-database, no-encrypted-storage"
+    ]
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "mt2"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "mt1"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "n",
+        "type": {
+          "name": "Int64"
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "n"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "mt2"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "n",
+        "type": {
+          "name": "Int64"
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "n"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "kind": "system",
+    "body": "commit",
+    "trailingComments": [
+      "-- { serverError INVALID_TRANSACTION } -- no transaction"
+    ]
+  },
+  {
+    "kind": "system",
+    "body": "rollback",
+    "trailingComments": [
+      "-- { serverError INVALID_TRANSACTION }"
+    ]
+  },
+  {
+    "kind": "system",
+    "body": "begin transaction"
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "mt1"
+      }
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "mt2"
+      }
+    }
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -59,6 +176,26 @@
             }
           }
         ]
+      }
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "mt1"
+      }
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "mt2"
       }
     }
   },
@@ -189,6 +326,26 @@
     }
   },
   {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "mt1"
+      }
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "mt2"
+      }
+    }
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -259,7 +416,33 @@
         "name": "functionThatDoesNotExist",
         "args": []
       }
+    ],
+    "leadingComments": [
+      "-- rollback on exception before start"
+    ],
+    "trailingComments": [
+      "-- { serverError UNKNOWN_FUNCTION }"
     ]
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "mt1"
+      }
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "mt2"
+      }
+    }
   },
   {
     "kind": "select",
@@ -350,7 +533,7 @@
       }
     ],
     "from": {
-      "kind": "tableFunction",
+      "kind": "tableFunctionRef",
       "name": "numbers",
       "args": [
         {
@@ -359,7 +542,39 @@
           "value": "1000"
         }
       ]
-    }
+    },
+    "leadingComments": [
+      "-- rollback on exception while processing"
+    ],
+    "trailingComments": [
+      "-- { serverError FUNCTION_THROW_IF_VALUE_IS_NON_ZERO }"
+    ]
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "mt1"
+      }
+    },
+    "trailingComments": [
+      "-- { serverError INVALID_TRANSACTION }"
+    ]
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "mt2"
+      }
+    },
+    "trailingComments": [
+      "-- { serverError INVALID_TRANSACTION }"
+    ]
   },
   {
     "kind": "select",
@@ -369,7 +584,30 @@
         "type": "UInt64",
         "value": "1"
       }
+    ],
+    "trailingComments": [
+      "-- { serverError INVALID_TRANSACTION }"
     ]
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "mt1"
+      }
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "mt2"
+      }
+    }
   },
   {
     "kind": "select",
@@ -431,6 +669,26 @@
             }
           }
         ]
+      }
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "mt1"
+      }
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "mt2"
       }
     }
   },
@@ -529,6 +787,10 @@
     }
   },
   {
+    "kind": "transactionControl",
+    "snapshot": "1"
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -558,6 +820,23 @@
       "kind": "tableRef",
       "table": "mt1"
     }
+  },
+  {
+    "kind": "transactionControl",
+    "snapshot": "3"
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "throw_on_unsupported_query_inside_transaction",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      }
+    ]
   },
   {
     "kind": "select",
@@ -659,6 +938,23 @@
     }
   },
   {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "throw_on_unsupported_query_inside_transaction",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "transactionControl",
+    "snapshot": "1000000000000000"
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -690,6 +986,48 @@
     }
   },
   {
+    "kind": "transactionControl",
+    "snapshot": "5",
+    "trailingComments": [
+      "-- { serverError INVALID_TRANSACTION }"
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "m"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "n",
+        "type": {
+          "name": "int"
+        }
+      }
+    ],
+    "engine": {
+      "name": "Memory"
+    },
+    "trailingComments": [
+      "-- { serverError NOT_IMPLEMENTED }"
+    ]
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "m"
+      }
+    },
+    "trailingComments": [
+      "-- { serverError NOT_IMPLEMENTED }"
+    ]
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -699,6 +1037,33 @@
     "from": {
       "kind": "tableRef",
       "table": "m"
+    },
+    "trailingComments": [
+      "-- { serverError INVALID_TRANSACTION }"
+    ]
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "m"
+    }
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "mt1"
+    }
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "mt2"
     }
   }
 ]

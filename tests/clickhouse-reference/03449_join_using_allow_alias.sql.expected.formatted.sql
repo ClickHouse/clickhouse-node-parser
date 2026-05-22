@@ -1,3 +1,6 @@
+SET enable_analyzer = 1;
+
+-- { echo On }
 SELECT *
 FROM
     numbers(1) AS l

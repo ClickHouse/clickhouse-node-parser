@@ -1,5 +1,74 @@
 [
   {
+    "kind": "createFunction",
+    "name": "02103_test_function",
+    "functionExpr": {
+      "kind": "lambdaExpr",
+      "params": [
+        "x"
+      ],
+      "body": {
+        "kind": "binaryExpr",
+        "op": "+",
+        "left": {
+          "kind": "columnRef",
+          "parts": [
+            "x"
+          ]
+        },
+        "right": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    },
+    "leadingComments": [
+      "-- Tags: no-parallel"
+    ]
+  },
+  {
+    "kind": "createFunction",
+    "name": "02103_test_function_with_nested_function_empty_args",
+    "functionExpr": {
+      "kind": "lambdaExpr",
+      "params": [],
+      "body": {
+        "kind": "functionCall",
+        "name": "02103_test_function",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "1"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "kind": "createFunction",
+    "name": "02103_test_function_with_nested_function_arg",
+    "functionExpr": {
+      "kind": "lambdaExpr",
+      "params": [
+        "x"
+      ],
+      "body": {
+        "kind": "functionCall",
+        "name": "02103_test_function",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "x"
+            ]
+          }
+        ]
+      }
+    }
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -24,5 +93,29 @@
         ]
       }
     ]
+  },
+  {
+    "kind": "drop",
+    "targetType": "FUNCTION",
+    "table": {
+      "kind": "tableRef",
+      "table": "02103_test_function_with_nested_function_empty_args"
+    }
+  },
+  {
+    "kind": "drop",
+    "targetType": "FUNCTION",
+    "table": {
+      "kind": "tableRef",
+      "table": "02103_test_function_with_nested_function_arg"
+    }
+  },
+  {
+    "kind": "drop",
+    "targetType": "FUNCTION",
+    "table": {
+      "kind": "tableRef",
+      "table": "02103_test_function"
+    }
   }
 ]

@@ -1,5 +1,83 @@
 [
   {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "force_primary_key",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "samples"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "samples"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "key",
+        "type": {
+          "name": "UInt32"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "value",
+        "type": {
+          "name": "UInt32"
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree",
+      "args": []
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "key"
+          ]
+        }
+      }
+    ],
+    "primaryKey": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "key"
+        ]
+      }
+    ],
+    "primaryKeyAfterOrderBy": true
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "samples"
+      }
+    }
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -34,7 +112,10 @@
           ]
         }
       ]
-    }
+    },
+    "leadingComments": [
+      "-- all etries, verify that index is used"
+    ]
   },
   {
     "kind": "select",
@@ -87,7 +168,10 @@
           ]
         }
       ]
-    }
+    },
+    "leadingComments": [
+      "-- some entries:"
+    ]
   },
   {
     "kind": "select",
@@ -130,7 +214,10 @@
           ]
         }
       ]
-    }
+    },
+    "leadingComments": [
+      "-- different type"
+    ]
   },
   {
     "kind": "select",
@@ -183,7 +270,10 @@
           ]
         }
       ]
-    }
+    },
+    "leadingComments": [
+      "-- should be empty"
+    ]
   },
   {
     "kind": "select",
@@ -214,6 +304,38 @@
             ]
           }
         ]
+      }
+    ],
+    "leadingComments": [
+      "-- not only ints:"
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "force_primary_key",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      }
+    ],
+    "leadingComments": [
+      "-- non-constant expressions in the right side of IN now work with array-returning functions"
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "enable_analyzer",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
       }
     ]
   },
@@ -344,7 +466,13 @@
           ]
         }
       ]
-    }
+    },
+    "leadingComments": [
+      "-- index is not used"
+    ],
+    "trailingComments": [
+      "-- { serverError INDEX_NOT_USED }"
+    ]
   },
   {
     "kind": "select",
@@ -376,6 +504,20 @@
           }
         ]
       }
+    ],
+    "leadingComments": [
+      "-- wrong type"
+    ],
+    "trailingComments": [
+      "-- { serverError TYPE_MISMATCH }"
     ]
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "samples"
+    }
   }
 ]

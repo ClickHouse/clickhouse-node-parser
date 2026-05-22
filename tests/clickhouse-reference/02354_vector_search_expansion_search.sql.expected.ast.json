@@ -1,5 +1,477 @@
 [
   {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "tab"
+    },
+    "ifExists": true,
+    "leadingComments": [
+      "-- Tags: no-fasttest, long, no-asan, no-ubsan, no-tsan, no-debug",
+      "-- ^^ Disable test for slow builds: generating data takes time but a sufficiently large data set",
+      "-- is necessary for different hnsw_candidate_list_size_for_search settings to make a difference",
+      "-- Tests vector search with setting 'hnsw_candidate_list_size_for_search'"
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "tab"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "id",
+        "type": {
+          "name": "Int32"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "vec",
+        "type": {
+          "name": "Array",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "Float32"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "kind": "indexDef",
+        "name": "idx",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "vec"
+          ]
+        },
+        "indexType": {
+          "name": "vector_similarity",
+          "args": [
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "hnsw"
+            },
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "L2Distance"
+            },
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "2"
+            }
+          ]
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "id"
+          ]
+        }
+      }
+    ],
+    "settings": [
+      {
+        "name": "index_granularity",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "8192"
+        }
+      }
+    ],
+    "settingsAfterOrderBy": true
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "tab"
+      }
+    },
+    "selectQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "number"
+          ]
+        },
+        {
+          "kind": "arrayLiteral",
+          "elements": [
+            {
+              "kind": "binaryExpr",
+              "op": "/",
+              "left": {
+                "kind": "functionCall",
+                "name": "sipHash64",
+                "args": [
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "number"
+                    ]
+                  }
+                ]
+              },
+              "right": {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "18446744073709551615"
+              }
+            },
+            {
+              "kind": "binaryExpr",
+              "op": "/",
+              "left": {
+                "kind": "functionCall",
+                "name": "wyHash64",
+                "args": [
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "number"
+                    ]
+                  }
+                ]
+              },
+              "right": {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "18446744073709551615"
+              }
+            }
+          ],
+          "source": "[sipHash64(number)/18446744073709551615, wyHash64(number)/18446744073709551615]"
+        }
+      ],
+      "from": {
+        "kind": "tableFunctionRef",
+        "name": "numbers",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "660000"
+          }
+        ]
+      }
+    },
+    "leadingComments": [
+      "-- Generate random values but with a fixed seed (conceptually), so that the data is deterministic.",
+      "-- Unfortunately, no random functions in ClickHouse accepts a seed. Instead, abuse the numbers table + hash functions to provide",
+      "-- deterministic randomness."
+    ],
+    "trailingComments": [
+      "-- 18446744073709551615 is the biggest UInt64"
+    ]
+  },
+  {
+    "kind": "select",
+    "with": [
+      {
+        "kind": "cteExpr",
+        "name": "reference_vec",
+        "expr": {
+          "kind": "arrayLiteral",
+          "elements": [
+            {
+              "kind": "literal",
+              "type": "Float64",
+              "value": "0.5"
+            },
+            {
+              "kind": "literal",
+              "type": "Float64",
+              "value": "0.5"
+            }
+          ],
+          "source": "[0.5, 0.5]"
+        }
+      }
+    ],
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "id"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "vec"
+        ]
+      },
+      {
+        "kind": "functionCall",
+        "name": "L2Distance",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "vec"
+            ]
+          },
+          {
+            "kind": "columnRef",
+            "parts": [
+              "reference_vec"
+            ]
+          }
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "tab"
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "functionCall",
+          "name": "L2Distance",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "vec"
+              ]
+            },
+            {
+              "kind": "columnRef",
+              "parts": [
+                "reference_vec"
+              ]
+            }
+          ]
+        },
+        "direction": "ASC"
+      }
+    ],
+    "limit": {
+      "count": {
+        "kind": "literal",
+        "type": "UInt64",
+        "value": "3"
+      }
+    },
+    "settings": [
+      {
+        "name": "hnsw_candidate_list_size_for_search",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      }
+    ],
+    "leadingComments": [
+      "-- hnsw_candidate_list_size_for_search = 0 is illegal"
+    ],
+    "trailingComments": [
+      "-- { serverError INVALID_SETTING_VALUE }"
+    ]
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "results"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "results"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "id",
+        "type": {
+          "name": "Int32"
+        }
+      }
+    ],
+    "engine": {
+      "name": "Memory"
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "results"
+      }
+    },
+    "selectQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "id"
+          ]
+        }
+      ],
+      "from": {
+        "kind": "tableRef",
+        "table": "tab"
+      },
+      "orderBy": [
+        {
+          "kind": "orderByItem",
+          "expr": {
+            "kind": "functionCall",
+            "name": "L2Distance",
+            "args": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "vec"
+                ]
+              },
+              {
+                "kind": "arrayLiteral",
+                "elements": [
+                  {
+                    "kind": "literal",
+                    "type": "Float64",
+                    "value": "0.5"
+                  },
+                  {
+                    "kind": "literal",
+                    "type": "Float64",
+                    "value": "0.5"
+                  }
+                ],
+                "source": "[0.5, 0.5]"
+              }
+            ]
+          },
+          "direction": "ASC"
+        }
+      ],
+      "limit": {
+        "count": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    },
+    "leadingComments": [
+      "-- Standard vector search with default hnsw_candidate_list_size_for_search = 64"
+    ]
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "results"
+      }
+    },
+    "selectQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "id"
+          ]
+        }
+      ],
+      "from": {
+        "kind": "tableRef",
+        "table": "tab"
+      },
+      "orderBy": [
+        {
+          "kind": "orderByItem",
+          "expr": {
+            "kind": "functionCall",
+            "name": "L2Distance",
+            "args": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "vec"
+                ]
+              },
+              {
+                "kind": "arrayLiteral",
+                "elements": [
+                  {
+                    "kind": "literal",
+                    "type": "Float64",
+                    "value": "0.5"
+                  },
+                  {
+                    "kind": "literal",
+                    "type": "Float64",
+                    "value": "0.5"
+                  }
+                ],
+                "source": "[0.5, 0.5]"
+              }
+            ]
+          },
+          "direction": "ASC"
+        }
+      ],
+      "limit": {
+        "count": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      },
+      "settings": [
+        {
+          "name": "hnsw_candidate_list_size_for_search",
+          "value": {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "1"
+          }
+        }
+      ]
+    },
+    "leadingComments": [
+      "-- Vector search with custom hnsw_candidate_list_size_for_search"
+    ]
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -15,6 +487,25 @@
     "from": {
       "kind": "tableRef",
       "table": "results"
+    },
+    "leadingComments": [
+      "-- Expect that matches are different"
+    ]
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "results"
+    }
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "tab"
     }
   }
 ]

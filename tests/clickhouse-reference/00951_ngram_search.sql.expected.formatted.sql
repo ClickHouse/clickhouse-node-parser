@@ -96,6 +96,16 @@ SELECT round(1000 * ngramSearchUTF8('абвгдеёжз', 'гдеёзд'));
 
 SELECT round(1000 * ngramSearchUTF8('абвгдеёжз', 'ёёёёёёёё'));
 
+DROP TABLE IF EXISTS test_entry_distance;
+
+CREATE TABLE test_entry_distance
+(
+    Title String
+)
+ENGINE = Memory;
+
+INSERT INTO test_entry_distance;
+
 SELECT
     Title,
     round(1000 * distance)

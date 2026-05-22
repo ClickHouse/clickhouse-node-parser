@@ -28,7 +28,7 @@
       }
     ],
     "from": {
-      "kind": "tableFunction",
+      "kind": "tableFunctionRef",
       "name": "numbers",
       "args": [
         {
@@ -37,7 +37,29 @@
           "value": "2"
         }
       ]
-    }
+    },
+    "leadingComments": [
+      "-- NOTE: that due to overflows it may give different result before",
+      "-- quantilesTimingWeighted() had been converted to double:",
+      "--",
+      "-- Before:",
+      "--",
+      "--     SELECT quantilesTimingWeighted(1)(number, 9223372036854775807)",
+      "--     FROM numbers(2)",
+      "--",
+      "--     ┌─quantilesTimingWeighted(1)(number, 9223372036854775807)─┐",
+      "--     │ [1]                                                     │",
+      "--     └─────────────────────────────────────────────────────────┘",
+      "--",
+      "-- After:",
+      "--",
+      "--     SELECT quantilesTimingWeighted(1)(number, 9223372036854775807)",
+      "--     FROM numbers(2)",
+      "--",
+      "--     ┌─quantilesTimingWeighted(1)(number, 9223372036854775807)─┐",
+      "--     │ [0]                                                     │",
+      "--     └─────────────────────────────────────────────────────────┘"
+    ]
   },
   {
     "kind": "select",
@@ -167,6 +189,9 @@
           }
         }
       }
-    }
+    },
+    "leadingComments": [
+      "-- same UB, but in the inner loop"
+    ]
   }
 ]

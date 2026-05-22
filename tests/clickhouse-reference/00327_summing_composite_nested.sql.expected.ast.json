@@ -1,5 +1,162 @@
 [
   {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "optimize_on_insert",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "summing_composite_key"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "allow_deprecated_syntax_for_merge_tree",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "summing_composite_key"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "d",
+        "type": {
+          "name": "Date"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "k",
+        "type": {
+          "name": "UInt64"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "FirstMap",
+        "type": {
+          "name": "Nested",
+          "args": [
+            {
+              "kind": "namedField",
+              "name": "k1",
+              "type": {
+                "name": "UInt32"
+              }
+            },
+            {
+              "kind": "namedField",
+              "name": "k2ID",
+              "type": {
+                "name": "Int8"
+              }
+            },
+            {
+              "kind": "namedField",
+              "name": "s",
+              "type": {
+                "name": "Float64"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "SecondMap",
+        "type": {
+          "name": "Nested",
+          "args": [
+            {
+              "kind": "namedField",
+              "name": "k1ID",
+              "type": {
+                "name": "UInt64"
+              }
+            },
+            {
+              "kind": "namedField",
+              "name": "k2Key",
+              "type": {
+                "name": "String"
+              }
+            },
+            {
+              "kind": "namedField",
+              "name": "k3Type",
+              "type": {
+                "name": "Int32"
+              }
+            },
+            {
+              "kind": "namedField",
+              "name": "s",
+              "type": {
+                "name": "Int64"
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "engine": {
+      "name": "SummingMergeTree",
+      "args": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "d"
+          ]
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "k"
+          ]
+        },
+        {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      ]
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "summing_composite_key"
+      }
+    }
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -152,7 +309,7 @@
         "kind": "tableRef",
         "table": "summing_composite_key"
       },
-      "kind": "arrayJoin",
+      "kind": "arrayJoinExpr",
       "joinType": "ARRAY",
       "expressions": [
         {
@@ -315,7 +472,7 @@
         "kind": "tableRef",
         "table": "summing_composite_key"
       },
-      "kind": "arrayJoin",
+      "kind": "arrayJoinExpr",
       "joinType": "ARRAY",
       "expressions": [
         {
@@ -449,7 +606,7 @@
         "table": "summing_composite_key",
         "final": true
       },
-      "kind": "arrayJoin",
+      "kind": "arrayJoinExpr",
       "joinType": "ARRAY",
       "expressions": [
         {
@@ -569,7 +726,7 @@
         "kind": "tableRef",
         "table": "summing_composite_key"
       },
-      "kind": "arrayJoin",
+      "kind": "arrayJoinExpr",
       "joinType": "ARRAY",
       "expressions": [
         {
@@ -706,7 +863,7 @@
         "kind": "tableRef",
         "table": "summing_composite_key"
       },
-      "kind": "arrayJoin",
+      "kind": "arrayJoinExpr",
       "joinType": "ARRAY",
       "expressions": [
         {
@@ -865,7 +1022,7 @@
         "table": "summing_composite_key",
         "final": true
       },
-      "kind": "arrayJoin",
+      "kind": "arrayJoinExpr",
       "joinType": "ARRAY",
       "expressions": [
         {
@@ -948,6 +1105,25 @@
     ]
   },
   {
+    "kind": "optimize",
+    "table": {
+      "kind": "tableRef",
+      "table": "summing_composite_key"
+    },
+    "partition": {
+      "kind": "expr",
+      "expr": {
+        "kind": "literal",
+        "type": "UInt64",
+        "value": "200001"
+      }
+    },
+    "final": true
+  },
+  {
+    "kind": "empty"
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -989,7 +1165,7 @@
         "kind": "tableRef",
         "table": "summing_composite_key"
       },
-      "kind": "arrayJoin",
+      "kind": "arrayJoinExpr",
       "joinType": "ARRAY",
       "expressions": [
         {
@@ -1059,5 +1235,13 @@
         "direction": "ASC"
       }
     ]
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "summing_composite_key"
+    }
   }
 ]

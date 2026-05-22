@@ -1,3 +1,5 @@
+SET enable_analyzer = 1;
+
 SELECT avgWeighted(x, y)
 FROM (
         SELECT
@@ -9,4 +11,4 @@ FROM (
             y,
             NULL AS x,
             1 AS y
-    );
+    ); -- { echoOff }

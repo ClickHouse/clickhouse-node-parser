@@ -1,3 +1,17 @@
+SET allow_suspicious_low_cardinality_types = 1;
+
+DROP TABLE IF EXISTS lc_00688;
+
+CREATE TABLE lc_00688
+(
+    str LowCardinality(String),
+    val LowCardinality(UInt8)
+)
+ENGINE = MergeTree
+ORDER BY tuple();
+
+INSERT INTO lc_00688;
+
 SELECT
     str,
     str IN ('a', 'd')
@@ -37,6 +51,18 @@ SELECT
         FROM lc_00688
     )
 FROM lc_00688;
+
+DROP TABLE IF EXISTS ary_lc_null;
+
+CREATE TABLE ary_lc_null
+(
+    i int,
+    v Array(LowCardinality(Nullable(String)))
+)
+ENGINE = MergeTree()
+ORDER BY i;
+
+INSERT INTO ary_lc_null;
 
 SELECT v
 FROM ary_lc_null

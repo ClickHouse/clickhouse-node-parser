@@ -1,5 +1,14 @@
 [
   {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "test_table_for_01070_exception_code_in_query_log_table"
+    },
+    "ifExists": true
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -9,7 +18,34 @@
     "from": {
       "kind": "tableRef",
       "table": "test_table_for_01070_exception_code_in_query_log_table"
+    },
+    "trailingComments": [
+      "-- { serverError UNKNOWN_TABLE }"
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "test_table_for_01070_exception_code_in_query_log_table"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "value",
+        "type": {
+          "name": "UInt64"
+        }
+      }
+    ],
+    "engine": {
+      "name": "Memory",
+      "args": []
     }
+  },
+  {
+    "kind": "system",
+    "body": "SYSTEM FLUSH LOGS query_log"
   },
   {
     "kind": "select",

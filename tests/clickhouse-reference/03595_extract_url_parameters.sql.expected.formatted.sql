@@ -1,3 +1,4 @@
+-- Tags: no-fasttest, stateful
 SELECT sum(cityHash64(extractURLParameters(URL)))
 FROM test.hits;
 

@@ -1,3 +1,9 @@
+--- Some aggregate functions use IColumn::serializeAggregationStateValueIntoArena
+--- method for values serialization into aggregation states.
+--- Aggregation states should not be changed for compatibility,
+--- and this test should fail if something is changed in serializeAggregationStateValueIntoArena method.
+SET session_timezone = 'UTC';
+
 SELECT hex(approx_top_sumState(3)(['str'], 1));
 
 SELECT hex(approx_top_kState(3)(['str']));
@@ -14,6 +20,7 @@ SELECT hex(groupUniqArrayState(['str']));
 
 SELECT hex(groupArrayIntersectState(['str']));
 
+--- Check different data types
 SELECT hex(maxDistinctState(tuple('str', true)));
 
 SELECT hex(maxDistinctState(tuple('str', 42::Int8)));

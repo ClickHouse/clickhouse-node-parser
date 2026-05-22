@@ -1,5 +1,220 @@
 [
   {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "output_format_parquet_use_custom_encoder",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ],
+    "leadingComments": [
+      "-- Tags: long, no-fasttest, no-parallel, no-tsan, no-msan, no-asan"
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "output_format_parquet_row_group_size",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1000"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "output_format_parquet_data_page_size",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "800"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "output_format_parquet_batch_size",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "100"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "output_format_parquet_row_group_size_bytes",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1000000000"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "engine_file_truncate_on_insert",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "allow_suspicious_low_cardinality_types",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "output_format_parquet_enum_as_byte_array",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "basic_types_02735"
+    },
+    "ifExists": true,
+    "leadingComments": [
+      "-- Write random data to parquet file, then read from it and check that it matches what we wrote.",
+      "-- Do this for all kinds of data types: primitive, Nullable(primitive), Array(primitive),",
+      "-- Array(Nullable(primitive)), Array(Array(primitive)), Map(primitive, primitive), etc."
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "basic_types_02735"
+    },
+    "temporary": true,
+    "asQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "asterisk"
+        }
+      ],
+      "from": {
+        "kind": "tableFunctionRef",
+        "name": "generateRandom",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": "\n    u8 UInt8,\n    u16 UInt16,\n    u32 UInt32,\n    u64 UInt64,\n    i8 Int8,\n    i16 Int16,\n    i32 Int32,\n    i64 Int64,\n    date Date,\n    date32 Date32,\n    datetime DateTime,\n    datetime64 DateTime64,\n    enum8 Enum8('x' = 1, 'y' = 2, 'z' = 3),\n    enum16 Enum16('xx' = 1000, 'yy' = 2000, 'zz' = 3000),\n    float32 Float32,\n    float64 Float64,\n    str String,\n    fstr FixedString(12),\n    u128 UInt128,\n    u256 UInt256,\n    i128 Int128,\n    i256 Int256,\n    decimal32 Decimal32(3),\n    decimal64 Decimal64(10),\n    decimal128 Decimal128(20),\n    decimal256 Decimal256(40),\n    ipv4 IPv4,\n    ipv6 IPv6"
+          }
+        ]
+      },
+      "limit": {
+        "count": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1011"
+        }
+      }
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "function",
+      "func": {
+        "kind": "tableFunctionRef",
+        "name": "file",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "basic_types_02735",
+              "parquet"
+            ]
+          }
+        ]
+      }
+    },
+    "selectQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "asterisk"
+        }
+      ],
+      "from": {
+        "kind": "tableRef",
+        "table": "basic_types_02735"
+      },
+      "settings": [
+        {
+          "name": "output_format_parquet_datetime_as_uint32",
+          "value": {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "1"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "kind": "describe",
+    "target": {
+      "kind": "function",
+      "func": {
+        "kind": "tableFunctionRef",
+        "name": "file",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "basic_types_02735",
+              "parquet"
+            ]
+          }
+        ]
+      }
+    }
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -54,7 +269,7 @@
               }
             ],
             "from": {
-              "kind": "tableFunction",
+              "kind": "tableFunctionRef",
               "name": "file",
               "args": [
                 {
@@ -70,6 +285,111 @@
         }
       }
     ]
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "basic_types_02735"
+    }
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "datetime_02735"
+    },
+    "ifExists": true,
+    "leadingComments": [
+      "-- DateTime values don't roundtrip (without output_format_parquet_datetime_as_uint32) because we",
+      "-- write them as DateTime64(3) (the closest type supported by Parquet)."
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "datetime_02735"
+    },
+    "temporary": true,
+    "asQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "asterisk"
+        }
+      ],
+      "from": {
+        "kind": "tableFunctionRef",
+        "name": "generateRandom",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": "datetime DateTime"
+          }
+        ]
+      },
+      "limit": {
+        "count": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1011"
+        }
+      }
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "function",
+      "func": {
+        "kind": "tableFunctionRef",
+        "name": "file",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "datetime_02735",
+              "parquet"
+            ]
+          }
+        ]
+      }
+    },
+    "selectQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "asterisk"
+        }
+      ],
+      "from": {
+        "kind": "tableRef",
+        "table": "datetime_02735"
+      }
+    }
+  },
+  {
+    "kind": "describe",
+    "target": {
+      "kind": "function",
+      "func": {
+        "kind": "tableFunctionRef",
+        "name": "file",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "datetime_02735",
+              "parquet"
+            ]
+          }
+        ]
+      }
+    }
   },
   {
     "kind": "select",
@@ -140,7 +460,7 @@
               }
             ],
             "from": {
-              "kind": "tableFunction",
+              "kind": "tableFunctionRef",
               "name": "file",
               "args": [
                 {
@@ -212,7 +532,7 @@
               }
             ],
             "from": {
-              "kind": "tableFunction",
+              "kind": "tableFunctionRef",
               "name": "file",
               "args": [
                 {
@@ -239,6 +559,88 @@
         }
       }
     ]
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "datetime_02735"
+    }
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "nullables_02735"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "nullables_02735"
+    },
+    "temporary": true,
+    "asQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "asterisk"
+        }
+      ],
+      "from": {
+        "kind": "tableFunctionRef",
+        "name": "generateRandom",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": "\n    u16 Nullable(UInt16),\n    i64 Nullable(Int64),\n    datetime64 Nullable(DateTime64),\n    enum8 Nullable(Enum8('x' = 1, 'y' = 2, 'z' = 3)),\n    float64 Nullable(Float64),\n    str Nullable(String),\n    fstr Nullable(FixedString(12)),\n    i256 Nullable(Int256),\n    decimal256 Nullable(Decimal256(40)),\n    ipv6 Nullable(IPv6)"
+          }
+        ]
+      },
+      "limit": {
+        "count": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1000"
+        }
+      }
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "function",
+      "func": {
+        "kind": "tableFunctionRef",
+        "name": "file",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "nullables_02735",
+              "parquet"
+            ]
+          }
+        ]
+      }
+    },
+    "selectQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "asterisk"
+        }
+      ],
+      "from": {
+        "kind": "tableRef",
+        "table": "nullables_02735"
+      }
+    }
   },
   {
     "kind": "select",
@@ -295,7 +697,7 @@
               }
             ],
             "from": {
-              "kind": "tableFunction",
+              "kind": "tableFunctionRef",
               "name": "file",
               "args": [
                 {
@@ -311,6 +713,147 @@
         }
       }
     ]
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "nullables_02735"
+    }
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "arrays_02735"
+    },
+    "ifExists": true,
+    "leadingComments": [
+      "-- TODO: When cityHash64() fully supports Nullable: https://github.com/ClickHouse/ClickHouse/pull/58754",
+      "--       the next two blocks can be simplified: arrays_out_02735 intermediate table is not needed,",
+      "--       a.csv and b.csv are not needed."
+    ]
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "arrays_out_02735"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "arrays_02735"
+    },
+    "engine": {
+      "name": "Memory"
+    },
+    "asQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "asterisk"
+        }
+      ],
+      "from": {
+        "kind": "tableFunctionRef",
+        "name": "generateRandom",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": "\n    u32 Array(UInt32),\n    i8 Array(Int8),\n    datetime Array(DateTime),\n    enum16 Array(Enum16('xx' = 1000, 'yy' = 2000, 'zz' = 3000)),\n    float32 Array(Float32),\n    str Array(String),\n    fstr Array(FixedString(12)),\n    u128 Array(UInt128),\n    decimal64 Array(Decimal64(10)),\n    ipv4 Array(IPv4),\n    msi Map(String, Int16),\n    tup Tuple(FixedString(3), Array(String), Map(Int8, Date))"
+          }
+        ]
+      },
+      "limit": {
+        "count": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1000"
+        }
+      }
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "function",
+      "func": {
+        "kind": "tableFunctionRef",
+        "name": "file",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "arrays_02735",
+              "parquet"
+            ]
+          }
+        ]
+      }
+    },
+    "selectQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "asterisk"
+        }
+      ],
+      "from": {
+        "kind": "tableRef",
+        "table": "arrays_02735"
+      }
+    }
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "arrays_out_02735"
+    },
+    "temporary": true,
+    "asTable": {
+      "kind": "tableRef",
+      "table": "arrays_02735"
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "arrays_out_02735"
+      }
+    },
+    "selectQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "asterisk"
+        }
+      ],
+      "from": {
+        "kind": "tableFunctionRef",
+        "name": "file",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "arrays_02735",
+              "parquet"
+            ]
+          }
+        ]
+      }
+    }
   },
   {
     "kind": "select",
@@ -376,6 +919,376 @@
     ]
   },
   {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "arrays_02735"
+    },
+    "leadingComments": [
+      "--select (select sum(cityHash64(*)) from arrays_02735) -",
+      "--       (select sum(cityHash64(u32, i8, datetime, enum16, float32, str, fstr, arrayMap(x->reinterpret(x, 'UInt128'), u128), decimal64, ipv4, msi, tup)) from file(arrays_02735.parquet));"
+    ]
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "arrays_out_02735"
+    }
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "madness_02735"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "madness_02735"
+    },
+    "temporary": true,
+    "asQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "asterisk"
+        }
+      ],
+      "from": {
+        "kind": "tableFunctionRef",
+        "name": "generateRandom",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": "\n    aa Array(Array(UInt32)),\n    aaa Array(Array(Array(UInt32))),\n    an Array(Nullable(String)),\n    aan Array(Array(Nullable(FixedString(10)))),\n    l LowCardinality(String),\n    ln LowCardinality(Nullable(FixedString(11))),\n    al Array(LowCardinality(UInt128)),\n    aaln Array(Array(LowCardinality(Nullable(String)))),\n    mln Map(LowCardinality(String), Nullable(Int8)),\n    t Tuple(Map(FixedString(5), Tuple(Array(UInt16), Nullable(UInt16), Array(Tuple(Int8, Decimal64(10))))), Tuple(kitchen UInt64, sink String)),\n    n Nested(hello UInt64, world Tuple(first String, second FixedString(1)))\n    "
+          }
+        ]
+      },
+      "limit": {
+        "count": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1000"
+        }
+      }
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "function",
+      "func": {
+        "kind": "tableFunctionRef",
+        "name": "file",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "madness_02735",
+              "parquet"
+            ]
+          }
+        ]
+      }
+    },
+    "selectQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "asterisk"
+        }
+      ],
+      "from": {
+        "kind": "tableRef",
+        "table": "madness_02735"
+      }
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "function",
+      "func": {
+        "kind": "tableFunctionRef",
+        "name": "file",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "a",
+              "csv"
+            ]
+          }
+        ]
+      }
+    },
+    "selectQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "asterisk"
+        }
+      ],
+      "from": {
+        "kind": "tableRef",
+        "table": "madness_02735"
+      },
+      "orderBy": [
+        {
+          "kind": "orderByItem",
+          "expr": {
+            "kind": "functionCall",
+            "name": "tuple",
+            "args": [
+              {
+                "kind": "asterisk"
+              }
+            ]
+          },
+          "direction": "ASC"
+        }
+      ]
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "function",
+      "func": {
+        "kind": "tableFunctionRef",
+        "name": "file",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "b",
+              "csv"
+            ]
+          }
+        ]
+      }
+    },
+    "selectQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "aa"
+          ]
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "aaa"
+          ]
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "an"
+          ]
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "aan"
+          ]
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "l"
+          ]
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "ln"
+          ]
+        },
+        {
+          "kind": "alias",
+          "expr": {
+            "kind": "functionCall",
+            "name": "arrayMap",
+            "args": [
+              {
+                "kind": "lambdaExpr",
+                "params": [
+                  "x"
+                ],
+                "body": {
+                  "kind": "functionCall",
+                  "name": "reinterpret",
+                  "args": [
+                    {
+                      "kind": "columnRef",
+                      "parts": [
+                        "x"
+                      ]
+                    },
+                    {
+                      "kind": "literal",
+                      "type": "String",
+                      "value": "UInt128"
+                    }
+                  ]
+                }
+              },
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "al"
+                ]
+              }
+            ]
+          },
+          "alias": "al_"
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "aaln"
+          ]
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "mln"
+          ]
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "t"
+          ]
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "n",
+            "hello"
+          ]
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "n",
+            "world"
+          ]
+        }
+      ],
+      "from": {
+        "kind": "tableFunctionRef",
+        "name": "file",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "madness_02735",
+              "parquet"
+            ]
+          }
+        ]
+      },
+      "orderBy": [
+        {
+          "kind": "orderByItem",
+          "expr": {
+            "kind": "functionCall",
+            "name": "tuple",
+            "args": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "aa"
+                ]
+              },
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "aaa"
+                ]
+              },
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "an"
+                ]
+              },
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "aan"
+                ]
+              },
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "l"
+                ]
+              },
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "ln"
+                ]
+              },
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "al_"
+                ]
+              },
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "aaln"
+                ]
+              },
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "mln"
+                ]
+              },
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "t"
+                ]
+              },
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "n",
+                  "hello"
+                ]
+              },
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "n",
+                  "world"
+                ]
+              }
+            ]
+          },
+          "direction": "ASC"
+        }
+      ]
+    }
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -403,7 +1316,7 @@
               }
             ],
             "from": {
-              "kind": "tableFunction",
+              "kind": "tableFunctionRef",
               "name": "file",
               "args": [
                 {
@@ -445,7 +1358,7 @@
               }
             ],
             "from": {
-              "kind": "tableFunction",
+              "kind": "tableFunctionRef",
               "name": "file",
               "args": [
                 {
@@ -466,6 +1379,75 @@
           }
         }
       }
+    ]
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "madness_02735"
+    },
+    "leadingComments": [
+      "--select (select sum(cityHash64(*)) from madness_02735) -",
+      "--       (select sum(cityHash64(aa, aaa, an, aan, l, ln, map(x->reinterpret(x, 'UInt128'), al), aaln, mln, t, n.hello, n.world)) from file(madness_02735.parquet));"
+    ]
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "function",
+      "func": {
+        "kind": "tableFunctionRef",
+        "name": "file",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "squash_02735",
+              "parquet"
+            ]
+          }
+        ]
+      }
+    },
+    "selectQuery": {
+      "kind": "union",
+      "queries": [
+        {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "012345"
+            }
+          ]
+        },
+        {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "543210"
+            }
+          ],
+          "settings": [
+            {
+              "name": "max_block_size",
+              "value": {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "1"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "leadingComments": [
+      "-- Merging input blocks into bigger row groups."
     ]
   },
   {
@@ -491,7 +1473,7 @@
       }
     ],
     "from": {
-      "kind": "tableFunction",
+      "kind": "tableFunctionRef",
       "name": "file",
       "args": [
         {
@@ -511,6 +1493,71 @@
     }
   },
   {
+    "kind": "insert",
+    "target": {
+      "kind": "function",
+      "func": {
+        "kind": "tableFunctionRef",
+        "name": "file",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "row_group_bytes_02735",
+              "parquet"
+            ]
+          }
+        ]
+      }
+    },
+    "selectQuery": {
+      "kind": "union",
+      "queries": [
+        {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "012345"
+            }
+          ]
+        },
+        {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "543210"
+            }
+          ],
+          "settings": [
+            {
+              "name": "max_block_size",
+              "value": {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "1"
+              }
+            },
+            {
+              "name": "output_format_parquet_row_group_size_bytes",
+              "value": {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "5"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "leadingComments": [
+      "-- Row group size limit in bytes."
+    ]
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -533,7 +1580,7 @@
       }
     ],
     "from": {
-      "kind": "tableFunction",
+      "kind": "tableFunctionRef",
       "name": "file",
       "args": [
         {
@@ -553,46 +1600,55 @@
     }
   },
   {
-    "kind": "select",
-    "select": [
-      {
-        "kind": "columnRef",
-        "parts": [
-          "num_columns"
-        ]
-      },
-      {
-        "kind": "columnRef",
-        "parts": [
-          "num_rows"
-        ]
-      },
-      {
-        "kind": "columnRef",
-        "parts": [
-          "num_row_groups"
+    "kind": "insert",
+    "target": {
+      "kind": "function",
+      "func": {
+        "kind": "tableFunctionRef",
+        "name": "file",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "tiny_row_groups_02735",
+              "parquet"
+            ]
+          }
         ]
       }
-    ],
-    "from": {
-      "kind": "tableFunction",
-      "name": "file",
-      "args": [
+    },
+    "selectQuery": {
+      "kind": "select",
+      "select": [
         {
-          "kind": "columnRef",
-          "parts": [
-            "tiny_row_groups_02735",
-            "parquet"
-          ]
-        },
+          "kind": "asterisk"
+        }
+      ],
+      "from": {
+        "kind": "tableFunctionRef",
+        "name": "numbers",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "3"
+          }
+        ]
+      },
+      "settings": [
         {
-          "kind": "columnRef",
-          "parts": [
-            "ParquetMetadata"
-          ]
+          "name": "output_format_parquet_row_group_size",
+          "value": {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "1"
+          }
         }
       ]
-    }
+    },
+    "leadingComments": [
+      "-- Row group size limit in rows."
+    ]
   },
   {
     "kind": "select",
@@ -617,7 +1673,103 @@
       }
     ],
     "from": {
-      "kind": "tableFunction",
+      "kind": "tableFunctionRef",
+      "name": "file",
+      "args": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "tiny_row_groups_02735",
+            "parquet"
+          ]
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "ParquetMetadata"
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "function",
+      "func": {
+        "kind": "tableFunctionRef",
+        "name": "file",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "big_column_chunk_02735",
+              "parquet"
+            ]
+          }
+        ]
+      }
+    },
+    "selectQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "number"
+          ]
+        }
+      ],
+      "from": {
+        "kind": "tableFunctionRef",
+        "name": "numbers",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "1000000"
+          }
+        ]
+      },
+      "settings": [
+        {
+          "name": "output_format_parquet_row_group_size",
+          "value": {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "1000000"
+          }
+        }
+      ]
+    },
+    "leadingComments": [
+      "-- 1M unique 8-byte values should exceed dictionary_size_limit (1 MB)."
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "num_columns"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "num_rows"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "num_row_groups"
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableFunctionRef",
       "name": "file",
       "args": [
         {
@@ -659,7 +1811,7 @@
       }
     ],
     "from": {
-      "kind": "tableFunction",
+      "kind": "tableFunctionRef",
       "name": "file",
       "args": [
         {
@@ -671,6 +1823,183 @@
         }
       ]
     }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "function",
+      "func": {
+        "kind": "tableFunctionRef",
+        "name": "file",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "statistics_02735",
+              "parquet"
+            ]
+          }
+        ]
+      }
+    },
+    "selectQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "alias",
+          "expr": {
+            "kind": "binaryExpr",
+            "op": "+",
+            "left": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "100"
+            },
+            "right": {
+              "kind": "binaryExpr",
+              "op": "%",
+              "left": {
+                "kind": "columnRef",
+                "parts": [
+                  "number"
+                ]
+              },
+              "right": {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "200"
+              }
+            }
+          },
+          "alias": "a"
+        },
+        {
+          "kind": "alias",
+          "expr": {
+            "kind": "functionCall",
+            "name": "toUInt32",
+            "args": [
+              {
+                "kind": "binaryExpr",
+                "op": "*",
+                "left": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "number"
+                  ]
+                },
+                "right": {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "3000"
+                }
+              }
+            ]
+          },
+          "alias": "u"
+        },
+        {
+          "kind": "alias",
+          "expr": {
+            "kind": "functionCall",
+            "name": "toInt32",
+            "args": [
+              {
+                "kind": "binaryExpr",
+                "op": "*",
+                "left": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "number"
+                  ]
+                },
+                "right": {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "3000"
+                }
+              }
+            ]
+          },
+          "alias": "i"
+        },
+        {
+          "kind": "alias",
+          "expr": {
+            "kind": "functionCall",
+            "name": "if",
+            "args": [
+              {
+                "kind": "binaryExpr",
+                "op": "==",
+                "left": {
+                  "kind": "binaryExpr",
+                  "op": "%",
+                  "left": {
+                    "kind": "columnRef",
+                    "parts": [
+                      "number"
+                    ]
+                  },
+                  "right": {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "10"
+                  }
+                },
+                "right": {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "9"
+                }
+              },
+              {
+                "kind": "functionCall",
+                "name": "toString",
+                "args": [
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "number"
+                    ]
+                  }
+                ]
+              },
+              {
+                "kind": "literal",
+                "type": "NULL",
+                "value": "NULL"
+              }
+            ]
+          },
+          "alias": "s"
+        }
+      ],
+      "from": {
+        "kind": "tableFunctionRef",
+        "name": "numbers",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "1000000"
+          }
+        ]
+      },
+      "settings": [
+        {
+          "name": "output_format_parquet_row_group_size",
+          "value": {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "1000000"
+          }
+        }
+      ]
+    },
+    "leadingComments": [
+      "-- Check statistics: signed vs unsigned, null count. Use enough rows to produce multiple pages."
+    ]
   },
   {
     "kind": "select",
@@ -695,7 +2024,7 @@
       }
     ],
     "from": {
-      "kind": "tableFunction",
+      "kind": "tableFunctionRef",
       "name": "file",
       "args": [
         {
@@ -737,7 +2066,7 @@
     ],
     "from": {
       "left": {
-        "kind": "tableFunction",
+        "kind": "tableFunctionRef",
         "name": "file",
         "args": [
           {
@@ -755,7 +2084,7 @@
           }
         ]
       },
-      "kind": "arrayJoin",
+      "kind": "arrayJoinExpr",
       "joinType": "ARRAY",
       "expressions": [
         {
@@ -792,6 +2121,71 @@
         }
       ]
     }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "function",
+      "func": {
+        "kind": "tableFunctionRef",
+        "name": "file",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "long_string_02735",
+              "parquet"
+            ]
+          }
+        ]
+      }
+    },
+    "selectQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "functionCall",
+          "name": "toString",
+          "args": [
+            {
+              "kind": "functionCall",
+              "name": "range",
+              "args": [
+                {
+                  "kind": "binaryExpr",
+                  "op": "*",
+                  "left": {
+                    "kind": "columnRef",
+                    "parts": [
+                      "number"
+                    ]
+                  },
+                  "right": {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "2000"
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "from": {
+        "kind": "tableFunctionRef",
+        "name": "numbers",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "2"
+          }
+        ]
+      }
+    },
+    "leadingComments": [
+      "-- Statistics string length limit (max_statistics_size)."
+    ]
   },
   {
     "kind": "select",
@@ -837,7 +2231,7 @@
       }
     ],
     "from": {
-      "kind": "tableFunction",
+      "kind": "tableFunctionRef",
       "name": "file",
       "args": [
         {
@@ -855,6 +2249,89 @@
         }
       ]
     }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "function",
+      "func": {
+        "kind": "tableFunctionRef",
+        "name": "file",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "compressed_02735",
+              "parquet"
+            ]
+          }
+        ]
+      }
+    },
+    "selectQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "alias",
+          "expr": {
+            "kind": "functionCall",
+            "name": "concat",
+            "args": [
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "aaaaaaaaaaaaaaaa"
+              },
+              {
+                "kind": "functionCall",
+                "name": "toString",
+                "args": [
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "number"
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          "alias": "s"
+        }
+      ],
+      "from": {
+        "kind": "tableFunctionRef",
+        "name": "numbers",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "1000"
+          }
+        ]
+      },
+      "settings": [
+        {
+          "name": "output_format_parquet_row_group_size",
+          "value": {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "10000"
+          }
+        },
+        {
+          "name": "output_format_parquet_compression_method",
+          "value": {
+            "kind": "literal",
+            "type": "String",
+            "value": "zstd"
+          }
+        }
+      ]
+    },
+    "leadingComments": [
+      "-- Compression setting."
+    ]
   },
   {
     "kind": "select",
@@ -891,7 +2368,7 @@
       }
     ],
     "from": {
-      "kind": "tableFunction",
+      "kind": "tableFunctionRef",
       "name": "file",
       "args": [
         {
@@ -911,6 +2388,175 @@
     }
   },
   {
+    "kind": "insert",
+    "target": {
+      "kind": "function",
+      "func": {
+        "kind": "tableFunctionRef",
+        "name": "file",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "compressed_02735",
+              "parquet"
+            ]
+          }
+        ]
+      }
+    },
+    "selectQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "alias",
+          "expr": {
+            "kind": "functionCall",
+            "name": "concat",
+            "args": [
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "aaaaaaaaaaaaaaaa"
+              },
+              {
+                "kind": "functionCall",
+                "name": "toString",
+                "args": [
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "number"
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          "alias": "s"
+        }
+      ],
+      "from": {
+        "kind": "tableFunctionRef",
+        "name": "numbers",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "1000"
+          }
+        ]
+      },
+      "settings": [
+        {
+          "name": "output_format_parquet_row_group_size",
+          "value": {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "10000"
+          }
+        },
+        {
+          "name": "output_format_parquet_compression_method",
+          "value": {
+            "kind": "literal",
+            "type": "String",
+            "value": "none"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "function",
+      "func": {
+        "kind": "tableFunctionRef",
+        "name": "file",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "compressed_02735",
+              "parquet"
+            ]
+          }
+        ]
+      }
+    },
+    "selectQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "alias",
+          "expr": {
+            "kind": "functionCall",
+            "name": "if",
+            "args": [
+              {
+                "kind": "binaryExpr",
+                "op": "==",
+                "left": {
+                  "kind": "binaryExpr",
+                  "op": "%",
+                  "left": {
+                    "kind": "columnRef",
+                    "parts": [
+                      "number"
+                    ]
+                  },
+                  "right": {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "3"
+                  }
+                },
+                "right": {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "1"
+                }
+              },
+              {
+                "kind": "literal",
+                "type": "NULL",
+                "value": "NULL"
+              },
+              {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "42"
+              }
+            ]
+          },
+          "alias": "x"
+        }
+      ],
+      "from": {
+        "kind": "tableFunctionRef",
+        "name": "numbers",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "70"
+          }
+        ]
+      },
+      "settings": [
+        {
+          "name": "output_format_parquet_compression_method",
+          "value": {
+            "kind": "literal",
+            "type": "String",
+            "value": "zstd"
+          }
+        }
+      ]
+    }
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -930,7 +2576,7 @@
       }
     ],
     "from": {
-      "kind": "tableFunction",
+      "kind": "tableFunctionRef",
       "name": "file",
       "args": [
         {
@@ -944,34 +2590,99 @@
     }
   },
   {
-    "kind": "select",
-    "select": [
-      {
-        "kind": "functionCall",
-        "name": "sum",
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "other_encoders_02735"
+    },
+    "ifExists": true,
+    "leadingComments": [
+      "-- Single-threaded encoding and Arrow encoder."
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "other_encoders_02735"
+    },
+    "temporary": true,
+    "asQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "number"
+          ]
+        },
+        {
+          "kind": "binaryExpr",
+          "op": "*",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "number"
+            ]
+          },
+          "right": {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "2"
+          }
+        }
+      ],
+      "from": {
+        "kind": "tableFunctionRef",
+        "name": "numbers",
         "args": [
           {
-            "kind": "functionCall",
-            "name": "cityHash64",
-            "args": [
-              {
-                "kind": "asterisk"
-              }
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "10000"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "function",
+      "func": {
+        "kind": "tableFunctionRef",
+        "name": "file",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "single_thread_02735",
+              "parquet"
             ]
           }
         ]
       }
-    ],
-    "from": {
-      "kind": "tableFunction",
-      "name": "file",
-      "args": [
+    },
+    "selectQuery": {
+      "kind": "select",
+      "select": [
         {
-          "kind": "columnRef",
-          "parts": [
-            "single_thread_02735",
-            "parquet"
-          ]
+          "kind": "asterisk"
+        }
+      ],
+      "from": {
+        "kind": "tableRef",
+        "table": "other_encoders_02735"
+      },
+      "settings": [
+        {
+          "name": "max_threads",
+          "value": {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "1"
+          }
         }
       ]
     }
@@ -996,7 +2707,81 @@
       }
     ],
     "from": {
-      "kind": "tableFunction",
+      "kind": "tableFunctionRef",
+      "name": "file",
+      "args": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "single_thread_02735",
+            "parquet"
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "function",
+      "func": {
+        "kind": "tableFunctionRef",
+        "name": "file",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "arrow_02735",
+              "parquet"
+            ]
+          }
+        ]
+      }
+    },
+    "selectQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "asterisk"
+        }
+      ],
+      "from": {
+        "kind": "tableRef",
+        "table": "other_encoders_02735"
+      },
+      "settings": [
+        {
+          "name": "output_format_parquet_use_custom_encoder",
+          "value": {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "0"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "sum",
+        "args": [
+          {
+            "kind": "functionCall",
+            "name": "cityHash64",
+            "args": [
+              {
+                "kind": "asterisk"
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableFunctionRef",
       "name": "file",
       "args": [
         {
@@ -1008,6 +2793,72 @@
         }
       ]
     }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "function",
+      "func": {
+        "kind": "tableFunctionRef",
+        "name": "file",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "strings1_02735",
+              "parquet"
+            ]
+          }
+        ]
+      }
+    },
+    "selectQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "never"
+        },
+        {
+          "kind": "functionCall",
+          "name": "toFixedString",
+          "args": [
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "gonna"
+            },
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "5"
+            }
+          ]
+        }
+      ],
+      "settings": [
+        {
+          "name": "output_format_parquet_string_as_string",
+          "value": {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "1"
+          }
+        },
+        {
+          "name": "output_format_parquet_fixed_string_as_fixed_byte_array",
+          "value": {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "1"
+          }
+        }
+      ]
+    },
+    "leadingComments": [
+      "-- String -> binary vs string; FixedString -> fixed-length-binary vs binary vs string."
+    ]
   },
   {
     "kind": "select",
@@ -1049,7 +2900,7 @@
     ],
     "from": {
       "left": {
-        "kind": "tableFunction",
+        "kind": "tableFunctionRef",
         "name": "file",
         "args": [
           {
@@ -1067,7 +2918,7 @@
           }
         ]
       },
-      "kind": "arrayJoin",
+      "kind": "arrayJoinExpr",
       "joinType": "ARRAY",
       "expressions": [
         {
@@ -1075,6 +2926,69 @@
           "parts": [
             "columns"
           ]
+        }
+      ]
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "function",
+      "func": {
+        "kind": "tableFunctionRef",
+        "name": "file",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "strings2_02735",
+              "parquet"
+            ]
+          }
+        ]
+      }
+    },
+    "selectQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "give"
+        },
+        {
+          "kind": "functionCall",
+          "name": "toFixedString",
+          "args": [
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "you"
+            },
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "3"
+            }
+          ]
+        }
+      ],
+      "settings": [
+        {
+          "name": "output_format_parquet_string_as_string",
+          "value": {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "0"
+          }
+        },
+        {
+          "name": "output_format_parquet_fixed_string_as_fixed_byte_array",
+          "value": {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "0"
+          }
         }
       ]
     }
@@ -1119,7 +3033,7 @@
     ],
     "from": {
       "left": {
-        "kind": "tableFunction",
+        "kind": "tableFunctionRef",
         "name": "file",
         "args": [
           {
@@ -1137,7 +3051,7 @@
           }
         ]
       },
-      "kind": "arrayJoin",
+      "kind": "arrayJoinExpr",
       "joinType": "ARRAY",
       "expressions": [
         {
@@ -1145,6 +3059,64 @@
           "parts": [
             "columns"
           ]
+        }
+      ]
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "function",
+      "func": {
+        "kind": "tableFunctionRef",
+        "name": "file",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "strings3_02735",
+              "parquet"
+            ]
+          }
+        ]
+      }
+    },
+    "selectQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "functionCall",
+          "name": "toFixedString",
+          "args": [
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "up"
+            },
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "2"
+            }
+          ]
+        }
+      ],
+      "settings": [
+        {
+          "name": "output_format_parquet_string_as_string",
+          "value": {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "1"
+          }
+        },
+        {
+          "name": "output_format_parquet_fixed_string_as_fixed_byte_array",
+          "value": {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "0"
+          }
         }
       ]
     }
@@ -1189,7 +3161,7 @@
     ],
     "from": {
       "left": {
-        "kind": "tableFunction",
+        "kind": "tableFunctionRef",
         "name": "file",
         "args": [
           {
@@ -1207,7 +3179,7 @@
           }
         ]
       },
-      "kind": "arrayJoin",
+      "kind": "arrayJoinExpr",
       "joinType": "ARRAY",
       "expressions": [
         {
@@ -1227,7 +3199,7 @@
       }
     ],
     "from": {
-      "kind": "tableFunction",
+      "kind": "tableFunctionRef",
       "name": "file",
       "args": [
         {
@@ -1248,7 +3220,7 @@
       }
     ],
     "from": {
-      "kind": "tableFunction",
+      "kind": "tableFunctionRef",
       "name": "file",
       "args": [
         {
@@ -1269,7 +3241,7 @@
       }
     ],
     "from": {
-      "kind": "tableFunction",
+      "kind": "tableFunctionRef",
       "name": "file",
       "args": [
         {
@@ -1280,6 +3252,234 @@
           ]
         }
       ]
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "function",
+      "func": {
+        "kind": "tableFunctionRef",
+        "name": "file",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "datetime64_02735",
+              "parquet"
+            ]
+          }
+        ]
+      }
+    },
+    "selectQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "alias",
+          "expr": {
+            "kind": "functionCall",
+            "name": "toDateTime64",
+            "args": [
+              {
+                "kind": "binaryExpr",
+                "op": "/",
+                "left": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "number"
+                  ]
+                },
+                "right": {
+                  "kind": "literal",
+                  "type": "Float64",
+                  "value": "1e3"
+                }
+              },
+              {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "3"
+              }
+            ]
+          },
+          "alias": "ms"
+        },
+        {
+          "kind": "alias",
+          "expr": {
+            "kind": "functionCall",
+            "name": "toDateTime64",
+            "args": [
+              {
+                "kind": "binaryExpr",
+                "op": "/",
+                "left": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "number"
+                  ]
+                },
+                "right": {
+                  "kind": "literal",
+                  "type": "Float64",
+                  "value": "1e6"
+                }
+              },
+              {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "6"
+              }
+            ]
+          },
+          "alias": "us"
+        },
+        {
+          "kind": "alias",
+          "expr": {
+            "kind": "functionCall",
+            "name": "toDateTime64",
+            "args": [
+              {
+                "kind": "binaryExpr",
+                "op": "/",
+                "left": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "number"
+                  ]
+                },
+                "right": {
+                  "kind": "literal",
+                  "type": "Float64",
+                  "value": "1e9"
+                }
+              },
+              {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "9"
+              }
+            ]
+          },
+          "alias": "ns"
+        },
+        {
+          "kind": "alias",
+          "expr": {
+            "kind": "functionCall",
+            "name": "toDateTime64",
+            "args": [
+              {
+                "kind": "binaryExpr",
+                "op": "/",
+                "left": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "number"
+                  ]
+                },
+                "right": {
+                  "kind": "literal",
+                  "type": "Float64",
+                  "value": "1e2"
+                }
+              },
+              {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "2"
+              }
+            ]
+          },
+          "alias": "cs"
+        },
+        {
+          "kind": "alias",
+          "expr": {
+            "kind": "functionCall",
+            "name": "toDateTime64",
+            "args": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "number"
+                ]
+              },
+              {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "0"
+              }
+            ]
+          },
+          "alias": "s"
+        },
+        {
+          "kind": "alias",
+          "expr": {
+            "kind": "functionCall",
+            "name": "toDateTime64",
+            "args": [
+              {
+                "kind": "binaryExpr",
+                "op": "/",
+                "left": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "number"
+                  ]
+                },
+                "right": {
+                  "kind": "literal",
+                  "type": "Float64",
+                  "value": "1e7"
+                }
+              },
+              {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "7"
+              }
+            ]
+          },
+          "alias": "dus"
+        }
+      ],
+      "from": {
+        "kind": "tableFunctionRef",
+        "name": "numbers",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "2000"
+          }
+        ]
+      }
+    },
+    "leadingComments": [
+      "-- DateTime64 with different units."
+    ]
+  },
+  {
+    "kind": "describe",
+    "target": {
+      "kind": "function",
+      "func": {
+        "kind": "tableFunctionRef",
+        "name": "file",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "datetime64_02735",
+              "parquet"
+            ]
+          }
+        ]
+      }
     }
   },
   {
@@ -1302,7 +3502,7 @@
       }
     ],
     "from": {
-      "kind": "tableFunction",
+      "kind": "tableFunctionRef",
       "name": "file",
       "args": [
         {
@@ -1316,6 +3516,55 @@
     }
   },
   {
+    "kind": "insert",
+    "target": {
+      "kind": "function",
+      "func": {
+        "kind": "tableFunctionRef",
+        "name": "file",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "date_as_uint16",
+              "parquet"
+            ]
+          }
+        ]
+      }
+    },
+    "selectQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "alias",
+          "expr": {
+            "kind": "functionCall",
+            "name": "toDate",
+            "args": [
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "2025-08-12"
+              }
+            ]
+          },
+          "alias": "d"
+        }
+      ],
+      "settings": [
+        {
+          "name": "output_format_parquet_date_as_uint16",
+          "value": {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "1"
+          }
+        }
+      ]
+    }
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -1323,7 +3572,7 @@
       }
     ],
     "from": {
-      "kind": "tableFunction",
+      "kind": "tableFunctionRef",
       "name": "file",
       "args": [
         {
@@ -1334,6 +3583,25 @@
           ]
         }
       ]
+    }
+  },
+  {
+    "kind": "describe",
+    "target": {
+      "kind": "function",
+      "func": {
+        "kind": "tableFunctionRef",
+        "name": "file",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "date_as_uint16",
+              "parquet"
+            ]
+          }
+        ]
+      }
     }
   }
 ]

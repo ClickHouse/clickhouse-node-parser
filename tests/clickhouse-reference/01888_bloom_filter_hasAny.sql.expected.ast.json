@@ -1,5 +1,168 @@
 [
   {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "bftest"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "k",
+        "type": {
+          "name": "Int64"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "y",
+        "type": {
+          "name": "Array",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "Int64"
+              }
+            }
+          ]
+        },
+        "defaultKind": "DEFAULT",
+        "defaultExpr": {
+          "kind": "columnRef",
+          "parts": [
+            "x"
+          ]
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "x",
+        "type": {
+          "name": "Array",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "Int64"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "kind": "indexDef",
+        "name": "ix1",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "x"
+          ]
+        },
+        "indexType": {
+          "name": "bloom_filter"
+        },
+        "granularity": 3
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "k"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "bftest"
+      }
+    },
+    "columns": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "k"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "x"
+        ]
+      }
+    ],
+    "selectQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "number"
+          ]
+        },
+        {
+          "kind": "functionCall",
+          "name": "arrayMap",
+          "args": [
+            {
+              "kind": "lambdaExpr",
+              "params": [
+                "i"
+              ],
+              "body": {
+                "kind": "binaryExpr",
+                "op": "%",
+                "left": {
+                  "kind": "functionCall",
+                  "name": "rand64",
+                  "args": []
+                },
+                "right": {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "565656"
+                }
+              }
+            },
+            {
+              "kind": "functionCall",
+              "name": "range",
+              "args": [
+                {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "10"
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "from": {
+        "kind": "tableFunctionRef",
+        "name": "numbers",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "1000"
+          }
+        ]
+      }
+    }
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -27,7 +190,7 @@
           "name": "materialize",
           "args": [
             {
-              "kind": "array",
+              "kind": "arrayLiteral",
               "elements": [
                 {
                   "kind": "literal",
@@ -51,7 +214,10 @@
         }
       ]
     },
-    "format": "Null"
+    "format": "Null",
+    "leadingComments": [
+      "-- index is not used, but query should still work"
+    ]
   },
   {
     "kind": "select",
@@ -77,7 +243,7 @@
           ]
         },
         {
-          "kind": "array",
+          "kind": "arrayLiteral",
           "elements": [
             {
               "kind": "literal",
@@ -94,7 +260,10 @@
         }
       ]
     },
-    "format": "Null"
+    "format": "Null",
+    "leadingComments": [
+      "-- verify the expression in WHERE works on non-index col the same way as on index cols"
+    ]
   },
   {
     "kind": "select",
@@ -120,7 +289,7 @@
           ]
         },
         {
-          "kind": "array",
+          "kind": "arrayLiteral",
           "elements": [
             {
               "kind": "literal",
@@ -163,10 +332,10 @@
           ]
         },
         {
-          "kind": "array",
+          "kind": "arrayLiteral",
           "elements": [
             {
-              "kind": "array",
+              "kind": "arrayLiteral",
               "elements": [
                 {
                   "kind": "literal",
@@ -186,7 +355,10 @@
         }
       ]
     },
-    "format": "Null"
+    "format": "Null",
+    "trailingComments": [
+      "-- { serverError NO_COMMON_TYPE }"
+    ]
   },
   {
     "kind": "select",
@@ -212,7 +384,7 @@
           ]
         },
         {
-          "kind": "array",
+          "kind": "arrayLiteral",
           "elements": [
             {
               "kind": "functionCall",
@@ -240,7 +412,23 @@
         }
       ]
     },
-    "format": "Null"
+    "format": "Null",
+    "trailingComments": [
+      "-- different, doesn't fail"
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "force_data_skipping_indices",
+        "value": {
+          "kind": "literal",
+          "type": "String",
+          "value": "ix1"
+        }
+      }
+    ]
   },
   {
     "kind": "select",
@@ -321,7 +509,7 @@
           ]
         },
         {
-          "kind": "array",
+          "kind": "arrayLiteral",
           "elements": [
             {
               "kind": "literal",
@@ -364,7 +552,7 @@
           ]
         },
         {
-          "kind": "array",
+          "kind": "arrayLiteral",
           "elements": [],
           "source": "[]"
         }
@@ -396,7 +584,7 @@
           ]
         },
         {
-          "kind": "array",
+          "kind": "arrayLiteral",
           "elements": [
             {
               "kind": "literal",
@@ -434,7 +622,7 @@
           ]
         },
         {
-          "kind": "array",
+          "kind": "arrayLiteral",
           "elements": [
             {
               "kind": "literal",
@@ -457,7 +645,13 @@
         }
       ]
     },
-    "format": "Null"
+    "format": "Null",
+    "leadingComments": [
+      "-- can't use bloom_filter with `hasAny` on non-constant arguments (just like `has`)"
+    ],
+    "trailingComments": [
+      "-- { serverError INDEX_NOT_USED }"
+    ]
   },
   {
     "kind": "select",
@@ -483,7 +677,7 @@
           ]
         },
         {
-          "kind": "array",
+          "kind": "arrayLiteral",
           "elements": [
             {
               "kind": "literal",
@@ -500,7 +694,13 @@
         }
       ]
     },
-    "format": "Null"
+    "format": "Null",
+    "leadingComments": [
+      "-- NULLs are not Ok"
+    ],
+    "trailingComments": [
+      "-- { serverError INDEX_NOT_USED }"
+    ]
   },
   {
     "kind": "select",
@@ -526,7 +726,7 @@
           ]
         },
         {
-          "kind": "array",
+          "kind": "arrayLiteral",
           "elements": [
             {
               "kind": "literal",
@@ -543,7 +743,10 @@
         }
       ]
     },
-    "format": "Null"
+    "format": "Null",
+    "trailingComments": [
+      "-- { serverError INDEX_NOT_USED }"
+    ]
   },
   {
     "kind": "select",
@@ -569,10 +772,10 @@
           ]
         },
         {
-          "kind": "array",
+          "kind": "arrayLiteral",
           "elements": [
             {
-              "kind": "array",
+              "kind": "arrayLiteral",
               "elements": [
                 {
                   "kind": "literal",
@@ -592,7 +795,13 @@
         }
       ]
     },
-    "format": "Null"
+    "format": "Null",
+    "leadingComments": [
+      "-- non-compatible types"
+    ],
+    "trailingComments": [
+      "-- { serverError NO_COMMON_TYPE }"
+    ]
   },
   {
     "kind": "select",
@@ -618,7 +827,7 @@
           ]
         },
         {
-          "kind": "array",
+          "kind": "arrayLiteral",
           "elements": [
             {
               "kind": "functionCall",
@@ -646,7 +855,10 @@
         }
       ]
     },
-    "format": "Null"
+    "format": "Null",
+    "trailingComments": [
+      "-- { serverError INDEX_NOT_USED }"
+    ]
   },
   {
     "kind": "select",
@@ -689,7 +901,10 @@
         }
       ]
     },
-    "format": "Null"
+    "format": "Null",
+    "leadingComments": [
+      "-- Bug discovered by AST fuzzier (fixed, shouldn't crash)."
+    ]
   },
   {
     "kind": "select",
@@ -719,7 +934,7 @@
               ]
             },
             {
-              "kind": "array",
+              "kind": "arrayLiteral",
               "elements": [
                 {
                   "kind": "literal",

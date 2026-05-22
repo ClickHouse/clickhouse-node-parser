@@ -1,5 +1,55 @@
 [
   {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "max_rows_to_read",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      }
+    ],
+    "leadingComments": [
+      "-- Tags: no-fasttest, no-debug, no-tsan, no-msan, no-asan"
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "max_bytes_to_read",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "min_execution_speed",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "100000000000"
+        }
+      },
+      {
+        "name": "timeout_before_checking_execution_speed",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      }
+    ]
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -12,6 +62,132 @@
       "kind": "tableRef",
       "database": "system",
       "table": "numbers"
+    },
+    "trailingComments": [
+      "-- { serverError TOO_SLOW }"
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "min_execution_speed",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "min_execution_speed_bytes",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "800000000000"
+        }
+      },
+      {
+        "name": "timeout_before_checking_execution_speed",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "min_execution_speed_bytes",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "max_execution_time",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "600"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "max_execution_speed",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1000000"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "max_block_size",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "100"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "times"
+    },
+    "temporary": true,
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "t",
+        "type": {
+          "name": "DateTime"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "times"
+      }
+    },
+    "selectQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "functionCall",
+          "name": "now",
+          "args": []
+        }
+      ]
     }
   },
   {
@@ -24,7 +200,7 @@
       }
     ],
     "from": {
-      "kind": "tableFunction",
+      "kind": "tableFunctionRef",
       "name": "numbers",
       "args": [
         {
@@ -80,5 +256,62 @@
       "kind": "tableRef",
       "table": "times"
     }
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "max_execution_speed",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "max_execution_speed_bytes",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "8000000"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "truncate",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "times"
+    }
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "max_execution_speed_bytes",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      }
+    ],
+    "trailingComments": [
+      "-- Note that 'min_execution_speed' does not count sleeping due to throttling",
+      "-- with 'max_execution_speed' and similar limits like 'priority' and 'max_network_bandwidth'",
+      "-- Note: I have to disable this part of the test because it actually can work slower under sanitizers,",
+      "-- with debug builds and in presence of random system hiccups in our CI environment.",
+      "--SET max_execution_speed = 1000000, min_execution_speed = 2000000;",
+      "-- And this query will work despite the fact that the above settings look contradictory.",
+      "--SELECT count() FROM numbers(1000000);",
+      "--SELECT 'Ok (5)';"
+    ]
   }
 ]

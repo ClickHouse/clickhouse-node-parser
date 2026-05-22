@@ -1,3 +1,4 @@
+-- Tags: no-fasttest
 SELECT
     code_point,
     code_point_value
@@ -21,6 +22,7 @@ WHERE code_point = 'A'
     OR code_point = 'Ω'
 ORDER BY code_point ASC;
 
+-- special mapping
 SELECT
     code_point,
     uppercase_mapping,
@@ -28,6 +30,7 @@ SELECT
 FROM `system`.unicode
 WHERE code_point = 'ß';
 
+-- no language-specific mappings 
 SELECT
     code_point,
     uppercase_mapping,

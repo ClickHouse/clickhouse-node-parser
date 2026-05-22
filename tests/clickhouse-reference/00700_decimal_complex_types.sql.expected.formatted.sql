@@ -1,3 +1,17 @@
+DROP TABLE IF EXISTS decimal;
+
+CREATE TABLE decimal
+(
+    a Array(Decimal32(3)),
+    b Array(Decimal64(3)),
+    c Array(Decimal128(3)),
+    nest Nested(a Decimal(9, 2), b Decimal(18, 2), c Decimal(38, 2)),
+    tup Tuple(Decimal32(1), Decimal64(1), Decimal128(1))
+)
+ENGINE = Memory;
+
+INSERT INTO decimal (a, b, c, nest.a, nest.b, nest.c, tup);
+
 SELECT
     toTypeName(a),
     toTypeName(b),
@@ -662,36 +676,36 @@ LIMIT 2;
 
 SELECT if(number % 2, toDecimal32('32.1', 5), toDecimal32('32.2', 1))
 FROM `system`.numbers
-LIMIT 2;
+LIMIT 2; -- { serverError NOT_IMPLEMENTED }
 
 SELECT if(number % 2, toDecimal32('32.1', 5), toDecimal64('64.2', 2))
 FROM `system`.numbers
-LIMIT 2;
+LIMIT 2; -- { serverError NOT_IMPLEMENTED }
 
 SELECT if(number % 2, toDecimal32('32.1', 5), toDecimal128('128.2', 3))
 FROM `system`.numbers
-LIMIT 2;
+LIMIT 2; -- { serverError NOT_IMPLEMENTED }
 
 SELECT if(number % 2, toDecimal64('64.1', 5), toDecimal32('32.2', 1))
 FROM `system`.numbers
-LIMIT 2;
+LIMIT 2; -- { serverError NOT_IMPLEMENTED }
 
 SELECT if(number % 2, toDecimal64('64.1', 5), toDecimal64('64.2', 2))
 FROM `system`.numbers
-LIMIT 2;
+LIMIT 2; -- { serverError NOT_IMPLEMENTED }
 
 SELECT if(number % 2, toDecimal64('64.1', 5), toDecimal128('128.2', 3))
 FROM `system`.numbers
-LIMIT 2;
+LIMIT 2; -- { serverError NOT_IMPLEMENTED }
 
 SELECT if(number % 2, toDecimal128('128.1', 5), toDecimal32('32.2', 1))
 FROM `system`.numbers
-LIMIT 2;
+LIMIT 2; -- { serverError NOT_IMPLEMENTED }
 
 SELECT if(number % 2, toDecimal128('128.1', 5), toDecimal64('64.2', 2))
 FROM `system`.numbers
-LIMIT 2;
+LIMIT 2; -- { serverError NOT_IMPLEMENTED }
 
 SELECT if(number % 2, toDecimal128('128.1', 5), toDecimal128('128.2', 3))
 FROM `system`.numbers
-LIMIT 2;
+LIMIT 2; -- { serverError NOT_IMPLEMENTED }

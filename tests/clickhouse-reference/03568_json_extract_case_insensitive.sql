@@ -40,3 +40,5 @@ SELECT JSONExtractIntCaseInsensitive('{"LEVEL1": {"Level2": {"level3": 999}}}', 
 SELECT JSONExtractArrayRawCaseInsensitive('{"Items": [1, 2, 3]}', 'ITEMS');
 SELECT JSONExtractKeysAndValuesRawCaseInsensitive('{"Name": "Alice", "AGE": 30}');
 SELECT JSONExtractKeysCaseInsensitive('{"Name": "Alice", "AGE": 30}');
+SET allow_simdjson=0;
+SET allow_simdjson=1;

@@ -1,5 +1,344 @@
 [
   {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "with_deduplication"
+    },
+    "ifExists": true,
+    "leadingComments": [
+      "-- Tags: zookeeper, no-ordinary-database, no-parallel",
+      "-- Tag no-parallel: static UUID"
+    ]
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "without_deduplication"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "with_deduplication_mv"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "without_deduplication_mv"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "database_replicated_allow_explicit_uuid",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "3"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "database_replicated_allow_replicated_engine_arguments",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "3"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "with_deduplication"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "x",
+        "type": {
+          "name": "UInt32"
+        }
+      }
+    ],
+    "engine": {
+      "name": "ReplicatedMergeTree",
+      "args": [
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "/clickhouse/tables/{database}/test_00510/with_deduplication"
+        },
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "r1"
+        }
+      ]
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "x"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "without_deduplication"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "x",
+        "type": {
+          "name": "UInt32"
+        }
+      }
+    ],
+    "engine": {
+      "name": "ReplicatedMergeTree",
+      "args": [
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "/clickhouse/tables/{database}/test_00510/without_deduplication"
+        },
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "r1"
+        }
+      ]
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "x"
+          ]
+        }
+      }
+    ],
+    "settings": [
+      {
+        "name": "replicated_deduplication_window",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      },
+      {
+        "name": "replicated_deduplication_window_for_async_inserts",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      }
+    ],
+    "settingsAfterOrderBy": true
+  },
+  {
+    "kind": "createMaterializedView",
+    "table": {
+      "kind": "tableRef",
+      "table": "with_deduplication_mv"
+    },
+    "engine": {
+      "name": "ReplicatedAggregatingMergeTree",
+      "args": [
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "/clickhouse/tables/{database}/test_00510/with_deduplication_mv"
+        },
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "r1"
+        }
+      ]
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "dummy"
+          ]
+        }
+      }
+    ],
+    "asQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "alias",
+          "expr": {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "0"
+          },
+          "alias": "dummy"
+        },
+        {
+          "kind": "alias",
+          "expr": {
+            "kind": "functionCall",
+            "name": "countState",
+            "args": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "x"
+                ]
+              }
+            ]
+          },
+          "alias": "cnt"
+        }
+      ],
+      "from": {
+        "kind": "tableRef",
+        "table": "with_deduplication"
+      }
+    }
+  },
+  {
+    "kind": "createMaterializedView",
+    "table": {
+      "kind": "tableRef",
+      "table": "without_deduplication_mv"
+    },
+    "engine": {
+      "name": "ReplicatedAggregatingMergeTree",
+      "args": [
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "/clickhouse/tables/{database}/test_00510/without_deduplication_mv"
+        },
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "r1"
+        }
+      ]
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "dummy"
+          ]
+        }
+      }
+    ],
+    "asQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "alias",
+          "expr": {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "0"
+          },
+          "alias": "dummy"
+        },
+        {
+          "kind": "alias",
+          "expr": {
+            "kind": "functionCall",
+            "name": "countState",
+            "args": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "x"
+                ]
+              }
+            ]
+          },
+          "alias": "cnt"
+        }
+      ],
+      "from": {
+        "kind": "tableRef",
+        "table": "without_deduplication"
+      }
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "with_deduplication"
+      }
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "with_deduplication"
+      }
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "without_deduplication"
+      }
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "without_deduplication"
+      }
+    }
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -67,6 +406,163 @@
     "from": {
       "kind": "tableRef",
       "table": "without_deduplication_mv"
+    }
+  },
+  {
+    "kind": "alter",
+    "table": {
+      "kind": "tableRef",
+      "table": ".inner_id.00000510-1000-4000-8000-000000000001"
+    },
+    "commands": [
+      {
+        "kind": "alterCommand",
+        "commandType": "DROP_PARTITION",
+        "partition": {
+          "partitionKind": "id",
+          "id": {
+            "kind": "literal",
+            "type": "String",
+            "value": "all"
+          }
+        }
+      }
+    ],
+    "leadingComments": [
+      "-- Explicit insert is not deduplicated because insert has selectpart and select is not stable"
+    ]
+  },
+  {
+    "kind": "alter",
+    "table": {
+      "kind": "tableRef",
+      "table": ".inner_id.00000510-1000-4000-8000-000000000002"
+    },
+    "commands": [
+      {
+        "kind": "alterCommand",
+        "commandType": "DROP_PARTITION",
+        "partition": {
+          "partitionKind": "id",
+          "id": {
+            "kind": "literal",
+            "type": "String",
+            "value": "all"
+          }
+        }
+      }
+    ]
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": ".inner_id.00000510-1000-4000-8000-000000000001"
+      }
+    },
+    "selectQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "alias",
+          "expr": {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "0"
+          },
+          "alias": "dummy"
+        },
+        {
+          "kind": "alias",
+          "expr": {
+            "kind": "functionCall",
+            "name": "arrayReduce",
+            "args": [
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "countState"
+              },
+              {
+                "kind": "arrayLiteral",
+                "elements": [
+                  {
+                    "kind": "functionCall",
+                    "name": "toUInt32",
+                    "args": [
+                      {
+                        "kind": "literal",
+                        "type": "UInt64",
+                        "value": "42"
+                      }
+                    ]
+                  }
+                ],
+                "source": "[toUInt32(42)]"
+              }
+            ]
+          },
+          "alias": "cnt"
+        }
+      ]
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": ".inner_id.00000510-1000-4000-8000-000000000002"
+      }
+    },
+    "selectQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "alias",
+          "expr": {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "0"
+          },
+          "alias": "dummy"
+        },
+        {
+          "kind": "alias",
+          "expr": {
+            "kind": "functionCall",
+            "name": "arrayReduce",
+            "args": [
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "countState"
+              },
+              {
+                "kind": "arrayLiteral",
+                "elements": [
+                  {
+                    "kind": "functionCall",
+                    "name": "toUInt32",
+                    "args": [
+                      {
+                        "kind": "literal",
+                        "type": "UInt64",
+                        "value": "42"
+                      }
+                    ]
+                  }
+                ],
+                "source": "[toUInt32(42)]"
+              }
+            ]
+          },
+          "alias": "cnt"
+        }
+      ]
     }
   }
 ]

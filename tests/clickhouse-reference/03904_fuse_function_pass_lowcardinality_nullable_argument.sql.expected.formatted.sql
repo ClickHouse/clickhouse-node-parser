@@ -1,3 +1,17 @@
+-- { echo }
+SET optimize_syntax_fuse_functions = 1;
+
+SET allow_suspicious_low_cardinality_types = 1;
+
+DROP TABLE IF EXISTS test;
+
+CREATE TABLE test
+(
+    a Float64,
+    b LowCardinality(Nullable(Int8))
+)
+ENGINE = Log;
+
 SELECT count(b) * count(b)
 FROM (
         SELECT b
@@ -13,6 +27,8 @@ FROM (
         SELECT b
         FROM test
     );
+
+INSERT INTO test (a, b);
 
 SELECT
     sum(b),
@@ -32,3 +48,5 @@ SELECT
 FROM (
         SELECT CAST(materialize(1), 'LowCardinality(Nullable(Int32))') AS a
     ) AS t;
+
+SET enable_analyzer = 1;

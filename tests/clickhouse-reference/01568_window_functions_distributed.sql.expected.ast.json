@@ -36,7 +36,7 @@
           }
         ],
         "from": {
-          "kind": "tableFunction",
+          "kind": "tableFunctionRef",
           "name": "remote",
           "args": [
             {
@@ -71,6 +71,10 @@
         },
         "direction": "ASC"
       }
+    ],
+    "leadingComments": [
+      "-- Tags: distributed",
+      "-- { echo }"
     ]
   },
   {
@@ -101,7 +105,7 @@
       }
     ],
     "from": {
-      "kind": "tableFunction",
+      "kind": "tableFunctionRef",
       "name": "remote",
       "args": [
         {
@@ -173,7 +177,7 @@
       }
     ],
     "from": {
-      "kind": "tableFunction",
+      "kind": "tableFunctionRef",
       "name": "remote",
       "args": [
         {
@@ -207,6 +211,89 @@
         "direction": "ASC"
       }
     ]
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "t_01568"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "t_01568"
+    },
+    "engine": {
+      "name": "Memory"
+    },
+    "asQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "alias",
+          "expr": {
+            "kind": "functionCall",
+            "name": "intDiv",
+            "args": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "number"
+                ]
+              },
+              {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "3"
+              }
+            ]
+          },
+          "alias": "p"
+        },
+        {
+          "kind": "alias",
+          "expr": {
+            "kind": "functionCall",
+            "name": "modulo",
+            "args": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "number"
+                ]
+              },
+              {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "3"
+              }
+            ]
+          },
+          "alias": "o"
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "number"
+          ]
+        }
+      ],
+      "from": {
+        "kind": "tableFunctionRef",
+        "name": "numbers",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "9"
+          }
+        ]
+      }
+    }
   },
   {
     "kind": "select",
@@ -273,7 +360,16 @@
     "windows": [
       {
         "name": "w",
-        "body": "partition by p"
+        "spec": {
+          "partitionBy": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "p"
+              ]
+            }
+          ]
+        }
       }
     ]
   },
@@ -324,7 +420,16 @@
     "windows": [
       {
         "name": "w",
-        "body": "partition by p"
+        "spec": {
+          "partitionBy": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "p"
+              ]
+            }
+          ]
+        }
       }
     ]
   },
@@ -365,7 +470,7 @@
       }
     ],
     "from": {
-      "kind": "tableFunction",
+      "kind": "tableFunctionRef",
       "name": "remote",
       "args": [
         {
@@ -411,7 +516,16 @@
     "windows": [
       {
         "name": "w",
-        "body": "partition by p"
+        "spec": {
+          "partitionBy": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "p"
+              ]
+            }
+          ]
+        }
       }
     ]
   },
@@ -452,7 +566,7 @@
       }
     ],
     "from": {
-      "kind": "tableFunction",
+      "kind": "tableFunctionRef",
       "name": "remote",
       "args": [
         {
@@ -498,7 +612,16 @@
     "windows": [
       {
         "name": "w",
-        "body": "partition by p"
+        "spec": {
+          "partitionBy": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "p"
+              ]
+            }
+          ]
+        }
       }
     ],
     "settings": [
@@ -552,7 +675,7 @@
       }
     ],
     "from": {
-      "kind": "tableFunction",
+      "kind": "tableFunctionRef",
       "name": "remote",
       "args": [
         {
@@ -598,7 +721,16 @@
     "windows": [
       {
         "name": "w",
-        "body": "partition by p"
+        "spec": {
+          "partitionBy": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "p"
+              ]
+            }
+          ]
+        }
       }
     ]
   },
@@ -637,7 +769,7 @@
       }
     ],
     "from": {
-      "kind": "tableFunction",
+      "kind": "tableFunctionRef",
       "name": "remote",
       "args": [
         {
@@ -691,6 +823,9 @@
         },
         "direction": "ASC"
       }
+    ],
+    "leadingComments": [
+      "-- window functions + aggregation w/shards"
     ]
   },
   {
@@ -728,7 +863,7 @@
       }
     ],
     "from": {
-      "kind": "tableFunction",
+      "kind": "tableFunctionRef",
       "name": "remote",
       "args": [
         {
@@ -829,7 +964,7 @@
       }
     ],
     "from": {
-      "kind": "tableFunction",
+      "kind": "tableFunctionRef",
       "name": "remote",
       "args": [
         {
@@ -893,6 +1028,9 @@
           "value": "2"
         }
       }
+    ],
+    "trailingComments": [
+      "-- { serverError NOT_IMPLEMENTED }"
     ]
   },
   {
@@ -927,7 +1065,7 @@
       }
     ],
     "from": {
-      "kind": "tableFunction",
+      "kind": "tableFunctionRef",
       "name": "remote",
       "args": [
         {
@@ -969,6 +1107,17 @@
         },
         "direction": "ASC"
       }
+    ],
+    "leadingComments": [
+      "-- proper ORDER BY w/window functions"
     ]
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "t_01568"
+    }
   }
 ]

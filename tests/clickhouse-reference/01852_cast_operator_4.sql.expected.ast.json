@@ -1,5 +1,18 @@
 [
   {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "enable_analyzer",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -9,7 +22,7 @@
           "name": "arrayElement",
           "args": [
             {
-              "kind": "array",
+              "kind": "arrayLiteral",
               "elements": [
                 {
                   "kind": "literal",
@@ -53,7 +66,7 @@
             {
               "kind": "castExpr",
               "expr": {
-                "kind": "array",
+                "kind": "arrayLiteral",
                 "elements": [
                   {
                     "kind": "literal",
@@ -100,7 +113,7 @@
             {
               "kind": "castExpr",
               "expr": {
-                "kind": "array",
+                "kind": "arrayLiteral",
                 "elements": [
                   {
                     "kind": "literal",
@@ -132,7 +145,7 @@
                   {
                     "kind": "castExpr",
                     "expr": {
-                      "kind": "array",
+                      "kind": "arrayLiteral",
                       "elements": [
                         {
                           "kind": "columnRef",
@@ -170,7 +183,7 @@
       }
     ],
     "from": {
-      "kind": "tableFunction",
+      "kind": "tableFunctionRef",
       "name": "numbers",
       "args": [
         {
@@ -180,6 +193,60 @@
         }
       ]
     }
+  },
+  {
+    "kind": "select",
+    "with": [
+      {
+        "kind": "cteExpr",
+        "name": "x",
+        "expr": {
+          "kind": "arrayLiteral",
+          "elements": [
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "3"
+            },
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "4"
+            },
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "5"
+            }
+          ],
+          "source": "[3,4,5]"
+        }
+      }
+    ],
+    "select": [
+      {
+        "kind": "castExpr",
+        "expr": {
+          "kind": "functionCall",
+          "name": "arrayElement",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "x"
+              ]
+            },
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "1"
+            }
+          ]
+        },
+        "type": "Int32",
+        "operator": true
+      }
+    ]
   },
   {
     "kind": "select",
@@ -262,6 +329,60 @@
               "kind": "literal",
               "type": "UInt64",
               "value": "2"
+            }
+          ]
+        },
+        "type": "Int32",
+        "operator": true
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "with": [
+      {
+        "kind": "cteExpr",
+        "name": "x",
+        "expr": {
+          "kind": "functionCall",
+          "name": "tuple",
+          "args": [
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "3"
+            },
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "4"
+            },
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "5"
+            }
+          ]
+        }
+      }
+    ],
+    "select": [
+      {
+        "kind": "castExpr",
+        "expr": {
+          "kind": "functionCall",
+          "name": "tupleElement",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "x"
+              ]
+            },
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "1"
             }
           ]
         },

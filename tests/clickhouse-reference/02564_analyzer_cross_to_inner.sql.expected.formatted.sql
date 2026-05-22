@@ -1,3 +1,62 @@
+SET enable_analyzer = 1;
+
+DROP TABLE IF EXISTS t1;
+
+DROP TABLE IF EXISTS t2;
+
+DROP TABLE IF EXISTS t3;
+
+DROP TABLE IF EXISTS t4;
+
+DROP TABLE IF EXISTS t5;
+
+CREATE TABLE t1
+(
+    a UInt64,
+    b UInt64
+)
+ENGINE = Log;
+
+INSERT INTO t1;
+
+CREATE TABLE t2
+(
+    a UInt64,
+    b UInt64
+)
+ENGINE = Log;
+
+INSERT INTO t2;
+
+CREATE TABLE t3
+(
+    a UInt64,
+    b UInt64
+)
+ENGINE = Log;
+
+INSERT INTO t3;
+
+CREATE TABLE t4
+(
+    a UInt64,
+    b UInt64
+)
+ENGINE = Log;
+
+INSERT INTO t4;
+
+CREATE TABLE t5
+(
+    a UInt64,
+    b UInt64
+)
+ENGINE = Log;
+
+INSERT INTO t5;
+
+SET cross_to_inner_join_rewrite = 1;
+
 SELECT *
 FROM
     t1
@@ -77,6 +136,7 @@ WHERE t1.a = t2.a
     AND t3.a = t5.a
     AND t4.a = t5.a;
 
+-- { echoOff }
 SELECT *
 FROM
     t1
@@ -87,4 +147,4 @@ CROSS JOIN (
         WHERE a + 1 = b
     ) AS t3
 WHERE t1.a = if(t2.b > 0, t2.a, 0)
-SETTINGS cross_to_inner_join_rewrite = 2;
+SETTINGS cross_to_inner_join_rewrite = 2; -- { serverError INCORRECT_QUERY }

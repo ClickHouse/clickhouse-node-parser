@@ -1,5 +1,207 @@
 [
   {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "mt_00168"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "mt_00168_buffer"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "allow_deprecated_syntax_for_merge_tree",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "mt_00168"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "EventDate",
+        "type": {
+          "name": "Date"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "UTCEventTime",
+        "type": {
+          "name": "DateTime"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "MoscowEventDate",
+        "type": {
+          "name": "Date"
+        },
+        "defaultKind": "DEFAULT",
+        "defaultExpr": {
+          "kind": "functionCall",
+          "name": "toDate",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "UTCEventTime"
+              ]
+            }
+          ]
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree",
+      "args": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "EventDate"
+          ]
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "UTCEventTime"
+          ]
+        },
+        {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "8192"
+        }
+      ]
+    }
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "mt_00168_buffer"
+    },
+    "asTable": {
+      "kind": "tableRef",
+      "table": "mt_00168"
+    },
+    "engine": {
+      "name": "Buffer",
+      "args": [
+        {
+          "kind": "functionCall",
+          "name": "currentDatabase",
+          "args": []
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "mt_00168"
+          ]
+        },
+        {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "16"
+        },
+        {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "10"
+        },
+        {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "100"
+        },
+        {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "10000"
+        },
+        {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1000000"
+        },
+        {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "10000000"
+        },
+        {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "100000000"
+        }
+      ]
+    }
+  },
+  {
+    "kind": "describe",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "mt_00168"
+      }
+    }
+  },
+  {
+    "kind": "describe",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "mt_00168_buffer"
+      }
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "mt_00168"
+      }
+    },
+    "columns": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "EventDate"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "UTCEventTime"
+        ]
+      }
+    ]
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -9,6 +211,46 @@
     "from": {
       "kind": "tableRef",
       "table": "mt_00168_buffer"
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "mt_00168_buffer"
+      }
+    },
+    "columns": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "EventDate"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "UTCEventTime"
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "mt_00168_buffer"
+    }
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "mt_00168"
     }
   }
 ]

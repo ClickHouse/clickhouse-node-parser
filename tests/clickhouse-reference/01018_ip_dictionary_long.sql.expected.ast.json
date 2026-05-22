@@ -1,5 +1,375 @@
 [
   {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "send_logs_level",
+        "value": {
+          "kind": "literal",
+          "type": "String",
+          "value": "fatal"
+        }
+      }
+    ],
+    "leadingComments": [
+      "-- Tags: long"
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "database": {
+        "kind": "queryParam",
+        "name": "CLICKHOUSE_DATABASE",
+        "type": "Identifier"
+      },
+      "table": "table_ipv4_trie"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "prefix",
+        "type": {
+          "name": "String"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "asn",
+        "type": {
+          "name": "UInt32"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "cca2",
+        "type": {
+          "name": "String"
+        }
+      }
+    ],
+    "engine": {
+      "name": "TinyLog"
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "database": {
+          "kind": "queryParam",
+          "name": "CLICKHOUSE_DATABASE",
+          "type": "Identifier"
+        },
+        "table": "table_ipv4_trie"
+      }
+    },
+    "selectQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "alias",
+          "expr": {
+            "kind": "functionCall",
+            "name": "concat",
+            "args": [
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "255.255.255.255/"
+              },
+              {
+                "kind": "functionCall",
+                "name": "toString",
+                "args": [
+                  {
+                    "kind": "binaryExpr",
+                    "op": "%",
+                    "left": {
+                      "kind": "binaryExpr",
+                      "op": "*",
+                      "left": {
+                        "kind": "binaryExpr",
+                        "op": "+",
+                        "left": {
+                          "kind": "columnRef",
+                          "parts": [
+                            "number"
+                          ]
+                        },
+                        "right": {
+                          "kind": "literal",
+                          "type": "UInt64",
+                          "value": "1"
+                        },
+                        "parenthesized": true
+                      },
+                      "right": {
+                        "kind": "literal",
+                        "type": "UInt64",
+                        "value": "13"
+                      }
+                    },
+                    "right": {
+                      "kind": "literal",
+                      "type": "UInt64",
+                      "value": "33"
+                    }
+                  }
+                ]
+              }
+            ]
+          },
+          "alias": "prefix"
+        },
+        {
+          "kind": "alias",
+          "expr": {
+            "kind": "functionCall",
+            "name": "toUInt32",
+            "args": [
+              {
+                "kind": "binaryExpr",
+                "op": "%",
+                "left": {
+                  "kind": "binaryExpr",
+                  "op": "*",
+                  "left": {
+                    "kind": "binaryExpr",
+                    "op": "+",
+                    "left": {
+                      "kind": "columnRef",
+                      "parts": [
+                        "number"
+                      ]
+                    },
+                    "right": {
+                      "kind": "literal",
+                      "type": "UInt64",
+                      "value": "1"
+                    },
+                    "parenthesized": true
+                  },
+                  "right": {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "13"
+                  }
+                },
+                "right": {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "33"
+                }
+              }
+            ]
+          },
+          "alias": "asn"
+        },
+        {
+          "kind": "alias",
+          "expr": {
+            "kind": "literal",
+            "type": "String",
+            "value": "NA"
+          },
+          "alias": "cca2"
+        }
+      ],
+      "from": {
+        "kind": "tableRef",
+        "database": "system",
+        "table": "numbers"
+      },
+      "limit": {
+        "count": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "33"
+        }
+      }
+    },
+    "leadingComments": [
+      "-- numbers reordered to test sorting criteria too"
+    ]
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "database": {
+          "kind": "queryParam",
+          "name": "CLICKHOUSE_DATABASE",
+          "type": "Identifier"
+        },
+        "table": "table_ipv4_trie"
+      }
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "database": {
+          "kind": "queryParam",
+          "name": "CLICKHOUSE_DATABASE",
+          "type": "Identifier"
+        },
+        "table": "table_ipv4_trie"
+      }
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "database": {
+          "kind": "queryParam",
+          "name": "CLICKHOUSE_DATABASE",
+          "type": "Identifier"
+        },
+        "table": "table_ipv4_trie"
+      }
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "database": {
+          "kind": "queryParam",
+          "name": "CLICKHOUSE_DATABASE",
+          "type": "Identifier"
+        },
+        "table": "table_ipv4_trie"
+      }
+    }
+  },
+  {
+    "kind": "createDictionary",
+    "table": {
+      "kind": "tableRef",
+      "database": {
+        "kind": "queryParam",
+        "name": "CLICKHOUSE_DATABASE",
+        "type": "Identifier"
+      },
+      "table": "dict_ipv4_trie"
+    },
+    "dictAttrs": [
+      {
+        "name": "prefix",
+        "type": {
+          "name": "String"
+        }
+      },
+      {
+        "name": "asn",
+        "type": {
+          "name": "UInt32"
+        }
+      },
+      {
+        "name": "cca2",
+        "type": {
+          "name": "String"
+        }
+      }
+    ],
+    "dictDef": {
+      "primaryKey": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "prefix"
+          ]
+        }
+      ],
+      "source": {
+        "name": "clickhouse",
+        "pairs": [
+          {
+            "name": "host",
+            "value": {
+              "kind": "literal",
+              "type": "String",
+              "value": "localhost"
+            }
+          },
+          {
+            "name": "port",
+            "value": {
+              "kind": "functionCall",
+              "name": "tcpPort",
+              "args": []
+            }
+          },
+          {
+            "name": "user",
+            "value": {
+              "kind": "literal",
+              "type": "String",
+              "value": "default"
+            }
+          },
+          {
+            "name": "db",
+            "value": {
+              "kind": "functionCall",
+              "name": "currentDatabase",
+              "args": []
+            }
+          },
+          {
+            "name": "table",
+            "value": {
+              "kind": "literal",
+              "type": "String",
+              "value": "table_ipv4_trie"
+            }
+          }
+        ]
+      },
+      "layout": {
+        "name": "IP_TRIE",
+        "pairs": []
+      },
+      "lifetime": {
+        "min": 10,
+        "max": 100
+      },
+      "settings": [
+        {
+          "name": "dictionary_use_async_executor",
+          "value": {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "1"
+          }
+        },
+        {
+          "name": "max_threads",
+          "value": {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "8"
+          }
+        }
+      ]
+    }
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -55,6 +425,12 @@
           ]
         }
       }
+    ],
+    "leadingComments": [
+      "-- fuzzer"
+    ],
+    "trailingComments": [
+      "-- { serverError BAD_ARGUMENTS }"
     ]
   },
   {
@@ -2872,6 +3248,9 @@
           ]
         }
       }
+    ],
+    "leadingComments": [
+      "-- check that dictionary works with aliased types `IPv4` and `IPv6`"
     ]
   },
   {
@@ -2933,6 +3312,57 @@
     ]
   },
   {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "database": {
+        "kind": "queryParam",
+        "name": "CLICKHOUSE_DATABASE",
+        "type": "Identifier"
+      },
+      "table": "table_from_ipv4_trie_dict"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "prefix",
+        "type": {
+          "name": "String"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "asn",
+        "type": {
+          "name": "UInt32"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "cca2",
+        "type": {
+          "name": "String"
+        }
+      }
+    ],
+    "engine": {
+      "name": "Dictionary",
+      "args": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            {
+              "kind": "queryParam",
+              "name": "CLICKHOUSE_DATABASE",
+              "type": "Identifier"
+            },
+            "dict_ipv4_trie"
+          ]
+        }
+      ]
+    }
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -2974,7 +3404,11 @@
     ],
     "from": {
       "kind": "tableRef",
-      "database": "{CLICKHOUSE_DATABASE:Identifier}",
+      "database": {
+        "kind": "queryParam",
+        "name": "CLICKHOUSE_DATABASE",
+        "type": "Identifier"
+      },
       "table": "table_from_ipv4_trie_dict"
     },
     "where": {
@@ -3017,7 +3451,11 @@
     ],
     "from": {
       "kind": "tableRef",
-      "database": "{CLICKHOUSE_DATABASE:Identifier}",
+      "database": {
+        "kind": "queryParam",
+        "name": "CLICKHOUSE_DATABASE",
+        "type": "Identifier"
+      },
       "table": "table_from_ipv4_trie_dict"
     }
   },
@@ -3048,8 +3486,268 @@
     ],
     "from": {
       "kind": "tableRef",
-      "database": "{CLICKHOUSE_DATABASE:Identifier}",
+      "database": {
+        "kind": "queryParam",
+        "name": "CLICKHOUSE_DATABASE",
+        "type": "Identifier"
+      },
       "table": "table_from_ipv4_trie_dict"
+    }
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "database": {
+        "kind": "queryParam",
+        "name": "CLICKHOUSE_DATABASE",
+        "type": "Identifier"
+      },
+      "table": "table_from_ipv4_trie_dict"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "drop",
+    "targetType": "DICTIONARY",
+    "table": {
+      "kind": "tableRef",
+      "database": {
+        "kind": "queryParam",
+        "name": "CLICKHOUSE_DATABASE",
+        "type": "Identifier"
+      },
+      "table": "dict_ipv4_trie"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "database": {
+        "kind": "queryParam",
+        "name": "CLICKHOUSE_DATABASE",
+        "type": "Identifier"
+      },
+      "table": "table_ipv4_trie"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "database": {
+        "kind": "queryParam",
+        "name": "CLICKHOUSE_DATABASE",
+        "type": "Identifier"
+      },
+      "table": "table_ipv4_trie"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "prefix",
+        "type": {
+          "name": "String"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "val",
+        "type": {
+          "name": "UInt32"
+        }
+      }
+    ],
+    "engine": {
+      "name": "TinyLog"
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "database": {
+          "kind": "queryParam",
+          "name": "CLICKHOUSE_DATABASE",
+          "type": "Identifier"
+        },
+        "table": "table_ipv4_trie"
+      }
+    },
+    "selectQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "alias",
+          "expr": {
+            "kind": "functionCall",
+            "name": "concat",
+            "args": [
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "255.255.255.255/"
+              },
+              {
+                "kind": "functionCall",
+                "name": "toString",
+                "args": [
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "number"
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          "alias": "prefix"
+        },
+        {
+          "kind": "alias",
+          "expr": {
+            "kind": "functionCall",
+            "name": "toUInt32",
+            "args": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "number"
+                ]
+              }
+            ]
+          },
+          "alias": "val"
+        }
+      ],
+      "from": {
+        "kind": "tableFunctionRef",
+        "name": "VALUES",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": "number UInt32"
+          },
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "5"
+          },
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "13"
+          },
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "24"
+          },
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "30"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "kind": "createDictionary",
+    "table": {
+      "kind": "tableRef",
+      "database": {
+        "kind": "queryParam",
+        "name": "CLICKHOUSE_DATABASE",
+        "type": "Identifier"
+      },
+      "table": "dict_ipv4_trie"
+    },
+    "dictAttrs": [
+      {
+        "name": "prefix",
+        "type": {
+          "name": "String"
+        }
+      },
+      {
+        "name": "val",
+        "type": {
+          "name": "UInt32"
+        }
+      }
+    ],
+    "dictDef": {
+      "primaryKey": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "prefix"
+          ]
+        }
+      ],
+      "source": {
+        "name": "clickhouse",
+        "pairs": [
+          {
+            "name": "host",
+            "value": {
+              "kind": "literal",
+              "type": "String",
+              "value": "localhost"
+            }
+          },
+          {
+            "name": "port",
+            "value": {
+              "kind": "functionCall",
+              "name": "tcpPort",
+              "args": []
+            }
+          },
+          {
+            "name": "user",
+            "value": {
+              "kind": "literal",
+              "type": "String",
+              "value": "default"
+            }
+          },
+          {
+            "name": "db",
+            "value": {
+              "kind": "functionCall",
+              "name": "currentDatabase",
+              "args": []
+            }
+          },
+          {
+            "name": "table",
+            "value": {
+              "kind": "literal",
+              "type": "String",
+              "value": "table_ipv4_trie"
+            }
+          }
+        ]
+      },
+      "layout": {
+        "name": "IP_TRIE",
+        "pairs": []
+      },
+      "lifetime": {
+        "min": 10,
+        "max": 100
+      }
     }
   },
   {
@@ -4965,6 +5663,419 @@
         }
       }
     ]
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "database": {
+          "kind": "queryParam",
+          "name": "CLICKHOUSE_DATABASE",
+          "type": "Identifier"
+        },
+        "table": "table_ipv4_trie"
+      }
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "database": {
+          "kind": "queryParam",
+          "name": "CLICKHOUSE_DATABASE",
+          "type": "Identifier"
+        },
+        "table": "table_ipv4_trie"
+      }
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "database": {
+          "kind": "queryParam",
+          "name": "CLICKHOUSE_DATABASE",
+          "type": "Identifier"
+        },
+        "table": "table_ipv4_trie"
+      }
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "database": {
+          "kind": "queryParam",
+          "name": "CLICKHOUSE_DATABASE",
+          "type": "Identifier"
+        },
+        "table": "table_ipv4_trie"
+      }
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "database": {
+          "kind": "queryParam",
+          "name": "CLICKHOUSE_DATABASE",
+          "type": "Identifier"
+        },
+        "table": "table_ipv4_trie"
+      }
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "database": {
+          "kind": "queryParam",
+          "name": "CLICKHOUSE_DATABASE",
+          "type": "Identifier"
+        },
+        "table": "table_ipv4_trie"
+      }
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "database": {
+          "kind": "queryParam",
+          "name": "CLICKHOUSE_DATABASE",
+          "type": "Identifier"
+        },
+        "table": "table_ipv4_trie"
+      }
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "database": {
+          "kind": "queryParam",
+          "name": "CLICKHOUSE_DATABASE",
+          "type": "Identifier"
+        },
+        "table": "table_ipv4_trie"
+      }
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "database": {
+          "kind": "queryParam",
+          "name": "CLICKHOUSE_DATABASE",
+          "type": "Identifier"
+        },
+        "table": "table_ipv4_trie"
+      }
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "database": {
+          "kind": "queryParam",
+          "name": "CLICKHOUSE_DATABASE",
+          "type": "Identifier"
+        },
+        "table": "table_ipv4_trie"
+      }
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "database": {
+          "kind": "queryParam",
+          "name": "CLICKHOUSE_DATABASE",
+          "type": "Identifier"
+        },
+        "table": "table_ipv4_trie"
+      }
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "database": {
+          "kind": "queryParam",
+          "name": "CLICKHOUSE_DATABASE",
+          "type": "Identifier"
+        },
+        "table": "table_ipv4_trie"
+      }
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "database": {
+          "kind": "queryParam",
+          "name": "CLICKHOUSE_DATABASE",
+          "type": "Identifier"
+        },
+        "table": "table_ipv4_trie"
+      }
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "database": {
+          "kind": "queryParam",
+          "name": "CLICKHOUSE_DATABASE",
+          "type": "Identifier"
+        },
+        "table": "table_ipv4_trie"
+      }
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "database": {
+          "kind": "queryParam",
+          "name": "CLICKHOUSE_DATABASE",
+          "type": "Identifier"
+        },
+        "table": "table_ipv4_trie"
+      }
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "database": {
+          "kind": "queryParam",
+          "name": "CLICKHOUSE_DATABASE",
+          "type": "Identifier"
+        },
+        "table": "table_ipv4_trie"
+      }
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "database": {
+          "kind": "queryParam",
+          "name": "CLICKHOUSE_DATABASE",
+          "type": "Identifier"
+        },
+        "table": "table_ipv4_trie"
+      }
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "database": {
+          "kind": "queryParam",
+          "name": "CLICKHOUSE_DATABASE",
+          "type": "Identifier"
+        },
+        "table": "table_ipv4_trie"
+      }
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "database": {
+          "kind": "queryParam",
+          "name": "CLICKHOUSE_DATABASE",
+          "type": "Identifier"
+        },
+        "table": "table_ipv4_trie"
+      }
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "database": {
+          "kind": "queryParam",
+          "name": "CLICKHOUSE_DATABASE",
+          "type": "Identifier"
+        },
+        "table": "table_ipv4_trie"
+      }
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "database": {
+          "kind": "queryParam",
+          "name": "CLICKHOUSE_DATABASE",
+          "type": "Identifier"
+        },
+        "table": "table_ipv4_trie"
+      }
+    }
+  },
+  {
+    "kind": "createDictionary",
+    "table": {
+      "kind": "tableRef",
+      "database": {
+        "kind": "queryParam",
+        "name": "CLICKHOUSE_DATABASE",
+        "type": "Identifier"
+      },
+      "table": "dict_ipv4_trie"
+    },
+    "dictAttrs": [
+      {
+        "name": "prefix",
+        "type": {
+          "name": "String"
+        }
+      },
+      {
+        "name": "val",
+        "type": {
+          "name": "UInt32"
+        }
+      }
+    ],
+    "dictDef": {
+      "primaryKey": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "prefix"
+          ]
+        }
+      ],
+      "source": {
+        "name": "clickhouse",
+        "pairs": [
+          {
+            "name": "host",
+            "value": {
+              "kind": "literal",
+              "type": "String",
+              "value": "localhost"
+            }
+          },
+          {
+            "name": "port",
+            "value": {
+              "kind": "functionCall",
+              "name": "tcpPort",
+              "args": []
+            }
+          },
+          {
+            "name": "user",
+            "value": {
+              "kind": "literal",
+              "type": "String",
+              "value": "default"
+            }
+          },
+          {
+            "name": "db",
+            "value": {
+              "kind": "functionCall",
+              "name": "currentDatabase",
+              "args": []
+            }
+          },
+          {
+            "name": "table",
+            "value": {
+              "kind": "literal",
+              "type": "String",
+              "value": "table_ipv4_trie"
+            }
+          }
+        ]
+      },
+      "layout": {
+        "name": "IP_TRIE",
+        "pairs": [
+          {
+            "name": "ACCESS_TO_KEY_FROM_ATTRIBUTES",
+            "value": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "1"
+            }
+          }
+        ]
+      },
+      "lifetime": {
+        "min": 10,
+        "max": 100
+      }
+    }
   },
   {
     "kind": "select",
@@ -7447,6 +8558,281 @@
         }
       }
     ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "database": {
+        "kind": "queryParam",
+        "name": "CLICKHOUSE_DATABASE",
+        "type": "Identifier"
+      },
+      "table": "table_ip_trie"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "prefix",
+        "type": {
+          "name": "String"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "val",
+        "type": {
+          "name": "String"
+        }
+      }
+    ],
+    "engine": {
+      "name": "TinyLog"
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "database": {
+          "kind": "queryParam",
+          "name": "CLICKHOUSE_DATABASE",
+          "type": "Identifier"
+        },
+        "table": "table_ip_trie"
+      }
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "database": {
+          "kind": "queryParam",
+          "name": "CLICKHOUSE_DATABASE",
+          "type": "Identifier"
+        },
+        "table": "table_ip_trie"
+      }
+    },
+    "selectQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "alias",
+          "expr": {
+            "kind": "functionCall",
+            "name": "concat",
+            "args": [
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "ffff:ffff:ffff:ffff:ffff:ffff:ffff:ffff/"
+              },
+              {
+                "kind": "functionCall",
+                "name": "toString",
+                "args": [
+                  {
+                    "kind": "binaryExpr",
+                    "op": "%",
+                    "left": {
+                      "kind": "binaryExpr",
+                      "op": "*",
+                      "left": {
+                        "kind": "binaryExpr",
+                        "op": "+",
+                        "left": {
+                          "kind": "columnRef",
+                          "parts": [
+                            "number"
+                          ]
+                        },
+                        "right": {
+                          "kind": "literal",
+                          "type": "UInt64",
+                          "value": "1"
+                        },
+                        "parenthesized": true
+                      },
+                      "right": {
+                        "kind": "literal",
+                        "type": "UInt64",
+                        "value": "13"
+                      }
+                    },
+                    "right": {
+                      "kind": "literal",
+                      "type": "UInt64",
+                      "value": "129"
+                    }
+                  }
+                ]
+              }
+            ]
+          },
+          "alias": "prefix"
+        },
+        {
+          "kind": "alias",
+          "expr": {
+            "kind": "functionCall",
+            "name": "toString",
+            "args": [
+              {
+                "kind": "binaryExpr",
+                "op": "%",
+                "left": {
+                  "kind": "binaryExpr",
+                  "op": "*",
+                  "left": {
+                    "kind": "binaryExpr",
+                    "op": "+",
+                    "left": {
+                      "kind": "columnRef",
+                      "parts": [
+                        "number"
+                      ]
+                    },
+                    "right": {
+                      "kind": "literal",
+                      "type": "UInt64",
+                      "value": "1"
+                    },
+                    "parenthesized": true
+                  },
+                  "right": {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "13"
+                  }
+                },
+                "right": {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "129"
+                }
+              }
+            ]
+          },
+          "alias": "val"
+        }
+      ],
+      "from": {
+        "kind": "tableRef",
+        "database": "system",
+        "table": "numbers"
+      },
+      "limit": {
+        "count": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "129"
+        }
+      }
+    }
+  },
+  {
+    "kind": "createDictionary",
+    "table": {
+      "kind": "tableRef",
+      "database": {
+        "kind": "queryParam",
+        "name": "CLICKHOUSE_DATABASE",
+        "type": "Identifier"
+      },
+      "table": "dict_ip_trie"
+    },
+    "dictAttrs": [
+      {
+        "name": "prefix",
+        "type": {
+          "name": "String"
+        }
+      },
+      {
+        "name": "val",
+        "type": {
+          "name": "String"
+        }
+      }
+    ],
+    "dictDef": {
+      "primaryKey": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "prefix"
+          ]
+        }
+      ],
+      "source": {
+        "name": "clickhouse",
+        "pairs": [
+          {
+            "name": "host",
+            "value": {
+              "kind": "literal",
+              "type": "String",
+              "value": "localhost"
+            }
+          },
+          {
+            "name": "port",
+            "value": {
+              "kind": "functionCall",
+              "name": "tcpPort",
+              "args": []
+            }
+          },
+          {
+            "name": "user",
+            "value": {
+              "kind": "literal",
+              "type": "String",
+              "value": "default"
+            }
+          },
+          {
+            "name": "db",
+            "value": {
+              "kind": "functionCall",
+              "name": "currentDatabase",
+              "args": []
+            }
+          },
+          {
+            "name": "table",
+            "value": {
+              "kind": "literal",
+              "type": "String",
+              "value": "table_ip_trie"
+            }
+          }
+        ]
+      },
+      "layout": {
+        "name": "IP_TRIE",
+        "pairs": [
+          {
+            "name": "ACCESS_TO_KEY_FROM_ATTRIBUTES",
+            "value": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "1"
+            }
+          }
+        ]
+      },
+      "lifetime": {
+        "min": 10,
+        "max": 100
+      }
+    }
   },
   {
     "kind": "select",
@@ -15950,6 +17336,50 @@
     ]
   },
   {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "database": {
+        "kind": "queryParam",
+        "name": "CLICKHOUSE_DATABASE",
+        "type": "Identifier"
+      },
+      "table": "table_from_ip_trie_dict"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "prefix",
+        "type": {
+          "name": "String"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "val",
+        "type": {
+          "name": "String"
+        }
+      }
+    ],
+    "engine": {
+      "name": "Dictionary",
+      "args": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            {
+              "kind": "queryParam",
+              "name": "CLICKHOUSE_DATABASE",
+              "type": "Identifier"
+            },
+            "dict_ip_trie"
+          ]
+        }
+      ]
+    }
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -15976,7 +17406,11 @@
     ],
     "from": {
       "kind": "tableRef",
-      "database": "{CLICKHOUSE_DATABASE:Identifier}",
+      "database": {
+        "kind": "queryParam",
+        "name": "CLICKHOUSE_DATABASE",
+        "type": "Identifier"
+      },
       "table": "table_from_ip_trie_dict"
     },
     "where": {
@@ -16019,8 +17453,361 @@
     ],
     "from": {
       "kind": "tableRef",
-      "database": "{CLICKHOUSE_DATABASE:Identifier}",
+      "database": {
+        "kind": "queryParam",
+        "name": "CLICKHOUSE_DATABASE",
+        "type": "Identifier"
+      },
       "table": "table_from_ip_trie_dict"
+    }
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "database": {
+        "kind": "queryParam",
+        "name": "CLICKHOUSE_DATABASE",
+        "type": "Identifier"
+      },
+      "table": "table_from_ip_trie_dict"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "drop",
+    "targetType": "DICTIONARY",
+    "table": {
+      "kind": "tableRef",
+      "database": {
+        "kind": "queryParam",
+        "name": "CLICKHOUSE_DATABASE",
+        "type": "Identifier"
+      },
+      "table": "dict_ip_trie"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "database": {
+        "kind": "queryParam",
+        "name": "CLICKHOUSE_DATABASE",
+        "type": "Identifier"
+      },
+      "table": "table_ip_trie"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "database": {
+          "kind": "queryParam",
+          "name": "CLICKHOUSE_DATABASE",
+          "type": "Identifier"
+        },
+        "table": "table_ip_trie"
+      }
+    },
+    "selectQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "alias",
+          "expr": {
+            "kind": "functionCall",
+            "name": "concat",
+            "args": [
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "ffff:ffff:ffff:ffff:ffff:ffff:ffff:ffff/"
+              },
+              {
+                "kind": "functionCall",
+                "name": "toString",
+                "args": [
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "number"
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          "alias": "prefix"
+        },
+        {
+          "kind": "alias",
+          "expr": {
+            "kind": "functionCall",
+            "name": "toString",
+            "args": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "number"
+                ]
+              }
+            ]
+          },
+          "alias": "val"
+        }
+      ],
+      "from": {
+        "kind": "tableFunctionRef",
+        "name": "VALUES",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": "number UInt32"
+          },
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "5"
+          },
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "13"
+          },
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "24"
+          },
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "48"
+          },
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "49"
+          },
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "99"
+          },
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "127"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "database": {
+          "kind": "queryParam",
+          "name": "CLICKHOUSE_DATABASE",
+          "type": "Identifier"
+        },
+        "table": "table_ip_trie"
+      }
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "database": {
+          "kind": "queryParam",
+          "name": "CLICKHOUSE_DATABASE",
+          "type": "Identifier"
+        },
+        "table": "table_ip_trie"
+      }
+    },
+    "selectQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "alias",
+          "expr": {
+            "kind": "functionCall",
+            "name": "concat",
+            "args": [
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "255.255.255.255/"
+              },
+              {
+                "kind": "functionCall",
+                "name": "toString",
+                "args": [
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "number"
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          "alias": "prefix"
+        },
+        {
+          "kind": "alias",
+          "expr": {
+            "kind": "functionCall",
+            "name": "toString",
+            "args": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "number"
+                ]
+              }
+            ]
+          },
+          "alias": "val"
+        }
+      ],
+      "from": {
+        "kind": "tableFunctionRef",
+        "name": "VALUES",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": "number UInt32"
+          },
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "5"
+          },
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "13"
+          },
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "24"
+          },
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "30"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "kind": "createDictionary",
+    "table": {
+      "kind": "tableRef",
+      "database": {
+        "kind": "queryParam",
+        "name": "CLICKHOUSE_DATABASE",
+        "type": "Identifier"
+      },
+      "table": "dict_ip_trie"
+    },
+    "dictAttrs": [
+      {
+        "name": "prefix",
+        "type": {
+          "name": "String"
+        }
+      },
+      {
+        "name": "val",
+        "type": {
+          "name": "String"
+        }
+      }
+    ],
+    "dictDef": {
+      "primaryKey": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "prefix"
+          ]
+        }
+      ],
+      "source": {
+        "name": "clickhouse",
+        "pairs": [
+          {
+            "name": "host",
+            "value": {
+              "kind": "literal",
+              "type": "String",
+              "value": "localhost"
+            }
+          },
+          {
+            "name": "port",
+            "value": {
+              "kind": "functionCall",
+              "name": "tcpPort",
+              "args": []
+            }
+          },
+          {
+            "name": "user",
+            "value": {
+              "kind": "literal",
+              "type": "String",
+              "value": "default"
+            }
+          },
+          {
+            "name": "db",
+            "value": {
+              "kind": "functionCall",
+              "name": "currentDatabase",
+              "args": []
+            }
+          },
+          {
+            "name": "table",
+            "value": {
+              "kind": "literal",
+              "type": "String",
+              "value": "table_ip_trie"
+            }
+          }
+        ]
+      },
+      "layout": {
+        "name": "IP_TRIE",
+        "pairs": []
+      },
+      "lifetime": {
+        "min": 10,
+        "max": 100
+      }
     }
   },
   {
@@ -24185,5 +25972,18 @@
         }
       }
     ]
+  },
+  {
+    "kind": "drop",
+    "targetType": "DATABASE",
+    "table": {
+      "kind": "tableRef",
+      "table": {
+        "kind": "queryParam",
+        "name": "CLICKHOUSE_DATABASE",
+        "type": "Identifier"
+      }
+    },
+    "ifExists": true
   }
 ]

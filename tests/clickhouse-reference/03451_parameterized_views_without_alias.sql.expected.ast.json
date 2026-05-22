@@ -1,5 +1,46 @@
 [
   {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "tables": [
+      {
+        "kind": "tableRef",
+        "table": "parameterized_view_without_renaming"
+      },
+      {
+        "kind": "tableRef",
+        "table": "parameterized_view_with_renaming"
+      }
+    ],
+    "ifExists": true
+  },
+  {
+    "kind": "createView",
+    "table": {
+      "kind": "tableRef",
+      "table": "parameterized_view_without_renaming"
+    },
+    "asQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "binaryExpr",
+          "op": "*",
+          "left": {
+            "kind": "queryParam",
+            "name": "test",
+            "type": "Int32"
+          },
+          "right": {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "2"
+          }
+        }
+      ]
+    }
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -7,7 +48,7 @@
       }
     ],
     "from": {
-      "kind": "tableFunction",
+      "kind": "tableFunctionRef",
       "name": "parameterized_view_without_renaming",
       "args": [
         {
@@ -29,6 +70,36 @@
     }
   },
   {
+    "kind": "createView",
+    "table": {
+      "kind": "tableRef",
+      "table": "parameterized_view_with_renaming"
+    },
+    "asQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "alias",
+          "expr": {
+            "kind": "binaryExpr",
+            "op": "*",
+            "left": {
+              "kind": "queryParam",
+              "name": "test",
+              "type": "Int32"
+            },
+            "right": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "2"
+            }
+          },
+          "alias": "result"
+        }
+      ]
+    }
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -36,7 +107,7 @@
       }
     ],
     "from": {
-      "kind": "tableFunction",
+      "kind": "tableFunctionRef",
       "name": "parameterized_view_with_renaming",
       "args": [
         {
@@ -56,5 +127,19 @@
         }
       ]
     }
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "tables": [
+      {
+        "kind": "tableRef",
+        "table": "parameterized_view_without_renaming"
+      },
+      {
+        "kind": "tableRef",
+        "table": "parameterized_view_with_renaming"
+      }
+    ]
   }
 ]

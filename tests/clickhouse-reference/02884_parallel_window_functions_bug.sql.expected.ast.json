@@ -1,5 +1,524 @@
 [
   {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "posts"
+    },
+    "ifNotExists": true,
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "page_id",
+        "type": {
+          "name": "LowCardinality",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "String"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "post_id",
+        "type": {
+          "name": "String"
+        },
+        "codec": [
+          {
+            "name": "LZ4"
+          }
+        ]
+      },
+      {
+        "kind": "columnDef",
+        "name": "host_id",
+        "type": {
+          "name": "UInt32"
+        },
+        "codec": [
+          {
+            "name": "T64"
+          },
+          {
+            "name": "LZ4"
+          }
+        ]
+      },
+      {
+        "kind": "columnDef",
+        "name": "path_id",
+        "type": {
+          "name": "UInt32"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "created",
+        "type": {
+          "name": "DateTime"
+        },
+        "codec": [
+          {
+            "name": "T64"
+          },
+          {
+            "name": "LZ4"
+          }
+        ]
+      },
+      {
+        "kind": "columnDef",
+        "name": "as_of",
+        "type": {
+          "name": "DateTime"
+        },
+        "codec": [
+          {
+            "name": "T64"
+          },
+          {
+            "name": "LZ4"
+          }
+        ]
+      }
+    ],
+    "engine": {
+      "name": "ReplacingMergeTree",
+      "args": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "as_of"
+          ]
+        }
+      ]
+    },
+    "partitionBy": {
+      "kind": "functionCall",
+      "name": "toStartOfMonth",
+      "args": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "created"
+          ]
+        }
+      ]
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "page_id"
+          ]
+        }
+      },
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "post_id"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "post_metrics"
+    },
+    "ifNotExists": true,
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "page_id",
+        "type": {
+          "name": "LowCardinality",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "String"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "post_id",
+        "type": {
+          "name": "String"
+        },
+        "codec": [
+          {
+            "name": "LZ4"
+          }
+        ]
+      },
+      {
+        "kind": "columnDef",
+        "name": "created",
+        "type": {
+          "name": "DateTime"
+        },
+        "codec": [
+          {
+            "name": "T64"
+          },
+          {
+            "name": "LZ4"
+          }
+        ]
+      },
+      {
+        "kind": "columnDef",
+        "name": "impressions",
+        "type": {
+          "name": "UInt32"
+        },
+        "codec": [
+          {
+            "name": "T64"
+          },
+          {
+            "name": "LZ4"
+          }
+        ]
+      },
+      {
+        "kind": "columnDef",
+        "name": "clicks",
+        "type": {
+          "name": "UInt32"
+        },
+        "codec": [
+          {
+            "name": "T64"
+          },
+          {
+            "name": "LZ4"
+          }
+        ]
+      },
+      {
+        "kind": "columnDef",
+        "name": "as_of",
+        "type": {
+          "name": "DateTime"
+        },
+        "codec": [
+          {
+            "name": "T64"
+          },
+          {
+            "name": "LZ4"
+          }
+        ]
+      }
+    ],
+    "engine": {
+      "name": "ReplacingMergeTree",
+      "args": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "as_of"
+          ]
+        }
+      ]
+    },
+    "partitionBy": {
+      "kind": "functionCall",
+      "name": "toStartOfMonth",
+      "args": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "created"
+          ]
+        }
+      ]
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "page_id"
+          ]
+        }
+      },
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "post_id"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "posts"
+      }
+    },
+    "selectQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "functionCall",
+          "name": "repeat",
+          "args": [
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "a"
+            },
+            {
+              "kind": "binaryExpr",
+              "op": "+",
+              "left": {
+                "kind": "binaryExpr",
+                "op": "%",
+                "left": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "number"
+                  ]
+                },
+                "right": {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "10"
+                },
+                "parenthesized": true
+              },
+              "right": {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "1"
+              }
+            }
+          ]
+        },
+        {
+          "kind": "functionCall",
+          "name": "toString",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "number"
+              ]
+            }
+          ]
+        },
+        {
+          "kind": "binaryExpr",
+          "op": "%",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "number"
+            ]
+          },
+          "right": {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "10"
+          }
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "number"
+          ]
+        },
+        {
+          "kind": "binaryExpr",
+          "op": "-",
+          "left": {
+            "kind": "functionCall",
+            "name": "now",
+            "args": []
+          },
+          "right": {
+            "kind": "functionCall",
+            "name": "toIntervalMinute",
+            "args": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "number"
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "kind": "functionCall",
+          "name": "now",
+          "args": []
+        }
+      ],
+      "from": {
+        "kind": "tableFunctionRef",
+        "name": "numbers",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "100000"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "post_metrics"
+      }
+    },
+    "selectQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "functionCall",
+          "name": "repeat",
+          "args": [
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "a"
+            },
+            {
+              "kind": "binaryExpr",
+              "op": "+",
+              "left": {
+                "kind": "binaryExpr",
+                "op": "%",
+                "left": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "number"
+                  ]
+                },
+                "right": {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "10"
+                },
+                "parenthesized": true
+              },
+              "right": {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "1"
+              }
+            }
+          ]
+        },
+        {
+          "kind": "functionCall",
+          "name": "toString",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "number"
+              ]
+            }
+          ]
+        },
+        {
+          "kind": "binaryExpr",
+          "op": "-",
+          "left": {
+            "kind": "functionCall",
+            "name": "now",
+            "args": []
+          },
+          "right": {
+            "kind": "functionCall",
+            "name": "toIntervalMinute",
+            "args": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "number"
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "kind": "binaryExpr",
+          "op": "*",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "number"
+            ]
+          },
+          "right": {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "100"
+          }
+        },
+        {
+          "kind": "binaryExpr",
+          "op": "*",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "number"
+            ]
+          },
+          "right": {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "10"
+          }
+        },
+        {
+          "kind": "functionCall",
+          "name": "now",
+          "args": []
+        }
+      ],
+      "from": {
+        "kind": "tableFunctionRef",
+        "name": "numbers",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "100000"
+          }
+        ]
+      }
+    }
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -37,7 +556,7 @@
         "kind": "select",
         "with": [
           {
-            "kind": "subquery",
+            "kind": "cteSubquery",
             "name": "as_of_posts",
             "query": {
               "kind": "select",
@@ -54,7 +573,7 @@
                     "window": {
                       "partitionBy": [
                         {
-                          "kind": "tuple",
+                          "kind": "tupleLiteral",
                           "elements": [
                             {
                               "kind": "columnRef",
@@ -145,7 +664,7 @@
             }
           },
           {
-            "kind": "subquery",
+            "kind": "cteSubquery",
             "name": "as_of_post_metrics",
             "query": {
               "kind": "select",
@@ -162,7 +681,7 @@
                     "window": {
                       "partitionBy": [
                         {
-                          "kind": "tuple",
+                          "kind": "tupleLiteral",
                           "elements": [
                             {
                               "kind": "columnRef",
@@ -319,7 +838,7 @@
             "kind": "tableRef",
             "table": "as_of_posts"
           },
-          "kind": "join",
+          "kind": "joinExpr",
           "joinType": "LEFT",
           "right": {
             "kind": "tableRef",

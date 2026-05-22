@@ -1,5 +1,218 @@
 [
   {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "null_table"
+    },
+    "ifExists": true,
+    "leadingComments": [
+      "-- Based on https://github.com/ClickHouse/ClickHouse/issues/52436",
+      "-- Test that inserts performed via Buffer table engine land into destination table.",
+      "-- { echoOn }"
+    ]
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "null_table_buffer"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "null_mv"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "drop",
+    "targetType": "VIEW",
+    "table": {
+      "kind": "tableRef",
+      "table": "number_view"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "null_table"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "number",
+        "type": {
+          "name": "UInt64"
+        }
+      }
+    ],
+    "engine": {
+      "name": "Null"
+    }
+  },
+  {
+    "kind": "createView",
+    "table": {
+      "kind": "tableRef",
+      "table": "number_view"
+    },
+    "asQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "asterisk"
+        }
+      ],
+      "from": {
+        "kind": "tableFunctionRef",
+        "name": "numbers",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "10"
+          }
+        ],
+        "alias": "tb"
+      }
+    }
+  },
+  {
+    "kind": "createMaterializedView",
+    "table": {
+      "kind": "tableRef",
+      "table": "null_mv"
+    },
+    "engine": {
+      "name": "Log"
+    },
+    "asQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "asterisk"
+        }
+      ],
+      "from": {
+        "left": {
+          "kind": "tableRef",
+          "table": "null_table"
+        },
+        "kind": "joinExpr",
+        "joinType": "LEFT",
+        "right": {
+          "kind": "tableRef",
+          "table": "number_view",
+          "alias": "tb"
+        },
+        "constraint": {
+          "kind": "using",
+          "columns": [
+            "number"
+          ]
+        }
+      }
+    }
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "null_table_buffer"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "number",
+        "type": {
+          "name": "UInt64"
+        }
+      }
+    ],
+    "engine": {
+      "name": "Buffer",
+      "args": [
+        {
+          "kind": "functionCall",
+          "name": "currentDatabase",
+          "args": []
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "null_table"
+          ]
+        },
+        {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        },
+        {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        },
+        {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        },
+        {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "100"
+        },
+        {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "200"
+        },
+        {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "10000"
+        },
+        {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "20000"
+        }
+      ]
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "null_table_buffer"
+      }
+    }
+  },
+  {
+    "kind": "optimize",
+    "table": {
+      "kind": "tableRef",
+      "table": "null_table_buffer"
+    },
+    "leadingComments": [
+      "-- OPTIMIZE query should flush Buffer table, but still it is not guaranteed",
+      "-- (see the comment StorageBuffer::optimize)",
+      "-- But the combination of OPTIMIZE + sleep + OPTIMIZE should be enough."
+    ]
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -28,6 +241,9 @@
     "from": {
       "kind": "tableRef",
       "table": "null_mv"
-    }
+    },
+    "leadingComments": [
+      "-- Insert about should've landed into `null_mv`"
+    ]
   }
 ]

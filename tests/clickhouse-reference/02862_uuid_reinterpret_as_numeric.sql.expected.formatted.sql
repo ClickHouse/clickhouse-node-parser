@@ -1,3 +1,14 @@
+DROP TABLE IF EXISTS t_uuid;
+
+CREATE TABLE t_uuid
+(
+    x UUID
+)
+ENGINE = MergeTree
+ORDER BY x;
+
+INSERT INTO t_uuid;
+
 SELECT reinterpretAsUUID(x)
 FROM t_uuid;
 

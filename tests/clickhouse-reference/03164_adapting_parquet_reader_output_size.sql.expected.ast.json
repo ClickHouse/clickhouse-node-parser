@@ -1,5 +1,257 @@
 [
   {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "max_insert_threads",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ],
+    "leadingComments": [
+      "-- Tags: no-fasttest, no-random-settings"
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "schema_inference_make_columns_nullable",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "engine_file_truncate_on_insert",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "function",
+      "func": {
+        "kind": "tableFunctionRef",
+        "name": "file",
+        "args": [
+          {
+            "kind": "functionCall",
+            "name": "concat",
+            "args": [
+              {
+                "kind": "functionCall",
+                "name": "currentDatabase",
+                "args": []
+              },
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "03164_adapting_parquet_reader_output_size.parquet"
+              }
+            ]
+          },
+          {
+            "kind": "columnRef",
+            "parts": [
+              "Parquet"
+            ]
+          },
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": "short String, long1 String, long2 String, long_low_cardinality String"
+          }
+        ]
+      }
+    },
+    "selectQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "binaryExpr",
+          "op": "%",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "number"
+            ]
+          },
+          "right": {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "100"
+          }
+        },
+        {
+          "kind": "functionCall",
+          "name": "range",
+          "args": [
+            {
+              "kind": "functionCall",
+              "name": "cityHash64",
+              "args": [
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "number"
+                  ]
+                }
+              ]
+            },
+            {
+              "kind": "binaryExpr",
+              "op": "+",
+              "left": {
+                "kind": "functionCall",
+                "name": "cityHash64",
+                "args": [
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "number"
+                    ]
+                  }
+                ]
+              },
+              "right": {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "10"
+              }
+            }
+          ]
+        },
+        {
+          "kind": "functionCall",
+          "name": "repeat",
+          "args": [
+            {
+              "kind": "castExpr",
+              "expr": {
+                "kind": "functionCall",
+                "name": "cityHash64",
+                "args": [
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "number"
+                    ]
+                  }
+                ]
+              },
+              "type": "String",
+              "operator": true
+            },
+            {
+              "kind": "binaryExpr",
+              "op": "+",
+              "left": {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "6"
+              },
+              "right": {
+                "kind": "binaryExpr",
+                "op": "%",
+                "left": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "number"
+                  ]
+                },
+                "right": {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "10"
+                }
+              }
+            }
+          ]
+        },
+        {
+          "kind": "functionCall",
+          "name": "repeat",
+          "args": [
+            {
+              "kind": "castExpr",
+              "expr": {
+                "kind": "binaryExpr",
+                "op": "%",
+                "left": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "number"
+                  ]
+                },
+                "right": {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "10"
+                },
+                "parenthesized": true
+              },
+              "type": "String",
+              "operator": true
+            },
+            {
+              "kind": "binaryExpr",
+              "op": "+",
+              "left": {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "200"
+              },
+              "right": {
+                "kind": "binaryExpr",
+                "op": "%",
+                "left": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "number"
+                  ]
+                },
+                "right": {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "10"
+                }
+              }
+            }
+          ]
+        }
+      ],
+      "from": {
+        "kind": "tableFunctionRef",
+        "name": "numbers",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "25000"
+          }
+        ]
+      }
+    },
+    "leadingComments": [
+      "-- Average string lengths, approximately: 2, 200, 200, 200"
+    ]
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -43,7 +295,7 @@
       }
     ],
     "from": {
-      "kind": "tableFunction",
+      "kind": "tableFunctionRef",
       "name": "file",
       "args": [
         {
@@ -63,7 +315,10 @@
           ]
         }
       ]
-    }
+    },
+    "leadingComments": [
+      "-- Default limits are high, everything goes in one block."
+    ]
   },
   {
     "kind": "select",
@@ -103,7 +358,7 @@
       }
     ],
     "from": {
-      "kind": "tableFunction",
+      "kind": "tableFunctionRef",
       "name": "file",
       "args": [
         {
@@ -133,6 +388,9 @@
           "value": "100000"
         }
       }
+    ],
+    "leadingComments": [
+      "-- Small column doesn't take a lot of bytes, everything goes in one block."
     ]
   },
   {
@@ -179,7 +437,7 @@
       }
     ],
     "from": {
-      "kind": "tableFunction",
+      "kind": "tableFunctionRef",
       "name": "file",
       "args": [
         {
@@ -209,6 +467,9 @@
           "value": "64"
         }
       }
+    ],
+    "leadingComments": [
+      "-- Specific number of rows requested."
     ]
   },
   {
@@ -255,7 +516,7 @@
       }
     ],
     "from": {
-      "kind": "tableFunction",
+      "kind": "tableFunctionRef",
       "name": "file",
       "args": [
         {
@@ -285,6 +546,9 @@
           "value": "30"
         }
       }
+    ],
+    "leadingComments": [
+      "-- Tiny byte limit, reader bumps block size to 128 rows instead of 1 row."
     ]
   },
   {
@@ -337,7 +601,7 @@
       }
     ],
     "from": {
-      "kind": "tableFunction",
+      "kind": "tableFunctionRef",
       "name": "file",
       "args": [
         {
@@ -367,6 +631,10 @@
           "value": "700000"
         }
       }
+    ],
+    "leadingComments": [
+      "-- Intermediate byte limit. The two parquet reader implementations estimate row byte sizes slightly",
+      "-- differently it slightly differently and don't match exactly, so we round the result."
     ]
   },
   {
@@ -425,7 +693,7 @@
       }
     ],
     "from": {
-      "kind": "tableFunction",
+      "kind": "tableFunctionRef",
       "name": "file",
       "args": [
         {
@@ -507,7 +775,7 @@
       }
     ],
     "from": {
-      "kind": "tableFunction",
+      "kind": "tableFunctionRef",
       "name": "file",
       "args": [
         {
@@ -545,6 +813,9 @@
           "value": "1"
         }
       }
+    ],
+    "leadingComments": [
+      "-- Only the new parquet reader uses correct length estimate for dictionary-encoded strings."
     ]
   }
 ]

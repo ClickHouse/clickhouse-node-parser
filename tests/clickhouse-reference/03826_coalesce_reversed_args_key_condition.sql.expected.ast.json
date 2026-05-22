@@ -1,5 +1,99 @@
 [
   {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "session_timezone",
+        "value": {
+          "kind": "literal",
+          "type": "String",
+          "value": "UTC"
+        }
+      }
+    ],
+    "leadingComments": [
+      "-- Reproducer for \"Inconsistent KeyCondition behavior\" with coalesce(const, key_column).",
+      "-- When the first argument of coalesce is a non-null constant,",
+      "-- matchesExactContinuousRange() incorrectly used types.front() (the constant's type)",
+      "-- instead of the actual varying argument type to check monotonicity."
+    ]
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "test_coalesce_reversed"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "test_coalesce_reversed"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "ts",
+        "type": {
+          "name": "Nullable",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "Date"
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "ts"
+          ]
+        }
+      }
+    ],
+    "settings": [
+      {
+        "name": "index_granularity",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      },
+      {
+        "name": "allow_nullable_key",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ],
+    "settingsAfterOrderBy": true
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "test_coalesce_reversed"
+      }
+    }
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -59,7 +153,12 @@
           }
         ]
       }
-    }
+    },
+    "leadingComments": [
+      "-- This query triggered \"Inconsistent KeyCondition behavior\" because",
+      "-- coalesce(non_null_const, ts) was treated as monotonic w.r.t. ts",
+      "-- due to using the wrong argument type in matchesExactContinuousRange()."
+    ]
   },
   {
     "kind": "select",
@@ -121,7 +220,10 @@
           }
         ]
       }
-    }
+    },
+    "leadingComments": [
+      "-- Also test the >= variant"
+    ]
   },
   {
     "kind": "select",
@@ -183,6 +285,17 @@
           }
         ]
       }
+    },
+    "leadingComments": [
+      "-- And the normal order (coalesce(ts, const)) which should also work"
+    ]
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "test_coalesce_reversed"
     }
   }
 ]

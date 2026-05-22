@@ -1,4 +1,4 @@
-
+-- { echoOn }
 select JSONArrayLength(null);
 select JSONArrayLength('');
 select JSONArrayLength('[]');

@@ -1,3 +1,5 @@
+create table t (number UInt64) engine MergeTree order by number;
+
 SELECT 1
 FROM
 (

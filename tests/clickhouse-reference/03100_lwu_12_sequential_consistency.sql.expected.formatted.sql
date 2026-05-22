@@ -1,3 +1,40 @@
+-- Tags: replica
+DROP TABLE IF EXISTS t_lwu_sequential_1;
+
+DROP TABLE IF EXISTS t_lwu_sequential_2;
+
+SET enable_lightweight_update = 1;
+
+CREATE TABLE t_lwu_sequential_1
+(
+    id UInt64,
+    s FixedString(3)
+)
+ENGINE = ReplicatedMergeTree('/zookeeper/{database}/t_lwu_sequential/', '1')
+ORDER BY id
+SETTINGS enable_block_number_column = 1, enable_block_offset_column = 1;
+
+CREATE TABLE t_lwu_sequential_2
+(
+    id UInt64,
+    s FixedString(3)
+)
+ENGINE = ReplicatedMergeTree('/zookeeper/{database}/t_lwu_sequential/', '2')
+ORDER BY id
+SETTINGS enable_block_number_column = 1, enable_block_offset_column = 1;
+
+SET update_sequential_consistency = 1;
+
+SET select_sequential_consistency = 0;
+
+INSERT INTO t_lwu_sequential_1;
+
+UPDATE t_lwu_sequential_2 SET s = 'foo' WHERE id = 1;
+
+SET select_sequential_consistency = 1;
+
+SYSTEM SYNC REPLICA t_lwu_sequential_1 LIGHTWEIGHT;
+
 SELECT *
 FROM t_lwu_sequential_1
 ORDER BY id ASC

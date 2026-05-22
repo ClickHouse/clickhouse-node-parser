@@ -1,3 +1,4 @@
+-- Tags: no-fasttest
 SELECT INET6_NTOA(toFixedString(unhex('2A0206B8000000000000000000000011'), 16));
 
 SELECT hex(INET6_ATON('2a02:6b8::11'));

@@ -1,3 +1,104 @@
+DropQuery  landing (children 1)
+ Identifier landing
+
+DropQuery  landing_dist (children 1)
+ Identifier landing_dist
+
+DropQuery  ds (children 1)
+ Identifier ds
+
+CreateQuery landing (children 3)
+ Identifier landing
+ Columns definition (children 1)
+  ExpressionList (children 3)
+   ColumnDeclaration timestamp (children 1)
+    DataType DateTime64 (children 1)
+     ExpressionList (children 1)
+      Literal UInt64_3
+   ColumnDeclaration status (children 1)
+    DataType String
+   ColumnDeclaration id (children 1)
+    DataType String
+ Storage definition (children 2)
+  Function MergeTree (children 1)
+   ExpressionList
+  Identifier timestamp
+
+CreateQuery landing_dist (children 3)
+ Identifier landing_dist
+ Columns definition (children 1)
+  ExpressionList (children 3)
+   ColumnDeclaration timestamp (children 1)
+    DataType DateTime64 (children 1)
+     ExpressionList (children 1)
+      Literal UInt64_3
+   ColumnDeclaration status (children 1)
+    DataType String
+   ColumnDeclaration id (children 1)
+    DataType String
+ Storage definition (children 1)
+  Function Distributed (children 1)
+   ExpressionList (children 4)
+    Literal 'test_cluster_two_shards'
+    Function currentDatabase (children 1)
+     ExpressionList
+    Literal 'landing'
+    Function rand (children 1)
+     ExpressionList
+
+SYSTEM query (children 1)
+ Identifier landing
+
+InsertQuery   (children 3)
+ Identifier landing
+ ExpressionList (children 3)
+  Identifier status
+  Identifier id
+  Identifier timestamp
+ SelectWithUnionQuery (children 1)
+  ExpressionList (children 1)
+   SelectQuery (children 3)
+    ExpressionList (children 1)
+     Asterisk
+    TablesInSelectQuery (children 1)
+     TablesInSelectQueryElement (children 1)
+      TableExpression (children 1)
+       Function generateRandom (children 1)
+        ExpressionList
+    Literal UInt64_1
+
+CreateQuery ds (children 3)
+ Identifier ds
+ Columns definition (children 1)
+  ExpressionList (children 3)
+   ColumnDeclaration timestamp (children 1)
+    DataType DateTime64 (children 1)
+     ExpressionList (children 1)
+      Literal UInt64_3
+   ColumnDeclaration status (children 1)
+    DataType String
+   ColumnDeclaration id (children 1)
+    DataType String
+ Storage definition (children 3)
+  Function MergeTree (children 1)
+   ExpressionList
+  Identifier timestamp
+  Set
+
+InsertQuery   (children 3)
+ Identifier ds
+ SelectWithUnionQuery (children 1)
+  ExpressionList (children 1)
+   SelectQuery (children 3)
+    ExpressionList (children 1)
+     Asterisk
+    TablesInSelectQuery (children 1)
+     TablesInSelectQueryElement (children 1)
+      TableExpression (children 1)
+       TableIdentifier landing
+    Set
+ Set
+
 SelectWithUnionQuery (children 1)
  ExpressionList (children 1)
   SelectQuery (children 2)
@@ -8,3 +109,45 @@ SelectWithUnionQuery (children 1)
     TablesInSelectQueryElement (children 1)
      TableExpression (children 1)
       TableIdentifier ds
+
+InsertQuery   (children 3)
+ Identifier ds
+ SelectWithUnionQuery (children 1)
+  ExpressionList (children 1)
+   SelectQuery (children 3)
+    ExpressionList (children 1)
+     Asterisk
+    TablesInSelectQuery (children 1)
+     TablesInSelectQueryElement (children 1)
+      TableExpression (children 1)
+       TableIdentifier landing
+    Set
+ Set
+
+InsertQuery   (children 3)
+ Identifier ds
+ SelectWithUnionQuery (children 1)
+  ExpressionList (children 1)
+   SelectQuery (children 3)
+    ExpressionList (children 1)
+     Asterisk
+    TablesInSelectQuery (children 1)
+     TablesInSelectQueryElement (children 1)
+      TableExpression (children 1)
+       TableIdentifier landing_dist
+    Set
+ Set
+
+InsertQuery   (children 3)
+ Identifier ds
+ SelectWithUnionQuery (children 1)
+  ExpressionList (children 1)
+   SelectQuery (children 3)
+    ExpressionList (children 1)
+     Asterisk
+    TablesInSelectQuery (children 1)
+     TablesInSelectQueryElement (children 1)
+      TableExpression (children 1)
+       TableIdentifier landing_dist
+    Set
+ Set

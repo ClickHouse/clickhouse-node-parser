@@ -1,3 +1,11 @@
+-- Tags: long
+
+SET enable_analyzer = 1;
+-- Too slow
+SET max_bytes_before_external_sort = 0;
+SET max_bytes_ratio_before_external_sort = 0;
+SET max_bytes_before_external_group_by = 0;
+SET max_bytes_ratio_before_external_group_by = 0;
 -- { echo }
 
 -- just something basic
@@ -51,6 +59,9 @@ select count(1) over (rows unbounded preceding), max(number + 1) over () from nu
 -- Should work in DISTINCT
 select distinct sum(0) over (rows unbounded preceding) from numbers(2);
 select distinct any(number) over (rows unbounded preceding) from numbers(2);
+-- Various kinds of aliases are properly substituted into various parts of window
+-- function definition.
+with number + 1 as x select intDiv(number, 3) as y, sum(x + y) over (partition by y order by x rows unbounded preceding) from numbers(7);
 -- WINDOW clause
 select 1 window w1 as ();
 select sum(number) over w1, sum(number) over w2
@@ -254,10 +265,16 @@ SELECT
     max(number) OVER (ORDER BY number ASC NULLS FIRST)
 FROM numbers(2)
 ;
+-- optimize_read_in_order conflicts with sorting for window functions, check that
+-- it is disabled.
+drop table if exists window_mt;
+create table window_mt engine MergeTree order by number
+    as select number, mod(number, 3) p from numbers(100);
 select number, count(*) over (partition by p)
     from window_mt order by number limit 10 settings optimize_read_in_order = 0;
 select number, count(*) over (partition by p)
     from window_mt order by number limit 10 settings optimize_read_in_order = 1;
+drop table window_mt;
 -- some true window functions -- rank and friends
 select number, p, o,
     count(*) over w,
@@ -287,6 +304,7 @@ window w as (partition by p order by number
     rows between unbounded preceding and unbounded following)
 order by number
 settings max_block_size = 3;
+;
 -- careful with auto-application of Null combinator
 select lagInFrame(toNullable(1)) over ();
 select lagInFrameOrNull(1) over (); -- { serverError BAD_ARGUMENTS }

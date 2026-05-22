@@ -1,5 +1,105 @@
 [
   {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "log_queries",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ],
+    "leadingComments": [
+      "-- Tags: no-parallel, no-replicated-database",
+      "-- Tag no-parallel: due to attaching to system.query_log",
+      "-- Tag no-replicated-database: Replicated database will has extra queries",
+      "-- Attach MV to system.query_log and check that writing query_log will not fail"
+    ]
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "log_proxy_02572"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "push_to_logs_proxy_mv_02572"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "system",
+    "body": "SYSTEM flush logs query_log",
+    "leadingComments": [
+      "-- create log tables"
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "log_proxy_02572"
+    },
+    "asTable": {
+      "kind": "tableRef",
+      "database": "system",
+      "table": "query_log"
+    },
+    "engine": {
+      "name": "Distributed",
+      "args": [
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "test_shard_localhost"
+        },
+        {
+          "kind": "functionCall",
+          "name": "currentDatabase",
+          "args": []
+        },
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "receiver_02572"
+        }
+      ]
+    }
+  },
+  {
+    "kind": "createMaterializedView",
+    "table": {
+      "kind": "tableRef",
+      "table": "push_to_logs_proxy_mv_02572"
+    },
+    "toTable": {
+      "kind": "tableRef",
+      "table": "log_proxy_02572"
+    },
+    "asQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "asterisk"
+        }
+      ],
+      "from": {
+        "kind": "tableRef",
+        "database": "system",
+        "table": "query_log"
+      }
+    }
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -9,6 +109,35 @@
       }
     ],
     "format": "Null"
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "log_proxy_02572"
+    }
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "push_to_logs_proxy_mv_02572"
+    }
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "log_queries",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      }
+    ]
   },
   {
     "kind": "select",
@@ -97,6 +226,9 @@
         "direction": "ASC"
       }
     ],
-    "format": "CSV"
+    "format": "CSV",
+    "leadingComments": [
+      "-- lower() to pass through clickhouse-test \"exception\" check"
+    ]
   }
 ]

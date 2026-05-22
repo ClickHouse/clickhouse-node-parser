@@ -1,3 +1,5 @@
+SET enable_analyzer = 1;
+
 SELECT
     t.1 AS cnt,
     t.2 AS name,

@@ -1,5 +1,178 @@
 [
   {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "rename_table_multiple"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "rename_table_multiple"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "key",
+        "type": {
+          "name": "Int32"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "value1",
+        "type": {
+          "name": "String"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "value2",
+        "type": {
+          "name": "Int32"
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "functionCall",
+          "name": "tuple",
+          "args": []
+        }
+      }
+    ],
+    "settings": [
+      {
+        "name": "min_bytes_for_wide_part",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      }
+    ],
+    "settingsAfterOrderBy": true
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "rename_table_multiple"
+      }
+    }
+  },
+  {
+    "kind": "alter",
+    "table": {
+      "kind": "tableRef",
+      "table": "rename_table_multiple"
+    },
+    "commands": [
+      {
+        "kind": "alterCommand",
+        "commandType": "RENAME_COLUMN",
+        "oldName": "value1",
+        "newName": "value1_string"
+      },
+      {
+        "kind": "alterCommand",
+        "commandType": "MODIFY_COLUMN",
+        "column": {
+          "kind": "columnDef",
+          "name": "value1_string",
+          "type": {
+            "name": "String"
+          }
+        }
+      }
+    ],
+    "trailingComments": [
+      "--{serverError NOT_IMPLEMENTED}"
+    ]
+  },
+  {
+    "kind": "alter",
+    "table": {
+      "kind": "tableRef",
+      "table": "rename_table_multiple"
+    },
+    "commands": [
+      {
+        "kind": "alterCommand",
+        "commandType": "MODIFY_COLUMN",
+        "column": {
+          "kind": "columnDef",
+          "name": "value1",
+          "type": {
+            "name": "String"
+          }
+        }
+      },
+      {
+        "kind": "alterCommand",
+        "commandType": "RENAME_COLUMN",
+        "oldName": "value1",
+        "newName": "value1_string"
+      }
+    ],
+    "trailingComments": [
+      "--{serverError NOT_IMPLEMENTED}"
+    ]
+  },
+  {
+    "kind": "alter",
+    "table": {
+      "kind": "tableRef",
+      "table": "rename_table_multiple"
+    },
+    "commands": [
+      {
+        "kind": "alterCommand",
+        "commandType": "RENAME_COLUMN",
+        "oldName": "value1",
+        "newName": "value1_string"
+      }
+    ]
+  },
+  {
+    "kind": "alter",
+    "table": {
+      "kind": "tableRef",
+      "table": "rename_table_multiple"
+    },
+    "commands": [
+      {
+        "kind": "alterCommand",
+        "commandType": "MODIFY_COLUMN",
+        "column": {
+          "kind": "columnDef",
+          "name": "value1_string",
+          "type": {
+            "name": "String"
+          }
+        }
+      }
+    ]
+  },
+  {
+    "kind": "showCreate",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "rename_table_multiple"
+    }
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -11,6 +184,48 @@
       "table": "rename_table_multiple"
     },
     "format": "TSVWithNames"
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "rename_table_multiple"
+      }
+    }
+  },
+  {
+    "kind": "alter",
+    "table": {
+      "kind": "tableRef",
+      "table": "rename_table_multiple"
+    },
+    "commands": [
+      {
+        "kind": "alterCommand",
+        "commandType": "RENAME_COLUMN",
+        "oldName": "value2",
+        "newName": "value2_old"
+      },
+      {
+        "kind": "alterCommand",
+        "commandType": "ADD_COLUMN",
+        "column": {
+          "kind": "columnDef",
+          "name": "value2",
+          "type": {
+            "name": "Int64"
+          },
+          "defaultKind": "DEFAULT",
+          "defaultExpr": {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "7"
+          }
+        }
+      }
+    ]
   },
   {
     "kind": "select",
@@ -38,6 +253,209 @@
     "format": "TSVWithNames"
   },
   {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "rename_table_multiple"
+      }
+    }
+  },
+  {
+    "kind": "alter",
+    "table": {
+      "kind": "tableRef",
+      "table": "rename_table_multiple"
+    },
+    "commands": [
+      {
+        "kind": "alterCommand",
+        "commandType": "DROP_COLUMN",
+        "columnName": "value2_old"
+      },
+      {
+        "kind": "alterCommand",
+        "commandType": "RENAME_COLUMN",
+        "oldName": "value2",
+        "newName": "value2_old"
+      }
+    ]
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "rename_table_multiple_compact"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "rename_table_multiple_compact"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "key",
+        "type": {
+          "name": "Int32"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "value1",
+        "type": {
+          "name": "String"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "value2",
+        "type": {
+          "name": "Int32"
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "functionCall",
+          "name": "tuple",
+          "args": []
+        }
+      }
+    ],
+    "settings": [
+      {
+        "name": "min_rows_for_wide_part",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "100000"
+        }
+      }
+    ],
+    "settingsAfterOrderBy": true
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "rename_table_multiple_compact"
+      }
+    }
+  },
+  {
+    "kind": "alter",
+    "table": {
+      "kind": "tableRef",
+      "table": "rename_table_multiple_compact"
+    },
+    "commands": [
+      {
+        "kind": "alterCommand",
+        "commandType": "RENAME_COLUMN",
+        "oldName": "value1",
+        "newName": "value1_string"
+      },
+      {
+        "kind": "alterCommand",
+        "commandType": "MODIFY_COLUMN",
+        "column": {
+          "kind": "columnDef",
+          "name": "value1_string",
+          "type": {
+            "name": "String"
+          }
+        }
+      }
+    ],
+    "trailingComments": [
+      "--{serverError NOT_IMPLEMENTED}"
+    ]
+  },
+  {
+    "kind": "alter",
+    "table": {
+      "kind": "tableRef",
+      "table": "rename_table_multiple_compact"
+    },
+    "commands": [
+      {
+        "kind": "alterCommand",
+        "commandType": "MODIFY_COLUMN",
+        "column": {
+          "kind": "columnDef",
+          "name": "value1",
+          "type": {
+            "name": "String"
+          }
+        }
+      },
+      {
+        "kind": "alterCommand",
+        "commandType": "RENAME_COLUMN",
+        "oldName": "value1",
+        "newName": "value1_string"
+      }
+    ],
+    "trailingComments": [
+      "--{serverError NOT_IMPLEMENTED}"
+    ]
+  },
+  {
+    "kind": "alter",
+    "table": {
+      "kind": "tableRef",
+      "table": "rename_table_multiple_compact"
+    },
+    "commands": [
+      {
+        "kind": "alterCommand",
+        "commandType": "RENAME_COLUMN",
+        "oldName": "value1",
+        "newName": "value1_string"
+      }
+    ]
+  },
+  {
+    "kind": "alter",
+    "table": {
+      "kind": "tableRef",
+      "table": "rename_table_multiple_compact"
+    },
+    "commands": [
+      {
+        "kind": "alterCommand",
+        "commandType": "MODIFY_COLUMN",
+        "column": {
+          "kind": "columnDef",
+          "name": "value1_string",
+          "type": {
+            "name": "String"
+          }
+        }
+      }
+    ]
+  },
+  {
+    "kind": "showCreate",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "rename_table_multiple_compact"
+    }
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -49,6 +467,48 @@
       "table": "rename_table_multiple_compact"
     },
     "format": "TSVWithNames"
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "rename_table_multiple_compact"
+      }
+    }
+  },
+  {
+    "kind": "alter",
+    "table": {
+      "kind": "tableRef",
+      "table": "rename_table_multiple_compact"
+    },
+    "commands": [
+      {
+        "kind": "alterCommand",
+        "commandType": "RENAME_COLUMN",
+        "oldName": "value2",
+        "newName": "value2_old"
+      },
+      {
+        "kind": "alterCommand",
+        "commandType": "ADD_COLUMN",
+        "column": {
+          "kind": "columnDef",
+          "name": "value2",
+          "type": {
+            "name": "Int64"
+          },
+          "defaultKind": "DEFAULT",
+          "defaultExpr": {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "7"
+          }
+        }
+      }
+    ]
   },
   {
     "kind": "select",
@@ -74,5 +534,35 @@
       }
     ],
     "format": "TSVWithNames"
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "rename_table_multiple_compact"
+      }
+    }
+  },
+  {
+    "kind": "alter",
+    "table": {
+      "kind": "tableRef",
+      "table": "rename_table_multiple_compact"
+    },
+    "commands": [
+      {
+        "kind": "alterCommand",
+        "commandType": "DROP_COLUMN",
+        "columnName": "value2_old"
+      },
+      {
+        "kind": "alterCommand",
+        "commandType": "RENAME_COLUMN",
+        "oldName": "value2",
+        "newName": "value2_old"
+      }
+    ]
   }
 ]

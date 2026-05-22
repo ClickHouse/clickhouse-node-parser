@@ -1,3 +1,20 @@
+DROP TABLE IF EXISTS logs;
+
+CREATE TABLE logs
+(
+    a int,
+    b int,
+    c int,
+    INDEX i c TYPE minmax GRANULARITY 1
+)
+ENGINE = MergeTree
+ORDER BY tuple() AS
+SELECT
+    number,
+    number,
+    number
+FROM numbers(1);
+
 SELECT
     a,
     b,

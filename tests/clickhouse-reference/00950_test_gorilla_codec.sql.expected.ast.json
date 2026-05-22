@@ -1,5 +1,636 @@
 [
   {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "codecTest"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "cross_to_inner_join_rewrite",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "codecTest"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "key",
+        "type": {
+          "name": "UInt64"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "name",
+        "type": {
+          "name": "String"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "ref_valueF64",
+        "type": {
+          "name": "Float64"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "ref_valueF32",
+        "type": {
+          "name": "Float32"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "valueF64",
+        "type": {
+          "name": "Float64"
+        },
+        "codec": [
+          {
+            "name": "Gorilla"
+          }
+        ]
+      },
+      {
+        "kind": "columnDef",
+        "name": "valueF32",
+        "type": {
+          "name": "Float32"
+        },
+        "codec": [
+          {
+            "name": "Gorilla"
+          }
+        ]
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "key"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "codecTest"
+      }
+    },
+    "columns": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "key"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "name"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "ref_valueF64"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "valueF64"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "ref_valueF32"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "valueF32"
+        ]
+      }
+    ],
+    "selectQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "alias",
+          "expr": {
+            "kind": "columnRef",
+            "parts": [
+              "number"
+            ]
+          },
+          "alias": "n"
+        },
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "e()"
+        },
+        {
+          "kind": "alias",
+          "expr": {
+            "kind": "functionCall",
+            "name": "e",
+            "args": []
+          },
+          "alias": "v"
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "v"
+          ]
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "v"
+          ]
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "v"
+          ]
+        }
+      ],
+      "from": {
+        "kind": "tableRef",
+        "database": "system",
+        "table": "numbers"
+      },
+      "offset": {
+        "kind": "literal",
+        "type": "UInt64",
+        "value": "100"
+      },
+      "limit": {
+        "count": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        },
+        "commaSyntax": true
+      }
+    },
+    "leadingComments": [
+      "-- best case - same value"
+    ]
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "codecTest"
+      }
+    },
+    "columns": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "key"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "name"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "ref_valueF64"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "valueF64"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "ref_valueF32"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "valueF32"
+        ]
+      }
+    ],
+    "selectQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "alias",
+          "expr": {
+            "kind": "columnRef",
+            "parts": [
+              "number"
+            ]
+          },
+          "alias": "n"
+        },
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "log2(n)"
+        },
+        {
+          "kind": "alias",
+          "expr": {
+            "kind": "functionCall",
+            "name": "log2",
+            "args": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "n"
+                ]
+              }
+            ]
+          },
+          "alias": "v"
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "v"
+          ]
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "v"
+          ]
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "v"
+          ]
+        }
+      ],
+      "from": {
+        "kind": "tableRef",
+        "database": "system",
+        "table": "numbers"
+      },
+      "offset": {
+        "kind": "literal",
+        "type": "UInt64",
+        "value": "100"
+      },
+      "limit": {
+        "count": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "101"
+        },
+        "commaSyntax": true
+      }
+    },
+    "leadingComments": [
+      "-- good case - values that grow insignificantly"
+    ]
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "codecTest"
+      }
+    },
+    "columns": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "key"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "name"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "ref_valueF64"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "valueF64"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "ref_valueF32"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "valueF32"
+        ]
+      }
+    ],
+    "selectQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "alias",
+          "expr": {
+            "kind": "columnRef",
+            "parts": [
+              "number"
+            ]
+          },
+          "alias": "n"
+        },
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "n*sqrt(n)"
+        },
+        {
+          "kind": "alias",
+          "expr": {
+            "kind": "binaryExpr",
+            "op": "*",
+            "left": {
+              "kind": "columnRef",
+              "parts": [
+                "n"
+              ]
+            },
+            "right": {
+              "kind": "functionCall",
+              "name": "sqrt",
+              "args": [
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "n"
+                  ]
+                }
+              ]
+            }
+          },
+          "alias": "v"
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "v"
+          ]
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "v"
+          ]
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "v"
+          ]
+        }
+      ],
+      "from": {
+        "kind": "tableRef",
+        "database": "system",
+        "table": "numbers"
+      },
+      "offset": {
+        "kind": "literal",
+        "type": "UInt64",
+        "value": "100"
+      },
+      "limit": {
+        "count": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "201"
+        },
+        "commaSyntax": true
+      }
+    },
+    "leadingComments": [
+      "-- bad case - values differ significantly"
+    ]
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "codecTest"
+      }
+    },
+    "columns": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "key"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "name"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "ref_valueF64"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "valueF64"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "ref_valueF32"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "valueF32"
+        ]
+      }
+    ],
+    "selectQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "alias",
+          "expr": {
+            "kind": "columnRef",
+            "parts": [
+              "number"
+            ]
+          },
+          "alias": "n"
+        },
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "sin(n*n*n)*n"
+        },
+        {
+          "kind": "alias",
+          "expr": {
+            "kind": "functionCall",
+            "name": "sin",
+            "args": [
+              {
+                "kind": "binaryExpr",
+                "op": "*",
+                "left": {
+                  "kind": "binaryExpr",
+                  "op": "*",
+                  "left": {
+                    "kind": "binaryExpr",
+                    "op": "*",
+                    "left": {
+                      "kind": "binaryExpr",
+                      "op": "*",
+                      "left": {
+                        "kind": "columnRef",
+                        "parts": [
+                          "n"
+                        ]
+                      },
+                      "right": {
+                        "kind": "columnRef",
+                        "parts": [
+                          "n"
+                        ]
+                      }
+                    },
+                    "right": {
+                      "kind": "columnRef",
+                      "parts": [
+                        "n"
+                      ]
+                    }
+                  },
+                  "right": {
+                    "kind": "columnRef",
+                    "parts": [
+                      "n"
+                    ]
+                  }
+                },
+                "right": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "n"
+                  ]
+                }
+              }
+            ]
+          },
+          "alias": "v"
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "v"
+          ]
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "v"
+          ]
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "v"
+          ]
+        }
+      ],
+      "from": {
+        "kind": "tableRef",
+        "database": "system",
+        "table": "numbers"
+      },
+      "offset": {
+        "kind": "literal",
+        "type": "UInt64",
+        "value": "100"
+      },
+      "limit": {
+        "count": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "301"
+        },
+        "commaSyntax": true
+      }
+    },
+    "leadingComments": [
+      "-- worst case - almost like a random values"
+    ]
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -78,7 +709,7 @@
         "table": "codecTest",
         "alias": "c1"
       },
-      "kind": "join",
+      "kind": "joinExpr",
       "joinType": "CROSS",
       "right": {
         "kind": "tableRef",
@@ -221,7 +852,7 @@
         "table": "codecTest",
         "alias": "c1"
       },
-      "kind": "join",
+      "kind": "joinExpr",
       "joinType": "CROSS",
       "right": {
         "kind": "tableRef",

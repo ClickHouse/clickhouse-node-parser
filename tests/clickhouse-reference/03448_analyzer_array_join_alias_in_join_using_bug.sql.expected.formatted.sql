@@ -1,3 +1,16 @@
+CREATE TABLE local_table
+(
+    id Int8,
+    arr Array(UInt8)
+)
+ENGINE = MergeTree
+ORDER BY id;
+
+INSERT INTO local_table SELECT
+    42,
+    [0, 1, 2];
+
+-- { echoOn }
 SELECT arr
 FROM
     remote('127.0.0.2', currentDatabase(), local_table) AS r
@@ -54,6 +67,7 @@ INNER JOIN (
     ) AS foo
     USING (arr_item);
 
+-- Fuzzed
 SELECT arr
 FROM
     remote('127.0.0.2', currentDatabase(), local_table) AS r

@@ -1,3 +1,4 @@
+-- Tags: no-fasttest
 SELECT
     '' AS value,
     normalizeUTF8NFC(value) AS nfc,

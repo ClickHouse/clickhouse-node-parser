@@ -1,3 +1,25 @@
+CREATE TABLE test1
+(
+    pt String,
+    brand_name String,
+    total_indirect_order_cnt Float64,
+    total_indirect_gmv Float64
+)
+ENGINE = Memory;
+
+CREATE TABLE test2
+(
+    pt String,
+    brand_name String,
+    exposure_uv Float64,
+    click_uv Float64
+)
+ENGINE = Memory;
+
+INSERT INTO test1 (pt, brand_name, total_indirect_order_cnt, total_indirect_gmv);
+
+INSERT INTO test2 (pt, brand_name, exposure_uv, click_uv);
+
 SELECT *
 FROM (
         SELECT

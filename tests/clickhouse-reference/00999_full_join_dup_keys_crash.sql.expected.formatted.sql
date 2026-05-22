@@ -1,3 +1,5 @@
+SET join_use_nulls = 0;
+
 SELECT *
 FROM
     (
@@ -205,3 +207,5 @@ RIGHT JOIN (
     ON (foo.b = bar.a)
     AND (foo.b = bar.b)
 ORDER BY bar.a ASC;
+
+SET join_use_nulls = 1;

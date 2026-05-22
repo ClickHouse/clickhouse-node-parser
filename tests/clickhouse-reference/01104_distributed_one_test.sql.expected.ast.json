@@ -1,5 +1,61 @@
 [
   {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "d_one"
+    },
+    "ifExists": true,
+    "leadingComments": [
+      "-- Tags: distributed"
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "d_one"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "dummy",
+        "type": {
+          "name": "UInt8"
+        }
+      }
+    ],
+    "engine": {
+      "name": "Distributed",
+      "args": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "test_cluster_two_shards"
+          ]
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "system"
+          ]
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "one"
+          ]
+        },
+        {
+          "kind": "functionCall",
+          "name": "rand",
+          "args": []
+        }
+      ]
+    }
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -222,6 +278,27 @@
     ]
   },
   {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "distributed_product_mode",
+        "value": {
+          "kind": "literal",
+          "type": "String",
+          "value": "local"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "d_one"
+    }
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -246,7 +323,7 @@
       }
     ],
     "from": {
-      "kind": "tableFunction",
+      "kind": "tableFunctionRef",
       "name": "remote",
       "args": [
         {
@@ -311,7 +388,7 @@
       }
     ],
     "from": {
-      "kind": "tableFunction",
+      "kind": "tableFunctionRef",
       "name": "remote",
       "args": [
         {

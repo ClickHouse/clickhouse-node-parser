@@ -1,5 +1,140 @@
 [
   {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "enable_json_type",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "test"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "test"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "agg1",
+        "type": {
+          "name": "AggregateFunction",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "sum"
+              }
+            },
+            {
+              "kind": "type",
+              "type": {
+                "name": "UInt64"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "agg2",
+        "type": {
+          "name": "AggregateFunction",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "sum"
+              }
+            },
+            {
+              "kind": "type",
+              "type": {
+                "name": "UInt64"
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "engine": {
+      "name": "Memory"
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "test"
+      }
+    },
+    "selectQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "functionCall",
+          "name": "sumState",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "number"
+              ]
+            }
+          ]
+        },
+        {
+          "kind": "functionCall",
+          "name": "sumState",
+          "args": [
+            {
+              "kind": "binaryExpr",
+              "op": "+",
+              "left": {
+                "kind": "columnRef",
+                "parts": [
+                  "number"
+                ]
+              },
+              "right": {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "1"
+              }
+            }
+          ]
+        }
+      ],
+      "from": {
+        "kind": "tableFunctionRef",
+        "name": "numbers",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "10"
+          }
+        ]
+      }
+    }
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -21,6 +156,9 @@
         },
         "direction": "ASC"
       }
+    ],
+    "trailingComments": [
+      "-- {serverError ILLEGAL_COLUMN}"
     ]
   },
   {
@@ -46,7 +184,10 @@
     "from": {
       "kind": "tableRef",
       "table": "test"
-    }
+    },
+    "trailingComments": [
+      "-- {serverError ILLEGAL_TYPE_OF_ARGUMENT}"
+    ]
   },
   {
     "kind": "select",
@@ -71,7 +212,10 @@
     "from": {
       "kind": "tableRef",
       "table": "test"
-    }
+    },
+    "trailingComments": [
+      "-- {serverError ILLEGAL_TYPE_OF_ARGUMENT}"
+    ]
   },
   {
     "kind": "select",
@@ -96,7 +240,10 @@
     "from": {
       "kind": "tableRef",
       "table": "test"
-    }
+    },
+    "trailingComments": [
+      "-- {serverError ILLEGAL_TYPE_OF_ARGUMENT}"
+    ]
   },
   {
     "kind": "select",
@@ -121,7 +268,10 @@
     "from": {
       "kind": "tableRef",
       "table": "test"
-    }
+    },
+    "trailingComments": [
+      "-- {serverError ILLEGAL_TYPE_OF_ARGUMENT}"
+    ]
   },
   {
     "kind": "select",
@@ -146,7 +296,10 @@
     "from": {
       "kind": "tableRef",
       "table": "test"
-    }
+    },
+    "trailingComments": [
+      "-- {serverError ILLEGAL_TYPE_OF_ARGUMENT}"
+    ]
   },
   {
     "kind": "select",
@@ -169,6 +322,17 @@
       }
     ],
     "from": {
+      "kind": "tableRef",
+      "table": "test"
+    },
+    "trailingComments": [
+      "-- {serverError ILLEGAL_TYPE_OF_ARGUMENT}"
+    ]
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
       "kind": "tableRef",
       "table": "test"
     }

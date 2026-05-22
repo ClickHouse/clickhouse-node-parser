@@ -1,5 +1,205 @@
 [
   {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "utf8_overlap"
+    },
+    "ifExists": true,
+    "leadingComments": [
+      "-- Tags: no-fasttest",
+      "-- no-fasttest: upper/lowerUTF8 use ICU"
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "utf8_overlap"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "str",
+        "type": {
+          "name": "String"
+        }
+      }
+    ],
+    "engine": {
+      "name": "Memory",
+      "args": []
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "utf8_overlap"
+      }
+    },
+    "leadingComments": [
+      "-- { echoOn }",
+      "-- NOTE: total string size should be > 16 (sizeof(__m128i))"
+    ]
+  },
+  {
+    "kind": "select",
+    "with": [
+      {
+        "kind": "cteExpr",
+        "name": "l_",
+        "expr": {
+          "kind": "functionCall",
+          "name": "lowerUTF8",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "str"
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "kind": "cteExpr",
+        "name": "u_",
+        "expr": {
+          "kind": "functionCall",
+          "name": "upperUTF8",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "str"
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "kind": "cteExpr",
+        "name": "h_",
+        "expr": {
+          "kind": "functionCall",
+          "name": "concat",
+          "args": [
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "0x"
+            },
+            {
+              "kind": "functionCall",
+              "name": "hex",
+              "args": [
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "str"
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ],
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "length",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "str"
+            ]
+          }
+        ]
+      },
+      {
+        "kind": "functionCall",
+        "name": "if",
+        "args": [
+          {
+            "kind": "binaryExpr",
+            "op": "==",
+            "left": {
+              "kind": "columnRef",
+              "parts": [
+                "l_"
+              ]
+            },
+            "right": {
+              "kind": "literal",
+              "type": "String",
+              "value": "�"
+            }
+          },
+          {
+            "kind": "columnRef",
+            "parts": [
+              "h_"
+            ]
+          },
+          {
+            "kind": "columnRef",
+            "parts": [
+              "l_"
+            ]
+          }
+        ]
+      },
+      {
+        "kind": "functionCall",
+        "name": "if",
+        "args": [
+          {
+            "kind": "binaryExpr",
+            "op": "==",
+            "left": {
+              "kind": "columnRef",
+              "parts": [
+                "u_"
+              ]
+            },
+            "right": {
+              "kind": "literal",
+              "type": "String",
+              "value": "�"
+            }
+          },
+          {
+            "kind": "columnRef",
+            "parts": [
+              "h_"
+            ]
+          },
+          {
+            "kind": "columnRef",
+            "parts": [
+              "u_"
+            ]
+          }
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "utf8_overlap"
+    },
+    "format": "CSV",
+    "leadingComments": [
+      "--                                             ^",
+      "--                                             MONOGRAM FOR YANG"
+    ]
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -13,6 +213,10 @@
           }
         ]
       }
+    ],
+    "leadingComments": [
+      "-- NOTE: regression test for introduced bug",
+      "-- https://github.com/ClickHouse/ClickHouse/issues/42756"
     ]
   },
   {
@@ -99,6 +303,9 @@
           }
         ]
       }
+    ],
+    "leadingComments": [
+      "-- Test at 32 and 64 byte boundaries"
     ]
   },
   {

@@ -1,3 +1,24 @@
+DROP TABLE IF EXISTS pk_order;
+
+SET optimize_aggregation_in_order = 1;
+
+CREATE TABLE pk_order
+(
+    a UInt64,
+    b UInt64,
+    c UInt64,
+    d UInt64
+)
+ENGINE = MergeTree()
+ORDER BY (a, b);
+
+INSERT INTO pk_order (a, b, c, d);
+
+INSERT INTO pk_order (a, b, c, d);
+
+INSERT INTO pk_order (a, b, c, d);
+
+-- Order after group by in order is determined
 SELECT
     a,
     b
@@ -43,6 +64,25 @@ FROM pk_order
 GROUP BY negate(a)
 ORDER BY negate(a) ASC;
 
+CREATE TABLE pk_order
+(
+    d DateTime,
+    a Int32,
+    b Int32
+)
+ENGINE = MergeTree
+ORDER BY (d, a)
+PARTITION BY toDate(d)
+SETTINGS index_granularity = 1;
+
+INSERT INTO pk_order SELECT
+    toDateTime('2019-05-05 00:00:00') + toIntervalDay(number % 10),
+    number,
+    intHash32(number)
+FROM numbers(100);
+
+SET max_block_size = 1;
+
 SELECT
     d,
     max(b)
@@ -71,3 +111,5 @@ FROM pk_order
 GROUP BY d1
 ORDER BY d1 ASC
 LIMIT 5;
+
+DROP TABLE pk_order;

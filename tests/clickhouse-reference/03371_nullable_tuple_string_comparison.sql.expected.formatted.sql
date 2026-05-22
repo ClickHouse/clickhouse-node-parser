@@ -1,3 +1,27 @@
+DROP TABLE IF EXISTS t1;
+
+DROP TABLE IF EXISTS t2;
+
+CREATE TABLE t1
+(
+    id UInt64,
+    s1 Nullable(String),
+    s2 Nullable(String)
+)
+ORDER BY id;
+
+CREATE TABLE t2
+(
+    id UInt64,
+    s1 String,
+    s2 String
+)
+ORDER BY id;
+
+INSERT INTO t1;
+
+INSERT INTO t2;
+
 SELECT id
 FROM t1
 WHERE (s1, s2) = ('a', 'b');
@@ -42,3 +66,7 @@ WHERE (s1, null) = ('z', null);
 SELECT id
 FROM t2
 WHERE (s1, null) = '(''z'',null)';
+
+DROP TABLE t1;
+
+DROP TABLE t2;

@@ -1,0 +1,329 @@
+[
+  {
+    "kind": "drop",
+    "targetType": "DATABASE",
+    "table": {
+      "kind": "tableRef",
+      "table": {
+        "kind": "queryParam",
+        "name": "CLICKHOUSE_DATABASE",
+        "type": "Identifier"
+      }
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "createDatabase",
+    "name": {
+      "kind": "queryParam",
+      "name": "CLICKHOUSE_DATABASE",
+      "type": "Identifier"
+    },
+    "ifNotExists": true
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "database": {
+        "kind": "queryParam",
+        "name": "CLICKHOUSE_DATABASE",
+        "type": "Identifier"
+      },
+      "table": "r1"
+    },
+    "ifNotExists": true,
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "name",
+        "type": {
+          "name": "String"
+        }
+      }
+    ],
+    "engine": {
+      "name": "Memory",
+      "args": []
+    }
+  },
+  {
+    "kind": "system",
+    "body": "SHOW TABLES FROM {CLICKHOUSE_DATABASE:Identifier}"
+  },
+  {
+    "kind": "rename",
+    "targetType": "TABLE",
+    "pairs": [
+      {
+        "from": {
+          "kind": "tableRef",
+          "database": {
+            "kind": "queryParam",
+            "name": "CLICKHOUSE_DATABASE",
+            "type": "Identifier"
+          },
+          "table": "r1"
+        },
+        "to": {
+          "kind": "tableRef",
+          "database": {
+            "kind": "queryParam",
+            "name": "CLICKHOUSE_DATABASE",
+            "type": "Identifier"
+          },
+          "table": "r1_bak"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "rename",
+    "targetType": "TABLE",
+    "pairs": [
+      {
+        "from": {
+          "kind": "tableRef",
+          "database": {
+            "kind": "queryParam",
+            "name": "CLICKHOUSE_DATABASE",
+            "type": "Identifier"
+          },
+          "table": "r1_bak"
+        },
+        "to": {
+          "kind": "tableRef",
+          "database": {
+            "kind": "queryParam",
+            "name": "CLICKHOUSE_DATABASE",
+            "type": "Identifier"
+          },
+          "table": "r1"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "database": {
+        "kind": "queryParam",
+        "name": "CLICKHOUSE_DATABASE",
+        "type": "Identifier"
+      },
+      "table": "r2"
+    },
+    "ifNotExists": true,
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "name",
+        "type": {
+          "name": "String"
+        }
+      }
+    ],
+    "engine": {
+      "name": "Memory",
+      "args": []
+    }
+  },
+  {
+    "kind": "rename",
+    "targetType": "TABLE",
+    "pairs": [
+      {
+        "from": {
+          "kind": "tableRef",
+          "database": {
+            "kind": "queryParam",
+            "name": "CLICKHOUSE_DATABASE",
+            "type": "Identifier"
+          },
+          "table": "r1"
+        },
+        "to": {
+          "kind": "tableRef",
+          "database": {
+            "kind": "queryParam",
+            "name": "CLICKHOUSE_DATABASE",
+            "type": "Identifier"
+          },
+          "table": "r1_bak"
+        }
+      },
+      {
+        "from": {
+          "kind": "tableRef",
+          "database": {
+            "kind": "queryParam",
+            "name": "CLICKHOUSE_DATABASE",
+            "type": "Identifier"
+          },
+          "table": "r2"
+        },
+        "to": {
+          "kind": "tableRef",
+          "database": {
+            "kind": "queryParam",
+            "name": "CLICKHOUSE_DATABASE",
+            "type": "Identifier"
+          },
+          "table": "r2_bak"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "database": {
+        "kind": "queryParam",
+        "name": "CLICKHOUSE_DATABASE",
+        "type": "Identifier"
+      },
+      "table": "source_table"
+    },
+    "ifNotExists": true,
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "id",
+        "type": {
+          "name": "UInt64"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "value",
+        "type": {
+          "name": "String"
+        }
+      }
+    ],
+    "engine": {
+      "name": "Memory"
+    }
+  },
+  {
+    "kind": "createDictionary",
+    "table": {
+      "kind": "tableRef",
+      "database": {
+        "kind": "queryParam",
+        "name": "CLICKHOUSE_DATABASE",
+        "type": "Identifier"
+      },
+      "table": "test_dictionary"
+    },
+    "ifNotExists": true,
+    "dictAttrs": [
+      {
+        "name": "id",
+        "type": {
+          "name": "UInt64"
+        }
+      },
+      {
+        "name": "value",
+        "type": {
+          "name": "String"
+        }
+      }
+    ],
+    "dictDef": {
+      "primaryKey": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "id"
+          ]
+        }
+      ],
+      "source": {
+        "name": "clickhouse",
+        "pairs": [
+          {
+            "name": "TABLE",
+            "value": {
+              "kind": "literal",
+              "type": "String",
+              "value": "{CLICKHOUSE_DATABASE:String}.dictionary_table"
+            }
+          }
+        ]
+      },
+      "layout": {
+        "name": "FLAT",
+        "pairs": []
+      },
+      "lifetime": {
+        "min": 0,
+        "max": 1000
+      }
+    }
+  },
+  {
+    "kind": "system",
+    "body": "SHOW DICTIONARIES FROM {CLICKHOUSE_DATABASE:Identifier}"
+  },
+  {
+    "kind": "rename",
+    "targetType": "TABLE",
+    "pairs": [
+      {
+        "from": {
+          "kind": "tableRef",
+          "database": {
+            "kind": "queryParam",
+            "name": "CLICKHOUSE_DATABASE",
+            "type": "Identifier"
+          },
+          "table": "test_dictionary"
+        },
+        "to": {
+          "kind": "tableRef",
+          "database": {
+            "kind": "queryParam",
+            "name": "CLICKHOUSE_DATABASE",
+            "type": "Identifier"
+          },
+          "table": "test_dictionary_2"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "system",
+    "body": "SHOW DATABASES LIKE '{CLICKHOUSE_DATABASE:String}'"
+  },
+  {
+    "kind": "rename",
+    "targetType": "TABLE",
+    "pairs": [
+      {
+        "from": {
+          "kind": "tableRef",
+          "table": {
+            "kind": "queryParam",
+            "name": "CLICKHOUSE_DATABASE",
+            "type": "Identifier"
+          }
+        },
+        "to": {
+          "kind": "tableRef",
+          "table": {
+            "kind": "queryParam",
+            "name": "CLICKHOUSE_DATABASE_1",
+            "type": "Identifier"
+          }
+        }
+      }
+    ],
+    "trailingComments": [
+      "-- { serverError UNKNOWN_TABLE }"
+    ]
+  }
+]

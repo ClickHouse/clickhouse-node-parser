@@ -1,5 +1,77 @@
 [
   {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "send_logs_level",
+        "value": {
+          "kind": "literal",
+          "type": "String",
+          "value": "fatal"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "map_comb"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "map_comb"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "a",
+        "type": {
+          "name": "int"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "statusMap",
+        "type": {
+          "name": "Map",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "UInt16"
+              }
+            },
+            {
+              "kind": "type",
+              "type": {
+                "name": "UInt32"
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "engine": {
+      "name": "Log"
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "map_comb"
+      }
+    }
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -319,6 +391,14 @@
     ]
   },
   {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "map_comb"
+    }
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -335,7 +415,7 @@
       }
     ],
     "from": {
-      "kind": "tableFunction",
+      "kind": "tableFunctionRef",
       "name": "values",
       "args": [
         {
@@ -378,7 +458,10 @@
           "parenthesized": true
         }
       ]
-    }
+    },
+    "leadingComments": [
+      "-- check different types"
+    ]
   },
   {
     "kind": "select",
@@ -397,7 +480,7 @@
       }
     ],
     "from": {
-      "kind": "tableFunction",
+      "kind": "tableFunctionRef",
       "name": "values",
       "args": [
         {
@@ -459,7 +542,7 @@
       }
     ],
     "from": {
-      "kind": "tableFunction",
+      "kind": "tableFunctionRef",
       "name": "values",
       "args": [
         {
@@ -521,7 +604,7 @@
       }
     ],
     "from": {
-      "kind": "tableFunction",
+      "kind": "tableFunctionRef",
       "name": "values",
       "args": [
         {
@@ -583,7 +666,7 @@
       }
     ],
     "from": {
-      "kind": "tableFunction",
+      "kind": "tableFunctionRef",
       "name": "values",
       "args": [
         {
@@ -645,7 +728,7 @@
       }
     ],
     "from": {
-      "kind": "tableFunction",
+      "kind": "tableFunctionRef",
       "name": "values",
       "args": [
         {
@@ -707,7 +790,7 @@
       }
     ],
     "from": {
-      "kind": "tableFunction",
+      "kind": "tableFunctionRef",
       "name": "values",
       "args": [
         {
@@ -769,7 +852,7 @@
       }
     ],
     "from": {
-      "kind": "tableFunction",
+      "kind": "tableFunctionRef",
       "name": "values",
       "args": [
         {
@@ -831,7 +914,7 @@
       }
     ],
     "from": {
-      "kind": "tableFunction",
+      "kind": "tableFunctionRef",
       "name": "values",
       "args": [
         {
@@ -893,7 +976,7 @@
       }
     ],
     "from": {
-      "kind": "tableFunction",
+      "kind": "tableFunctionRef",
       "name": "values",
       "args": [
         {
@@ -955,7 +1038,7 @@
       }
     ],
     "from": {
-      "kind": "tableFunction",
+      "kind": "tableFunctionRef",
       "name": "values",
       "args": [
         {
@@ -1017,7 +1100,7 @@
       }
     ],
     "from": {
-      "kind": "tableFunction",
+      "kind": "tableFunctionRef",
       "name": "values",
       "args": [
         {
@@ -1097,6 +1180,9 @@
           }
         ]
       }
+    ],
+    "trailingComments": [
+      "-- { serverError NUMBER_OF_ARGUMENTS_DOESNT_MATCH }"
     ]
   },
   {
@@ -1140,6 +1226,9 @@
           }
         ]
       }
+    ],
+    "trailingComments": [
+      "-- { serverError NUMBER_OF_ARGUMENTS_DOESNT_MATCH }"
     ]
   },
   {
@@ -1150,7 +1239,7 @@
         "name": "avgMap",
         "args": [
           {
-            "kind": "array",
+            "kind": "arrayLiteral",
             "elements": [
               {
                 "kind": "literal",
@@ -1171,7 +1260,7 @@
             "source": "[1,1,1]"
           },
           {
-            "kind": "array",
+            "kind": "arrayLiteral",
             "elements": [
               {
                 "kind": "literal",
@@ -1193,6 +1282,12 @@
           }
         ]
       }
+    ],
+    "leadingComments": [
+      "-- array and tuple arguments"
+    ],
+    "trailingComments": [
+      "-- { serverError ILLEGAL_TYPE_OF_ARGUMENT }"
     ]
   },
   {
@@ -1203,7 +1298,7 @@
         "name": "minMap",
         "args": [
           {
-            "kind": "tuple",
+            "kind": "tupleLiteral",
             "elements": [
               {
                 "kind": "literal",
@@ -1220,6 +1315,9 @@
           }
         ]
       }
+    ],
+    "trailingComments": [
+      "-- { serverError ILLEGAL_TYPE_OF_ARGUMENT }"
     ]
   },
   {
@@ -1230,10 +1328,10 @@
         "name": "minMap",
         "args": [
           {
-            "kind": "tuple",
+            "kind": "tupleLiteral",
             "elements": [
               {
-                "kind": "array",
+                "kind": "arrayLiteral",
                 "elements": [
                   {
                     "kind": "literal",
@@ -1263,6 +1361,9 @@
           }
         ]
       }
+    ],
+    "trailingComments": [
+      "-- { serverError ILLEGAL_TYPE_OF_ARGUMENT }"
     ]
   },
   {
@@ -1273,7 +1374,7 @@
         "name": "minMap",
         "args": [
           {
-            "kind": "array",
+            "kind": "arrayLiteral",
             "elements": [
               {
                 "kind": "literal",
@@ -1300,6 +1401,9 @@
           }
         ]
       }
+    ],
+    "trailingComments": [
+      "-- { serverError ILLEGAL_TYPE_OF_ARGUMENT }"
     ]
   },
   {
@@ -1310,7 +1414,7 @@
         "name": "minMap",
         "args": [
           {
-            "kind": "array",
+            "kind": "arrayLiteral",
             "elements": [
               {
                 "kind": "literal",
@@ -1332,6 +1436,9 @@
           }
         ]
       }
+    ],
+    "trailingComments": [
+      "-- { serverError ILLEGAL_TYPE_OF_ARGUMENT }"
     ]
   },
   {
@@ -1342,7 +1449,7 @@
         "name": "minMap",
         "args": [
           {
-            "kind": "array",
+            "kind": "arrayLiteral",
             "elements": [
               {
                 "kind": "literal",
@@ -1365,7 +1472,68 @@
           }
         ]
       }
+    ],
+    "trailingComments": [
+      "-- { serverError ILLEGAL_TYPE_OF_ARGUMENT }"
     ]
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "sum_map_decimal"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "sum_map_decimal"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "statusMap",
+        "type": {
+          "name": "Map",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "UInt16"
+              }
+            },
+            {
+              "kind": "type",
+              "type": {
+                "name": "Decimal32",
+                "args": [
+                  {
+                    "kind": "literal",
+                    "value": "5"
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "engine": {
+      "name": "Log"
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "sum_map_decimal"
+      }
+    }
   },
   {
     "kind": "select",
@@ -1405,6 +1573,14 @@
       }
     ],
     "from": {
+      "kind": "tableRef",
+      "table": "sum_map_decimal"
+    }
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
       "kind": "tableRef",
       "table": "sum_map_decimal"
     }

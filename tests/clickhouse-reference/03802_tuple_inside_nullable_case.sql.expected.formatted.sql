@@ -1,3 +1,6 @@
+SET enable_analyzer = 1;
+
+-- { echo }
 SELECT
     multiIf(number = 0, (
         SELECT 0

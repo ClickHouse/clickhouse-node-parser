@@ -1,3 +1,4 @@
+-- Tests functions round(), roundBankers(), floor(), ceil() and trunc() with default 'scale' argument
 SELECT
     toUInt8(number) AS x,
     round(x),
@@ -118,6 +119,7 @@ SELECT
 FROM `system`.numbers
 LIMIT 20;
 
+-- Functions round(), roundBankers(), floor(), ceil() and trunc() accept non-const 'scale' arguments
 SELECT
     toFloat32(((number - 10)) / 10) AS x,
     round(x, materialize(1)),
@@ -340,6 +342,165 @@ LIMIT 20;
 
 SELECT toString('CHECKPOINT1');
 
+DROP TABLE IF EXISTS tab;
+
+CREATE TABLE tab
+(
+    id Int32,
+    scale Int16,
+    u8 UInt8,
+    u16 UInt16,
+    u32 UInt32,
+    u64 UInt64,
+    i8 Int8,
+    i16 Int16,
+    i32 Int32,
+    i64 Int64,
+    f32 Float32,
+    f64 Float64
+)
+ENGINE = Memory;
+
+INSERT INTO tab SELECT
+    number,
+    0,
+    number,
+    number,
+    number,
+    number,
+    number,
+    number,
+    number,
+    number,
+    number,
+    number
+FROM `system`.numbers
+LIMIT 20;
+
+INSERT INTO tab SELECT
+    number + 20,
+    0,
+    number + 10,
+    number + 10,
+    number + 10,
+    number + 10,
+    number - 10,
+    number - 10,
+    number - 10,
+    number - 10,
+    ((toFloat32(number) - 10)) / 10,
+    ((toFloat64(number) - 10)) / 10
+FROM `system`.numbers
+LIMIT 20;
+
+INSERT INTO tab SELECT
+    number + 40,
+    -1,
+    number,
+    number,
+    number,
+    number,
+    number,
+    number,
+    number,
+    number,
+    number,
+    number
+FROM `system`.numbers
+LIMIT 20;
+
+INSERT INTO tab SELECT
+    number + 60,
+    -1,
+    number + 10,
+    number + 10,
+    number + 10,
+    number + 10,
+    number - 10,
+    number - 10,
+    number - 10,
+    number - 10,
+    ((toFloat32(number) - 10)) / 10,
+    ((toFloat64(number) - 10)) / 10
+FROM `system`.numbers
+LIMIT 20;
+
+INSERT INTO tab SELECT
+    number + 80,
+    -2,
+    number,
+    number,
+    number,
+    number,
+    number,
+    number,
+    number,
+    number,
+    number,
+    number
+FROM `system`.numbers
+LIMIT 20;
+
+INSERT INTO tab SELECT
+    number + 100,
+    -2,
+    number + 10,
+    number + 10,
+    number + 10,
+    number + 10,
+    number - 10,
+    number - 10,
+    number - 10,
+    number - 10,
+    ((toFloat32(number) - 10)) / 10,
+    ((toFloat64(number) - 10)) / 10
+FROM `system`.numbers
+LIMIT 20;
+
+INSERT INTO tab SELECT
+    number + 200,
+    negate(number),
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    12345.6789,
+    12345.6789
+FROM `system`.numbers
+LIMIT 10;
+
+INSERT INTO tab SELECT
+    number + 210,
+    negate(number),
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    12345.6789,
+    12345.6789
+FROM `system`.numbers
+LIMIT 10;
+
+INSERT INTO tab;
+
+INSERT INTO tab;
+
+INSERT INTO tab;
+
+INSERT INTO tab;
+
+INSERT INTO tab;
+
+INSERT INTO tab;
+
 SELECT toString('id u8 scale round(u8, scale) roundBankers(x, scale) floor(x, scale) ceil(x, scale) trunc(x, scale)');
 
 SELECT
@@ -480,7 +641,113 @@ SELECT
 FROM tab
 ORDER BY id ASC;
 
+DROP TABLE tab;
+
+--
 SELECT toString('CHECKPOINT2');
+
+CREATE TABLE tab
+(
+    id Int32,
+    scale Int16,
+    d32 Decimal32(4),
+    d64 Decimal64(4),
+    d128 Decimal128(4),
+    d256 Decimal256(4)
+)
+ENGINE = Memory;
+
+INSERT INTO tab;
+
+INSERT INTO tab SELECT
+    2,
+    6,
+    cos(d32),
+    cos(d64),
+    cos(d128),
+    cos(d256)
+FROM tab
+WHERE id = 1;
+
+INSERT INTO tab SELECT
+    3,
+    6,
+    sqrt(d32),
+    sqrt(d64),
+    sqrt(d128),
+    sqrt(d256)
+FROM tab
+WHERE id = 1;
+
+INSERT INTO tab SELECT
+    4,
+    6,
+    lgamma(d32),
+    lgamma(d64),
+    lgamma(d128),
+    lgamma(d256)
+FROM tab
+WHERE id = 1;
+
+INSERT INTO tab SELECT
+    5,
+    6,
+    tgamma(d32) / 1e50,
+    tgamma(d64) / 1e50,
+    tgamma(d128) / 1e50,
+    tgamma(d256) / 1e50
+FROM tab
+WHERE id = 1;
+
+INSERT INTO tab SELECT
+    6,
+    8,
+    sin(d32),
+    sin(d64),
+    sin(d128),
+    sin(d256)
+FROM tab
+WHERE id = 1;
+
+INSERT INTO tab SELECT
+    7,
+    8,
+    cos(d32),
+    cos(d64),
+    cos(d128),
+    cos(d256)
+FROM tab
+WHERE id = 1;
+
+INSERT INTO tab SELECT
+    8,
+    8,
+    log(d32),
+    log(d64),
+    log(d128),
+    log(d256)
+FROM tab
+WHERE id = 1;
+
+INSERT INTO tab SELECT
+    9,
+    8,
+    log2(d32),
+    log2(d64),
+    log2(d128),
+    log2(d256)
+FROM tab
+WHERE id = 1;
+
+INSERT INTO tab SELECT
+    10,
+    8,
+    log10(d32),
+    log10(d64),
+    log10(d128),
+    log10(d256)
+FROM tab
+WHERE id = 1;
 
 SELECT
     id,
@@ -505,4 +772,4 @@ SELECT round(materialize(1), 1);
 
 SELECT
     materialize(10.1) AS x,
-    ceil(x, toUInt256(123));
+    ceil(x, toUInt256(123)); --{serverError ILLEGAL_TYPE_OF_ARGUMENT}

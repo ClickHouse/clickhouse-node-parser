@@ -1,0 +1,245 @@
+[
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "03593_backup_with_broken_projection"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "id",
+        "type": {
+          "name": "UInt64"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "string",
+        "type": {
+          "name": "String"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "time1",
+        "type": {
+          "name": "DateTime64",
+          "args": [
+            {
+              "kind": "literal",
+              "value": "6"
+            }
+          ]
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "time2",
+        "type": {
+          "name": "DateTime64",
+          "args": [
+            {
+              "kind": "literal",
+              "value": "6"
+            }
+          ]
+        }
+      },
+      {
+        "kind": "projectionDef",
+        "name": "max_time",
+        "query": {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "string"
+              ]
+            },
+            {
+              "kind": "functionCall",
+              "name": "max",
+              "args": [
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "time1"
+                  ]
+                }
+              ]
+            },
+            {
+              "kind": "functionCall",
+              "name": "max",
+              "args": [
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "time2"
+                  ]
+                }
+              ]
+            }
+          ],
+          "groupBy": {
+            "kind": "expressions",
+            "items": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "string"
+                ]
+              }
+            ]
+          }
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "time1"
+          ]
+        }
+      }
+    ],
+    "leadingComments": [
+      "-- Tags: no-msan"
+    ]
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "03593_backup_with_broken_projection"
+      }
+    },
+    "insertSettings": [
+      {
+        "name": "max_block_size",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "10000000"
+        }
+      },
+      {
+        "name": "min_insert_block_size_rows",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "10000000"
+        }
+      }
+    ],
+    "selectQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "binaryExpr",
+          "op": "=",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "number"
+            ]
+          },
+          "right": {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "4000000"
+          }
+        },
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "test"
+        },
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "2025-08-11"
+        },
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "2025-08-11"
+        }
+      ],
+      "from": {
+        "kind": "tableRef",
+        "database": "system",
+        "table": "numbers"
+      },
+      "limit": {
+        "count": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "5000000"
+        }
+      }
+    }
+  },
+  {
+    "kind": "alter",
+    "table": {
+      "kind": "tableRef",
+      "table": "03593_backup_with_broken_projection"
+    },
+    "commands": [
+      {
+        "kind": "alterCommand",
+        "commandType": "UPDATE",
+        "assignments": [
+          {
+            "column": "_row_exists",
+            "expr": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "0"
+            }
+          }
+        ],
+        "where": {
+          "kind": "binaryExpr",
+          "op": "=",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "id"
+            ]
+          },
+          "right": {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "0"
+          }
+        },
+        "parenthesized": true
+      }
+    ],
+    "settings": [
+      {
+        "name": "mutations_sync",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "system",
+    "body": "BACKUP TABLE 03593_backup_with_broken_projection TO Null SETTINGS allow_backup_broken_projections = true, check_projection_parts = false FORMAT Null"
+  }
+]

@@ -1,5 +1,144 @@
 [
   {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "max_block_size",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "65409"
+        }
+      }
+    ],
+    "leadingComments": [
+      "-- Tags: memory-engine"
+    ],
+    "trailingComments": [
+      "-- Default value"
+    ]
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "memory"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "memory"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "i",
+        "type": {
+          "name": "UInt32"
+        }
+      }
+    ],
+    "engine": {
+      "name": "Memory"
+    },
+    "settings": [
+      {
+        "name": "min_bytes_to_keep",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "8192"
+        }
+      },
+      {
+        "name": "max_bytes_to_keep",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "32768"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "memory"
+      }
+    },
+    "selectQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "asterisk"
+        }
+      ],
+      "from": {
+        "kind": "tableFunctionRef",
+        "name": "numbers",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "0"
+          },
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "100"
+          }
+        ]
+      }
+    },
+    "trailingComments": [
+      "-- 1024 bytes"
+    ]
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "memory"
+      }
+    },
+    "selectQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "asterisk"
+        }
+      ],
+      "from": {
+        "kind": "tableFunctionRef",
+        "name": "numbers",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "0"
+          },
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "3000"
+          }
+        ]
+      }
+    },
+    "trailingComments": [
+      "-- 16384 bytes"
+    ]
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -49,7 +188,152 @@
           }
         }
       ]
-    }
+    },
+    "trailingComments": [
+      "-- 17408 in total"
+    ]
+  },
+  {
+    "kind": "alter",
+    "table": {
+      "kind": "tableRef",
+      "table": "memory"
+    },
+    "commands": [
+      {
+        "kind": "alterCommand",
+        "commandType": "MODIFY_SETTING",
+        "settings": [
+          {
+            "name": "min_bytes_to_keep",
+            "value": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "4096"
+            }
+          },
+          {
+            "name": "max_bytes_to_keep",
+            "value": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "16384"
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "memory"
+      }
+    },
+    "selectQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "asterisk"
+        }
+      ],
+      "from": {
+        "kind": "tableFunctionRef",
+        "name": "numbers",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "3000"
+          },
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "10000"
+          }
+        ]
+      }
+    },
+    "trailingComments": [
+      "-- 65536 bytes"
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "memory"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "i",
+        "type": {
+          "name": "UInt32"
+        }
+      }
+    ],
+    "engine": {
+      "name": "Memory"
+    },
+    "settings": [
+      {
+        "name": "min_rows_to_keep",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "200"
+        }
+      },
+      {
+        "name": "max_rows_to_keep",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "2000"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "memory"
+      }
+    },
+    "selectQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "asterisk"
+        }
+      ],
+      "from": {
+        "kind": "tableFunctionRef",
+        "name": "numbers",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "100"
+          },
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "1000"
+          }
+        ]
+      }
+    },
+    "trailingComments": [
+      "-- 1000 rows"
+    ]
   },
   {
     "kind": "select",
@@ -101,6 +385,350 @@
           }
         }
       ]
+    },
+    "trailingComments": [
+      "-- 1100 in total"
+    ]
+  },
+  {
+    "kind": "alter",
+    "table": {
+      "kind": "tableRef",
+      "table": "memory"
+    },
+    "commands": [
+      {
+        "kind": "alterCommand",
+        "commandType": "MODIFY_SETTING",
+        "settings": [
+          {
+            "name": "min_rows_to_keep",
+            "value": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "100"
+            }
+          },
+          {
+            "name": "max_rows_to_keep",
+            "value": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "1000"
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "memory"
+      }
+    },
+    "selectQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "asterisk"
+        }
+      ],
+      "from": {
+        "kind": "tableFunctionRef",
+        "name": "numbers",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "1000"
+          },
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "500"
+          }
+        ]
+      }
+    },
+    "trailingComments": [
+      "-- 500 rows"
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "memory"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "i",
+        "type": {
+          "name": "UInt32"
+        }
+      }
+    ],
+    "engine": {
+      "name": "Memory"
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "memory"
+      }
+    },
+    "selectQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "asterisk"
+        }
+      ],
+      "from": {
+        "kind": "tableFunctionRef",
+        "name": "numbers",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "0"
+          },
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "50"
+          }
+        ]
+      }
+    },
+    "trailingComments": [
+      "-- 50 rows"
+    ]
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "memory"
+      }
+    },
+    "selectQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "asterisk"
+        }
+      ],
+      "from": {
+        "kind": "tableFunctionRef",
+        "name": "numbers",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "50"
+          },
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "950"
+          }
+        ]
+      }
+    },
+    "trailingComments": [
+      "-- 950 rows"
+    ]
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "memory"
+      }
+    },
+    "selectQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "asterisk"
+        }
+      ],
+      "from": {
+        "kind": "tableFunctionRef",
+        "name": "numbers",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "2000"
+          },
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "70"
+          }
+        ]
+      }
+    },
+    "trailingComments": [
+      "-- 70 rows"
+    ]
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "memory"
+      }
+    },
+    "selectQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "asterisk"
+        }
+      ],
+      "from": {
+        "kind": "tableFunctionRef",
+        "name": "numbers",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "3000"
+          },
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "1100"
+          }
+        ]
+      }
+    },
+    "trailingComments": [
+      "-- 1100 rows"
+    ]
+  },
+  {
+    "kind": "alter",
+    "table": {
+      "kind": "tableRef",
+      "table": "memory"
+    },
+    "commands": [
+      {
+        "kind": "alterCommand",
+        "commandType": "MODIFY_SETTING",
+        "settings": [
+          {
+            "name": "min_rows_to_keep",
+            "value": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "100"
+            }
+          }
+        ]
+      }
+    ],
+    "trailingComments": [
+      "-- { serverError SETTING_CONSTRAINT_VIOLATION }"
+    ]
+  },
+  {
+    "kind": "alter",
+    "table": {
+      "kind": "tableRef",
+      "table": "memory"
+    },
+    "commands": [
+      {
+        "kind": "alterCommand",
+        "commandType": "MODIFY_SETTING",
+        "settings": [
+          {
+            "name": "min_bytes_to_keep",
+            "value": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "100"
+            }
+          }
+        ]
+      }
+    ],
+    "trailingComments": [
+      "-- { serverError SETTING_CONSTRAINT_VIOLATION }"
+    ]
+  },
+  {
+    "kind": "alter",
+    "table": {
+      "kind": "tableRef",
+      "table": "memory"
+    },
+    "commands": [
+      {
+        "kind": "alterCommand",
+        "commandType": "MODIFY_SETTING",
+        "settings": [
+          {
+            "name": "max_rows_to_keep",
+            "value": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "1000"
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "alter",
+    "table": {
+      "kind": "tableRef",
+      "table": "memory"
+    },
+    "commands": [
+      {
+        "kind": "alterCommand",
+        "commandType": "MODIFY_SETTING",
+        "settings": [
+          {
+            "name": "max_bytes_to_keep",
+            "value": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "1000"
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "memory"
     }
   }
 ]

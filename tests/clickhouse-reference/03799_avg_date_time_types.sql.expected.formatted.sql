@@ -1,4 +1,21 @@
+SET enable_time_time64_type = 1;
+
+SET use_legacy_to_time = 0;
+
+SET session_timezone = 'UTC';
+
 SELECT '-- Original Time aggregate functions test';
+
+DROP TABLE IF EXISTS dt;
+
+CREATE TABLE dt
+(
+    time Time,
+    event_id UInt8
+)
+ENGINE = TinyLog;
+
+INSERT INTO dt;
 
 SELECT max(time)
 FROM dt;
@@ -8,6 +25,8 @@ FROM dt;
 
 SELECT avg(time)
 FROM dt;
+
+DROP TABLE dt;
 
 SELECT avg(d)
 FROM (
@@ -85,6 +104,19 @@ FROM (
         SELECT toTime64('01:00:00.000', 3) AS t64
     );
 
+DROP TABLE IF EXISTS empty_date_test;
+
+CREATE TABLE empty_date_test
+(
+    d Date,
+    d32 Date32,
+    dt DateTime('UTC'),
+    dt64 DateTime64(3, 'UTC'),
+    t Time,
+    t64 Time64(3)
+)
+ENGINE = Memory;
+
 SELECT
     avg(d),
     avg(d32),
@@ -94,6 +126,8 @@ SELECT
     avg(t64)
 FROM empty_date_test
 FORMAT Vertical;
+
+DROP TABLE empty_date_test;
 
 SELECT avg(d)
 FROM (
@@ -190,14 +224,14 @@ FROM (
         SELECT toTime('00:00:00') AS t
         UNION ALL
         SELECT toTime('00:00:01') AS t
-    );
+    ); -- 0.5 -> 0
 
 SELECT avg(t)
 FROM (
         SELECT toTime('00:00:01') AS t
         UNION ALL
         SELECT toTime('00:00:02') AS t
-    );
+    ); -- 1.5 -> 2
 
 SELECT avg(dt64)
 FROM (
@@ -301,6 +335,21 @@ FROM (
         SELECT toTime('100:00:00') AS t
     );
 
+DROP TABLE IF EXISTS nullable_date_test;
+
+CREATE TABLE nullable_date_test
+(
+    d Nullable(Date),
+    d32 Nullable(Date32),
+    dt Nullable(DateTime('UTC')),
+    dt64 Nullable(DateTime64(3, 'UTC')),
+    t Nullable(Time),
+    t64 Nullable(Time64(3))
+)
+ENGINE = Memory;
+
+INSERT INTO nullable_date_test;
+
 SELECT
     avg(d),
     avg(d32),
@@ -325,6 +374,21 @@ SELECT avg(d)
 FROM nullable_date_test
 WHERE isNull(d);
 
+DROP TABLE nullable_date_test;
+
+DROP TABLE IF EXISTS avgif_date_test;
+
+CREATE TABLE avgif_date_test
+(
+    d Date,
+    dt DateTime('UTC'),
+    t Time,
+    flag UInt8
+)
+ENGINE = Memory;
+
+INSERT INTO avgif_date_test;
+
 SELECT
     avgIf(d, flag = 1),
     avgIf(dt, flag = 1),
@@ -334,6 +398,21 @@ FROM avgif_date_test;
 SELECT avgIf(d, flag = 99)
 FROM avgif_date_test;
 
+DROP TABLE avgif_date_test;
+
+DROP TABLE IF EXISTS groupby_date_test;
+
+CREATE TABLE groupby_date_test
+(
+    grp String,
+    d Date,
+    dt DateTime('UTC'),
+    t Time
+)
+ENGINE = Memory;
+
+INSERT INTO groupby_date_test;
+
 SELECT
     grp,
     avg(d),
@@ -342,6 +421,8 @@ SELECT
 FROM groupby_date_test
 GROUP BY grp
 ORDER BY grp ASC;
+
+DROP TABLE groupby_date_test;
 
 SELECT avg(d)
 FROM (
@@ -541,6 +622,10 @@ FROM (
         SELECT toTime64('12:00:00.003', 3) AS t64
     );
 
+SET compile_aggregate_expressions = 1;
+
+SET min_count_to_compile_aggregate_expression = 0;
+
 SELECT avg(d)
 FROM (
         SELECT addDays(toDate('2020-01-01'), number) AS d
@@ -559,17 +644,95 @@ FROM (
         FROM numbers(100)
     );
 
+-- Use CAST for Time types to avoid timezone sensitivity
+DROP TABLE IF EXISTS jit_time_test;
+
+CREATE TABLE jit_time_test
+(
+    t Time,
+    t64 Time64(3)
+)
+ENGINE = Memory;
+
+INSERT INTO jit_time_test SELECT
+    CAST(number AS Time),
+    CAST(number AS Time64(3))
+FROM numbers(100);
+
 SELECT avg(t)
 FROM jit_time_test;
 
 SELECT avg(t64)
 FROM jit_time_test;
 
+DROP TABLE jit_time_test;
+
+SET compile_aggregate_expressions = 0;
+
+DROP TABLE IF EXISTS negative_time_test;
+
+CREATE TABLE negative_time_test
+(
+    t Time
+)
+ENGINE = Memory;
+
+-- Insert -3600 (=-1h), 3600 (=1h), 10800 (=3h) -> avg = 3600 = 1h
+INSERT INTO negative_time_test SELECT toTime(-3600 + number * 7200)
+FROM numbers(3);
+
 SELECT avg(t)
 FROM negative_time_test;
+
+DROP TABLE negative_time_test;
+
+DROP TABLE IF EXISTS mv_source;
+
+DROP TABLE IF EXISTS mv_target;
+
+CREATE TABLE mv_source
+(
+    grp UInt8,
+    d Date,
+    dt DateTime('UTC'),
+    t Time
+)
+ENGINE = MergeTree
+ORDER BY grp;
+
+CREATE TABLE mv_target
+(
+    grp UInt8,
+    d_avg AggregateFunction(avg, Date),
+    dt_avg AggregateFunction(avg, DateTime('UTC')),
+    t_avg AggregateFunction(avg, Time)
+)
+ENGINE = AggregatingMergeTree
+ORDER BY grp;
+
+CREATE MATERIALIZED VIEW mv_view
+TO mv_target
+AS
+SELECT
+    1 AS grp,
+    avgState(d) AS d_avg,
+    avgState(dt) AS dt_avg,
+    avgState(t) AS t_avg
+FROM mv_source
+GROUP BY grp;
+
+INSERT INTO mv_source;
+
+INSERT INTO mv_source;
 
 SELECT
     avgMerge(d_avg),
     avgMerge(dt_avg),
     avgMerge(t_avg)
 FROM mv_target;
+
+DROP VIEW mv_view;
+
+DROP TABLE mv_target;
+
+DROP TABLE mv_source;

@@ -1,5 +1,299 @@
 [
   {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "hits_text"
+    },
+    "ifExists": true,
+    "leadingComments": [
+      "-- Tags: stateful, long, no-parallel, no-asan, no-tsan, no-ubsan, no-msan",
+      "-- no-*san: too long."
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "hits_text"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "CounterID",
+        "type": {
+          "name": "UInt32"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "EventDate",
+        "type": {
+          "name": "Date"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "UserID",
+        "type": {
+          "name": "UInt32"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "SearchPhrase",
+        "type": {
+          "name": "String"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "URL",
+        "type": {
+          "name": "String"
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "CounterID"
+          ]
+        }
+      },
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "EventDate"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "enable_full_text_index",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "use_query_condition_cache",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "alter",
+    "table": {
+      "kind": "tableRef",
+      "table": "hits_text"
+    },
+    "commands": [
+      {
+        "kind": "alterCommand",
+        "commandType": "ADD_INDEX",
+        "index": {
+          "kind": "indexDef",
+          "name": "idx_search_phrase",
+          "expr": {
+            "kind": "columnRef",
+            "parts": [
+              "SearchPhrase"
+            ]
+          },
+          "indexType": {
+            "name": "text",
+            "args": [
+              {
+                "kind": "binaryExpr",
+                "op": "=",
+                "left": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "tokenizer"
+                  ]
+                },
+                "right": {
+                  "kind": "literal",
+                  "type": "String",
+                  "value": "splitByNonAlpha"
+                }
+              }
+            ]
+          },
+          "granularity": 8
+        }
+      }
+    ]
+  },
+  {
+    "kind": "alter",
+    "table": {
+      "kind": "tableRef",
+      "table": "hits_text"
+    },
+    "commands": [
+      {
+        "kind": "alterCommand",
+        "commandType": "ADD_INDEX",
+        "index": {
+          "kind": "indexDef",
+          "name": "idx_url",
+          "expr": {
+            "kind": "columnRef",
+            "parts": [
+              "URL"
+            ]
+          },
+          "indexType": {
+            "name": "text",
+            "args": [
+              {
+                "kind": "binaryExpr",
+                "op": "=",
+                "left": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "tokenizer"
+                  ]
+                },
+                "right": {
+                  "kind": "literal",
+                  "type": "String",
+                  "value": "splitByNonAlpha"
+                }
+              }
+            ]
+          },
+          "granularity": 8
+        }
+      }
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "max_insert_threads",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "4"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "hits_text"
+      }
+    },
+    "selectQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "CounterID"
+          ]
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "EventDate"
+          ]
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "UserID"
+          ]
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "SearchPhrase"
+          ]
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "URL"
+          ]
+        }
+      ],
+      "from": {
+        "kind": "tableRef",
+        "database": "test",
+        "table": "hits"
+      }
+    }
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "use_skip_indexes",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "use_skip_indexes_on_data_read",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "force_data_skipping_indices",
+        "value": {
+          "kind": "literal",
+          "type": "String",
+          "value": ""
+        }
+      }
+    ]
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -694,6 +988,71 @@
     }
   },
   {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "use_skip_indexes",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "use_skip_indexes_on_data_read",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "force_data_skipping_indices",
+        "value": {
+          "kind": "literal",
+          "type": "String",
+          "value": "idx_search_phrase"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "force_data_skipping_indices",
+        "value": {
+          "kind": "literal",
+          "type": "String",
+          "value": "idx_url"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "force_data_skipping_indices",
+        "value": {
+          "kind": "literal",
+          "type": "String",
+          "value": "idx_search_phrase,idx_url"
+        }
+      }
+    ]
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -717,7 +1076,7 @@
           ]
         },
         {
-          "kind": "array",
+          "kind": "arrayLiteral",
           "elements": [
             {
               "kind": "literal",
@@ -759,7 +1118,7 @@
           ]
         },
         {
-          "kind": "array",
+          "kind": "arrayLiteral",
           "elements": [
             {
               "kind": "literal",
@@ -805,7 +1164,7 @@
               ]
             },
             {
-              "kind": "array",
+              "kind": "arrayLiteral",
               "elements": [
                 {
                   "kind": "literal",
@@ -870,7 +1229,7 @@
           ]
         },
         {
-          "kind": "array",
+          "kind": "arrayLiteral",
           "elements": [
             {
               "kind": "literal",
@@ -933,7 +1292,7 @@
               ]
             },
             {
-              "kind": "array",
+              "kind": "arrayLiteral",
               "elements": [
                 {
                   "kind": "literal",
@@ -986,7 +1345,7 @@
               ]
             },
             {
-              "kind": "array",
+              "kind": "arrayLiteral",
               "elements": [
                 {
                   "kind": "literal",
@@ -1014,7 +1373,7 @@
               ]
             },
             {
-              "kind": "array",
+              "kind": "arrayLiteral",
               "elements": [
                 {
                   "kind": "literal",
@@ -1032,6 +1391,14 @@
           ]
         }
       ]
+    }
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "hits_text"
     }
   }
 ]

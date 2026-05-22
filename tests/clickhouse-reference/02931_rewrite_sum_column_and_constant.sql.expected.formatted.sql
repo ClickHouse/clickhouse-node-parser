@@ -1,3 +1,6 @@
+SET enable_analyzer = 1;
+
+-- { echoOn }
 SELECT sum(number + 1)
 FROM numbers(10);
 
@@ -10,6 +13,40 @@ FROM numbers(10);
 SELECT sum(1 - number)
 FROM numbers(10);
 
+WITH 1::Nullable(UInt64) AS my_literal
+
+SELECT sum(number + my_literal)
+FROM numbers(0);
+
+WITH 1::Nullable(UInt64) AS my_literal
+
+SELECT sum(number) + my_literal * count()
+FROM numbers(0);
+
+-- { echoOff }
+DROP TABLE IF EXISTS test_table;
+
+CREATE TABLE test_table
+(
+    uint64 UInt64,
+    float64 Float64,
+    decimal32 Decimal32(5)
+)
+ENGINE = MergeTree
+ORDER BY uint64;
+
+-- Use Float64 numbers divisible by 1/16 (or some other small power of two), so that their sum doesn't depend on summation order.
+INSERT INTO test_table;
+
+INSERT INTO test_table;
+
+INSERT INTO test_table;
+
+INSERT INTO test_table;
+
+INSERT INTO test_table;
+
+-- { echoOn }
 SELECT sum(uint64 + 1 AS i)
 FROM test_table
 WHERE i > 0;
@@ -289,6 +326,7 @@ FROM test_table;
 SELECT (2 * count(decimal32) - sum(decimal32)) + ((3 * count(decimal32) - sum(decimal32)))
 FROM test_table;
 
+-- https://github.com/ClickHouse/ClickHouse/issues/59414
 SELECT
     sum(uint64 + 2) AS j,
     j + 5 AS t

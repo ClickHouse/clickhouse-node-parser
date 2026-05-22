@@ -1,3 +1,69 @@
+CreateQuery ts_raw_data (children 3)
+ Identifier ts_raw_data
+ Columns definition (children 1)
+  ExpressionList (children 2)
+   ColumnDeclaration timestamp (children 1)
+    DataType DateTime64 (children 1)
+     ExpressionList (children 2)
+      Literal UInt64_3
+      Literal 'UTC'
+   ColumnDeclaration value (children 1)
+    DataType Float64
+ Storage definition (children 2)
+  Function MergeTree (children 1)
+   ExpressionList
+  Identifier timestamp
+
+InsertQuery   (children 2)
+ Identifier ts_raw_data
+ SelectWithUnionQuery (children 1)
+  ExpressionList (children 1)
+   SelectQuery (children 2)
+    ExpressionList (children 2)
+     Function CAST (alias timestamp) (children 1)
+      ExpressionList (children 2)
+       Function tupleElement (children 1)
+        ExpressionList (children 2)
+         Function arrayJoin (children 1)
+          ExpressionList (children 1)
+           Asterisk
+         Literal UInt64_1
+       Literal 'DateTime64(3, \'UTC\')'
+     Function tupleElement (alias value) (children 1)
+      ExpressionList (children 2)
+       Function arrayJoin (children 1)
+        ExpressionList (children 1)
+         Asterisk
+       Literal UInt64_2
+    TablesInSelectQuery (children 1)
+     TablesInSelectQueryElement (children 1)
+      TableExpression (children 1)
+       Subquery (children 1)
+        SelectWithUnionQuery (children 1)
+         ExpressionList (children 1)
+          SelectQuery (children 1)
+           ExpressionList (children 1)
+            Function array (children 1)
+             ExpressionList (children 18)
+              Literal Tuple_(Float64_1734955421.374, UInt64_0)
+              Literal Tuple_(Float64_1734955436.374, UInt64_0)
+              Literal Tuple_(Float64_1734955451.374, UInt64_0)
+              Literal Tuple_(Float64_1734955466.374, UInt64_0)
+              Literal Tuple_(Float64_1734955481.374, UInt64_0)
+              Literal Tuple_(Float64_1734955496.374, UInt64_0)
+              Literal Tuple_(Float64_1734955511.374, UInt64_1)
+              Literal Tuple_(Float64_1734955526.374, UInt64_3)
+              Literal Tuple_(Float64_1734955541.374, UInt64_5)
+              Literal Tuple_(Float64_1734955556.374, UInt64_5)
+              Literal Tuple_(Float64_1734955571.374, UInt64_5)
+              Literal Tuple_(Float64_1734955586.374, UInt64_5)
+              Literal Tuple_(Float64_1734955601.374, UInt64_8)
+              Literal Tuple_(Float64_1734955616.374, UInt64_8)
+              Literal Tuple_(Float64_1734955631.374, UInt64_8)
+              Literal Tuple_(Float64_1734955646.374, UInt64_8)
+              Literal Tuple_(Float64_1734955661.374, UInt64_8)
+              Literal Tuple_(Float64_1734955676.374, UInt64_8)
+
 SelectWithUnionQuery (children 1)
  ExpressionList (children 1)
   SelectQuery (children 2)
@@ -17,3 +83,150 @@ SelectWithUnionQuery (children 1)
     TablesInSelectQueryElement (children 1)
      TableExpression (children 1)
       TableIdentifier ts_raw_data
+
+Set
+
+SelectWithUnionQuery (children 1)
+ ExpressionList (children 1)
+  SelectQuery (children 3)
+   ExpressionList (children 5)
+    Literal UInt64_1734955380 (alias start)
+    Literal UInt64_1734955680 (alias end)
+    Literal UInt64_15 (alias step)
+    Literal UInt64_0 (alias staleness)
+    Function timeSeriesRange (alias grid) (children 1)
+     ExpressionList (children 3)
+      Identifier start
+      Identifier end
+      Identifier step
+   ExpressionList (children 1)
+    Function arrayZip (children 1)
+     ExpressionList (children 2)
+      Identifier grid
+      Function timeSeriesResampleToGridWithStaleness (children 2)
+       ExpressionList (children 2)
+        Identifier timestamp
+        Identifier value
+       ExpressionList (children 4)
+        Identifier start
+        Identifier end
+        Identifier step
+        Identifier staleness
+   TablesInSelectQuery (children 1)
+    TablesInSelectQueryElement (children 1)
+     TableExpression (children 1)
+      TableIdentifier ts_raw_data
+
+SelectWithUnionQuery (children 2)
+ ExpressionList (children 1)
+  SelectQuery (children 3)
+   ExpressionList (children 5)
+    Literal UInt64_1734955380 (alias start)
+    Literal UInt64_1734955680 (alias end)
+    Literal UInt64_15 (alias step)
+    Literal UInt64_300 (alias window)
+    Function timeSeriesRange (alias grid) (children 1)
+     ExpressionList (children 3)
+      Identifier start
+      Identifier end
+      Identifier step
+   ExpressionList (children 3)
+    Function arrayZip (alias last_5m) (children 1)
+     ExpressionList (children 2)
+      Identifier grid
+      Function timeSeriesLastToGrid (children 2)
+       ExpressionList (children 2)
+        Identifier timestamp
+        Identifier value
+       ExpressionList (children 4)
+        Identifier start
+        Identifier end
+        Identifier step
+        Identifier window
+    Function arrayZip (alias rate_5m) (children 1)
+     ExpressionList (children 2)
+      Identifier grid
+      Function timeSeriesRateToGrid (children 2)
+       ExpressionList (children 2)
+        Identifier timestamp
+        Identifier value
+       ExpressionList (children 4)
+        Identifier start
+        Identifier end
+        Identifier step
+        Identifier window
+    Function arrayZip (alias delta_5m) (children 1)
+     ExpressionList (children 2)
+      Identifier grid
+      Function timeSeriesDeltaToGrid (children 2)
+       ExpressionList (children 2)
+        Identifier timestamp
+        Identifier value
+       ExpressionList (children 4)
+        Identifier start
+        Identifier end
+        Identifier step
+        Identifier window
+   TablesInSelectQuery (children 1)
+    TablesInSelectQueryElement (children 1)
+     TableExpression (children 1)
+      TableIdentifier ts_raw_data
+ Identifier Vertical
+
+SelectWithUnionQuery (children 2)
+ ExpressionList (children 1)
+  SelectQuery (children 3)
+   ExpressionList (children 4)
+    Literal UInt64_1734955380 (alias start)
+    Literal UInt64_1734955680 (alias end)
+    Literal UInt64_15 (alias step)
+    Function timeSeriesRange (alias grid) (children 1)
+     ExpressionList (children 3)
+      Identifier start
+      Identifier end
+      Identifier step
+   ExpressionList (children 3)
+    Function arrayZip (alias irate_30s) (children 1)
+     ExpressionList (children 2)
+      Identifier grid
+      Function timeSeriesInstantRateToGrid (children 2)
+       ExpressionList (children 2)
+        Identifier timestamp
+        Identifier value
+       ExpressionList (children 4)
+        Identifier start
+        Identifier end
+        Identifier step
+        Literal UInt64_30
+    Function arrayZip (alias irate_19s) (children 1)
+     ExpressionList (children 2)
+      Identifier grid
+      Function timeSeriesInstantRateToGrid (children 2)
+       ExpressionList (children 2)
+        Identifier timestamp
+        Identifier value
+       ExpressionList (children 4)
+        Identifier start
+        Identifier end
+        Identifier step
+        Literal UInt64_19
+    Function arrayZip (alias irate_18s) (children 1)
+     ExpressionList (children 2)
+      Identifier grid
+      Function timeSeriesInstantRateToGrid (children 2)
+       ExpressionList (children 2)
+        Identifier timestamp
+        Identifier value
+       ExpressionList (children 4)
+        Identifier start
+        Identifier end
+        Identifier step
+        Literal UInt64_18
+   TablesInSelectQuery (children 1)
+    TablesInSelectQueryElement (children 1)
+     TableExpression (children 1)
+      TableIdentifier ts_raw_data
+ Identifier Vertical
+
+DropQuery  ts_raw_data (children 1)
+ Identifier ts_raw_data

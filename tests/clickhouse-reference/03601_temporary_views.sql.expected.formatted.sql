@@ -1,3 +1,43 @@
+CREATE TEMPORARY TABLE t_src
+(
+    id UInt32,
+    val String
+)
+ENGINE = Memory;
+
+INSERT INTO t_src;
+
+CREATE TEMPORARY VIEW tview_basic
+AS
+SELECT
+    id,
+    upper(val) AS u
+FROM t_src
+WHERE id <= 2;
+
 SELECT *
 FROM tview_basic
 ORDER BY id ASC;
+
+EXISTS VIEW tview_basic;
+
+SHOW TEMPORARY VIEW tview_basic;
+
+CREATE TEMPORARY VIEW IF NOT EXISTS tview_basic
+AS
+SELECT 0;
+
+CREATE TEMPORARY VIEW default.tview_db
+AS
+SELECT 1; -- { serverError BAD_DATABASE_FOR_TEMPORARY_TABLE }
+
+CREATE TEMPORARY VIEW tview_cluster ON CLUSTER `'test'`
+AS
+SELECT 1; -- { serverError INCORRECT_QUERY }
+
+CREATE TEMPORARY TABLE tsrc_cluster ON CLUSTER `'test'` AS
+SELECT 1; -- { serverError INCORRECT_QUERY }
+
+DROP TEMPORARY VIEW IF EXISTS tview_basic;
+
+DROP TEMPORARY TABLE IF EXISTS t_src;

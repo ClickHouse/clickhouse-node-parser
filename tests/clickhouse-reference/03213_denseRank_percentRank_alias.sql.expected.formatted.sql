@@ -1,3 +1,6 @@
+-- https://github.com/ClickHouse/ClickHouse/issues/67042
+-- Reference generated using percent_rank() and dense_rank()
+-- From ClickHouse/tests/queries/0_stateless/01591_window_functions.sql  (for deterministic query)
 SELECT '---- denseRank() ----';
 
 SELECT
@@ -22,8 +25,36 @@ ORDER BY
     p ASC,
     o ASC,
     number ASC
-WINDOW w AS (partition by p order by o, number)
+WINDOW w AS (PARTITION BY p ORDER BY o ASC, number ASC)
 SETTINGS max_block_size = 2;
+
+DROP TABLE IF EXISTS product_groups;
+
+DROP TABLE IF EXISTS products;
+
+CREATE TABLE product_groups
+(
+    group_id Int64,
+    group_name String
+)
+ENGINE = Memory;
+
+CREATE TABLE products
+(
+    product_id Int64,
+    product_name String,
+    price DECIMAL(11, 2),
+    group_id Int64
+)
+ENGINE = Memory;
+
+INSERT INTO product_groups;
+
+INSERT INTO products (product_id, product_name, group_id, price);
+
+INSERT INTO product_groups;
+
+INSERT INTO products (product_id, product_name, group_id, price);
 
 SELECT *
 FROM (
@@ -42,3 +73,7 @@ ORDER BY
     group_name ASC,
     price ASC,
     product_name ASC;
+
+DROP TABLE product_groups;
+
+DROP TABLE products;

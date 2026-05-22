@@ -1,3 +1,17 @@
+DROP TABLE IF EXISTS x;
+
+CREATE TABLE x
+(
+    dt String
+)
+ENGINE = MergeTree
+ORDER BY tuple()
+PARTITION BY toYYYYMM(toDate(dt));
+
+INSERT INTO x;
+
 SELECT *
 FROM x
 WHERE like(dt, '2022-10-01%');
+
+DROP TABLE x;

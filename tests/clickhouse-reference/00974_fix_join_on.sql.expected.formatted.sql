@@ -1,3 +1,37 @@
+DROP TABLE IF EXISTS t1;
+
+DROP TABLE IF EXISTS t2;
+
+DROP TABLE IF EXISTS t3;
+
+CREATE TABLE t1
+(
+    a UInt32,
+    b String
+)
+ENGINE = Memory;
+
+CREATE TABLE t2
+(
+    c UInt32,
+    d String
+)
+ENGINE = Memory;
+
+CREATE TABLE t3
+(
+    a UInt32
+)
+ENGINE = Memory;
+
+INSERT INTO t1;
+
+INSERT INTO t2;
+
+INSERT INTO t3;
+
+SET enable_optimize_predicate_expression = 0;
+
 SELECT *
 FROM
     t1
@@ -177,3 +211,11 @@ FROM
     t1 AS table1
 INNER JOIN t3 AS table3
     ON t1_a = t3_a;
+
+SET enable_optimize_predicate_expression = 1;
+
+DROP TABLE t1;
+
+DROP TABLE t2;
+
+DROP TABLE t3;

@@ -1,0 +1,71 @@
+CreateQuery test_a (children 3)
+ Identifier test_a
+ Columns definition (children 1)
+  ExpressionList (children 3)
+   ColumnDeclaration id (children 1)
+    DataType UInt32
+   ColumnDeclaration company (children 1)
+    DataType UInt32
+   ColumnDeclaration total (children 1)
+    DataType UInt64
+ Storage definition (children 4)
+  Function SummingMergeTree (children 1)
+   ExpressionList
+  Identifier company
+  Identifier id
+  Function tuple (children 1)
+   ExpressionList (children 2)
+    Identifier id
+    Identifier company
+
+InsertQuery   (children 2)
+ Identifier test_a
+ SelectWithUnionQuery (children 1)
+  ExpressionList (children 1)
+   SelectQuery (children 3)
+    ExpressionList (children 3)
+     Function modulo (alias id) (children 1)
+      ExpressionList (children 2)
+       Identifier number
+       Literal UInt64_10
+     Function modulo (alias company) (children 1)
+      ExpressionList (children 2)
+       Identifier number
+       Literal UInt64_2
+     Function count (alias total) (children 1)
+      ExpressionList
+    TablesInSelectQuery (children 1)
+     TablesInSelectQueryElement (children 1)
+      TableExpression (children 1)
+       Function numbers (children 1)
+        ExpressionList (children 1)
+         Literal UInt64_100
+    ExpressionList (children 2)
+     Identifier id
+     Identifier company
+
+CreateQuery test_b (children 3)
+ Identifier test_b
+ Columns definition (children 1)
+  ExpressionList (children 3)
+   ColumnDeclaration id (children 1)
+    DataType UInt32
+   ColumnDeclaration company (children 1)
+    DataType UInt32
+   ColumnDeclaration total (children 1)
+    DataType UInt64
+ Storage definition (children 3)
+  Function SummingMergeTree (children 1)
+   ExpressionList
+  Identifier company
+  Function tuple (children 1)
+   ExpressionList (children 2)
+    Identifier id
+    Identifier company
+
+AlterQuery  test_b (children 2)
+ ExpressionList (children 1)
+  AlterCommand REPLACE_PARTITION (children 1)
+   Partition (children 1)
+    Literal '0'
+ Identifier test_b

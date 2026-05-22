@@ -1,4 +1,8 @@
+-- Tags: no-fasttest
+-- Tag: no-fasttest due to only SIMD JSON is available in fasttest
 SELECT '--allow_simdjson=1--';
+
+SET allow_simdjson = 1;
 
 SELECT JSONLength('{"a": "hello", "b": [-100, 200.0, 300]}');
 
@@ -374,9 +378,15 @@ FROM (
         SELECT arrayJoin(['{"s":"u"}', '{"s":"v"}']) AS json
     );
 
-SELECT JSONExtractKeysAndValues([], JSONLength('^?V{LSwp'));
+SELECT JSONExtractKeysAndValues([], JSONLength('^?V{LSwp')); -- { serverError ILLEGAL_COLUMN }
 
-SELECT JSONExtract('{"a": [100.0, 200], "b": [-100, 200.0, 300]}', 'Map(Int64, Array(Float64))');
+WITH '{"i": 1, "f": 1.2}' AS json
+
+SELECT JSONExtract(json, 'i', JSONType(json, 'i')); -- { serverError ILLEGAL_COLUMN }
+
+SELECT JSONExtract('{"a": [100.0, 200], "b": [-100, 200.0, 300]}', 'Map(Int64, Array(Float64))'); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
+
+SET allow_simdjson = 0;
 
 SELECT JSONExtractKeys('{"a": "hello", "b": [-100, 200.0, 300]}');
 
@@ -386,7 +396,7 @@ SELECT JSONExtractKeys('{"a": "hello", "b": [-100, 200.0, 300]}', 'a');
 
 SELECT JSONExtractKeys('{"a": "hello", "b": [-100, 200.0, 300], "c":{"d":[121,144]}}', 'c');
 
-SELECT JSONExtract('[]', JSONExtract('0', 'UInt256'), 'UInt256');
+SELECT JSONExtract('[]', JSONExtract('0', 'UInt256'), 'UInt256'); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
 SELECT JSONExtract(materialize(toLowCardinality('{"string_value":null}')), materialize('string_value'), 'LowCardinality(Nullable(String))');
 

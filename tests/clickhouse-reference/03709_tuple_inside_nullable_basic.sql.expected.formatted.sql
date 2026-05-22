@@ -1,3 +1,18 @@
+SET allow_experimental_nullable_tuple_type = 1;
+
+DROP TABLE IF EXISTS tuple_test;
+
+CREATE TABLE tuple_test
+(
+    id UInt64,
+    tup Nullable(Tuple(u UInt64, s String)),
+    n Nullable(UInt64)
+)
+ENGINE = MergeTree
+ORDER BY id;
+
+INSERT INTO tuple_test (id, tup, n);
+
 SELECT
     id,
     tup,
@@ -316,7 +331,7 @@ WHERE t1.id < t2.id
 ORDER BY
     id1 ASC,
     id2 ASC
-SETTINGS enable_analyzer = 1;
+SETTINGS enable_analyzer = 1; -- t1.tup.u notation is not recognized in old analyzer
 
 SELECT
     t1.id,
@@ -330,7 +345,7 @@ LEFT JOIN tuple_test AS t2
 ORDER BY
     t1.id ASC,
     t2.id ASC
-SETTINGS enable_analyzer = 1;
+SETTINGS enable_analyzer = 1; -- t1.tup.u notation is not recognized in old analyzer
 
 SELECT
     t1.id AS id1,
@@ -422,7 +437,7 @@ WHERE EXISTS((
             AND t1.id != t2.id
     ))
 ORDER BY id ASC
-SETTINGS enable_analyzer = 1;
+SETTINGS enable_analyzer = 1; -- t1.tup.u notation is not recognized in old analyzer
 
 SELECT
     id,
@@ -444,7 +459,7 @@ SELECT
     ) AS count_same_u
 FROM tuple_test AS t1
 ORDER BY id ASC
-SETTINGS enable_analyzer = 1;
+SETTINGS enable_analyzer = 1; -- t1.tup.u notation is not recognized in old analyzer
 
 SELECT
     id,
@@ -588,6 +603,40 @@ SELECT
 FROM tuple_test
 ORDER BY id ASC;
 
+WITH filtered AS (
+    SELECT
+        id,
+        tup
+    FROM tuple_test
+    WHERE isNotNull(tup)
+)
+
+SELECT
+    id,
+    tup.u,
+    tup.s
+FROM filtered
+ORDER BY id ASC
+SETTINGS enable_analyzer = 1; -- CTE tup.u notation is not recognized in old analyzer
+
+WITH stats AS (
+    SELECT
+        avg(tup.u) AS avg_u,
+        max(tup.u) AS max_u
+    FROM tuple_test
+)
+
+SELECT
+    id,
+    tup.u,
+    tup.u - (
+        SELECT avg_u
+        FROM stats
+    ) AS diff_from_avg
+FROM tuple_test
+WHERE isNotNull(tup)
+ORDER BY id ASC;
+
 SELECT groupArray(tup) AS tuple_array
 FROM tuple_test;
 
@@ -602,7 +651,7 @@ FROM tuple_test;
 
 SELECT arrayMap(x -> x.u, arrayFilter(x -> isNotNull(x), groupArray(tup))) AS all_u_values
 FROM tuple_test
-SETTINGS enable_analyzer = 1;
+SETTINGS enable_analyzer = 1; -- Lambda tup.u notation is not recognized in old analyzer
 
 SELECT
     tup.u AS u_value,
@@ -631,7 +680,18 @@ FROM (
     )
 GROUP BY category
 ORDER BY category ASC
-SETTINGS enable_analyzer = 1;
+SETTINGS enable_analyzer = 1; -- Here, tup.u notation is not recognized in old analyzer
+
+DROP TABLE IF EXISTS test_nullable_tuple;
+
+CREATE TABLE test_nullable_tuple
+(
+    data Nullable(Tuple(String, UInt64))
+)
+ENGINE = MergeTree
+ORDER BY tuple();
+
+INSERT INTO test_nullable_tuple;
 
 SELECT
     data.1,

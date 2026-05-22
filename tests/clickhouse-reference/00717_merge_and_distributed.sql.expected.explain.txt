@@ -1,3 +1,83 @@
+Set
+
+Set
+
+DropQuery  test_local_1 (children 1)
+ Identifier test_local_1
+
+DropQuery  test_local_2 (children 1)
+ Identifier test_local_2
+
+DropQuery  test_distributed_1 (children 1)
+ Identifier test_distributed_1
+
+DropQuery  test_distributed_2 (children 1)
+ Identifier test_distributed_2
+
+Set
+
+Set
+
+CreateQuery test_local_1 (children 3)
+ Identifier test_local_1
+ Columns definition (children 1)
+  ExpressionList (children 2)
+   ColumnDeclaration date (children 1)
+    DataType Date
+   ColumnDeclaration value (children 1)
+    DataType UInt32
+ Storage definition (children 1)
+  Function MergeTree (children 1)
+   ExpressionList (children 3)
+    Identifier date
+    Identifier date
+    Literal UInt64_8192
+
+CreateQuery test_local_2 (children 3)
+ Identifier test_local_2
+ Columns definition (children 1)
+  ExpressionList (children 2)
+   ColumnDeclaration date (children 1)
+    DataType Date
+   ColumnDeclaration value (children 1)
+    DataType UInt32
+ Storage definition (children 1)
+  Function MergeTree (children 1)
+   ExpressionList (children 3)
+    Identifier date
+    Identifier date
+    Literal UInt64_8192
+
+CreateQuery test_distributed_1 (children 2)
+ Identifier test_distributed_1
+ Storage definition (children 1)
+  Function Distributed (children 1)
+   ExpressionList (children 4)
+    Literal 'test_shard_localhost'
+    Function currentDatabase (children 1)
+     ExpressionList
+    Identifier test_local_1
+    Function rand (children 1)
+     ExpressionList
+
+CreateQuery test_distributed_2 (children 2)
+ Identifier test_distributed_2
+ Storage definition (children 1)
+  Function Distributed (children 1)
+   ExpressionList (children 4)
+    Literal 'test_shard_localhost'
+    Function currentDatabase (children 1)
+     ExpressionList
+    Identifier test_local_2
+    Function rand (children 1)
+     ExpressionList
+
+InsertQuery   (children 1)
+ Identifier test_local_1
+
+InsertQuery   (children 1)
+ Identifier test_local_2
+
 SelectWithUnionQuery (children 1)
  ExpressionList (children 1)
   SelectQuery (children 1)
@@ -660,6 +740,78 @@ SelectWithUnionQuery (children 1)
    ExpressionList (children 1)
     OrderByElement (children 1)
      Identifier value
+
+DropQuery  test_u64_local (children 1)
+ Identifier test_u64_local
+
+DropQuery  test_s64_local (children 1)
+ Identifier test_s64_local
+
+DropQuery  test_u64_distributed (children 1)
+ Identifier test_u64_distributed
+
+DropQuery  test_s64_distributed (children 1)
+ Identifier test_s64_distributed
+
+CreateQuery test_s64_local (children 3)
+ Identifier test_s64_local
+ Columns definition (children 1)
+  ExpressionList (children 2)
+   ColumnDeclaration date (children 1)
+    DataType Date
+   ColumnDeclaration value (children 1)
+    DataType Int64
+ Storage definition (children 1)
+  Function MergeTree (children 1)
+   ExpressionList (children 3)
+    Identifier date
+    Identifier date
+    Literal UInt64_8192
+
+CreateQuery test_u64_local (children 3)
+ Identifier test_u64_local
+ Columns definition (children 1)
+  ExpressionList (children 2)
+   ColumnDeclaration date (children 1)
+    DataType Date
+   ColumnDeclaration value (children 1)
+    DataType UInt64
+ Storage definition (children 1)
+  Function MergeTree (children 1)
+   ExpressionList (children 3)
+    Identifier date
+    Identifier date
+    Literal UInt64_8192
+
+CreateQuery test_s64_distributed (children 2)
+ Identifier test_s64_distributed
+ Storage definition (children 1)
+  Function Distributed (children 1)
+   ExpressionList (children 4)
+    Literal 'test_shard_localhost'
+    Function currentDatabase (children 1)
+     ExpressionList
+    Identifier test_s64_local
+    Function rand (children 1)
+     ExpressionList
+
+CreateQuery test_u64_distributed (children 2)
+ Identifier test_u64_distributed
+ Storage definition (children 1)
+  Function Distributed (children 1)
+   ExpressionList (children 4)
+    Literal 'test_shard_localhost'
+    Function currentDatabase (children 1)
+     ExpressionList
+    Identifier test_u64_local
+    Function rand (children 1)
+     ExpressionList
+
+InsertQuery   (children 1)
+ Identifier test_s64_local
+
+InsertQuery   (children 1)
+ Identifier test_u64_local
 
 SelectWithUnionQuery (children 1)
  ExpressionList (children 1)

@@ -1,3 +1,16 @@
+DROP TABLE IF EXISTS t;
+
+CREATE TABLE t
+(
+    a Int8,
+    val Float32
+)
+ENGINE = Memory();
+
+INSERT INTO t;
+
+SET enable_optimize_predicate_expression = 0;
+
 SELECT *
 FROM (
         SELECT
@@ -10,3 +23,7 @@ FROM (
             USING (a)
     )
 ORDER BY val1 ASC;
+
+SET enable_optimize_predicate_expression = 1;
+
+DROP TABLE t;

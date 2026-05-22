@@ -1,3 +1,7 @@
+SET json_type_escape_dots_in_keys = 1;
+
+SET enable_analyzer = 1;
+
 SELECT
     '{"a" : {"b" : 42}}'::JSON AS json1,
     '{"a.b" : 42}'::JSON AS json2,

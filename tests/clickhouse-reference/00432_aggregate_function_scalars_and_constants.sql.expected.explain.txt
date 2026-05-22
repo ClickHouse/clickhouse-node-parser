@@ -1,3 +1,60 @@
+DropQuery  agg_func_col (children 1)
+ Identifier agg_func_col
+
+Set
+
+CreateQuery agg_func_col (children 3)
+ Identifier agg_func_col
+ Columns definition (children 1)
+  ExpressionList (children 3)
+   ColumnDeclaration p (children 1)
+    DataType Date
+   ColumnDeclaration k (children 1)
+    DataType UInt8
+   ColumnDeclaration d (children 2)
+    DataType AggregateFunction (children 1)
+     ExpressionList (children 2)
+      Identifier sum
+      DataType UInt64
+    Function arrayReduce (children 1)
+     ExpressionList (children 2)
+      Literal 'sumState'
+      Function array (children 1)
+       ExpressionList (children 1)
+        Function toUInt64 (children 1)
+         ExpressionList (children 1)
+          Literal UInt64_200
+ Storage definition (children 1)
+  Function AggregatingMergeTree (children 1)
+   ExpressionList (children 3)
+    Identifier p
+    Identifier k
+    Literal UInt64_1
+
+InsertQuery   (children 2)
+ Identifier agg_func_col
+ ExpressionList (children 1)
+  Identifier k
+
+InsertQuery   (children 3)
+ Identifier agg_func_col
+ ExpressionList (children 2)
+  Identifier k
+  Identifier d
+ SelectWithUnionQuery (children 1)
+  ExpressionList (children 1)
+   SelectQuery (children 1)
+    ExpressionList (children 2)
+     Literal UInt64_1 (alias k)
+     Function arrayReduce (alias d) (children 1)
+      ExpressionList (children 2)
+       Literal 'sumState'
+       Function array (children 1)
+        ExpressionList (children 1)
+         Function toUInt64 (children 1)
+          ExpressionList (children 1)
+           Literal UInt64_100
+
 SelectWithUnionQuery (children 1)
  ExpressionList (children 1)
   SelectQuery (children 4)
@@ -15,6 +72,16 @@ SelectWithUnionQuery (children 1)
    ExpressionList (children 1)
     OrderByElement (children 1)
      Identifier k
+
+AlterQuery  agg_func_col (children 2)
+ ExpressionList (children 1)
+  AlterCommand ADD_COLUMN (children 1)
+   ColumnDeclaration af_avg1 (children 1)
+    DataType AggregateFunction (children 1)
+     ExpressionList (children 2)
+      Identifier avg
+      DataType UInt8
+ Identifier agg_func_col
 
 SelectWithUnionQuery (children 1)
  ExpressionList (children 1)
@@ -36,6 +103,26 @@ SelectWithUnionQuery (children 1)
    ExpressionList (children 1)
     OrderByElement (children 1)
      Identifier k
+
+InsertQuery   (children 2)
+ Identifier agg_func_col
+ ExpressionList (children 2)
+  Identifier k
+  Identifier af_avg1
+
+AlterQuery  agg_func_col (children 2)
+ ExpressionList (children 1)
+  AlterCommand ADD_COLUMN (children 1)
+   ColumnDeclaration af_gua (children 2)
+    DataType AggregateFunction (children 1)
+     ExpressionList (children 2)
+      Identifier groupUniqArray
+      DataType String
+    Function arrayReduce (children 1)
+     ExpressionList (children 2)
+      Literal 'groupUniqArrayState'
+      Literal Array_['---', '---']
+ Identifier agg_func_col
 
 SelectWithUnionQuery (children 1)
  ExpressionList (children 1)
@@ -60,6 +147,16 @@ SelectWithUnionQuery (children 1)
    ExpressionList (children 1)
     OrderByElement (children 1)
      Identifier k
+
+InsertQuery   (children 2)
+ Identifier agg_func_col
+ ExpressionList (children 3)
+  Identifier k
+  Identifier af_avg1
+  Identifier af_gua
+
+OptimizeQuery  agg_func_col (children 1)
+ Identifier agg_func_col
 
 SelectWithUnionQuery (children 1)
  ExpressionList (children 1)

@@ -1,5 +1,57 @@
 [
   {
+    "kind": "insert",
+    "target": {
+      "kind": "function",
+      "func": {
+        "kind": "tableFunctionRef",
+        "name": "file",
+        "args": [
+          {
+            "kind": "functionCall",
+            "name": "concat",
+            "args": [
+              {
+                "kind": "functionCall",
+                "name": "current_database",
+                "args": []
+              },
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "03630_parquet_bool_bug.parquet"
+              }
+            ]
+          },
+          {
+            "kind": "columnRef",
+            "parts": [
+              "Parquet"
+            ]
+          },
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": "tags Array(Bool)"
+          }
+        ]
+      }
+    },
+    "insertSettings": [
+      {
+        "name": "engine_file_truncate_on_insert",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ],
+    "leadingComments": [
+      "-- Tags: no-fasttest"
+    ]
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -17,7 +69,7 @@
     ],
     "from": {
       "left": {
-        "kind": "tableFunction",
+        "kind": "tableFunctionRef",
         "name": "file",
         "args": [
           {
@@ -38,7 +90,7 @@
           }
         ]
       },
-      "kind": "arrayJoin",
+      "kind": "arrayJoinExpr",
       "joinType": "ARRAY",
       "expressions": [
         {
@@ -58,6 +110,142 @@
           "value": "1"
         }
       }
+    ]
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "function",
+      "func": {
+        "kind": "tableFunctionRef",
+        "name": "file",
+        "args": [
+          {
+            "kind": "functionCall",
+            "name": "concat",
+            "args": [
+              {
+                "kind": "functionCall",
+                "name": "current_database",
+                "args": []
+              },
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "03630_parquet_bool_bug.parquet"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "selectQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "alias",
+          "expr": {
+            "kind": "columnRef",
+            "parts": [
+              "number"
+            ]
+          },
+          "alias": "n"
+        },
+        {
+          "kind": "alias",
+          "expr": {
+            "kind": "functionCall",
+            "name": "arrayMap",
+            "args": [
+              {
+                "kind": "lambdaExpr",
+                "params": [
+                  "i"
+                ],
+                "body": {
+                  "kind": "functionCall",
+                  "name": "toBool",
+                  "args": [
+                    {
+                      "kind": "binaryExpr",
+                      "op": "=",
+                      "left": {
+                        "kind": "binaryExpr",
+                        "op": "%",
+                        "left": {
+                          "kind": "functionCall",
+                          "name": "bitShiftRight",
+                          "args": [
+                            {
+                              "kind": "columnRef",
+                              "parts": [
+                                "number"
+                              ]
+                            },
+                            {
+                              "kind": "columnRef",
+                              "parts": [
+                                "i"
+                              ]
+                            }
+                          ]
+                        },
+                        "right": {
+                          "kind": "literal",
+                          "type": "UInt64",
+                          "value": "2"
+                        }
+                      },
+                      "right": {
+                        "kind": "literal",
+                        "type": "UInt64",
+                        "value": "1"
+                      }
+                    }
+                  ]
+                }
+              },
+              {
+                "kind": "functionCall",
+                "name": "range",
+                "args": [
+                  {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "8"
+                  }
+                ]
+              }
+            ]
+          },
+          "alias": "bits"
+        }
+      ],
+      "from": {
+        "kind": "tableFunctionRef",
+        "name": "numbers",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "256"
+          }
+        ]
+      },
+      "settings": [
+        {
+          "name": "engine_file_truncate_on_insert",
+          "value": {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "1"
+          }
+        }
+      ]
+    },
+    "leadingComments": [
+      "-- Try all 256 1-byte masks to verify the bit shifting nonsense in PlainBooleanDecoder."
     ]
   },
   {
@@ -153,7 +341,7 @@
       }
     ],
     "from": {
-      "kind": "tableFunction",
+      "kind": "tableFunctionRef",
       "name": "file",
       "args": [
         {

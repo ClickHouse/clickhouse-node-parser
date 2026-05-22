@@ -1,3 +1,57 @@
+Set
+
+DropQuery   (children 1)
+ ExpressionList (children 2)
+  TableIdentifier 03578_rocksdb_local
+  TableIdentifier 03578_rocksdb_dist
+
+CreateQuery 03578_rocksdb_local (children 3)
+ Identifier 03578_rocksdb_local
+ Columns definition (children 1)
+  ExpressionList (children 2)
+   ColumnDeclaration key (children 1)
+    DataType UInt64
+   ColumnDeclaration val (children 1)
+    DataType String
+ Storage definition (children 2)
+  Function EmbeddedRocksDB (children 1)
+   ExpressionList
+  Identifier key
+
+CreateQuery 03578_rocksdb_dist (children 3)
+ Identifier 03578_rocksdb_dist
+ Columns definition (children 1)
+  ExpressionList (children 2)
+   ColumnDeclaration key (children 1)
+    DataType UInt64
+   ColumnDeclaration val (children 1)
+    DataType String
+ Storage definition (children 1)
+  Function Distributed (children 1)
+   ExpressionList (children 3)
+    Identifier test_cluster_two_shards_localhost
+    Function currentDatabase (children 1)
+     ExpressionList
+    Identifier 03578_rocksdb_local
+
+InsertQuery   (children 2)
+ Identifier 03578_rocksdb_local
+ SelectWithUnionQuery (children 1)
+  ExpressionList (children 1)
+   SelectQuery (children 2)
+    ExpressionList (children 2)
+     Identifier number
+     Function concat (children 1)
+      ExpressionList (children 2)
+       Literal 'val-'
+       Identifier number
+    TablesInSelectQuery (children 1)
+     TablesInSelectQueryElement (children 1)
+      TableExpression (children 1)
+       Function numbers (children 1)
+        ExpressionList (children 1)
+         Literal UInt64_1000
+
 SelectWithUnionQuery (children 1)
  ExpressionList (children 1)
   SelectQuery (children 1)
@@ -53,6 +107,8 @@ SelectWithUnionQuery (children 1)
     OrderByElement (children 1)
      Literal UInt64_2
 
+SYSTEM query
+
 SelectWithUnionQuery (children 1)
  ExpressionList (children 1)
   SelectQuery (children 4)
@@ -81,6 +137,69 @@ SelectWithUnionQuery (children 1)
    ExpressionList (children 1)
     OrderByElement (children 1)
      Identifier event_time_microseconds
+
+DropQuery   (children 1)
+ ExpressionList (children 2)
+  TableIdentifier 03578_rocksdb_local
+  TableIdentifier 03578_rocksdb_dist
+
+DropQuery   (children 1)
+ ExpressionList (children 2)
+  TableIdentifier 03578_keepermap_local
+  TableIdentifier 03578_keepermap_dist
+
+CreateQuery 03578_keepermap_local (children 3)
+ Identifier 03578_keepermap_local
+ Columns definition (children 1)
+  ExpressionList (children 2)
+   ColumnDeclaration key (children 1)
+    DataType UInt64
+   ColumnDeclaration val (children 1)
+    DataType String
+ Storage definition (children 2)
+  Function KeeperMap (children 1)
+   ExpressionList (children 1)
+    Function concat (children 1)
+     ExpressionList (children 3)
+      Literal '/'
+      Function currentDatabase (children 1)
+       ExpressionList
+      Literal '/test_03578_global_in'
+  Identifier key
+
+CreateQuery 03578_keepermap_dist (children 3)
+ Identifier 03578_keepermap_dist
+ Columns definition (children 1)
+  ExpressionList (children 2)
+   ColumnDeclaration key (children 1)
+    DataType UInt64
+   ColumnDeclaration val (children 1)
+    DataType String
+ Storage definition (children 1)
+  Function Distributed (children 1)
+   ExpressionList (children 3)
+    Identifier test_cluster_two_shards_localhost
+    Function currentDatabase (children 1)
+     ExpressionList
+    Identifier 03578_keepermap_local
+
+InsertQuery   (children 2)
+ Identifier 03578_keepermap_local
+ SelectWithUnionQuery (children 1)
+  ExpressionList (children 1)
+   SelectQuery (children 2)
+    ExpressionList (children 2)
+     Identifier number
+     Function concat (children 1)
+      ExpressionList (children 2)
+       Literal 'val-'
+       Identifier number
+    TablesInSelectQuery (children 1)
+     TablesInSelectQueryElement (children 1)
+      TableExpression (children 1)
+       Function numbers (children 1)
+        ExpressionList (children 1)
+         Literal UInt64_1000
 
 SelectWithUnionQuery (children 1)
  ExpressionList (children 1)

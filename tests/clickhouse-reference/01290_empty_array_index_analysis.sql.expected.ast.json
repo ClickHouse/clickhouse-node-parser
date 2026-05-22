@@ -1,5 +1,113 @@
 [
   {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "count_lc_test"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "count_lc_test"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "s",
+        "type": {
+          "name": "LowCardinality",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "String"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "arr",
+        "type": {
+          "name": "Array",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "LowCardinality",
+                "args": [
+                  {
+                    "kind": "type",
+                    "type": {
+                      "name": "String"
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "num",
+        "type": {
+          "name": "UInt64"
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "s"
+          ]
+        }
+      },
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "arr"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "count_lc_test"
+      }
+    },
+    "columns": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "num"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "arr"
+        ]
+      }
+    ]
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -78,7 +186,7 @@
         ]
       },
       "right": {
-        "kind": "array",
+        "kind": "arrayLiteral",
         "elements": [],
         "source": "[]"
       }
@@ -105,7 +213,7 @@
         ]
       },
       "right": {
-        "kind": "array",
+        "kind": "arrayLiteral",
         "elements": [],
         "source": "[]"
       }
@@ -132,7 +240,7 @@
         ]
       },
       "right": {
-        "kind": "array",
+        "kind": "arrayLiteral",
         "elements": [],
         "source": "[]"
       }
@@ -159,7 +267,7 @@
         ]
       },
       "right": {
-        "kind": "array",
+        "kind": "arrayLiteral",
         "elements": [],
         "source": "[]"
       }
@@ -186,7 +294,7 @@
         ]
       },
       "right": {
-        "kind": "array",
+        "kind": "arrayLiteral",
         "elements": [],
         "source": "[]"
       }
@@ -213,10 +321,85 @@
         ]
       },
       "right": {
-        "kind": "array",
+        "kind": "arrayLiteral",
         "elements": [],
         "source": "[]"
       }
     }
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "count_lc_test"
+    }
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "count_lc_test"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "s",
+        "type": {
+          "name": "LowCardinality",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "String"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "arr",
+        "type": {
+          "name": "Array",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "String"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "num",
+        "type": {
+          "name": "UInt64"
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "s"
+          ]
+        }
+      },
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "arr"
+          ]
+        }
+      }
+    ]
   }
 ]

@@ -1,3 +1,19 @@
+DROP TABLE IF EXISTS order_test1;
+
+CREATE TABLE order_test1
+(
+    timestamp DateTime64(3),
+    color LowCardinality(String)
+)
+ENGINE = MergeTree()
+ORDER BY tuple();
+
+INSERT INTO order_test1;
+
+INSERT INTO order_test1;
+
+INSERT INTO order_test1;
+
 SELECT
     color,
     toDateTime(timestamp) AS second
@@ -43,3 +59,5 @@ GROUP BY
 ORDER BY
     color ASC,
     timestamp DESC;
+
+DROP TABLE order_test1;

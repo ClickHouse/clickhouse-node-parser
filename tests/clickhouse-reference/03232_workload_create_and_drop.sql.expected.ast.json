@@ -1,5 +1,14 @@
 [
   {
+    "kind": "createWorkload",
+    "name": "all",
+    "orReplace": true,
+    "leadingComments": [
+      "-- Tags: no-parallel",
+      "-- Do not run this test in parallel because `all` workload might affect other queries execution process"
+    ]
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -38,5 +47,28 @@
         "direction": "ASC"
       }
     ]
+  },
+  {
+    "kind": "createWorkload",
+    "name": "production",
+    "ifNotExists": true,
+    "parentWorkload": "all"
+  },
+  {
+    "kind": "createWorkload",
+    "name": "development",
+    "parentWorkload": "all"
+  },
+  {
+    "kind": "system",
+    "body": "DROP WORKLOAD IF EXISTS production"
+  },
+  {
+    "kind": "system",
+    "body": "DROP WORKLOAD development"
+  },
+  {
+    "kind": "system",
+    "body": "DROP WORKLOAD all"
   }
 ]

@@ -1,5 +1,192 @@
 [
   {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "buf_dest"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "buf"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "buf_dest"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "timestamp",
+        "type": {
+          "name": "DateTime"
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "partitionBy": {
+      "kind": "functionCall",
+      "name": "toYYYYMMDD",
+      "args": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "timestamp"
+          ]
+        }
+      ]
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "timestamp"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "buf"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "timestamp",
+        "type": {
+          "name": "DateTime"
+        }
+      }
+    ],
+    "engine": {
+      "name": "Buffer",
+      "args": [
+        {
+          "kind": "functionCall",
+          "name": "currentDatabase",
+          "args": []
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "buf_dest"
+          ]
+        },
+        {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "16"
+        },
+        {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "3"
+        },
+        {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "20"
+        },
+        {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "2000000"
+        },
+        {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "20000000"
+        },
+        {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "100000000"
+        },
+        {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "300000000"
+        }
+      ]
+    }
+  },
+  {
+    "kind": "empty"
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "buf"
+      }
+    },
+    "columns": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "timestamp"
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "alter",
+    "table": {
+      "kind": "tableRef",
+      "table": "buf_dest"
+    },
+    "commands": [
+      {
+        "kind": "alterCommand",
+        "commandType": "ADD_COLUMN",
+        "column": {
+          "kind": "columnDef",
+          "name": "s",
+          "type": {
+            "name": "String"
+          }
+        }
+      }
+    ]
+  },
+  {
+    "kind": "alter",
+    "table": {
+      "kind": "tableRef",
+      "table": "buf"
+    },
+    "commands": [
+      {
+        "kind": "alterCommand",
+        "commandType": "ADD_COLUMN",
+        "column": {
+          "kind": "columnDef",
+          "name": "s",
+          "type": {
+            "name": "String"
+          }
+        }
+      }
+    ]
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -10,6 +197,30 @@
       "kind": "tableRef",
       "table": "buf"
     }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "buf"
+      }
+    },
+    "columns": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "timestamp"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "s"
+        ]
+      }
+    ]
   },
   {
     "kind": "select",

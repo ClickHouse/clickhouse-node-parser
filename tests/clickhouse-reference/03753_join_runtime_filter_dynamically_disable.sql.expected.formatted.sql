@@ -1,3 +1,67 @@
+-- Tags: no-azure-blob-storage
+CREATE TABLE nation
+(
+    n_nationkey Int32,
+    n_name String
+)
+ENGINE = MergeTree
+ORDER BY n_nationkey;
+
+CREATE TABLE customer
+(
+    c_custkey Int32,
+    c_nationkey Int32,
+    c_nationkey_copy Int32
+)
+ENGINE = MergeTree
+ORDER BY c_custkey
+SETTINGS index_granularity = 10;
+
+SYSTEM STOP MERGES customer;
+
+INSERT INTO nation;
+
+INSERT INTO customer SELECT
+    number,
+    5,
+    5
+FROM numbers(1000);
+
+INSERT INTO customer SELECT
+    number,
+    6,
+    6
+FROM numbers(1000);
+
+INSERT INTO customer SELECT
+    number,
+    7,
+    7
+FROM numbers(1000);
+
+INSERT INTO customer SELECT
+    number,
+    100,
+    100
+FROM numbers(10);
+
+SET enable_analyzer = 1;
+
+SET enable_join_runtime_filters = 1;
+
+SET enable_parallel_replicas = 0;
+
+SET join_algorithm = 'hash,parallel_hash';
+
+SET query_plan_optimize_join_order_algorithm = 'greedy';
+
+SET query_plan_optimize_join_order_limit = 1;
+
+SET query_plan_join_swap_table = 0;
+
+SET enable_multiple_prewhere_read_steps = 1;
+
+-- 1 row in filter
 SELECT count()
 FROM
     customer
@@ -11,6 +75,9 @@ SETTINGS
     max_threads = 1,
     log_comment = 'Q1';
 
+-- Check that most of the blocks were skipped
+SYSTEM FLUSH LOGS query_log;
+
 SELECT
     log_comment,
     ProfileEvents['RuntimeFilterBlocksSkipped'] > 10 * ProfileEvents['RuntimeFilterBlocksProcessed'] AS Passed,
@@ -21,6 +88,7 @@ WHERE type = 'QueryFinish'
     AND current_database = currentDatabase()
     AND event_time > now() - toIntervalMinute(30);
 
+-- 2 rows in exact set
 SELECT count()
 FROM
     customer
@@ -44,6 +112,7 @@ WHERE type = 'QueryFinish'
     AND current_database = currentDatabase()
     AND event_time > now() - toIntervalMinute(30);
 
+-- 3 rows in bloom filter
 SELECT count()
 FROM
     customer
@@ -67,6 +136,7 @@ WHERE type = 'QueryFinish'
     AND current_database = currentDatabase()
     AND event_time > now() - toIntervalMinute(30);
 
+-- Too many rows in bloom filter
 SELECT count()
 FROM
     customer
@@ -90,6 +160,7 @@ WHERE type = 'QueryFinish'
     AND current_database = currentDatabase()
     AND event_time > now() - toIntervalMinute(30);
 
+-- ANTI JOIN with 1 row
 SELECT count()
 FROM
     (
@@ -119,6 +190,7 @@ WHERE type = 'QueryFinish'
     AND current_database = currentDatabase()
     AND event_time > now() - toIntervalMinute(30);
 
+-- ANTI JOIN with exact set
 SELECT count()
 FROM
     (
@@ -148,6 +220,7 @@ WHERE type = 'QueryFinish'
     AND current_database = currentDatabase()
     AND event_time > now() - toIntervalMinute(30);
 
+-- Change pass ratio to >1 to turn of auto-disabling
 SELECT count()
 FROM
     customer

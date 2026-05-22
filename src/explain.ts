@@ -1,10 +1,24 @@
 import {
+  AlterStatement,
+  AlterCommand,
+  AlterPartitionExpr,
   BinaryExpr,
   CTE,
+  ColumnDef,
   ColumnTransformer,
+  CreateTableStatement,
+  CreateViewStatement,
+  CreateMaterializedViewStatement,
+  CreateDatabaseStatement,
+  CreateFunctionStatement,
+  CreateIndexStatement,
+  CreateDictionaryStatement,
+  CreateWorkloadStatement,
   ExplainStatement,
   Expression,
   FromExpr,
+  InsertStatement,
+  ParallelWithStatement,
   JoinConstraint,
   OrderByItem,
   SampleClause,
@@ -17,6 +31,7 @@ import {
   TableRef,
   WindowSpec,
 } from './ast';
+import { isCreateTableStatement } from './guards';
 
 const OP_TO_FUNCTION: Record<string, string> = {
   AND: 'and',
@@ -45,6 +60,11 @@ type ExplainNode = { label: string; children: ExplainNode[] };
 
 function n(label: string, children: ExplainNode[] = []): ExplainNode {
   return { label, children };
+}
+
+// Canonical string rendering for an Identifier (plain name or query-param).
+function id(x: import('./ast').Identifier): string {
+  return typeof x === 'string' ? x : `{${x.name}:${x.type}}`;
 }
 
 function render(node: ExplainNode, depth = 0): string {
@@ -257,7 +277,7 @@ function inlineExpr(expr: Expression): string | null {
       if (expr.type === 'Float64') return `Float64_${normalizeFloat(expr.value)}`;
       if (expr.type === 'Int64') return expr.value === '0' ? 'UInt64_0' : `Int64_${expr.value}`;
       return `UInt64_${normalizeUInt(expr.value)}`;
-    case 'array': {
+    case 'arrayLiteral': {
       // Empty arrays use Function array form, not literal
       if (expr.elements.length === 0) return null;
       const inlines = expr.elements.map(inlineExpr);
@@ -275,7 +295,7 @@ function inlineExpr(expr: Expression): string | null {
 function inlineTupleLiteral(expr: Expression): string | null {
   if ((expr as Record<string, unknown>).parenthesized) return null;
   if (expr.kind === 'literal') return inlineExpr(expr);
-  if (expr.kind === 'tuple') {
+  if (expr.kind === 'tupleLiteral') {
     const inlines = expr.elements.map(inlineTupleLiteral);
     if (inlines.some((i) => i === null)) return null;
     return `Tuple_(${inlines.join(', ')})`;
@@ -288,10 +308,10 @@ function inlineTupleLiteral(expr: Expression): string | null {
 // Arrays inside tuples are NOT inlined (ClickHouse renders them as Function tuple).
 function inlineInValue(expr: Expression): string | null {
   // Arrays as IN values are not inlined when they appear inside tuples
-  if (expr.kind === 'array') return null;
+  if (expr.kind === 'arrayLiteral') return null;
   const inline = inlineExpr(expr);
   if (inline !== null) return inline;
-  if (expr.kind === 'tuple') {
+  if (expr.kind === 'tupleLiteral') {
     const inlines = expr.elements.map(inlineInValue);
     if (inlines.some((i) => i === null)) return null;
     return `Tuple_(${inlines.join(', ')})`;
@@ -409,7 +429,8 @@ function exprNode(expr: Expression): ExplainNode {
       // - name[] (JSON array subcolumn): name.:`Array(JSON)`  (expands into two dot-separated parts)
       // - other parts: unchanged
       const formattedParts: string[] = [];
-      for (const part of expr.parts) {
+      for (const rawPart of expr.parts) {
+        const part = id(rawPart);
         if (part.startsWith('^')) {
           formattedParts.push(`^\`${part.slice(1)}\``);
         } else if (part.endsWith('[]')) {
@@ -429,7 +450,7 @@ function exprNode(expr: Expression): ExplainNode {
       return n('Asterisk');
     }
     case 'qualifiedAsterisk': {
-      const qChildren: ExplainNode[] = [n(`Identifier ${expr.parts.join('.')}`)];
+      const qChildren: ExplainNode[] = [n(`Identifier ${expr.parts.map(id).join('.')}`)];
       if (expr.transformers && expr.transformers.length > 0) {
         qChildren.push(transformerListNode(expr.transformers));
       }
@@ -444,7 +465,7 @@ function exprNode(expr: Expression): ExplainNode {
     }
 
     case 'queryParam':
-      return n(`QueryParameter {${expr.name}: ${expr.type}}`);
+      return n(`QueryParameter ${expr.name}:${expr.type}`);
     case 'alias': {
       // Outer alias overrides any inner aliases — only show the outermost alias
       let innerExpr = expr.expr;
@@ -454,7 +475,7 @@ function exprNode(expr: Expression): ExplainNode {
       const inner = exprNode(innerExpr);
       return { label: `${inner.label} (alias ${expr.alias})`, children: inner.children };
     }
-    case 'array': {
+    case 'arrayLiteral': {
       if (expr.elements.length === 0) {
         return n('Function array', [n('ExpressionList')]);
       }
@@ -464,7 +485,7 @@ function exprNode(expr: Expression): ExplainNode {
       }
       return n(`Literal Array_[${inlines.join(', ')}]`);
     }
-    case 'tuple': {
+    case 'tupleLiteral': {
       const inline = inlineTupleLiteral(expr);
       if (inline !== null) return n(`Literal ${inline}`);
       return n('Function tuple', [n('ExpressionList', expr.elements.map(exprNode))]);
@@ -485,7 +506,7 @@ function exprNode(expr: Expression): ExplainNode {
       };
       const funcName = FUNC_ALIASES[expr.name.toLowerCase()] ?? expr.name;
       // not(tuple(a,b,c)) — NOT applied directly to a tuple literal: expand the tuple
-      if (funcName === 'not' && expr.args.length === 1 && expr.args[0].kind === 'tuple') {
+      if (funcName === 'not' && expr.args.length === 1 && expr.args[0].kind === 'tupleLiteral') {
         const tupleArg = expr.args[0];
         const tupleNode = n('Function tuple', [
           n('ExpressionList', tupleArg.elements.map(exprNode)),
@@ -526,8 +547,8 @@ function exprNode(expr: Expression): ExplainNode {
       // are shown as string literals. Source text is used to preserve original formatting.
       function isPureLiteral(e: Expression): boolean {
         if (e.kind === 'literal') return e.type !== 'NULL' && e.type !== 'Bool';
-        if (e.kind === 'array') return e.elements.every(isPureLiteral);
-        if (e.kind === 'tuple') return e.elements.every(isPureLiteral);
+        if (e.kind === 'arrayLiteral') return e.elements.every(isPureLiteral);
+        if (e.kind === 'tupleLiteral') return e.elements.every(isPureLiteral);
         return false;
       }
       function castElemStr(e: Expression): string {
@@ -535,12 +556,12 @@ function exprNode(expr: Expression): ExplainNode {
           if (e.type === 'String') return `'${escapeStringValue(e.value)}'`;
           return e.value;
         }
-        if (e.kind === 'array') {
+        if (e.kind === 'arrayLiteral') {
           if (e.source !== undefined) return e.source;
           return `[${e.elements.map(castElemStr).join(', ')}]`;
         }
         // tuple
-        if (e.kind === 'tuple') {
+        if (e.kind === 'tupleLiteral') {
           if (e.source !== undefined) return e.source;
           return `(${e.elements.map(castElemStr).join(', ')})`;
         }
@@ -552,13 +573,13 @@ function exprNode(expr: Expression): ExplainNode {
           if (e.type === 'String') return escapeStringValue(e.value);
           return e.value;
         }
-        if (e.kind === 'array') {
-          // Escape single quotes in source text so they appear as \' in the Literal label
-          const src = e.source !== undefined ? e.source.replace(/'/g, "\\'") : null;
+        if (e.kind === 'arrayLiteral') {
+          // Escape single quotes and newlines in source text for the Literal label
+          const src = e.source !== undefined ? escapeStringValue(e.source) : null;
           return src ?? `[${e.elements.map(castElemStr).join(', ')}]`;
         }
-        if (e.kind === 'tuple') {
-          const src = e.source !== undefined ? e.source.replace(/'/g, "\\'") : null;
+        if (e.kind === 'tupleLiteral') {
+          const src = e.source !== undefined ? escapeStringValue(e.source) : null;
           return src ?? `(${e.elements.map(castElemStr).join(', ')})`;
         }
         return null;
@@ -627,7 +648,7 @@ function exprNode(expr: Expression): ExplainNode {
           const single = expr.values[0];
           // Single tuple value in IN: wrap in Function tuple if inlineable,
           // otherwise render directly (e.g. parenthesized elements)
-          if (single.kind === 'tuple') {
+          if (single.kind === 'tupleLiteral') {
             const inlineResult = inlineInValue(single);
             if (inlineResult !== null) {
               valuesNode = n('Function tuple', [
@@ -725,8 +746,10 @@ function sampleRatioLabel(
 }
 
 function tableExpressionNode(ref: TableRef): ExplainNode {
-  const id = ref.database ? `${ref.database}.${ref.table}` : ref.table;
-  const label = ref.alias ? `TableIdentifier ${id} (alias ${ref.alias})` : `TableIdentifier ${id}`;
+  const qualified = ref.database ? `${id(ref.database)}.${id(ref.table)}` : id(ref.table);
+  const label = ref.alias
+    ? `TableIdentifier ${qualified} (alias ${ref.alias})`
+    : `TableIdentifier ${qualified}`;
   const children: ExplainNode[] = [n(label)];
   if (ref.sample) {
     children.push(n(sampleRatioLabel(ref.sample.ratio)));
@@ -786,7 +809,7 @@ function tableFunctionExprNode(from: TableFunctionRef): ExplainNode {
 
 function fromAtomExplainNode(from: TableRef | SubqueryFrom | TableFunctionRef): ExplainNode {
   if (from.kind === 'subqueryFrom') return subqueryTableExprNode(from);
-  if (from.kind === 'tableFunction') return tableFunctionExprNode(from);
+  if (from.kind === 'tableFunctionRef') return tableFunctionExprNode(from);
   return tableExpressionNode(from);
 }
 
@@ -812,10 +835,14 @@ type JoinElement =
   | { tag: 'arrayJoin'; expressions: Expression[] };
 
 function flattenFromExpr(from: FromExpr): JoinElement[] {
-  if (from.kind === 'tableRef' || from.kind === 'subqueryFrom' || from.kind === 'tableFunction') {
+  if (
+    from.kind === 'tableRef' ||
+    from.kind === 'subqueryFrom' ||
+    from.kind === 'tableFunctionRef'
+  ) {
     return [{ tag: 'base', from }];
   }
-  if (from.kind === 'join') {
+  if (from.kind === 'joinExpr') {
     return [
       ...flattenFromExpr(from.left),
       { tag: 'join', from: from.right, constraint: from.constraint },
@@ -825,7 +852,40 @@ function flattenFromExpr(from: FromExpr): JoinElement[] {
   return [...flattenFromExpr(from.left), { tag: 'arrayJoin', expressions: from.expressions }];
 }
 
-function fromExprNode(from: FromExpr): ExplainNode {
+// ClickHouse renders CTEs distributed to sibling UNION branches with their
+// inner TableJoin/TableExpression order swapped. Mark every nested SELECT in
+// the distributed CTE copies so fromExprNode reverses the pair.
+function markStmtForReverseJoins(s: Statement): Statement {
+  if (s.kind === 'select') {
+    const withCopy = s.with ? markCTEsForReverseJoins(s.with) : undefined;
+    return {
+      ...s,
+      reverseJoins: true,
+      ...(withCopy ? { with: withCopy } : {}),
+    } as Statement;
+  }
+  if (s.kind === 'union') {
+    return { ...s, queries: s.queries.map(markStmtForReverseJoins) } as Statement;
+  }
+  if (s.kind === 'intersect') {
+    return {
+      ...s,
+      left: markStmtForReverseJoins(s.left as Statement),
+      right: markStmtForReverseJoins(s.right as Statement),
+    } as Statement;
+  }
+  return s;
+}
+
+function markCTEsForReverseJoins(ctes: CTE[]): CTE[] {
+  return ctes.map((c) =>
+    c.kind === 'cteSubquery'
+      ? ({ ...c, query: markStmtForReverseJoins(c.query as Statement) } as CTE)
+      : c,
+  );
+}
+
+function fromExprNode(from: FromExpr, reverseJoins = false): ExplainNode {
   const elements = flattenFromExpr(from);
   return n(
     'TablesInSelectQuery',
@@ -834,9 +894,12 @@ function fromExprNode(from: FromExpr): ExplainNode {
         return n('TablesInSelectQueryElement', [fromAtomExplainNode(elem.from)]);
       }
       if (elem.tag === 'join') {
-        const children = [fromAtomExplainNode(elem.from)];
-        children.push(elem.constraint ? joinConstraintNode(elem.constraint) : n('TableJoin'));
-        return n('TablesInSelectQueryElement', children);
+        const tableNode = fromAtomExplainNode(elem.from);
+        const joinNode = elem.constraint ? joinConstraintNode(elem.constraint) : n('TableJoin');
+        return n(
+          'TablesInSelectQueryElement',
+          reverseJoins ? [joinNode, tableNode] : [tableNode, joinNode],
+        );
       }
       // arrayJoin
       return n('TablesInSelectQueryElement', [
@@ -859,8 +922,11 @@ function orderByNode(item: OrderByItem): ExplainNode {
 }
 
 function cteNode(cte: CTE): ExplainNode {
-  if (cte.kind === 'expr') {
+  if (cte.kind === 'cteExpr') {
     return exprNode({ kind: 'alias', expr: cte.expr, alias: cte.name });
+  }
+  if (cte.kind === 'cteTuple') {
+    return n('Function tuple', [n('ExpressionList', cte.elements.map(exprNode))]);
   }
   return n('WithElement', [n('Subquery', [stmtNode(cte.query)])]);
 }
@@ -881,7 +947,8 @@ function selectQueryNode(stmt: SelectStatement): ExplainNode {
 
   children.push(n('ExpressionList', stmt.select.map(exprNode)));
 
-  if (stmt.from) children.push(fromExprNode(stmt.from));
+  const reverseJoins = !!(stmt as Record<string, unknown>).reverseJoins;
+  if (stmt.from) children.push(fromExprNode(stmt.from, reverseJoins));
   if (stmt.prewhere) children.push(exprNode(stmt.prewhere));
   if (stmt.where) children.push(exprNode(stmt.where));
   if (stmt.groupBy) {
@@ -967,6 +1034,20 @@ function selectQueryNode(stmt: SelectStatement): ExplainNode {
     children.push(cteNodes);
   }
 
+  // CTE column aliases: WITH t (a, b) AS (...) → ExpressionList with Identifiers
+  if (stmt.with) {
+    for (const cte of stmt.with) {
+      if (cte.kind === 'cteSubquery' && cte.columnAliases && cte.columnAliases.length > 0) {
+        children.push(
+          n(
+            'ExpressionList',
+            cte.columnAliases.map((a) => n(`Identifier ${a}`)),
+          ),
+        );
+      }
+    }
+  }
+
   return n('SelectQuery', children);
 }
 
@@ -1048,12 +1129,1983 @@ function viewExplainNode(stmt: ExplainStatement, aliasStr: string): ExplainNode 
   ]);
 }
 
+// ── CREATE TABLE explain helpers ──────────────────────────────────────────────
+
+// Convert a structured DataType to an EXPLAIN node tree
+function dataTypeToExplainNode(dt: import('./ast').DataType): ExplainNode {
+  const baseName = dt.name;
+
+  // Enum types with parsed values
+  if (
+    /^Enum(?:8|16)?$/i.test(baseName) &&
+    dt.args &&
+    dt.args.length === 1 &&
+    dt.args[0].kind === 'enumValues'
+  ) {
+    const enumVals = dt.args[0].values;
+    // If ALL values have explicit assignments, use EnumDataType (no children)
+    const allExplicit = enumVals.every(
+      (v) => v.value !== undefined && v.value !== null && v.name !== null,
+    );
+    if (allExplicit) {
+      return n(`EnumDataType ${baseName}`);
+    }
+    // Otherwise show DataType with ExpressionList children
+    const children = enumVals.map((v) => {
+      if (v.name === null) return n('Literal NULL');
+      if (v.value !== undefined && v.value !== null) {
+        const numVal = v.value;
+        const numLabel = numVal.startsWith('-') ? `Int64_${numVal}` : `UInt64_${numVal}`;
+        return n('Function equals', [
+          n('ExpressionList', [
+            n(`Literal '${escapeStringValue(v.name)}'`),
+            n(`Literal ${numLabel}`),
+          ]),
+        ]);
+      }
+      return n(`Literal '${escapeStringValue(v.name)}'`);
+    });
+    return n(`DataType ${baseName}`, [n('ExpressionList', children)]);
+  }
+  // Enum without args: EnumDataType
+  if (/^Enum(?:8|16)?$/i.test(baseName)) {
+    return n(`EnumDataType ${baseName}`);
+  }
+
+  // MySQL integer types strip their display width: TINYINT(8) → DataType TINYINT
+  const intTypePattern =
+    /^(TINYINT|SMALLINT|INT|INTEGER|BIGINT|MEDIUMINT)(\s+(SIGNED|UNSIGNED))?$/i;
+  if (intTypePattern.test(baseName) && dt.args) {
+    return n(`DataType ${baseName}`);
+  }
+
+  // No args
+  if (!dt.args) {
+    return n(`DataType ${baseName}`);
+  }
+  // Empty args: show ExpressionList child (DateTime(), Variant(), Tuple(), etc.)
+  if (dt.args.length === 0) {
+    return n(`DataType ${baseName}`, [n('ExpressionList')]);
+  }
+
+  // Tuple type uses TupleDataType; named fields are stripped (only types shown)
+  if (/^Tuple$/i.test(baseName)) {
+    if (dt.args.length === 0) {
+      return n(`DataType ${baseName}`, [n('ExpressionList')]);
+    }
+    const children = dt.args.map((arg) => {
+      if (arg.kind === 'namedField') return dataTypeToExplainNode(arg.type);
+      if (arg.kind === 'type') return dataTypeToExplainNode(arg.type);
+      return dataTypeArgToExplainNode(arg, baseName, 0);
+    });
+    return n(`TupleDataType ${baseName}`, [n('ExpressionList', children)]);
+  }
+
+  // Nested type: children are NameTypePair
+  if (/^Nested$/i.test(baseName)) {
+    const children = dt.args.map((arg) => {
+      if (arg.kind === 'namedField') {
+        return n(`NameTypePair ${arg.name}`, [dataTypeToExplainNode(arg.type)]);
+      }
+      if (arg.kind === 'type') return dataTypeToExplainNode(arg.type);
+      return dataTypeArgToExplainNode(arg, baseName, 0);
+    });
+    return n(`DataType ${baseName}`, [n('ExpressionList', children)]);
+  }
+
+  // JSON type: args are wrapped in ASTObjectTypeArgument / ObjectTypedPath
+  if (/^JSON$/i.test(baseName)) {
+    const children = dt.args.map((arg) => jsonTypeArgToExplainNode(arg));
+    return n(`DataType ${baseName}`, [n('ExpressionList', children)]);
+  }
+
+  // Generic parameterized type (Array, Nullable, Map, AggregateFunction, etc.)
+  const children = dt.args.map((arg, idx) => dataTypeArgToExplainNode(arg, baseName, idx));
+  return n(`DataType ${baseName}`, [n('ExpressionList', children)]);
+}
+
+// Convert a single DataTypeArg to an EXPLAIN node
+function dataTypeArgToExplainNode(
+  arg: import('./ast').DataTypeArg,
+  parentName: string,
+  index: number,
+): ExplainNode {
+  switch (arg.kind) {
+    case 'type':
+      // AggregateFunction: first arg is a function name (Identifier)
+      if (/^(?:Aggregate|SimpleAggregate)Function$/i.test(parentName) && index === 0) {
+        // Render the function name as Identifier, including params if present
+        const t = arg.type;
+        if (t.args && t.args.length > 0) {
+          // e.g. quantile(0.5) → Function quantile(...)
+          const argNodes = t.args.map((a, i) => dataTypeArgToExplainNode(a, t.name, i));
+          return n(`Function ${t.name}`, [n('ExpressionList', argNodes)]);
+        }
+        return n(`Identifier ${t.name}`);
+      }
+      return dataTypeToExplainNode(arg.type);
+    case 'namedField':
+      return n(`ColumnDeclaration ${arg.name}`, [dataTypeToExplainNode(arg.type)]);
+    case 'literal': {
+      const v = arg.value;
+      if (/^\d+$/.test(v)) return n(`Literal UInt64_${v}`);
+      if (/^-?\d+$/.test(v)) return n(`Literal Int64_${v}`);
+      if (/^-?\d*\.\d+$/.test(v) || /^\d+\.\d*$/.test(v))
+        return n(`Literal Float64_${normalizeFloat(v)}`);
+      if (v.startsWith("'")) return n(`Literal ${v}`);
+      // Setting-like: "max_types = 3" → not currently output as literal in CH
+      return n(`Literal ${v}`);
+    }
+    case 'enumValues':
+      return n(`EnumDataType ${parentName}`);
+    case 'setting':
+      return n('Function equals', [
+        n('ExpressionList', [n(`Identifier ${arg.name}`), exprNode(arg.value)]),
+      ]);
+  }
+}
+
+// Convert a JSON type argument to an ASTObjectTypeArgument explain node
+function jsonTypeArgToExplainNode(arg: import('./ast').DataTypeArg): ExplainNode {
+  switch (arg.kind) {
+    case 'namedField':
+      // JSON(a String) → ASTObjectTypeArgument / ObjectTypedPath a / DataType String
+      return n('ASTObjectTypeArgument', [
+        n(`ObjectTypedPath ${arg.name}`, [dataTypeToExplainNode(arg.type)]),
+      ]);
+    case 'setting':
+      // JSON(max_dynamic_paths=2) → ASTObjectTypeArgument / Function equals(...)
+      return n('ASTObjectTypeArgument', [
+        n('Function equals', [
+          n('ExpressionList', [n(`Identifier ${arg.name}`), exprNode(arg.value)]),
+        ]),
+      ]);
+    case 'literal': {
+      // SKIP REGEXP 'pattern' → ASTObjectTypeArgument / Literal 'pattern'
+      const skipRegexpMatch = arg.value.match(/^SKIP REGEXP\s+(.+)$/);
+      if (skipRegexpMatch) {
+        return n('ASTObjectTypeArgument', [n(`Literal ${skipRegexpMatch[1]}`)]);
+      }
+      // SKIP path → ASTObjectTypeArgument / Identifier path (strip backticks from each segment)
+      const skipMatch = arg.value.match(/^SKIP\s+(.+)$/);
+      if (skipMatch) {
+        const path = skipMatch[1].replace(/`([^`]*)`/g, '$1');
+        return n('ASTObjectTypeArgument', [n(`Identifier ${path}`)]);
+      }
+      return n('ASTObjectTypeArgument', [n(`Literal ${arg.value}`)]);
+    }
+    case 'type':
+      return n('ASTObjectTypeArgument', [dataTypeToExplainNode(arg.type)]);
+    case 'enumValues':
+      return n('ASTObjectTypeArgument');
+  }
+}
+
+// Convert structured CodecItem[] to EXPLAIN nodes
+function codecToExplainNodes(items: import('./ast').CodecItem[]): ExplainNode {
+  const children = items.map((item) => {
+    if (item.args !== undefined && item.args.length > 0) {
+      return n(`Function ${item.name}`, [n('ExpressionList', item.args.map(exprNode))]);
+    }
+    if (item.args !== undefined) {
+      return n(`Function ${item.name}`, [n('ExpressionList')]);
+    }
+    return n(`Function ${item.name}`);
+  });
+  return n('Function CODEC', [n('ExpressionList', children)]);
+}
+
+// Convert structured IndexType to EXPLAIN node
+function indexTypeToExplainNode(it: import('./ast').IndexType): ExplainNode {
+  if (it.args !== undefined && it.args.length > 0) {
+    return n(`Function ${it.name}`, [n('ExpressionList', it.args.map(exprNode))]);
+  }
+  if (it.args !== undefined) {
+    return n(`Function ${it.name}`, [n('ExpressionList')]);
+  }
+  return n(`Function ${it.name}`, [n('ExpressionList')]);
+}
+
+// Build ColumnDeclaration explain node
+function columnDeclNode(col: ColumnDef): ExplainNode {
+  const children: ExplainNode[] = [];
+
+  // DataType (if specified)
+  if (col.type) {
+    children.push(dataTypeToExplainNode(col.type));
+  }
+
+  // Collation
+  if (col.collate) {
+    children.push(n('Collation'));
+  }
+
+  // EPHEMERAL without default value: show defaultValueOfTypeName placeholder
+  if (col.defaultKind === 'EPHEMERAL' && !col.defaultExpr) {
+    children.push(n('Function defaultValueOfTypeName'));
+  }
+
+  // Default/Materialized/Alias/Ephemeral expression
+  if (col.defaultExpr) {
+    children.push(exprNode(col.defaultExpr));
+  }
+
+  // CODEC
+  if (col.codec) {
+    children.push(codecToExplainNodes(col.codec));
+  }
+
+  // Column SETTINGS (before STATISTICS and TTL)
+  if (col.columnSettings) {
+    children.push(n('Set'));
+  }
+
+  // STATISTICS — rendered as Function STATISTICS (not CODEC)
+  if (col.statistics) {
+    const statChildren = col.statistics.map((item) => {
+      if (item.args !== undefined && item.args.length > 0) {
+        return n(`Function ${item.name}`, [n('ExpressionList', item.args.map(exprNode))]);
+      }
+      return n(`Function ${item.name}`);
+    });
+    children.push(n('Function STATISTICS', [n('ExpressionList', statChildren)]));
+  }
+
+  // Column TTL
+  if (col.ttl) {
+    children.push(exprNode(col.ttl));
+  }
+
+  // Column comment
+  if (col.comment) {
+    children.push(n(`Literal '${col.comment.replace(/'/g, "\\'")}'`));
+  }
+
+  return n(`ColumnDeclaration ${col.name}`, children);
+}
+
+// Build Storage definition node
+function storageDefNode(
+  stmt: CreateTableStatement | CreateMaterializedViewStatement,
+): ExplainNode | null {
+  const children: ExplainNode[] = [];
+
+  // Engine
+  if (stmt.engine) {
+    if (stmt.engine.args !== undefined) {
+      if (stmt.engine.args.length === 0) {
+        children.push(n(`Function ${stmt.engine.name}`, [n('ExpressionList')]));
+      } else {
+        children.push(
+          n(`Function ${stmt.engine.name}`, [n('ExpressionList', stmt.engine.args.map(exprNode))]),
+        );
+      }
+    } else {
+      children.push(n(`Function ${stmt.engine.name}`));
+    }
+  }
+
+  // SETTINGS before ORDER BY (when SETTINGS was specified before ORDER BY in the DDL)
+  const settingsAfterOrderBy = !!(stmt as Record<string, unknown>).settingsAfterOrderBy;
+  if (stmt.settings && !settingsAfterOrderBy) {
+    children.push(n('Set'));
+  }
+
+  // PARTITION BY
+  if (stmt.partitionBy) {
+    children.push(exprNode(stmt.partitionBy));
+  }
+
+  // PRIMARY KEY
+  const pk =
+    stmt.primaryKey || (isCreateTableStatement(stmt) ? stmt.primaryKeyInSchema : undefined);
+  const storagePkFromColumns =
+    isCreateTableStatement(stmt) &&
+    stmt.tableElements?.some((el) => el.kind === 'columnDef' && el.primaryKey);
+  // PK goes after ORDER BY when from column-level modifiers or from schema PRIMARY KEY
+  const hasSchemaPk = isCreateTableStatement(stmt) && !!stmt.primaryKeyInSchema;
+  const pkAfterOrderBy = storagePkFromColumns || hasSchemaPk;
+  // Render PK before ORDER BY (when not from column modifiers)
+  if (pk && !pkAfterOrderBy) {
+    if (pk.length === 1) {
+      children.push(exprNode(pk[0]));
+    } else {
+      children.push(n('Function tuple', [n('ExpressionList', pk.map(exprNode))]));
+    }
+  }
+
+  // ORDER BY
+  if (stmt.orderBy) {
+    const hasDesc = stmt.orderBy.some((o) => o.dir === 'DESC');
+    const isParenthesized = !!(stmt.orderBy as unknown as { _parenthesized?: boolean })
+      ._parenthesized;
+    if (hasDesc && isParenthesized) {
+      // Parenthesized ORDER BY with any DESC → Function tuple (no children)
+      children.push(n('Function tuple'));
+    } else if (stmt.orderBy.length === 1) {
+      const item = stmt.orderBy[0];
+      if (item.dir === 'DESC') {
+        children.push(n('StorageOrderByElement', [exprNode(item.expr)]));
+      } else {
+        children.push(exprNode(item.expr));
+      }
+    } else if (hasDesc) {
+      // Non-parenthesized multi-item with DESC → Function tuple (no children)
+      children.push(n('Function tuple'));
+    } else {
+      children.push(
+        n('Function tuple', [
+          n(
+            'ExpressionList',
+            stmt.orderBy.map((o) => exprNode(o.expr)),
+          ),
+        ]),
+      );
+    }
+  }
+
+  // PK after ORDER BY (from column modifiers or explicit PRIMARY KEY after ORDER BY)
+  if (pk && pkAfterOrderBy) {
+    if (storagePkFromColumns) {
+      children.push(n('Function tuple', [n('ExpressionList', pk.map(exprNode))]));
+    } else if (pk.length === 1) {
+      children.push(exprNode(pk[0]));
+    } else {
+      children.push(n('Function tuple', [n('ExpressionList', pk.map(exprNode))]));
+    }
+  }
+
+  // SAMPLE BY
+  if (stmt.sampleBy) {
+    children.push(exprNode(stmt.sampleBy));
+  }
+
+  // TTL
+  if (stmt.ttl) {
+    const ttlElements = stmt.ttl.map((item) => {
+      const ttlChildren = [exprNode(item.expr)];
+      if (item.where) ttlChildren.push(exprNode(item.where));
+      return n('TTLElement', ttlChildren);
+    });
+    children.push(n('ExpressionList', ttlElements));
+  }
+
+  // SETTINGS after ORDER BY (when SETTINGS was specified after ORDER BY in the DDL)
+  if (stmt.settings && settingsAfterOrderBy) {
+    children.push(n('Set'));
+  }
+
+  if (children.length === 0) return null;
+  return n('Storage definition', children);
+}
+
+// Build CreateIndexQuery explain node
+// Format: CreateIndexQuery  tablename (children 3)
+//   Identifier indexName
+//   Index (children 1-2)
+//     expr
+//     [Function typeName ...]
+//   Identifier tableName
+function createIndexQueryNode(stmt: CreateIndexStatement): ExplainNode {
+  // Note: double space between CreateIndexQuery and table name (ClickHouse quirk)
+  const label = `CreateIndexQuery  ${id(stmt.table.table)}`;
+
+  const children: ExplainNode[] = [];
+
+  // Index name
+  children.push(n(`Identifier ${stmt.indexName}`));
+
+  // Index node
+  const indexChildren: ExplainNode[] = [];
+  if (stmt.indexExpr) {
+    // For multi-column indexes, ClickHouse EXPLAIN shows Function tuple with empty ExpressionList
+    if (stmt.indexExpr.kind === 'functionCall' && stmt.indexExpr.name === 'tuple') {
+      indexChildren.push(n('Function tuple', [n('ExpressionList')]));
+    } else {
+      indexChildren.push(exprNode(stmt.indexExpr));
+    }
+  }
+  if (stmt.indexType) {
+    indexChildren.push(indexTypeToExplainNode(stmt.indexType));
+  }
+  children.push(n('Index', indexChildren));
+
+  // Table name
+  children.push(n(`Identifier ${id(stmt.table.table)}`));
+
+  return n(label, children);
+}
+
+// Build CreateQuery explain node for DICTIONARY
+function createDictionaryQueryNode(stmt: CreateDictionaryStatement): ExplainNode {
+  const children: ExplainNode[] = [];
+
+  // Label
+  let label = stmt.attach ? 'AttachQuery' : 'CreateQuery';
+  if (stmt.table.database) {
+    label += ` ${id(stmt.table.database)} ${id(stmt.table.table)}`;
+    children.push(n(`Identifier ${id(stmt.table.database)}`));
+    children.push(n(`Identifier ${id(stmt.table.table)}`));
+  } else {
+    label += ` ${id(stmt.table.table)}`;
+    children.push(n(`Identifier ${id(stmt.table.table)}`));
+  }
+
+  // Dictionary attributes
+  if (stmt.dictAttrs && stmt.dictAttrs.length > 0) {
+    const attrNodes = stmt.dictAttrs.map((attr) => {
+      const attrChildren: ExplainNode[] = [dataTypeToExplainNode(attr.type)];
+      if (attr.defaultValue) attrChildren.push(exprNode(attr.defaultValue));
+      if (attr.expression) attrChildren.push(exprNode(attr.expression));
+      return n(`DictionaryAttributeDeclaration ${attr.name}`, attrChildren);
+    });
+    children.push(n('ExpressionList', attrNodes));
+  }
+
+  // Dictionary definition
+  if (stmt.dictDef) {
+    const defChildren: ExplainNode[] = [];
+    const dd = stmt.dictDef;
+
+    // PRIMARY KEY — flatten tuple to flat list
+    if (dd.primaryKey) {
+      const pkExprs: Expression[] = [];
+      for (const pk of dd.primaryKey) {
+        if (pk.kind === 'tupleLiteral') {
+          pkExprs.push(...pk.elements);
+        } else {
+          pkExprs.push(pk);
+        }
+      }
+      defChildren.push(n('ExpressionList', pkExprs.map(exprNode)));
+    }
+
+    // SOURCE
+    if (dd.source) {
+      const pairNodes = dd.source.pairs.map((p) => {
+        if (Array.isArray(p.value)) {
+          // Structure pairs: render type as Identifier (simple) or Function (parameterized)
+          const structPairs = p.value.map(
+            (sp: { name: string; type: import('./ast').DataType }) => {
+              const dt = sp.type;
+              if (dt.args && dt.args.length > 0) {
+                const argNodes = dt.args.map((a, i) => dataTypeArgToExplainNode(a, dt.name, i));
+                return n('pair', [n(`Function ${dt.name}`, [n('ExpressionList', argNodes)])]);
+              }
+              return n('pair', [n(`Identifier ${dt.name}`)]);
+            },
+          );
+          return n('pair', [n('ExpressionList', structPairs)]);
+        }
+        return n('pair', [exprNode(p.value)]);
+      });
+      // Double space before source name (ClickHouse quirk)
+      defChildren.push(
+        n(`FunctionWithKeyValueArguments  ${dd.source.name}`, [n('ExpressionList', pairNodes)]),
+      );
+    }
+
+    // LIFETIME
+    if (dd.lifetime) {
+      defChildren.push(n('Dictionary lifetime'));
+    }
+
+    // LAYOUT
+    if (dd.layout) {
+      const layoutPairs = dd.layout.pairs.map((p) => n('pair', [exprNode(p.value)]));
+      defChildren.push(n('Dictionary layout', [n('ExpressionList', layoutPairs)]));
+    }
+
+    // RANGE — no children in EXPLAIN
+    if (dd.range) {
+      defChildren.push(n('Dictionary range'));
+    }
+
+    // SETTINGS
+    if (dd.settings) {
+      defChildren.push(n('Dictionary settings'));
+    }
+
+    children.push(n('Dictionary definition', defChildren));
+  }
+
+  // Dictionary comment
+  if (stmt.dictDef?.comment) {
+    children.push(n(`Literal '${stmt.dictDef.comment.replace(/'/g, "\\'")}'`));
+  }
+
+  return n(label, children);
+}
+
+function createWorkloadQueryNode(stmt: CreateWorkloadStatement): ExplainNode {
+  const children: ExplainNode[] = [n(`Identifier ${stmt.name}`)];
+  if (stmt.parentWorkload) {
+    children.push(n(`Identifier ${stmt.parentWorkload}`));
+  }
+  return n(`CreateWorkloadQuery ${stmt.name}`, children);
+}
+
+function createFunctionQueryNode(stmt: CreateFunctionStatement): ExplainNode {
+  const children: ExplainNode[] = [n(`Identifier ${stmt.name}`)];
+  children.push(exprNode(stmt.functionExpr));
+  return n(`CreateFunctionQuery ${stmt.name}`, children);
+}
+
+function createDatabaseQueryNode(stmt: CreateDatabaseStatement): ExplainNode {
+  const children: ExplainNode[] = [n(`Identifier ${stmt.name}`)];
+  // Build storage definition if we have engine, ORDER BY, or settings
+  const storageChildren: ExplainNode[] = [];
+  if (stmt.engine) {
+    if (stmt.engine.args !== undefined) {
+      if (stmt.engine.args.length === 0) {
+        storageChildren.push(n(`Function ${stmt.engine.name}`, [n('ExpressionList')]));
+      } else {
+        storageChildren.push(
+          n(`Function ${stmt.engine.name}`, [n('ExpressionList', stmt.engine.args.map(exprNode))]),
+        );
+      }
+    } else {
+      storageChildren.push(n(`Function ${stmt.engine.name}`));
+    }
+  }
+  if (stmt.orderBy) {
+    if (stmt.orderBy.length === 1 && !stmt.orderBy[0].dir) {
+      storageChildren.push(exprNode(stmt.orderBy[0].expr));
+    }
+  }
+  if (stmt.settings) {
+    storageChildren.push(n('Set'));
+  }
+  if (storageChildren.length > 0) {
+    children.push(n('Storage definition', storageChildren));
+  }
+  // Note: trailing space after dbname (ClickHouse quirk)
+  return n(`CreateQuery ${stmt.name} `, children);
+}
+
+function createViewQueryNode(stmt: CreateViewStatement): ExplainNode {
+  const children: ExplainNode[] = [];
+  let label = stmt.attach ? 'AttachQuery' : 'CreateQuery';
+  if (stmt.table.database) {
+    label += ` ${id(stmt.table.database)} ${id(stmt.table.table)}`;
+    children.push(n(`Identifier ${id(stmt.table.database)}`));
+    children.push(n(`Identifier ${id(stmt.table.table)}`));
+  } else {
+    label += ` ${id(stmt.table.table)}`;
+    children.push(n(`Identifier ${id(stmt.table.table)}`));
+  }
+  if (stmt.tableElements && stmt.tableElements.length > 0) {
+    const columns = stmt.tableElements.filter((el) => el.kind === 'columnDef');
+    // If all columns are bare names (no type), render as ExpressionList of Identifiers (view column aliases)
+    const allBareNames = columns.every((c) => !c.type);
+    if (allBareNames && columns.length > 0) {
+      children.push(
+        n(
+          'ExpressionList',
+          columns.map((c) => n(`Identifier ${c.name}`)),
+        ),
+      );
+    } else if (columns.length > 0) {
+      children.push(n('Columns definition', [n('ExpressionList', columns.map(columnDeclNode))]));
+    }
+  }
+  if (stmt.asQuery) children.push(stmtNode(stmt.asQuery));
+  return n(label, children);
+}
+
+function createMaterializedViewQueryNode(stmt: CreateMaterializedViewStatement): ExplainNode {
+  const children: ExplainNode[] = [];
+  let label = stmt.attach ? 'AttachQuery' : 'CreateQuery';
+  if (stmt.table.database) {
+    label += ` ${id(stmt.table.database)} ${id(stmt.table.table)}`;
+    children.push(n(`Identifier ${id(stmt.table.database)}`));
+    children.push(n(`Identifier ${id(stmt.table.table)}`));
+  } else {
+    label += ` ${id(stmt.table.table)}`;
+    children.push(n(`Identifier ${id(stmt.table.table)}`));
+  }
+  if (stmt.tableElements && stmt.tableElements.length > 0) {
+    const colsDefChildren: ExplainNode[] = [];
+    const columns = stmt.tableElements.filter((el) => el.kind === 'columnDef').map(columnDeclNode);
+    if (columns.length > 0) colsDefChildren.push(n('ExpressionList', columns));
+    const indexes = stmt.tableElements
+      .filter((el) => el.kind === 'indexDef')
+      .map((el) => {
+        const idxChildren: ExplainNode[] = [exprNode(el.expr)];
+        idxChildren.push(indexTypeToExplainNode(el.indexType));
+        return n('Index', idxChildren);
+      });
+    if (indexes.length > 0) colsDefChildren.push(n('ExpressionList', indexes));
+    // Projections in MV
+    const projections: ExplainNode[] = [];
+    for (const el of stmt.tableElements) {
+      if (el.kind === 'projectionDef') {
+        const projChildren: ExplainNode[] = [];
+        if (el.query) {
+          const pqChildren: ExplainNode[] = [];
+          if (el.query.select) pqChildren.push(n('ExpressionList', el.query.select.map(exprNode)));
+          if (el.query.groupBy && el.query.groupBy.kind === 'expressions') {
+            pqChildren.push(n('ExpressionList', el.query.groupBy.items.map(exprNode)));
+          }
+          if (el.query.orderBy && el.query.orderBy.length > 0) {
+            if (el.query.orderBy.length === 1) pqChildren.push(exprNode(el.query.orderBy[0].expr));
+            else
+              pqChildren.push(
+                n('Function tuple', [
+                  n(
+                    'ExpressionList',
+                    el.query.orderBy.map((o) => exprNode(o.expr)),
+                  ),
+                ]),
+              );
+          }
+          projChildren.push(n('ProjectionSelectQuery', pqChildren));
+        }
+        projections.push(n('Projection', projChildren));
+      }
+    }
+    if (projections.length > 0) colsDefChildren.push(n('ExpressionList', projections));
+    // Schema-level PRIMARY KEY in MV
+    const mvPkInSchema = (stmt as Record<string, unknown>).primaryKeyInSchema as
+      | Expression[]
+      | undefined;
+    if (mvPkInSchema) {
+      if (mvPkInSchema.length === 1) {
+        colsDefChildren.push(exprNode(mvPkInSchema[0]));
+      } else if (mvPkInSchema.length > 1) {
+        colsDefChildren.push(
+          n('Function tuple', [n('ExpressionList', mvPkInSchema.map(exprNode))]),
+        );
+      }
+    }
+    // Column-level PRIMARY KEY in MV
+    const mvColPks = stmt.tableElements
+      ?.filter((el): el is ColumnDef => el.kind === 'columnDef' && !!el.primaryKey)
+      .map((el) => n(`Identifier ${el.name}`));
+    if (mvColPks && mvColPks.length > 0 && !mvPkInSchema) {
+      colsDefChildren.push(n('Function tuple', [n('ExpressionList', mvColPks)]));
+    }
+    if (colsDefChildren.length > 0) {
+      children.push(n('Columns definition', colsDefChildren));
+    }
+  }
+  // Refresh strategy
+  if ((stmt as Record<string, unknown>).refresh) {
+    children.push(n('Refresh strategy definition', [n('TimeInterval')]));
+  }
+  if (stmt.asQuery) children.push(stmtNode(stmt.asQuery));
+  // ViewTargets
+  if (stmt.toTable) {
+    children.push(n('ViewTargets'));
+  } else if (
+    stmt.engine ||
+    stmt.orderBy ||
+    stmt.primaryKey ||
+    (stmt as Record<string, unknown>).primaryKeyInSchema ||
+    stmt.tableElements?.some((el) => el.kind === 'columnDef' && el.primaryKey)
+  ) {
+    // When MV has PK but no ORDER BY, replicate PK as ORDER BY in ViewTargets storage
+    const colPkExprs = stmt.tableElements
+      ?.filter((el): el is ColumnDef => el.kind === 'columnDef' && !!el.primaryKey)
+      .map((el) => ({ kind: 'columnRef' as const, parts: [el.name] }));
+    const mvPk = (stmt.primaryKey ||
+      (stmt as Record<string, unknown>).primaryKeyInSchema ||
+      (colPkExprs && colPkExprs.length > 0 ? colPkExprs : undefined)) as Expression[] | undefined;
+    let innerStorage: ExplainNode | null;
+    const isColPk = colPkExprs && colPkExprs.length > 0;
+    if (mvPk && !stmt.orderBy) {
+      // PK used as implicit ORDER BY — suppress normal PK rendering in storage
+      const stmtNoPk = { ...stmt, primaryKey: undefined } as typeof stmt;
+      innerStorage = storageDefNode(stmtNoPk);
+      if (innerStorage) {
+        if (isColPk) {
+          // Column-modifier PK: always tuple-wrapped
+          innerStorage.children.push(
+            n('Function tuple', [n('ExpressionList', mvPk.map(exprNode))]),
+          );
+        } else {
+          // Schema PK: bare expression for single, tuple for multiple
+          if (mvPk.length === 1) {
+            innerStorage.children.push(exprNode(mvPk[0]));
+          } else {
+            innerStorage.children.push(
+              n('Function tuple', [n('ExpressionList', mvPk.map(exprNode))]),
+            );
+          }
+        }
+      }
+    } else {
+      innerStorage = storageDefNode(stmt);
+    }
+    if (innerStorage) {
+      children.push(n('ViewTargets', [innerStorage]));
+    } else {
+      children.push(n('ViewTargets'));
+    }
+  }
+  // FORMAT clause
+  if ((stmt as Record<string, unknown>).format) {
+    children.push(n(`Identifier ${(stmt as Record<string, unknown>).format}`));
+  }
+  return n(label, children);
+}
+
+// Build the full CreateQuery explain node for CREATE TABLE
+function createTableQueryNode(stmt: CreateTableStatement): ExplainNode {
+  const children: ExplainNode[] = [];
+
+  let label = stmt.attach ? 'AttachQuery' : 'CreateQuery';
+  if (stmt.table.database) {
+    label += ` ${id(stmt.table.database)} ${id(stmt.table.table)}`;
+    children.push(n(`Identifier ${id(stmt.table.database)}`));
+    children.push(n(`Identifier ${id(stmt.table.table)}`));
+  } else {
+    label += ` ${id(stmt.table.table)}`;
+    children.push(n(`Identifier ${id(stmt.table.table)}`));
+  }
+
+  // Columns definition
+  if (stmt.tableElements && stmt.tableElements.length > 0) {
+    const colsDefChildren: ExplainNode[] = [];
+
+    // Separate columns, constraints, indexes, and projections
+    const columns: ExplainNode[] = [];
+    const constraints: ExplainNode[] = [];
+    const indexes: ExplainNode[] = [];
+    const projections: ExplainNode[] = [];
+
+    for (const el of stmt.tableElements) {
+      switch (el.kind) {
+        case 'columnDef':
+          columns.push(columnDeclNode(el));
+          break;
+        case 'constraintDef':
+          constraints.push(n('Constraint', [exprNode(el.expr)]));
+          break;
+        case 'indexDef': {
+          const idxChildren: ExplainNode[] = [exprNode(el.expr)];
+          idxChildren.push(indexTypeToExplainNode(el.indexType));
+          indexes.push(n('Index', idxChildren));
+          break;
+        }
+        case 'projectionDef': {
+          // PROJECTION ... INDEX col TYPE name format
+          if (el.indexExpr) {
+            const piChildren: ExplainNode[] = [exprNode(el.indexExpr)];
+            if (el.indexType) piChildren.push(indexTypeToExplainNode(el.indexType));
+            projections.push(n('Projection', piChildren));
+            break;
+          }
+          const projChildren: ExplainNode[] = [];
+          const projQuery = el.query!;
+          const pqChildren: ExplainNode[] = [];
+          // WITH CTEs as aliased expressions (separate ExpressionList)
+          if (projQuery.with && projQuery.with.length > 0) {
+            const cteItems = projQuery.with
+              .filter((cte): cte is typeof cte & { kind: 'cteExpr' } => cte.kind === 'cteExpr')
+              .map((cte) => exprNode({ kind: 'alias', expr: cte.expr, alias: cte.name }));
+            if (cteItems.length > 0) {
+              pqChildren.push(n('ExpressionList', cteItems));
+            }
+          }
+          // SELECT list
+          if (projQuery.select) {
+            pqChildren.push(n('ExpressionList', projQuery.select.map(exprNode)));
+          }
+          // GROUP BY in projection (comes before ORDER BY)
+          if (projQuery.groupBy && projQuery.groupBy.kind === 'expressions') {
+            pqChildren.push(n('ExpressionList', projQuery.groupBy.items.map(exprNode)));
+          }
+          // ORDER BY in projection
+          if (projQuery.orderBy && projQuery.orderBy.length > 0) {
+            if (projQuery.orderBy.length === 1) {
+              pqChildren.push(exprNode(projQuery.orderBy[0].expr));
+            } else {
+              pqChildren.push(
+                n('Function tuple', [
+                  n(
+                    'ExpressionList',
+                    projQuery.orderBy.map((o) => exprNode(o.expr)),
+                  ),
+                ]),
+              );
+            }
+          }
+          projChildren.push(n('ProjectionSelectQuery', pqChildren));
+          // Projection SETTINGS
+          if ((el as Record<string, unknown>).projectionSettings) {
+            projChildren.push(n('Set'));
+          }
+          projections.push(n('Projection', projChildren));
+          break;
+        }
+      }
+    }
+
+    // Columns are always first ExpressionList
+    if (columns.length > 0) {
+      colsDefChildren.push(n('ExpressionList', columns));
+    }
+
+    // Constraints, indexes, and projections go into separate ExpressionLists
+    if (constraints.length > 0) {
+      colsDefChildren.push(n('ExpressionList', constraints));
+    }
+    if (indexes.length > 0) {
+      colsDefChildren.push(n('ExpressionList', indexes));
+    }
+    if (projections.length > 0) {
+      colsDefChildren.push(n('ExpressionList', projections));
+    }
+
+    // Primary key in schema is a direct child of Columns definition
+    // This includes both explicit PRIMARY KEY(...) elements and column-level PRIMARY KEY modifiers
+    const pkFromColumns = stmt.tableElements?.some(
+      (el) => el.kind === 'columnDef' && el.primaryKey,
+    );
+    const pkInColsDef =
+      stmt.primaryKeyInSchema || (stmt.primaryKey && pkFromColumns ? stmt.primaryKey : undefined);
+    if (pkInColsDef) {
+      if (pkInColsDef.length === 1 && !pkFromColumns) {
+        colsDefChildren.push(exprNode(pkInColsDef[0]));
+      } else {
+        colsDefChildren.push(n('Function tuple', [n('ExpressionList', pkInColsDef.map(exprNode))]));
+      }
+    }
+
+    children.push(n('Columns definition', colsDefChildren));
+  }
+
+  // Storage definition
+  const storageDef = storageDefNode(stmt);
+  if (storageDef) {
+    children.push(storageDef);
+  }
+
+  // AS SELECT query
+  if (stmt.asQuery) {
+    children.push(stmtNode(stmt.asQuery));
+  }
+
+  // AS table_function()
+  if (stmt.asTableFunction) {
+    const tf = stmt.asTableFunction;
+    if (tf.args.length === 0) {
+      children.push(n(`Function ${tf.name}`, [n('ExpressionList')]));
+    } else {
+      children.push(n(`Function ${tf.name}`, [n('ExpressionList', tf.args.map(exprNode))]));
+    }
+  }
+
+  // Table COMMENT
+  if (stmt.comment) {
+    children.push(n(`Literal '${stmt.comment.replace(/'/g, "\\'")}'`));
+  }
+
+  // Query-level SETTINGS (second SETTINGS clause)
+  if ((stmt as Record<string, unknown>).querySettings) {
+    children.push(n('Set'));
+  }
+
+  // FORMAT clause
+  if ((stmt as Record<string, unknown>).format) {
+    children.push(n(`Identifier ${(stmt as Record<string, unknown>).format}`));
+  }
+
+  return n(label, children);
+}
+
+function parallelWithQueryNode(stmt: ParallelWithStatement): ExplainNode {
+  const first = stmt.queries[0];
+  let kindPrefix: string;
+  let firstTable: string;
+  if (first?.kind === 'insert') {
+    kindPrefix = 'InsertQuery_';
+    firstTable = '';
+  } else if (first?.kind === 'drop') {
+    kindPrefix = 'DropQuery_';
+    firstTable = first.table ? id(first.table.table) : '';
+  } else if (first?.kind === 'truncate') {
+    kindPrefix = 'TruncateQuery_';
+    firstTable = first.table
+      ? id(first.table.table)
+      : first.database !== undefined
+        ? id(first.database)
+        : '';
+  } else if (first?.kind === 'optimize') {
+    kindPrefix = 'OptimizeQuery_';
+    let suffix = id(first.table.table);
+    if (first.final) suffix += '_final';
+    if (first.cleanup) suffix += '_cleanup';
+    if (first.deduplicate) suffix += '_deduplicate';
+    firstTable = suffix;
+  } else if (first?.kind === 'alter') {
+    kindPrefix = 'AlterQuery_';
+    firstTable = first.table ? id(first.table.table) : '';
+  } else {
+    kindPrefix = 'CreateQuery';
+    firstTable = first?.kind === 'createTable' ? id(first.table.table) : '';
+  }
+  const label = `ParallelWithQuery ${stmt.queries.length} ${kindPrefix}_${firstTable}`;
+  const children = stmt.queries.map((q) => stmtNode(q as Statement));
+  return n(label, children);
+}
+
+// Check if a query statement (or any of its children in a union) has settings
+function hasSelectSettings(query?: Statement): boolean {
+  if (!query) return false;
+  if (query.kind === 'select') return !!(query.settings && query.settings.length > 0);
+  if (query.kind === 'union') return query.queries.some((q) => hasSelectSettings(q));
+  return false;
+}
+
+function insertQueryNode(stmt: InsertStatement): ExplainNode {
+  const children: ExplainNode[] = [];
+
+  // First child: table identifier or function
+  if (stmt.target.kind === 'table') {
+    const t = stmt.target.table;
+    if (t.database) {
+      children.push(n(`Identifier ${id(t.database)}`));
+      children.push(n(`Identifier ${id(t.table)}`));
+    } else {
+      children.push(n(`Identifier ${id(t.table)}`));
+    }
+  } else {
+    const func = stmt.target.func;
+    const argsNodes = func.args.map(exprNode);
+    children.push(n(`Function ${func.name}`, [n('ExpressionList', argsNodes)]));
+  }
+
+  // PARTITION BY expression
+  if (stmt.partitionBy) {
+    children.push(exprNode(stmt.partitionBy));
+  }
+
+  // Column list
+  if (stmt.columns && stmt.columns.length > 0) {
+    children.push(
+      n(
+        'ExpressionList',
+        stmt.columns.map((c) => exprNode(c)),
+      ),
+    );
+  }
+
+  // SELECT query — INSERT-level WITH is attached to the inner SELECT as distributed
+  if (stmt.selectQuery) {
+    let sq = stmt.selectQuery as Statement;
+    if (stmt.with && stmt.with.length > 0) {
+      const withItems = stmt.with;
+      // Attach WITH to the leftmost SELECT with distributedWith: true
+      function attachInsertWith(s: Statement): Statement {
+        if (s.kind === 'select' && !s.with) {
+          return { ...s, with: withItems, distributedWith: true } as Statement;
+        }
+        if (s.kind === 'union') {
+          const [first, ...rest] = s.queries;
+          return { ...s, queries: [attachInsertWith(first), ...rest] } as Statement;
+        }
+        if (s.kind === 'intersect') {
+          return { ...s, left: attachInsertWith(s.left as Statement) } as Statement;
+        }
+        return s;
+      }
+      sq = attachInsertWith(sq);
+    }
+    children.push(stmtNode(sq));
+  }
+
+  // Settings: InsertQuery gets a Set child if any settings exist (insert-level or select-level)
+  const hasInsertSettings = stmt.insertSettings && stmt.insertSettings.length > 0;
+  const hasQuerySettings = stmt.querySettings && stmt.querySettings.length > 0;
+  // Check if the inner SELECT query has settings
+  const selectHasSettings = hasSelectSettings(stmt.selectQuery);
+  if (hasInsertSettings || hasQuerySettings || selectHasSettings) {
+    children.push(n('Set'));
+  }
+
+  return n('InsertQuery  ', children);
+}
+
+// ── ALTER TABLE explain helpers ──────────────────────────────────────────────
+
+// Build a Partition or Partition_ID node from an AlterPartitionExpr
+// For main partition commands (DROP/ATTACH/REPLACE/MOVE/FETCH/FREEZE PARTITION),
+// ALL and tuple(...) both produce Partition_ID (empty).
+// For IN PARTITION sub-clauses (CLEAR/MATERIALIZE), expressions produce normal Partition nodes.
+function partitionNode(part: AlterPartitionExpr): ExplainNode {
+  if (part.partitionKind === 'all') {
+    return n('Partition_ID ');
+  }
+  if (part.partitionKind === 'id') {
+    if (part.id.kind === 'queryParam') {
+      return n('Partition_ID', [exprNode(part.id)]);
+    }
+    const lit = part.id as import('./ast').Literal;
+    const label = `Partition_ID Literal_'${escapeStringValue(lit.value)}'`;
+    return n(label, [n(`Literal '${escapeStringValue(lit.value)}'`)]);
+  }
+  return n('Partition', [exprNode(part.expr)]);
+}
+
+// Build an AlterCommand explain node
+function alterCommandNode(cmd: AlterCommand): ExplainNode {
+  const children: ExplainNode[] = [];
+  const type = cmd.commandType;
+
+  switch (type) {
+    case 'ADD_COLUMN':
+      if (cmd.column) children.push(columnDeclNode(cmd.column));
+      if (cmd.afterColumn) children.push(n(`Identifier ${cmd.afterColumn}`));
+      break;
+
+    case 'DROP_COLUMN':
+      if (cmd.columnName) children.push(n(`Identifier ${cmd.columnName}`));
+      if (cmd.partition) children.push(partitionNode(cmd.partition));
+      break;
+
+    case 'MODIFY_COLUMN': {
+      if (cmd.column) children.push(columnDeclNode(cmd.column));
+      const colSettingOp = (cmd as Record<string, unknown>).columnSettingOp as
+        | { op: string; names?: string[]; settings?: unknown[] }
+        | undefined;
+      if (colSettingOp) {
+        if (colSettingOp.op === 'RESET_SETTING' && colSettingOp.names) {
+          children.push(
+            n(
+              'ExpressionList',
+              colSettingOp.names.map((name: string) => n(`Identifier ${name}`)),
+            ),
+          );
+        } else {
+          children.push(n('Set'));
+        }
+      }
+      if (cmd.afterColumn) children.push(n(`Identifier ${cmd.afterColumn}`));
+      break;
+    }
+
+    case 'RENAME_COLUMN':
+      if (cmd.oldName) children.push(n(`Identifier ${cmd.oldName}`));
+      if (cmd.newName) children.push(n(`Identifier ${cmd.newName}`));
+      break;
+
+    case 'COMMENT_COLUMN':
+      if (cmd.columnName) children.push(n(`Identifier ${cmd.columnName}`));
+      if (cmd.comment) children.push(n(`Literal '${escapeStringValue(cmd.comment.value)}'`));
+      break;
+
+    case 'MATERIALIZE_COLUMN':
+      if (cmd.columnName) children.push(n(`Identifier ${cmd.columnName}`));
+      if (cmd.partition) children.push(partitionNode(cmd.partition));
+      break;
+
+    case 'ADD_INDEX':
+      if (cmd.index) {
+        const idxChildren: ExplainNode[] = [];
+        if (cmd.index.expr) {
+          idxChildren.push(exprNode(cmd.index.expr));
+        }
+        if (cmd.index.indexType) {
+          idxChildren.push(indexTypeToExplainNode(cmd.index.indexType));
+        }
+        children.push(n('Index', idxChildren));
+      }
+      if (cmd.afterIndex) children.push(n(`Identifier ${cmd.afterIndex}`));
+      break;
+
+    case 'DROP_INDEX':
+      if (cmd.indexName) children.push(n(`Identifier ${cmd.indexName}`));
+      if (cmd.partition) children.push(partitionNode(cmd.partition));
+      break;
+
+    case 'MATERIALIZE_INDEX':
+      if (cmd.indexName) children.push(n(`Identifier ${cmd.indexName}`));
+      if (cmd.partition) children.push(partitionNode(cmd.partition));
+      break;
+
+    case 'ADD_PROJECTION':
+      if (cmd.projection) {
+        const projChildren: ExplainNode[] = [];
+        if (cmd.projection.indexExpr) {
+          // INDEX variant: PROJECTION name INDEX expr TYPE type
+          projChildren.push(exprNode(cmd.projection.indexExpr));
+          if (cmd.projection.indexType) {
+            projChildren.push(indexTypeToExplainNode(cmd.projection.indexType));
+          }
+        } else if (cmd.projection.query) {
+          const pqChildren: ExplainNode[] = [];
+          if (cmd.projection.query.select)
+            pqChildren.push(n('ExpressionList', cmd.projection.query.select.map(exprNode)));
+          if (cmd.projection.query.groupBy && cmd.projection.query.groupBy.kind === 'expressions') {
+            pqChildren.push(n('ExpressionList', cmd.projection.query.groupBy.items.map(exprNode)));
+          }
+          if (cmd.projection.query.orderBy && cmd.projection.query.orderBy.length > 0) {
+            if (cmd.projection.query.orderBy.length === 1)
+              pqChildren.push(exprNode(cmd.projection.query.orderBy[0].expr));
+            else
+              pqChildren.push(
+                n('Function tuple', [
+                  n(
+                    'ExpressionList',
+                    cmd.projection.query.orderBy.map((o) => exprNode(o.expr)),
+                  ),
+                ]),
+              );
+          }
+          projChildren.push(n('ProjectionSelectQuery', pqChildren));
+        }
+        if (cmd.projection.projectionSettings && cmd.projection.projectionSettings.length > 0) {
+          projChildren.push(n('Set'));
+        }
+        children.push(n('Projection', projChildren));
+      }
+      break;
+
+    case 'DROP_PROJECTION':
+      if (cmd.projectionName) children.push(n(`Identifier ${cmd.projectionName}`));
+      if (cmd.partition) children.push(partitionNode(cmd.partition));
+      break;
+
+    case 'MATERIALIZE_PROJECTION':
+      if (cmd.projectionName) children.push(n(`Identifier ${cmd.projectionName}`));
+      if (cmd.partition) children.push(partitionNode(cmd.partition));
+      break;
+
+    case 'ADD_CONSTRAINT':
+      if (cmd.constraint) {
+        children.push(n('Constraint', [exprNode(cmd.constraint.expr)]));
+      }
+      break;
+
+    case 'DROP_CONSTRAINT':
+      if (cmd.constraintName) children.push(n(`Identifier ${cmd.constraintName}`));
+      break;
+
+    case 'ADD_STATISTICS':
+    case 'MODIFY_STATISTICS': {
+      const statChildren: ExplainNode[] = [];
+      if (cmd.statColumns && cmd.statColumns.length > 0) {
+        statChildren.push(
+          n(
+            'ExpressionList',
+            cmd.statColumns.map((c) => n(`Identifier ${c}`)),
+          ),
+        );
+      }
+      if (cmd.statTypes && cmd.statTypes.length > 0) {
+        statChildren.push(
+          n(
+            'ExpressionList',
+            cmd.statTypes.map((t) => indexTypeToExplainNode(t)),
+          ),
+        );
+      }
+      children.push(n('Stat', statChildren));
+      break;
+    }
+
+    case 'DROP_STATISTICS':
+      if (cmd.statColumns && cmd.statColumns.length > 0) {
+        children.push(
+          n('Stat', [
+            n(
+              'ExpressionList',
+              cmd.statColumns.map((c) => n(`Identifier ${c}`)),
+            ),
+          ]),
+        );
+      }
+      break;
+    case 'MATERIALIZE_STATISTICS':
+      if (cmd.statColumns && cmd.statColumns.length > 0) {
+        children.push(
+          n('Stat', [
+            n(
+              'ExpressionList',
+              cmd.statColumns.map((c: string) => n(`Identifier ${c}`)),
+            ),
+          ]),
+        );
+      }
+      break;
+
+    case 'UPDATE':
+      if (cmd.partition) children.push(partitionNode(cmd.partition));
+      if (cmd.where) children.push(exprNode(cmd.where));
+      if (cmd.assignments && cmd.assignments.length > 0) {
+        const assignNodes = cmd.assignments.map((a) =>
+          n(`Assignment ${a.column}`, [exprNode(a.expr)]),
+        );
+        children.push(n('ExpressionList', assignNodes));
+      }
+      break;
+
+    case 'DELETE':
+      if (cmd.where) children.push(exprNode(cmd.where));
+      break;
+
+    case 'DROP_PARTITION':
+    case 'ATTACH_PARTITION':
+      if (cmd.partName) {
+        // DETACH/DROP PART 'name' → direct Literal child
+        children.push(n(`Literal '${escapeStringValue(cmd.partName.value)}'`));
+      } else if (cmd.partition) {
+        children.push(partitionNode(cmd.partition));
+      }
+      break;
+    case 'DROP_DETACHED_PARTITION':
+    case 'REPLACE_PARTITION':
+    case 'MOVE_PARTITION':
+    case 'FETCH_PARTITION':
+    case 'FREEZE_PARTITION':
+      if (cmd.partition) {
+        children.push(partitionNode(cmd.partition));
+      }
+      break;
+
+    case 'FREEZE_ALL':
+      // No children
+      break;
+
+    case 'MODIFY_TTL':
+      if (cmd.ttl) {
+        const ttlElements = cmd.ttl.map((item) => {
+          const ttlChildren = [exprNode(item.expr)];
+          if (item.where) ttlChildren.push(exprNode(item.where));
+          return n('TTLElement', ttlChildren);
+        });
+        children.push(n('ExpressionList', ttlElements));
+      }
+      break;
+
+    case 'REMOVE_TTL':
+    case 'REMOVE_SAMPLE_BY':
+      // No children
+      break;
+
+    case 'MATERIALIZE_TTL':
+      // No children (partition is handled at statement level)
+      break;
+
+    case 'MODIFY_ORDER_BY':
+    case 'MODIFY_SAMPLE_BY':
+      if (cmd.expr) children.push(exprNode(cmd.expr));
+      break;
+
+    case 'MODIFY_SETTING':
+      children.push(n('Set'));
+      break;
+
+    case 'RESET_SETTING':
+      if (cmd.settingNames && cmd.settingNames.length > 0) {
+        children.push(
+          n(
+            'ExpressionList',
+            cmd.settingNames.map((name) => n(`Identifier ${name}`)),
+          ),
+        );
+      }
+      break;
+
+    case 'MODIFY_QUERY':
+      if (cmd.query) children.push(stmtNode(cmd.query));
+      break;
+
+    case 'MODIFY_COMMENT':
+      if (cmd.comment) children.push(n(`Literal '${escapeStringValue(cmd.comment.value)}'`));
+      break;
+
+    case 'APPLY_DELETED_MASK':
+    case 'APPLY_PATCHES':
+    case 'REWRITE_PARTS':
+      if (cmd.partition) children.push(partitionNode(cmd.partition));
+      break;
+  }
+
+  return n(`AlterCommand ${type}`, children);
+}
+
+// Build AlterQuery explain node
+function alterQueryNode(stmt: AlterStatement): ExplainNode {
+  const t = stmt.table;
+  const label = t.database
+    ? `AlterQuery ${id(t.database)} ${id(t.table)}`
+    : `AlterQuery  ${id(t.table)}`;
+
+  const children: ExplainNode[] = [];
+
+  // ExpressionList of AlterCommand nodes
+  const cmdNodes = stmt.commands.map(alterCommandNode);
+  children.push(n('ExpressionList', cmdNodes));
+
+  // Identifier(s) for table name
+  if (t.database) {
+    children.push(n(`Identifier ${id(t.database)}`));
+  }
+  children.push(n(`Identifier ${id(t.table)}`));
+
+  // Optional FORMAT → Identifier child (before Set)
+  if (stmt.format) {
+    children.push(n(`Identifier ${stmt.format}`));
+  }
+
+  // Optional SETTINGS → Set child
+  if (stmt.settings && stmt.settings.length > 0) {
+    children.push(n('Set'));
+  }
+
+  return n(label, children);
+}
+
 // Build the top-level SelectWithUnionQuery node for a statement (SelectStatement or UnionStatement)
 function stmtNode(stmt: Statement): ExplainNode {
+  if (stmt.kind === 'parallelWith') return parallelWithQueryNode(stmt);
   if (stmt.kind === 'explain') return explainStmtNode(stmt);
-  if (stmt.kind === 'set') return n('Set');
-  if (stmt.kind === 'system') return n('SYSTEM query');
-  if (stmt.kind === 'use') return n('Query');
+  if (stmt.kind === 'transactionControl') return n('ASTTransactionControl');
+  if (stmt.kind === 'setRole') return n('SetRoleQuery');
+  if (stmt.kind === 'empty') return n('');
+  if (stmt.kind === 'set') {
+    return n('Set');
+  }
+  if (stmt.kind === 'system') {
+    // Opaque ALTER statements for access control objects (ALTER USER, ALTER ROLE, etc.)
+    if (/^ALTER\s/i.test(stmt.body)) {
+      const alterAliases: Record<string, string> = {
+        USER: 'CreateUserQuery',
+        ROLE: 'CreateRoleQuery',
+        'ROW POLICY': 'CREATE ROW POLICY or ALTER ROW POLICY query',
+        POLICY: 'CREATE ROW POLICY or ALTER ROW POLICY query',
+        'SETTINGS PROFILE': 'CreateSettingsProfileQuery',
+        PROFILE: 'CreateSettingsProfileQuery',
+        QUOTA: 'CreateQuotaQuery',
+        'NAMED COLLECTION': 'AlterNamedCollectionQuery',
+      };
+      const m = stmt.body.match(
+        /^ALTER\s+(USER|ROLE|ROW\s+POLICY|POLICY|SETTINGS\s+PROFILE|PROFILE|QUOTA|NAMED\s+COLLECTION)\b/i,
+      );
+      if (m) {
+        const key = m[1].toUpperCase().replace(/\s+/g, ' ');
+        const label = alterAliases[key] || 'SYSTEM query';
+        // For ALTER USER, extract auth data
+        if (key === 'USER') {
+          const authByMatch = stmt.body.match(/IDENTIFIED\s+(?:WITH\s+\w+\s+)?BY\s+'([^']*)'/i);
+          if (authByMatch) {
+            return n(label, [n('AuthenticationData', [n(`Literal '${authByMatch[1]}'`)])]);
+          }
+          // NOT IDENTIFIED or IDENTIFIED WITH <type> (no password)
+          if (/(?:NOT\s+)?IDENTIFIED/i.test(stmt.body) && !/RENAME/i.test(stmt.body)) {
+            return n(label, [n('AuthenticationData')]);
+          }
+        }
+        return n(label);
+      }
+      return n('SYSTEM query');
+    }
+    // Opaque DROP statements produce specific labels based on the DROP target type
+    if (/^DROP\s/i.test(stmt.body)) {
+      const dropAliases: Record<string, string> = {
+        USER: 'DROP USER query',
+        ROLE: 'DROP ROLE query',
+        'ROW POLICY': 'DROP ROW POLICY query',
+        POLICY: 'DROP ROW POLICY query',
+        'SETTINGS PROFILE': 'DROP SETTINGS PROFILE query',
+        PROFILE: 'DROP SETTINGS PROFILE query',
+        QUOTA: 'DROP QUOTA query',
+        'NAMED COLLECTION': 'DropNamedCollectionQuery',
+        WORKLOAD: 'DropWorkloadQuery',
+        RESOURCE: 'DropResourceQuery',
+      };
+      const m = stmt.body.match(
+        /^DROP\s+(USER|ROLE|ROW\s+POLICY|POLICY|SETTINGS\s+PROFILE|PROFILE|QUOTA|NAMED\s+COLLECTION|WORKLOAD|RESOURCE)\b/i,
+      );
+      if (m) {
+        const key = m[1].toUpperCase().replace(/\s+/g, ' ');
+        return n(dropAliases[key] || 'SYSTEM query');
+      }
+      return n('SYSTEM query');
+    }
+    // SHOW variants
+    if (/^SHOW\s/i.test(stmt.body)) {
+      // SHOW CREATE USER/ROLE/QUOTA/etc. → "<DDL> QUOTA query" labels
+      const showCreateACMatch = stmt.body.match(
+        /^SHOW\s+CREATE\s+(USERS|USER|ROLES|ROLE|QUOTAS|QUOTA|ROW\s+POLICIES|ROW\s+POLICY|POLICIES|POLICY|SETTINGS\s+PROFILES|SETTINGS\s+PROFILE|PROFILES|PROFILE|NAMED\s+COLLECTIONS|NAMED\s+COLLECTION)\b/i,
+      );
+      if (showCreateACMatch) {
+        const rawKey = showCreateACMatch[1].toUpperCase().replace(/\s+/g, ' ');
+        // Normalize aliases: POLICY → ROW POLICY, PROFILE → SETTINGS PROFILE.
+        const keyAliases: Record<string, string> = {
+          POLICY: 'ROW POLICY',
+          POLICIES: 'ROW POLICIES',
+          PROFILE: 'SETTINGS PROFILE',
+          PROFILES: 'SETTINGS PROFILES',
+        };
+        const key = keyAliases[rawKey] || rawKey;
+        // The body after the keyword is the name list (and optional FORMAT clause).
+        const afterKeyword = stmt.body.slice(showCreateACMatch[0].length);
+        const formatMatch = afterKeyword.match(/\bFORMAT\s+([A-Za-z_][A-Za-z0-9_]*)\s*$/i);
+        const hasFormat = formatMatch !== null;
+        const nameList = hasFormat
+          ? afterKeyword.slice(0, formatMatch.index).trim()
+          : afterKeyword.trim();
+        const isMulti = /,/.test(nameList);
+        // ROW POLICY: PLURAL with FORMAT, SINGULAR without (regardless of name count).
+        // Others: PLURAL when multi-name and no FORMAT; SINGULAR otherwise.
+        let usePlural: boolean;
+        if (key === 'ROW POLICY' || key === 'ROW POLICIES') {
+          usePlural = hasFormat;
+        } else {
+          usePlural = isMulti && !hasFormat;
+        }
+        const labels: Record<string, [string, string]> = {
+          USER: ['SHOW CREATE USER query', 'SHOW CREATE USERS query'],
+          USERS: ['SHOW CREATE USER query', 'SHOW CREATE USERS query'],
+          ROLE: ['SHOW CREATE ROLE query', 'SHOW CREATE ROLES query'],
+          ROLES: ['SHOW CREATE ROLE query', 'SHOW CREATE ROLES query'],
+          QUOTA: ['SHOW CREATE QUOTA query', 'SHOW CREATE QUOTAS query'],
+          QUOTAS: ['SHOW CREATE QUOTA query', 'SHOW CREATE QUOTAS query'],
+          'ROW POLICY': ['SHOW CREATE ROW POLICY query', 'SHOW CREATE ROW POLICIES query'],
+          'ROW POLICIES': ['SHOW CREATE ROW POLICY query', 'SHOW CREATE ROW POLICIES query'],
+          'SETTINGS PROFILE': [
+            'SHOW CREATE SETTINGS PROFILE query',
+            'SHOW CREATE SETTINGS PROFILES query',
+          ],
+          'SETTINGS PROFILES': [
+            'SHOW CREATE SETTINGS PROFILE query',
+            'SHOW CREATE SETTINGS PROFILES query',
+          ],
+          'NAMED COLLECTION': ['ShowCreateNamedCollectionQuery', 'ShowCreateNamedCollectionQuery'],
+          'NAMED COLLECTIONS': ['ShowCreateNamedCollectionQuery', 'ShowCreateNamedCollectionQuery'],
+        };
+        const pair = labels[key];
+        const label = pair ? pair[usePlural ? 1 : 0] : 'SYSTEM query';
+        if (hasFormat && formatMatch) {
+          return n(label, [n(`Identifier ${formatMatch[1]}`)]);
+        }
+        return n(label);
+      }
+      if (/^SHOW\s+GRANTS\b/i.test(stmt.body)) {
+        const formatMatch = stmt.body.match(/\bFORMAT\s+([A-Za-z_][A-Za-z0-9_]*)\s*$/i);
+        if (formatMatch) return n('ShowGrantsQuery', [n(`Identifier ${formatMatch[1]}`)]);
+        return n('ShowGrantsQuery');
+      }
+      if (/^SHOW\s+FUNCTIONS\b/i.test(stmt.body)) return n('ShowFunctions');
+      if (/^SHOW\s+(?:EXTENDED\s+|FULL\s+)?(?:COLUMNS|FIELDS)\b/i.test(stmt.body))
+        return n('ShowColumns');
+      if (/^SHOW\s+(?:EXTENDED\s+)?(?:INDEX|INDEXES|INDICES|KEYS)\b/i.test(stmt.body))
+        return n('ShowColumns');
+      if (/^SHOW\s+PRIVILEGES\b/i.test(stmt.body)) return n('ShowPrivilegesQuery');
+      if (/^SHOW\s+SETTING\b/i.test(stmt.body)) return n('ShowSetting');
+      // SHOW [CHANGED] SETTINGS → ShowTables
+      if (/^SHOW\s+(?:CHANGED\s+)?SETTINGS\b/i.test(stmt.body)) return n('ShowTables');
+      if (/^SHOW\s+ENGINES\b/i.test(stmt.body)) return n('ShowEngines');
+      if (/^SHOW\s+PROCESSLIST\b/i.test(stmt.body)) return n('ShowProcesslist');
+      if (/^SHOW\s+MERGES\b/i.test(stmt.body)) return n('ShowMerges');
+      if (/^SHOW\s+CLUSTERS?\b/i.test(stmt.body)) return n('ShowTables');
+      if (/^SHOW\s+ACCESS\b/i.test(stmt.body)) return n('ShowAccessQuery');
+      if (/^SHOW\s+(?:CURRENT\s+)?ROLES?\b/i.test(stmt.body)) return n('ShowTables');
+      if (/^SHOW\s+USERS?\b/i.test(stmt.body)) return n('ShowTables');
+      if (/^SHOW\s+QUOTAS?\b/i.test(stmt.body)) return n('ShowTables');
+      if (/^SHOW\s+(?:ROW\s+)?POLIC(?:Y|IES)\b/i.test(stmt.body)) return n('ShowTables');
+      if (/^SHOW\s+(?:SETTINGS\s+)?PROFILES?\b/i.test(stmt.body)) return n('ShowTables');
+      if (/^SHOW\s+(?:NAMED\s+)?COLLECTIONS?\b/i.test(stmt.body)) return n('ShowTables');
+      if (/^SHOW\s+WARNINGS?\b/i.test(stmt.body)) return n('ShowTables');
+      // SHOW TABLES/DATABASES/DICTIONARIES [FROM db [LIKE/NOT LIKE 'x']] [SETTINGS ...] [FORMAT fmt]
+      if (/^SHOW\s+(?:TEMPORARY\s+)?(TABLES|DATABASES|DICTIONARIES)\b/i.test(stmt.body)) {
+        const fromMatch = stmt.body.match(/\b(?:FROM|IN)\s+([A-Za-z_][A-Za-z0-9_]*)\b/i);
+        const formatMatch = stmt.body.match(/\bFORMAT\s+([A-Za-z_][A-Za-z0-9_]*)\s*$/i);
+        const hasSettings = /\bSETTINGS\b/i.test(stmt.body);
+        const children: ExplainNode[] = [];
+        if (fromMatch) children.push(n(`Identifier ${fromMatch[1]}`));
+        if (hasSettings) children.push(n('Set'));
+        if (formatMatch) children.push(n(`Identifier ${formatMatch[1]}`));
+        if (children.length > 0) return n('ShowTables', children);
+        return n('ShowTables');
+      }
+      // SHOW TABLE name / SHOW TEMPORARY VIEW name → equivalent to SHOW CREATE TABLE/VIEW
+      const showTableMatch = stmt.body.match(
+        /^SHOW\s+(TABLE|TEMPORARY\s+VIEW|VIEW)\s+(?:([A-Za-z_][A-Za-z0-9_]*)\.)?([A-Za-z_][A-Za-z0-9_]*)\b/i,
+      );
+      if (showTableMatch) {
+        const kw = showTableMatch[1].toUpperCase().replace(/\s+/g, ' ');
+        const db = showTableMatch[2];
+        const tbl = showTableMatch[3];
+        const children: ExplainNode[] = [];
+        if (db) children.push(n(`Identifier ${db}`));
+        children.push(n(`Identifier ${tbl}`));
+        const formatMatch = stmt.body.match(/\bFORMAT\s+([A-Za-z_][A-Za-z0-9_]*)\s*$/i);
+        if (formatMatch) children.push(n(`Identifier ${formatMatch[1]}`));
+        const prefix = kw === 'TABLE' ? 'ShowCreateTableQuery' : 'ShowCreateViewQuery';
+        const label = db ? `${prefix} ${db} ${tbl}` : `${prefix}  ${tbl}`;
+        return n(label, children);
+      }
+      // SHOW DATABASE name → equivalent to SHOW CREATE DATABASE
+      const showDbMatch = stmt.body.match(/^SHOW\s+DATABASE\s+([A-Za-z_][A-Za-z0-9_]*)\b/i);
+      if (showDbMatch) {
+        const db = showDbMatch[1];
+        const children: ExplainNode[] = [n(`Identifier ${db}`)];
+        const formatMatch = stmt.body.match(/\bFORMAT\s+([A-Za-z_][A-Za-z0-9_]*)\s*$/i);
+        if (formatMatch) children.push(n(`Identifier ${formatMatch[1]}`));
+        return n(`ShowCreateDatabaseQuery ${db} `, children);
+      }
+      return n('SYSTEM query');
+    }
+    // SYSTEM subcommands that target a specific table or dictionary include
+    // Identifier children in the explain output.
+    if (/^SYSTEM\s/i.test(stmt.body)) {
+      // RELOAD DICTIONARY foo / RELOAD DICTIONARIES foo — ClickHouse duplicates the name
+      // Supports bare identifiers, `backtick-quoted`, and qualified db.dict.
+      const dictMatch = stmt.body.match(
+        /^SYSTEM\s+(?:RELOAD\s+DICTIONAR(?:Y|IES)|DROP\s+DICTIONARY\s+CACHE)(?!\s+ON\s+CLUSTER\b)\s+(?:`([^`]+)`|([A-Za-z_][A-Za-z0-9_]*))(?:\.(?:`([^`]+)`|([A-Za-z_][A-Za-z0-9_]*)))?\b/i,
+      );
+      if (dictMatch) {
+        const db = dictMatch[1] || dictMatch[2];
+        const tbl = dictMatch[3] || dictMatch[4];
+        if (tbl) {
+          return n('SYSTEM query', [
+            n(`Identifier ${db}`),
+            n(`Identifier ${tbl}`),
+            n(`Identifier ${db}`),
+            n(`Identifier ${tbl}`),
+          ]);
+        }
+        return n('SYSTEM query', [n(`Identifier ${db}`), n(`Identifier ${db}`)]);
+      }
+      // DISTRIBUTED commands also duplicate the table name in the explain output.
+      const distMatch = stmt.body.match(
+        /\b(?:FLUSH\s+DISTRIBUTED|STOP\s+DISTRIBUTED\s+SENDS|START\s+DISTRIBUTED\s+SENDS|LOAD\s+PRIMARY\s+KEY|UNLOAD\s+PRIMARY\s+KEY|RESTORE\s+REPLICA)(?:\s+ON\s+CLUSTER\s+[A-Za-z_0-9][A-Za-z0-9_]*)?\s+([A-Za-z_0-9][A-Za-z0-9_]*(?:\.[A-Za-z_0-9][A-Za-z0-9_]*)?)(?:\s|$|;)/i,
+      );
+      if (distMatch) {
+        const tbl = distMatch[1];
+        const hasSettings = /\bSETTINGS\b/i.test(stmt.body);
+        const parts = tbl.split('.');
+        const children: ExplainNode[] =
+          parts.length === 2
+            ? [
+                n(`Identifier ${parts[0]}`),
+                n(`Identifier ${parts[1]}`),
+                n(`Identifier ${parts[0]}`),
+                n(`Identifier ${parts[1]}`),
+              ]
+            : [n(`Identifier ${tbl}`), n(`Identifier ${tbl}`)];
+        if (hasSettings) children.push(n('Set'));
+        return n('SYSTEM query', children);
+      }
+      const tableMatch = stmt.body.match(
+        /\b(?:SYNC\s+REPLICA|SYNC\s+DATABASE\s+REPLICA|STOP\s+(?:MERGES|FETCHES|MOVES|REPLICATED\s+SENDS|REPLICATION\s+QUEUES|TTL\s+MERGES|PULLING\s+REPLICATION\s+LOG|CLEANUP)|START\s+(?:MERGES|FETCHES|MOVES|REPLICATED\s+SENDS|REPLICATION\s+QUEUES|TTL\s+MERGES|PULLING\s+REPLICATION\s+LOG|CLEANUP)|RESTART\s+REPLICA|DROP\s+REPLICA|WAIT\s+LOADING\s+PARTS|PREWARM\s+MARK\s+CACHE|PREWARM\s+PRIMARY\s+INDEX\s+CACHE|REFRESH\s+VIEW|WAIT\s+VIEW|STOP\s+VIEW|START\s+VIEW|CANCEL\s+VIEW)\s+([A-Za-z_0-9][A-Za-z0-9_]*(?:\.[A-Za-z_0-9][A-Za-z0-9_]*)?)(?:\s|$|;)/i,
+      );
+      if (tableMatch) {
+        const tbl = tableMatch[1];
+        const parts = tbl.split('.');
+        if (parts.length === 2) {
+          return n('SYSTEM query', [n(`Identifier ${parts[0]}`), n(`Identifier ${parts[1]}`)]);
+        }
+        return n('SYSTEM query', [n(`Identifier ${tbl}`)]);
+      }
+      return n('SYSTEM query');
+    }
+    // KILL QUERY / KILL MUTATION (fallback when not structurally parsed)
+    if (/^KILL\s/i.test(stmt.body)) {
+      return n('KillQueryQuery');
+    }
+    // BACKUP / RESTORE — extract the TO/FROM destination function and FORMAT.
+    if (/^BACKUP\s/i.test(stmt.body) || /^RESTORE\s/i.test(stmt.body)) {
+      const isRestore = /^RESTORE\s/i.test(stmt.body);
+      const label = isRestore ? 'RestoreQuery' : 'BackupQuery';
+      // Strip trailing FORMAT clause from body so it doesn't bleed into destination match.
+      const formatMatch = stmt.body.match(/\bFORMAT\s+([A-Za-z_][A-Za-z0-9_]*)\s*$/i);
+      let bodyNoFormat = formatMatch ? stmt.body.slice(0, formatMatch.index).trimEnd() : stmt.body;
+      // Strip trailing SETTINGS clause too.
+      const settingsIdx = bodyNoFormat.search(/\bSETTINGS\b/i);
+      if (settingsIdx > 0) bodyNoFormat = bodyNoFormat.slice(0, settingsIdx).trimEnd();
+      // Destination: ` TO|FROM <Name>[('<arg>'[, ...])]` at the end of body.
+      const destMatch = bodyNoFormat.match(
+        /\b(?:TO|FROM)\s+([A-Za-z_][A-Za-z0-9_]*)(\s*\([^)]*\))?\s*$/i,
+      );
+      const children: ExplainNode[] = [];
+      if (destMatch) {
+        const fnName = destMatch[1];
+        const argsPart = destMatch[2] || '';
+        const args: ExplainNode[] = [];
+        const argsRegex = /'([^']*)'/g;
+        let m;
+        while ((m = argsRegex.exec(argsPart)) !== null) {
+          args.push(n(`Literal '${m[1]}'`));
+        }
+        const fnChildren =
+          args.length > 0 ? [n('ExpressionList', args)] : argsPart ? [n('ExpressionList')] : [];
+        children.push(n(`Function ${fnName}`, fnChildren));
+      }
+      if (formatMatch) children.push(n(`Identifier ${formatMatch[1]}`));
+      if (children.length > 0) return n(label, children);
+      return n(label);
+    }
+    // GRANT / REVOKE
+    if (/^GRANT\s/i.test(stmt.body)) return n('GrantQuery');
+    if (/^REVOKE\s/i.test(stmt.body)) return n('GrantQuery');
+    // Transaction control (BEGIN / COMMIT / ROLLBACK)
+    if (/^(BEGIN|COMMIT|ROLLBACK)\b/i.test(stmt.body)) return n('ASTTransactionControl');
+    // UNDROP TABLE [db.]name [UUID '...'] [ON CLUSTER ...] [FORMAT name]
+    if (/^UNDROP\s/i.test(stmt.body)) {
+      const m = stmt.body.match(
+        /^UNDROP\s+TABLE\s+(?:([A-Za-z_0-9][A-Za-z0-9_]*)\.)?([A-Za-z_0-9][A-Za-z0-9_]*)/i,
+      );
+      if (m) {
+        const db = m[1];
+        const tbl = m[2];
+        const children: ExplainNode[] = [];
+        if (db) children.push(n(`Identifier ${db}`));
+        children.push(n(`Identifier ${tbl}`));
+        const formatMatch = stmt.body.match(/\bFORMAT\s+([A-Za-z_][A-Za-z0-9_]*)\s*$/i);
+        if (formatMatch) children.push(n(`Identifier ${formatMatch[1]}`));
+        const label = db ? `UndropQuery ${db}.${tbl}` : `UndropQuery  ${tbl}`;
+        return n(label, children);
+      }
+      return n('UndropQuery');
+    }
+    // EXCHANGE TABLES/DICTIONARIES as system fallback
+    if (/^EXCHANGE\s/i.test(stmt.body)) return n('Rename');
+    return n('SYSTEM query');
+  }
+  if (stmt.kind === 'use')
+    return n(`UseQuery ${id(stmt.database)}`, [n(`Identifier ${id(stmt.database)}`)]);
+  if (stmt.kind === 'createTable') return createTableQueryNode(stmt);
+  if (stmt.kind === 'createView') return createViewQueryNode(stmt);
+  if (stmt.kind === 'createMaterializedView') return createMaterializedViewQueryNode(stmt);
+  if (stmt.kind === 'createDatabase') return createDatabaseQueryNode(stmt);
+  if (stmt.kind === 'createFunction') return createFunctionQueryNode(stmt);
+  if (stmt.kind === 'createIndex') return createIndexQueryNode(stmt);
+  if (stmt.kind === 'createDictionary') return createDictionaryQueryNode(stmt);
+  if (stmt.kind === 'createWorkload') return createWorkloadQueryNode(stmt);
+  if (stmt.kind === 'createUser') {
+    if (!stmt.auth || stmt.auth.length === 0) return n('CreateUserQuery');
+    const authChildren = stmt.auth.map((a) => {
+      if (a.sshKeys !== undefined) {
+        const keys = Array.from({ length: a.sshKeys }, () => n('PublicSSHKey'));
+        return n('AuthenticationData', keys);
+      }
+      if (a.secret !== undefined) {
+        return n('AuthenticationData', [n(`Literal '${a.secret}'`)]);
+      }
+      return n('AuthenticationData');
+    });
+    return n('CreateUserQuery', authChildren);
+  }
+  if (stmt.kind === 'createRole') return n('CreateRoleQuery');
+  if (stmt.kind === 'createRowPolicy') return n('CREATE ROW POLICY or ALTER ROW POLICY query');
+  if (stmt.kind === 'createQuota') return n('CreateQuotaQuery');
+  if (stmt.kind === 'createSettingsProfile') return n('CreateSettingsProfileQuery');
+  if (stmt.kind === 'createNamedCollection') return n('CreateNamedCollectionQuery');
+  if (stmt.kind === 'createResource') {
+    return n(`CreateResourceQuery ${stmt.name}`, [n(`Identifier ${stmt.name}`)]);
+  }
+  if (stmt.kind === 'createWindowView') return n('CreateQuery');
+  if (stmt.kind === 'createLiveView') return n('CreateQuery');
+  if (stmt.kind === 'insert') return insertQueryNode(stmt);
+  if (stmt.kind === 'truncate') {
+    if (stmt.targetType === 'TABLE') {
+      const t = stmt.table!;
+      // Label format: "TruncateQuery <db-or-empty> <table>" — for unqualified
+      // refs that collapses to "TruncateQuery  <table>" (double space).
+      const label = `TruncateQuery ${t.database ?? ''} ${id(t.table)}`;
+      const children = [n(`Identifier ${id(t.table)}`)];
+      if (t.database) children.unshift(n(`Identifier ${id(t.database)}`));
+      if (stmt.settings && stmt.settings.length > 0) children.push(n('Set'));
+      return n(label, children);
+    }
+    // DATABASE or TABLES: label format is "TruncateQuery <db> " (single space + trailing space)
+    const db = stmt.database!;
+    const children = [n(`Identifier ${id(db)}`)];
+    return n(`TruncateQuery ${id(db)} `, children);
+  }
+  if (stmt.kind === 'optimize') {
+    const t = stmt.table;
+    const children: ExplainNode[] = [];
+    if (stmt.partition) {
+      if (stmt.partition.kind === 'id') {
+        children.push(
+          n(`Partition_ID Literal_'${stmt.partition.id}'`, [n(`Literal '${stmt.partition.id}'`)]),
+        );
+      } else if (stmt.partition.kind === 'all') {
+        children.push(n('Partition_ID '));
+      } else {
+        children.push(n('Partition', [exprNode(stmt.partition.expr)]));
+      }
+    }
+    if (t.database) children.push(n(`Identifier ${id(t.database)}`));
+    children.push(n(`Identifier ${id(t.table)}`));
+    if (stmt.settings && stmt.settings.length > 0) children.push(n('Set'));
+    let suffix = id(t.table);
+    if (stmt.final) suffix += '_final';
+    if (stmt.cleanup) suffix += '_cleanup';
+    if (stmt.deduplicate) suffix += '_deduplicate';
+    const label = t.database
+      ? `OptimizeQuery ${id(t.database)} ${suffix}`
+      : `OptimizeQuery  ${suffix}`;
+    return n(label, children);
+  }
+  if (stmt.kind === 'describe') {
+    let child: ExplainNode;
+    if (stmt.target.kind === 'table') {
+      const t = stmt.target.table;
+      child = n('TableExpression', [
+        n(
+          t.database
+            ? `TableIdentifier ${id(t.database)}.${id(t.table)}`
+            : `TableIdentifier ${id(t.table)}`,
+        ),
+      ]);
+    } else if (stmt.target.kind === 'function') {
+      const func = stmt.target.func;
+      const argsNodes = func.args.map(exprNode);
+      child = n('TableExpression', [n(`Function ${func.name}`, [n('ExpressionList', argsNodes)])]);
+    } else {
+      child = n('TableExpression', [n('Subquery', [stmtNode(stmt.target.query as Statement)])]);
+    }
+    const children: ExplainNode[] = [child];
+    const hasSettings = stmt.settings && stmt.settings.length > 0;
+    if (stmt.settingsBeforeFormat) {
+      if (hasSettings) children.push(n('Set'));
+      if (stmt.format) children.push(n(`Identifier ${stmt.format}`));
+    } else {
+      if (stmt.format) children.push(n(`Identifier ${stmt.format}`));
+      if (hasSettings) children.push(n('Set'));
+    }
+    return n('DescribeQuery', children);
+  }
+  if (stmt.kind === 'showCreate') {
+    if (stmt.targetType === 'DATABASE') {
+      const db = stmt.database!;
+      const children = [n(`Identifier ${id(db)}`)];
+      if (stmt.settings && stmt.settings.length > 0) children.push(n('Set'));
+      if (stmt.format) children.push(n(`Identifier ${stmt.format}`));
+      return n(`ShowCreateDatabaseQuery ${id(db)} `, children);
+    }
+    const t = stmt.table!;
+    const labelMap: Record<string, string> = {
+      TABLE: 'ShowCreateTableQuery',
+      VIEW: 'ShowCreateViewQuery',
+      DICTIONARY: 'ShowCreateDictionaryQuery',
+    };
+    const prefix = labelMap[stmt.targetType];
+    const children: ExplainNode[] = [];
+    if (t.database) children.push(n(`Identifier ${id(t.database)}`));
+    children.push(n(`Identifier ${id(t.table)}`));
+    if (stmt.settings && stmt.settings.length > 0) children.push(n('Set'));
+    if (stmt.format) children.push(n(`Identifier ${stmt.format}`));
+    const label = t.database
+      ? `${prefix} ${id(t.database)} ${id(t.table)}`
+      : `${prefix}  ${id(t.table)}`;
+    return n(label, children);
+  }
+  if (stmt.kind === 'detach') {
+    if (stmt.targetType === 'DATABASE') {
+      const db = stmt.database!;
+      return n(`DetachQuery ${id(db)} `, [n(`Identifier ${id(db)}`)]);
+    }
+    const t = stmt.table!;
+    const children: ExplainNode[] = [];
+    if (t.database) children.push(n(`Identifier ${id(t.database)}`));
+    children.push(n(`Identifier ${id(t.table)}`));
+    const label = t.database
+      ? `DetachQuery ${id(t.database)} ${id(t.table)}`
+      : `DetachQuery  ${id(t.table)}`;
+    return n(label, children);
+  }
+  if (stmt.kind === 'delete') {
+    const t = stmt.table;
+    const children: ExplainNode[] = [];
+    if (stmt.partition) {
+      if (stmt.partition.kind === 'id') {
+        children.push(
+          n(`Partition_ID Literal_'${stmt.partition.id}'`, [n(`Literal '${stmt.partition.id}'`)]),
+        );
+      } else {
+        children.push(n('Partition', [exprNode(stmt.partition.expr)]));
+      }
+    }
+    children.push(exprNode(stmt.where));
+    if (t.database) children.push(n(`Identifier ${id(t.database)}`));
+    children.push(n(`Identifier ${id(t.table)}`));
+    if (stmt.settings && stmt.settings.length > 0) children.push(n('Set'));
+    const label = t.database
+      ? `DeleteQuery ${id(t.database)} ${id(t.table)}`
+      : `DeleteQuery  ${id(t.table)}`;
+    return n(label, children);
+  }
+  if (stmt.kind === 'update') {
+    const t = stmt.table;
+    const children: ExplainNode[] = [];
+    if (t.database) children.push(n(`Identifier ${id(t.database)}`));
+    children.push(n(`Identifier ${id(t.table)}`));
+    children.push(exprNode(stmt.where));
+    const assignNodes = stmt.assignments.map((a) =>
+      n(`Assignment ${a.column}`, [exprNode(a.expr)]),
+    );
+    children.push(n('ExpressionList', assignNodes));
+    if (stmt.settings && stmt.settings.length > 0) children.push(n('Set'));
+    const label = t.database
+      ? `UpdateQuery ${id(t.database)} ${id(t.table)}`
+      : `UpdateQuery  ${id(t.table)}`;
+    return n(label, children);
+  }
+  if (stmt.kind === 'check') {
+    if (stmt.targetType === 'ALL') return n('CheckAllQuery');
+    if (stmt.targetType === 'DATABASE') {
+      const db = stmt.database!;
+      const children = [n(`Identifier ${id(db)}`)];
+      if (stmt.settings && stmt.settings.length > 0) children.push(n('Set'));
+      return n(`CheckQuery ${id(db)} `, children);
+    }
+    const t = stmt.table!;
+    const children: ExplainNode[] = [];
+    if (t.database) children.push(n(`Identifier ${id(t.database)}`));
+    children.push(n(`Identifier ${id(t.table)}`));
+    if (stmt.format) children.push(n(`Identifier ${stmt.format}`));
+    if (stmt.settings && stmt.settings.length > 0) children.push(n('Set'));
+    const label = t.database
+      ? `CheckQuery ${id(t.database)} ${id(t.table)}`
+      : `CheckQuery  ${id(t.table)}`;
+    return n(label, children);
+  }
+  if (stmt.kind === 'attach') {
+    if (stmt.targetType === 'DATABASE') {
+      const db = stmt.database!;
+      return n(`AttachQuery ${id(db)} `, [n(`Identifier ${id(db)}`)]);
+    }
+    const t = stmt.table!;
+    const children: ExplainNode[] = [];
+    if (t.database) children.push(n(`Identifier ${id(t.database)}`));
+    children.push(n(`Identifier ${id(t.table)}`));
+    const label = t.database
+      ? `AttachQuery ${id(t.database)} ${id(t.table)}`
+      : `AttachQuery ${id(t.table)}`;
+    return n(label, children);
+  }
+  if (stmt.kind === 'rename') {
+    const children: ExplainNode[] = [];
+    for (const p of stmt.pairs) {
+      if (p.from.database) children.push(n(`Identifier ${id(p.from.database)}`));
+      children.push(n(`Identifier ${id(p.from.table)}`));
+      if (p.to.database) children.push(n(`Identifier ${id(p.to.database)}`));
+      children.push(n(`Identifier ${id(p.to.table)}`));
+    }
+    if (stmt.settings && stmt.settings.length > 0) children.push(n('Set'));
+    return n('Rename', children);
+  }
+  if (stmt.kind === 'executeAs') {
+    return n('ExecuteAsQuery', [
+      n('UserNameWithHost', [n(`Identifier ${stmt.user}`)]),
+      stmtNode(stmt.statement),
+    ]);
+  }
+  if (stmt.kind === 'kill') {
+    // Label: KillQueryQuery Function_<name> <mode>
+    // The function name is taken from the where expression's function call.
+    let fnName = '';
+    const where = stmt.where as Expression;
+    if (where.kind === 'functionCall') fnName = where.name;
+    else if (where.kind === 'binaryExpr') {
+      const opMap: Record<string, string> = {
+        '=': 'equals',
+        '!=': 'notEquals',
+        '<>': 'notEquals',
+        '<': 'less',
+        '>': 'greater',
+        '<=': 'lessOrEquals',
+        '>=': 'greaterOrEquals',
+        AND: 'and',
+        OR: 'or',
+      };
+      fnName = opMap[where.op] || where.op.toLowerCase();
+    } else if (where.kind === 'naryExpr') {
+      fnName = where.op === 'AND' ? 'and' : 'or';
+    }
+    const mode = stmt.mode ?? 'ASYNC';
+    const label = `KillQueryQuery Function_${fnName} ${mode}`;
+    const children: ExplainNode[] = [exprNode(stmt.where)];
+    if (stmt.settings && stmt.settings.length > 0) children.push(n('Set'));
+    if (stmt.format) children.push(n(`Identifier ${stmt.format}`));
+    return n(label, children);
+  }
+  if (stmt.kind === 'exists') {
+    const labelMap: Record<string, string> = {
+      TABLE: 'ExistsTableQuery',
+      VIEW: 'ExistsViewQuery',
+      DATABASE: 'ExistsDatabaseQuery',
+      DICTIONARY: 'ExistsDictionaryQuery',
+    };
+    const prefix = labelMap[stmt.targetType];
+    if (stmt.targetType === 'DATABASE') {
+      const db = stmt.database!;
+      const children: ExplainNode[] = [n(`Identifier ${id(db)}`)];
+      if (stmt.settings && stmt.settings.length > 0) children.push(n('Set'));
+      return n(`${prefix} ${id(db)} `, children);
+    }
+    const t = stmt.table!;
+    const children: ExplainNode[] = [];
+    if (t.database) children.push(n(`Identifier ${id(t.database)}`));
+    children.push(n(`Identifier ${id(t.table)}`));
+    if (stmt.settings && stmt.settings.length > 0) children.push(n('Set'));
+    const label = t.database
+      ? `${prefix} ${id(t.database)} ${id(t.table)}`
+      : `${prefix}  ${id(t.table)}`;
+    return n(label, children);
+  }
+  if (stmt.kind === 'drop') {
+    // DROP FUNCTION and DROP INDEX have their own label formats
+    if (stmt.targetType === 'FUNCTION') return n('DropFunctionQuery');
+    if (stmt.targetType === 'INDEX' && stmt.table) {
+      const t = stmt.table;
+      const tableName = t.database ? `${id(t.database)}.${id(t.table)}` : ` ${id(t.table)}`;
+      const children: ExplainNode[] = [];
+      children.push(n(`Identifier ${stmt.indexName}`));
+      if (t.database) children.push(n(`Identifier ${id(t.database)}`));
+      children.push(n(`Identifier ${id(t.table)}`));
+      return n(`DropIndexQuery ${tableName}`, children);
+    }
+
+    const children: ExplainNode[] = [];
+    let label: string;
+
+    if (stmt.tables && stmt.tables.length > 0) {
+      // Multi-table DROP: DropQuery  (with ExpressionList of TableIdentifiers)
+      const tableNodes = stmt.tables.map((t) => {
+        const name = t.database ? `${id(t.database)}.${id(t.table)}` : t.table;
+        return n(`TableIdentifier ${name}`);
+      });
+      children.push(n('ExpressionList', tableNodes));
+      label = 'DropQuery  ';
+    } else if (stmt.table) {
+      const t = stmt.table;
+      if (stmt.targetType === 'DATABASE') {
+        children.push(n(`Identifier ${id(t.table)}`));
+        label = `DropQuery ${id(t.table)} `;
+      } else if (t.database) {
+        children.push(n(`Identifier ${id(t.database)}`));
+        children.push(n(`Identifier ${id(t.table)}`));
+        label = `DropQuery ${id(t.database)} ${id(t.table)}`;
+      } else {
+        children.push(n(`Identifier ${id(t.table)}`));
+        label = `DropQuery  ${id(t.table)}`;
+      }
+    } else {
+      label = 'DropQuery  ';
+    }
+
+    // SETTINGS → Set child
+    if (stmt.settings && stmt.settings.length > 0) {
+      children.push(n('Set'));
+    }
+    // FORMAT → Identifier child
+    if (stmt.format) {
+      children.push(n(`Identifier ${stmt.format}`));
+    }
+
+    return n(label, children);
+  }
+  if (stmt.kind === 'alter') return alterQueryNode(stmt);
 
   const format = stmt.format;
 
@@ -1075,12 +3127,20 @@ function stmtNode(stmt: Statement): ExplainNode {
       // Parenthesized selects in intersect/except context get wrapped
       if (s.parenthesized) wrapInSWU = true;
     } else if (s.kind === 'intersect') {
-      const lw = s.op === 'EXCEPT' || (s.op === 'INTERSECT' && s.left.kind === 'intersect');
-      const rw = s.op === 'INTERSECT' && s.right.kind === 'intersect';
+      const leftParen = (s.left as { parenthesized?: boolean }).parenthesized === true;
+      const rightParen = (s.right as { parenthesized?: boolean }).parenthesized === true;
+      const lw =
+        s.op === 'EXCEPT' ||
+        (s.op === 'INTERSECT' && s.left.kind === 'intersect') ||
+        (s.left.kind === 'intersect' && leftParen);
+      const rw =
+        (s.op === 'INTERSECT' && s.right.kind === 'intersect') ||
+        (s.right.kind === 'intersect' && rightParen);
       node = n('SelectIntersectExceptQuery', [
         renderIntersectChild(s.left, lw),
         renderIntersectChild(s.right, rw),
       ]);
+      if ((s as { parenthesized?: boolean }).parenthesized) wrapInSWU = true;
     } else {
       node = stmtNode(s);
     }
@@ -1090,28 +3150,86 @@ function stmtNode(stmt: Statement): ExplainNode {
 
   // INTERSECT/EXCEPT produces SelectIntersectExceptQuery as the single ExpressionList child
   if (stmt.kind === 'intersect') {
+    // Find the WITH CTEs from the left-most SELECT and distribute to all other SELECTs
+    function findLeftmostWith(s: Statement): CTE[] | undefined {
+      if (s.kind === 'select') return s.with;
+      if (s.kind === 'intersect') return findLeftmostWith(s.left);
+      return undefined;
+    }
+    function distributeWithIntersect(s: Statement, withItems: CTE[]): Statement {
+      if (s.kind === 'select' && !s.with) {
+        return { ...s, with: withItems, distributedWith: true } as Statement;
+      }
+      if (s.kind === 'select' && s.with) return s;
+      if (s.kind === 'intersect') {
+        return {
+          ...s,
+          left: distributeWithIntersect(s.left, withItems),
+          right: distributeWithIntersect(s.right, withItems),
+        } as Statement;
+      }
+      return s;
+    }
+    let distributed = stmt;
+    const leftWith = findLeftmostWith(stmt);
+    if (leftWith && leftWith.length > 0) {
+      // Distribute to right side(s) but keep left as-is
+      distributed = {
+        ...stmt,
+        right: distributeWithIntersect(stmt.right, leftWith),
+      } as typeof stmt;
+    }
+
     const leftWrap =
-      stmt.op === 'EXCEPT' || (stmt.op === 'INTERSECT' && stmt.left.kind === 'intersect');
-    const rightWrap = stmt.op === 'INTERSECT' && stmt.right.kind === 'intersect';
+      distributed.op === 'EXCEPT' ||
+      (distributed.op === 'INTERSECT' && distributed.left.kind === 'intersect');
+    const rightWrap = distributed.op === 'INTERSECT' && distributed.right.kind === 'intersect';
     const intersectNode = n('SelectIntersectExceptQuery', [
-      renderIntersectChild(stmt.left, leftWrap),
-      renderIntersectChild(stmt.right, rightWrap),
+      renderIntersectChild(distributed.left, leftWrap),
+      renderIntersectChild(distributed.right, rightWrap),
     ]);
     const children: ExplainNode[] = [n('ExpressionList', [intersectNode])];
     if (format) children.push(n(`Identifier ${format}`));
     return n('SelectWithUnionQuery', children);
   }
 
+  // Distribute WITH within a union's queries and then flatten
+  function distributeAndFlatten(queries: Statement[]): Statement[] {
+    // Distribute WITH CTEs from the first SELECT to all other SELECTs
+    let distributed = queries;
+    if (queries.length > 1) {
+      const firstWith = queries[0]?.kind === 'select' ? queries[0].with : undefined;
+      if (firstWith && firstWith.length > 0) {
+        const reversedWith = markCTEsForReverseJoins(firstWith);
+        distributed = queries.map((q, i) => {
+          if (i === 0 || q.kind !== 'select' || (q.with && q.with.length > 0)) return q;
+          return { ...q, with: reversedWith, distributedWith: true } as Statement;
+        });
+      }
+    }
+    return distributed.flatMap(flattenUnion);
+  }
+
   // Flatten nested UNION ALL so all SELECT queries appear at the same level
   // UNION DISTINCT creates a nesting boundary (don't flatten through it)
+  // Distribute WITH within each nested union before flattening
   function flattenUnion(s: Statement): Statement[] {
-    if (s.kind === 'union' && !s.unionMode) return s.queries.flatMap(flattenUnion);
+    if (s.kind === 'union' && !s.unionMode) return distributeAndFlatten(s.queries);
+    return [s];
+  }
+
+  // Deep flatten: flatten ALL union nodes (including UNION DISTINCT) — used when
+  // the outermost union is itself UNION DISTINCT (pure DISTINCT chain)
+  function flattenUnionDeep(s: Statement): Statement[] {
+    if (s.kind === 'union') return s.queries.flatMap(flattenUnionDeep);
     return [s];
   }
 
   let queries: Statement[];
   if (stmt.kind === 'union') {
-    queries = stmt.queries.flatMap(flattenUnion);
+    // For pure UNION DISTINCT chains, flatten deeply; for UNION ALL, flatten normally
+    const flattener = stmt.unionMode ? flattenUnionDeep : flattenUnion;
+    queries = stmt.queries.flatMap(flattener);
   } else {
     queries = [stmt];
   }
@@ -1120,9 +3238,10 @@ function stmtNode(stmt: Statement): ExplainNode {
   if (queries.length > 1) {
     const firstWith = queries[0]?.kind === 'select' ? queries[0].with : undefined;
     if (firstWith && firstWith.length > 0) {
+      const reversedWith = markCTEsForReverseJoins(firstWith);
       queries = queries.map((q, i) => {
         if (i === 0 || q.kind !== 'select' || (q.with && q.with.length > 0)) return q;
-        return { ...q, with: firstWith, distributedWith: true } as Statement;
+        return { ...q, with: reversedWith, distributedWith: true } as Statement;
       });
     }
   }

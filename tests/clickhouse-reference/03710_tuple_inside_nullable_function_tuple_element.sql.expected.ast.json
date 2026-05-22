@@ -1,5 +1,125 @@
 [
   {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "allow_experimental_nullable_tuple_type",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "with": [
+      {
+        "kind": "cteExpr",
+        "name": "result",
+        "expr": {
+          "kind": "subqueryExpr",
+          "query": {
+            "kind": "select",
+            "select": [
+              {
+                "kind": "functionCall",
+                "name": "tuple",
+                "args": [
+                  {
+                    "kind": "literal",
+                    "type": "String",
+                    "value": "1"
+                  },
+                  {
+                    "kind": "functionCall",
+                    "name": "toDateTime64",
+                    "args": [
+                      {
+                        "kind": "literal",
+                        "type": "String",
+                        "value": "2024-01-01 00:00:00"
+                      },
+                      {
+                        "kind": "literal",
+                        "type": "UInt64",
+                        "value": "6"
+                      },
+                      {
+                        "kind": "literal",
+                        "type": "String",
+                        "value": "UTC"
+                      }
+                    ]
+                  },
+                  {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "3"
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      }
+    ],
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "tupleElement",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "result"
+            ]
+          },
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "1"
+          }
+        ]
+      },
+      {
+        "kind": "functionCall",
+        "name": "tupleElement",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "result"
+            ]
+          },
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "2"
+          }
+        ]
+      },
+      {
+        "kind": "functionCall",
+        "name": "tupleElement",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "result"
+            ]
+          },
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "3"
+          }
+        ]
+      }
+    ]
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -65,7 +185,7 @@
           {
             "kind": "castExpr",
             "expr": {
-              "kind": "tuple",
+              "kind": "tupleLiteral",
               "elements": [
                 {
                   "kind": "literal",
@@ -105,7 +225,7 @@
               {
                 "kind": "castExpr",
                 "expr": {
-                  "kind": "tuple",
+                  "kind": "tupleLiteral",
                   "elements": [
                     {
                       "kind": "literal",
@@ -141,12 +261,12 @@
         "name": "tupleElement",
         "args": [
           {
-            "kind": "array",
+            "kind": "arrayLiteral",
             "elements": [
               {
                 "kind": "castExpr",
                 "expr": {
-                  "kind": "tuple",
+                  "kind": "tupleLiteral",
                   "elements": [
                     {
                       "kind": "literal",
@@ -192,12 +312,12 @@
             "name": "tupleElement",
             "args": [
               {
-                "kind": "array",
+                "kind": "arrayLiteral",
                 "elements": [
                   {
                     "kind": "castExpr",
                     "expr": {
-                      "kind": "tuple",
+                      "kind": "tupleLiteral",
                       "elements": [
                         {
                           "kind": "literal",
@@ -241,15 +361,15 @@
         "name": "tupleElement",
         "args": [
           {
-            "kind": "array",
+            "kind": "arrayLiteral",
             "elements": [
               {
                 "kind": "castExpr",
                 "expr": {
-                  "kind": "tuple",
+                  "kind": "tupleLiteral",
                   "elements": [
                     {
-                      "kind": "array",
+                      "kind": "arrayLiteral",
                       "elements": [
                         {
                           "kind": "literal",
@@ -317,15 +437,15 @@
             "name": "tupleElement",
             "args": [
               {
-                "kind": "array",
+                "kind": "arrayLiteral",
                 "elements": [
                   {
                     "kind": "castExpr",
                     "expr": {
-                      "kind": "tuple",
+                      "kind": "tupleLiteral",
                       "elements": [
                         {
-                          "kind": "array",
+                          "kind": "arrayLiteral",
                           "elements": [
                             {
                               "kind": "literal",
@@ -406,6 +526,9 @@
           }
         ]
       }
+    ],
+    "trailingComments": [
+      "-- { serverError NOT_FOUND_COLUMN_IN_BLOCK }"
     ]
   },
   {
@@ -418,10 +541,10 @@
           {
             "kind": "castExpr",
             "expr": {
-              "kind": "array",
+              "kind": "arrayLiteral",
               "elements": [
                 {
-                  "kind": "tuple",
+                  "kind": "tupleLiteral",
                   "elements": [
                     {
                       "kind": "literal",
@@ -437,7 +560,7 @@
                   "source": "(1, 7)"
                 },
                 {
-                  "kind": "tuple",
+                  "kind": "tupleLiteral",
                   "elements": [
                     {
                       "kind": "literal",
@@ -453,7 +576,7 @@
                   "source": "(3, 4)"
                 },
                 {
-                  "kind": "tuple",
+                  "kind": "tupleLiteral",
                   "elements": [
                     {
                       "kind": "literal",
@@ -496,10 +619,10 @@
               {
                 "kind": "castExpr",
                 "expr": {
-                  "kind": "array",
+                  "kind": "arrayLiteral",
                   "elements": [
                     {
-                      "kind": "tuple",
+                      "kind": "tupleLiteral",
                       "elements": [
                         {
                           "kind": "literal",
@@ -515,7 +638,7 @@
                       "source": "(1, 7)"
                     },
                     {
-                      "kind": "tuple",
+                      "kind": "tupleLiteral",
                       "elements": [
                         {
                           "kind": "literal",
@@ -531,7 +654,7 @@
                       "source": "(3, 4)"
                     },
                     {
-                      "kind": "tuple",
+                      "kind": "tupleLiteral",
                       "elements": [
                         {
                           "kind": "literal",
@@ -564,18 +687,110 @@
   },
   {
     "kind": "select",
+    "with": [
+      {
+        "kind": "cteSubquery",
+        "name": "data",
+        "query": {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "alias",
+              "expr": {
+                "kind": "arrayLiteral",
+                "elements": [
+                  {
+                    "kind": "castExpr",
+                    "expr": {
+                      "kind": "tupleLiteral",
+                      "elements": [
+                        {
+                          "kind": "literal",
+                          "type": "UInt64",
+                          "value": "1"
+                        },
+                        {
+                          "kind": "literal",
+                          "type": "UInt64",
+                          "value": "7"
+                        }
+                      ],
+                      "source": "(1, 7)"
+                    },
+                    "type": "Nullable(Tuple(x Int8, y Int8))"
+                  },
+                  {
+                    "kind": "literal",
+                    "type": "NULL",
+                    "value": "NULL"
+                  },
+                  {
+                    "kind": "castExpr",
+                    "expr": {
+                      "kind": "tupleLiteral",
+                      "elements": [
+                        {
+                          "kind": "literal",
+                          "type": "UInt64",
+                          "value": "2"
+                        },
+                        {
+                          "kind": "literal",
+                          "type": "UInt64",
+                          "value": "8"
+                        }
+                      ],
+                      "source": "(2, 8)"
+                    },
+                    "type": "Nullable(Tuple(x Int8, y Int8))"
+                  }
+                ],
+                "source": "[\n        CAST((1, 7) AS Nullable(Tuple(x Int8, y Int8))),\n        NULL,\n        CAST((2, 8) AS Nullable(Tuple(x Int8, y Int8)))\n    ]"
+              },
+              "alias": "arr"
+            }
+          ]
+        }
+      }
+    ],
     "select": [
       {
         "kind": "functionCall",
         "name": "tupleElement",
         "args": [
           {
-            "kind": "array",
+            "kind": "columnRef",
+            "parts": [
+              "arr"
+            ]
+          },
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": "y"
+          }
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "data"
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "tupleElement",
+        "args": [
+          {
+            "kind": "arrayLiteral",
             "elements": [
               {
                 "kind": "castExpr",
                 "expr": {
-                  "kind": "tuple",
+                  "kind": "tupleLiteral",
                   "elements": [
                     {
                       "kind": "literal",
@@ -621,12 +836,12 @@
             "name": "tupleElement",
             "args": [
               {
-                "kind": "array",
+                "kind": "arrayLiteral",
                 "elements": [
                   {
                     "kind": "castExpr",
                     "expr": {
-                      "kind": "tuple",
+                      "kind": "tupleLiteral",
                       "elements": [
                         {
                           "kind": "literal",
@@ -672,7 +887,7 @@
           {
             "kind": "castExpr",
             "expr": {
-              "kind": "tuple",
+              "kind": "tupleLiteral",
               "elements": [
                 {
                   "kind": "literal",
@@ -717,7 +932,7 @@
               {
                 "kind": "castExpr",
                 "expr": {
-                  "kind": "tuple",
+                  "kind": "tupleLiteral",
                   "elements": [
                     {
                       "kind": "literal",
@@ -826,10 +1041,10 @@
           {
             "kind": "castExpr",
             "expr": {
-              "kind": "tuple",
+              "kind": "tupleLiteral",
               "elements": [
                 {
-                  "kind": "tuple",
+                  "kind": "tupleLiteral",
                   "elements": [
                     {
                       "kind": "literal",
@@ -877,10 +1092,10 @@
               {
                 "kind": "castExpr",
                 "expr": {
-                  "kind": "tuple",
+                  "kind": "tupleLiteral",
                   "elements": [
                     {
-                      "kind": "tuple",
+                      "kind": "tupleLiteral",
                       "elements": [
                         {
                           "kind": "literal",
@@ -980,7 +1195,7 @@
         "name": "tupleElement",
         "args": [
           {
-            "kind": "tuple",
+            "kind": "tupleLiteral",
             "elements": [
               {
                 "kind": "literal",
@@ -1020,7 +1235,7 @@
             "name": "tupleElement",
             "args": [
               {
-                "kind": "tuple",
+                "kind": "tupleLiteral",
                 "elements": [
                   {
                     "kind": "literal",
@@ -1058,15 +1273,15 @@
         "name": "tupleElement",
         "args": [
           {
-            "kind": "array",
+            "kind": "arrayLiteral",
             "elements": [
               {
-                "kind": "array",
+                "kind": "arrayLiteral",
                 "elements": [
                   {
                     "kind": "castExpr",
                     "expr": {
-                      "kind": "tuple",
+                      "kind": "tupleLiteral",
                       "elements": [
                         {
                           "kind": "literal",
@@ -1092,7 +1307,7 @@
                 "source": "[CAST((1, 'a') AS Nullable(Tuple(Int32, String))), NULL]"
               },
               {
-                "kind": "array",
+                "kind": "arrayLiteral",
                 "elements": [
                   {
                     "kind": "literal",
@@ -1102,7 +1317,7 @@
                   {
                     "kind": "castExpr",
                     "expr": {
-                      "kind": "tuple",
+                      "kind": "tupleLiteral",
                       "elements": [
                         {
                           "kind": "literal",
@@ -1146,15 +1361,15 @@
             "name": "tupleElement",
             "args": [
               {
-                "kind": "array",
+                "kind": "arrayLiteral",
                 "elements": [
                   {
-                    "kind": "array",
+                    "kind": "arrayLiteral",
                     "elements": [
                       {
                         "kind": "castExpr",
                         "expr": {
-                          "kind": "tuple",
+                          "kind": "tupleLiteral",
                           "elements": [
                             {
                               "kind": "literal",
@@ -1180,7 +1395,7 @@
                     "source": "[CAST((1, 'a') AS Nullable(Tuple(Int32, String))), NULL]"
                   },
                   {
-                    "kind": "array",
+                    "kind": "arrayLiteral",
                     "elements": [
                       {
                         "kind": "literal",
@@ -1190,7 +1405,7 @@
                       {
                         "kind": "castExpr",
                         "expr": {
-                          "kind": "tuple",
+                          "kind": "tupleLiteral",
                           "elements": [
                             {
                               "kind": "literal",
@@ -1247,6 +1462,9 @@
           }
         ]
       }
+    ],
+    "trailingComments": [
+      "-- { serverError NOT_FOUND_COLUMN_IN_BLOCK }"
     ]
   },
   {
@@ -1257,7 +1475,7 @@
         "name": "tupleElement",
         "args": [
           {
-            "kind": "array",
+            "kind": "arrayLiteral",
             "elements": [
               {
                 "kind": "castExpr",
@@ -1302,7 +1520,7 @@
             "name": "tupleElement",
             "args": [
               {
-                "kind": "array",
+                "kind": "arrayLiteral",
                 "elements": [
                   {
                     "kind": "castExpr",
@@ -1347,7 +1565,7 @@
           {
             "kind": "castExpr",
             "expr": {
-              "kind": "tuple",
+              "kind": "tupleLiteral",
               "elements": [
                 {
                   "kind": "literal",
@@ -1392,7 +1610,7 @@
               {
                 "kind": "castExpr",
                 "expr": {
-                  "kind": "tuple",
+                  "kind": "tupleLiteral",
                   "elements": [
                     {
                       "kind": "literal",
@@ -1435,7 +1653,7 @@
           {
             "kind": "castExpr",
             "expr": {
-              "kind": "tuple",
+              "kind": "tupleLiteral",
               "elements": [
                 {
                   "kind": "literal",
@@ -1515,7 +1733,7 @@
               {
                 "kind": "castExpr",
                 "expr": {
-                  "kind": "tuple",
+                  "kind": "tupleLiteral",
                   "elements": [
                     {
                       "kind": "literal",
@@ -1597,7 +1815,7 @@
               {
                 "kind": "castExpr",
                 "expr": {
-                  "kind": "tuple",
+                  "kind": "tupleLiteral",
                   "elements": [
                     {
                       "kind": "literal",
@@ -1625,7 +1843,7 @@
       }
     ],
     "from": {
-      "kind": "tableFunction",
+      "kind": "tableFunctionRef",
       "name": "numbers",
       "args": [
         {
@@ -1654,7 +1872,7 @@
                   {
                     "kind": "castExpr",
                     "expr": {
-                      "kind": "tuple",
+                      "kind": "tupleLiteral",
                       "elements": [
                         {
                           "kind": "literal",
@@ -1684,7 +1902,7 @@
       }
     ],
     "from": {
-      "kind": "tableFunction",
+      "kind": "tableFunctionRef",
       "name": "numbers",
       "args": [
         {
@@ -1707,7 +1925,7 @@
             {
               "kind": "castExpr",
               "expr": {
-                "kind": "tuple",
+                "kind": "tupleLiteral",
                 "elements": [
                   {
                     "kind": "literal",
@@ -1747,7 +1965,7 @@
             {
               "kind": "castExpr",
               "expr": {
-                "kind": "tuple",
+                "kind": "tupleLiteral",
                 "elements": [
                   {
                     "kind": "literal",
@@ -1787,7 +2005,7 @@
             {
               "kind": "castExpr",
               "expr": {
-                "kind": "tuple",
+                "kind": "tupleLiteral",
                 "elements": [
                   {
                     "kind": "literal",
@@ -1837,7 +2055,7 @@
             "expr": {
               "kind": "castExpr",
               "expr": {
-                "kind": "tuple",
+                "kind": "tupleLiteral",
                 "elements": [
                   {
                     "kind": "columnRef",
@@ -1866,7 +2084,7 @@
           }
         ],
         "from": {
-          "kind": "tableFunction",
+          "kind": "tableFunctionRef",
           "name": "numbers",
           "args": [
             {
@@ -2007,7 +2225,7 @@
             "expr": {
               "kind": "castExpr",
               "expr": {
-                "kind": "tuple",
+                "kind": "tupleLiteral",
                 "elements": [
                   {
                     "kind": "columnRef",
@@ -2036,7 +2254,7 @@
           }
         ],
         "from": {
-          "kind": "tableFunction",
+          "kind": "tableFunctionRef",
           "name": "numbers",
           "args": [
             {
@@ -2057,12 +2275,12 @@
         "name": "tupleElement",
         "args": [
           {
-            "kind": "array",
+            "kind": "arrayLiteral",
             "elements": [
               {
                 "kind": "castExpr",
                 "expr": {
-                  "kind": "tuple",
+                  "kind": "tupleLiteral",
                   "elements": [
                     {
                       "kind": "literal",
@@ -2087,7 +2305,7 @@
               {
                 "kind": "castExpr",
                 "expr": {
-                  "kind": "tuple",
+                  "kind": "tupleLiteral",
                   "elements": [
                     {
                       "kind": "literal",
@@ -2112,7 +2330,7 @@
               {
                 "kind": "castExpr",
                 "expr": {
-                  "kind": "tuple",
+                  "kind": "tupleLiteral",
                   "elements": [
                     {
                       "kind": "literal",
@@ -2140,6 +2358,100 @@
         ]
       }
     ]
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "test_nullable_tuples"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "test_array_nullable_tuples"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "test_nullable_named_tuples"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "test_complex_nullable"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "test_nullable_tuples"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "id",
+        "type": {
+          "name": "UInt32"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "data",
+        "type": {
+          "name": "Nullable",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "Tuple",
+                "args": [
+                  {
+                    "kind": "type",
+                    "type": {
+                      "name": "Int32"
+                    }
+                  },
+                  {
+                    "kind": "type",
+                    "type": {
+                      "name": "String"
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "engine": {
+      "name": "Memory"
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "test_nullable_tuples"
+      }
+    }
   },
   {
     "kind": "select",
@@ -2588,6 +2900,72 @@
     }
   },
   {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "test_array_nullable_tuples"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "id",
+        "type": {
+          "name": "UInt32"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "records",
+        "type": {
+          "name": "Array",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "Nullable",
+                "args": [
+                  {
+                    "kind": "type",
+                    "type": {
+                      "name": "Tuple",
+                      "args": [
+                        {
+                          "kind": "type",
+                          "type": {
+                            "name": "Int32"
+                          }
+                        },
+                        {
+                          "kind": "type",
+                          "type": {
+                            "name": "String"
+                          }
+                        }
+                      ]
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "engine": {
+      "name": "Memory"
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "test_array_nullable_tuples"
+      }
+    }
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -2794,7 +3172,7 @@
         "kind": "tableRef",
         "table": "test_array_nullable_tuples"
       },
-      "kind": "arrayJoin",
+      "kind": "arrayJoinExpr",
       "joinType": "ARRAY",
       "expressions": [
         {
@@ -2843,6 +3221,73 @@
         "direction": "ASC"
       }
     ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "test_nullable_named_tuples"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "id",
+        "type": {
+          "name": "UInt32"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "person",
+        "type": {
+          "name": "Nullable",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "Tuple",
+                "args": [
+                  {
+                    "kind": "namedField",
+                    "name": "name",
+                    "type": {
+                      "name": "String"
+                    }
+                  },
+                  {
+                    "kind": "namedField",
+                    "name": "age",
+                    "type": {
+                      "name": "UInt8"
+                    }
+                  },
+                  {
+                    "kind": "namedField",
+                    "name": "salary",
+                    "type": {
+                      "name": "Float64"
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "engine": {
+      "name": "Memory"
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "test_nullable_named_tuples"
+      }
+    }
   },
   {
     "kind": "select",
@@ -3312,7 +3757,7 @@
         "table": "test_nullable_tuples",
         "alias": "t1"
       },
-      "kind": "join",
+      "kind": "joinExpr",
       "joinType": "INNER",
       "right": {
         "kind": "tableRef",
@@ -3846,6 +4291,82 @@
         "direction": "ASC"
       }
     ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "test_complex_nullable"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "id",
+        "type": {
+          "name": "UInt32"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "matrix",
+        "type": {
+          "name": "Array",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "Array",
+                "args": [
+                  {
+                    "kind": "type",
+                    "type": {
+                      "name": "Nullable",
+                      "args": [
+                        {
+                          "kind": "type",
+                          "type": {
+                            "name": "Tuple",
+                            "args": [
+                              {
+                                "kind": "namedField",
+                                "name": "x",
+                                "type": {
+                                  "name": "Int32"
+                                }
+                              },
+                              {
+                                "kind": "namedField",
+                                "name": "y",
+                                "type": {
+                                  "name": "Int32"
+                                }
+                              }
+                            ]
+                          }
+                        }
+                      ]
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "engine": {
+      "name": "Memory"
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "test_complex_nullable"
+      }
+    }
   },
   {
     "kind": "select",

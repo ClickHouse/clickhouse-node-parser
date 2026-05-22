@@ -1,3 +1,19 @@
+SET parallel_replicas_local_plan = 1;
+
+-- Test for issue #75523
+DROP TABLE IF EXISTS tab;
+
+CREATE TABLE tab
+(
+    id UInt64,
+    col Float,
+    INDEX col_idx col TYPE minmax
+)
+ENGINE = MergeTree()
+ORDER BY id; -- This is important. We want to have additional primary index that does not use the column `col`.
+
+INSERT INTO tab;
+
 SELECT count()
 FROM tab
 WHERE col = nan;
@@ -32,7 +48,7 @@ FROM (
 WHERE like(`explain`, '%Description:%')
     OR like(`explain`, '%Parts:%')
     OR like(`explain`, '%Granules:%')
-LIMIT 2, 3;
+LIMIT 2, 3; -- Skip the primary index parts and granules.
 
 SELECT trimLeft(`explain`) AS `explain`
 FROM (
@@ -44,7 +60,7 @@ FROM (
 WHERE like(`explain`, '%Description:%')
     OR like(`explain`, '%Parts:%')
     OR like(`explain`, '%Granules:%')
-LIMIT 2, 3;
+LIMIT 2, 3; -- Skip the primary index parts and granules.
 
 SELECT trimLeft(`explain`) AS `explain`
 FROM (
@@ -56,7 +72,7 @@ FROM (
 WHERE like(`explain`, '%Description:%')
     OR like(`explain`, '%Parts:%')
     OR like(`explain`, '%Granules:%')
-LIMIT 2, 3;
+LIMIT 2, 3; -- Skip the primary index parts and granules.
 
 SELECT trimLeft(`explain`) AS `explain`
 FROM (
@@ -68,4 +84,6 @@ FROM (
 WHERE like(`explain`, '%Description:%')
     OR like(`explain`, '%Parts:%')
     OR like(`explain`, '%Granules:%')
-LIMIT 2, 3;
+LIMIT 2, 3; -- Skip the primary index parts and granules.
+
+DROP TABLE tab;

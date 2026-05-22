@@ -1,3 +1,26 @@
+DROP TABLE IF EXISTS hierarchy_source_table;
+
+CREATE TABLE hierarchy_source_table
+(
+    id UInt64,
+    parent_id UInt64
+)
+ENGINE = TinyLog;
+
+INSERT INTO hierarchy_source_table;
+
+DROP DICTIONARY IF EXISTS hierarchy_flat_dictionary;
+
+CREATE DICTIONARY hierarchy_flat_dictionary
+(
+    id UInt64,
+    parent_id UInt64
+)
+PRIMARY KEY id
+SOURCE(clickhouse(TABLE 'hierarchy_source_table'))
+LIFETIME(MIN 1 MAX 1000)
+LAYOUT(FLAT());
+
 SELECT dictGetHierarchy('hierarchy_flat_dictionary', 0);
 
 SELECT dictGetHierarchy('hierarchy_flat_dictionary', 1);
@@ -51,3 +74,7 @@ SELECT dictGetDescendants('hierarchy_flat_dictionary', 3, 1);
 SELECT dictGetDescendants('hierarchy_flat_dictionary', 4, 1);
 
 SELECT dictGetDescendants('hierarchy_flat_dictionary', 5, 1);
+
+DROP DICTIONARY hierarchy_flat_dictionary;
+
+DROP TABLE hierarchy_source_table;

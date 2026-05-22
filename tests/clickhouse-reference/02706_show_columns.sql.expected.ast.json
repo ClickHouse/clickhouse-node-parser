@@ -1,5 +1,108 @@
 [
   {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "tab"
+    },
+    "ifExists": true,
+    "leadingComments": [
+      "-- Tags: no-parallel",
+      "-- no-parallel: creates a custom database schema and expects to use it exclusively",
+      "-- Create a test table and verify that the output of SHOW COLUMNS is sane.",
+      "-- The matching of actual/expected results relies on the fact that the output of SHOW COLUMNS is sorted."
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "tab"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "uint64",
+        "type": {
+          "name": "UInt64"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "int32",
+        "type": {
+          "name": "Nullable",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "Int32"
+              }
+            }
+          ]
+        },
+        "comment": "example comment"
+      },
+      {
+        "kind": "columnDef",
+        "name": "str",
+        "type": {
+          "name": "String"
+        }
+      },
+      {
+        "kind": "indexDef",
+        "name": "idx",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "str"
+          ]
+        },
+        "indexType": {
+          "name": "set",
+          "args": [
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "1000"
+            }
+          ]
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "primaryKey": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "uint64"
+        ]
+      }
+    ],
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "uint64"
+          ]
+        }
+      },
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "str"
+          ]
+        }
+      }
+    ]
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -8,5 +111,364 @@
         "value": "--- Aliases of SHOW COLUMNS"
       }
     ]
+  },
+  {
+    "kind": "system",
+    "body": "SHOW COLUMNS FROM tab"
+  },
+  {
+    "kind": "system",
+    "body": "SHOW FIELDS FROM tab"
+  },
+  {
+    "kind": "system",
+    "body": "SHOW EXTENDED COLUMNS FROM tab"
+  },
+  {
+    "kind": "system",
+    "body": "SHOW FULL COLUMNS FROM tab"
+  },
+  {
+    "kind": "system",
+    "body": "SHOW COLUMNS FROM tab LIKE '%int%'"
+  },
+  {
+    "kind": "system",
+    "body": "SHOW COLUMNS FROM tab NOT LIKE '%int%'"
+  },
+  {
+    "kind": "system",
+    "body": "SHOW COLUMNS FROM tab ILIKE '%INT%'"
+  },
+  {
+    "kind": "system",
+    "body": "SHOW COLUMNS FROM tab NOT ILIKE '%INT%'"
+  },
+  {
+    "kind": "system",
+    "body": "SHOW COLUMNS FROM tab WHERE field LIKE '%int%'"
+  },
+  {
+    "kind": "system",
+    "body": "SHOW COLUMNS FROM tab LIMIT 1"
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "$4@^7"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "$4@^7"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "c",
+        "type": {
+          "name": "String"
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "c"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "kind": "system",
+    "body": "SHOW COLUMNS FROM `$4@^7`"
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "$4@^7"
+    }
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "NULL"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "NULL"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "c",
+        "type": {
+          "name": "String"
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "c"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "kind": "system",
+    "body": "SHOW COLUMNS FROM NULL"
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "NULL"
+    }
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "tab.with.dots"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "tab.with.dots"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "c",
+        "type": {
+          "name": "String"
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "c"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "kind": "system",
+    "body": "SHOW COLUMNS FROM `tab.with.dots`"
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "tab.with.dots"
+    }
+  },
+  {
+    "kind": "drop",
+    "targetType": "DATABASE",
+    "table": {
+      "kind": "tableRef",
+      "table": "'"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "createDatabase",
+    "name": "'"
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "database": "'",
+      "table": "'"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "c",
+        "type": {
+          "name": "String"
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "c"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "kind": "system",
+    "body": "SHOW COLUMNS FROM `'` FROM `'`"
+  },
+  {
+    "kind": "system",
+    "body": "SHOW COLUMNS FROM `'`.`'`",
+    "trailingComments": [
+      "-- abbreviated form"
+    ]
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "database": "'",
+      "table": "'"
+    }
+  },
+  {
+    "kind": "drop",
+    "targetType": "DATABASE",
+    "table": {
+      "kind": "tableRef",
+      "table": "'"
+    }
+  },
+  {
+    "kind": "drop",
+    "targetType": "DATABASE",
+    "table": {
+      "kind": "tableRef",
+      "table": "database_123456789abcde"
+    },
+    "ifExists": true,
+    "leadingComments": [
+      "-- Create a table in a different database. Intentionally useing the same table/column names as above so",
+      "-- we notice if something is buggy in the implementation of SHOW COLUMNS."
+    ]
+  },
+  {
+    "kind": "createDatabase",
+    "name": "database_123456789abcde",
+    "trailingComments": [
+      "-- pseudo-random database name"
+    ]
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "database": "database_123456789abcde",
+      "table": "tab"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "database": "database_123456789abcde",
+      "table": "tab"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "uint64",
+        "type": {
+          "name": "UInt64"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "int32",
+        "type": {
+          "name": "Int32"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "str",
+        "type": {
+          "name": "String"
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "uint64"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "kind": "system",
+    "body": "SHOW COLUMNS FROM tab FROM database_123456789abcde"
+  },
+  {
+    "kind": "system",
+    "body": "SHOW COLUMNS FROM database_123456789abcde.tab"
+  },
+  {
+    "kind": "drop",
+    "targetType": "DATABASE",
+    "table": {
+      "kind": "tableRef",
+      "table": "database_123456789abcde"
+    }
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "tab"
+    }
   }
 ]

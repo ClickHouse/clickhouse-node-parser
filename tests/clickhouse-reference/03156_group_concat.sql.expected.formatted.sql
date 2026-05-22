@@ -1,3 +1,19 @@
+DROP TABLE IF EXISTS test_groupConcat;
+
+CREATE TABLE test_groupConcat
+(
+    id UInt64,
+    p_int Int32 NULL,
+    p_string String,
+    p_array Array(Int32)
+)
+ENGINE = MergeTree
+ORDER BY id;
+
+SET max_insert_threads = 1, max_threads = 1, min_insert_block_size_rows = 0, min_insert_block_size_bytes = 0;
+
+INSERT INTO test_groupConcat;
+
 SELECT *
 FROM test_groupConcat;
 
@@ -36,22 +52,24 @@ FROM test_groupConcat
 WHERE id = 1;
 
 SELECT groupConcat(123)(number)
-FROM numbers(10);
+FROM numbers(10); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
 SELECT groupConcat(',', '3')(number)
-FROM numbers(10);
+FROM numbers(10); -- { serverError BAD_ARGUMENTS }
 
 SELECT groupConcat(',', 0)(number)
-FROM numbers(10);
+FROM numbers(10); -- { serverError BAD_ARGUMENTS }
 
 SELECT groupConcat(',', -1)(number)
-FROM numbers(10);
+FROM numbers(10); -- { serverError BAD_ARGUMENTS }
 
 SELECT groupConcat(',', 3, 3)(number)
-FROM numbers(10);
+FROM numbers(10); -- { serverError TOO_MANY_ARGUMENTS_FOR_FUNCTION }
 
 SELECT length(groupConcat(number))
 FROM numbers(100000);
+
+TRUNCATE TABLE test_groupConcat;
 
 SELECT groupConcat(p_int, ',')
 FROM test_groupConcat
@@ -71,11 +89,25 @@ SETTINGS enable_analyzer = 1;
 
 SELECT grouP_CONcat(',')(p_array, '/')
 FROM test_groupConcat
-SETTINGS enable_analyzer = 1;
+SETTINGS enable_analyzer = 1; -- overrides current parameter
 
 SELECT grouP_CONcat(',', 2)(p_array, '/')
 FROM test_groupConcat
-SETTINGS enable_analyzer = 1;
+SETTINGS enable_analyzer = 1; -- works fine with both arguments
+
+CREATE TABLE test_groupConcat
+(
+    id UInt64,
+    p_int Int32
+)
+ENGINE = MergeTree
+ORDER BY id;
+
+INSERT INTO test_groupConcat SELECT
+    number,
+    number
+FROM numbers(100000)
+SETTINGS min_insert_block_size_rows = 2000;
 
 SELECT length(groupConcat(p_int))
 FROM test_groupConcat;

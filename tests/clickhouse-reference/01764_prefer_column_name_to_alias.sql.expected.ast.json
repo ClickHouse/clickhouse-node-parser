@@ -32,7 +32,7 @@
       }
     ],
     "from": {
-      "kind": "tableFunction",
+      "kind": "tableFunctionRef",
       "name": "numbers",
       "args": [
         {
@@ -41,7 +41,10 @@
           "value": "10"
         }
       ]
-    }
+    },
+    "trailingComments": [
+      "-- { serverError ILLEGAL_AGGREGATION }"
+    ]
   },
   {
     "kind": "select",
@@ -111,7 +114,10 @@
         ]
       },
       "alias": "t"
-    }
+    },
+    "trailingComments": [
+      "-- { serverError ILLEGAL_AGGREGATION }"
+    ]
   },
   {
     "kind": "select",
@@ -166,7 +172,7 @@
           }
         ],
         "from": {
-          "kind": "tableFunction",
+          "kind": "tableFunctionRef",
           "name": "numbers",
           "args": [
             {
@@ -178,7 +184,23 @@
         }
       },
       "alias": "ITBL"
-    }
+    },
+    "trailingComments": [
+      "-- { serverError ILLEGAL_AGGREGATION }"
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "prefer_column_name_to_alias",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
   },
   {
     "kind": "select",
@@ -313,7 +335,7 @@
           }
         ],
         "from": {
-          "kind": "tableFunction",
+          "kind": "tableFunctionRef",
           "name": "numbers",
           "args": [
             {
@@ -336,6 +358,70 @@
         }
       }
     ]
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "mytable"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "mytable"
+    },
+    "ifNotExists": true,
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "start_ts",
+        "type": {
+          "name": "UInt32"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "end_ts",
+        "type": {
+          "name": "UInt32"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "uuid",
+        "type": {
+          "name": "String"
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree",
+      "args": []
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "start_ts"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "mytable"
+      }
+    }
   },
   {
     "kind": "select",
@@ -624,5 +710,13 @@
         }
       }
     ]
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "mytable"
+    }
   }
 ]

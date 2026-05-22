@@ -1,3 +1,4 @@
+-- Tags: distributed
 SELECT *
 FROM (
         SELECT *
@@ -11,6 +12,14 @@ FROM (
 LIMIT 2
 SETTINGS max_threads = 1
 FORMAT Null;
+
+DROP TABLE IF EXISTS d_numbers;
+
+CREATE TABLE d_numbers
+(
+    number UInt32
+)
+ENGINE = Distributed(test_cluster_two_shards, `system`, numbers, rand());
 
 SELECT '100' AS number
 FROM d_numbers AS n
@@ -35,3 +44,7 @@ FROM (
 SETTINGS
     max_threads = 2,
     prefer_localhost_replica = 1;
+
+SET distributed_product_mode = 'local';
+
+DROP TABLE d_numbers;

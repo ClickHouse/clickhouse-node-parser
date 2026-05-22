@@ -1,3 +1,4 @@
+-- { echoOn }
 SELECT
     ltrim('   leading   '),
     trimLeft('   leading   ');

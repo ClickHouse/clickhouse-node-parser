@@ -1,3 +1,4 @@
+-- Tags: no-tsan
 SELECT number
 FROM remote('127.0.0.{3|2}', numbers(2))
 WHERE number GLOBAL IN (

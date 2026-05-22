@@ -7,7 +7,290 @@
         "type": "String",
         "value": "-- check that distinct with and w/o optimization produce the same result"
       }
+    ],
+    "leadingComments": [
+      "-- Tags: stateful"
     ]
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "distinct_in_order"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "ordinary_distinct"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "distinct_in_order"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "CounterID",
+        "type": {
+          "name": "UInt32"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "EventDate",
+        "type": {
+          "name": "Date"
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree",
+      "args": []
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "CounterID"
+          ]
+        }
+      },
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "EventDate"
+          ]
+        }
+      }
+    ],
+    "settings": [
+      {
+        "name": "index_granularity",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "8192"
+        }
+      },
+      {
+        "name": "index_granularity_bytes",
+        "value": {
+          "kind": "literal",
+          "type": "String",
+          "value": "10Mi"
+        }
+      }
+    ],
+    "settingsAfterOrderBy": true
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "distinct_in_order"
+      }
+    },
+    "selectQuery": {
+      "kind": "select",
+      "distinct": {
+        "kind": "distinct"
+      },
+      "select": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "CounterID"
+          ]
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "EventDate"
+          ]
+        }
+      ],
+      "from": {
+        "kind": "tableRef",
+        "database": "test",
+        "table": "hits"
+      },
+      "orderBy": [
+        {
+          "kind": "orderByItem",
+          "expr": {
+            "kind": "columnRef",
+            "parts": [
+              "CounterID"
+            ]
+          },
+          "direction": "ASC"
+        },
+        {
+          "kind": "orderByItem",
+          "expr": {
+            "kind": "columnRef",
+            "parts": [
+              "EventDate"
+            ]
+          },
+          "direction": "ASC"
+        }
+      ],
+      "settings": [
+        {
+          "name": "optimize_distinct_in_order",
+          "value": {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "1"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "ordinary_distinct"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "CounterID",
+        "type": {
+          "name": "UInt32"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "EventDate",
+        "type": {
+          "name": "Date"
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree",
+      "args": []
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "CounterID"
+          ]
+        }
+      },
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "EventDate"
+          ]
+        }
+      }
+    ],
+    "settings": [
+      {
+        "name": "index_granularity",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "8192"
+        }
+      },
+      {
+        "name": "index_granularity_bytes",
+        "value": {
+          "kind": "literal",
+          "type": "String",
+          "value": "10Mi"
+        }
+      }
+    ],
+    "settingsAfterOrderBy": true
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "ordinary_distinct"
+      }
+    },
+    "selectQuery": {
+      "kind": "select",
+      "distinct": {
+        "kind": "distinct"
+      },
+      "select": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "CounterID"
+          ]
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "EventDate"
+          ]
+        }
+      ],
+      "from": {
+        "kind": "tableRef",
+        "database": "test",
+        "table": "hits"
+      },
+      "orderBy": [
+        {
+          "kind": "orderByItem",
+          "expr": {
+            "kind": "columnRef",
+            "parts": [
+              "CounterID"
+            ]
+          },
+          "direction": "ASC"
+        },
+        {
+          "kind": "orderByItem",
+          "expr": {
+            "kind": "columnRef",
+            "parts": [
+              "EventDate"
+            ]
+          },
+          "direction": "ASC"
+        }
+      ],
+      "settings": [
+        {
+          "name": "optimize_distinct_in_order",
+          "value": {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "0"
+          }
+        }
+      ]
+    }
   },
   {
     "kind": "intersect",
@@ -38,6 +321,120 @@
         "kind": "tableRef",
         "table": "ordinary_distinct"
       }
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "distinct_in_order"
+      }
+    },
+    "selectQuery": {
+      "kind": "select",
+      "distinct": {
+        "kind": "distinct"
+      },
+      "select": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "CounterID"
+          ]
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "EventDate"
+          ]
+        }
+      ],
+      "from": {
+        "kind": "tableRef",
+        "database": "test",
+        "table": "hits"
+      },
+      "orderBy": [
+        {
+          "kind": "orderByItem",
+          "expr": {
+            "kind": "columnRef",
+            "parts": [
+              "CounterID"
+            ]
+          },
+          "direction": "ASC"
+        }
+      ],
+      "settings": [
+        {
+          "name": "optimize_distinct_in_order",
+          "value": {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "1"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "ordinary_distinct"
+      }
+    },
+    "selectQuery": {
+      "kind": "select",
+      "distinct": {
+        "kind": "distinct"
+      },
+      "select": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "CounterID"
+          ]
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "EventDate"
+          ]
+        }
+      ],
+      "from": {
+        "kind": "tableRef",
+        "database": "test",
+        "table": "hits"
+      },
+      "orderBy": [
+        {
+          "kind": "orderByItem",
+          "expr": {
+            "kind": "columnRef",
+            "parts": [
+              "CounterID"
+            ]
+          },
+          "direction": "ASC"
+        }
+      ],
+      "settings": [
+        {
+          "name": "optimize_distinct_in_order",
+          "value": {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "0"
+          }
+        }
+      ]
     }
   }
 ]

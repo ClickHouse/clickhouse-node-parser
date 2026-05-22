@@ -1,2 +1,12 @@
+DROP TABLE IF EXISTS t1;
+
+CREATE TABLE t1 AS remote('localhost', 'system.one');
+
+RENAME TABLE t1 TO t2;
+
 SELECT *
 FROM t2;
+
+RENAME TABLE t2 TO t1;
+
+DROP TABLE t1;

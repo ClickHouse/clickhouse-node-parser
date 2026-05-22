@@ -1,3 +1,43 @@
+-- https://github.com/ClickHouse/ClickHouse/issues/4567
+SET enable_analyzer = 1;
+
+DROP TABLE IF EXISTS fact;
+
+DROP TABLE IF EXISTS animals;
+
+DROP TABLE IF EXISTS colors;
+
+CREATE TABLE fact
+(
+    id Int64,
+    animal_key Int64,
+    color_key Int64
+)
+ENGINE = MergeTree
+ORDER BY tuple();
+
+INSERT INTO fact;
+
+CREATE TABLE animals
+(
+    animal_key UInt64,
+    animal_name String
+)
+ENGINE = MergeTree
+ORDER BY tuple();
+
+INSERT INTO animals;
+
+CREATE TABLE colors
+(
+    color_key UInt64,
+    color_name String
+)
+ENGINE = MergeTree
+ORDER BY tuple();
+
+INSERT INTO colors;
+
 SELECT
     id,
     animal_name,
@@ -19,7 +59,7 @@ LEFT JOIN (
             color_name
         FROM colors
     ) AS c
-    ON (a.color_key = c.color_key);
+    ON (a.color_key = c.color_key); -- { serverError AMBIGUOUS_IDENTIFIER }
 
 SELECT
     id,
@@ -42,4 +82,4 @@ LEFT JOIN (
             color_name
         FROM colors
     ) AS c
-    ON (a.color_key = c.color_key);
+    ON (a.color_key = c.color_key); -- { serverError AMBIGUOUS_IDENTIFIER }

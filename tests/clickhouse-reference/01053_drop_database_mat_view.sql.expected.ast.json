@@ -1,5 +1,188 @@
 [
   {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "send_logs_level",
+        "value": {
+          "kind": "literal",
+          "type": "String",
+          "value": "fatal"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "drop",
+    "targetType": "DATABASE",
+    "table": {
+      "kind": "tableRef",
+      "table": {
+        "kind": "queryParam",
+        "name": "CLICKHOUSE_DATABASE",
+        "type": "Identifier"
+      }
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "allow_deprecated_database_ordinary",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createDatabase",
+    "name": {
+      "kind": "queryParam",
+      "name": "CLICKHOUSE_DATABASE",
+      "type": "Identifier"
+    },
+    "engine": {
+      "name": "Ordinary"
+    },
+    "leadingComments": [
+      "-- Creation of a database with Ordinary engine emits a warning."
+    ],
+    "trailingComments": [
+      "-- Different inner table name with Atomic"
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "allow_deprecated_syntax_for_merge_tree",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "database": {
+        "kind": "queryParam",
+        "name": "CLICKHOUSE_DATABASE",
+        "type": "Identifier"
+      },
+      "table": "my_table"
+    },
+    "engine": {
+      "name": "MergeTree",
+      "args": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "day"
+          ]
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "day"
+          ],
+          "parenthesized": true
+        },
+        {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "8192"
+        }
+      ]
+    },
+    "asQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "alias",
+          "expr": {
+            "kind": "functionCall",
+            "name": "today",
+            "args": []
+          },
+          "alias": "day"
+        },
+        {
+          "kind": "alias",
+          "expr": {
+            "kind": "literal",
+            "type": "String",
+            "value": "mystring"
+          },
+          "alias": "str"
+        }
+      ]
+    }
+  },
+  {
+    "kind": "system",
+    "body": "show tables from {CLICKHOUSE_DATABASE:Identifier}"
+  },
+  {
+    "kind": "createMaterializedView",
+    "table": {
+      "kind": "tableRef",
+      "database": {
+        "kind": "queryParam",
+        "name": "CLICKHOUSE_DATABASE",
+        "type": "Identifier"
+      },
+      "table": "my_materialized_view"
+    },
+    "engine": {
+      "name": "MergeTree",
+      "args": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "day"
+          ]
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "day"
+          ],
+          "parenthesized": true
+        },
+        {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "8192"
+        }
+      ]
+    },
+    "asQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "asterisk"
+        }
+      ],
+      "from": {
+        "kind": "tableRef",
+        "database": {
+          "kind": "queryParam",
+          "name": "CLICKHOUSE_DATABASE",
+          "type": "Identifier"
+        },
+        "table": "my_table"
+      }
+    }
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -8,8 +191,24 @@
     ],
     "from": {
       "kind": "tableRef",
-      "database": "{CLICKHOUSE_DATABASE:Identifier}",
+      "database": {
+        "kind": "queryParam",
+        "name": "CLICKHOUSE_DATABASE",
+        "type": "Identifier"
+      },
       "table": "my_materialized_view"
+    }
+  },
+  {
+    "kind": "drop",
+    "targetType": "DATABASE",
+    "table": {
+      "kind": "tableRef",
+      "table": {
+        "kind": "queryParam",
+        "name": "CLICKHOUSE_DATABASE",
+        "type": "Identifier"
+      }
     }
   }
 ]

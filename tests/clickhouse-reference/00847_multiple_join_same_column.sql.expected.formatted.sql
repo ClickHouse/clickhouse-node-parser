@@ -1,3 +1,36 @@
+DROP TABLE IF EXISTS t;
+
+DROP TABLE IF EXISTS s;
+
+DROP TABLE IF EXISTS y;
+
+CREATE TABLE t
+(
+    a Int64,
+    b Int64
+)
+ENGINE = TinyLog;
+
+CREATE TABLE s
+(
+    a Int64,
+    b Int64
+)
+ENGINE = TinyLog;
+
+CREATE TABLE y
+(
+    a Int64,
+    b Int64
+)
+ENGINE = TinyLog;
+
+INSERT INTO t;
+
+INSERT INTO s;
+
+INSERT INTO y;
+
 SELECT
     t.a,
     s.b,
@@ -110,3 +143,9 @@ LEFT JOIN y
     ON y.b = s.b
 ORDER BY t.a ASC
 FORMAT PrettyCompactMonoBlock;
+
+DROP TABLE t;
+
+DROP TABLE s;
+
+DROP TABLE y;

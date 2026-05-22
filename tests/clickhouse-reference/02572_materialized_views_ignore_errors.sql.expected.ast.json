@@ -1,5 +1,152 @@
 [
   {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "prefer_localhost_replica",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "data_02572"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "proxy_02572"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "push_to_proxy_mv_02572"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "receiver_02572"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "data_02572"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "key",
+        "type": {
+          "name": "Int"
+        }
+      }
+    ],
+    "engine": {
+      "name": "Memory",
+      "args": []
+    }
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "proxy_02572"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "key",
+        "type": {
+          "name": "Int"
+        }
+      }
+    ],
+    "engine": {
+      "name": "Distributed",
+      "args": [
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "test_shard_localhost"
+        },
+        {
+          "kind": "functionCall",
+          "name": "currentDatabase",
+          "args": []
+        },
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "receiver_02572"
+        }
+      ]
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "proxy_02572"
+      }
+    },
+    "leadingComments": [
+      "-- ensure that insert fails"
+    ],
+    "trailingComments": [
+      "-- { serverError UNKNOWN_TABLE }"
+    ]
+  },
+  {
+    "kind": "createMaterializedView",
+    "table": {
+      "kind": "tableRef",
+      "table": "push_to_proxy_mv_02572"
+    },
+    "toTable": {
+      "kind": "tableRef",
+      "table": "proxy_02572"
+    },
+    "asQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "asterisk"
+        }
+      ],
+      "from": {
+        "kind": "tableRef",
+        "table": "data_02572"
+      }
+    },
+    "leadingComments": [
+      "-- proxy data with MV"
+    ]
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -21,6 +168,36 @@
         },
         "direction": "ASC"
       }
+    ],
+    "leadingComments": [
+      "-- { echoOn }"
+    ]
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "data_02572"
+      }
+    },
+    "insertSettings": [
+      {
+        "name": "materialized_views_ignore_errors",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "system",
+    "body": "SYSTEM flush logs query_views_log",
+    "leadingComments": [
+      "-- check system.query_views_log"
     ]
   },
   {
@@ -150,7 +327,47 @@
         },
         "direction": "ASC"
       }
+    ],
+    "leadingComments": [
+      "-- lower(status) to pass through clickhouse-test \"exception\" check"
     ]
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "data_02572"
+      }
+    },
+    "leadingComments": [
+      "-- materialized_views_ignore_errors=0"
+    ],
+    "trailingComments": [
+      "-- { serverError UNKNOWN_TABLE }"
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "receiver_02572"
+    },
+    "asTable": {
+      "kind": "tableRef",
+      "table": "data_02572"
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "data_02572"
+      }
+    }
   },
   {
     "kind": "select",

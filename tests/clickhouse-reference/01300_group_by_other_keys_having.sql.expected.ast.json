@@ -1,178 +1,40 @@
 [
   {
-    "kind": "select",
-    "select": [
+    "kind": "set",
+    "settings": [
       {
-        "kind": "alias",
-        "expr": {
-          "kind": "functionCall",
-          "name": "round",
-          "args": [
-            {
-              "kind": "functionCall",
-              "name": "avg",
-              "args": [
-                {
-                  "kind": "binaryExpr",
-                  "op": "*",
-                  "left": {
-                    "kind": "functionCall",
-                    "name": "log",
-                    "args": [
-                      {
-                        "kind": "literal",
-                        "type": "UInt64",
-                        "value": "2"
-                      }
-                    ]
-                  },
-                  "right": {
-                    "kind": "columnRef",
-                    "parts": [
-                      "number"
-                    ]
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "literal",
-              "type": "UInt64",
-              "value": "6"
-            }
-          ]
-        },
-        "alias": "k"
-      }
-    ],
-    "from": {
-      "kind": "tableFunction",
-      "name": "numbers",
-      "args": [
-        {
+        "name": "optimize_group_by_function_keys",
+        "value": {
           "kind": "literal",
           "type": "UInt64",
-          "value": "10000000"
+          "value": "1"
         }
-      ]
-    },
-    "groupBy": {
-      "kind": "expressions",
-      "items": [
-        {
-          "kind": "binaryExpr",
-          "op": "*",
-          "left": {
-            "kind": "binaryExpr",
-            "op": "%",
-            "left": {
-              "kind": "columnRef",
-              "parts": [
-                "number"
-              ]
-            },
-            "right": {
-              "kind": "literal",
-              "type": "UInt64",
-              "value": "2"
-            },
-            "parenthesized": true
-          },
-          "right": {
-            "kind": "binaryExpr",
-            "op": "%",
-            "left": {
-              "kind": "columnRef",
-              "parts": [
-                "number"
-              ]
-            },
-            "right": {
-              "kind": "literal",
-              "type": "UInt64",
-              "value": "3"
-            },
-            "parenthesized": true
-          }
-        },
-        {
-          "kind": "binaryExpr",
-          "op": "%",
-          "left": {
-            "kind": "columnRef",
-            "parts": [
-              "number"
-            ]
-          },
-          "right": {
-            "kind": "literal",
-            "type": "UInt64",
-            "value": "3"
-          }
-        },
-        {
-          "kind": "binaryExpr",
-          "op": "%",
-          "left": {
-            "kind": "columnRef",
-            "parts": [
-              "number"
-            ]
-          },
-          "right": {
-            "kind": "literal",
-            "type": "UInt64",
-            "value": "2"
-          }
-        }
-      ]
-    },
-    "having": {
-      "kind": "binaryExpr",
-      "op": ">",
-      "left": {
-        "kind": "functionCall",
-        "name": "avg",
-        "args": [
-          {
-            "kind": "binaryExpr",
-            "op": "*",
-            "left": {
-              "kind": "functionCall",
-              "name": "log",
-              "args": [
-                {
-                  "kind": "literal",
-                  "type": "UInt64",
-                  "value": "2"
-                }
-              ]
-            },
-            "right": {
-              "kind": "columnRef",
-              "parts": [
-                "number"
-              ]
-            }
-          }
-        ]
-      },
-      "right": {
-        "kind": "literal",
-        "type": "Float64",
-        "value": "3465735.3"
       }
-    },
-    "orderBy": [
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
       {
-        "kind": "orderByItem",
-        "expr": {
-          "kind": "columnRef",
-          "parts": [
-            "k"
-          ]
-        },
-        "direction": "ASC"
+        "name": "optimize_syntax_fuse_functions",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "enable_analyzer",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
       }
     ]
   },
@@ -223,7 +85,7 @@
       }
     ],
     "from": {
-      "kind": "tableFunction",
+      "kind": "tableFunctionRef",
       "name": "numbers",
       "args": [
         {
@@ -352,6 +214,186 @@
         "direction": "ASC"
       }
     ],
+    "leadingComments": [
+      "-- { echoOn }"
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "round",
+          "args": [
+            {
+              "kind": "functionCall",
+              "name": "avg",
+              "args": [
+                {
+                  "kind": "binaryExpr",
+                  "op": "*",
+                  "left": {
+                    "kind": "functionCall",
+                    "name": "log",
+                    "args": [
+                      {
+                        "kind": "literal",
+                        "type": "UInt64",
+                        "value": "2"
+                      }
+                    ]
+                  },
+                  "right": {
+                    "kind": "columnRef",
+                    "parts": [
+                      "number"
+                    ]
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "6"
+            }
+          ]
+        },
+        "alias": "k"
+      }
+    ],
+    "from": {
+      "kind": "tableFunctionRef",
+      "name": "numbers",
+      "args": [
+        {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "10000000"
+        }
+      ]
+    },
+    "groupBy": {
+      "kind": "expressions",
+      "items": [
+        {
+          "kind": "binaryExpr",
+          "op": "*",
+          "left": {
+            "kind": "binaryExpr",
+            "op": "%",
+            "left": {
+              "kind": "columnRef",
+              "parts": [
+                "number"
+              ]
+            },
+            "right": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "2"
+            },
+            "parenthesized": true
+          },
+          "right": {
+            "kind": "binaryExpr",
+            "op": "%",
+            "left": {
+              "kind": "columnRef",
+              "parts": [
+                "number"
+              ]
+            },
+            "right": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "3"
+            },
+            "parenthesized": true
+          }
+        },
+        {
+          "kind": "binaryExpr",
+          "op": "%",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "number"
+            ]
+          },
+          "right": {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "3"
+          }
+        },
+        {
+          "kind": "binaryExpr",
+          "op": "%",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "number"
+            ]
+          },
+          "right": {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "2"
+          }
+        }
+      ]
+    },
+    "having": {
+      "kind": "binaryExpr",
+      "op": ">",
+      "left": {
+        "kind": "functionCall",
+        "name": "avg",
+        "args": [
+          {
+            "kind": "binaryExpr",
+            "op": "*",
+            "left": {
+              "kind": "functionCall",
+              "name": "log",
+              "args": [
+                {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "2"
+                }
+              ]
+            },
+            "right": {
+              "kind": "columnRef",
+              "parts": [
+                "number"
+              ]
+            }
+          }
+        ]
+      },
+      "right": {
+        "kind": "literal",
+        "type": "Float64",
+        "value": "3465735.3"
+      }
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "k"
+          ]
+        },
+        "direction": "ASC"
+      }
+    ],
     "settings": [
       {
         "name": "enable_analyzer",
@@ -410,7 +452,7 @@
       }
     ],
     "from": {
-      "kind": "tableFunction",
+      "kind": "tableFunctionRef",
       "name": "numbers",
       "args": [
         {
@@ -583,7 +625,7 @@
       }
     ],
     "from": {
-      "kind": "tableFunction",
+      "kind": "tableFunctionRef",
       "name": "numbers",
       "args": [
         {
@@ -764,7 +806,7 @@
       }
     ],
     "from": {
-      "kind": "tableFunction",
+      "kind": "tableFunctionRef",
       "name": "numbers",
       "args": [
         {
@@ -935,7 +977,7 @@
       }
     ],
     "from": {
-      "kind": "tableFunction",
+      "kind": "tableFunctionRef",
       "name": "numbers",
       "args": [
         {
@@ -1067,6 +1109,19 @@
           "kind": "literal",
           "type": "UInt64",
           "value": "1"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "optimize_group_by_function_keys",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
         }
       }
     ]

@@ -10,6 +10,88 @@
     ]
   },
   {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "t0"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "c",
+        "type": {
+          "name": "Int"
+        },
+        "defaultKind": "DEFAULT",
+        "defaultExpr": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "7"
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree",
+      "args": []
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "functionCall",
+          "name": "tuple",
+          "args": []
+        }
+      }
+    ]
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "function",
+      "func": {
+        "kind": "tableFunctionRef",
+        "name": "remote",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": "localhost:9000"
+          },
+          {
+            "kind": "functionCall",
+            "name": "database",
+            "args": []
+          },
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": "t0"
+          },
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": "default"
+          },
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": ""
+          }
+        ]
+      }
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "t0"
+      }
+    }
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -34,6 +116,230 @@
     ]
   },
   {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "fuzz_87972"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "c0",
+        "type": {
+          "name": "Int"
+        },
+        "defaultKind": "MATERIALIZED",
+        "defaultExpr": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "c1",
+        "type": {
+          "name": "Int"
+        },
+        "defaultKind": "EPHEMERAL"
+      }
+    ],
+    "engine": {
+      "name": "MergeTree",
+      "args": []
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "functionCall",
+          "name": "tuple",
+          "args": []
+        }
+      }
+    ]
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "function",
+      "func": {
+        "kind": "tableFunctionRef",
+        "name": "remote",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": "localhost:9000"
+          },
+          {
+            "kind": "functionCall",
+            "name": "database",
+            "args": []
+          },
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": "fuzz_87972"
+          },
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": "default"
+          },
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": ""
+          }
+        ]
+      }
+    },
+    "trailingComments": [
+      "-- { error EMPTY_LIST_OF_COLUMNS_PASSED }"
+    ]
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "function",
+      "func": {
+        "kind": "tableFunctionRef",
+        "name": "file",
+        "args": [
+          {
+            "kind": "functionCall",
+            "name": "concat",
+            "args": [
+              {
+                "kind": "functionCall",
+                "name": "database",
+                "args": []
+              },
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "_test.csv"
+              }
+            ]
+          },
+          {
+            "kind": "columnRef",
+            "parts": [
+              "CSV"
+            ]
+          },
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": "a Int, b Int DEFAULT 77"
+          }
+        ]
+      }
+    },
+    "selectQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "number"
+          ]
+        },
+        {
+          "kind": "functionCall",
+          "name": "if",
+          "args": [
+            {
+              "kind": "binaryExpr",
+              "op": "=",
+              "left": {
+                "kind": "binaryExpr",
+                "op": "%",
+                "left": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "number"
+                  ]
+                },
+                "right": {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "2"
+                }
+              },
+              "right": {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "1"
+              }
+            },
+            {
+              "kind": "literal",
+              "type": "NULL",
+              "value": "NULL"
+            },
+            {
+              "kind": "columnRef",
+              "parts": [
+                "number"
+              ]
+            }
+          ]
+        }
+      ],
+      "from": {
+        "kind": "tableFunctionRef",
+        "name": "numbers",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "3"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "function",
+      "func": {
+        "kind": "tableFunctionRef",
+        "name": "file",
+        "args": [
+          {
+            "kind": "functionCall",
+            "name": "concat",
+            "args": [
+              {
+                "kind": "functionCall",
+                "name": "database",
+                "args": []
+              },
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "_test.csv"
+              }
+            ]
+          },
+          {
+            "kind": "columnRef",
+            "parts": [
+              "CSV"
+            ]
+          },
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": "a Int, b Int DEFAULT 77"
+          }
+        ]
+      }
+    }
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -41,7 +347,7 @@
       }
     ],
     "from": {
-      "kind": "tableFunction",
+      "kind": "tableFunctionRef",
       "name": "file",
       "args": [
         {

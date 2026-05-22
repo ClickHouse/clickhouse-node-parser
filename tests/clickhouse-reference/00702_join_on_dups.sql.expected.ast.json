@@ -1,5 +1,231 @@
 [
   {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "X"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "Y"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "X"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "id",
+        "type": {
+          "name": "Int32"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "x_a",
+        "type": {
+          "name": "String"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "x_b",
+        "type": {
+          "name": "Nullable",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "Int32"
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "functionCall",
+          "name": "tuple",
+          "args": []
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "Y"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "id",
+        "type": {
+          "name": "Int32"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "y_a",
+        "type": {
+          "name": "String"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "y_b",
+        "type": {
+          "name": "Nullable",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "String"
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "functionCall",
+          "name": "tuple",
+          "args": []
+        }
+      }
+    ]
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "X"
+      }
+    },
+    "columns": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "id"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "x_a"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "x_b"
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "X"
+      }
+    },
+    "columns": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "id"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "x_a"
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "Y"
+      }
+    },
+    "columns": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "id"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "y_a"
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "Y"
+      }
+    },
+    "columns": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "id"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "y_a"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "y_b"
+        ]
+      }
+    ]
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -20,7 +246,7 @@
         "kind": "tableRef",
         "table": "X"
       },
-      "kind": "join",
+      "kind": "joinExpr",
       "joinType": "INNER",
       "right": {
         "kind": "tableRef",
@@ -150,7 +376,7 @@
         },
         "alias": "s"
       },
-      "kind": "join",
+      "kind": "joinExpr",
       "joinType": "INNER",
       "right": {
         "kind": "subqueryFrom",
@@ -280,7 +506,7 @@
         "kind": "tableRef",
         "table": "X"
       },
-      "kind": "join",
+      "kind": "joinExpr",
       "joinType": "INNER",
       "right": {
         "kind": "tableRef",
@@ -418,7 +644,7 @@
         "kind": "tableRef",
         "table": "X"
       },
-      "kind": "join",
+      "kind": "joinExpr",
       "joinType": "LEFT",
       "right": {
         "kind": "tableRef",
@@ -548,7 +774,7 @@
         },
         "alias": "s"
       },
-      "kind": "join",
+      "kind": "joinExpr",
       "joinType": "LEFT",
       "right": {
         "kind": "subqueryFrom",
@@ -678,7 +904,7 @@
         "kind": "tableRef",
         "table": "X"
       },
-      "kind": "join",
+      "kind": "joinExpr",
       "joinType": "LEFT",
       "right": {
         "kind": "tableRef",
@@ -816,7 +1042,7 @@
         "kind": "tableRef",
         "table": "X"
       },
-      "kind": "join",
+      "kind": "joinExpr",
       "joinType": "RIGHT",
       "right": {
         "kind": "tableRef",
@@ -946,7 +1172,7 @@
         },
         "alias": "s"
       },
-      "kind": "join",
+      "kind": "joinExpr",
       "joinType": "RIGHT",
       "right": {
         "kind": "subqueryFrom",
@@ -1076,7 +1302,7 @@
         "kind": "tableRef",
         "table": "X"
       },
-      "kind": "join",
+      "kind": "joinExpr",
       "joinType": "FULL",
       "right": {
         "kind": "tableRef",
@@ -1206,7 +1432,7 @@
         },
         "alias": "s"
       },
-      "kind": "join",
+      "kind": "joinExpr",
       "joinType": "FULL",
       "right": {
         "kind": "subqueryFrom",
@@ -1336,7 +1562,7 @@
         "kind": "tableRef",
         "table": "X"
       },
-      "kind": "join",
+      "kind": "joinExpr",
       "joinType": "INNER",
       "right": {
         "kind": "subqueryFrom",
@@ -1466,7 +1692,7 @@
         "kind": "tableRef",
         "table": "X"
       },
-      "kind": "join",
+      "kind": "joinExpr",
       "joinType": "INNER",
       "right": {
         "kind": "subqueryFrom",
@@ -1596,7 +1822,7 @@
         "kind": "tableRef",
         "table": "X"
       },
-      "kind": "join",
+      "kind": "joinExpr",
       "joinType": "INNER",
       "right": {
         "kind": "subqueryFrom",
@@ -1726,7 +1952,7 @@
         "kind": "tableRef",
         "table": "Y"
       },
-      "kind": "join",
+      "kind": "joinExpr",
       "joinType": "INNER",
       "right": {
         "kind": "subqueryFrom",
@@ -1867,7 +2093,7 @@
         "kind": "tableRef",
         "table": "X"
       },
-      "kind": "join",
+      "kind": "joinExpr",
       "joinType": "LEFT",
       "right": {
         "kind": "subqueryFrom",
@@ -1997,7 +2223,7 @@
         "kind": "tableRef",
         "table": "X"
       },
-      "kind": "join",
+      "kind": "joinExpr",
       "joinType": "LEFT",
       "right": {
         "kind": "subqueryFrom",
@@ -2127,7 +2353,7 @@
         "kind": "tableRef",
         "table": "X"
       },
-      "kind": "join",
+      "kind": "joinExpr",
       "joinType": "LEFT",
       "right": {
         "kind": "subqueryFrom",
@@ -2257,7 +2483,7 @@
         "kind": "tableRef",
         "table": "Y"
       },
-      "kind": "join",
+      "kind": "joinExpr",
       "joinType": "LEFT",
       "right": {
         "kind": "subqueryFrom",
@@ -2398,7 +2624,7 @@
         "kind": "tableRef",
         "table": "X"
       },
-      "kind": "join",
+      "kind": "joinExpr",
       "joinType": "RIGHT",
       "right": {
         "kind": "subqueryFrom",
@@ -2528,7 +2754,7 @@
         "kind": "tableRef",
         "table": "X"
       },
-      "kind": "join",
+      "kind": "joinExpr",
       "joinType": "RIGHT",
       "right": {
         "kind": "subqueryFrom",
@@ -2658,7 +2884,7 @@
         "kind": "tableRef",
         "table": "X"
       },
-      "kind": "join",
+      "kind": "joinExpr",
       "joinType": "RIGHT",
       "right": {
         "kind": "subqueryFrom",
@@ -2788,7 +3014,7 @@
         "kind": "tableRef",
         "table": "X"
       },
-      "kind": "join",
+      "kind": "joinExpr",
       "joinType": "FULL",
       "right": {
         "kind": "subqueryFrom",
@@ -2918,7 +3144,7 @@
         "kind": "tableRef",
         "table": "X"
       },
-      "kind": "join",
+      "kind": "joinExpr",
       "joinType": "FULL",
       "right": {
         "kind": "subqueryFrom",
@@ -3048,7 +3274,7 @@
         "kind": "tableRef",
         "table": "X"
       },
-      "kind": "join",
+      "kind": "joinExpr",
       "joinType": "FULL",
       "right": {
         "kind": "subqueryFrom",
@@ -3156,5 +3382,25 @@
         "direction": "ASC"
       }
     ]
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "X"
+    },
+    "leadingComments": [
+      "--select 'self full nullable vs not nullable 2';",
+      "--select Y.*, s.* from Y full join (select * from Y) as s on concat('n', Y.y_a) = s.y_b order by id;"
+    ]
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "Y"
+    }
   }
 ]

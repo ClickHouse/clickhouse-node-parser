@@ -1,3 +1,180 @@
+CreateQuery posts (children 3)
+ Identifier posts
+ Columns definition (children 1)
+  ExpressionList (children 6)
+   ColumnDeclaration page_id (children 1)
+    DataType LowCardinality (children 1)
+     ExpressionList (children 1)
+      DataType String
+   ColumnDeclaration post_id (children 2)
+    DataType String
+    Function CODEC (children 1)
+     ExpressionList (children 1)
+      Function LZ4
+   ColumnDeclaration host_id (children 2)
+    DataType UInt32
+    Function CODEC (children 1)
+     ExpressionList (children 2)
+      Function T64
+      Function LZ4
+   ColumnDeclaration path_id (children 1)
+    DataType UInt32
+   ColumnDeclaration created (children 2)
+    DataType DateTime
+    Function CODEC (children 1)
+     ExpressionList (children 2)
+      Function T64
+      Function LZ4
+   ColumnDeclaration as_of (children 2)
+    DataType DateTime
+    Function CODEC (children 1)
+     ExpressionList (children 2)
+      Function T64
+      Function LZ4
+ Storage definition (children 3)
+  Function ReplacingMergeTree (children 1)
+   ExpressionList (children 1)
+    Identifier as_of
+  Function toStartOfMonth (children 1)
+   ExpressionList (children 1)
+    Identifier created
+  Function tuple (children 1)
+   ExpressionList (children 2)
+    Identifier page_id
+    Identifier post_id
+
+CreateQuery post_metrics (children 3)
+ Identifier post_metrics
+ Columns definition (children 1)
+  ExpressionList (children 6)
+   ColumnDeclaration page_id (children 1)
+    DataType LowCardinality (children 1)
+     ExpressionList (children 1)
+      DataType String
+   ColumnDeclaration post_id (children 2)
+    DataType String
+    Function CODEC (children 1)
+     ExpressionList (children 1)
+      Function LZ4
+   ColumnDeclaration created (children 2)
+    DataType DateTime
+    Function CODEC (children 1)
+     ExpressionList (children 2)
+      Function T64
+      Function LZ4
+   ColumnDeclaration impressions (children 2)
+    DataType UInt32
+    Function CODEC (children 1)
+     ExpressionList (children 2)
+      Function T64
+      Function LZ4
+   ColumnDeclaration clicks (children 2)
+    DataType UInt32
+    Function CODEC (children 1)
+     ExpressionList (children 2)
+      Function T64
+      Function LZ4
+   ColumnDeclaration as_of (children 2)
+    DataType DateTime
+    Function CODEC (children 1)
+     ExpressionList (children 2)
+      Function T64
+      Function LZ4
+ Storage definition (children 3)
+  Function ReplacingMergeTree (children 1)
+   ExpressionList (children 1)
+    Identifier as_of
+  Function toStartOfMonth (children 1)
+   ExpressionList (children 1)
+    Identifier created
+  Function tuple (children 1)
+   ExpressionList (children 2)
+    Identifier page_id
+    Identifier post_id
+
+InsertQuery   (children 2)
+ Identifier posts
+ SelectWithUnionQuery (children 1)
+  ExpressionList (children 1)
+   SelectQuery (children 2)
+    ExpressionList (children 6)
+     Function repeat (children 1)
+      ExpressionList (children 2)
+       Literal 'a'
+       Function plus (children 1)
+        ExpressionList (children 2)
+         Function modulo (children 1)
+          ExpressionList (children 2)
+           Identifier number
+           Literal UInt64_10
+         Literal UInt64_1
+     Function toString (children 1)
+      ExpressionList (children 1)
+       Identifier number
+     Function modulo (children 1)
+      ExpressionList (children 2)
+       Identifier number
+       Literal UInt64_10
+     Identifier number
+     Function minus (children 1)
+      ExpressionList (children 2)
+       Function now (children 1)
+        ExpressionList
+       Function toIntervalMinute (children 1)
+        ExpressionList (children 1)
+         Identifier number
+     Function now (children 1)
+      ExpressionList
+    TablesInSelectQuery (children 1)
+     TablesInSelectQueryElement (children 1)
+      TableExpression (children 1)
+       Function numbers (children 1)
+        ExpressionList (children 1)
+         Literal UInt64_100000
+
+InsertQuery   (children 2)
+ Identifier post_metrics
+ SelectWithUnionQuery (children 1)
+  ExpressionList (children 1)
+   SelectQuery (children 2)
+    ExpressionList (children 6)
+     Function repeat (children 1)
+      ExpressionList (children 2)
+       Literal 'a'
+       Function plus (children 1)
+        ExpressionList (children 2)
+         Function modulo (children 1)
+          ExpressionList (children 2)
+           Identifier number
+           Literal UInt64_10
+         Literal UInt64_1
+     Function toString (children 1)
+      ExpressionList (children 1)
+       Identifier number
+     Function minus (children 1)
+      ExpressionList (children 2)
+       Function now (children 1)
+        ExpressionList
+       Function toIntervalMinute (children 1)
+        ExpressionList (children 1)
+         Identifier number
+     Function multiply (children 1)
+      ExpressionList (children 2)
+       Identifier number
+       Literal UInt64_100
+     Function multiply (children 1)
+      ExpressionList (children 2)
+       Identifier number
+       Literal UInt64_10
+     Function now (children 1)
+      ExpressionList
+    TablesInSelectQuery (children 1)
+     TablesInSelectQueryElement (children 1)
+      TableExpression (children 1)
+       Function numbers (children 1)
+        ExpressionList (children 1)
+         Literal UInt64_100000
+
 SelectWithUnionQuery (children 2)
  ExpressionList (children 1)
   SelectQuery (children 4)

@@ -1,5 +1,160 @@
 [
   {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "buffer_table1__fuzz_28"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "merge_tree_table1"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "merge_tree_table1"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "x",
+        "type": {
+          "name": "UInt32"
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "x"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "buffer_table1__fuzz_24"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "s",
+        "type": {
+          "name": "Nullable",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "Int128"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "x",
+        "type": {
+          "name": "Nullable",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "FixedString",
+                "args": [
+                  {
+                    "kind": "literal",
+                    "value": "17"
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "engine": {
+      "name": "Buffer",
+      "args": [
+        {
+          "kind": "functionCall",
+          "name": "currentDatabase",
+          "args": []
+        },
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "merge_tree_table1"
+        },
+        {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "16"
+        },
+        {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "10"
+        },
+        {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "60"
+        },
+        {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "10"
+        },
+        {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1000"
+        },
+        {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1048576"
+        },
+        {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "2097152"
+        }
+      ]
+    }
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "send_logs_level",
+        "value": {
+          "kind": "literal",
+          "type": "String",
+          "value": "error"
+        }
+      }
+    ]
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -27,6 +182,90 @@
               "value": "10"
             }
           ]
+        }
+      ]
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "merge_tree_table1"
+      }
+    }
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "buffer_table1__fuzz_28"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "x",
+        "type": {
+          "name": "Nullable",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "UInt32"
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "engine": {
+      "name": "Buffer",
+      "args": [
+        {
+          "kind": "functionCall",
+          "name": "currentDatabase",
+          "args": []
+        },
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "merge_tree_table1"
+        },
+        {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "16"
+        },
+        {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "10"
+        },
+        {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "60"
+        },
+        {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "10"
+        },
+        {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1000"
+        },
+        {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1048576"
+        },
+        {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "2097152"
         }
       ]
     }
@@ -62,6 +301,48 @@
           }
         ]
       }
+    }
+  },
+  {
+    "kind": "createRowPolicy",
+    "targets": [
+      {
+        "names": [
+          "rp"
+        ],
+        "table": {
+          "kind": "tableRef",
+          "table": "buffer_table1__fuzz_28"
+        }
+      }
+    ],
+    "hasRowKeyword": true,
+    "using": {
+      "kind": "binaryExpr",
+      "op": "=",
+      "left": {
+        "kind": "columnRef",
+        "parts": [
+          "x"
+        ]
+      },
+      "right": {
+        "kind": "functionCall",
+        "name": "toLowCardinality",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "1"
+          }
+        ]
+      }
+    },
+    "to": {
+      "kind": "names",
+      "names": [
+        "default"
+      ]
     }
   },
   {

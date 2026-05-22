@@ -1,5 +1,53 @@
 [
   {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "test"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "test"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "my.json",
+        "type": {
+          "name": "JSON"
+        }
+      }
+    ],
+    "engine": {
+      "name": "Memory"
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "test"
+      }
+    },
+    "selectQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "{\"a\" : 42}"
+        }
+      ]
+    }
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -104,6 +152,14 @@
         }
       }
     ]
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "test"
+    }
   },
   {
     "kind": "select",
@@ -117,7 +173,7 @@
       }
     ],
     "from": {
-      "kind": "tableFunction",
+      "kind": "tableFunctionRef",
       "name": "format",
       "args": [
         {
@@ -135,6 +191,295 @@
           "kind": "literal",
           "type": "String",
           "value": "{\"t.t\" : {\"a\" : 42}}"
+        }
+      ]
+    }
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "test"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "my.json",
+        "type": {
+          "name": "JSON",
+          "args": [
+            {
+              "kind": "namedField",
+              "name": "a",
+              "type": {
+                "name": "UInt32"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "a1",
+        "type": {
+          "name": "UInt32"
+        },
+        "defaultKind": "MATERIALIZED",
+        "defaultExpr": {
+          "kind": "columnRef",
+          "parts": [
+            "my",
+            "json",
+            "a"
+          ]
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "a2",
+        "type": {
+          "name": "UInt32"
+        },
+        "defaultKind": "DEFAULT",
+        "defaultExpr": {
+          "kind": "columnRef",
+          "parts": [
+            "my",
+            "json",
+            "a"
+          ]
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "b1",
+        "type": {
+          "name": "UInt32"
+        },
+        "defaultKind": "MATERIALIZED",
+        "defaultExpr": {
+          "kind": "columnRef",
+          "parts": [
+            "my",
+            "json",
+            "b"
+          ]
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "b2",
+        "type": {
+          "name": "UInt32"
+        },
+        "defaultKind": "DEFAULT",
+        "defaultExpr": {
+          "kind": "columnRef",
+          "parts": [
+            "my",
+            "json",
+            "b"
+          ]
+        }
+      },
+      {
+        "kind": "indexDef",
+        "name": "idx1",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "my",
+            "json",
+            "a"
+          ]
+        },
+        "indexType": {
+          "name": "minmax"
+        }
+      },
+      {
+        "kind": "indexDef",
+        "name": "idx2",
+        "expr": {
+          "kind": "castExpr",
+          "expr": {
+            "kind": "columnRef",
+            "parts": [
+              "my",
+              "json",
+              "b"
+            ]
+          },
+          "type": "Int64",
+          "operator": true
+        },
+        "indexType": {
+          "name": "minmax"
+        }
+      },
+      {
+        "kind": "projectionDef",
+        "name": "prj1",
+        "query": {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "my",
+                "json"
+              ]
+            },
+            {
+              "kind": "columnRef",
+              "parts": [
+                "my",
+                "json",
+                "a"
+              ]
+            },
+            {
+              "kind": "columnRef",
+              "parts": [
+                "my",
+                "json",
+                "b"
+              ]
+            }
+          ],
+          "orderBy": [
+            {
+              "kind": "orderByItem",
+              "expr": {
+                "kind": "columnRef",
+                "parts": [
+                  "my",
+                  "json",
+                  "a"
+                ]
+              },
+              "direction": "ASC"
+            },
+            {
+              "kind": "orderByItem",
+              "expr": {
+                "kind": "castExpr",
+                "expr": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "my",
+                    "json",
+                    "b"
+                  ]
+                },
+                "type": "Int32",
+                "operator": true
+              },
+              "direction": "ASC"
+            }
+          ]
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "my",
+            "json",
+            "a"
+          ]
+        }
+      },
+      {
+        "expr": {
+          "kind": "castExpr",
+          "expr": {
+            "kind": "columnRef",
+            "parts": [
+              "my",
+              "json",
+              "b"
+            ]
+          },
+          "type": "Int32",
+          "operator": true
+        }
+      },
+      {
+        "expr": {
+          "kind": "binaryExpr",
+          "op": "+",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "my",
+              "json",
+              "a"
+            ]
+          },
+          "right": {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "42"
+          }
+        }
+      },
+      {
+        "expr": {
+          "kind": "binaryExpr",
+          "op": "+",
+          "left": {
+            "kind": "castExpr",
+            "expr": {
+              "kind": "columnRef",
+              "parts": [
+                "my",
+                "json",
+                "b"
+              ]
+            },
+            "type": "Int32",
+            "operator": true
+          },
+          "right": {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "42"
+          }
+        }
+      }
+    ]
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "test"
+      }
+    },
+    "columns": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "my",
+          "json"
+        ]
+      }
+    ],
+    "selectQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "{\"a\" : 42, \"b\" : 42}"
         }
       ]
     }
@@ -209,6 +554,292 @@
     ]
   },
   {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "test"
+      }
+    },
+    "columns": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "my",
+          "json"
+        ]
+      }
+    ],
+    "selectQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "{\"a\" : 43, \"b\" : 43}"
+        }
+      ]
+    }
+  },
+  {
+    "kind": "optimize",
+    "table": {
+      "kind": "tableRef",
+      "table": "test"
+    },
+    "final": true
+  },
+  {
+    "kind": "alter",
+    "table": {
+      "kind": "tableRef",
+      "table": "test"
+    },
+    "commands": [
+      {
+        "kind": "alterCommand",
+        "commandType": "MODIFY_COLUMN",
+        "column": {
+          "kind": "columnDef",
+          "name": "my.json",
+          "type": {
+            "name": "JSON",
+            "args": [
+              {
+                "kind": "namedField",
+                "name": "a",
+                "type": {
+                  "name": "UInt32"
+                }
+              },
+              {
+                "kind": "namedField",
+                "name": "b",
+                "type": {
+                  "name": "UInt32"
+                }
+              }
+            ]
+          }
+        }
+      }
+    ],
+    "trailingComments": [
+      "-- {serverError ALTER_OF_COLUMN_IS_FORBIDDEN}"
+    ]
+  },
+  {
+    "kind": "alter",
+    "table": {
+      "kind": "tableRef",
+      "table": "test"
+    },
+    "commands": [
+      {
+        "kind": "alterCommand",
+        "commandType": "UPDATE",
+        "assignments": [
+          {
+            "column": "my.json",
+            "expr": {
+              "kind": "literal",
+              "type": "String",
+              "value": "{}"
+            }
+          }
+        ],
+        "where": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ],
+    "trailingComments": [
+      "-- {serverError CANNOT_UPDATE_COLUMN}"
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "test"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "my.tuple",
+        "type": {
+          "name": "Tuple",
+          "args": [
+            {
+              "kind": "namedField",
+              "name": "a",
+              "type": {
+                "name": "UInt32"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "a1",
+        "type": {
+          "name": "UInt32"
+        },
+        "defaultKind": "MATERIALIZED",
+        "defaultExpr": {
+          "kind": "columnRef",
+          "parts": [
+            "my",
+            "tuple",
+            "a"
+          ]
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "a2",
+        "type": {
+          "name": "UInt32"
+        },
+        "defaultKind": "DEFAULT",
+        "defaultExpr": {
+          "kind": "columnRef",
+          "parts": [
+            "my",
+            "tuple",
+            "a"
+          ]
+        }
+      },
+      {
+        "kind": "indexDef",
+        "name": "idx1",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "my",
+            "tuple",
+            "a"
+          ]
+        },
+        "indexType": {
+          "name": "minmax"
+        }
+      },
+      {
+        "kind": "projectionDef",
+        "name": "prj1",
+        "query": {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "my",
+                "tuple"
+              ]
+            },
+            {
+              "kind": "columnRef",
+              "parts": [
+                "my",
+                "tuple",
+                "a"
+              ]
+            }
+          ],
+          "orderBy": [
+            {
+              "kind": "orderByItem",
+              "expr": {
+                "kind": "columnRef",
+                "parts": [
+                  "my",
+                  "tuple",
+                  "a"
+                ]
+              },
+              "direction": "ASC"
+            }
+          ]
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "my",
+            "tuple",
+            "a"
+          ]
+        }
+      },
+      {
+        "expr": {
+          "kind": "binaryExpr",
+          "op": "+",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "my",
+              "tuple",
+              "a"
+            ]
+          },
+          "right": {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "42"
+          }
+        }
+      }
+    ]
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "test"
+      }
+    },
+    "columns": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "my",
+          "tuple"
+        ]
+      }
+    ],
+    "selectQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "functionCall",
+          "name": "tuple",
+          "args": [
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "42"
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -232,6 +863,122 @@
         },
         "direction": "ASC"
       }
+    ]
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "test"
+      }
+    },
+    "columns": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "my",
+          "tuple"
+        ]
+      }
+    ],
+    "selectQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "functionCall",
+          "name": "tuple",
+          "args": [
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "43"
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "kind": "alter",
+    "table": {
+      "kind": "tableRef",
+      "table": "test"
+    },
+    "commands": [
+      {
+        "kind": "alterCommand",
+        "commandType": "MODIFY_COLUMN",
+        "column": {
+          "kind": "columnDef",
+          "name": "my.tuple",
+          "type": {
+            "name": "Tuple",
+            "args": [
+              {
+                "kind": "namedField",
+                "name": "a",
+                "type": {
+                  "name": "UInt32"
+                }
+              },
+              {
+                "kind": "namedField",
+                "name": "b",
+                "type": {
+                  "name": "UInt32"
+                }
+              }
+            ]
+          }
+        }
+      }
+    ],
+    "trailingComments": [
+      "-- {serverError ALTER_OF_COLUMN_IS_FORBIDDEN}"
+    ]
+  },
+  {
+    "kind": "alter",
+    "table": {
+      "kind": "tableRef",
+      "table": "test"
+    },
+    "commands": [
+      {
+        "kind": "alterCommand",
+        "commandType": "UPDATE",
+        "assignments": [
+          {
+            "column": "my.tuple",
+            "expr": {
+              "kind": "functionCall",
+              "name": "tuple",
+              "args": [
+                {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "0"
+                },
+                {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "0"
+                }
+              ]
+            }
+          }
+        ],
+        "where": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ],
+    "trailingComments": [
+      "-- {serverError CANNOT_UPDATE_COLUMN}"
     ]
   }
 ]

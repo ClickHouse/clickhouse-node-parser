@@ -1,5 +1,110 @@
 [
   {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "check_comments"
+    },
+    "ifExists": true,
+    "leadingComments": [
+      "-- Tags: zookeeper"
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "check_comments"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "column_name1",
+        "type": {
+          "name": "UInt8"
+        },
+        "defaultKind": "DEFAULT",
+        "defaultExpr": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        },
+        "comment": "comment"
+      },
+      {
+        "kind": "columnDef",
+        "name": "column_name2",
+        "type": {
+          "name": "UInt8"
+        },
+        "comment": "non default comment"
+      }
+    ],
+    "engine": {
+      "name": "ReplicatedMergeTree",
+      "args": [
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "/clickhouse/tables/{database}/test_00753/comments"
+        },
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "r1"
+        }
+      ]
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "column_name1"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "kind": "showCreate",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "check_comments"
+    }
+  },
+  {
+    "kind": "describe",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "check_comments"
+      }
+    }
+  },
+  {
+    "kind": "alter",
+    "table": {
+      "kind": "tableRef",
+      "table": "check_comments"
+    },
+    "commands": [
+      {
+        "kind": "alterCommand",
+        "commandType": "COMMENT_COLUMN",
+        "columnName": "column_name1",
+        "comment": {
+          "kind": "literal",
+          "type": "String",
+          "value": "another comment"
+        }
+      }
+    ]
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -46,6 +151,14 @@
           }
         }
       ]
+    }
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "check_comments"
     }
   }
 ]

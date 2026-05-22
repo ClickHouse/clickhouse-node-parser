@@ -1,5 +1,153 @@
 [
   {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "t_virtual_row_sparse_pk"
+    },
+    "ifExists": true,
+    "leadingComments": [
+      "-- Tags: no-random-merge-tree-settings",
+      "-- Test that read_in_order_use_virtual_row optimization works correctly when",
+      "-- the in-memory primary key index has fewer columns than expected due to",
+      "-- optimizeIndexColumns dropping suffix columns with high cardinality.",
+      "--",
+      "-- The primary_key_ratio_of_unique_prefix_values_to_skip_suffix_columns setting",
+      "-- (default 0.9) causes suffix columns to be dropped from the in-memory index",
+      "-- when prefix columns have >= 90% unique values across mark boundaries.",
+      "--",
+      "-- Previously, this caused \"Not found column in block\" errors because the",
+      "-- virtual_row_conversion expression expected all primary key columns, but",
+      "-- the pk_block only contained the columns present in the optimized index."
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "t_virtual_row_sparse_pk"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "a",
+        "type": {
+          "name": "UInt64"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "b",
+        "type": {
+          "name": "UInt64"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "c",
+        "type": {
+          "name": "String"
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree",
+      "args": []
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "a"
+          ]
+        }
+      },
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "b"
+          ]
+        }
+      }
+    ],
+    "settings": [
+      {
+        "name": "index_granularity",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "8192"
+        }
+      }
+    ],
+    "settingsAfterOrderBy": true,
+    "leadingComments": [
+      "-- Create table with composite primary key"
+    ]
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "t_virtual_row_sparse_pk"
+      }
+    },
+    "selectQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "number"
+          ]
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "number"
+          ]
+        },
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "data"
+        }
+      ],
+      "from": {
+        "kind": "tableFunctionRef",
+        "name": "numbers",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "81920"
+          }
+        ]
+      }
+    },
+    "leadingComments": [
+      "-- Insert enough data to have multiple marks (10 marks = 81920 rows with granularity 8192)",
+      "-- Use sequential numbers so column 'a' has 100% unique values at mark boundaries,",
+      "-- which triggers the index optimization to drop column 'b'"
+    ]
+  },
+  {
+    "kind": "optimize",
+    "table": {
+      "kind": "tableRef",
+      "table": "t_virtual_row_sparse_pk"
+    },
+    "final": true,
+    "leadingComments": [
+      "-- Force the merge to ensure we have a single part with optimized index"
+    ]
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -23,7 +171,7 @@
       {
         "kind": "orderByItem",
         "expr": {
-          "kind": "tuple",
+          "kind": "tupleLiteral",
           "elements": [
             {
               "kind": "columnRef",
@@ -59,6 +207,10 @@
           "value": "1"
         }
       }
+    ],
+    "leadingComments": [
+      "-- This query uses read_in_order_use_virtual_row optimization",
+      "-- It should work even when the index doesn't have all primary key columns"
     ]
   },
   {
@@ -100,7 +252,7 @@
       {
         "kind": "orderByItem",
         "expr": {
-          "kind": "tuple",
+          "kind": "tupleLiteral",
           "elements": [
             {
               "kind": "columnRef",
@@ -136,6 +288,9 @@
           "value": "1"
         }
       }
+    ],
+    "leadingComments": [
+      "-- Also test with PREWHERE which may take a different code path"
     ]
   },
   {
@@ -162,7 +317,7 @@
       {
         "kind": "orderByItem",
         "expr": {
-          "kind": "tuple",
+          "kind": "tupleLiteral",
           "elements": [
             {
               "kind": "columnRef",
@@ -198,6 +353,9 @@
           "value": "1"
         }
       }
+    ],
+    "leadingComments": [
+      "-- Test descending order"
     ]
   },
   {
@@ -210,6 +368,17 @@
       }
     ],
     "from": {
+      "kind": "tableRef",
+      "table": "t_virtual_row_sparse_pk"
+    },
+    "leadingComments": [
+      "-- Verify the total count is correct"
+    ]
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
       "kind": "tableRef",
       "table": "t_virtual_row_sparse_pk"
     }

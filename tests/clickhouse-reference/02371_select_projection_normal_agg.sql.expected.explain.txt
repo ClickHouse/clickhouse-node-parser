@@ -1,3 +1,253 @@
+DropQuery  video_log (children 1)
+ Identifier video_log
+
+CreateQuery video_log (children 3)
+ Identifier video_log
+ Columns definition (children 1)
+  ExpressionList (children 6)
+   ColumnDeclaration datetime (children 1)
+    DataType DateTime
+   ColumnDeclaration user_id (children 1)
+    DataType UInt64
+   ColumnDeclaration device_id (children 1)
+    DataType UInt64
+   ColumnDeclaration domain (children 1)
+    DataType LowCardinality (children 1)
+     ExpressionList (children 1)
+      DataType String
+   ColumnDeclaration bytes (children 1)
+    DataType UInt64
+   ColumnDeclaration duration (children 1)
+    DataType UInt64
+ Storage definition (children 4)
+  Function MergeTree
+  Function toDate (children 1)
+   ExpressionList (children 1)
+    Identifier datetime
+  Function tuple (children 1)
+   ExpressionList (children 2)
+    Identifier user_id
+    Identifier device_id
+  Set
+
+DropQuery  rng (children 1)
+ Identifier rng
+
+CreateQuery rng (children 3)
+ Identifier rng
+ Columns definition (children 1)
+  ExpressionList (children 5)
+   ColumnDeclaration user_id_raw (children 1)
+    DataType UInt64
+   ColumnDeclaration device_id_raw (children 1)
+    DataType UInt64
+   ColumnDeclaration domain_raw (children 1)
+    DataType UInt64
+   ColumnDeclaration bytes_raw (children 1)
+    DataType UInt64
+   ColumnDeclaration duration_raw (children 1)
+    DataType UInt64
+ Storage definition (children 1)
+  Function GenerateRandom (children 1)
+   ExpressionList (children 1)
+    Literal UInt64_1024
+
+InsertQuery   (children 2)
+ Identifier video_log
+ SelectWithUnionQuery (children 1)
+  ExpressionList (children 1)
+   SelectQuery (children 3)
+    ExpressionList (children 6)
+     Function plus (children 1)
+      ExpressionList (children 2)
+       Function toUnixTimestamp (children 1)
+        ExpressionList (children 1)
+         Literal '2022-07-22 01:00:00'
+       Function divide (children 1)
+        ExpressionList (children 2)
+         Function rowNumberInAllBlocks (children 1)
+          ExpressionList
+         Literal UInt64_20000
+     Function modulo (alias user_id) (children 1)
+      ExpressionList (children 2)
+       Identifier user_id_raw
+       Literal UInt64_100000000
+     Function modulo (alias device_id) (children 1)
+      ExpressionList (children 2)
+       Identifier device_id_raw
+       Literal UInt64_200000000
+     Function modulo (children 1)
+      ExpressionList (children 2)
+       Identifier domain_raw
+       Literal UInt64_100
+     Function plus (children 1)
+      ExpressionList (children 2)
+       Function modulo (children 1)
+        ExpressionList (children 2)
+         Identifier bytes_raw
+         Literal UInt64_1024
+       Literal UInt64_128
+     Function plus (children 1)
+      ExpressionList (children 2)
+       Function modulo (children 1)
+        ExpressionList (children 2)
+         Identifier duration_raw
+         Literal UInt64_300
+       Literal UInt64_100
+    TablesInSelectQuery (children 1)
+     TablesInSelectQueryElement (children 1)
+      TableExpression (children 1)
+       TableIdentifier rng
+    Literal UInt64_1728000
+
+InsertQuery   (children 2)
+ Identifier video_log
+ SelectWithUnionQuery (children 1)
+  ExpressionList (children 1)
+   SelectQuery (children 3)
+    ExpressionList (children 6)
+     Function plus (children 1)
+      ExpressionList (children 2)
+       Function toUnixTimestamp (children 1)
+        ExpressionList (children 1)
+         Literal '2022-07-22 01:00:00'
+       Function divide (children 1)
+        ExpressionList (children 2)
+         Function rowNumberInAllBlocks (children 1)
+          ExpressionList
+         Literal UInt64_20000
+     Function modulo (alias user_id) (children 1)
+      ExpressionList (children 2)
+       Identifier user_id_raw
+       Literal UInt64_100000000
+     Literal UInt64_100 (alias device_id)
+     Function modulo (children 1)
+      ExpressionList (children 2)
+       Identifier domain_raw
+       Literal UInt64_100
+     Function plus (children 1)
+      ExpressionList (children 2)
+       Function modulo (children 1)
+        ExpressionList (children 2)
+         Identifier bytes_raw
+         Literal UInt64_1024
+       Literal UInt64_128
+     Function plus (children 1)
+      ExpressionList (children 2)
+       Function modulo (children 1)
+        ExpressionList (children 2)
+         Identifier duration_raw
+         Literal UInt64_300
+       Literal UInt64_100
+    TablesInSelectQuery (children 1)
+     TablesInSelectQueryElement (children 1)
+      TableExpression (children 1)
+       TableIdentifier rng
+    Literal UInt64_10
+
+DropQuery  video_log_result (children 1)
+ Identifier video_log_result
+
+CreateQuery video_log_result (children 3)
+ Identifier video_log_result
+ Columns definition (children 1)
+  ExpressionList (children 3)
+   ColumnDeclaration hour (children 1)
+    DataType DateTime
+   ColumnDeclaration sum_bytes (children 1)
+    DataType UInt64
+   ColumnDeclaration avg_duration (children 1)
+    DataType Float64
+ Storage definition (children 4)
+  Function MergeTree
+  Function toDate (children 1)
+   ExpressionList (children 1)
+    Identifier hour
+  Identifier sum_bytes
+  Set
+
+InsertQuery   (children 2)
+ Identifier video_log_result
+ SelectWithUnionQuery (children 1)
+  ExpressionList (children 1)
+   SelectQuery (children 4)
+    ExpressionList (children 3)
+     Function toStartOfHour (alias hour) (children 1)
+      ExpressionList (children 1)
+       Identifier datetime
+     Function sum (children 1)
+      ExpressionList (children 1)
+       Identifier bytes
+     Function avg (children 1)
+      ExpressionList (children 1)
+       Identifier duration
+    TablesInSelectQuery (children 1)
+     TablesInSelectQueryElement (children 1)
+      TableExpression (children 1)
+       TableIdentifier video_log
+    Function and (children 1)
+     ExpressionList (children 2)
+      Function equals (children 1)
+       ExpressionList (children 2)
+        Function toDate (children 1)
+         ExpressionList (children 1)
+          Identifier hour
+        Literal '2022-07-22'
+      Function equals (children 1)
+       ExpressionList (children 2)
+        Identifier device_id
+        Literal '100'
+    ExpressionList (children 1)
+     Identifier hour
+
+AlterQuery  video_log (children 2)
+ ExpressionList (children 1)
+  AlterCommand ADD_PROJECTION (children 1)
+   Projection (children 1)
+    ProjectionSelectQuery (children 2)
+     ExpressionList (children 4)
+      Identifier datetime
+      Identifier device_id
+      Identifier bytes
+      Identifier duration
+     Identifier device_id
+ Identifier video_log
+
+AlterQuery  video_log (children 3)
+ ExpressionList (children 1)
+  AlterCommand MATERIALIZE_PROJECTION (children 1)
+   Identifier p_norm
+ Identifier video_log
+ Set
+
+AlterQuery  video_log (children 2)
+ ExpressionList (children 1)
+  AlterCommand ADD_PROJECTION (children 1)
+   Projection (children 1)
+    ProjectionSelectQuery (children 2)
+     ExpressionList (children 4)
+      Function toStartOfHour (alias hour) (children 1)
+       ExpressionList (children 1)
+        Identifier datetime
+      Identifier domain
+      Function sum (children 1)
+       ExpressionList (children 1)
+        Identifier bytes
+      Function avg (children 1)
+       ExpressionList (children 1)
+        Identifier duration
+     ExpressionList (children 2)
+      Identifier hour
+      Identifier domain
+ Identifier video_log
+
+AlterQuery  video_log (children 3)
+ ExpressionList (children 1)
+  AlterCommand MATERIALIZE_PROJECTION (children 1)
+   Identifier p_agg
+ Identifier video_log
+ Set
+
 SelectWithUnionQuery (children 1)
  ExpressionList (children 1)
   SelectQuery (children 3)

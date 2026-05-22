@@ -1,5 +1,111 @@
 [
   {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "t_in_tuple_index"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "t_in_tuple_index"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "ID",
+        "type": {
+          "name": "String"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "USER_ID",
+        "type": {
+          "name": "String"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "PLATFORM",
+        "type": {
+          "name": "LowCardinality",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "String"
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree",
+      "args": []
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "PLATFORM"
+          ]
+        }
+      },
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "USER_ID"
+          ]
+        }
+      },
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "ID"
+          ]
+        }
+      }
+    ],
+    "settings": [
+      {
+        "name": "index_granularity",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "2048"
+        }
+      },
+      {
+        "name": "index_granularity_bytes",
+        "value": {
+          "kind": "literal",
+          "type": "String",
+          "value": "10Mi"
+        }
+      }
+    ],
+    "settingsAfterOrderBy": true
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "t_in_tuple_index"
+      }
+    }
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -16,7 +122,7 @@
       "kind": "inExpr",
       "negated": false,
       "expr": {
-        "kind": "tuple",
+        "kind": "tupleLiteral",
         "elements": [
           {
             "kind": "columnRef",
@@ -35,7 +141,7 @@
       },
       "values": [
         {
-          "kind": "tuple",
+          "kind": "tupleLiteral",
           "elements": [
             {
               "kind": "literal",
@@ -70,7 +176,7 @@
       "kind": "inExpr",
       "negated": false,
       "expr": {
-        "kind": "tuple",
+        "kind": "tupleLiteral",
         "elements": [
           {
             "kind": "columnRef",
@@ -89,7 +195,7 @@
       },
       "values": [
         {
-          "kind": "tuple",
+          "kind": "tupleLiteral",
           "elements": [
             {
               "kind": "literal",
@@ -105,7 +211,7 @@
           "source": "('insta', '33')"
         },
         {
-          "kind": "tuple",
+          "kind": "tupleLiteral",
           "elements": [
             {
               "kind": "literal",

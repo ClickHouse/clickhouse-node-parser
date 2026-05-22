@@ -1,3 +1,13 @@
+-- Tags: no-random-settings, no-fasttest
+
+set allow_experimental_dynamic_type = 1;
+SET enable_json_type = 1;
+
+
+drop table if exists test;
+create table test (d Dynamic, json JSON) engine=MergeTree order by tuple() settings min_rows_for_wide_part=0, min_bytes_for_wide_part=1, object_serialization_version='v2', dynamic_serialization_version='v2';
+insert into test select number, '{"a" : 42, "b" : "Hello, World"}' from numbers(10000000);
+
 SELECT
     `table`,
     sum(rows) AS rows,
@@ -8,3 +18,5 @@ FROM system.parts
 WHERE active AND (database = currentDatabase()) AND (`table` = 'test')
 GROUP BY `table`
 ORDER BY `table` ASC;
+
+drop table test;

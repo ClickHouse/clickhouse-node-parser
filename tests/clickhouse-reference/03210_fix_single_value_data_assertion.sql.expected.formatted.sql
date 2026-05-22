@@ -1,7 +1,7 @@
 SELECT
     intDiv(number, 2) AS k,
     sumArgMax(number, number % 20),
-    sumArgMax(number, leftPad(toString(number % 20), 5, '0')),
+    sumArgMax(number, leftPad(toString(number % 20), 5, '0')), -- Pad with 0 to preserve number ordering
     sumArgMax(number, [number % 20, number % 20]),
     sumArgMin(number, number % 20),
     sumArgMin(number, leftPad(toString(number % 20), 5, '0')),

@@ -1,3 +1,4 @@
+-- Test that UInt8 type is processed correctly as bool
 SELECT
     1
     AND 2,

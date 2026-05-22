@@ -1,3 +1,8 @@
+-- Tags: no-parallel
+-- Tag no-parallel: Messes with internal cache
+SYSTEM CLEAR QUERY CACHE;
+
+-- Cache the query after the 1st query invocation
 SELECT 1
 SETTINGS
     use_query_cache = true,
@@ -8,11 +13,13 @@ FROM `system`.query_cache;
 
 SELECT '---';
 
+-- Cache the query result after the 2nd query invocation
 SELECT 1
 SETTINGS
     use_query_cache = true,
     query_cache_min_query_runs = 1;
 
+-- Cache the query result after the 3rd query invocation
 SELECT 1
 SETTINGS
     use_query_cache = true,

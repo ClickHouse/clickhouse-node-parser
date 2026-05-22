@@ -1,3 +1,203 @@
+DropQuery  events (children 1)
+ Identifier events
+
+Set
+
+CreateQuery events (children 3)
+ Identifier events
+ Columns definition (children 1)
+  ExpressionList (children 7)
+   ColumnDeclaration Id (children 1)
+    DataType UInt64
+   ColumnDeclaration Idu32 (children 2)
+    DataType UInt32
+    Function toUInt32 (children 1)
+     ExpressionList (children 1)
+      Identifier Id
+   ColumnDeclaration Idu32n (children 2)
+    DataType Nullable (children 1)
+     ExpressionList (children 1)
+      DataType UInt32
+    Function if (children 1)
+     ExpressionList (children 3)
+      Function equals (children 1)
+       ExpressionList (children 2)
+        Identifier Id
+        Literal UInt64_111
+      Literal NULL
+      Function toUInt32 (children 1)
+       ExpressionList (children 1)
+        Identifier Id
+   ColumnDeclaration Idlcn (children 2)
+    DataType LowCardinality (children 1)
+     ExpressionList (children 1)
+      DataType Nullable (children 1)
+       ExpressionList (children 1)
+        DataType UInt64
+    Function if (children 1)
+     ExpressionList (children 3)
+      Function equals (children 1)
+       ExpressionList (children 2)
+        Identifier Id
+        Literal UInt64_111
+      Literal NULL
+      Identifier Id
+   ColumnDeclaration Idlc (children 2)
+    DataType LowCardinality (children 1)
+     ExpressionList (children 1)
+      DataType UInt64
+    Identifier Id
+   ColumnDeclaration Payload (children 1)
+    DataType String
+   ColumnDeclaration Time (children 1)
+    DataType DateTime
+ Storage definition (children 1)
+  Function Memory
+
+InsertQuery   (children 2)
+ Identifier events
+ SelectWithUnionQuery (children 1)
+  ExpressionList (children 2)
+   SelectQuery (children 2)
+    ExpressionList (children 3)
+     Identifier number
+     Function concat (children 1)
+      ExpressionList (children 2)
+       Literal 'Payload_'
+       Function toString (children 1)
+        ExpressionList (children 1)
+         Identifier number
+     Function plus (children 1)
+      ExpressionList (children 2)
+       Function toDateTime (children 1)
+        ExpressionList (children 1)
+         Literal '2024-01-01 00:00:00'
+       Function toIntervalMinute (children 1)
+        ExpressionList (children 1)
+         Identifier number
+    TablesInSelectQuery (children 1)
+     TablesInSelectQueryElement (children 1)
+      TableExpression (children 1)
+       Function numbers (children 1)
+        ExpressionList (children 1)
+         Literal UInt64_500
+   SelectQuery (children 1)
+    ExpressionList (children 3)
+     Literal UInt64_32
+     Literal 'Payload_Dup'
+     Function toDateTime (children 1)
+      ExpressionList (children 1)
+       Literal '2024-01-01 00:10:00'
+
+InsertQuery   (children 2)
+ Identifier events
+ SelectWithUnionQuery (children 1)
+  ExpressionList (children 1)
+   SelectQuery (children 2)
+    ExpressionList (children 3)
+     Identifier number
+     Function concat (children 1)
+      ExpressionList (children 2)
+       Literal 'Payload_'
+       Function toString (children 1)
+        ExpressionList (children 1)
+         Identifier number
+     Function plus (children 1)
+      ExpressionList (children 2)
+       Function toDateTime (children 1)
+        ExpressionList (children 1)
+         Literal '2024-01-01 00:00:00'
+       Function toIntervalMinute (children 1)
+        ExpressionList (children 1)
+         Identifier number
+    TablesInSelectQuery (children 1)
+     TablesInSelectQueryElement (children 1)
+      TableExpression (children 1)
+       Function numbers (children 1)
+        ExpressionList (children 2)
+         Literal UInt64_500
+         Literal UInt64_500
+
+DropQuery  attributes (children 1)
+ Identifier attributes
+
+CreateQuery attributes (children 3)
+ Identifier attributes
+ Columns definition (children 1)
+  ExpressionList (children 3)
+   ColumnDeclaration EventId (children 1)
+    DataType UInt64
+   ColumnDeclaration OtherId (children 1)
+    DataType Nullable (children 1)
+     ExpressionList (children 1)
+      DataType UInt32
+   ColumnDeclaration Attribute (children 1)
+    DataType String
+ Storage definition (children 2)
+  Function MergeTree
+  Identifier EventId
+
+InsertQuery   (children 2)
+ Identifier attributes
+ SelectWithUnionQuery (children 1)
+  ExpressionList (children 1)
+   SelectQuery (children 2)
+    ExpressionList (children 3)
+     Function modulo (alias EventId) (children 1)
+      ExpressionList (children 2)
+       Function sipHash64 (children 1)
+        ExpressionList (children 2)
+         Identifier number
+         Literal UInt64_1
+       Literal UInt64_10000000
+     Function modulo (alias OtherId) (children 1)
+      ExpressionList (children 2)
+       Function sipHash64 (children 1)
+        ExpressionList (children 2)
+         Identifier number
+         Literal UInt64_1
+       Literal UInt64_10000000
+     Function concat (alias Attribute) (children 1)
+      ExpressionList (children 2)
+       Literal 'Attribute_'
+       Function toString (children 1)
+        ExpressionList (children 1)
+         Identifier number
+    TablesInSelectQuery (children 1)
+     TablesInSelectQueryElement (children 1)
+      TableExpression (children 1)
+       Function numbers (children 1)
+        ExpressionList (children 1)
+         Literal UInt64_1000000
+
+InsertQuery   (children 2)
+ Identifier attributes
+ SelectWithUnionQuery (children 1)
+  ExpressionList (children 1)
+   SelectQuery (children 1)
+    ExpressionList (children 3)
+     Literal UInt64_32 (alias EventId)
+     Literal UInt64_32 (alias OtherId)
+     Literal 'Attribute_Dup' (alias Attribute)
+
+InsertQuery   (children 2)
+ Identifier attributes
+ SelectWithUnionQuery (children 1)
+  ExpressionList (children 1)
+   SelectQuery (children 1)
+    ExpressionList (children 3)
+     Literal UInt64_1000001 (alias EventId)
+     Literal NULL (alias OtherId)
+     Literal 'Attribute_Dup' (alias Attribute)
+
+Set
+
+Set
+
+Set
+
+Set
+
 SelectWithUnionQuery (children 1)
  ExpressionList (children 1)
   SelectQuery (children 3)
@@ -279,6 +479,8 @@ SelectWithUnionQuery (children 1)
         Identifier t1.OtherId
         Identifier t0.Idu32n
    Set
+
+SYSTEM query
 
 SelectWithUnionQuery (children 1)
  ExpressionList (children 1)

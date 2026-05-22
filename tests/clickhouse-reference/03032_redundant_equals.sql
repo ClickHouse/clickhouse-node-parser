@@ -1,3 +1,13 @@
+-- add_minmax_index_for_numeric_columns=0: Different plan
+DROP TABLE IF EXISTS test_table;
+CREATE TABLE test_table
+(
+    k UInt64,
+)
+ENGINE = MergeTree
+ORDER BY k SETTINGS index_granularity = 8192, index_granularity_bytes = '10Mi', add_minmax_index_for_numeric_columns=0;
+INSERT INTO test_table SELECT number FROM numbers(100000);
+SET enable_analyzer = 1;
 SELECT * FROM test_table WHERE k in (100) = 1;
 SELECT * FROM test_table WHERE k = (100) = 1;
 SELECT * FROM test_table WHERE k not in (100) = 0;
@@ -66,3 +76,4 @@ FROM
 )
 WHERE
     explain LIKE '%Granules: 1/%';
+DROP TABLE test_table;

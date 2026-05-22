@@ -1,3 +1,44 @@
+Set
+
+Set
+
+Set
+
+Set
+
+Set
+
+CreateQuery tab0 (children 3)
+ Identifier tab0
+ Columns definition (children 1)
+  ExpressionList (children 2)
+   ColumnDeclaration x (children 1)
+    DataType UInt32
+   ColumnDeclaration y (children 1)
+    DataType UInt32
+ Storage definition (children 3)
+  Function MergeTree
+  Identifier x
+  Set
+
+InsertQuery   (children 2)
+ Identifier tab0
+ SelectWithUnionQuery (children 1)
+  ExpressionList (children 1)
+   SelectQuery (children 2)
+    ExpressionList (children 2)
+     Identifier number
+     Identifier number
+    TablesInSelectQuery (children 1)
+     TablesInSelectQueryElement (children 1)
+      TableExpression (children 1)
+       Function numbers (children 1)
+        ExpressionList (children 1)
+         Function multiply (children 1)
+          ExpressionList (children 2)
+           Literal UInt64_8192
+           Literal UInt64_123
+
 SelectWithUnionQuery (children 1)
  ExpressionList (children 1)
   SelectQuery (children 2)
@@ -970,6 +1011,51 @@ SelectWithUnionQuery (children 1)
                              ExpressionList (children 1)
                               Literal UInt64_1
 
+CreateQuery tab1 (children 3)
+ Identifier tab1
+ Columns definition (children 2)
+  ExpressionList (children 4)
+   ColumnDeclaration tenant (children 1)
+    DataType String
+   ColumnDeclaration recordTimestamp (children 1)
+    DataType Int64
+   ColumnDeclaration responseBody (children 1)
+    DataType String
+   ColumnDeclaration colAlias (children 2)
+    DataType String
+    Function concat (children 1)
+     ExpressionList (children 2)
+      Identifier responseBody
+      Literal 'something else'
+  ExpressionList (children 1)
+   Index (children 2)
+    Identifier colAlias
+    Function ngrambf_v1 (children 1)
+     ExpressionList (children 4)
+      Literal UInt64_3
+      Literal UInt64_2097152
+      Literal UInt64_3
+      Literal UInt64_0
+ Storage definition (children 3)
+  Function MergeTree
+  Identifier recordTimestamp
+  Set
+
+InsertQuery   (children 2)
+ Identifier tab1
+ SelectWithUnionQuery (children 1)
+  ExpressionList (children 1)
+   SelectQuery (children 3)
+    ExpressionList (children 1)
+     Asterisk
+    TablesInSelectQuery (children 1)
+     TablesInSelectQueryElement (children 1)
+      TableExpression (children 1)
+       Function generateRandom (children 1)
+        ExpressionList (children 1)
+         Literal 'tenant String, recordTimestamp Int64, responseBody String'
+    Literal UInt64_10
+
 SelectWithUnionQuery (children 1)
  ExpressionList (children 1)
   SelectQuery (children 2)
@@ -1041,6 +1127,47 @@ SelectWithUnionQuery (children 1)
                           ExpressionList (children 2)
                            Identifier colAlias
                            Literal '%abcd%'
+
+CreateQuery tab2 (children 3)
+ Identifier tab2
+ Storage definition (children 3)
+  Function ReplacingMergeTree
+  Identifier n
+  Set
+ SelectWithUnionQuery (children 1)
+  ExpressionList (children 1)
+   SelectQuery (children 2)
+    ExpressionList (children 1)
+     Function intDiv (alias n) (children 1)
+      ExpressionList (children 2)
+       Identifier number
+       Literal UInt64_2
+    TablesInSelectQuery (children 1)
+     TablesInSelectQueryElement (children 1)
+      TableExpression (children 1)
+       Function numbers (children 1)
+        ExpressionList (children 1)
+         Function multiply (children 1)
+          ExpressionList (children 2)
+           Literal UInt64_8192
+           Literal UInt64_123
+
+CreateQuery test_view (children 2)
+ Identifier test_view
+ SelectWithUnionQuery (children 1)
+  ExpressionList (children 1)
+   SelectQuery (children 2)
+    ExpressionList (children 1)
+     Asterisk
+    TablesInSelectQuery (children 1)
+     TablesInSelectQueryElement (children 1)
+      TableExpression (children 1)
+       Function remote (children 1)
+        ExpressionList (children 3)
+         Literal '127.0.0.{1,2}'
+         Function currentDatabase (children 1)
+          ExpressionList
+         Identifier tab2
 
 SelectWithUnionQuery (children 1)
  ExpressionList (children 1)

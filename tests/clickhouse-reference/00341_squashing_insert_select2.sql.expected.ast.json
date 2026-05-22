@@ -1,5 +1,173 @@
 [
   {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "numbers_squashed"
+    },
+    "ifExists": true,
+    "leadingComments": [
+      "-- Tags: log-engine"
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "numbers_squashed"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "number",
+        "type": {
+          "name": "UInt8"
+        }
+      }
+    ],
+    "engine": {
+      "name": "StripeLog"
+    }
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "min_insert_block_size_rows",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "100"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "min_insert_block_size_bytes",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "max_insert_threads",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "max_threads",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "numbers_squashed"
+      }
+    },
+    "selectQuery": {
+      "kind": "union",
+      "queries": [
+        {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "alias",
+              "expr": {
+                "kind": "functionCall",
+                "name": "arrayJoin",
+                "args": [
+                  {
+                    "kind": "functionCall",
+                    "name": "range",
+                    "args": [
+                      {
+                        "kind": "literal",
+                        "type": "UInt64",
+                        "value": "10"
+                      }
+                    ]
+                  }
+                ]
+              },
+              "alias": "number"
+            }
+          ]
+        },
+        {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "functionCall",
+              "name": "arrayJoin",
+              "args": [
+                {
+                  "kind": "functionCall",
+                  "name": "range",
+                  "args": [
+                    {
+                      "kind": "literal",
+                      "type": "UInt64",
+                      "value": "100"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "functionCall",
+              "name": "arrayJoin",
+              "args": [
+                {
+                  "kind": "functionCall",
+                  "name": "range",
+                  "args": [
+                    {
+                      "kind": "literal",
+                      "type": "UInt64",
+                      "value": "10"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -78,6 +246,326 @@
       }
     ],
     "from": {
+      "kind": "tableRef",
+      "table": "numbers_squashed"
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "numbers_squashed"
+      }
+    },
+    "selectQuery": {
+      "kind": "union",
+      "queries": [
+        {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "alias",
+              "expr": {
+                "kind": "functionCall",
+                "name": "arrayJoin",
+                "args": [
+                  {
+                    "kind": "functionCall",
+                    "name": "range",
+                    "args": [
+                      {
+                        "kind": "literal",
+                        "type": "UInt64",
+                        "value": "100"
+                      }
+                    ]
+                  }
+                ]
+              },
+              "alias": "number"
+            }
+          ]
+        },
+        {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "functionCall",
+              "name": "arrayJoin",
+              "args": [
+                {
+                  "kind": "functionCall",
+                  "name": "range",
+                  "args": [
+                    {
+                      "kind": "literal",
+                      "type": "UInt64",
+                      "value": "10"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "functionCall",
+              "name": "arrayJoin",
+              "args": [
+                {
+                  "kind": "functionCall",
+                  "name": "range",
+                  "args": [
+                    {
+                      "kind": "literal",
+                      "type": "UInt64",
+                      "value": "100"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "numbers_squashed"
+      }
+    },
+    "selectQuery": {
+      "kind": "union",
+      "queries": [
+        {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "alias",
+              "expr": {
+                "kind": "functionCall",
+                "name": "arrayJoin",
+                "args": [
+                  {
+                    "kind": "functionCall",
+                    "name": "range",
+                    "args": [
+                      {
+                        "kind": "literal",
+                        "type": "UInt64",
+                        "value": "10"
+                      }
+                    ]
+                  }
+                ]
+              },
+              "alias": "number"
+            }
+          ]
+        },
+        {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "functionCall",
+              "name": "arrayJoin",
+              "args": [
+                {
+                  "kind": "functionCall",
+                  "name": "range",
+                  "args": [
+                    {
+                      "kind": "literal",
+                      "type": "UInt64",
+                      "value": "100"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "functionCall",
+              "name": "arrayJoin",
+              "args": [
+                {
+                  "kind": "functionCall",
+                  "name": "range",
+                  "args": [
+                    {
+                      "kind": "literal",
+                      "type": "UInt64",
+                      "value": "100"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "numbers_squashed"
+      }
+    },
+    "selectQuery": {
+      "kind": "union",
+      "queries": [
+        {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "alias",
+              "expr": {
+                "kind": "functionCall",
+                "name": "arrayJoin",
+                "args": [
+                  {
+                    "kind": "functionCall",
+                    "name": "range",
+                    "args": [
+                      {
+                        "kind": "literal",
+                        "type": "UInt64",
+                        "value": "10"
+                      }
+                    ]
+                  }
+                ]
+              },
+              "alias": "number"
+            }
+          ]
+        },
+        {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "functionCall",
+              "name": "arrayJoin",
+              "args": [
+                {
+                  "kind": "functionCall",
+                  "name": "range",
+                  "args": [
+                    {
+                      "kind": "literal",
+                      "type": "UInt64",
+                      "value": "10"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "functionCall",
+              "name": "arrayJoin",
+              "args": [
+                {
+                  "kind": "functionCall",
+                  "name": "range",
+                  "args": [
+                    {
+                      "kind": "literal",
+                      "type": "UInt64",
+                      "value": "10"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "functionCall",
+              "name": "arrayJoin",
+              "args": [
+                {
+                  "kind": "functionCall",
+                  "name": "range",
+                  "args": [
+                    {
+                      "kind": "literal",
+                      "type": "UInt64",
+                      "value": "100"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "functionCall",
+              "name": "arrayJoin",
+              "args": [
+                {
+                  "kind": "functionCall",
+                  "name": "range",
+                  "args": [
+                    {
+                      "kind": "literal",
+                      "type": "UInt64",
+                      "value": "10"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "min_insert_block_size_rows",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "10"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
       "kind": "tableRef",
       "table": "numbers_squashed"
     }

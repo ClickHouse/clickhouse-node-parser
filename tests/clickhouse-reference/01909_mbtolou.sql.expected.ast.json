@@ -1,0 +1,672 @@
+[
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "DATE_INFO_DICT"
+    },
+    "ifExists": true,
+    "leadingComments": [
+      "-- BIGMDM.DATE_INFO_DICT definition"
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "DATE_INFO_DICT"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "TV",
+        "type": {
+          "name": "Date"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "SHAMSI",
+        "type": {
+          "name": "String"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "HIJRI",
+        "type": {
+          "name": "String"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "MILADI",
+        "type": {
+          "name": "String"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "S_DAY",
+        "type": {
+          "name": "UInt8"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "H_DAY",
+        "type": {
+          "name": "UInt8"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "S_MONTH",
+        "type": {
+          "name": "UInt8"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "H_MONTH",
+        "type": {
+          "name": "UInt8"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "WEEK_DAY_NAME",
+        "type": {
+          "name": "String"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "DAY_NUMBER",
+        "type": {
+          "name": "UInt8"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "HOLIDAY",
+        "type": {
+          "name": "UInt8"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "WEEK_NAME",
+        "type": {
+          "name": "String"
+        }
+      }
+    ],
+    "engine": {
+      "name": "Join",
+      "args": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "ANY"
+          ]
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "LEFT"
+          ]
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "TV"
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "kind": "truncate",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "DATE_INFO_DICT"
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "DATE_INFO_DICT"
+      }
+    },
+    "columns": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "TV"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "SHAMSI"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "HIJRI"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "MILADI"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "S_DAY"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "H_DAY"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "S_MONTH"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "H_MONTH"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "WEEK_DAY_NAME"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "DAY_NUMBER"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "HOLIDAY"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "WEEK_NAME"
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "with": [
+      {
+        "kind": "cteSubquery",
+        "name": "A",
+        "query": {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "alias",
+              "expr": {
+                "kind": "functionCall",
+                "name": "rowNumberInAllBlocks",
+                "args": []
+              },
+              "alias": "R"
+            },
+            {
+              "kind": "alias",
+              "expr": {
+                "kind": "functionCall",
+                "name": "addDays",
+                "args": [
+                  {
+                    "kind": "functionCall",
+                    "name": "toDate",
+                    "args": [
+                      {
+                        "kind": "literal",
+                        "type": "String",
+                        "value": "2021-05-18"
+                      }
+                    ]
+                  },
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "R"
+                    ]
+                  }
+                ]
+              },
+              "alias": "TVV"
+            }
+          ],
+          "from": {
+            "kind": "tableFunctionRef",
+            "name": "numbers",
+            "args": [
+              {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "5"
+              }
+            ]
+          }
+        }
+      },
+      {
+        "kind": "cteSubquery",
+        "name": "B",
+        "query": {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "alias",
+              "expr": {
+                "kind": "functionCall",
+                "name": "rowNumberInAllBlocks",
+                "args": []
+              },
+              "alias": "R"
+            },
+            {
+              "kind": "alias",
+              "expr": {
+                "kind": "functionCall",
+                "name": "toDateTime",
+                "args": [
+                  {
+                    "kind": "literal",
+                    "type": "NULL",
+                    "value": "NULL"
+                  }
+                ]
+              },
+              "alias": "TVV"
+            }
+          ],
+          "from": {
+            "kind": "tableFunctionRef",
+            "name": "numbers",
+            "args": [
+              {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "1"
+              }
+            ]
+          }
+        }
+      }
+    ],
+    "select": [
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "joinGet",
+          "args": [
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "DATE_INFO_DICT"
+            },
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "SHAMSI"
+            },
+            {
+              "kind": "functionCall",
+              "name": "toDate",
+              "args": [
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "A",
+                    "TVV"
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        "alias": "TV1"
+      },
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "concat",
+          "args": [
+            {
+              "kind": "functionCall",
+              "name": "substr",
+              "args": [
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "TV1"
+                  ]
+                },
+                {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "3"
+                },
+                {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "8"
+                }
+              ]
+            },
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": " : "
+            },
+            {
+              "kind": "functionCall",
+              "name": "toString",
+              "args": [
+                {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "1"
+                }
+              ]
+            }
+          ]
+        },
+        "alias": "TV_CHAR_1"
+      }
+    ],
+    "from": {
+      "left": {
+        "kind": "tableRef",
+        "table": "A"
+      },
+      "kind": "joinExpr",
+      "joinType": "LEFT",
+      "right": {
+        "kind": "tableRef",
+        "table": "B"
+      },
+      "constraint": {
+        "kind": "using",
+        "columns": [
+          "R"
+        ]
+      }
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "TV1"
+          ]
+        },
+        "direction": "ASC"
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "with": [
+      {
+        "kind": "cteSubquery",
+        "name": "A",
+        "query": {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "alias",
+              "expr": {
+                "kind": "functionCall",
+                "name": "rowNumberInAllBlocks",
+                "args": []
+              },
+              "alias": "R"
+            },
+            {
+              "kind": "alias",
+              "expr": {
+                "kind": "functionCall",
+                "name": "addDays",
+                "args": [
+                  {
+                    "kind": "functionCall",
+                    "name": "toDate",
+                    "args": [
+                      {
+                        "kind": "literal",
+                        "type": "String",
+                        "value": "2021-05-18"
+                      }
+                    ]
+                  },
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "R"
+                    ]
+                  }
+                ]
+              },
+              "alias": "TVV"
+            }
+          ],
+          "from": {
+            "kind": "tableFunctionRef",
+            "name": "numbers",
+            "args": [
+              {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "5"
+              }
+            ]
+          }
+        }
+      },
+      {
+        "kind": "cteSubquery",
+        "name": "B",
+        "query": {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "alias",
+              "expr": {
+                "kind": "functionCall",
+                "name": "rowNumberInAllBlocks",
+                "args": []
+              },
+              "alias": "R"
+            },
+            {
+              "kind": "alias",
+              "expr": {
+                "kind": "functionCall",
+                "name": "toDateTime",
+                "args": [
+                  {
+                    "kind": "literal",
+                    "type": "NULL",
+                    "value": "NULL"
+                  }
+                ]
+              },
+              "alias": "TVV"
+            }
+          ],
+          "from": {
+            "kind": "tableFunctionRef",
+            "name": "numbers",
+            "args": [
+              {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "1"
+              }
+            ]
+          }
+        }
+      }
+    ],
+    "select": [
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "joinGetOrNull",
+          "args": [
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "DATE_INFO_DICT"
+            },
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "SHAMSI"
+            },
+            {
+              "kind": "functionCall",
+              "name": "toDate",
+              "args": [
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "A",
+                    "TVV"
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        "alias": "TV1"
+      },
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "concat",
+          "args": [
+            {
+              "kind": "functionCall",
+              "name": "substr",
+              "args": [
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "TV1"
+                  ]
+                },
+                {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "3"
+                },
+                {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "8"
+                }
+              ]
+            },
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": " : "
+            },
+            {
+              "kind": "functionCall",
+              "name": "toString",
+              "args": [
+                {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "1"
+                }
+              ]
+            }
+          ]
+        },
+        "alias": "TV_CHAR_1"
+      }
+    ],
+    "from": {
+      "left": {
+        "kind": "tableRef",
+        "table": "A"
+      },
+      "kind": "joinExpr",
+      "joinType": "LEFT",
+      "right": {
+        "kind": "tableRef",
+        "table": "B"
+      },
+      "constraint": {
+        "kind": "using",
+        "columns": [
+          "R"
+        ]
+      }
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "TV1"
+          ]
+        },
+        "direction": "ASC"
+      }
+    ],
+    "leadingComments": [
+      "--query run success in 215ms"
+    ]
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "DATE_INFO_DICT"
+    },
+    "leadingComments": [
+      "--query not run success !!!!"
+    ]
+  }
+]

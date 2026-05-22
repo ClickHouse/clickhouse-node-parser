@@ -1,5 +1,67 @@
 [
   {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "allow_experimental_dynamic_type",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "test_max_types"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "test_max_types"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "d",
+        "type": {
+          "name": "Dynamic",
+          "args": [
+            {
+              "kind": "setting",
+              "name": "max_types",
+              "value": {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "5"
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "engine": {
+      "name": "Memory"
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "test_max_types"
+      }
+    }
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -24,6 +86,62 @@
     "from": {
       "kind": "tableRef",
       "table": "test_max_types"
+    }
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "test_nested_dynamic"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "test_nested_dynamic"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "d1",
+        "type": {
+          "name": "Dynamic"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "d2",
+        "type": {
+          "name": "Dynamic",
+          "args": [
+            {
+              "kind": "setting",
+              "name": "max_types",
+              "value": {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "2"
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "engine": {
+      "name": "Memory"
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "test_nested_dynamic"
+      }
     }
   },
   {
@@ -69,6 +187,44 @@
     "from": {
       "kind": "tableRef",
       "table": "test_nested_dynamic"
+    }
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "test_rapid_schema"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "test_rapid_schema"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "d",
+        "type": {
+          "name": "Dynamic"
+        }
+      }
+    ],
+    "engine": {
+      "name": "Memory"
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "test_rapid_schema"
+      }
     }
   },
   {
@@ -225,7 +381,7 @@
               }
             ],
             "from": {
-              "kind": "tableFunction",
+              "kind": "tableFunctionRef",
               "name": "numbers",
               "args": [
                 {
@@ -238,6 +394,30 @@
           }
         }
       }
+    }
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "test_max_types"
+    }
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "test_nested_dynamic"
+    }
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "test_rapid_schema"
     }
   }
 ]

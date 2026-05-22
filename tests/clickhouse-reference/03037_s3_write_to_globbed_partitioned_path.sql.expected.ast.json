@@ -1,0 +1,59 @@
+[
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "function",
+      "func": {
+        "kind": "tableFunctionRef",
+        "name": "s3",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": "http://localhost:11111/test/data_*_{_partition_id}.csv"
+          }
+        ]
+      }
+    },
+    "partitionBy": {
+      "kind": "binaryExpr",
+      "op": "%",
+      "left": {
+        "kind": "columnRef",
+        "parts": [
+          "number"
+        ]
+      },
+      "right": {
+        "kind": "literal",
+        "type": "UInt64",
+        "value": "3"
+      }
+    },
+    "selectQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "asterisk"
+        }
+      ],
+      "from": {
+        "kind": "tableFunctionRef",
+        "name": "numbers",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "10"
+          }
+        ]
+      }
+    },
+    "leadingComments": [
+      "-- Tags: no-fasttest"
+    ],
+    "trailingComments": [
+      "-- {serverError DATABASE_ACCESS_DENIED}"
+    ]
+  }
+]

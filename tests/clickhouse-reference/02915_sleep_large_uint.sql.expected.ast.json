@@ -13,6 +13,9 @@
           }
         ]
       }
+    ],
+    "trailingComments": [
+      "-- { serverError BAD_ARGUMENTS }"
     ]
   },
   {
@@ -59,6 +62,9 @@
           }
         ]
       }
+    ],
+    "trailingComments": [
+      "-- { serverError BAD_ARGUMENTS }"
     ]
   },
   {
@@ -77,7 +83,7 @@
       }
     ],
     "from": {
-      "kind": "tableFunction",
+      "kind": "tableFunctionRef",
       "name": "numbers",
       "args": [
         {
@@ -86,7 +92,23 @@
           "value": "10000"
         }
       ]
-    }
+    },
+    "trailingComments": [
+      "-- { serverError BAD_ARGUMENTS }"
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "max_rows_to_read",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      }
+    ]
   },
   {
     "kind": "select",
@@ -115,7 +137,7 @@
       }
     ],
     "from": {
-      "kind": "tableFunction",
+      "kind": "tableFunctionRef",
       "name": "numbers",
       "args": [
         {
@@ -134,6 +156,11 @@
           "value": "8589934592000000000"
         }
       }
+    ],
+    "trailingComments": [
+      "-- { serverError TOO_SLOW }",
+      "-- Another corner case, but it requires lots of memory to run (huge block size)",
+      "-- SELECT sleepEachRow(pow(2, 31)) from numbers(17179869184) settings max_block_size = 17179869184, function_sleep_max_microseconds_per_block = 8589934592000000000; -- { serverError TOO_SLOW }"
     ]
   }
 ]

@@ -31,6 +31,56 @@ SelectWithUnionQuery (children 2)
         Literal UInt64_3
  Identifier Null
 
+DropQuery  argmax_comb (children 1)
+ Identifier argmax_comb
+
+CreateQuery argmax_comb (children 3)
+ Identifier argmax_comb
+ Columns definition (children 1)
+  ExpressionList (children 2)
+   ColumnDeclaration id (children 1)
+    DataType UInt64
+   ColumnDeclaration state (children 1)
+    DataType AggregateFunction (children 1)
+     ExpressionList (children 3)
+      Identifier avgArgMax
+      DataType Float64
+      DataType UInt64
+ Storage definition (children 2)
+  Function MergeTree (children 1)
+   ExpressionList
+  Function tuple (children 1)
+   ExpressionList
+
+InsertQuery   (children 2)
+ Identifier argmax_comb
+ SelectWithUnionQuery (children 1)
+  ExpressionList (children 1)
+   SelectQuery (children 3)
+    ExpressionList (children 2)
+     Function CAST (alias id) (children 1)
+      ExpressionList (children 2)
+       Function modulo (children 1)
+        ExpressionList (children 2)
+         Identifier number
+         Literal UInt64_10
+       Literal 'UInt64'
+     Function avgArgMaxState (children 1)
+      ExpressionList (children 2)
+       Function CAST (children 1)
+        ExpressionList (children 2)
+         Identifier number
+         Literal 'Float64'
+       Identifier id
+    TablesInSelectQuery (children 1)
+     TablesInSelectQueryElement (children 1)
+      TableExpression (children 1)
+       Function numbers (children 1)
+        ExpressionList (children 1)
+         Literal UInt64_100
+    ExpressionList (children 1)
+     Identifier id
+
 SelectWithUnionQuery (children 1)
  ExpressionList (children 1)
   SelectQuery (children 2)

@@ -1,5 +1,226 @@
 [
   {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "ts_data"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "id",
+        "type": {
+          "name": "UInt64"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "timestamps",
+        "type": {
+          "name": "Array",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "DateTime"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "values",
+        "type": {
+          "name": "Array",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "Float64"
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree",
+      "args": []
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "id"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "ts_data_nullable"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "id",
+        "type": {
+          "name": "UInt64"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "timestamp",
+        "type": {
+          "name": "UInt32"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "value",
+        "type": {
+          "name": "Nullable",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "Float64"
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree",
+      "args": []
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "id"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "ts_data"
+      }
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "ts_data_nullable"
+      }
+    },
+    "selectQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "id"
+          ]
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "timestamp"
+          ]
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "value"
+          ]
+        }
+      ],
+      "from": {
+        "left": {
+          "kind": "tableRef",
+          "table": "ts_data"
+        },
+        "kind": "arrayJoinExpr",
+        "joinType": "ARRAY",
+        "expressions": [
+          {
+            "kind": "alias",
+            "expr": {
+              "kind": "columnRef",
+              "parts": [
+                "timestamps"
+              ]
+            },
+            "alias": "timestamp"
+          },
+          {
+            "kind": "alias",
+            "expr": {
+              "kind": "functionCall",
+              "name": "arrayResize",
+              "args": [
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "values"
+                  ]
+                },
+                {
+                  "kind": "functionCall",
+                  "name": "length",
+                  "args": [
+                    {
+                      "kind": "columnRef",
+                      "parts": [
+                        "timestamps"
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "kind": "literal",
+                  "type": "NULL",
+                  "value": "NULL"
+                }
+              ]
+            },
+            "alias": "value"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "allow_experimental_time_series_aggregate_functions",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -46,7 +267,13 @@
     "from": {
       "kind": "tableRef",
       "table": "ts_data"
-    }
+    },
+    "leadingComments": [
+      "-- Fail because of rows with non-matching lengths of timestamps and values"
+    ],
+    "trailingComments": [
+      "-- {serverError BAD_ARGUMENTS}"
+    ]
   },
   {
     "kind": "select",
@@ -95,7 +322,10 @@
     "from": {
       "kind": "tableRef",
       "table": "ts_data"
-    }
+    },
+    "trailingComments": [
+      "-- {serverError BAD_ARGUMENTS}"
+    ]
   },
   {
     "kind": "select",
@@ -144,7 +374,10 @@
     "from": {
       "kind": "tableRef",
       "table": "ts_data"
-    }
+    },
+    "trailingComments": [
+      "-- {serverError BAD_ARGUMENTS}"
+    ]
   },
   {
     "kind": "select",
@@ -193,7 +426,10 @@
     "from": {
       "kind": "tableRef",
       "table": "ts_data"
-    }
+    },
+    "trailingComments": [
+      "-- {serverError BAD_ARGUMENTS}"
+    ]
   },
   {
     "kind": "select",
@@ -242,7 +478,10 @@
     "from": {
       "kind": "tableRef",
       "table": "ts_data"
-    }
+    },
+    "trailingComments": [
+      "-- {serverError BAD_ARGUMENTS}"
+    ]
   },
   {
     "kind": "select",
@@ -2333,7 +2572,7 @@
                   "name": "arrayMin",
                   "args": [
                     {
-                      "kind": "array",
+                      "kind": "arrayLiteral",
                       "elements": [
                         {
                           "kind": "functionCall",
@@ -2392,7 +2631,10 @@
     "from": {
       "kind": "tableRef",
       "table": "ts_data"
-    }
+    },
+    "leadingComments": [
+      "-- Test with Nullable arguments"
+    ]
   },
   {
     "kind": "select",
@@ -2539,7 +2781,7 @@
           {
             "kind": "castExpr",
             "expr": {
-              "kind": "array",
+              "kind": "arrayLiteral",
               "elements": [
                 {
                   "kind": "literal",
@@ -2563,7 +2805,7 @@
             "operator": true
           },
           {
-            "kind": "array",
+            "kind": "arrayLiteral",
             "elements": [
               {
                 "kind": "literal",
@@ -2585,6 +2827,9 @@
           }
         ]
       }
+    ],
+    "trailingComments": [
+      "-- {serverError ILLEGAL_TYPE_OF_ARGUMENT}"
     ]
   },
   {
@@ -2619,7 +2864,7 @@
           {
             "kind": "castExpr",
             "expr": {
-              "kind": "array",
+              "kind": "arrayLiteral",
               "elements": [
                 {
                   "kind": "literal",
@@ -2643,7 +2888,7 @@
             "operator": true
           },
           {
-            "kind": "array",
+            "kind": "arrayLiteral",
             "elements": [
               {
                 "kind": "literal",
@@ -2665,6 +2910,9 @@
           }
         ]
       }
+    ],
+    "trailingComments": [
+      "-- {serverError ILLEGAL_TYPE_OF_ARGUMENT}"
     ]
   },
   {
@@ -2699,7 +2947,7 @@
           {
             "kind": "castExpr",
             "expr": {
-              "kind": "array",
+              "kind": "arrayLiteral",
               "elements": [
                 {
                   "kind": "literal",
@@ -2725,7 +2973,7 @@
           {
             "kind": "castExpr",
             "expr": {
-              "kind": "array",
+              "kind": "arrayLiteral",
               "elements": [
                 {
                   "kind": "literal",
@@ -2750,6 +2998,9 @@
           }
         ]
       }
+    ],
+    "leadingComments": [
+      "-- End timestamp not aligned by step"
     ]
   },
   {
@@ -2784,7 +3035,7 @@
           {
             "kind": "castExpr",
             "expr": {
-              "kind": "array",
+              "kind": "arrayLiteral",
               "elements": [
                 {
                   "kind": "literal",
@@ -2810,7 +3061,7 @@
           {
             "kind": "castExpr",
             "expr": {
-              "kind": "array",
+              "kind": "arrayLiteral",
               "elements": [
                 {
                   "kind": "literal",
@@ -2869,7 +3120,7 @@
           {
             "kind": "castExpr",
             "expr": {
-              "kind": "array",
+              "kind": "arrayLiteral",
               "elements": [
                 {
                   "kind": "literal",
@@ -2895,7 +3146,7 @@
           {
             "kind": "castExpr",
             "expr": {
-              "kind": "array",
+              "kind": "arrayLiteral",
               "elements": [
                 {
                   "kind": "literal",
@@ -2954,7 +3205,7 @@
           {
             "kind": "castExpr",
             "expr": {
-              "kind": "array",
+              "kind": "arrayLiteral",
               "elements": [
                 {
                   "kind": "literal",
@@ -2980,7 +3231,7 @@
           {
             "kind": "castExpr",
             "expr": {
-              "kind": "array",
+              "kind": "arrayLiteral",
               "elements": [
                 {
                   "kind": "literal",
@@ -3039,7 +3290,7 @@
           {
             "kind": "castExpr",
             "expr": {
-              "kind": "array",
+              "kind": "arrayLiteral",
               "elements": [
                 {
                   "kind": "literal",
@@ -3065,7 +3316,7 @@
           {
             "kind": "castExpr",
             "expr": {
-              "kind": "array",
+              "kind": "arrayLiteral",
               "elements": [
                 {
                   "kind": "literal",
@@ -3124,7 +3375,7 @@
           {
             "kind": "castExpr",
             "expr": {
-              "kind": "array",
+              "kind": "arrayLiteral",
               "elements": [
                 {
                   "kind": "literal",
@@ -3150,7 +3401,7 @@
           {
             "kind": "castExpr",
             "expr": {
-              "kind": "array",
+              "kind": "arrayLiteral",
               "elements": [
                 {
                   "kind": "literal",
@@ -3175,6 +3426,9 @@
           }
         ]
       }
+    ],
+    "leadingComments": [
+      "-- Start timestamp equals to end timestamp"
     ]
   },
   {
@@ -3209,7 +3463,7 @@
           {
             "kind": "castExpr",
             "expr": {
-              "kind": "array",
+              "kind": "arrayLiteral",
               "elements": [
                 {
                   "kind": "literal",
@@ -3235,7 +3489,7 @@
           {
             "kind": "castExpr",
             "expr": {
-              "kind": "array",
+              "kind": "arrayLiteral",
               "elements": [
                 {
                   "kind": "literal",
@@ -3294,7 +3548,7 @@
           {
             "kind": "castExpr",
             "expr": {
-              "kind": "array",
+              "kind": "arrayLiteral",
               "elements": [
                 {
                   "kind": "literal",
@@ -3320,7 +3574,7 @@
           {
             "kind": "castExpr",
             "expr": {
-              "kind": "array",
+              "kind": "arrayLiteral",
               "elements": [
                 {
                   "kind": "literal",
@@ -3379,7 +3633,7 @@
           {
             "kind": "castExpr",
             "expr": {
-              "kind": "array",
+              "kind": "arrayLiteral",
               "elements": [
                 {
                   "kind": "literal",
@@ -3435,7 +3689,7 @@
           {
             "kind": "castExpr",
             "expr": {
-              "kind": "array",
+              "kind": "arrayLiteral",
               "elements": [
                 {
                   "kind": "literal",
@@ -3490,6 +3744,9 @@
           }
         ]
       }
+    ],
+    "leadingComments": [
+      "-- First bucket doesn't have a value."
     ]
   },
   {
@@ -3524,7 +3781,7 @@
           {
             "kind": "castExpr",
             "expr": {
-              "kind": "array",
+              "kind": "arrayLiteral",
               "elements": [
                 {
                   "kind": "literal",
@@ -3580,7 +3837,7 @@
           {
             "kind": "castExpr",
             "expr": {
-              "kind": "array",
+              "kind": "arrayLiteral",
               "elements": [
                 {
                   "kind": "literal",
@@ -3669,7 +3926,7 @@
           {
             "kind": "castExpr",
             "expr": {
-              "kind": "array",
+              "kind": "arrayLiteral",
               "elements": [
                 {
                   "kind": "literal",
@@ -3725,7 +3982,7 @@
           {
             "kind": "castExpr",
             "expr": {
-              "kind": "array",
+              "kind": "arrayLiteral",
               "elements": [
                 {
                   "kind": "literal",
@@ -3823,7 +4080,7 @@
             ]
           },
           {
-            "kind": "array",
+            "kind": "arrayLiteral",
             "elements": [
               {
                 "kind": "literal",
@@ -3845,6 +4102,9 @@
           }
         ]
       }
+    ],
+    "trailingComments": [
+      "-- {serverError ILLEGAL_TYPE_OF_ARGUMENT}"
     ]
   },
   {
@@ -3888,7 +4148,7 @@
             ]
           },
           {
-            "kind": "array",
+            "kind": "arrayLiteral",
             "elements": [
               {
                 "kind": "literal",
@@ -3910,6 +4170,9 @@
           }
         ]
       }
+    ],
+    "trailingComments": [
+      "-- {serverError ILLEGAL_TYPE_OF_ARGUMENT}"
     ]
   },
   {
@@ -3953,7 +4216,7 @@
             ]
           },
           {
-            "kind": "array",
+            "kind": "arrayLiteral",
             "elements": [
               {
                 "kind": "literal",
@@ -3975,6 +4238,9 @@
           }
         ]
       }
+    ],
+    "trailingComments": [
+      "-- {serverError ILLEGAL_TYPE_OF_ARGUMENT}"
     ]
   },
   {
@@ -4022,7 +4288,7 @@
             "name": "arrayJoin",
             "args": [
               {
-                "kind": "array",
+                "kind": "arrayLiteral",
                 "elements": [
                   {
                     "kind": "literal",
@@ -4080,7 +4346,7 @@
           {
             "kind": "castExpr",
             "expr": {
-              "kind": "array",
+              "kind": "arrayLiteral",
               "elements": [
                 {
                   "kind": "literal",
@@ -4110,6 +4376,9 @@
           }
         ]
       }
+    ],
+    "trailingComments": [
+      "--{serverError ILLEGAL_TYPE_OF_ARGUMENT}"
     ]
   },
   {
@@ -4144,7 +4413,7 @@
           {
             "kind": "castExpr",
             "expr": {
-              "kind": "array",
+              "kind": "arrayLiteral",
               "elements": [
                 {
                   "kind": "literal",
@@ -4174,6 +4443,9 @@
           }
         ]
       }
+    ],
+    "trailingComments": [
+      "--{serverError ILLEGAL_TYPE_OF_ARGUMENT}"
     ]
   },
   {
@@ -4267,7 +4539,7 @@
       }
     ],
     "from": {
-      "kind": "tableFunction",
+      "kind": "tableFunctionRef",
       "name": "numbers",
       "args": [
         {
@@ -4276,7 +4548,14 @@
           "value": "5"
         }
       ]
-    }
+    },
+    "leadingComments": [
+      "-- Try to use aggregation function state in combinators with start, end, step and window parameters that are different from original parameters",
+      "-- An error should be returned"
+    ],
+    "trailingComments": [
+      "-- {serverError ILLEGAL_TYPE_OF_ARGUMENT}"
+    ]
   },
   {
     "kind": "select",
@@ -4369,7 +4648,7 @@
       }
     ],
     "from": {
-      "kind": "tableFunction",
+      "kind": "tableFunctionRef",
       "name": "numbers",
       "args": [
         {
@@ -4378,7 +4657,10 @@
           "value": "5"
         }
       ]
-    }
+    },
+    "trailingComments": [
+      "-- {serverError ILLEGAL_TYPE_OF_ARGUMENT}"
+    ]
   },
   {
     "kind": "select",
@@ -4465,7 +4747,7 @@
       }
     ],
     "from": {
-      "kind": "tableFunction",
+      "kind": "tableFunctionRef",
       "name": "numbers",
       "args": [
         {
@@ -4474,7 +4756,10 @@
           "value": "5"
         }
       ]
-    }
+    },
+    "trailingComments": [
+      "-- {serverError ILLEGAL_TYPE_OF_ARGUMENT}"
+    ]
   },
   {
     "kind": "select",
@@ -4561,7 +4846,7 @@
       }
     ],
     "from": {
-      "kind": "tableFunction",
+      "kind": "tableFunctionRef",
       "name": "numbers",
       "args": [
         {
@@ -4570,7 +4855,10 @@
           "value": "5"
         }
       ]
-    }
+    },
+    "leadingComments": [
+      "-- With matching parameters everything should work"
+    ]
   },
   {
     "kind": "select",
@@ -4657,7 +4945,7 @@
       }
     ],
     "from": {
-      "kind": "tableFunction",
+      "kind": "tableFunctionRef",
       "name": "numbers",
       "args": [
         {
@@ -4666,6 +4954,22 @@
           "value": "5"
         }
       ]
+    }
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "ts_data"
+    }
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "ts_data_nullable"
     }
   }
 ]

@@ -1,3 +1,4 @@
+-- International Programmers' Day
 SELECT toDayOfYear(toDate('2018-09-13'));
 
 SELECT
@@ -38,8 +39,21 @@ SELECT
 FROM `system`.numbers
 LIMIT 10;
 
+-- ISO year always begins at monday.
 SELECT DISTINCT toDayOfWeek(toStartOfISOYear(toDateTime(1000000000 + rand64() % 1000000000)))
 FROM numbers(10000);
 
 SELECT DISTINCT toDayOfWeek(toStartOfISOYear(toDate(10000 + rand64() % 20000)))
 FROM numbers(10000);
+
+-- Year and ISO year don't differ by more than one.
+WITH toDateTime(1000000000 + rand64() % 1000000000) AS time
+
+SELECT max(abs(toYear(time) - toISOYear(time))) <= 1
+FROM numbers(10000);
+
+-- ISO week is between 1 and 53
+WITH toDateTime(1000000000 + rand64() % 1000000000) AS time
+
+SELECT DISTINCT and(greaterOrEquals(toISOWeek(time), 1), lessOrEquals(toISOWeek(time), 53))
+FROM numbers(1000000);

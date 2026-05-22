@@ -1,3 +1,19 @@
+DROP TABLE IF EXISTS test02416;
+
+CREATE TABLE test02416
+(
+    a UInt64,
+    b UInt64
+)
+ENGINE = MergeTree()
+ORDER BY (a, b);
+
+INSERT INTO test02416 SELECT
+    number % 2 AS a,
+    number AS b
+FROM numbers(10);
+
+-- { echoOn }
 SELECT
     count() AS amount,
     a,
@@ -15,3 +31,6 @@ SELECT
 FROM test02416
 GROUP BY ROLLUP(a, b)
 ORDER BY (amount, a, b) ASC;
+
+-- { echoOff }
+DROP TABLE test02416;

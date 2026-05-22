@@ -1,5 +1,96 @@
 [
   {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "tab"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "tab"
+    },
+    "engine": {
+      "name": "Memory",
+      "args": []
+    },
+    "asQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "alias",
+          "expr": {
+            "kind": "tupleLiteral",
+            "elements": [
+              {
+                "kind": "arrayLiteral",
+                "elements": [
+                  {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "1"
+                  },
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "number"
+                    ]
+                  }
+                ],
+                "source": "[1, number]"
+              },
+              {
+                "kind": "arrayLiteral",
+                "elements": [
+                  {
+                    "kind": "functionCall",
+                    "name": "toInt32",
+                    "args": [
+                      {
+                        "kind": "literal",
+                        "type": "UInt64",
+                        "value": "2"
+                      }
+                    ]
+                  },
+                  {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "2"
+                  }
+                ],
+                "source": "[toInt32(2),2]"
+              }
+            ],
+            "source": "([1, number], [toInt32(2),2])"
+          },
+          "alias": "map"
+        }
+      ],
+      "from": {
+        "kind": "tableFunctionRef",
+        "name": "numbers",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "1"
+          },
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "10"
+          }
+        ]
+      },
+      "parenthesized": true
+    }
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -7,7 +98,7 @@
         "name": "mapAdd",
         "args": [
           {
-            "kind": "array",
+            "kind": "arrayLiteral",
             "elements": [
               {
                 "kind": "literal",
@@ -18,7 +109,7 @@
             "source": "[1]"
           },
           {
-            "kind": "array",
+            "kind": "arrayLiteral",
             "elements": [
               {
                 "kind": "literal",
@@ -30,6 +121,12 @@
           }
         ]
       }
+    ],
+    "leadingComments": [
+      "-- mapAdd"
+    ],
+    "trailingComments": [
+      "-- { serverError ILLEGAL_TYPE_OF_ARGUMENT }"
     ]
   },
   {
@@ -40,10 +137,10 @@
         "name": "mapAdd",
         "args": [
           {
-            "kind": "tuple",
+            "kind": "tupleLiteral",
             "elements": [
               {
-                "kind": "array",
+                "kind": "arrayLiteral",
                 "elements": [
                   {
                     "kind": "literal",
@@ -54,7 +151,7 @@
                 "source": "[1]"
               },
               {
-                "kind": "array",
+                "kind": "arrayLiteral",
                 "elements": [
                   {
                     "kind": "literal",
@@ -69,6 +166,9 @@
           }
         ]
       }
+    ],
+    "trailingComments": [
+      "-- { serverError NUMBER_OF_ARGUMENTS_DOESNT_MATCH }"
     ]
   },
   {
@@ -79,10 +179,10 @@
         "name": "mapAdd",
         "args": [
           {
-            "kind": "tuple",
+            "kind": "tupleLiteral",
             "elements": [
               {
-                "kind": "array",
+                "kind": "arrayLiteral",
                 "elements": [
                   {
                     "kind": "literal",
@@ -93,7 +193,7 @@
                 "source": "[1]"
               },
               {
-                "kind": "array",
+                "kind": "arrayLiteral",
                 "elements": [
                   {
                     "kind": "literal",
@@ -118,7 +218,10 @@
     "from": {
       "kind": "tableRef",
       "table": "tab"
-    }
+    },
+    "trailingComments": [
+      "-- { serverError ILLEGAL_TYPE_OF_ARGUMENT }"
+    ]
   },
   {
     "kind": "select",
@@ -128,10 +231,10 @@
         "name": "mapAdd",
         "args": [
           {
-            "kind": "tuple",
+            "kind": "tupleLiteral",
             "elements": [
               {
-                "kind": "array",
+                "kind": "arrayLiteral",
                 "elements": [
                   {
                     "kind": "functionCall",
@@ -148,7 +251,7 @@
                 "source": "[toUInt64(1)]"
               },
               {
-                "kind": "array",
+                "kind": "arrayLiteral",
                 "elements": [
                   {
                     "kind": "literal",
@@ -173,7 +276,10 @@
     "from": {
       "kind": "tableRef",
       "table": "tab"
-    }
+    },
+    "trailingComments": [
+      "-- { serverError ILLEGAL_TYPE_OF_ARGUMENT }"
+    ]
   },
   {
     "kind": "select",
@@ -183,10 +289,10 @@
         "name": "mapAdd",
         "args": [
           {
-            "kind": "tuple",
+            "kind": "tupleLiteral",
             "elements": [
               {
-                "kind": "array",
+                "kind": "arrayLiteral",
                 "elements": [
                   {
                     "kind": "functionCall",
@@ -208,7 +314,7 @@
                 "source": "[toUInt64(1), 2]"
               },
               {
-                "kind": "array",
+                "kind": "arrayLiteral",
                 "elements": [
                   {
                     "kind": "functionCall",
@@ -239,7 +345,10 @@
     "from": {
       "kind": "tableRef",
       "table": "tab"
-    }
+    },
+    "trailingComments": [
+      "-- {serverError NUMBER_OF_ARGUMENTS_DOESNT_MATCH }"
+    ]
   },
   {
     "kind": "select",
@@ -249,10 +358,10 @@
         "name": "mapAdd",
         "args": [
           {
-            "kind": "tuple",
+            "kind": "tupleLiteral",
             "elements": [
               {
-                "kind": "array",
+                "kind": "arrayLiteral",
                 "elements": [
                   {
                     "kind": "functionCall",
@@ -269,7 +378,7 @@
                 "source": "[toUInt64(1)]"
               },
               {
-                "kind": "array",
+                "kind": "arrayLiteral",
                 "elements": [
                   {
                     "kind": "functionCall",
@@ -327,10 +436,10 @@
             ]
           },
           {
-            "kind": "tuple",
+            "kind": "tupleLiteral",
             "elements": [
               {
-                "kind": "array",
+                "kind": "arrayLiteral",
                 "elements": [
                   {
                     "kind": "literal",
@@ -341,7 +450,7 @@
                 "source": "[1]"
               },
               {
-                "kind": "array",
+                "kind": "arrayLiteral",
                 "elements": [
                   {
                     "kind": "literal",
@@ -355,10 +464,10 @@
             "source": "([1], [1])"
           },
           {
-            "kind": "tuple",
+            "kind": "tupleLiteral",
             "elements": [
               {
-                "kind": "array",
+                "kind": "arrayLiteral",
                 "elements": [
                   {
                     "kind": "literal",
@@ -369,7 +478,7 @@
                 "source": "[2]"
               },
               {
-                "kind": "array",
+                "kind": "arrayLiteral",
                 "elements": [
                   {
                     "kind": "literal",
@@ -391,6 +500,17 @@
     }
   },
   {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "tab"
+    },
+    "leadingComments": [
+      "-- cleanup"
+    ]
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -400,10 +520,10 @@
           "name": "mapAdd",
           "args": [
             {
-              "kind": "tuple",
+              "kind": "tupleLiteral",
               "elements": [
                 {
-                  "kind": "array",
+                  "kind": "arrayLiteral",
                   "elements": [
                     {
                       "kind": "functionCall",
@@ -425,7 +545,7 @@
                   "source": "[toUInt8(1), 2]"
                 },
                 {
-                  "kind": "array",
+                  "kind": "arrayLiteral",
                   "elements": [
                     {
                       "kind": "literal",
@@ -444,10 +564,10 @@
               "source": "([toUInt8(1), 2], [1, 1])"
             },
             {
-              "kind": "tuple",
+              "kind": "tupleLiteral",
               "elements": [
                 {
-                  "kind": "array",
+                  "kind": "arrayLiteral",
                   "elements": [
                     {
                       "kind": "functionCall",
@@ -469,7 +589,7 @@
                   "source": "[toUInt8(1), 2]"
                 },
                 {
-                  "kind": "array",
+                  "kind": "arrayLiteral",
                   "elements": [
                     {
                       "kind": "literal",
@@ -503,6 +623,9 @@
           }
         ]
       }
+    ],
+    "leadingComments": [
+      "-- check types"
     ]
   },
   {
@@ -515,10 +638,10 @@
           "name": "mapAdd",
           "args": [
             {
-              "kind": "tuple",
+              "kind": "tupleLiteral",
               "elements": [
                 {
-                  "kind": "array",
+                  "kind": "arrayLiteral",
                   "elements": [
                     {
                       "kind": "functionCall",
@@ -540,7 +663,7 @@
                   "source": "[toUInt16(1), 2]"
                 },
                 {
-                  "kind": "array",
+                  "kind": "arrayLiteral",
                   "elements": [
                     {
                       "kind": "functionCall",
@@ -565,10 +688,10 @@
               "source": "([toUInt16(1), 2], [toUInt16(1), 1])"
             },
             {
-              "kind": "tuple",
+              "kind": "tupleLiteral",
               "elements": [
                 {
-                  "kind": "array",
+                  "kind": "arrayLiteral",
                   "elements": [
                     {
                       "kind": "functionCall",
@@ -590,7 +713,7 @@
                   "source": "[toUInt16(1), 2]"
                 },
                 {
-                  "kind": "array",
+                  "kind": "arrayLiteral",
                   "elements": [
                     {
                       "kind": "functionCall",
@@ -642,10 +765,10 @@
           "name": "mapAdd",
           "args": [
             {
-              "kind": "tuple",
+              "kind": "tupleLiteral",
               "elements": [
                 {
-                  "kind": "array",
+                  "kind": "arrayLiteral",
                   "elements": [
                     {
                       "kind": "functionCall",
@@ -667,7 +790,7 @@
                   "source": "[toUInt32(1), 2]"
                 },
                 {
-                  "kind": "array",
+                  "kind": "arrayLiteral",
                   "elements": [
                     {
                       "kind": "functionCall",
@@ -692,10 +815,10 @@
               "source": "([toUInt32(1), 2], [toUInt32(1), 1])"
             },
             {
-              "kind": "tuple",
+              "kind": "tupleLiteral",
               "elements": [
                 {
-                  "kind": "array",
+                  "kind": "arrayLiteral",
                   "elements": [
                     {
                       "kind": "functionCall",
@@ -717,7 +840,7 @@
                   "source": "[toUInt32(1), 2]"
                 },
                 {
-                  "kind": "array",
+                  "kind": "arrayLiteral",
                   "elements": [
                     {
                       "kind": "functionCall",
@@ -769,10 +892,10 @@
           "name": "mapAdd",
           "args": [
             {
-              "kind": "tuple",
+              "kind": "tupleLiteral",
               "elements": [
                 {
-                  "kind": "array",
+                  "kind": "arrayLiteral",
                   "elements": [
                     {
                       "kind": "functionCall",
@@ -794,7 +917,7 @@
                   "source": "[toUInt64(1), 2]"
                 },
                 {
-                  "kind": "array",
+                  "kind": "arrayLiteral",
                   "elements": [
                     {
                       "kind": "functionCall",
@@ -819,10 +942,10 @@
               "source": "([toUInt64(1), 2], [toUInt64(1), 1])"
             },
             {
-              "kind": "tuple",
+              "kind": "tupleLiteral",
               "elements": [
                 {
-                  "kind": "array",
+                  "kind": "arrayLiteral",
                   "elements": [
                     {
                       "kind": "functionCall",
@@ -844,7 +967,7 @@
                   "source": "[toUInt64(1), 2]"
                 },
                 {
-                  "kind": "array",
+                  "kind": "arrayLiteral",
                   "elements": [
                     {
                       "kind": "functionCall",
@@ -896,10 +1019,10 @@
           "name": "mapAdd",
           "args": [
             {
-              "kind": "tuple",
+              "kind": "tupleLiteral",
               "elements": [
                 {
-                  "kind": "array",
+                  "kind": "arrayLiteral",
                   "elements": [
                     {
                       "kind": "functionCall",
@@ -921,7 +1044,7 @@
                   "source": "[toInt8(1), 2]"
                 },
                 {
-                  "kind": "array",
+                  "kind": "arrayLiteral",
                   "elements": [
                     {
                       "kind": "functionCall",
@@ -946,10 +1069,10 @@
               "source": "([toInt8(1), 2], [toInt8(1), 1])"
             },
             {
-              "kind": "tuple",
+              "kind": "tupleLiteral",
               "elements": [
                 {
-                  "kind": "array",
+                  "kind": "arrayLiteral",
                   "elements": [
                     {
                       "kind": "functionCall",
@@ -971,7 +1094,7 @@
                   "source": "[toInt8(1), 2]"
                 },
                 {
-                  "kind": "array",
+                  "kind": "arrayLiteral",
                   "elements": [
                     {
                       "kind": "functionCall",
@@ -1023,10 +1146,10 @@
           "name": "mapAdd",
           "args": [
             {
-              "kind": "tuple",
+              "kind": "tupleLiteral",
               "elements": [
                 {
-                  "kind": "array",
+                  "kind": "arrayLiteral",
                   "elements": [
                     {
                       "kind": "functionCall",
@@ -1048,7 +1171,7 @@
                   "source": "[toInt16(1), 2]"
                 },
                 {
-                  "kind": "array",
+                  "kind": "arrayLiteral",
                   "elements": [
                     {
                       "kind": "functionCall",
@@ -1073,10 +1196,10 @@
               "source": "([toInt16(1), 2], [toInt16(1), 1])"
             },
             {
-              "kind": "tuple",
+              "kind": "tupleLiteral",
               "elements": [
                 {
-                  "kind": "array",
+                  "kind": "arrayLiteral",
                   "elements": [
                     {
                       "kind": "functionCall",
@@ -1098,7 +1221,7 @@
                   "source": "[toInt16(1), 2]"
                 },
                 {
-                  "kind": "array",
+                  "kind": "arrayLiteral",
                   "elements": [
                     {
                       "kind": "functionCall",
@@ -1150,10 +1273,10 @@
           "name": "mapAdd",
           "args": [
             {
-              "kind": "tuple",
+              "kind": "tupleLiteral",
               "elements": [
                 {
-                  "kind": "array",
+                  "kind": "arrayLiteral",
                   "elements": [
                     {
                       "kind": "functionCall",
@@ -1175,7 +1298,7 @@
                   "source": "[toInt32(1), 2]"
                 },
                 {
-                  "kind": "array",
+                  "kind": "arrayLiteral",
                   "elements": [
                     {
                       "kind": "functionCall",
@@ -1200,10 +1323,10 @@
               "source": "([toInt32(1), 2], [toInt32(1), 1])"
             },
             {
-              "kind": "tuple",
+              "kind": "tupleLiteral",
               "elements": [
                 {
-                  "kind": "array",
+                  "kind": "arrayLiteral",
                   "elements": [
                     {
                       "kind": "functionCall",
@@ -1225,7 +1348,7 @@
                   "source": "[toInt32(1), 2]"
                 },
                 {
-                  "kind": "array",
+                  "kind": "arrayLiteral",
                   "elements": [
                     {
                       "kind": "functionCall",
@@ -1277,10 +1400,10 @@
           "name": "mapAdd",
           "args": [
             {
-              "kind": "tuple",
+              "kind": "tupleLiteral",
               "elements": [
                 {
-                  "kind": "array",
+                  "kind": "arrayLiteral",
                   "elements": [
                     {
                       "kind": "functionCall",
@@ -1302,7 +1425,7 @@
                   "source": "[toInt64(1), 2]"
                 },
                 {
-                  "kind": "array",
+                  "kind": "arrayLiteral",
                   "elements": [
                     {
                       "kind": "functionCall",
@@ -1327,10 +1450,10 @@
               "source": "([toInt64(1), 2], [toInt64(1), 1])"
             },
             {
-              "kind": "tuple",
+              "kind": "tupleLiteral",
               "elements": [
                 {
-                  "kind": "array",
+                  "kind": "arrayLiteral",
                   "elements": [
                     {
                       "kind": "functionCall",
@@ -1352,7 +1475,7 @@
                   "source": "[toInt64(1), 2]"
                 },
                 {
-                  "kind": "array",
+                  "kind": "arrayLiteral",
                   "elements": [
                     {
                       "kind": "functionCall",
@@ -1404,10 +1527,10 @@
           "name": "mapAdd",
           "args": [
             {
-              "kind": "tuple",
+              "kind": "tupleLiteral",
               "elements": [
                 {
-                  "kind": "array",
+                  "kind": "arrayLiteral",
                   "elements": [
                     {
                       "kind": "literal",
@@ -1423,7 +1546,7 @@
                   "source": "[1, 2]"
                 },
                 {
-                  "kind": "array",
+                  "kind": "arrayLiteral",
                   "elements": [
                     {
                       "kind": "functionCall",
@@ -1448,10 +1571,10 @@
               "source": "([1, 2], [toFloat32(1.1), 1])"
             },
             {
-              "kind": "tuple",
+              "kind": "tupleLiteral",
               "elements": [
                 {
-                  "kind": "array",
+                  "kind": "arrayLiteral",
                   "elements": [
                     {
                       "kind": "literal",
@@ -1467,7 +1590,7 @@
                   "source": "[1, 2]"
                 },
                 {
-                  "kind": "array",
+                  "kind": "arrayLiteral",
                   "elements": [
                     {
                       "kind": "literal",
@@ -1513,10 +1636,10 @@
           "name": "mapAdd",
           "args": [
             {
-              "kind": "tuple",
+              "kind": "tupleLiteral",
               "elements": [
                 {
-                  "kind": "array",
+                  "kind": "arrayLiteral",
                   "elements": [
                     {
                       "kind": "literal",
@@ -1532,7 +1655,7 @@
                   "source": "[1, 2]"
                 },
                 {
-                  "kind": "array",
+                  "kind": "arrayLiteral",
                   "elements": [
                     {
                       "kind": "functionCall",
@@ -1557,10 +1680,10 @@
               "source": "([1, 2], [toFloat64(1.1), 1])"
             },
             {
-              "kind": "tuple",
+              "kind": "tupleLiteral",
               "elements": [
                 {
-                  "kind": "array",
+                  "kind": "arrayLiteral",
                   "elements": [
                     {
                       "kind": "literal",
@@ -1576,7 +1699,7 @@
                   "source": "[1, 2]"
                 },
                 {
-                  "kind": "array",
+                  "kind": "arrayLiteral",
                   "elements": [
                     {
                       "kind": "literal",
@@ -1622,10 +1745,10 @@
           "name": "mapAdd",
           "args": [
             {
-              "kind": "tuple",
+              "kind": "tupleLiteral",
               "elements": [
                 {
-                  "kind": "array",
+                  "kind": "arrayLiteral",
                   "elements": [
                     {
                       "kind": "functionCall",
@@ -1647,7 +1770,7 @@
                   "source": "[toFloat32(1), 2]"
                 },
                 {
-                  "kind": "array",
+                  "kind": "arrayLiteral",
                   "elements": [
                     {
                       "kind": "functionCall",
@@ -1672,10 +1795,10 @@
               "source": "([toFloat32(1), 2], [toFloat64(1.1), 1])"
             },
             {
-              "kind": "tuple",
+              "kind": "tupleLiteral",
               "elements": [
                 {
-                  "kind": "array",
+                  "kind": "arrayLiteral",
                   "elements": [
                     {
                       "kind": "functionCall",
@@ -1697,7 +1820,7 @@
                   "source": "[toFloat32(1), 2]"
                 },
                 {
-                  "kind": "array",
+                  "kind": "arrayLiteral",
                   "elements": [
                     {
                       "kind": "literal",
@@ -1731,6 +1854,9 @@
           }
         ]
       }
+    ],
+    "trailingComments": [
+      "-- { serverError ILLEGAL_TYPE_OF_ARGUMENT }"
     ]
   },
   {
@@ -1743,10 +1869,10 @@
           "name": "mapAdd",
           "args": [
             {
-              "kind": "tuple",
+              "kind": "tupleLiteral",
               "elements": [
                 {
-                  "kind": "array",
+                  "kind": "arrayLiteral",
                   "elements": [
                     {
                       "kind": "literal",
@@ -1762,7 +1888,7 @@
                   "source": "[1, 2]"
                 },
                 {
-                  "kind": "array",
+                  "kind": "arrayLiteral",
                   "elements": [
                     {
                       "kind": "functionCall",
@@ -1787,10 +1913,10 @@
               "source": "([1, 2], [toFloat64(1.1), 1])"
             },
             {
-              "kind": "tuple",
+              "kind": "tupleLiteral",
               "elements": [
                 {
-                  "kind": "array",
+                  "kind": "arrayLiteral",
                   "elements": [
                     {
                       "kind": "literal",
@@ -1806,7 +1932,7 @@
                   "source": "[1, 2]"
                 },
                 {
-                  "kind": "array",
+                  "kind": "arrayLiteral",
                   "elements": [
                     {
                       "kind": "literal",
@@ -1840,6 +1966,9 @@
           }
         ]
       }
+    ],
+    "trailingComments": [
+      "-- { serverError ILLEGAL_TYPE_OF_ARGUMENT }"
     ]
   },
   {
@@ -1850,10 +1979,10 @@
         "name": "mapAdd",
         "args": [
           {
-            "kind": "tuple",
+            "kind": "tupleLiteral",
             "elements": [
               {
-                "kind": "array",
+                "kind": "arrayLiteral",
                 "elements": [
                   {
                     "kind": "literal",
@@ -1869,7 +1998,7 @@
                 "source": "['a', 'b']"
               },
               {
-                "kind": "array",
+                "kind": "arrayLiteral",
                 "elements": [
                   {
                     "kind": "literal",
@@ -1888,10 +2017,10 @@
             "source": "(['a', 'b'], [1, 1])"
           },
           {
-            "kind": "tuple",
+            "kind": "tupleLiteral",
             "elements": [
               {
-                "kind": "array",
+                "kind": "arrayLiteral",
                 "elements": [
                   {
                     "kind": "columnRef",
@@ -1903,7 +2032,7 @@
                 "source": "[key]"
               },
               {
-                "kind": "array",
+                "kind": "arrayLiteral",
                 "elements": [
                   {
                     "kind": "literal",
@@ -1920,7 +2049,7 @@
       }
     ],
     "from": {
-      "kind": "tableFunction",
+      "kind": "tableFunctionRef",
       "name": "values",
       "args": [
         {
@@ -1959,14 +2088,14 @@
           "name": "mapAdd",
           "args": [
             {
-              "kind": "tuple",
+              "kind": "tupleLiteral",
               "elements": [
                 {
                   "kind": "functionCall",
                   "name": "cast",
                   "args": [
                     {
-                      "kind": "array",
+                      "kind": "arrayLiteral",
                       "elements": [
                         {
                           "kind": "literal",
@@ -1989,7 +2118,7 @@
                   ]
                 },
                 {
-                  "kind": "array",
+                  "kind": "arrayLiteral",
                   "elements": [
                     {
                       "kind": "literal",
@@ -2008,10 +2137,10 @@
               "source": "(cast(['a', 'b'], 'Array(FixedString(1))'), [1, 1])"
             },
             {
-              "kind": "tuple",
+              "kind": "tupleLiteral",
               "elements": [
                 {
-                  "kind": "array",
+                  "kind": "arrayLiteral",
                   "elements": [
                     {
                       "kind": "columnRef",
@@ -2023,7 +2152,7 @@
                   "source": "[key]"
                 },
                 {
-                  "kind": "array",
+                  "kind": "arrayLiteral",
                   "elements": [
                     {
                       "kind": "literal",
@@ -2054,7 +2183,7 @@
       }
     ],
     "from": {
-      "kind": "tableFunction",
+      "kind": "tableFunctionRef",
       "name": "values",
       "args": [
         {
@@ -2091,14 +2220,14 @@
         "name": "mapAdd",
         "args": [
           {
-            "kind": "tuple",
+            "kind": "tupleLiteral",
             "elements": [
               {
                 "kind": "functionCall",
                 "name": "cast",
                 "args": [
                   {
-                    "kind": "array",
+                    "kind": "arrayLiteral",
                     "elements": [
                       {
                         "kind": "literal",
@@ -2121,7 +2250,7 @@
                 ]
               },
               {
-                "kind": "array",
+                "kind": "arrayLiteral",
                 "elements": [
                   {
                     "kind": "literal",
@@ -2140,10 +2269,10 @@
             "source": "(cast(['a', 'b'], 'Array(LowCardinality(String))'), [1, 1])"
           },
           {
-            "kind": "tuple",
+            "kind": "tupleLiteral",
             "elements": [
               {
-                "kind": "array",
+                "kind": "arrayLiteral",
                 "elements": [
                   {
                     "kind": "columnRef",
@@ -2155,7 +2284,7 @@
                 "source": "[key]"
               },
               {
-                "kind": "array",
+                "kind": "arrayLiteral",
                 "elements": [
                   {
                     "kind": "literal",
@@ -2172,7 +2301,7 @@
       }
     ],
     "from": {
-      "kind": "tableFunction",
+      "kind": "tableFunctionRef",
       "name": "values",
       "args": [
         {
@@ -2211,7 +2340,7 @@
           "name": "mapAdd",
           "args": [
             {
-              "kind": "tuple",
+              "kind": "tupleLiteral",
               "elements": [
                 {
                   "kind": "columnRef",
@@ -2229,7 +2358,7 @@
               "source": "(key, val)"
             },
             {
-              "kind": "tuple",
+              "kind": "tupleLiteral",
               "elements": [
                 {
                   "kind": "columnRef",
@@ -2264,7 +2393,7 @@
       }
     ],
     "from": {
-      "kind": "tableFunction",
+      "kind": "tableFunctionRef",
       "name": "values",
       "args": [
         {
@@ -2273,10 +2402,10 @@
           "value": "key Array(Enum16('a'=1, 'b'=2)), val Array(Int16)"
         },
         {
-          "kind": "tuple",
+          "kind": "tupleLiteral",
           "elements": [
             {
-              "kind": "array",
+              "kind": "arrayLiteral",
               "elements": [
                 {
                   "kind": "literal",
@@ -2287,7 +2416,7 @@
               "source": "['a']"
             },
             {
-              "kind": "array",
+              "kind": "arrayLiteral",
               "elements": [
                 {
                   "kind": "literal",
@@ -2301,10 +2430,10 @@
           "source": "(['a'], [1])"
         },
         {
-          "kind": "tuple",
+          "kind": "tupleLiteral",
           "elements": [
             {
-              "kind": "array",
+              "kind": "arrayLiteral",
               "elements": [
                 {
                   "kind": "literal",
@@ -2315,7 +2444,7 @@
               "source": "['b']"
             },
             {
-              "kind": "array",
+              "kind": "arrayLiteral",
               "elements": [
                 {
                   "kind": "literal",
@@ -2341,7 +2470,7 @@
           "name": "mapAdd",
           "args": [
             {
-              "kind": "tuple",
+              "kind": "tupleLiteral",
               "elements": [
                 {
                   "kind": "columnRef",
@@ -2359,7 +2488,7 @@
               "source": "(key, val)"
             },
             {
-              "kind": "tuple",
+              "kind": "tupleLiteral",
               "elements": [
                 {
                   "kind": "columnRef",
@@ -2394,7 +2523,7 @@
       }
     ],
     "from": {
-      "kind": "tableFunction",
+      "kind": "tableFunctionRef",
       "name": "values",
       "args": [
         {
@@ -2403,10 +2532,10 @@
           "value": "key Array(Enum8('a'=1, 'b'=2)), val Array(Int16)"
         },
         {
-          "kind": "tuple",
+          "kind": "tupleLiteral",
           "elements": [
             {
-              "kind": "array",
+              "kind": "arrayLiteral",
               "elements": [
                 {
                   "kind": "literal",
@@ -2417,7 +2546,7 @@
               "source": "['a']"
             },
             {
-              "kind": "array",
+              "kind": "arrayLiteral",
               "elements": [
                 {
                   "kind": "literal",
@@ -2431,10 +2560,10 @@
           "source": "(['a'], [1])"
         },
         {
-          "kind": "tuple",
+          "kind": "tupleLiteral",
           "elements": [
             {
-              "kind": "array",
+              "kind": "arrayLiteral",
               "elements": [
                 {
                   "kind": "literal",
@@ -2445,7 +2574,7 @@
               "source": "['b']"
             },
             {
-              "kind": "array",
+              "kind": "arrayLiteral",
               "elements": [
                 {
                   "kind": "literal",
@@ -2471,7 +2600,7 @@
           "name": "mapAdd",
           "args": [
             {
-              "kind": "tuple",
+              "kind": "tupleLiteral",
               "elements": [
                 {
                   "kind": "columnRef",
@@ -2489,7 +2618,7 @@
               "source": "(key, val)"
             },
             {
-              "kind": "tuple",
+              "kind": "tupleLiteral",
               "elements": [
                 {
                   "kind": "columnRef",
@@ -2524,7 +2653,7 @@
       }
     ],
     "from": {
-      "kind": "tableFunction",
+      "kind": "tableFunctionRef",
       "name": "values",
       "args": [
         {
@@ -2533,10 +2662,10 @@
           "value": "key Array(UUID), val Array(Int32)"
         },
         {
-          "kind": "tuple",
+          "kind": "tupleLiteral",
           "elements": [
             {
-              "kind": "array",
+              "kind": "arrayLiteral",
               "elements": [
                 {
                   "kind": "literal",
@@ -2547,7 +2676,7 @@
               "source": "['00000000-89ab-cdef-0123-456789abcdef']"
             },
             {
-              "kind": "array",
+              "kind": "arrayLiteral",
               "elements": [
                 {
                   "kind": "literal",
@@ -2561,10 +2690,10 @@
           "source": "(['00000000-89ab-cdef-0123-456789abcdef'], [1])"
         },
         {
-          "kind": "tuple",
+          "kind": "tupleLiteral",
           "elements": [
             {
-              "kind": "array",
+              "kind": "arrayLiteral",
               "elements": [
                 {
                   "kind": "literal",
@@ -2575,7 +2704,7 @@
               "source": "['11111111-89ab-cdef-0123-456789abcdef']"
             },
             {
-              "kind": "array",
+              "kind": "arrayLiteral",
               "elements": [
                 {
                   "kind": "literal",
@@ -2601,10 +2730,10 @@
           "name": "mapSubtract",
           "args": [
             {
-              "kind": "tuple",
+              "kind": "tupleLiteral",
               "elements": [
                 {
-                  "kind": "array",
+                  "kind": "arrayLiteral",
                   "elements": [
                     {
                       "kind": "functionCall",
@@ -2626,7 +2755,7 @@
                   "source": "[toUInt8(1), 2]"
                 },
                 {
-                  "kind": "array",
+                  "kind": "arrayLiteral",
                   "elements": [
                     {
                       "kind": "literal",
@@ -2645,10 +2774,10 @@
               "source": "([toUInt8(1), 2], [1, 1])"
             },
             {
-              "kind": "tuple",
+              "kind": "tupleLiteral",
               "elements": [
                 {
-                  "kind": "array",
+                  "kind": "arrayLiteral",
                   "elements": [
                     {
                       "kind": "functionCall",
@@ -2670,7 +2799,7 @@
                   "source": "[toUInt8(1), 2]"
                 },
                 {
-                  "kind": "array",
+                  "kind": "arrayLiteral",
                   "elements": [
                     {
                       "kind": "literal",
@@ -2704,6 +2833,9 @@
           }
         ]
       }
+    ],
+    "leadingComments": [
+      "-- mapSubtract, same rules as mapAdd"
     ]
   },
   {
@@ -2716,10 +2848,10 @@
           "name": "mapSubtract",
           "args": [
             {
-              "kind": "tuple",
+              "kind": "tupleLiteral",
               "elements": [
                 {
-                  "kind": "array",
+                  "kind": "arrayLiteral",
                   "elements": [
                     {
                       "kind": "functionCall",
@@ -2741,7 +2873,7 @@
                   "source": "[toUInt8(1), 2]"
                 },
                 {
-                  "kind": "array",
+                  "kind": "arrayLiteral",
                   "elements": [
                     {
                       "kind": "literal",
@@ -2760,10 +2892,10 @@
               "source": "([toUInt8(1), 2], [1, 1])"
             },
             {
-              "kind": "tuple",
+              "kind": "tupleLiteral",
               "elements": [
                 {
-                  "kind": "array",
+                  "kind": "arrayLiteral",
                   "elements": [
                     {
                       "kind": "functionCall",
@@ -2785,7 +2917,7 @@
                   "source": "[toUInt8(1), 2]"
                 },
                 {
-                  "kind": "array",
+                  "kind": "arrayLiteral",
                   "elements": [
                     {
                       "kind": "literal",
@@ -2819,6 +2951,9 @@
           }
         ]
       }
+    ],
+    "trailingComments": [
+      "-- overflow"
     ]
   },
   {
@@ -2831,10 +2966,10 @@
           "name": "mapSubtract",
           "args": [
             {
-              "kind": "tuple",
+              "kind": "tupleLiteral",
               "elements": [
                 {
-                  "kind": "array",
+                  "kind": "arrayLiteral",
                   "elements": [
                     {
                       "kind": "functionCall",
@@ -2856,7 +2991,7 @@
                   "source": "[toUInt8(1), 2]"
                 },
                 {
-                  "kind": "array",
+                  "kind": "arrayLiteral",
                   "elements": [
                     {
                       "kind": "functionCall",
@@ -2881,10 +3016,10 @@
               "source": "([toUInt8(1), 2], [toInt32(1), 1])"
             },
             {
-              "kind": "tuple",
+              "kind": "tupleLiteral",
               "elements": [
                 {
-                  "kind": "array",
+                  "kind": "arrayLiteral",
                   "elements": [
                     {
                       "kind": "functionCall",
@@ -2906,7 +3041,7 @@
                   "source": "[toUInt8(1), 2]"
                 },
                 {
-                  "kind": "array",
+                  "kind": "arrayLiteral",
                   "elements": [
                     {
                       "kind": "functionCall",
@@ -2958,10 +3093,10 @@
           "name": "mapSubtract",
           "args": [
             {
-              "kind": "tuple",
+              "kind": "tupleLiteral",
               "elements": [
                 {
-                  "kind": "array",
+                  "kind": "arrayLiteral",
                   "elements": [
                     {
                       "kind": "literal",
@@ -2977,7 +3112,7 @@
                   "source": "[1, 2]"
                 },
                 {
-                  "kind": "array",
+                  "kind": "arrayLiteral",
                   "elements": [
                     {
                       "kind": "functionCall",
@@ -3002,10 +3137,10 @@
               "source": "([1, 2], [toFloat32(1.1), 1])"
             },
             {
-              "kind": "tuple",
+              "kind": "tupleLiteral",
               "elements": [
                 {
-                  "kind": "array",
+                  "kind": "arrayLiteral",
                   "elements": [
                     {
                       "kind": "literal",
@@ -3021,7 +3156,7 @@
                   "source": "[1, 2]"
                 },
                 {
-                  "kind": "array",
+                  "kind": "arrayLiteral",
                   "elements": [
                     {
                       "kind": "literal",
@@ -3067,10 +3202,10 @@
           "name": "mapSubtract",
           "args": [
             {
-              "kind": "tuple",
+              "kind": "tupleLiteral",
               "elements": [
                 {
-                  "kind": "array",
+                  "kind": "arrayLiteral",
                   "elements": [
                     {
                       "kind": "functionCall",
@@ -3087,7 +3222,7 @@
                   "source": "[toUInt8(3)]"
                 },
                 {
-                  "kind": "array",
+                  "kind": "arrayLiteral",
                   "elements": [
                     {
                       "kind": "functionCall",
@@ -3107,10 +3242,10 @@
               "source": "([toUInt8(3)], [toInt32(1)])"
             },
             {
-              "kind": "tuple",
+              "kind": "tupleLiteral",
               "elements": [
                 {
-                  "kind": "array",
+                  "kind": "arrayLiteral",
                   "elements": [
                     {
                       "kind": "functionCall",
@@ -3132,7 +3267,7 @@
                   "source": "[toUInt8(1), 2]"
                 },
                 {
-                  "kind": "array",
+                  "kind": "arrayLiteral",
                   "elements": [
                     {
                       "kind": "functionCall",

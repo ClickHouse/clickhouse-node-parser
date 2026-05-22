@@ -1,3 +1,47 @@
+DropQuery  userid_set (children 1)
+ Identifier userid_set
+
+DropQuery  userid_test (children 1)
+ Identifier userid_test
+
+DropQuery  userid_set2 (children 1)
+ Identifier userid_set2
+
+CreateQuery userid_set (children 3)
+ Identifier userid_set
+ Columns definition (children 1)
+  ExpressionList (children 2)
+   ColumnDeclaration userid (children 1)
+    DataType UInt64
+   ColumnDeclaration name (children 1)
+    DataType String
+ Storage definition (children 1)
+  Function Set
+
+InsertQuery   (children 1)
+ Identifier userid_set
+
+CreateQuery userid_test (children 3)
+ Identifier userid_test
+ Columns definition (children 1)
+  ExpressionList (children 2)
+   ColumnDeclaration userid (children 1)
+    DataType UInt64
+   ColumnDeclaration name (children 1)
+    DataType String
+ Storage definition (children 4)
+  Function MergeTree (children 1)
+   ExpressionList
+  Function intDiv (children 1)
+   ExpressionList (children 2)
+    Identifier userid
+    Literal UInt64_500
+  Identifier userid
+  Set
+
+InsertQuery   (children 1)
+ Identifier userid_test
+
 SelectWithUnionQuery (children 1)
  ExpressionList (children 1)
   SelectQuery (children 3)
@@ -14,3 +58,53 @@ SelectWithUnionQuery (children 1)
        Identifier userid
        Identifier name
      Identifier userid_set
+
+CreateQuery userid_set2 (children 3)
+ Identifier userid_set2
+ Columns definition (children 1)
+  ExpressionList (children 3)
+   ColumnDeclaration userid (children 1)
+    DataType UInt64
+   ColumnDeclaration name (children 1)
+    DataType String
+   ColumnDeclaration birthdate (children 1)
+    DataType Date
+ Storage definition (children 1)
+  Function Set
+
+InsertQuery   (children 1)
+ Identifier userid_set2
+
+SelectWithUnionQuery (children 1)
+ ExpressionList (children 1)
+  SelectQuery (children 4)
+   ExpressionList (children 2)
+    Literal 'John' (alias name)
+    Function toDate (alias birthdate) (children 1)
+     ExpressionList (children 1)
+      Literal '1990-01-01'
+   ExpressionList (children 1)
+    Asterisk
+   TablesInSelectQuery (children 1)
+    TablesInSelectQueryElement (children 1)
+     TableExpression (children 1)
+      Function numbers (children 1)
+       ExpressionList (children 1)
+        Literal UInt64_10
+   Function in (children 1)
+    ExpressionList (children 2)
+     Function tuple (children 1)
+      ExpressionList (children 3)
+       Identifier number
+       Identifier name
+       Identifier birthdate
+     Identifier userid_set2
+
+DropQuery  userid_set (children 1)
+ Identifier userid_set
+
+DropQuery  userid_test (children 1)
+ Identifier userid_test
+
+DropQuery  userid_set2 (children 1)
+ Identifier userid_set2

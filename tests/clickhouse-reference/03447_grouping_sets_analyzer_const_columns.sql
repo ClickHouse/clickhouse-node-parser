@@ -1,3 +1,4 @@
+SET enable_analyzer=1;
 SELECT grouping(key_a), grouping(key_b), key_a, key_b, count()  FROM (
     SELECT 'value' as key_a, number as key_b FROM numbers(4)
 )

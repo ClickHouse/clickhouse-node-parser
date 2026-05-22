@@ -7,6 +7,11 @@
         "type": "String",
         "value": "---- denseRank() ----"
       }
+    ],
+    "leadingComments": [
+      "-- https://github.com/ClickHouse/ClickHouse/issues/67042",
+      "-- Reference generated using percent_rank() and dense_rank()",
+      "-- From ClickHouse/tests/queries/0_stateless/01591_window_functions.sql  (for deterministic query)"
     ]
   },
   {
@@ -110,7 +115,7 @@
           }
         ],
         "from": {
-          "kind": "tableFunction",
+          "kind": "tableFunctionRef",
           "name": "numbers",
           "args": [
             {
@@ -180,7 +185,38 @@
     "windows": [
       {
         "name": "w",
-        "body": "partition by p order by o, number"
+        "spec": {
+          "partitionBy": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "p"
+              ]
+            }
+          ],
+          "orderBy": [
+            {
+              "kind": "orderByItem",
+              "expr": {
+                "kind": "columnRef",
+                "parts": [
+                  "o"
+                ]
+              },
+              "direction": "ASC"
+            },
+            {
+              "kind": "orderByItem",
+              "expr": {
+                "kind": "columnRef",
+                "parts": [
+                  "number"
+                ]
+              },
+              "direction": "ASC"
+            }
+          ]
+        }
       }
     ],
     "settings": [
@@ -191,6 +227,192 @@
           "type": "UInt64",
           "value": "2"
         }
+      }
+    ]
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "product_groups"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "products"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "product_groups"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "group_id",
+        "type": {
+          "name": "Int64"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "group_name",
+        "type": {
+          "name": "String"
+        }
+      }
+    ],
+    "engine": {
+      "name": "Memory"
+    }
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "products"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "product_id",
+        "type": {
+          "name": "Int64"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "product_name",
+        "type": {
+          "name": "String"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "price",
+        "type": {
+          "name": "DECIMAL",
+          "args": [
+            {
+              "kind": "literal",
+              "value": "11"
+            },
+            {
+              "kind": "literal",
+              "value": "2"
+            }
+          ]
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "group_id",
+        "type": {
+          "name": "Int64"
+        }
+      }
+    ],
+    "engine": {
+      "name": "Memory"
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "product_groups"
+      }
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "products"
+      }
+    },
+    "columns": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "product_id"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "product_name"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "group_id"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "price"
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "product_groups"
+      }
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "products"
+      }
+    },
+    "columns": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "product_id"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "product_name"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "group_id"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "price"
+        ]
       }
     ]
   },
@@ -292,7 +514,7 @@
             "kind": "tableRef",
             "table": "products"
           },
-          "kind": "join",
+          "kind": "joinExpr",
           "joinType": "INNER",
           "right": {
             "kind": "tableRef",
@@ -340,5 +562,21 @@
         "direction": "ASC"
       }
     ]
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "product_groups"
+    }
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "products"
+    }
   }
 ]

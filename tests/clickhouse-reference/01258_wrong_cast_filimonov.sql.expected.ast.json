@@ -1,0 +1,120 @@
+[
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "x"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "id",
+        "type": {
+          "name": "UInt64"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "t",
+        "type": {
+          "name": "AggregateFunction",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "argMax"
+              }
+            },
+            {
+              "kind": "type",
+              "type": {
+                "name": "Enum8",
+                "args": [
+                  {
+                    "kind": "enumValues",
+                    "values": [
+                      {
+                        "name": "<Empty>",
+                        "value": "-1"
+                      },
+                      {
+                        "name": "Male",
+                        "value": "1"
+                      },
+                      {
+                        "name": "Female",
+                        "value": "2"
+                      }
+                    ]
+                  }
+                ]
+              }
+            },
+            {
+              "kind": "type",
+              "type": {
+                "name": "UInt64"
+              }
+            }
+          ]
+        },
+        "defaultKind": "DEFAULT",
+        "defaultExpr": {
+          "kind": "functionCall",
+          "name": "arrayReduce",
+          "args": [
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "argMaxState"
+            },
+            {
+              "kind": "arrayLiteral",
+              "elements": [
+                {
+                  "kind": "literal",
+                  "type": "String",
+                  "value": "cast(-1, 'Enum8('<Empty>' = -1, 'Male' = 1, 'Female' = 2)"
+                }
+              ],
+              "source": "['cast(-1, \\'Enum8(\\'<Empty>\\' = -1, \\'Male\\' = 1, \\'Female\\' = 2)']"
+            },
+            {
+              "kind": "arrayLiteral",
+              "elements": [
+                {
+                  "kind": "functionCall",
+                  "name": "toUInt64",
+                  "args": [
+                    {
+                      "kind": "literal",
+                      "type": "UInt64",
+                      "value": "0"
+                    }
+                  ]
+                }
+              ],
+              "source": "[toUInt64(0)]"
+            }
+          ]
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "id"
+          ]
+        }
+      }
+    ],
+    "trailingComments": [
+      "-- { serverError CANNOT_CONVERT_TYPE }"
+    ]
+  }
+]

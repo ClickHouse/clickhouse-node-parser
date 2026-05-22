@@ -33,7 +33,7 @@ WHERE
    OR toTypeName(any_nullable_ignore) != toTypeName(any_nullable_respect)
    OR last_nullable_ignore != last_nullable_respect
    OR toTypeName(last_nullable_ignore) != toTypeName(last_nullable_respect);
-
+-- { echoOn }
 Select anyOrNull(tp) FROM (Select (number, number) as tp from numbers(10));
 SELECT
     any(tp) AS default,

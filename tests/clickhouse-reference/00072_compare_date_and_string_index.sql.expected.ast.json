@@ -27,7 +27,10 @@
         "type": "String",
         "value": "2014-03-18"
       }
-    }
+    },
+    "leadingComments": [
+      "-- Tags: stateful"
+    ]
   },
   {
     "kind": "select",
@@ -454,6 +457,126 @@
           }
         ]
       }
+    }
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "hits_indexed_by_time"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "hits_indexed_by_time"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "EventDate",
+        "type": {
+          "name": "Date"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "EventTime",
+        "type": {
+          "name": "DateTime",
+          "args": [
+            {
+              "kind": "literal",
+              "value": "'Asia/Dubai'"
+            }
+          ]
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "EventDate"
+          ]
+        }
+      },
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "EventTime"
+          ]
+        }
+      }
+    ],
+    "settings": [
+      {
+        "name": "index_granularity",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "8192"
+        }
+      },
+      {
+        "name": "index_granularity_bytes",
+        "value": {
+          "kind": "literal",
+          "type": "String",
+          "value": "10Mi"
+        }
+      }
+    ],
+    "settingsAfterOrderBy": true
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "hits_indexed_by_time"
+      }
+    },
+    "selectQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "EventDate"
+          ]
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "EventTime"
+          ]
+        }
+      ],
+      "from": {
+        "kind": "tableRef",
+        "database": "test",
+        "table": "hits"
+      },
+      "settings": [
+        {
+          "name": "max_block_size",
+          "value": {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "65000"
+          }
+        }
+      ]
     }
   },
   {
@@ -933,6 +1056,14 @@
           }
         ]
       }
+    }
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "hits_indexed_by_time"
     }
   }
 ]

@@ -1,0 +1,1833 @@
+[
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "uin_value_details"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "uin_value_details"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "ds",
+        "type": {
+          "name": "Date"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "uin",
+        "type": {
+          "name": "UInt32"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "value",
+        "type": {
+          "name": "Float64"
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree",
+      "args": []
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "ds"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "uin_value_details"
+      }
+    },
+    "columns": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "ds"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "uin"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "value"
+        ]
+      }
+    ],
+    "selectQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "2023-12-20"
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "number"
+          ]
+        },
+        {
+          "kind": "binaryExpr",
+          "op": "*",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "number"
+            ]
+          },
+          "right": {
+            "kind": "columnRef",
+            "parts": [
+              "number"
+            ]
+          }
+        }
+      ],
+      "from": {
+        "kind": "tableFunctionRef",
+        "name": "numbers",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "1000"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "uin_value_details"
+      }
+    },
+    "columns": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "ds"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "uin"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "value"
+        ]
+      }
+    ],
+    "selectQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "2023-12-21"
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "number"
+          ]
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "number"
+          ]
+        }
+      ],
+      "from": {
+        "kind": "tableFunctionRef",
+        "name": "numbers",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "1000"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "kind": "select",
+    "with": [
+      {
+        "kind": "cteExpr",
+        "name": "vec_1",
+        "expr": {
+          "kind": "subqueryExpr",
+          "query": {
+            "kind": "select",
+            "select": [
+              {
+                "kind": "functionCall",
+                "name": "groupNumericIndexedVectorStateIf",
+                "args": [
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "uin"
+                    ]
+                  },
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "value"
+                    ]
+                  },
+                  {
+                    "kind": "binaryExpr",
+                    "op": "=",
+                    "left": {
+                      "kind": "columnRef",
+                      "parts": [
+                        "ds"
+                      ]
+                    },
+                    "right": {
+                      "kind": "literal",
+                      "type": "String",
+                      "value": "2023-12-20"
+                    }
+                  }
+                ]
+              }
+            ],
+            "from": {
+              "kind": "tableRef",
+              "table": "uin_value_details"
+            }
+          }
+        }
+      },
+      {
+        "kind": "cteExpr",
+        "name": "vec_2",
+        "expr": {
+          "kind": "subqueryExpr",
+          "query": {
+            "kind": "select",
+            "select": [
+              {
+                "kind": "functionCall",
+                "name": "groupNumericIndexedVectorStateIf",
+                "args": [
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "uin"
+                    ]
+                  },
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "value"
+                    ]
+                  },
+                  {
+                    "kind": "binaryExpr",
+                    "op": "=",
+                    "left": {
+                      "kind": "columnRef",
+                      "parts": [
+                        "ds"
+                      ]
+                    },
+                    "right": {
+                      "kind": "literal",
+                      "type": "String",
+                      "value": "2023-12-21"
+                    }
+                  }
+                ]
+              }
+            ],
+            "from": {
+              "kind": "tableRef",
+              "table": "uin_value_details"
+            }
+          }
+        }
+      },
+      {
+        "kind": "cteExpr",
+        "name": "vec_3",
+        "expr": {
+          "kind": "functionCall",
+          "name": "numericIndexedVectorPointwiseDivide",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "vec_1"
+              ]
+            },
+            {
+              "kind": "columnRef",
+              "parts": [
+                "vec_2"
+              ]
+            }
+          ]
+        }
+      }
+    ],
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "arrayJoin",
+        "args": [
+          {
+            "kind": "arrayLiteral",
+            "elements": [
+              {
+                "kind": "functionCall",
+                "name": "numericIndexedVectorShortDebugString",
+                "args": [
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "vec_1"
+                    ]
+                  }
+                ]
+              },
+              {
+                "kind": "functionCall",
+                "name": "toString",
+                "args": [
+                  {
+                    "kind": "functionCall",
+                    "name": "numericIndexedVectorAllValueSum",
+                    "args": [
+                      {
+                        "kind": "columnRef",
+                        "parts": [
+                          "vec_1"
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "kind": "functionCall",
+                "name": "numericIndexedVectorShortDebugString",
+                "args": [
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "vec_2"
+                    ]
+                  }
+                ]
+              },
+              {
+                "kind": "functionCall",
+                "name": "toString",
+                "args": [
+                  {
+                    "kind": "functionCall",
+                    "name": "numericIndexedVectorAllValueSum",
+                    "args": [
+                      {
+                        "kind": "columnRef",
+                        "parts": [
+                          "vec_2"
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "kind": "functionCall",
+                "name": "numericIndexedVectorShortDebugString",
+                "args": [
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "vec_3"
+                    ]
+                  }
+                ]
+              },
+              {
+                "kind": "functionCall",
+                "name": "toString",
+                "args": [
+                  {
+                    "kind": "functionCall",
+                    "name": "numericIndexedVectorAllValueSum",
+                    "args": [
+                      {
+                        "kind": "columnRef",
+                        "parts": [
+                          "vec_3"
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            ],
+            "source": "[\n    numericIndexedVectorShortDebugString(vec_1)\n    , toString(numericIndexedVectorAllValueSum(vec_1))\n    , numericIndexedVectorShortDebugString(vec_2)\n    , toString(numericIndexedVectorAllValueSum(vec_2))\n    , numericIndexedVectorShortDebugString(vec_3)\n    , toString(numericIndexedVectorAllValueSum(vec_3))\n]"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "uin_value_details"
+      }
+    },
+    "columns": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "ds"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "uin"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "value"
+        ]
+      }
+    ],
+    "selectQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "2023-12-22"
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "number"
+          ]
+        },
+        {
+          "kind": "binaryExpr",
+          "op": "*",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "number"
+            ]
+          },
+          "right": {
+            "kind": "columnRef",
+            "parts": [
+              "number"
+            ]
+          }
+        }
+      ],
+      "from": {
+        "kind": "tableFunctionRef",
+        "name": "numbers",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "5000"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "uin_value_details"
+      }
+    },
+    "columns": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "ds"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "uin"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "value"
+        ]
+      }
+    ],
+    "selectQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "2023-12-23"
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "number"
+          ]
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "number"
+          ]
+        }
+      ],
+      "from": {
+        "kind": "tableFunctionRef",
+        "name": "numbers",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "5000"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "kind": "select",
+    "with": [
+      {
+        "kind": "cteExpr",
+        "name": "vec_1",
+        "expr": {
+          "kind": "subqueryExpr",
+          "query": {
+            "kind": "select",
+            "select": [
+              {
+                "kind": "functionCall",
+                "name": "groupNumericIndexedVectorStateIf",
+                "args": [
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "uin"
+                    ]
+                  },
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "value"
+                    ]
+                  },
+                  {
+                    "kind": "binaryExpr",
+                    "op": "=",
+                    "left": {
+                      "kind": "columnRef",
+                      "parts": [
+                        "ds"
+                      ]
+                    },
+                    "right": {
+                      "kind": "literal",
+                      "type": "String",
+                      "value": "2023-12-22"
+                    }
+                  }
+                ]
+              }
+            ],
+            "from": {
+              "kind": "tableRef",
+              "table": "uin_value_details"
+            }
+          }
+        }
+      },
+      {
+        "kind": "cteExpr",
+        "name": "vec_2",
+        "expr": {
+          "kind": "subqueryExpr",
+          "query": {
+            "kind": "select",
+            "select": [
+              {
+                "kind": "functionCall",
+                "name": "groupNumericIndexedVectorStateIf",
+                "args": [
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "uin"
+                    ]
+                  },
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "value"
+                    ]
+                  },
+                  {
+                    "kind": "binaryExpr",
+                    "op": "=",
+                    "left": {
+                      "kind": "columnRef",
+                      "parts": [
+                        "ds"
+                      ]
+                    },
+                    "right": {
+                      "kind": "literal",
+                      "type": "String",
+                      "value": "2023-12-23"
+                    }
+                  }
+                ]
+              }
+            ],
+            "from": {
+              "kind": "tableRef",
+              "table": "uin_value_details"
+            }
+          }
+        }
+      },
+      {
+        "kind": "cteExpr",
+        "name": "vec_3",
+        "expr": {
+          "kind": "functionCall",
+          "name": "numericIndexedVectorPointwiseDivide",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "vec_1"
+              ]
+            },
+            {
+              "kind": "columnRef",
+              "parts": [
+                "vec_2"
+              ]
+            }
+          ]
+        }
+      }
+    ],
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "arrayJoin",
+        "args": [
+          {
+            "kind": "arrayLiteral",
+            "elements": [
+              {
+                "kind": "functionCall",
+                "name": "numericIndexedVectorShortDebugString",
+                "args": [
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "vec_1"
+                    ]
+                  }
+                ]
+              },
+              {
+                "kind": "functionCall",
+                "name": "toString",
+                "args": [
+                  {
+                    "kind": "functionCall",
+                    "name": "numericIndexedVectorAllValueSum",
+                    "args": [
+                      {
+                        "kind": "columnRef",
+                        "parts": [
+                          "vec_1"
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "kind": "functionCall",
+                "name": "numericIndexedVectorShortDebugString",
+                "args": [
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "vec_2"
+                    ]
+                  }
+                ]
+              },
+              {
+                "kind": "functionCall",
+                "name": "toString",
+                "args": [
+                  {
+                    "kind": "functionCall",
+                    "name": "numericIndexedVectorAllValueSum",
+                    "args": [
+                      {
+                        "kind": "columnRef",
+                        "parts": [
+                          "vec_2"
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "kind": "functionCall",
+                "name": "numericIndexedVectorShortDebugString",
+                "args": [
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "vec_3"
+                    ]
+                  }
+                ]
+              },
+              {
+                "kind": "functionCall",
+                "name": "toString",
+                "args": [
+                  {
+                    "kind": "functionCall",
+                    "name": "numericIndexedVectorAllValueSum",
+                    "args": [
+                      {
+                        "kind": "columnRef",
+                        "parts": [
+                          "vec_3"
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            ],
+            "source": "[\n    numericIndexedVectorShortDebugString(vec_1)\n    , toString(numericIndexedVectorAllValueSum(vec_1))\n    , numericIndexedVectorShortDebugString(vec_2)\n    , toString(numericIndexedVectorAllValueSum(vec_2))\n    , numericIndexedVectorShortDebugString(vec_3)\n    , toString(numericIndexedVectorAllValueSum(vec_3))\n]"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "uin_value_details"
+      }
+    },
+    "columns": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "ds"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "uin"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "value"
+        ]
+      }
+    ],
+    "selectQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "2023-12-26"
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "number"
+          ]
+        },
+        {
+          "kind": "binaryExpr",
+          "op": "*",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "number"
+            ]
+          },
+          "right": {
+            "kind": "columnRef",
+            "parts": [
+              "number"
+            ]
+          }
+        }
+      ],
+      "from": {
+        "kind": "tableFunctionRef",
+        "name": "numbers",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "30000"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "uin_value_details"
+      }
+    },
+    "columns": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "ds"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "uin"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "value"
+        ]
+      }
+    ],
+    "selectQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "2023-12-27"
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "number"
+          ]
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "number"
+          ]
+        }
+      ],
+      "from": {
+        "kind": "tableFunctionRef",
+        "name": "numbers",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "30000"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "uin_value_details"
+      }
+    },
+    "columns": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "ds"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "uin"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "value"
+        ]
+      }
+    ],
+    "selectQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "2023-12-28"
+        },
+        {
+          "kind": "binaryExpr",
+          "op": "*",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "number"
+            ]
+          },
+          "right": {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "3"
+          }
+        },
+        {
+          "kind": "binaryExpr",
+          "op": "*",
+          "left": {
+            "kind": "binaryExpr",
+            "op": "*",
+            "left": {
+              "kind": "binaryExpr",
+              "op": "*",
+              "left": {
+                "kind": "columnRef",
+                "parts": [
+                  "number"
+                ]
+              },
+              "right": {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "3"
+              }
+            },
+            "right": {
+              "kind": "columnRef",
+              "parts": [
+                "number"
+              ]
+            }
+          },
+          "right": {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "3"
+          }
+        }
+      ],
+      "from": {
+        "kind": "tableFunctionRef",
+        "name": "numbers",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "30000"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "uin_value_details"
+      }
+    },
+    "columns": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "ds"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "uin"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "value"
+        ]
+      }
+    ],
+    "selectQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "2023-12-29"
+        },
+        {
+          "kind": "binaryExpr",
+          "op": "*",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "number"
+            ]
+          },
+          "right": {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "3"
+          }
+        },
+        {
+          "kind": "binaryExpr",
+          "op": "*",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "number"
+            ]
+          },
+          "right": {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "3"
+          }
+        }
+      ],
+      "from": {
+        "kind": "tableFunctionRef",
+        "name": "numbers",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "30000"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "kind": "select",
+    "with": [
+      {
+        "kind": "cteExpr",
+        "name": "vec_1",
+        "expr": {
+          "kind": "subqueryExpr",
+          "query": {
+            "kind": "select",
+            "select": [
+              {
+                "kind": "functionCall",
+                "name": "groupNumericIndexedVectorStateIf",
+                "args": [
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "uin"
+                    ]
+                  },
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "value"
+                    ]
+                  },
+                  {
+                    "kind": "binaryExpr",
+                    "op": "=",
+                    "left": {
+                      "kind": "columnRef",
+                      "parts": [
+                        "ds"
+                      ]
+                    },
+                    "right": {
+                      "kind": "literal",
+                      "type": "String",
+                      "value": "2023-12-26"
+                    }
+                  }
+                ]
+              }
+            ],
+            "from": {
+              "kind": "tableRef",
+              "table": "uin_value_details"
+            }
+          }
+        }
+      },
+      {
+        "kind": "cteExpr",
+        "name": "vec_2",
+        "expr": {
+          "kind": "subqueryExpr",
+          "query": {
+            "kind": "select",
+            "select": [
+              {
+                "kind": "functionCall",
+                "name": "groupNumericIndexedVectorStateIf",
+                "args": [
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "uin"
+                    ]
+                  },
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "value"
+                    ]
+                  },
+                  {
+                    "kind": "binaryExpr",
+                    "op": "=",
+                    "left": {
+                      "kind": "columnRef",
+                      "parts": [
+                        "ds"
+                      ]
+                    },
+                    "right": {
+                      "kind": "literal",
+                      "type": "String",
+                      "value": "2023-12-27"
+                    }
+                  }
+                ]
+              }
+            ],
+            "from": {
+              "kind": "tableRef",
+              "table": "uin_value_details"
+            }
+          }
+        }
+      },
+      {
+        "kind": "cteExpr",
+        "name": "vec_3",
+        "expr": {
+          "kind": "subqueryExpr",
+          "query": {
+            "kind": "select",
+            "select": [
+              {
+                "kind": "functionCall",
+                "name": "groupNumericIndexedVectorStateIf",
+                "args": [
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "uin"
+                    ]
+                  },
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "value"
+                    ]
+                  },
+                  {
+                    "kind": "binaryExpr",
+                    "op": "=",
+                    "left": {
+                      "kind": "columnRef",
+                      "parts": [
+                        "ds"
+                      ]
+                    },
+                    "right": {
+                      "kind": "literal",
+                      "type": "String",
+                      "value": "2023-12-28"
+                    }
+                  }
+                ]
+              }
+            ],
+            "from": {
+              "kind": "tableRef",
+              "table": "uin_value_details"
+            }
+          }
+        }
+      },
+      {
+        "kind": "cteExpr",
+        "name": "vec_4",
+        "expr": {
+          "kind": "subqueryExpr",
+          "query": {
+            "kind": "select",
+            "select": [
+              {
+                "kind": "functionCall",
+                "name": "groupNumericIndexedVectorStateIf",
+                "args": [
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "uin"
+                    ]
+                  },
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "value"
+                    ]
+                  },
+                  {
+                    "kind": "binaryExpr",
+                    "op": "=",
+                    "left": {
+                      "kind": "columnRef",
+                      "parts": [
+                        "ds"
+                      ]
+                    },
+                    "right": {
+                      "kind": "literal",
+                      "type": "String",
+                      "value": "2023-12-29"
+                    }
+                  }
+                ]
+              }
+            ],
+            "from": {
+              "kind": "tableRef",
+              "table": "uin_value_details"
+            }
+          }
+        }
+      },
+      {
+        "kind": "cteExpr",
+        "name": "vec_5",
+        "expr": {
+          "kind": "functionCall",
+          "name": "numericIndexedVectorPointwiseDivide",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "vec_1"
+              ]
+            },
+            {
+              "kind": "columnRef",
+              "parts": [
+                "vec_2"
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "kind": "cteExpr",
+        "name": "vec_6",
+        "expr": {
+          "kind": "functionCall",
+          "name": "numericIndexedVectorPointwiseDivide",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "vec_1"
+              ]
+            },
+            {
+              "kind": "columnRef",
+              "parts": [
+                "vec_3"
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "kind": "cteExpr",
+        "name": "vec_7",
+        "expr": {
+          "kind": "functionCall",
+          "name": "numericIndexedVectorPointwiseDivide",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "vec_1"
+              ]
+            },
+            {
+              "kind": "columnRef",
+              "parts": [
+                "vec_4"
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "kind": "cteExpr",
+        "name": "vec_8",
+        "expr": {
+          "kind": "functionCall",
+          "name": "numericIndexedVectorPointwiseDivide",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "vec_2"
+              ]
+            },
+            {
+              "kind": "columnRef",
+              "parts": [
+                "vec_3"
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "kind": "cteExpr",
+        "name": "vec_9",
+        "expr": {
+          "kind": "functionCall",
+          "name": "numericIndexedVectorPointwiseDivide",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "vec_2"
+              ]
+            },
+            {
+              "kind": "columnRef",
+              "parts": [
+                "vec_4"
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "kind": "cteExpr",
+        "name": "vec_10",
+        "expr": {
+          "kind": "functionCall",
+          "name": "numericIndexedVectorPointwiseDivide",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "vec_3"
+              ]
+            },
+            {
+              "kind": "columnRef",
+              "parts": [
+                "vec_4"
+              ]
+            }
+          ]
+        }
+      }
+    ],
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "arrayJoin",
+        "args": [
+          {
+            "kind": "arrayLiteral",
+            "elements": [
+              {
+                "kind": "functionCall",
+                "name": "numericIndexedVectorShortDebugString",
+                "args": [
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "vec_1"
+                    ]
+                  }
+                ]
+              },
+              {
+                "kind": "functionCall",
+                "name": "toString",
+                "args": [
+                  {
+                    "kind": "functionCall",
+                    "name": "numericIndexedVectorAllValueSum",
+                    "args": [
+                      {
+                        "kind": "columnRef",
+                        "parts": [
+                          "vec_1"
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "kind": "functionCall",
+                "name": "numericIndexedVectorShortDebugString",
+                "args": [
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "vec_2"
+                    ]
+                  }
+                ]
+              },
+              {
+                "kind": "functionCall",
+                "name": "toString",
+                "args": [
+                  {
+                    "kind": "functionCall",
+                    "name": "numericIndexedVectorAllValueSum",
+                    "args": [
+                      {
+                        "kind": "columnRef",
+                        "parts": [
+                          "vec_2"
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "kind": "functionCall",
+                "name": "numericIndexedVectorShortDebugString",
+                "args": [
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "vec_3"
+                    ]
+                  }
+                ]
+              },
+              {
+                "kind": "functionCall",
+                "name": "toString",
+                "args": [
+                  {
+                    "kind": "functionCall",
+                    "name": "numericIndexedVectorAllValueSum",
+                    "args": [
+                      {
+                        "kind": "columnRef",
+                        "parts": [
+                          "vec_3"
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "kind": "functionCall",
+                "name": "numericIndexedVectorShortDebugString",
+                "args": [
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "vec_4"
+                    ]
+                  }
+                ]
+              },
+              {
+                "kind": "functionCall",
+                "name": "toString",
+                "args": [
+                  {
+                    "kind": "functionCall",
+                    "name": "numericIndexedVectorAllValueSum",
+                    "args": [
+                      {
+                        "kind": "columnRef",
+                        "parts": [
+                          "vec_4"
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "kind": "functionCall",
+                "name": "numericIndexedVectorShortDebugString",
+                "args": [
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "vec_5"
+                    ]
+                  }
+                ]
+              },
+              {
+                "kind": "functionCall",
+                "name": "toString",
+                "args": [
+                  {
+                    "kind": "functionCall",
+                    "name": "numericIndexedVectorAllValueSum",
+                    "args": [
+                      {
+                        "kind": "columnRef",
+                        "parts": [
+                          "vec_5"
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "kind": "functionCall",
+                "name": "numericIndexedVectorShortDebugString",
+                "args": [
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "vec_6"
+                    ]
+                  }
+                ]
+              },
+              {
+                "kind": "functionCall",
+                "name": "toString",
+                "args": [
+                  {
+                    "kind": "functionCall",
+                    "name": "numericIndexedVectorAllValueSum",
+                    "args": [
+                      {
+                        "kind": "columnRef",
+                        "parts": [
+                          "vec_6"
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "kind": "functionCall",
+                "name": "numericIndexedVectorShortDebugString",
+                "args": [
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "vec_7"
+                    ]
+                  }
+                ]
+              },
+              {
+                "kind": "functionCall",
+                "name": "toString",
+                "args": [
+                  {
+                    "kind": "functionCall",
+                    "name": "numericIndexedVectorAllValueSum",
+                    "args": [
+                      {
+                        "kind": "columnRef",
+                        "parts": [
+                          "vec_7"
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "kind": "functionCall",
+                "name": "numericIndexedVectorShortDebugString",
+                "args": [
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "vec_8"
+                    ]
+                  }
+                ]
+              },
+              {
+                "kind": "functionCall",
+                "name": "toString",
+                "args": [
+                  {
+                    "kind": "functionCall",
+                    "name": "numericIndexedVectorAllValueSum",
+                    "args": [
+                      {
+                        "kind": "columnRef",
+                        "parts": [
+                          "vec_8"
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "kind": "functionCall",
+                "name": "numericIndexedVectorShortDebugString",
+                "args": [
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "vec_9"
+                    ]
+                  }
+                ]
+              },
+              {
+                "kind": "functionCall",
+                "name": "toString",
+                "args": [
+                  {
+                    "kind": "functionCall",
+                    "name": "numericIndexedVectorAllValueSum",
+                    "args": [
+                      {
+                        "kind": "columnRef",
+                        "parts": [
+                          "vec_9"
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "kind": "functionCall",
+                "name": "numericIndexedVectorShortDebugString",
+                "args": [
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "vec_10"
+                    ]
+                  }
+                ]
+              },
+              {
+                "kind": "functionCall",
+                "name": "toString",
+                "args": [
+                  {
+                    "kind": "functionCall",
+                    "name": "numericIndexedVectorAllValueSum",
+                    "args": [
+                      {
+                        "kind": "columnRef",
+                        "parts": [
+                          "vec_10"
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            ],
+            "source": "[\n    numericIndexedVectorShortDebugString(vec_1)\n    , toString(numericIndexedVectorAllValueSum(vec_1))\n    , numericIndexedVectorShortDebugString(vec_2)\n    , toString(numericIndexedVectorAllValueSum(vec_2))\n    , numericIndexedVectorShortDebugString(vec_3)\n    , toString(numericIndexedVectorAllValueSum(vec_3))\n    , numericIndexedVectorShortDebugString(vec_4)\n    , toString(numericIndexedVectorAllValueSum(vec_4))\n    , numericIndexedVectorShortDebugString(vec_5)\n    , toString(numericIndexedVectorAllValueSum(vec_5))\n    , numericIndexedVectorShortDebugString(vec_6)\n    , toString(numericIndexedVectorAllValueSum(vec_6))\n    , numericIndexedVectorShortDebugString(vec_7)\n    , toString(numericIndexedVectorAllValueSum(vec_7))\n    , numericIndexedVectorShortDebugString(vec_8)\n    , toString(numericIndexedVectorAllValueSum(vec_8))\n    , numericIndexedVectorShortDebugString(vec_9)\n    , toString(numericIndexedVectorAllValueSum(vec_9))\n    , numericIndexedVectorShortDebugString(vec_10)\n    , toString(numericIndexedVectorAllValueSum(vec_10))\n]"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "numeric_indexed_vector"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "numeric_indexed_vector"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "ds",
+        "type": {
+          "name": "Date"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "vector",
+        "type": {
+          "name": "AggregateFunction",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "groupNumericIndexedVector"
+              }
+            },
+            {
+              "kind": "type",
+              "type": {
+                "name": "UInt32"
+              }
+            },
+            {
+              "kind": "type",
+              "type": {
+                "name": "Float64"
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree",
+      "args": []
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "ds"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "numeric_indexed_vector"
+      }
+    },
+    "columns": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "ds"
+        ]
+      }
+    ]
+  }
+]

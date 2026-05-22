@@ -1,5 +1,265 @@
 [
   {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "enable_parallel_replicas",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      }
+    ],
+    "leadingComments": [
+      "-- Tags: no-parallel-replicas",
+      "-- It generates plan with _reading_ from storage join, but reading from storage join with complex keys is currently not supported."
+    ]
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "t1"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "tj"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "tjj"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "t1"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "key1",
+        "type": {
+          "name": "UInt64"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "key2",
+        "type": {
+          "name": "UInt64"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "key3",
+        "type": {
+          "name": "UInt64"
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "functionCall",
+          "name": "tuple",
+          "args": []
+        }
+      }
+    ]
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "t1"
+      }
+    }
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "tj"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "key2",
+        "type": {
+          "name": "UInt64"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "key1",
+        "type": {
+          "name": "UInt64"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "key3",
+        "type": {
+          "name": "UInt64"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "attr",
+        "type": {
+          "name": "UInt64"
+        }
+      }
+    ],
+    "engine": {
+      "name": "Join",
+      "args": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "ALL"
+          ]
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "INNER"
+          ]
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "key3"
+          ]
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "key2"
+          ]
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "key1"
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "tj"
+      }
+    }
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "tjj"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "key2",
+        "type": {
+          "name": "UInt64"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "key1",
+        "type": {
+          "name": "UInt64"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "key3",
+        "type": {
+          "name": "UInt64"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "attr",
+        "type": {
+          "name": "UInt64"
+        }
+      }
+    ],
+    "engine": {
+      "name": "Join",
+      "args": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "ALL"
+          ]
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "INNER"
+          ]
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "key3"
+          ]
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "key2"
+          ]
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "key1"
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "tjj"
+      }
+    }
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -21,7 +281,7 @@
         "kind": "tableRef",
         "table": "t1"
       },
-      "kind": "join",
+      "kind": "joinExpr",
       "joinType": "INNER",
       "right": {
         "kind": "tableRef",
@@ -82,7 +342,7 @@
         "kind": "tableRef",
         "table": "t1"
       },
-      "kind": "join",
+      "kind": "joinExpr",
       "joinType": "INNER",
       "right": {
         "kind": "tableRef",
@@ -143,7 +403,7 @@
         "kind": "tableRef",
         "table": "t1"
       },
-      "kind": "join",
+      "kind": "joinExpr",
       "joinType": "INNER",
       "right": {
         "kind": "tableRef",
@@ -204,7 +464,7 @@
         "kind": "tableRef",
         "table": "t1"
       },
-      "kind": "join",
+      "kind": "joinExpr",
       "joinType": "INNER",
       "right": {
         "kind": "tableRef",
@@ -265,7 +525,7 @@
         "kind": "tableRef",
         "table": "t1"
       },
-      "kind": "join",
+      "kind": "joinExpr",
       "joinType": "INNER",
       "right": {
         "kind": "tableRef",
@@ -305,7 +565,7 @@
         "kind": "tableRef",
         "table": "t1"
       },
-      "kind": "join",
+      "kind": "joinExpr",
       "joinType": "INNER",
       "right": {
         "kind": "tableRef",
@@ -401,7 +661,7 @@
         "kind": "tableRef",
         "table": "t1"
       },
-      "kind": "join",
+      "kind": "joinExpr",
       "joinType": "INNER",
       "right": {
         "kind": "tableRef",
@@ -497,7 +757,7 @@
         "kind": "tableRef",
         "table": "t1"
       },
-      "kind": "join",
+      "kind": "joinExpr",
       "joinType": "INNER",
       "right": {
         "kind": "tableRef",
@@ -593,7 +853,7 @@
         "kind": "tableRef",
         "table": "t1"
       },
-      "kind": "join",
+      "kind": "joinExpr",
       "joinType": "INNER",
       "right": {
         "kind": "tableRef",
@@ -728,7 +988,7 @@
         },
         "alias": "t1"
       },
-      "kind": "join",
+      "kind": "joinExpr",
       "joinType": "INNER",
       "right": {
         "kind": "tableRef",
@@ -863,7 +1123,7 @@
         },
         "alias": "t1"
       },
-      "kind": "join",
+      "kind": "joinExpr",
       "joinType": "INNER",
       "right": {
         "kind": "tableRef",
@@ -998,7 +1258,7 @@
         },
         "alias": "t1"
       },
-      "kind": "join",
+      "kind": "joinExpr",
       "joinType": "INNER",
       "right": {
         "kind": "tableRef",
@@ -1094,7 +1354,7 @@
         "kind": "tableRef",
         "table": "t1"
       },
-      "kind": "join",
+      "kind": "joinExpr",
       "joinType": "INNER",
       "right": {
         "kind": "tableRef",
@@ -1168,7 +1428,10 @@
           ]
         }
       }
-    }
+    },
+    "trailingComments": [
+      "-- { serverError INCOMPATIBLE_TYPE_OF_JOIN,INVALID_JOIN_ON_EXPRESSION }"
+    ]
   },
   {
     "kind": "select",
@@ -1182,7 +1445,7 @@
         "kind": "tableRef",
         "table": "t1"
       },
-      "kind": "join",
+      "kind": "joinExpr",
       "joinType": "INNER",
       "right": {
         "kind": "tableRef",
@@ -1265,7 +1528,10 @@
           ]
         }
       }
-    }
+    },
+    "trailingComments": [
+      "-- { serverError INCOMPATIBLE_TYPE_OF_JOIN,INVALID_JOIN_ON_EXPRESSION }"
+    ]
   },
   {
     "kind": "select",
@@ -1279,7 +1545,7 @@
         "kind": "tableRef",
         "table": "t1"
       },
-      "kind": "join",
+      "kind": "joinExpr",
       "joinType": "INNER",
       "right": {
         "kind": "tableRef",
@@ -1293,7 +1559,10 @@
           "value": "1"
         }
       }
-    }
+    },
+    "trailingComments": [
+      "-- { serverError INCOMPATIBLE_TYPE_OF_JOIN,INVALID_JOIN_ON_EXPRESSION }"
+    ]
   },
   {
     "kind": "select",
@@ -1307,7 +1576,7 @@
         "kind": "tableRef",
         "table": "t1"
       },
-      "kind": "join",
+      "kind": "joinExpr",
       "joinType": "INNER",
       "right": {
         "kind": "tableRef",
@@ -1321,7 +1590,10 @@
           "value": "0"
         }
       }
-    }
+    },
+    "trailingComments": [
+      "-- { serverError INCOMPATIBLE_TYPE_OF_JOIN,INVALID_JOIN_ON_EXPRESSION }"
+    ]
   },
   {
     "kind": "select",
@@ -1335,7 +1607,7 @@
         "kind": "tableRef",
         "table": "t1"
       },
-      "kind": "join",
+      "kind": "joinExpr",
       "joinType": "INNER",
       "right": {
         "kind": "tableRef",
@@ -1349,7 +1621,10 @@
           "value": "NULL"
         }
       }
-    }
+    },
+    "trailingComments": [
+      "-- { serverError INCOMPATIBLE_TYPE_OF_JOIN,INVALID_JOIN_ON_EXPRESSION }"
+    ]
   },
   {
     "kind": "select",
@@ -1363,7 +1638,7 @@
         "kind": "tableRef",
         "table": "t1"
       },
-      "kind": "join",
+      "kind": "joinExpr",
       "joinType": "INNER",
       "right": {
         "kind": "tableRef",
@@ -1386,7 +1661,10 @@
           }
         }
       }
-    }
+    },
+    "trailingComments": [
+      "-- { serverError INCOMPATIBLE_TYPE_OF_JOIN,INVALID_JOIN_ON_EXPRESSION }"
+    ]
   },
   {
     "kind": "select",
@@ -1400,7 +1678,7 @@
         "kind": "tableRef",
         "table": "t1"
       },
-      "kind": "join",
+      "kind": "joinExpr",
       "joinType": "INNER",
       "right": {
         "kind": "tableRef",
@@ -1423,7 +1701,16 @@
           }
         }
       }
-    }
+    },
+    "leadingComments": [
+      "-- Here is another error code because equality is handled differently in CollectJoinOnKeysVisitor.",
+      "-- We can change the error code, but it will become inconsistent for other cases",
+      "-- where we actually expect AMBIGUOUS_COLUMN_NAME instead of INVALID_JOIN_ON_EXPRESSION/INCOMPATIBLE_TYPE_OF_JOIN.",
+      "-- These checks are more reliable after switching to a new analyzer, they return INCOMPATIBLE_TYPE_OF_JOIN consistent with cases above"
+    ],
+    "trailingComments": [
+      "-- { serverError INCOMPATIBLE_TYPE_OF_JOIN,AMBIGUOUS_COLUMN_NAME }"
+    ]
   },
   {
     "kind": "select",
@@ -1437,7 +1724,7 @@
         "kind": "tableRef",
         "table": "t1"
       },
-      "kind": "join",
+      "kind": "joinExpr",
       "joinType": "INNER",
       "right": {
         "kind": "tableRef",
@@ -1460,7 +1747,10 @@
           }
         }
       }
-    }
+    },
+    "trailingComments": [
+      "-- { serverError INCOMPATIBLE_TYPE_OF_JOIN,AMBIGUOUS_COLUMN_NAME }"
+    ]
   },
   {
     "kind": "select",
@@ -1474,7 +1764,7 @@
         "kind": "tableRef",
         "table": "t1"
       },
-      "kind": "join",
+      "kind": "joinExpr",
       "joinType": "INNER",
       "right": {
         "kind": "tableRef",
@@ -1488,7 +1778,10 @@
           "attr"
         ]
       }
-    }
+    },
+    "trailingComments": [
+      "-- { serverError INCOMPATIBLE_TYPE_OF_JOIN,UNKNOWN_IDENTIFIER }"
+    ]
   },
   {
     "kind": "select",
@@ -1502,7 +1795,7 @@
         "kind": "tableRef",
         "table": "t1"
       },
-      "kind": "join",
+      "kind": "joinExpr",
       "joinType": "INNER",
       "right": {
         "kind": "tableRef",
@@ -1517,7 +1810,10 @@
           "attr"
         ]
       }
-    }
+    },
+    "trailingComments": [
+      "-- { serverError INCOMPATIBLE_TYPE_OF_JOIN,UNKNOWN_IDENTIFIER }"
+    ]
   },
   {
     "kind": "select",
@@ -1531,7 +1827,7 @@
         "kind": "tableRef",
         "table": "t1"
       },
-      "kind": "join",
+      "kind": "joinExpr",
       "joinType": "INNER",
       "right": {
         "kind": "tableRef",
@@ -1544,7 +1840,10 @@
           "key3"
         ]
       }
-    }
+    },
+    "trailingComments": [
+      "-- { serverError INCOMPATIBLE_TYPE_OF_JOIN }"
+    ]
   },
   {
     "kind": "select",
@@ -1558,7 +1857,7 @@
         "kind": "tableRef",
         "table": "t1"
       },
-      "kind": "join",
+      "kind": "joinExpr",
       "joinType": "INNER",
       "right": {
         "kind": "tableRef",
@@ -1585,7 +1884,10 @@
           }
         }
       }
-    }
+    },
+    "trailingComments": [
+      "-- { serverError INCOMPATIBLE_TYPE_OF_JOIN }"
+    ]
   },
   {
     "kind": "select",
@@ -1599,7 +1901,7 @@
         "kind": "tableRef",
         "table": "t1"
       },
-      "kind": "join",
+      "kind": "joinExpr",
       "joinType": "INNER",
       "right": {
         "kind": "tableRef",
@@ -1626,7 +1928,10 @@
           }
         }
       }
-    }
+    },
+    "trailingComments": [
+      "-- { serverError INCOMPATIBLE_TYPE_OF_JOIN }"
+    ]
   },
   {
     "kind": "select",
@@ -1640,7 +1945,7 @@
         "kind": "tableRef",
         "table": "t1"
       },
-      "kind": "join",
+      "kind": "joinExpr",
       "joinType": "INNER",
       "right": {
         "kind": "tableRef",
@@ -1709,7 +2014,10 @@
           ]
         }
       }
-    }
+    },
+    "trailingComments": [
+      "-- { serverError INCOMPATIBLE_TYPE_OF_JOIN }"
+    ]
   },
   {
     "kind": "select",
@@ -1723,7 +2031,7 @@
         "kind": "tableRef",
         "table": "t1"
       },
-      "kind": "join",
+      "kind": "joinExpr",
       "joinType": "INNER",
       "right": {
         "kind": "tableRef",
@@ -1810,7 +2118,10 @@
           ]
         }
       }
-    }
+    },
+    "trailingComments": [
+      "-- { serverError INCOMPATIBLE_TYPE_OF_JOIN }"
+    ]
   },
   {
     "kind": "select",
@@ -1824,7 +2135,7 @@
         "kind": "tableRef",
         "table": "t1"
       },
-      "kind": "join",
+      "kind": "joinExpr",
       "joinType": "INNER",
       "right": {
         "kind": "tableRef",
@@ -1920,7 +2231,7 @@
         "kind": "tableRef",
         "table": "t1"
       },
-      "kind": "join",
+      "kind": "joinExpr",
       "joinType": "INNER",
       "right": {
         "kind": "tableRef",

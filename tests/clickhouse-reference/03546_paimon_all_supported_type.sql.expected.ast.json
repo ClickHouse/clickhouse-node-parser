@@ -1,5 +1,63 @@
 [
   {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "enable_time_time64_type",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      },
+      {
+        "name": "session_timezone",
+        "value": {
+          "kind": "literal",
+          "type": "String",
+          "value": "UTC"
+        }
+      }
+    ],
+    "leadingComments": [
+      "-- Tags: no-fasttest",
+      "-- Tag no-fasttest: Depends on AWS"
+    ]
+  },
+  {
+    "kind": "describe",
+    "target": {
+      "kind": "function",
+      "func": {
+        "kind": "tableFunctionRef",
+        "name": "paimonS3",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "s3_conn"
+            ]
+          },
+          {
+            "kind": "binaryExpr",
+            "op": "=",
+            "left": {
+              "kind": "columnRef",
+              "parts": [
+                "filename"
+              ]
+            },
+            "right": {
+              "kind": "literal",
+              "type": "String",
+              "value": "paimon_all_types"
+            }
+          }
+        ]
+      }
+    }
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -290,7 +348,7 @@
       }
     ],
     "from": {
-      "kind": "tableFunction",
+      "kind": "tableFunctionRef",
       "name": "paimonS3",
       "args": [
         {
@@ -345,7 +403,7 @@
       }
     ],
     "from": {
-      "kind": "tableFunction",
+      "kind": "tableFunctionRef",
       "name": "paimonS3",
       "args": [
         {

@@ -1,3 +1,4 @@
+-- Tags: no-fasttest
 SELECT javaHash(toInt8(123));
 
 SELECT javaHash(toInt8(-123));

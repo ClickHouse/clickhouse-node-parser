@@ -1,5 +1,107 @@
 [
   {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "enable_analyzer",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createView",
+    "table": {
+      "kind": "tableRef",
+      "table": "03271_parametrized_v"
+    },
+    "asQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "alias",
+          "expr": {
+            "kind": "columnRef",
+            "parts": [
+              "number"
+            ]
+          },
+          "alias": "n"
+        }
+      ],
+      "from": {
+        "kind": "tableFunctionRef",
+        "name": "numbers",
+        "args": [
+          {
+            "kind": "queryParam",
+            "name": "upper_bound",
+            "type": "UInt64"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "kind": "createView",
+    "table": {
+      "kind": "tableRef",
+      "table": "03271_parametrized_v_expl"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "n",
+        "type": {
+          "name": "UInt64"
+        }
+      }
+    ],
+    "asQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "alias",
+          "expr": {
+            "kind": "columnRef",
+            "parts": [
+              "number"
+            ]
+          },
+          "alias": "n"
+        }
+      ],
+      "from": {
+        "kind": "tableFunctionRef",
+        "name": "numbers",
+        "args": [
+          {
+            "kind": "queryParam",
+            "name": "upper_bound",
+            "type": "UInt64"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "kind": "system",
+    "body": "SHOW COLUMNS IN 03271_parametrized_v",
+    "leadingComments": [
+      "-- Should return no columns"
+    ]
+  },
+  {
+    "kind": "system",
+    "body": "SHOW COLUMNS IN 03271_parametrized_v_expl",
+    "leadingComments": [
+      "-- Should return one column 'n' of type 'UInt64'"
+    ]
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -98,6 +200,58 @@
     }
   },
   {
+    "kind": "createView",
+    "table": {
+      "kind": "tableRef",
+      "table": "03271_parametrized_v_expl_mismatch"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "n",
+        "type": {
+          "name": "UInt64"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "s",
+        "type": {
+          "name": "String"
+        }
+      }
+    ],
+    "asQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "alias",
+          "expr": {
+            "kind": "columnRef",
+            "parts": [
+              "number"
+            ]
+          },
+          "alias": "n"
+        }
+      ],
+      "from": {
+        "kind": "tableFunctionRef",
+        "name": "numbers",
+        "args": [
+          {
+            "kind": "queryParam",
+            "name": "upper_bound",
+            "type": "UInt64"
+          }
+        ]
+      }
+    },
+    "leadingComments": [
+      "-- Mismatched schema: should return error on query tree building"
+    ]
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -105,8 +259,40 @@
       }
     ],
     "from": {
-      "kind": "tableFunction",
+      "kind": "tableFunctionRef",
       "name": "03271_parametrized_v_expl_mismatch",
+      "args": [
+        {
+          "kind": "binaryExpr",
+          "op": "=",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "upper_bound"
+            ]
+          },
+          "right": {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "3"
+          }
+        }
+      ]
+    },
+    "trailingComments": [
+      "-- { serverError TYPE_MISMATCH }"
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "asterisk"
+      }
+    ],
+    "from": {
+      "kind": "tableFunctionRef",
+      "name": "03271_parametrized_v_expl",
       "args": [
         {
           "kind": "binaryExpr",
@@ -127,32 +313,27 @@
     }
   },
   {
-    "kind": "select",
-    "select": [
-      {
-        "kind": "asterisk"
-      }
-    ],
-    "from": {
-      "kind": "tableFunction",
-      "name": "03271_parametrized_v_expl",
-      "args": [
-        {
-          "kind": "binaryExpr",
-          "op": "=",
-          "left": {
-            "kind": "columnRef",
-            "parts": [
-              "upper_bound"
-            ]
-          },
-          "right": {
-            "kind": "literal",
-            "type": "UInt64",
-            "value": "3"
-          }
-        }
-      ]
+    "kind": "drop",
+    "targetType": "VIEW",
+    "table": {
+      "kind": "tableRef",
+      "table": "03271_parametrized_v"
+    }
+  },
+  {
+    "kind": "drop",
+    "targetType": "VIEW",
+    "table": {
+      "kind": "tableRef",
+      "table": "03271_parametrized_v_expl"
+    }
+  },
+  {
+    "kind": "drop",
+    "targetType": "VIEW",
+    "table": {
+      "kind": "tableRef",
+      "table": "03271_parametrized_v_expl_mismatch"
     }
   }
 ]

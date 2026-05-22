@@ -1,0 +1,90 @@
+DropQuery  foo (children 1)
+ Identifier foo
+
+DropQuery  foo2 (children 1)
+ Identifier foo2
+
+DropQuery  foo2_dist (children 1)
+ Identifier foo2_dist
+
+DropQuery  merge1 (children 1)
+ Identifier merge1
+
+CreateQuery foo (children 3)
+ Identifier foo
+ Columns definition (children 1)
+  ExpressionList (children 2)
+   ColumnDeclaration Id (children 1)
+    DataType Int32
+   ColumnDeclaration Val (children 1)
+    DataType Int32
+ Storage definition (children 2)
+  Function MergeTree
+  Identifier Id
+
+InsertQuery   (children 2)
+ Identifier foo
+ SelectWithUnionQuery (children 1)
+  ExpressionList (children 1)
+   SelectQuery (children 2)
+    ExpressionList (children 2)
+     Identifier number
+     Identifier number
+    TablesInSelectQuery (children 1)
+     TablesInSelectQueryElement (children 1)
+      TableExpression (children 1)
+       Function numbers (children 1)
+        ExpressionList (children 1)
+         Literal UInt64_100
+
+CreateQuery foo2 (children 3)
+ Identifier foo2
+ Columns definition (children 1)
+  ExpressionList (children 2)
+   ColumnDeclaration Id (children 1)
+    DataType Int32
+   ColumnDeclaration Val (children 1)
+    DataType Int32
+ Storage definition (children 2)
+  Function MergeTree
+  Identifier Id
+
+InsertQuery   (children 2)
+ Identifier foo2
+ SelectWithUnionQuery (children 1)
+  ExpressionList (children 1)
+   SelectQuery (children 2)
+    ExpressionList (children 2)
+     Identifier number
+     Identifier number
+    TablesInSelectQuery (children 1)
+     TablesInSelectQueryElement (children 1)
+      TableExpression (children 1)
+       Function numbers (children 1)
+        ExpressionList (children 1)
+         Literal UInt64_100
+
+CreateQuery foo2_dist (children 3)
+ Identifier foo2_dist
+ Columns definition (children 1)
+  ExpressionList (children 2)
+   ColumnDeclaration Id (children 1)
+    DataType UInt32
+   ColumnDeclaration Val (children 1)
+    DataType String
+ Storage definition (children 1)
+  Function Distributed (children 1)
+   ExpressionList (children 3)
+    Identifier test_shard_localhost
+    Function currentDatabase (children 1)
+     ExpressionList
+    Identifier foo2
+
+CreateQuery merge1 (children 2)
+ Identifier merge1
+ Storage definition (children 1)
+  Function Merge (children 1)
+   ExpressionList (children 2)
+    Function currentDatabase (children 1)
+     ExpressionList
+    Literal '^(foo|foo2_dist)$'

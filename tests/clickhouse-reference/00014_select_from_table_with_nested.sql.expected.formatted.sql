@@ -1,3 +1,14 @@
+DROP TABLE IF EXISTS nested_test;
+
+CREATE TABLE nested_test
+(
+    s String,
+    nest Nested(x UInt8, y UInt32)
+)
+ENGINE = Memory;
+
+INSERT INTO nested_test;
+
 SELECT *
 FROM nested_test;
 
@@ -62,3 +73,5 @@ SELECT
 FROM
     nested_test
 ARRAY JOIN nest AS n, arrayEnumerate(nest.x) AS num;
+
+DROP TABLE nested_test;

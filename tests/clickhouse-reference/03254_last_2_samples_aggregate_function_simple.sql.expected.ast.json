@@ -1,5 +1,568 @@
 [
   {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "allow_experimental_ts_to_grid_aggregate_function",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "t_raw_timeseries"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "metric_id",
+        "type": {
+          "name": "UInt64"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "timestamp",
+        "type": {
+          "name": "DateTime64",
+          "args": [
+            {
+              "kind": "literal",
+              "value": "3"
+            },
+            {
+              "kind": "literal",
+              "value": "'UTC'"
+            }
+          ]
+        },
+        "codec": [
+          {
+            "name": "DoubleDelta"
+          },
+          {
+            "name": "ZSTD"
+          }
+        ]
+      },
+      {
+        "kind": "columnDef",
+        "name": "value",
+        "type": {
+          "name": "Float64"
+        },
+        "codec": [
+          {
+            "name": "DoubleDelta"
+          }
+        ]
+      }
+    ],
+    "engine": {
+      "name": "MergeTree",
+      "args": []
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "metric_id"
+          ]
+        }
+      },
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "timestamp"
+          ]
+        }
+      }
+    ],
+    "leadingComments": [
+      "-- Table for raw data"
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "t_resampled_timeseries_15_sec"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "metric_id",
+        "type": {
+          "name": "UInt64"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "grid_timestamp",
+        "type": {
+          "name": "DateTime",
+          "args": [
+            {
+              "kind": "literal",
+              "value": "'UTC'"
+            }
+          ]
+        },
+        "codec": [
+          {
+            "name": "DoubleDelta"
+          },
+          {
+            "name": "ZSTD"
+          }
+        ]
+      },
+      {
+        "kind": "columnDef",
+        "name": "samples",
+        "type": {
+          "name": "AggregateFunction",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "timeSeriesLastTwoSamples"
+              }
+            },
+            {
+              "kind": "type",
+              "type": {
+                "name": "DateTime64",
+                "args": [
+                  {
+                    "kind": "literal",
+                    "value": "3"
+                  },
+                  {
+                    "kind": "literal",
+                    "value": "'UTC'"
+                  }
+                ]
+              }
+            },
+            {
+              "kind": "type",
+              "type": {
+                "name": "Float64"
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "engine": {
+      "name": "AggregatingMergeTree",
+      "args": []
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "metric_id"
+          ]
+        }
+      },
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "grid_timestamp"
+          ]
+        }
+      }
+    ],
+    "leadingComments": [
+      "-- Table with data re-sampled to bigger (15 sec) time steps"
+    ]
+  },
+  {
+    "kind": "createMaterializedView",
+    "table": {
+      "kind": "tableRef",
+      "table": "mv_resampled_timeseries"
+    },
+    "toTable": {
+      "kind": "tableRef",
+      "table": "t_resampled_timeseries_15_sec"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "metric_id",
+        "type": {
+          "name": "UInt64"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "grid_timestamp",
+        "type": {
+          "name": "DateTime",
+          "args": [
+            {
+              "kind": "literal",
+              "value": "'UTC'"
+            }
+          ]
+        },
+        "codec": [
+          {
+            "name": "DoubleDelta"
+          },
+          {
+            "name": "ZSTD"
+          }
+        ]
+      },
+      {
+        "kind": "columnDef",
+        "name": "samples",
+        "type": {
+          "name": "AggregateFunction",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "timeSeriesLastTwoSamples"
+              }
+            },
+            {
+              "kind": "type",
+              "type": {
+                "name": "DateTime64",
+                "args": [
+                  {
+                    "kind": "literal",
+                    "value": "3"
+                  },
+                  {
+                    "kind": "literal",
+                    "value": "'UTC'"
+                  }
+                ]
+              }
+            },
+            {
+              "kind": "type",
+              "type": {
+                "name": "Float64"
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "asQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "metric_id"
+          ]
+        },
+        {
+          "kind": "alias",
+          "expr": {
+            "kind": "binaryExpr",
+            "op": "*",
+            "left": {
+              "kind": "functionCall",
+              "name": "ceil",
+              "args": [
+                {
+                  "kind": "binaryExpr",
+                  "op": "/",
+                  "left": {
+                    "kind": "functionCall",
+                    "name": "toUnixTimestamp",
+                    "args": [
+                      {
+                        "kind": "binaryExpr",
+                        "op": "+",
+                        "left": {
+                          "kind": "columnRef",
+                          "parts": [
+                            "timestamp"
+                          ]
+                        },
+                        "right": {
+                          "kind": "functionCall",
+                          "name": "toIntervalMillisecond",
+                          "args": [
+                            {
+                              "kind": "literal",
+                              "type": "UInt64",
+                              "value": "999"
+                            }
+                          ]
+                        }
+                      }
+                    ]
+                  },
+                  "right": {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "15"
+                  }
+                },
+                {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "0"
+                }
+              ]
+            },
+            "right": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "15"
+            }
+          },
+          "alias": "grid_timestamp",
+          "trailingComments": [
+            "-- Round timestamp up to the next grid point"
+          ]
+        },
+        {
+          "kind": "alias",
+          "expr": {
+            "kind": "functionCall",
+            "name": "initializeAggregation",
+            "args": [
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "timeSeriesLastTwoSamplesState"
+              },
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "timestamp"
+                ]
+              },
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "value"
+                ]
+              }
+            ]
+          },
+          "alias": "samples"
+        }
+      ],
+      "from": {
+        "kind": "tableRef",
+        "table": "t_raw_timeseries"
+      },
+      "orderBy": [
+        {
+          "kind": "orderByItem",
+          "expr": {
+            "kind": "columnRef",
+            "parts": [
+              "metric_id"
+            ]
+          },
+          "direction": "ASC"
+        },
+        {
+          "kind": "orderByItem",
+          "expr": {
+            "kind": "columnRef",
+            "parts": [
+              "grid_timestamp"
+            ]
+          },
+          "direction": "ASC"
+        }
+      ]
+    },
+    "leadingComments": [
+      "-- MV for populating re-sampled table"
+    ]
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "t_raw_timeseries"
+      }
+    },
+    "columns": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "metric_id"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "timestamp"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "value"
+        ]
+      }
+    ],
+    "selectQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "alias",
+          "expr": {
+            "kind": "binaryExpr",
+            "op": "%",
+            "left": {
+              "kind": "columnRef",
+              "parts": [
+                "number"
+              ]
+            },
+            "right": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "10"
+            }
+          },
+          "alias": "metric_id"
+        },
+        {
+          "kind": "alias",
+          "expr": {
+            "kind": "binaryExpr",
+            "op": "+",
+            "left": {
+              "kind": "castExpr",
+              "expr": {
+                "kind": "literal",
+                "type": "String",
+                "value": "2024-12-12 12:00:00"
+              },
+              "type": "DateTime64(3, 'UTC')",
+              "operator": true
+            },
+            "right": {
+              "kind": "functionCall",
+              "name": "toIntervalMillisecond",
+              "args": [
+                {
+                  "kind": "binaryExpr",
+                  "op": "*",
+                  "left": {
+                    "kind": "binaryExpr",
+                    "op": "%",
+                    "left": {
+                      "kind": "binaryExpr",
+                      "op": "/",
+                      "left": {
+                        "kind": "columnRef",
+                        "parts": [
+                          "number"
+                        ]
+                      },
+                      "right": {
+                        "kind": "literal",
+                        "type": "UInt64",
+                        "value": "10"
+                      },
+                      "parenthesized": true
+                    },
+                    "right": {
+                      "kind": "literal",
+                      "type": "UInt64",
+                      "value": "100"
+                    },
+                    "parenthesized": true
+                  },
+                  "right": {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "900"
+                  }
+                }
+              ]
+            }
+          },
+          "alias": "timestamp"
+        },
+        {
+          "kind": "alias",
+          "expr": {
+            "kind": "binaryExpr",
+            "op": "+",
+            "left": {
+              "kind": "binaryExpr",
+              "op": "%",
+              "left": {
+                "kind": "columnRef",
+                "parts": [
+                  "number"
+                ]
+              },
+              "right": {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "3"
+              }
+            },
+            "right": {
+              "kind": "binaryExpr",
+              "op": "%",
+              "left": {
+                "kind": "columnRef",
+                "parts": [
+                  "number"
+                ]
+              },
+              "right": {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "29"
+              }
+            }
+          },
+          "alias": "value"
+        }
+      ],
+      "from": {
+        "kind": "tableFunctionRef",
+        "name": "numbers",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "1000"
+          }
+        ]
+      }
+    },
+    "leadingComments": [
+      "-- Insert some data"
+    ]
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -92,6 +655,9 @@
         },
         "direction": "ASC"
       }
+    ],
+    "leadingComments": [
+      "-- Check raw data"
     ]
   },
   {
@@ -110,7 +676,7 @@
         ]
       },
       {
-        "kind": "tuple",
+        "kind": "tupleLiteral",
         "elements": [
           {
             "kind": "alias",
@@ -256,6 +822,611 @@
         },
         "direction": "ASC"
       }
+    ],
+    "leadingComments": [
+      "-- Check re-sampled data"
+    ]
+  },
+  {
+    "kind": "select",
+    "with": [
+      {
+        "kind": "cteExpr",
+        "name": "start_ts",
+        "expr": {
+          "kind": "castExpr",
+          "expr": {
+            "kind": "literal",
+            "type": "String",
+            "value": "2024-12-12 12:00:15"
+          },
+          "type": "DateTime64(3,'UTC')",
+          "operator": true
+        },
+        "trailingComments": [
+          "-- start of timestamp grid"
+        ]
+      },
+      {
+        "kind": "cteExpr",
+        "name": "end_ts",
+        "expr": {
+          "kind": "binaryExpr",
+          "op": "+",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "start_ts"
+            ]
+          },
+          "right": {
+            "kind": "functionCall",
+            "name": "toIntervalSecond",
+            "args": [
+              {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "60"
+              }
+            ]
+          }
+        },
+        "trailingComments": [
+          "-- end of timestamp grid"
+        ]
+      },
+      {
+        "kind": "cteExpr",
+        "name": "step_seconds",
+        "expr": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "15"
+        },
+        "trailingComments": [
+          "-- step of timestamp grid"
+        ]
+      },
+      {
+        "kind": "cteExpr",
+        "name": "window_seconds",
+        "expr": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "45"
+        },
+        "trailingComments": [
+          "-- \"staleness\" window"
+        ]
+      }
+    ],
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "metric_id"
+        ]
+      },
+      {
+        "kind": "functionCall",
+        "name": "timeSeriesInstantDeltaToGrid",
+        "params": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "start_ts"
+            ]
+          },
+          {
+            "kind": "columnRef",
+            "parts": [
+              "end_ts"
+            ]
+          },
+          {
+            "kind": "columnRef",
+            "parts": [
+              "step_seconds"
+            ]
+          },
+          {
+            "kind": "columnRef",
+            "parts": [
+              "window_seconds"
+            ]
+          }
+        ],
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "timestamp"
+            ]
+          },
+          {
+            "kind": "columnRef",
+            "parts": [
+              "value"
+            ]
+          }
+        ]
+      },
+      {
+        "kind": "functionCall",
+        "name": "timeSeriesInstantRateToGrid",
+        "params": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "start_ts"
+            ]
+          },
+          {
+            "kind": "columnRef",
+            "parts": [
+              "end_ts"
+            ]
+          },
+          {
+            "kind": "columnRef",
+            "parts": [
+              "step_seconds"
+            ]
+          },
+          {
+            "kind": "columnRef",
+            "parts": [
+              "window_seconds"
+            ]
+          }
+        ],
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "timestamp"
+            ]
+          },
+          {
+            "kind": "columnRef",
+            "parts": [
+              "value"
+            ]
+          }
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "t_raw_timeseries"
+    },
+    "where": {
+      "kind": "naryExpr",
+      "op": "AND",
+      "operands": [
+        {
+          "kind": "binaryExpr",
+          "op": "=",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "metric_id"
+            ]
+          },
+          "right": {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "3"
+          }
+        },
+        {
+          "kind": "functionCall",
+          "name": "and",
+          "args": [
+            {
+              "kind": "functionCall",
+              "name": "greaterOrEquals",
+              "args": [
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "timestamp"
+                  ]
+                },
+                {
+                  "kind": "binaryExpr",
+                  "op": "-",
+                  "left": {
+                    "kind": "columnRef",
+                    "parts": [
+                      "start_ts"
+                    ]
+                  },
+                  "right": {
+                    "kind": "functionCall",
+                    "name": "toIntervalSecond",
+                    "args": [
+                      {
+                        "kind": "columnRef",
+                        "parts": [
+                          "window_seconds"
+                        ]
+                      }
+                    ]
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "functionCall",
+              "name": "lessOrEquals",
+              "args": [
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "timestamp"
+                  ]
+                },
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "end_ts"
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "groupBy": {
+      "kind": "expressions",
+      "items": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "metric_id"
+          ]
+        }
+      ]
+    },
+    "leadingComments": [
+      "-- Calculate idelta and irate from the raw data"
+    ]
+  },
+  {
+    "kind": "select",
+    "with": [
+      {
+        "kind": "cteExpr",
+        "name": "start_ts",
+        "expr": {
+          "kind": "castExpr",
+          "expr": {
+            "kind": "literal",
+            "type": "String",
+            "value": "2024-12-12 12:00:15"
+          },
+          "type": "DateTime64(3,'UTC')",
+          "operator": true
+        },
+        "trailingComments": [
+          "-- start of timestamp grid"
+        ]
+      },
+      {
+        "kind": "cteExpr",
+        "name": "end_ts",
+        "expr": {
+          "kind": "binaryExpr",
+          "op": "+",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "start_ts"
+            ]
+          },
+          "right": {
+            "kind": "functionCall",
+            "name": "toIntervalSecond",
+            "args": [
+              {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "60"
+              }
+            ]
+          }
+        },
+        "trailingComments": [
+          "-- end of timestamp grid"
+        ]
+      },
+      {
+        "kind": "cteExpr",
+        "name": "step_seconds",
+        "expr": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "15"
+        },
+        "trailingComments": [
+          "-- step of timestamp grid"
+        ]
+      },
+      {
+        "kind": "cteExpr",
+        "name": "window_seconds",
+        "expr": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "45"
+        },
+        "trailingComments": [
+          "-- \"staleness\" window"
+        ]
+      }
+    ],
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "metric_id"
+        ]
+      },
+      {
+        "kind": "functionCall",
+        "name": "timeSeriesInstantDeltaToGrid",
+        "params": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "start_ts"
+            ]
+          },
+          {
+            "kind": "columnRef",
+            "parts": [
+              "end_ts"
+            ]
+          },
+          {
+            "kind": "columnRef",
+            "parts": [
+              "step_seconds"
+            ]
+          },
+          {
+            "kind": "columnRef",
+            "parts": [
+              "window_seconds"
+            ]
+          }
+        ],
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "timestamps"
+            ]
+          },
+          {
+            "kind": "columnRef",
+            "parts": [
+              "values"
+            ]
+          }
+        ]
+      },
+      {
+        "kind": "functionCall",
+        "name": "timeSeriesInstantRateToGrid",
+        "params": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "start_ts"
+            ]
+          },
+          {
+            "kind": "columnRef",
+            "parts": [
+              "end_ts"
+            ]
+          },
+          {
+            "kind": "columnRef",
+            "parts": [
+              "step_seconds"
+            ]
+          },
+          {
+            "kind": "columnRef",
+            "parts": [
+              "window_seconds"
+            ]
+          }
+        ],
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "timestamps"
+            ]
+          },
+          {
+            "kind": "columnRef",
+            "parts": [
+              "values"
+            ]
+          }
+        ]
+      }
+    ],
+    "from": {
+      "kind": "subqueryFrom",
+      "query": {
+        "kind": "select",
+        "select": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "metric_id"
+            ]
+          },
+          {
+            "kind": "alias",
+            "expr": {
+              "kind": "functionCall",
+              "name": "tupleElement",
+              "args": [
+                {
+                  "kind": "functionCall",
+                  "name": "finalizeAggregation",
+                  "args": [
+                    {
+                      "kind": "columnRef",
+                      "parts": [
+                        "samples"
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "1"
+                }
+              ]
+            },
+            "alias": "timestamps"
+          },
+          {
+            "kind": "alias",
+            "expr": {
+              "kind": "functionCall",
+              "name": "tupleElement",
+              "args": [
+                {
+                  "kind": "functionCall",
+                  "name": "finalizeAggregation",
+                  "args": [
+                    {
+                      "kind": "columnRef",
+                      "parts": [
+                        "samples"
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "2"
+                }
+              ]
+            },
+            "alias": "values"
+          }
+        ],
+        "from": {
+          "kind": "tableRef",
+          "table": "t_resampled_timeseries_15_sec"
+        },
+        "where": {
+          "kind": "naryExpr",
+          "op": "AND",
+          "operands": [
+            {
+              "kind": "binaryExpr",
+              "op": "=",
+              "left": {
+                "kind": "columnRef",
+                "parts": [
+                  "metric_id"
+                ]
+              },
+              "right": {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "3"
+              }
+            },
+            {
+              "kind": "functionCall",
+              "name": "and",
+              "args": [
+                {
+                  "kind": "functionCall",
+                  "name": "greaterOrEquals",
+                  "args": [
+                    {
+                      "kind": "columnRef",
+                      "parts": [
+                        "grid_timestamp"
+                      ]
+                    },
+                    {
+                      "kind": "binaryExpr",
+                      "op": "-",
+                      "left": {
+                        "kind": "columnRef",
+                        "parts": [
+                          "start_ts"
+                        ]
+                      },
+                      "right": {
+                        "kind": "functionCall",
+                        "name": "toIntervalSecond",
+                        "args": [
+                          {
+                            "kind": "columnRef",
+                            "parts": [
+                              "window_seconds"
+                            ]
+                          }
+                        ]
+                      }
+                    }
+                  ]
+                },
+                {
+                  "kind": "functionCall",
+                  "name": "lessOrEquals",
+                  "args": [
+                    {
+                      "kind": "columnRef",
+                      "parts": [
+                        "grid_timestamp"
+                      ]
+                    },
+                    {
+                      "kind": "columnRef",
+                      "parts": [
+                        "end_ts"
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      }
+    },
+    "groupBy": {
+      "kind": "expressions",
+      "items": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "metric_id"
+          ]
+        }
+      ]
+    },
+    "leadingComments": [
+      "-- Calculate idelta and irate from the re-sampled data"
     ]
   }
 ]

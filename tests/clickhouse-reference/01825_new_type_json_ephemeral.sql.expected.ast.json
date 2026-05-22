@@ -1,0 +1,196 @@
+[
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "enable_json_type",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "t_github_json"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "t_github_json"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "event_type",
+        "type": {
+          "name": "LowCardinality",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "String"
+              }
+            }
+          ]
+        },
+        "defaultKind": "DEFAULT",
+        "defaultExpr": {
+          "kind": "functionCall",
+          "name": "JSONExtractString",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "message_raw"
+              ]
+            },
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "type"
+            }
+          ]
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "repo_name",
+        "type": {
+          "name": "LowCardinality",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "String"
+              }
+            }
+          ]
+        },
+        "defaultKind": "DEFAULT",
+        "defaultExpr": {
+          "kind": "functionCall",
+          "name": "JSONExtractString",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "message_raw"
+              ]
+            },
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "repo"
+            },
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "name"
+            }
+          ]
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "message",
+        "type": {
+          "name": "JSON"
+        },
+        "defaultKind": "DEFAULT",
+        "defaultExpr": {
+          "kind": "functionCall",
+          "name": "if",
+          "args": [
+            {
+              "kind": "functionCall",
+              "name": "empty",
+              "args": [
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "message_raw"
+                  ]
+                }
+              ]
+            },
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "{}"
+            },
+            {
+              "kind": "columnRef",
+              "parts": [
+                "message_raw"
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "message_raw",
+        "type": {
+          "name": "String"
+        },
+        "defaultKind": "EPHEMERAL"
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "event_type"
+          ]
+        }
+      },
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "repo_name"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "t_github_json"
+      }
+    },
+    "columns": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "message_raw"
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "t_github_json"
+    }
+  }
+]

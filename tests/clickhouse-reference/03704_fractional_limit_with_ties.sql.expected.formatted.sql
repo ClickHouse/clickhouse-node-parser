@@ -1,3 +1,14 @@
+DROP TABLE IF EXISTS `ties`;
+
+CREATE TABLE `ties`
+(
+    id UInt8
+)
+ENGINE = MergeTree
+ORDER BY tuple();
+
+INSERT INTO `ties`;
+
 SELECT id
 FROM `ties`
 ORDER BY id ASC
@@ -37,6 +48,8 @@ SELECT id
 FROM `ties`
 ORDER BY id ASC;
 
+SET max_block_size = 2;
+
 SELECT id
 FROM `ties`
 ORDER BY id ASC
@@ -62,10 +75,16 @@ FROM `ties`
 ORDER BY id ASC
 LIMIT 0.8, 0.1 WITH TIES;
 
+SET max_block_size = 3;
+
+SET max_block_size = 10;
+
 SELECT number
 FROM numbers(50)
 ORDER BY number ASC
 LIMIT 0.3 WITH TIES;
+
+SET max_block_size = 5;
 
 SELECT number
 FROM numbers(33)
@@ -95,3 +114,5 @@ FROM (
         ORDER BY n ASC
         LIMIT 0.25 WITH TIES
     );
+
+DROP TABLE `ties`;

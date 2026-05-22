@@ -1,3 +1,14 @@
+SET joined_subquery_requires_alias = 0;
+
+DROP TEMPORARY TABLE IF EXISTS test_00744;
+
+CREATE TEMPORARY TABLE test_00744
+(
+    x Int32
+);
+
+INSERT INTO test_00744;
+
 SELECT x
 FROM (
         SELECT

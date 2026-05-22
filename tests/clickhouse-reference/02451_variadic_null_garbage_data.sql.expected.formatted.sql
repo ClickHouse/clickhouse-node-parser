@@ -1,3 +1,4 @@
+-- { echoOn }
 SELECT
     argMax((n, n), n) AS t,
     toTypeName(t)

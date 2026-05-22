@@ -1,5 +1,234 @@
 [
   {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "nested"
+    },
+    "ifExists": true,
+    "leadingComments": [
+      "-- Tags: no-object-storage, no-random-merge-tree-settings, no-parallel",
+      "-- no-s3 because read FileOpen metric"
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "flatten_nested",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "use_uncompressed_cache",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "local_filesystem_read_method",
+        "value": {
+          "kind": "literal",
+          "type": "String",
+          "value": "pread"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "nested"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "col1",
+        "type": {
+          "name": "Nested",
+          "args": [
+            {
+              "kind": "namedField",
+              "name": "a",
+              "type": {
+                "name": "UInt32"
+              }
+            },
+            {
+              "kind": "namedField",
+              "name": "s",
+              "type": {
+                "name": "String"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "col2",
+        "type": {
+          "name": "Nested",
+          "args": [
+            {
+              "kind": "namedField",
+              "name": "a",
+              "type": {
+                "name": "UInt32"
+              }
+            },
+            {
+              "kind": "namedField",
+              "name": "n",
+              "type": {
+                "name": "Nested",
+                "args": [
+                  {
+                    "kind": "namedField",
+                    "name": "s",
+                    "type": {
+                      "name": "String"
+                    }
+                  },
+                  {
+                    "kind": "namedField",
+                    "name": "b",
+                    "type": {
+                      "name": "UInt32"
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "col3",
+        "type": {
+          "name": "Nested",
+          "args": [
+            {
+              "kind": "namedField",
+              "name": "n1",
+              "type": {
+                "name": "Nested",
+                "args": [
+                  {
+                    "kind": "namedField",
+                    "name": "a",
+                    "type": {
+                      "name": "UInt32"
+                    }
+                  },
+                  {
+                    "kind": "namedField",
+                    "name": "b",
+                    "type": {
+                      "name": "UInt32"
+                    }
+                  }
+                ]
+              }
+            },
+            {
+              "kind": "namedField",
+              "name": "n2",
+              "type": {
+                "name": "Nested",
+                "args": [
+                  {
+                    "kind": "namedField",
+                    "name": "s",
+                    "type": {
+                      "name": "String"
+                    }
+                  },
+                  {
+                    "kind": "namedField",
+                    "name": "t",
+                    "type": {
+                      "name": "String"
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "functionCall",
+          "name": "tuple",
+          "args": []
+        }
+      }
+    ],
+    "settings": [
+      {
+        "name": "min_bytes_for_wide_part",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      }
+    ],
+    "settingsAfterOrderBy": true
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "nested"
+      }
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "nested"
+      }
+    }
+  },
+  {
+    "kind": "optimize",
+    "table": {
+      "kind": "tableRef",
+      "table": "nested"
+    },
+    "final": true
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -129,6 +358,10 @@
     }
   },
   {
+    "kind": "system",
+    "body": "SYSTEM CLEAR MARK CACHE"
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -144,6 +377,13 @@
       "table": "nested"
     },
     "format": "Null"
+  },
+  {
+    "kind": "system",
+    "body": "SYSTEM FLUSH LOGS query_log",
+    "leadingComments": [
+      "-- 4 files: (col1.size0, col1.a) x2"
+    ]
   },
   {
     "kind": "select",
@@ -421,6 +661,247 @@
           }
         }
       ]
+    }
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "nested"
+    }
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "nested"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "id",
+        "type": {
+          "name": "UInt32"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "col1",
+        "type": {
+          "name": "Nested",
+          "args": [
+            {
+              "kind": "namedField",
+              "name": "a",
+              "type": {
+                "name": "UInt32"
+              }
+            },
+            {
+              "kind": "namedField",
+              "name": "n",
+              "type": {
+                "name": "Nested",
+                "args": [
+                  {
+                    "kind": "namedField",
+                    "name": "s",
+                    "type": {
+                      "name": "String"
+                    }
+                  },
+                  {
+                    "kind": "namedField",
+                    "name": "b",
+                    "type": {
+                      "name": "UInt32"
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "id"
+          ]
+        }
+      }
+    ],
+    "settings": [
+      {
+        "name": "min_bytes_for_wide_part",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      }
+    ],
+    "settingsAfterOrderBy": true
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "nested"
+      }
+    },
+    "selectQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "number"
+          ]
+        },
+        {
+          "kind": "functionCall",
+          "name": "arrayMap",
+          "args": [
+            {
+              "kind": "lambdaExpr",
+              "params": [
+                "x"
+              ],
+              "body": {
+                "kind": "tupleLiteral",
+                "elements": [
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "x"
+                    ]
+                  },
+                  {
+                    "kind": "functionCall",
+                    "name": "arrayMap",
+                    "args": [
+                      {
+                        "kind": "lambdaExpr",
+                        "params": [
+                          "y"
+                        ],
+                        "body": {
+                          "kind": "tupleLiteral",
+                          "elements": [
+                            {
+                              "kind": "functionCall",
+                              "name": "toString",
+                              "args": [
+                                {
+                                  "kind": "binaryExpr",
+                                  "op": "*",
+                                  "left": {
+                                    "kind": "columnRef",
+                                    "parts": [
+                                      "y"
+                                    ]
+                                  },
+                                  "right": {
+                                    "kind": "columnRef",
+                                    "parts": [
+                                      "x"
+                                    ]
+                                  }
+                                }
+                              ]
+                            },
+                            {
+                              "kind": "binaryExpr",
+                              "op": "+",
+                              "left": {
+                                "kind": "columnRef",
+                                "parts": [
+                                  "y"
+                                ]
+                              },
+                              "right": {
+                                "kind": "columnRef",
+                                "parts": [
+                                  "x"
+                                ]
+                              }
+                            }
+                          ],
+                          "source": "(toString(y * x), y + x)"
+                        }
+                      },
+                      {
+                        "kind": "functionCall",
+                        "name": "range",
+                        "args": [
+                          {
+                            "kind": "binaryExpr",
+                            "op": "%",
+                            "left": {
+                              "kind": "columnRef",
+                              "parts": [
+                                "number"
+                              ]
+                            },
+                            "right": {
+                              "kind": "literal",
+                              "type": "UInt64",
+                              "value": "17"
+                            }
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ],
+                "source": "(x, arrayMap(y -> (toString(y * x), y + x), range(number % 17)))"
+              }
+            },
+            {
+              "kind": "functionCall",
+              "name": "range",
+              "args": [
+                {
+                  "kind": "binaryExpr",
+                  "op": "%",
+                  "left": {
+                    "kind": "columnRef",
+                    "parts": [
+                      "number"
+                    ]
+                  },
+                  "right": {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "19"
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "from": {
+        "kind": "tableFunctionRef",
+        "name": "numbers",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "100000"
+          }
+        ]
+      }
     }
   },
   {

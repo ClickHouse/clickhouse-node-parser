@@ -1,5 +1,33 @@
 [
   {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "allow_experimental_analyzer",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ],
+    "leadingComments": [
+      "-- Tags: no-parallel",
+      "-- Tag no-parallel: Messes with internal cache",
+      "-- Test for issue #81506 (recursive CTEs return wrong results if the query condition cache is on)"
+    ],
+    "trailingComments": [
+      "-- needed by recursive CTEs"
+    ]
+  },
+  {
+    "kind": "system",
+    "body": "SYSTEM CLEAR QUERY CONDITION CACHE",
+    "leadingComments": [
+      "-- Start from a clean query condition cache"
+    ]
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -8,5 +36,228 @@
         "value": "-- Prepare data"
       }
     ]
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "tab"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "tab"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "id",
+        "type": {
+          "name": "String"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "parent",
+        "type": {
+          "name": "String"
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "functionCall",
+          "name": "tuple",
+          "args": []
+        }
+      }
+    ]
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "tab"
+      }
+    },
+    "columns": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "id"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "parent"
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "with": [
+      {
+        "kind": "cteSubquery",
+        "name": "recursive",
+        "query": {
+          "kind": "union",
+          "queries": [
+            {
+              "kind": "select",
+              "select": [
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "id"
+                  ]
+                }
+              ],
+              "from": {
+                "kind": "tableRef",
+                "table": "tab"
+              },
+              "where": {
+                "kind": "binaryExpr",
+                "op": "=",
+                "left": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "id"
+                  ]
+                },
+                "right": {
+                  "kind": "literal",
+                  "type": "String",
+                  "value": "uuid3"
+                }
+              }
+            },
+            {
+              "kind": "select",
+              "select": [
+                {
+                  "kind": "alias",
+                  "expr": {
+                    "kind": "columnRef",
+                    "parts": [
+                      "parent"
+                    ]
+                  },
+                  "alias": "id"
+                }
+              ],
+              "from": {
+                "kind": "tableRef",
+                "table": "tab"
+              },
+              "where": {
+                "kind": "naryExpr",
+                "op": "AND",
+                "operands": [
+                  {
+                    "kind": "inExpr",
+                    "negated": false,
+                    "expr": {
+                      "kind": "columnRef",
+                      "parts": [
+                        "tab",
+                        "id"
+                      ]
+                    },
+                    "values": [
+                      {
+                        "kind": "columnRef",
+                        "parts": [
+                          "recursive"
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "kind": "binaryExpr",
+                    "op": "!=",
+                    "left": {
+                      "kind": "columnRef",
+                      "parts": [
+                        "parent"
+                      ]
+                    },
+                    "right": {
+                      "kind": "literal",
+                      "type": "String",
+                      "value": "empty"
+                    }
+                  }
+                ]
+              },
+              "groupBy": {
+                "kind": "expressions",
+                "items": [
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "parent"
+                    ]
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "recursive": true,
+    "select": [
+      {
+        "kind": "asterisk"
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "recursive"
+    },
+    "groupBy": {
+      "kind": "expressions",
+      "items": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "id"
+          ]
+        }
+      ]
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "id"
+          ]
+        },
+        "direction": "ASC"
+      }
+    ]
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "tab"
+    }
   }
 ]

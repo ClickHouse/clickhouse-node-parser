@@ -36,7 +36,7 @@ SELECT toTypeName(initializeAggregation('uniqExactState', initializeAggregation(
 
 SELECT hex(toString(initializeAggregation('quantileState', 0)));
 
-SELECT toTypeName(initializeAggregation('sumState', initializeAggregation('quantileState', 0)));
+SELECT toTypeName(initializeAggregation('sumState', initializeAggregation('quantileState', 0))); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
 SELECT toTypeName(initializeAggregation('anyState', initializeAggregation('quantileState', 0)));
 
@@ -50,7 +50,7 @@ SELECT hex(toString(initializeAggregation('anyLastState', initializeAggregation(
 
 SELECT hex(toString(initializeAggregation('anyState', initializeAggregation('uniqState', 0))));
 
-SELECT hex(toString(initializeAggregation('maxState', initializeAggregation('uniqState', 0))));
+SELECT hex(toString(initializeAggregation('maxState', initializeAggregation('uniqState', 0)))); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
 SELECT hex(toString(initializeAggregation('uniqExactState', initializeAggregation('uniqState', 0))));
 
@@ -60,13 +60,13 @@ SELECT toTypeName(quantileState(x))
 FROM (
         SELECT uniqState(number) AS x
         FROM numbers(1000)
-    );
+    ); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
 SELECT hex(toString(quantileState(x)))
 FROM (
         SELECT uniqState(number) AS x
         FROM numbers(1000)
-    );
+    ); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
 SELECT
     hex(toString(anyState(x))),

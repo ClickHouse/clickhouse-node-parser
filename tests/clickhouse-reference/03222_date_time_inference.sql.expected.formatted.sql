@@ -1,3 +1,13 @@
+SET input_format_try_infer_datetimes = 1;
+
+SET input_format_try_infer_dates = 1;
+
+SET schema_inference_make_columns_nullable = 0;
+
+SET input_format_json_try_infer_numbers_from_strings = 0;
+
+SET session_timezone = 'UTC';
+
 SELECT
     x,
     toTypeName(x)
@@ -182,6 +192,8 @@ SELECT
     x,
     toTypeName(x)
 FROM format(JSONEachRow, '{"x" : "2020-01-01 42a42a42.4242"}');
+
+SET date_time_input_format = 'best_effort';
 
 SELECT
     x,

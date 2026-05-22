@@ -1,3 +1,28 @@
+SET enable_analyzer = 1;
+
+DROP TABLE IF EXISTS date_table_pv;
+
+CREATE TABLE date_table_pv
+(
+    id Int32,
+    dt Date
+)
+ENGINE = Memory();
+
+INSERT INTO date_table_pv;
+
+INSERT INTO date_table_pv;
+
+INSERT INTO date_table_pv;
+
+DROP VIEW IF EXISTS date_pv;
+
+CREATE VIEW date_pv
+AS
+SELECT *
+FROM date_table_pv
+WHERE dt = {dtparam:Date};
+
 SELECT id
 FROM date_pv(dtparam = today());
 
@@ -25,6 +50,33 @@ FROM date_pv(dtparam = (
         FROM date_table_pv
         WHERE id = 2
     ));
+
+DROP TABLE IF EXISTS date32_table_pv;
+
+CREATE TABLE date32_table_pv
+(
+    id Int32,
+    dt Date32
+)
+ENGINE = Memory();
+
+INSERT INTO date32_table_pv;
+
+INSERT INTO date32_table_pv;
+
+INSERT INTO date32_table_pv;
+
+INSERT INTO date32_table_pv;
+
+INSERT INTO date32_table_pv;
+
+DROP VIEW IF EXISTS date32_pv;
+
+CREATE VIEW date32_pv
+AS
+SELECT *
+FROM date32_table_pv
+WHERE dt = {dtparam:Date32};
 
 SELECT id
 FROM date32_pv(dtparam = today());
@@ -55,6 +107,33 @@ FROM date32_pv(dtparam = (
         WHERE id = 4
     ));
 
+DROP TABLE IF EXISTS uuid_table_pv;
+
+CREATE TABLE uuid_table_pv
+(
+    id Int32,
+    uu UUID
+)
+ENGINE = Memory();
+
+INSERT INTO uuid_table_pv;
+
+INSERT INTO uuid_table_pv;
+
+INSERT INTO uuid_table_pv;
+
+INSERT INTO uuid_table_pv SELECT
+    4,
+    serverUUID();
+
+DROP VIEW IF EXISTS uuid_pv;
+
+CREATE VIEW uuid_pv
+AS
+SELECT *
+FROM uuid_table_pv
+WHERE uu = {uuidparam:UUID};
+
 SELECT id
 FROM uuid_pv(uuidparam = serverUUID());
 
@@ -78,13 +157,24 @@ FROM uuid_pv(uuidparam = (
         WHERE id = 2
     ));
 
+-- generateUUIDv4() is not constant foldable, hence cannot be used as parameter value
 SELECT id
-FROM uuid_pv(uuidparam = generateUUIDv4());
+FROM uuid_pv(uuidparam = generateUUIDv4()); -- { serverError UNKNOWN_QUERY_PARAMETER }
 
+-- But nested "select generateUUIDv4()"  works!
 SELECT id
 FROM uuid_pv(uuidparam = (
         SELECT generateUUIDv4()
     ));
+
+DROP VIEW IF EXISTS date_pv2;
+
+CREATE VIEW date_pv2
+AS
+SELECT *
+FROM date_table_pv
+WHERE dt = {dtparam:Date}
+    AND id = {intparam:Int32};
 
 SELECT id
 FROM date_pv2(dtparam = today(), intparam = 1);
@@ -98,6 +188,29 @@ FROM date_pv2(dtparam = '1974-04-07', intparam = length('AAA'));
 SELECT id
 FROM date_pv2(dtparam = toDate('1974-04-07'), intparam = length('BBB'));
 
+DROP TABLE IF EXISTS ipv4_table_pv;
+
+CREATE TABLE ipv4_table_pv
+(
+    id Int32,
+    ipaddr IPv4
+)
+ENGINE = Memory();
+
+INSERT INTO ipv4_table_pv;
+
+INSERT INTO ipv4_table_pv;
+
+INSERT INTO ipv4_table_pv;
+
+DROP VIEW IF EXISTS ipv4_pv;
+
+CREATE VIEW ipv4_pv
+AS
+SELECT *
+FROM ipv4_table_pv
+WHERE ipaddr = {ipv4param:IPv4};
+
 SELECT id
 FROM ipv4_pv(ipv4param = '116.106.34.242');
 
@@ -110,3 +223,21 @@ FROM ipv4_pv(ipv4param = (
         FROM ipv4_table_pv
         WHERE id = 3
     ));
+
+DROP VIEW date_pv;
+
+DROP VIEW date_pv2;
+
+DROP VIEW date32_pv;
+
+DROP VIEW uuid_pv;
+
+DROP VIEW ipv4_pv;
+
+DROP TABLE date_table_pv;
+
+DROP TABLE date32_table_pv;
+
+DROP TABLE uuid_table_pv;
+
+DROP TABLE ipv4_table_pv;

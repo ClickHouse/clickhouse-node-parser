@@ -23,4 +23,9 @@ SELECT reinterpret('ababc', 'Array(FixedString(4))'); -- { serverError BAD_ARGUM
 SELECT reinterpret(x'3108d4', 'Array(Float32)'); -- { serverError BAD_ARGUMENTS }
 SELECT reinterpret(concat(repeat(x'3108b4403108d4403108b4403108d440', 10),  x'aa'), 'Array(Float32)'); -- { serverError BAD_ARGUMENTS }
 SELECT reinterpret(95, 'Array(FixedString(4))'); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
+DROP TABLE IF EXISTS tab1;
+CREATE TABLE tab1 (id Int32, s FixedString(8)) Engine = Memory;
+INSERT INTO tab1 VALUES (1, x'3108b4403108d440');
+INSERT INTO tab1 VALUES (2, x'3108d4403108b440');
 SELECT reinterpret(s, 'Array(Float32)') FROM tab1 ORDER BY id;
+DROP TABLE tab1;

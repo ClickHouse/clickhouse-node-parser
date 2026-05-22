@@ -1,0 +1,92 @@
+[
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "max_threads",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "lock_acquire_timeout",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "t0"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "c0",
+        "type": {
+          "name": "Int"
+        }
+      }
+    ],
+    "engine": {
+      "name": "Memory",
+      "args": []
+    }
+  },
+  {
+    "kind": "parallelWith",
+    "queries": [
+      {
+        "kind": "insert",
+        "target": {
+          "kind": "table",
+          "table": {
+            "kind": "tableRef",
+            "table": "t0"
+          }
+        },
+        "columns": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "c0"
+            ]
+          }
+        ],
+        "selectQuery": {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "1"
+            }
+          ]
+        }
+      },
+      {
+        "kind": "truncate",
+        "targetType": "TABLE",
+        "table": {
+          "kind": "tableRef",
+          "table": "t0"
+        }
+      }
+    ],
+    "trailingComments": [
+      "-- { serverError DEADLOCK_AVOIDED }"
+    ]
+  }
+]

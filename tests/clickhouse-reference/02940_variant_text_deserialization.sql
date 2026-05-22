@@ -1,3 +1,6 @@
+set allow_experimental_variant_type = 1;
+set allow_suspicious_variant_types = 1;
+set session_timezone = 'UTC';
 select v, variantElement(v, 'String') from format(JSONEachRow, 'v Variant(String, UInt64)', '{"v" : null}, {"v" : "string"}, {"v" : 42}') format JSONEachRow;
 select v, variantElement(v, 'FixedString(4)') from format(JSONEachRow, 'v Variant(String, FixedString(4))', '{"v" : null}, {"v" : "string"}, {"v" : "abcd"}') format JSONEachRow;
 select v, variantElement(v, 'Bool') from format(JSONEachRow, 'v Variant(String, Bool)', '{"v" : null}, {"v" : "string"}, {"v" : true}') format JSONEachRow;

@@ -1,5 +1,84 @@
 [
   {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "const_node"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "const_node"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "v",
+        "type": {
+          "name": "Nullable",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "UInt8"
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "functionCall",
+          "name": "tuple",
+          "args": []
+        }
+      }
+    ]
+  },
+  {
+    "kind": "system",
+    "body": "SYSTEM STOP MERGES const_node"
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "const_node"
+      }
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "const_node"
+      }
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "const_node"
+      }
+    }
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -44,6 +123,10 @@
         },
         "direction": "ASC"
       }
+    ],
+    "leadingComments": [
+      "-- Here we have condition with a constant \"materialize(255)\", for which convertToFullColumnIfConst() will return underlying column w/o copying,",
+      "-- and later shrinkToFit() will be called from multiple threads on this column, and leads to UB"
     ]
   }
 ]

@@ -24,6 +24,15 @@ SELECT
 
 SELECT toString(toUUID('3f1ed72e-f7fe-4459-9cbe-95fe9298f845'));
 
+-- conversion back and forth to big-endian hex string
+WITH generateUUIDv4() AS uuid,
+
+identity(lower(hex(reverse(reinterpretAsString(uuid))))) AS str,
+
+reinterpretAsUUID(reverse(unhex(str))) AS uuid2
+
+SELECT uuid = uuid2;
+
 SELECT '-- UUID variants --';
 
 SELECT hex(UUIDStringToNum('00112233-4455-6677-8899-aabbccddeeff', 1));

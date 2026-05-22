@@ -1,3 +1,8 @@
+-- Tags: no-fasttest, no-openssl-fips
+-- ^ certain functions are disabled in the fast test build.
+-- ^ MD5 function is not available in FIPS build
+
+SET session_timezone = 'UTC';
 SELECT BIT_AND(0) FROM system.one;
 SELECT BIT_OR(0) FROM system.one;
 SELECT BIT_XOR(0) FROM system.one;

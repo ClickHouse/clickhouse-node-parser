@@ -272,7 +272,7 @@
               }
             ],
             "from": {
-              "kind": "tableFunction",
+              "kind": "tableFunctionRef",
               "name": "numbers",
               "args": [
                 {
@@ -353,7 +353,7 @@
               }
             ],
             "from": {
-              "kind": "tableFunction",
+              "kind": "tableFunctionRef",
               "name": "numbers",
               "args": [
                 {
@@ -434,7 +434,7 @@
               }
             ],
             "from": {
-              "kind": "tableFunction",
+              "kind": "tableFunctionRef",
               "name": "numbers",
               "args": [
                 {
@@ -448,6 +448,269 @@
         }
       }
     }
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "sensor_value"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "sensor_value"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "received_at",
+        "type": {
+          "name": "DateTime",
+          "args": [
+            {
+              "kind": "literal",
+              "value": "'Asia/Istanbul'"
+            }
+          ]
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "device_id",
+        "type": {
+          "name": "UUID"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "sensor_id",
+        "type": {
+          "name": "UUID"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "value",
+        "type": {
+          "name": "Nullable",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "Decimal",
+                "args": [
+                  {
+                    "kind": "literal",
+                    "value": "18"
+                  },
+                  {
+                    "kind": "literal",
+                    "value": "4"
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "low_warning",
+        "type": {
+          "name": "Nullable",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "Decimal",
+                "args": [
+                  {
+                    "kind": "literal",
+                    "value": "18"
+                  },
+                  {
+                    "kind": "literal",
+                    "value": "4"
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "low_critical",
+        "type": {
+          "name": "Nullable",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "Decimal",
+                "args": [
+                  {
+                    "kind": "literal",
+                    "value": "18"
+                  },
+                  {
+                    "kind": "literal",
+                    "value": "4"
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "high_warning",
+        "type": {
+          "name": "Nullable",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "Decimal",
+                "args": [
+                  {
+                    "kind": "literal",
+                    "value": "18"
+                  },
+                  {
+                    "kind": "literal",
+                    "value": "4"
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "high_critical",
+        "type": {
+          "name": "Nullable",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "Decimal",
+                "args": [
+                  {
+                    "kind": "literal",
+                    "value": "18"
+                  },
+                  {
+                    "kind": "literal",
+                    "value": "4"
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "partitionBy": {
+      "kind": "functionCall",
+      "name": "toDate",
+      "args": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "received_at"
+          ]
+        }
+      ]
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "device_id"
+          ]
+        }
+      },
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "sensor_id"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "sensor_value"
+      }
+    },
+    "columns": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "received_at"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "device_id"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "sensor_id"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "value"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "low_warning"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "low_critical"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "high_warning"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "high_critical"
+        ]
+      }
+    ]
   },
   {
     "kind": "select",
@@ -465,7 +728,7 @@
           "name": "groupArray",
           "args": [
             {
-              "kind": "tuple",
+              "kind": "tupleLiteral",
               "elements": [
                 {
                   "kind": "columnRef",
@@ -650,6 +913,14 @@
         "direction": "ASC"
       }
     ]
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "sensor_value"
+    }
   },
   {
     "kind": "select",

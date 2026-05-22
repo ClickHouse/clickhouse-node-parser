@@ -1,5 +1,59 @@
 [
   {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "t_str"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "t_str"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "creation_time",
+        "type": {
+          "name": "String"
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "partitionBy": {
+      "kind": "columnRef",
+      "parts": [
+        "creation_time"
+      ]
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "creation_time"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "t_str"
+      }
+    }
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -48,7 +102,7 @@
               }
             ],
             "from": {
-              "kind": "tableFunction",
+              "kind": "tableFunctionRef",
               "name": "numbers",
               "args": [
                 {
@@ -122,7 +176,7 @@
                   }
                 ],
                 "from": {
-                  "kind": "tableFunction",
+                  "kind": "tableFunctionRef",
                   "name": "numbers",
                   "args": [
                     {
@@ -194,6 +248,14 @@
           }
         }
       }
+    }
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "t_str"
     }
   }
 ]

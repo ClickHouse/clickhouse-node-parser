@@ -1,5 +1,60 @@
 [
   {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "t0"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "t0"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "c0",
+        "type": {
+          "name": "Int"
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "functionCall",
+          "name": "tuple",
+          "args": []
+        }
+      }
+    ]
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "t0"
+      }
+    },
+    "columns": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "c0"
+        ]
+      }
+    ]
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -14,7 +69,7 @@
           "kind": "tableRef",
           "table": "t0"
         },
-        "kind": "join",
+        "kind": "joinExpr",
         "joinType": "PASTE",
         "right": {
           "kind": "subqueryFrom",
@@ -35,7 +90,7 @@
           "alias": "tx"
         }
       },
-      "kind": "join",
+      "kind": "joinExpr",
       "joinType": "PASTE",
       "right": {
         "kind": "tableRef",
@@ -71,7 +126,7 @@
           "kind": "tableRef",
           "table": "t0"
         },
-        "kind": "join",
+        "kind": "joinExpr",
         "joinType": "PASTE",
         "right": {
           "kind": "subqueryFrom",
@@ -92,7 +147,7 @@
           "alias": "tx"
         }
       },
-      "kind": "join",
+      "kind": "joinExpr",
       "joinType": "PASTE",
       "right": {
         "kind": "tableRef",
@@ -128,7 +183,7 @@
           "kind": "tableRef",
           "table": "t0"
         },
-        "kind": "join",
+        "kind": "joinExpr",
         "joinType": "FULL",
         "right": {
           "kind": "subqueryFrom",
@@ -170,7 +225,7 @@
           }
         }
       },
-      "kind": "join",
+      "kind": "joinExpr",
       "joinType": "PASTE",
       "right": {
         "kind": "subqueryFrom",
@@ -236,6 +291,19 @@
     ]
   },
   {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "enable_analyzer",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -261,7 +329,7 @@
           },
           "alias": "a"
         },
-        "kind": "join",
+        "kind": "joinExpr",
         "joinType": "INNER",
         "right": {
           "kind": "subqueryFrom",
@@ -287,7 +355,7 @@
           ]
         }
       },
-      "kind": "join",
+      "kind": "joinExpr",
       "joinType": "INNER",
       "right": {
         "kind": "subqueryFrom",
@@ -364,7 +432,7 @@
         },
         "alias": "t1"
       },
-      "kind": "join",
+      "kind": "joinExpr",
       "joinType": "RIGHT",
       "right": {
         "kind": "subqueryFrom",

@@ -7,7 +7,7 @@
         "name": "pointInPolygon",
         "args": [
           {
-            "kind": "tuple",
+            "kind": "tupleLiteral",
             "elements": [
               {
                 "kind": "literal",
@@ -23,13 +23,13 @@
             "source": "(0, 0)"
           },
           {
-            "kind": "array",
+            "kind": "arrayLiteral",
             "elements": [
               {
-                "kind": "array",
+                "kind": "arrayLiteral",
                 "elements": [
                   {
-                    "kind": "tuple",
+                    "kind": "tupleLiteral",
                     "elements": [
                       {
                         "kind": "literal",
@@ -45,7 +45,7 @@
                     "source": "(0, 0)"
                   },
                   {
-                    "kind": "tuple",
+                    "kind": "tupleLiteral",
                     "elements": [
                       {
                         "kind": "literal",
@@ -61,7 +61,7 @@
                     "source": "(10, 0)"
                   },
                   {
-                    "kind": "tuple",
+                    "kind": "tupleLiteral",
                     "elements": [
                       {
                         "kind": "literal",
@@ -77,7 +77,7 @@
                     "source": "(10, 10)"
                   },
                   {
-                    "kind": "tuple",
+                    "kind": "tupleLiteral",
                     "elements": [
                       {
                         "kind": "literal",
@@ -103,6 +103,149 @@
     ]
   },
   {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "s"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "s"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "id",
+        "type": {
+          "name": "String"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "lng",
+        "type": {
+          "name": "Int64"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "lat",
+        "type": {
+          "name": "Int64"
+        }
+      }
+    ],
+    "engine": {
+      "name": "Memory",
+      "args": []
+    }
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "p"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "p"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "polygon_id",
+        "type": {
+          "name": "Int64"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "polygon_name",
+        "type": {
+          "name": "String"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "shape",
+        "type": {
+          "name": "Array",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "Array",
+                "args": [
+                  {
+                    "kind": "type",
+                    "type": {
+                      "name": "Tuple",
+                      "args": [
+                        {
+                          "kind": "type",
+                          "type": {
+                            "name": "Float64"
+                          }
+                        },
+                        {
+                          "kind": "type",
+                          "type": {
+                            "name": "Float64"
+                          }
+                        }
+                      ]
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "state",
+        "type": {
+          "name": "String"
+        }
+      }
+    ],
+    "engine": {
+      "name": "Memory",
+      "args": []
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "s"
+      }
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "p"
+      }
+    }
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -121,7 +264,7 @@
       "name": "pointInPolygon",
       "args": [
         {
-          "kind": "tuple",
+          "kind": "tupleLiteral",
           "elements": [
             {
               "kind": "columnRef",
@@ -172,6 +315,22 @@
           }
         }
       ]
+    }
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "s"
+    }
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "p"
     }
   }
 ]

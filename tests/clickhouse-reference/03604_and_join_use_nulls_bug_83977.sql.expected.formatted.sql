@@ -1,3 +1,32 @@
+CREATE TABLE AA
+(
+    key String,
+    value Int64
+)
+ENGINE = MergeTree
+ORDER BY (key);
+
+INSERT INTO AA;
+
+CREATE TABLE B
+(
+    key String,
+    flag Bool
+)
+ENGINE = MergeTree
+ORDER BY (key);
+
+INSERT INTO B;
+
+CREATE TABLE C
+(
+    key String
+)
+ENGINE = MergeTree
+ORDER BY (key);
+
+INSERT INTO C;
+
 SELECT flag
     AND value <= 10
 FROM (

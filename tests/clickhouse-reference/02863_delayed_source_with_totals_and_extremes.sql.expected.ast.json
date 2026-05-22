@@ -1,5 +1,73 @@
 [
   {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "02863_delayed_source"
+    },
+    "ifExists": true,
+    "leadingComments": [
+      "-- Tags: no-parallel",
+      "-- Tag no-parallel: failpoint is used which can force DelayedSource on other tests"
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "02863_delayed_source"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "a",
+        "type": {
+          "name": "Int64"
+        }
+      }
+    ],
+    "engine": {
+      "name": "ReplicatedMergeTree",
+      "args": [
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "/clickhouse/tables/{database}/02863_delayed_source/{replica}"
+        },
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "r1"
+        }
+      ]
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "a"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "02863_delayed_source"
+      }
+    }
+  },
+  {
+    "kind": "system",
+    "body": "SYSTEM ENABLE FAILPOINT use_delayed_remote_source"
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -16,7 +84,7 @@
       }
     ],
     "from": {
-      "kind": "tableFunction",
+      "kind": "tableFunctionRef",
       "name": "remote",
       "args": [
         {
@@ -107,7 +175,7 @@
             }
           ],
           "from": {
-            "kind": "tableFunction",
+            "kind": "tableFunctionRef",
             "name": "remote",
             "args": [
               {
@@ -159,7 +227,7 @@
       }
     ],
     "from": {
-      "kind": "tableFunction",
+      "kind": "tableFunctionRef",
       "name": "remote",
       "args": [
         {
@@ -220,5 +288,17 @@
         }
       }
     ]
+  },
+  {
+    "kind": "system",
+    "body": "SYSTEM DISABLE FAILPOINT use_delayed_remote_source"
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "02863_delayed_source"
+    }
   }
 ]

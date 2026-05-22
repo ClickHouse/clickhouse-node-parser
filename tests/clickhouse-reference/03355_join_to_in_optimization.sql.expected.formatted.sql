@@ -1,3 +1,35 @@
+SET enable_analyzer = 1;
+
+SET join_algorithm = 'hash';
+
+DROP TABLE IF EXISTS t1;
+
+DROP TABLE IF EXISTS t2;
+
+CREATE TABLE t1
+(
+    id Int32,
+    key String,
+    key2 String
+)
+ENGINE = MergeTree
+ORDER BY id
+SETTINGS index_granularity = 8192;
+
+CREATE TABLE t2
+(
+    id Int32,
+    key String,
+    key2 String
+)
+ENGINE = MergeTree
+ORDER BY id
+SETTINGS index_granularity = 8192;
+
+INSERT INTO t1;
+
+INSERT INTO t2;
+
 SELECT
     t1.key,
     t1.key2
@@ -12,6 +44,8 @@ ORDER BY
 SETTINGS
     query_plan_use_new_logical_join_step = true,
     query_plan_convert_join_to_in = true;
+
+SYSTEM FLUSH LOGS system.query_log;
 
 SELECT dummy
 FROM
@@ -33,6 +67,22 @@ SETTINGS
     query_plan_use_new_logical_join_step = true,
     query_plan_convert_join_to_in = true;
 
+-- check type, modified from 02988_join_using_prewhere_pushdown
+SET allow_suspicious_low_cardinality_types = 1;
+
+DROP TABLE IF EXISTS t;
+
+CREATE TABLE t
+(
+    id UInt16,
+    u LowCardinality(Int32),
+    s LowCardinality(String)
+)
+ENGINE = MergeTree
+ORDER BY id;
+
+INSERT INTO t;
+
 SELECT
     u,
     s
@@ -46,6 +96,29 @@ INNER JOIN (
 FORMAT Null
 SETTINGS query_plan_use_new_logical_join_step = true, query_plan_convert_join_to_in = true;
 
+-- check filter column remove, modified from 01852_multiple_joins_with_union_join
+DROP TABLE IF EXISTS v1;
+
+DROP TABLE IF EXISTS v2;
+
+CREATE TABLE v1
+(
+    id Int32
+)
+ENGINE = MergeTree()
+ORDER BY id;
+
+CREATE TABLE v2
+(
+    value Int32
+)
+ENGINE = MergeTree()
+ORDER BY value;
+
+INSERT INTO v1 (id);
+
+INSERT INTO v2 (value);
+
 SELECT *
 FROM
     v1 AS t1
@@ -53,6 +126,7 @@ INNER JOIN v1 AS t2
     USING (id)
 CROSS JOIN v2 AS n1;
 
+-- from fuzzer
 SELECT 10
 FROM
     `system`.query_log AS a

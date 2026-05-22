@@ -1,3 +1,13 @@
+SET enable_optimize_predicate_expression = 1;
+
+SET joined_subquery_requires_alias = 0;
+
+SET convert_query_to_cnf = 0;
+
+SET enable_analyzer = 1;
+
+SET allow_deprecated_error_prone_window_functions = 1;
+
 SELECT
     k,
     v,
@@ -50,6 +60,60 @@ INNER JOIN (
     USING (name)
 WHERE name = 'enable_optimize_predicate_expression';
 
+-- https://github.com/ClickHouse/ClickHouse/issues/6767
+DROP TABLE IF EXISTS t1;
+
+DROP TABLE IF EXISTS t2;
+
+DROP TABLE IF EXISTS t3;
+
+DROP TABLE IF EXISTS view1;
+
+CREATE TABLE t1
+(
+    id UInt32,
+    value1 String
+)
+ENGINE = ReplacingMergeTree()
+ORDER BY id;
+
+CREATE TABLE t2
+(
+    id UInt32,
+    value2 String
+)
+ENGINE = ReplacingMergeTree()
+ORDER BY id;
+
+CREATE TABLE t3
+(
+    id UInt32,
+    value3 String
+)
+ENGINE = ReplacingMergeTree()
+ORDER BY id;
+
+INSERT INTO t1 (id, value1);
+
+INSERT INTO t2 (id, value2);
+
+INSERT INTO t3 (id, value3);
+
+CREATE VIEW IF NOT EXISTS view1
+AS
+SELECT
+    t1.id AS id,
+    t1.value1 AS value1,
+    t2.value2 AS value2,
+    t3.value3 AS value3
+FROM
+    t1
+LEFT JOIN t2
+    ON t1.id = t2.id
+LEFT JOIN t3
+    ON t1.id = t3.id
+WHERE t1.id > 0;
+
 SELECT *
 FROM view1
 WHERE id = 1;
@@ -69,6 +133,45 @@ FROM (
             USING (ccc)
     )
 WHERE ccc > 1;
+
+-- https://github.com/ClickHouse/ClickHouse/issues/5674
+-- https://github.com/ClickHouse/ClickHouse/issues/4731
+-- https://github.com/ClickHouse/ClickHouse/issues/4904
+DROP TABLE IF EXISTS A;
+
+DROP TABLE IF EXISTS B;
+
+CREATE TABLE A
+(
+    ts DateTime,
+    id String,
+    id_b String
+)
+ENGINE = MergeTree
+ORDER BY (ts, id)
+PARTITION BY toStartOfHour(ts);
+
+CREATE TABLE B
+(
+    ts DateTime,
+    id String,
+    id_c String
+)
+ENGINE = MergeTree
+ORDER BY (ts, id)
+PARTITION BY toStartOfHour(ts);
+
+-- https://github.com/ClickHouse/ClickHouse/issues/7802
+DROP TABLE IF EXISTS test;
+
+CREATE TABLE test
+(
+    A Int32,
+    B Int32
+)
+ENGINE = Memory();
+
+INSERT INTO test;
 
 SELECT
     B,
@@ -127,6 +230,7 @@ INNER JOIN (
     USING (id)
 WHERE arrayMap(x -> x + value + value_1, [1]) = [6];
 
+-- from #10613
 SELECT
     name,
     count() AS cnt

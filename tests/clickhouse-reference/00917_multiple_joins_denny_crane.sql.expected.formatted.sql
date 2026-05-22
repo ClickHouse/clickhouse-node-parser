@@ -1,3 +1,16 @@
+SET joined_subquery_requires_alias = 0;
+
+DROP TABLE IF EXISTS ANIMAL;
+
+CREATE TABLE ANIMAL
+(
+    ANIMAL Nullable(String)
+)
+ENGINE = MergeTree
+ORDER BY tuple();
+
+INSERT INTO ANIMAL (ANIMAL);
+
 SELECT *
 FROM (
         SELECT
@@ -35,3 +48,5 @@ FROM (
         HAVING ANIMAL >= 0
     ) AS ANIMAL
 WHERE ANIMAL.ANIMAL >= 0;
+
+DROP TABLE ANIMAL;

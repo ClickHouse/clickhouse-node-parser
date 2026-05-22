@@ -1,3 +1,4 @@
+-- { echoOn }
 SELECT xxHash32(NULL);
 
 SELECT xxHash64(NULL);
@@ -46,6 +47,14 @@ SELECT xxHash64(materialize(tuple(NULL::Nullable(Int64))));
 
 SELECT xxHash64(materialize(tuple(NULL::Nullable(String))));
 
+CREATE TABLE test_hash_on_null
+(
+    a Array(Nullable(Int64))
+)
+ENGINE = Memory;
+
+INSERT INTO test_hash_on_null;
+
 SELECT xxHash32(a)
 FROM test_hash_on_null;
 
@@ -63,11 +72,27 @@ SELECT cityHash64(tuple(toLowCardinality(toNullable('hi'))));
 
 SELECT cityHash64(materialize(tuple(toLowCardinality(toNullable('hi')))));
 
+CREATE TABLE test_mix_null
+(
+    a Nullable(Int64)
+)
+ENGINE = Memory;
+
+INSERT INTO test_mix_null;
+
 SELECT
     a,
     xxHash32(a),
     xxHash32(tuple(a))
 FROM test_mix_null;
+
+CREATE TABLE t
+(
+    a Array(Tuple(x Nullable(Int64), y Map(Int64, Nullable(String)), z LowCardinality(Nullable(FixedString(16)))))
+)
+ENGINE = Memory;
+
+INSERT INTO t;
 
 SELECT reinterpret(sipHash128(tuple(*)), 'UInt128')
 FROM t;
@@ -87,6 +112,7 @@ FROM t;
 SELECT cityHash64(a.z)
 FROM t;
 
+--- Keyed.
 SELECT sipHash64Keyed(materialize((1::UInt64, 2::UInt64)), NULL)
 FROM numbers(2);
 
@@ -99,6 +125,7 @@ FROM numbers(2);
 SELECT sipHash64Keyed((1::UInt64, number), tuple(NULL))
 FROM numbers(3);
 
+-- Make sure all types are allowed.
 SELECT sum(ignore(cityHash64(tuple(*))))
 FROM (
         SELECT *

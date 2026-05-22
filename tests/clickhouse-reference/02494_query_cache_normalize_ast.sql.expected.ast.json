@@ -1,5 +1,14 @@
 [
   {
+    "kind": "system",
+    "body": "SYSTEM CLEAR QUERY CACHE",
+    "leadingComments": [
+      "-- Tags: no-parallel",
+      "-- Tag no-parallel: Messes with internal cache",
+      "-- Start with empty query cache (QC)"
+    ]
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -33,6 +42,11 @@
           "value": "16"
         }
       }
+    ],
+    "leadingComments": [
+      "-- Run query whose result gets cached in the query cache.",
+      "-- Besides \"use_query_cache\", pass two more knobs (one QC-specific knob and one non-QC-specific knob). We just care",
+      "-- *that* they are passed and not about their effect."
     ]
   },
   {
@@ -52,7 +66,10 @@
       "kind": "tableRef",
       "database": "system",
       "table": "query_cache"
-    }
+    },
+    "leadingComments": [
+      "-- Check that entry in QC exists"
+    ]
   },
   {
     "kind": "select",
@@ -62,6 +79,10 @@
         "type": "String",
         "value": "---"
       }
+    ],
+    "leadingComments": [
+      "-- Run the same SELECT but with different SETTINGS. We want its result to be served from the QC (--> passive mode, achieve it by",
+      "-- disabling active mode)"
     ]
   },
   {
@@ -98,6 +119,14 @@
           "value": "16"
         }
       }
+    ]
+  },
+  {
+    "kind": "system",
+    "body": "SYSTEM FLUSH LOGS query_log",
+    "leadingComments": [
+      "-- Technically, both SELECT queries have different ASTs, leading to different QC keys. QC does some AST normalization (erase all",
+      "-- QC-related settings) such that the keys match regardless. Verify by checking that the second query caused a QC hit."
     ]
   },
   {

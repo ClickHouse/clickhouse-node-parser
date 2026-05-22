@@ -1,5 +1,78 @@
 [
   {
+    "kind": "drop",
+    "targetType": "FUNCTION",
+    "table": {
+      "kind": "tableRef",
+      "table": "03215_udf_with_union"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "createFunction",
+    "name": "03215_udf_with_union",
+    "functionExpr": {
+      "kind": "lambdaExpr",
+      "params": [],
+      "body": {
+        "kind": "subqueryExpr",
+        "query": {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "functionCall",
+              "name": "sum",
+              "args": [
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "s"
+                  ]
+                }
+              ]
+            }
+          ],
+          "from": {
+            "kind": "subqueryFrom",
+            "query": {
+              "kind": "union",
+              "queries": [
+                {
+                  "kind": "select",
+                  "select": [
+                    {
+                      "kind": "alias",
+                      "expr": {
+                        "kind": "literal",
+                        "type": "UInt64",
+                        "value": "1"
+                      },
+                      "alias": "s"
+                    }
+                  ]
+                },
+                {
+                  "kind": "select",
+                  "select": [
+                    {
+                      "kind": "alias",
+                      "expr": {
+                        "kind": "literal",
+                        "type": "UInt64",
+                        "value": "1"
+                      },
+                      "alias": "s"
+                    }
+                  ]
+                }
+              ]
+            }
+          }
+        }
+      }
+    }
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -8,5 +81,13 @@
         "args": []
       }
     ]
+  },
+  {
+    "kind": "drop",
+    "targetType": "FUNCTION",
+    "table": {
+      "kind": "tableRef",
+      "table": "03215_udf_with_union"
+    }
   }
 ]

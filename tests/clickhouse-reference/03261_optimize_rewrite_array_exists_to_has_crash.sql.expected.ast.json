@@ -1,5 +1,37 @@
 [
   {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "rewrite"
+    },
+    "ifExists": true,
+    "leadingComments": [
+      "-- https://github.com/ClickHouse/ClickHouse/issues/71382"
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "rewrite"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "c0",
+        "type": {
+          "name": "Int"
+        }
+      }
+    ],
+    "engine": {
+      "name": "Memory",
+      "args": []
+    }
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -14,7 +46,7 @@
           "kind": "tableRef",
           "table": "rewrite"
         },
-        "kind": "join",
+        "kind": "joinExpr",
         "joinType": "INNER",
         "right": {
           "kind": "tableRef",
@@ -38,7 +70,7 @@
           }
         }
       },
-      "kind": "join",
+      "kind": "joinExpr",
       "joinType": "INNER",
       "right": {
         "kind": "tableRef",

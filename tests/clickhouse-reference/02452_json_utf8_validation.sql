@@ -1,3 +1,5 @@
+SET output_format_write_statistics = 0;
+SET output_format_json_validate_utf8 = 1;
 SELECT '\xED\x20\xA8' AS s FORMAT JSONCompact;
 SELECT '\xED\x20\xA8' AS s FORMAT JSON;
 SELECT '\xED\x20\xA8' AS s FORMAT XML;
@@ -7,3 +9,4 @@ SELECT '\xED\x20\xA8' AS s FORMAT JSONCompactEachRow;
 SELECT '\xED\x20\xA8' AS s FORMAT JSONColumns;
 SELECT '\xED\x20\xA8' AS s FORMAT JSONCompactColumns;
 SELECT '\xED\x20\xA8' AS s FORMAT JSONObjectEachRow;
+SET output_format_json_validate_utf8 = 0;

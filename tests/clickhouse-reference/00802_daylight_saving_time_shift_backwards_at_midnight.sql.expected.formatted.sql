@@ -1,3 +1,4 @@
+-- concat with empty string to defeat injectiveness of toString assumption.
 SELECT concat('', toString(toDateTime('1981-09-29 00:00:00', 'Europe/Moscow') + toIntervalSecond(number * 300))) AS k
 FROM numbers(10000)
 GROUP BY k

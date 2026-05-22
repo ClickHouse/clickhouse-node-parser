@@ -1,3 +1,8 @@
+SET enable_analyzer = 1;
+SET optimize_syntax_fuse_functions = 1;
+DROP TABLE IF EXISTS fuse_tbl;
+CREATE TABLE fuse_tbl(a Nullable(Int8), b Int8) Engine = Log;
+INSERT INTO fuse_tbl VALUES (1, 1), (2, 2), (NULL, 3);
 SELECT avg(a), sum(a) FROM (SELECT a FROM fuse_tbl);
 SELECT avg(a), sum(a) FROM (SELECT a FROM fuse_tbl WHERE isNull(a));
 SELECT avg(a), sum(a) FROM (SELECT a FROM fuse_tbl WHERE isNotNull(a));
@@ -10,3 +15,7 @@ SELECT sum(x), count(x), avg(x) FROM (SELECT number :: Decimal32(0) AS x FROM nu
 SELECT sum(x), count(x), avg(x) FROM (SELECT number :: Decimal32(0) AS x FROM numbers(0));
 SELECT sum(x), count(x), avg(x), toTypeName(sum(x)), toTypeName(count(x)), toTypeName(avg(x)) FROM (SELECT number :: Decimal32(0) AS x FROM numbers(10)) SETTINGS optimize_syntax_fuse_functions = 0;
 SELECT sum(x), count(x), avg(x), toTypeName(sum(x)), toTypeName(count(x)), toTypeName(avg(x)) FROM (SELECT number :: Decimal32(0) AS x FROM numbers(10));
+-- TODO: uncomment after https://github.com/ClickHouse/ClickHouse/pull/43372
+-- SELECT avg(b), x - 2 AS b FROM (SELECT number as x FROM numbers(1)) GROUP BY x;
+
+DROP TABLE fuse_tbl;

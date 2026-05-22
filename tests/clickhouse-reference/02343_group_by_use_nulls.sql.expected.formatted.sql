@@ -1,3 +1,6 @@
+SET optimize_group_by_function_keys = 0;
+
+-- { echoOn }
 SELECT
     number,
     number % 2,

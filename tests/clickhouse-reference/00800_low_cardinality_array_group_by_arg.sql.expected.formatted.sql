@@ -1,3 +1,33 @@
+DROP TABLE IF EXISTS table1;
+
+DROP TABLE IF EXISTS table2;
+
+CREATE TABLE table1
+(
+    dt Date,
+    id Int32,
+    arr Array(LowCardinality(String))
+)
+ENGINE = MergeTree
+ORDER BY (dt, id)
+PARTITION BY toMonday(dt)
+SETTINGS index_granularity = 8192;
+
+CREATE TABLE table2
+(
+    dt Date,
+    id Int32,
+    arr Array(LowCardinality(String))
+)
+ENGINE = MergeTree
+ORDER BY (dt, id)
+PARTITION BY toMonday(dt)
+SETTINGS index_granularity = 8192;
+
+INSERT INTO table1 (dt, id, arr);
+
+INSERT INTO table2 (dt, id, arr);
+
 SELECT
     dt,
     id,
@@ -22,3 +52,7 @@ FROM (
 GROUP BY
     dt,
     id;
+
+DROP TABLE table1;
+
+DROP TABLE table2;

@@ -1,3 +1,5 @@
+SET optimize_group_by_function_keys = 0;
+
 SELECT
     number,
     grouping(number, number % 2, number % 3) AS gr
@@ -5,8 +7,9 @@ FROM numbers(10)
 GROUP BY GROUPING SETS ((number), (number % 2))
 ORDER BY
     number ASC,
-    gr ASC;
+    gr ASC; -- { serverError BAD_ARGUMENTS }
 
+-- { echoOn }
 SELECT
     number,
     grouping(number, number % 2) AS gr

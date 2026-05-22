@@ -1,5 +1,608 @@
 [
   {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "prefer_localhost_replica",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ],
+    "leadingComments": [
+      "-- Tags: no-parallel, no-fasttest"
+    ]
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "file"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "url"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "view"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "buffer"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "merge"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "merge_tf"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "distributed"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "distributed_tf"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "rich_syntax"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "drop",
+    "targetType": "DICTIONARY",
+    "table": {
+      "kind": "tableRef",
+      "table": "dict"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "file"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "n",
+        "type": {
+          "name": "Int8"
+        }
+      }
+    ],
+    "engine": {
+      "name": "File",
+      "args": [
+        {
+          "kind": "functionCall",
+          "name": "concat",
+          "args": [
+            {
+              "kind": "functionCall",
+              "name": "upper",
+              "args": [
+                {
+                  "kind": "literal",
+                  "type": "String",
+                  "value": "tsv"
+                }
+              ]
+            },
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "WithNames"
+            },
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "AndTypes"
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "buffer"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "n",
+        "type": {
+          "name": "Int8"
+        }
+      }
+    ],
+    "engine": {
+      "name": "Buffer",
+      "args": [
+        {
+          "kind": "functionCall",
+          "name": "currentDatabase",
+          "args": []
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "file"
+          ]
+        },
+        {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "16"
+        },
+        {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "10"
+        },
+        {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "200"
+        },
+        {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "10000"
+        },
+        {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1000000"
+        },
+        {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "10000000"
+        },
+        {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1000000000"
+        }
+      ]
+    }
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "merge"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "n",
+        "type": {
+          "name": "Int8"
+        }
+      }
+    ],
+    "engine": {
+      "name": "Merge",
+      "args": [
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": ""
+        },
+        {
+          "kind": "functionCall",
+          "name": "lower",
+          "args": [
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "DISTRIBUTED"
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "merge_tf"
+    },
+    "asTableFunction": {
+      "name": "merge",
+      "args": [
+        {
+          "kind": "functionCall",
+          "name": "currentDatabase",
+          "args": []
+        },
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": ".*"
+        }
+      ]
+    }
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "distributed"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "n",
+        "type": {
+          "name": "Int8"
+        }
+      }
+    ],
+    "engine": {
+      "name": "Distributed",
+      "args": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "test_shard_localhost"
+          ]
+        },
+        {
+          "kind": "functionCall",
+          "name": "currentDatabase",
+          "args": []
+        },
+        {
+          "kind": "functionCall",
+          "name": "concat",
+          "args": [
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "fi"
+            },
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "le"
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "distributed_tf"
+    },
+    "asTableFunction": {
+      "name": "cluster",
+      "args": [
+        {
+          "kind": "functionCall",
+          "name": "concat",
+          "args": [
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "test"
+            },
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "_"
+            },
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "shard_localhost"
+            }
+          ]
+        },
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": ""
+        },
+        {
+          "kind": "functionCall",
+          "name": "concat",
+          "args": [
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "buf"
+            },
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "fer"
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "buffer"
+      }
+    }
+  },
+  {
+    "kind": "detach",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "buffer"
+    },
+    "trailingComments": [
+      "-- trigger flushing"
+    ]
+  },
+  {
+    "kind": "attach",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "buffer"
+    }
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "url"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "n",
+        "type": {
+          "name": "UInt64"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "col",
+        "type": {
+          "name": "String"
+        }
+      }
+    ],
+    "engine": {
+      "name": "URL",
+      "args": [
+        {
+          "kind": "functionCall",
+          "name": "replace",
+          "args": [
+            {
+              "kind": "functionCall",
+              "name": "concat",
+              "args": [
+                {
+                  "kind": "literal",
+                  "type": "String",
+                  "value": "https://localhost:"
+                },
+                {
+                  "kind": "functionCall",
+                  "name": "getServerPort",
+                  "args": [
+                    {
+                      "kind": "literal",
+                      "type": "String",
+                      "value": "https_port"
+                    }
+                  ]
+                },
+                {
+                  "kind": "literal",
+                  "type": "String",
+                  "value": "/?query="
+                },
+                {
+                  "kind": "literal",
+                  "type": "String",
+                  "value": "select n, _table from "
+                },
+                {
+                  "kind": "functionCall",
+                  "name": "currentDatabase",
+                  "args": []
+                },
+                {
+                  "kind": "literal",
+                  "type": "String",
+                  "value": ".merge format CSV"
+                }
+              ]
+            },
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": " "
+            },
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "+"
+            }
+          ]
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "CSV"
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "kind": "createView",
+    "table": {
+      "kind": "tableRef",
+      "table": "view"
+    },
+    "asQuery": {
+      "kind": "union",
+      "queries": [
+        {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "alias",
+              "expr": {
+                "kind": "functionCall",
+                "name": "toInt64",
+                "args": [
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "n"
+                    ]
+                  }
+                ]
+              },
+              "alias": "n"
+            }
+          ],
+          "from": {
+            "kind": "subqueryFrom",
+            "query": {
+              "kind": "select",
+              "select": [
+                {
+                  "kind": "alias",
+                  "expr": {
+                    "kind": "functionCall",
+                    "name": "toString",
+                    "args": [
+                      {
+                        "kind": "columnRef",
+                        "parts": [
+                          "n"
+                        ]
+                      }
+                    ]
+                  },
+                  "alias": "n"
+                }
+              ],
+              "from": {
+                "kind": "tableRef",
+                "table": "merge"
+              },
+              "where": {
+                "kind": "binaryExpr",
+                "op": "!=",
+                "left": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "_table"
+                  ]
+                },
+                "right": {
+                  "kind": "literal",
+                  "type": "String",
+                  "value": "qwerty"
+                }
+              },
+              "orderBy": [
+                {
+                  "kind": "orderByItem",
+                  "expr": {
+                    "kind": "columnRef",
+                    "parts": [
+                      "_table"
+                    ]
+                  },
+                  "direction": "ASC"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "asterisk"
+            }
+          ],
+          "from": {
+            "kind": "tableRef",
+            "table": "file"
+          }
+        }
+      ]
+    }
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -8,7 +611,357 @@
           "nonexistentsomething"
         ]
       }
+    ],
+    "leadingComments": [
+      "-- The following line is needed just to disable checking stderr for emptiness"
+    ],
+    "trailingComments": [
+      "-- { serverError UNKNOWN_IDENTIFIER }"
     ]
+  },
+  {
+    "kind": "createDictionary",
+    "table": {
+      "kind": "tableRef",
+      "table": "dict"
+    },
+    "dictAttrs": [
+      {
+        "name": "n",
+        "type": {
+          "name": "UInt64"
+        }
+      },
+      {
+        "name": "col",
+        "type": {
+          "name": "String"
+        },
+        "defaultValue": {
+          "kind": "literal",
+          "type": "String",
+          "value": "42"
+        }
+      }
+    ],
+    "dictDef": {
+      "primaryKey": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "n"
+          ]
+        }
+      ],
+      "source": {
+        "name": "clickhouse",
+        "pairs": [
+          {
+            "name": "HOST",
+            "value": {
+              "kind": "literal",
+              "type": "String",
+              "value": "localhost"
+            }
+          },
+          {
+            "name": "PORT",
+            "value": {
+              "kind": "functionCall",
+              "name": "getServerPort",
+              "args": [
+                {
+                  "kind": "literal",
+                  "type": "String",
+                  "value": "tcp_port_secure"
+                }
+              ]
+            }
+          },
+          {
+            "name": "SECURE",
+            "value": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "1"
+            }
+          },
+          {
+            "name": "USER",
+            "value": {
+              "kind": "literal",
+              "type": "String",
+              "value": "default"
+            }
+          },
+          {
+            "name": "TABLE",
+            "value": {
+              "kind": "literal",
+              "type": "String",
+              "value": "url"
+            }
+          }
+        ]
+      },
+      "lifetime": {
+        "value": 1
+      },
+      "layout": {
+        "name": "CACHE",
+        "pairs": [
+          {
+            "name": "SIZE_IN_CELLS",
+            "value": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "1"
+            }
+          }
+        ]
+      }
+    }
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "rich_syntax"
+    },
+    "asTableFunction": {
+      "name": "remote",
+      "args": [
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "localhos{x|y|t}"
+        },
+        {
+          "kind": "functionCall",
+          "name": "cluster",
+          "args": [
+            {
+              "kind": "functionCall",
+              "name": "concat",
+              "args": [
+                {
+                  "kind": "literal",
+                  "type": "String",
+                  "value": "test"
+                },
+                {
+                  "kind": "literal",
+                  "type": "String",
+                  "value": "_"
+                },
+                {
+                  "kind": "literal",
+                  "type": "String",
+                  "value": "shard_localhost"
+                }
+              ]
+            },
+            {
+              "kind": "functionCall",
+              "name": "remote",
+              "args": [
+                {
+                  "kind": "literal",
+                  "type": "String",
+                  "value": "127.0.0.{1..4}"
+                },
+                {
+                  "kind": "functionCall",
+                  "name": "if",
+                  "args": [
+                    {
+                      "kind": "inExpr",
+                      "negated": true,
+                      "expr": {
+                        "kind": "functionCall",
+                        "name": "toString",
+                        "args": [
+                          {
+                            "kind": "binaryExpr",
+                            "op": "+",
+                            "left": {
+                              "kind": "literal",
+                              "type": "UInt64",
+                              "value": "40"
+                            },
+                            "right": {
+                              "kind": "literal",
+                              "type": "UInt64",
+                              "value": "2"
+                            }
+                          }
+                        ]
+                      },
+                      "values": [
+                        {
+                          "kind": "literal",
+                          "type": "String",
+                          "value": "hello"
+                        },
+                        {
+                          "kind": "functionCall",
+                          "name": "dictGetString",
+                          "args": [
+                            {
+                              "kind": "functionCall",
+                              "name": "concat",
+                              "args": [
+                                {
+                                  "kind": "functionCall",
+                                  "name": "currentDatabase",
+                                  "args": []
+                                },
+                                {
+                                  "kind": "literal",
+                                  "type": "String",
+                                  "value": ".dict"
+                                }
+                              ]
+                            },
+                            {
+                              "kind": "literal",
+                              "type": "String",
+                              "value": "col"
+                            },
+                            {
+                              "kind": "functionCall",
+                              "name": "toUInt64",
+                              "args": [
+                                {
+                                  "kind": "literal",
+                                  "type": "String",
+                                  "value": "0001"
+                                }
+                              ]
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "kind": "functionCall",
+                      "name": "currentDatabase",
+                      "args": []
+                    },
+                    {
+                      "kind": "literal",
+                      "type": "String",
+                      "value": "FAIL"
+                    }
+                  ]
+                },
+                {
+                  "kind": "functionCall",
+                  "name": "extract",
+                  "args": [
+                    {
+                      "kind": "literal",
+                      "type": "String",
+                      "value": "123view456"
+                    },
+                    {
+                      "kind": "literal",
+                      "type": "String",
+                      "value": "[a-z]+"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "leadingComments": [
+      "-- dict --> url --> merge |-> distributed -> file (1)",
+      "--                        |-> distributed_tf -> buffer -> file (1)",
+      "-- TODO make fuzz test from this"
+    ]
+  },
+  {
+    "kind": "showCreate",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "file"
+    }
+  },
+  {
+    "kind": "showCreate",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "buffer"
+    }
+  },
+  {
+    "kind": "showCreate",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "merge"
+    }
+  },
+  {
+    "kind": "showCreate",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "merge_tf"
+    }
+  },
+  {
+    "kind": "showCreate",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "distributed"
+    }
+  },
+  {
+    "kind": "showCreate",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "distributed_tf"
+    }
+  },
+  {
+    "kind": "showCreate",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "url"
+    }
+  },
+  {
+    "kind": "showCreate",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "rich_syntax"
+    }
+  },
+  {
+    "kind": "showCreate",
+    "targetType": "VIEW",
+    "table": {
+      "kind": "tableRef",
+      "table": "view"
+    }
+  },
+  {
+    "kind": "showCreate",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "dict"
+    }
   },
   {
     "kind": "select",
@@ -39,6 +992,12 @@
           "value": "0"
         }
       }
+    ],
+    "leadingComments": [
+      "-- remote(localhost) --> cluster(test_shard_localhost) |-> remote(127.0.0.1) --> view |-> subquery --> merge |-> distributed --> file (1)",
+      "--                                                     |                              |                      |-> distributed_tf -> buffer (1) -> file (1)",
+      "--                                                     |                              |-> file (1)",
+      "--                                                     |-> remote(127.0.0.2) --> ..."
     ]
   },
   {
@@ -71,5 +1030,92 @@
         }
       }
     ]
+  },
+  {
+    "kind": "system",
+    "body": "SYSTEM CLEAR DNS CACHE",
+    "leadingComments": [
+      "-- Clear cache to avoid future errors in the logs"
+    ]
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "file"
+    }
+  },
+  {
+    "kind": "drop",
+    "targetType": "DICTIONARY",
+    "table": {
+      "kind": "tableRef",
+      "table": "dict"
+    }
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "url"
+    }
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "view"
+    }
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "buffer"
+    }
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "merge"
+    }
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "merge_tf"
+    }
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "distributed"
+    }
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "distributed_tf"
+    }
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "rich_syntax"
+    }
   }
 ]

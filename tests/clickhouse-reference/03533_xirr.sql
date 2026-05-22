@@ -15,6 +15,30 @@ SELECT financialInternalRateOfReturnExtended([-10000], [toDate('2020-01-01')]);
 SELECT financialInternalRateOfReturnExtended([-0., 0.], [toDate('2020-01-01'), toDate('2020-01-02')]);
 SELECT round(financialInternalRateOfReturnExtended([-10000, 5750, 4250, 3250], [toDate('2025-01-01'), toDate('2020-03-01'), toDate('2020-10-30'), toDate('2021-02-15')]), 6) AS xirr_rate;
 SELECT financialInternalRateOfReturnExtended([-100, 10], [toDate('2020-01-01'), toDate('2020-01-01')]);
+CREATE TABLE IF NOT EXISTS 3533_xirr_test (
+    tag String,
+    date Date,
+    date32 Date32,
+    value Float64,
+    r Float64
+) ENGINE = Memory;
+INSERT INTO 3533_xirr_test VALUES
+('a', '2020-01-01', '2020-01-01', -10000, 0.08),
+('a', '2020-06-01', '2020-06-01', 3000, 0.08),
+('a', '2020-12-31', '2020-12-31', 8000, 0.08),
+('b', '2020-03-15', '2020-03-15', -5000, 0.09),
+('b', '2020-09-15', '2020-09-15', 2500, 0.09),
+('b', '2021-03-15', '2021-03-15', 3000, 0.09),
+('c', '2019-12-31', '2019-12-31', -15000, 0.10),
+('c', '2020-04-30', '2020-04-30', 5000, 0.10),
+('c', '2020-08-31', '2020-08-31', 6000, 0.10),
+('c', '2020-12-31', '2020-12-31', 5000, 0.10),
+('c', '2021-02-28', '2021-02-28', 2000, 0.10),
+('d', '2020-01-01', '2020-01-01', -10000, 0.11),
+('d', '2020-03-01', '2020-03-01', 5750, 0.11),
+('d', '2020-10-30', '2020-10-30', 4250, 0.11),
+('d', '2021-02-15', '2021-02-15', 3250, 0.11)
+;
 SELECT
     tag,
     round( financialInternalRateOfReturnExtended(groupArray(value), groupArray(date)), 6) AS result_f64_date,
@@ -86,6 +110,7 @@ FROM (
 )
 GROUP BY tag
 ORDER BY tag;
+DROP TABLE IF EXISTS 3533_xirr_test;
 SELECT round(financialNetPresentValue(0.1, [-10000, 3000, 4200, 6800], False), 6);
 SELECT round(financialNetPresentValue(0.08, [8000., 9200., 10000., 12000., 14500.], False), 6) - 40000;
 SELECT round(financialNetPresentValueExtended(0.09, [-10_000, 2750, 4250, 3250, 2750], [toDate('2008-01-01'), toDate('2008-03-01'), toDate('2008-10-30'), toDate('2009-02-15'), toDate('2009-04-01')], 'ACT_365F'), 6);

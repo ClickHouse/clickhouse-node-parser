@@ -18,16 +18,34 @@ SELECT ([materialize(1),materialize(2),materialize(3)] - [1,2,3]);
 
 SELECT [(NULL, 256), (NULL, 256)] + [(1., 100000000000000000000.), (NULL, 1048577)];
 
+CREATE TABLE my_table
+(
+    values Array(Int32)
+)
+ENGINE = MergeTree()
+ORDER BY values;
+
+INSERT INTO my_table (values);
+
 SELECT values - [1,2,3]
 FROM my_table
 WHERE arrayExists(x -> x > 5, values);
 
-SELECT ([12,13] % [5,6]);
+SELECT ([12,13] % [5,6]); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
-SELECT ([2,3,4] - [1,-2,10,29]);
+SELECT ([2,3,4] - [1,-2,10,29]); -- { serverError SIZES_OF_ARRAYS_DONT_MATCH }
+
+CREATE TABLE a
+(
+    x Array(UInt64),
+    y Array(UInt64)
+)
+ENGINE = Memory;
+
+INSERT INTO a;
 
 SELECT
     x,
     y,
     x + y
-FROM a;
+FROM a; -- { serverError SIZES_OF_ARRAYS_DONT_MATCH }

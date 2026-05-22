@@ -25,3 +25,4 @@ SELECT (1, NULL) IN (1, NULL);
 SELECT (1, NULL) IN ((1, 1), (NULL, 1));
 SELECT NULL IN (1, 2, 3);
 SELECT (1, NULL) IN [(1, 1)];
+SET transform_null_in = 1;

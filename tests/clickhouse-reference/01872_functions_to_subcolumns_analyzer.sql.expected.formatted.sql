@@ -1,3 +1,21 @@
+DROP TABLE IF EXISTS t_func_to_subcolumns;
+
+SET enable_analyzer = 1;
+
+SET optimize_functions_to_subcolumns = 1;
+
+CREATE TABLE t_func_to_subcolumns
+(
+    id UInt64,
+    arr Array(UInt64),
+    n Nullable(String),
+    m Map(String, UInt64)
+)
+ENGINE = MergeTree
+ORDER BY tuple();
+
+INSERT INTO t_func_to_subcolumns;
+
 SELECT
     isNull(id),
     isNull(n),
@@ -43,7 +61,22 @@ FULL JOIN (
     USING (id)
 ORDER BY id ASC;
 
+DROP TABLE t_func_to_subcolumns;
+
+DROP TABLE IF EXISTS t_tuple_null;
+
+CREATE TABLE t_tuple_null
+(
+    t Tuple(`null` UInt32)
+)
+ENGINE = MergeTree
+ORDER BY tuple();
+
+INSERT INTO t_tuple_null;
+
 SELECT
     isNull(t),
     t.`null`
 FROM t_tuple_null;
+
+DROP TABLE t_tuple_null;

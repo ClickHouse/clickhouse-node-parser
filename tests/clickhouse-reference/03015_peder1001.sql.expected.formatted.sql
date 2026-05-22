@@ -1,3 +1,15 @@
+-- Tags: no-fasttest
+-- no-fasttest: upper/lowerUTF8 use ICU
+DROP TABLE IF EXISTS test_data;
+
+CREATE TABLE test_data
+(
+    ShipmentDate Date
+)
+ENGINE = Memory;
+
+INSERT INTO test_data (ShipmentDate);
+
 SELECT toDayOfWeek(ShipmentDate) AS c
 FROM test_data
 WHERE isNotNull(c)
@@ -6,3 +18,5 @@ GROUP BY c
 ORDER BY c ASC
 LIMIT 62
 OFFSET 0;
+
+DROP TABLE test_data;

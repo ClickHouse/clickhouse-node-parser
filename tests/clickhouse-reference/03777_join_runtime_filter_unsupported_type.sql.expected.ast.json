@@ -1,5 +1,86 @@
 [
   {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "enable_analyzer",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ],
+    "leadingComments": [
+      "-- Freeze some settings to produce stable query plans"
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "enable_parallel_replicas",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "join_algorithm",
+        "value": {
+          "kind": "literal",
+          "type": "String",
+          "value": "hash,parallel_hash"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "query_plan_optimize_join_order_algorithm",
+        "value": {
+          "kind": "literal",
+          "type": "String",
+          "value": "greedy"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "query_plan_optimize_join_order_limit",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "query_plan_join_swap_table",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      }
+    ]
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -15,7 +96,7 @@
             {
               "kind": "alias",
               "expr": {
-                "kind": "tuple",
+                "kind": "tupleLiteral",
                 "elements": [
                   {
                     "kind": "columnRef",
@@ -45,7 +126,7 @@
             }
           ],
           "from": {
-            "kind": "tableFunction",
+            "kind": "tableFunctionRef",
             "name": "numbers",
             "args": [
               {
@@ -72,7 +153,7 @@
         },
         "alias": "t1"
       },
-      "kind": "join",
+      "kind": "joinExpr",
       "joinType": "CROSS",
       "right": {
         "kind": "subqueryFrom",
@@ -82,7 +163,7 @@
             {
               "kind": "alias",
               "expr": {
-                "kind": "tuple",
+                "kind": "tupleLiteral",
                 "elements": [
                   {
                     "kind": "columnRef",
@@ -112,7 +193,7 @@
             }
           ],
           "from": {
-            "kind": "tableFunction",
+            "kind": "tableFunctionRef",
             "name": "numbers",
             "args": [
               {
@@ -170,6 +251,10 @@
         }
       }
     ]
+  },
+  {
+    "kind": "system",
+    "body": "SYSTEM FLUSH LOGS system.query_log"
   },
   {
     "kind": "select",
@@ -312,7 +397,7 @@
             {
               "kind": "alias",
               "expr": {
-                "kind": "tuple",
+                "kind": "tupleLiteral",
                 "elements": [
                   {
                     "kind": "columnRef",
@@ -342,7 +427,7 @@
             }
           ],
           "from": {
-            "kind": "tableFunction",
+            "kind": "tableFunctionRef",
             "name": "numbers",
             "args": [
               {
@@ -369,7 +454,7 @@
         },
         "alias": "t1"
       },
-      "kind": "join",
+      "kind": "joinExpr",
       "joinType": "CROSS",
       "right": {
         "kind": "subqueryFrom",
@@ -379,7 +464,7 @@
             {
               "kind": "alias",
               "expr": {
-                "kind": "tuple",
+                "kind": "tupleLiteral",
                 "elements": [
                   {
                     "kind": "columnRef",
@@ -409,7 +494,7 @@
             }
           ],
           "from": {
-            "kind": "tableFunction",
+            "kind": "tableFunctionRef",
             "name": "numbers",
             "args": [
               {

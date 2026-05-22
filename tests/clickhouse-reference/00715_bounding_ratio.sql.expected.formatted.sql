@@ -1,8 +1,35 @@
+DROP TABLE IF EXISTS rate_test;
+
+CREATE TABLE rate_test
+(
+    timestamp UInt32,
+    event UInt32
+)
+ENGINE = Memory;
+
+INSERT INTO rate_test;
+
 SELECT 1.0 = boundingRatio(timestamp, event)
 FROM rate_test;
 
+DROP TABLE IF EXISTS rate_test2;
+
+CREATE TABLE rate_test2
+(
+    uid UInt32 DEFAULT 1,
+    timestamp DateTime,
+    event UInt32
+)
+ENGINE = Memory;
+
+INSERT INTO rate_test2 (timestamp, event);
+
 SELECT 1.0 = boundingRatio(timestamp, event)
 FROM rate_test2;
+
+DROP TABLE rate_test;
+
+DROP TABLE rate_test2;
 
 SELECT boundingRatio(number, number * 1.5)
 FROM numbers(10);

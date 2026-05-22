@@ -1,3 +1,103 @@
+Set
+
+Set
+
+DropQuery  first_table_lr (children 1)
+ Identifier first_table_lr
+
+CreateQuery first_table_lr (children 3)
+ Identifier first_table_lr
+ Columns definition (children 1)
+  ExpressionList (children 2)
+   ColumnDeclaration id (children 1)
+    DataType String
+   ColumnDeclaration id2 (children 1)
+    DataType String
+ Storage definition (children 2)
+  Function ReplicatedMergeTree (children 1)
+   ExpressionList (children 2)
+    Literal '/clickhouse/tables/{database}/test_03080/alter'
+    Literal 'r1'
+  Identifier id
+
+DropQuery  first_table (children 1)
+ Identifier first_table
+
+CreateQuery first_table (children 3)
+ Identifier first_table
+ Columns definition (children 1)
+  ExpressionList (children 2)
+   ColumnDeclaration id (children 1)
+    DataType String
+   ColumnDeclaration id2 (children 1)
+    DataType String
+ Storage definition (children 1)
+  Function Distributed (children 1)
+   ExpressionList (children 3)
+    Literal 'test_shard_localhost'
+    Function currentDatabase (children 1)
+     ExpressionList
+    Literal 'first_table_lr'
+
+DropQuery  second_table_lr (children 1)
+ Identifier second_table_lr
+
+CreateQuery second_table_lr (children 3)
+ Identifier second_table_lr
+ Columns definition (children 1)
+  ExpressionList (children 2)
+   ColumnDeclaration id (children 1)
+    DataType String
+   ColumnDeclaration id2 (children 1)
+    DataType String
+ Storage definition (children 2)
+  Function MergeTree (children 1)
+   ExpressionList
+  Identifier id
+
+DropQuery  second_table (children 1)
+ Identifier second_table
+
+CreateQuery second_table (children 3)
+ Identifier second_table
+ Columns definition (children 1)
+  ExpressionList (children 2)
+   ColumnDeclaration id (children 1)
+    DataType String
+   ColumnDeclaration id2 (children 1)
+    DataType String
+ Storage definition (children 1)
+  Function Distributed (children 1)
+   ExpressionList (children 3)
+    Literal 'test_shard_localhost'
+    Function currentDatabase (children 1)
+     ExpressionList
+    Literal 'second_table_lr'
+
+InsertQuery   (children 1)
+ Identifier first_table
+
+InsertQuery   (children 1)
+ Identifier second_table
+
+DropQuery  two_tables (children 1)
+ Identifier two_tables
+
+CreateQuery two_tables (children 3)
+ Identifier two_tables
+ Columns definition (children 1)
+  ExpressionList (children 2)
+   ColumnDeclaration id (children 1)
+    DataType String
+   ColumnDeclaration id2 (children 1)
+    DataType String
+ Storage definition (children 1)
+  Function Merge (children 1)
+   ExpressionList (children 2)
+    Function currentDatabase (children 1)
+     ExpressionList
+    Literal '^(first_table)$'
+
 SelectWithUnionQuery (children 1)
  ExpressionList (children 1)
   SelectQuery (children 3)

@@ -1,5 +1,99 @@
 [
   {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "alter_index_test"
+    },
+    "ifExists": true,
+    "leadingComments": [
+      "-- add_minmax_index_for_numeric_columns=0: Adds more output to system.data_skipping_indices"
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "alter_index_test"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "a",
+        "type": {
+          "name": "UInt32"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "b",
+        "type": {
+          "name": "Date"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "c",
+        "type": {
+          "name": "UInt32"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "d",
+        "type": {
+          "name": "UInt32"
+        }
+      },
+      {
+        "kind": "indexDef",
+        "name": "index_a",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "a"
+          ]
+        },
+        "indexType": {
+          "name": "set",
+          "args": [
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "0"
+            }
+          ]
+        },
+        "granularity": 1
+      }
+    ],
+    "engine": {
+      "name": "MergeTree",
+      "args": []
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "functionCall",
+          "name": "tuple",
+          "args": []
+        }
+      }
+    ],
+    "settings": [
+      {
+        "name": "add_minmax_index_for_numeric_columns",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      }
+    ],
+    "settingsAfterOrderBy": true
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -46,6 +140,118 @@
           }
         }
       ]
+    }
+  },
+  {
+    "kind": "alter",
+    "table": {
+      "kind": "tableRef",
+      "table": "alter_index_test"
+    },
+    "commands": [
+      {
+        "kind": "alterCommand",
+        "commandType": "ADD_INDEX",
+        "index": {
+          "kind": "indexDef",
+          "name": "index_b",
+          "expr": {
+            "kind": "columnRef",
+            "parts": [
+              "b"
+            ]
+          },
+          "indexType": {
+            "name": "minmax"
+          },
+          "granularity": 1
+        }
+      }
+    ]
+  },
+  {
+    "kind": "alter",
+    "table": {
+      "kind": "tableRef",
+      "table": "alter_index_test"
+    },
+    "commands": [
+      {
+        "kind": "alterCommand",
+        "commandType": "ADD_INDEX",
+        "index": {
+          "kind": "indexDef",
+          "name": "index_c",
+          "expr": {
+            "kind": "columnRef",
+            "parts": [
+              "c"
+            ]
+          },
+          "indexType": {
+            "name": "set",
+            "args": [
+              {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "0"
+              }
+            ]
+          },
+          "granularity": 2
+        },
+        "afterIndex": "index_b"
+      }
+    ]
+  },
+  {
+    "kind": "alter",
+    "table": {
+      "kind": "tableRef",
+      "table": "alter_index_test"
+    },
+    "commands": [
+      {
+        "kind": "alterCommand",
+        "commandType": "ADD_INDEX",
+        "index": {
+          "kind": "indexDef",
+          "name": "index_d",
+          "expr": {
+            "kind": "columnRef",
+            "parts": [
+              "d"
+            ]
+          },
+          "indexType": {
+            "name": "set",
+            "args": [
+              {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "0"
+              }
+            ]
+          },
+          "granularity": 1
+        }
+      }
+    ]
+  },
+  {
+    "kind": "detach",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "alter_index_test"
+    }
+  },
+  {
+    "kind": "attach",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "alter_index_test"
     }
   }
 ]

@@ -1,9 +1,27 @@
-
+SET enable_analyzer=1;
+-- { echoOn }
 Select sum(number + 1) from numbers(10);
 Select sum(1 + number) from numbers(10);
 Select sum(number - 1) from numbers(10);
 Select sum(1 - number) from numbers(10);
+WITH 1::Nullable(UInt64) as my_literal Select sum(number + my_literal) from numbers(0);
+WITH 1::Nullable(UInt64) as my_literal Select sum(number) + my_literal * count() from numbers(0);
+-- { echoOff }
 
+DROP TABLE IF EXISTS test_table;
+CREATE TABLE test_table
+(
+    uint64 UInt64,
+    float64 Float64,
+    decimal32 Decimal32(5),
+) ENGINE=MergeTree ORDER BY uint64;
+-- Use Float64 numbers divisible by 1/16 (or some other small power of two), so that their sum doesn't depend on summation order.
+INSERT INTO test_table VALUES (1, 1.125, 1.11);
+INSERT INTO test_table VALUES (2, 2.250, 2.22);
+INSERT INTO test_table VALUES (3, 3.375, 3.33);
+INSERT INTO test_table VALUES (4, 4.500, 4.44);
+INSERT INTO test_table VALUES (5, 5.625, 5.55);
+-- { echoOn }
 SELECT sum(uint64 + 1 AS i) from test_table where i > 0;
 SELECT sum(uint64 + 1) AS j from test_table having j > 0;
 SELECT sum(uint64 + 1 AS i) j from test_table where i > 0 having j > 0;

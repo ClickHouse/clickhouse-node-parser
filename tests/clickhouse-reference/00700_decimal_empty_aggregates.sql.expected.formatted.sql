@@ -1,3 +1,13 @@
+DROP TABLE IF EXISTS decimal;
+
+CREATE TABLE decimal
+(
+    a Decimal(6, 4),
+    b Decimal(16, 7),
+    c Decimal(20, 8)
+)
+ENGINE = Memory;
+
 SELECT
     count(a),
     count(b),
@@ -389,19 +399,21 @@ SELECT
     covarPop(a, a),
     covarPop(b, b),
     covarPop(c, c)
-FROM decimal;
+FROM decimal; -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
 SELECT
     covarSamp(a, a),
     covarSamp(b, b),
     covarSamp(c, c)
-FROM decimal;
+FROM decimal; -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
 SELECT
     corr(a, a),
     corr(b, b),
     corr(c, c)
-FROM decimal;
+FROM decimal; -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
 SELECT 1
 LIMIT 0;
+
+DROP TABLE decimal;

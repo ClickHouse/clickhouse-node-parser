@@ -8,7 +8,7 @@ FROM
 LEFT JOIN (
         SELECT 1024 AS b
     ) AS bar
-    ON 1 = foo.b;
+    ON 1 = foo.b; -- { serverError INVALID_JOIN_ON_EXPRESSION }
 
 SELECT *
 FROM
@@ -20,4 +20,4 @@ FROM
 RIGHT JOIN (
         SELECT 1024 AS b
     ) AS bar
-    ON 1 = bar.b;
+    ON 1 = bar.b; -- { serverError INVALID_JOIN_ON_EXPRESSION }

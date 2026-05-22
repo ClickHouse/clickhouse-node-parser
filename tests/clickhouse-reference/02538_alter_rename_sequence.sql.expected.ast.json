@@ -1,5 +1,121 @@
 [
   {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "wrong_metadata"
+    },
+    "ifExists": true,
+    "leadingComments": [
+      "-- Tags: no-shared-merge-tree",
+      "-- Stop replication queues"
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "wrong_metadata"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "column1",
+        "type": {
+          "name": "UInt64"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "column2",
+        "type": {
+          "name": "UInt64"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "column3",
+        "type": {
+          "name": "UInt64"
+        }
+      }
+    ],
+    "engine": {
+      "name": "ReplicatedMergeTree",
+      "args": [
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "/test/{database}/tables/wrong_metadata"
+        },
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "1"
+        }
+      ]
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "functionCall",
+          "name": "tuple",
+          "args": []
+        }
+      }
+    ]
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "wrong_metadata"
+      }
+    }
+  },
+  {
+    "kind": "system",
+    "body": "SYSTEM STOP REPLICATION QUEUES wrong_metadata"
+  },
+  {
+    "kind": "alter",
+    "table": {
+      "kind": "tableRef",
+      "table": "wrong_metadata"
+    },
+    "commands": [
+      {
+        "kind": "alterCommand",
+        "commandType": "RENAME_COLUMN",
+        "oldName": "column1",
+        "newName": "column1_renamed"
+      }
+    ],
+    "settings": [
+      {
+        "name": "replication_alter_partitions_sync",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "wrong_metadata"
+      }
+    }
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -20,6 +136,39 @@
           ]
         },
         "direction": "ASC"
+      }
+    ]
+  },
+  {
+    "kind": "system",
+    "body": "SYSTEM START REPLICATION QUEUES wrong_metadata"
+  },
+  {
+    "kind": "system",
+    "body": "SYSTEM SYNC REPLICA wrong_metadata"
+  },
+  {
+    "kind": "alter",
+    "table": {
+      "kind": "tableRef",
+      "table": "wrong_metadata"
+    },
+    "commands": [
+      {
+        "kind": "alterCommand",
+        "commandType": "RENAME_COLUMN",
+        "oldName": "column2",
+        "newName": "column2_renamed"
+      }
+    ],
+    "settings": [
+      {
+        "name": "replication_alter_partitions_sync",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "2"
+        }
       }
     ]
   },
@@ -49,6 +198,120 @@
     "format": "JSONEachRow"
   },
   {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "wrong_metadata_wide"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "column1",
+        "type": {
+          "name": "UInt64"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "column2",
+        "type": {
+          "name": "UInt64"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "column3",
+        "type": {
+          "name": "UInt64"
+        }
+      }
+    ],
+    "engine": {
+      "name": "ReplicatedMergeTree",
+      "args": [
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "/test/{database}/tables/wrong_metadata_wide"
+        },
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "1"
+        }
+      ]
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "functionCall",
+          "name": "tuple",
+          "args": []
+        }
+      }
+    ],
+    "settings": [
+      {
+        "name": "min_bytes_for_wide_part",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      }
+    ],
+    "settingsAfterOrderBy": true
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "wrong_metadata_wide"
+      }
+    }
+  },
+  {
+    "kind": "system",
+    "body": "SYSTEM STOP REPLICATION QUEUES wrong_metadata_wide"
+  },
+  {
+    "kind": "alter",
+    "table": {
+      "kind": "tableRef",
+      "table": "wrong_metadata_wide"
+    },
+    "commands": [
+      {
+        "kind": "alterCommand",
+        "commandType": "RENAME_COLUMN",
+        "oldName": "column1",
+        "newName": "column1_renamed"
+      }
+    ],
+    "settings": [
+      {
+        "name": "replication_alter_partitions_sync",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "wrong_metadata_wide"
+      }
+    }
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -69,6 +332,39 @@
           ]
         },
         "direction": "ASC"
+      }
+    ]
+  },
+  {
+    "kind": "system",
+    "body": "SYSTEM START REPLICATION QUEUES wrong_metadata_wide"
+  },
+  {
+    "kind": "system",
+    "body": "SYSTEM SYNC REPLICA wrong_metadata_wide"
+  },
+  {
+    "kind": "alter",
+    "table": {
+      "kind": "tableRef",
+      "table": "wrong_metadata_wide"
+    },
+    "commands": [
+      {
+        "kind": "alterCommand",
+        "commandType": "RENAME_COLUMN",
+        "oldName": "column2",
+        "newName": "column2_renamed"
+      }
+    ],
+    "settings": [
+      {
+        "name": "replication_alter_partitions_sync",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "2"
+        }
       }
     ]
   },
@@ -96,5 +392,14 @@
       }
     ],
     "format": "JSONEachRow"
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "wrong_metadata_wide"
+    },
+    "ifExists": true
   }
 ]

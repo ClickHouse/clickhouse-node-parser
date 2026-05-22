@@ -1,5 +1,18 @@
 [
   {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "enable_analyzer",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -245,7 +258,7 @@
               {
                 "kind": "castExpr",
                 "expr": {
-                  "kind": "array",
+                  "kind": "arrayLiteral",
                   "elements": [
                     {
                       "kind": "literal",
@@ -288,7 +301,7 @@
               {
                 "kind": "castExpr",
                 "expr": {
-                  "kind": "array",
+                  "kind": "arrayLiteral",
                   "elements": [
                     {
                       "kind": "literal",
@@ -335,7 +348,7 @@
                   "name": "materialize",
                   "args": [
                     {
-                      "kind": "array",
+                      "kind": "arrayLiteral",
                       "elements": [
                         {
                           "kind": "literal",
@@ -384,7 +397,7 @@
                   "name": "materialize",
                   "args": [
                     {
-                      "kind": "array",
+                      "kind": "arrayLiteral",
                       "elements": [
                         {
                           "kind": "literal",
@@ -414,6 +427,53 @@
         ]
       }
     ]
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "test"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "test"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "json",
+        "type": {
+          "name": "JSON",
+          "args": [
+            {
+              "kind": "namedField",
+              "name": "a",
+              "type": {
+                "name": "UInt32"
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "engine": {
+      "name": "Memory"
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "test"
+      }
+    }
   },
   {
     "kind": "select",
@@ -553,6 +613,14 @@
       }
     ],
     "from": {
+      "kind": "tableRef",
+      "table": "test"
+    }
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
       "kind": "tableRef",
       "table": "test"
     }

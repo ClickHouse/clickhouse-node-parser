@@ -1,3 +1,4 @@
+-- Tags: no-fasttest
 SELECT
     'â' AS s,
     normalizeUTF8NFC(s) AS s1,

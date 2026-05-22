@@ -1,6 +1,38 @@
+DROP TABLE IF EXISTS src;
+
+DROP TABLE IF EXISTS dst;
+
+DROP TABLE IF EXISTS original_mv;
+
+DROP TABLE IF EXISTS new_mv;
+
+CREATE TABLE src
+(
+    x UInt8
+)
+ENGINE = Null;
+
+CREATE TABLE dst
+(
+    x UInt8
+)
+ENGINE = Memory;
+
+CREATE MATERIALIZED VIEW original_mv
+TO dst
+AS
+SELECT *
+FROM src;
+
+INSERT INTO src;
+
 SELECT *
 FROM original_mv
 ORDER BY x ASC;
+
+RENAME TABLE original_mv TO new_mv;
+
+INSERT INTO src;
 
 SELECT *
 FROM dst

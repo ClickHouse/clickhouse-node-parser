@@ -1,3 +1,60 @@
+DropQuery  hits_dst (children 1)
+ Identifier hits_dst
+
+DropQuery  hits_buffer (children 1)
+ Identifier hits_buffer
+
+CreateQuery hits_dst (children 2)
+ Identifier hits_dst
+ Storage definition (children 5)
+  Function MergeTree
+  Function toYYYYMM (children 1)
+   ExpressionList (children 1)
+    Identifier EventDate
+  Function tuple (children 1)
+   ExpressionList (children 3)
+    Identifier CounterID
+    Identifier EventDate
+    Function intHash32 (children 1)
+     ExpressionList (children 1)
+      Identifier UserID
+  Function intHash32 (children 1)
+   ExpressionList (children 1)
+    Identifier UserID
+  Set
+
+CreateQuery hits_buffer (children 2)
+ Identifier hits_buffer
+ Storage definition (children 1)
+  Function Buffer (children 1)
+   ExpressionList (children 9)
+    Function current_database (children 1)
+     ExpressionList
+    Identifier hits_dst
+    Literal UInt64_8
+    Literal UInt64_600
+    Literal UInt64_600
+    Literal UInt64_1000000
+    Literal UInt64_1000000
+    Literal UInt64_100000000
+    Literal UInt64_1000000000
+
+InsertQuery   (children 2)
+ Identifier hits_buffer
+ SelectWithUnionQuery (children 1)
+  ExpressionList (children 1)
+   SelectQuery (children 3)
+    ExpressionList (children 1)
+     Asterisk
+    TablesInSelectQuery (children 1)
+     TablesInSelectQueryElement (children 1)
+      TableExpression (children 1)
+       TableIdentifier test.hits
+    Function equals (children 1)
+     ExpressionList (children 2)
+      Identifier CounterID
+      Literal UInt64_800784
+
 SelectWithUnionQuery (children 1)
  ExpressionList (children 1)
   SelectQuery (children 2)
@@ -19,3 +76,12 @@ SelectWithUnionQuery (children 1)
     TablesInSelectQueryElement (children 1)
      TableExpression (children 1)
       TableIdentifier hits_dst
+
+OptimizeQuery  hits_buffer (children 1)
+ Identifier hits_buffer
+
+DropQuery  hits_dst (children 1)
+ Identifier hits_dst
+
+DropQuery  hits_buffer (children 1)
+ Identifier hits_buffer

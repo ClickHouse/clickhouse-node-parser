@@ -28,6 +28,8 @@ SELECT overlay(materialize('Spark SQL'), materialize('ANSI '), 7, materialize(0)
 SELECT overlay(materialize('Spark SQL'), 'ANSI ', materialize(7), materialize(0)), overlayUTF8(materialize('Spark SQL和CH'), 'ANSI ', materialize(7), materialize(0));
 SELECT overlay('Spark SQL', materialize('ANSI '), materialize(7), materialize(0)), overlayUTF8('Spark SQL和CH', materialize('ANSI '), materialize(7), materialize(0));
 SELECT overlay(materialize('Spark SQL'), materialize('ANSI '), materialize(7), materialize(0)), overlayUTF8(materialize('Spark SQL和CH'), materialize('ANSI '), materialize(7), materialize(0));
+WITH number - 12 AS offset SELECT offset, overlay('Spark SQL', '__', offset), overlayUTF8('Spark SQL和CH', '之', offset) FROM numbers(26) ORDER BY number;
+WITH number - 1 AS length SELECT length, overlay('Spark SQL', 'ANSI ', 7, length), overlayUTF8('Spark SQL和CH', 'ANSI ', 7, length) FROM numbers(8) ORDER BY number;
 SELECT overlay('', '_', 6), overlayUTF8('', '_', 6);
 SELECT overlay('Spark SQL', '', 6), overlayUTF8('Spark SQL和CH', '', 6);
 SELECT overlay('', 'ANSI ', 7, 0), overlayUTF8('', 'ANSI ', 7, 0);

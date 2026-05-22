@@ -10,7 +10,7 @@
 import { readFileSync, writeFileSync, readdirSync, unlinkSync } from 'fs';
 import { join } from 'path';
 
-const dir = new URL('../clickhouse-tests', import.meta.url).pathname;
+const dir = new URL('../tests/clickhouse-reference', import.meta.url).pathname;
 
 // Step 1: Remove all non-.sql and non-.txt files
 const allFiles = readdirSync(dir);
@@ -32,12 +32,25 @@ function splitStatements(content) {
   let current = '';
   let inSingleQuote = false;
   let inDoubleQuote = false;
+  let inBacktick = false;
+  let dollarTag = null; // non-null string when inside a dollar-quoted string (e.g. '$$' or '$doc$')
   let inLineComment = false;
   let inBlockComment = false;
 
   for (let i = 0; i < content.length; i++) {
     const ch = content[i];
     const next = content[i + 1];
+
+    // Dollar-quoted strings: $tag$...$tag$ (tag may be empty, e.g. $$...$$)
+    if (dollarTag !== null) {
+      current += ch;
+      if (ch === '$' && content.substring(i, i + dollarTag.length) === dollarTag) {
+        current += content.substring(i + 1, i + dollarTag.length);
+        i += dollarTag.length - 1;
+        dollarTag = null;
+      }
+      continue;
+    }
 
     if (inLineComment) {
       current += ch;
@@ -55,7 +68,17 @@ function splitStatements(content) {
       continue;
     }
 
-    if (!inSingleQuote && !inDoubleQuote) {
+    if (!inSingleQuote && !inDoubleQuote && !inBacktick) {
+      if (ch === '$') {
+        // Match $tag$ where tag is [a-zA-Z0-9_]* (may be empty for $$)
+        const tagMatch = content.substring(i).match(/^\$([a-zA-Z0-9_]*)\$/);
+        if (tagMatch) {
+          dollarTag = tagMatch[0];
+          current += dollarTag;
+          i += dollarTag.length - 1;
+          continue;
+        }
+      }
       if (ch === '-' && next === '-') {
         inLineComment = true;
         current += ch;
@@ -68,21 +91,58 @@ function splitStatements(content) {
       }
     }
 
-    if (ch === "'" && !inDoubleQuote) {
+    if (ch === '\\' && (inSingleQuote || inDoubleQuote)) {
+      // Backslash escape: consume the next character as-is.
+      current += ch;
+      if (i + 1 < content.length) current += content[++i];
+      continue;
+    } else if (ch === '`' && !inSingleQuote && !inDoubleQuote) {
+      // Backtick-quoted identifiers: `` is an escaped backtick inside backticks.
+      if (inBacktick && next === '`') {
+        current += ch + next;
+        i++;
+        continue;
+      }
+      inBacktick = !inBacktick;
+    } else if (ch === "'" && !inDoubleQuote && !inBacktick) {
+      // SQL-style '' escaped quote: stay inside the string.
+      if (inSingleQuote && next === "'") {
+        current += ch + next;
+        i++;
+        continue;
+      }
       inSingleQuote = !inSingleQuote;
-    } else if (ch === '"' && !inSingleQuote) {
+    } else if (ch === '"' && !inSingleQuote && !inBacktick) {
+      if (inDoubleQuote && next === '"') {
+        current += ch + next;
+        i++;
+        continue;
+      }
       inDoubleQuote = !inDoubleQuote;
     }
 
-    if (ch === ';' && !inSingleQuote && !inDoubleQuote) {
-      // Consume the rest of the line so inline trailing comments stay with
-      // this statement rather than being prepended to the next one.
+    if (ch === ';' && !inSingleQuote && !inDoubleQuote && !inBacktick) {
+      // Consume trailing whitespace and an optional inline comment so they
+      // stay with this statement rather than being prepended to the next one.
+      // Stop if we hit a non-whitespace, non-comment character (i.e. another
+      // statement on the same line).
       let tail = ';';
-      i++;
-      while (i < content.length && content[i] !== '\n') {
-        tail += content[i];
-        i++;
+      let j = i + 1;
+      while (j < content.length && content[j] !== '\n') {
+        if (content[j] === '-' && content[j + 1] === '-') {
+          while (j < content.length && content[j] !== '\n') {
+            tail += content[j];
+            j++;
+          }
+          break;
+        } else if (content[j] === ' ' || content[j] === '\t') {
+          tail += content[j];
+          j++;
+        } else {
+          break;
+        }
       }
+      i = j - 1;
       statements.push(current + tail);
       current = '';
     } else {
@@ -90,13 +150,13 @@ function splitStatements(content) {
     }
   }
 
-  // Any trailing content without a semicolon
   if (current.trim()) {
     statements.push(current);
   }
 
   return statements;
 }
+
 
 /**
  * Returns the SQL keyword at the start of a statement, ignoring leading
@@ -113,8 +173,8 @@ function getLeadingKeyword(statement) {
   return match ? match[1].toUpperCase() : '';
 }
 
-function isSelectStatement(statement) {
-  return getLeadingKeyword(statement) === 'SELECT';
+function isSupportedStatement(statement) {
+  return !['EXPLAIN'].includes(getLeadingKeyword(statement));
 }
 
 /**
@@ -139,15 +199,118 @@ function isStringOnlySelect(statement) {
 
 /** Returns true if the statement's trailing inline comment contains "clientError". */
 function hasClientError(statement) {
-  return /;\s*--[^\n]*clientError/.test(statement);
+  return /;\s*--[^\n]*(clientError)/.test(statement);
 }
 
-/** Returns true if the statement uses the implicit_transaction setting. */
-function hasImplicitTransaction(statement) {
-  return /implicit_transaction/.test(statement);
+/** Returns true if the statement uses a disallowed setting. */
+function hasDisallowedSetting(statement) {
+  return /implicit_transaction/.test(statement) ||
+    /output_format_tsv_crlf_end_of_line/.test(statement);
 }
 
-// Step 2: Filter .sql files
+/** Returns true if the statement uses a disallowed setting. */
+function hasKql(statement) {
+  return /kql\(/.test(statement);
+}
+
+/**
+ * SQL keywords that may appear at the start of a statement. Anything else at
+ * the start indicates a bare expression (only valid with implicit_select=1)
+ * or a non-SQL dialect (KQL pipe, PRQL, etc.) — neither of which the parser
+ * accepts structurally.
+ */
+const SQL_LEADING_KEYWORDS = new Set([
+  'SELECT', 'WITH', 'INSERT', 'UPDATE', 'DELETE', 'CREATE', 'REPLACE',
+  'DROP', 'TRUNCATE', 'ALTER', 'ATTACH', 'DETACH', 'SET', 'USE', 'SYSTEM',
+  'EXPLAIN', 'OPTIMIZE', 'DESCRIBE', 'DESC', 'SHOW', 'GRANT', 'REVOKE',
+  'KILL', 'RENAME', 'EXCHANGE', 'CHECK', 'EXISTS', 'BACKUP', 'RESTORE',
+  'UNDROP', 'BEGIN', 'COMMIT', 'ROLLBACK', 'WATCH', 'UNDO', 'MOVE',
+  'EXECUTE', 'FROM',
+]);
+
+/**
+ * Returns true when the statement's first non-comment token is clearly a
+ * bare expression (only valid with `implicit_select=1`):
+ *   - identifier-or-function that is not a known SQL leading keyword
+ *     (e.g. `s;`, `count();`, `upper('x');`)
+ *   - leading number literal (`1;`, `1 + 2;`)
+ *   - leading `*` (`*;`)
+ * Statements that begin with anything else (parens, unicode whitespace, etc.)
+ * are left alone — we'd rather under-filter than mis-flag a real query.
+ */
+function isImplicitSelectExpression(statement) {
+  // Strip block, --, #/#! and // line comments before inspecting the leading
+  // token. (ClickHouse supports `--`, `#`, `#!`, and `//` line comments.)
+  let s = statement
+    .replace(/\/\*[\s\S]*?\*\//g, '')
+    .replace(/\/\/[^\n]*/g, '')
+    .replace(/--[^\n]*/g, '')
+    .replace(/#[^\n]*/g, '')
+    .replace(/^[ \t\r\n]+/, '');
+  if (s === '') return false;
+  // Identifier-led: bare expression iff identifier is not a SQL leading keyword.
+  const idMatch = s.match(/^([A-Za-z_][A-Za-z0-9_]*)/);
+  if (idMatch) return !SQL_LEADING_KEYWORDS.has(idMatch[1].toUpperCase());
+  // Numeric literal at start (e.g. `1;`, `1 + 2;`).
+  if (/^[0-9]/.test(s)) return true;
+  // Bare asterisk (`*;`).
+  if (/^\*\s*;/.test(s)) return true;
+  return false;
+}
+
+const blocklist = [
+  // Ridiculous inputs
+  '03775_too_large_temporary_files_buffer_size.sql',
+  '02686_bson3.sql',
+  '01666_blns_long.sql',
+  // Expected Parse error
+  '02474_fix_function_parser_bug.sql',
+  // Experimental window views, may be supported in the future
+  '01049_window_view_window_functions.sql',
+  // KQL parsing — these files are entirely written in KQL after `set dialect='kusto'`,
+  // so almost every statement fails to parse as SQL.
+  '02366_kql_datatype.sql',
+  '02366_kql_distinct.sql',
+  '02366_kql_extend.sql',
+  '02366_kql_func_binary.sql',
+  '02366_kql_func_datetime.sql',
+  '02366_kql_func_dynamic.sql',
+  '02366_kql_func_iif.sql',
+  '02366_kql_func_ip.sql',
+  '02366_kql_func_math.sql',
+  '02366_kql_func_scalar.sql',
+  '02366_kql_func_string.sql',
+  '02366_kql_mvexpand.sql',
+  '02366_kql_operator_in_sql.sql',
+  '02366_kql_summarize.sql',
+  '02366_kql_tabular.sql',
+  // Mixed-dialect file (PRQL + KQL). The non-SQL branches are unparseable and
+  // the SQL splitter can't separate them cleanly.
+  '02985_dialects_with_distributed_tables.sql',
+  // INSERT INTO ... FORMAT CSV with a non-comma `format_csv_delimiter` puts
+  // raw CSV data containing `;` directly in the SQL stream, which breaks
+  // statement splitting.
+  '00707_float_csv_delimiter.sql',
+  // implicit_select / implicit_table_at_top_level enable bare expressions
+  // (`1+2;`, `s;`, `count();`, `*;`) which our parser rejects. The remaining
+  // valid SQL in these files isn't worth keeping out of sync with the
+  // pre-generated expected outputs.
+  '03227_implicit_select.sql',
+  '03408_implicit_table.sql',
+  // Difficult to split
+  // '03011_definitive_guide_to_cast.sql',
+];
+
+// Step 2: Remove blocklisted files
+for (const stem of blocklist) {
+  for (const file of readdirSync(dir)) {
+    if (file.startsWith(stem)) {
+      unlinkSync(join(dir, file));
+    }
+  }
+}
+
+// Step 3: Filter .sql files
 const sqlFiles = readdirSync(dir).filter((f) => f.endsWith('.sql') && !f.includes('.expected.'));
 let totalRemoved = 0;
 let totalDuplicates = 0;
@@ -160,10 +323,12 @@ for (const file of sqlFiles) {
 
   const selectStatements = statements.filter(
     (s) =>
-      isSelectStatement(s) &&
+      isSupportedStatement(s) &&
       !isStringOnlySelect(s) &&
       !hasClientError(s) &&
-      !hasImplicitTransaction(s),
+      !hasDisallowedSetting(s) &&
+      !hasKql(s) &&
+      !isImplicitSelectExpression(s),
   );
   const removed = statements.length - selectStatements.length;
 

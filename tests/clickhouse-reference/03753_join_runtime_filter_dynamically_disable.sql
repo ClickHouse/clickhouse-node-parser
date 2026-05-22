@@ -1,3 +1,21 @@
+-- Tags: no-azure-blob-storage
+
+CREATE TABLE nation(n_nationkey Int32, n_name String) ENGINE MergeTree ORDER BY n_nationkey;
+CREATE TABLE customer(c_custkey Int32, c_nationkey Int32, c_nationkey_copy Int32) ENGINE MergeTree ORDER BY c_custkey SETTINGS index_granularity=10;
+SYSTEM STOP MERGES customer;
+INSERT INTO nation VALUES (5,'ETHIOPIA'),(6,'FRANCE'),(7,'GERMANY'),(100,'UNKNOWN');
+INSERT INTO customer SELECT number, 5, 5 FROM numbers(1000);
+INSERT INTO customer SELECT number, 6, 6 FROM numbers(1000);
+INSERT INTO customer SELECT number, 7, 7 FROM numbers(1000);
+INSERT INTO customer SELECT number, 100, 100 FROM numbers(10);
+SET enable_analyzer=1;
+SET enable_join_runtime_filters=1;
+SET enable_parallel_replicas=0;
+SET join_algorithm = 'hash,parallel_hash';
+SET query_plan_optimize_join_order_algorithm='greedy';
+SET query_plan_optimize_join_order_limit=1;
+SET query_plan_join_swap_table=0;
+SET enable_multiple_prewhere_read_steps=1;
 -- 1 row in filter
 SELECT count()
 FROM customer, nation
@@ -6,6 +24,8 @@ WHERE
     AND n_name = 'FRANCE'
     AND c_nationkey_copy = 6
 SETTINGS join_runtime_filter_exact_values_limit = 100, max_block_size=10, max_threads=1, log_comment='Q1';
+-- Check that most of the blocks were skipped
+SYSTEM FLUSH LOGS query_log;
 SELECT
     log_comment,
     ProfileEvents['RuntimeFilterBlocksSkipped'] > 10 * ProfileEvents['RuntimeFilterBlocksProcessed'] AS Passed,

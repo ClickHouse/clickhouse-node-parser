@@ -1,3 +1,28 @@
+CREATE TABLE users
+(
+    uid Int16,
+    name String,
+    age Int16
+)
+ENGINE = MergeTree
+ORDER BY tuple();
+
+INSERT INTO users;
+
+INSERT INTO users;
+
+INSERT INTO users;
+
+-- For some reason planner sometimes decides to swap tables.
+-- It breaks test because it prints query plan with actions.
+SET query_plan_join_swap_table = 0;
+
+SET enable_analyzer = 1; -- Optimization requires LogicalJoinStep
+
+SET enable_parallel_replicas = 0; -- Optimization requires LogicalJoinStep
+
+SET parallel_hash_join_threshold = 0;
+
 SELECT *
 FROM (
         SELECT *

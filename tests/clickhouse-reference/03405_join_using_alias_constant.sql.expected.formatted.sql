@@ -1,3 +1,58 @@
+-- Tags: no-parallel-replicas
+-- FIXME: with parallel replicas:
+-- Cannot convert column `__table1.b` because it is non constant in source stream but must be constant in result. (ILLEGAL_COLUMN)
+DROP TABLE IF EXISTS t1;
+
+DROP TABLE IF EXISTS t1lc;
+
+DROP TABLE IF EXISTS t2;
+
+DROP TABLE IF EXISTS t2lc;
+
+SET allow_suspicious_low_cardinality_types = 1;
+
+SET enable_analyzer = 1;
+
+CREATE TABLE t1
+(
+    a UInt64,
+    b Int32 ALIAS 1
+)
+ENGINE = MergeTree
+ORDER BY tuple();
+
+CREATE TABLE t1lc
+(
+    a UInt64,
+    b LowCardinality(Int32) ALIAS 1
+)
+ENGINE = MergeTree
+ORDER BY tuple();
+
+INSERT INTO t1;
+
+INSERT INTO t1lc;
+
+CREATE TABLE t2
+(
+    a UInt64,
+    b Nullable(Int64)
+)
+ENGINE = MergeTree
+ORDER BY tuple();
+
+CREATE TABLE t2lc
+(
+    a UInt64,
+    b LowCardinality(Nullable(Int64))
+)
+ENGINE = MergeTree
+ORDER BY tuple();
+
+INSERT INTO t2;
+
+INSERT INTO t2lc;
+
 SELECT b
 FROM
     t1

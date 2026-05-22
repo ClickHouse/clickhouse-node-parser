@@ -1,5 +1,297 @@
 [
   {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "log_for_alter"
+    },
+    "ifExists": true,
+    "leadingComments": [
+      "-- Tags: no-replicated-database, log-engine",
+      "-- Tag no-replicated-database: Unsupported type of ALTER query"
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "log_for_alter"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "id",
+        "type": {
+          "name": "UInt64"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "Data",
+        "type": {
+          "name": "String"
+        }
+      }
+    ],
+    "engine": {
+      "name": "Log",
+      "args": []
+    }
+  },
+  {
+    "kind": "alter",
+    "table": {
+      "kind": "tableRef",
+      "table": "log_for_alter"
+    },
+    "commands": [
+      {
+        "kind": "alterCommand",
+        "commandType": "MODIFY_SETTING",
+        "settings": [
+          {
+            "name": "aaa",
+            "value": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "123"
+            }
+          }
+        ]
+      }
+    ],
+    "trailingComments": [
+      "-- { serverError NOT_IMPLEMENTED }"
+    ]
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "table_for_alter"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "table_for_alter"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "id",
+        "type": {
+          "name": "UInt64"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "Data",
+        "type": {
+          "name": "String"
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree",
+      "args": []
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "id"
+          ]
+        }
+      }
+    ],
+    "settings": [
+      {
+        "name": "index_granularity",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "4096"
+        }
+      },
+      {
+        "name": "index_granularity_bytes",
+        "value": {
+          "kind": "literal",
+          "type": "String",
+          "value": "10Mi"
+        }
+      }
+    ],
+    "settingsAfterOrderBy": true
+  },
+  {
+    "kind": "alter",
+    "table": {
+      "kind": "tableRef",
+      "table": "table_for_alter"
+    },
+    "commands": [
+      {
+        "kind": "alterCommand",
+        "commandType": "MODIFY_SETTING",
+        "settings": [
+          {
+            "name": "index_granularity",
+            "value": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "555"
+            }
+          }
+        ]
+      }
+    ],
+    "trailingComments": [
+      "-- { serverError READONLY_SETTING }"
+    ]
+  },
+  {
+    "kind": "showCreate",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "table_for_alter"
+    }
+  },
+  {
+    "kind": "alter",
+    "table": {
+      "kind": "tableRef",
+      "table": "table_for_alter"
+    },
+    "commands": [
+      {
+        "kind": "alterCommand",
+        "commandType": "MODIFY_SETTING",
+        "settings": [
+          {
+            "name": "parts_to_throw_insert",
+            "value": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "1"
+            }
+          },
+          {
+            "name": "parts_to_delay_insert",
+            "value": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "1"
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "table_for_alter"
+      }
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "table_for_alter"
+      }
+    },
+    "trailingComments": [
+      "-- { serverError TOO_MANY_PARTS }"
+    ]
+  },
+  {
+    "kind": "detach",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "table_for_alter"
+    }
+  },
+  {
+    "kind": "attach",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "table_for_alter"
+    }
+  },
+  {
+    "kind": "alter",
+    "table": {
+      "kind": "tableRef",
+      "table": "table_for_alter"
+    },
+    "commands": [
+      {
+        "kind": "alterCommand",
+        "commandType": "MODIFY_SETTING",
+        "settings": [
+          {
+            "name": "xxx_yyy",
+            "value": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "124"
+            }
+          }
+        ]
+      }
+    ],
+    "trailingComments": [
+      "-- { serverError UNKNOWN_SETTING }"
+    ]
+  },
+  {
+    "kind": "alter",
+    "table": {
+      "kind": "tableRef",
+      "table": "table_for_alter"
+    },
+    "commands": [
+      {
+        "kind": "alterCommand",
+        "commandType": "MODIFY_SETTING",
+        "settings": [
+          {
+            "name": "parts_to_throw_insert",
+            "value": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "100"
+            }
+          },
+          {
+            "name": "parts_to_delay_insert",
+            "value": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "100"
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -12,5 +304,367 @@
       "kind": "tableRef",
       "table": "table_for_alter"
     }
+  },
+  {
+    "kind": "alter",
+    "table": {
+      "kind": "tableRef",
+      "table": "table_for_alter"
+    },
+    "commands": [
+      {
+        "kind": "alterCommand",
+        "commandType": "MODIFY_SETTING",
+        "settings": [
+          {
+            "name": "check_delay_period",
+            "value": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "10"
+            }
+          },
+          {
+            "name": "check_delay_period",
+            "value": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "20"
+            }
+          },
+          {
+            "name": "check_delay_period",
+            "value": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "30"
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "alter",
+    "table": {
+      "kind": "tableRef",
+      "table": "table_for_alter"
+    },
+    "commands": [
+      {
+        "kind": "alterCommand",
+        "commandType": "ADD_COLUMN",
+        "column": {
+          "kind": "columnDef",
+          "name": "Data2",
+          "type": {
+            "name": "UInt64"
+          }
+        }
+      },
+      {
+        "kind": "alterCommand",
+        "commandType": "MODIFY_SETTING",
+        "settings": [
+          {
+            "name": "check_delay_period",
+            "value": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "5"
+            }
+          },
+          {
+            "name": "check_delay_period",
+            "value": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "10"
+            }
+          },
+          {
+            "name": "check_delay_period",
+            "value": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "15"
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "table_for_reset_setting"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "table_for_reset_setting"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "id",
+        "type": {
+          "name": "UInt64"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "Data",
+        "type": {
+          "name": "String"
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree",
+      "args": []
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "id"
+          ]
+        }
+      }
+    ],
+    "settings": [
+      {
+        "name": "index_granularity",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "4096"
+        }
+      },
+      {
+        "name": "index_granularity_bytes",
+        "value": {
+          "kind": "literal",
+          "type": "String",
+          "value": "10Mi"
+        }
+      }
+    ],
+    "settingsAfterOrderBy": true
+  },
+  {
+    "kind": "alter",
+    "table": {
+      "kind": "tableRef",
+      "table": "table_for_reset_setting"
+    },
+    "commands": [
+      {
+        "kind": "alterCommand",
+        "commandType": "MODIFY_SETTING",
+        "settings": [
+          {
+            "name": "index_granularity",
+            "value": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "555"
+            }
+          }
+        ]
+      }
+    ],
+    "trailingComments": [
+      "-- { serverError READONLY_SETTING }"
+    ]
+  },
+  {
+    "kind": "showCreate",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "table_for_reset_setting"
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "table_for_reset_setting"
+      }
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "table_for_reset_setting"
+      }
+    }
+  },
+  {
+    "kind": "alter",
+    "table": {
+      "kind": "tableRef",
+      "table": "table_for_reset_setting"
+    },
+    "commands": [
+      {
+        "kind": "alterCommand",
+        "commandType": "MODIFY_SETTING",
+        "settings": [
+          {
+            "name": "parts_to_throw_insert",
+            "value": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "1"
+            }
+          },
+          {
+            "name": "parts_to_delay_insert",
+            "value": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "1"
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "alter",
+    "table": {
+      "kind": "tableRef",
+      "table": "table_for_reset_setting"
+    },
+    "commands": [
+      {
+        "kind": "alterCommand",
+        "commandType": "RESET_SETTING",
+        "settingNames": [
+          "parts_to_delay_insert",
+          "parts_to_throw_insert"
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "detach",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "table_for_reset_setting"
+    }
+  },
+  {
+    "kind": "attach",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "table_for_reset_setting"
+    }
+  },
+  {
+    "kind": "alter",
+    "table": {
+      "kind": "tableRef",
+      "table": "table_for_reset_setting"
+    },
+    "commands": [
+      {
+        "kind": "alterCommand",
+        "commandType": "RESET_SETTING",
+        "settingNames": [
+          "index_granularity"
+        ]
+      }
+    ],
+    "trailingComments": [
+      "-- { serverError READONLY_SETTING }"
+    ]
+  },
+  {
+    "kind": "alter",
+    "table": {
+      "kind": "tableRef",
+      "table": "table_for_reset_setting"
+    },
+    "commands": [
+      {
+        "kind": "alterCommand",
+        "commandType": "RESET_SETTING",
+        "settingNames": [
+          "merge_with_ttl_timeout",
+          "unknown_setting"
+        ]
+      }
+    ],
+    "leadingComments": [
+      "-- don't execute alter with incorrect setting"
+    ],
+    "trailingComments": [
+      "-- { serverError BAD_ARGUMENTS }"
+    ]
+  },
+  {
+    "kind": "alter",
+    "table": {
+      "kind": "tableRef",
+      "table": "table_for_reset_setting"
+    },
+    "commands": [
+      {
+        "kind": "alterCommand",
+        "commandType": "MODIFY_SETTING",
+        "settings": [
+          {
+            "name": "merge_with_ttl_timeout",
+            "value": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "300"
+            }
+          },
+          {
+            "name": "max_concurrent_queries",
+            "value": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "1"
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "alter",
+    "table": {
+      "kind": "tableRef",
+      "table": "table_for_reset_setting"
+    },
+    "commands": [
+      {
+        "kind": "alterCommand",
+        "commandType": "RESET_SETTING",
+        "settingNames": [
+          "max_concurrent_queries",
+          "merge_with_ttl_timeout"
+        ]
+      }
+    ]
   }
 ]

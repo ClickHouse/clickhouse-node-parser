@@ -1,3 +1,17 @@
+DROP TABLE IF EXISTS t_03369;
+
+CREATE TABLE t_03369
+(
+    d Date,
+    event String,
+    c UInt32
+)
+ENGINE = Memory;
+
+INSERT INTO t_03369;
+
+SET prefer_localhost_replica = 0, allow_push_predicate_ast_for_distributed_subqueries = 1;
+
 SELECT
     d,
     count()

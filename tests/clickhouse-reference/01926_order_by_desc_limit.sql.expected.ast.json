@@ -1,5 +1,178 @@
 [
   {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "order_by_desc"
+    },
+    "ifExists": true,
+    "leadingComments": [
+      "-- Tags: no-random-settings, no-azure-blob-storage"
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "enable_filesystem_cache",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "read_through_distributed_cache",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "order_by_desc"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "u",
+        "type": {
+          "name": "UInt32"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "s",
+        "type": {
+          "name": "String"
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "u"
+          ]
+        }
+      }
+    ],
+    "partitionBy": {
+      "kind": "binaryExpr",
+      "op": "%",
+      "left": {
+        "kind": "columnRef",
+        "parts": [
+          "u"
+        ]
+      },
+      "right": {
+        "kind": "literal",
+        "type": "UInt64",
+        "value": "100"
+      }
+    },
+    "settings": [
+      {
+        "name": "index_granularity",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1024"
+        }
+      },
+      {
+        "name": "index_granularity_bytes",
+        "value": {
+          "kind": "literal",
+          "type": "String",
+          "value": "10Mi"
+        }
+      }
+    ],
+    "settingsAfterOrderBy": true
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "order_by_desc"
+      }
+    },
+    "selectQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "number"
+          ]
+        },
+        {
+          "kind": "functionCall",
+          "name": "repeat",
+          "args": [
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "a"
+            },
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "1024"
+            }
+          ]
+        }
+      ],
+      "from": {
+        "kind": "tableFunctionRef",
+        "name": "numbers",
+        "args": [
+          {
+            "kind": "binaryExpr",
+            "op": "*",
+            "left": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "1024"
+            },
+            "right": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "300"
+            }
+          }
+        ]
+      }
+    }
+  },
+  {
+    "kind": "optimize",
+    "table": {
+      "kind": "tableRef",
+      "table": "order_by_desc"
+    },
+    "final": true
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -88,6 +261,10 @@
         }
       }
     ]
+  },
+  {
+    "kind": "system",
+    "body": "SYSTEM FLUSH LOGS query_log"
   },
   {
     "kind": "select",
@@ -202,6 +379,9 @@
           ]
         }
       ]
-    }
+    },
+    "leadingComments": [
+      "--- 100 granules for reading from main table, 10 granules for lazy reading"
+    ]
   }
 ]

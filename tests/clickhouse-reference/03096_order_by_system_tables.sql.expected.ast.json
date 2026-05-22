@@ -1,0 +1,207 @@
+[
+  {
+    "kind": "system",
+    "body": "SYSTEM FLUSH LOGS /* all tables */"
+  },
+  {
+    "kind": "select",
+    "with": [
+      {
+        "kind": "cteExpr",
+        "name": "known_tables",
+        "expr": {
+          "kind": "arrayLiteral",
+          "elements": [
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "asynchronous_metric_log"
+            },
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "asynchronous_insert_log"
+            },
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "opentelemetry_span_log"
+            },
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "coverage_log"
+            }
+          ],
+          "source": "['asynchronous_metric_log', 'asynchronous_insert_log', 'opentelemetry_span_log', 'coverage_log']"
+        }
+      },
+      {
+        "kind": "cteExpr",
+        "name": "default_sorting_key",
+        "expr": {
+          "kind": "literal",
+          "type": "String",
+          "value": "event_date, event_time"
+        }
+      }
+    ],
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "concat",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": "Table "
+          },
+          {
+            "kind": "columnRef",
+            "parts": [
+              "name"
+            ]
+          },
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": " has non-default sorting key: "
+          },
+          {
+            "kind": "columnRef",
+            "parts": [
+              "sorting_key"
+            ]
+          }
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "database": "system",
+      "table": "tables"
+    },
+    "where": {
+      "kind": "naryExpr",
+      "op": "AND",
+      "operands": [
+        {
+          "kind": "binaryExpr",
+          "op": "=",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "database"
+            ]
+          },
+          "right": {
+            "kind": "literal",
+            "type": "String",
+            "value": "system"
+          },
+          "parenthesized": true
+        },
+        {
+          "kind": "binaryExpr",
+          "op": "=",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "engine"
+            ]
+          },
+          "right": {
+            "kind": "literal",
+            "type": "String",
+            "value": "MergeTree"
+          },
+          "parenthesized": true
+        },
+        {
+          "kind": "functionCall",
+          "name": "notLike",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "name"
+              ]
+            },
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "minio%"
+            }
+          ]
+        },
+        {
+          "kind": "unaryExpr",
+          "op": "NOT",
+          "expr": {
+            "kind": "functionCall",
+            "name": "arraySum",
+            "args": [
+              {
+                "kind": "functionCall",
+                "name": "arrayMap",
+                "args": [
+                  {
+                    "kind": "lambdaExpr",
+                    "params": [
+                      "x"
+                    ],
+                    "body": {
+                      "kind": "functionCall",
+                      "name": "position",
+                      "args": [
+                        {
+                          "kind": "columnRef",
+                          "parts": [
+                            "name"
+                          ]
+                        },
+                        {
+                          "kind": "columnRef",
+                          "parts": [
+                            "x"
+                          ]
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "known_tables"
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          "parenthesized": true
+        },
+        {
+          "kind": "binaryExpr",
+          "op": "!=",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "sorting_key"
+            ]
+          },
+          "right": {
+            "kind": "columnRef",
+            "parts": [
+              "default_sorting_key"
+            ]
+          },
+          "parenthesized": true
+        }
+      ]
+    },
+    "leadingComments": [
+      "-- Check for system tables which have non-default sorting key"
+    ]
+  }
+]

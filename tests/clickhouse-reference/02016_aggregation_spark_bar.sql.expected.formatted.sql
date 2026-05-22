@@ -1,3 +1,17 @@
+DROP TABLE IF EXISTS spark_bar_test;
+
+CREATE TABLE spark_bar_test
+(
+    cnt UInt64,
+    event_date Date
+)
+ENGINE = MergeTree
+ORDER BY event_date
+SETTINGS index_granularity = 8192;
+
+INSERT INTO spark_bar_test;
+
+-- { echoOn }
 SELECT sparkbar(2)(event_date, cnt)
 FROM spark_bar_test;
 
@@ -67,6 +81,17 @@ FROM spark_bar_test;
 SELECT sparkbar(9, toDate('2020-01-01'), toDate('2020-01-10'))(event_date, cnt)
 FROM spark_bar_test;
 
+WITH number DIV 50 AS k,
+
+toUInt32(number % 50) AS value
+
+SELECT
+    k,
+    sparkbar(50, 0, 99)(number, value)
+FROM numbers(100)
+GROUP BY k
+ORDER BY k ASC;
+
 SELECT sparkbar(128, 0, 9223372036854775806)(toUInt64(9223372036854775806), number % 65535)
 FROM numbers(100);
 
@@ -100,33 +125,35 @@ FROM numbers(1024);
 SELECT sparkbar(1024)(number, 0)
 FROM numbers(1024);
 
+-- { echoOff }
 SELECT sparkbar(0)(number, number)
-FROM numbers(10);
+FROM numbers(10); -- { serverError BAD_ARGUMENTS }
 
 SELECT sparkbar(1)(number, number)
-FROM numbers(10);
+FROM numbers(10); -- { serverError BAD_ARGUMENTS }
 
 SELECT sparkbar(1025)(number, number)
-FROM numbers(10);
+FROM numbers(10); -- { serverError BAD_ARGUMENTS }
 
 SELECT sparkbar(2, 10, 9)(number, number)
-FROM numbers(10);
+FROM numbers(10); -- { serverError BAD_ARGUMENTS }
 
 SELECT sparkbar(2, -5, -1)(number, number)
-FROM numbers(10);
+FROM numbers(10); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
 SELECT sparkbar(2, -5, 1)(number, number)
-FROM numbers(10);
+FROM numbers(10); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
 SELECT sparkbar(2)(toInt32(number), number)
-FROM numbers(10);
+FROM numbers(10); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
 SELECT sparkbar(2, 0)(number, number)
-FROM numbers(10);
+FROM numbers(10); -- { serverError NUMBER_OF_ARGUMENTS_DOESNT_MATCH }
 
 SELECT sparkbar(2, 0, 5, 8)(number, number)
-FROM numbers(10);
+FROM numbers(10); -- { serverError NUMBER_OF_ARGUMENTS_DOESNT_MATCH }
 
+-- it causes overflow, just check that it doesn't crash under UBSan, do not check the result it's not really reasonable
 SELECT sparkbar(10)(number, toInt64(number))
 FROM numbers(toUInt64(9223372036854775807), 20)
 FORMAT Null;

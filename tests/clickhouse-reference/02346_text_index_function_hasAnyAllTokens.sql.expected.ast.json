@@ -1,5 +1,154 @@
 [
   {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "enable_analyzer",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ],
+    "leadingComments": [
+      "-- Tags: no-parallel-replicas, long"
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "enable_full_text_index",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "use_query_condition_cache",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "tab"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "tab"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "id",
+        "type": {
+          "name": "UInt32"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "col_str",
+        "type": {
+          "name": "String"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "message",
+        "type": {
+          "name": "String"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "arr",
+        "type": {
+          "name": "Array",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "String"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "kind": "indexDef",
+        "name": "idx",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "message"
+          ]
+        },
+        "indexType": {
+          "name": "text",
+          "args": [
+            {
+              "kind": "binaryExpr",
+              "op": "=",
+              "left": {
+                "kind": "columnRef",
+                "parts": [
+                  "tokenizer"
+                ]
+              },
+              "right": {
+                "kind": "literal",
+                "type": "String",
+                "value": "splitByNonAlpha"
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "id"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "tab"
+      }
+    }
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -17,7 +166,13 @@
       "kind": "functionCall",
       "name": "hasAnyTokens",
       "args": []
-    }
+    },
+    "leadingComments": [
+      "-- Must accept two arguments"
+    ],
+    "trailingComments": [
+      "-- { serverError NUMBER_OF_ARGUMENTS_DOESNT_MATCH }"
+    ]
   },
   {
     "kind": "select",
@@ -53,7 +208,10 @@
           "value": "c"
         }
       ]
-    }
+    },
+    "trailingComments": [
+      "-- { serverError NUMBER_OF_ARGUMENTS_DOESNT_MATCH }"
+    ]
   },
   {
     "kind": "select",
@@ -73,7 +231,10 @@
       "kind": "functionCall",
       "name": "hasAllTokens",
       "args": []
-    }
+    },
+    "trailingComments": [
+      "-- { serverError NUMBER_OF_ARGUMENTS_DOESNT_MATCH }"
+    ]
   },
   {
     "kind": "select",
@@ -109,7 +270,10 @@
           "value": "c"
         }
       ]
-    }
+    },
+    "trailingComments": [
+      "-- { serverError NUMBER_OF_ARGUMENTS_DOESNT_MATCH }"
+    ]
   },
   {
     "kind": "select",
@@ -135,7 +299,7 @@
           "value": "1"
         },
         {
-          "kind": "array",
+          "kind": "arrayLiteral",
           "elements": [
             {
               "kind": "literal",
@@ -146,7 +310,13 @@
           "source": "['a']"
         }
       ]
-    }
+    },
+    "leadingComments": [
+      "-- 1st arg must be String or FixedString"
+    ],
+    "trailingComments": [
+      "-- { serverError ILLEGAL_TYPE_OF_ARGUMENT }"
+    ]
   },
   {
     "kind": "select",
@@ -172,7 +342,7 @@
           "value": "1"
         },
         {
-          "kind": "array",
+          "kind": "arrayLiteral",
           "elements": [
             {
               "kind": "literal",
@@ -183,7 +353,10 @@
           "source": "['a']"
         }
       ]
-    }
+    },
+    "trailingComments": [
+      "-- { serverError ILLEGAL_TYPE_OF_ARGUMENT }"
+    ]
   },
   {
     "kind": "select",
@@ -215,7 +388,13 @@
           "value": "1"
         }
       ]
-    }
+    },
+    "leadingComments": [
+      "-- 2nd arg must be const const String or const Array(String)"
+    ],
+    "trailingComments": [
+      "-- { serverError ILLEGAL_TYPE_OF_ARGUMENT }"
+    ]
   },
   {
     "kind": "select",
@@ -253,7 +432,10 @@
           ]
         }
       ]
-    }
+    },
+    "trailingComments": [
+      "-- { serverError ILLEGAL_COLUMN }"
+    ]
   },
   {
     "kind": "select",
@@ -284,7 +466,7 @@
           "name": "materialize",
           "args": [
             {
-              "kind": "array",
+              "kind": "arrayLiteral",
               "elements": [
                 {
                   "kind": "literal",
@@ -297,7 +479,10 @@
           ]
         }
       ]
-    }
+    },
+    "trailingComments": [
+      "-- { serverError ILLEGAL_COLUMN }"
+    ]
   },
   {
     "kind": "select",
@@ -329,7 +514,10 @@
           "value": "1"
         }
       ]
-    }
+    },
+    "trailingComments": [
+      "-- { serverError ILLEGAL_TYPE_OF_ARGUMENT }"
+    ]
   },
   {
     "kind": "select",
@@ -367,7 +555,10 @@
           ]
         }
       ]
-    }
+    },
+    "trailingComments": [
+      "-- { serverError ILLEGAL_COLUMN }"
+    ]
   },
   {
     "kind": "select",
@@ -398,7 +589,7 @@
           "name": "materialize",
           "args": [
             {
-              "kind": "array",
+              "kind": "arrayLiteral",
               "elements": [
                 {
                   "kind": "literal",
@@ -411,7 +602,10 @@
           ]
         }
       ]
-    }
+    },
+    "trailingComments": [
+      "-- { serverError ILLEGAL_COLUMN }"
+    ]
   },
   {
     "kind": "select",
@@ -438,7 +632,7 @@
           ]
         },
         {
-          "kind": "array",
+          "kind": "arrayLiteral",
           "elements": [
             {
               "kind": "literal",
@@ -1688,7 +1882,7 @@
           ]
         },
         {
-          "kind": "array",
+          "kind": "arrayLiteral",
           "elements": [
             {
               "kind": "literal",
@@ -2948,7 +3142,7 @@
             "value": "a b"
           },
           {
-            "kind": "array",
+            "kind": "arrayLiteral",
             "elements": [
               {
                 "kind": "literal",
@@ -2998,7 +3192,7 @@
             "value": "a b"
           },
           {
-            "kind": "array",
+            "kind": "arrayLiteral",
             "elements": [
               {
                 "kind": "literal",
@@ -3026,7 +3220,7 @@
             "value": "a b"
           },
           {
-            "kind": "array",
+            "kind": "arrayLiteral",
             "elements": [
               {
                 "kind": "literal",
@@ -3038,6 +3232,10 @@
           }
         ]
       }
+    ],
+    "leadingComments": [
+      "-- We expected that the default tokenizer is used",
+      "-- { echoOn }"
     ]
   },
   {
@@ -3053,7 +3251,7 @@
             "value": "a b"
           },
           {
-            "kind": "array",
+            "kind": "arrayLiteral",
             "elements": [
               {
                 "kind": "literal",
@@ -3128,7 +3326,7 @@
             ]
           },
           {
-            "kind": "array",
+            "kind": "arrayLiteral",
             "elements": [
               {
                 "kind": "literal",
@@ -3161,7 +3359,7 @@
             ]
           },
           {
-            "kind": "array",
+            "kind": "arrayLiteral",
             "elements": [
               {
                 "kind": "literal",
@@ -3242,7 +3440,7 @@
             "value": "a b"
           },
           {
-            "kind": "array",
+            "kind": "arrayLiteral",
             "elements": [
               {
                 "kind": "literal",
@@ -3259,6 +3457,9 @@
           }
         ]
       }
+    ],
+    "leadingComments": [
+      "--"
     ]
   },
   {
@@ -3274,7 +3475,7 @@
             "value": "a b"
           },
           {
-            "kind": "array",
+            "kind": "arrayLiteral",
             "elements": [
               {
                 "kind": "literal",
@@ -3354,7 +3555,7 @@
             ]
           },
           {
-            "kind": "array",
+            "kind": "arrayLiteral",
             "elements": [
               {
                 "kind": "literal",
@@ -3392,7 +3593,7 @@
             ]
           },
           {
-            "kind": "array",
+            "kind": "arrayLiteral",
             "elements": [
               {
                 "kind": "literal",
@@ -3489,7 +3690,7 @@
           "value": "a b"
         },
         {
-          "kind": "array",
+          "kind": "arrayLiteral",
           "elements": [
             {
               "kind": "literal",
@@ -3500,7 +3701,12 @@
           "source": "['b']"
         }
       ]
-    }
+    },
+    "leadingComments": [
+      "-- These are equivalent to the lines above, but using Search{Any,All} in the filter step.",
+      "-- We keep this test because the direct read optimization substituted Search{Any,All} only",
+      "-- when they are in the filterStep, and we want to detect any variation eagerly."
+    ]
   },
   {
     "kind": "select",
@@ -3526,7 +3732,7 @@
           "value": "a b"
         },
         {
-          "kind": "array",
+          "kind": "arrayLiteral",
           "elements": [
             {
               "kind": "literal",
@@ -3564,7 +3770,7 @@
           ]
         },
         {
-          "kind": "array",
+          "kind": "arrayLiteral",
           "elements": [
             {
               "kind": "literal",
@@ -3602,7 +3808,7 @@
           ]
         },
         {
-          "kind": "array",
+          "kind": "arrayLiteral",
           "elements": [
             {
               "kind": "literal",
@@ -3765,7 +3971,7 @@
           "value": "a b"
         },
         {
-          "kind": "array",
+          "kind": "arrayLiteral",
           "elements": [
             {
               "kind": "literal",
@@ -3802,7 +4008,7 @@
           "value": "a b"
         },
         {
-          "kind": "array",
+          "kind": "arrayLiteral",
           "elements": [
             {
               "kind": "literal",
@@ -3840,7 +4046,7 @@
           ]
         },
         {
-          "kind": "array",
+          "kind": "arrayLiteral",
           "elements": [
             {
               "kind": "literal",
@@ -3878,7 +4084,7 @@
           ]
         },
         {
-          "kind": "array",
+          "kind": "arrayLiteral",
           "elements": [
             {
               "kind": "literal",
@@ -4041,12 +4247,15 @@
           ]
         },
         {
-          "kind": "array",
+          "kind": "arrayLiteral",
           "elements": [],
           "source": "[]"
         }
       ]
-    }
+    },
+    "leadingComments": [
+      "-- Test search without needle on non-empty columns (all are expected to match nothing)"
+    ]
   },
   {
     "kind": "select",
@@ -4072,7 +4281,7 @@
           ]
         },
         {
-          "kind": "array",
+          "kind": "arrayLiteral",
           "elements": [],
           "source": "[]"
         }
@@ -4103,7 +4312,7 @@
           ]
         },
         {
-          "kind": "array",
+          "kind": "arrayLiteral",
           "elements": [
             {
               "kind": "literal",
@@ -4171,7 +4380,7 @@
           ]
         },
         {
-          "kind": "array",
+          "kind": "arrayLiteral",
           "elements": [
             {
               "kind": "literal",
@@ -4187,6 +4396,72 @@
           "source": "['','']"
         }
       ]
+    }
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "tab"
+    },
+    "leadingComments": [
+      "-- { echoOff }"
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "tab"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "id",
+        "type": {
+          "name": "UInt8"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "s",
+        "type": {
+          "name": "FixedString",
+          "args": [
+            {
+              "kind": "literal",
+              "value": "11"
+            }
+          ]
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "id"
+          ]
+        }
+      }
+    ],
+    "leadingComments": [
+      "-- Test specifically FixedString columns without text index"
+    ]
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "tab"
+      }
     }
   },
   {
@@ -4214,7 +4489,7 @@
           ]
         },
         {
-          "kind": "array",
+          "kind": "arrayLiteral",
           "elements": [
             {
               "kind": "literal",
@@ -4237,6 +4512,9 @@
         },
         "direction": "ASC"
       }
+    ],
+    "leadingComments": [
+      "-- { echoOn }"
     ]
   },
   {
@@ -4264,7 +4542,7 @@
           ]
         },
         {
-          "kind": "array",
+          "kind": "arrayLiteral",
           "elements": [
             {
               "kind": "literal",
@@ -4319,7 +4597,7 @@
           ]
         },
         {
-          "kind": "array",
+          "kind": "arrayLiteral",
           "elements": [
             {
               "kind": "literal",
@@ -4374,7 +4652,7 @@
           ]
         },
         {
-          "kind": "array",
+          "kind": "arrayLiteral",
           "elements": [
             {
               "kind": "literal",
@@ -4429,7 +4707,7 @@
           ]
         },
         {
-          "kind": "array",
+          "kind": "arrayLiteral",
           "elements": [
             {
               "kind": "literal",
@@ -4479,7 +4757,7 @@
           ]
         },
         {
-          "kind": "array",
+          "kind": "arrayLiteral",
           "elements": [
             {
               "kind": "literal",
@@ -4534,7 +4812,7 @@
           ]
         },
         {
-          "kind": "array",
+          "kind": "arrayLiteral",
           "elements": [
             {
               "kind": "literal",
@@ -4563,6 +4841,89 @@
         "direction": "ASC"
       }
     ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "tab"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "id",
+        "type": {
+          "name": "Int"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "text",
+        "type": {
+          "name": "FixedString",
+          "args": [
+            {
+              "kind": "literal",
+              "value": "16"
+            }
+          ]
+        }
+      },
+      {
+        "kind": "indexDef",
+        "name": "idx_text",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "text"
+          ]
+        },
+        "indexType": {
+          "name": "text",
+          "args": [
+            {
+              "kind": "binaryExpr",
+              "op": "=",
+              "left": {
+                "kind": "columnRef",
+                "parts": [
+                  "tokenizer"
+                ]
+              },
+              "right": {
+                "kind": "literal",
+                "type": "String",
+                "value": "splitByNonAlpha"
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree",
+      "args": []
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "id"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "tab"
+      }
+    }
   },
   {
     "kind": "select",
@@ -4595,7 +4956,7 @@
           ]
         },
         {
-          "kind": "array",
+          "kind": "arrayLiteral",
           "elements": [
             {
               "kind": "literal",
@@ -4639,7 +5000,7 @@
           ]
         },
         {
-          "kind": "array",
+          "kind": "arrayLiteral",
           "elements": [
             {
               "kind": "literal",
@@ -4739,6 +5100,96 @@
     ]
   },
   {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "tab"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "id",
+        "type": {
+          "name": "UInt32"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "message",
+        "type": {
+          "name": "String"
+        }
+      },
+      {
+        "kind": "indexDef",
+        "name": "idx",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "message"
+          ]
+        },
+        "indexType": {
+          "name": "text",
+          "args": [
+            {
+              "kind": "binaryExpr",
+              "op": "=",
+              "left": {
+                "kind": "columnRef",
+                "parts": [
+                  "tokenizer"
+                ]
+              },
+              "right": {
+                "kind": "literal",
+                "type": "String",
+                "value": "splitByNonAlpha"
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "id"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "tab"
+      }
+    },
+    "columns": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "id"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "message"
+        ]
+      }
+    ]
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -4769,7 +5220,7 @@
           ]
         },
         {
-          "kind": "array",
+          "kind": "arrayLiteral",
           "elements": [
             {
               "kind": "literal",
@@ -4813,7 +5264,7 @@
           ]
         },
         {
-          "kind": "array",
+          "kind": "arrayLiteral",
           "elements": [
             {
               "kind": "literal",
@@ -4857,7 +5308,7 @@
           ]
         },
         {
-          "kind": "array",
+          "kind": "arrayLiteral",
           "elements": [
             {
               "kind": "literal",
@@ -4901,7 +5352,7 @@
           ]
         },
         {
-          "kind": "array",
+          "kind": "arrayLiteral",
           "elements": [
             {
               "kind": "literal",
@@ -4945,7 +5396,7 @@
           ]
         },
         {
-          "kind": "array",
+          "kind": "arrayLiteral",
           "elements": [
             {
               "kind": "literal",
@@ -4994,7 +5445,7 @@
           ]
         },
         {
-          "kind": "array",
+          "kind": "arrayLiteral",
           "elements": [
             {
               "kind": "literal",
@@ -5043,7 +5494,7 @@
           ]
         },
         {
-          "kind": "array",
+          "kind": "arrayLiteral",
           "elements": [
             {
               "kind": "literal",
@@ -5092,7 +5543,7 @@
           ]
         },
         {
-          "kind": "array",
+          "kind": "arrayLiteral",
           "elements": [
             {
               "kind": "literal",
@@ -5141,7 +5592,7 @@
           ]
         },
         {
-          "kind": "array",
+          "kind": "arrayLiteral",
           "elements": [
             {
               "kind": "literal",
@@ -5342,7 +5793,7 @@
           ]
         },
         {
-          "kind": "array",
+          "kind": "arrayLiteral",
           "elements": [
             {
               "kind": "literal",
@@ -5386,7 +5837,7 @@
           ]
         },
         {
-          "kind": "array",
+          "kind": "arrayLiteral",
           "elements": [
             {
               "kind": "literal",
@@ -5430,7 +5881,7 @@
           ]
         },
         {
-          "kind": "array",
+          "kind": "arrayLiteral",
           "elements": [
             {
               "kind": "literal",
@@ -5474,7 +5925,7 @@
           ]
         },
         {
-          "kind": "array",
+          "kind": "arrayLiteral",
           "elements": [
             {
               "kind": "literal",
@@ -5518,7 +5969,7 @@
           ]
         },
         {
-          "kind": "array",
+          "kind": "arrayLiteral",
           "elements": [
             {
               "kind": "literal",
@@ -5567,7 +6018,7 @@
           ]
         },
         {
-          "kind": "array",
+          "kind": "arrayLiteral",
           "elements": [
             {
               "kind": "literal",
@@ -5616,7 +6067,7 @@
           ]
         },
         {
-          "kind": "array",
+          "kind": "arrayLiteral",
           "elements": [
             {
               "kind": "literal",
@@ -5665,7 +6116,7 @@
           ]
         },
         {
-          "kind": "array",
+          "kind": "arrayLiteral",
           "elements": [
             {
               "kind": "literal",
@@ -5836,6 +6287,88 @@
     }
   },
   {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "tab"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "id",
+        "type": {
+          "name": "UInt32"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "message",
+        "type": {
+          "name": "String"
+        }
+      },
+      {
+        "kind": "indexDef",
+        "name": "idx",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "message"
+          ]
+        },
+        "indexType": {
+          "name": "text",
+          "args": [
+            {
+              "kind": "binaryExpr",
+              "op": "=",
+              "left": {
+                "kind": "columnRef",
+                "parts": [
+                  "tokenizer"
+                ]
+              },
+              "right": {
+                "kind": "functionCall",
+                "name": "ngrams",
+                "args": [
+                  {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "4"
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "id"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "tab"
+      }
+    }
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -5866,7 +6399,7 @@
           ]
         },
         {
-          "kind": "array",
+          "kind": "arrayLiteral",
           "elements": [
             {
               "kind": "literal",
@@ -5910,7 +6443,7 @@
           ]
         },
         {
-          "kind": "array",
+          "kind": "arrayLiteral",
           "elements": [
             {
               "kind": "literal",
@@ -5954,7 +6487,7 @@
           ]
         },
         {
-          "kind": "array",
+          "kind": "arrayLiteral",
           "elements": [
             {
               "kind": "literal",
@@ -5998,7 +6531,7 @@
           ]
         },
         {
-          "kind": "array",
+          "kind": "arrayLiteral",
           "elements": [
             {
               "kind": "literal",
@@ -6042,7 +6575,7 @@
           ]
         },
         {
-          "kind": "array",
+          "kind": "arrayLiteral",
           "elements": [
             {
               "kind": "literal",
@@ -6058,7 +6591,10 @@
           "source": "['cdef', 'defg']"
         }
       ]
-    }
+    },
+    "trailingComments": [
+      "-- search cdefg"
+    ]
   },
   {
     "kind": "select",
@@ -6091,7 +6627,7 @@
           ]
         },
         {
-          "kind": "array",
+          "kind": "arrayLiteral",
           "elements": [
             {
               "kind": "literal",
@@ -6112,7 +6648,10 @@
           "source": "['efgh', 'cdef', 'defg']"
         }
       ]
-    }
+    },
+    "trailingComments": [
+      "--search for either cdefg or defgh"
+    ]
   },
   {
     "kind": "select",
@@ -6335,7 +6874,7 @@
           ]
         },
         {
-          "kind": "array",
+          "kind": "arrayLiteral",
           "elements": [
             {
               "kind": "literal",
@@ -6379,7 +6918,7 @@
           ]
         },
         {
-          "kind": "array",
+          "kind": "arrayLiteral",
           "elements": [
             {
               "kind": "literal",
@@ -6423,7 +6962,7 @@
           ]
         },
         {
-          "kind": "array",
+          "kind": "arrayLiteral",
           "elements": [
             {
               "kind": "literal",
@@ -6467,7 +7006,7 @@
           ]
         },
         {
-          "kind": "array",
+          "kind": "arrayLiteral",
           "elements": [
             {
               "kind": "literal",
@@ -6511,7 +7050,7 @@
           ]
         },
         {
-          "kind": "array",
+          "kind": "arrayLiteral",
           "elements": [
             {
               "kind": "literal",
@@ -6560,7 +7099,7 @@
           ]
         },
         {
-          "kind": "array",
+          "kind": "arrayLiteral",
           "elements": [
             {
               "kind": "literal",
@@ -6774,6 +7313,99 @@
     }
   },
   {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "tab"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "id",
+        "type": {
+          "name": "UInt32"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "message",
+        "type": {
+          "name": "String"
+        }
+      },
+      {
+        "kind": "indexDef",
+        "name": "idx",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "message"
+          ]
+        },
+        "indexType": {
+          "name": "text",
+          "args": [
+            {
+              "kind": "binaryExpr",
+              "op": "=",
+              "left": {
+                "kind": "columnRef",
+                "parts": [
+                  "tokenizer"
+                ]
+              },
+              "right": {
+                "kind": "functionCall",
+                "name": "splitByString",
+                "args": [
+                  {
+                    "kind": "arrayLiteral",
+                    "elements": [
+                      {
+                        "kind": "literal",
+                        "type": "String",
+                        "value": "()"
+                      },
+                      {
+                        "kind": "literal",
+                        "type": "String",
+                        "value": "\\\\"
+                      }
+                    ],
+                    "source": "['()', '\\\\']"
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "id"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "tab"
+      }
+    }
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -6804,7 +7436,7 @@
           ]
         },
         {
-          "kind": "array",
+          "kind": "arrayLiteral",
           "elements": [
             {
               "kind": "literal",
@@ -6848,7 +7480,7 @@
           ]
         },
         {
-          "kind": "array",
+          "kind": "arrayLiteral",
           "elements": [
             {
               "kind": "literal",
@@ -6892,7 +7524,7 @@
           ]
         },
         {
-          "kind": "array",
+          "kind": "arrayLiteral",
           "elements": [
             {
               "kind": "literal",
@@ -6936,7 +7568,7 @@
           ]
         },
         {
-          "kind": "array",
+          "kind": "arrayLiteral",
           "elements": [
             {
               "kind": "literal",
@@ -6985,7 +7617,7 @@
           ]
         },
         {
-          "kind": "array",
+          "kind": "arrayLiteral",
           "elements": [
             {
               "kind": "literal",
@@ -7034,7 +7666,7 @@
           ]
         },
         {
-          "kind": "array",
+          "kind": "arrayLiteral",
           "elements": [
             {
               "kind": "literal",
@@ -7311,7 +7943,7 @@
           ]
         },
         {
-          "kind": "array",
+          "kind": "arrayLiteral",
           "elements": [
             {
               "kind": "literal",
@@ -7355,7 +7987,7 @@
           ]
         },
         {
-          "kind": "array",
+          "kind": "arrayLiteral",
           "elements": [
             {
               "kind": "literal",
@@ -7399,7 +8031,7 @@
           ]
         },
         {
-          "kind": "array",
+          "kind": "arrayLiteral",
           "elements": [
             {
               "kind": "literal",
@@ -7443,7 +8075,7 @@
           ]
         },
         {
-          "kind": "array",
+          "kind": "arrayLiteral",
           "elements": [
             {
               "kind": "literal",
@@ -7492,7 +8124,7 @@
           ]
         },
         {
-          "kind": "array",
+          "kind": "arrayLiteral",
           "elements": [
             {
               "kind": "literal",
@@ -7541,7 +8173,7 @@
           ]
         },
         {
-          "kind": "array",
+          "kind": "arrayLiteral",
           "elements": [
             {
               "kind": "literal",
@@ -7788,6 +8420,82 @@
     }
   },
   {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "tab"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "id",
+        "type": {
+          "name": "UInt32"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "message",
+        "type": {
+          "name": "String"
+        }
+      },
+      {
+        "kind": "indexDef",
+        "name": "idx",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "message"
+          ]
+        },
+        "indexType": {
+          "name": "text",
+          "args": [
+            {
+              "kind": "binaryExpr",
+              "op": "=",
+              "left": {
+                "kind": "columnRef",
+                "parts": [
+                  "tokenizer"
+                ]
+              },
+              "right": {
+                "kind": "literal",
+                "type": "String",
+                "value": "array"
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "id"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "tab"
+      }
+    }
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -7818,7 +8526,7 @@
           ]
         },
         {
-          "kind": "array",
+          "kind": "arrayLiteral",
           "elements": [
             {
               "kind": "literal",
@@ -7862,7 +8570,7 @@
           ]
         },
         {
-          "kind": "array",
+          "kind": "arrayLiteral",
           "elements": [
             {
               "kind": "literal",
@@ -7911,7 +8619,7 @@
           ]
         },
         {
-          "kind": "array",
+          "kind": "arrayLiteral",
           "elements": [
             {
               "kind": "literal",
@@ -8031,7 +8739,7 @@
           ]
         },
         {
-          "kind": "array",
+          "kind": "arrayLiteral",
           "elements": [
             {
               "kind": "literal",
@@ -8075,7 +8783,7 @@
           ]
         },
         {
-          "kind": "array",
+          "kind": "arrayLiteral",
           "elements": [
             {
               "kind": "literal",
@@ -8124,7 +8832,7 @@
           ]
         },
         {
-          "kind": "array",
+          "kind": "arrayLiteral",
           "elements": [
             {
               "kind": "literal",
@@ -8252,6 +8960,16 @@
     }
   },
   {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "tab"
+      }
+    }
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -8275,7 +8993,7 @@
           ]
         },
         {
-          "kind": "array",
+          "kind": "arrayLiteral",
           "elements": [
             {
               "kind": "literal",
@@ -8312,7 +9030,7 @@
           ]
         },
         {
-          "kind": "array",
+          "kind": "arrayLiteral",
           "elements": [
             {
               "kind": "literal",
@@ -8385,7 +9103,7 @@
           ]
         },
         {
-          "kind": "array",
+          "kind": "arrayLiteral",
           "elements": [
             {
               "kind": "literal",
@@ -8422,7 +9140,7 @@
           ]
         },
         {
-          "kind": "array",
+          "kind": "arrayLiteral",
           "elements": [
             {
               "kind": "literal",
@@ -8470,6 +9188,72 @@
         }
       ]
     }
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "tab"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "id",
+        "type": {
+          "name": "UInt32"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "message",
+        "type": {
+          "name": "String"
+        }
+      },
+      {
+        "kind": "indexDef",
+        "name": "idx",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "message"
+          ]
+        },
+        "indexType": {
+          "name": "text",
+          "args": [
+            {
+              "kind": "binaryExpr",
+              "op": "=",
+              "left": {
+                "kind": "columnRef",
+                "parts": [
+                  "tokenizer"
+                ]
+              },
+              "right": {
+                "kind": "literal",
+                "type": "String",
+                "value": "splitByNonAlpha"
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "id"
+          ]
+        }
+      }
+    ]
   },
   {
     "kind": "select",
@@ -9572,7 +10356,10 @@
           ]
         }
       ]
-    }
+    },
+    "trailingComments": [
+      "-- search cdefg"
+    ]
   },
   {
     "kind": "select",
@@ -9653,7 +10440,10 @@
           ]
         }
       ]
-    }
+    },
+    "trailingComments": [
+      "--search for either cdefg or defgh"
+    ]
   },
   {
     "kind": "select",
@@ -10051,7 +10841,7 @@
               "value": "splitByString"
             },
             {
-              "kind": "array",
+              "kind": "arrayLiteral",
               "elements": [
                 {
                   "kind": "literal",
@@ -10116,7 +10906,7 @@
               "value": "splitByString"
             },
             {
-              "kind": "array",
+              "kind": "arrayLiteral",
               "elements": [
                 {
                   "kind": "literal",
@@ -10181,7 +10971,7 @@
               "value": "splitByString"
             },
             {
-              "kind": "array",
+              "kind": "arrayLiteral",
               "elements": [
                 {
                   "kind": "literal",
@@ -10246,7 +11036,7 @@
               "value": "splitByString"
             },
             {
-              "kind": "array",
+              "kind": "arrayLiteral",
               "elements": [
                 {
                   "kind": "literal",
@@ -10311,7 +11101,7 @@
               "value": "splitByString"
             },
             {
-              "kind": "array",
+              "kind": "arrayLiteral",
               "elements": [
                 {
                   "kind": "literal",
@@ -10376,7 +11166,7 @@
               "value": "splitByString"
             },
             {
-              "kind": "array",
+              "kind": "arrayLiteral",
               "elements": [
                 {
                   "kind": "literal",
@@ -10441,7 +11231,7 @@
               "value": "splitByString"
             },
             {
-              "kind": "array",
+              "kind": "arrayLiteral",
               "elements": [
                 {
                   "kind": "literal",
@@ -10506,7 +11296,7 @@
               "value": "splitByString"
             },
             {
-              "kind": "array",
+              "kind": "arrayLiteral",
               "elements": [
                 {
                   "kind": "literal",
@@ -10571,7 +11361,7 @@
               "value": "splitByString"
             },
             {
-              "kind": "array",
+              "kind": "arrayLiteral",
               "elements": [
                 {
                   "kind": "literal",
@@ -10636,7 +11426,7 @@
               "value": "splitByString"
             },
             {
-              "kind": "array",
+              "kind": "arrayLiteral",
               "elements": [
                 {
                   "kind": "literal",
@@ -10701,7 +11491,7 @@
               "value": "splitByString"
             },
             {
-              "kind": "array",
+              "kind": "arrayLiteral",
               "elements": [
                 {
                   "kind": "literal",
@@ -10766,7 +11556,7 @@
               "value": "splitByString"
             },
             {
-              "kind": "array",
+              "kind": "arrayLiteral",
               "elements": [
                 {
                   "kind": "literal",
@@ -11223,6 +12013,232 @@
     }
   },
   {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "tab"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "id",
+        "type": {
+          "name": "UInt32"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "message",
+        "type": {
+          "name": "String"
+        }
+      },
+      {
+        "kind": "indexDef",
+        "name": "idx",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "message"
+          ]
+        },
+        "indexType": {
+          "name": "text",
+          "args": [
+            {
+              "kind": "binaryExpr",
+              "op": "=",
+              "left": {
+                "kind": "columnRef",
+                "parts": [
+                  "tokenizer"
+                ]
+              },
+              "right": {
+                "kind": "literal",
+                "type": "String",
+                "value": "splitByNonAlpha"
+              }
+            }
+          ]
+        },
+        "granularity": 1
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "id"
+          ]
+        }
+      }
+    ],
+    "settings": [
+      {
+        "name": "index_granularity",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ],
+    "settingsAfterOrderBy": true
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "tab"
+      }
+    },
+    "selectQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "number"
+          ]
+        },
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "Hello, ClickHouse"
+        }
+      ],
+      "from": {
+        "kind": "tableFunctionRef",
+        "name": "numbers",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "1024"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "tab"
+      }
+    },
+    "selectQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "number"
+          ]
+        },
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "Hello, World"
+        }
+      ],
+      "from": {
+        "kind": "tableFunctionRef",
+        "name": "numbers",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "1024"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "tab"
+      }
+    },
+    "selectQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "number"
+          ]
+        },
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "Hallo, ClickHouse"
+        }
+      ],
+      "from": {
+        "kind": "tableFunctionRef",
+        "name": "numbers",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "1024"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "tab"
+      }
+    },
+    "selectQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "number"
+          ]
+        },
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "ClickHouse is fast, really fast!"
+        }
+      ],
+      "from": {
+        "kind": "tableFunctionRef",
+        "name": "numbers",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "1024"
+          }
+        ]
+      }
+    }
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -11280,7 +12296,7 @@
                 ]
               },
               {
-                "kind": "array",
+                "kind": "arrayLiteral",
                 "elements": [
                   {
                     "kind": "literal",
@@ -11364,7 +12380,10 @@
         "value": "2"
       },
       "commaSyntax": true
-    }
+    },
+    "trailingComments": [
+      "-- Skip the primary index parts and granules."
+    ]
   },
   {
     "kind": "select",
@@ -11502,7 +12521,10 @@
         "value": "2"
       },
       "commaSyntax": true
-    }
+    },
+    "trailingComments": [
+      "-- Skip the primary index parts and granules."
+    ]
   },
   {
     "kind": "select",
@@ -11562,7 +12584,7 @@
                 ]
               },
               {
-                "kind": "array",
+                "kind": "arrayLiteral",
                 "elements": [
                   {
                     "kind": "literal",
@@ -11844,7 +12866,7 @@
                 ]
               },
               {
-                "kind": "array",
+                "kind": "arrayLiteral",
                 "elements": [
                   {
                     "kind": "literal",
@@ -11861,7 +12883,10 @@
               }
             ]
           }
-        }
+        },
+        "trailingComments": [
+          "-- Word does not exist in terms"
+        ]
       }
     },
     "where": {
@@ -11999,7 +13024,10 @@
               }
             ]
           }
-        }
+        },
+        "trailingComments": [
+          "-- Word does not exist in terms"
+        ]
       }
     },
     "where": {
@@ -12131,7 +13159,7 @@
                 ]
               },
               {
-                "kind": "array",
+                "kind": "arrayLiteral",
                 "elements": [
                   {
                     "kind": "literal",
@@ -12280,7 +13308,7 @@
                 ]
               },
               {
-                "kind": "array",
+                "kind": "arrayLiteral",
                 "elements": [
                   {
                     "kind": "literal",
@@ -12429,7 +13457,7 @@
                 ]
               },
               {
-                "kind": "array",
+                "kind": "arrayLiteral",
                 "elements": [
                   {
                     "kind": "literal",
@@ -12578,7 +13606,7 @@
                 ]
               },
               {
-                "kind": "array",
+                "kind": "arrayLiteral",
                 "elements": [
                   {
                     "kind": "literal",
@@ -12722,7 +13750,7 @@
                 ]
               },
               {
-                "kind": "array",
+                "kind": "arrayLiteral",
                 "elements": [
                   {
                     "kind": "literal",
@@ -12871,7 +13899,7 @@
                 ]
               },
               {
-                "kind": "array",
+                "kind": "arrayLiteral",
                 "elements": [
                   {
                     "kind": "literal",
@@ -13153,7 +14181,7 @@
                 ]
               },
               {
-                "kind": "array",
+                "kind": "arrayLiteral",
                 "elements": [
                   {
                     "kind": "literal",
@@ -13435,7 +14463,7 @@
                 ]
               },
               {
-                "kind": "array",
+                "kind": "arrayLiteral",
                 "elements": [
                   {
                     "kind": "literal",
@@ -13722,7 +14750,7 @@
                 ]
               },
               {
-                "kind": "array",
+                "kind": "arrayLiteral",
                 "elements": [
                   {
                     "kind": "literal",
@@ -13739,7 +14767,10 @@
               }
             ]
           }
-        }
+        },
+        "trailingComments": [
+          "-- Word does not exist in terms"
+        ]
       }
     },
     "where": {
@@ -13877,7 +14908,10 @@
               }
             ]
           }
-        }
+        },
+        "trailingComments": [
+          "-- Word does not exist in terms"
+        ]
       }
     },
     "where": {
@@ -14009,7 +15043,7 @@
                 ]
               },
               {
-                "kind": "array",
+                "kind": "arrayLiteral",
                 "elements": [
                   {
                     "kind": "literal",
@@ -14153,7 +15187,7 @@
                 ]
               },
               {
-                "kind": "array",
+                "kind": "arrayLiteral",
                 "elements": [
                   {
                     "kind": "literal",
@@ -14302,7 +15336,7 @@
                 ]
               },
               {
-                "kind": "array",
+                "kind": "arrayLiteral",
                 "elements": [
                   {
                     "kind": "literal",
@@ -14451,7 +15485,7 @@
                 ]
               },
               {
-                "kind": "array",
+                "kind": "arrayLiteral",
                 "elements": [
                   {
                     "kind": "literal",
@@ -14595,7 +15629,7 @@
                 ]
               },
               {
-                "kind": "array",
+                "kind": "arrayLiteral",
                 "elements": [
                   {
                     "kind": "literal",
@@ -14687,6 +15721,250 @@
     }
   },
   {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "tab"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "id",
+        "type": {
+          "name": "UInt32"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "message",
+        "type": {
+          "name": "String"
+        }
+      },
+      {
+        "kind": "indexDef",
+        "name": "idx",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "message"
+          ]
+        },
+        "indexType": {
+          "name": "text",
+          "args": [
+            {
+              "kind": "binaryExpr",
+              "op": "=",
+              "left": {
+                "kind": "columnRef",
+                "parts": [
+                  "tokenizer"
+                ]
+              },
+              "right": {
+                "kind": "literal",
+                "type": "String",
+                "value": "splitByNonAlpha"
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "id"
+          ]
+        }
+      }
+    ],
+    "settings": [
+      {
+        "name": "index_granularity",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ],
+    "settingsAfterOrderBy": true
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "tab"
+      }
+    },
+    "selectQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "number"
+          ]
+        },
+        {
+          "kind": "functionCall",
+          "name": "multiIf",
+          "args": [
+            {
+              "kind": "binaryExpr",
+              "op": "=",
+              "left": {
+                "kind": "functionCall",
+                "name": "modulo",
+                "args": [
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "number"
+                    ]
+                  },
+                  {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "4"
+                  }
+                ]
+              },
+              "right": {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "0"
+              }
+            },
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "Hello, ClickHouse"
+            },
+            {
+              "kind": "binaryExpr",
+              "op": "=",
+              "left": {
+                "kind": "functionCall",
+                "name": "modulo",
+                "args": [
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "number"
+                    ]
+                  },
+                  {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "4"
+                  }
+                ]
+              },
+              "right": {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "1"
+              }
+            },
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "Hello, World"
+            },
+            {
+              "kind": "binaryExpr",
+              "op": "=",
+              "left": {
+                "kind": "functionCall",
+                "name": "modulo",
+                "args": [
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "number"
+                    ]
+                  },
+                  {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "4"
+                  }
+                ]
+              },
+              "right": {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "2"
+              }
+            },
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "Hallo, ClickHouse"
+            },
+            {
+              "kind": "binaryExpr",
+              "op": "=",
+              "left": {
+                "kind": "functionCall",
+                "name": "modulo",
+                "args": [
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "number"
+                    ]
+                  },
+                  {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "4"
+                  }
+                ]
+              },
+              "right": {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "3"
+              }
+            },
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "ClickHouse is the fast, really fast!"
+            },
+            {
+              "kind": "literal",
+              "type": "NULL",
+              "value": "NULL"
+            }
+          ]
+        }
+      ],
+      "from": {
+        "kind": "tableFunctionRef",
+        "name": "numbers",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "1024"
+          }
+        ]
+      }
+    }
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -14744,7 +16022,7 @@
                 ]
               },
               {
-                "kind": "array",
+                "kind": "arrayLiteral",
                 "elements": [
                   {
                     "kind": "literal",
@@ -14893,7 +16171,7 @@
                 ]
               },
               {
-                "kind": "array",
+                "kind": "arrayLiteral",
                 "elements": [
                   {
                     "kind": "literal",

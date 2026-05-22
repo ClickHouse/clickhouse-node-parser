@@ -1,5 +1,57 @@
 [
   {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "use_legacy_to_time",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "enable_time_time64_type",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "enable_analyzer",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "use_variant_as_common_type",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      }
+    ]
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -7,7 +59,7 @@
         "name": "toTypeName",
         "args": [
           {
-            "kind": "array",
+            "kind": "arrayLiteral",
             "elements": [
               {
                 "kind": "functionCall",
@@ -36,6 +88,9 @@
           }
         ]
       }
+    ],
+    "leadingComments": [
+      "-- Time + Time -> Time"
     ]
   },
   {
@@ -46,7 +101,7 @@
         "name": "toTypeName",
         "args": [
           {
-            "kind": "array",
+            "kind": "arrayLiteral",
             "elements": [
               {
                 "kind": "functionCall",
@@ -80,6 +135,9 @@
           }
         ]
       }
+    ],
+    "leadingComments": [
+      "-- Time + Time64(0) -> Time64(0)"
     ]
   },
   {
@@ -90,7 +148,7 @@
         "name": "toTypeName",
         "args": [
           {
-            "kind": "array",
+            "kind": "arrayLiteral",
             "elements": [
               {
                 "kind": "functionCall",
@@ -124,6 +182,9 @@
           }
         ]
       }
+    ],
+    "leadingComments": [
+      "-- Time + Time64(3) -> Time64(3)"
     ]
   },
   {
@@ -134,7 +195,7 @@
         "name": "toTypeName",
         "args": [
           {
-            "kind": "array",
+            "kind": "arrayLiteral",
             "elements": [
               {
                 "kind": "functionCall",
@@ -173,6 +234,9 @@
           }
         ]
       }
+    ],
+    "leadingComments": [
+      "-- Time64(1) + Time64(3) -> Time64(3)"
     ]
   },
   {
@@ -183,7 +247,7 @@
         "name": "toTypeName",
         "args": [
           {
-            "kind": "array",
+            "kind": "arrayLiteral",
             "elements": [
               {
                 "kind": "functionCall",
@@ -222,6 +286,9 @@
           }
         ]
       }
+    ],
+    "leadingComments": [
+      "-- Time64(6) + Time64(3) -> Time64(6)"
     ]
   },
   {
@@ -232,7 +299,7 @@
         "name": "toTypeName",
         "args": [
           {
-            "kind": "array",
+            "kind": "arrayLiteral",
             "elements": [
               {
                 "kind": "literal",
@@ -255,6 +322,9 @@
           }
         ]
       }
+    ],
+    "leadingComments": [
+      "-- Nullable with Time -> Nullable(Time)"
     ]
   },
   {
@@ -265,7 +335,7 @@
         "name": "toTypeName",
         "args": [
           {
-            "kind": "array",
+            "kind": "arrayLiteral",
             "elements": [
               {
                 "kind": "literal",
@@ -293,6 +363,9 @@
           }
         ]
       }
+    ],
+    "leadingComments": [
+      "-- Nullable with Time64(6) -> Nullable(Time64(6))"
     ]
   },
   {
@@ -303,7 +376,7 @@
         "name": "toTypeName",
         "args": [
           {
-            "kind": "array",
+            "kind": "arrayLiteral",
             "elements": [
               {
                 "kind": "functionCall",
@@ -342,6 +415,9 @@
           }
         ]
       }
+    ],
+    "leadingComments": [
+      "-- Mixing Nullable(Time) and Time64(6) -> Nullable(Time64(6))"
     ]
   },
   {
@@ -391,6 +467,9 @@
           }
         ]
       }
+    ],
+    "leadingComments": [
+      "-- IF(Time, Time64(6)) -> Time64(6)"
     ]
   },
   {
@@ -445,6 +524,9 @@
           }
         ]
       }
+    ],
+    "leadingComments": [
+      "-- IF(Time64(3), Time64(6)) -> Time64(6)"
     ]
   },
   {
@@ -515,6 +597,9 @@
           }
         ]
       }
+    ],
+    "leadingComments": [
+      "-- multiIf with mixture -> Time64(6)"
     ]
   },
   {
@@ -588,7 +673,10 @@
         "type": "UInt64",
         "value": "1"
       }
-    }
+    },
+    "leadingComments": [
+      "-- UNION ALL unifies to max scale (Time + Time64(6) -> Time64(6)); use LIMIT 1 to avoid duplicate lines"
+    ]
   },
   {
     "kind": "select",
@@ -598,7 +686,7 @@
         "name": "toTypeName",
         "args": [
           {
-            "kind": "array",
+            "kind": "arrayLiteral",
             "elements": [
               {
                 "kind": "functionCall",
@@ -621,6 +709,12 @@
           }
         ]
       }
+    ],
+    "leadingComments": [
+      "-- Time with Int -> NO_COMMON_TYPE"
+    ],
+    "trailingComments": [
+      "-- { serverError NO_COMMON_TYPE }"
     ]
   },
   {
@@ -631,7 +725,7 @@
         "name": "toTypeName",
         "args": [
           {
-            "kind": "array",
+            "kind": "arrayLiteral",
             "elements": [
               {
                 "kind": "functionCall",
@@ -665,6 +759,12 @@
           }
         ]
       }
+    ],
+    "leadingComments": [
+      "-- Time64 with Date -> NO_COMMON_TYPE"
+    ],
+    "trailingComments": [
+      "-- { serverError NO_COMMON_TYPE }"
     ]
   },
   {
@@ -675,7 +775,7 @@
         "name": "toTypeName",
         "args": [
           {
-            "kind": "array",
+            "kind": "arrayLiteral",
             "elements": [
               {
                 "kind": "functionCall",
@@ -709,6 +809,12 @@
           }
         ]
       }
+    ],
+    "leadingComments": [
+      "-- Time64 with DateTime -> NO_COMMON_TYPE"
+    ],
+    "trailingComments": [
+      "-- { serverError NO_COMMON_TYPE }"
     ]
   }
 ]

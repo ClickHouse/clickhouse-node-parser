@@ -1,3 +1,18 @@
+SET enable_analyzer = 1;
+
+DROP TABLE IF EXISTS `02702_logical_optimizer`;
+
+CREATE TABLE `02702_logical_optimizer`
+(
+    a Int32,
+    b LowCardinality(String)
+)
+ENGINE = Memory;
+
+INSERT INTO `02702_logical_optimizer`;
+
+SET optimize_min_equality_disjunction_chain_length = 3;
+
 SELECT *
 FROM `02702_logical_optimizer`
 WHERE a = 1
@@ -10,6 +25,19 @@ WHERE a = 1
     OR 3 = a
     OR 2 = a
     OR a = NULL;
+
+DROP TABLE `02702_logical_optimizer`;
+
+DROP TABLE IF EXISTS `02702_logical_optimizer_with_null_column`;
+
+CREATE TABLE `02702_logical_optimizer_with_null_column`
+(
+    a Nullable(Int32),
+    b LowCardinality(String)
+)
+ENGINE = Memory;
+
+INSERT INTO `02702_logical_optimizer_with_null_column`;
 
 SELECT *
 FROM `02702_logical_optimizer_with_null_column`
@@ -31,3 +59,5 @@ SELECT (k = 2)
 FROM (
         SELECT 1 AS k
     );
+
+DROP TABLE `02702_logical_optimizer_with_null_column`;

@@ -1,3 +1,31 @@
+DROP TABLE IF EXISTS decimal;
+
+CREATE TABLE IF NOT EXISTS decimal
+(
+    a DECIMAL(9, 0),
+    b DECIMAL(18, 0),
+    c DECIMAL(38, 0),
+    d DECIMAL(9, 9),
+    e DEC(18, 18),
+    f dec(38, 38),
+    g Decimal(9, 3),
+    h decimal(18, 9),
+    i deciMAL(38, 18),
+    j dec(4, 2),
+    k NumEriC(23, 4),
+    l numeric(9, 3),
+    m NUMEric(18, 9),
+    n FixED(12, 6),
+    o fixed(8, 6)
+)
+ENGINE = Memory;
+
+INSERT INTO decimal (a, b, c, d, e, f, g, h, i, j, k, l, m, n, o);
+
+INSERT INTO decimal (a, b, c, d, e, f, g, h, i, j, k, l, m, n, o);
+
+INSERT INTO decimal (a, b, c, d, e, f, g, h, i, j, k, l, m, n, o);
+
 SELECT
     a + a,
     a - a,
@@ -36,7 +64,7 @@ SELECT
     intDiv(e, e),
     intDivOrZero(e, e)
 FROM decimal
-WHERE e > 0;
+WHERE e > 0; -- { serverError ARGUMENT_OUT_OF_BOUND }
 
 SELECT
     f + f,
@@ -46,7 +74,7 @@ SELECT
     intDiv(f, f),
     intDivOrZero(f, f)
 FROM decimal
-WHERE f > 0;
+WHERE f > 0; -- { serverError ARGUMENT_OUT_OF_BOUND }
 
 SELECT
     g + g,
@@ -66,7 +94,7 @@ SELECT
     intDiv(h, h),
     intDivOrZero(h, h)
 FROM decimal
-WHERE h > 0;
+WHERE h > 0; -- { serverError DECIMAL_OVERFLOW }
 
 SELECT
     h + h,
@@ -148,7 +176,7 @@ SELECT
     e / 21,
     e / 84
 FROM decimal
-WHERE e > 0;
+WHERE e > 0; -- { serverError DECIMAL_OVERFLOW }
 
 SELECT
     f + 21,
@@ -261,7 +289,7 @@ SELECT
     21 / e,
     84 / e
 FROM decimal
-WHERE e > 0;
+WHERE e > 0; -- { serverError DECIMAL_OVERFLOW }
 
 SELECT
     21 + f,
@@ -296,7 +324,7 @@ SELECT
     21 / h,
     84 / h
 FROM decimal
-WHERE h > 0;
+WHERE h > 0; -- { serverError DECIMAL_OVERFLOW }
 
 SELECT
     21 + h,
@@ -360,6 +388,8 @@ SELECT
 FROM decimal
 ORDER BY a ASC;
 
+SET decimal_check_overflow = 0;
+
 SELECT
     (h * h) != 0,
     (h / h) != 1
@@ -388,23 +418,23 @@ SELECT
 FROM decimal
 WHERE f > 0;
 
-SELECT 1 / toDecimal32(0, 0);
+SELECT 1 / toDecimal32(0, 0); -- { serverError ILLEGAL_DIVISION }
 
-SELECT 1 / toDecimal64(0, 1);
+SELECT 1 / toDecimal64(0, 1); -- { serverError ILLEGAL_DIVISION }
 
-SELECT 1 / toDecimal128(0, 2);
+SELECT 1 / toDecimal128(0, 2); -- { serverError ILLEGAL_DIVISION }
 
-SELECT 0 / toDecimal32(0, 3);
+SELECT 0 / toDecimal32(0, 3); -- { serverError ILLEGAL_DIVISION }
 
-SELECT 0 / toDecimal64(0, 4);
+SELECT 0 / toDecimal64(0, 4); -- { serverError ILLEGAL_DIVISION }
 
-SELECT 0 / toDecimal128(0, 5);
+SELECT 0 / toDecimal128(0, 5); -- { serverError ILLEGAL_DIVISION }
 
-SELECT toDecimal32(0, 0) / toInt8(0);
+SELECT toDecimal32(0, 0) / toInt8(0); -- { serverError ILLEGAL_DIVISION }
 
-SELECT toDecimal64(0, 1) / toInt32(0);
+SELECT toDecimal64(0, 1) / toInt32(0); -- { serverError ILLEGAL_DIVISION }
 
-SELECT toDecimal128(0, 2) / toInt64(0);
+SELECT toDecimal128(0, 2) / toInt64(0); -- { serverError ILLEGAL_DIVISION }
 
 SELECT
     toDecimal32(0, 4) AS x,
@@ -421,11 +451,12 @@ SELECT
     multiIf(x = 0, NULL, intDivOrZero(1, x)),
     multiIf(x = 0, NULL, intDivOrZero(x, 0));
 
+-- { echoOn }
 SELECT toDecimal128(1, 38) / toDecimal128(1, 0)
 SETTINGS decimal_check_overflow = 1;
 
 SELECT toDecimal128(1, 38) / toDecimal128(1, 1)
-SETTINGS decimal_check_overflow = 1;
+SETTINGS decimal_check_overflow = 1; -- { serverError DECIMAL_OVERFLOW }
 
 SELECT toDecimal128(1, 38) / toDecimal128(1, 1)
 SETTINGS decimal_check_overflow = 0;
@@ -437,4 +468,4 @@ SELECT toDecimal128(1, 19) / toDecimal128(1, 19)
 SETTINGS decimal_check_overflow = 1;
 
 SELECT toDecimal128(1, 20) / toDecimal128(1, 19)
-SETTINGS decimal_check_overflow = 1;
+SETTINGS decimal_check_overflow = 1; -- { serverError DECIMAL_OVERFLOW }

@@ -1,3 +1,70 @@
+Set
+
+DropQuery  foo_without_dependencies (children 1)
+ Identifier foo_without_dependencies
+
+CreateQuery foo_without_dependencies (children 3)
+ Identifier foo_without_dependencies
+ Columns definition (children 1)
+  ExpressionList (children 2)
+   ColumnDeclaration ts (children 1)
+    DataType DateTime
+   ColumnDeclaration x (children 1)
+    DataType UInt64
+ Storage definition (children 3)
+  Function MergeTree
+  Function toYYYYMMDD (children 1)
+   ExpressionList (children 1)
+    Identifier ts
+  Identifier ts
+
+InsertQuery   (children 3)
+ Identifier foo_without_dependencies
+ ExpressionList (children 2)
+  Identifier ts
+  Identifier x
+ SelectWithUnionQuery (children 1)
+  ExpressionList (children 1)
+   SelectQuery (children 3)
+    ExpressionList (children 2)
+     Function toDateTime (children 1)
+      ExpressionList (children 1)
+       Literal '2020-01-01 00:05:00'
+     Function plus (children 1)
+      ExpressionList (children 2)
+       Identifier number
+       Literal UInt64_1
+    TablesInSelectQuery (children 1)
+     TablesInSelectQueryElement (children 1)
+      TableExpression (children 1)
+       TableIdentifier system.numbers
+    Literal UInt64_10
+
+AlterQuery  foo_without_dependencies (children 2)
+ ExpressionList (children 1)
+  AlterCommand UPDATE (children 2)
+   Function equals (children 1)
+    ExpressionList (children 2)
+     Identifier x
+     Subquery (children 1)
+      SelectWithUnionQuery (children 1)
+       ExpressionList (children 1)
+        SelectQuery (children 3)
+         ExpressionList (children 1)
+          Identifier x
+         TablesInSelectQuery (children 1)
+          TablesInSelectQueryElement (children 1)
+           TableExpression (children 1)
+            TableIdentifier foo_without_dependencies
+         Function equals (children 1)
+          ExpressionList (children 2)
+           Identifier x
+           Literal UInt64_4
+   ExpressionList (children 1)
+    Assignment x (children 1)
+     Literal UInt64_10
+ Identifier foo_without_dependencies
+
 SelectWithUnionQuery (children 1)
  ExpressionList (children 1)
   SelectQuery (children 3)
@@ -11,6 +78,78 @@ SelectWithUnionQuery (children 1)
    ExpressionList (children 1)
     OrderByElement (children 1)
      Identifier x
+
+<Explain Error>
+
+DropQuery  foo_with_index (children 1)
+ Identifier foo_with_index
+
+CreateQuery foo_with_index (children 3)
+ Identifier foo_with_index
+ Columns definition (children 2)
+  ExpressionList (children 2)
+   ColumnDeclaration ts (children 1)
+    DataType DateTime
+   ColumnDeclaration x (children 1)
+    DataType UInt64
+  ExpressionList (children 1)
+   Index (children 2)
+    Identifier x
+    Function minmax (children 1)
+     ExpressionList
+ Storage definition (children 3)
+  Function MergeTree
+  Function toYYYYMMDD (children 1)
+   ExpressionList (children 1)
+    Identifier ts
+  Identifier ts
+
+InsertQuery   (children 3)
+ Identifier foo_with_index
+ ExpressionList (children 2)
+  Identifier ts
+  Identifier x
+ SelectWithUnionQuery (children 1)
+  ExpressionList (children 1)
+   SelectQuery (children 3)
+    ExpressionList (children 2)
+     Function toDateTime (children 1)
+      ExpressionList (children 1)
+       Literal '2020-01-01 00:05:00'
+     Function plus (children 1)
+      ExpressionList (children 2)
+       Identifier number
+       Literal UInt64_1
+    TablesInSelectQuery (children 1)
+     TablesInSelectQueryElement (children 1)
+      TableExpression (children 1)
+       TableIdentifier system.numbers
+    Literal UInt64_10
+
+AlterQuery  foo_with_index (children 2)
+ ExpressionList (children 1)
+  AlterCommand UPDATE (children 2)
+   Function equals (children 1)
+    ExpressionList (children 2)
+     Identifier x
+     Subquery (children 1)
+      SelectWithUnionQuery (children 1)
+       ExpressionList (children 1)
+        SelectQuery (children 3)
+         ExpressionList (children 1)
+          Identifier x
+         TablesInSelectQuery (children 1)
+          TablesInSelectQueryElement (children 1)
+           TableExpression (children 1)
+            TableIdentifier foo_with_index
+         Function equals (children 1)
+          ExpressionList (children 2)
+           Identifier x
+           Literal UInt64_4
+   ExpressionList (children 1)
+    Assignment x (children 1)
+     Literal UInt64_10
+ Identifier foo_with_index
 
 SelectWithUnionQuery (children 1)
  ExpressionList (children 1)
@@ -26,6 +165,75 @@ SelectWithUnionQuery (children 1)
     OrderByElement (children 1)
      Identifier x
 
+CreateQuery foo_with_projection (children 3)
+ Identifier foo_with_projection
+ Columns definition (children 2)
+  ExpressionList (children 2)
+   ColumnDeclaration ts (children 1)
+    DataType DateTime
+   ColumnDeclaration x (children 1)
+    DataType UInt64
+  ExpressionList (children 1)
+   Projection (children 1)
+    ProjectionSelectQuery (children 2)
+     ExpressionList (children 2)
+      Identifier ts
+      Identifier x
+     Identifier x
+ Storage definition (children 3)
+  Function MergeTree
+  Function toYYYYMMDD (children 1)
+   ExpressionList (children 1)
+    Identifier ts
+  Identifier ts
+
+InsertQuery   (children 3)
+ Identifier foo_with_projection
+ ExpressionList (children 2)
+  Identifier ts
+  Identifier x
+ SelectWithUnionQuery (children 1)
+  ExpressionList (children 1)
+   SelectQuery (children 3)
+    ExpressionList (children 2)
+     Function toDateTime (children 1)
+      ExpressionList (children 1)
+       Literal '2020-01-01 00:05:00'
+     Function plus (children 1)
+      ExpressionList (children 2)
+       Identifier number
+       Literal UInt64_1
+    TablesInSelectQuery (children 1)
+     TablesInSelectQueryElement (children 1)
+      TableExpression (children 1)
+       TableIdentifier system.numbers
+    Literal UInt64_10
+
+AlterQuery  foo_with_projection (children 2)
+ ExpressionList (children 1)
+  AlterCommand UPDATE (children 2)
+   Function equals (children 1)
+    ExpressionList (children 2)
+     Identifier x
+     Subquery (children 1)
+      SelectWithUnionQuery (children 1)
+       ExpressionList (children 1)
+        SelectQuery (children 3)
+         ExpressionList (children 1)
+          Identifier x
+         TablesInSelectQuery (children 1)
+          TablesInSelectQueryElement (children 1)
+           TableExpression (children 1)
+            TableIdentifier foo_with_projection
+         Function equals (children 1)
+          ExpressionList (children 2)
+           Identifier x
+           Literal UInt64_4
+   ExpressionList (children 1)
+    Assignment x (children 1)
+     Literal UInt64_10
+ Identifier foo_with_projection
+
 SelectWithUnionQuery (children 1)
  ExpressionList (children 1)
   SelectQuery (children 3)
@@ -39,3 +247,6 @@ SelectWithUnionQuery (children 1)
    ExpressionList (children 1)
     OrderByElement (children 1)
      Identifier x
+
+DropQuery  foo_with_projection (children 1)
+ Identifier foo_with_projection

@@ -1,5 +1,61 @@
 [
   {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "file"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "file"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "s",
+        "type": {
+          "name": "String"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "n",
+        "type": {
+          "name": "UInt32"
+        }
+      }
+    ],
+    "engine": {
+      "name": "File",
+      "args": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "CSVWithNames"
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "file"
+      }
+    },
+    "leadingComments": [
+      "-- BTW, WithNames formats are totally unsuitable for more than a single INSERT"
+    ]
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -12,6 +68,26 @@
     }
   },
   {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "file2"
+    },
+    "temporary": true,
+    "asQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "asterisk"
+        }
+      ],
+      "from": {
+        "kind": "tableRef",
+        "table": "file"
+      }
+    }
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -21,6 +97,14 @@
     "from": {
       "kind": "tableRef",
       "table": "file2"
+    }
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "file"
     }
   }
 ]

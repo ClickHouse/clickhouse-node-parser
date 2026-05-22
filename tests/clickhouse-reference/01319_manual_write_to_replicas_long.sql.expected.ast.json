@@ -1,5 +1,127 @@
 [
   {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "r1"
+    },
+    "ifExists": true,
+    "leadingComments": [
+      "-- Tags: long, replica, no-shared-merge-tree",
+      "-- no-shared-merge-tree: not possible to stop replicated sends"
+    ]
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "r2"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "r1"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "x",
+        "type": {
+          "name": "String"
+        }
+      }
+    ],
+    "engine": {
+      "name": "ReplicatedMergeTree",
+      "args": [
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "/clickhouse/tables/{database}/r"
+        },
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "r1"
+        }
+      ]
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "x"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "r2"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "x",
+        "type": {
+          "name": "String"
+        }
+      }
+    ],
+    "engine": {
+      "name": "ReplicatedMergeTree",
+      "args": [
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "/clickhouse/tables/{database}/r"
+        },
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "r2"
+        }
+      ]
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "x"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "kind": "system",
+    "body": "SYSTEM STOP REPLICATED SENDS r1"
+  },
+  {
+    "kind": "system",
+    "body": "SYSTEM STOP REPLICATED SENDS r2"
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "r1"
+      }
+    }
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -24,6 +146,16 @@
     }
   },
   {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "r2"
+      }
+    }
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -32,5 +164,37 @@
         "value": "---"
       }
     ]
+  },
+  {
+    "kind": "system",
+    "body": "SYSTEM START REPLICATED SENDS r1"
+  },
+  {
+    "kind": "system",
+    "body": "SYSTEM START REPLICATED SENDS r2"
+  },
+  {
+    "kind": "system",
+    "body": "SYSTEM SYNC REPLICA r1"
+  },
+  {
+    "kind": "system",
+    "body": "SYSTEM SYNC REPLICA r2"
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "r1"
+    }
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "r2"
+    }
   }
 ]

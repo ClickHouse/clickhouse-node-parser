@@ -1,3 +1,5 @@
+SET session_timezone = 'UTC';
+SET use_legacy_to_time = 0;
 -- Operations <Time> + <number>
 SELECT toTime(12) + 1;
 SELECT toTime(12) + 25;
@@ -44,6 +46,7 @@ SELECT toTime(12) % 25.2;
 SELECT toTime(12) - toTime(11);
 SELECT toTime(12) - toTime(2);
 SELECT toTime(12) - toTime(20);
+
 -- Operations <Time64> + <number>
 SELECT toTime64(12, 2) + 1;
 SELECT toTime64(12, 2) + 25;

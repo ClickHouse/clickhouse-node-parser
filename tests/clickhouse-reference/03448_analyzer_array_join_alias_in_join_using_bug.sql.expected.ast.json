@@ -1,5 +1,90 @@
 [
   {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "local_table"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "id",
+        "type": {
+          "name": "Int8"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "arr",
+        "type": {
+          "name": "Array",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "UInt8"
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "id"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "local_table"
+      }
+    },
+    "selectQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "42"
+        },
+        {
+          "kind": "arrayLiteral",
+          "elements": [
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "0"
+            },
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "1"
+            },
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "2"
+            }
+          ],
+          "source": "[0, 1, 2]"
+        }
+      ]
+    }
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -12,7 +97,7 @@
     "from": {
       "left": {
         "left": {
-          "kind": "tableFunction",
+          "kind": "tableFunctionRef",
           "name": "remote",
           "args": [
             {
@@ -34,7 +119,7 @@
           ],
           "alias": "r"
         },
-        "kind": "arrayJoin",
+        "kind": "arrayJoinExpr",
         "joinType": "ARRAY",
         "expressions": [
           {
@@ -49,7 +134,7 @@
           }
         ]
       },
-      "kind": "join",
+      "kind": "joinExpr",
       "joinType": "INNER",
       "right": {
         "kind": "tableRef",
@@ -63,7 +148,10 @@
           "dummy"
         ]
       }
-    }
+    },
+    "leadingComments": [
+      "-- { echoOn }"
+    ]
   },
   {
     "kind": "select",
@@ -78,7 +166,7 @@
     "from": {
       "left": {
         "left": {
-          "kind": "tableFunction",
+          "kind": "tableFunctionRef",
           "name": "remote",
           "args": [
             {
@@ -100,7 +188,7 @@
           ],
           "alias": "r"
         },
-        "kind": "arrayJoin",
+        "kind": "arrayJoinExpr",
         "joinType": "ARRAY",
         "expressions": [
           {
@@ -115,7 +203,7 @@
           }
         ]
       },
-      "kind": "join",
+      "kind": "joinExpr",
       "joinType": "INNER",
       "right": {
         "kind": "tableRef",
@@ -144,7 +232,7 @@
     "from": {
       "left": {
         "left": {
-          "kind": "tableFunction",
+          "kind": "tableFunctionRef",
           "name": "remote",
           "args": [
             {
@@ -166,7 +254,7 @@
           ],
           "alias": "r"
         },
-        "kind": "arrayJoin",
+        "kind": "arrayJoinExpr",
         "joinType": "ARRAY",
         "expressions": [
           {
@@ -181,7 +269,7 @@
           }
         ]
       },
-      "kind": "join",
+      "kind": "joinExpr",
       "joinType": "INNER",
       "right": {
         "kind": "subqueryFrom",
@@ -222,7 +310,7 @@
     "from": {
       "left": {
         "left": {
-          "kind": "tableFunction",
+          "kind": "tableFunctionRef",
           "name": "remote",
           "args": [
             {
@@ -244,7 +332,7 @@
           ],
           "alias": "r"
         },
-        "kind": "arrayJoin",
+        "kind": "arrayJoinExpr",
         "joinType": "ARRAY",
         "expressions": [
           {
@@ -259,7 +347,7 @@
           }
         ]
       },
-      "kind": "join",
+      "kind": "joinExpr",
       "joinType": "INNER",
       "right": {
         "kind": "subqueryFrom",
@@ -306,7 +394,7 @@
     "from": {
       "left": {
         "left": {
-          "kind": "tableFunction",
+          "kind": "tableFunctionRef",
           "name": "remote",
           "args": [
             {
@@ -328,7 +416,7 @@
           ],
           "alias": "r"
         },
-        "kind": "arrayJoin",
+        "kind": "arrayJoinExpr",
         "joinType": "ARRAY",
         "expressions": [
           {
@@ -343,7 +431,7 @@
           }
         ]
       },
-      "kind": "join",
+      "kind": "joinExpr",
       "joinType": "INNER",
       "right": {
         "kind": "subqueryFrom",
@@ -371,7 +459,7 @@
             }
           ],
           "from": {
-            "kind": "tableFunction",
+            "kind": "tableFunctionRef",
             "name": "numbers",
             "args": [
               {
@@ -411,7 +499,7 @@
     "from": {
       "left": {
         "left": {
-          "kind": "tableFunction",
+          "kind": "tableFunctionRef",
           "name": "remote",
           "args": [
             {
@@ -433,7 +521,7 @@
           ],
           "alias": "r"
         },
-        "kind": "arrayJoin",
+        "kind": "arrayJoinExpr",
         "joinType": "ARRAY",
         "expressions": [
           {
@@ -448,7 +536,7 @@
           }
         ]
       },
-      "kind": "join",
+      "kind": "joinExpr",
       "joinType": "INNER",
       "right": {
         "kind": "subqueryFrom",
@@ -476,7 +564,7 @@
             }
           ],
           "from": {
-            "kind": "tableFunction",
+            "kind": "tableFunctionRef",
             "name": "numbers",
             "args": [
               {
@@ -510,7 +598,7 @@
     "from": {
       "left": {
         "left": {
-          "kind": "tableFunction",
+          "kind": "tableFunctionRef",
           "name": "remote",
           "args": [
             {
@@ -532,7 +620,7 @@
           ],
           "alias": "r"
         },
-        "kind": "arrayJoin",
+        "kind": "arrayJoinExpr",
         "joinType": "ARRAY",
         "expressions": [
           {
@@ -547,7 +635,7 @@
           }
         ]
       },
-      "kind": "join",
+      "kind": "joinExpr",
       "joinType": "RIGHT",
       "right": {
         "kind": "subqueryFrom",
@@ -573,6 +661,9 @@
           "arr_item"
         ]
       }
-    }
+    },
+    "leadingComments": [
+      "-- Fuzzed"
+    ]
   }
 ]

@@ -1,3 +1,16 @@
+DROP TABLE IF EXISTS test_table;
+
+CREATE TABLE test_table
+(
+    id UInt64,
+    value String,
+    value_array Array(UInt64)
+)
+ENGINE = MergeTree()
+ORDER BY id;
+
+INSERT INTO test_table;
+
 SELECT
     materialize(id),
     toTypeName(id)

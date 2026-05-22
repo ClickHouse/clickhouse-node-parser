@@ -1,5 +1,62 @@
 [
   {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "check_system_tables_null"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "key",
+        "type": {
+          "name": "Int"
+        }
+      }
+    ],
+    "engine": {
+      "name": "Null",
+      "args": []
+    }
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "check_system_tables"
+    },
+    "asTable": {
+      "kind": "tableRef",
+      "table": "check_system_tables_null"
+    },
+    "engine": {
+      "name": "Distributed",
+      "args": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "test_shard_localhost"
+          ]
+        },
+        {
+          "kind": "functionCall",
+          "name": "currentDatabase",
+          "args": []
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "check_system_tables_null"
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "kind": "system",
+    "body": "SYSTEM STOP DISTRIBUTED SENDS check_system_tables"
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -52,6 +109,45 @@
             "kind": "literal",
             "type": "String",
             "value": "check_system_tables"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "check_system_tables"
+      }
+    },
+    "selectQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "asterisk"
+        }
+      ],
+      "from": {
+        "kind": "tableFunctionRef",
+        "name": "numbers",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "1"
+          }
+        ]
+      },
+      "settings": [
+        {
+          "name": "prefer_localhost_replica",
+          "value": {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "0"
           }
         }
       ]
@@ -122,6 +218,26 @@
           }
         }
       ]
+    }
+  },
+  {
+    "kind": "system",
+    "body": "SYSTEM FLUSH DISTRIBUTED check_system_tables"
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "check_system_tables_null"
+    }
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "check_system_tables"
     }
   }
 ]

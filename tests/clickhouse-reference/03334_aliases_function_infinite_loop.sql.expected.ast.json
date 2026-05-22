@@ -1,0 +1,136 @@
+[
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "enable_analyzer",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ],
+    "leadingComments": [
+      "-- Tags: no-parallel",
+      "-- ^ creates a function"
+    ]
+  },
+  {
+    "kind": "drop",
+    "targetType": "FUNCTION",
+    "table": {
+      "kind": "tableRef",
+      "table": "f0"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "drop",
+    "targetType": "VIEW",
+    "table": {
+      "kind": "tableRef",
+      "table": "v0"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "createFunction",
+    "name": "f0",
+    "functionExpr": {
+      "kind": "lambdaExpr",
+      "params": [
+        "x"
+      ],
+      "body": {
+        "kind": "functionCall",
+        "name": "toInt32",
+        "args": [
+          {
+            "kind": "alias",
+            "expr": {
+              "kind": "binaryExpr",
+              "op": "%",
+              "left": {
+                "kind": "alias",
+                "expr": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "x"
+                  ]
+                },
+                "alias": "c0",
+                "parenthesized": true
+              },
+              "right": {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "2"
+              }
+            },
+            "alias": "c1"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "kind": "createView",
+    "table": {
+      "kind": "tableRef",
+      "table": "v0"
+    },
+    "asQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "alias",
+          "expr": {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "0"
+          },
+          "alias": "c0"
+        },
+        {
+          "kind": "alias",
+          "expr": {
+            "kind": "columnRef",
+            "parts": [
+              "c0"
+            ]
+          },
+          "alias": "c1"
+        },
+        {
+          "kind": "alias",
+          "expr": {
+            "kind": "functionCall",
+            "name": "f0",
+            "args": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "c1"
+                ]
+              }
+            ]
+          },
+          "alias": "c2"
+        }
+      ],
+      "parenthesized": true
+    },
+    "trailingComments": [
+      "-- { serverError UNKNOWN_IDENTIFIER }"
+    ]
+  },
+  {
+    "kind": "drop",
+    "targetType": "FUNCTION",
+    "table": {
+      "kind": "tableRef",
+      "table": "f0"
+    }
+  }
+]

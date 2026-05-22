@@ -1,3 +1,49 @@
+-- Tags: no-parallel
+-- Must use `default` database and these tables - they're configured in tests/*_dictionary.xml
+USE default;
+
+DROP TABLE IF EXISTS ints;
+
+DROP TABLE IF EXISTS strings;
+
+DROP TABLE IF EXISTS decimals;
+
+CREATE TABLE ints
+(
+    key UInt64,
+    i8 Int8,
+    i16 Int16,
+    i32 Int32,
+    i64 Int64,
+    u8 UInt8,
+    u16 UInt16,
+    u32 UInt32,
+    u64 UInt64
+)
+ENGINE = Memory;
+
+CREATE TABLE strings
+(
+    key UInt64,
+    str String
+)
+ENGINE = Memory;
+
+CREATE TABLE decimals
+(
+    key UInt64,
+    d32 Decimal32(4),
+    d64 Decimal64(6),
+    d128 Decimal128(1)
+)
+ENGINE = Memory;
+
+INSERT INTO ints;
+
+INSERT INTO strings;
+
+INSERT INTO decimals;
+
 SELECT
     'dictGet',
     'flat_ints' AS dict_name,
@@ -221,6 +267,8 @@ SELECT
     dictGet(dict_name, 'u64', k),
     dictGet(dict_name, ('i8', 'i16', 'i32'), k);
 
+;
+
 SELECT
     'dictGetOrDefault',
     'complex_cache_ints' AS dict_name,
@@ -249,6 +297,7 @@ SELECT
     dictGetOrDefault(dict_name, 'u64', k, toUInt64(42)),
     dictGetOrDefault(dict_name, ('i8', 'i16', 'i32'), k, (toInt8(42), toInt16(42), toInt32(42)));
 
+--
 SELECT
     'dictGet',
     'flat_strings' AS dict_name,
@@ -354,6 +403,7 @@ SELECT
     dictGetOrDefault(dict_name, 'str', tuple(k), '*'),
     dictGetOrDefault(dict_name, ('str'), tuple(k), ('*'));
 
+--
 SELECT
     'dictGet',
     'flat_decimals' AS dict_name,

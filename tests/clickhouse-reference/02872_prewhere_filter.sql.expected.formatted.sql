@@ -1,3 +1,20 @@
+DROP TABLE IF EXISTS data;
+
+CREATE TABLE data
+(
+    key Int,
+    val1 SimpleAggregateFunction(max, Nullable(Int)),
+    val2 SimpleAggregateFunction(min, Int)
+)
+ENGINE = AggregatingMergeTree()
+ORDER BY key;
+
+SYSTEM stop merges data;
+
+INSERT INTO data;
+
+INSERT INTO data;
+
 SELECT
     key,
     val1,

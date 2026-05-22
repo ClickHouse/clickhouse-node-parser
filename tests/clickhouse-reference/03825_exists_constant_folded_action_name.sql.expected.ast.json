@@ -23,7 +23,7 @@
       }
     ],
     "from": {
-      "kind": "tableFunction",
+      "kind": "tableFunctionRef",
       "name": "remote",
       "args": [
         {
@@ -43,7 +43,16 @@
           ]
         }
       ]
-    }
+    },
+    "leadingComments": [
+      "-- Test for EXISTS subquery that is constant-folded into a ConstantNode.",
+      "-- When the planner reconstructs the action node name from the source expression",
+      "-- (e.g., in distributed/secondary query context), the EXISTS argument subquery",
+      "-- may not have an alias because createUniqueAliasesIfNecessary doesn't visit",
+      "-- inside ConstantNode source expressions. This should not cause an exception.",
+      "-- Simplified reproduction: EXISTS in a scalar subquery evaluated during analysis.",
+      "-- The remote() call forces SECONDARY_QUERY context where isASTLevelOptimizationAllowed() is false."
+    ]
   },
   {
     "kind": "select",
@@ -69,7 +78,7 @@
       }
     ],
     "from": {
-      "kind": "tableFunction",
+      "kind": "tableFunctionRef",
       "name": "remote",
       "args": [
         {
@@ -153,7 +162,7 @@
       }
     ],
     "from": {
-      "kind": "tableFunction",
+      "kind": "tableFunctionRef",
       "name": "remote",
       "args": [
         {
@@ -173,7 +182,10 @@
           ]
         }
       ]
-    }
+    },
+    "leadingComments": [
+      "-- Multiple EXISTS expressions"
+    ]
   },
   {
     "kind": "select",
@@ -195,7 +207,7 @@
                 }
               ],
               "from": {
-                "kind": "tableFunction",
+                "kind": "tableFunctionRef",
                 "name": "numbers",
                 "args": [
                   {
@@ -211,7 +223,7 @@
       }
     ],
     "from": {
-      "kind": "tableFunction",
+      "kind": "tableFunctionRef",
       "name": "remote",
       "args": [
         {
@@ -231,7 +243,10 @@
           ]
         }
       ]
-    }
+    },
+    "leadingComments": [
+      "-- EXISTS with more complex subquery"
+    ]
   },
   {
     "kind": "select",
@@ -261,7 +276,7 @@
       }
     ],
     "from": {
-      "kind": "tableFunction",
+      "kind": "tableFunctionRef",
       "name": "remote",
       "args": [
         {
@@ -281,6 +296,9 @@
           ]
         }
       ]
-    }
+    },
+    "leadingComments": [
+      "-- NOT exists"
+    ]
   }
 ]

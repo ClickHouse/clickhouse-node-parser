@@ -1,5 +1,167 @@
 [
   {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "cool_table"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "cool_table"
+    },
+    "ifNotExists": true,
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "id",
+        "type": {
+          "name": "UInt64"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "n",
+        "type": {
+          "name": "Nested",
+          "args": [
+            {
+              "kind": "namedField",
+              "name": "n",
+              "type": {
+                "name": "UInt64"
+              }
+            },
+            {
+              "kind": "namedField",
+              "name": "lc1",
+              "type": {
+                "name": "LowCardinality",
+                "args": [
+                  {
+                    "kind": "type",
+                    "type": {
+                      "name": "String"
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "id"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "cool_table"
+      }
+    },
+    "selectQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "number"
+          ]
+        },
+        {
+          "kind": "functionCall",
+          "name": "range",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "number"
+              ]
+            }
+          ]
+        },
+        {
+          "kind": "functionCall",
+          "name": "range",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "number"
+              ]
+            }
+          ]
+        }
+      ],
+      "from": {
+        "kind": "tableFunctionRef",
+        "name": "numbers",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "10"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "kind": "alter",
+    "table": {
+      "kind": "tableRef",
+      "table": "cool_table"
+    },
+    "commands": [
+      {
+        "kind": "alterCommand",
+        "commandType": "ADD_COLUMN",
+        "column": {
+          "kind": "columnDef",
+          "name": "n.lc2",
+          "type": {
+            "name": "Array",
+            "args": [
+              {
+                "kind": "type",
+                "type": {
+                  "name": "LowCardinality",
+                  "args": [
+                    {
+                      "kind": "type",
+                      "type": {
+                        "name": "String"
+                      }
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        }
+      }
+    ]
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -31,6 +193,489 @@
           ]
         },
         "direction": "ASC"
+      }
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "cool_table"
+    },
+    "ifNotExists": true,
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "id",
+        "type": {
+          "name": "UInt64"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "n",
+        "type": {
+          "name": "Nested",
+          "args": [
+            {
+              "kind": "namedField",
+              "name": "n",
+              "type": {
+                "name": "UInt64"
+              }
+            },
+            {
+              "kind": "namedField",
+              "name": "lc1",
+              "type": {
+                "name": "Array",
+                "args": [
+                  {
+                    "kind": "type",
+                    "type": {
+                      "name": "LowCardinality",
+                      "args": [
+                        {
+                          "kind": "type",
+                          "type": {
+                            "name": "String"
+                          }
+                        }
+                      ]
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "id"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "cool_table"
+      }
+    },
+    "selectQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "number"
+          ]
+        },
+        {
+          "kind": "functionCall",
+          "name": "range",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "number"
+              ]
+            }
+          ]
+        },
+        {
+          "kind": "functionCall",
+          "name": "arrayMap",
+          "args": [
+            {
+              "kind": "lambdaExpr",
+              "params": [
+                "x"
+              ],
+              "body": {
+                "kind": "functionCall",
+                "name": "range",
+                "args": [
+                  {
+                    "kind": "binaryExpr",
+                    "op": "%",
+                    "left": {
+                      "kind": "columnRef",
+                      "parts": [
+                        "x"
+                      ]
+                    },
+                    "right": {
+                      "kind": "literal",
+                      "type": "UInt64",
+                      "value": "4"
+                    }
+                  }
+                ]
+              }
+            },
+            {
+              "kind": "functionCall",
+              "name": "range",
+              "args": [
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "number"
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "from": {
+        "kind": "tableFunctionRef",
+        "name": "numbers",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "10"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "kind": "alter",
+    "table": {
+      "kind": "tableRef",
+      "table": "cool_table"
+    },
+    "commands": [
+      {
+        "kind": "alterCommand",
+        "commandType": "ADD_COLUMN",
+        "column": {
+          "kind": "columnDef",
+          "name": "n.lc2",
+          "type": {
+            "name": "Array",
+            "args": [
+              {
+                "kind": "type",
+                "type": {
+                  "name": "Array",
+                  "args": [
+                    {
+                      "kind": "type",
+                      "type": {
+                        "name": "LowCardinality",
+                        "args": [
+                          {
+                            "kind": "type",
+                            "type": {
+                              "name": "String"
+                            }
+                          }
+                        ]
+                      }
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "cool_table"
+    },
+    "ifNotExists": true,
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "id",
+        "type": {
+          "name": "UInt64"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "n",
+        "type": {
+          "name": "Nested",
+          "args": [
+            {
+              "kind": "namedField",
+              "name": "n",
+              "type": {
+                "name": "UInt64"
+              }
+            },
+            {
+              "kind": "namedField",
+              "name": "lc1",
+              "type": {
+                "name": "Map",
+                "args": [
+                  {
+                    "kind": "type",
+                    "type": {
+                      "name": "LowCardinality",
+                      "args": [
+                        {
+                          "kind": "type",
+                          "type": {
+                            "name": "String"
+                          }
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "kind": "type",
+                    "type": {
+                      "name": "UInt64"
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "id"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "cool_table"
+      }
+    },
+    "selectQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "number"
+          ]
+        },
+        {
+          "kind": "functionCall",
+          "name": "range",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "number"
+              ]
+            }
+          ]
+        },
+        {
+          "kind": "functionCall",
+          "name": "arrayMap",
+          "args": [
+            {
+              "kind": "lambdaExpr",
+              "params": [
+                "x"
+              ],
+              "body": {
+                "kind": "castExpr",
+                "expr": {
+                  "kind": "tupleLiteral",
+                  "elements": [
+                    {
+                      "kind": "functionCall",
+                      "name": "arrayMap",
+                      "args": [
+                        {
+                          "kind": "lambdaExpr",
+                          "params": [
+                            "y"
+                          ],
+                          "body": {
+                            "kind": "functionCall",
+                            "name": "concat",
+                            "args": [
+                              {
+                                "kind": "literal",
+                                "type": "String",
+                                "value": "k"
+                              },
+                              {
+                                "kind": "functionCall",
+                                "name": "toString",
+                                "args": [
+                                  {
+                                    "kind": "columnRef",
+                                    "parts": [
+                                      "y"
+                                    ]
+                                  }
+                                ]
+                              }
+                            ]
+                          }
+                        },
+                        {
+                          "kind": "functionCall",
+                          "name": "range",
+                          "args": [
+                            {
+                              "kind": "binaryExpr",
+                              "op": "%",
+                              "left": {
+                                "kind": "columnRef",
+                                "parts": [
+                                  "x"
+                                ]
+                              },
+                              "right": {
+                                "kind": "literal",
+                                "type": "UInt64",
+                                "value": "4"
+                              }
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "kind": "functionCall",
+                      "name": "range",
+                      "args": [
+                        {
+                          "kind": "binaryExpr",
+                          "op": "%",
+                          "left": {
+                            "kind": "columnRef",
+                            "parts": [
+                              "x"
+                            ]
+                          },
+                          "right": {
+                            "kind": "literal",
+                            "type": "UInt64",
+                            "value": "4"
+                          }
+                        }
+                      ]
+                    }
+                  ],
+                  "source": "(arrayMap(y -> 'k' || toString(y), range(x % 4)), range(x % 4))"
+                },
+                "type": "Map(LowCardinality(String), UInt64)",
+                "operator": true
+              }
+            },
+            {
+              "kind": "functionCall",
+              "name": "range",
+              "args": [
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "number"
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "from": {
+        "kind": "tableFunctionRef",
+        "name": "numbers",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "10"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "kind": "alter",
+    "table": {
+      "kind": "tableRef",
+      "table": "cool_table"
+    },
+    "commands": [
+      {
+        "kind": "alterCommand",
+        "commandType": "ADD_COLUMN",
+        "column": {
+          "kind": "columnDef",
+          "name": "n.lc2",
+          "type": {
+            "name": "Array",
+            "args": [
+              {
+                "kind": "type",
+                "type": {
+                  "name": "Map",
+                  "args": [
+                    {
+                      "kind": "type",
+                      "type": {
+                        "name": "LowCardinality",
+                        "args": [
+                          {
+                            "kind": "type",
+                            "type": {
+                              "name": "String"
+                            }
+                          }
+                        ]
+                      }
+                    },
+                    {
+                      "kind": "type",
+                      "type": {
+                        "name": "UInt64"
+                      }
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        }
       }
     ]
   }

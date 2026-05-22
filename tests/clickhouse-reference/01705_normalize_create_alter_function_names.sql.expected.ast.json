@@ -1,5 +1,165 @@
 [
   {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "x"
+    },
+    "ifExists": true,
+    "leadingComments": [
+      "-- Tags: zookeeper, no-replicated-database, no-parallel, no-object-storage"
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "x"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "i",
+        "type": {
+          "name": "int"
+        }
+      },
+      {
+        "kind": "indexDef",
+        "name": "mm",
+        "expr": {
+          "kind": "functionCall",
+          "name": "LOG2",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "i"
+              ]
+            }
+          ]
+        },
+        "indexType": {
+          "name": "minmax"
+        },
+        "granularity": 1
+      },
+      {
+        "kind": "projectionDef",
+        "name": "p",
+        "query": {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "functionCall",
+              "name": "MAX",
+              "args": [
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "i"
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ],
+    "engine": {
+      "name": "ReplicatedMergeTree",
+      "args": [
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "/clickhouse/tables/{database}/x"
+        },
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "r"
+        }
+      ]
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "i"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "kind": "alter",
+    "table": {
+      "kind": "tableRef",
+      "table": "x"
+    },
+    "commands": [
+      {
+        "kind": "alterCommand",
+        "commandType": "ADD_INDEX",
+        "index": {
+          "kind": "indexDef",
+          "name": "nn",
+          "expr": {
+            "kind": "functionCall",
+            "name": "LOG2",
+            "args": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "i"
+                ]
+              }
+            ]
+          },
+          "indexType": {
+            "name": "minmax"
+          },
+          "granularity": 1
+        }
+      },
+      {
+        "kind": "alterCommand",
+        "commandType": "ADD_PROJECTION",
+        "projection": {
+          "kind": "projectionDef",
+          "name": "p2",
+          "query": {
+            "kind": "select",
+            "select": [
+              {
+                "kind": "functionCall",
+                "name": "MIN",
+                "args": [
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "i"
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      }
+    ]
+  },
+  {
+    "kind": "showCreate",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "x"
+    }
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -65,6 +225,14 @@
           }
         }
       ]
+    }
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "x"
     }
   }
 ]

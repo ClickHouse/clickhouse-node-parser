@@ -1,5 +1,113 @@
 [
   {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "distributed_ddl_output_mode",
+        "value": {
+          "kind": "literal",
+          "type": "String",
+          "value": "throw"
+        }
+      }
+    ],
+    "leadingComments": [
+      "-- Tags: distributed, no-replicated-database",
+      "-- Tag no-replicated-database: ON CLUSTER is not allowed"
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "t1_local"
+    },
+    "onCluster": "test_shard_localhost",
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "partition_col_1",
+        "type": {
+          "name": "String"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "tc1",
+        "type": {
+          "name": "int"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "tc2",
+        "type": {
+          "name": "int"
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree",
+      "args": []
+    },
+    "partitionBy": {
+      "kind": "columnRef",
+      "parts": [
+        "partition_col_1"
+      ]
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "tc1"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "t1_local"
+      }
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "t1_local"
+      }
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "t1_local"
+      }
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "t1_local"
+      }
+    }
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -31,6 +139,35 @@
         },
         "direction": "ASC"
       }
+    ],
+    "leadingComments": [
+      "-- { echoOn }"
+    ]
+  },
+  {
+    "kind": "delete",
+    "table": {
+      "kind": "tableRef",
+      "table": "t1_local"
+    },
+    "where": {
+      "kind": "binaryExpr",
+      "op": "=",
+      "left": {
+        "kind": "columnRef",
+        "parts": [
+          "tc1"
+        ]
+      },
+      "right": {
+        "kind": "literal",
+        "type": "UInt64",
+        "value": "1"
+      }
+    },
+    "onCluster": "test_shard_localhost",
+    "trailingComments": [
+      "-- { echoOff }"
     ]
   }
 ]

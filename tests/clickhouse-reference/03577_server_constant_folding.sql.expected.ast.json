@@ -1,5 +1,18 @@
 [
   {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "prefer_localhost_replica",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      }
+    ]
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -25,7 +38,7 @@
       }
     ],
     "from": {
-      "kind": "tableFunction",
+      "kind": "tableFunctionRef",
       "name": "remote",
       "args": [
         {
@@ -68,7 +81,7 @@
             }
           ],
           "from": {
-            "kind": "tableFunction",
+            "kind": "tableFunctionRef",
             "name": "numbers",
             "args": [
               {
@@ -133,7 +146,7 @@
       }
     ],
     "from": {
-      "kind": "tableFunction",
+      "kind": "tableFunctionRef",
       "name": "remote",
       "args": [
         {
@@ -176,7 +189,7 @@
             }
           ],
           "from": {
-            "kind": "tableFunction",
+            "kind": "tableFunctionRef",
             "name": "numbers",
             "args": [
               {
@@ -242,7 +255,7 @@
       }
     ],
     "from": {
-      "kind": "tableFunction",
+      "kind": "tableFunctionRef",
       "name": "remote",
       "args": [
         {
@@ -288,7 +301,7 @@
                 }
               ],
               "from": {
-                "kind": "tableFunction",
+                "kind": "tableFunctionRef",
                 "name": "numbers",
                 "args": [
                   {
@@ -325,7 +338,7 @@
                 }
               ],
               "from": {
-                "kind": "tableFunction",
+                "kind": "tableFunctionRef",
                 "name": "numbers",
                 "args": [
                   {
@@ -401,7 +414,7 @@
       }
     ],
     "from": {
-      "kind": "tableFunction",
+      "kind": "tableFunctionRef",
       "name": "remote",
       "args": [
         {
@@ -447,7 +460,7 @@
                 }
               ],
               "from": {
-                "kind": "tableFunction",
+                "kind": "tableFunctionRef",
                 "name": "numbers",
                 "args": [
                   {
@@ -484,7 +497,7 @@
                 }
               ],
               "from": {
-                "kind": "tableFunction",
+                "kind": "tableFunctionRef",
                 "name": "numbers",
                 "args": [
                   {
@@ -547,6 +560,586 @@
   },
   {
     "kind": "select",
+    "with": [
+      {
+        "kind": "cteSubquery",
+        "name": "flt",
+        "query": {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "number"
+              ]
+            }
+          ],
+          "from": {
+            "kind": "tableFunctionRef",
+            "name": "numbers",
+            "args": [
+              {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "10"
+              }
+            ]
+          },
+          "where": {
+            "kind": "binaryExpr",
+            "op": "=",
+            "left": {
+              "kind": "columnRef",
+              "parts": [
+                "number"
+              ]
+            },
+            "right": {
+              "kind": "functionCall",
+              "name": "shardNum",
+              "args": []
+            }
+          }
+        }
+      }
+    ],
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "shardNum",
+        "args": []
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "number"
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableFunctionRef",
+      "name": "remote",
+      "args": [
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "127.0.0.{1..3}"
+        },
+        {
+          "kind": "functionCall",
+          "name": "numbers",
+          "args": [
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "100"
+            }
+          ]
+        }
+      ]
+    },
+    "where": {
+      "kind": "inExpr",
+      "negated": false,
+      "expr": {
+        "kind": "columnRef",
+        "parts": [
+          "number"
+        ]
+      },
+      "values": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "flt"
+          ]
+        }
+      ]
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        },
+        "direction": "ASC"
+      },
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "2"
+        },
+        "direction": "ASC"
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "with": [
+      {
+        "kind": "cteSubquery",
+        "name": "flt",
+        "query": {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "number"
+              ]
+            }
+          ],
+          "from": {
+            "kind": "tableFunctionRef",
+            "name": "numbers",
+            "args": [
+              {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "10"
+              }
+            ]
+          },
+          "where": {
+            "kind": "binaryExpr",
+            "op": "=",
+            "left": {
+              "kind": "columnRef",
+              "parts": [
+                "number"
+              ]
+            },
+            "right": {
+              "kind": "functionCall",
+              "name": "shardNum",
+              "args": []
+            }
+          }
+        }
+      }
+    ],
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "shardNum",
+        "args": []
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "number"
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableFunctionRef",
+      "name": "remote",
+      "args": [
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "127.0.0.{1..3}"
+        },
+        {
+          "kind": "functionCall",
+          "name": "numbers",
+          "args": [
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "100"
+            }
+          ]
+        }
+      ]
+    },
+    "where": {
+      "kind": "inExpr",
+      "negated": false,
+      "expr": {
+        "kind": "columnRef",
+        "parts": [
+          "number"
+        ]
+      },
+      "values": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "flt"
+          ]
+        }
+      ],
+      "global": true
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        },
+        "direction": "ASC"
+      },
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "2"
+        },
+        "direction": "ASC"
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "with": [
+      {
+        "kind": "cteSubquery",
+        "name": "flt",
+        "query": {
+          "kind": "union",
+          "queries": [
+            {
+              "kind": "select",
+              "select": [
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "number"
+                  ]
+                }
+              ],
+              "from": {
+                "kind": "tableFunctionRef",
+                "name": "numbers",
+                "args": [
+                  {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "10"
+                  }
+                ]
+              },
+              "where": {
+                "kind": "binaryExpr",
+                "op": "=",
+                "left": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "number"
+                  ]
+                },
+                "right": {
+                  "kind": "functionCall",
+                  "name": "shardNum",
+                  "args": []
+                }
+              }
+            },
+            {
+              "kind": "select",
+              "select": [
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "number"
+                  ]
+                }
+              ],
+              "from": {
+                "kind": "tableFunctionRef",
+                "name": "numbers",
+                "args": [
+                  {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "10"
+                  }
+                ]
+              },
+              "where": {
+                "kind": "binaryExpr",
+                "op": "=",
+                "left": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "number"
+                  ]
+                },
+                "right": {
+                  "kind": "binaryExpr",
+                  "op": "*",
+                  "left": {
+                    "kind": "functionCall",
+                    "name": "shardNum",
+                    "args": []
+                  },
+                  "right": {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "2"
+                  }
+                }
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "shardNum",
+        "args": []
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "number"
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableFunctionRef",
+      "name": "remote",
+      "args": [
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "127.0.0.{1..3}"
+        },
+        {
+          "kind": "functionCall",
+          "name": "numbers",
+          "args": [
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "100"
+            }
+          ]
+        }
+      ]
+    },
+    "where": {
+      "kind": "inExpr",
+      "negated": false,
+      "expr": {
+        "kind": "columnRef",
+        "parts": [
+          "number"
+        ]
+      },
+      "values": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "flt"
+          ]
+        }
+      ]
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        },
+        "direction": "ASC"
+      },
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "2"
+        },
+        "direction": "ASC"
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "with": [
+      {
+        "kind": "cteSubquery",
+        "name": "flt",
+        "query": {
+          "kind": "union",
+          "queries": [
+            {
+              "kind": "select",
+              "select": [
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "number"
+                  ]
+                }
+              ],
+              "from": {
+                "kind": "tableFunctionRef",
+                "name": "numbers",
+                "args": [
+                  {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "10"
+                  }
+                ]
+              },
+              "where": {
+                "kind": "binaryExpr",
+                "op": "=",
+                "left": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "number"
+                  ]
+                },
+                "right": {
+                  "kind": "functionCall",
+                  "name": "shardNum",
+                  "args": []
+                }
+              }
+            },
+            {
+              "kind": "select",
+              "select": [
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "number"
+                  ]
+                }
+              ],
+              "from": {
+                "kind": "tableFunctionRef",
+                "name": "numbers",
+                "args": [
+                  {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "10"
+                  }
+                ]
+              },
+              "where": {
+                "kind": "binaryExpr",
+                "op": "=",
+                "left": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "number"
+                  ]
+                },
+                "right": {
+                  "kind": "binaryExpr",
+                  "op": "*",
+                  "left": {
+                    "kind": "functionCall",
+                    "name": "shardNum",
+                    "args": []
+                  },
+                  "right": {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "2"
+                  }
+                }
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "shardNum",
+        "args": []
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "number"
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableFunctionRef",
+      "name": "remote",
+      "args": [
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "127.0.0.{1..3}"
+        },
+        {
+          "kind": "functionCall",
+          "name": "numbers",
+          "args": [
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "100"
+            }
+          ]
+        }
+      ]
+    },
+    "where": {
+      "kind": "inExpr",
+      "negated": false,
+      "expr": {
+        "kind": "columnRef",
+        "parts": [
+          "number"
+        ]
+      },
+      "values": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "flt"
+          ]
+        }
+      ],
+      "global": true
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        },
+        "direction": "ASC"
+      },
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "2"
+        },
+        "direction": "ASC"
+      }
+    ]
+  },
+  {
+    "kind": "select",
     "select": [
       {
         "kind": "functionCall",
@@ -563,7 +1156,7 @@
     ],
     "from": {
       "left": {
-        "kind": "tableFunction",
+        "kind": "tableFunctionRef",
         "name": "remote",
         "args": [
           {
@@ -585,7 +1178,7 @@
         ],
         "alias": "tab"
       },
-      "kind": "join",
+      "kind": "joinExpr",
       "joinType": "INNER",
       "right": {
         "kind": "subqueryFrom",
@@ -600,7 +1193,7 @@
             }
           ],
           "from": {
-            "kind": "tableFunction",
+            "kind": "tableFunctionRef",
             "name": "numbers",
             "args": [
               {
@@ -698,7 +1291,7 @@
     ],
     "from": {
       "left": {
-        "kind": "tableFunction",
+        "kind": "tableFunctionRef",
         "name": "remote",
         "args": [
           {
@@ -719,7 +1312,7 @@
           }
         ]
       },
-      "kind": "join",
+      "kind": "joinExpr",
       "joinType": "INNER",
       "right": {
         "kind": "subqueryFrom",
@@ -738,7 +1331,7 @@
             }
           ],
           "from": {
-            "kind": "tableFunction",
+            "kind": "tableFunctionRef",
             "name": "numbers",
             "args": [
               {
@@ -843,7 +1436,7 @@
     ],
     "from": {
       "left": {
-        "kind": "tableFunction",
+        "kind": "tableFunctionRef",
         "name": "remote",
         "args": [
           {
@@ -865,7 +1458,7 @@
         ],
         "alias": "tab"
       },
-      "kind": "join",
+      "kind": "joinExpr",
       "joinType": "INNER",
       "right": {
         "kind": "subqueryFrom",
@@ -880,7 +1473,7 @@
             }
           ],
           "from": {
-            "kind": "tableFunction",
+            "kind": "tableFunctionRef",
             "name": "numbers",
             "args": [
               {
@@ -978,7 +1571,7 @@
     ],
     "from": {
       "left": {
-        "kind": "tableFunction",
+        "kind": "tableFunctionRef",
         "name": "remote",
         "args": [
           {
@@ -999,7 +1592,7 @@
           }
         ]
       },
-      "kind": "join",
+      "kind": "joinExpr",
       "joinType": "INNER",
       "right": {
         "kind": "subqueryFrom",
@@ -1018,7 +1611,7 @@
             }
           ],
           "from": {
-            "kind": "tableFunction",
+            "kind": "tableFunctionRef",
             "name": "numbers",
             "args": [
               {
@@ -1123,7 +1716,7 @@
     ],
     "from": {
       "left": {
-        "kind": "tableFunction",
+        "kind": "tableFunctionRef",
         "name": "remote",
         "args": [
           {
@@ -1145,7 +1738,7 @@
         ],
         "alias": "tab"
       },
-      "kind": "join",
+      "kind": "joinExpr",
       "joinType": "INNER",
       "right": {
         "kind": "subqueryFrom",
@@ -1163,7 +1756,7 @@
                 }
               ],
               "from": {
-                "kind": "tableFunction",
+                "kind": "tableFunctionRef",
                 "name": "numbers",
                 "args": [
                   {
@@ -1200,7 +1793,7 @@
                 }
               ],
               "from": {
-                "kind": "tableFunction",
+                "kind": "tableFunctionRef",
                 "name": "numbers",
                 "args": [
                   {
@@ -1309,7 +1902,7 @@
     ],
     "from": {
       "left": {
-        "kind": "tableFunction",
+        "kind": "tableFunctionRef",
         "name": "remote",
         "args": [
           {
@@ -1330,7 +1923,7 @@
           }
         ]
       },
-      "kind": "join",
+      "kind": "joinExpr",
       "joinType": "INNER",
       "right": {
         "kind": "subqueryFrom",
@@ -1352,7 +1945,7 @@
                 }
               ],
               "from": {
-                "kind": "tableFunction",
+                "kind": "tableFunctionRef",
                 "name": "numbers",
                 "args": [
                   {
@@ -1393,7 +1986,7 @@
                 }
               ],
               "from": {
-                "kind": "tableFunction",
+                "kind": "tableFunctionRef",
                 "name": "numbers",
                 "args": [
                   {
@@ -1509,7 +2102,7 @@
     ],
     "from": {
       "left": {
-        "kind": "tableFunction",
+        "kind": "tableFunctionRef",
         "name": "remote",
         "args": [
           {
@@ -1531,7 +2124,7 @@
         ],
         "alias": "tab"
       },
-      "kind": "join",
+      "kind": "joinExpr",
       "joinType": "INNER",
       "right": {
         "kind": "subqueryFrom",
@@ -1549,7 +2142,7 @@
                 }
               ],
               "from": {
-                "kind": "tableFunction",
+                "kind": "tableFunctionRef",
                 "name": "numbers",
                 "args": [
                   {
@@ -1586,7 +2179,7 @@
                 }
               ],
               "from": {
-                "kind": "tableFunction",
+                "kind": "tableFunctionRef",
                 "name": "numbers",
                 "args": [
                   {
@@ -1695,7 +2288,7 @@
     ],
     "from": {
       "left": {
-        "kind": "tableFunction",
+        "kind": "tableFunctionRef",
         "name": "remote",
         "args": [
           {
@@ -1716,7 +2309,7 @@
           }
         ]
       },
-      "kind": "join",
+      "kind": "joinExpr",
       "joinType": "INNER",
       "right": {
         "kind": "subqueryFrom",
@@ -1738,7 +2331,7 @@
                 }
               ],
               "from": {
-                "kind": "tableFunction",
+                "kind": "tableFunctionRef",
                 "name": "numbers",
                 "args": [
                   {
@@ -1779,7 +2372,7 @@
                 }
               ],
               "from": {
-                "kind": "tableFunction",
+                "kind": "tableFunctionRef",
                 "name": "numbers",
                 "args": [
                   {

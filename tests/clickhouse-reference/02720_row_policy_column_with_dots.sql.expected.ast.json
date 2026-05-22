@@ -1,5 +1,183 @@
 [
   {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "table_with_dot_column"
+    },
+    "ifNotExists": true,
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "date",
+        "type": {
+          "name": "Date"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "regular_column",
+        "type": {
+          "name": "String"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "other_column.2",
+        "type": {
+          "name": "String"
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree",
+      "args": []
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "date"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "table_with_dot_column"
+      }
+    },
+    "selectQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "2020-01-01"
+        },
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "Hello"
+        },
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "World"
+        }
+      ]
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "table_with_dot_column"
+      }
+    },
+    "selectQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "functionCall",
+          "name": "toDate",
+          "args": [
+            {
+              "kind": "binaryExpr",
+              "op": "+",
+              "left": {
+                "kind": "functionCall",
+                "name": "now",
+                "args": []
+              },
+              "right": {
+                "kind": "binaryExpr",
+                "op": "*",
+                "left": {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "48"
+                },
+                "right": {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "3600"
+                }
+              }
+            }
+          ]
+        },
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "Hello"
+        },
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "World"
+        }
+      ]
+    }
+  },
+  {
+    "kind": "createRowPolicy",
+    "targets": [
+      {
+        "names": [
+          "row_policy"
+        ],
+        "table": {
+          "kind": "tableRef",
+          "table": "table_with_dot_column"
+        }
+      }
+    ],
+    "hasRowKeyword": true,
+    "ifNotExists": true,
+    "using": {
+      "kind": "binaryExpr",
+      "op": ">=",
+      "left": {
+        "kind": "functionCall",
+        "name": "toDate",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "date"
+            ]
+          }
+        ]
+      },
+      "right": {
+        "kind": "binaryExpr",
+        "op": "-",
+        "left": {
+          "kind": "functionCall",
+          "name": "today",
+          "args": []
+        },
+        "right": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "30"
+        }
+      }
+    },
+    "to": {
+      "kind": "all"
+    }
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -13,6 +191,14 @@
       }
     ],
     "from": {
+      "kind": "tableRef",
+      "table": "table_with_dot_column"
+    }
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
       "kind": "tableRef",
       "table": "table_with_dot_column"
     }

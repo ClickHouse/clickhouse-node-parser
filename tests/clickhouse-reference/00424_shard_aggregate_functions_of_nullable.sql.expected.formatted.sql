@@ -1,3 +1,4 @@
+-- Tags: shard
 SELECT avg(arrayJoin([NULL]));
 
 SELECT avg(arrayJoin([NULL, 1]));

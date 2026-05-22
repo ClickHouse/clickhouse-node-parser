@@ -1,3 +1,27 @@
+-- This test checks, that common SQL operations work
+-- with mixed columns (sparse and full) in table.
+
+DROP TABLE IF EXISTS t_sparse_full;
+CREATE TABLE t_sparse_full (id UInt64, u UInt64, s String)
+ENGINE = MergeTree ORDER BY id
+SETTINGS index_granularity = 32,
+    index_granularity_bytes = '10Mi',
+    ratio_of_defaults_for_sparse_serialization = 0.1,
+    enable_block_number_column = 0,
+    enable_block_offset_column = 0;
+SYSTEM STOP MERGES t_sparse_full;
+INSERT INTO t_sparse_full
+SELECT
+    number,
+    if (number % 10 = 0, number, 0),
+    if (number % 7 = 0, toString(number), '')
+FROM numbers(1000);
+INSERT INTO t_sparse_full
+SELECT
+    number,
+    number,
+    toString(number)
+FROM numbers(500);
 SELECT name, column, serialization_kind
 FROM system.parts_columns WHERE table = 't_sparse_full' AND database = currentDatabase() AND active
 ORDER BY name, column;
@@ -31,6 +55,9 @@ SELECT id, u, s FROM (SELECT number * 2 AS u FROM numbers(10)) AS t1
 FULL JOIN t_sparse_full USING(u) ORDER BY id, u, s LIMIT 5;
 SELECT id, u, s FROM (SELECT u FROM t_sparse_full) AS t1
 FULL JOIN t_sparse_full USING(u) ORDER BY id, u, s LIMIT 5;
+SYSTEM START MERGES t_sparse_full;
+OPTIMIZE TABLE t_sparse_full FINAL;
 SELECT column, serialization_kind
 FROM system.parts_columns WHERE table = 't_sparse_full' AND database = currentDatabase() AND active
 ORDER BY name, column;
+DROP TABLE t_sparse_full;

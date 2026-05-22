@@ -1,3 +1,88 @@
+DropQuery test hits_1m (children 2)
+ Identifier test
+ Identifier hits_1m
+
+CreateQuery test hits_1m (children 3)
+ Identifier test
+ Identifier hits_1m
+ Storage definition (children 5)
+  Function MergeTree
+  Function toYYYYMM (children 1)
+   ExpressionList (children 1)
+    Identifier EventDate
+  Function tuple (children 1)
+   ExpressionList (children 3)
+    Identifier CounterID
+    Identifier EventDate
+    Function intHash32 (children 1)
+     ExpressionList (children 1)
+      Identifier UserID
+  Function intHash32 (children 1)
+   ExpressionList (children 1)
+    Identifier UserID
+  Set
+
+Set
+
+InsertQuery   (children 4)
+ Identifier test
+ Identifier hits_1m
+ SelectWithUnionQuery (children 1)
+  ExpressionList (children 1)
+   SelectQuery (children 4)
+    ExpressionList (children 1)
+     Asterisk
+    TablesInSelectQuery (children 1)
+     TablesInSelectQueryElement (children 1)
+      TableExpression (children 1)
+       TableIdentifier test.hits
+    Literal UInt64_1000000
+    Set
+ Set
+
+CreateQuery db_dict  (children 1)
+ Identifier db_dict
+
+DropQuery db_dict cache_hits (children 2)
+ Identifier db_dict
+ Identifier cache_hits
+
+CreateQuery db_dict cache_hits (children 4)
+ Identifier db_dict
+ Identifier cache_hits
+ ExpressionList (children 3)
+  DictionaryAttributeDeclaration WatchID (children 1)
+   DataType UInt64
+  DictionaryAttributeDeclaration UserID (children 1)
+   DataType UInt64
+  DictionaryAttributeDeclaration SearchPhrase (children 1)
+   DataType String
+ Dictionary definition (children 4)
+  ExpressionList (children 1)
+   Identifier WatchID
+  FunctionWithKeyValueArguments  clickhouse (children 1)
+   ExpressionList (children 6)
+    pair (children 1)
+     Literal 'localhost'
+    pair (children 1)
+     Function tcpPort (children 1)
+      ExpressionList
+    pair (children 1)
+     Literal 'default'
+    pair (children 1)
+     Literal 'hits_1m'
+    pair (children 1)
+     Literal ''
+    pair (children 1)
+     Literal 'test'
+  Dictionary lifetime
+  Dictionary layout (children 1)
+   ExpressionList (children 2)
+    pair (children 1)
+     Literal UInt64_1
+    pair (children 1)
+     Literal UInt64_60000
+
 SelectWithUnionQuery (children 1)
  ExpressionList (children 1)
   SelectQuery (children 3)
@@ -144,3 +229,9 @@ SelectWithUnionQuery (children 1)
     ExpressionList (children 2)
      Identifier arr
      Literal Array_[UInt64_0]
+
+DropQuery db_dict  (children 1)
+ Identifier db_dict
+
+DropQuery  hits_1m (children 1)
+ Identifier hits_1m

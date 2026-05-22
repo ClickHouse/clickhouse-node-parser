@@ -1,0 +1,505 @@
+[
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "insert_keeper_fault_injection_probability",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      }
+    ],
+    "leadingComments": [
+      "-- Tags: long, no-object-storage",
+      "-- no-object-storage: Avoid flakiness due to cache / buffer usage"
+    ],
+    "trailingComments": [
+      "-- to succeed this test can require too many retries due to 100 partitions, so disable fault injections"
+    ]
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "data_02228"
+    },
+    "ifExists": true,
+    "leadingComments": [
+      "-- regression for MEMORY_LIMIT_EXCEEDED error because of deferred final part flush"
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "data_02228"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "key1",
+        "type": {
+          "name": "UInt32"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "sign",
+        "type": {
+          "name": "Int8"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "s",
+        "type": {
+          "name": "UInt64"
+        }
+      }
+    ],
+    "engine": {
+      "name": "CollapsingMergeTree",
+      "args": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "sign"
+          ]
+        }
+      ]
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "key1"
+          ]
+        }
+      }
+    ],
+    "partitionBy": {
+      "kind": "binaryExpr",
+      "op": "%",
+      "left": {
+        "kind": "columnRef",
+        "parts": [
+          "key1"
+        ]
+      },
+      "right": {
+        "kind": "literal",
+        "type": "UInt64",
+        "value": "100"
+      }
+    },
+    "settings": [
+      {
+        "name": "auto_statistics_types",
+        "value": {
+          "kind": "literal",
+          "type": "String",
+          "value": ""
+        }
+      }
+    ],
+    "settingsAfterOrderBy": true
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "data_02228"
+      }
+    },
+    "selectQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "number"
+          ]
+        },
+        {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "number"
+          ]
+        }
+      ],
+      "from": {
+        "kind": "tableFunctionRef",
+        "name": "numbers_mt",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "10000"
+          }
+        ]
+      },
+      "settings": [
+        {
+          "name": "max_memory_usage",
+          "value": {
+            "kind": "literal",
+            "type": "String",
+            "value": "30Mi"
+          }
+        },
+        {
+          "name": "max_partitions_per_insert_block",
+          "value": {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "1024"
+          }
+        },
+        {
+          "name": "max_insert_delayed_streams_for_parallel_write",
+          "value": {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "0"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "data_02228"
+      }
+    },
+    "selectQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "number"
+          ]
+        },
+        {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "number"
+          ]
+        }
+      ],
+      "from": {
+        "kind": "tableFunctionRef",
+        "name": "numbers_mt",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "10000"
+          }
+        ]
+      },
+      "settings": [
+        {
+          "name": "max_memory_usage",
+          "value": {
+            "kind": "literal",
+            "type": "String",
+            "value": "30Mi"
+          }
+        },
+        {
+          "name": "max_partitions_per_insert_block",
+          "value": {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "1024"
+          }
+        },
+        {
+          "name": "max_insert_delayed_streams_for_parallel_write",
+          "value": {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "1000000"
+          }
+        }
+      ]
+    },
+    "trailingComments": [
+      "-- { serverError MEMORY_LIMIT_EXCEEDED }"
+    ]
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "data_02228"
+    }
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "data_rep_02228"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "data_rep_02228"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "key1",
+        "type": {
+          "name": "UInt32"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "sign",
+        "type": {
+          "name": "Int8"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "s",
+        "type": {
+          "name": "UInt64"
+        }
+      }
+    ],
+    "engine": {
+      "name": "ReplicatedCollapsingMergeTree",
+      "args": [
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "/clickhouse/{database}"
+        },
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "r1"
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "sign"
+          ]
+        }
+      ]
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "key1"
+          ]
+        }
+      }
+    ],
+    "partitionBy": {
+      "kind": "binaryExpr",
+      "op": "%",
+      "left": {
+        "kind": "columnRef",
+        "parts": [
+          "key1"
+        ]
+      },
+      "right": {
+        "kind": "literal",
+        "type": "UInt64",
+        "value": "100"
+      }
+    },
+    "settings": [
+      {
+        "name": "auto_statistics_types",
+        "value": {
+          "kind": "literal",
+          "type": "String",
+          "value": ""
+        }
+      }
+    ],
+    "settingsAfterOrderBy": true
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "data_rep_02228"
+      }
+    },
+    "selectQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "number"
+          ]
+        },
+        {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "number"
+          ]
+        }
+      ],
+      "from": {
+        "kind": "tableFunctionRef",
+        "name": "numbers_mt",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "10000"
+          }
+        ]
+      },
+      "settings": [
+        {
+          "name": "max_memory_usage",
+          "value": {
+            "kind": "literal",
+            "type": "String",
+            "value": "30Mi"
+          }
+        },
+        {
+          "name": "max_partitions_per_insert_block",
+          "value": {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "1024"
+          }
+        },
+        {
+          "name": "max_insert_delayed_streams_for_parallel_write",
+          "value": {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "0"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "data_rep_02228"
+      }
+    },
+    "selectQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "number"
+          ]
+        },
+        {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "number"
+          ]
+        }
+      ],
+      "from": {
+        "kind": "tableFunctionRef",
+        "name": "numbers_mt",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "10000"
+          }
+        ]
+      },
+      "settings": [
+        {
+          "name": "max_memory_usage",
+          "value": {
+            "kind": "literal",
+            "type": "String",
+            "value": "30Mi"
+          }
+        },
+        {
+          "name": "max_partitions_per_insert_block",
+          "value": {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "1024"
+          }
+        },
+        {
+          "name": "max_insert_delayed_streams_for_parallel_write",
+          "value": {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "1000000"
+          }
+        }
+      ]
+    },
+    "trailingComments": [
+      "-- { serverError MEMORY_LIMIT_EXCEEDED }"
+    ]
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "data_rep_02228"
+    }
+  }
+]

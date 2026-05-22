@@ -1,3 +1,22 @@
+SET max_threads = 1;
+SET max_insert_threads = 1;
+SET max_block_size = 65536;
+SET allow_experimental_analyzer = 1;
+DROP TABLE IF EXISTS test_limit_by_all;
+CREATE TABLE test_limit_by_all (
+    id Int32,
+    category String,
+    value Int32,
+    name String
+) ENGINE = Memory;
+INSERT INTO test_limit_by_all VALUES 
+(1, 'A', 100, 'item1'),
+(1, 'A', 200, 'item2'),
+(1, 'B', 300, 'item3'),
+(2, 'A', 400, 'item4'),
+(2, 'A', 500, 'item5'),
+(2, 'B', 600, 'item6'),
+(3, 'C', 700, 'item7');
 -- Test 1: Basic LIMIT BY ALL usage
 SELECT id, category, value 
 FROM test_limit_by_all 
@@ -76,12 +95,23 @@ LIMIT 2;
 SELECT count()
 FROM test_limit_by_all
 LIMIT 1 BY ALL; -- { serverError 62 }
+-- JOIN + ARRAY JOIN
+DROP TABLE IF EXISTS test_limit_by_all_tags;
+CREATE TABLE test_limit_by_all_tags (id Int32, tags Array(String)) ENGINE = Memory;
+INSERT INTO test_limit_by_all_tags VALUES (1, ['x','y']), (2, ['y']), (3, ['z']);
 SELECT t.id, tag
 FROM test_limit_by_all AS t
 LEFT JOIN test_limit_by_all_tags AS g USING (id)
 ARRAY JOIN g.tags AS tag
 ORDER BY t.id, tag, value
 LIMIT 1 BY ALL;
+DROP TABLE test_limit_by_all_tags;
+WITH toStartOfHour(toDateTime('2025-01-01 12:00:00')) AS h
+SELECT h, category
+FROM test_limit_by_all
+ORDER BY h, category, value
+LIMIT 1 BY ALL
+SETTINGS enable_positional_arguments = 0;
 SELECT id, category, value
 FROM test_limit_by_all
 ORDER BY id, category, value
@@ -113,7 +143,10 @@ GROUP BY id, category
 HAVING c >= 1
 ORDER BY id, c DESC, category
 LIMIT 1 BY ALL;
+-- NULL key handling
+INSERT INTO test_limit_by_all VALUES (4, NULL, 10, 'n1'), (4, NULL, 20, 'n2');
 SELECT id, category
 FROM test_limit_by_all
 ORDER BY id, category NULLS FIRST, value
 LIMIT 1 BY ALL;
+DROP TABLE test_limit_by_all;

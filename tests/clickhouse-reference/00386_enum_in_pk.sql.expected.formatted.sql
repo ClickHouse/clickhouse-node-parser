@@ -1,3 +1,17 @@
+DROP TABLE IF EXISTS enum_pk;
+
+SET allow_deprecated_syntax_for_merge_tree = 1;
+
+CREATE TABLE enum_pk
+(
+    date Date DEFAULT '0000-00-00',
+    x Enum8('0' = 0, '1' = 1, '2' = 2),
+    d Enum8('0' = 0, '1' = 1, '2' = 2)
+)
+ENGINE = MergeTree(date, x, 1);
+
+INSERT INTO enum_pk (x, d);
+
 SELECT cityHash64(groupArraySorted(100)(x))
 FROM enum_pk
 WHERE x = '0';
@@ -105,3 +119,5 @@ SELECT cityHash64(groupArraySorted(100)(d))
 FROM enum_pk
 WHERE (d != '0'
     AND d != '1');
+
+DROP TABLE enum_pk;

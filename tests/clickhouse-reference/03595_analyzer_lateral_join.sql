@@ -1,3 +1,6 @@
+SET enable_analyzer = 1;
+SET allow_experimental_correlated_subqueries = 1;
+
 SELECT
     t.a,
     u.a
@@ -10,6 +13,7 @@ FROM
         SELECT 1 AS a
         QUALIFY 0 = (t.a AS alias668)
     ) AS u; -- { serverError NOT_IMPLEMENTED }
+
 SELECT
     t.a,
     u.a
@@ -57,6 +61,7 @@ FROM
                 ) IS NULL
             ) = (t.a AS alias668)
     ) AS u; -- { serverError NOT_IMPLEMENTED }
+
 SELECT
     c,
     a c

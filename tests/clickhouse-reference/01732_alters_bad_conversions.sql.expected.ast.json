@@ -1,5 +1,100 @@
 [
   {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "bad_conversions"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "bad_conversions_2"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "bad_conversions"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "a",
+        "type": {
+          "name": "UInt32"
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "functionCall",
+          "name": "tuple",
+          "args": []
+        }
+      }
+    ]
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "bad_conversions"
+      }
+    }
+  },
+  {
+    "kind": "alter",
+    "table": {
+      "kind": "tableRef",
+      "table": "bad_conversions"
+    },
+    "commands": [
+      {
+        "kind": "alterCommand",
+        "commandType": "MODIFY_COLUMN",
+        "column": {
+          "kind": "columnDef",
+          "name": "a",
+          "type": {
+            "name": "Array",
+            "args": [
+              {
+                "kind": "type",
+                "type": {
+                  "name": "String"
+                }
+              }
+            ]
+          }
+        }
+      }
+    ],
+    "trailingComments": [
+      "-- { serverError TYPE_MISMATCH }"
+    ]
+  },
+  {
+    "kind": "showCreate",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "bad_conversions"
+    }
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -48,6 +143,105 @@
           }
         }
       ]
+    }
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "bad_conversions_2"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "e",
+        "type": {
+          "name": "Enum",
+          "args": [
+            {
+              "kind": "enumValues",
+              "values": [
+                {
+                  "name": "foo",
+                  "value": "1"
+                },
+                {
+                  "name": "bar",
+                  "value": "2"
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "functionCall",
+          "name": "tuple",
+          "args": []
+        }
+      }
+    ]
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "bad_conversions_2"
+      }
+    }
+  },
+  {
+    "kind": "alter",
+    "table": {
+      "kind": "tableRef",
+      "table": "bad_conversions_2"
+    },
+    "commands": [
+      {
+        "kind": "alterCommand",
+        "commandType": "MODIFY_COLUMN",
+        "column": {
+          "kind": "columnDef",
+          "name": "e",
+          "type": {
+            "name": "Enum",
+            "args": [
+              {
+                "kind": "enumValues",
+                "values": [
+                  {
+                    "name": "bar",
+                    "value": "1"
+                  },
+                  {
+                    "name": "foo",
+                    "value": "2"
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      }
+    ],
+    "trailingComments": [
+      "-- { serverError CANNOT_CONVERT_TYPE }"
+    ]
+  },
+  {
+    "kind": "showCreate",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "bad_conversions_2"
     }
   },
   {

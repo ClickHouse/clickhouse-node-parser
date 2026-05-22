@@ -1,3 +1,7 @@
+SET enable_analyzer = 1;
+
+SET enable_parallel_replicas = 0;
+
 SELECT
     table1.id1 AS id1,
     table1.date1 AS date1

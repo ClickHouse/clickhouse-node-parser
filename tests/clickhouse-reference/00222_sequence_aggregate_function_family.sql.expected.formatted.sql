@@ -1,3 +1,15 @@
+DROP TABLE IF EXISTS sequence_test;
+
+CREATE TABLE sequence_test
+(
+    time UInt32,
+    data UInt8
+)
+ENGINE = MergeTree
+ORDER BY tuple();
+
+INSERT INTO sequence_test;
+
 SELECT 1 = sequenceMatch('')(time, data = 0, data = 1, data = 2, data = 3)
 FROM sequence_test;
 
@@ -204,3 +216,5 @@ FROM sequence_test;
 
 SELECT [4,5] = sequenceMatchEvents('(?1)(?t==1)(?2)')(time, data = 1, data = 2)
 FROM sequence_test;
+
+DROP TABLE sequence_test;

@@ -1,5 +1,216 @@
 [
   {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "adaptive_table"
+    },
+    "ifExists": true,
+    "leadingComments": [
+      "-- Tags: no-random-merge-tree-settings"
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "adaptive_table"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "key",
+        "type": {
+          "name": "UInt64"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "value",
+        "type": {
+          "name": "String"
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree",
+      "args": []
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "key"
+          ]
+        }
+      }
+    ],
+    "settings": [
+      {
+        "name": "index_granularity_bytes",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1048576"
+        }
+      },
+      {
+        "name": "min_bytes_for_wide_part",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      },
+      {
+        "name": "old_parts_lifetime",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      },
+      {
+        "name": "index_granularity",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "8192"
+        }
+      }
+    ],
+    "settingsAfterOrderBy": true
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "adaptive_table"
+      }
+    },
+    "selectQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "number"
+          ]
+        },
+        {
+          "kind": "functionCall",
+          "name": "randomPrintableASCII",
+          "args": [
+            {
+              "kind": "functionCall",
+              "name": "if",
+              "args": [
+                {
+                  "kind": "functionCall",
+                  "name": "and",
+                  "args": [
+                    {
+                      "kind": "functionCall",
+                      "name": "greaterOrEquals",
+                      "args": [
+                        {
+                          "kind": "columnRef",
+                          "parts": [
+                            "number"
+                          ]
+                        },
+                        {
+                          "kind": "binaryExpr",
+                          "op": "-",
+                          "left": {
+                            "kind": "literal",
+                            "type": "UInt64",
+                            "value": "8192"
+                          },
+                          "right": {
+                            "kind": "literal",
+                            "type": "UInt64",
+                            "value": "30"
+                          }
+                        }
+                      ]
+                    },
+                    {
+                      "kind": "functionCall",
+                      "name": "lessOrEquals",
+                      "args": [
+                        {
+                          "kind": "columnRef",
+                          "parts": [
+                            "number"
+                          ]
+                        },
+                        {
+                          "kind": "literal",
+                          "type": "UInt64",
+                          "value": "8192"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "102400"
+                },
+                {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "1"
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "from": {
+        "kind": "tableRef",
+        "database": "system",
+        "table": "numbers"
+      },
+      "limit": {
+        "count": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "16384"
+        }
+      }
+    },
+    "leadingComments": [
+      "-- This triggers adjustment of the granules that was introduced in PR#17120"
+    ]
+  },
+  {
+    "kind": "optimize",
+    "table": {
+      "kind": "tableRef",
+      "table": "adaptive_table"
+    },
+    "final": true,
+    "leadingComments": [
+      "-- This creates the following marks:",
+      "--",
+      "--     $ check-marks /path/to/db/adaptive_table/all_*/key.{mrk2,bin}",
+      "--     Mark 0, points to 0, 0, has rows after 8192, decompressed size 72808. <!-- wrong number of rows, should be 5461",
+      "--     Mark 1, points to 0, 43688, has rows after 1820, decompressed size 29120.",
+      "--     Mark 2, points to 0, 58248, has rows after 1820, decompressed size 14560.",
+      "--     Mark 3, points to 36441, 0, has rows after 1820, decompressed size 58264.",
+      "--     Mark 4, points to 36441, 14560, has rows after 1820, decompressed size 43704.",
+      "--     Mark 5, points to 36441, 29120, has rows after 8192, decompressed size 29144.",
+      "--     Mark 6, points to 36441, 58264, has rows after 0, decompressed size 0."
+    ]
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -64,6 +275,25 @@
     "format": "CSV"
   },
   {
+    "kind": "detach",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "adaptive_table"
+    },
+    "leadingComments": [
+      "-- Reset marks cache"
+    ]
+  },
+  {
+    "kind": "attach",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "adaptive_table"
+    }
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -91,7 +321,10 @@
         }
       }
     ],
-    "format": "CSV"
+    "format": "CSV",
+    "leadingComments": [
+      "-- This works correctly, since it does not read any marks"
+    ]
   },
   {
     "kind": "select",
@@ -129,7 +362,10 @@
         }
       }
     ],
-    "format": "CSV"
+    "format": "CSV",
+    "leadingComments": [
+      "-- This works correctly, since it reads marks sequentially and don't seek"
+    ]
   },
   {
     "kind": "select",
@@ -183,6 +419,22 @@
         }
       }
     ],
-    "format": "CSV"
+    "format": "CSV",
+    "leadingComments": [
+      "-- This works wrong, since it seek to each mark (due to reading each mark from a separate thread),",
+      "-- so if the marks offsets will be wrong it will read more data.",
+      "--",
+      "-- Reading each mark from a separate thread is just the simplest reproducers,",
+      "-- this can be also reproduced with PREWHERE since it skips data physically,",
+      "-- so it also uses seeks."
+    ]
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "adaptive_table"
+    }
   }
 ]

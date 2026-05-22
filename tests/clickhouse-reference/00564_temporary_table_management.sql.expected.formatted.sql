@@ -1,0 +1,15 @@
+-- Tags: memory-engine
+DROP TEMPORARY TABLE IF EXISTS temp_tab;
+
+CREATE TEMPORARY TABLE temp_tab
+(
+    number UInt64
+);
+
+EXISTS TABLE temp_tab;
+
+SHOW CREATE TABLE temp_tab;
+
+SHOW TEMPORARY TABLES LIKE 'temp_tab';
+
+DROP TEMPORARY TABLE temp_tab;

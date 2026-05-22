@@ -1,5 +1,110 @@
 [
   {
+    "kind": "insert",
+    "target": {
+      "kind": "function",
+      "func": {
+        "kind": "tableFunctionRef",
+        "name": "s3",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "s3_conn"
+            ]
+          },
+          {
+            "kind": "binaryExpr",
+            "op": "=",
+            "left": {
+              "kind": "columnRef",
+              "parts": [
+                "url"
+              ]
+            },
+            "right": {
+              "kind": "functionCall",
+              "name": "concat",
+              "args": [
+                {
+                  "kind": "literal",
+                  "type": "String",
+                  "value": "http://localhost:11111/test/03762_data/file_"
+                },
+                {
+                  "kind": "functionCall",
+                  "name": "currentDatabase",
+                  "args": []
+                },
+                {
+                  "kind": "literal",
+                  "type": "String",
+                  "value": ".parquet"
+                }
+              ]
+            }
+          },
+          {
+            "kind": "binaryExpr",
+            "op": "=",
+            "left": {
+              "kind": "columnRef",
+              "parts": [
+                "format"
+              ]
+            },
+            "right": {
+              "kind": "columnRef",
+              "parts": [
+                "Parquet"
+              ]
+            }
+          }
+        ]
+      }
+    },
+    "insertSettings": [
+      {
+        "name": "s3_truncate_on_insert",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ],
+    "selectQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "number"
+          ]
+        }
+      ],
+      "from": {
+        "kind": "tableFunctionRef",
+        "name": "numbers",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "10"
+          }
+        ]
+      }
+    },
+    "leadingComments": [
+      "-- Tags: no-fasttest",
+      "-- Tag no-fasttest: Depends on S3"
+    ]
+  },
+  {
+    "kind": "system",
+    "body": "SYSTEM FLUSH LOGS blob_storage_log"
+  },
+  {
     "kind": "select",
     "select": [
       {

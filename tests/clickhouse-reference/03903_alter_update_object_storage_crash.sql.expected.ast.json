@@ -1,0 +1,127 @@
+[
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "t_object_storage_update"
+    },
+    "ifExists": true,
+    "leadingComments": [
+      "-- Tags: no-fasttest",
+      "-- Reproducer for https://github.com/ClickHouse/ClickHouse/issues/92994",
+      "-- ALTER UPDATE on non-MergeTree engines that support prewhere (like S3 with Parquet)",
+      "-- used to crash with a null pointer dereference in the PREWHERE optimization code."
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "t_object_storage_update"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "c0",
+        "type": {
+          "name": "Int32"
+        }
+      }
+    ],
+    "engine": {
+      "name": "S3",
+      "args": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "s3_conn"
+          ]
+        },
+        {
+          "kind": "binaryExpr",
+          "op": "=",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "filename"
+            ]
+          },
+          "right": {
+            "kind": "functionCall",
+            "name": "concat",
+            "args": [
+              {
+                "kind": "functionCall",
+                "name": "currentDatabase",
+                "args": []
+              },
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "_test_03903_alter_update.parquet"
+              }
+            ]
+          }
+        },
+        {
+          "kind": "binaryExpr",
+          "op": "=",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "format"
+            ]
+          },
+          "right": {
+            "kind": "columnRef",
+            "parts": [
+              "Parquet"
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "t_object_storage_update"
+      }
+    }
+  },
+  {
+    "kind": "alter",
+    "table": {
+      "kind": "tableRef",
+      "table": "t_object_storage_update"
+    },
+    "commands": [
+      {
+        "kind": "alterCommand",
+        "commandType": "UPDATE",
+        "assignments": [
+          {
+            "column": "c0",
+            "expr": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "1"
+            }
+          }
+        ],
+        "where": {
+          "kind": "literal",
+          "type": "Bool",
+          "value": "1"
+        }
+      }
+    ],
+    "trailingComments": [
+      "-- { serverError NOT_IMPLEMENTED }"
+    ]
+  }
+]

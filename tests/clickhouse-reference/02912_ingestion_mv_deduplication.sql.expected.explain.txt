@@ -1,8 +1,75 @@
+Set
+
 SelectWithUnionQuery (children 1)
  ExpressionList (children 1)
   SelectQuery (children 1)
    ExpressionList (children 1)
     Literal '-- Original issue with max_insert_delayed_streams_for_parallel_write <= 1'
+
+Set
+
+CreateQuery landing (children 3)
+ Identifier landing
+ Columns definition (children 1)
+  ExpressionList (children 2)
+   ColumnDeclaration time (children 1)
+    DataType DateTime
+   ColumnDeclaration number (children 1)
+    DataType Int64
+ Storage definition (children 3)
+  Function ReplicatedReplacingMergeTree (children 1)
+   ExpressionList (children 2)
+    Function concat (children 1)
+     ExpressionList (children 3)
+      Literal '/clickhouse/'
+      Function currentDatabase (children 1)
+       ExpressionList
+      Literal '/landing/{shard}/'
+    Literal '{replica}'
+  Function toYYYYMMDD (children 1)
+   ExpressionList (children 1)
+    Identifier time
+  Identifier time
+
+CreateQuery mv (children 3)
+ Identifier mv
+ SelectWithUnionQuery (children 1)
+  ExpressionList (children 1)
+   SelectQuery (children 3)
+    ExpressionList (children 2)
+     Function toStartOfHour (alias hour) (children 1)
+      ExpressionList (children 1)
+       Identifier time
+     Function sum (alias sum_amount) (children 1)
+      ExpressionList (children 1)
+       Identifier number
+    TablesInSelectQuery (children 1)
+     TablesInSelectQueryElement (children 1)
+      TableExpression (children 1)
+       TableIdentifier landing
+    ExpressionList (children 1)
+     Identifier hour
+ ViewTargets (children 1)
+  Storage definition (children 3)
+   Function ReplicatedSummingMergeTree (children 1)
+    ExpressionList (children 2)
+     Function concat (children 1)
+      ExpressionList (children 3)
+       Literal '/clickhouse/'
+       Function currentDatabase (children 1)
+        ExpressionList
+       Literal '/mv/{shard}/'
+     Literal '{replica}'
+   Function toYYYYMMDD (children 1)
+    ExpressionList (children 1)
+     Identifier hour
+   Identifier hour
+
+InsertQuery   (children 1)
+ Identifier landing
+
+InsertQuery   (children 1)
+ Identifier landing
 
 SelectWithUnionQuery (children 1)
  ExpressionList (children 1)
@@ -29,6 +96,126 @@ SelectWithUnionQuery (children 1)
    ExpressionList (children 1)
     OrderByElement (children 1)
      Identifier hour
+
+DropQuery  landing (children 1)
+ Identifier landing
+
+DropQuery  mv (children 1)
+ Identifier mv
+
+Set
+
+Set
+
+CreateQuery landing (children 3)
+ Identifier landing
+ Columns definition (children 1)
+  ExpressionList (children 5)
+   ColumnDeclaration time (children 1)
+    DataType DateTime
+   ColumnDeclaration pk1 (children 1)
+    DataType LowCardinality (children 1)
+     ExpressionList (children 1)
+      DataType String
+   ColumnDeclaration pk2 (children 1)
+    DataType LowCardinality (children 1)
+     ExpressionList (children 1)
+      DataType String
+   ColumnDeclaration pk3 (children 1)
+    DataType LowCardinality (children 1)
+     ExpressionList (children 1)
+      DataType String
+   ColumnDeclaration pk4 (children 1)
+    DataType String
+ Storage definition (children 2)
+  Function ReplicatedReplacingMergeTree (children 1)
+   ExpressionList (children 2)
+    Function concat (children 1)
+     ExpressionList (children 3)
+      Literal '/clickhouse/'
+      Function currentDatabase (children 1)
+       ExpressionList
+      Literal '/landing/{shard}/'
+    Literal '{replica}'
+  Function tuple (children 1)
+   ExpressionList (children 4)
+    Identifier pk1
+    Identifier pk2
+    Identifier pk3
+    Identifier pk4
+
+CreateQuery ds (children 3)
+ Identifier ds
+ Columns definition (children 1)
+  ExpressionList (children 5)
+   ColumnDeclaration pk1 (children 1)
+    DataType LowCardinality (children 1)
+     ExpressionList (children 1)
+      DataType String
+   ColumnDeclaration pk2 (children 1)
+    DataType LowCardinality (children 1)
+     ExpressionList (children 1)
+      DataType String
+   ColumnDeclaration pk3 (children 1)
+    DataType LowCardinality (children 1)
+     ExpressionList (children 1)
+      DataType String
+   ColumnDeclaration pk4 (children 1)
+    DataType LowCardinality (children 1)
+     ExpressionList (children 1)
+      DataType String
+   ColumnDeclaration occurences (children 1)
+    DataType AggregateFunction (children 1)
+     ExpressionList (children 1)
+      Identifier count
+ Storage definition (children 2)
+  Function ReplicatedAggregatingMergeTree (children 1)
+   ExpressionList (children 2)
+    Function concat (children 1)
+     ExpressionList (children 3)
+      Literal '/clickhouse/'
+      Function currentDatabase (children 1)
+       ExpressionList
+      Literal '/ds/{shard}/'
+    Literal '{replica}'
+  Function tuple (children 1)
+   ExpressionList (children 4)
+    Identifier pk1
+    Identifier pk2
+    Identifier pk3
+    Identifier pk4
+
+CreateQuery mv (children 3)
+ Identifier mv
+ SelectWithUnionQuery (children 1)
+  ExpressionList (children 1)
+   SelectQuery (children 3)
+    ExpressionList (children 5)
+     Identifier pk1
+     Identifier pk2
+     Identifier pk4
+     Identifier pk3
+     Function countState (alias occurences) (children 1)
+      ExpressionList
+    TablesInSelectQuery (children 1)
+     TablesInSelectQueryElement (children 1)
+      TableExpression (children 1)
+       TableIdentifier landing
+    ExpressionList (children 4)
+     Identifier pk1
+     Identifier pk2
+     Identifier pk4
+     Identifier pk3
+ ViewTargets
+
+InsertQuery   (children 2)
+ Identifier landing
+ ExpressionList (children 5)
+  Identifier time
+  Identifier pk1
+  Identifier pk2
+  Identifier pk4
+  Identifier pk3
 
 SelectWithUnionQuery (children 1)
  ExpressionList (children 1)
@@ -88,3 +275,6 @@ SelectWithUnionQuery (children 1)
      Identifier pk4
     OrderByElement (children 1)
      Identifier pk3
+
+DropQuery  ds (children 1)
+ Identifier ds

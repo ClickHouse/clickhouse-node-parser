@@ -1,8 +1,43 @@
+-- Tags: no-fasttest
+-- no-fasttest: depends on model binary and model details via config files
+/*
+Output language code mapping:
+  Bengali           0
+  Mandarin Chinese  1
+  German            2
+  Greek             3
+  English           4
+  French            5
+  Russian           6
+  Spanish           7
+*/
 SELECT
     number,
     naiveBayesClassifier('lang_byte_2', 'She painted the wall a bright yellow')
 FROM numbers(10)
 ORDER BY number ASC;
+
+DROP TABLE IF EXISTS model_names;
+
+CREATE TABLE model_names
+(
+    model_name String
+)
+ENGINE = MergeTree()
+ORDER BY model_name;
+
+INSERT INTO model_names;
+
+DROP TABLE IF EXISTS input_texts;
+
+CREATE TABLE input_texts
+(
+    input_text String
+)
+ENGINE = MergeTree()
+ORDER BY input_text;
+
+INSERT INTO input_texts;
 
 SELECT
     model_name,

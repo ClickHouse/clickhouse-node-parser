@@ -77,6 +77,9 @@
           }
         ]
       }
+    ],
+    "leadingComments": [
+      "-- The parser doesn't know if this function supports \"RESPECT/IGNORE\" NULLS"
     ]
   },
   {
@@ -97,6 +100,12 @@
         },
         "alias": "b"
       }
+    ],
+    "leadingComments": [
+      "-- Normal functions should throw in the server"
+    ],
+    "trailingComments": [
+      "-- { serverError UNKNOWN_FUNCTION }"
     ]
   },
   {
@@ -117,6 +126,9 @@
         },
         "alias": "b"
       }
+    ],
+    "trailingComments": [
+      "-- { serverError SYNTAX_ERROR }"
     ]
   },
   {
@@ -129,7 +141,7 @@
       }
     ],
     "from": {
-      "kind": "tableFunction",
+      "kind": "tableFunctionRef",
       "name": "numbers",
       "args": [
         {
@@ -156,7 +168,10 @@
           "parenthesized": true
         }
       ]
-    }
+    },
+    "trailingComments": [
+      "-- { serverError SYNTAX_ERROR }"
+    ]
   },
   {
     "kind": "select",
@@ -195,7 +210,7 @@
       }
     ],
     "from": {
-      "kind": "tableFunction",
+      "kind": "tableFunctionRef",
       "name": "numbers",
       "args": [
         {
@@ -204,7 +219,79 @@
           "value": "0"
         }
       ]
-    }
+    },
+    "trailingComments": [
+      "-- { serverError SYNTAX_ERROR }"
+    ]
+  },
+  {
+    "kind": "select",
+    "with": [
+      {
+        "kind": "cteExpr",
+        "name": "lambda",
+        "expr": {
+          "kind": "lambdaExpr",
+          "params": [
+            "x"
+          ],
+          "body": {
+            "kind": "binaryExpr",
+            "op": "+",
+            "left": {
+              "kind": "columnRef",
+              "parts": [
+                "x"
+              ]
+            },
+            "right": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "1"
+            }
+          },
+          "parenthesized": true
+        }
+      }
+    ],
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "lambda",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "number"
+            ]
+          }
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableFunctionRef",
+      "name": "numbers",
+      "args": [
+        {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "10"
+        }
+      ]
+    },
+    "settings": [
+      {
+        "name": "enable_analyzer",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ],
+    "trailingComments": [
+      "-- { serverError SYNTAX_ERROR }"
+    ]
   },
   {
     "kind": "select",
@@ -238,7 +325,10 @@
           }
         }
       ]
-    }
+    },
+    "trailingComments": [
+      "-- { serverError SYNTAX_ERROR }"
+    ]
   },
   {
     "kind": "select",
@@ -248,10 +338,10 @@
         "name": "arrayJoin",
         "args": [
           {
-            "kind": "array",
+            "kind": "arrayLiteral",
             "elements": [
               {
-                "kind": "array",
+                "kind": "arrayLiteral",
                 "elements": [
                   {
                     "kind": "literal",
@@ -272,7 +362,7 @@
                 "source": "[3,4,5]"
               },
               {
-                "kind": "array",
+                "kind": "arrayLiteral",
                 "elements": [
                   {
                     "kind": "literal",
@@ -288,7 +378,7 @@
                 "source": "[6,7]"
               },
               {
-                "kind": "array",
+                "kind": "arrayLiteral",
                 "elements": [
                   {
                     "kind": "literal",
@@ -299,7 +389,7 @@
                 "source": "[2]"
               },
               {
-                "kind": "array",
+                "kind": "arrayLiteral",
                 "elements": [
                   {
                     "kind": "literal",
@@ -319,6 +409,9 @@
           }
         ]
       }
+    ],
+    "trailingComments": [
+      "-- { serverError SYNTAX_ERROR }"
     ]
   },
   {
@@ -363,7 +456,7 @@
       }
     ],
     "from": {
-      "kind": "tableFunction",
+      "kind": "tableFunctionRef",
       "name": "numbers",
       "args": [
         {
@@ -412,6 +505,9 @@
           "value": "0"
         }
       }
+    ],
+    "trailingComments": [
+      "-- { serverError SYNTAX_ERROR }"
     ]
   }
 ]

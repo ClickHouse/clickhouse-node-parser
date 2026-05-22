@@ -1,5 +1,176 @@
 [
   {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "enable_analyzer",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ],
+    "leadingComments": [
+      "-- Tags: no-random-merge-tree-settings",
+      "-- add_minmax_index_for_numeric_columns=0: Different plan"
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "serialize_query_plan",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "enable_parallel_replicas",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "prefer_localhost_replica",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "optimize_aggregation_in_order",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      },
+      {
+        "name": "optimize_read_in_order",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "tab0"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "x",
+        "type": {
+          "name": "UInt32"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "y",
+        "type": {
+          "name": "UInt32"
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "x"
+          ]
+        }
+      }
+    ],
+    "settings": [
+      {
+        "name": "add_minmax_index_for_numeric_columns",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      }
+    ],
+    "settingsAfterOrderBy": true
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "tab0"
+      }
+    },
+    "selectQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "number"
+          ]
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "number"
+          ]
+        }
+      ],
+      "from": {
+        "kind": "tableFunctionRef",
+        "name": "numbers",
+        "args": [
+          {
+            "kind": "binaryExpr",
+            "op": "*",
+            "left": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "8192"
+            },
+            "right": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "123"
+            }
+          }
+        ]
+      }
+    }
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -53,7 +224,7 @@
                 }
               ],
               "from": {
-                "kind": "tableFunction",
+                "kind": "tableFunctionRef",
                 "name": "remote",
                 "args": [
                   {
@@ -112,7 +283,7 @@
           }
         ],
         "from": {
-          "kind": "tableFunction",
+          "kind": "tableFunctionRef",
           "name": "remote",
           "args": [
             {
@@ -168,7 +339,7 @@
                 }
               },
               {
-                "kind": "array",
+                "kind": "arrayLiteral",
                 "elements": [
                   {
                     "kind": "columnRef",
@@ -188,7 +359,10 @@
         "type": "UInt64",
         "value": "42"
       }
-    }
+    },
+    "leadingComments": [
+      "--- lambdas are not supported"
+    ]
   },
   {
     "kind": "select",
@@ -207,7 +381,7 @@
           }
         ],
         "from": {
-          "kind": "tableFunction",
+          "kind": "tableFunctionRef",
           "name": "remote",
           "args": [
             {
@@ -273,7 +447,7 @@
                 }
               },
               {
-                "kind": "array",
+                "kind": "arrayLiteral",
                 "elements": [
                   {
                     "kind": "columnRef",
@@ -358,7 +532,7 @@
                 }
               ],
               "from": {
-                "kind": "tableFunction",
+                "kind": "tableFunctionRef",
                 "name": "remote",
                 "args": [
                   {
@@ -469,7 +643,7 @@
                 }
               ],
               "from": {
-                "kind": "tableFunction",
+                "kind": "tableFunctionRef",
                 "name": "remote",
                 "args": [
                   {
@@ -577,7 +751,7 @@
                 }
               ],
               "from": {
-                "kind": "tableFunction",
+                "kind": "tableFunctionRef",
                 "name": "remote",
                 "args": [
                   {
@@ -631,7 +805,7 @@
                   }
                 ],
                 "from": {
-                  "kind": "tableFunction",
+                  "kind": "tableFunctionRef",
                   "name": "numbers",
                   "args": [
                     {
@@ -646,7 +820,10 @@
           }
         }
       }
-    }
+    },
+    "leadingComments": [
+      "--- IN is supported"
+    ]
   },
   {
     "kind": "select",
@@ -674,7 +851,7 @@
           }
         ],
         "from": {
-          "kind": "tableFunction",
+          "kind": "tableFunctionRef",
           "name": "remote",
           "args": [
             {
@@ -728,7 +905,7 @@
             }
           ],
           "from": {
-            "kind": "tableFunction",
+            "kind": "tableFunctionRef",
             "name": "numbers",
             "args": [
               {
@@ -741,7 +918,10 @@
         }
       },
       "global": true
-    }
+    },
+    "leadingComments": [
+      "--- GLOBAL IN is replaced to temporary table"
+    ]
   },
   {
     "kind": "select",
@@ -798,7 +978,7 @@
                 }
               ],
               "from": {
-                "kind": "tableFunction",
+                "kind": "tableFunctionRef",
                 "name": "remote",
                 "args": [
                   {
@@ -852,7 +1032,7 @@
                   }
                 ],
                 "from": {
-                  "kind": "tableFunction",
+                  "kind": "tableFunctionRef",
                   "name": "numbers",
                   "args": [
                     {
@@ -896,7 +1076,7 @@
           }
         ],
         "from": {
-          "kind": "tableFunction",
+          "kind": "tableFunctionRef",
           "name": "remote",
           "args": [
             {
@@ -950,7 +1130,7 @@
             }
           ],
           "from": {
-            "kind": "tableFunction",
+            "kind": "tableFunctionRef",
             "name": "numbers",
             "args": [
               {
@@ -1020,7 +1200,7 @@
                 }
               ],
               "from": {
-                "kind": "tableFunction",
+                "kind": "tableFunctionRef",
                 "name": "remote",
                 "args": [
                   {
@@ -1074,7 +1254,7 @@
                   }
                 ],
                 "from": {
-                  "kind": "tableFunction",
+                  "kind": "tableFunctionRef",
                   "name": "numbers",
                   "args": [
                     {
@@ -1118,7 +1298,7 @@
           }
         ],
         "from": {
-          "kind": "tableFunction",
+          "kind": "tableFunctionRef",
           "name": "remote",
           "args": [
             {
@@ -1172,7 +1352,7 @@
             }
           ],
           "from": {
-            "kind": "tableFunction",
+            "kind": "tableFunctionRef",
             "name": "numbers",
             "args": [
               {
@@ -1242,7 +1422,7 @@
                 }
               ],
               "from": {
-                "kind": "tableFunction",
+                "kind": "tableFunctionRef",
                 "name": "remote",
                 "args": [
                   {
@@ -1296,7 +1476,7 @@
                   }
                 ],
                 "from": {
-                  "kind": "tableFunction",
+                  "kind": "tableFunctionRef",
                   "name": "numbers",
                   "args": [
                     {
@@ -1340,7 +1520,7 @@
           }
         ],
         "from": {
-          "kind": "tableFunction",
+          "kind": "tableFunctionRef",
           "name": "remote",
           "args": [
             {
@@ -1394,7 +1574,7 @@
             }
           ],
           "from": {
-            "kind": "tableFunction",
+            "kind": "tableFunctionRef",
             "name": "numbers",
             "args": [
               {
@@ -1464,7 +1644,7 @@
                 }
               ],
               "from": {
-                "kind": "tableFunction",
+                "kind": "tableFunctionRef",
                 "name": "remote",
                 "args": [
                   {
@@ -1518,7 +1698,7 @@
                   }
                 ],
                 "from": {
-                  "kind": "tableFunction",
+                  "kind": "tableFunctionRef",
                   "name": "numbers",
                   "args": [
                     {
@@ -1562,7 +1742,7 @@
           }
         ],
         "from": {
-          "kind": "tableFunction",
+          "kind": "tableFunctionRef",
           "name": "remote",
           "args": [
             {
@@ -1616,7 +1796,7 @@
             }
           ],
           "from": {
-            "kind": "tableFunction",
+            "kind": "tableFunctionRef",
             "name": "numbers",
             "args": [
               {
@@ -1686,7 +1866,7 @@
                 }
               ],
               "from": {
-                "kind": "tableFunction",
+                "kind": "tableFunctionRef",
                 "name": "remote",
                 "args": [
                   {
@@ -1740,7 +1920,7 @@
                   }
                 ],
                 "from": {
-                  "kind": "tableFunction",
+                  "kind": "tableFunctionRef",
                   "name": "numbers",
                   "args": [
                     {
@@ -1784,7 +1964,7 @@
           }
         ],
         "from": {
-          "kind": "tableFunction",
+          "kind": "tableFunctionRef",
           "name": "remote",
           "args": [
             {
@@ -1838,7 +2018,7 @@
             }
           ],
           "from": {
-            "kind": "tableFunction",
+            "kind": "tableFunctionRef",
             "name": "numbers",
             "args": [
               {
@@ -1908,7 +2088,7 @@
                 }
               ],
               "from": {
-                "kind": "tableFunction",
+                "kind": "tableFunctionRef",
                 "name": "remote",
                 "args": [
                   {
@@ -1962,7 +2142,7 @@
                   }
                 ],
                 "from": {
-                  "kind": "tableFunction",
+                  "kind": "tableFunctionRef",
                   "name": "numbers",
                   "args": [
                     {
@@ -1976,6 +2156,157 @@
             },
             "global": true
           }
+        }
+      }
+    }
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "tab1"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "tenant",
+        "type": {
+          "name": "String"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "recordTimestamp",
+        "type": {
+          "name": "Int64"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "responseBody",
+        "type": {
+          "name": "String"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "colAlias",
+        "type": {
+          "name": "String"
+        },
+        "defaultKind": "ALIAS",
+        "defaultExpr": {
+          "kind": "functionCall",
+          "name": "concat",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "responseBody"
+              ]
+            },
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "something else"
+            }
+          ]
+        }
+      },
+      {
+        "kind": "indexDef",
+        "name": "ngrams",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "colAlias"
+          ]
+        },
+        "indexType": {
+          "name": "ngrambf_v1",
+          "args": [
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "3"
+            },
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "2097152"
+            },
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "3"
+            },
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "0"
+            }
+          ]
+        },
+        "granularity": 10
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "recordTimestamp"
+          ]
+        }
+      }
+    ],
+    "settings": [
+      {
+        "name": "add_minmax_index_for_numeric_columns",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      }
+    ],
+    "settingsAfterOrderBy": true
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "tab1"
+      }
+    },
+    "selectQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "asterisk"
+        }
+      ],
+      "from": {
+        "kind": "tableFunctionRef",
+        "name": "generateRandom",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": "tenant String, recordTimestamp Int64, responseBody String"
+          }
+        ]
+      },
+      "limit": {
+        "count": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "10"
         }
       }
     }
@@ -2026,7 +2357,7 @@
                 }
               ],
               "from": {
-                "kind": "tableFunction",
+                "kind": "tableFunctionRef",
                 "name": "remote",
                 "args": [
                   {
@@ -2053,7 +2384,7 @@
             "kind": "inExpr",
             "negated": false,
             "expr": {
-              "kind": "tuple",
+              "kind": "tupleLiteral",
               "elements": [
                 {
                   "kind": "columnRef",
@@ -2089,7 +2420,7 @@
                   }
                 ],
                 "from": {
-                  "kind": "tableFunction",
+                  "kind": "tableFunctionRef",
                   "name": "remote",
                   "args": [
                     {
@@ -2131,6 +2462,120 @@
             }
           }
         }
+      }
+    }
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "tab2"
+    },
+    "engine": {
+      "name": "ReplacingMergeTree"
+    },
+    "asQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "alias",
+          "expr": {
+            "kind": "functionCall",
+            "name": "intDiv",
+            "args": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "number"
+                ]
+              },
+              {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "2"
+              }
+            ]
+          },
+          "alias": "n"
+        }
+      ],
+      "from": {
+        "kind": "tableFunctionRef",
+        "name": "numbers",
+        "args": [
+          {
+            "kind": "binaryExpr",
+            "op": "*",
+            "left": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "8192"
+            },
+            "right": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "123"
+            }
+          }
+        ]
+      }
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "n"
+          ]
+        }
+      }
+    ],
+    "settings": [
+      {
+        "name": "add_minmax_index_for_numeric_columns",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      }
+    ],
+    "settingsAfterOrderBy": true
+  },
+  {
+    "kind": "createView",
+    "table": {
+      "kind": "tableRef",
+      "table": "test_view"
+    },
+    "asQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "asterisk"
+        }
+      ],
+      "from": {
+        "kind": "tableFunctionRef",
+        "name": "remote",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": "127.0.0.{1,2}"
+          },
+          {
+            "kind": "functionCall",
+            "name": "currentDatabase",
+            "args": []
+          },
+          {
+            "kind": "columnRef",
+            "parts": [
+              "tab2"
+            ]
+          }
+        ]
       }
     }
   },

@@ -1,3 +1,59 @@
+DropQuery  test_vertical_merge (children 1)
+ Identifier test_vertical_merge
+
+CreateQuery test_vertical_merge (children 3)
+ Identifier test_vertical_merge
+ Columns definition (children 2)
+  ExpressionList (children 3)
+   ColumnDeclaration k (children 1)
+    DataType UInt64
+   ColumnDeclaration val1 (children 1)
+    DataType UInt64
+   ColumnDeclaration val2 (children 1)
+    DataType UInt64
+  ExpressionList (children 2)
+   Index (children 2)
+    Function multiply (children 1)
+     ExpressionList (children 2)
+      Identifier val1
+      Identifier val2
+    Function minmax (children 1)
+     ExpressionList
+   Index (children 2)
+    Function multiply (children 1)
+     ExpressionList (children 2)
+      Identifier val1
+      Identifier k
+    Function minmax (children 1)
+     ExpressionList
+ Storage definition (children 3)
+  Function MergeTree (children 1)
+   ExpressionList
+  Identifier k
+  Set
+
+InsertQuery   (children 2)
+ Identifier test_vertical_merge
+ SelectWithUnionQuery (children 1)
+  ExpressionList (children 1)
+   SelectQuery (children 2)
+    ExpressionList (children 3)
+     Identifier number
+     Function plus (children 1)
+      ExpressionList (children 2)
+       Identifier number
+       Literal UInt64_5
+     Function multiply (children 1)
+      ExpressionList (children 2)
+       Identifier number
+       Literal UInt64_12
+    TablesInSelectQuery (children 1)
+     TablesInSelectQueryElement (children 1)
+      TableExpression (children 1)
+       Function numbers (children 1)
+        ExpressionList (children 1)
+         Literal UInt64_1000
+
 SelectWithUnionQuery (children 1)
  ExpressionList (children 1)
   SelectQuery (children 3)
@@ -12,3 +68,6 @@ SelectWithUnionQuery (children 1)
     ExpressionList (children 2)
      Identifier val2
      Literal UInt64_2400
+
+OptimizeQuery  test_vertical_merge_final (children 1)
+ Identifier test_vertical_merge

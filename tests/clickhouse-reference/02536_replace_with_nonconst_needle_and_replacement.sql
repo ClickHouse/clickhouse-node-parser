@@ -1,3 +1,11 @@
+-- Tests that functions replaceOne(), replaceAll(), replaceRegexpOne(), replaceRegexpAll() work with with non-const pattern and replacement arguments
+
+DROP TABLE IF EXISTS test_tab;
+CREATE TABLE test_tab
+  (id UInt32, haystack String, needle String, replacement String)
+  engine = MergeTree()
+  ORDER BY id;
+INSERT INTO test_tab VALUES (1, 'Hello World', 'l', 'xx') (2, 'Hello World', 'll', 'x') (3, 'Hello World', 'not_found', 'x') (4, 'Hello World', '[eo]', 'x') (5, 'Hello World', '.', 'x');
 SELECT id, haystack, needle, 'x', replaceAll(haystack, needle, 'x') FROM test_tab ORDER BY id;
 SELECT id, haystack, needle, 'x', replaceAll('Hello World', needle, 'x') FROM test_tab ORDER BY id;
 SELECT id, haystack, 'l', replacement, replaceAll(haystack, 'l', replacement) FROM test_tab ORDER BY id;
@@ -22,6 +30,7 @@ SELECT id, haystack, 'l', replacement, replaceRegexpOne(haystack, 'l', replaceme
 SELECT id, haystack, 'l', replacement, replaceRegexpOne('Hello World', 'l', replacement) FROM test_tab ORDER BY id;
 SELECT id, haystack, needle, replacement, replaceRegexpOne(haystack, needle, replacement) FROM test_tab ORDER BY id;
 SELECT id, haystack, needle, replacement, replaceRegexpOne('Hello World', needle, replacement) FROM test_tab ORDER BY id;
+INSERT INTO test_tab VALUES (1, 'Hello World', 'l', 'x') (2, 'Hello World', '', 'y');
 SELECT replaceAll(haystack, needle, 'x') FROM test_tab;
 SELECT replaceOne(haystack, needle, 'x') FROM test_tab;
 SELECT replaceRegexpAll(haystack, needle, 'x') FROM test_tab;

@@ -1,5 +1,95 @@
 [
   {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "nnd"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "nnd"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "id",
+        "type": {
+          "name": "Int8"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "ts",
+        "type": {
+          "name": "DateTime64",
+          "args": [
+            {
+              "kind": "literal",
+              "value": "3"
+            },
+            {
+              "kind": "literal",
+              "value": "'UTC'"
+            }
+          ]
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "metric",
+        "type": {
+          "name": "Float64"
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree",
+      "args": []
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "id"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "nnd"
+      }
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "nnd"
+      }
+    }
+  },
+  {
+    "kind": "optimize",
+    "table": {
+      "kind": "tableRef",
+      "table": "nnd"
+    }
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -207,6 +297,10 @@
           }
         }
       }
+    ],
+    "leadingComments": [
+      "-- shall work for precise intervals",
+      "-- INTERVAL 1 SECOND shall be default"
     ]
   },
   {
@@ -424,7 +518,10 @@
     "from": {
       "kind": "tableRef",
       "table": "nnd"
-    }
+    },
+    "leadingComments": [
+      "-- Nanosecond"
+    ]
   },
   {
     "kind": "select",
@@ -538,7 +635,10 @@
     "from": {
       "kind": "tableRef",
       "table": "nnd"
-    }
+    },
+    "leadingComments": [
+      "-- Microsecond"
+    ]
   },
   {
     "kind": "select",
@@ -652,7 +752,10 @@
     "from": {
       "kind": "tableRef",
       "table": "nnd"
-    }
+    },
+    "leadingComments": [
+      "-- Millisecond"
+    ]
   },
   {
     "kind": "select",
@@ -761,7 +864,10 @@
     "from": {
       "kind": "tableRef",
       "table": "nnd"
-    }
+    },
+    "leadingComments": [
+      "-- Second"
+    ]
   },
   {
     "kind": "select",
@@ -870,7 +976,10 @@
     "from": {
       "kind": "tableRef",
       "table": "nnd"
-    }
+    },
+    "leadingComments": [
+      "-- Minute"
+    ]
   },
   {
     "kind": "select",
@@ -974,7 +1083,10 @@
     "from": {
       "kind": "tableRef",
       "table": "nnd"
-    }
+    },
+    "leadingComments": [
+      "-- Hour"
+    ]
   },
   {
     "kind": "select",
@@ -1088,7 +1200,10 @@
     "from": {
       "kind": "tableRef",
       "table": "nnd"
-    }
+    },
+    "leadingComments": [
+      "-- Day"
+    ]
   },
   {
     "kind": "select",
@@ -1197,7 +1312,10 @@
     "from": {
       "kind": "tableRef",
       "table": "nnd"
-    }
+    },
+    "leadingComments": [
+      "-- Week"
+    ]
   },
   {
     "kind": "select",
@@ -1292,7 +1410,14 @@
     "from": {
       "kind": "tableRef",
       "table": "nnd"
-    }
+    },
+    "leadingComments": [
+      "-- shall not work for month, quarter, year (intervals with floating number of seconds)",
+      "-- Month"
+    ],
+    "trailingComments": [
+      "-- { serverError ILLEGAL_TYPE_OF_ARGUMENT }"
+    ]
   },
   {
     "kind": "select",
@@ -1387,7 +1512,13 @@
     "from": {
       "kind": "tableRef",
       "table": "nnd"
-    }
+    },
+    "leadingComments": [
+      "-- Quarter"
+    ],
+    "trailingComments": [
+      "-- { serverError ILLEGAL_TYPE_OF_ARGUMENT }"
+    ]
   },
   {
     "kind": "select",
@@ -1482,7 +1613,13 @@
     "from": {
       "kind": "tableRef",
       "table": "nnd"
-    }
+    },
+    "leadingComments": [
+      "-- Year"
+    ],
+    "trailingComments": [
+      "-- { serverError ILLEGAL_TYPE_OF_ARGUMENT }"
+    ]
   },
   {
     "kind": "select",
@@ -1576,7 +1713,13 @@
     "from": {
       "kind": "tableRef",
       "table": "nnd"
-    }
+    },
+    "leadingComments": [
+      "-- test against wrong arguments/types"
+    ],
+    "trailingComments": [
+      "-- { serverError BAD_ARGUMENTS }"
+    ]
   },
   {
     "kind": "select",
@@ -1670,7 +1813,10 @@
     "from": {
       "kind": "tableRef",
       "table": "nnd"
-    }
+    },
+    "trailingComments": [
+      "-- { serverError BAD_ARGUMENTS }"
+    ]
   },
   {
     "kind": "select",
@@ -1771,7 +1917,10 @@
     "from": {
       "kind": "tableRef",
       "table": "nnd"
-    }
+    },
+    "trailingComments": [
+      "-- { serverError NUMBER_OF_ARGUMENTS_DOESNT_MATCH }"
+    ]
   },
   {
     "kind": "select",
@@ -1849,6 +1998,9 @@
     "from": {
       "kind": "tableRef",
       "table": "nnd"
-    }
+    },
+    "trailingComments": [
+      "-- { serverError NUMBER_OF_ARGUMENTS_DOESNT_MATCH }"
+    ]
   }
 ]

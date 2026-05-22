@@ -7,7 +7,7 @@
       }
     ],
     "from": {
-      "kind": "tableFunction",
+      "kind": "tableFunctionRef",
       "name": "format",
       "args": [
         {
@@ -32,7 +32,7 @@
       }
     ],
     "from": {
-      "kind": "tableFunction",
+      "kind": "tableFunctionRef",
       "name": "format",
       "args": [
         {
@@ -55,7 +55,10 @@
           }
         }
       ]
-    }
+    },
+    "leadingComments": [
+      "-- Should be equivalent to the previous one"
+    ]
   },
   {
     "kind": "select",
@@ -65,7 +68,7 @@
       }
     ],
     "from": {
-      "kind": "tableFunction",
+      "kind": "tableFunctionRef",
       "name": "format",
       "args": [
         {
@@ -103,7 +106,106 @@
           }
         }
       ]
-    }
+    },
+    "leadingComments": [
+      "-- The scalar subquery is incorrect so it should throw the proper error"
+    ],
+    "trailingComments": [
+      "-- { serverError UNKNOWN_IDENTIFIER }"
+    ]
+  },
+  {
+    "kind": "select",
+    "with": [
+      {
+        "kind": "cteExpr",
+        "name": "s",
+        "expr": {
+          "kind": "subqueryExpr",
+          "query": {
+            "kind": "select",
+            "select": [
+              {
+                "kind": "alias",
+                "expr": {
+                  "kind": "castExpr",
+                  "expr": {
+                    "kind": "functionCall",
+                    "name": "sum",
+                    "args": [
+                      {
+                        "kind": "columnRef",
+                        "parts": [
+                          "number"
+                        ]
+                      }
+                    ]
+                  },
+                  "type": "String",
+                  "operator": true
+                },
+                "alias": "s"
+              }
+            ],
+            "from": {
+              "kind": "tableFunctionRef",
+              "name": "numbers",
+              "args": [
+                {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "4"
+                }
+              ]
+            }
+          }
+        }
+      }
+    ],
+    "select": [
+      {
+        "kind": "asterisk"
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "s"
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableFunctionRef",
+      "name": "format",
+      "args": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "TSVRaw"
+          ]
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "s"
+          ]
+        }
+      ]
+    },
+    "settings": [
+      {
+        "name": "enable_analyzer",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ],
+    "leadingComments": [
+      "-- https://github.com/ClickHouse/ClickHouse/issues/70177",
+      "-- Resolution of the scalar subquery should work ok (already did, adding a test just for safety)",
+      "-- Disabled for the old analyzer since it incorrectly passes 's' to format, instead of resolving s and passing that"
+    ]
   },
   {
     "kind": "select",
@@ -115,7 +217,7 @@
       }
     ],
     "from": {
-      "kind": "tableFunction",
+      "kind": "tableFunctionRef",
       "name": "format",
       "args": [
         {
@@ -137,7 +239,7 @@
               }
             ],
             "from": {
-              "kind": "tableFunction",
+              "kind": "tableFunctionRef",
               "name": "numbers",
               "args": [
                 {
@@ -150,7 +252,10 @@
           }
         }
       ]
-    }
+    },
+    "trailingComments": [
+      "-- { serverError UNKNOWN_IDENTIFIER }"
+    ]
   },
   {
     "kind": "select",
@@ -162,7 +267,7 @@
       }
     ],
     "from": {
-      "kind": "tableFunction",
+      "kind": "tableFunctionRef",
       "name": "format",
       "args": [
         {
@@ -187,7 +292,7 @@
                   }
                 ],
                 "from": {
-                  "kind": "tableFunction",
+                  "kind": "tableFunctionRef",
                   "name": "numbers",
                   "args": [
                     {
@@ -209,7 +314,7 @@
                   }
                 ],
                 "from": {
-                  "kind": "tableFunction",
+                  "kind": "tableFunctionRef",
                   "name": "numbers",
                   "args": [
                     {
@@ -224,7 +329,72 @@
           }
         }
       ]
-    }
+    },
+    "trailingComments": [
+      "-- { serverError UNKNOWN_IDENTIFIER }"
+    ]
+  },
+  {
+    "kind": "select",
+    "with": [
+      {
+        "kind": "cteExpr",
+        "name": "s",
+        "expr": {
+          "kind": "subqueryExpr",
+          "query": {
+            "kind": "select",
+            "select": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "where_qualified__fuzz_19"
+                ]
+              }
+            ],
+            "from": {
+              "kind": "tableFunctionRef",
+              "name": "numbers",
+              "args": [
+                {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "10000"
+                }
+              ]
+            }
+          }
+        }
+      }
+    ],
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "count",
+        "args": []
+      }
+    ],
+    "from": {
+      "kind": "tableFunctionRef",
+      "name": "format",
+      "args": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "TSVRaw"
+          ]
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "s"
+          ]
+        }
+      ]
+    },
+    "trailingComments": [
+      "-- { serverError UNKNOWN_IDENTIFIER }"
+    ]
   },
   {
     "kind": "select",
@@ -236,7 +406,7 @@
       }
     ],
     "from": {
-      "kind": "tableFunction",
+      "kind": "tableFunctionRef",
       "name": "format",
       "args": [
         {
@@ -382,7 +552,7 @@
                                     }
                                   ],
                                   "from": {
-                                    "kind": "tableFunction",
+                                    "kind": "tableFunctionRef",
                                     "name": "numbers",
                                     "args": [
                                       {
@@ -425,7 +595,7 @@
               }
             ],
             "from": {
-              "kind": "tableFunction",
+              "kind": "tableFunctionRef",
               "name": "numbers",
               "args": [
                 {
@@ -439,7 +609,13 @@
         }
       ]
     },
-    "format": "TSVRaw"
+    "format": "TSVRaw",
+    "leadingComments": [
+      "-- https://github.com/ClickHouse/ClickHouse/issues/70675"
+    ],
+    "trailingComments": [
+      "-- { serverError UNKNOWN_IDENTIFIER, ILLEGAL_TYPE_OF_ARGUMENT }"
+    ]
   },
   {
     "kind": "select",
@@ -451,7 +627,7 @@
       }
     ],
     "from": {
-      "kind": "tableFunction",
+      "kind": "tableFunctionRef",
       "name": "numbers",
       "args": [
         {
@@ -469,6 +645,12 @@
           }
         }
       ]
-    }
+    },
+    "leadingComments": [
+      "-- Same but for table function numbers"
+    ],
+    "trailingComments": [
+      "-- { serverError UNKNOWN_IDENTIFIER }"
+    ]
   }
 ]

@@ -1,5 +1,103 @@
 [
   {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "mydestination"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "object",
+        "type": {
+          "name": "String"
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "object"
+          ]
+        }
+      }
+    ],
+    "leadingComments": [
+      "-- Tags: no-replicated-database",
+      "-- no-replicated-database: avoids strange edge case error that only happens with replicated DB and old analyzer"
+    ]
+  },
+  {
+    "kind": "createMaterializedView",
+    "table": {
+      "kind": "tableRef",
+      "table": "myview"
+    },
+    "toTable": {
+      "kind": "tableRef",
+      "table": "mydestination"
+    },
+    "asQuery": {
+      "kind": "select",
+      "with": [
+        {
+          "kind": "cteExpr",
+          "name": "objects",
+          "expr": {
+            "kind": "tupleLiteral",
+            "elements": [
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "foo"
+              },
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "bar"
+              }
+            ],
+            "source": "('foo', 'bar')"
+          }
+        }
+      ],
+      "select": [
+        {
+          "kind": "alias",
+          "expr": {
+            "kind": "literal",
+            "type": "String",
+            "value": "foo"
+          },
+          "alias": "object"
+        }
+      ],
+      "where": {
+        "kind": "inExpr",
+        "negated": false,
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "object"
+          ]
+        },
+        "values": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "objects"
+            ]
+          }
+        ]
+      }
+    }
+  },
+  {
     "kind": "select",
     "select": [
       {

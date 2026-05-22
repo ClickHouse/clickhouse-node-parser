@@ -1,3 +1,38 @@
+-- Tags: long
+DROP TABLE IF EXISTS normal;
+
+CREATE TABLE IF NOT EXISTS normal
+(
+    key UInt32,
+    value UInt32
+)
+ENGINE = MergeTree
+ORDER BY tuple()
+SETTINGS index_granularity = 1;
+
+SYSTEM STOP MERGES normal;
+
+INSERT INTO normal SELECT
+    number AS key,
+    number AS value
+FROM numbers(10000);
+
+ALTER TABLE normal ADD PROJECTION p_normal (SELECT
+    key,
+    value
+ORDER BY key ASC);
+
+INSERT INTO normal SELECT
+    number AS key,
+    number AS value
+FROM numbers(10000, 100);
+
+SET parallel_replicas_only_with_analyzer = 0;
+
+SET optimize_use_projections = 1, optimize_aggregation_in_order = 0;
+
+SET enable_parallel_replicas = 2, parallel_replicas_local_plan = 1, parallel_replicas_support_projection = 1, max_parallel_replicas = 3, parallel_replicas_for_non_replicated_merge_tree = 1, cluster_for_parallel_replicas = 'test_cluster_one_shard_three_replicas_localhost';
+
 SELECT '---normal : contains both projections and parts ---';
 
 SELECT trimLeft(replaceRegexpAll(`explain`, 'ReadFromRemoteParallelReplicas.*', 'ReadFromRemoteParallelReplicas'))
@@ -17,6 +52,43 @@ FROM normal
 WHERE key > 9999
     AND key < 10010;
 
+TRUNCATE TABLE normal;
+
+INSERT INTO normal SELECT
+    number AS key,
+    number AS value
+FROM numbers(10100);
+
+DROP TABLE normal;
+
+DROP TABLE IF EXISTS agg;
+
+CREATE TABLE agg
+(
+    key UInt32,
+    value UInt32
+)
+ENGINE = MergeTree
+ORDER BY tuple()
+SETTINGS index_granularity = 1;
+
+SYSTEM STOP MERGES agg;
+
+INSERT INTO agg SELECT
+    number AS key,
+    number AS value
+FROM numbers(100);
+
+ALTER TABLE agg ADD PROJECTION p_agg (SELECT
+    key,
+    sum(value)
+GROUP BY key);
+
+INSERT INTO agg SELECT
+    number AS key,
+    number AS value
+FROM numbers(100, 100);
+
 SELECT trimLeft(replaceRegexpAll(`explain`, 'ReadFromRemoteParallelReplicas.*', 'ReadFromRemoteParallelReplicas'))
 FROM (
         EXPLAIN
@@ -33,6 +105,28 @@ SELECT sum(value) AS v
 FROM agg
 WHERE key > 90
     AND key < 110;
+
+TRUNCATE TABLE agg;
+
+INSERT INTO agg SELECT
+    number AS key,
+    number AS value
+FROM numbers(200);
+
+DROP TABLE agg;
+
+DROP TABLE IF EXISTS x;
+
+CREATE TABLE x
+(
+    i int
+)
+ENGINE = MergeTree
+ORDER BY i
+SETTINGS index_granularity = 3;
+
+INSERT INTO x SELECT *
+FROM numbers(10);
 
 SELECT trimLeft(replaceRegexpAll(`explain`, 'ReadFromRemoteParallelReplicas.*', 'ReadFromRemoteParallelReplicas'))
 FROM (

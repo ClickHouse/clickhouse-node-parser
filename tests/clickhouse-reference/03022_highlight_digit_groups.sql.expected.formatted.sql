@@ -1,3 +1,7 @@
+SET output_format_pretty_display_footer_column_names = 0;
+
+SET output_format_pretty_row_numbers = 0;
+
 SELECT exp10(number) * (if(number % 2, 1, -1))
 FROM numbers(30)
 FORMAT PrettySpace

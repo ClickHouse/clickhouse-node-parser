@@ -1,1 +1,1 @@
-SELECT defaultValueOfTypeName(FQDN());
+SELECT defaultValueOfTypeName(FQDN()); -- { serverError ILLEGAL_COLUMN }

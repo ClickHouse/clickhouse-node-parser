@@ -1,5 +1,173 @@
 [
   {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "A"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "A"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "A",
+        "type": {
+          "name": "Int64"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "B",
+        "type": {
+          "name": "Int64"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "S",
+        "type": {
+          "name": "String"
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "A"
+          ]
+        }
+      }
+    ],
+    "asQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "number"
+          ]
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "number"
+          ]
+        },
+        {
+          "kind": "functionCall",
+          "name": "toString",
+          "args": [
+            {
+              "kind": "functionCall",
+              "name": "arrayMap",
+              "args": [
+                {
+                  "kind": "lambdaExpr",
+                  "params": [
+                    "i"
+                  ],
+                  "body": {
+                    "kind": "functionCall",
+                    "name": "cityHash64",
+                    "args": [
+                      {
+                        "kind": "binaryExpr",
+                        "op": "*",
+                        "left": {
+                          "kind": "columnRef",
+                          "parts": [
+                            "i"
+                          ]
+                        },
+                        "right": {
+                          "kind": "columnRef",
+                          "parts": [
+                            "number"
+                          ]
+                        }
+                      }
+                    ]
+                  }
+                },
+                {
+                  "kind": "functionCall",
+                  "name": "range",
+                  "args": [
+                    {
+                      "kind": "literal",
+                      "type": "UInt64",
+                      "value": "10"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "from": {
+        "kind": "tableFunctionRef",
+        "name": "numbers",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "Float64",
+            "value": "1e6"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "max_threads",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      },
+      {
+        "name": "join_algorithm",
+        "value": {
+          "kind": "literal",
+          "type": "String",
+          "value": "grace_hash"
+        }
+      },
+      {
+        "name": "grace_hash_join_initial_buckets",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "128"
+        }
+      },
+      {
+        "name": "grace_hash_join_max_buckets",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "256"
+        }
+      }
+    ]
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -12,7 +180,7 @@
         "table": "A",
         "alias": "a"
       },
-      "kind": "join",
+      "kind": "joinExpr",
       "joinType": "INNER",
       "right": {
         "kind": "tableRef",
@@ -49,5 +217,42 @@
       }
     },
     "format": "Null"
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "join_algorithm",
+        "value": {
+          "kind": "literal",
+          "type": "String",
+          "value": "grace_hash"
+        }
+      },
+      {
+        "name": "grace_hash_join_initial_buckets",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "128"
+        }
+      },
+      {
+        "name": "grace_hash_join_max_buckets",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "128"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "A"
+    }
   }
 ]

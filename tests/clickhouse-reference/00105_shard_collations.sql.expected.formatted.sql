@@ -47,13 +47,16 @@ ORDER BY
     x ASC COLLATE 'ru',
     n ASC;
 
+--- Const expression
 SELECT 'ζ' AS x
 ORDER BY x ASC COLLATE 'el';
 
+-- check order by const with collation
 SELECT number
 FROM numbers(2)
 ORDER BY 'x' ASC COLLATE 'el';
 
+-- check const and non const columns in order
 SELECT number
 FROM numbers(11)
 ORDER BY
@@ -61,14 +64,15 @@ ORDER BY
     toString(number) ASC,
     'y' ASC COLLATE 'el';
 
+--- Trash locales
 SELECT '' AS x
-ORDER BY x ASC COLLATE 'qq';
+ORDER BY x ASC COLLATE 'qq'; --{serverError UNSUPPORTED_COLLATION_LOCALE}
 
 SELECT '' AS x
-ORDER BY x ASC COLLATE 'qwe';
+ORDER BY x ASC COLLATE 'qwe'; --{serverError UNSUPPORTED_COLLATION_LOCALE}
 
 SELECT '' AS x
-ORDER BY x ASC COLLATE 'some_non_existing_locale';
+ORDER BY x ASC COLLATE 'some_non_existing_locale'; --{serverError UNSUPPORTED_COLLATION_LOCALE}
 
 SELECT '' AS x
-ORDER BY x ASC COLLATE 'ру';
+ORDER BY x ASC COLLATE 'ру'; --{serverError UNSUPPORTED_COLLATION_LOCALE}

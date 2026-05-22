@@ -10,6 +10,10 @@ SETTINGS
   insert_keeper_fault_injection_probability=0.3,
   insert_keeper_fault_injection_seed=4,
   log_comment='02975_system_zookeeper_retries';
+
+
+SYSTEM FLUSH LOGS query_log;
+
 -- Check that there where zk session failures
 SELECT ProfileEvents['ZooKeeperHardwareExceptions'] > 0
 FROM system.query_log

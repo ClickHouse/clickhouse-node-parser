@@ -1,3 +1,24 @@
+DROP TABLE IF EXISTS defaults;
+
+CREATE TABLE IF NOT EXISTS defaults
+(
+    param1 Float64,
+    param2 Float64,
+    target Float64,
+    predict1 Float64,
+    predict2 Float64
+)
+ENGINE = Memory;
+
+INSERT INTO defaults;
+
+DROP TABLE IF EXISTS model;
+
+CREATE TABLE model
+ENGINE = Memory AS
+SELECT stochasticLinearRegressionState(0.03, 0.00001, 2, 'Nesterov')(target, param1, param2) AS state
+FROM defaults;
+
 SELECT ans > -67.01
     AND ans < -66.9
 FROM (
@@ -11,6 +32,7 @@ FROM (
         LIMIT 1
     );
 
+-- Check that returned weights are close to real
 SELECT ans > 0.49
     AND ans < 0.51
 FROM (
@@ -31,6 +53,20 @@ FROM (
         SELECT stochasticLinearRegression(0.03, 0.00001, 2, 'Nesterov')(target, param1, param2)[3] AS ans
         FROM defaults
     );
+
+-- Check GROUP BY
+DROP TABLE IF EXISTS grouptest;
+
+CREATE TABLE IF NOT EXISTS grouptest
+(
+    user_id UInt32,
+    p1 Float64,
+    p2 Float64,
+    target Float64
+)
+ENGINE = Memory;
+
+INSERT INTO grouptest;
 
 SELECT ANS[1] > -1.1
     AND ANS[1] < -0.9
@@ -59,3 +95,9 @@ FROM (
         ORDER BY user_id ASC
         LIMIT 0, 1
     );
+
+DROP TABLE defaults;
+
+DROP TABLE model;
+
+DROP TABLE grouptest;

@@ -1,5 +1,376 @@
 [
   {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "check_query_single_value_result",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ],
+    "leadingComments": [
+      "-- Tags: stateful, no-parallel",
+      "-- no-parallel: Heavy usage"
+    ]
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "database": "test",
+      "table": "hits_log"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "database": "test",
+      "table": "hits_tinylog"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "database": "test",
+      "table": "hits_stripelog"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "database": "test",
+      "table": "hits_log"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "CounterID",
+        "type": {
+          "name": "UInt32"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "AdvEngineID",
+        "type": {
+          "name": "UInt8"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "RegionID",
+        "type": {
+          "name": "UInt32"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "SearchPhrase",
+        "type": {
+          "name": "String"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "UserID",
+        "type": {
+          "name": "UInt64"
+        }
+      }
+    ],
+    "engine": {
+      "name": "Log"
+    }
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "database": "test",
+      "table": "hits_tinylog"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "CounterID",
+        "type": {
+          "name": "UInt32"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "AdvEngineID",
+        "type": {
+          "name": "UInt8"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "RegionID",
+        "type": {
+          "name": "UInt32"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "SearchPhrase",
+        "type": {
+          "name": "String"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "UserID",
+        "type": {
+          "name": "UInt64"
+        }
+      }
+    ],
+    "engine": {
+      "name": "TinyLog"
+    }
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "database": "test",
+      "table": "hits_stripelog"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "CounterID",
+        "type": {
+          "name": "UInt32"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "AdvEngineID",
+        "type": {
+          "name": "UInt8"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "RegionID",
+        "type": {
+          "name": "UInt32"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "SearchPhrase",
+        "type": {
+          "name": "String"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "UserID",
+        "type": {
+          "name": "UInt64"
+        }
+      }
+    ],
+    "engine": {
+      "name": "StripeLog"
+    }
+  },
+  {
+    "kind": "check",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "database": "test",
+      "table": "hits_log"
+    }
+  },
+  {
+    "kind": "check",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "database": "test",
+      "table": "hits_tinylog"
+    }
+  },
+  {
+    "kind": "check",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "database": "test",
+      "table": "hits_stripelog"
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "database": "test",
+        "table": "hits_log"
+      }
+    },
+    "selectQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "CounterID"
+          ]
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "AdvEngineID"
+          ]
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "RegionID"
+          ]
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "SearchPhrase"
+          ]
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "UserID"
+          ]
+        }
+      ],
+      "from": {
+        "kind": "tableRef",
+        "database": "test",
+        "table": "hits"
+      }
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "database": "test",
+        "table": "hits_tinylog"
+      }
+    },
+    "selectQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "CounterID"
+          ]
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "AdvEngineID"
+          ]
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "RegionID"
+          ]
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "SearchPhrase"
+          ]
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "UserID"
+          ]
+        }
+      ],
+      "from": {
+        "kind": "tableRef",
+        "database": "test",
+        "table": "hits"
+      }
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "database": "test",
+        "table": "hits_stripelog"
+      }
+    },
+    "selectQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "CounterID"
+          ]
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "AdvEngineID"
+          ]
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "RegionID"
+          ]
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "SearchPhrase"
+          ]
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "UserID"
+          ]
+        }
+      ],
+      "from": {
+        "kind": "tableRef",
+        "database": "test",
+        "table": "hits"
+      }
+    }
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -141,6 +512,33 @@
       }
     ],
     "from": {
+      "kind": "tableRef",
+      "database": "test",
+      "table": "hits_stripelog"
+    }
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "database": "test",
+      "table": "hits_log"
+    }
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "database": "test",
+      "table": "hits_tinylog"
+    }
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
       "kind": "tableRef",
       "database": "test",
       "table": "hits_stripelog"

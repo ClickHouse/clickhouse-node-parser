@@ -1,3 +1,35 @@
+SET enable_analyzer = 1;
+
+DROP TABLE IF EXISTS t1;
+
+DROP TABLE IF EXISTS t2;
+
+CREATE TABLE t1
+(
+    a Int64,
+    b Int64
+)
+ENGINE = MergeTree
+ORDER BY a;
+
+CREATE TABLE t2
+(
+    key Int32,
+    val Int64
+)
+ENGINE = MergeTree
+ORDER BY key;
+
+INSERT INTO t1 SELECT
+    number,
+    number
+FROM numbers(100000);
+
+INSERT INTO t2 SELECT
+    number,
+    number
+FROM numbers(100000);
+
 SELECT
     1 * 1000.0001,
     (count(1.) = -2147483647)
@@ -19,4 +51,8 @@ FROM (
 GROUP BY '65537'
 WITH CUBE
 FORMAT Null
-SETTINGS max_block_size = 100, join_use_nulls = 1, max_execution_time = 1., max_result_rows = 0, max_result_bytes = 0;
+SETTINGS max_block_size = 100, join_use_nulls = 1, max_execution_time = 1., max_result_rows = 0, max_result_bytes = 0; -- { serverError TIMEOUT_EXCEEDED, QUERY_WAS_CANCELLED }
+
+DROP TABLE t1;
+
+DROP TABLE t2;

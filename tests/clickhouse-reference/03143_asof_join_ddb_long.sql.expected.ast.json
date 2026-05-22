@@ -1,5 +1,439 @@
 [
   {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "build"
+    },
+    "ifExists": true,
+    "leadingComments": [
+      "-- Tags: long, no-random-merge-tree-settings, no-distributed-cache",
+      "-- no-random-merge-tree-settings - times out in private"
+    ]
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "skewed_probe"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "session_timezone",
+        "value": {
+          "kind": "literal",
+          "type": "String",
+          "value": "UTC"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "build"
+    },
+    "engine": {
+      "name": "MergeTree"
+    },
+    "asQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "alias",
+          "expr": {
+            "kind": "binaryExpr",
+            "op": "+",
+            "left": {
+              "kind": "functionCall",
+              "name": "toDateTime",
+              "args": [
+                {
+                  "kind": "literal",
+                  "type": "String",
+                  "value": "1990-03-21 13:00:00"
+                }
+              ]
+            },
+            "right": {
+              "kind": "functionCall",
+              "name": "toIntervalMinute",
+              "args": [
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "number"
+                  ]
+                }
+              ]
+            }
+          },
+          "alias": "begin"
+        },
+        {
+          "kind": "alias",
+          "expr": {
+            "kind": "binaryExpr",
+            "op": "%",
+            "left": {
+              "kind": "columnRef",
+              "parts": [
+                "number"
+              ]
+            },
+            "right": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "4"
+            }
+          },
+          "alias": "key"
+        },
+        {
+          "kind": "alias",
+          "expr": {
+            "kind": "columnRef",
+            "parts": [
+              "number"
+            ]
+          },
+          "alias": "value"
+        }
+      ],
+      "from": {
+        "kind": "tableFunctionRef",
+        "name": "numbers",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "0"
+          },
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "4000000"
+          }
+        ]
+      }
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "key"
+          ]
+        }
+      },
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "begin"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "skewed_probe"
+    },
+    "engine": {
+      "name": "MergeTree"
+    },
+    "asQuery": {
+      "kind": "union",
+      "queries": [
+        {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "alias",
+              "expr": {
+                "kind": "binaryExpr",
+                "op": "+",
+                "left": {
+                  "kind": "functionCall",
+                  "name": "toDateTime",
+                  "args": [
+                    {
+                      "kind": "literal",
+                      "type": "String",
+                      "value": "1990-04-21 13:00:01"
+                    }
+                  ]
+                },
+                "right": {
+                  "kind": "functionCall",
+                  "name": "toIntervalMinute",
+                  "args": [
+                    {
+                      "kind": "columnRef",
+                      "parts": [
+                        "number"
+                      ]
+                    }
+                  ]
+                }
+              },
+              "alias": "begin"
+            },
+            {
+              "kind": "alias",
+              "expr": {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "0"
+              },
+              "alias": "key"
+            }
+          ],
+          "from": {
+            "kind": "tableFunctionRef",
+            "name": "numbers",
+            "args": [
+              {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "0"
+              },
+              {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "5"
+              }
+            ]
+          }
+        },
+        {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "alias",
+              "expr": {
+                "kind": "binaryExpr",
+                "op": "+",
+                "left": {
+                  "kind": "functionCall",
+                  "name": "toDateTime",
+                  "args": [
+                    {
+                      "kind": "literal",
+                      "type": "String",
+                      "value": "1990-05-21 13:00:01"
+                    }
+                  ]
+                },
+                "right": {
+                  "kind": "functionCall",
+                  "name": "toIntervalMinute",
+                  "args": [
+                    {
+                      "kind": "columnRef",
+                      "parts": [
+                        "number"
+                      ]
+                    }
+                  ]
+                }
+              },
+              "alias": "begin"
+            },
+            {
+              "kind": "alias",
+              "expr": {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "1"
+              },
+              "alias": "key"
+            }
+          ],
+          "from": {
+            "kind": "tableFunctionRef",
+            "name": "numbers",
+            "args": [
+              {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "0"
+              },
+              {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "10"
+              }
+            ]
+          }
+        },
+        {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "alias",
+              "expr": {
+                "kind": "binaryExpr",
+                "op": "+",
+                "left": {
+                  "kind": "functionCall",
+                  "name": "toDateTime",
+                  "args": [
+                    {
+                      "kind": "literal",
+                      "type": "String",
+                      "value": "1990-06-21 13:00:01"
+                    }
+                  ]
+                },
+                "right": {
+                  "kind": "functionCall",
+                  "name": "toIntervalMinute",
+                  "args": [
+                    {
+                      "kind": "columnRef",
+                      "parts": [
+                        "number"
+                      ]
+                    }
+                  ]
+                }
+              },
+              "alias": "begin"
+            },
+            {
+              "kind": "alias",
+              "expr": {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "2"
+              },
+              "alias": "key"
+            }
+          ],
+          "from": {
+            "kind": "tableFunctionRef",
+            "name": "numbers",
+            "args": [
+              {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "0"
+              },
+              {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "20"
+              }
+            ]
+          }
+        },
+        {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "alias",
+              "expr": {
+                "kind": "binaryExpr",
+                "op": "+",
+                "left": {
+                  "kind": "functionCall",
+                  "name": "toDateTime",
+                  "args": [
+                    {
+                      "kind": "literal",
+                      "type": "String",
+                      "value": "1990-03-21 13:00:01"
+                    }
+                  ]
+                },
+                "right": {
+                  "kind": "functionCall",
+                  "name": "toIntervalMinute",
+                  "args": [
+                    {
+                      "kind": "columnRef",
+                      "parts": [
+                        "number"
+                      ]
+                    }
+                  ]
+                }
+              },
+              "alias": "begin"
+            },
+            {
+              "kind": "alias",
+              "expr": {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "3"
+              },
+              "alias": "key"
+            }
+          ],
+          "from": {
+            "kind": "tableFunctionRef",
+            "name": "numbers",
+            "args": [
+              {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "0"
+              },
+              {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "4000000"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "key"
+          ]
+        }
+      },
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "begin"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "max_rows_to_read",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      }
+    ]
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -29,7 +463,7 @@
         "kind": "tableRef",
         "table": "skewed_probe"
       },
-      "kind": "join",
+      "kind": "joinExpr",
       "joinType": "INNER",
       "right": {
         "kind": "tableRef",
@@ -74,7 +508,7 @@
         "kind": "tableRef",
         "table": "skewed_probe"
       },
-      "kind": "join",
+      "kind": "joinExpr",
       "joinType": "INNER",
       "right": {
         "kind": "tableRef",

@@ -1,3 +1,5 @@
+set short_circuit_function_evaluation = 'enable';
+set convert_query_to_cnf = 0;
 select if(number > 0, intDiv(number + 100, number), throwIf(number)) from numbers(10);
 select multiIf(number == 0, 0, number == 1, intDiv(1, number), number == 2, intDiv(1, number - 1), number == 3, intDiv(1, number - 2), intDiv(1, number - 3)) from numbers(10);
 select number != 0 and intDiv(1, number) == 0 and number != 2 and intDiv(1, number - 2) == 0 from numbers(10);
@@ -102,6 +104,7 @@ select toColumnTypeName(toDecimal32OrZero(toString(number), 5)) from numbers(5);
 select if(if(number > 0, intDiv(42, number), 0), intDiv(42, number), 8) from numbers(5);
 select if(number > 0, intDiv(42, number), 0), if(number = 0, 0, intDiv(42, number)) from numbers(5);
 select Null or isNull(intDiv(number, 1)) from numbers(5);
+set compile_expressions = 1;
 select if(number > 0, intDiv(42, number), 1) from numbers(5);
 select if(number > 0, 42 / toDecimal32(number, 2), 0) from numbers(5);
 select if(number = 0, 0, toDecimal32(42, 2) / number) from numbers(5);

@@ -1,0 +1,147 @@
+[
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "enable_variant_type",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "t0"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "t0"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "c0",
+        "type": {
+          "name": "Variant",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "Int"
+              }
+            },
+            {
+              "kind": "type",
+              "type": {
+                "name": "Int"
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "engine": {
+      "name": "Memory",
+      "args": []
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "function",
+      "func": {
+        "kind": "tableFunctionRef",
+        "name": "file",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": "data_03314.file"
+          },
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": "RowBinary"
+          },
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": "c0 Variant(Int,Int)"
+          }
+        ]
+      }
+    },
+    "selectQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "c0"
+          ]
+        }
+      ],
+      "from": {
+        "kind": "tableRef",
+        "table": "t0"
+      }
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "t0"
+      }
+    },
+    "columns": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "c0"
+        ]
+      }
+    ],
+    "selectQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "asterisk"
+        }
+      ],
+      "from": {
+        "kind": "tableFunctionRef",
+        "name": "file",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": "data_03314.file"
+          },
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": "RowBinary"
+          },
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": "c0 Variant(Int,Int)"
+          }
+        ]
+      }
+    }
+  }
+]

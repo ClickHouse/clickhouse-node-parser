@@ -1,3 +1,5 @@
+Set
+
 SelectWithUnionQuery (children 1)
  ExpressionList (children 1)
   SelectQuery (children 3)
@@ -197,6 +199,56 @@ SelectWithUnionQuery (children 1)
                Identifier system.numbers
           Literal UInt64_100
    Set
+
+DropQuery  test_local (children 1)
+ Identifier test_local
+
+DropQuery  test_distributed (children 1)
+ Identifier test_distributed
+
+Set
+
+CreateQuery test_local (children 3)
+ Identifier test_local
+ Columns definition (children 1)
+  ExpressionList (children 2)
+   ColumnDeclaration date (children 1)
+    DataType Date
+   ColumnDeclaration value (children 1)
+    DataType UInt32
+ Storage definition (children 1)
+  Function MergeTree (children 1)
+   ExpressionList (children 3)
+    Identifier date
+    Identifier date
+    Literal UInt64_8192
+
+CreateQuery test_distributed (children 2)
+ Identifier test_distributed
+ Storage definition (children 1)
+  Function Distributed (children 1)
+   ExpressionList (children 4)
+    Identifier test_cluster_two_shards
+    Function currentDatabase (children 1)
+     ExpressionList
+    Identifier test_local
+    Function rand (children 1)
+     ExpressionList
+
+InsertQuery   (children 2)
+ Identifier test_local
+ SelectWithUnionQuery (children 1)
+  ExpressionList (children 1)
+   SelectQuery (children 2)
+    ExpressionList (children 2)
+     Literal '2000-08-01'
+     Identifier number (alias value)
+    TablesInSelectQuery (children 1)
+     TablesInSelectQueryElement (children 1)
+      TableExpression (children 1)
+       Function numbers (children 1)
+        ExpressionList (children 1)
+         Literal UInt64_50000
 
 SelectWithUnionQuery (children 1)
  ExpressionList (children 1)

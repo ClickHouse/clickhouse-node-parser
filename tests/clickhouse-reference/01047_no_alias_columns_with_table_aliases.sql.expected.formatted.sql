@@ -1,3 +1,16 @@
+DROP TABLE IF EXISTS requests;
+
+CREATE TABLE requests
+(
+    event_time DateTime,
+    event_date Date MATERIALIZED toDate(event_time),
+    event_tm DateTime ALIAS event_time
+)
+ENGINE = MergeTree
+ORDER BY (event_time);
+
+INSERT INTO requests (event_time);
+
 SELECT *
 FROM requests
 WHERE event_date > '2000-01-01';
@@ -17,3 +30,5 @@ WHERE t.event_tm > toDate('2000-01-01');
 SELECT *
 FROM requests AS t
 WHERE t.event_tm > toDate('2000-01-01');
+
+DROP TABLE requests;

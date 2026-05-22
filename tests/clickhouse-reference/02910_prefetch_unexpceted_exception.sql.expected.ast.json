@@ -1,5 +1,141 @@
 [
   {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "prefetched_table"
+    },
+    "ifExists": true,
+    "leadingComments": [
+      "-- Tags: no-parallel, no-random-settings, no-random-merge-tree-settings",
+      "-- no-parallel -- enables failpoint",
+      "-- no-random-settings -- depend on type of part, should always fail"
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "prefetched_table"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "key",
+        "type": {
+          "name": "UInt64"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "s",
+        "type": {
+          "name": "String"
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree",
+      "args": []
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "key"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "prefetched_table"
+      }
+    },
+    "selectQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "functionCall",
+          "name": "rand",
+          "args": []
+        },
+        {
+          "kind": "functionCall",
+          "name": "randomString",
+          "args": [
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "5"
+            }
+          ]
+        }
+      ],
+      "from": {
+        "kind": "tableFunctionRef",
+        "name": "numbers",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "1000"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "local_filesystem_read_prefetch",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "allow_prefetched_read_pool_for_remote_filesystem",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "allow_prefetched_read_pool_for_local_filesystem",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "system",
+    "body": "SYSTEM ENABLE FAILPOINT prefetched_reader_pool_failpoint"
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -10,6 +146,13 @@
       "kind": "tableRef",
       "table": "prefetched_table"
     },
-    "format": "Null"
+    "format": "Null",
+    "trailingComments": [
+      "--{serverError BAD_ARGUMENTS}"
+    ]
+  },
+  {
+    "kind": "system",
+    "body": "SYSTEM DISABLE FAILPOINT prefetched_reader_pool_failpoint"
   }
 ]

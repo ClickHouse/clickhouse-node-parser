@@ -1,5 +1,295 @@
 [
   {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "minmax_idx"
+    },
+    "ifExists": true,
+    "leadingComments": [
+      "-- Tags: long, replica"
+    ]
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "minmax_idx_r"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "minmax_idx2"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "minmax_idx2_r"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "replication_alter_partitions_sync",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "2"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "minmax_idx"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "u64",
+        "type": {
+          "name": "UInt64"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "i32",
+        "type": {
+          "name": "Int32"
+        }
+      }
+    ],
+    "engine": {
+      "name": "ReplicatedMergeTree",
+      "args": [
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "/clickhouse/tables/{database}/test_00836/indices_alter1"
+        },
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "r1"
+        }
+      ]
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "u64"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "minmax_idx_r"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "u64",
+        "type": {
+          "name": "UInt64"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "i32",
+        "type": {
+          "name": "Int32"
+        }
+      }
+    ],
+    "engine": {
+      "name": "ReplicatedMergeTree",
+      "args": [
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "/clickhouse/tables/{database}/test_00836/indices_alter1"
+        },
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "r2"
+        }
+      ]
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "u64"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "minmax_idx"
+      }
+    }
+  },
+  {
+    "kind": "system",
+    "body": "SYSTEM SYNC REPLICA minmax_idx_r"
+  },
+  {
+    "kind": "alter",
+    "table": {
+      "kind": "tableRef",
+      "table": "minmax_idx"
+    },
+    "commands": [
+      {
+        "kind": "alterCommand",
+        "commandType": "ADD_INDEX",
+        "index": {
+          "kind": "indexDef",
+          "name": "idx1",
+          "expr": {
+            "kind": "binaryExpr",
+            "op": "*",
+            "left": {
+              "kind": "columnRef",
+              "parts": [
+                "u64"
+              ]
+            },
+            "right": {
+              "kind": "columnRef",
+              "parts": [
+                "i32"
+              ]
+            }
+          },
+          "indexType": {
+            "name": "minmax"
+          },
+          "granularity": 10
+        }
+      }
+    ]
+  },
+  {
+    "kind": "alter",
+    "table": {
+      "kind": "tableRef",
+      "table": "minmax_idx_r"
+    },
+    "commands": [
+      {
+        "kind": "alterCommand",
+        "commandType": "ADD_INDEX",
+        "index": {
+          "kind": "indexDef",
+          "name": "idx2",
+          "expr": {
+            "kind": "binaryExpr",
+            "op": "+",
+            "left": {
+              "kind": "columnRef",
+              "parts": [
+                "u64"
+              ]
+            },
+            "right": {
+              "kind": "columnRef",
+              "parts": [
+                "i32"
+              ]
+            }
+          },
+          "indexType": {
+            "name": "minmax"
+          },
+          "granularity": 10
+        }
+      }
+    ]
+  },
+  {
+    "kind": "alter",
+    "table": {
+      "kind": "tableRef",
+      "table": "minmax_idx"
+    },
+    "commands": [
+      {
+        "kind": "alterCommand",
+        "commandType": "ADD_INDEX",
+        "index": {
+          "kind": "indexDef",
+          "name": "idx3",
+          "expr": {
+            "kind": "binaryExpr",
+            "op": "-",
+            "left": {
+              "kind": "columnRef",
+              "parts": [
+                "u64"
+              ]
+            },
+            "right": {
+              "kind": "columnRef",
+              "parts": [
+                "i32"
+              ]
+            }
+          },
+          "indexType": {
+            "name": "minmax"
+          },
+          "granularity": 10
+        },
+        "afterIndex": "idx1"
+      }
+    ]
+  },
+  {
+    "kind": "showCreate",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "minmax_idx"
+    }
+  },
+  {
+    "kind": "showCreate",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "minmax_idx_r"
+    }
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -39,7 +329,7 @@
       {
         "kind": "orderByItem",
         "expr": {
-          "kind": "tuple",
+          "kind": "tupleLiteral",
           "elements": [
             {
               "kind": "columnRef",
@@ -100,7 +390,7 @@
       {
         "kind": "orderByItem",
         "expr": {
-          "kind": "tuple",
+          "kind": "tupleLiteral",
           "elements": [
             {
               "kind": "columnRef",
@@ -120,6 +410,60 @@
         "direction": "ASC"
       }
     ]
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "minmax_idx"
+      }
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "minmax_idx_r"
+      }
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "minmax_idx"
+      }
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "minmax_idx_r"
+      }
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "minmax_idx"
+      }
+    }
+  },
+  {
+    "kind": "system",
+    "body": "SYSTEM SYNC REPLICA minmax_idx"
   },
   {
     "kind": "select",
@@ -161,7 +505,7 @@
       {
         "kind": "orderByItem",
         "expr": {
-          "kind": "tuple",
+          "kind": "tupleLiteral",
           "elements": [
             {
               "kind": "columnRef",
@@ -222,7 +566,7 @@
       {
         "kind": "orderByItem",
         "expr": {
-          "kind": "tuple",
+          "kind": "tupleLiteral",
           "elements": [
             {
               "kind": "columnRef",
@@ -242,6 +586,284 @@
         "direction": "ASC"
       }
     ]
+  },
+  {
+    "kind": "alter",
+    "table": {
+      "kind": "tableRef",
+      "table": "minmax_idx"
+    },
+    "commands": [
+      {
+        "kind": "alterCommand",
+        "commandType": "DROP_INDEX",
+        "indexName": "idx1"
+      }
+    ]
+  },
+  {
+    "kind": "alter",
+    "table": {
+      "kind": "tableRef",
+      "table": "minmax_idx"
+    },
+    "commands": [
+      {
+        "kind": "alterCommand",
+        "commandType": "DROP_INDEX",
+        "indexName": "idx2"
+      }
+    ]
+  },
+  {
+    "kind": "alter",
+    "table": {
+      "kind": "tableRef",
+      "table": "minmax_idx_r"
+    },
+    "commands": [
+      {
+        "kind": "alterCommand",
+        "commandType": "DROP_INDEX",
+        "indexName": "idx3"
+      }
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "minmax_idx2"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "u64",
+        "type": {
+          "name": "UInt64"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "i32",
+        "type": {
+          "name": "Int32"
+        }
+      },
+      {
+        "kind": "indexDef",
+        "name": "idx1",
+        "expr": {
+          "kind": "binaryExpr",
+          "op": "+",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "u64"
+            ]
+          },
+          "right": {
+            "kind": "columnRef",
+            "parts": [
+              "i32"
+            ]
+          }
+        },
+        "indexType": {
+          "name": "minmax"
+        },
+        "granularity": 10
+      },
+      {
+        "kind": "indexDef",
+        "name": "idx2",
+        "expr": {
+          "kind": "binaryExpr",
+          "op": "*",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "u64"
+            ]
+          },
+          "right": {
+            "kind": "columnRef",
+            "parts": [
+              "i32"
+            ]
+          }
+        },
+        "indexType": {
+          "name": "minmax"
+        },
+        "granularity": 10
+      }
+    ],
+    "engine": {
+      "name": "ReplicatedMergeTree",
+      "args": [
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "/clickhouse/tables/{database}/test_00836/indices_alter2"
+        },
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "r1"
+        }
+      ]
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "u64"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "minmax_idx2_r"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "u64",
+        "type": {
+          "name": "UInt64"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "i32",
+        "type": {
+          "name": "Int32"
+        }
+      },
+      {
+        "kind": "indexDef",
+        "name": "idx1",
+        "expr": {
+          "kind": "binaryExpr",
+          "op": "+",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "u64"
+            ]
+          },
+          "right": {
+            "kind": "columnRef",
+            "parts": [
+              "i32"
+            ]
+          }
+        },
+        "indexType": {
+          "name": "minmax"
+        },
+        "granularity": 10
+      },
+      {
+        "kind": "indexDef",
+        "name": "idx2",
+        "expr": {
+          "kind": "binaryExpr",
+          "op": "*",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "u64"
+            ]
+          },
+          "right": {
+            "kind": "columnRef",
+            "parts": [
+              "i32"
+            ]
+          }
+        },
+        "indexType": {
+          "name": "minmax"
+        },
+        "granularity": 10
+      }
+    ],
+    "engine": {
+      "name": "ReplicatedMergeTree",
+      "args": [
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "/clickhouse/tables/{database}/test_00836/indices_alter2"
+        },
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "r2"
+        }
+      ]
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "u64"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "kind": "showCreate",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "minmax_idx2"
+    }
+  },
+  {
+    "kind": "showCreate",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "minmax_idx2_r"
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "minmax_idx2"
+      }
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "minmax_idx2_r"
+      }
+    }
+  },
+  {
+    "kind": "system",
+    "body": "SYSTEM SYNC REPLICA minmax_idx2"
+  },
+  {
+    "kind": "system",
+    "body": "SYSTEM SYNC REPLICA minmax_idx2_r"
   },
   {
     "kind": "select",
@@ -283,7 +905,7 @@
       {
         "kind": "orderByItem",
         "expr": {
-          "kind": "tuple",
+          "kind": "tupleLiteral",
           "elements": [
             {
               "kind": "columnRef",
@@ -344,7 +966,7 @@
       {
         "kind": "orderByItem",
         "expr": {
-          "kind": "tuple",
+          "kind": "tupleLiteral",
           "elements": [
             {
               "kind": "columnRef",
@@ -364,5 +986,56 @@
         "direction": "ASC"
       }
     ]
+  },
+  {
+    "kind": "alter",
+    "table": {
+      "kind": "tableRef",
+      "table": "minmax_idx2_r"
+    },
+    "commands": [
+      {
+        "kind": "alterCommand",
+        "commandType": "DROP_INDEX",
+        "indexName": "idx1"
+      },
+      {
+        "kind": "alterCommand",
+        "commandType": "DROP_INDEX",
+        "indexName": "idx2"
+      }
+    ]
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "minmax_idx"
+    }
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "minmax_idx_r"
+    }
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "minmax_idx2"
+    }
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "minmax_idx2_r"
+    }
   }
 ]

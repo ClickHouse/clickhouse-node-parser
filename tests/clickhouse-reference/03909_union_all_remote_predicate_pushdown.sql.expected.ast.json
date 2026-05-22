@@ -1,5 +1,59 @@
 [
   {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "t_union_remote"
+    },
+    "ifExists": true,
+    "leadingComments": [
+      "-- Regression test for https://github.com/ClickHouse/ClickHouse/issues/81636",
+      "-- UNION ALL with remote() and an outer WHERE clause should not fail with",
+      "-- UNKNOWN_DATABASE when predicate pushdown tries to resolve the remote database locally."
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "t_union_remote"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "key",
+        "type": {
+          "name": "UInt64"
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree",
+      "args": []
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "key"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "t_union_remote"
+      }
+    }
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -39,7 +93,7 @@
               }
             ],
             "from": {
-              "kind": "tableFunction",
+              "kind": "tableFunctionRef",
               "name": "remote",
               "args": [
                 {
@@ -78,6 +132,14 @@
         "type": "UInt64",
         "value": "1"
       }
+    }
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "t_union_remote"
     }
   }
 ]

@@ -1,3 +1,6 @@
+-- { echoOn }
+SET allow_experimental_nullable_tuple_type = 1;
+
 SELECT
     flattenTuple(CAST((1, ('x', 7)) AS Nullable(Tuple(a Int32, b Tuple(String, Int32))))) AS res,
     toTypeName(res),
@@ -6,7 +9,7 @@ SELECT
 SELECT
     flattenTuple(CAST(NULL AS Nullable(Tuple()))) AS res,
     toTypeName(res),
-    isNull(res);
+    isNull(res); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
 SELECT
     flattenTuple(CAST(NULL AS Nullable(Tuple(a Nullable(Int32))))) AS res,

@@ -1,5 +1,322 @@
 [
   {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "test"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "str",
+        "type": {
+          "name": "String"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "column_with_codec",
+        "type": {
+          "name": "String"
+        },
+        "codec": [
+          {
+            "name": "ZSTD"
+          }
+        ]
+      },
+      {
+        "kind": "columnDef",
+        "name": "column_with_alias",
+        "type": {
+          "name": "String"
+        },
+        "defaultKind": "MATERIALIZED",
+        "defaultExpr": {
+          "kind": "functionCall",
+          "name": "concat",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "str"
+              ]
+            },
+            {
+              "kind": "alias",
+              "expr": {
+                "kind": "literal",
+                "type": "String",
+                "value": "a"
+              },
+              "alias": "a"
+            }
+          ]
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree",
+      "args": []
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "functionCall",
+          "name": "tuple",
+          "args": []
+        }
+      }
+    ],
+    "leadingComments": [
+      "-- Tags: no-replicated-database",
+      "-- no-replicated-database: It messes up the output and this test explicitly checks the replicated database"
+    ]
+  },
+  {
+    "kind": "alter",
+    "table": {
+      "kind": "tableRef",
+      "table": "test"
+    },
+    "commands": [
+      {
+        "kind": "alterCommand",
+        "commandType": "ADD_COLUMN",
+        "column": {
+          "kind": "columnDef",
+          "name": "invalid_column",
+          "type": {
+            "name": "String"
+          },
+          "defaultKind": "MATERIALIZED",
+          "defaultExpr": {
+            "kind": "functionCall",
+            "name": "concat",
+            "args": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "str"
+                ]
+              },
+              {
+                "kind": "alias",
+                "expr": {
+                  "kind": "literal",
+                  "type": "String",
+                  "value": "b"
+                },
+                "alias": "a"
+              }
+            ]
+          }
+        }
+      }
+    ],
+    "leadingComments": [
+      "-- Cannot have a different expression with the same alias"
+    ],
+    "trailingComments": [
+      "-- { serverError MULTIPLE_EXPRESSIONS_FOR_ALIAS }"
+    ]
+  },
+  {
+    "kind": "alter",
+    "table": {
+      "kind": "tableRef",
+      "table": "test"
+    },
+    "commands": [
+      {
+        "kind": "alterCommand",
+        "commandType": "ADD_COLUMN",
+        "column": {
+          "kind": "columnDef",
+          "name": "invalid_column",
+          "type": {
+            "name": "String"
+          },
+          "defaultKind": "DEFAULT",
+          "defaultExpr": {
+            "kind": "functionCall",
+            "name": "concat",
+            "args": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "str"
+                ]
+              },
+              {
+                "kind": "alias",
+                "expr": {
+                  "kind": "literal",
+                  "type": "String",
+                  "value": "b"
+                },
+                "alias": "a"
+              }
+            ]
+          }
+        }
+      }
+    ],
+    "trailingComments": [
+      "-- { serverError MULTIPLE_EXPRESSIONS_FOR_ALIAS }"
+    ]
+  },
+  {
+    "kind": "alter",
+    "table": {
+      "kind": "tableRef",
+      "table": "test"
+    },
+    "commands": [
+      {
+        "kind": "alterCommand",
+        "commandType": "MODIFY_COLUMN",
+        "column": {
+          "kind": "columnDef",
+          "name": "column_with_codec",
+          "type": {
+            "name": "String"
+          },
+          "defaultKind": "ALIAS",
+          "defaultExpr": {
+            "kind": "columnRef",
+            "parts": [
+              "str"
+            ]
+          }
+        }
+      }
+    ],
+    "leadingComments": [
+      "-- Cannot specify codec for column type ALIAS"
+    ],
+    "trailingComments": [
+      "-- { serverError BAD_ARGUMENTS }"
+    ]
+  },
+  {
+    "kind": "alter",
+    "table": {
+      "kind": "tableRef",
+      "table": "test"
+    },
+    "commands": [
+      {
+        "kind": "alterCommand",
+        "commandType": "ADD_COLUMN",
+        "column": {
+          "kind": "columnDef",
+          "name": "valid_column_1",
+          "type": {
+            "name": "String"
+          },
+          "defaultKind": "DEFAULT",
+          "defaultExpr": {
+            "kind": "functionCall",
+            "name": "concat",
+            "args": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "str"
+                ]
+              },
+              {
+                "kind": "alias",
+                "expr": {
+                  "kind": "literal",
+                  "type": "String",
+                  "value": "a"
+                },
+                "alias": "a"
+              }
+            ]
+          }
+        }
+      }
+    ],
+    "leadingComments": [
+      "-- alias is defined exactly the same"
+    ]
+  },
+  {
+    "kind": "alter",
+    "table": {
+      "kind": "tableRef",
+      "table": "test"
+    },
+    "commands": [
+      {
+        "kind": "alterCommand",
+        "commandType": "ADD_COLUMN",
+        "column": {
+          "kind": "columnDef",
+          "name": "valid_column_2",
+          "type": {
+            "name": "String"
+          },
+          "defaultKind": "MATERIALIZED",
+          "defaultExpr": {
+            "kind": "functionCall",
+            "name": "concat",
+            "args": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "str"
+                ]
+              },
+              {
+                "kind": "alias",
+                "expr": {
+                  "kind": "literal",
+                  "type": "String",
+                  "value": "c"
+                },
+                "alias": "c"
+              }
+            ]
+          }
+        }
+      }
+    ],
+    "leadingComments": [
+      "-- different alias"
+    ]
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "test"
+      }
+    },
+    "columns": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "str"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "column_with_codec"
+        ]
+      }
+    ],
+    "leadingComments": [
+      "-- do one insert to make sure we can insert into the table"
+    ]
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -31,6 +348,323 @@
       "kind": "tableRef",
       "table": "test"
     }
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "test"
+    }
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "test2"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "str",
+        "type": {
+          "name": "String"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "column_with_codec",
+        "type": {
+          "name": "String"
+        },
+        "codec": [
+          {
+            "name": "ZSTD"
+          }
+        ]
+      },
+      {
+        "kind": "columnDef",
+        "name": "column_with_alias",
+        "type": {
+          "name": "String"
+        },
+        "defaultKind": "MATERIALIZED",
+        "defaultExpr": {
+          "kind": "functionCall",
+          "name": "concat",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "str"
+              ]
+            },
+            {
+              "kind": "alias",
+              "expr": {
+                "kind": "literal",
+                "type": "String",
+                "value": "a"
+              },
+              "alias": "a"
+            }
+          ]
+        }
+      }
+    ],
+    "engine": {
+      "name": "ReplicatedMergeTree",
+      "args": [
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "/clickhouse/03224_invalid_alter/{database}/{table}"
+        },
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "r1"
+        }
+      ]
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "functionCall",
+          "name": "tuple",
+          "args": []
+        }
+      }
+    ]
+  },
+  {
+    "kind": "alter",
+    "table": {
+      "kind": "tableRef",
+      "table": "test2"
+    },
+    "commands": [
+      {
+        "kind": "alterCommand",
+        "commandType": "ADD_COLUMN",
+        "column": {
+          "kind": "columnDef",
+          "name": "invalid_column",
+          "type": {
+            "name": "String"
+          },
+          "defaultKind": "MATERIALIZED",
+          "defaultExpr": {
+            "kind": "functionCall",
+            "name": "concat",
+            "args": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "str"
+                ]
+              },
+              {
+                "kind": "alias",
+                "expr": {
+                  "kind": "literal",
+                  "type": "String",
+                  "value": "b"
+                },
+                "alias": "a"
+              }
+            ]
+          }
+        }
+      }
+    ],
+    "trailingComments": [
+      "-- { serverError MULTIPLE_EXPRESSIONS_FOR_ALIAS }"
+    ]
+  },
+  {
+    "kind": "alter",
+    "table": {
+      "kind": "tableRef",
+      "table": "test2"
+    },
+    "commands": [
+      {
+        "kind": "alterCommand",
+        "commandType": "ADD_COLUMN",
+        "column": {
+          "kind": "columnDef",
+          "name": "invalid_column",
+          "type": {
+            "name": "String"
+          },
+          "defaultKind": "DEFAULT",
+          "defaultExpr": {
+            "kind": "functionCall",
+            "name": "concat",
+            "args": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "str"
+                ]
+              },
+              {
+                "kind": "alias",
+                "expr": {
+                  "kind": "literal",
+                  "type": "String",
+                  "value": "b"
+                },
+                "alias": "a"
+              }
+            ]
+          }
+        }
+      }
+    ],
+    "trailingComments": [
+      "-- { serverError MULTIPLE_EXPRESSIONS_FOR_ALIAS }"
+    ]
+  },
+  {
+    "kind": "alter",
+    "table": {
+      "kind": "tableRef",
+      "table": "test2"
+    },
+    "commands": [
+      {
+        "kind": "alterCommand",
+        "commandType": "MODIFY_COLUMN",
+        "column": {
+          "kind": "columnDef",
+          "name": "column_with_codec",
+          "type": {
+            "name": "String"
+          },
+          "defaultKind": "ALIAS",
+          "defaultExpr": {
+            "kind": "columnRef",
+            "parts": [
+              "str"
+            ]
+          }
+        }
+      }
+    ],
+    "trailingComments": [
+      "-- { serverError BAD_ARGUMENTS }"
+    ]
+  },
+  {
+    "kind": "alter",
+    "table": {
+      "kind": "tableRef",
+      "table": "test2"
+    },
+    "commands": [
+      {
+        "kind": "alterCommand",
+        "commandType": "ADD_COLUMN",
+        "column": {
+          "kind": "columnDef",
+          "name": "valid_column_1",
+          "type": {
+            "name": "String"
+          },
+          "defaultKind": "DEFAULT",
+          "defaultExpr": {
+            "kind": "functionCall",
+            "name": "concat",
+            "args": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "str"
+                ]
+              },
+              {
+                "kind": "alias",
+                "expr": {
+                  "kind": "literal",
+                  "type": "String",
+                  "value": "a"
+                },
+                "alias": "a"
+              }
+            ]
+          }
+        }
+      }
+    ]
+  },
+  {
+    "kind": "alter",
+    "table": {
+      "kind": "tableRef",
+      "table": "test2"
+    },
+    "commands": [
+      {
+        "kind": "alterCommand",
+        "commandType": "ADD_COLUMN",
+        "column": {
+          "kind": "columnDef",
+          "name": "valid_column_2",
+          "type": {
+            "name": "String"
+          },
+          "defaultKind": "MATERIALIZED",
+          "defaultExpr": {
+            "kind": "functionCall",
+            "name": "concat",
+            "args": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "str"
+                ]
+              },
+              {
+                "kind": "alias",
+                "expr": {
+                  "kind": "literal",
+                  "type": "String",
+                  "value": "c"
+                },
+                "alias": "c"
+              }
+            ]
+          }
+        }
+      }
+    ]
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "test2"
+      }
+    },
+    "columns": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "str"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "column_with_codec"
+        ]
+      }
+    ]
   },
   {
     "kind": "select",
@@ -66,6 +700,378 @@
     }
   },
   {
+    "kind": "drop",
+    "targetType": "DATABASE",
+    "table": {
+      "kind": "tableRef",
+      "table": {
+        "kind": "queryParam",
+        "name": "CLICKHOUSE_DATABASE",
+        "type": "Identifier"
+      }
+    }
+  },
+  {
+    "kind": "createDatabase",
+    "name": {
+      "kind": "queryParam",
+      "name": "CLICKHOUSE_DATABASE",
+      "type": "Identifier"
+    },
+    "onCluster": "test_shard_localhost",
+    "engine": {
+      "name": "Atomic"
+    }
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "test3"
+    },
+    "onCluster": "test_shard_localhost",
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "str",
+        "type": {
+          "name": "String"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "column_with_codec",
+        "type": {
+          "name": "String"
+        },
+        "codec": [
+          {
+            "name": "ZSTD"
+          }
+        ]
+      },
+      {
+        "kind": "columnDef",
+        "name": "column_with_alias",
+        "type": {
+          "name": "String"
+        },
+        "defaultKind": "MATERIALIZED",
+        "defaultExpr": {
+          "kind": "functionCall",
+          "name": "concat",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "str"
+              ]
+            },
+            {
+              "kind": "alias",
+              "expr": {
+                "kind": "literal",
+                "type": "String",
+                "value": "a"
+              },
+              "alias": "a"
+            }
+          ]
+        }
+      }
+    ],
+    "engine": {
+      "name": "ReplicatedMergeTree",
+      "args": [
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "/clickhouse/03224_invalid_alter/{database}_atomic/{table}"
+        },
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "r1"
+        }
+      ]
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "functionCall",
+          "name": "tuple",
+          "args": []
+        }
+      }
+    ]
+  },
+  {
+    "kind": "alter",
+    "table": {
+      "kind": "tableRef",
+      "table": "test3"
+    },
+    "commands": [
+      {
+        "kind": "alterCommand",
+        "commandType": "ADD_COLUMN",
+        "column": {
+          "kind": "columnDef",
+          "name": "invalid_column",
+          "type": {
+            "name": "String"
+          },
+          "defaultKind": "MATERIALIZED",
+          "defaultExpr": {
+            "kind": "functionCall",
+            "name": "concat",
+            "args": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "str"
+                ]
+              },
+              {
+                "kind": "alias",
+                "expr": {
+                  "kind": "literal",
+                  "type": "String",
+                  "value": "b"
+                },
+                "alias": "a"
+              }
+            ]
+          }
+        }
+      }
+    ],
+    "onCluster": "test_shard_localhost",
+    "settings": [
+      {
+        "name": "distributed_ddl_output_mode",
+        "value": {
+          "kind": "literal",
+          "type": "String",
+          "value": "throw"
+        }
+      }
+    ],
+    "format": "Null",
+    "trailingComments": [
+      "-- { serverError MULTIPLE_EXPRESSIONS_FOR_ALIAS }"
+    ]
+  },
+  {
+    "kind": "alter",
+    "table": {
+      "kind": "tableRef",
+      "table": "test3"
+    },
+    "commands": [
+      {
+        "kind": "alterCommand",
+        "commandType": "ADD_COLUMN",
+        "column": {
+          "kind": "columnDef",
+          "name": "invalid_column",
+          "type": {
+            "name": "String"
+          },
+          "defaultKind": "DEFAULT",
+          "defaultExpr": {
+            "kind": "functionCall",
+            "name": "concat",
+            "args": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "str"
+                ]
+              },
+              {
+                "kind": "alias",
+                "expr": {
+                  "kind": "literal",
+                  "type": "String",
+                  "value": "b"
+                },
+                "alias": "a"
+              }
+            ]
+          }
+        }
+      }
+    ],
+    "onCluster": "test_shard_localhost",
+    "settings": [
+      {
+        "name": "distributed_ddl_output_mode",
+        "value": {
+          "kind": "literal",
+          "type": "String",
+          "value": "throw"
+        }
+      }
+    ],
+    "format": "Null",
+    "trailingComments": [
+      "-- { serverError MULTIPLE_EXPRESSIONS_FOR_ALIAS }"
+    ]
+  },
+  {
+    "kind": "alter",
+    "table": {
+      "kind": "tableRef",
+      "table": "test3"
+    },
+    "commands": [
+      {
+        "kind": "alterCommand",
+        "commandType": "MODIFY_COLUMN",
+        "column": {
+          "kind": "columnDef",
+          "name": "column_with_codec",
+          "type": {
+            "name": "String"
+          },
+          "defaultKind": "ALIAS",
+          "defaultExpr": {
+            "kind": "columnRef",
+            "parts": [
+              "str"
+            ]
+          }
+        }
+      }
+    ],
+    "onCluster": "test_shard_localhost",
+    "settings": [
+      {
+        "name": "distributed_ddl_output_mode",
+        "value": {
+          "kind": "literal",
+          "type": "String",
+          "value": "throw"
+        }
+      }
+    ],
+    "format": "Null",
+    "trailingComments": [
+      "-- { serverError BAD_ARGUMENTS }"
+    ]
+  },
+  {
+    "kind": "alter",
+    "table": {
+      "kind": "tableRef",
+      "table": "test3"
+    },
+    "commands": [
+      {
+        "kind": "alterCommand",
+        "commandType": "ADD_COLUMN",
+        "column": {
+          "kind": "columnDef",
+          "name": "valid_column_1",
+          "type": {
+            "name": "String"
+          },
+          "defaultKind": "DEFAULT",
+          "defaultExpr": {
+            "kind": "functionCall",
+            "name": "concat",
+            "args": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "str"
+                ]
+              },
+              {
+                "kind": "alias",
+                "expr": {
+                  "kind": "literal",
+                  "type": "String",
+                  "value": "a"
+                },
+                "alias": "a"
+              }
+            ]
+          }
+        }
+      }
+    ],
+    "onCluster": "test_shard_localhost"
+  },
+  {
+    "kind": "alter",
+    "table": {
+      "kind": "tableRef",
+      "table": "test3"
+    },
+    "commands": [
+      {
+        "kind": "alterCommand",
+        "commandType": "ADD_COLUMN",
+        "column": {
+          "kind": "columnDef",
+          "name": "valid_column_2",
+          "type": {
+            "name": "String"
+          },
+          "defaultKind": "MATERIALIZED",
+          "defaultExpr": {
+            "kind": "functionCall",
+            "name": "concat",
+            "args": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "str"
+                ]
+              },
+              {
+                "kind": "alias",
+                "expr": {
+                  "kind": "literal",
+                  "type": "String",
+                  "value": "c"
+                },
+                "alias": "c"
+              }
+            ]
+          }
+        }
+      }
+    ],
+    "onCluster": "test_shard_localhost"
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "test3"
+      }
+    },
+    "columns": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "str"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "column_with_codec"
+        ]
+      }
+    ]
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -97,6 +1103,389 @@
       "kind": "tableRef",
       "table": "test3"
     }
+  },
+  {
+    "kind": "createDatabase",
+    "name": {
+      "kind": "queryParam",
+      "name": "CLICKHOUSE_DATABASE",
+      "type": "Identifier"
+    },
+    "engine": {
+      "name": "Replicated",
+      "args": [
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "/clickhouse/03224_invalid_alter/{database}_replicated"
+        },
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "shard1"
+        },
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "replica1"
+        }
+      ]
+    },
+    "format": "Null"
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "test4"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "str",
+        "type": {
+          "name": "String"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "column_with_codec",
+        "type": {
+          "name": "String"
+        },
+        "codec": [
+          {
+            "name": "ZSTD"
+          }
+        ]
+      },
+      {
+        "kind": "columnDef",
+        "name": "column_with_alias",
+        "type": {
+          "name": "String"
+        },
+        "defaultKind": "MATERIALIZED",
+        "defaultExpr": {
+          "kind": "functionCall",
+          "name": "concat",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "str"
+              ]
+            },
+            {
+              "kind": "alias",
+              "expr": {
+                "kind": "literal",
+                "type": "String",
+                "value": "a"
+              },
+              "alias": "a"
+            }
+          ]
+        }
+      }
+    ],
+    "engine": {
+      "name": "ReplicatedMergeTree",
+      "args": []
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "functionCall",
+          "name": "tuple",
+          "args": []
+        }
+      }
+    ],
+    "format": "Null"
+  },
+  {
+    "kind": "alter",
+    "table": {
+      "kind": "tableRef",
+      "table": "test4"
+    },
+    "commands": [
+      {
+        "kind": "alterCommand",
+        "commandType": "ADD_COLUMN",
+        "column": {
+          "kind": "columnDef",
+          "name": "invalid_column",
+          "type": {
+            "name": "String"
+          },
+          "defaultKind": "MATERIALIZED",
+          "defaultExpr": {
+            "kind": "functionCall",
+            "name": "concat",
+            "args": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "str"
+                ]
+              },
+              {
+                "kind": "alias",
+                "expr": {
+                  "kind": "literal",
+                  "type": "String",
+                  "value": "b"
+                },
+                "alias": "a"
+              }
+            ]
+          }
+        }
+      }
+    ],
+    "settings": [
+      {
+        "name": "distributed_ddl_output_mode",
+        "value": {
+          "kind": "literal",
+          "type": "String",
+          "value": "throw"
+        }
+      }
+    ],
+    "format": "Null",
+    "trailingComments": [
+      "-- { serverError MULTIPLE_EXPRESSIONS_FOR_ALIAS }"
+    ]
+  },
+  {
+    "kind": "alter",
+    "table": {
+      "kind": "tableRef",
+      "table": "test4"
+    },
+    "commands": [
+      {
+        "kind": "alterCommand",
+        "commandType": "ADD_COLUMN",
+        "column": {
+          "kind": "columnDef",
+          "name": "invalid_column",
+          "type": {
+            "name": "String"
+          },
+          "defaultKind": "DEFAULT",
+          "defaultExpr": {
+            "kind": "functionCall",
+            "name": "concat",
+            "args": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "str"
+                ]
+              },
+              {
+                "kind": "alias",
+                "expr": {
+                  "kind": "literal",
+                  "type": "String",
+                  "value": "b"
+                },
+                "alias": "a"
+              }
+            ]
+          }
+        }
+      }
+    ],
+    "settings": [
+      {
+        "name": "distributed_ddl_output_mode",
+        "value": {
+          "kind": "literal",
+          "type": "String",
+          "value": "throw"
+        }
+      }
+    ],
+    "format": "Null",
+    "trailingComments": [
+      "-- { serverError MULTIPLE_EXPRESSIONS_FOR_ALIAS }"
+    ]
+  },
+  {
+    "kind": "alter",
+    "table": {
+      "kind": "tableRef",
+      "table": "test4"
+    },
+    "commands": [
+      {
+        "kind": "alterCommand",
+        "commandType": "MODIFY_COLUMN",
+        "column": {
+          "kind": "columnDef",
+          "name": "column_with_codec",
+          "type": {
+            "name": "String"
+          },
+          "defaultKind": "ALIAS",
+          "defaultExpr": {
+            "kind": "columnRef",
+            "parts": [
+              "str"
+            ]
+          }
+        }
+      }
+    ],
+    "settings": [
+      {
+        "name": "distributed_ddl_output_mode",
+        "value": {
+          "kind": "literal",
+          "type": "String",
+          "value": "throw"
+        }
+      }
+    ],
+    "format": "Null",
+    "trailingComments": [
+      "-- { serverError BAD_ARGUMENTS }"
+    ]
+  },
+  {
+    "kind": "alter",
+    "table": {
+      "kind": "tableRef",
+      "table": "test4"
+    },
+    "commands": [
+      {
+        "kind": "alterCommand",
+        "commandType": "ADD_COLUMN",
+        "column": {
+          "kind": "columnDef",
+          "name": "valid_column_1",
+          "type": {
+            "name": "String"
+          },
+          "defaultKind": "DEFAULT",
+          "defaultExpr": {
+            "kind": "functionCall",
+            "name": "concat",
+            "args": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "str"
+                ]
+              },
+              {
+                "kind": "alias",
+                "expr": {
+                  "kind": "literal",
+                  "type": "String",
+                  "value": "a"
+                },
+                "alias": "a"
+              }
+            ]
+          }
+        }
+      }
+    ],
+    "settings": [
+      {
+        "name": "distributed_ddl_output_mode",
+        "value": {
+          "kind": "literal",
+          "type": "String",
+          "value": "throw"
+        }
+      }
+    ],
+    "format": "Null"
+  },
+  {
+    "kind": "alter",
+    "table": {
+      "kind": "tableRef",
+      "table": "test4"
+    },
+    "commands": [
+      {
+        "kind": "alterCommand",
+        "commandType": "ADD_COLUMN",
+        "column": {
+          "kind": "columnDef",
+          "name": "valid_column_2",
+          "type": {
+            "name": "String"
+          },
+          "defaultKind": "MATERIALIZED",
+          "defaultExpr": {
+            "kind": "functionCall",
+            "name": "concat",
+            "args": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "str"
+                ]
+              },
+              {
+                "kind": "alias",
+                "expr": {
+                  "kind": "literal",
+                  "type": "String",
+                  "value": "c"
+                },
+                "alias": "c"
+              }
+            ]
+          }
+        }
+      }
+    ],
+    "settings": [
+      {
+        "name": "distributed_ddl_output_mode",
+        "value": {
+          "kind": "literal",
+          "type": "String",
+          "value": "throw"
+        }
+      }
+    ],
+    "format": "Null"
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "test4"
+      }
+    },
+    "columns": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "str"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "column_with_codec"
+        ]
+      }
+    ]
   },
   {
     "kind": "select",

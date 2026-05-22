@@ -1,3 +1,33 @@
+DROP TABLE IF EXISTS t_length_1;
+
+DROP TABLE IF EXISTS t_length_2;
+
+SET optimize_functions_to_subcolumns = 1;
+
+SET enable_analyzer = 1;
+
+SET optimize_on_insert = 0;
+
+CREATE TABLE t_length_1
+(
+    id UInt64,
+    arr Array(UInt64)
+)
+ENGINE = ReplacingMergeTree
+ORDER BY id;
+
+CREATE TABLE t_length_2
+(
+    id UInt64,
+    arr_length UInt64
+)
+ENGINE = ReplacingMergeTree
+ORDER BY id;
+
+INSERT INTO t_length_1;
+
+INSERT INTO t_length_2;
+
 SELECT length(arr)
 FROM t_length_1
 WHERE length(arr) IN (
@@ -18,3 +48,7 @@ WHERE length(arr) IN (
         SELECT arr_length
         FROM t_length_2 FINAL
     );
+
+DROP TABLE t_length_1;
+
+DROP TABLE t_length_2;

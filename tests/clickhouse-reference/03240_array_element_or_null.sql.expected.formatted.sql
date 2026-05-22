@@ -1,10 +1,67 @@
+-- { echoOn }
+DROP TABLE IF EXISTS array_element_or_null_test;
+
+CREATE TABLE array_element_or_null_test
+(
+    arr Array(Int32),
+    id Int32
+)
+ENGINE = Memory;
+
+INSERT INTO array_element_or_null_test;
+
 SELECT arrayElementOrNull(arr, id)
 FROM array_element_or_null_test;
+
+CREATE TABLE array_element_or_null_test
+(
+    arr Array(Int32),
+    id UInt32
+)
+ENGINE = Memory;
+
+INSERT INTO array_element_or_null_test;
+
+CREATE TABLE array_element_or_null_test
+(
+    arr Array(String),
+    id Int32
+)
+ENGINE = Memory;
+
+INSERT INTO array_element_or_null_test;
+
+CREATE TABLE array_element_or_null_test
+(
+    arr Array(String),
+    id UInt32
+)
+ENGINE = Memory;
+
+INSERT INTO array_element_or_null_test;
+
+CREATE TABLE array_element_or_null_test
+(
+    id UInt32
+)
+ENGINE = Memory;
+
+INSERT INTO array_element_or_null_test;
 
 SELECT
     [1, 2, 3] AS arr,
     arrayElementOrNull(arr, id)
 FROM array_element_or_null_test;
+
+CREATE TABLE array_element_or_null_test
+(
+    id Int32
+)
+ENGINE = Memory;
+
+INSERT INTO array_element_or_null_test;
+
+DROP TABLE array_element_or_null_test;
 
 SELECT arrayElementOrNull(range(0), -1);
 
@@ -108,4 +165,5 @@ SELECT
 
 SELECT
     arrayElementOrNull(m, 0),
-    materialize(map('key', 42)) AS m;
+    materialize(map('key', 42)) AS m; -- {serverError ILLEGAL_TYPE_OF_ARGUMENT}
+-- { echoOff }

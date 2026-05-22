@@ -1,6 +1,28 @@
+-- Tags: no-parallel
+SET prefer_localhost_replica = 1;
+
+DROP TABLE IF EXISTS null_01293;
+
+DROP TABLE IF EXISTS dist_01293;
+
+CREATE TABLE null_01293
+(
+    key Int
+)
+ENGINE = Null();
+
+CREATE TABLE dist_01293 AS null_01293
+ENGINE = Distributed(test_cluster_two_shards, currentDatabase(), null_01293, key);
+
+-- no rows, since no active monitor
 SELECT *
 FROM `system`.distribution_queue
 WHERE database = currentDatabase();
+
+SYSTEM stop distributed sends dist_01293;
+
+INSERT INTO dist_01293 SELECT *
+FROM numbers(10);
 
 SELECT
     is_blocked,
@@ -12,6 +34,8 @@ SELECT
 FROM `system`.distribution_queue
 WHERE database = currentDatabase();
 
+SYSTEM flush distributed dist_01293;
+
 SELECT
     is_blocked,
     error_count,
@@ -21,3 +45,9 @@ SELECT
     broken_data_compressed_bytes
 FROM `system`.distribution_queue
 WHERE database = currentDatabase();
+
+SYSTEM start distributed sends dist_01293;
+
+DROP TABLE null_01293;
+
+DROP TABLE dist_01293;

@@ -1,3 +1,31 @@
+SET group_by_two_level_threshold = 10000;
+
+CREATE TABLE group_bitmap_data_test
+(
+    `pickup_date` Date,
+    `city_id` UInt32,
+    `uid` UInt32
+)
+ENGINE = Memory;
+
+INSERT INTO group_bitmap_data_test SELECT
+    '2019-01-01',
+    1,
+    number
+FROM numbers(1, 50);
+
+INSERT INTO group_bitmap_data_test SELECT
+    '2019-01-02',
+    1,
+    number
+FROM numbers(11, 60);
+
+INSERT INTO group_bitmap_data_test SELECT
+    '2019-01-03',
+    2,
+    number
+FROM numbers(1, 10);
+
 SELECT
     bitmapCardinality(day_today) AS today_users,
     bitmapCardinality(day_before) AS before_users,
@@ -26,3 +54,5 @@ ALL LEFT JOIN
     GROUP BY city_id
 ) AS js2 USING (city_id)
 ORDER BY today_users, before_users, ll_users, old_users, new_users, diff_users;
+
+DROP TABLE IF EXISTS group_bitmap_data_test;

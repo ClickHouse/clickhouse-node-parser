@@ -1,3 +1,5 @@
+SET enable_analyzer = 1;
+
 SELECT
     grouping(num1),
     num1,
@@ -21,9 +23,34 @@ FROM (
 GROUP BY GROUPING SETS ((num1), ())
 ORDER BY grouping(num1) DESC;
 
+DROP TABLE IF EXISTS users;
+
+CREATE TABLE users
+(
+    uid Int16,
+    name String,
+    age Int16,
+    ts DateTime
+)
+ENGINE = MergeTree
+ORDER BY tuple();
+
+INSERT INTO users;
+
+INSERT INTO users;
+
+INSERT INTO users;
+
+INSERT INTO users;
+
+INSERT INTO users;
+
+INSERT INTO users;
+
 SELECT arrayStringConcat(groupArray('-'))
 FROM numbers(67);
 
+-- Query A
 SELECT
     uid,
     name,
@@ -36,6 +63,7 @@ FROM users
 GROUP BY GROUPING SETS ((*), ())
 ORDER BY `ALL` ASC;
 
+-- Query B
 SELECT
     uid,
     name,
@@ -47,3 +75,5 @@ SELECT
 FROM users
 GROUP BY GROUPING SETS ((uid, name), ())
 ORDER BY `ALL` ASC;
+
+DROP TABLE users;

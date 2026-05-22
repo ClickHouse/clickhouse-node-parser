@@ -1,3 +1,173 @@
+Set
+
+Set
+
+CreateQuery src (children 3)
+ Identifier src
+ Storage definition (children 2)
+  Function MergeTree
+  Identifier id
+ SelectWithUnionQuery (children 1)
+  ExpressionList (children 1)
+   SelectQuery (children 2)
+    ExpressionList (children 2)
+     Identifier number (alias id)
+     Function toInt32 (alias value) (children 1)
+      ExpressionList (children 1)
+       Literal UInt64_1
+    TablesInSelectQuery (children 1)
+     TablesInSelectQueryElement (children 1)
+      TableExpression (children 1)
+       Function numbers (children 1)
+        ExpressionList (children 1)
+         Literal UInt64_1
+
+CreateQuery dst (children 3)
+ Identifier dst
+ Columns definition (children 1)
+  ExpressionList (children 2)
+   ColumnDeclaration id (children 1)
+    DataType UInt64
+   ColumnDeclaration delta (children 1)
+    DataType Int64
+ Storage definition (children 2)
+  Function MergeTree
+  Identifier id
+
+Set
+
+CreateQuery src2dst_true (children 3)
+ Identifier src2dst_true
+ SelectWithUnionQuery (children 1)
+  ExpressionList (children 1)
+   SelectQuery (children 2)
+    ExpressionList (children 2)
+     Identifier id
+     Function minus (alias delta) (children 1)
+      ExpressionList (children 2)
+       Identifier src.value
+       Identifier deltas_sum
+    TablesInSelectQuery (children 2)
+     TablesInSelectQueryElement (children 1)
+      TableExpression (children 1)
+       TableIdentifier src
+     TablesInSelectQueryElement (children 2)
+      TableExpression (children 1)
+       Subquery (alias _a) (children 1)
+        SelectWithUnionQuery (children 1)
+         ExpressionList (children 1)
+          SelectQuery (children 4)
+           ExpressionList (children 2)
+            Identifier id
+            Function sum (alias deltas_sum) (children 1)
+             ExpressionList (children 1)
+              Identifier delta
+           TablesInSelectQuery (children 1)
+            TablesInSelectQueryElement (children 1)
+             TableExpression (children 1)
+              TableIdentifier dst
+           Function in (children 1)
+            ExpressionList (children 2)
+             Identifier id
+             Subquery (children 1)
+              SelectWithUnionQuery (children 1)
+               ExpressionList (children 1)
+                SelectQuery (children 3)
+                 ExpressionList (children 1)
+                  Identifier id
+                 TablesInSelectQuery (children 1)
+                  TablesInSelectQueryElement (children 1)
+                   TableExpression (children 1)
+                    TableIdentifier src
+                 Function not (children 1)
+                  ExpressionList (children 1)
+                   Function sleepEachRow (children 1)
+                    ExpressionList (children 1)
+                     Literal Float64_0.001
+           ExpressionList (children 1)
+            Identifier id
+      TableJoin (children 1)
+       ExpressionList (children 1)
+        Identifier id
+ ViewTargets
+
+InsertQuery   (children 2)
+ Identifier src
+ SelectWithUnionQuery (children 1)
+  ExpressionList (children 1)
+   SelectQuery (children 2)
+    ExpressionList (children 2)
+     Function plus (alias id) (children 1)
+      ExpressionList (children 2)
+       Identifier number
+       Literal UInt64_100
+     Literal UInt64_1
+    TablesInSelectQuery (children 1)
+     TablesInSelectQueryElement (children 1)
+      TableExpression (children 1)
+       Function numbers (children 1)
+        ExpressionList (children 1)
+         Literal UInt64_2
+
+DescribeQuery (children 2)
+ TableExpression (children 1)
+  Subquery (children 1)
+   SelectWithUnionQuery (children 1)
+    ExpressionList (children 1)
+     SelectQuery (children 2)
+      ExpressionList (children 3)
+       Literal '1947 #3 QUERY - TRUE'
+       Identifier id
+       Function minus (alias delta) (children 1)
+        ExpressionList (children 2)
+         Identifier src.value
+         Identifier deltas_sum
+      TablesInSelectQuery (children 2)
+       TablesInSelectQueryElement (children 1)
+        TableExpression (children 1)
+         TableIdentifier src
+       TablesInSelectQueryElement (children 2)
+        TableExpression (children 1)
+         Subquery (alias _a) (children 1)
+          SelectWithUnionQuery (children 1)
+           ExpressionList (children 1)
+            SelectQuery (children 4)
+             ExpressionList (children 2)
+              Identifier id
+              Function sum (alias deltas_sum) (children 1)
+               ExpressionList (children 1)
+                Identifier delta
+             TablesInSelectQuery (children 1)
+              TablesInSelectQueryElement (children 1)
+               TableExpression (children 1)
+                TableIdentifier dst
+             Function in (children 1)
+              ExpressionList (children 2)
+               Identifier id
+               Subquery (children 1)
+                SelectWithUnionQuery (children 1)
+                 ExpressionList (children 1)
+                  SelectQuery (children 3)
+                   ExpressionList (children 1)
+                    Identifier id
+                   TablesInSelectQuery (children 1)
+                    TablesInSelectQueryElement (children 1)
+                     TableExpression (children 1)
+                      TableIdentifier src
+                   Function not (children 1)
+                    ExpressionList (children 1)
+                     Function sleepEachRow (children 1)
+                      ExpressionList (children 1)
+                       Literal Float64_0.001
+             ExpressionList (children 1)
+              Identifier id
+        TableJoin (children 1)
+         ExpressionList (children 1)
+          Identifier id
+ Identifier Null
+
+SYSTEM query
+
 SelectWithUnionQuery (children 2)
  ExpressionList (children 1)
   SelectQuery (children 3)
@@ -115,6 +285,141 @@ SelectWithUnionQuery (children 2)
         ExpressionList
  Identifier JSONEachRow
 
+DropQuery  src2dst_true (children 1)
+ Identifier src2dst_true
+
+Set
+
+CreateQuery src2dst_false (children 3)
+ Identifier src2dst_false
+ SelectWithUnionQuery (children 1)
+  ExpressionList (children 1)
+   SelectQuery (children 2)
+    ExpressionList (children 2)
+     Identifier id
+     Function minus (alias delta) (children 1)
+      ExpressionList (children 2)
+       Identifier src.value
+       Identifier deltas_sum
+    TablesInSelectQuery (children 2)
+     TablesInSelectQueryElement (children 1)
+      TableExpression (children 1)
+       TableIdentifier src
+     TablesInSelectQueryElement (children 2)
+      TableExpression (children 1)
+       Subquery (alias _a) (children 1)
+        SelectWithUnionQuery (children 1)
+         ExpressionList (children 1)
+          SelectQuery (children 4)
+           ExpressionList (children 2)
+            Identifier id
+            Function sum (alias deltas_sum) (children 1)
+             ExpressionList (children 1)
+              Identifier delta
+           TablesInSelectQuery (children 1)
+            TablesInSelectQueryElement (children 1)
+             TableExpression (children 1)
+              TableIdentifier dst
+           Function in (children 1)
+            ExpressionList (children 2)
+             Identifier id
+             Subquery (children 1)
+              SelectWithUnionQuery (children 1)
+               ExpressionList (children 1)
+                SelectQuery (children 3)
+                 ExpressionList (children 1)
+                  Identifier id
+                 TablesInSelectQuery (children 1)
+                  TablesInSelectQueryElement (children 1)
+                   TableExpression (children 1)
+                    TableIdentifier src
+                 Function not (children 1)
+                  ExpressionList (children 1)
+                   Function sleepEachRow (children 1)
+                    ExpressionList (children 1)
+                     Literal Float64_0.001
+           ExpressionList (children 1)
+            Identifier id
+      TableJoin (children 1)
+       ExpressionList (children 1)
+        Identifier id
+ ViewTargets
+
+InsertQuery   (children 2)
+ Identifier src
+ SelectWithUnionQuery (children 1)
+  ExpressionList (children 1)
+   SelectQuery (children 2)
+    ExpressionList (children 2)
+     Function plus (alias id) (children 1)
+      ExpressionList (children 2)
+       Identifier number
+       Literal UInt64_200
+     Literal UInt64_1
+    TablesInSelectQuery (children 1)
+     TablesInSelectQueryElement (children 1)
+      TableExpression (children 1)
+       Function numbers (children 1)
+        ExpressionList (children 1)
+         Literal UInt64_2
+
+DescribeQuery (children 2)
+ TableExpression (children 1)
+  Subquery (children 1)
+   SelectWithUnionQuery (children 1)
+    ExpressionList (children 1)
+     SelectQuery (children 2)
+      ExpressionList (children 3)
+       Literal '1947 #3 QUERY - FALSE'
+       Identifier id
+       Function minus (alias delta) (children 1)
+        ExpressionList (children 2)
+         Identifier src.value
+         Identifier deltas_sum
+      TablesInSelectQuery (children 2)
+       TablesInSelectQueryElement (children 1)
+        TableExpression (children 1)
+         TableIdentifier src
+       TablesInSelectQueryElement (children 2)
+        TableExpression (children 1)
+         Subquery (alias _a) (children 1)
+          SelectWithUnionQuery (children 1)
+           ExpressionList (children 1)
+            SelectQuery (children 4)
+             ExpressionList (children 2)
+              Identifier id
+              Function sum (alias deltas_sum) (children 1)
+               ExpressionList (children 1)
+                Identifier delta
+             TablesInSelectQuery (children 1)
+              TablesInSelectQueryElement (children 1)
+               TableExpression (children 1)
+                TableIdentifier dst
+             Function in (children 1)
+              ExpressionList (children 2)
+               Identifier id
+               Subquery (children 1)
+                SelectWithUnionQuery (children 1)
+                 ExpressionList (children 1)
+                  SelectQuery (children 3)
+                   ExpressionList (children 1)
+                    Identifier id
+                   TablesInSelectQuery (children 1)
+                    TablesInSelectQueryElement (children 1)
+                     TableExpression (children 1)
+                      TableIdentifier src
+                   Function not (children 1)
+                    ExpressionList (children 1)
+                     Function sleepEachRow (children 1)
+                      ExpressionList (children 1)
+                       Literal Float64_0.001
+             ExpressionList (children 1)
+              Identifier id
+        TableJoin (children 1)
+         ExpressionList (children 1)
+          Identifier id
+ Identifier Null
+
 SelectWithUnionQuery (children 2)
  ExpressionList (children 1)
   SelectQuery (children 3)
@@ -231,3 +536,12 @@ SelectWithUnionQuery (children 2)
        Function yesterday (children 1)
         ExpressionList
  Identifier JSONEachRow
+
+DropQuery  src2dst_false (children 1)
+ Identifier src2dst_false
+
+DropQuery  src (children 1)
+ Identifier src
+
+DropQuery  dst (children 1)
+ Identifier dst

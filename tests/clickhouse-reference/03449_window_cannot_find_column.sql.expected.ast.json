@@ -1,0 +1,182 @@
+[
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "t0"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "t3"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "t0"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "vkey",
+        "type": {
+          "name": "UInt32"
+        }
+      }
+    ],
+    "primaryKeyInSchema": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "vkey"
+        ]
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    }
+  },
+  {
+    "kind": "createView",
+    "table": {
+      "kind": "tableRef",
+      "table": "t3"
+    },
+    "asQuery": {
+      "kind": "select",
+      "distinct": {
+        "kind": "distinct"
+      },
+      "select": [
+        {
+          "kind": "alias",
+          "expr": {
+            "kind": "columnRef",
+            "parts": [
+              "ref_0",
+              "vkey"
+            ]
+          },
+          "alias": "c_2_c16_0"
+        }
+      ],
+      "from": {
+        "kind": "tableRef",
+        "table": "t0",
+        "alias": "ref_0"
+      }
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "t0"
+      }
+    }
+  },
+  {
+    "kind": "select",
+    "with": [
+      {
+        "kind": "cteSubquery",
+        "name": "cte_4",
+        "query": {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "alias",
+              "expr": {
+                "kind": "functionCall",
+                "name": "rank",
+                "args": []
+              },
+              "alias": "c_2_c2398_0"
+            }
+          ],
+          "from": {
+            "kind": "tableRef",
+            "table": "t3",
+            "alias": "ref_15"
+          },
+          "windows": [
+            {
+              "name": "w0",
+              "spec": {
+                "partitionBy": [
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "ref_15",
+                      "c_2_c16_0"
+                    ]
+                  }
+                ],
+                "orderBy": [
+                  {
+                    "kind": "orderByItem",
+                    "expr": {
+                      "kind": "columnRef",
+                      "parts": [
+                        "ref_15",
+                        "c_2_c16_0"
+                      ]
+                    },
+                    "direction": "DESC"
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "distinct": {
+      "kind": "distinct"
+    },
+    "select": [
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "ref_39",
+            "c_2_c2398_0"
+          ]
+        },
+        "alias": "c_9_c2479_0"
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "cte_4",
+      "alias": "ref_39"
+    }
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "t3"
+    }
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "t0"
+    }
+  }
+]

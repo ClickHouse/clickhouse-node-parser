@@ -1,5 +1,110 @@
 [
   {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "users"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "users_ext"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "users"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "uid",
+        "type": {
+          "name": "Int16"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "name",
+        "type": {
+          "name": "String"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "age",
+        "type": {
+          "name": "Int16"
+        }
+      }
+    ],
+    "engine": {
+      "name": "Memory"
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "users"
+      }
+    }
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "users_ext"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "uid",
+        "type": {
+          "name": "Int16"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "nullableStringCol",
+        "type": {
+          "name": "Nullable",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "String"
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "engine": {
+      "name": "Memory"
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "users_ext"
+      }
+    }
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -20,7 +125,7 @@
         "kind": "tableRef",
         "table": "users"
       },
-      "kind": "join",
+      "kind": "joinExpr",
       "joinType": "LEFT",
       "right": {
         "kind": "tableRef",
@@ -70,7 +175,7 @@
         "kind": "tableRef",
         "table": "users"
       },
-      "kind": "join",
+      "kind": "joinExpr",
       "joinType": "LEFT",
       "right": {
         "kind": "tableRef",
@@ -120,7 +225,7 @@
         "kind": "tableRef",
         "table": "users"
       },
-      "kind": "join",
+      "kind": "joinExpr",
       "joinType": "LEFT",
       "right": {
         "kind": "tableRef",
@@ -171,7 +276,7 @@
           "kind": "tableRef",
           "table": "users"
         },
-        "kind": "join",
+        "kind": "joinExpr",
         "joinType": "INNER",
         "right": {
           "kind": "tableRef",
@@ -200,7 +305,7 @@
           }
         }
       },
-      "kind": "join",
+      "kind": "joinExpr",
       "joinType": "LEFT",
       "right": {
         "kind": "tableRef",
@@ -251,7 +356,7 @@
           "kind": "tableRef",
           "table": "users_ext"
         },
-        "kind": "join",
+        "kind": "joinExpr",
         "joinType": "RIGHT",
         "right": {
           "kind": "tableRef",
@@ -280,7 +385,7 @@
           }
         }
       },
-      "kind": "join",
+      "kind": "joinExpr",
       "joinType": "LEFT",
       "right": {
         "kind": "tableRef",
@@ -331,7 +436,7 @@
           "kind": "tableRef",
           "table": "users_ext"
         },
-        "kind": "join",
+        "kind": "joinExpr",
         "joinType": "INNER",
         "right": {
           "kind": "tableRef",
@@ -360,7 +465,7 @@
           }
         }
       },
-      "kind": "join",
+      "kind": "joinExpr",
       "joinType": "FULL",
       "right": {
         "kind": "tableRef",
@@ -439,7 +544,7 @@
           "table": "users_ext",
           "alias": "t1"
         },
-        "kind": "join",
+        "kind": "joinExpr",
         "joinType": "FULL",
         "right": {
           "kind": "tableRef",
@@ -468,7 +573,7 @@
           }
         }
       },
-      "kind": "join",
+      "kind": "joinExpr",
       "joinType": "FULL",
       "right": {
         "kind": "tableRef",

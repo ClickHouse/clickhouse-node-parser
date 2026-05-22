@@ -1,3 +1,33 @@
+-- Test TTL GROUP BY with LowCardinality columns in SET expression
+-- This verifies the fix for type mismatch crash when using LowCardinality types
+DROP TABLE IF EXISTS ttl_group_by__fuzz_13;
+
+CREATE TABLE ttl_group_by__fuzz_13
+(
+    d Date,
+    i LowCardinality(Float32),
+    v LowCardinality(Nullable(UInt64))
+)
+ENGINE = MergeTree
+ORDER BY (toStartOfMonth(d), i % 10)
+TTL d + toIntervalYear(10),
+    d + toIntervalYear(40)
+SETTINGS allow_suspicious_low_cardinality_types = 1;
+
+INSERT INTO ttl_group_by__fuzz_13 SELECT
+    toDate('2000-10-10'),
+    number,
+    number
+FROM numbers(100);
+
+INSERT INTO ttl_group_by__fuzz_13 SELECT
+    toDate('1970-10-10'),
+    number,
+    number
+FROM numbers(100);
+
+OPTIMIZE TABLE ttl_group_by__fuzz_13 FINAL;
+
 SELECT
     d,
     v
@@ -5,3 +35,5 @@ FROM ttl_group_by__fuzz_13
 ORDER BY
     d ASC,
     v ASC;
+
+DROP TABLE ttl_group_by__fuzz_13;

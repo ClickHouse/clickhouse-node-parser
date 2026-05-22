@@ -1,3 +1,13 @@
+-- { echo }
+DROP TABLE IF EXISTS map_test;
+
+CREATE TABLE map_test
+ENGINE = TinyLog() AS
+(SELECT
+    (number + 1) AS n,
+    map(1, 1, number, 2) AS m
+FROM numbers(1, 5));
+
 SELECT mapPopulateSeries(m)
 FROM map_test;
 
@@ -12,6 +22,8 @@ FROM map_test;
 
 SELECT mapPopulateSeries(m, n)
 FROM map_test;
+
+DROP TABLE map_test;
 
 SELECT
     mapPopulateSeries(map(toUInt8(1), toUInt8(1), 2, 1)) AS res,
@@ -81,10 +93,10 @@ SELECT
     mapPopulateSeries(map(toInt64(-10), toInt64(1), 2, 1), toInt64(-5)) AS res,
     toTypeName(res);
 
-SELECT mapPopulateSeries();
+SELECT mapPopulateSeries(); -- { serverError NUMBER_OF_ARGUMENTS_DOESNT_MATCH }
 
-SELECT mapPopulateSeries('asdf');
+SELECT mapPopulateSeries('asdf'); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
 SELECT
     mapPopulateSeries(map('1', 1, '2', 1)) AS res,
-    toTypeName(res);
+    toTypeName(res); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }

@@ -1,3 +1,18 @@
+DROP TABLE IF EXISTS prewhere_alias;
+
+CREATE TABLE prewhere_alias
+(
+    a UInt8,
+    b Int32,
+    c UInt8 ALIAS a,
+    d Int64 ALIAS b + 1,
+    e Int32 ALIAS a + b
+)
+ENGINE = MergeTree
+ORDER BY tuple();
+
+INSERT INTO prewhere_alias;
+
 SELECT a
 FROM prewhere_alias
 PREWHERE a = 1;

@@ -1,0 +1,113 @@
+[
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "send_logs_level",
+        "value": {
+          "kind": "literal",
+          "type": "String",
+          "value": "fatal"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "allow_ddl",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createDatabase",
+    "name": "some_db",
+    "trailingComments": [
+      "-- { serverError QUERY_IS_PROHIBITED } "
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "some_table"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "a",
+        "type": {
+          "name": "Int32"
+        }
+      }
+    ],
+    "engine": {
+      "name": "Memory"
+    },
+    "trailingComments": [
+      "-- { serverError QUERY_IS_PROHIBITED}"
+    ]
+  },
+  {
+    "kind": "alter",
+    "table": {
+      "kind": "tableRef",
+      "table": "some_table"
+    },
+    "commands": [
+      {
+        "kind": "alterCommand",
+        "commandType": "DELETE",
+        "where": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ],
+    "trailingComments": [
+      "-- { serverError QUERY_IS_PROHIBITED}"
+    ]
+  },
+  {
+    "kind": "rename",
+    "targetType": "TABLE",
+    "pairs": [
+      {
+        "from": {
+          "kind": "tableRef",
+          "table": "some_table"
+        },
+        "to": {
+          "kind": "tableRef",
+          "table": "some_table1"
+        }
+      }
+    ],
+    "trailingComments": [
+      "-- { serverError QUERY_IS_PROHIBITED}"
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "allow_ddl",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ],
+    "trailingComments": [
+      "-- { serverError QUERY_IS_PROHIBITED}"
+    ]
+  }
+]

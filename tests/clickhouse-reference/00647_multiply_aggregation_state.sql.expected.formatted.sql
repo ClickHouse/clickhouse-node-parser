@@ -1,3 +1,5 @@
+SET send_logs_level = 'fatal';
+
 SELECT countMerge(x) AS y
 FROM (
         SELECT countState() * 2 AS x
@@ -53,6 +55,19 @@ FROM (
                 SELECT 2 AS x
             )
     );
+
+DROP TABLE IF EXISTS mult_aggregation;
+
+CREATE TABLE mult_aggregation
+(
+    a UInt32,
+    b UInt32
+)
+ENGINE = Memory;
+
+INSERT INTO mult_aggregation;
+
+INSERT INTO mult_aggregation;
 
 SELECT
     sumMerge(x * 5),
@@ -111,4 +126,4 @@ FROM (
             sumState(b) AS y
         FROM mult_aggregation
         GROUP BY a
-    );
+    ); -- { serverError ILLEGAL_COLUMN}

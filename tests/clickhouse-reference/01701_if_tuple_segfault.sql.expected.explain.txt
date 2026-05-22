@@ -1,3 +1,113 @@
+Set
+
+DropQuery  agg_table (children 1)
+ Identifier agg_table
+
+CreateQuery agg_table (children 3)
+ Identifier agg_table
+ Columns definition (children 1)
+  ExpressionList (children 5)
+   ColumnDeclaration time (children 2)
+    DataType DateTime
+    Function CODEC (children 1)
+     ExpressionList (children 2)
+      Function DoubleDelta
+      Function LZ4
+   ColumnDeclaration xxx (children 1)
+    DataType String
+   ColumnDeclaration two_values (children 1)
+    TupleDataType Tuple (children 1)
+     ExpressionList (children 2)
+      DataType Array (children 1)
+       ExpressionList (children 1)
+        DataType UInt16
+      DataType UInt32
+   ColumnDeclaration agg_simple (children 1)
+    DataType SimpleAggregateFunction (children 1)
+     ExpressionList (children 2)
+      Identifier sum
+      DataType UInt64
+   ColumnDeclaration agg (children 1)
+    DataType SimpleAggregateFunction (children 1)
+     ExpressionList (children 2)
+      Identifier sumMap
+      TupleDataType Tuple (children 1)
+       ExpressionList (children 2)
+        DataType Array (children 1)
+         ExpressionList (children 1)
+          DataType Int16
+        DataType Array (children 1)
+         ExpressionList (children 1)
+          DataType UInt64
+ Storage definition (children 2)
+  Function AggregatingMergeTree (children 1)
+   ExpressionList
+  Function tuple (children 1)
+   ExpressionList (children 2)
+    Identifier xxx
+    Identifier time
+
+InsertQuery   (children 2)
+ Identifier agg_table
+ SelectWithUnionQuery (children 1)
+  ExpressionList (children 1)
+   SelectQuery (children 2)
+    ExpressionList (children 5)
+     Function toDateTime (children 1)
+      ExpressionList (children 1)
+       Literal '2020-10-01 19:20:30'
+     Literal 'hello'
+     Function tuple (children 1)
+      ExpressionList (children 2)
+       Function array (children 1)
+        ExpressionList (children 1)
+         Function any (children 1)
+          ExpressionList (children 1)
+           Identifier number
+       Function sum (children 1)
+        ExpressionList (children 1)
+         Identifier number
+     Function sum (children 1)
+      ExpressionList (children 1)
+       Identifier number
+     Function sumMap (children 1)
+      ExpressionList (children 1)
+       Function tuple (children 1)
+        ExpressionList (children 2)
+         Function arrayMap (children 1)
+          ExpressionList (children 2)
+           Function lambda (children 1)
+            ExpressionList (children 2)
+             Function tuple (children 1)
+              ExpressionList (children 1)
+               Identifier i
+             Function toString (children 1)
+              ExpressionList (children 1)
+               Identifier i
+           Function range (children 1)
+            ExpressionList (children 1)
+             Literal UInt64_13
+         Function arrayMap (children 1)
+          ExpressionList (children 2)
+           Function lambda (children 1)
+            ExpressionList (children 2)
+             Function tuple (children 1)
+              ExpressionList (children 1)
+               Identifier i
+             Function plus (children 1)
+              ExpressionList (children 2)
+               Identifier number
+               Identifier i
+           Function range (children 1)
+            ExpressionList (children 1)
+             Literal UInt64_13
+    TablesInSelectQuery (children 1)
+     TablesInSelectQueryElement (children 1)
+      TableExpression (children 1)
+       Function numbers (children 1)
+        ExpressionList (children 1)
+         Literal UInt64_10
+
 SelectWithUnionQuery (children 1)
  ExpressionList (children 1)
   SelectQuery (children 2)
@@ -56,3 +166,135 @@ SelectWithUnionQuery (children 1)
     TablesInSelectQueryElement (children 1)
      TableExpression (children 1)
       TableIdentifier agg_table
+
+AlterQuery  agg_table (children 3)
+ ExpressionList (children 1)
+  AlterCommand UPDATE (children 2)
+   Function and (children 1)
+    ExpressionList (children 2)
+     Function greaterOrEquals (children 1)
+      ExpressionList (children 2)
+       Identifier time
+       Function toDateTime (children 1)
+        ExpressionList (children 1)
+         Literal '2020-08-01 00:00:00'
+     Function lessOrEquals (children 1)
+      ExpressionList (children 2)
+       Identifier time
+       Function toDateTime (children 1)
+        ExpressionList (children 1)
+         Literal '2020-12-01 00:00:00'
+   ExpressionList (children 1)
+    Assignment two_values (children 1)
+     Function tuple (children 1)
+      ExpressionList (children 2)
+       Function tupleElement (children 1)
+        ExpressionList (children 2)
+         Identifier two_values
+         Literal UInt64_1
+       Function tupleElement (children 1)
+        ExpressionList (children 2)
+         Identifier two_values
+         Literal UInt64_2
+ Identifier agg_table
+ Set
+
+AlterQuery  agg_table (children 3)
+ ExpressionList (children 1)
+  AlterCommand UPDATE (children 2)
+   Function and (children 1)
+    ExpressionList (children 2)
+     Function greaterOrEquals (children 1)
+      ExpressionList (children 2)
+       Identifier time
+       Function toDateTime (children 1)
+        ExpressionList (children 1)
+         Literal '2020-08-01 00:00:00'
+     Function lessOrEquals (children 1)
+      ExpressionList (children 2)
+       Identifier time
+       Function toDateTime (children 1)
+        ExpressionList (children 1)
+         Literal '2020-12-01 00:00:00'
+   ExpressionList (children 1)
+    Assignment agg_simple (children 1)
+     Literal UInt64_5
+ Identifier agg_table
+ Set
+
+AlterQuery  agg_table (children 3)
+ ExpressionList (children 1)
+  AlterCommand UPDATE (children 2)
+   Function and (children 1)
+    ExpressionList (children 2)
+     Function greaterOrEquals (children 1)
+      ExpressionList (children 2)
+       Identifier time
+       Function toDateTime (children 1)
+        ExpressionList (children 1)
+         Literal '2020-08-01 00:00:00'
+     Function lessOrEquals (children 1)
+      ExpressionList (children 2)
+       Identifier time
+       Function toDateTime (children 1)
+        ExpressionList (children 1)
+         Literal '2020-12-01 00:00:00'
+   ExpressionList (children 1)
+    Assignment agg (children 1)
+     Function tuple (children 1)
+      ExpressionList (children 2)
+       Function tupleElement (children 1)
+        ExpressionList (children 2)
+         Identifier agg
+         Literal UInt64_1
+       Function tupleElement (children 1)
+        ExpressionList (children 2)
+         Identifier agg
+         Literal UInt64_2
+ Identifier agg_table
+ Set
+
+AlterQuery  agg_table (children 3)
+ ExpressionList (children 1)
+  AlterCommand UPDATE (children 2)
+   Function and (children 1)
+    ExpressionList (children 2)
+     Function greaterOrEquals (children 1)
+      ExpressionList (children 2)
+       Identifier time
+       Function toDateTime (children 1)
+        ExpressionList (children 1)
+         Literal '2020-08-01 00:00:00'
+     Function lessOrEquals (children 1)
+      ExpressionList (children 2)
+       Identifier time
+       Function toDateTime (children 1)
+        ExpressionList (children 1)
+         Literal '2020-12-01 00:00:00'
+   ExpressionList (children 1)
+    Assignment agg (children 1)
+     Function tuple (children 1)
+      ExpressionList (children 2)
+       Function tupleElement (children 1)
+        ExpressionList (children 2)
+         Identifier agg
+         Literal UInt64_1
+       Function arrayMap (children 1)
+        ExpressionList (children 2)
+         Function lambda (children 1)
+          ExpressionList (children 2)
+           Function tuple (children 1)
+            ExpressionList (children 1)
+             Identifier x
+           Function toUInt64 (children 1)
+            ExpressionList (children 1)
+             Function divide (children 1)
+              ExpressionList (children 2)
+               Identifier x
+               Literal UInt64_2
+         Function tupleElement (children 1)
+          ExpressionList (children 2)
+           Identifier agg
+           Literal UInt64_2
+ Identifier agg_table
+ Set

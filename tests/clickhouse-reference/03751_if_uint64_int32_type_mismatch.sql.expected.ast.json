@@ -1,5 +1,95 @@
 [
   {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "test_if_type_mismatch"
+    },
+    "ifExists": true,
+    "leadingComments": [
+      "-- Test for issue #70017: if function type mismatch between UInt64 and Int32",
+      "-- The issue was: Unexpected return type from if. Expected Int64. Got Int128.",
+      "-- This happened when the canUnsignedBeSigned flag on UInt64 type was lost during",
+      "-- query plan transformations in distributed queries."
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "test_if_type_mismatch"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "c_f7nvvq",
+        "type": {
+          "name": "Int32"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "c_ooi4e9x212",
+        "type": {
+          "name": "Float64"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "c_h16pd",
+        "type": {
+          "name": "String"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "c_j3",
+        "type": {
+          "name": "String"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "c_u37",
+        "type": {
+          "name": "Float64"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "c_d9n_3",
+        "type": {
+          "name": "Int32"
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree",
+      "args": []
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "c_d9n_3"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "test_if_type_mismatch"
+      }
+    }
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -56,7 +146,10 @@
         "type": "UInt64",
         "value": "1"
       }
-    }
+    },
+    "leadingComments": [
+      "-- Test case 1: Simple if with UInt64 literal (fits in Int64) and Int32 column"
+    ]
   },
   {
     "kind": "select",
@@ -116,7 +209,10 @@
         "type": "UInt64",
         "value": "1"
       }
-    }
+    },
+    "leadingComments": [
+      "-- Test case 2: Case expression (which uses if internally)"
+    ]
   },
   {
     "kind": "select",
@@ -216,7 +312,7 @@
           }
         ],
         "from": {
-          "kind": "tableFunction",
+          "kind": "tableFunctionRef",
           "name": "remote",
           "args": [
             {
@@ -372,7 +468,11 @@
       },
       "type": "Nullable(Bool)",
       "parenthesized": true
-    }
+    },
+    "leadingComments": [
+      "-- Test case 3: Query pattern from original issue #70017 using remote() to simulate distributed query",
+      "-- This triggers prewhere optimization which materializes the constant and loses the type flag"
+    ]
   },
   {
     "kind": "select",
@@ -451,6 +551,17 @@
         },
         "alias": "when_false"
       }
+    ],
+    "leadingComments": [
+      "-- Test case 4: Verify the actual value computation works correctly"
     ]
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "test_if_type_mismatch"
+    }
   }
 ]

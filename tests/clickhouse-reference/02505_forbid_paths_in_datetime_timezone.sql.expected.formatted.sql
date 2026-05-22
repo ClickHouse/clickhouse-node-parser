@@ -1,9 +1,9 @@
-SELECT toDateTime(0, '/abc');
+SELECT toDateTime(0, '/abc'); -- { serverError BAD_ARGUMENTS }
 
-SELECT toDateTime(0, './abc');
+SELECT toDateTime(0, './abc'); -- { serverError BAD_ARGUMENTS }
 
-SELECT toDateTime(0, '../abc');
+SELECT toDateTime(0, '../abc'); -- { serverError BAD_ARGUMENTS }
 
-SELECT toDateTime(0, '~/abc');
+SELECT toDateTime(0, '~/abc'); -- { serverError BAD_ARGUMENTS }
 
-SELECT toDateTime(0, 'abc/../../cba');
+SELECT toDateTime(0, 'abc/../../cba'); -- { serverError BAD_ARGUMENTS }

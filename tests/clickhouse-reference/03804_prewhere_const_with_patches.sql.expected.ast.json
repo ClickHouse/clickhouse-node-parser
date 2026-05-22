@@ -1,5 +1,277 @@
 [
   {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "t_prewhere_const_patches"
+    },
+    "ifExists": true,
+    "leadingComments": [
+      "-- Tags: no-replicated-database",
+      "-- Test for constant PREWHERE with patch parts (lightweight updates)",
+      "-- This tests the fix for the exception \"Can't adjust last granule\" when using",
+      "-- constant PREWHERE expressions with tables that have patch parts."
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "enable_lightweight_update",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "mutations_sync",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "2"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "t_prewhere_const_patches"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "a",
+        "type": {
+          "name": "UInt64"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "b",
+        "type": {
+          "name": "UInt64"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "c",
+        "type": {
+          "name": "UInt64"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "d",
+        "type": {
+          "name": "UInt64"
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "functionCall",
+          "name": "tuple",
+          "args": []
+        }
+      }
+    ],
+    "settings": [
+      {
+        "name": "min_bytes_for_wide_part",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      },
+      {
+        "name": "min_bytes_for_full_part_storage",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      },
+      {
+        "name": "ratio_of_defaults_for_sparse_serialization",
+        "value": {
+          "kind": "literal",
+          "type": "Float64",
+          "value": "1.0"
+        }
+      },
+      {
+        "name": "enable_block_number_column",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      },
+      {
+        "name": "enable_block_offset_column",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ],
+    "settingsAfterOrderBy": true
+  },
+  {
+    "kind": "system",
+    "body": "SYSTEM STOP MERGES t_prewhere_const_patches",
+    "leadingComments": [
+      "-- Stop merges to ensure patch parts are preserved"
+    ]
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "t_prewhere_const_patches"
+      }
+    },
+    "selectQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "number"
+          ]
+        },
+        {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        },
+        {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        },
+        {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      ],
+      "from": {
+        "kind": "tableFunctionRef",
+        "name": "numbers",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "10000"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "kind": "update",
+    "table": {
+      "kind": "tableRef",
+      "table": "t_prewhere_const_patches"
+    },
+    "assignments": [
+      {
+        "column": "b",
+        "expr": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ],
+    "where": {
+      "kind": "binaryExpr",
+      "op": "=",
+      "left": {
+        "kind": "binaryExpr",
+        "op": "%",
+        "left": {
+          "kind": "columnRef",
+          "parts": [
+            "a"
+          ]
+        },
+        "right": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "4"
+        }
+      },
+      "right": {
+        "kind": "literal",
+        "type": "UInt64",
+        "value": "0"
+      }
+    },
+    "leadingComments": [
+      "-- Apply some lightweight updates to create patch parts"
+    ]
+  },
+  {
+    "kind": "update",
+    "table": {
+      "kind": "tableRef",
+      "table": "t_prewhere_const_patches"
+    },
+    "assignments": [
+      {
+        "column": "c",
+        "expr": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "2"
+        }
+      }
+    ],
+    "where": {
+      "kind": "binaryExpr",
+      "op": "=",
+      "left": {
+        "kind": "binaryExpr",
+        "op": "%",
+        "left": {
+          "kind": "columnRef",
+          "parts": [
+            "a"
+          ]
+        },
+        "right": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "4"
+        }
+      },
+      "right": {
+        "kind": "literal",
+        "type": "UInt64",
+        "value": "0"
+      }
+    }
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -16,7 +288,12 @@
       "kind": "literal",
       "type": "UInt64",
       "value": "18"
-    }
+    },
+    "leadingComments": [
+      "-- This query with constant PREWHERE (18 is a non-zero integer, treated as true)",
+      "-- used to cause \"Can't adjust last granule\" exception.",
+      "-- Just verify it doesn't crash and returns the correct count."
+    ]
   },
   {
     "kind": "select",
@@ -35,7 +312,10 @@
       "kind": "literal",
       "type": "UInt64",
       "value": "1"
-    }
+    },
+    "leadingComments": [
+      "-- Also test with explicit true constant"
+    ]
   },
   {
     "kind": "select",
@@ -54,7 +334,10 @@
       "kind": "literal",
       "type": "UInt64",
       "value": "0"
-    }
+    },
+    "leadingComments": [
+      "-- Test with false constant (should return 0)"
+    ]
   },
   {
     "kind": "select",
@@ -124,6 +407,9 @@
         },
         "direction": "ASC"
       }
+    ],
+    "leadingComments": [
+      "-- Test the original fuzzed query pattern with simpler output"
     ]
   }
 ]

@@ -1,5 +1,305 @@
 [
   {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "join"
+    },
+    "ifExists": true,
+    "leadingComments": [
+      "-- Tags: stateful"
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "join"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "UserID",
+        "type": {
+          "name": "UInt64"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "loyalty",
+        "type": {
+          "name": "Int8"
+        }
+      }
+    ],
+    "engine": {
+      "name": "Join",
+      "args": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "SEMI"
+          ]
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "LEFT"
+          ]
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "UserID"
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "join"
+      }
+    },
+    "selectQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "UserID"
+          ]
+        },
+        {
+          "kind": "alias",
+          "expr": {
+            "kind": "functionCall",
+            "name": "toInt8",
+            "args": [
+              {
+                "kind": "binaryExpr",
+                "op": "*",
+                "left": {
+                  "kind": "functionCall",
+                  "name": "if",
+                  "args": [
+                    {
+                      "kind": "binaryExpr",
+                      "op": ">",
+                      "left": {
+                        "kind": "alias",
+                        "expr": {
+                          "kind": "functionCall",
+                          "name": "sum",
+                          "args": [
+                            {
+                              "kind": "binaryExpr",
+                              "op": "=",
+                              "left": {
+                                "kind": "columnRef",
+                                "parts": [
+                                  "SearchEngineID"
+                                ]
+                              },
+                              "right": {
+                                "kind": "literal",
+                                "type": "UInt64",
+                                "value": "2"
+                              }
+                            }
+                          ]
+                        },
+                        "alias": "yandex",
+                        "parenthesized": true
+                      },
+                      "right": {
+                        "kind": "alias",
+                        "expr": {
+                          "kind": "functionCall",
+                          "name": "sum",
+                          "args": [
+                            {
+                              "kind": "binaryExpr",
+                              "op": "=",
+                              "left": {
+                                "kind": "columnRef",
+                                "parts": [
+                                  "SearchEngineID"
+                                ]
+                              },
+                              "right": {
+                                "kind": "literal",
+                                "type": "UInt64",
+                                "value": "3"
+                              }
+                            }
+                          ]
+                        },
+                        "alias": "google",
+                        "parenthesized": true
+                      }
+                    },
+                    {
+                      "kind": "binaryExpr",
+                      "op": "/",
+                      "left": {
+                        "kind": "columnRef",
+                        "parts": [
+                          "yandex"
+                        ]
+                      },
+                      "right": {
+                        "kind": "binaryExpr",
+                        "op": "+",
+                        "left": {
+                          "kind": "columnRef",
+                          "parts": [
+                            "yandex"
+                          ]
+                        },
+                        "right": {
+                          "kind": "columnRef",
+                          "parts": [
+                            "google"
+                          ]
+                        },
+                        "parenthesized": true
+                      }
+                    },
+                    {
+                      "kind": "binaryExpr",
+                      "op": "/",
+                      "left": {
+                        "kind": "functionCall",
+                        "name": "negate",
+                        "args": [
+                          {
+                            "kind": "columnRef",
+                            "parts": [
+                              "google"
+                            ]
+                          }
+                        ]
+                      },
+                      "right": {
+                        "kind": "binaryExpr",
+                        "op": "+",
+                        "left": {
+                          "kind": "columnRef",
+                          "parts": [
+                            "yandex"
+                          ]
+                        },
+                        "right": {
+                          "kind": "columnRef",
+                          "parts": [
+                            "google"
+                          ]
+                        },
+                        "parenthesized": true
+                      }
+                    }
+                  ]
+                },
+                "right": {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "10"
+                }
+              }
+            ]
+          },
+          "alias": "loyalty"
+        }
+      ],
+      "from": {
+        "kind": "tableRef",
+        "database": "test",
+        "table": "hits"
+      },
+      "where": {
+        "kind": "naryExpr",
+        "op": "OR",
+        "operands": [
+          {
+            "kind": "binaryExpr",
+            "op": "=",
+            "left": {
+              "kind": "columnRef",
+              "parts": [
+                "SearchEngineID"
+              ]
+            },
+            "right": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "2"
+            },
+            "parenthesized": true
+          },
+          {
+            "kind": "binaryExpr",
+            "op": "=",
+            "left": {
+              "kind": "columnRef",
+              "parts": [
+                "SearchEngineID"
+              ]
+            },
+            "right": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "3"
+            },
+            "parenthesized": true
+          }
+        ]
+      },
+      "groupBy": {
+        "kind": "expressions",
+        "items": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "UserID"
+            ]
+          }
+        ]
+      },
+      "having": {
+        "kind": "binaryExpr",
+        "op": ">",
+        "left": {
+          "kind": "binaryExpr",
+          "op": "+",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "yandex"
+            ]
+          },
+          "right": {
+            "kind": "columnRef",
+            "parts": [
+              "google"
+            ]
+          },
+          "parenthesized": true
+        },
+        "right": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "10"
+        }
+      }
+    }
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -20,7 +320,7 @@
         "database": "test",
         "table": "hits"
       },
-      "kind": "join",
+      "kind": "joinExpr",
       "joinType": "LEFT",
       "right": {
         "kind": "tableRef",
@@ -56,5 +356,29 @@
         "direction": "ASC"
       }
     ]
+  },
+  {
+    "kind": "detach",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "join"
+    }
+  },
+  {
+    "kind": "attach",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "join"
+    }
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "join"
+    }
   }
 ]

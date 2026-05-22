@@ -1,5 +1,374 @@
 [
   {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "optimize_move_to_prewhere",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ],
+    "leadingComments": [
+      "-- Tags: no-fasttest"
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "move_all_conditions_to_prewhere",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "enable_multiple_prewhere_read_steps",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "move_primary_key_columns_to_end_of_prewhere",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "allow_reorder_prewhere_conditions",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "enable_analyzer",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "enable_parallel_replicas",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "allow_experimental_statistics",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "use_statistics",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "test_improve_prewhere"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "test_improve_prewhere"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "primary_key",
+        "type": {
+          "name": "String"
+        },
+        "statistics": [
+          {
+            "name": "CountMin"
+          }
+        ]
+      },
+      {
+        "kind": "columnDef",
+        "name": "normal_column",
+        "type": {
+          "name": "String"
+        },
+        "statistics": [
+          {
+            "name": "CountMin"
+          }
+        ]
+      },
+      {
+        "kind": "columnDef",
+        "name": "value",
+        "type": {
+          "name": "UInt32"
+        },
+        "statistics": [
+          {
+            "name": "TDigest"
+          }
+        ]
+      },
+      {
+        "kind": "columnDef",
+        "name": "date",
+        "type": {
+          "name": "Date"
+        },
+        "statistics": [
+          {
+            "name": "CountMin"
+          }
+        ]
+      }
+    ],
+    "engine": {
+      "name": "MergeTree",
+      "args": []
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "primary_key"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "test_improve_prewhere"
+      }
+    },
+    "selectQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "alias",
+          "expr": {
+            "kind": "functionCall",
+            "name": "hex",
+            "args": [
+              {
+                "kind": "binaryExpr",
+                "op": "%",
+                "left": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "number"
+                  ]
+                },
+                "right": {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "100"
+                }
+              }
+            ]
+          },
+          "alias": "primary_key"
+        },
+        {
+          "kind": "alias",
+          "expr": {
+            "kind": "functionCall",
+            "name": "arrayElement",
+            "args": [
+              {
+                "kind": "arrayLiteral",
+                "elements": [
+                  {
+                    "kind": "literal",
+                    "type": "String",
+                    "value": "hello"
+                  },
+                  {
+                    "kind": "literal",
+                    "type": "String",
+                    "value": "world"
+                  },
+                  {
+                    "kind": "literal",
+                    "type": "String",
+                    "value": "test"
+                  },
+                  {
+                    "kind": "literal",
+                    "type": "String",
+                    "value": "example"
+                  },
+                  {
+                    "kind": "literal",
+                    "type": "String",
+                    "value": "sample"
+                  }
+                ],
+                "source": "['hello', 'world', 'test', 'example', 'sample']"
+              },
+              {
+                "kind": "binaryExpr",
+                "op": "+",
+                "left": {
+                  "kind": "binaryExpr",
+                  "op": "%",
+                  "left": {
+                    "kind": "columnRef",
+                    "parts": [
+                      "number"
+                    ]
+                  },
+                  "right": {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "5"
+                  }
+                },
+                "right": {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "1"
+                }
+              }
+            ]
+          },
+          "alias": "normal_column"
+        },
+        {
+          "kind": "alias",
+          "expr": {
+            "kind": "binaryExpr",
+            "op": "+",
+            "left": {
+              "kind": "binaryExpr",
+              "op": "%",
+              "left": {
+                "kind": "columnRef",
+                "parts": [
+                  "number"
+                ]
+              },
+              "right": {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "1000"
+              }
+            },
+            "right": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "1"
+            }
+          },
+          "alias": "value"
+        },
+        {
+          "kind": "alias",
+          "expr": {
+            "kind": "binaryExpr",
+            "op": "+",
+            "left": {
+              "kind": "functionCall",
+              "name": "toDate",
+              "args": [
+                {
+                  "kind": "literal",
+                  "type": "String",
+                  "value": "2025-08-01"
+                }
+              ]
+            },
+            "right": {
+              "kind": "columnRef",
+              "parts": [
+                "number"
+              ]
+            }
+          },
+          "alias": "date"
+        }
+      ],
+      "from": {
+        "kind": "tableFunctionRef",
+        "name": "numbers",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "100000"
+          }
+        ]
+      }
+    }
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -131,7 +500,11 @@
           "value": "%Prewhere filter column%"
         }
       ]
-    }
+    },
+    "leadingComments": [
+      "-- { echoOn }",
+      "-- Condition: lower(primary_key) = '00' can't make use of primary key index. It shouldn't be moved to the end of prewhere conditions."
+    ]
   },
   {
     "kind": "select",
@@ -259,7 +632,10 @@
           "value": "%Prewhere filter column%"
         }
       ]
-    }
+    },
+    "leadingComments": [
+      "-- Condition: primary_key = '00' can use primary key index. It should be moved to the end of prewhere conditions."
+    ]
   },
   {
     "kind": "select",
@@ -416,6 +792,21 @@
           "value": "%Prewhere filter column%"
         }
       ]
-    }
+    },
+    "leadingComments": [
+      "-- Condition: lower(primary_key) IN ('00', '01') should be placed before Condition: normal_column != 'hello' and value < 100",
+      "-- because it has a lower estimated selectivity."
+    ]
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "test_improve_prewhere"
+    },
+    "leadingComments": [
+      "-- { echoOff }"
+    ]
   }
 ]

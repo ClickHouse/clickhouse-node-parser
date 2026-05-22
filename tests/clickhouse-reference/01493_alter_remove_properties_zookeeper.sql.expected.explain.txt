@@ -1,3 +1,140 @@
+DropQuery  r_prop_table1 (children 1)
+ Identifier r_prop_table1
+
+DropQuery  r_prop_table2 (children 1)
+ Identifier r_prop_table2
+
+Set
+
+CreateQuery r_prop_table1 (children 3)
+ Identifier r_prop_table1
+ Columns definition (children 1)
+  ExpressionList (children 4)
+   ColumnDeclaration column_default (children 2)
+    DataType UInt64
+    Literal UInt64_42
+   ColumnDeclaration column_codec (children 2)
+    DataType String
+    Function CODEC (children 1)
+     ExpressionList (children 1)
+      Function ZSTD (children 1)
+       ExpressionList (children 1)
+        Literal UInt64_10
+   ColumnDeclaration column_comment (children 2)
+    DataType Date
+    Literal 'Some comment'
+   ColumnDeclaration column_ttl (children 2)
+    DataType UInt64
+    Function plus (children 1)
+     ExpressionList (children 2)
+      Identifier column_comment
+      Function toIntervalMonth (children 1)
+       ExpressionList (children 1)
+        Literal UInt64_1
+ Storage definition (children 3)
+  Function ReplicatedMergeTree (children 1)
+   ExpressionList (children 2)
+    Literal '/clickhouse/{database}/test_01493/r_prop_table'
+    Literal '1'
+  Function tuple (children 1)
+   ExpressionList
+  ExpressionList (children 1)
+   TTLElement (children 1)
+    Function plus (children 1)
+     ExpressionList (children 2)
+      Identifier column_comment
+      Function toIntervalMonth (children 1)
+       ExpressionList (children 1)
+        Literal UInt64_2
+
+CreateQuery r_prop_table2 (children 3)
+ Identifier r_prop_table2
+ Columns definition (children 1)
+  ExpressionList (children 4)
+   ColumnDeclaration column_default (children 2)
+    DataType UInt64
+    Literal UInt64_42
+   ColumnDeclaration column_codec (children 2)
+    DataType String
+    Function CODEC (children 1)
+     ExpressionList (children 1)
+      Function ZSTD (children 1)
+       ExpressionList (children 1)
+        Literal UInt64_10
+   ColumnDeclaration column_comment (children 2)
+    DataType Date
+    Literal 'Some comment'
+   ColumnDeclaration column_ttl (children 2)
+    DataType UInt64
+    Function plus (children 1)
+     ExpressionList (children 2)
+      Identifier column_comment
+      Function toIntervalMonth (children 1)
+       ExpressionList (children 1)
+        Literal UInt64_1
+ Storage definition (children 3)
+  Function ReplicatedMergeTree (children 1)
+   ExpressionList (children 2)
+    Literal '/clickhouse/{database}/test_01493/r_prop_table'
+    Literal '2'
+  Function tuple (children 1)
+   ExpressionList
+  ExpressionList (children 1)
+   TTLElement (children 1)
+    Function plus (children 1)
+     ExpressionList (children 2)
+      Identifier column_comment
+      Function toIntervalMonth (children 1)
+       ExpressionList (children 1)
+        Literal UInt64_2
+
+ShowCreateTableQuery  r_prop_table1 (children 1)
+ Identifier r_prop_table1
+
+ShowCreateTableQuery  r_prop_table2 (children 1)
+ Identifier r_prop_table2
+
+InsertQuery   (children 2)
+ Identifier r_prop_table1
+ ExpressionList (children 3)
+  Identifier column_codec
+  Identifier column_comment
+  Identifier column_ttl
+
+SYSTEM query (children 1)
+ Identifier r_prop_table2
+
+AlterQuery  r_prop_table1 (children 2)
+ ExpressionList (children 1)
+  AlterCommand MODIFY_COLUMN (children 1)
+   ColumnDeclaration column_comment
+ Identifier r_prop_table1
+
+DetachQuery  r_prop_table1 (children 1)
+ Identifier r_prop_table1
+
+AttachQuery r_prop_table1 (children 1)
+ Identifier r_prop_table1
+
+AlterQuery  r_prop_table2 (children 2)
+ ExpressionList (children 1)
+  AlterCommand MODIFY_COLUMN (children 1)
+   ColumnDeclaration column_codec
+ Identifier r_prop_table2
+
+AlterQuery  r_prop_table2 (children 2)
+ ExpressionList (children 1)
+  AlterCommand MODIFY_COLUMN (children 1)
+   ColumnDeclaration column_default
+ Identifier r_prop_table2
+
+InsertQuery   (children 2)
+ Identifier r_prop_table1
+ ExpressionList (children 3)
+  Identifier column_codec
+  Identifier column_comment
+  Identifier column_ttl
+
 SelectWithUnionQuery (children 1)
  ExpressionList (children 1)
   SelectQuery (children 3)
@@ -12,6 +149,36 @@ SelectWithUnionQuery (children 1)
    ExpressionList (children 1)
     OrderByElement (children 1)
      Identifier column_ttl
+
+DetachQuery  r_prop_table2 (children 1)
+ Identifier r_prop_table2
+
+AttachQuery r_prop_table2 (children 1)
+ Identifier r_prop_table2
+
+AlterQuery  r_prop_table2 (children 2)
+ ExpressionList (children 1)
+  AlterCommand MODIFY_COLUMN (children 1)
+   ColumnDeclaration column_ttl
+ Identifier r_prop_table2
+
+AlterQuery  r_prop_table1 (children 2)
+ ExpressionList (children 1)
+  AlterCommand REMOVE_TTL
+ Identifier r_prop_table1
+
+InsertQuery   (children 2)
+ Identifier r_prop_table1
+ ExpressionList (children 3)
+  Identifier column_codec
+  Identifier column_comment
+  Identifier column_ttl
+
+OptimizeQuery  r_prop_table2_final (children 1)
+ Identifier r_prop_table2
+
+SYSTEM query (children 1)
+ Identifier r_prop_table1
 
 SelectWithUnionQuery (children 1)
  ExpressionList (children 1)

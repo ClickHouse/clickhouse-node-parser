@@ -1,5 +1,172 @@
 [
   {
+    "kind": "drop",
+    "targetType": "DATABASE",
+    "table": {
+      "kind": "tableRef",
+      "table": "test_01191"
+    },
+    "ifExists": true,
+    "leadingComments": [
+      "-- Tags: no-parallel, memory-engine"
+    ]
+  },
+  {
+    "kind": "createDatabase",
+    "name": "test_01191",
+    "engine": {
+      "name": "Atomic"
+    }
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "database": "test_01191",
+      "table": "_"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "n",
+        "type": {
+          "name": "UInt64"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "s",
+        "type": {
+          "name": "String"
+        }
+      }
+    ],
+    "engine": {
+      "name": "Memory",
+      "args": []
+    }
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "database": "test_01191",
+      "table": "t"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "n",
+        "type": {
+          "name": "UInt64"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "s",
+        "type": {
+          "name": "String"
+        }
+      }
+    ],
+    "engine": {
+      "name": "Memory",
+      "args": []
+    }
+  },
+  {
+    "kind": "createDictionary",
+    "table": {
+      "kind": "tableRef",
+      "database": "test_01191",
+      "table": "dict"
+    },
+    "dictAttrs": [
+      {
+        "name": "n",
+        "type": {
+          "name": "UInt64"
+        }
+      },
+      {
+        "name": "s",
+        "type": {
+          "name": "String"
+        }
+      }
+    ],
+    "dictDef": {
+      "primaryKey": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "n"
+          ]
+        }
+      ],
+      "layout": {
+        "name": "DIRECT",
+        "pairs": []
+      },
+      "source": {
+        "name": "clickhouse",
+        "pairs": [
+          {
+            "name": "HOST",
+            "value": {
+              "kind": "literal",
+              "type": "String",
+              "value": "localhost"
+            }
+          },
+          {
+            "name": "PORT",
+            "value": {
+              "kind": "functionCall",
+              "name": "tcpPort",
+              "args": []
+            }
+          },
+          {
+            "name": "USER",
+            "value": {
+              "kind": "literal",
+              "type": "String",
+              "value": "default"
+            }
+          },
+          {
+            "name": "TABLE",
+            "value": {
+              "kind": "literal",
+              "type": "String",
+              "value": "_"
+            }
+          },
+          {
+            "name": "DB",
+            "value": {
+              "kind": "literal",
+              "type": "String",
+              "value": "test_01191"
+            }
+          }
+        ]
+      }
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "database": "test_01191",
+        "table": "_"
+      }
+    }
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -86,6 +253,68 @@
     ]
   },
   {
+    "kind": "rename",
+    "targetType": "DICTIONARY",
+    "pairs": [
+      {
+        "from": {
+          "kind": "tableRef",
+          "database": "test_01191",
+          "table": "table"
+        },
+        "to": {
+          "kind": "tableRef",
+          "database": "test_01191",
+          "table": "table1"
+        }
+      }
+    ],
+    "trailingComments": [
+      "-- {serverError UNKNOWN_TABLE}"
+    ]
+  },
+  {
+    "kind": "rename",
+    "targetType": "DICTIONARY",
+    "pairs": [
+      {
+        "from": {
+          "kind": "tableRef",
+          "database": "test_01191",
+          "table": "_"
+        },
+        "to": {
+          "kind": "tableRef",
+          "database": "test_01191",
+          "table": "dict"
+        }
+      }
+    ],
+    "exchange": true,
+    "trailingComments": [
+      "-- {serverError INFINITE_LOOP}"
+    ]
+  },
+  {
+    "kind": "rename",
+    "targetType": "TABLE",
+    "pairs": [
+      {
+        "from": {
+          "kind": "tableRef",
+          "database": "test_01191",
+          "table": "t"
+        },
+        "to": {
+          "kind": "tableRef",
+          "database": "test_01191",
+          "table": "dict"
+        }
+      }
+    ],
+    "exchange": true
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -116,6 +345,145 @@
             ]
           }
         ]
+      }
+    ]
+  },
+  {
+    "kind": "rename",
+    "targetType": "TABLE",
+    "pairs": [
+      {
+        "from": {
+          "kind": "tableRef",
+          "database": "test_01191",
+          "table": "dict"
+        },
+        "to": {
+          "kind": "tableRef",
+          "database": "test_01191",
+          "table": "t"
+        }
+      }
+    ],
+    "exchange": true
+  },
+  {
+    "kind": "rename",
+    "targetType": "DICTIONARY",
+    "pairs": [
+      {
+        "from": {
+          "kind": "tableRef",
+          "database": "test_01191",
+          "table": "t"
+        },
+        "to": {
+          "kind": "tableRef",
+          "database": "test_01191",
+          "table": "dict1"
+        }
+      }
+    ],
+    "trailingComments": [
+      "-- {serverError INCORRECT_QUERY}"
+    ]
+  },
+  {
+    "kind": "drop",
+    "targetType": "DICTIONARY",
+    "table": {
+      "kind": "tableRef",
+      "database": "test_01191",
+      "table": "t"
+    },
+    "trailingComments": [
+      "-- {serverError INCORRECT_QUERY}"
+    ]
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "database": "test_01191",
+      "table": "t"
+    }
+  },
+  {
+    "kind": "drop",
+    "targetType": "DATABASE",
+    "table": {
+      "kind": "tableRef",
+      "table": "dummy_db"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "createDatabase",
+    "name": "dummy_db",
+    "engine": {
+      "name": "Atomic"
+    }
+  },
+  {
+    "kind": "rename",
+    "targetType": "DICTIONARY",
+    "pairs": [
+      {
+        "from": {
+          "kind": "tableRef",
+          "database": "test_01191",
+          "table": "dict"
+        },
+        "to": {
+          "kind": "tableRef",
+          "database": "dummy_db",
+          "table": "dict1"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "rename",
+    "targetType": "DICTIONARY",
+    "pairs": [
+      {
+        "from": {
+          "kind": "tableRef",
+          "database": "dummy_db",
+          "table": "dict1"
+        },
+        "to": {
+          "kind": "tableRef",
+          "database": "test_01191",
+          "table": "dict"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "drop",
+    "targetType": "DATABASE",
+    "table": {
+      "kind": "tableRef",
+      "table": "dummy_db"
+    }
+  },
+  {
+    "kind": "rename",
+    "targetType": "DICTIONARY",
+    "pairs": [
+      {
+        "from": {
+          "kind": "tableRef",
+          "database": "test_01191",
+          "table": "dict"
+        },
+        "to": {
+          "kind": "tableRef",
+          "database": "test_01191",
+          "table": "dict1"
+        }
       }
     ]
   },
@@ -154,6 +522,24 @@
     ]
   },
   {
+    "kind": "rename",
+    "targetType": "DICTIONARY",
+    "pairs": [
+      {
+        "from": {
+          "kind": "tableRef",
+          "database": "test_01191",
+          "table": "dict1"
+        },
+        "to": {
+          "kind": "tableRef",
+          "database": "test_01191",
+          "table": "dict2"
+        }
+      }
+    ]
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -186,5 +572,13 @@
         ]
       }
     ]
+  },
+  {
+    "kind": "drop",
+    "targetType": "DATABASE",
+    "table": {
+      "kind": "tableRef",
+      "table": "test_01191"
+    }
   }
 ]

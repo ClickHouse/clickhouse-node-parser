@@ -1,3 +1,59 @@
+DropQuery  mutation_table (children 1)
+ Identifier mutation_table
+
+CreateQuery mutation_table (children 3)
+ Identifier mutation_table
+ Columns definition (children 1)
+  ExpressionList (children 3)
+   ColumnDeclaration date (children 1)
+    DataType Date
+   ColumnDeclaration key (children 1)
+    DataType UInt64
+   ColumnDeclaration value (children 1)
+    DataType String
+ Storage definition (children 3)
+  Function MergeTree (children 1)
+   ExpressionList
+  Identifier date
+  Function tuple (children 1)
+   ExpressionList
+
+InsertQuery   (children 2)
+ Identifier mutation_table
+ SelectWithUnionQuery (children 1)
+  ExpressionList (children 1)
+   SelectQuery (children 2)
+    ExpressionList (children 3)
+     Function toDate (children 1)
+      ExpressionList (children 1)
+       Literal '2019-10-01'
+     Identifier number
+     Literal '42'
+    TablesInSelectQuery (children 1)
+     TablesInSelectQueryElement (children 1)
+      TableExpression (children 1)
+       Function numbers (children 1)
+        ExpressionList (children 1)
+         Literal UInt64_100
+
+InsertQuery   (children 2)
+ Identifier mutation_table
+ SelectWithUnionQuery (children 1)
+  ExpressionList (children 1)
+   SelectQuery (children 2)
+    ExpressionList (children 3)
+     Function toDate (children 1)
+      ExpressionList (children 1)
+       Literal '2019-10-02'
+     Identifier number
+     Literal 'Hello'
+    TablesInSelectQuery (children 1)
+     TablesInSelectQueryElement (children 1)
+      TableExpression (children 1)
+       Function numbers (children 1)
+        ExpressionList (children 1)
+         Literal UInt64_100
+
 SelectWithUnionQuery (children 1)
  ExpressionList (children 1)
   SelectQuery (children 3)
@@ -10,3 +66,32 @@ SelectWithUnionQuery (children 1)
    ExpressionList (children 1)
     OrderByElement (children 1)
      Identifier value
+
+AlterQuery  mutation_table (children 3)
+ ExpressionList (children 1)
+  AlterCommand MODIFY_COLUMN (children 1)
+   ColumnDeclaration value (children 1)
+    DataType UInt64
+ Identifier mutation_table
+ Set
+
+KillQueryQuery Function_and ASYNC (children 1)
+ Function and (children 1)
+  ExpressionList (children 2)
+   Function equals (children 1)
+    ExpressionList (children 2)
+     Identifier table
+     Literal 'mutation_table'
+   Function equals (children 1)
+    ExpressionList (children 2)
+     Identifier database
+     Function currentDatabase (children 1)
+      ExpressionList
+
+AlterQuery  mutation_table (children 3)
+ ExpressionList (children 1)
+  AlterCommand MODIFY_COLUMN (children 1)
+   ColumnDeclaration value (children 1)
+    DataType String
+ Identifier mutation_table
+ Set

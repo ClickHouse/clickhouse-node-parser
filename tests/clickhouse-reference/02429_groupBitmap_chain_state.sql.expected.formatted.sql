@@ -23,7 +23,7 @@ FROM (
         FROM (
                 SELECT 123 AS u
             ) AS a1
-    ) AS a2;
+    ) AS a2; -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
 SELECT groupBitmapOr(z)
 FROM (
@@ -31,7 +31,7 @@ FROM (
         FROM (
                 SELECT '123' AS u
             ) AS a1
-    ) AS a2;
+    ) AS a2; -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
 SELECT groupBitmapXor(z)
 FROM (
@@ -39,4 +39,4 @@ FROM (
         FROM (
                 SELECT '123' AS u
             ) AS a1
-    ) AS a2;
+    ) AS a2; -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }

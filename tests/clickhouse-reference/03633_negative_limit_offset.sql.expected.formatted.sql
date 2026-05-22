@@ -1,3 +1,5 @@
+SET enable_analyzer = 0;
+
 SELECT number
 FROM numbers(10)
 ORDER BY number ASC
@@ -178,6 +180,20 @@ FROM numbers(20)
 LIMIT 18446744073709551615
 OFFSET -446744073709551615;
 
+DROP TABLE IF EXISTS num_tab;
+
+CREATE TABLE num_tab
+(
+    id UInt8,
+    val UInt32
+)
+ENGINE = MergeTree
+ORDER BY (id, val) AS
+SELECT
+    number % 2 AS id,
+    number AS val
+FROM numbers(20);
+
 SELECT if((count() = 5)
     AND (min(val) = 15)
     AND (max(val) = 19)
@@ -192,13 +208,46 @@ FROM (
         LIMIT -5
     );
 
+CREATE TABLE num_tab
+ENGINE = MergeTree
+ORDER BY number AS
+SELECT number
+FROM numbers(1000000);
+
+DROP TABLE IF EXISTS modified_tab;
+
+CREATE TABLE modified_tab
+ENGINE = MergeTree()
+ORDER BY number AS
+SELECT number
+FROM (
+        SELECT number
+        FROM num_tab
+        ORDER BY number ASC
+        OFFSET -10
+    );
+
 SELECT
     count(number),
     sum(number)
 FROM modified_tab;
 
+CREATE TABLE modified_tab
+ENGINE = MergeTree()
+ORDER BY number AS
+SELECT number
+FROM (
+        SELECT number
+        FROM num_tab
+        ORDER BY number ASC
+        LIMIT -10
+        OFFSET -100000
+    );
+
 SELECT number
 FROM modified_tab;
+
+SET enable_analyzer = 1;
 
 SELECT DISTINCT number
 FROM (

@@ -1,3 +1,18 @@
+-- Tags: no-fasttest
+DROP TABLE IF EXISTS t_flatten_tuple;
+
+DROP TABLE IF EXISTS t_flatten_object;
+
+SET flatten_nested = 0;
+
+CREATE TABLE t_flatten_tuple
+(
+    t Tuple(t1 Nested(a UInt32, s String), b UInt32, t2 Tuple(k String, v UInt32))
+)
+ENGINE = Memory;
+
+INSERT INTO t_flatten_tuple;
+
 SELECT
     flattenTuple(t) AS ft,
     toTypeName(ft)

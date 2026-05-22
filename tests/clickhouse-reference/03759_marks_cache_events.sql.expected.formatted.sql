@@ -1,12 +1,38 @@
+-- Tags: no-parallel-replicas, no-parallel
+-- Test depends on mark cache, don't run with others in parallel
+DROP TABLE IF EXISTS data;
+
+CREATE TABLE data
+(
+    key Int
+)
+ENGINE = MergeTree()
+ORDER BY tuple()
+SETTINGS prewarm_mark_cache = 0;
+
+SET load_marks_asynchronously = 0;
+
+INSERT INTO data;
+
+--
+-- SELECTs
+--
 SELECT *
 FROM data
 FORMAT Null
 SETTINGS load_marks_asynchronously = 0;
 
+-- drop marks cache
+DETACH TABLE data;
+
+ATTACH TABLE data;
+
 SELECT *
 FROM data
 FORMAT Null
 SETTINGS load_marks_asynchronously = 1;
+
+SYSTEM flush logs query_log;
 
 SELECT
     query_kind,
@@ -19,6 +45,14 @@ WHERE current_database = currentDatabase()
     AND type != 'QueryStart'
 ORDER BY event_time_microseconds ASC
 FORMAT CSVWithNames;
+
+--
+-- metrics for merges
+--
+-- only hits
+OPTIMIZE TABLE data FINAL;
+
+SYSTEM flush logs part_log;
 
 SELECT
     part_name,

@@ -25,6 +25,8 @@ FROM (
     )
 WHERE sum = 0;
 
+SET aggregate_functions_null_for_empty = 1;
+
 SELECT sum
 FROM (
         SELECT sum(dummy) AS sum

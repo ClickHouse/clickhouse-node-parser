@@ -1,5 +1,235 @@
 [
   {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "hourly_data"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "domain_name",
+        "type": {
+          "name": "String"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "event_time",
+        "type": {
+          "name": "DateTime"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "count_views",
+        "type": {
+          "name": "UInt64"
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "domain_name"
+          ]
+        }
+      },
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "event_time"
+          ]
+        }
+      }
+    ],
+    "leadingComments": [
+      "-- Tags: zookeeper, no-replicated-database, no-ordinary-database"
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "monthly_aggregated_data"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "domain_name",
+        "type": {
+          "name": "String"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "month",
+        "type": {
+          "name": "Date"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "sumCountViews",
+        "type": {
+          "name": "AggregateFunction",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "sum"
+              }
+            },
+            {
+              "kind": "type",
+              "type": {
+                "name": "UInt64"
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "engine": {
+      "name": "AggregatingMergeTree"
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "domain_name"
+          ]
+        }
+      },
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "month"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createMaterializedView",
+    "table": {
+      "kind": "tableRef",
+      "table": "monthly_aggregated_data_mv"
+    },
+    "toTable": {
+      "kind": "tableRef",
+      "table": "monthly_aggregated_data"
+    },
+    "asQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "alias",
+          "expr": {
+            "kind": "functionCall",
+            "name": "toDate",
+            "args": [
+              {
+                "kind": "functionCall",
+                "name": "toStartOfMonth",
+                "args": [
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "event_time"
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          "alias": "month"
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "domain_name"
+          ]
+        },
+        {
+          "kind": "alias",
+          "expr": {
+            "kind": "functionCall",
+            "name": "sumState",
+            "args": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "count_views"
+                ]
+              }
+            ]
+          },
+          "alias": "sumCountViews"
+        }
+      ],
+      "from": {
+        "kind": "tableRef",
+        "table": "hourly_data"
+      },
+      "groupBy": {
+        "kind": "expressions",
+        "items": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "domain_name"
+            ]
+          },
+          {
+            "kind": "columnRef",
+            "parts": [
+              "month"
+            ]
+          }
+        ]
+      }
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "hourly_data"
+      }
+    },
+    "columns": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "domain_name"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "event_time"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "count_views"
+        ]
+      }
+    ]
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -37,6 +267,54 @@
       "kind": "tableRef",
       "table": "hourly_data"
     }
+  },
+  {
+    "kind": "detach",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "hourly_data"
+    }
+  },
+  {
+    "kind": "detach",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "monthly_aggregated_data"
+    }
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "hourly_data"
+    },
+    "attach": true,
+    "asTable": {
+      "kind": "tableRef",
+      "table": "REPLICATED"
+    }
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "monthly_aggregated_data"
+    },
+    "attach": true,
+    "asTable": {
+      "kind": "tableRef",
+      "table": "REPLICATED"
+    }
+  },
+  {
+    "kind": "system",
+    "body": "SYSTEM RESTORE REPLICA hourly_data"
+  },
+  {
+    "kind": "system",
+    "body": "SYSTEM RESTORE REPLICA monthly_aggregated_data"
   },
   {
     "kind": "select",

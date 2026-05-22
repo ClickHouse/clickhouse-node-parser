@@ -1,3 +1,8 @@
+-- Tags: no-parallel, memory-engine
+SET database_atomic_wait_for_drop_and_detach_synchronously = 1;
+
+SET log_queries = 1;
+
 SELECT
     uniqArray([1, 1, 2]),
     SUBSTRING('Hello, world', 7, 5),
@@ -20,7 +25,9 @@ FROM numbers(10e3)
 SETTINGS
     max_memory_usage = 4e6,
     max_block_size = 100
-FORMAT Null;
+FORMAT Null; -- { serverError MEMORY_LIMIT_EXCEEDED }
+
+SYSTEM FLUSH LOGS query_log;
 
 SELECT arraySort(used_aggregate_functions)
 FROM `system`.query_log
@@ -49,6 +56,8 @@ ORDER BY query_start_time DESC
 LIMIT 1
 FORMAT TabSeparatedWithNames;
 
+-- 1. analyzer includes arrayJoin into functions list
+-- 2. for crc32 (CaseInsensitive function) we use lower case now
 SELECT arraySort(arrayMap(x -> if(x == 'crc32', 'CRC32', x), arrayFilter(x -> x != 'arrayJoin', used_functions))) AS `arraySort(used_functions)`
 FROM `system`.query_log
 WHERE current_database = currentDatabase()
@@ -76,6 +85,11 @@ ORDER BY query_start_time DESC
 LIMIT 1
 FORMAT TabSeparatedWithNames;
 
+DROP DATABASE IF EXISTS test_query_log_factories_info1;
+
+CREATE DATABASE test_query_log_factories_info1
+ENGINE = Atomic;
+
 SELECT used_database_engines
 FROM `system`.query_log
 WHERE current_database = currentDatabase()
@@ -84,6 +98,14 @@ WHERE current_database = currentDatabase()
 ORDER BY query_start_time DESC
 LIMIT 1
 FORMAT TabSeparatedWithNames;
+
+CREATE OR REPLACE TABLE test_query_log_factories_info1.memory_table
+(
+    id BIGINT,
+    date DATETIME,
+    date2 DateTime
+)
+ENGINE = Memory();
 
 SELECT
     arraySort(used_data_type_families),
@@ -95,3 +117,7 @@ WHERE current_database = currentDatabase()
 ORDER BY query_start_time DESC
 LIMIT 1
 FORMAT TabSeparatedWithNames;
+
+DROP TABLE test_query_log_factories_info1.memory_table;
+
+DROP DATABASE test_query_log_factories_info1;

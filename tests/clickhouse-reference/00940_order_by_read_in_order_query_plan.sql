@@ -1,4 +1,12 @@
-
+SET optimize_read_in_order = 1, query_plan_read_in_order = 1, enable_analyzer = 0;
+drop table if exists tab;
+drop table if exists tab2;
+drop table if exists tab3;
+drop table if exists tab4;
+drop table if exists tab5;
+create table tab (a UInt32, b UInt32, c UInt32, d UInt32) engine = MergeTree order by ((a + b) * c, sin(a / b));
+insert into tab select number, number, number, number from numbers(5);
+-- { echoOn }
 
 -- Exact match, single key
 select * from tab order by (a + b) * c;
@@ -54,7 +62,11 @@ select * from (select *, a + b as x, a / b as y from tab) order by x * c, sin(y)
 select * from (explain plan actions = 1 select * from (select *, a + b as x, a / b as y from tab) order by x * c, sin(y)) where explain like '%sort description%';
 select * from (select *, a / b as y from (select *, a + b as x from tab)) order by x * c, sin(y);
 select * from (explain plan actions = 1 select * from (select *, a / b as y from (select *, a + b as x from tab)) order by x * c, sin(y)) where explain like '%sort description%';
+-- { echoOff }
 
+create table tab2 (x DateTime, y UInt32, z UInt32) engine = MergeTree order by (x, y);
+insert into tab2 select toDate('2020-02-02') + number, number, number from numbers(4);
+-- { echoOn }
 
 select * from tab2 order by toTimeZone(toTimezone(x, 'UTC'), 'CET'), intDiv(intDiv(y, -2), -3);
 select * from (explain plan actions = 1 select * from tab2 order by toTimeZone(toTimezone(x, 'UTC'), 'CET'), intDiv(intDiv(y, -2), -3)) where explain like '%sort description%';
@@ -62,7 +74,15 @@ select * from tab2 order by toStartOfDay(x), intDiv(intDiv(y, -2), -3);
 select * from (explain plan actions = 1 select * from tab2 order by toStartOfDay(x), intDiv(intDiv(y, -2), -3)) where explain like '%sort description%';
 -- select * from tab2 where toTimezone(x, 'CET') = '2020-02-03 01:00:00' order by intDiv(intDiv(y, -2), -3);
 select * from (explain plan actions = 1 select * from tab2 where toTimezone(x, 'CET') = '2020-02-03 01:00:00' order by intDiv(intDiv(y, -2), -3)) where explain like '%sort description%';
+-- { echoOff }
 
+create table tab3 (a UInt32, b UInt32, c UInt32, d UInt32) engine = MergeTree order by ((a + b) * c, sin(a / b));
+insert into tab3 select number, number, number, number from numbers(5);
+create table tab4 (a UInt32, b UInt32, c UInt32, d UInt32) engine = MergeTree order by sin(a / b);
+insert into tab4 select number, number, number, number from numbers(5);
+create table tab5 (a UInt32, b UInt32, c UInt32, d UInt32) engine = MergeTree order by (a + b) * c;
+insert into tab5 select number, number, number, number from numbers(5);
+-- { echoOn }
 
 -- Union (not fully supported)
 select * from (select * from tab union all select * from tab3) order by (a + b) * c, sin(a / b);

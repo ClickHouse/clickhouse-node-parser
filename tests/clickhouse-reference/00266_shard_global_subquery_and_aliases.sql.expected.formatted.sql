@@ -1,3 +1,4 @@
+-- Tags: shard
 SELECT
     1 GLOBAL IN (
         SELECT 1

@@ -1,5 +1,56 @@
 [
   {
+    "kind": "describe",
+    "target": {
+      "kind": "function",
+      "func": {
+        "kind": "tableFunctionRef",
+        "name": "format",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "JSONEachRow"
+            ]
+          },
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": "\n{\"a\": \"Hello\", \"b\": 111}\n{\"a\": \"World\", \"b\": 123}\n{\"a\": \"Hello\", \"b\": 111}\n{\"a\": \"World\", \"b\": 123}\n"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "kind": "describe",
+    "target": {
+      "kind": "function",
+      "func": {
+        "kind": "tableFunctionRef",
+        "name": "format",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "JSONEachRow"
+            ]
+          },
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": "a String, b Int64"
+          },
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": "\n{\"a\": \"Hello\", \"b\": 111}\n{\"a\": \"World\", \"b\": 123}\n{\"a\": \"Hello\", \"b\": 111}\n{\"a\": \"World\", \"b\": 123}\n"
+          }
+        ]
+      }
+    }
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -7,7 +58,7 @@
       }
     ],
     "from": {
-      "kind": "tableFunction",
+      "kind": "tableFunctionRef",
       "name": "format",
       "args": [
         {
@@ -30,6 +81,57 @@
     }
   },
   {
+    "kind": "describe",
+    "target": {
+      "kind": "function",
+      "func": {
+        "kind": "tableFunctionRef",
+        "name": "format",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "CSV"
+            ]
+          },
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": "1,2,\"[1,2,3]\",\"[['abc'], [], ['d', 'e']]\""
+          }
+        ]
+      }
+    }
+  },
+  {
+    "kind": "describe",
+    "target": {
+      "kind": "function",
+      "func": {
+        "kind": "tableFunctionRef",
+        "name": "format",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "CSV"
+            ]
+          },
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": "a1 Int32, a2 UInt64, a3 Array(Int32), a4 Array(Array(String))"
+          },
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": "1,2,\"[1,2,3]\",\"[['abc'], [], ['d', 'e']]\""
+          }
+        ]
+      }
+    }
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -37,7 +139,7 @@
       }
     ],
     "from": {
-      "kind": "tableFunction",
+      "kind": "tableFunctionRef",
       "name": "format",
       "args": [
         {
@@ -62,7 +164,7 @@
       }
     ],
     "from": {
-      "kind": "tableFunction",
+      "kind": "tableFunctionRef",
       "name": "format",
       "args": [
         {
@@ -85,6 +187,43 @@
     }
   },
   {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "test"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "test"
+    },
+    "asTableFunction": {
+      "name": "format",
+      "args": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "TSV"
+          ]
+        },
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "cust_id UInt128"
+        },
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "20210129005809043707\\n123456789\\n987654321"
+        }
+      ]
+    }
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -92,6 +231,24 @@
       }
     ],
     "from": {
+      "kind": "tableRef",
+      "table": "test"
+    }
+  },
+  {
+    "kind": "describe",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "test"
+      }
+    }
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
       "kind": "tableRef",
       "table": "test"
     }

@@ -46,15 +46,32 @@ SELECT
     space(-3::Int64),
     length(space(-3::Int64));
 
-SELECT space('abc');
+SELECT space('abc'); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
-SELECT space(['abc']);
+SELECT space(['abc']); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
-SELECT space(('abc'));
+SELECT space(('abc')); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
-SELECT space(30303030303030303030303030303030::UInt64);
+SELECT space(30303030303030303030303030303030::UInt64); -- { serverError TOO_LARGE_STRING_SIZE }
 
 SELECT space(NULL);
+
+DROP TABLE IF EXISTS defaults;
+
+CREATE TABLE defaults
+(
+    u8 UInt8,
+    u16 UInt16,
+    u32 UInt32,
+    u64 UInt64,
+    i8 Int8,
+    i16 Int16,
+    i32 Int32,
+    i64 Int64
+)
+ENGINE = Memory();
+
+INSERT INTO defaults;
 
 SELECT space(30::UInt8)
 FROM defaults;
@@ -119,3 +136,5 @@ SELECT
     space(i64),
     length(space(i64))
 FROM defaults;
+
+DROP TABLE defaults;

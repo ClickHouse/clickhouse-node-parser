@@ -34,6 +34,8 @@ FROM `system`.one AS one;
 SELECT one.*
 FROM `system`.one AS one;
 
+USE `system`;
+
 SELECT dummy
 FROM one;
 
@@ -58,6 +60,18 @@ FROM one AS t;
 SELECT `system`.one.*
 FROM one AS t;
 
+USE {CLICKHOUSE_DATABASE:Identifier};
+
+DROP TABLE IF EXISTS nested;
+
+CREATE TABLE nested
+(
+    nest Nested(a UInt8, b String)
+)
+ENGINE = Memory;
+
+INSERT INTO nested;
+
 SELECT
     nest.a,
     nest.b,
@@ -67,6 +81,8 @@ SELECT
     t.nest.b,
     t.*
 FROM nested AS t;
+
+DROP TABLE nested;
 
 SELECT number
 FROM numbers(2);

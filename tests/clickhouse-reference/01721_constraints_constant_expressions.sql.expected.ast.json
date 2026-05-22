@@ -1,5 +1,100 @@
 [
   {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "constraint_constant_number_expression"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "constraint_constant_number_expression"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "id",
+        "type": {
+          "name": "UInt64"
+        }
+      },
+      {
+        "kind": "constraintDef",
+        "name": "c0",
+        "constraintType": "CHECK",
+        "expr": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      },
+      {
+        "kind": "constraintDef",
+        "name": "c1",
+        "constraintType": "CHECK",
+        "expr": {
+          "kind": "binaryExpr",
+          "op": "<",
+          "left": {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "1"
+          },
+          "right": {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "2"
+          }
+        }
+      },
+      {
+        "kind": "constraintDef",
+        "name": "c2",
+        "constraintType": "CHECK",
+        "expr": {
+          "kind": "functionCall",
+          "name": "isNull",
+          "args": [
+            {
+              "kind": "functionCall",
+              "name": "cast",
+              "args": [
+                {
+                  "kind": "literal",
+                  "type": "NULL",
+                  "value": "NULL"
+                },
+                {
+                  "kind": "literal",
+                  "type": "String",
+                  "value": "Nullable(UInt8)"
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ],
+    "engine": {
+      "name": "TinyLog",
+      "args": []
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "constraint_constant_number_expression"
+      }
+    }
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -10,6 +105,72 @@
       "kind": "tableRef",
       "table": "constraint_constant_number_expression"
     }
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "constraint_constant_number_expression"
+    }
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "constraint_constant_number_expression_non_uint8"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "constraint_constant_number_expression_non_uint8"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "id",
+        "type": {
+          "name": "UInt64"
+        }
+      },
+      {
+        "kind": "constraintDef",
+        "name": "c0",
+        "constraintType": "CHECK",
+        "expr": {
+          "kind": "functionCall",
+          "name": "toUInt64",
+          "args": [
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "1"
+            }
+          ]
+        }
+      }
+    ],
+    "engine": {
+      "name": "TinyLog",
+      "args": []
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "constraint_constant_number_expression_non_uint8"
+      }
+    },
+    "trailingComments": [
+      "-- {serverError UNSUPPORTED_METHOD}"
+    ]
   },
   {
     "kind": "select",
@@ -24,6 +185,86 @@
     }
   },
   {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "constraint_constant_number_expression_non_uint8"
+    }
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "constraint_constant_nullable_expression_that_contains_null"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "constraint_constant_nullable_expression_that_contains_null"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "id",
+        "type": {
+          "name": "UInt64"
+        }
+      },
+      {
+        "kind": "constraintDef",
+        "name": "c0",
+        "constraintType": "CHECK",
+        "expr": {
+          "kind": "functionCall",
+          "name": "nullIf",
+          "args": [
+            {
+              "kind": "binaryExpr",
+              "op": "%",
+              "left": {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "1"
+              },
+              "right": {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "2"
+              }
+            },
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "1"
+            }
+          ]
+        }
+      }
+    ],
+    "engine": {
+      "name": "TinyLog",
+      "args": []
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "constraint_constant_nullable_expression_that_contains_null"
+      }
+    },
+    "trailingComments": [
+      "-- {serverError VIOLATED_CONSTRAINT}"
+    ]
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -31,6 +272,14 @@
       }
     ],
     "from": {
+      "kind": "tableRef",
+      "table": "constraint_constant_nullable_expression_that_contains_null"
+    }
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
       "kind": "tableRef",
       "table": "constraint_constant_nullable_expression_that_contains_null"
     }

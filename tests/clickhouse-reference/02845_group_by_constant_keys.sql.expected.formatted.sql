@@ -58,6 +58,19 @@ SETTINGS
     enable_software_prefetch_in_aggregation = 1,
     compile_aggregate_expressions = 1;
 
+DROP TABLE IF EXISTS test;
+
+CREATE TABLE test
+(
+    x UInt64
+)
+ENGINE = File(JSON);
+
+SET engine_file_allow_create_multiple_files = 1;
+
+INSERT INTO test SELECT *
+FROM numbers(10);
+
 SELECT count()
 FROM test
 GROUP BY _file
@@ -189,3 +202,5 @@ SETTINGS
     optimize_group_by_constant_keys = 1,
     enable_software_prefetch_in_aggregation = 1,
     compile_aggregate_expressions = 1;
+
+DROP TABLE test;

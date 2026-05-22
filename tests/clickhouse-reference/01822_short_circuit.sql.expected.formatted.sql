@@ -1,3 +1,7 @@
+SET short_circuit_function_evaluation = 'enable';
+
+SET convert_query_to_cnf = 0;
+
 SELECT if(number > 0, intDiv(number + 100, number), throwIf(number))
 FROM numbers(10);
 
@@ -331,6 +335,8 @@ FROM numbers(5);
 SELECT NULL
     OR isNull(intDiv(number, 1))
 FROM numbers(5);
+
+SET compile_expressions = 1;
 
 SELECT if(number > 0, intDiv(42, number), 1)
 FROM numbers(5);

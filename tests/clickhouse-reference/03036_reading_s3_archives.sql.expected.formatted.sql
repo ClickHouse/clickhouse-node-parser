@@ -1,3 +1,5 @@
+-- Tags: no-fasttest
+-- Tag no-fasttest: Depends on AWS
 SELECT
     id,
     data,
@@ -85,7 +87,7 @@ SELECT
     _size,
     _file,
     _path
-FROM s3(s3_conn, filename = '03036_archive2.zip :: nonexistent.csv');
+FROM s3(s3_conn, filename = '03036_archive2.zip :: nonexistent.csv'); -- { serverError CANNOT_EXTRACT_TABLE_STRUCTURE }
 
 SELECT
     id,
@@ -93,7 +95,10 @@ SELECT
     _size,
     _file,
     _path
-FROM s3(s3_conn, filename = '03036_archive2.zip :: nonexistent{2..3}.csv');
+FROM s3(s3_conn, filename = '03036_archive2.zip :: nonexistent{2..3}.csv'); -- { serverError CANNOT_EXTRACT_TABLE_STRUCTURE }
+
+CREATE TABLE table_zip22
+ENGINE = S3(s3_conn, filename = '03036_archive2.zip :: example2.csv');
 
 SELECT
     id,
@@ -104,6 +109,9 @@ SELECT
 FROM table_zip22
 ORDER BY (id, _file, _path) ASC;
 
+CREATE TABLE table_tar2star
+ENGINE = S3(s3_conn, filename = '03036_archive2.tar :: example*.csv');
+
 SELECT
     id,
     data,
@@ -113,6 +121,9 @@ SELECT
 FROM table_tar2star
 ORDER BY (id, _file, _path) ASC;
 
+CREATE TABLE table_tarstarglobs
+ENGINE = S3(s3_conn, filename = '03036_archive*.tar* :: example{2..3}.csv');
+
 SELECT
     id,
     data,
@@ -121,6 +132,9 @@ SELECT
     _path
 FROM table_tarstarglobs
 ORDER BY (id, _file, _path) ASC;
+
+CREATE TABLE table_noexist
+ENGINE = s3(s3_conn, filename = '03036_archive2.zip :: nonexistent.csv'); -- { serverError UNKNOWN_STORAGE }
 
 SELECT
     id,

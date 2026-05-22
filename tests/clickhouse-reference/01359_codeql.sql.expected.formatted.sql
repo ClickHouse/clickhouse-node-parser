@@ -1,3 +1,4 @@
+-- In previous ClickHouse versions, the multiplications was made in a wrong type leading to overflow.
 SELECT round(avgWeighted(x, y))
 FROM (
         SELECT

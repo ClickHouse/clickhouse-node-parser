@@ -1,3 +1,4 @@
+-- Tags: stateful
 SELECT
     RegionID,
     uniq(UserID) AS u
@@ -7,4 +8,4 @@ GROUP BY RegionID
 ORDER BY
     u DESC,
     RegionID ASC
-LIMIT 10;
+LIMIT 10; -- nothing

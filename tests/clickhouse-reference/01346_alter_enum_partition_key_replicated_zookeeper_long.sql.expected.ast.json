@@ -1,5 +1,203 @@
 [
   {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "insert_keeper_fault_injection_probability",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      }
+    ],
+    "leadingComments": [
+      "-- Tags: long, replica"
+    ],
+    "trailingComments": [
+      "-- disable fault injection; part ids are non-deterministic in case of insert retries"
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "replication_alter_partitions_sync",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "2"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "test"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "test2"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "test"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "x",
+        "type": {
+          "name": "Enum",
+          "args": [
+            {
+              "kind": "enumValues",
+              "values": [
+                {
+                  "name": "hello",
+                  "value": "1"
+                },
+                {
+                  "name": "world",
+                  "value": "2"
+                }
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "y",
+        "type": {
+          "name": "String"
+        }
+      }
+    ],
+    "engine": {
+      "name": "ReplicatedMergeTree",
+      "args": [
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "/clickhouse/{database}/test_01346/table"
+        },
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "r1"
+        }
+      ]
+    },
+    "partitionBy": {
+      "kind": "columnRef",
+      "parts": [
+        "x"
+      ]
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "y"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "test2"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "x",
+        "type": {
+          "name": "Enum",
+          "args": [
+            {
+              "kind": "enumValues",
+              "values": [
+                {
+                  "name": "hello",
+                  "value": "1"
+                },
+                {
+                  "name": "world",
+                  "value": "2"
+                }
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "y",
+        "type": {
+          "name": "String"
+        }
+      }
+    ],
+    "engine": {
+      "name": "ReplicatedMergeTree",
+      "args": [
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "/clickhouse/{database}/test_01346/table"
+        },
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "r2"
+        }
+      ]
+    },
+    "partitionBy": {
+      "kind": "columnRef",
+      "parts": [
+        "x"
+      ]
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "y"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "test"
+      }
+    }
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -10,6 +208,10 @@
       "kind": "tableRef",
       "table": "test"
     }
+  },
+  {
+    "kind": "system",
+    "body": "SYSTEM SYNC REPLICA test2"
   },
   {
     "kind": "select",
@@ -200,6 +402,63 @@
     ]
   },
   {
+    "kind": "alter",
+    "table": {
+      "kind": "tableRef",
+      "table": "test"
+    },
+    "commands": [
+      {
+        "kind": "alterCommand",
+        "commandType": "MODIFY_COLUMN",
+        "column": {
+          "kind": "columnDef",
+          "name": "x",
+          "type": {
+            "name": "Enum",
+            "args": [
+              {
+                "kind": "enumValues",
+                "values": [
+                  {
+                    "name": "hello",
+                    "value": "1"
+                  },
+                  {
+                    "name": "world",
+                    "value": "2"
+                  },
+                  {
+                    "name": "goodbye",
+                    "value": "3"
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      }
+    ]
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "test"
+      }
+    }
+  },
+  {
+    "kind": "optimize",
+    "table": {
+      "kind": "tableRef",
+      "table": "test"
+    },
+    "final": true
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -246,5 +505,385 @@
         "direction": "ASC"
       }
     ]
+  },
+  {
+    "kind": "alter",
+    "table": {
+      "kind": "tableRef",
+      "table": "test"
+    },
+    "commands": [
+      {
+        "kind": "alterCommand",
+        "commandType": "MODIFY_COLUMN",
+        "column": {
+          "kind": "columnDef",
+          "name": "x",
+          "type": {
+            "name": "Enum",
+            "args": [
+              {
+                "kind": "enumValues",
+                "values": [
+                  {
+                    "name": "hello",
+                    "value": "1"
+                  },
+                  {
+                    "name": "world",
+                    "value": "2"
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      }
+    ],
+    "trailingComments": [
+      "-- { serverError ALTER_OF_COLUMN_IS_FORBIDDEN }"
+    ]
+  },
+  {
+    "kind": "alter",
+    "table": {
+      "kind": "tableRef",
+      "table": "test"
+    },
+    "commands": [
+      {
+        "kind": "alterCommand",
+        "commandType": "MODIFY_COLUMN",
+        "column": {
+          "kind": "columnDef",
+          "name": "x",
+          "type": {
+            "name": "Enum",
+            "args": [
+              {
+                "kind": "enumValues",
+                "values": [
+                  {
+                    "name": "hello",
+                    "value": "1"
+                  },
+                  {
+                    "name": "world",
+                    "value": "2"
+                  },
+                  {
+                    "name": "test",
+                    "value": "3"
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      }
+    ]
+  },
+  {
+    "kind": "alter",
+    "table": {
+      "kind": "tableRef",
+      "table": "test"
+    },
+    "commands": [
+      {
+        "kind": "alterCommand",
+        "commandType": "MODIFY_COLUMN",
+        "column": {
+          "kind": "columnDef",
+          "name": "x",
+          "type": {
+            "name": "Enum",
+            "args": [
+              {
+                "kind": "enumValues",
+                "values": [
+                  {
+                    "name": "hello",
+                    "value": "1"
+                  },
+                  {
+                    "name": "world",
+                    "value": "2"
+                  },
+                  {
+                    "name": "goodbye",
+                    "value": "4"
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      }
+    ],
+    "trailingComments": [
+      "-- { serverError ALTER_OF_COLUMN_IS_FORBIDDEN }"
+    ]
+  },
+  {
+    "kind": "alter",
+    "table": {
+      "kind": "tableRef",
+      "table": "test"
+    },
+    "commands": [
+      {
+        "kind": "alterCommand",
+        "commandType": "MODIFY_COLUMN",
+        "column": {
+          "kind": "columnDef",
+          "name": "x",
+          "type": {
+            "name": "Int8"
+          }
+        }
+      }
+    ]
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "test"
+      }
+    }
+  },
+  {
+    "kind": "alter",
+    "table": {
+      "kind": "tableRef",
+      "table": "test"
+    },
+    "commands": [
+      {
+        "kind": "alterCommand",
+        "commandType": "MODIFY_COLUMN",
+        "column": {
+          "kind": "columnDef",
+          "name": "x",
+          "type": {
+            "name": "Enum8",
+            "args": [
+              {
+                "kind": "enumValues",
+                "values": [
+                  {
+                    "name": "",
+                    "value": "1"
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      }
+    ],
+    "trailingComments": [
+      "-- { serverError ALTER_OF_COLUMN_IS_FORBIDDEN }"
+    ]
+  },
+  {
+    "kind": "alter",
+    "table": {
+      "kind": "tableRef",
+      "table": "test"
+    },
+    "commands": [
+      {
+        "kind": "alterCommand",
+        "commandType": "MODIFY_COLUMN",
+        "column": {
+          "kind": "columnDef",
+          "name": "x",
+          "type": {
+            "name": "Enum16",
+            "args": [
+              {
+                "kind": "enumValues",
+                "values": [
+                  {
+                    "name": "",
+                    "value": "1"
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      }
+    ],
+    "trailingComments": [
+      "-- { serverError ALTER_OF_COLUMN_IS_FORBIDDEN }"
+    ]
+  },
+  {
+    "kind": "alter",
+    "table": {
+      "kind": "tableRef",
+      "table": "test"
+    },
+    "commands": [
+      {
+        "kind": "alterCommand",
+        "commandType": "MODIFY_COLUMN",
+        "column": {
+          "kind": "columnDef",
+          "name": "x",
+          "type": {
+            "name": "UInt64"
+          }
+        }
+      }
+    ],
+    "trailingComments": [
+      "-- { serverError ALTER_OF_COLUMN_IS_FORBIDDEN }"
+    ]
+  },
+  {
+    "kind": "alter",
+    "table": {
+      "kind": "tableRef",
+      "table": "test"
+    },
+    "commands": [
+      {
+        "kind": "alterCommand",
+        "commandType": "MODIFY_COLUMN",
+        "column": {
+          "kind": "columnDef",
+          "name": "x",
+          "type": {
+            "name": "String"
+          }
+        }
+      }
+    ],
+    "trailingComments": [
+      "-- { serverError ALTER_OF_COLUMN_IS_FORBIDDEN }"
+    ]
+  },
+  {
+    "kind": "alter",
+    "table": {
+      "kind": "tableRef",
+      "table": "test"
+    },
+    "commands": [
+      {
+        "kind": "alterCommand",
+        "commandType": "MODIFY_COLUMN",
+        "column": {
+          "kind": "columnDef",
+          "name": "x",
+          "type": {
+            "name": "Nullable",
+            "args": [
+              {
+                "kind": "type",
+                "type": {
+                  "name": "Int64"
+                }
+              }
+            ]
+          }
+        }
+      }
+    ],
+    "trailingComments": [
+      "-- { serverError ALTER_OF_COLUMN_IS_FORBIDDEN }"
+    ]
+  },
+  {
+    "kind": "alter",
+    "table": {
+      "kind": "tableRef",
+      "table": "test"
+    },
+    "commands": [
+      {
+        "kind": "alterCommand",
+        "commandType": "RENAME_COLUMN",
+        "oldName": "x",
+        "newName": "z"
+      }
+    ],
+    "trailingComments": [
+      "-- { serverError ALTER_OF_COLUMN_IS_FORBIDDEN }"
+    ]
+  },
+  {
+    "kind": "alter",
+    "table": {
+      "kind": "tableRef",
+      "table": "test"
+    },
+    "commands": [
+      {
+        "kind": "alterCommand",
+        "commandType": "RENAME_COLUMN",
+        "oldName": "y",
+        "newName": "z"
+      }
+    ],
+    "trailingComments": [
+      "-- { serverError ALTER_OF_COLUMN_IS_FORBIDDEN }"
+    ]
+  },
+  {
+    "kind": "alter",
+    "table": {
+      "kind": "tableRef",
+      "table": "test"
+    },
+    "commands": [
+      {
+        "kind": "alterCommand",
+        "commandType": "DROP_COLUMN",
+        "columnName": "x"
+      }
+    ],
+    "trailingComments": [
+      "-- { serverError UNKNOWN_IDENTIFIER }"
+    ]
+  },
+  {
+    "kind": "alter",
+    "table": {
+      "kind": "tableRef",
+      "table": "test"
+    },
+    "commands": [
+      {
+        "kind": "alterCommand",
+        "commandType": "DROP_COLUMN",
+        "columnName": "y"
+      }
+    ],
+    "trailingComments": [
+      "-- { serverError UNKNOWN_IDENTIFIER }"
+    ]
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "test"
+    }
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "test2"
+    }
   }
 ]

@@ -1,3 +1,7 @@
+SET enable_analyzer = 1;
+
+SET enable_named_columns_in_function_tuple = 1;
+
 SELECT untuple(tuple(* EXCEPT (b)))
 FROM (
         SELECT
@@ -31,6 +35,22 @@ FROM (
         FROM numbers(10)
     )
 HAVING tuple(untuple(min(x))).1 != 42;
+
+DROP TABLE IF EXISTS kv;
+
+CREATE TABLE kv
+(
+    key int,
+    v1 int,
+    v2 int,
+    v3 int,
+    v4 int,
+    v5 int
+)
+ENGINE = MergeTree
+ORDER BY key;
+
+INSERT INTO kv;
 
 SELECT
     key,

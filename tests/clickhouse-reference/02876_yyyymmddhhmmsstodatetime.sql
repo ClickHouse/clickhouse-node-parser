@@ -1,3 +1,4 @@
+SET session_timezone = 'UTC'; -- no time zone randomization, please
 -----------------------------------------------------------
 SELECT '--- YYYYMMDDToDateTime';
 SELECT YYYYMMDDhhmmssToDateTime(); -- { serverError NUMBER_OF_ARGUMENTS_DOESNT_MATCH }

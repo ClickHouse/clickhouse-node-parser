@@ -1,5 +1,65 @@
 [
   {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "enable_analyzer",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "mt"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "names",
+        "type": {
+          "name": "Array",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "String"
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "names"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "mt"
+      }
+    }
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -87,7 +147,7 @@
                   "kind": "tableRef",
                   "table": "mt"
                 },
-                "kind": "arrayJoin",
+                "kind": "arrayJoinExpr",
                 "joinType": "ARRAY",
                 "expressions": [
                   {
@@ -102,7 +162,7 @@
                   }
                 ]
               },
-              "kind": "arrayJoin",
+              "kind": "arrayJoinExpr",
               "joinType": "ARRAY",
               "expressions": [
                 {

@@ -1,5 +1,704 @@
 [
   {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "saved_intervals_tmp"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "saved_intervals_tmp"
+    },
+    "engine": {
+      "name": "Memory"
+    },
+    "asQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "alias",
+          "expr": {
+            "kind": "columnRef",
+            "parts": [
+              "number"
+            ]
+          },
+          "alias": "EventID"
+        },
+        {
+          "kind": "alias",
+          "expr": {
+            "kind": "functionCall",
+            "name": "toIntervalSecond",
+            "args": [
+              {
+                "kind": "binaryExpr",
+                "op": "+",
+                "left": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "number"
+                  ]
+                },
+                "right": {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "1"
+                }
+              }
+            ]
+          },
+          "alias": "v1"
+        },
+        {
+          "kind": "alias",
+          "expr": {
+            "kind": "functionCall",
+            "name": "toIntervalHour",
+            "args": [
+              {
+                "kind": "binaryExpr",
+                "op": "+",
+                "left": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "number"
+                  ]
+                },
+                "right": {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "2"
+                }
+              }
+            ]
+          },
+          "alias": "v2"
+        },
+        {
+          "kind": "alias",
+          "expr": {
+            "kind": "functionCall",
+            "name": "toIntervalNanosecond",
+            "args": [
+              {
+                "kind": "binaryExpr",
+                "op": "+",
+                "left": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "number"
+                  ]
+                },
+                "right": {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "3"
+                }
+              }
+            ]
+          },
+          "alias": "v3"
+        }
+      ],
+      "from": {
+        "kind": "tableFunctionRef",
+        "name": "numbers",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "2"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "kind": "select",
+    "with": [
+      {
+        "kind": "cteExpr",
+        "name": "c",
+        "expr": {
+          "kind": "functionCall",
+          "name": "toDateTime64",
+          "args": [
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "2023-01-01 00:00:00.000000001"
+            },
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "9"
+            },
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "US/Eastern"
+            }
+          ]
+        }
+      }
+    ],
+    "select": [
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "binaryExpr",
+          "op": "+",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "c"
+            ]
+          },
+          "right": {
+            "kind": "columnRef",
+            "parts": [
+              "v1"
+            ]
+          }
+        },
+        "alias": "c_v1"
+      },
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "binaryExpr",
+          "op": "+",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "c"
+            ]
+          },
+          "right": {
+            "kind": "columnRef",
+            "parts": [
+              "v2"
+            ]
+          }
+        },
+        "alias": "c_v2"
+      },
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "binaryExpr",
+          "op": "+",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "c"
+            ]
+          },
+          "right": {
+            "kind": "columnRef",
+            "parts": [
+              "v3"
+            ]
+          }
+        },
+        "alias": "c_v3"
+      },
+      {
+        "kind": "functionCall",
+        "name": "dateDiff",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": "second"
+          },
+          {
+            "kind": "columnRef",
+            "parts": [
+              "c"
+            ]
+          },
+          {
+            "kind": "columnRef",
+            "parts": [
+              "c_v1"
+            ]
+          }
+        ]
+      },
+      {
+        "kind": "functionCall",
+        "name": "dateDiff",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": "hour"
+          },
+          {
+            "kind": "columnRef",
+            "parts": [
+              "c"
+            ]
+          },
+          {
+            "kind": "columnRef",
+            "parts": [
+              "c_v2"
+            ]
+          }
+        ]
+      },
+      {
+        "kind": "functionCall",
+        "name": "dateDiff",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": "second"
+          },
+          {
+            "kind": "columnRef",
+            "parts": [
+              "c"
+            ]
+          },
+          {
+            "kind": "columnRef",
+            "parts": [
+              "c_v3"
+            ]
+          }
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "saved_intervals_tmp"
+    }
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "saved_intervals_mgt"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "saved_intervals_mgt"
+    },
+    "engine": {
+      "name": "MergeTree",
+      "args": []
+    },
+    "asQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "alias",
+          "expr": {
+            "kind": "columnRef",
+            "parts": [
+              "number"
+            ]
+          },
+          "alias": "EventID"
+        },
+        {
+          "kind": "alias",
+          "expr": {
+            "kind": "functionCall",
+            "name": "toIntervalSecond",
+            "args": [
+              {
+                "kind": "binaryExpr",
+                "op": "+",
+                "left": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "number"
+                  ]
+                },
+                "right": {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "1"
+                }
+              }
+            ]
+          },
+          "alias": "v1"
+        },
+        {
+          "kind": "alias",
+          "expr": {
+            "kind": "functionCall",
+            "name": "toIntervalHour",
+            "args": [
+              {
+                "kind": "binaryExpr",
+                "op": "+",
+                "left": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "number"
+                  ]
+                },
+                "right": {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "2"
+                }
+              }
+            ]
+          },
+          "alias": "v2"
+        },
+        {
+          "kind": "alias",
+          "expr": {
+            "kind": "functionCall",
+            "name": "toIntervalNanosecond",
+            "args": [
+              {
+                "kind": "binaryExpr",
+                "op": "+",
+                "left": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "number"
+                  ]
+                },
+                "right": {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "3"
+                }
+              }
+            ]
+          },
+          "alias": "v3"
+        }
+      ],
+      "from": {
+        "kind": "tableFunctionRef",
+        "name": "numbers",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "2"
+          }
+        ]
+      }
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "EventID"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "with": [
+      {
+        "kind": "cteExpr",
+        "name": "c",
+        "expr": {
+          "kind": "functionCall",
+          "name": "toDateTime64",
+          "args": [
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "2023-01-01 00:00:00.000000001"
+            },
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "9"
+            },
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "US/Eastern"
+            }
+          ]
+        }
+      }
+    ],
+    "select": [
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "binaryExpr",
+          "op": "+",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "c"
+            ]
+          },
+          "right": {
+            "kind": "columnRef",
+            "parts": [
+              "v1"
+            ]
+          }
+        },
+        "alias": "c_v1"
+      },
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "binaryExpr",
+          "op": "+",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "c"
+            ]
+          },
+          "right": {
+            "kind": "columnRef",
+            "parts": [
+              "v2"
+            ]
+          }
+        },
+        "alias": "c_v2"
+      },
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "binaryExpr",
+          "op": "+",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "c"
+            ]
+          },
+          "right": {
+            "kind": "columnRef",
+            "parts": [
+              "v3"
+            ]
+          }
+        },
+        "alias": "c_v3"
+      },
+      {
+        "kind": "functionCall",
+        "name": "dateDiff",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": "second"
+          },
+          {
+            "kind": "columnRef",
+            "parts": [
+              "c"
+            ]
+          },
+          {
+            "kind": "columnRef",
+            "parts": [
+              "c_v1"
+            ]
+          }
+        ]
+      },
+      {
+        "kind": "functionCall",
+        "name": "dateDiff",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": "hour"
+          },
+          {
+            "kind": "columnRef",
+            "parts": [
+              "c"
+            ]
+          },
+          {
+            "kind": "columnRef",
+            "parts": [
+              "c_v2"
+            ]
+          }
+        ]
+      },
+      {
+        "kind": "functionCall",
+        "name": "dateDiff",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": "second"
+          },
+          {
+            "kind": "columnRef",
+            "parts": [
+              "c"
+            ]
+          },
+          {
+            "kind": "columnRef",
+            "parts": [
+              "c_v3"
+            ]
+          }
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "saved_intervals_mgt"
+    }
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "t1"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "t1"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "v1",
+        "type": {
+          "name": "IntervalMinute"
+        }
+      }
+    ],
+    "engine": {
+      "name": "Memory"
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "t1"
+      }
+    },
+    "selectQuery": {
+      "kind": "select",
+      "with": [
+        {
+          "kind": "cteExpr",
+          "name": "c",
+          "expr": {
+            "kind": "functionCall",
+            "name": "toDateTime64",
+            "args": [
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "2023-01-01 00:00:00.000000001"
+              },
+              {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "9"
+              },
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "US/Eastern"
+              }
+            ]
+          }
+        }
+      ],
+      "select": [
+        {
+          "kind": "functionCall",
+          "name": "toMinute",
+          "args": [
+            {
+              "kind": "binaryExpr",
+              "op": "+",
+              "left": {
+                "kind": "columnRef",
+                "parts": [
+                  "c"
+                ]
+              },
+              "right": {
+                "kind": "functionCall",
+                "name": "toIntervalSecond",
+                "args": [
+                  {
+                    "kind": "binaryExpr",
+                    "op": "*",
+                    "left": {
+                      "kind": "columnRef",
+                      "parts": [
+                        "number"
+                      ]
+                    },
+                    "right": {
+                      "kind": "literal",
+                      "type": "UInt64",
+                      "value": "60"
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      ],
+      "from": {
+        "kind": "tableFunctionRef",
+        "name": "numbers",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "2"
+          }
+        ]
+      }
+    }
+  },
+  {
     "kind": "select",
     "select": [
       {

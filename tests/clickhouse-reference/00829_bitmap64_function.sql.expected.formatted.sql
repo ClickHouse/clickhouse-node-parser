@@ -1,3 +1,55 @@
+DROP TABLE IF EXISTS bitmap_test;
+
+CREATE TABLE bitmap_test
+(
+    pickup_date Date,
+    city_id UInt32,
+    uid UInt64
+)
+ENGINE = Memory;
+
+INSERT INTO bitmap_test SELECT
+    '2019-01-01',
+    1,
+    4294967295 + number
+FROM numbers(1, 100);
+
+INSERT INTO bitmap_test SELECT
+    '2019-01-02',
+    1,
+    4294967295 + number
+FROM numbers(90, 110);
+
+INSERT INTO bitmap_test SELECT
+    '2019-01-03',
+    2,
+    4294967295 + number
+FROM numbers(1, 210);
+
+DROP TABLE IF EXISTS bitmap_state_test;
+
+CREATE TABLE bitmap_state_test
+(
+    pickup_date Date,
+    city_id UInt32,
+    uv AggregateFunction(groupBitmap, UInt64)
+)
+ENGINE = AggregatingMergeTree()
+ORDER BY (pickup_date, city_id)
+PARTITION BY toYYYYMM(pickup_date);
+
+INSERT INTO bitmap_state_test SELECT
+    pickup_date,
+    city_id,
+    groupBitmapState(uid) AS uv
+FROM bitmap_test
+GROUP BY
+    pickup_date,
+    city_id
+ORDER BY
+    pickup_date ASC,
+    city_id ASC;
+
 SELECT
     pickup_date,
     groupBitmapMerge(uv) AS users
@@ -100,3 +152,7 @@ SELECT bitmapToArray(bitmapAnd(groupBitmapState(uid), bitmapBuild(CAST([42949672
 FROM bitmap_test
 GROUP BY city_id
 ORDER BY city_id ASC;
+
+DROP TABLE bitmap_state_test;
+
+DROP TABLE bitmap_test;

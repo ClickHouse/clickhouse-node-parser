@@ -1,0 +1,245 @@
+[
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "a"
+    },
+    "ifExists": true,
+    "leadingComments": [
+      "-- https://github.com/ClickHouse/ClickHouse/issues/448"
+    ]
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "b"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "a"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "a",
+        "type": {
+          "name": "UInt64"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "b",
+        "type": {
+          "name": "UInt64"
+        }
+      }
+    ],
+    "engine": {
+      "name": "Memory"
+    }
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "b"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "b",
+        "type": {
+          "name": "UInt64"
+        }
+      }
+    ],
+    "engine": {
+      "name": "Memory"
+    }
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "enable_analyzer",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "joined_subquery_requires_alias",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createMaterializedView",
+    "table": {
+      "kind": "tableRef",
+      "table": "view_4"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "bb",
+        "type": {
+          "name": "UInt64"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "cnt",
+        "type": {
+          "name": "UInt64"
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "bb"
+          ]
+        }
+      }
+    ],
+    "populate": true,
+    "asQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "bb"
+          ]
+        },
+        {
+          "kind": "alias",
+          "expr": {
+            "kind": "functionCall",
+            "name": "count",
+            "args": []
+          },
+          "alias": "cnt"
+        }
+      ],
+      "from": {
+        "kind": "subqueryFrom",
+        "query": {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "a"
+              ]
+            },
+            {
+              "kind": "alias",
+              "expr": {
+                "kind": "columnRef",
+                "parts": [
+                  "b"
+                ]
+              },
+              "alias": "j"
+            },
+            {
+              "kind": "alias",
+              "expr": {
+                "kind": "columnRef",
+                "parts": [
+                  "b"
+                ]
+              },
+              "alias": "bb"
+            }
+          ],
+          "from": {
+            "left": {
+              "kind": "tableRef",
+              "table": "a"
+            },
+            "kind": "joinExpr",
+            "joinType": "INNER",
+            "right": {
+              "kind": "subqueryFrom",
+              "query": {
+                "kind": "select",
+                "select": [
+                  {
+                    "kind": "alias",
+                    "expr": {
+                      "kind": "columnRef",
+                      "parts": [
+                        "b"
+                      ]
+                    },
+                    "alias": "j"
+                  },
+                  {
+                    "kind": "alias",
+                    "expr": {
+                      "kind": "columnRef",
+                      "parts": [
+                        "b"
+                      ]
+                    },
+                    "alias": "bb"
+                  }
+                ],
+                "from": {
+                  "kind": "tableRef",
+                  "table": "b"
+                }
+              }
+            },
+            "constraint": {
+              "kind": "using",
+              "columns": [
+                "j"
+              ]
+            }
+          }
+        }
+      },
+      "groupBy": {
+        "kind": "expressions",
+        "items": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "bb"
+            ]
+          }
+        ]
+      }
+    },
+    "trailingComments": [
+      "-- { serverError UNKNOWN_IDENTIFIER }"
+    ]
+  }
+]

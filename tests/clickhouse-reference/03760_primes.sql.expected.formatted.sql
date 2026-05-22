@@ -1,3 +1,6 @@
+-- { echoOn }
+SET max_block_size = 16;
+
 SELECT
     database,
     name
@@ -194,31 +197,31 @@ SELECT *
 FROM primes(0, 0);
 
 SELECT *
-FROM primes(1, 2, 3, 4);
+FROM primes(1, 2, 3, 4); -- { serverError NUMBER_OF_ARGUMENTS_DOESNT_MATCH }
 
 SELECT *
-FROM primes(0, 10, 0);
+FROM primes(0, 10, 0); -- { serverError BAD_ARGUMENTS }
 
 SELECT *
-FROM primes('10');
+FROM primes('10'); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
 SELECT *
-FROM primes(NULL);
+FROM primes(NULL); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
 SELECT *
-FROM primes(*, 10);
+FROM primes(*, 10); -- { serverError BAD_ARGUMENTS }
 
 SELECT *
-FROM primes(-1);
+FROM primes(-1); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
 SELECT *
-FROM primes(18446744073709551616);
+FROM primes(18446744073709551616); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
 SELECT *
-FROM primes(rand());
+FROM primes(rand()); -- { serverError BAD_ARGUMENTS }
 
 SELECT *
-FROM primes(10, -5);
+FROM primes(10, -5); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
 SELECT *
 FROM `system`.primes

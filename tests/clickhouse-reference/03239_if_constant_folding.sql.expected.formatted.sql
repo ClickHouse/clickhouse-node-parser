@@ -1,3 +1,5 @@
+SET enable_analyzer = 1;
+
 SELECT
     if(false, c, '') AS c,
     count()
@@ -37,3 +39,26 @@ FROM (
         SELECT '' AS c
     )
 GROUP BY _c;
+
+DROP TABLE IF EXISTS f;
+
+CREATE TABLE f
+(
+    c String
+)
+ENGINE = Null;
+
+DROP TABLE IF EXISTS v;
+
+CREATE MATERIALIZED VIEW v
+ENGINE = Null
+AS
+SELECT
+    if(false, c, '') AS c,
+    countState() AS t
+FROM f
+GROUP BY c;
+
+DROP TABLE v;
+
+DROP TABLE f;

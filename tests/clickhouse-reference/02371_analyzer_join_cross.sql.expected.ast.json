@@ -1,5 +1,253 @@
 [
   {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "enable_analyzer",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "single_join_prefer_left_table",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "test_table_join_1"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "test_table_join_1"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "id",
+        "type": {
+          "name": "UInt64"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "value",
+        "type": {
+          "name": "String"
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "functionCall",
+          "name": "tuple",
+          "args": []
+        }
+      }
+    ]
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "test_table_join_2"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "test_table_join_2"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "id",
+        "type": {
+          "name": "UInt64"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "value",
+        "type": {
+          "name": "String"
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "functionCall",
+          "name": "tuple",
+          "args": []
+        }
+      }
+    ]
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "test_table_join_3"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "test_table_join_3"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "id",
+        "type": {
+          "name": "UInt64"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "value",
+        "type": {
+          "name": "String"
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "functionCall",
+          "name": "tuple",
+          "args": []
+        }
+      }
+    ]
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "test_table_join_1"
+      }
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "test_table_join_1"
+      }
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "test_table_join_1"
+      }
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "test_table_join_2"
+      }
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "test_table_join_2"
+      }
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "test_table_join_2"
+      }
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "test_table_join_3"
+      }
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "test_table_join_3"
+      }
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "test_table_join_3"
+      }
+    }
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -36,7 +284,7 @@
         "kind": "tableRef",
         "table": "test_table_join_1"
       },
-      "kind": "join",
+      "kind": "joinExpr",
       "joinType": "CROSS",
       "right": {
         "kind": "tableRef",
@@ -104,7 +352,7 @@
         "table": "test_table_join_1",
         "alias": "t1"
       },
-      "kind": "join",
+      "kind": "joinExpr",
       "joinType": "CROSS",
       "right": {
         "kind": "tableRef",
@@ -191,7 +439,7 @@
         "table": "test_table_join_1",
         "alias": "t1"
       },
-      "kind": "join",
+      "kind": "joinExpr",
       "joinType": "CROSS",
       "right": {
         "kind": "tableRef",
@@ -264,14 +512,14 @@
           "kind": "tableRef",
           "table": "test_table_join_1"
         },
-        "kind": "join",
+        "kind": "joinExpr",
         "joinType": "CROSS",
         "right": {
           "kind": "tableRef",
           "table": "test_table_join_2"
         }
       },
-      "kind": "join",
+      "kind": "joinExpr",
       "joinType": "CROSS",
       "right": {
         "kind": "tableRef",
@@ -344,7 +592,7 @@
           "table": "test_table_join_1",
           "alias": "t1"
         },
-        "kind": "join",
+        "kind": "joinExpr",
         "joinType": "CROSS",
         "right": {
           "kind": "tableRef",
@@ -352,7 +600,7 @@
           "alias": "t2"
         }
       },
-      "kind": "join",
+      "kind": "joinExpr",
       "joinType": "CROSS",
       "right": {
         "kind": "tableRef",
@@ -468,7 +716,7 @@
           "table": "test_table_join_1",
           "alias": "t1"
         },
-        "kind": "join",
+        "kind": "joinExpr",
         "joinType": "CROSS",
         "right": {
           "kind": "tableRef",
@@ -476,7 +724,7 @@
           "alias": "t2"
         }
       },
-      "kind": "join",
+      "kind": "joinExpr",
       "joinType": "CROSS",
       "right": {
         "kind": "tableRef",
@@ -512,13 +760,16 @@
         "kind": "tableRef",
         "table": "test_table_join_1"
       },
-      "kind": "join",
+      "kind": "joinExpr",
       "joinType": "CROSS",
       "right": {
         "kind": "tableRef",
         "table": "test_table_join_2"
       }
-    }
+    },
+    "trailingComments": [
+      "-- { serverError AMBIGUOUS_IDENTIFIER }"
+    ]
   },
   {
     "kind": "select",
@@ -535,12 +786,39 @@
         "kind": "tableRef",
         "table": "test_table_join_1"
       },
-      "kind": "join",
+      "kind": "joinExpr",
       "joinType": "CROSS",
       "right": {
         "kind": "tableRef",
         "table": "test_table_join_2"
       }
+    },
+    "trailingComments": [
+      "-- { serverError AMBIGUOUS_IDENTIFIER }"
+    ]
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "test_table_join_1"
+    }
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "test_table_join_2"
+    }
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "test_table_join_3"
     }
   }
 ]

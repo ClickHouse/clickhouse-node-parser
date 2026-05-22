@@ -1,0 +1,126 @@
+Set
+
+DropQuery  session_events (children 1)
+ Identifier session_events
+
+DropQuery  event_types (children 1)
+ Identifier event_types
+
+CreateQuery session_events (children 3)
+ Identifier session_events
+ Columns definition (children 1)
+  ExpressionList (children 7)
+   ColumnDeclaration clientId (children 1)
+    DataType UInt64
+   ColumnDeclaration sessionId (children 1)
+    DataType String
+   ColumnDeclaration pageId (children 1)
+    DataType UInt64
+   ColumnDeclaration eventNumber (children 1)
+    DataType UInt64
+   ColumnDeclaration timestamp (children 1)
+    DataType UInt64
+   ColumnDeclaration type (children 1)
+    DataType LowCardinality (children 1)
+     ExpressionList (children 1)
+      DataType String
+   ColumnDeclaration data (children 1)
+    DataType String
+ Storage definition (children 3)
+  Function MergeTree
+  Function toYYYYMM (children 1)
+   ExpressionList (children 1)
+    Function toDate (children 1)
+     ExpressionList (children 1)
+      Function divide (children 1)
+       ExpressionList (children 2)
+        Identifier pageId
+        Literal UInt64_1000
+  Function tuple (children 1)
+   ExpressionList (children 4)
+    Identifier clientId
+    Identifier sessionId
+    Identifier pageId
+    Identifier timestamp
+
+CreateQuery event_types (children 3)
+ Identifier event_types
+ Columns definition (children 1)
+  ExpressionList (children 2)
+   ColumnDeclaration type (children 1)
+    DataType String
+   ColumnDeclaration active (children 1)
+    DataType Int16
+ Storage definition (children 3)
+  Function MergeTree
+  Function substring (children 1)
+   ExpressionList (children 3)
+    Identifier type
+    Literal UInt64_1
+    Literal UInt64_1
+  Function tuple (children 1)
+   ExpressionList (children 2)
+    Identifier type
+    Identifier active
+
+SYSTEM query (children 1)
+ Identifier session_events
+
+SYSTEM query (children 1)
+ Identifier event_types
+
+InsertQuery   (children 2)
+ Identifier session_events
+ SelectWithUnionQuery (children 1)
+  ExpressionList (children 1)
+   SelectQuery (children 2)
+    ExpressionList (children 7)
+     Literal UInt64_141
+     Literal '693de636-6d9b-47b7-b52a-33bd303b6255'
+     Literal UInt64_1686053240314
+     Identifier number
+     Identifier number
+     Function toString (children 1)
+      ExpressionList (children 1)
+       Function modulo (children 1)
+        ExpressionList (children 2)
+         Identifier number
+         Literal UInt64_10
+     Literal ''
+    TablesInSelectQuery (children 1)
+     TablesInSelectQueryElement (children 1)
+      TableExpression (children 1)
+       Function numbers_mt (children 1)
+        ExpressionList (children 1)
+         Literal UInt64_100000
+
+InsertQuery   (children 2)
+ Identifier event_types
+ SelectWithUnionQuery (children 1)
+  ExpressionList (children 1)
+   SelectQuery (children 2)
+    ExpressionList (children 2)
+     Function toString (children 1)
+      ExpressionList (children 1)
+       Function modulo (children 1)
+        ExpressionList (children 2)
+         Identifier number
+         Literal UInt64_10
+     Function modulo (children 1)
+      ExpressionList (children 2)
+       Identifier number
+       Literal UInt64_2
+    TablesInSelectQuery (children 1)
+     TablesInSelectQueryElement (children 1)
+      TableExpression (children 1)
+       Function numbers (children 1)
+        ExpressionList (children 1)
+         Literal UInt64_20
+
+Set
+
+DropQuery  session_events (children 1)
+ Identifier session_events
+
+DropQuery  event_types (children 1)
+ Identifier event_types

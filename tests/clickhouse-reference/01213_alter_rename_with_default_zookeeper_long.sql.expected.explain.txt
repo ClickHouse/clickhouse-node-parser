@@ -1,3 +1,67 @@
+DropQuery  table_rename_with_default (children 1)
+ Identifier table_rename_with_default
+
+CreateQuery table_rename_with_default (children 3)
+ Identifier table_rename_with_default
+ Columns definition (children 1)
+  ExpressionList (children 5)
+   ColumnDeclaration date (children 1)
+    DataType Date
+   ColumnDeclaration key (children 1)
+    DataType UInt64
+   ColumnDeclaration value1 (children 1)
+    DataType String
+   ColumnDeclaration value2 (children 2)
+    DataType String
+    Function concat (children 1)
+     ExpressionList (children 2)
+      Literal 'Hello '
+      Identifier value1
+   ColumnDeclaration value3 (children 2)
+    DataType String
+    Function concat (children 1)
+     ExpressionList (children 2)
+      Literal 'Word '
+      Identifier value1
+ Storage definition (children 3)
+  Function MergeTree (children 1)
+   ExpressionList
+  Identifier date
+  Identifier key
+
+InsertQuery   (children 3)
+ Identifier table_rename_with_default
+ ExpressionList (children 3)
+  Identifier date
+  Identifier key
+  Identifier value1
+ SelectWithUnionQuery (children 1)
+  ExpressionList (children 1)
+   SelectQuery (children 2)
+    ExpressionList (children 3)
+     Function toDateTime (children 1)
+      ExpressionList (children 2)
+       Function plus (children 1)
+        ExpressionList (children 2)
+         Function toDate (children 1)
+          ExpressionList (children 1)
+           Literal '2019-10-01'
+         Function modulo (children 1)
+          ExpressionList (children 2)
+           Identifier number
+           Literal UInt64_3
+       Literal 'Asia/Istanbul'
+     Identifier number
+     Function toString (children 1)
+      ExpressionList (children 1)
+       Identifier number
+    TablesInSelectQuery (children 1)
+     TablesInSelectQueryElement (children 1)
+      TableExpression (children 1)
+       Function numbers (children 1)
+        ExpressionList (children 1)
+         Literal UInt64_9
+
 SelectWithUnionQuery (children 2)
  ExpressionList (children 1)
   SelectQuery (children 3)
@@ -12,6 +76,16 @@ SelectWithUnionQuery (children 2)
      Identifier key
      Literal UInt64_1
  Identifier TSVWithNames
+
+ShowCreateTableQuery  table_rename_with_default (children 1)
+ Identifier table_rename_with_default
+
+AlterQuery  table_rename_with_default (children 2)
+ ExpressionList (children 1)
+  AlterCommand RENAME_COLUMN (children 2)
+   Identifier value1
+   Identifier renamed_value1
+ Identifier table_rename_with_default
 
 SelectWithUnionQuery (children 1)
  ExpressionList (children 1)
@@ -41,6 +115,86 @@ SelectWithUnionQuery (children 1)
      Identifier key
      Literal UInt64_1
 
+DropQuery  table_rename_with_ttl (children 1)
+ Identifier table_rename_with_ttl
+
+CreateQuery table_rename_with_ttl (children 3)
+ Identifier table_rename_with_ttl
+ Columns definition (children 1)
+  ExpressionList (children 4)
+   ColumnDeclaration date1 (children 1)
+    DataType Date
+   ColumnDeclaration date2 (children 1)
+    DataType Date
+   ColumnDeclaration value1 (children 1)
+    DataType String
+   ColumnDeclaration value2 (children 2)
+    DataType String
+    Function plus (children 1)
+     ExpressionList (children 2)
+      Identifier date1
+      Function toIntervalMonth (children 1)
+       ExpressionList (children 1)
+        Literal UInt64_500
+ Storage definition (children 3)
+  Function ReplicatedMergeTree (children 1)
+   ExpressionList (children 2)
+    Literal '/clickhouse/{database}/test_01213/table_rename_with_ttl'
+    Literal '1'
+  Function tuple (children 1)
+   ExpressionList
+  ExpressionList (children 1)
+   TTLElement (children 1)
+    Function plus (children 1)
+     ExpressionList (children 2)
+      Identifier date2
+      Function toIntervalMonth (children 1)
+       ExpressionList (children 1)
+        Literal UInt64_500
+
+InsertQuery   (children 2)
+ Identifier table_rename_with_ttl
+ SelectWithUnionQuery (children 1)
+  ExpressionList (children 1)
+   SelectQuery (children 2)
+    ExpressionList (children 4)
+     Function toDateTime (children 1)
+      ExpressionList (children 2)
+       Function plus (children 1)
+        ExpressionList (children 2)
+         Function toDate (children 1)
+          ExpressionList (children 1)
+           Literal '2019-10-01'
+         Function modulo (children 1)
+          ExpressionList (children 2)
+           Identifier number
+           Literal UInt64_3
+       Literal 'Asia/Istanbul'
+     Function toDateTime (children 1)
+      ExpressionList (children 2)
+       Function plus (children 1)
+        ExpressionList (children 2)
+         Function toDate (children 1)
+          ExpressionList (children 1)
+           Literal '2018-10-01'
+         Function modulo (children 1)
+          ExpressionList (children 2)
+           Identifier number
+           Literal UInt64_3
+       Literal 'Asia/Istanbul'
+     Function toString (children 1)
+      ExpressionList (children 1)
+       Identifier number
+     Function toString (children 1)
+      ExpressionList (children 1)
+       Identifier number
+    TablesInSelectQuery (children 1)
+     TablesInSelectQueryElement (children 1)
+      TableExpression (children 1)
+       Function numbers (children 1)
+        ExpressionList (children 1)
+         Literal UInt64_9
+
 SelectWithUnionQuery (children 2)
  ExpressionList (children 1)
   SelectQuery (children 3)
@@ -55,3 +209,20 @@ SelectWithUnionQuery (children 2)
      Identifier value1
      Literal '1'
  Identifier TSVWithNames
+
+ShowCreateTableQuery  table_rename_with_ttl (children 1)
+ Identifier table_rename_with_ttl
+
+AlterQuery  table_rename_with_ttl (children 2)
+ ExpressionList (children 1)
+  AlterCommand RENAME_COLUMN (children 2)
+   Identifier date1
+   Identifier renamed_date1
+ Identifier table_rename_with_ttl
+
+AlterQuery  table_rename_with_ttl (children 2)
+ ExpressionList (children 1)
+  AlterCommand RENAME_COLUMN (children 2)
+   Identifier date2
+   Identifier renamed_date2
+ Identifier table_rename_with_ttl

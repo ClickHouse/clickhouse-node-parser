@@ -1,5 +1,202 @@
 [
   {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "max_threads",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ],
+    "leadingComments": [
+      "-- Tags: shard"
+    ]
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "enums"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "allow_deprecated_syntax_for_merge_tree",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "enums"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "d",
+        "type": {
+          "name": "Date"
+        },
+        "defaultKind": "DEFAULT",
+        "defaultExpr": {
+          "kind": "literal",
+          "type": "String",
+          "value": "2015-12-29"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "k",
+        "defaultKind": "DEFAULT",
+        "defaultExpr": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "e",
+        "type": {
+          "name": "Enum8",
+          "args": [
+            {
+              "kind": "enumValues",
+              "values": [
+                {
+                  "name": "world",
+                  "value": "2"
+                },
+                {
+                  "name": "hello",
+                  "value": "1"
+                }
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "sign",
+        "type": {
+          "name": "Enum8",
+          "args": [
+            {
+              "kind": "enumValues",
+              "values": [
+                {
+                  "name": "minus",
+                  "value": "-1"
+                },
+                {
+                  "name": "plus",
+                  "value": "1"
+                }
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "letter",
+        "type": {
+          "name": "Enum16",
+          "args": [
+            {
+              "kind": "enumValues",
+              "values": [
+                {
+                  "name": "a",
+                  "value": "0"
+                },
+                {
+                  "name": "b",
+                  "value": "1"
+                },
+                {
+                  "name": "c",
+                  "value": "2"
+                },
+                {
+                  "name": "*",
+                  "value": "-256"
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree",
+      "args": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "d"
+          ]
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "k"
+          ]
+        },
+        {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      ]
+    }
+  },
+  {
+    "kind": "describe",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "enums"
+      }
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "enums"
+      }
+    },
+    "columns": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "k"
+        ]
+      }
+    ],
+    "leadingComments": [
+      "-- insert default values"
+    ]
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -10,6 +207,75 @@
       "kind": "tableRef",
       "table": "enums"
     }
+  },
+  {
+    "kind": "alter",
+    "table": {
+      "kind": "tableRef",
+      "table": "enums"
+    },
+    "commands": [
+      {
+        "kind": "alterCommand",
+        "commandType": "MODIFY_COLUMN",
+        "column": {
+          "kind": "columnDef",
+          "name": "e",
+          "type": {
+            "name": "Enum8",
+            "args": [
+              {
+                "kind": "enumValues",
+                "values": [
+                  {
+                    "name": "world",
+                    "value": "2"
+                  },
+                  {
+                    "name": "hello",
+                    "value": "1"
+                  },
+                  {
+                    "name": "!",
+                    "value": "3"
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      }
+    ]
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "enums"
+      }
+    },
+    "columns": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "e"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "sign"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "letter"
+        ]
+      }
+    ]
   },
   {
     "kind": "select",
@@ -36,6 +302,257 @@
     ]
   },
   {
+    "kind": "alter",
+    "table": {
+      "kind": "tableRef",
+      "table": "enums"
+    },
+    "commands": [
+      {
+        "kind": "alterCommand",
+        "commandType": "MODIFY_COLUMN",
+        "column": {
+          "kind": "columnDef",
+          "name": "e",
+          "type": {
+            "name": "Enum16",
+            "args": [
+              {
+                "kind": "enumValues",
+                "values": [
+                  {
+                    "name": "world",
+                    "value": "2"
+                  },
+                  {
+                    "name": "hello",
+                    "value": "1"
+                  },
+                  {
+                    "name": "!",
+                    "value": "3"
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      },
+      {
+        "kind": "alterCommand",
+        "commandType": "MODIFY_COLUMN",
+        "column": {
+          "kind": "columnDef",
+          "name": "sign",
+          "type": {
+            "name": "Enum16",
+            "args": [
+              {
+                "kind": "enumValues",
+                "values": [
+                  {
+                    "name": "minus",
+                    "value": "-1"
+                  },
+                  {
+                    "name": "plus",
+                    "value": "1"
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      },
+      {
+        "kind": "alterCommand",
+        "commandType": "MODIFY_COLUMN",
+        "column": {
+          "kind": "columnDef",
+          "name": "letter",
+          "type": {
+            "name": "Enum16",
+            "args": [
+              {
+                "kind": "enumValues",
+                "values": [
+                  {
+                    "name": "a",
+                    "value": "0"
+                  },
+                  {
+                    "name": "b",
+                    "value": "1"
+                  },
+                  {
+                    "name": "c",
+                    "value": "2"
+                  },
+                  {
+                    "name": "no letter",
+                    "value": "-256"
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      }
+    ],
+    "leadingComments": [
+      "-- expand `e` and `sign` from Enum8 to Enum16 without changing values, change values of `letter` without changing type"
+    ]
+  },
+  {
+    "kind": "alter",
+    "table": {
+      "kind": "tableRef",
+      "table": "enums"
+    },
+    "commands": [
+      {
+        "kind": "alterCommand",
+        "commandType": "MODIFY_COLUMN",
+        "column": {
+          "kind": "columnDef",
+          "name": "e",
+          "type": {
+            "name": "Enum8",
+            "args": [
+              {
+                "kind": "enumValues",
+                "values": [
+                  {
+                    "name": "world",
+                    "value": "2"
+                  },
+                  {
+                    "name": "hello",
+                    "value": "1"
+                  },
+                  {
+                    "name": "!",
+                    "value": "3"
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      },
+      {
+        "kind": "alterCommand",
+        "commandType": "MODIFY_COLUMN",
+        "column": {
+          "kind": "columnDef",
+          "name": "sign",
+          "type": {
+            "name": "Enum8",
+            "args": [
+              {
+                "kind": "enumValues",
+                "values": [
+                  {
+                    "name": "minus",
+                    "value": "-1"
+                  },
+                  {
+                    "name": "plus",
+                    "value": "1"
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      }
+    ]
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "enums"
+      }
+    },
+    "columns": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "letter"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "e"
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "enums"
+    }
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "enums"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "e",
+        "type": {
+          "name": "Enum8",
+          "args": [
+            {
+              "kind": "enumValues",
+              "values": [
+                {
+                  "name": "a",
+                  "value": "0"
+                },
+                {
+                  "name": "b",
+                  "value": "1"
+                },
+                {
+                  "name": "c",
+                  "value": "2"
+                },
+                {
+                  "name": "d",
+                  "value": "3"
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ],
+    "engine": {
+      "name": "TinyLog"
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "enums"
+      }
+    }
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -57,6 +574,9 @@
         },
         "direction": "ASC"
       }
+    ],
+    "leadingComments": [
+      "-- ORDER BY"
     ]
   },
   {
@@ -124,6 +644,9 @@
         },
         "direction": "ASC"
       }
+    ],
+    "leadingComments": [
+      "-- GROUP BY"
     ]
   },
   {
@@ -179,7 +702,10 @@
           "value": "d"
         }
       ]
-    }
+    },
+    "leadingComments": [
+      "-- IN"
+    ]
   },
   {
     "kind": "select",
@@ -237,7 +763,10 @@
     "from": {
       "kind": "tableRef",
       "table": "enums"
-    }
+    },
+    "leadingComments": [
+      "-- DISTINCT"
+    ]
   },
   {
     "kind": "select",
@@ -265,7 +794,10 @@
           "e"
         ]
       }
-    }
+    },
+    "leadingComments": [
+      "-- Comparison"
+    ]
   },
   {
     "kind": "select",
@@ -457,6 +989,40 @@
     "from": {
       "kind": "tableRef",
       "table": "enums"
+    },
+    "leadingComments": [
+      "-- Conversion"
+    ]
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "enums_copy"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "enums_copy"
+    },
+    "engine": {
+      "name": "TinyLog"
+    },
+    "asQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "asterisk"
+        }
+      ],
+      "from": {
+        "kind": "tableRef",
+        "table": "enums"
+      }
     }
   },
   {
@@ -472,6 +1038,54 @@
     }
   },
   {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "enums_copy"
+    }
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "enums_copy"
+    },
+    "engine": {
+      "name": "TinyLog"
+    },
+    "asQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "asterisk"
+        }
+      ],
+      "from": {
+        "kind": "tableFunctionRef",
+        "name": "remote",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": "127.0.0.2"
+          },
+          {
+            "kind": "functionCall",
+            "name": "currentDatabase",
+            "args": []
+          },
+          {
+            "kind": "columnRef",
+            "parts": [
+              "enums"
+            ]
+          }
+        ]
+      }
+    }
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -479,7 +1093,7 @@
       }
     ],
     "from": {
-      "kind": "tableFunction",
+      "kind": "tableFunctionRef",
       "name": "remote",
       "args": [
         {

@@ -1,3 +1,46 @@
+-- Tags: use-rocksdb, no-parallel-replicas
+-- no-parallel-replicas: Can't execute any of specified algorithms for specified strictness/kind and right storage type. (NOT_IMPLEMENTED)
+DROP TABLE IF EXISTS rdb;
+
+DROP TABLE IF EXISTS t1;
+
+DROP TABLE IF EXISTS t2;
+
+CREATE TABLE rdb
+(
+    key UInt32,
+    value Array(UInt32),
+    value2 String
+)
+ENGINE = EmbeddedRocksDB
+PRIMARY KEY key;
+
+INSERT INTO rdb SELECT
+    toUInt32(sipHash64(number) % 10) AS key,
+    [key, key+1] AS value,
+    (concat('val2', toString(key))) AS value2
+FROM numbers_mt(10);
+
+CREATE TABLE t1
+(
+    k UInt32
+)
+ENGINE = TinyLog;
+
+INSERT INTO t1 SELECT number AS k
+FROM numbers_mt(10);
+
+CREATE TABLE t2
+(
+    k UInt16
+)
+ENGINE = TinyLog;
+
+INSERT INTO t2 SELECT number AS k
+FROM numbers_mt(10);
+
+SET join_algorithm = 'direct';
+
 SELECT '-- key rename';
 
 SELECT *
@@ -72,6 +115,7 @@ INNER JOIN rdb
     ON rdb.key == t2.k
 ORDER BY rdb.key ASC;
 
+-- can't promote right table type
 SELECT *
 FROM
     (
@@ -79,7 +123,7 @@ FROM
         FROM t2
     ) AS t2
 INNER JOIN rdb
-    ON rdb.key == t2.k;
+    ON rdb.key == t2.k; -- { serverError NOT_IMPLEMENTED,TYPE_MISMATCH }
 
 SELECT
     rdb.key % 2,
@@ -96,7 +140,7 @@ SELECT *
 FROM
     t1
 RIGHT JOIN rdb
-    ON rdb.key == t1.k;
+    ON rdb.key == t1.k; -- { serverError NOT_IMPLEMENTED }
 
 SELECT *
 FROM
@@ -110,7 +154,7 @@ SELECT *
 FROM
     t1
 FULL JOIN rdb
-    ON rdb.key == t1.k;
+    ON rdb.key == t1.k; -- { serverError NOT_IMPLEMENTED }
 
 SELECT *
 FROM
@@ -124,7 +168,7 @@ SELECT *
 FROM
     t1
 INNER JOIN rdb
-    ON rdb.key + 1 == t1.k;
+    ON rdb.key + 1 == t1.k; -- { serverError NOT_IMPLEMENTED }
 
 SELECT *
 FROM
@@ -141,7 +185,7 @@ INNER JOIN (
         SELECT *
         FROM rdb
     ) AS rdb
-    ON rdb.key == t1.k;
+    ON rdb.key == t1.k; -- { serverError NOT_IMPLEMENTED }
 
 SELECT *
 FROM
@@ -161,7 +205,7 @@ RIGHT JOIN (
         SELECT *
         FROM rdb
     ) AS rdb
-    ON rdb.key == t1.k;
+    ON rdb.key == t1.k; -- { serverError NOT_IMPLEMENTED }
 
 SELECT *
 FROM
@@ -170,4 +214,4 @@ RIGHT JOIN (
         SELECT *
         FROM rdb
     ) AS rdb
-    ON rdb.key == t1.k;
+    ON rdb.key == t1.k; -- { serverError NOT_IMPLEMENTED }

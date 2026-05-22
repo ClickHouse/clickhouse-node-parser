@@ -1,0 +1,139 @@
+[
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "test"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "test"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "start_s",
+        "type": {
+          "name": "UInt32"
+        },
+        "defaultKind": "EPHEMERAL",
+        "comment": "start UNIX time"
+      },
+      {
+        "kind": "columnDef",
+        "name": "start_us",
+        "type": {
+          "name": "UInt16"
+        },
+        "defaultKind": "EPHEMERAL",
+        "comment": "start microseconds"
+      },
+      {
+        "kind": "columnDef",
+        "name": "finish_s",
+        "type": {
+          "name": "UInt32"
+        },
+        "defaultKind": "EPHEMERAL",
+        "comment": "finish UNIX time"
+      },
+      {
+        "kind": "columnDef",
+        "name": "finish_us",
+        "type": {
+          "name": "UInt16"
+        },
+        "defaultKind": "EPHEMERAL",
+        "comment": "finish microseconds"
+      },
+      {
+        "kind": "columnDef",
+        "name": "captured",
+        "type": {
+          "name": "DateTime"
+        },
+        "defaultKind": "MATERIALIZED",
+        "defaultExpr": {
+          "kind": "functionCall",
+          "name": "fromUnixTimestamp",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "start_s"
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "duration",
+        "type": {
+          "name": "Decimal32",
+          "args": [
+            {
+              "kind": "literal",
+              "value": "6"
+            }
+          ]
+        },
+        "defaultKind": "MATERIALIZED",
+        "defaultExpr": {
+          "kind": "binaryExpr",
+          "op": "+",
+          "left": {
+            "kind": "binaryExpr",
+            "op": "-",
+            "left": {
+              "kind": "columnRef",
+              "parts": [
+                "finish_s"
+              ]
+            },
+            "right": {
+              "kind": "columnRef",
+              "parts": [
+                "start_s"
+              ]
+            }
+          },
+          "right": {
+            "kind": "binaryExpr",
+            "op": "/",
+            "left": {
+              "kind": "binaryExpr",
+              "op": "-",
+              "left": {
+                "kind": "columnRef",
+                "parts": [
+                  "finish_us"
+                ]
+              },
+              "right": {
+                "kind": "columnRef",
+                "parts": [
+                  "start_us"
+                ]
+              },
+              "parenthesized": true
+            },
+            "right": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "1000000"
+            }
+          }
+        }
+      }
+    ],
+    "engine": {
+      "name": "Null"
+    }
+  }
+]

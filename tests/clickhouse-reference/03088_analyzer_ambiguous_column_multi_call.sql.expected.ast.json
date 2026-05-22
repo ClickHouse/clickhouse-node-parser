@@ -1,11 +1,77 @@
 [
   {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "enable_analyzer",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ],
+    "leadingComments": [
+      "-- https://github.com/ClickHouse/ClickHouse/issues/61014"
+    ]
+  },
+  {
+    "kind": "drop",
+    "targetType": "DATABASE",
+    "table": {
+      "kind": "tableRef",
+      "table": {
+        "kind": "queryParam",
+        "name": "CLICKHOUSE_DATABASE",
+        "type": "Identifier"
+      }
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "createDatabase",
+    "name": {
+      "kind": "queryParam",
+      "name": "CLICKHOUSE_DATABASE",
+      "type": "Identifier"
+    }
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "database": {
+        "kind": "queryParam",
+        "name": "CLICKHOUSE_DATABASE",
+        "type": "Identifier"
+      },
+      "table": "a"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "i",
+        "type": {
+          "name": "int"
+        }
+      }
+    ],
+    "engine": {
+      "name": "Log",
+      "args": []
+    }
+  },
+  {
     "kind": "select",
     "select": [
       {
         "kind": "columnRef",
         "parts": [
-          "{CLICKHOUSE_DATABASE:Identifier}",
+          {
+            "kind": "queryParam",
+            "name": "CLICKHOUSE_DATABASE",
+            "type": "Identifier"
+          },
           "a",
           "i"
         ]
@@ -14,14 +80,22 @@
     "from": {
       "left": {
         "kind": "tableRef",
-        "database": "{CLICKHOUSE_DATABASE:Identifier}",
+        "database": {
+          "kind": "queryParam",
+          "name": "CLICKHOUSE_DATABASE",
+          "type": "Identifier"
+        },
         "table": "a"
       },
-      "kind": "join",
+      "kind": "joinExpr",
       "joinType": "CROSS",
       "right": {
         "kind": "tableRef",
-        "database": "{CLICKHOUSE_DATABASE:Identifier}",
+        "database": {
+          "kind": "queryParam",
+          "name": "CLICKHOUSE_DATABASE",
+          "type": "Identifier"
+        },
         "table": "a",
         "alias": "x"
       }

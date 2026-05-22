@@ -1,3 +1,4 @@
+-- Tags: no-fasttest
 SELECT h3EdgeLengthKm(0);
 
 SELECT h3EdgeLengthKm(1);

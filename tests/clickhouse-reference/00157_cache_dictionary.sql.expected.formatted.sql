@@ -1,3 +1,42 @@
+-- Tags: stateful, no-tsan, no-msan, no-asan, no-parallel
+-- no-parallel: Heavy
+DROP TABLE IF EXISTS test.hits_1m;
+
+CREATE TABLE test.hits_1m AS test.hits
+ENGINE = MergeTree
+ORDER BY (CounterID, EventDate, intHash32(UserID))
+PARTITION BY toYYYYMM(EventDate)
+SAMPLE BY intHash32(UserID)
+SETTINGS storage_policy = 'default', index_granularity = 8192, index_granularity_bytes = 10485760;
+
+SET max_execution_time = 300;
+
+INSERT INTO test.hits_1m SELECT *
+FROM test.hits
+LIMIT 1000000
+SETTINGS
+    min_insert_block_size_rows = 0,
+    min_insert_block_size_bytes = 0,
+    max_block_size = 8192,
+    max_insert_threads = 1,
+    max_threads = 1,
+    max_parallel_replicas = 1;
+
+CREATE DATABASE IF NOT EXISTS db_dict;
+
+DROP DICTIONARY IF EXISTS db_dict.cache_hits;
+
+CREATE DICTIONARY db_dict.cache_hits
+(
+    WatchID UInt64,
+    UserID UInt64,
+    SearchPhrase String
+)
+PRIMARY KEY WatchID
+SOURCE(clickhouse(HOST 'localhost' PORT tcpPort() USER 'default' TABLE 'hits_1m' PASSWORD '' DB 'test'))
+LIFETIME(MIN 1 MAX 10)
+LAYOUT(CACHE(SIZE_IN_CELLS 1 QUERY_WAIT_TIMEOUT_MILLISECONDS 60000));
+
 SELECT count()
 FROM (
         SELECT
@@ -33,3 +72,7 @@ FROM (
         ORDER BY length(arr) DESC
     )
 WHERE arr = [0];
+
+DROP DATABASE IF EXISTS db_dict;
+
+DROP TABLE IF EXISTS hits_1m;

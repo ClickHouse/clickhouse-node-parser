@@ -1,5 +1,51 @@
 [
   {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "abc"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "abc"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "f1",
+        "type": {
+          "name": "String"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "f2",
+        "type": {
+          "name": "String"
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree",
+      "args": []
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "f1"
+          ]
+        }
+      }
+    ]
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -10,7 +56,7 @@
       }
     ],
     "from": {
-      "kind": "tableFunction",
+      "kind": "tableFunctionRef",
       "name": "merge",
       "args": [
         {
@@ -83,7 +129,13 @@
           }
         }
       ]
-    }
+    },
+    "leadingComments": [
+      "-- In version 20.12 this query sometimes produces an exception \"Cannot find column\""
+    ],
+    "trailingComments": [
+      "-- { serverError ILLEGAL_PREWHERE }"
+    ]
   },
   {
     "kind": "select",
@@ -96,7 +148,7 @@
       }
     ],
     "from": {
-      "kind": "tableFunction",
+      "kind": "tableFunctionRef",
       "name": "merge",
       "args": [
         {
@@ -146,7 +198,10 @@
           }
         }
       ]
-    }
+    },
+    "trailingComments": [
+      "-- { serverError ILLEGAL_PREWHERE }"
+    ]
   },
   {
     "kind": "select",
@@ -159,7 +214,7 @@
       }
     ],
     "from": {
-      "kind": "tableFunction",
+      "kind": "tableFunctionRef",
       "name": "merge",
       "args": [
         {
@@ -245,7 +300,7 @@
       }
     ],
     "from": {
-      "kind": "tableFunction",
+      "kind": "tableFunctionRef",
       "name": "merge",
       "args": [
         {
@@ -289,6 +344,14 @@
         "type": "String",
         "value": "abc"
       }
+    }
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "abc"
     }
   }
 ]

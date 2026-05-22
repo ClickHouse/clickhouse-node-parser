@@ -1,5 +1,21 @@
 [
   {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "enable_json_type",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ],
+    "leadingComments": [
+      "-- Test that format settings are respected during internal CAST for JSON type"
+    ]
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -38,7 +54,71 @@
           "value": "best_effort"
         }
       }
+    ],
+    "leadingComments": [
+      "-- Direct CAST should respect date_time_input_format setting"
     ]
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "test_json_datetime"
+    },
+    "ifExists": true,
+    "leadingComments": [
+      "-- INSERT SELECT should also respect date_time_input_format setting"
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "test_json_datetime"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "json",
+        "type": {
+          "name": "JSON"
+        }
+      }
+    ],
+    "engine": {
+      "name": "Memory"
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "test_json_datetime"
+      }
+    },
+    "selectQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "{\"a\" : \"2024 April 4\"}"
+        }
+      ],
+      "settings": [
+        {
+          "name": "date_time_input_format",
+          "value": {
+            "kind": "literal",
+            "type": "String",
+            "value": "best_effort"
+          }
+        }
+      ]
+    }
   },
   {
     "kind": "select",
@@ -57,6 +137,14 @@
       }
     ],
     "from": {
+      "kind": "tableRef",
+      "table": "test_json_datetime"
+    }
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
       "kind": "tableRef",
       "table": "test_json_datetime"
     }

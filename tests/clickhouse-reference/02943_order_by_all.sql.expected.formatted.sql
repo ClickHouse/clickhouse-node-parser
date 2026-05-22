@@ -1,4 +1,18 @@
+-- Tests that sort expression ORDER BY ALL
+DROP TABLE IF EXISTS order_by_all;
+
+CREATE TABLE order_by_all
+(
+    a String,
+    b Nullable(Int32)
+)
+ENGINE = Memory;
+
+INSERT INTO order_by_all;
+
 SELECT '-- no modifiers';
+
+SET enable_analyzer = 0;
 
 SELECT
     a,
@@ -11,6 +25,8 @@ SELECT
     a
 FROM order_by_all
 ORDER BY `ALL` ASC;
+
+SET enable_analyzer = 1;
 
 SELECT
     a,
@@ -40,12 +56,24 @@ SELECT *
 FROM order_by_all
 ORDER BY `all` ASC;
 
+DROP TABLE order_by_all;
+
+CREATE TABLE order_by_all
+(
+    a String,
+    b Nullable(Int32),
+    `all` UInt64
+)
+ENGINE = Memory;
+
+INSERT INTO order_by_all;
+
 SELECT
     a,
     b,
     `all`
 FROM order_by_all
-ORDER BY `all` ASC;
+ORDER BY `all` ASC; -- { serverError UNEXPECTED_EXPRESSION }
 
 SELECT
     a,
@@ -57,7 +85,7 @@ SETTINGS enable_order_by_all = false;
 
 SELECT a
 FROM order_by_all
-ORDER BY `all` ASC;
+ORDER BY `all` ASC; -- { serverError UNEXPECTED_EXPRESSION }
 
 SELECT a
 FROM order_by_all
@@ -73,7 +101,7 @@ SELECT
     a,
     b AS `all`
 FROM order_by_all
-ORDER BY `all` ASC;
+ORDER BY `all` ASC; -- { serverError UNEXPECTED_EXPRESSION }
 
 SELECT
     a,
@@ -84,7 +112,7 @@ SETTINGS enable_order_by_all = false;
 
 SELECT format('{} {}', a, b) AS `all`
 FROM order_by_all
-ORDER BY `all` ASC;
+ORDER BY `all` ASC; -- { serverError UNEXPECTED_EXPRESSION }
 
 SELECT format('{} {}', a, b) AS `all`
 FROM order_by_all

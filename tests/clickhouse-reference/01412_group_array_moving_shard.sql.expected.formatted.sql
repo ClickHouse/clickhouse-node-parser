@@ -1,3 +1,4 @@
+-- Tags: shard
 SELECT groupArrayMovingSum(10)(1)
 FROM remote('127.0.0.{1,2}', numbers(100));
 
@@ -29,16 +30,16 @@ SELECT groupArrayMovingSum(10)(1)
 FROM numbers(100);
 
 SELECT groupArrayMovingSum(0)(1)
-FROM numbers(100);
+FROM numbers(100); -- { serverError BAD_ARGUMENTS }
 
 SELECT groupArrayMovingSum(0.)(1)
-FROM numbers(100);
+FROM numbers(100); -- { serverError BAD_ARGUMENTS }
 
 SELECT groupArrayMovingSum(0.1)(1)
-FROM numbers(100);
+FROM numbers(100); -- { serverError BAD_ARGUMENTS }
 
 SELECT groupArrayMovingSum(0.1)(1)
-FROM remote('127.0.0.{1,2}', numbers(100));
+FROM remote('127.0.0.{1,2}', numbers(100)); -- { serverError BAD_ARGUMENTS }
 
 SELECT groupArrayMovingSum(256)(1)
 FROM remote('127.0.0.{1,2}', numbers(100));
@@ -53,7 +54,7 @@ SELECT groupArrayMovingSum(256)(toDecimal32(1, 9))
 FROM numbers(300);
 
 SELECT groupArrayMovingSum(256)(toDecimal32(1000000000, 1))
-FROM numbers(300);
+FROM numbers(300); -- { serverError DECIMAL_OVERFLOW }
 
 SELECT groupArrayMovingSum(256)(toDecimal32(1, 1))
 FROM numbers(300);

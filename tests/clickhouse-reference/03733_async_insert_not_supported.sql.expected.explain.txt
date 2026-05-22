@@ -1,3 +1,119 @@
+Set
+
+Set
+
+Set
+
+Set
+
+Set
+
+CreateQuery src_table (children 3)
+ Identifier src_table
+ Columns definition (children 1)
+  ExpressionList (children 2)
+   ColumnDeclaration id (children 1)
+    DataType UInt32
+   ColumnDeclaration name (children 1)
+    DataType String
+ Storage definition (children 2)
+  Function ReplicatedMergeTree (children 1)
+   ExpressionList (children 2)
+    Literal '/clickhouse/tables/test/{database}/table'
+    Literal 'replica1'
+  Identifier id
+
+CreateQuery table_join (children 3)
+ Identifier table_join
+ Columns definition (children 1)
+  ExpressionList (children 2)
+   ColumnDeclaration id (children 1)
+    DataType UInt32
+   ColumnDeclaration surname (children 1)
+    DataType String
+ Storage definition (children 2)
+  Function ReplicatedMergeTree (children 1)
+   ExpressionList (children 2)
+    Literal '/clickhouse/tables/test/{database}/table_join'
+    Literal 'replica1'
+  Identifier id
+
+Set
+
+Set
+
+Set
+
+InsertQuery   (children 2)
+ Identifier table_join
+ SelectWithUnionQuery (children 1)
+  ExpressionList (children 1)
+   SelectQuery (children 2)
+    ExpressionList (children 2)
+     Literal UInt64_1 (alias id)
+     Function toString (children 1)
+      ExpressionList (children 1)
+       Identifier number
+    TablesInSelectQuery (children 1)
+     TablesInSelectQueryElement (children 1)
+      TableExpression (children 1)
+       Function numbers (children 1)
+        ExpressionList (children 1)
+         Literal UInt64_10000
+
+InsertQuery   (children 2)
+ Identifier table_join
+ SelectWithUnionQuery (children 1)
+  ExpressionList (children 1)
+   SelectQuery (children 2)
+    ExpressionList (children 2)
+     Literal UInt64_2 (alias id)
+     Function toString (children 1)
+      ExpressionList (children 1)
+       Identifier number
+    TablesInSelectQuery (children 1)
+     TablesInSelectQueryElement (children 1)
+      TableExpression (children 1)
+       Function numbers (children 1)
+        ExpressionList (children 1)
+         Literal UInt64_10000
+
+InsertQuery   (children 2)
+ Identifier table_join
+ SelectWithUnionQuery (children 1)
+  ExpressionList (children 1)
+   SelectQuery (children 2)
+    ExpressionList (children 2)
+     Literal UInt64_3 (alias id)
+     Function toString (children 1)
+      ExpressionList (children 1)
+       Identifier number
+    TablesInSelectQuery (children 1)
+     TablesInSelectQueryElement (children 1)
+      TableExpression (children 1)
+       Function numbers (children 1)
+        ExpressionList (children 1)
+         Literal UInt64_10000
+
+InsertQuery   (children 2)
+ Identifier table_join
+ SelectWithUnionQuery (children 1)
+  ExpressionList (children 1)
+   SelectQuery (children 2)
+    ExpressionList (children 2)
+     Literal UInt64_4 (alias id)
+     Function toString (children 1)
+      ExpressionList (children 1)
+       Identifier number
+    TablesInSelectQuery (children 1)
+     TablesInSelectQueryElement (children 1)
+      TableExpression (children 1)
+       Function numbers (children 1)
+        ExpressionList (children 1)
+         Literal UInt64_10000
+
+SYSTEM query
+
 SelectWithUnionQuery (children 1)
  ExpressionList (children 1)
   SelectQuery (children 2)
@@ -9,6 +125,52 @@ SelectWithUnionQuery (children 1)
     TablesInSelectQueryElement (children 1)
      TableExpression (children 1)
       TableIdentifier table_join
+
+CreateQuery table_join_mv_dst (children 3)
+ Identifier table_join_mv_dst
+ Columns definition (children 1)
+  ExpressionList (children 3)
+   ColumnDeclaration id (children 1)
+    DataType UInt32
+   ColumnDeclaration name (children 1)
+    DataType String
+   ColumnDeclaration surname (children 1)
+    DataType String
+ Storage definition (children 2)
+  Function ReplicatedMergeTree (children 1)
+   ExpressionList (children 2)
+    Literal '/clickhouse/tables/test/{database}/table_join_mv_dst'
+    Literal 'replica1'
+  Identifier id
+
+CreateQuery table_join_mv (children 3)
+ Identifier table_join_mv
+ SelectWithUnionQuery (children 1)
+  ExpressionList (children 1)
+   SelectQuery (children 2)
+    ExpressionList (children 3)
+     Identifier t1.id (alias id)
+     Identifier t1.name (alias name)
+     Identifier t2.surname (alias surname)
+    TablesInSelectQuery (children 2)
+     TablesInSelectQueryElement (children 1)
+      TableExpression (children 1)
+       TableIdentifier src_table (alias t1)
+     TablesInSelectQueryElement (children 2)
+      TableExpression (children 1)
+       TableIdentifier table_join (alias t2)
+      TableJoin (children 1)
+       ExpressionList (children 1)
+        Identifier id
+ ViewTargets
+
+InsertQuery   (children 1)
+ Identifier src_table
+
+InsertQuery   (children 1)
+ Identifier src_table
+
+SYSTEM query
 
 SelectWithUnionQuery (children 1)
  ExpressionList (children 1)
@@ -33,6 +195,14 @@ SelectWithUnionQuery (children 1)
     TablesInSelectQueryElement (children 1)
      TableExpression (children 1)
       TableIdentifier table_join_mv_dst
+
+InsertQuery   (children 1)
+ Identifier src_table
+
+InsertQuery   (children 1)
+ Identifier src_table
+
+SYSTEM query
 
 SelectWithUnionQuery (children 1)
  ExpressionList (children 1)

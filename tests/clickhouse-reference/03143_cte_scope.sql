@@ -1,3 +1,23 @@
+-- https://github.com/ClickHouse/ClickHouse/issues/56287
+SET enable_analyzer = 1;
+DROP TABLE IF EXISTS tmp_a;
+DROP TABLE IF EXISTS tmp_b;
+CREATE TEMPORARY TABLE IF NOT EXISTS tmp_a
+(
+    k1 Int32,
+    k2 Int32,
+    d1 Int32,
+    d2 Int32
+) ENGINE = MergeTree ORDER BY tuple();
+INSERT INTO tmp_a VALUES (1,2,3,4);
+INSERT INTO tmp_a VALUES (5,6,7,8);
+CREATE TEMPORARY TABLE IF NOT EXISTS tmp_b (
+                                               k1 Int32,
+                                               k2 Int32,
+                                               d0 Float64
+) ENGINE = MergeTree ORDER BY tuple();
+INSERT INTO tmp_b VALUES (1,2,0.3);
+INSERT INTO tmp_b VALUES (5,6,0.4);
 SELECT tb1.*,tb2.*
 FROM
         (

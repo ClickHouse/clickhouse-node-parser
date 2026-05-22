@@ -1,3 +1,5 @@
+SET input_format_json_throw_on_bad_escape_sequence = 0;
+
 SELECT *
 FROM format(JSONEachRow, '
 {"key" : "\\u"}

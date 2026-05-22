@@ -1,3 +1,11 @@
+DROP TABLE IF EXISTS defaults;
+
+CREATE TABLE defaults
+(
+    n Int8
+)
+ENGINE = Memory();
+
 SELECT sum(n)
 FROM defaults;
 
@@ -9,3 +17,12 @@ FROM defaults;
 
 SELECT countOrNull(n)
 FROM defaults;
+
+SET aggregate_functions_null_for_empty = 1;
+
+INSERT INTO defaults SELECT *
+FROM numbers(10);
+
+SET aggregate_functions_null_for_empty = 0;
+
+DROP TABLE defaults;

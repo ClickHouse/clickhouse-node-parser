@@ -1,0 +1,98 @@
+[
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "null_01016"
+    },
+    "ifExists": true,
+    "leadingComments": [
+      "-- this test checks that null values are correctly serialized inside minmax index (issue #7113)"
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "null_01016"
+    },
+    "ifNotExists": true,
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "x",
+        "type": {
+          "name": "Nullable",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "String"
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "functionCall",
+          "name": "ifNull",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "x"
+              ]
+            },
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "order-null"
+            }
+          ]
+        }
+      }
+    ],
+    "partitionBy": {
+      "kind": "functionCall",
+      "name": "ifNull",
+      "args": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "x"
+          ]
+        },
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "partition-null"
+        }
+      ]
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "null_01016"
+      }
+    }
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "null_01016"
+    }
+  }
+]

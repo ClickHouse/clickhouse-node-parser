@@ -1,0 +1,168 @@
+[
+  {
+    "kind": "select",
+    "with": [
+      {
+        "kind": "cteExpr",
+        "name": "x",
+        "expr": {
+          "kind": "functionCall",
+          "name": "round",
+          "args": [
+            {
+              "kind": "functionCall",
+              "name": "exp",
+              "args": [
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "number"
+                  ]
+                }
+              ]
+            },
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "6"
+            }
+          ]
+        }
+      },
+      {
+        "kind": "cteExpr",
+        "name": "y",
+        "expr": {
+          "kind": "functionCall",
+          "name": "if",
+          "args": [
+            {
+              "kind": "binaryExpr",
+              "op": ">",
+              "left": {
+                "kind": "columnRef",
+                "parts": [
+                  "x"
+                ]
+              },
+              "right": {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "0xFFFFFFFFFFFFFFFF"
+              }
+            },
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "0xFFFFFFFFFFFFFFFF"
+            },
+            {
+              "kind": "functionCall",
+              "name": "toUInt64",
+              "args": [
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "x"
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "kind": "cteExpr",
+        "name": "z",
+        "expr": {
+          "kind": "functionCall",
+          "name": "if",
+          "args": [
+            {
+              "kind": "binaryExpr",
+              "op": ">",
+              "left": {
+                "kind": "columnRef",
+                "parts": [
+                  "x"
+                ]
+              },
+              "right": {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "0x7FFFFFFF"
+              }
+            },
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "0x7FFFFFFF"
+            },
+            {
+              "kind": "functionCall",
+              "name": "toInt32",
+              "args": [
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "x"
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ],
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "FORMAT_BYTES",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "x"
+            ]
+          }
+        ]
+      },
+      {
+        "kind": "functionCall",
+        "name": "format_bytes",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "y"
+            ]
+          }
+        ]
+      },
+      {
+        "kind": "functionCall",
+        "name": "formatReadableSize",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "z"
+            ]
+          }
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "database": "system",
+      "table": "numbers"
+    },
+    "limit": {
+      "count": {
+        "kind": "literal",
+        "type": "UInt64",
+        "value": "70"
+      }
+    }
+  }
+]

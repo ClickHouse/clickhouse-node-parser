@@ -1,3 +1,7 @@
+SET query_plan_merge_filters = 1;
+
+SET enable_analyzer = 1;
+
 SELECT `explain`
 FROM (
         EXPLAIN actions = 1
@@ -14,3 +18,5 @@ FROM (
     )
 WHERE like(`explain`, '%Filter%')
     OR like(`explain`, '%Aggregating%');
+
+SET enable_analyzer = 0;

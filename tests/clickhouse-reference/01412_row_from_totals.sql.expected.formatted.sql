@@ -1,3 +1,45 @@
+DROP TABLE IF EXISTS tracking_events_tmp;
+
+DROP TABLE IF EXISTS open_events_tmp;
+
+CREATE TABLE tracking_events_tmp
+(
+    APIKey UInt32,
+    EventDate Date
+)
+ENGINE = MergeTree
+ORDER BY (APIKey, EventDate)
+PARTITION BY toYYYYMM(EventDate);
+
+CREATE TABLE open_events_tmp
+(
+    APIKey UInt32,
+    EventDate Date
+)
+ENGINE = MergeTree
+ORDER BY (APIKey, EventDate)
+PARTITION BY toMonday(EventDate);
+
+INSERT INTO open_events_tmp SELECT
+    2,
+    '2020-07-10'
+FROM numbers(32);
+
+INSERT INTO open_events_tmp SELECT
+    2,
+    '2020-07-11'
+FROM numbers(31);
+
+INSERT INTO tracking_events_tmp SELECT
+    2,
+    '2020-07-10'
+FROM numbers(1881);
+
+INSERT INTO tracking_events_tmp SELECT
+    2,
+    '2020-07-11'
+FROM numbers(1623);
+
 SELECT EventDate
 FROM
     (

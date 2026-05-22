@@ -1,4 +1,13 @@
-
+SET enable_analyzer = 1;
+DROP TABLE IF EXISTS test_table;
+CREATE TABLE test_table
+(
+    id UInt64,
+    value String,
+    value_array Array(UInt64)
+) ENGINE=MergeTree ORDER BY id;
+INSERT INTO test_table VALUES (0, 'Value_0', [1,2,3]);
+-- { echoOn }
 
 SELECT * FROM test_table ARRAY JOIN value_array;
 SELECT '--';
@@ -33,3 +42,6 @@ SELECT *, id FROM (SELECT [5] AS id) AS subquery ARRAY JOIN [1] AS id INNER JOIN
 SELECT * FROM (SELECT [5] AS id_array) AS subquery ARRAY JOIN id_array, [0] AS id INNER JOIN test_table USING (id);
 SELECT * FROM (SELECT [[0]] AS id) AS subquery ARRAY JOIN id AS id_nested_array ARRAY JOIN id_nested_array AS id INNER JOIN test_table USING (id);
 SELECT *, id FROM (SELECT [[0]] AS id) AS subquery ARRAY JOIN id AS id_nested_array ARRAY JOIN id_nested_array AS id INNER JOIN test_table USING (id);
+-- { echoOff }
+
+DROP TABLE test_table;

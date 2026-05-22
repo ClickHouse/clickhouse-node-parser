@@ -1,5 +1,26 @@
 [
   {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "max_block_size",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "10"
+        }
+      },
+      {
+        "name": "max_threads",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  },
+  {
     "kind": "union",
     "queries": [
       {
@@ -23,31 +44,131 @@
         ]
       }
     ],
-    "format": "TSV"
+    "format": "TSV",
+    "leadingComments": [
+      "-- { echoOn }",
+      "-- Take the following example:"
+    ]
   },
   {
-    "kind": "select",
-    "select": [
+    "kind": "union",
+    "queries": [
       {
-        "kind": "functionCall",
-        "name": "getSetting",
-        "args": [
+        "kind": "select",
+        "select": [
           {
-            "kind": "literal",
-            "type": "String",
-            "value": "max_block_size"
+            "kind": "functionCall",
+            "name": "getSetting",
+            "args": [
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "max_block_size"
+              }
+            ]
           }
-        ]
+        ],
+        "settings": [
+          {
+            "name": "max_block_size",
+            "value": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "1"
+            }
+          }
+        ],
+        "parenthesized": true
+      },
+      {
+        "kind": "select",
+        "select": [
+          {
+            "kind": "functionCall",
+            "name": "getSetting",
+            "args": [
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "max_block_size"
+              }
+            ]
+          }
+        ],
+        "settings": [
+          {
+            "name": "max_block_size",
+            "value": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "2"
+            }
+          }
+        ],
+        "parenthesized": true
       }
     ],
-    "settings": [
+    "format": "TSV",
+    "leadingComments": [
+      "-- Each subquery can be put in parentheses and have its own settings:"
+    ]
+  },
+  {
+    "kind": "union",
+    "queries": [
       {
-        "name": "max_block_size",
-        "value": {
-          "kind": "literal",
-          "type": "UInt64",
-          "value": "1"
-        }
+        "kind": "select",
+        "select": [
+          {
+            "kind": "functionCall",
+            "name": "getSetting",
+            "args": [
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "max_block_size"
+              }
+            ]
+          }
+        ],
+        "settings": [
+          {
+            "name": "max_block_size",
+            "value": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "1"
+            }
+          }
+        ],
+        "parenthesized": true
+      },
+      {
+        "kind": "select",
+        "select": [
+          {
+            "kind": "functionCall",
+            "name": "getSetting",
+            "args": [
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "max_block_size"
+              }
+            ]
+          }
+        ],
+        "settings": [
+          {
+            "name": "max_block_size",
+            "value": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "2"
+            }
+          }
+        ],
+        "parenthesized": true
       }
     ],
     "format": "TSV",
@@ -60,6 +181,9 @@
           "value": "3"
         }
       }
+    ],
+    "leadingComments": [
+      "-- And the whole query can have settings:"
     ]
   },
   {
@@ -87,7 +211,50 @@
         }
       }
     ],
-    "format": "TSV"
+    "format": "TSV",
+    "postFormatSettings": [
+      {
+        "name": "max_block_size",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "3"
+        }
+      }
+    ],
+    "leadingComments": [
+      "-- A single query with output is parsed in the same way as the UNION ALL chain:"
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "getSetting",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": "max_block_size"
+          }
+        ]
+      }
+    ],
+    "settings": [
+      {
+        "name": "max_block_size",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ],
+    "format": "TSV",
+    "leadingComments": [
+      "-- So while these forms have a slightly different meaning, they both exist:"
+    ]
   },
   {
     "kind": "select",
@@ -114,6 +281,113 @@
           "value": "3"
         }
       }
+    ]
+  },
+  {
+    "kind": "union",
+    "queries": [
+      {
+        "kind": "select",
+        "select": [
+          {
+            "kind": "functionCall",
+            "name": "getSetting",
+            "args": [
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "max_block_size"
+              }
+            ]
+          }
+        ],
+        "parenthesized": true
+      },
+      {
+        "kind": "select",
+        "select": [
+          {
+            "kind": "functionCall",
+            "name": "getSetting",
+            "args": [
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "max_block_size"
+              }
+            ]
+          }
+        ],
+        "parenthesized": true
+      }
+    ],
+    "format": "TSV",
+    "postFormatSettings": [
+      {
+        "name": "max_block_size",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "3"
+        }
+      }
+    ],
+    "leadingComments": [
+      "-- And due to this effect, the users expect that the FORMAT and SETTINGS may go in an arbitrary order.",
+      "-- But while this work:"
+    ]
+  },
+  {
+    "kind": "union",
+    "queries": [
+      {
+        "kind": "select",
+        "select": [
+          {
+            "kind": "functionCall",
+            "name": "getSetting",
+            "args": [
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "max_block_size"
+              }
+            ]
+          }
+        ],
+        "parenthesized": true
+      },
+      {
+        "kind": "select",
+        "select": [
+          {
+            "kind": "functionCall",
+            "name": "getSetting",
+            "args": [
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "max_block_size"
+              }
+            ]
+          }
+        ],
+        "parenthesized": true
+      }
+    ],
+    "format": "TSV",
+    "preFormatSettings": [
+      {
+        "name": "max_block_size",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "3"
+        }
+      }
+    ],
+    "leadingComments": [
+      "-- This does not work automatically, unless we explicitly allow different orders:"
     ]
   },
   {
@@ -151,6 +425,14 @@
           "value": "3"
         }
       }
+    ],
+    "leadingComments": [
+      "-- Inevitably, we allow this:"
+    ],
+    "trailingComments": [
+      "/*^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^*/",
+      "-- Because this part is consumed into ASTSelectWithUnionQuery",
+      "-- and the rest into ASTQueryWithOutput."
     ]
   }
 ]

@@ -1,4 +1,84 @@
+CREATE TABLE ts_data (timestamp DateTime('UTC'), value Float64) ENGINE=MergeTree() ORDER BY tuple();
+WITH [11, 57, 71, 88, 89, 101, 127, 135, 151] as timestamps
+INSERT INTO ts_data SELECT ts::DateTime64 as timestamp, ts + 10000 as value FROM (SELECT arrayJoin(timestamps) as ts);
+WITH [102, 104, 112, 113, 120] as timestamps
+INSERT INTO ts_data SELECT ts::DateTime64 as timestamp, ts + 10000 as value FROM (SELECT arrayJoin(timestamps) as ts);
+SET allow_experimental_ts_to_grid_aggregate_function = 1;
 SELECT groupArraySorted(30)((toUnixTimestamp(timestamp), value)) FROM ts_data;
+WITH
+    100 as begin,
+    200 as end,
+    10 as step_sec,
+    15 as staleness_sec,
+    CAST(begin as DateTime('UTC')) as begin_ts,
+    CAST(end as DateTime('UTC')) as end_ts,
+    range(begin, end+step_sec, step_sec) as grid
+SELECT
+   arrayZip(
+       grid,
+       timeSeriesResampleToGridWithStaleness(begin, end, step_sec, staleness_sec)(timestamp, value)
+   ) as a
+FROM ts_data;
+WITH
+    100 as begin,
+    200 as end,
+    10 as step_sec,
+    15 as staleness_sec,
+    CAST(begin as DateTime('UTC')) as begin_ts,
+    CAST(end as DateTime('UTC')) as end_ts,
+    range(begin, end+step_sec, step_sec) as grid
+SELECT
+   arrayZip(
+       grid,
+       timeSeriesResampleToGridWithStaleness(begin_ts, end_ts, step_sec, staleness_sec)(timestamp, value)
+   ) as b
+FROM ts_data;
+WITH
+    100 as begin,
+    200 as end,
+    10 as step_sec,
+    15 as staleness_sec,
+    CAST(begin as DateTime('UTC')) as begin_ts,
+    CAST(end as DateTime('UTC')) as end_ts,
+    range(begin, end+step_sec, step_sec) as grid
+SELECT
+   arrayZip(
+       grid,
+       timeSeriesResampleToGridWithStaleness(begin_ts, end_ts, step_sec, staleness_sec)(timestamp::DateTime64(3, 'UTC'), value::Float32)
+   ) as c
+FROM ts_data;
+WITH
+    100 as begin,
+    200 as end,
+    10 as step_sec,
+    15 as staleness_sec,
+    CAST(begin as DateTime('UTC')) as begin_ts,
+    CAST(end as DateTime('UTC')) as end_ts,
+    range(begin, end+step_sec, step_sec) as grid
+SELECT
+   arrayZip(
+       grid,
+       timeSeriesResampleToGridWithStaleness(begin_ts::DateTime64(2, 'UTC'), end_ts::DateTime64(1, 'UTC'), step_sec::Decimal(6,2), staleness_sec::Decimal(18,3))(timestamp::DateTime64(3, 'UTC'), value::Float32)
+   ) as d
+FROM ts_data;
+WITH
+    100 as begin,
+    200 as end,
+    10 as step_sec,
+    15 as staleness_sec,
+    CAST(begin as DateTime('UTC')) as begin_ts,
+    CAST(end as DateTime('UTC')) as end_ts,
+    range(begin, end+step_sec, step_sec) as grid
+SELECT
+   arrayZip(
+       grid,
+       timeSeriesResampleToGridWithStaleness(begin_ts, end_ts::DateTime64(3, 'UTC'), step_sec::Decimal(6,2), staleness_sec)(timestamp::DateTime64(6, 'UTC'), value)
+   ) as e
+FROM ts_data;
+-- AggregatingMergeTree Table to test (de)serialization of timeSeriesResampleToGridWithStaleness state
+CREATE TABLE ts_data_agg(k UInt64, agg AggregateFunction(timeSeriesResampleToGridWithStaleness(100, 200, 10, 15), DateTime('UTC'), Float64)) ENGINE AggregatingMergeTree() ORDER BY k;
+-- Insert the data splitting it into several pieces
+INSERT INTO ts_data_agg SELECT toUnixTimestamp(timestamp)%3, initializeAggregation('timeSeriesResampleToGridWithStalenessState(100, 200, 10, 15)', timestamp, value) FROM ts_data;
 SELECT k, finalizeAggregation(agg) FROM ts_data_agg FINAL ORDER BY k;
 -- Check that -Merge returns the same result as the result form original table
 SELECT timeSeriesResampleToGridWithStaleness(100, 200, 10, 15)(timestamp, value) FROM ts_data;

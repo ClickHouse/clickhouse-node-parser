@@ -1,3 +1,37 @@
+Set
+
+SelectWithUnionQuery (children 1)
+ ExpressionList (children 1)
+  SelectQuery (children 2)
+   ExpressionList (children 1)
+    Subquery (alias result) (children 1)
+     SelectWithUnionQuery (children 1)
+      ExpressionList (children 1)
+       SelectQuery (children 1)
+        ExpressionList (children 1)
+         Function tuple (children 1)
+          ExpressionList (children 3)
+           Literal '1'
+           Function toDateTime64 (children 1)
+            ExpressionList (children 3)
+             Literal '2024-01-01 00:00:00'
+             Literal UInt64_6
+             Literal 'UTC'
+           Literal UInt64_3
+   ExpressionList (children 3)
+    Function tupleElement (children 1)
+     ExpressionList (children 2)
+      Identifier result
+      Literal UInt64_1
+    Function tupleElement (children 1)
+     ExpressionList (children 2)
+      Identifier result
+      Literal UInt64_2
+    Function tupleElement (children 1)
+     ExpressionList (children 2)
+      Identifier result
+      Literal UInt64_3
+
 SelectWithUnionQuery (children 1)
  ExpressionList (children 1)
   SelectQuery (children 1)
@@ -173,6 +207,37 @@ SelectWithUnionQuery (children 1)
             Literal Tuple_(UInt64_2, UInt64_8)
           Literal 'Array(Nullable(Tuple(x Int8, y Int8)))'
         Literal 'y'
+
+SelectWithUnionQuery (children 1)
+ ExpressionList (children 1)
+  SelectQuery (children 3)
+   ExpressionList (children 1)
+    WithElement (children 1)
+     Subquery (children 1)
+      SelectWithUnionQuery (children 1)
+       ExpressionList (children 1)
+        SelectQuery (children 1)
+         ExpressionList (children 1)
+          Function array (alias arr) (children 1)
+           ExpressionList (children 3)
+            Function CAST (children 1)
+             ExpressionList (children 2)
+              Literal Tuple_(UInt64_1, UInt64_7)
+              Literal 'Nullable(Tuple(x Int8, y Int8))'
+            Literal NULL
+            Function CAST (children 1)
+             ExpressionList (children 2)
+              Literal Tuple_(UInt64_2, UInt64_8)
+              Literal 'Nullable(Tuple(x Int8, y Int8))'
+   ExpressionList (children 1)
+    Function tupleElement (children 1)
+     ExpressionList (children 2)
+      Identifier arr
+      Literal 'y'
+   TablesInSelectQuery (children 1)
+    TablesInSelectQueryElement (children 1)
+     TableExpression (children 1)
+      TableIdentifier data
 
 SelectWithUnionQuery (children 1)
  ExpressionList (children 1)
@@ -680,6 +745,37 @@ SelectWithUnionQuery (children 1)
           Literal 'Nullable(Tuple(Int32, String))'
       Literal UInt64_2
 
+DropQuery  test_nullable_tuples (children 1)
+ Identifier test_nullable_tuples
+
+DropQuery  test_array_nullable_tuples (children 1)
+ Identifier test_array_nullable_tuples
+
+DropQuery  test_nullable_named_tuples (children 1)
+ Identifier test_nullable_named_tuples
+
+DropQuery  test_complex_nullable (children 1)
+ Identifier test_complex_nullable
+
+CreateQuery test_nullable_tuples (children 3)
+ Identifier test_nullable_tuples
+ Columns definition (children 1)
+  ExpressionList (children 2)
+   ColumnDeclaration id (children 1)
+    DataType UInt32
+   ColumnDeclaration data (children 1)
+    DataType Nullable (children 1)
+     ExpressionList (children 1)
+      TupleDataType Tuple (children 1)
+       ExpressionList (children 2)
+        DataType Int32
+        DataType String
+ Storage definition (children 1)
+  Function Memory
+
+InsertQuery   (children 1)
+ Identifier test_nullable_tuples
+
 SelectWithUnionQuery (children 1)
  ExpressionList (children 1)
   SelectQuery (children 3)
@@ -814,6 +910,27 @@ SelectWithUnionQuery (children 1)
      TableExpression (children 1)
       TableIdentifier test_nullable_tuples
 
+CreateQuery test_array_nullable_tuples (children 3)
+ Identifier test_array_nullable_tuples
+ Columns definition (children 1)
+  ExpressionList (children 2)
+   ColumnDeclaration id (children 1)
+    DataType UInt32
+   ColumnDeclaration records (children 1)
+    DataType Array (children 1)
+     ExpressionList (children 1)
+      DataType Nullable (children 1)
+       ExpressionList (children 1)
+        TupleDataType Tuple (children 1)
+         ExpressionList (children 2)
+          DataType Int32
+          DataType String
+ Storage definition (children 1)
+  Function Memory
+
+InsertQuery   (children 1)
+ Identifier test_array_nullable_tuples
+
 SelectWithUnionQuery (children 1)
  ExpressionList (children 1)
   SelectQuery (children 3)
@@ -889,6 +1006,26 @@ SelectWithUnionQuery (children 1)
      Identifier id
     OrderByElement (children 1)
      Identifier value
+
+CreateQuery test_nullable_named_tuples (children 3)
+ Identifier test_nullable_named_tuples
+ Columns definition (children 1)
+  ExpressionList (children 2)
+   ColumnDeclaration id (children 1)
+    DataType UInt32
+   ColumnDeclaration person (children 1)
+    DataType Nullable (children 1)
+     ExpressionList (children 1)
+      TupleDataType Tuple (children 1)
+       ExpressionList (children 3)
+        DataType String
+        DataType UInt8
+        DataType Float64
+ Storage definition (children 1)
+  Function Memory
+
+InsertQuery   (children 1)
+ Identifier test_nullable_named_tuples
 
 SelectWithUnionQuery (children 1)
  ExpressionList (children 1)
@@ -1183,6 +1320,29 @@ SelectWithUnionQuery (children 1)
    ExpressionList (children 1)
     OrderByElement (children 1)
      Identifier id
+
+CreateQuery test_complex_nullable (children 3)
+ Identifier test_complex_nullable
+ Columns definition (children 1)
+  ExpressionList (children 2)
+   ColumnDeclaration id (children 1)
+    DataType UInt32
+   ColumnDeclaration matrix (children 1)
+    DataType Array (children 1)
+     ExpressionList (children 1)
+      DataType Array (children 1)
+       ExpressionList (children 1)
+        DataType Nullable (children 1)
+         ExpressionList (children 1)
+          TupleDataType Tuple (children 1)
+           ExpressionList (children 2)
+            DataType Int32
+            DataType Int32
+ Storage definition (children 1)
+  Function Memory
+
+InsertQuery   (children 1)
+ Identifier test_complex_nullable
 
 SelectWithUnionQuery (children 1)
  ExpressionList (children 1)

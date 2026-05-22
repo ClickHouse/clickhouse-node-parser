@@ -1,0 +1,1 @@
+SET enable_analyzer = 1;

@@ -1,3 +1,4 @@
+SET session_timezone = 'Europe/Amsterdam';
 -- Type conversion functions and operators.
 
 
@@ -10,7 +11,11 @@ SELECT CAST(1234567890 AS DateTime('Europe/Amsterdam'));
 -- and composite data types:
 
 SELECT CAST('[1, 2, 3]' AS Array(UInt8));
+-- Its return type depends on the setting `cast_keep_nullable`. If it is enabled, if the source argument type is Nullable, the resulting data type will be also Nullable, even if it is not written explicitly:
+
+SET cast_keep_nullable = 1;
 SELECT CAST(x AS UInt8) AS y, toTypeName(y) FROM VALUES('x Nullable(String)', ('123'), ('NULL'));
+SET cast_keep_nullable = 0;
 -- There are various type conversion rules, some worth noting.
 
 -- Conversion between numeric types can involve implementation-defined overflow:
@@ -20,9 +25,12 @@ SELECT CAST(-1 AS UInt8);
 -- Conversion from string acts like parsing, and for composite data types like Array, Tuple, it works in the same way as from the `Values` data format:
 
 SELECT CAST($$['Hello', 'wo\'rld\\']$$ AS Array(String));
-
 -- '
 -- While for simple data types, it does not interpret escape sequences:
+
+SELECT arrayJoin(CAST($$['Hello', 'wo\'rld\\']$$ AS Array(String))) AS x, CAST($$wo\'rld\\$$ AS FixedString(9)) AS y;
+-- As conversion from String is similar to direct parsing rather than conversion from other types,
+-- it can be stricter for numbers by not tolerating overflows in some cases:
 
 SELECT CAST(-123 AS UInt8), CAST(1234 AS UInt8);
 SELECT CAST('-123' AS UInt8); -- { serverError CANNOT_PARSE_NUMBER }
@@ -245,3 +253,4 @@ SELECT parseDateTimeBestEffort('25 Apr 1986 1pm');
 -- 10. Functions for converting between different components or rounding of date and time data types.
 
 SELECT toDayOfMonth(toDateTime(1234567890));
+-- These functions are covered in a separate topic.

@@ -1,3 +1,30 @@
+DropQuery  null (children 1)
+ Identifier null
+
+DropQuery  dist (children 1)
+ Identifier dist
+
+CreateQuery null (children 2)
+ Identifier null
+ Storage definition (children 1)
+  Function Null
+
+CreateQuery dist (children 2)
+ Identifier dist
+ Storage definition (children 1)
+  Function Distributed (children 1)
+   ExpressionList (children 4)
+    Identifier test_cluster_two_shards
+    Function currentDatabase (children 1)
+     ExpressionList
+    Literal 'null'
+    Function rand (children 1)
+     ExpressionList
+
+InsertQuery   (children 2)
+ Identifier dist
+ Set
+
 SelectWithUnionQuery (children 1)
  ExpressionList (children 1)
   SelectQuery (children 3)
@@ -24,6 +51,23 @@ SelectWithUnionQuery (children 1)
        Identifier database
        Function currentDatabase (children 1)
         ExpressionList
+
+DropQuery  rocksdb (children 1)
+ Identifier rocksdb
+
+CreateQuery rocksdb (children 3)
+ Identifier rocksdb
+ Columns definition (children 1)
+  ExpressionList (children 1)
+   ColumnDeclaration key (children 1)
+    DataType Int
+ Storage definition (children 2)
+  Function EmbeddedRocksDB (children 1)
+   ExpressionList
+  Identifier key
+
+InsertQuery   (children 1)
+ Identifier rocksdb
 
 SelectWithUnionQuery (children 1)
  ExpressionList (children 1)
@@ -82,6 +126,26 @@ SelectWithUnionQuery (children 1)
        Function currentDatabase (children 1)
         ExpressionList
 
+DropQuery  mt (children 1)
+ Identifier mt
+
+CreateQuery mt (children 3)
+ Identifier mt
+ Columns definition (children 1)
+  ExpressionList (children 1)
+   ColumnDeclaration key (children 1)
+    DataType Int
+ Storage definition (children 2)
+  Function MergeTree (children 1)
+   ExpressionList
+  Identifier key
+
+AlterQuery  mt (children 2)
+ ExpressionList (children 1)
+  AlterCommand DELETE (children 1)
+   Literal UInt64_1
+ Identifier mt
+
 SelectWithUnionQuery (children 1)
  ExpressionList (children 1)
   SelectQuery (children 3)
@@ -108,6 +172,47 @@ SelectWithUnionQuery (children 1)
        Identifier database
        Function currentDatabase (children 1)
         ExpressionList
+
+DropQuery  rep1 (children 1)
+ Identifier rep1
+
+DropQuery  rep2 (children 1)
+ Identifier rep2
+
+CreateQuery rep1 (children 3)
+ Identifier rep1
+ Columns definition (children 1)
+  ExpressionList (children 1)
+   ColumnDeclaration key (children 1)
+    DataType Int
+ Storage definition (children 2)
+  Function ReplicatedMergeTree (children 1)
+   ExpressionList (children 2)
+    Literal '/{database}/rep'
+    Literal '{table}'
+  Identifier key
+
+CreateQuery rep2 (children 3)
+ Identifier rep2
+ Columns definition (children 1)
+  ExpressionList (children 1)
+   ColumnDeclaration key (children 1)
+    DataType Int
+ Storage definition (children 2)
+  Function ReplicatedMergeTree (children 1)
+   ExpressionList (children 2)
+    Literal '/{database}/rep'
+    Literal '{table}'
+  Identifier key
+
+SYSTEM query (children 1)
+ Identifier rep2
+
+InsertQuery   (children 1)
+ Identifier rep1
+
+SYSTEM query (children 1)
+ Identifier rep2
 
 SelectWithUnionQuery (children 1)
  ExpressionList (children 1)

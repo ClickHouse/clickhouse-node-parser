@@ -108,7 +108,7 @@
           }
         ],
         "from": {
-          "kind": "tableFunction",
+          "kind": "tableFunctionRef",
           "name": "numbers",
           "args": [
             {
@@ -230,7 +230,7 @@
           }
         ],
         "from": {
-          "kind": "tableFunction",
+          "kind": "tableFunctionRef",
           "name": "numbers",
           "args": [
             {
@@ -343,7 +343,7 @@
           }
         ],
         "from": {
-          "kind": "tableFunction",
+          "kind": "tableFunctionRef",
           "name": "numbers",
           "args": [
             {
@@ -519,703 +519,7 @@
           }
         ],
         "from": {
-          "kind": "tableFunction",
-          "name": "numbers",
-          "args": [
-            {
-              "kind": "literal",
-              "type": "UInt64",
-              "value": "50"
-            }
-          ]
-        }
-      }
-    }
-  },
-  {
-    "kind": "select",
-    "select": [
-      {
-        "kind": "columnRef",
-        "parts": [
-          "value"
-        ]
-      },
-      {
-        "kind": "columnRef",
-        "parts": [
-          "time"
-        ]
-      },
-      {
-        "kind": "functionCall",
-        "name": "round",
-        "args": [
-          {
-            "kind": "columnRef",
-            "parts": [
-              "exp_smooth"
-            ]
-          },
-          {
-            "kind": "literal",
-            "type": "UInt64",
-            "value": "3"
-          }
-        ]
-      },
-      {
-        "kind": "alias",
-        "expr": {
-          "kind": "functionCall",
-          "name": "bar",
-          "args": [
-            {
-              "kind": "columnRef",
-              "parts": [
-                "exp_smooth"
-              ]
-            },
-            {
-              "kind": "literal",
-              "type": "UInt64",
-              "value": "0"
-            },
-            {
-              "kind": "literal",
-              "type": "UInt64",
-              "value": "1"
-            },
-            {
-              "kind": "literal",
-              "type": "UInt64",
-              "value": "50"
-            }
-          ]
-        },
-        "alias": "bar"
-      }
-    ],
-    "from": {
-      "kind": "subqueryFrom",
-      "query": {
-        "kind": "select",
-        "select": [
-          {
-            "kind": "alias",
-            "expr": {
-              "kind": "binaryExpr",
-              "op": "=",
-              "left": {
-                "kind": "binaryExpr",
-                "op": "%",
-                "left": {
-                  "kind": "columnRef",
-                  "parts": [
-                    "number"
-                  ]
-                },
-                "right": {
-                  "kind": "literal",
-                  "type": "UInt64",
-                  "value": "5"
-                },
-                "parenthesized": true
-              },
-              "right": {
-                "kind": "literal",
-                "type": "UInt64",
-                "value": "0"
-              }
-            },
-            "alias": "value"
-          },
-          {
-            "kind": "alias",
-            "expr": {
-              "kind": "columnRef",
-              "parts": [
-                "number"
-              ]
-            },
-            "alias": "time"
-          },
-          {
-            "kind": "alias",
-            "expr": {
-              "kind": "functionCall",
-              "name": "exponentialMovingAverage",
-              "params": [
-                {
-                  "kind": "literal",
-                  "type": "UInt64",
-                  "value": "1"
-                }
-              ],
-              "args": [
-                {
-                  "kind": "columnRef",
-                  "parts": [
-                    "value"
-                  ]
-                },
-                {
-                  "kind": "columnRef",
-                  "parts": [
-                    "time"
-                  ]
-                }
-              ],
-              "window": {
-                "frame": {
-                  "frameType": "rows",
-                  "start": {
-                    "kind": "unbounded"
-                  },
-                  "end": {
-                    "kind": "currentRow"
-                  }
-                }
-              }
-            },
-            "alias": "exp_smooth"
-          }
-        ],
-        "from": {
-          "kind": "tableFunction",
-          "name": "numbers",
-          "args": [
-            {
-              "kind": "literal",
-              "type": "UInt64",
-              "value": "50"
-            }
-          ]
-        }
-      }
-    }
-  },
-  {
-    "kind": "select",
-    "select": [
-      {
-        "kind": "columnRef",
-        "parts": [
-          "value"
-        ]
-      },
-      {
-        "kind": "columnRef",
-        "parts": [
-          "time"
-        ]
-      },
-      {
-        "kind": "functionCall",
-        "name": "round",
-        "args": [
-          {
-            "kind": "columnRef",
-            "parts": [
-              "exp_smooth"
-            ]
-          },
-          {
-            "kind": "literal",
-            "type": "UInt64",
-            "value": "3"
-          }
-        ]
-      }
-    ],
-    "from": {
-      "kind": "subqueryFrom",
-      "query": {
-        "kind": "select",
-        "select": [
-          {
-            "kind": "alias",
-            "expr": {
-              "kind": "binaryExpr",
-              "op": "=",
-              "left": {
-                "kind": "columnRef",
-                "parts": [
-                  "number"
-                ]
-              },
-              "right": {
-                "kind": "literal",
-                "type": "UInt64",
-                "value": "0"
-              }
-            },
-            "alias": "value"
-          },
-          {
-            "kind": "alias",
-            "expr": {
-              "kind": "columnRef",
-              "parts": [
-                "number"
-              ]
-            },
-            "alias": "time"
-          },
-          {
-            "kind": "alias",
-            "expr": {
-              "kind": "functionCall",
-              "name": "exponentialTimeDecayedSum",
-              "params": [
-                {
-                  "kind": "literal",
-                  "type": "UInt64",
-                  "value": "1"
-                }
-              ],
-              "args": [
-                {
-                  "kind": "columnRef",
-                  "parts": [
-                    "value"
-                  ]
-                },
-                {
-                  "kind": "columnRef",
-                  "parts": [
-                    "time"
-                  ]
-                }
-              ],
-              "window": {
-                "frame": {
-                  "frameType": "rows",
-                  "start": {
-                    "kind": "unbounded"
-                  },
-                  "end": {
-                    "kind": "currentRow"
-                  }
-                }
-              }
-            },
-            "alias": "exp_smooth"
-          }
-        ],
-        "from": {
-          "kind": "tableFunction",
-          "name": "numbers",
-          "args": [
-            {
-              "kind": "literal",
-              "type": "UInt64",
-              "value": "10"
-            }
-          ]
-        }
-      }
-    }
-  },
-  {
-    "kind": "select",
-    "select": [
-      {
-        "kind": "columnRef",
-        "parts": [
-          "value"
-        ]
-      },
-      {
-        "kind": "columnRef",
-        "parts": [
-          "time"
-        ]
-      },
-      {
-        "kind": "functionCall",
-        "name": "round",
-        "args": [
-          {
-            "kind": "columnRef",
-            "parts": [
-              "exp_smooth"
-            ]
-          },
-          {
-            "kind": "literal",
-            "type": "UInt64",
-            "value": "3"
-          }
-        ]
-      }
-    ],
-    "from": {
-      "kind": "subqueryFrom",
-      "query": {
-        "kind": "select",
-        "select": [
-          {
-            "kind": "alias",
-            "expr": {
-              "kind": "binaryExpr",
-              "op": "=",
-              "left": {
-                "kind": "columnRef",
-                "parts": [
-                  "number"
-                ]
-              },
-              "right": {
-                "kind": "literal",
-                "type": "UInt64",
-                "value": "0"
-              }
-            },
-            "alias": "value"
-          },
-          {
-            "kind": "alias",
-            "expr": {
-              "kind": "columnRef",
-              "parts": [
-                "number"
-              ]
-            },
-            "alias": "time"
-          },
-          {
-            "kind": "alias",
-            "expr": {
-              "kind": "functionCall",
-              "name": "exponentialTimeDecayedSum",
-              "params": [
-                {
-                  "kind": "literal",
-                  "type": "UInt64",
-                  "value": "10"
-                }
-              ],
-              "args": [
-                {
-                  "kind": "columnRef",
-                  "parts": [
-                    "value"
-                  ]
-                },
-                {
-                  "kind": "columnRef",
-                  "parts": [
-                    "time"
-                  ]
-                }
-              ],
-              "window": {
-                "frame": {
-                  "frameType": "rows",
-                  "start": {
-                    "kind": "unbounded"
-                  },
-                  "end": {
-                    "kind": "currentRow"
-                  }
-                }
-              }
-            },
-            "alias": "exp_smooth"
-          }
-        ],
-        "from": {
-          "kind": "tableFunction",
-          "name": "numbers",
-          "args": [
-            {
-              "kind": "literal",
-              "type": "UInt64",
-              "value": "10"
-            }
-          ]
-        }
-      }
-    }
-  },
-  {
-    "kind": "select",
-    "select": [
-      {
-        "kind": "columnRef",
-        "parts": [
-          "value"
-        ]
-      },
-      {
-        "kind": "columnRef",
-        "parts": [
-          "time"
-        ]
-      },
-      {
-        "kind": "functionCall",
-        "name": "round",
-        "args": [
-          {
-            "kind": "columnRef",
-            "parts": [
-              "exp_smooth"
-            ]
-          },
-          {
-            "kind": "literal",
-            "type": "UInt64",
-            "value": "3"
-          }
-        ]
-      }
-    ],
-    "from": {
-      "kind": "subqueryFrom",
-      "query": {
-        "kind": "select",
-        "select": [
-          {
-            "kind": "alias",
-            "expr": {
-              "kind": "columnRef",
-              "parts": [
-                "number"
-              ]
-            },
-            "alias": "value"
-          },
-          {
-            "kind": "alias",
-            "expr": {
-              "kind": "columnRef",
-              "parts": [
-                "number"
-              ]
-            },
-            "alias": "time"
-          },
-          {
-            "kind": "alias",
-            "expr": {
-              "kind": "functionCall",
-              "name": "exponentialTimeDecayedSum",
-              "params": [
-                {
-                  "kind": "literal",
-                  "type": "UInt64",
-                  "value": "1"
-                }
-              ],
-              "args": [
-                {
-                  "kind": "columnRef",
-                  "parts": [
-                    "value"
-                  ]
-                },
-                {
-                  "kind": "columnRef",
-                  "parts": [
-                    "time"
-                  ]
-                }
-              ],
-              "window": {
-                "frame": {
-                  "frameType": "rows",
-                  "start": {
-                    "kind": "unbounded"
-                  },
-                  "end": {
-                    "kind": "currentRow"
-                  }
-                }
-              }
-            },
-            "alias": "exp_smooth"
-          }
-        ],
-        "from": {
-          "kind": "tableFunction",
-          "name": "numbers",
-          "args": [
-            {
-              "kind": "literal",
-              "type": "UInt64",
-              "value": "10"
-            }
-          ]
-        }
-      }
-    }
-  },
-  {
-    "kind": "select",
-    "select": [
-      {
-        "kind": "columnRef",
-        "parts": [
-          "value"
-        ]
-      },
-      {
-        "kind": "columnRef",
-        "parts": [
-          "time"
-        ]
-      },
-      {
-        "kind": "functionCall",
-        "name": "round",
-        "args": [
-          {
-            "kind": "columnRef",
-            "parts": [
-              "exp_smooth"
-            ]
-          },
-          {
-            "kind": "literal",
-            "type": "UInt64",
-            "value": "3"
-          }
-        ]
-      },
-      {
-        "kind": "alias",
-        "expr": {
-          "kind": "functionCall",
-          "name": "bar",
-          "args": [
-            {
-              "kind": "columnRef",
-              "parts": [
-                "exp_smooth"
-              ]
-            },
-            {
-              "kind": "literal",
-              "type": "UInt64",
-              "value": "0"
-            },
-            {
-              "kind": "literal",
-              "type": "UInt64",
-              "value": "10"
-            },
-            {
-              "kind": "literal",
-              "type": "UInt64",
-              "value": "50"
-            }
-          ]
-        },
-        "alias": "bar"
-      }
-    ],
-    "from": {
-      "kind": "subqueryFrom",
-      "query": {
-        "kind": "select",
-        "select": [
-          {
-            "kind": "alias",
-            "expr": {
-              "kind": "naryExpr",
-              "op": "OR",
-              "operands": [
-                {
-                  "kind": "binaryExpr",
-                  "op": "=",
-                  "left": {
-                    "kind": "columnRef",
-                    "parts": [
-                      "number"
-                    ]
-                  },
-                  "right": {
-                    "kind": "literal",
-                    "type": "UInt64",
-                    "value": "0"
-                  },
-                  "parenthesized": true
-                },
-                {
-                  "kind": "binaryExpr",
-                  "op": ">=",
-                  "left": {
-                    "kind": "columnRef",
-                    "parts": [
-                      "number"
-                    ]
-                  },
-                  "right": {
-                    "kind": "literal",
-                    "type": "UInt64",
-                    "value": "25"
-                  },
-                  "parenthesized": true
-                }
-              ]
-            },
-            "alias": "value"
-          },
-          {
-            "kind": "alias",
-            "expr": {
-              "kind": "columnRef",
-              "parts": [
-                "number"
-              ]
-            },
-            "alias": "time"
-          },
-          {
-            "kind": "alias",
-            "expr": {
-              "kind": "functionCall",
-              "name": "exponentialTimeDecayedSum",
-              "params": [
-                {
-                  "kind": "literal",
-                  "type": "UInt64",
-                  "value": "10"
-                }
-              ],
-              "args": [
-                {
-                  "kind": "columnRef",
-                  "parts": [
-                    "value"
-                  ]
-                },
-                {
-                  "kind": "columnRef",
-                  "parts": [
-                    "time"
-                  ]
-                }
-              ],
-              "window": {
-                "frame": {
-                  "frameType": "rows",
-                  "start": {
-                    "kind": "unbounded"
-                  },
-                  "end": {
-                    "kind": "currentRow"
-                  }
-                }
-              }
-            },
-            "alias": "exp_smooth"
-          }
-        ],
-        "from": {
-          "kind": "tableFunction",
+          "kind": "tableFunctionRef",
           "name": "numbers",
           "args": [
             {
@@ -1340,6 +644,128 @@
             "kind": "alias",
             "expr": {
               "kind": "functionCall",
+              "name": "exponentialMovingAverage",
+              "params": [
+                {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "1"
+                }
+              ],
+              "args": [
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "value"
+                  ]
+                },
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "time"
+                  ]
+                }
+              ],
+              "window": {
+                "frame": {
+                  "frameType": "rows",
+                  "start": {
+                    "kind": "unbounded"
+                  },
+                  "end": {
+                    "kind": "currentRow"
+                  }
+                }
+              }
+            },
+            "alias": "exp_smooth"
+          }
+        ],
+        "from": {
+          "kind": "tableFunctionRef",
+          "name": "numbers",
+          "args": [
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "50"
+            }
+          ]
+        }
+      }
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "value"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "time"
+        ]
+      },
+      {
+        "kind": "functionCall",
+        "name": "round",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "exp_smooth"
+            ]
+          },
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "3"
+          }
+        ]
+      }
+    ],
+    "from": {
+      "kind": "subqueryFrom",
+      "query": {
+        "kind": "select",
+        "select": [
+          {
+            "kind": "alias",
+            "expr": {
+              "kind": "binaryExpr",
+              "op": "=",
+              "left": {
+                "kind": "columnRef",
+                "parts": [
+                  "number"
+                ]
+              },
+              "right": {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "0"
+              }
+            },
+            "alias": "value"
+          },
+          {
+            "kind": "alias",
+            "expr": {
+              "kind": "columnRef",
+              "parts": [
+                "number"
+              ]
+            },
+            "alias": "time"
+          },
+          {
+            "kind": "alias",
+            "expr": {
+              "kind": "functionCall",
               "name": "exponentialTimeDecayedSum",
               "params": [
                 {
@@ -1378,7 +804,581 @@
           }
         ],
         "from": {
-          "kind": "tableFunction",
+          "kind": "tableFunctionRef",
+          "name": "numbers",
+          "args": [
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "10"
+            }
+          ]
+        }
+      }
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "value"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "time"
+        ]
+      },
+      {
+        "kind": "functionCall",
+        "name": "round",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "exp_smooth"
+            ]
+          },
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "3"
+          }
+        ]
+      }
+    ],
+    "from": {
+      "kind": "subqueryFrom",
+      "query": {
+        "kind": "select",
+        "select": [
+          {
+            "kind": "alias",
+            "expr": {
+              "kind": "binaryExpr",
+              "op": "=",
+              "left": {
+                "kind": "columnRef",
+                "parts": [
+                  "number"
+                ]
+              },
+              "right": {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "0"
+              }
+            },
+            "alias": "value"
+          },
+          {
+            "kind": "alias",
+            "expr": {
+              "kind": "columnRef",
+              "parts": [
+                "number"
+              ]
+            },
+            "alias": "time"
+          },
+          {
+            "kind": "alias",
+            "expr": {
+              "kind": "functionCall",
+              "name": "exponentialTimeDecayedSum",
+              "params": [
+                {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "10"
+                }
+              ],
+              "args": [
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "value"
+                  ]
+                },
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "time"
+                  ]
+                }
+              ],
+              "window": {
+                "frame": {
+                  "frameType": "rows",
+                  "start": {
+                    "kind": "unbounded"
+                  },
+                  "end": {
+                    "kind": "currentRow"
+                  }
+                }
+              }
+            },
+            "alias": "exp_smooth"
+          }
+        ],
+        "from": {
+          "kind": "tableFunctionRef",
+          "name": "numbers",
+          "args": [
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "10"
+            }
+          ]
+        }
+      }
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "value"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "time"
+        ]
+      },
+      {
+        "kind": "functionCall",
+        "name": "round",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "exp_smooth"
+            ]
+          },
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "3"
+          }
+        ]
+      }
+    ],
+    "from": {
+      "kind": "subqueryFrom",
+      "query": {
+        "kind": "select",
+        "select": [
+          {
+            "kind": "alias",
+            "expr": {
+              "kind": "columnRef",
+              "parts": [
+                "number"
+              ]
+            },
+            "alias": "value"
+          },
+          {
+            "kind": "alias",
+            "expr": {
+              "kind": "columnRef",
+              "parts": [
+                "number"
+              ]
+            },
+            "alias": "time"
+          },
+          {
+            "kind": "alias",
+            "expr": {
+              "kind": "functionCall",
+              "name": "exponentialTimeDecayedSum",
+              "params": [
+                {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "1"
+                }
+              ],
+              "args": [
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "value"
+                  ]
+                },
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "time"
+                  ]
+                }
+              ],
+              "window": {
+                "frame": {
+                  "frameType": "rows",
+                  "start": {
+                    "kind": "unbounded"
+                  },
+                  "end": {
+                    "kind": "currentRow"
+                  }
+                }
+              }
+            },
+            "alias": "exp_smooth"
+          }
+        ],
+        "from": {
+          "kind": "tableFunctionRef",
+          "name": "numbers",
+          "args": [
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "10"
+            }
+          ]
+        }
+      }
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "value"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "time"
+        ]
+      },
+      {
+        "kind": "functionCall",
+        "name": "round",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "exp_smooth"
+            ]
+          },
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "3"
+          }
+        ]
+      },
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "bar",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "exp_smooth"
+              ]
+            },
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "0"
+            },
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "10"
+            },
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "50"
+            }
+          ]
+        },
+        "alias": "bar"
+      }
+    ],
+    "from": {
+      "kind": "subqueryFrom",
+      "query": {
+        "kind": "select",
+        "select": [
+          {
+            "kind": "alias",
+            "expr": {
+              "kind": "naryExpr",
+              "op": "OR",
+              "operands": [
+                {
+                  "kind": "binaryExpr",
+                  "op": "=",
+                  "left": {
+                    "kind": "columnRef",
+                    "parts": [
+                      "number"
+                    ]
+                  },
+                  "right": {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "0"
+                  },
+                  "parenthesized": true
+                },
+                {
+                  "kind": "binaryExpr",
+                  "op": ">=",
+                  "left": {
+                    "kind": "columnRef",
+                    "parts": [
+                      "number"
+                    ]
+                  },
+                  "right": {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "25"
+                  },
+                  "parenthesized": true
+                }
+              ]
+            },
+            "alias": "value"
+          },
+          {
+            "kind": "alias",
+            "expr": {
+              "kind": "columnRef",
+              "parts": [
+                "number"
+              ]
+            },
+            "alias": "time"
+          },
+          {
+            "kind": "alias",
+            "expr": {
+              "kind": "functionCall",
+              "name": "exponentialTimeDecayedSum",
+              "params": [
+                {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "10"
+                }
+              ],
+              "args": [
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "value"
+                  ]
+                },
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "time"
+                  ]
+                }
+              ],
+              "window": {
+                "frame": {
+                  "frameType": "rows",
+                  "start": {
+                    "kind": "unbounded"
+                  },
+                  "end": {
+                    "kind": "currentRow"
+                  }
+                }
+              }
+            },
+            "alias": "exp_smooth"
+          }
+        ],
+        "from": {
+          "kind": "tableFunctionRef",
+          "name": "numbers",
+          "args": [
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "50"
+            }
+          ]
+        }
+      }
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "value"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "time"
+        ]
+      },
+      {
+        "kind": "functionCall",
+        "name": "round",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "exp_smooth"
+            ]
+          },
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "3"
+          }
+        ]
+      },
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "bar",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "exp_smooth"
+              ]
+            },
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "0"
+            },
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "1"
+            },
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "50"
+            }
+          ]
+        },
+        "alias": "bar"
+      }
+    ],
+    "from": {
+      "kind": "subqueryFrom",
+      "query": {
+        "kind": "select",
+        "select": [
+          {
+            "kind": "alias",
+            "expr": {
+              "kind": "binaryExpr",
+              "op": "=",
+              "left": {
+                "kind": "binaryExpr",
+                "op": "%",
+                "left": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "number"
+                  ]
+                },
+                "right": {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "5"
+                },
+                "parenthesized": true
+              },
+              "right": {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "0"
+              }
+            },
+            "alias": "value"
+          },
+          {
+            "kind": "alias",
+            "expr": {
+              "kind": "columnRef",
+              "parts": [
+                "number"
+              ]
+            },
+            "alias": "time"
+          },
+          {
+            "kind": "alias",
+            "expr": {
+              "kind": "functionCall",
+              "name": "exponentialTimeDecayedSum",
+              "params": [
+                {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "1"
+                }
+              ],
+              "args": [
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "value"
+                  ]
+                },
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "time"
+                  ]
+                }
+              ],
+              "window": {
+                "frame": {
+                  "frameType": "rows",
+                  "start": {
+                    "kind": "unbounded"
+                  },
+                  "end": {
+                    "kind": "currentRow"
+                  }
+                }
+              }
+            },
+            "alias": "exp_smooth"
+          }
+        ],
+        "from": {
+          "kind": "tableFunctionRef",
           "name": "numbers",
           "args": [
             {
@@ -1500,7 +1500,7 @@
           }
         ],
         "from": {
-          "kind": "tableFunction",
+          "kind": "tableFunctionRef",
           "name": "numbers",
           "args": [
             {
@@ -1622,7 +1622,7 @@
           }
         ],
         "from": {
-          "kind": "tableFunction",
+          "kind": "tableFunctionRef",
           "name": "numbers",
           "args": [
             {
@@ -1735,7 +1735,7 @@
           }
         ],
         "from": {
-          "kind": "tableFunction",
+          "kind": "tableFunctionRef",
           "name": "numbers",
           "args": [
             {
@@ -1911,7 +1911,7 @@
           }
         ],
         "from": {
-          "kind": "tableFunction",
+          "kind": "tableFunctionRef",
           "name": "numbers",
           "args": [
             {
@@ -2074,7 +2074,7 @@
           }
         ],
         "from": {
-          "kind": "tableFunction",
+          "kind": "tableFunctionRef",
           "name": "numbers",
           "args": [
             {
@@ -2190,7 +2190,7 @@
           }
         ],
         "from": {
-          "kind": "tableFunction",
+          "kind": "tableFunctionRef",
           "name": "numbers",
           "args": [
             {
@@ -2306,7 +2306,7 @@
           }
         ],
         "from": {
-          "kind": "tableFunction",
+          "kind": "tableFunctionRef",
           "name": "numbers",
           "args": [
             {
@@ -2413,7 +2413,7 @@
           }
         ],
         "from": {
-          "kind": "tableFunction",
+          "kind": "tableFunctionRef",
           "name": "numbers",
           "args": [
             {
@@ -2583,7 +2583,7 @@
           }
         ],
         "from": {
-          "kind": "tableFunction",
+          "kind": "tableFunctionRef",
           "name": "numbers",
           "args": [
             {
@@ -2740,7 +2740,7 @@
           }
         ],
         "from": {
-          "kind": "tableFunction",
+          "kind": "tableFunctionRef",
           "name": "numbers",
           "args": [
             {
@@ -2862,7 +2862,7 @@
           }
         ],
         "from": {
-          "kind": "tableFunction",
+          "kind": "tableFunctionRef",
           "name": "numbers",
           "args": [
             {
@@ -2984,7 +2984,7 @@
           }
         ],
         "from": {
-          "kind": "tableFunction",
+          "kind": "tableFunctionRef",
           "name": "numbers",
           "args": [
             {
@@ -3097,7 +3097,7 @@
           }
         ],
         "from": {
-          "kind": "tableFunction",
+          "kind": "tableFunctionRef",
           "name": "numbers",
           "args": [
             {
@@ -3273,7 +3273,7 @@
           }
         ],
         "from": {
-          "kind": "tableFunction",
+          "kind": "tableFunctionRef",
           "name": "numbers",
           "args": [
             {
@@ -3436,7 +3436,7 @@
           }
         ],
         "from": {
-          "kind": "tableFunction",
+          "kind": "tableFunctionRef",
           "name": "numbers",
           "args": [
             {
@@ -3700,10 +3700,10 @@
                 {
                   "kind": "alias",
                   "expr": {
-                    "kind": "array",
+                    "kind": "arrayLiteral",
                     "elements": [
                       {
-                        "kind": "array",
+                        "kind": "arrayLiteral",
                         "elements": [
                           {
                             "kind": "literal",
@@ -3719,7 +3719,7 @@
                         "source": "[2, 1]"
                       },
                       {
-                        "kind": "array",
+                        "kind": "arrayLiteral",
                         "elements": [
                           {
                             "kind": "literal",
@@ -3735,7 +3735,7 @@
                         "source": "[1, 2]"
                       },
                       {
-                        "kind": "array",
+                        "kind": "arrayLiteral",
                         "elements": [
                           {
                             "kind": "literal",
@@ -3751,7 +3751,7 @@
                         "source": "[0, 3]"
                       },
                       {
-                        "kind": "array",
+                        "kind": "arrayLiteral",
                         "elements": [
                           {
                             "kind": "literal",
@@ -3767,7 +3767,7 @@
                         "source": "[4, 4]"
                       },
                       {
-                        "kind": "array",
+                        "kind": "arrayLiteral",
                         "elements": [
                           {
                             "kind": "literal",
@@ -3783,7 +3783,7 @@
                         "source": "[5, 5]"
                       },
                       {
-                        "kind": "array",
+                        "kind": "arrayLiteral",
                         "elements": [
                           {
                             "kind": "literal",
@@ -3799,7 +3799,7 @@
                         "source": "[1, 6]"
                       },
                       {
-                        "kind": "array",
+                        "kind": "arrayLiteral",
                         "elements": [
                           {
                             "kind": "literal",
@@ -3815,7 +3815,7 @@
                         "source": "[0, 7]"
                       },
                       {
-                        "kind": "array",
+                        "kind": "arrayLiteral",
                         "elements": [
                           {
                             "kind": "literal",
@@ -3838,7 +3838,7 @@
               ]
             }
           },
-          "kind": "arrayJoin",
+          "kind": "arrayJoinExpr",
           "joinType": "ARRAY",
           "expressions": [
             {
@@ -3852,7 +3852,38 @@
         "windows": [
           {
             "name": "w",
-            "body": "ORDER BY 1 ASC Rows BETWEEN 2 PRECEDING AND 2 FOLLOWING"
+            "spec": {
+              "orderBy": [
+                {
+                  "kind": "orderByItem",
+                  "expr": {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "1"
+                  },
+                  "direction": "ASC"
+                }
+              ],
+              "frame": {
+                "frameType": "rows",
+                "start": {
+                  "kind": "preceding",
+                  "expr": {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "2"
+                  }
+                },
+                "end": {
+                  "kind": "following",
+                  "expr": {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "2"
+                  }
+                }
+              }
+            }
           }
         ]
       }
@@ -4085,7 +4116,7 @@
           }
         ],
         "from": {
-          "kind": "tableFunction",
+          "kind": "tableFunctionRef",
           "name": "numbers",
           "args": [
             {
@@ -4098,7 +4129,38 @@
         "windows": [
           {
             "name": "w",
-            "body": "ORDER BY 1 ASC Rows BETWEEN 2 PRECEDING AND 2 FOLLOWING"
+            "spec": {
+              "orderBy": [
+                {
+                  "kind": "orderByItem",
+                  "expr": {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "1"
+                  },
+                  "direction": "ASC"
+                }
+              ],
+              "frame": {
+                "frameType": "rows",
+                "start": {
+                  "kind": "preceding",
+                  "expr": {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "2"
+                  }
+                },
+                "end": {
+                  "kind": "following",
+                  "expr": {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "2"
+                  }
+                }
+              }
+            }
           }
         ]
       }
@@ -4230,10 +4292,10 @@
                 {
                   "kind": "alias",
                   "expr": {
-                    "kind": "array",
+                    "kind": "arrayLiteral",
                     "elements": [
                       {
-                        "kind": "array",
+                        "kind": "arrayLiteral",
                         "elements": [
                           {
                             "kind": "literal",
@@ -4249,7 +4311,7 @@
                         "source": "[2, 1]"
                       },
                       {
-                        "kind": "array",
+                        "kind": "arrayLiteral",
                         "elements": [
                           {
                             "kind": "literal",
@@ -4265,7 +4327,7 @@
                         "source": "[1, 2]"
                       },
                       {
-                        "kind": "array",
+                        "kind": "arrayLiteral",
                         "elements": [
                           {
                             "kind": "literal",
@@ -4281,7 +4343,7 @@
                         "source": "[10, 3]"
                       },
                       {
-                        "kind": "array",
+                        "kind": "arrayLiteral",
                         "elements": [
                           {
                             "kind": "literal",
@@ -4297,7 +4359,7 @@
                         "source": "[4, 4]"
                       },
                       {
-                        "kind": "array",
+                        "kind": "arrayLiteral",
                         "elements": [
                           {
                             "kind": "literal",
@@ -4313,7 +4375,7 @@
                         "source": "[5, 5]"
                       },
                       {
-                        "kind": "array",
+                        "kind": "arrayLiteral",
                         "elements": [
                           {
                             "kind": "literal",
@@ -4329,7 +4391,7 @@
                         "source": "[1, 6]"
                       },
                       {
-                        "kind": "array",
+                        "kind": "arrayLiteral",
                         "elements": [
                           {
                             "kind": "literal",
@@ -4345,7 +4407,7 @@
                         "source": "[10, 7]"
                       },
                       {
-                        "kind": "array",
+                        "kind": "arrayLiteral",
                         "elements": [
                           {
                             "kind": "literal",
@@ -4361,7 +4423,7 @@
                         "source": "[10, 8]"
                       },
                       {
-                        "kind": "array",
+                        "kind": "arrayLiteral",
                         "elements": [
                           {
                             "kind": "literal",
@@ -4377,7 +4439,7 @@
                         "source": "[10, 9]"
                       },
                       {
-                        "kind": "array",
+                        "kind": "arrayLiteral",
                         "elements": [
                           {
                             "kind": "literal",
@@ -4393,7 +4455,7 @@
                         "source": "[9.81, 10]"
                       },
                       {
-                        "kind": "array",
+                        "kind": "arrayLiteral",
                         "elements": [
                           {
                             "kind": "literal",
@@ -4416,7 +4478,7 @@
               ]
             }
           },
-          "kind": "arrayJoin",
+          "kind": "arrayJoinExpr",
           "joinType": "ARRAY",
           "expressions": [
             {
@@ -4430,7 +4492,38 @@
         "windows": [
           {
             "name": "w",
-            "body": "ORDER BY 1 ASC Rows BETWEEN 2 PRECEDING AND 2 FOLLOWING"
+            "spec": {
+              "orderBy": [
+                {
+                  "kind": "orderByItem",
+                  "expr": {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "1"
+                  },
+                  "direction": "ASC"
+                }
+              ],
+              "frame": {
+                "frameType": "rows",
+                "start": {
+                  "kind": "preceding",
+                  "expr": {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "2"
+                  }
+                },
+                "end": {
+                  "kind": "following",
+                  "expr": {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "2"
+                  }
+                }
+              }
+            }
           }
         ]
       }

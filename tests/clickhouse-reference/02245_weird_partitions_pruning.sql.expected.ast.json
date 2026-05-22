@@ -1,5 +1,376 @@
 [
   {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "weird_partitions_02245"
+    },
+    "ifExists": true,
+    "leadingComments": [
+      "-- Tags: no-random-merge-tree-settings",
+      "-- We use a hack - partition by ignore(d1). In some cases there are two columns",
+      "-- not fully correlated (<1) (date_begin - date_end or datetime - datetime_in_TZ_with_DST)",
+      "-- If we partition by these columns instead of one it will be twice more partitions.",
+      "-- Partition by (.., ignore(d1)) allows to partition by the first column but build",
+      "-- min_max indexes for both column, so partition pruning works for both columns.",
+      "-- It's very similar to min_max skip index but gives bigger performance boost,",
+      "-- because partition pruning happens on very early query stage."
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "weird_partitions_02245"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "d",
+        "type": {
+          "name": "DateTime"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "d1",
+        "type": {
+          "name": "DateTime"
+        },
+        "defaultKind": "DEFAULT",
+        "defaultExpr": {
+          "kind": "binaryExpr",
+          "op": "-",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "d"
+            ]
+          },
+          "right": {
+            "kind": "functionCall",
+            "name": "toIntervalHour",
+            "args": [
+              {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "8"
+              }
+            ]
+          }
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "id",
+        "type": {
+          "name": "Int64"
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "partitionBy": {
+      "kind": "tupleLiteral",
+      "elements": [
+        {
+          "kind": "functionCall",
+          "name": "toYYYYMM",
+          "args": [
+            {
+              "kind": "functionCall",
+              "name": "toDateTime",
+              "args": [
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "d"
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "kind": "functionCall",
+          "name": "ignore",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "d1"
+              ]
+            }
+          ]
+        }
+      ],
+      "source": "(toYYYYMM(toDateTime(d)), ignore(d1))"
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "id"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "weird_partitions_02245"
+      }
+    },
+    "columns": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "d"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "id"
+        ]
+      }
+    ],
+    "selectQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "alias",
+          "expr": {
+            "kind": "functionCall",
+            "name": "toDateTime",
+            "args": [
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "2021-12-31 22:30:00"
+              }
+            ]
+          },
+          "alias": "d"
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "number"
+          ]
+        }
+      ],
+      "from": {
+        "kind": "tableFunctionRef",
+        "name": "numbers",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "1000"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "weird_partitions_02245"
+      }
+    },
+    "columns": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "d"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "id"
+        ]
+      }
+    ],
+    "selectQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "alias",
+          "expr": {
+            "kind": "functionCall",
+            "name": "toDateTime",
+            "args": [
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "2022-01-01 00:30:00"
+              }
+            ]
+          },
+          "alias": "d"
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "number"
+          ]
+        }
+      ],
+      "from": {
+        "kind": "tableFunctionRef",
+        "name": "numbers",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "1000"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "weird_partitions_02245"
+      }
+    },
+    "columns": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "d"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "id"
+        ]
+      }
+    ],
+    "selectQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "alias",
+          "expr": {
+            "kind": "functionCall",
+            "name": "toDateTime",
+            "args": [
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "2022-01-31 22:30:00"
+              }
+            ]
+          },
+          "alias": "d"
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "number"
+          ]
+        }
+      ],
+      "from": {
+        "kind": "tableFunctionRef",
+        "name": "numbers",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "1000"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "weird_partitions_02245"
+      }
+    },
+    "columns": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "d"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "id"
+        ]
+      }
+    ],
+    "selectQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "alias",
+          "expr": {
+            "kind": "functionCall",
+            "name": "toDateTime",
+            "args": [
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "2023-01-31 22:30:00"
+              }
+            ]
+          },
+          "alias": "d"
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "number"
+          ]
+        }
+      ],
+      "from": {
+        "kind": "tableFunctionRef",
+        "name": "numbers",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "1000"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "kind": "optimize",
+    "table": {
+      "kind": "tableRef",
+      "table": "weird_partitions_02245"
+    }
+  },
+  {
     "kind": "select",
     "distinct": {
       "kind": "distinct"
@@ -274,6 +645,9 @@
     ]
   },
   {
+    "kind": "empty"
+  },
+  {
     "kind": "select",
     "distinct": {
       "kind": "distinct"
@@ -419,5 +793,13 @@
         "direction": "ASC"
       }
     ]
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "weird_partitions_02245"
+    }
   }
 ]

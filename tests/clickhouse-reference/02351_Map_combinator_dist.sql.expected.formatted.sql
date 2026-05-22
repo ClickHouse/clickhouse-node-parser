@@ -1,3 +1,5 @@
+-- https://github.com/ClickHouse/ClickHouse/issues/35359
+-- sumMap
 SELECT x[67]
 FROM (
         SELECT
@@ -20,6 +22,7 @@ SETTINGS
     group_by_two_level_threshold = 0,
     group_by_two_level_threshold_bytes = 0;
 
+-- minMap
 SELECT x[0]
 FROM (
         SELECT
@@ -42,6 +45,7 @@ SETTINGS
     group_by_two_level_threshold = 0,
     group_by_two_level_threshold_bytes = 0;
 
+-- maxMap
 SELECT x[0]
 FROM (
         SELECT
@@ -64,6 +68,7 @@ SETTINGS
     group_by_two_level_threshold = 0,
     group_by_two_level_threshold_bytes = 0;
 
+-- avgMap
 SELECT x[0]
 FROM (
         SELECT

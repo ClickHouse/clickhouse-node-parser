@@ -1,5 +1,434 @@
 [
   {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "enable_full_text_index",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "parallel_replicas_local_plan",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ],
+    "trailingComments": [
+      "-- this setting may skip index analysis when false"
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "use_skip_indexes_on_data_read",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "mutations_sync",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "2"
+        }
+      }
+    ],
+    "trailingComments": [
+      "-- want synchronous materialize"
+    ]
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "tab"
+    },
+    "ifExists": true,
+    "leadingComments": [
+      "-- In this test we make sure that text search functions hasAny/AllTokens work correctly for",
+      "-- tables in which only some parts have a materialized index. The expected behavior is that",
+      "-- the search acts the same as if the whole column was indexed, but of course an inefficient",
+      "-- brute force search is used for the un-indexed rows. Furthermore we test that the same",
+      "-- tokenizer used to create the index is used for the un-indexed parts as is specified in",
+      "-- the index."
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "tab"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "id",
+        "type": {
+          "name": "UInt32"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "message",
+        "type": {
+          "name": "String"
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "id"
+          ]
+        }
+      }
+    ],
+    "settings": [
+      {
+        "name": "index_granularity",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "2"
+        }
+      }
+    ],
+    "settingsAfterOrderBy": true
+  },
+  {
+    "kind": "drop",
+    "targetType": "VIEW",
+    "table": {
+      "kind": "tableRef",
+      "table": "explain_indexes"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "createView",
+    "table": {
+      "kind": "tableRef",
+      "table": "explain_indexes"
+    },
+    "asQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "alias",
+          "expr": {
+            "kind": "functionCall",
+            "name": "trimLeft",
+            "args": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "explain"
+                ]
+              }
+            ]
+          },
+          "alias": "explain"
+        }
+      ],
+      "from": {
+        "kind": "subqueryFrom",
+        "query": {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "asterisk"
+            }
+          ],
+          "from": {
+            "kind": "tableFunctionRef",
+            "name": "viewExplain",
+            "args": [
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "EXPLAIN"
+              },
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "indexes = 1"
+              },
+              {
+                "kind": "subqueryExpr",
+                "query": {
+                  "kind": "select",
+                  "select": [
+                    {
+                      "kind": "functionCall",
+                      "name": "groupArray",
+                      "args": [
+                        {
+                          "kind": "columnRef",
+                          "parts": [
+                            "id"
+                          ]
+                        }
+                      ]
+                    }
+                  ],
+                  "from": {
+                    "kind": "tableRef",
+                    "table": "tab"
+                  },
+                  "where": {
+                    "kind": "functionCall",
+                    "name": "hasAnyTokens",
+                    "args": [
+                      {
+                        "kind": "columnRef",
+                        "parts": [
+                          "message"
+                        ]
+                      },
+                      {
+                        "kind": "arrayLiteral",
+                        "elements": [
+                          {
+                            "kind": "literal",
+                            "type": "String",
+                            "value": "def"
+                          }
+                        ],
+                        "source": "['def']"
+                      }
+                    ]
+                  }
+                }
+              }
+            ]
+          }
+        }
+      },
+      "where": {
+        "kind": "naryExpr",
+        "op": "OR",
+        "operands": [
+          {
+            "kind": "functionCall",
+            "name": "like",
+            "args": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "explain"
+                ]
+              },
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "%Name%"
+              }
+            ],
+            "parenthesized": true
+          },
+          {
+            "kind": "functionCall",
+            "name": "like",
+            "args": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "explain"
+                ]
+              },
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "%Description%"
+              }
+            ],
+            "parenthesized": true
+          },
+          {
+            "kind": "functionCall",
+            "name": "like",
+            "args": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "explain"
+                ]
+              },
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "%Parts%"
+              }
+            ],
+            "parenthesized": true
+          },
+          {
+            "kind": "functionCall",
+            "name": "like",
+            "args": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "explain"
+                ]
+              },
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "%Granules%"
+              }
+            ],
+            "parenthesized": true
+          },
+          {
+            "kind": "functionCall",
+            "name": "like",
+            "args": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "explain"
+                ]
+              },
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "%Range%"
+              }
+            ],
+            "parenthesized": true
+          }
+        ]
+      }
+    }
+  },
+  {
+    "kind": "system",
+    "body": "SYSTEM STOP MERGES tab"
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "tab"
+      }
+    },
+    "columns": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "id"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "message"
+        ]
+      }
+    ],
+    "leadingComments": [
+      "-- bar# will be parsed differently by different tokenizers, e.g. splitbyString -> 'bar#'; splitByNonAlpha -> 'bar'",
+      "-- we want to test that the search functions will use the same tokenizer on un-materialized column parts"
+    ]
+  },
+  {
+    "kind": "alter",
+    "table": {
+      "kind": "tableRef",
+      "table": "tab"
+    },
+    "commands": [
+      {
+        "kind": "alterCommand",
+        "commandType": "ADD_INDEX",
+        "index": {
+          "kind": "indexDef",
+          "name": "idx",
+          "expr": {
+            "kind": "columnRef",
+            "parts": [
+              "message"
+            ]
+          },
+          "indexType": {
+            "name": "text",
+            "args": [
+              {
+                "kind": "binaryExpr",
+                "op": "=",
+                "left": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "tokenizer"
+                  ]
+                },
+                "right": {
+                  "kind": "literal",
+                  "type": "String",
+                  "value": "splitByString"
+                }
+              }
+            ]
+          },
+          "granularity": 1
+        }
+      }
+    ]
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "tab"
+      }
+    },
+    "columns": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "id"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "message"
+        ]
+      }
+    ]
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -9,7 +438,10 @@
     "from": {
       "kind": "tableRef",
       "table": "explain_indexes"
-    }
+    },
+    "leadingComments": [
+      "-- { echoOn }"
+    ]
   },
   {
     "kind": "select",
@@ -48,7 +480,7 @@
           ]
         },
         {
-          "kind": "array",
+          "kind": "arrayLiteral",
           "elements": [
             {
               "kind": "literal",
@@ -59,7 +491,11 @@
           "source": "['foo']"
         }
       ]
-    }
+    },
+    "leadingComments": [
+      "--",
+      "--hasAnyTokens:"
+    ]
   },
   {
     "kind": "select",
@@ -98,7 +534,7 @@
           ]
         },
         {
-          "kind": "array",
+          "kind": "arrayLiteral",
           "elements": [
             {
               "kind": "literal",
@@ -148,7 +584,7 @@
           ]
         },
         {
-          "kind": "array",
+          "kind": "arrayLiteral",
           "elements": [
             {
               "kind": "literal",
@@ -203,7 +639,7 @@
           ]
         },
         {
-          "kind": "array",
+          "kind": "arrayLiteral",
           "elements": [
             {
               "kind": "literal",
@@ -258,7 +694,7 @@
           ]
         },
         {
-          "kind": "array",
+          "kind": "arrayLiteral",
           "elements": [
             {
               "kind": "literal",
@@ -313,7 +749,7 @@
           ]
         },
         {
-          "kind": "array",
+          "kind": "arrayLiteral",
           "elements": [
             {
               "kind": "literal",
@@ -324,7 +760,11 @@
           "source": "['foo']"
         }
       ]
-    }
+    },
+    "leadingComments": [
+      "--",
+      "--hasAllTokens:"
+    ]
   },
   {
     "kind": "select",
@@ -363,7 +803,7 @@
           ]
         },
         {
-          "kind": "array",
+          "kind": "arrayLiteral",
           "elements": [
             {
               "kind": "literal",
@@ -413,7 +853,7 @@
           ]
         },
         {
-          "kind": "array",
+          "kind": "arrayLiteral",
           "elements": [
             {
               "kind": "literal",
@@ -468,7 +908,7 @@
           ]
         },
         {
-          "kind": "array",
+          "kind": "arrayLiteral",
           "elements": [
             {
               "kind": "literal",
@@ -487,6 +927,60 @@
     }
   },
   {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "tab"
+    },
+    "leadingComments": [
+      "-- { echoOff }"
+    ]
+  },
+  {
+    "kind": "alter",
+    "table": {
+      "kind": "tableRef",
+      "table": "tab"
+    },
+    "commands": [
+      {
+        "kind": "alterCommand",
+        "commandType": "ADD_INDEX",
+        "index": {
+          "kind": "indexDef",
+          "name": "idx",
+          "expr": {
+            "kind": "columnRef",
+            "parts": [
+              "message"
+            ]
+          },
+          "indexType": {
+            "name": "text",
+            "args": [
+              {
+                "kind": "binaryExpr",
+                "op": "=",
+                "left": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "tokenizer"
+                  ]
+                },
+                "right": {
+                  "kind": "literal",
+                  "type": "String",
+                  "value": "splitByNonAlpha"
+                }
+              }
+            ]
+          }
+        }
+      }
+    ]
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -523,7 +1017,7 @@
           ]
         },
         {
-          "kind": "array",
+          "kind": "arrayLiteral",
           "elements": [
             {
               "kind": "literal",
@@ -534,7 +1028,10 @@
           "source": "['bar$']"
         }
       ]
-    }
+    },
+    "trailingComments": [
+      "-- test default tokenizer"
+    ]
   },
   {
     "kind": "select",
@@ -628,7 +1125,7 @@
           ]
         },
         {
-          "kind": "array",
+          "kind": "arrayLiteral",
           "elements": [
             {
               "kind": "literal",
@@ -639,7 +1136,10 @@
           "source": "['bar$']"
         }
       ]
-    }
+    },
+    "trailingComments": [
+      "-- test default tokenizer"
+    ]
   },
   {
     "kind": "select",
@@ -694,6 +1194,14 @@
           ]
         }
       ]
+    }
+  },
+  {
+    "kind": "drop",
+    "targetType": "VIEW",
+    "table": {
+      "kind": "tableRef",
+      "table": "explain_indexes"
     }
   }
 ]

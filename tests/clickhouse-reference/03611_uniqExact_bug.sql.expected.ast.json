@@ -1,5 +1,298 @@
 [
   {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "max_threads",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "4"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "test"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "c1",
+        "type": {
+          "name": "Int64"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "c2",
+        "type": {
+          "name": "Int64"
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "c2"
+          ]
+        }
+      }
+    ],
+    "asQuery": {
+      "kind": "union",
+      "queries": [
+        {
+          "kind": "select",
+          "with": [
+            {
+              "kind": "cteSubquery",
+              "name": "gen",
+              "query": {
+                "kind": "select",
+                "select": [
+                  {
+                    "kind": "alias",
+                    "expr": {
+                      "kind": "binaryExpr",
+                      "op": "%",
+                      "left": {
+                        "kind": "functionCall",
+                        "name": "xxHash32",
+                        "args": [
+                          {
+                            "kind": "columnRef",
+                            "parts": [
+                              "number"
+                            ]
+                          }
+                        ]
+                      },
+                      "right": {
+                        "kind": "literal",
+                        "type": "UInt64",
+                        "value": "1000000"
+                      }
+                    },
+                    "alias": "u1"
+                  },
+                  {
+                    "kind": "alias",
+                    "expr": {
+                      "kind": "binaryExpr",
+                      "op": "%",
+                      "left": {
+                        "kind": "functionCall",
+                        "name": "xxHash32",
+                        "args": [
+                          {
+                            "kind": "binaryExpr",
+                            "op": "+",
+                            "left": {
+                              "kind": "columnRef",
+                              "parts": [
+                                "number"
+                              ]
+                            },
+                            "right": {
+                              "kind": "literal",
+                              "type": "UInt64",
+                              "value": "12345"
+                            }
+                          }
+                        ]
+                      },
+                      "right": {
+                        "kind": "literal",
+                        "type": "UInt64",
+                        "value": "1000000"
+                      }
+                    },
+                    "alias": "u2"
+                  }
+                ],
+                "from": {
+                  "kind": "tableFunctionRef",
+                  "name": "numbers",
+                  "args": [
+                    {
+                      "kind": "literal",
+                      "type": "Float64",
+                      "value": "1e6"
+                    }
+                  ]
+                }
+              }
+            }
+          ],
+          "select": [
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "1071106"
+            },
+            {
+              "kind": "binaryExpr",
+              "op": "+",
+              "left": {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "5"
+              },
+              "right": {
+                "kind": "binaryExpr",
+                "op": "+",
+                "left": {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "1"
+                },
+                "right": {
+                  "kind": "binaryExpr",
+                  "op": "*",
+                  "left": {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "151703"
+                  },
+                  "right": {
+                    "kind": "binaryExpr",
+                    "op": "*",
+                    "left": {
+                      "kind": "binaryExpr",
+                      "op": "*",
+                      "left": {
+                        "kind": "literal",
+                        "type": "UInt64",
+                        "value": "2"
+                      },
+                      "right": {
+                        "kind": "columnRef",
+                        "parts": [
+                          "u1"
+                        ]
+                      },
+                      "parenthesized": true
+                    },
+                    "right": {
+                      "kind": "binaryExpr",
+                      "op": "*",
+                      "left": {
+                        "kind": "literal",
+                        "type": "UInt64",
+                        "value": "2"
+                      },
+                      "right": {
+                        "kind": "columnRef",
+                        "parts": [
+                          "u2"
+                        ]
+                      },
+                      "parenthesized": true
+                    },
+                    "parenthesized": true
+                  }
+                },
+                "parenthesized": true
+              }
+            }
+          ],
+          "from": {
+            "kind": "tableRef",
+            "table": "gen"
+          }
+        },
+        {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "1071102"
+            },
+            {
+              "kind": "binaryExpr",
+              "op": "+",
+              "left": {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "8"
+              },
+              "right": {
+                "kind": "binaryExpr",
+                "op": "+",
+                "left": {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "1"
+                },
+                "right": {
+                  "kind": "binaryExpr",
+                  "op": "*",
+                  "left": {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "151693"
+                  },
+                  "right": {
+                    "kind": "binaryExpr",
+                    "op": "*",
+                    "left": {
+                      "kind": "binaryExpr",
+                      "op": "*",
+                      "left": {
+                        "kind": "literal",
+                        "type": "UInt64",
+                        "value": "2"
+                      },
+                      "right": {
+                        "kind": "columnRef",
+                        "parts": [
+                          "u1"
+                        ]
+                      },
+                      "parenthesized": true
+                    },
+                    "right": {
+                      "kind": "binaryExpr",
+                      "op": "*",
+                      "left": {
+                        "kind": "literal",
+                        "type": "UInt64",
+                        "value": "2"
+                      },
+                      "right": {
+                        "kind": "columnRef",
+                        "parts": [
+                          "u2"
+                        ]
+                      },
+                      "parenthesized": true
+                    },
+                    "parenthesized": true
+                  }
+                },
+                "parenthesized": true
+              }
+            }
+          ],
+          "from": {
+            "kind": "tableRef",
+            "table": "gen"
+          }
+        }
+      ]
+    }
+  },
+  {
     "kind": "select",
     "select": [
       {

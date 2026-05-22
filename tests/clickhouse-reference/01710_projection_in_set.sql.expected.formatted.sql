@@ -1,3 +1,26 @@
+DROP TABLE IF EXISTS x;
+
+CREATE TABLE x
+(
+    i UInt64,
+    j UInt64,
+    k UInt64,
+    PROJECTION agg (    SELECT
+        sum(j),
+        avg(k)
+    GROUP BY i),
+    PROJECTION norm (    SELECT
+        j,
+        k
+    ORDER BY i ASC)
+)
+ENGINE = MergeTree
+ORDER BY tuple();
+
+INSERT INTO x;
+
+SET optimize_use_projections = 1, use_index_for_in_with_subqueries = 0;
+
 SELECT
     sum(j),
     avg(k)
@@ -16,6 +39,19 @@ WHERE i IN (
         FROM numbers(4)
     );
 
+DROP TABLE x;
+
+-- Projection analysis should not break other IN constructs. See https://github.com/ClickHouse/ClickHouse/issues/35336
+CREATE TABLE IF NOT EXISTS flows
+(
+    SrcAS UInt32,
+    Bytes UInt64
+)
+ENGINE = MergeTree()
+ORDER BY tuple();
+
+INSERT INTO flows;
+
 SELECT if(SrcAS IN (
         SELECT SrcAS
         FROM flows
@@ -26,3 +62,5 @@ SELECT if(SrcAS IN (
 FROM flows
 WHERE 2 == 2
 ORDER BY SrcAS ASC;
+
+DROP TABLE flows;

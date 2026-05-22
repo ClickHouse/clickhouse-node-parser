@@ -1,7 +1,22 @@
-SELECT *
-FROM table_that_do_not_exists;
+-- Tags: no-parallel, no-fasttest
+DROP TABLE IF EXISTS to_insert;
 
-SELECT throwIf(1);
+CREATE TABLE to_insert
+(
+    value UInt64
+)
+ENGINE = Memory();
+
+INSERT INTO table_that_do_not_exists; -- { serverError UNKNOWN_TABLE }
+
+INSERT INTO to_insert SELECT throwIf(1); -- { serverError FUNCTION_THROW_IF_VALUE_IS_NON_ZERO }
+
+SELECT *
+FROM table_that_do_not_exists; -- { serverError UNKNOWN_TABLE }
+
+SELECT throwIf(1); -- { serverError FUNCTION_THROW_IF_VALUE_IS_NON_ZERO }
+
+SYSTEM FLUSH LOGS query_log;
 
 SELECT
     normalizeQuery(query),

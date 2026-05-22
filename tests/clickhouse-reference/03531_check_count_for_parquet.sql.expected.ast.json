@@ -9,7 +9,7 @@
       }
     ],
     "from": {
-      "kind": "tableFunction",
+      "kind": "tableFunctionRef",
       "name": "url",
       "args": [
         {
@@ -18,7 +18,12 @@
           "value": "http://localhost:11111/test/hive_partitioning/column0=Elizabeth/sample.parquet"
         }
       ]
-    }
+    },
+    "leadingComments": [
+      "-- Tags: no-fasttest, no-parallel",
+      "-- no-fasttest because of Parquet",
+      "-- no-parallel because we're writing a file with fixed name"
+    ]
   },
   {
     "kind": "select",
@@ -30,7 +35,7 @@
       }
     ],
     "from": {
-      "kind": "tableFunction",
+      "kind": "tableFunctionRef",
       "name": "url",
       "args": [
         {
@@ -57,6 +62,60 @@
     }
   },
   {
+    "kind": "insert",
+    "target": {
+      "kind": "function",
+      "func": {
+        "kind": "tableFunctionRef",
+        "name": "file",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": "03531.parquet"
+          }
+        ]
+      }
+    },
+    "selectQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "asterisk"
+        }
+      ],
+      "from": {
+        "kind": "tableFunctionRef",
+        "name": "numbers",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "42"
+          }
+        ]
+      },
+      "settings": [
+        {
+          "name": "engine_file_truncate_on_insert",
+          "value": {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "1"
+          }
+        },
+        {
+          "name": "output_format_parquet_row_group_size",
+          "value": {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "10"
+          }
+        }
+      ]
+    }
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -70,6 +129,9 @@
           }
         ]
       }
+    ],
+    "trailingComments": [
+      "-- quirk in schema cache: cache is not used for up to 1s after file is written"
     ]
   },
   {
@@ -82,7 +144,7 @@
       }
     ],
     "from": {
-      "kind": "tableFunction",
+      "kind": "tableFunctionRef",
       "name": "file",
       "args": [
         {
@@ -103,7 +165,7 @@
       }
     ],
     "from": {
-      "kind": "tableFunction",
+      "kind": "tableFunctionRef",
       "name": "file",
       "args": [
         {

@@ -1,5 +1,59 @@
 [
   {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "t_dist_in_select"
+    },
+    "ifExists": true,
+    "leadingComments": [
+      "-- Regression test for https://github.com/ClickHouse/ClickHouse/issues/76182",
+      "-- Distributed query with IN in the SELECT section should not throw",
+      "-- ILLEGAL_TYPE_OF_ARGUMENT when using the analyzer."
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "t_dist_in_select"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "uid",
+        "type": {
+          "name": "UInt32"
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree",
+      "args": []
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "uid"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "t_dist_in_select"
+      }
+    }
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -26,7 +80,7 @@
       }
     ],
     "from": {
-      "kind": "tableFunction",
+      "kind": "tableFunctionRef",
       "name": "remote",
       "args": [
         {
@@ -59,5 +113,13 @@
         "direction": "ASC"
       }
     ]
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "t_dist_in_select"
+    }
   }
 ]

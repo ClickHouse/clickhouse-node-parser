@@ -1,0 +1,184 @@
+[
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "tbl_x"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "tbl_x"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "col2",
+        "type": {
+          "name": "String"
+        }
+      }
+    ],
+    "engine": {
+      "name": "Memory"
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "tbl_x"
+      }
+    },
+    "selectQuery": {
+      "kind": "select",
+      "with": [
+        {
+          "kind": "cteSubquery",
+          "name": "c4",
+          "query": {
+            "kind": "union",
+            "queries": [
+              {
+                "kind": "select",
+                "select": [
+                  {
+                    "kind": "alias",
+                    "expr": {
+                      "kind": "literal",
+                      "type": "String",
+                      "value": "aaa"
+                    },
+                    "alias": "col2"
+                  }
+                ]
+              },
+              {
+                "kind": "select",
+                "select": [
+                  {
+                    "kind": "literal",
+                    "type": "String",
+                    "value": "bbb"
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "kind": "cteSubquery",
+          "name": "c6",
+          "query": {
+            "kind": "select",
+            "select": [
+              {
+                "kind": "alias",
+                "expr": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "r",
+                    "col2"
+                  ]
+                },
+                "alias": "col2"
+              }
+            ],
+            "from": {
+              "left": {
+                "kind": "subqueryFrom",
+                "query": {
+                  "kind": "select",
+                  "select": [
+                    {
+                      "kind": "alias",
+                      "expr": {
+                        "kind": "literal",
+                        "type": "String",
+                        "value": "ccc"
+                      },
+                      "alias": "col2"
+                    }
+                  ]
+                },
+                "alias": "r"
+              },
+              "kind": "joinExpr",
+              "joinType": "LEFT",
+              "right": {
+                "kind": "subqueryFrom",
+                "query": {
+                  "kind": "select",
+                  "select": [
+                    {
+                      "kind": "alias",
+                      "expr": {
+                        "kind": "literal",
+                        "type": "String",
+                        "value": "foo"
+                      },
+                      "alias": "col2"
+                    }
+                  ]
+                },
+                "alias": "rt"
+              },
+              "constraint": {
+                "kind": "using",
+                "columns": [
+                  "col2"
+                ]
+              }
+            }
+          }
+        }
+      ],
+      "select": [
+        {
+          "kind": "asterisk"
+        }
+      ],
+      "from": {
+        "kind": "subqueryFrom",
+        "query": {
+          "kind": "union",
+          "queries": [
+            {
+              "kind": "select",
+              "select": [
+                {
+                  "kind": "asterisk"
+                }
+              ],
+              "from": {
+                "kind": "tableRef",
+                "table": "c4"
+              }
+            },
+            {
+              "kind": "select",
+              "select": [
+                {
+                  "kind": "asterisk"
+                }
+              ],
+              "from": {
+                "kind": "tableRef",
+                "table": "c6"
+              }
+            }
+          ]
+        }
+      }
+    },
+    "leadingComments": [
+      "-- Produce Const and non-Const block in various SELECTs that may lead to UB w/o removing constness while squashing"
+    ]
+  }
+]

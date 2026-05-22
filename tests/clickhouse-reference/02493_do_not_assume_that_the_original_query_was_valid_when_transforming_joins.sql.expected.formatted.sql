@@ -1,3 +1,26 @@
+CREATE TABLE table1
+(
+    column1 String
+)
+ENGINE = MergeTree()
+ORDER BY tuple();
+
+CREATE TABLE table2
+(
+    column1 String,
+    column2 String,
+    column3 String
+)
+ENGINE = MergeTree()
+ORDER BY tuple();
+
+CREATE TABLE table3
+(
+    column3 String
+)
+ENGINE = MergeTree()
+ORDER BY tuple();
+
 SELECT *
 FROM
     (
@@ -15,4 +38,4 @@ LEFT JOIN (
         SELECT *
         FROM table3
     ) AS c
-    ON c.column3 = b.column3;
+    ON c.column3 = b.column3; -- {serverError UNKNOWN_IDENTIFIER}

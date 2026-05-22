@@ -1,5 +1,601 @@
 [
   {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "allow_experimental_variant_type",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ],
+    "leadingComments": [
+      "-- Tags: long, no-tsan, no-msan, no-ubsan, no-asan",
+      "-- Random settings limits: index_granularity=(100, None); merge_max_block_size=(100, None)"
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "use_variant_as_common_type",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "allow_experimental_dynamic_type",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "enable_named_columns_in_function_tuple",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "test"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "empty"
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "test"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "id",
+        "type": {
+          "name": "UInt64"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "d",
+        "type": {
+          "name": "Dynamic",
+          "args": [
+            {
+              "kind": "setting",
+              "name": "max_types",
+              "value": {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "2"
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "id"
+          ]
+        }
+      }
+    ],
+    "settings": [
+      {
+        "name": "min_rows_for_wide_part",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      },
+      {
+        "name": "min_bytes_for_wide_part",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      },
+      {
+        "name": "lock_acquire_timeout_for_background_operations",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "600"
+        }
+      }
+    ],
+    "settingsAfterOrderBy": true
+  },
+  {
+    "kind": "system",
+    "body": "SYSTEM stop merges test"
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "test"
+      }
+    },
+    "selectQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "number"
+          ]
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "number"
+          ]
+        }
+      ],
+      "from": {
+        "kind": "tableFunctionRef",
+        "name": "numbers",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "100000"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "test"
+      }
+    },
+    "selectQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "number"
+          ]
+        },
+        {
+          "kind": "castExpr",
+          "expr": {
+            "kind": "functionCall",
+            "name": "tuple",
+            "args": [
+              {
+                "kind": "functionCall",
+                "name": "if",
+                "args": [
+                  {
+                    "kind": "binaryExpr",
+                    "op": "==",
+                    "left": {
+                      "kind": "binaryExpr",
+                      "op": "%",
+                      "left": {
+                        "kind": "columnRef",
+                        "parts": [
+                          "number"
+                        ]
+                      },
+                      "right": {
+                        "kind": "literal",
+                        "type": "UInt64",
+                        "value": "3"
+                      }
+                    },
+                    "right": {
+                      "kind": "literal",
+                      "type": "UInt64",
+                      "value": "0"
+                    }
+                  },
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "number"
+                    ]
+                  },
+                  {
+                    "kind": "functionCall",
+                    "name": "concat",
+                    "args": [
+                      {
+                        "kind": "literal",
+                        "type": "String",
+                        "value": "str_"
+                      },
+                      {
+                        "kind": "functionCall",
+                        "name": "toString",
+                        "args": [
+                          {
+                            "kind": "columnRef",
+                            "parts": [
+                              "number"
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          "type": "Tuple(a Dynamic(max_types=2))",
+          "operator": true
+        }
+      ],
+      "from": {
+        "kind": "tableFunctionRef",
+        "name": "numbers",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "100000"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "test"
+      }
+    },
+    "selectQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "number"
+          ]
+        },
+        {
+          "kind": "castExpr",
+          "expr": {
+            "kind": "functionCall",
+            "name": "tuple",
+            "args": [
+              {
+                "kind": "functionCall",
+                "name": "if",
+                "args": [
+                  {
+                    "kind": "binaryExpr",
+                    "op": "==",
+                    "left": {
+                      "kind": "binaryExpr",
+                      "op": "%",
+                      "left": {
+                        "kind": "columnRef",
+                        "parts": [
+                          "number"
+                        ]
+                      },
+                      "right": {
+                        "kind": "literal",
+                        "type": "UInt64",
+                        "value": "3"
+                      }
+                    },
+                    "right": {
+                      "kind": "literal",
+                      "type": "UInt64",
+                      "value": "0"
+                    }
+                  },
+                  {
+                    "kind": "functionCall",
+                    "name": "toDate",
+                    "args": [
+                      {
+                        "kind": "columnRef",
+                        "parts": [
+                          "number"
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "kind": "functionCall",
+                    "name": "range",
+                    "args": [
+                      {
+                        "kind": "binaryExpr",
+                        "op": "%",
+                        "left": {
+                          "kind": "columnRef",
+                          "parts": [
+                            "number"
+                          ]
+                        },
+                        "right": {
+                          "kind": "literal",
+                          "type": "UInt64",
+                          "value": "10"
+                        }
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          "type": "Tuple(a Dynamic(max_types=2))",
+          "operator": true
+        }
+      ],
+      "from": {
+        "kind": "tableFunctionRef",
+        "name": "numbers",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "50000"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "test"
+      }
+    },
+    "selectQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "number"
+          ]
+        },
+        {
+          "kind": "functionCall",
+          "name": "multiIf",
+          "args": [
+            {
+              "kind": "binaryExpr",
+              "op": "==",
+              "left": {
+                "kind": "binaryExpr",
+                "op": "%",
+                "left": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "number"
+                  ]
+                },
+                "right": {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "5"
+                }
+              },
+              "right": {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "0"
+              }
+            },
+            {
+              "kind": "castExpr",
+              "expr": {
+                "kind": "functionCall",
+                "name": "tuple",
+                "args": [
+                  {
+                    "kind": "functionCall",
+                    "name": "if",
+                    "args": [
+                      {
+                        "kind": "binaryExpr",
+                        "op": "==",
+                        "left": {
+                          "kind": "binaryExpr",
+                          "op": "%",
+                          "left": {
+                            "kind": "columnRef",
+                            "parts": [
+                              "number"
+                            ]
+                          },
+                          "right": {
+                            "kind": "literal",
+                            "type": "UInt64",
+                            "value": "3"
+                          }
+                        },
+                        "right": {
+                          "kind": "literal",
+                          "type": "UInt64",
+                          "value": "0"
+                        }
+                      },
+                      {
+                        "kind": "functionCall",
+                        "name": "toDateTime",
+                        "args": [
+                          {
+                            "kind": "columnRef",
+                            "parts": [
+                              "number"
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "kind": "functionCall",
+                        "name": "toIPv4",
+                        "args": [
+                          {
+                            "kind": "columnRef",
+                            "parts": [
+                              "number"
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              "type": "Tuple(a Dynamic(max_types=2))",
+              "operator": true
+            },
+            {
+              "kind": "naryExpr",
+              "op": "OR",
+              "operands": [
+                {
+                  "kind": "binaryExpr",
+                  "op": "==",
+                  "left": {
+                    "kind": "binaryExpr",
+                    "op": "%",
+                    "left": {
+                      "kind": "columnRef",
+                      "parts": [
+                        "number"
+                      ]
+                    },
+                    "right": {
+                      "kind": "literal",
+                      "type": "UInt64",
+                      "value": "5"
+                    }
+                  },
+                  "right": {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "1"
+                  }
+                },
+                {
+                  "kind": "binaryExpr",
+                  "op": "==",
+                  "left": {
+                    "kind": "binaryExpr",
+                    "op": "%",
+                    "left": {
+                      "kind": "columnRef",
+                      "parts": [
+                        "number"
+                      ]
+                    },
+                    "right": {
+                      "kind": "literal",
+                      "type": "UInt64",
+                      "value": "5"
+                    }
+                  },
+                  "right": {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "2"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "columnRef",
+              "parts": [
+                "number"
+              ]
+            },
+            {
+              "kind": "functionCall",
+              "name": "concat",
+              "args": [
+                {
+                  "kind": "literal",
+                  "type": "String",
+                  "value": "str_"
+                },
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "number"
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "from": {
+        "kind": "tableFunctionRef",
+        "name": "numbers",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "100000"
+          }
+        ]
+      }
+    }
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -111,6 +707,18 @@
     ]
   },
   {
+    "kind": "system",
+    "body": "SYSTEM start merges test"
+  },
+  {
+    "kind": "optimize",
+    "table": {
+      "kind": "tableRef",
+      "table": "test"
+    },
+    "final": true
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -119,5 +727,248 @@
         "value": "---------------------"
       }
     ]
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "test"
+      }
+    },
+    "selectQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "number"
+          ]
+        },
+        {
+          "kind": "castExpr",
+          "expr": {
+            "kind": "functionCall",
+            "name": "tuple",
+            "args": [
+              {
+                "kind": "functionCall",
+                "name": "if",
+                "args": [
+                  {
+                    "kind": "binaryExpr",
+                    "op": "==",
+                    "left": {
+                      "kind": "binaryExpr",
+                      "op": "%",
+                      "left": {
+                        "kind": "columnRef",
+                        "parts": [
+                          "number"
+                        ]
+                      },
+                      "right": {
+                        "kind": "literal",
+                        "type": "UInt64",
+                        "value": "3"
+                      }
+                    },
+                    "right": {
+                      "kind": "literal",
+                      "type": "UInt64",
+                      "value": "0"
+                    }
+                  },
+                  {
+                    "kind": "functionCall",
+                    "name": "toDateTime",
+                    "args": [
+                      {
+                        "kind": "columnRef",
+                        "parts": [
+                          "number"
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "kind": "literal",
+                    "type": "NULL",
+                    "value": "NULL"
+                  }
+                ]
+              }
+            ]
+          },
+          "type": "Tuple(a Dynamic(max_types=2))",
+          "operator": true
+        }
+      ],
+      "from": {
+        "kind": "tableFunctionRef",
+        "name": "numbers",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "50000"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "test"
+      }
+    },
+    "selectQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "number"
+          ]
+        },
+        {
+          "kind": "castExpr",
+          "expr": {
+            "kind": "functionCall",
+            "name": "tuple",
+            "args": [
+              {
+                "kind": "functionCall",
+                "name": "if",
+                "args": [
+                  {
+                    "kind": "binaryExpr",
+                    "op": "==",
+                    "left": {
+                      "kind": "binaryExpr",
+                      "op": "%",
+                      "left": {
+                        "kind": "columnRef",
+                        "parts": [
+                          "number"
+                        ]
+                      },
+                      "right": {
+                        "kind": "literal",
+                        "type": "UInt64",
+                        "value": "2"
+                      }
+                    },
+                    "right": {
+                      "kind": "literal",
+                      "type": "UInt64",
+                      "value": "0"
+                    }
+                  },
+                  {
+                    "kind": "functionCall",
+                    "name": "tuple",
+                    "args": [
+                      {
+                        "kind": "columnRef",
+                        "parts": [
+                          "number"
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "kind": "literal",
+                    "type": "NULL",
+                    "value": "NULL"
+                  }
+                ]
+              }
+            ]
+          },
+          "type": "Tuple(a Dynamic(max_types=2))",
+          "operator": true
+        }
+      ],
+      "from": {
+        "kind": "tableFunctionRef",
+        "name": "numbers",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "200000"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "test"
+      }
+    },
+    "selectQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "number"
+          ]
+        },
+        {
+          "kind": "castExpr",
+          "expr": {
+            "kind": "functionCall",
+            "name": "tuple",
+            "args": [
+              {
+                "kind": "functionCall",
+                "name": "toDateTime",
+                "args": [
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "number"
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          "type": "Tuple(a Dynamic(max_types=2))",
+          "operator": true
+        }
+      ],
+      "from": {
+        "kind": "tableFunctionRef",
+        "name": "numbers",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "40000"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "test"
+    }
   }
 ]

@@ -521,6 +521,40 @@ INNER JOIN (
     OR t1.f = t2.f))
 SETTINGS enable_analyzer = 1;
 
+SET joined_subquery_requires_alias = 0;
+
+SET max_threads = 1;
+
+DROP TABLE IF EXISTS tab2;
+
+DROP TABLE IF EXISTS tab3;
+
+CREATE TABLE tab2
+(
+    a2 Int32,
+    b2 Int32
+)
+ENGINE = MergeTree
+ORDER BY a2;
+
+CREATE TABLE tab3
+(
+    a3 Int32,
+    b3 Int32
+)
+ENGINE = MergeTree
+ORDER BY a3;
+
+INSERT INTO tab2;
+
+INSERT INTO tab2;
+
+INSERT INTO tab3;
+
+INSERT INTO tab3;
+
+INSERT INTO tab3;
+
 SELECT
     a2,
     b2,
@@ -534,3 +568,7 @@ LEFT JOIN tab3
     OR b2 = b3
     AND a2 + 1 = b3 + 0
 ORDER BY `ALL` ASC;
+
+DROP TABLE tab2;
+
+DROP TABLE tab3;

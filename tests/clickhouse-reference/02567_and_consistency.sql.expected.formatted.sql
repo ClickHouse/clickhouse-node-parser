@@ -31,6 +31,8 @@ SETTINGS enable_optimize_predicate_expression = 1;
 SELECT 1
     AND sin(1);
 
+SET enable_analyzer = 1;
+
 SELECT toBool(sin(SUM(number))) AS x
 FROM (
         SELECT 1 AS number
@@ -40,6 +42,17 @@ HAVING 1
     AND sin(sum(number))
 ORDER BY `ALL` ASC
 SETTINGS enable_optimize_predicate_expression = 1;
+
+DROP TABLE IF EXISTS t2;
+
+CREATE TABLE t2
+(
+    c0 Int32
+)
+ENGINE = MergeTree
+ORDER BY c0;
+
+INSERT INTO t2;
 
 SELECT
     MAX(`left`.c0),

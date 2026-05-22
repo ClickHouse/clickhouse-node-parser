@@ -1,3 +1,27 @@
+SET enable_analyzer = 1;
+
+DROP TABLE IF EXISTS v1;
+
+DROP TABLE IF EXISTS v2;
+
+CREATE TABLE v1
+(
+    id Int32
+)
+ENGINE = MergeTree()
+ORDER BY id;
+
+CREATE TABLE v2
+(
+    value Int32
+)
+ENGINE = MergeTree()
+ORDER BY value;
+
+INSERT INTO v1 (id);
+
+INSERT INTO v2 (value);
+
 SELECT *
 FROM
     v1 AS t1
@@ -24,4 +48,4 @@ FROM
 INNER JOIN v1 AS t2
     USING (id)
 INNER JOIN v1 AS t3
-    USING (value);
+    USING (value); -- { serverError UNKNOWN_IDENTIFIER }

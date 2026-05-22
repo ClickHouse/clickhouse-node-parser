@@ -1,5 +1,158 @@
 [
   {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "optimize_skip_unused_shards",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ],
+    "leadingComments": [
+      "-- Tags: shard"
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "force_optimize_skip_unused_shards",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "2"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "data"
+    },
+    "temporary": true,
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "id",
+        "type": {
+          "name": "UInt64"
+        }
+      }
+    ],
+    "engine": {
+      "name": "Memory",
+      "args": []
+    },
+    "asQuery": {
+      "kind": "select",
+      "with": [
+        {
+          "kind": "cteExpr",
+          "name": "values",
+          "expr": {
+            "kind": "arrayLiteral",
+            "elements": [
+              {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "0"
+              },
+              {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "1"
+              },
+              {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "0x7f"
+              },
+              {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "0x80"
+              },
+              {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "0xff"
+              },
+              {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "0x7fff"
+              },
+              {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "0x8000"
+              },
+              {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "0xffff"
+              },
+              {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "0x7fffffff"
+              },
+              {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "0x80000000"
+              },
+              {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "0xffffffff"
+              },
+              {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "0x7fffffffffffffff"
+              },
+              {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "0x8000000000000000"
+              },
+              {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "0xffffffffffffffff"
+              }
+            ],
+            "source": "[\n    0,\n    1,\n    0x7f, 0x80, 0xff,\n    0x7fff, 0x8000, 0xffff,\n    0x7fffffff, 0x80000000, 0xffffffff,\n    0x7fffffffffffffff, 0x8000000000000000, 0xffffffffffffffff\n]"
+          }
+        }
+      ],
+      "select": [
+        {
+          "kind": "alias",
+          "expr": {
+            "kind": "functionCall",
+            "name": "arrayJoin",
+            "args": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "values"
+                ]
+              }
+            ]
+          },
+          "alias": "id"
+        }
+      ]
+    }
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -13,7 +166,7 @@
       }
     ],
     "from": {
-      "kind": "tableFunction",
+      "kind": "tableFunctionRef",
       "name": "remote",
       "args": [
         {
@@ -117,6 +270,10 @@
         },
         "direction": "ASC"
       }
+    ],
+    "leadingComments": [
+      "-- { echoOn }",
+      "-- Int8, Int8"
     ]
   },
   {
@@ -133,7 +290,7 @@
       }
     ],
     "from": {
-      "kind": "tableFunction",
+      "kind": "tableFunctionRef",
       "name": "remote",
       "args": [
         {
@@ -237,6 +394,9 @@
         },
         "direction": "ASC"
       }
+    ],
+    "leadingComments": [
+      "-- Int8, UInt8"
     ]
   },
   {
@@ -253,7 +413,7 @@
       }
     ],
     "from": {
-      "kind": "tableFunction",
+      "kind": "tableFunctionRef",
       "name": "remote",
       "args": [
         {
@@ -367,6 +527,9 @@
         },
         "direction": "ASC"
       }
+    ],
+    "leadingComments": [
+      "-- UInt8, UInt8"
     ]
   },
   {
@@ -383,7 +546,7 @@
       }
     ],
     "from": {
-      "kind": "tableFunction",
+      "kind": "tableFunctionRef",
       "name": "remote",
       "args": [
         {
@@ -497,6 +660,9 @@
         },
         "direction": "ASC"
       }
+    ],
+    "leadingComments": [
+      "-- UInt8, Int8"
     ]
   },
   {
@@ -513,7 +679,7 @@
       }
     ],
     "from": {
-      "kind": "tableFunction",
+      "kind": "tableFunctionRef",
       "name": "remote",
       "args": [
         {
@@ -617,6 +783,9 @@
         },
         "direction": "ASC"
       }
+    ],
+    "leadingComments": [
+      "-- Int16, Int16"
     ]
   },
   {
@@ -633,7 +802,7 @@
       }
     ],
     "from": {
-      "kind": "tableFunction",
+      "kind": "tableFunctionRef",
       "name": "remote",
       "args": [
         {
@@ -737,6 +906,9 @@
         },
         "direction": "ASC"
       }
+    ],
+    "leadingComments": [
+      "-- Int16, UInt16"
     ]
   },
   {
@@ -753,7 +925,7 @@
       }
     ],
     "from": {
-      "kind": "tableFunction",
+      "kind": "tableFunctionRef",
       "name": "remote",
       "args": [
         {
@@ -867,6 +1039,9 @@
         },
         "direction": "ASC"
       }
+    ],
+    "leadingComments": [
+      "-- UInt16, UInt16"
     ]
   },
   {
@@ -883,7 +1058,7 @@
       }
     ],
     "from": {
-      "kind": "tableFunction",
+      "kind": "tableFunctionRef",
       "name": "remote",
       "args": [
         {
@@ -997,6 +1172,9 @@
         },
         "direction": "ASC"
       }
+    ],
+    "leadingComments": [
+      "-- UInt16, Int16"
     ]
   },
   {
@@ -1013,7 +1191,7 @@
       }
     ],
     "from": {
-      "kind": "tableFunction",
+      "kind": "tableFunctionRef",
       "name": "remote",
       "args": [
         {
@@ -1117,6 +1295,9 @@
         },
         "direction": "ASC"
       }
+    ],
+    "leadingComments": [
+      "-- Int32, Int32"
     ]
   },
   {
@@ -1133,7 +1314,7 @@
       }
     ],
     "from": {
-      "kind": "tableFunction",
+      "kind": "tableFunctionRef",
       "name": "remote",
       "args": [
         {
@@ -1237,6 +1418,9 @@
         },
         "direction": "ASC"
       }
+    ],
+    "leadingComments": [
+      "-- Int32, UInt32"
     ]
   },
   {
@@ -1253,7 +1437,7 @@
       }
     ],
     "from": {
-      "kind": "tableFunction",
+      "kind": "tableFunctionRef",
       "name": "remote",
       "args": [
         {
@@ -1367,6 +1551,9 @@
         },
         "direction": "ASC"
       }
+    ],
+    "leadingComments": [
+      "-- UInt32, UInt32"
     ]
   },
   {
@@ -1383,7 +1570,7 @@
       }
     ],
     "from": {
-      "kind": "tableFunction",
+      "kind": "tableFunctionRef",
       "name": "remote",
       "args": [
         {
@@ -1497,6 +1684,9 @@
         },
         "direction": "ASC"
       }
+    ],
+    "leadingComments": [
+      "-- UInt32, Int32"
     ]
   },
   {
@@ -1513,7 +1703,7 @@
       }
     ],
     "from": {
-      "kind": "tableFunction",
+      "kind": "tableFunctionRef",
       "name": "remote",
       "args": [
         {
@@ -1617,6 +1807,9 @@
         },
         "direction": "ASC"
       }
+    ],
+    "leadingComments": [
+      "-- Int64, Int64"
     ]
   },
   {
@@ -1633,7 +1826,7 @@
       }
     ],
     "from": {
-      "kind": "tableFunction",
+      "kind": "tableFunctionRef",
       "name": "remote",
       "args": [
         {
@@ -1737,6 +1930,9 @@
         },
         "direction": "ASC"
       }
+    ],
+    "leadingComments": [
+      "-- Int64, UInt64"
     ]
   },
   {
@@ -1753,7 +1949,7 @@
       }
     ],
     "from": {
-      "kind": "tableFunction",
+      "kind": "tableFunctionRef",
       "name": "remote",
       "args": [
         {
@@ -1867,6 +2063,9 @@
         },
         "direction": "ASC"
       }
+    ],
+    "leadingComments": [
+      "-- UInt64, UInt64"
     ]
   },
   {
@@ -1883,7 +2082,7 @@
       }
     ],
     "from": {
-      "kind": "tableFunction",
+      "kind": "tableFunctionRef",
       "name": "remote",
       "args": [
         {
@@ -1997,6 +2196,9 @@
         },
         "direction": "ASC"
       }
+    ],
+    "leadingComments": [
+      "-- UInt64, Int64"
     ]
   },
   {
@@ -2016,7 +2218,7 @@
       }
     ],
     "from": {
-      "kind": "tableFunction",
+      "kind": "tableFunctionRef",
       "name": "remote",
       "args": [
         {
@@ -2119,6 +2321,9 @@
         },
         "direction": "ASC"
       }
+    ],
+    "leadingComments": [
+      "-- modulo(Int8)"
     ]
   },
   {
@@ -2138,7 +2343,7 @@
       }
     ],
     "from": {
-      "kind": "tableFunction",
+      "kind": "tableFunctionRef",
       "name": "remote",
       "args": [
         {
@@ -2241,6 +2446,9 @@
         },
         "direction": "ASC"
       }
+    ],
+    "leadingComments": [
+      "-- modulo(UInt8)"
     ]
   },
   {
@@ -2251,7 +2459,7 @@
       }
     ],
     "from": {
-      "kind": "tableFunction",
+      "kind": "tableFunctionRef",
       "name": "remote",
       "args": [
         {
@@ -2280,7 +2488,7 @@
                   }
                 ],
                 "from": {
-                  "kind": "tableFunction",
+                  "kind": "tableFunctionRef",
                   "name": "numbers",
                   "args": [
                     {
@@ -2340,7 +2548,13 @@
           "value": "3"
         }
       ]
-    }
+    },
+    "leadingComments": [
+      "-- { echoOff }",
+      "-- those two had been reported initially by amosbird:",
+      "-- (the problem is that murmurHash3_32() returns different value to toInt64(1) and toUInt64(1))",
+      "---- error for local node"
+    ]
   },
   {
     "kind": "select",
@@ -2350,7 +2564,7 @@
       }
     ],
     "from": {
-      "kind": "tableFunction",
+      "kind": "tableFunctionRef",
       "name": "remote",
       "args": [
         {
@@ -2379,7 +2593,7 @@
                   }
                 ],
                 "from": {
-                  "kind": "tableFunction",
+                  "kind": "tableFunctionRef",
                   "name": "numbers",
                   "args": [
                     {
@@ -2439,6 +2653,9 @@
           "value": "3"
         }
       ]
-    }
+    },
+    "leadingComments": [
+      "---- error for remote node"
+    ]
   }
 ]

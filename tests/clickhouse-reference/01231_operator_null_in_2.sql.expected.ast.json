@@ -1,5 +1,158 @@
 [
   {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "null_in_subquery"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "null_in_subquery"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "dt",
+        "type": {
+          "name": "DateTime"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "idx",
+        "type": {
+          "name": "int"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "i",
+        "type": {
+          "name": "Nullable",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "UInt64"
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree",
+      "args": []
+    },
+    "partitionBy": {
+      "kind": "columnRef",
+      "parts": [
+        "dt"
+      ]
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "idx"
+          ]
+        }
+      }
+    ],
+    "settings": [
+      {
+        "name": "index_granularity",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "8192"
+        }
+      },
+      {
+        "name": "index_granularity_bytes",
+        "value": {
+          "kind": "literal",
+          "type": "String",
+          "value": "10Mi"
+        }
+      }
+    ],
+    "settingsAfterOrderBy": true
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "null_in_subquery"
+      }
+    },
+    "selectQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "binaryExpr",
+          "op": "%",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "number"
+            ]
+          },
+          "right": {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "3"
+          }
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "number"
+          ]
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "number"
+          ]
+        }
+      ],
+      "from": {
+        "kind": "tableRef",
+        "database": "system",
+        "table": "numbers"
+      },
+      "limit": {
+        "count": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "99999"
+        }
+      }
+    }
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "transform_null_in",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -329,7 +482,10 @@
           }
         }
       }
-    }
+    },
+    "leadingComments": [
+      "-- For index column"
+    ]
   },
   {
     "kind": "select",
@@ -529,6 +685,26 @@
         }
       },
       "global": true
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "null_in_subquery"
+      }
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "null_in_subquery"
+      }
     }
   },
   {
@@ -931,6 +1107,137 @@
     }
   },
   {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "null_in_tuple"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "null_in_tuple"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "dt",
+        "type": {
+          "name": "DateTime"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "idx",
+        "type": {
+          "name": "int"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "t",
+        "type": {
+          "name": "Tuple",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "Nullable",
+                "args": [
+                  {
+                    "kind": "type",
+                    "type": {
+                      "name": "UInt64"
+                    }
+                  }
+                ]
+              }
+            },
+            {
+              "kind": "type",
+              "type": {
+                "name": "Nullable",
+                "args": [
+                  {
+                    "kind": "type",
+                    "type": {
+                      "name": "String"
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree",
+      "args": []
+    },
+    "partitionBy": {
+      "kind": "columnRef",
+      "parts": [
+        "dt"
+      ]
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "idx"
+          ]
+        }
+      }
+    ],
+    "settings": [
+      {
+        "name": "index_granularity",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "8192"
+        }
+      },
+      {
+        "name": "index_granularity_bytes",
+        "value": {
+          "kind": "literal",
+          "type": "String",
+          "value": "10Mi"
+        }
+      }
+    ],
+    "settingsAfterOrderBy": true
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "null_in_tuple"
+      }
+    }
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "transform_null_in",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      }
+    ]
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -946,7 +1253,7 @@
                 "x"
               ],
               "body": {
-                "kind": "tuple",
+                "kind": "tupleLiteral",
                 "elements": [
                   {
                     "kind": "functionCall",
@@ -1001,10 +1308,10 @@
           ]
         },
         "right": {
-          "kind": "array",
+          "kind": "arrayLiteral",
           "elements": [
             {
-              "kind": "tuple",
+              "kind": "tupleLiteral",
               "elements": [
                 {
                   "kind": "literal",
@@ -1039,7 +1346,7 @@
       },
       "values": [
         {
-          "kind": "tuple",
+          "kind": "tupleLiteral",
           "elements": [
             {
               "kind": "literal",
@@ -1055,7 +1362,7 @@
           "source": "(1, '1')"
         },
         {
-          "kind": "tuple",
+          "kind": "tupleLiteral",
           "elements": [
             {
               "kind": "literal",
@@ -1089,7 +1396,7 @@
                 "x"
               ],
               "body": {
-                "kind": "tuple",
+                "kind": "tupleLiteral",
                 "elements": [
                   {
                     "kind": "functionCall",
@@ -1144,10 +1451,10 @@
           ]
         },
         "right": {
-          "kind": "array",
+          "kind": "arrayLiteral",
           "elements": [
             {
-              "kind": "tuple",
+              "kind": "tupleLiteral",
               "elements": [
                 {
                   "kind": "literal",
@@ -1163,7 +1470,7 @@
               "source": "(2, NULL)"
             },
             {
-              "kind": "tuple",
+              "kind": "tupleLiteral",
               "elements": [
                 {
                   "kind": "literal",
@@ -1179,7 +1486,7 @@
               "source": "(NULL, '3')"
             },
             {
-              "kind": "tuple",
+              "kind": "tupleLiteral",
               "elements": [
                 {
                   "kind": "literal",
@@ -1214,7 +1521,7 @@
       },
       "values": [
         {
-          "kind": "tuple",
+          "kind": "tupleLiteral",
           "elements": [
             {
               "kind": "literal",
@@ -1230,7 +1537,7 @@
           "source": "(1, '1')"
         },
         {
-          "kind": "tuple",
+          "kind": "tupleLiteral",
           "elements": [
             {
               "kind": "literal",
@@ -1264,7 +1571,7 @@
                 "x"
               ],
               "body": {
-                "kind": "tuple",
+                "kind": "tupleLiteral",
                 "elements": [
                   {
                     "kind": "functionCall",
@@ -1319,10 +1626,10 @@
           ]
         },
         "right": {
-          "kind": "array",
+          "kind": "arrayLiteral",
           "elements": [
             {
-              "kind": "tuple",
+              "kind": "tupleLiteral",
               "elements": [
                 {
                   "kind": "literal",
@@ -1357,7 +1664,7 @@
       },
       "values": [
         {
-          "kind": "tuple",
+          "kind": "tupleLiteral",
           "elements": [
             {
               "kind": "literal",
@@ -1373,7 +1680,7 @@
           "source": "(1, '1')"
         },
         {
-          "kind": "tuple",
+          "kind": "tupleLiteral",
           "elements": [
             {
               "kind": "literal",
@@ -1408,7 +1715,7 @@
                 "x"
               ],
               "body": {
-                "kind": "tuple",
+                "kind": "tupleLiteral",
                 "elements": [
                   {
                     "kind": "functionCall",
@@ -1463,10 +1770,10 @@
           ]
         },
         "right": {
-          "kind": "array",
+          "kind": "arrayLiteral",
           "elements": [
             {
-              "kind": "tuple",
+              "kind": "tupleLiteral",
               "elements": [
                 {
                   "kind": "literal",
@@ -1482,7 +1789,7 @@
               "source": "(2, NULL)"
             },
             {
-              "kind": "tuple",
+              "kind": "tupleLiteral",
               "elements": [
                 {
                   "kind": "literal",
@@ -1498,7 +1805,7 @@
               "source": "(NULL, '3')"
             },
             {
-              "kind": "tuple",
+              "kind": "tupleLiteral",
               "elements": [
                 {
                   "kind": "literal",
@@ -1533,7 +1840,7 @@
       },
       "values": [
         {
-          "kind": "tuple",
+          "kind": "tupleLiteral",
           "elements": [
             {
               "kind": "literal",
@@ -1549,7 +1856,7 @@
           "source": "(1, '1')"
         },
         {
-          "kind": "tuple",
+          "kind": "tupleLiteral",
           "elements": [
             {
               "kind": "literal",
@@ -1584,7 +1891,7 @@
                 "x"
               ],
               "body": {
-                "kind": "tuple",
+                "kind": "tupleLiteral",
                 "elements": [
                   {
                     "kind": "functionCall",
@@ -1639,10 +1946,10 @@
           ]
         },
         "right": {
-          "kind": "array",
+          "kind": "arrayLiteral",
           "elements": [
             {
-              "kind": "tuple",
+              "kind": "tupleLiteral",
               "elements": [
                 {
                   "kind": "literal",
@@ -1658,7 +1965,7 @@
               "source": "(1, '1')"
             },
             {
-              "kind": "tuple",
+              "kind": "tupleLiteral",
               "elements": [
                 {
                   "kind": "literal",
@@ -1693,7 +2000,7 @@
       },
       "values": [
         {
-          "kind": "tuple",
+          "kind": "tupleLiteral",
           "elements": [
             {
               "kind": "literal",
@@ -1709,7 +2016,7 @@
           "source": "(1, '1')"
         },
         {
-          "kind": "tuple",
+          "kind": "tupleLiteral",
           "elements": [
             {
               "kind": "literal",
@@ -1743,7 +2050,7 @@
                 "x"
               ],
               "body": {
-                "kind": "tuple",
+                "kind": "tupleLiteral",
                 "elements": [
                   {
                     "kind": "functionCall",
@@ -1798,10 +2105,10 @@
           ]
         },
         "right": {
-          "kind": "array",
+          "kind": "arrayLiteral",
           "elements": [
             {
-              "kind": "tuple",
+              "kind": "tupleLiteral",
               "elements": [
                 {
                   "kind": "literal",
@@ -1817,7 +2124,7 @@
               "source": "(2, NULL)"
             },
             {
-              "kind": "tuple",
+              "kind": "tupleLiteral",
               "elements": [
                 {
                   "kind": "literal",
@@ -1852,7 +2159,7 @@
       },
       "values": [
         {
-          "kind": "tuple",
+          "kind": "tupleLiteral",
           "elements": [
             {
               "kind": "literal",
@@ -1868,7 +2175,7 @@
           "source": "(1, '1')"
         },
         {
-          "kind": "tuple",
+          "kind": "tupleLiteral",
           "elements": [
             {
               "kind": "literal",
@@ -1902,7 +2209,7 @@
                 "x"
               ],
               "body": {
-                "kind": "tuple",
+                "kind": "tupleLiteral",
                 "elements": [
                   {
                     "kind": "functionCall",
@@ -1957,10 +2264,10 @@
           ]
         },
         "right": {
-          "kind": "array",
+          "kind": "arrayLiteral",
           "elements": [
             {
-              "kind": "tuple",
+              "kind": "tupleLiteral",
               "elements": [
                 {
                   "kind": "literal",
@@ -1976,7 +2283,7 @@
               "source": "(1, '1')"
             },
             {
-              "kind": "tuple",
+              "kind": "tupleLiteral",
               "elements": [
                 {
                   "kind": "literal",
@@ -2011,7 +2318,7 @@
       },
       "values": [
         {
-          "kind": "tuple",
+          "kind": "tupleLiteral",
           "elements": [
             {
               "kind": "literal",
@@ -2027,7 +2334,7 @@
           "source": "(1, '1')"
         },
         {
-          "kind": "tuple",
+          "kind": "tupleLiteral",
           "elements": [
             {
               "kind": "literal",
@@ -2062,7 +2369,7 @@
                 "x"
               ],
               "body": {
-                "kind": "tuple",
+                "kind": "tupleLiteral",
                 "elements": [
                   {
                     "kind": "functionCall",
@@ -2117,10 +2424,10 @@
           ]
         },
         "right": {
-          "kind": "array",
+          "kind": "arrayLiteral",
           "elements": [
             {
-              "kind": "tuple",
+              "kind": "tupleLiteral",
               "elements": [
                 {
                   "kind": "literal",
@@ -2136,7 +2443,7 @@
               "source": "(2, NULL)"
             },
             {
-              "kind": "tuple",
+              "kind": "tupleLiteral",
               "elements": [
                 {
                   "kind": "literal",
@@ -2171,7 +2478,7 @@
       },
       "values": [
         {
-          "kind": "tuple",
+          "kind": "tupleLiteral",
           "elements": [
             {
               "kind": "literal",
@@ -2187,7 +2494,7 @@
           "source": "(1, '1')"
         },
         {
-          "kind": "tuple",
+          "kind": "tupleLiteral",
           "elements": [
             {
               "kind": "literal",
@@ -2222,7 +2529,7 @@
                 "x"
               ],
               "body": {
-                "kind": "tuple",
+                "kind": "tupleLiteral",
                 "elements": [
                   {
                     "kind": "functionCall",
@@ -2277,10 +2584,10 @@
           ]
         },
         "right": {
-          "kind": "array",
+          "kind": "arrayLiteral",
           "elements": [
             {
-              "kind": "tuple",
+              "kind": "tupleLiteral",
               "elements": [
                 {
                   "kind": "literal",
@@ -2315,7 +2622,7 @@
       },
       "values": [
         {
-          "kind": "tuple",
+          "kind": "tupleLiteral",
           "elements": [
             {
               "kind": "literal",
@@ -2331,7 +2638,7 @@
           "source": "(1, '1')"
         },
         {
-          "kind": "tuple",
+          "kind": "tupleLiteral",
           "elements": [
             {
               "kind": "literal",
@@ -2365,7 +2672,7 @@
                 "x"
               ],
               "body": {
-                "kind": "tuple",
+                "kind": "tupleLiteral",
                 "elements": [
                   {
                     "kind": "functionCall",
@@ -2420,10 +2727,10 @@
           ]
         },
         "right": {
-          "kind": "array",
+          "kind": "arrayLiteral",
           "elements": [
             {
-              "kind": "tuple",
+              "kind": "tupleLiteral",
               "elements": [
                 {
                   "kind": "literal",
@@ -2458,7 +2765,7 @@
       },
       "values": [
         {
-          "kind": "tuple",
+          "kind": "tupleLiteral",
           "elements": [
             {
               "kind": "literal",
@@ -2474,7 +2781,7 @@
           "source": "(1, '1')"
         },
         {
-          "kind": "tuple",
+          "kind": "tupleLiteral",
           "elements": [
             {
               "kind": "literal",
@@ -2508,7 +2815,7 @@
                 "x"
               ],
               "body": {
-                "kind": "tuple",
+                "kind": "tupleLiteral",
                 "elements": [
                   {
                     "kind": "functionCall",
@@ -2563,10 +2870,10 @@
           ]
         },
         "right": {
-          "kind": "array",
+          "kind": "arrayLiteral",
           "elements": [
             {
-              "kind": "tuple",
+              "kind": "tupleLiteral",
               "elements": [
                 {
                   "kind": "literal",
@@ -2582,7 +2889,7 @@
               "source": "(1, '1')"
             },
             {
-              "kind": "tuple",
+              "kind": "tupleLiteral",
               "elements": [
                 {
                   "kind": "literal",
@@ -2617,7 +2924,7 @@
       },
       "values": [
         {
-          "kind": "tuple",
+          "kind": "tupleLiteral",
           "elements": [
             {
               "kind": "literal",
@@ -2633,7 +2940,7 @@
           "source": "(1, '1')"
         },
         {
-          "kind": "tuple",
+          "kind": "tupleLiteral",
           "elements": [
             {
               "kind": "literal",
@@ -2649,7 +2956,7 @@
           "source": "(NULL, '1')"
         },
         {
-          "kind": "tuple",
+          "kind": "tupleLiteral",
           "elements": [
             {
               "kind": "literal",
@@ -2683,7 +2990,7 @@
                 "x"
               ],
               "body": {
-                "kind": "tuple",
+                "kind": "tupleLiteral",
                 "elements": [
                   {
                     "kind": "functionCall",
@@ -2738,10 +3045,10 @@
           ]
         },
         "right": {
-          "kind": "array",
+          "kind": "arrayLiteral",
           "elements": [
             {
-              "kind": "tuple",
+              "kind": "tupleLiteral",
               "elements": [
                 {
                   "kind": "literal",
@@ -2757,7 +3064,7 @@
               "source": "(1, '1')"
             },
             {
-              "kind": "tuple",
+              "kind": "tupleLiteral",
               "elements": [
                 {
                   "kind": "literal",
@@ -2792,7 +3099,7 @@
       },
       "values": [
         {
-          "kind": "tuple",
+          "kind": "tupleLiteral",
           "elements": [
             {
               "kind": "literal",
@@ -2808,7 +3115,7 @@
           "source": "(1, '1')"
         },
         {
-          "kind": "tuple",
+          "kind": "tupleLiteral",
           "elements": [
             {
               "kind": "literal",
@@ -2824,7 +3131,7 @@
           "source": "(1, NULL)"
         },
         {
-          "kind": "tuple",
+          "kind": "tupleLiteral",
           "elements": [
             {
               "kind": "literal",
@@ -2858,7 +3165,7 @@
                 "x"
               ],
               "body": {
-                "kind": "tuple",
+                "kind": "tupleLiteral",
                 "elements": [
                   {
                     "kind": "functionCall",
@@ -2913,10 +3220,10 @@
           ]
         },
         "right": {
-          "kind": "array",
+          "kind": "arrayLiteral",
           "elements": [
             {
-              "kind": "tuple",
+              "kind": "tupleLiteral",
               "elements": [
                 {
                   "kind": "literal",
@@ -2932,7 +3239,7 @@
               "source": "(1, '1')"
             },
             {
-              "kind": "tuple",
+              "kind": "tupleLiteral",
               "elements": [
                 {
                   "kind": "literal",
@@ -2948,7 +3255,7 @@
               "source": "(2, NULL)"
             },
             {
-              "kind": "tuple",
+              "kind": "tupleLiteral",
               "elements": [
                 {
                   "kind": "literal",
@@ -2964,7 +3271,7 @@
               "source": "(NULL, '3')"
             },
             {
-              "kind": "tuple",
+              "kind": "tupleLiteral",
               "elements": [
                 {
                   "kind": "literal",
@@ -2999,7 +3306,7 @@
       },
       "values": [
         {
-          "kind": "tuple",
+          "kind": "tupleLiteral",
           "elements": [
             {
               "kind": "literal",
@@ -3015,7 +3322,7 @@
           "source": "(1, '1')"
         },
         {
-          "kind": "tuple",
+          "kind": "tupleLiteral",
           "elements": [
             {
               "kind": "literal",
@@ -3031,7 +3338,7 @@
           "source": "(1, NULL)"
         },
         {
-          "kind": "tuple",
+          "kind": "tupleLiteral",
           "elements": [
             {
               "kind": "literal",
@@ -3047,7 +3354,7 @@
           "source": "(2, NULL)"
         },
         {
-          "kind": "tuple",
+          "kind": "tupleLiteral",
           "elements": [
             {
               "kind": "literal",
@@ -3063,7 +3370,7 @@
           "source": "(NULL, '3')"
         },
         {
-          "kind": "tuple",
+          "kind": "tupleLiteral",
           "elements": [
             {
               "kind": "literal",
@@ -3097,7 +3404,7 @@
                 "x"
               ],
               "body": {
-                "kind": "tuple",
+                "kind": "tupleLiteral",
                 "elements": [
                   {
                     "kind": "functionCall",
@@ -3152,10 +3459,10 @@
           ]
         },
         "right": {
-          "kind": "array",
+          "kind": "arrayLiteral",
           "elements": [
             {
-              "kind": "tuple",
+              "kind": "tupleLiteral",
               "elements": [
                 {
                   "kind": "literal",
@@ -3171,7 +3478,7 @@
               "source": "(2, NULL)"
             },
             {
-              "kind": "tuple",
+              "kind": "tupleLiteral",
               "elements": [
                 {
                   "kind": "literal",
@@ -3187,7 +3494,7 @@
               "source": "(NULL, '3')"
             },
             {
-              "kind": "tuple",
+              "kind": "tupleLiteral",
               "elements": [
                 {
                   "kind": "literal",
@@ -3222,7 +3529,7 @@
       },
       "values": [
         {
-          "kind": "tuple",
+          "kind": "tupleLiteral",
           "elements": [
             {
               "kind": "literal",
@@ -3238,7 +3545,7 @@
           "source": "(1, '1')"
         },
         {
-          "kind": "tuple",
+          "kind": "tupleLiteral",
           "elements": [
             {
               "kind": "literal",
@@ -3272,7 +3579,7 @@
                 "x"
               ],
               "body": {
-                "kind": "tuple",
+                "kind": "tupleLiteral",
                 "elements": [
                   {
                     "kind": "functionCall",
@@ -3327,10 +3634,10 @@
           ]
         },
         "right": {
-          "kind": "array",
+          "kind": "arrayLiteral",
           "elements": [
             {
-              "kind": "tuple",
+              "kind": "tupleLiteral",
               "elements": [
                 {
                   "kind": "literal",
@@ -3346,7 +3653,7 @@
               "source": "(2, NULL)"
             },
             {
-              "kind": "tuple",
+              "kind": "tupleLiteral",
               "elements": [
                 {
                   "kind": "literal",
@@ -3362,7 +3669,7 @@
               "source": "(NULL, '3')"
             },
             {
-              "kind": "tuple",
+              "kind": "tupleLiteral",
               "elements": [
                 {
                   "kind": "literal",
@@ -3397,7 +3704,7 @@
       },
       "values": [
         {
-          "kind": "tuple",
+          "kind": "tupleLiteral",
           "elements": [
             {
               "kind": "literal",
@@ -3413,7 +3720,7 @@
           "source": "(1, '1')"
         },
         {
-          "kind": "tuple",
+          "kind": "tupleLiteral",
           "elements": [
             {
               "kind": "literal",
@@ -3447,7 +3754,7 @@
                 "x"
               ],
               "body": {
-                "kind": "tuple",
+                "kind": "tupleLiteral",
                 "elements": [
                   {
                     "kind": "functionCall",
@@ -3502,10 +3809,10 @@
           ]
         },
         "right": {
-          "kind": "array",
+          "kind": "arrayLiteral",
           "elements": [
             {
-              "kind": "tuple",
+              "kind": "tupleLiteral",
               "elements": [
                 {
                   "kind": "literal",
@@ -3521,7 +3828,7 @@
               "source": "(NULL, '3')"
             },
             {
-              "kind": "tuple",
+              "kind": "tupleLiteral",
               "elements": [
                 {
                   "kind": "literal",
@@ -3556,7 +3863,7 @@
       },
       "values": [
         {
-          "kind": "tuple",
+          "kind": "tupleLiteral",
           "elements": [
             {
               "kind": "literal",
@@ -3572,7 +3879,7 @@
           "source": "(1, '1')"
         },
         {
-          "kind": "tuple",
+          "kind": "tupleLiteral",
           "elements": [
             {
               "kind": "literal",
@@ -3588,7 +3895,7 @@
           "source": "(NULL, '1')"
         },
         {
-          "kind": "tuple",
+          "kind": "tupleLiteral",
           "elements": [
             {
               "kind": "literal",
@@ -3622,7 +3929,7 @@
                 "x"
               ],
               "body": {
-                "kind": "tuple",
+                "kind": "tupleLiteral",
                 "elements": [
                   {
                     "kind": "functionCall",
@@ -3677,10 +3984,10 @@
           ]
         },
         "right": {
-          "kind": "array",
+          "kind": "arrayLiteral",
           "elements": [
             {
-              "kind": "tuple",
+              "kind": "tupleLiteral",
               "elements": [
                 {
                   "kind": "literal",
@@ -3696,7 +4003,7 @@
               "source": "(2, NULL)"
             },
             {
-              "kind": "tuple",
+              "kind": "tupleLiteral",
               "elements": [
                 {
                   "kind": "literal",
@@ -3731,7 +4038,7 @@
       },
       "values": [
         {
-          "kind": "tuple",
+          "kind": "tupleLiteral",
           "elements": [
             {
               "kind": "literal",
@@ -3747,7 +4054,7 @@
           "source": "(1, '1')"
         },
         {
-          "kind": "tuple",
+          "kind": "tupleLiteral",
           "elements": [
             {
               "kind": "literal",
@@ -3763,7 +4070,7 @@
           "source": "(1, NULL)"
         },
         {
-          "kind": "tuple",
+          "kind": "tupleLiteral",
           "elements": [
             {
               "kind": "literal",
@@ -3797,7 +4104,7 @@
                 "x"
               ],
               "body": {
-                "kind": "tuple",
+                "kind": "tupleLiteral",
                 "elements": [
                   {
                     "kind": "functionCall",
@@ -3852,7 +4159,7 @@
           ]
         },
         "right": {
-          "kind": "array",
+          "kind": "arrayLiteral",
           "elements": [],
           "source": "[]"
         }
@@ -3873,7 +4180,7 @@
       },
       "values": [
         {
-          "kind": "tuple",
+          "kind": "tupleLiteral",
           "elements": [
             {
               "kind": "literal",
@@ -3889,7 +4196,7 @@
           "source": "(1, '1')"
         },
         {
-          "kind": "tuple",
+          "kind": "tupleLiteral",
           "elements": [
             {
               "kind": "literal",
@@ -3905,7 +4212,7 @@
           "source": "(1, NULL)"
         },
         {
-          "kind": "tuple",
+          "kind": "tupleLiteral",
           "elements": [
             {
               "kind": "literal",
@@ -3921,7 +4228,7 @@
           "source": "(2, NULL)"
         },
         {
-          "kind": "tuple",
+          "kind": "tupleLiteral",
           "elements": [
             {
               "kind": "literal",
@@ -3937,7 +4244,7 @@
           "source": "(NULL, '3')"
         },
         {
-          "kind": "tuple",
+          "kind": "tupleLiteral",
           "elements": [
             {
               "kind": "literal",

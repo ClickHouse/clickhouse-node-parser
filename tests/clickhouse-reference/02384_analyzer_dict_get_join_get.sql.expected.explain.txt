@@ -1,3 +1,43 @@
+Set
+
+DropQuery  test_table (children 1)
+ Identifier test_table
+
+CreateQuery test_table (children 3)
+ Identifier test_table
+ Columns definition (children 1)
+  ExpressionList (children 2)
+   ColumnDeclaration id (children 1)
+    DataType UInt64
+   ColumnDeclaration value (children 1)
+    DataType String
+ Storage definition (children 1)
+  Function TinyLog
+
+InsertQuery   (children 1)
+ Identifier test_table
+
+DropQuery  test_dictionary (children 1)
+ Identifier test_dictionary
+
+CreateQuery test_dictionary (children 3)
+ Identifier test_dictionary
+ ExpressionList (children 2)
+  DictionaryAttributeDeclaration id (children 1)
+   DataType UInt64
+  DictionaryAttributeDeclaration value (children 1)
+   DataType String
+ Dictionary definition (children 4)
+  ExpressionList (children 1)
+   Identifier id
+  FunctionWithKeyValueArguments  clickhouse (children 1)
+   ExpressionList (children 1)
+    pair (children 1)
+     Literal 'test_table'
+  Dictionary lifetime
+  Dictionary layout (children 1)
+   ExpressionList
+
 SelectWithUnionQuery (children 1)
  ExpressionList (children 1)
   SelectQuery (children 2)
@@ -36,6 +76,61 @@ SelectWithUnionQuery (children 1)
  ExpressionList (children 1)
   SelectQuery (children 2)
    ExpressionList (children 1)
+    Literal 'test_dictionary' (alias dictionary)
+   ExpressionList (children 1)
+    Function dictGet (children 1)
+     ExpressionList (children 3)
+      Identifier dictionary
+      Literal 'value'
+      Function toUInt64 (children 1)
+       ExpressionList (children 1)
+        Literal UInt64_0
+
+SelectWithUnionQuery (children 1)
+ ExpressionList (children 1)
+  SelectQuery (children 2)
+   ExpressionList (children 1)
+    Literal 'invalid_dictionary' (alias dictionary)
+   ExpressionList (children 1)
+    Function dictGet (children 1)
+     ExpressionList (children 3)
+      Identifier dictionary
+      Literal 'value'
+      Function toUInt64 (children 1)
+       ExpressionList (children 1)
+        Literal UInt64_0
+
+DropQuery  test_dictionary (children 1)
+ Identifier test_dictionary
+
+DropQuery  test_table (children 1)
+ Identifier test_table
+
+DropQuery  test_table_join (children 1)
+ Identifier test_table_join
+
+CreateQuery test_table_join (children 3)
+ Identifier test_table_join
+ Columns definition (children 1)
+  ExpressionList (children 2)
+   ColumnDeclaration id (children 1)
+    DataType UInt64
+   ColumnDeclaration value (children 1)
+    DataType String
+ Storage definition (children 1)
+  Function Join (children 1)
+   ExpressionList (children 3)
+    Identifier Any
+    Identifier Left
+    Identifier id
+
+InsertQuery   (children 1)
+ Identifier test_table_join
+
+SelectWithUnionQuery (children 1)
+ ExpressionList (children 1)
+  SelectQuery (children 2)
+   ExpressionList (children 1)
     Asterisk
    TablesInSelectQuery (children 1)
     TablesInSelectQueryElement (children 1)
@@ -65,3 +160,34 @@ SelectWithUnionQuery (children 1)
       Function toUInt64 (children 1)
        ExpressionList (children 1)
         Literal UInt64_0
+
+SelectWithUnionQuery (children 1)
+ ExpressionList (children 1)
+  SelectQuery (children 2)
+   ExpressionList (children 1)
+    Literal 'test_table_join' (alias join_table)
+   ExpressionList (children 1)
+    Function joinGet (children 1)
+     ExpressionList (children 3)
+      Identifier join_table
+      Literal 'value'
+      Function toUInt64 (children 1)
+       ExpressionList (children 1)
+        Literal UInt64_0
+
+SelectWithUnionQuery (children 1)
+ ExpressionList (children 1)
+  SelectQuery (children 2)
+   ExpressionList (children 1)
+    Literal 'invalid_test_table_join' (alias join_table)
+   ExpressionList (children 1)
+    Function joinGet (children 1)
+     ExpressionList (children 3)
+      Identifier join_table
+      Literal 'value'
+      Function toUInt64 (children 1)
+       ExpressionList (children 1)
+        Literal UInt64_0
+
+DropQuery  test_table_join (children 1)
+ Identifier test_table_join

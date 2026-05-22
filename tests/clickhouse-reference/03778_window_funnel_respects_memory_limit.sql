@@ -1,3 +1,13 @@
+-- Tags: no-random-mergetree-settings, no-random-settings, long, no-tsan, no-asan, no-ubsan, no-msan, no-debug
+
+DROP TABLE IF EXISTS test;
+
+CREATE TABLE test (ts Date, a String, b String, c String, d String) ENGINE= MergeTree() ORDER BY a;
+
+SET max_rows_to_read = 0, max_insert_threads = 4, max_threads = 4;
+
+INSERT INTO test SELECT today() - rand32()%25, toString(rand32()%25), toString(rand32()%25), toString(rand32()%25), toString(rand32()%25) FROM numbers_mt(1e8);
+
 SELECT
     ifNull(fun_res, 0),
     count(*)
@@ -14,3 +24,5 @@ FROM
 GROUP BY fun_res
 FORMAT Null
 SETTINGS log_queries = 1, max_memory_usage = '800Mi'; -- { serverError MEMORY_LIMIT_EXCEEDED }
+
+DROP TABLE test;

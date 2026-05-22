@@ -1,5 +1,125 @@
 [
   {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "data_02771"
+    },
+    "ifExists": true,
+    "leadingComments": [
+      "-- Tags: no-parallel-replicas"
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "data_02771"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "key",
+        "type": {
+          "name": "Int"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "x",
+        "type": {
+          "name": "Int"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "y",
+        "type": {
+          "name": "Int"
+        }
+      },
+      {
+        "kind": "indexDef",
+        "name": "x_idx",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "x"
+          ]
+        },
+        "indexType": {
+          "name": "minmax"
+        },
+        "granularity": 1
+      },
+      {
+        "kind": "indexDef",
+        "name": "y_idx",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "y"
+          ]
+        },
+        "indexType": {
+          "name": "minmax"
+        },
+        "granularity": 1
+      },
+      {
+        "kind": "indexDef",
+        "name": "xy_idx",
+        "expr": {
+          "kind": "functionCall",
+          "name": "tuple",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "x"
+              ]
+            },
+            {
+              "kind": "columnRef",
+              "parts": [
+                "y"
+              ]
+            }
+          ]
+        },
+        "indexType": {
+          "name": "minmax"
+        },
+        "granularity": 1
+      }
+    ],
+    "engine": {
+      "name": "MergeTree",
+      "args": []
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "key"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "data_02771"
+      }
+    }
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -31,6 +151,9 @@
           "value": ""
         }
       }
+    ],
+    "trailingComments": [
+      "-- { serverError CANNOT_PARSE_TEXT }"
     ]
   },
   {
@@ -141,6 +264,9 @@
           "value": "xy_idx"
         }
       }
+    ],
+    "trailingComments": [
+      "-- { serverError INDEX_NOT_USED }"
     ]
   },
   {
@@ -197,6 +323,19 @@
           "kind": "literal",
           "type": "String",
           "value": "xy_idx"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "enable_analyzer",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
         }
       }
     ]
@@ -433,6 +572,27 @@
           ]
         }
       ]
+    }
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "enable_analyzer",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "data_02771"
     }
   }
 ]

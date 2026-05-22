@@ -1,0 +1,142 @@
+CreateQuery test (children 3)
+ Identifier test
+ Columns definition (children 1)
+  ExpressionList (children 1)
+   ColumnDeclaration a (children 1)
+    DataType UInt64
+ Storage definition (children 2)
+  Function MergeTree (children 1)
+   ExpressionList
+  Identifier a
+
+InsertQuery   (children 3)
+ Identifier test
+ ExpressionList (children 1)
+  Identifier a
+ SelectWithUnionQuery (children 1)
+  ExpressionList (children 1)
+   SelectQuery (children 2)
+    ExpressionList (children 1)
+     Literal UInt64_1
+    TablesInSelectQuery (children 1)
+     TablesInSelectQueryElement (children 1)
+      TableExpression (children 1)
+       Function numbers (children 1)
+        ExpressionList (children 1)
+         Literal UInt64_1000
+
+AlterQuery  test (children 2)
+ ExpressionList (children 2)
+  AlterCommand ADD_COLUMN (children 2)
+   ColumnDeclaration b (children 1)
+    DataType Float64
+   Identifier a
+  AlterCommand MODIFY_ORDER_BY (children 1)
+   Function tuple (children 1)
+    ExpressionList (children 2)
+     Identifier a
+     Identifier b
+ Identifier test
+
+AlterQuery  test (children 2)
+ ExpressionList (children 1)
+  AlterCommand MODIFY_COLUMN (children 1)
+   ColumnDeclaration b (children 1)
+    Function modulo (children 1)
+     ExpressionList (children 2)
+      Function rand64 (children 1)
+       ExpressionList
+      Literal UInt64_100000
+ Identifier test
+
+AlterQuery  test (children 2)
+ ExpressionList (children 1)
+  AlterCommand MATERIALIZE_COLUMN (children 1)
+   Identifier b
+ Identifier test
+
+DropQuery  test (children 1)
+ Identifier test
+
+CreateQuery tab (children 3)
+ Identifier tab
+ Columns definition (children 1)
+  ExpressionList (children 2)
+   ColumnDeclaration x (children 1)
+    DataType UInt32
+   ColumnDeclaration y (children 1)
+    DataType UInt32
+ Storage definition (children 2)
+  Function MergeTree
+  Function tuple (children 1)
+   ExpressionList
+
+CreateQuery dict (children 3)
+ Identifier dict
+ ExpressionList (children 2)
+  DictionaryAttributeDeclaration x (children 1)
+   DataType UInt32
+  DictionaryAttributeDeclaration y (children 1)
+   DataType UInt32
+ Dictionary definition (children 4)
+  ExpressionList (children 1)
+   Identifier x
+  FunctionWithKeyValueArguments  clickhouse (children 1)
+   ExpressionList (children 1)
+    pair (children 1)
+     Literal 'tab'
+  Dictionary lifetime
+  Dictionary layout (children 1)
+   ExpressionList
+
+InsertQuery   (children 1)
+ Identifier tab
+
+SYSTEM query (children 2)
+ Identifier dict
+ Identifier dict
+
+CreateQuery tab2 (children 3)
+ Identifier tab2
+ Columns definition (children 1)
+  ExpressionList (children 2)
+   ColumnDeclaration x (children 1)
+    DataType UInt32
+   ColumnDeclaration y (children 2)
+    DataType UInt32
+    Function dictGet (children 1)
+     ExpressionList (children 3)
+      Identifier dict
+      Literal 'y'
+      Identifier x
+ Storage definition (children 2)
+  Function MergeTree
+  Identifier y
+
+InsertQuery   (children 2)
+ Identifier tab2
+ ExpressionList (children 1)
+  Identifier x
+
+TruncateQuery  tab (children 1)
+ Identifier tab
+
+InsertQuery   (children 1)
+ Identifier tab
+
+Set
+
+AlterQuery  tab2 (children 2)
+ ExpressionList (children 1)
+  AlterCommand MATERIALIZE_COLUMN (children 1)
+   Identifier y
+ Identifier tab2
+
+DropQuery  tab2 (children 1)
+ Identifier tab2
+
+DropQuery  dict (children 1)
+ Identifier dict
+
+DropQuery  tab (children 1)
+ Identifier tab

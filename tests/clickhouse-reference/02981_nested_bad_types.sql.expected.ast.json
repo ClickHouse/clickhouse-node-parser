@@ -1,11 +1,37 @@
 [
   {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "allow_suspicious_low_cardinality_types",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "allow_suspicious_fixed_string_types",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      }
+    ]
+  },
+  {
     "kind": "select",
     "select": [
       {
         "kind": "castExpr",
         "expr": {
-          "kind": "array",
+          "kind": "arrayLiteral",
           "elements": [
             {
               "kind": "literal",
@@ -18,6 +44,9 @@
         "type": "Array(LowCardinality(UInt64))",
         "operator": true
       }
+    ],
+    "trailingComments": [
+      "-- {serverError SUSPICIOUS_TYPE_FOR_LOW_CARDINALITY}"
     ]
   },
   {
@@ -26,13 +55,13 @@
       {
         "kind": "castExpr",
         "expr": {
-          "kind": "array",
+          "kind": "arrayLiteral",
           "elements": [
             {
-              "kind": "array",
+              "kind": "arrayLiteral",
               "elements": [
                 {
-                  "kind": "array",
+                  "kind": "arrayLiteral",
                   "elements": [
                     {
                       "kind": "literal",
@@ -51,6 +80,9 @@
         "type": "Array(Array(Array(LowCardinality(UInt64))))",
         "operator": true
       }
+    ],
+    "trailingComments": [
+      "-- {serverError SUSPICIOUS_TYPE_FOR_LOW_CARDINALITY}"
     ]
   },
   {
@@ -77,6 +109,9 @@
         "type": "Map(String, LowCardinality(UInt64))",
         "operator": true
       }
+    ],
+    "trailingComments": [
+      "-- {serverError SUSPICIOUS_TYPE_FOR_LOW_CARDINALITY}"
     ]
   },
   {
@@ -103,7 +138,7 @@
                   "value": "b"
                 },
                 {
-                  "kind": "array",
+                  "kind": "arrayLiteral",
                   "elements": [
                     {
                       "kind": "literal",
@@ -120,6 +155,9 @@
         "type": "Map(String, Map(String, Array(LowCardinality(UInt64))))",
         "operator": true
       }
+    ],
+    "trailingComments": [
+      "-- {serverError SUSPICIOUS_TYPE_FOR_LOW_CARDINALITY}"
     ]
   },
   {
@@ -146,6 +184,9 @@
         "type": "Tuple(String, LowCardinality(UInt64))",
         "operator": true
       }
+    ],
+    "trailingComments": [
+      "-- {serverError SUSPICIOUS_TYPE_FOR_LOW_CARDINALITY}"
     ]
   },
   {
@@ -163,7 +204,7 @@
               "value": "a"
             },
             {
-              "kind": "array",
+              "kind": "arrayLiteral",
               "elements": [
                 {
                   "kind": "functionCall",
@@ -189,6 +230,305 @@
         "type": "Tuple(String, Array(Map(String, LowCardinality(UInt64))))",
         "operator": true
       }
+    ],
+    "trailingComments": [
+      "-- {serverError SUSPICIOUS_TYPE_FOR_LOW_CARDINALITY}"
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "test"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "x",
+        "type": {
+          "name": "Array",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "LowCardinality",
+                "args": [
+                  {
+                    "kind": "type",
+                    "type": {
+                      "name": "UInt64"
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "engine": {
+      "name": "Memory"
+    },
+    "trailingComments": [
+      "-- {serverError SUSPICIOUS_TYPE_FOR_LOW_CARDINALITY}"
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "test"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "x",
+        "type": {
+          "name": "Array",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "Array",
+                "args": [
+                  {
+                    "kind": "type",
+                    "type": {
+                      "name": "LowCardinality",
+                      "args": [
+                        {
+                          "kind": "type",
+                          "type": {
+                            "name": "UInt64"
+                          }
+                        }
+                      ]
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "engine": {
+      "name": "Memory"
+    },
+    "trailingComments": [
+      "-- {serverError SUSPICIOUS_TYPE_FOR_LOW_CARDINALITY}"
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "test"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "x",
+        "type": {
+          "name": "Map",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "String"
+              }
+            },
+            {
+              "kind": "type",
+              "type": {
+                "name": "LowCardinality",
+                "args": [
+                  {
+                    "kind": "type",
+                    "type": {
+                      "name": "UInt64"
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "engine": {
+      "name": "Memory"
+    },
+    "trailingComments": [
+      "-- {serverError SUSPICIOUS_TYPE_FOR_LOW_CARDINALITY}"
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "test"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "x",
+        "type": {
+          "name": "Map",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "String"
+              }
+            },
+            {
+              "kind": "type",
+              "type": {
+                "name": "Map",
+                "args": [
+                  {
+                    "kind": "type",
+                    "type": {
+                      "name": "String"
+                    }
+                  },
+                  {
+                    "kind": "type",
+                    "type": {
+                      "name": "LowCardinality",
+                      "args": [
+                        {
+                          "kind": "type",
+                          "type": {
+                            "name": "UInt64"
+                          }
+                        }
+                      ]
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "engine": {
+      "name": "Memory"
+    },
+    "trailingComments": [
+      "-- {serverError SUSPICIOUS_TYPE_FOR_LOW_CARDINALITY}"
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "test"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "x",
+        "type": {
+          "name": "Tuple",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "String"
+              }
+            },
+            {
+              "kind": "type",
+              "type": {
+                "name": "LowCardinality",
+                "args": [
+                  {
+                    "kind": "type",
+                    "type": {
+                      "name": "UInt64"
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "engine": {
+      "name": "Memory"
+    },
+    "trailingComments": [
+      "-- {serverError SUSPICIOUS_TYPE_FOR_LOW_CARDINALITY}"
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "test"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "x",
+        "type": {
+          "name": "Tuple",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "String"
+              }
+            },
+            {
+              "kind": "type",
+              "type": {
+                "name": "Array",
+                "args": [
+                  {
+                    "kind": "type",
+                    "type": {
+                      "name": "Map",
+                      "args": [
+                        {
+                          "kind": "type",
+                          "type": {
+                            "name": "String"
+                          }
+                        },
+                        {
+                          "kind": "type",
+                          "type": {
+                            "name": "LowCardinality",
+                            "args": [
+                              {
+                                "kind": "type",
+                                "type": {
+                                  "name": "UInt64"
+                                }
+                              }
+                            ]
+                          }
+                        }
+                      ]
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "engine": {
+      "name": "Memory"
+    },
+    "trailingComments": [
+      "-- {serverError SUSPICIOUS_TYPE_FOR_LOW_CARDINALITY}"
     ]
   },
   {
@@ -197,7 +537,7 @@
       {
         "kind": "castExpr",
         "expr": {
-          "kind": "array",
+          "kind": "arrayLiteral",
           "elements": [
             {
               "kind": "literal",
@@ -210,6 +550,9 @@
         "type": "Array(FixedString(1000000))",
         "operator": true
       }
+    ],
+    "trailingComments": [
+      "-- {serverError ILLEGAL_COLUMN}"
     ]
   },
   {
@@ -218,13 +561,13 @@
       {
         "kind": "castExpr",
         "expr": {
-          "kind": "array",
+          "kind": "arrayLiteral",
           "elements": [
             {
-              "kind": "array",
+              "kind": "arrayLiteral",
               "elements": [
                 {
-                  "kind": "array",
+                  "kind": "arrayLiteral",
                   "elements": [
                     {
                       "kind": "literal",
@@ -243,6 +586,9 @@
         "type": "Array(Array(Array(FixedString(1000000))))",
         "operator": true
       }
+    ],
+    "trailingComments": [
+      "-- {serverError ILLEGAL_COLUMN}"
     ]
   },
   {
@@ -269,6 +615,9 @@
         "type": "Map(String, FixedString(1000000))",
         "operator": true
       }
+    ],
+    "trailingComments": [
+      "-- {serverError ILLEGAL_COLUMN}"
     ]
   },
   {
@@ -295,7 +644,7 @@
                   "value": "b"
                 },
                 {
-                  "kind": "array",
+                  "kind": "arrayLiteral",
                   "elements": [
                     {
                       "kind": "literal",
@@ -312,6 +661,9 @@
         "type": "Map(String, Map(String, Array(FixedString(1000000))))",
         "operator": true
       }
+    ],
+    "trailingComments": [
+      "-- {serverError ILLEGAL_COLUMN}"
     ]
   },
   {
@@ -338,6 +690,9 @@
         "type": "Tuple(String, FixedString(1000000))",
         "operator": true
       }
+    ],
+    "trailingComments": [
+      "-- {serverError ILLEGAL_COLUMN}"
     ]
   },
   {
@@ -355,7 +710,7 @@
               "value": "a"
             },
             {
-              "kind": "array",
+              "kind": "arrayLiteral",
               "elements": [
                 {
                   "kind": "functionCall",
@@ -381,6 +736,293 @@
         "type": "Tuple(String, Array(Map(String, FixedString(1000000))))",
         "operator": true
       }
+    ],
+    "trailingComments": [
+      "-- {serverError ILLEGAL_COLUMN}"
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "test"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "x",
+        "type": {
+          "name": "Array",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "FixedString",
+                "args": [
+                  {
+                    "kind": "literal",
+                    "value": "1000000"
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "engine": {
+      "name": "Memory"
+    },
+    "trailingComments": [
+      "-- {serverError ILLEGAL_COLUMN}"
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "test"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "x",
+        "type": {
+          "name": "Array",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "Array",
+                "args": [
+                  {
+                    "kind": "type",
+                    "type": {
+                      "name": "FixedString",
+                      "args": [
+                        {
+                          "kind": "literal",
+                          "value": "1000000"
+                        }
+                      ]
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "engine": {
+      "name": "Memory"
+    },
+    "trailingComments": [
+      "-- {serverError ILLEGAL_COLUMN}"
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "test"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "x",
+        "type": {
+          "name": "Map",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "String"
+              }
+            },
+            {
+              "kind": "type",
+              "type": {
+                "name": "FixedString",
+                "args": [
+                  {
+                    "kind": "literal",
+                    "value": "1000000"
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "engine": {
+      "name": "Memory"
+    },
+    "trailingComments": [
+      "-- {serverError ILLEGAL_COLUMN}"
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "test"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "x",
+        "type": {
+          "name": "Map",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "String"
+              }
+            },
+            {
+              "kind": "type",
+              "type": {
+                "name": "Map",
+                "args": [
+                  {
+                    "kind": "type",
+                    "type": {
+                      "name": "String"
+                    }
+                  },
+                  {
+                    "kind": "type",
+                    "type": {
+                      "name": "FixedString",
+                      "args": [
+                        {
+                          "kind": "literal",
+                          "value": "1000000"
+                        }
+                      ]
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "engine": {
+      "name": "Memory"
+    },
+    "trailingComments": [
+      "-- {serverError ILLEGAL_COLUMN}"
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "test"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "x",
+        "type": {
+          "name": "Tuple",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "String"
+              }
+            },
+            {
+              "kind": "type",
+              "type": {
+                "name": "FixedString",
+                "args": [
+                  {
+                    "kind": "literal",
+                    "value": "1000000"
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "engine": {
+      "name": "Memory"
+    },
+    "trailingComments": [
+      "-- {serverError ILLEGAL_COLUMN}"
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "test"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "x",
+        "type": {
+          "name": "Tuple",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "String"
+              }
+            },
+            {
+              "kind": "type",
+              "type": {
+                "name": "Array",
+                "args": [
+                  {
+                    "kind": "type",
+                    "type": {
+                      "name": "Map",
+                      "args": [
+                        {
+                          "kind": "type",
+                          "type": {
+                            "name": "String"
+                          }
+                        },
+                        {
+                          "kind": "type",
+                          "type": {
+                            "name": "FixedString",
+                            "args": [
+                              {
+                                "kind": "literal",
+                                "value": "1000000"
+                              }
+                            ]
+                          }
+                        }
+                      ]
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "engine": {
+      "name": "Memory"
+    },
+    "trailingComments": [
+      "-- {serverError ILLEGAL_COLUMN}"
     ]
   },
   {
@@ -406,6 +1048,9 @@
           "value": "1"
         }
       }
+    ],
+    "trailingComments": [
+      "-- {serverError SUSPICIOUS_TYPE_FOR_LOW_CARDINALITY}"
     ]
   },
   {
@@ -423,7 +1068,7 @@
               "value": "a"
             },
             {
-              "kind": "array",
+              "kind": "arrayLiteral",
               "elements": [
                 {
                   "kind": "functionCall",
@@ -449,6 +1094,133 @@
         "type": "Tuple(String, Array(Map(String, Variant(LowCardinality(UInt64), String))))",
         "operator": true
       }
+    ],
+    "trailingComments": [
+      "-- {serverError SUSPICIOUS_TYPE_FOR_LOW_CARDINALITY}"
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "test"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "x",
+        "type": {
+          "name": "Variant",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "LowCardinality",
+                "args": [
+                  {
+                    "kind": "type",
+                    "type": {
+                      "name": "UInt64"
+                    }
+                  }
+                ]
+              }
+            },
+            {
+              "kind": "type",
+              "type": {
+                "name": "String"
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "engine": {
+      "name": "Memory"
+    },
+    "trailingComments": [
+      "-- {serverError SUSPICIOUS_TYPE_FOR_LOW_CARDINALITY}"
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "test"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "x",
+        "type": {
+          "name": "Tuple",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "String"
+              }
+            },
+            {
+              "kind": "type",
+              "type": {
+                "name": "Array",
+                "args": [
+                  {
+                    "kind": "type",
+                    "type": {
+                      "name": "Map",
+                      "args": [
+                        {
+                          "kind": "type",
+                          "type": {
+                            "name": "String"
+                          }
+                        },
+                        {
+                          "kind": "type",
+                          "type": {
+                            "name": "Variant",
+                            "args": [
+                              {
+                                "kind": "type",
+                                "type": {
+                                  "name": "LowCardinality",
+                                  "args": [
+                                    {
+                                      "kind": "type",
+                                      "type": {
+                                        "name": "UInt64"
+                                      }
+                                    }
+                                  ]
+                                }
+                              },
+                              {
+                                "kind": "type",
+                                "type": {
+                                  "name": "String"
+                                }
+                              }
+                            ]
+                          }
+                        }
+                      ]
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "engine": {
+      "name": "Memory"
+    },
+    "trailingComments": [
+      "-- {serverError SUSPICIOUS_TYPE_FOR_LOW_CARDINALITY}"
     ]
   },
   {
@@ -464,6 +1236,9 @@
         "type": "Variant(UInt64, FixedString(1000000))",
         "operator": true
       }
+    ],
+    "trailingComments": [
+      "-- {serverError ILLEGAL_COLUMN}"
     ]
   },
   {
@@ -481,7 +1256,7 @@
               "value": "a"
             },
             {
-              "kind": "array",
+              "kind": "arrayLiteral",
               "elements": [
                 {
                   "kind": "functionCall",
@@ -507,6 +1282,51 @@
         "type": "Tuple(String, Array(Map(String, Variant(UInt32, FixedString(1000000)))))",
         "operator": true
       }
+    ],
+    "trailingComments": [
+      "-- {serverError ILLEGAL_COLUMN}"
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "test"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "x",
+        "type": {
+          "name": "Variant",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "UInt64"
+              }
+            },
+            {
+              "kind": "type",
+              "type": {
+                "name": "FixedString",
+                "args": [
+                  {
+                    "kind": "literal",
+                    "value": "1000000"
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "engine": {
+      "name": "Memory"
+    },
+    "trailingComments": [
+      "-- {serverError ILLEGAL_COLUMN}"
     ]
   }
 ]

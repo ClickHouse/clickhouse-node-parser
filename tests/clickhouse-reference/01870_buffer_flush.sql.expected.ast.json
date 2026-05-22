@@ -1,5 +1,145 @@
 [
   {
+    "kind": "drop",
+    "targetType": "DATABASE",
+    "table": {
+      "kind": "tableRef",
+      "table": "db_01870"
+    },
+    "ifExists": true,
+    "leadingComments": [
+      "-- Tags: no-parallel",
+      "-- Check that Buffer will be flushed before shutdown",
+      "-- (via DETACH DATABASE)"
+    ]
+  },
+  {
+    "kind": "createDatabase",
+    "name": "db_01870"
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "database": "db_01870",
+      "table": "a_data_01870"
+    },
+    "asTable": {
+      "kind": "tableRef",
+      "database": "system",
+      "table": "numbers"
+    },
+    "engine": {
+      "name": "TinyLog",
+      "args": []
+    },
+    "leadingComments": [
+      "-- Right now the order for shutdown is defined and it is:",
+      "-- (prefixes are important, to define the order)",
+      "-- - a_data_01870",
+      "-- - z_buffer_01870",
+      "-- so on DETACH DATABASE the following error will be printed:",
+      "--",
+      "--     Destination table default.a_data_01870 doesn't exist. Block of data is discarded."
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "database": "db_01870",
+      "table": "z_buffer_01870"
+    },
+    "asTable": {
+      "kind": "tableRef",
+      "database": "system",
+      "table": "numbers"
+    },
+    "engine": {
+      "name": "Buffer",
+      "args": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "db_01870"
+          ]
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "a_data_01870"
+          ]
+        },
+        {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        },
+        {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "100"
+        },
+        {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "100"
+        },
+        {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "100"
+        },
+        {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "100"
+        },
+        {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "100"
+        },
+        {
+          "kind": "literal",
+          "type": "Float64",
+          "value": "1e6"
+        }
+      ]
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "database": "db_01870",
+        "table": "z_buffer_01870"
+      }
+    },
+    "selectQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "asterisk"
+        }
+      ],
+      "from": {
+        "kind": "tableRef",
+        "database": "system",
+        "table": "numbers"
+      },
+      "limit": {
+        "count": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "5"
+        }
+      }
+    }
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -12,6 +152,24 @@
       "kind": "tableRef",
       "database": "db_01870",
       "table": "a_data_01870"
+    }
+  },
+  {
+    "kind": "detach",
+    "targetType": "DATABASE",
+    "database": "db_01870"
+  },
+  {
+    "kind": "attach",
+    "targetType": "DATABASE",
+    "database": "db_01870"
+  },
+  {
+    "kind": "drop",
+    "targetType": "DATABASE",
+    "table": {
+      "kind": "tableRef",
+      "table": "db_01870"
     }
   }
 ]

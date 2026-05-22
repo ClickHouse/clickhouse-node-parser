@@ -1,5 +1,54 @@
 [
   {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "enable_analyzer",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ],
+    "leadingComments": [
+      "-- https://github.com/ClickHouse/ClickHouse/issues/14739"
+    ]
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "test_subquery"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "test_subquery"
+    },
+    "engine": {
+      "name": "Memory"
+    },
+    "asQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "alias",
+          "expr": {
+            "kind": "literal",
+            "type": "String",
+            "value": "base"
+          },
+          "alias": "my_field"
+        }
+      ]
+    }
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -32,7 +81,10 @@
           "table": "test_subquery"
         }
       }
-    }
+    },
+    "leadingComments": [
+      "-- query 1"
+    ]
   },
   {
     "kind": "select",
@@ -67,7 +119,10 @@
           "table": "test_subquery"
         }
       }
-    }
+    },
+    "leadingComments": [
+      "-- query 2"
+    ]
   },
   {
     "kind": "select",
@@ -113,6 +168,9 @@
           }
         }
       }
-    }
+    },
+    "leadingComments": [
+      "-- query 3"
+    ]
   }
 ]

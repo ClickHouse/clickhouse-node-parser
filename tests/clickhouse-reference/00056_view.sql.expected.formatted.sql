@@ -1,3 +1,14 @@
+-- Tags: stateful
+DROP TABLE IF EXISTS view;
+
+CREATE VIEW view
+AS
+SELECT
+    CounterID,
+    count() AS c
+FROM test.hits
+GROUP BY CounterID;
+
 SELECT count()
 FROM view;
 
@@ -18,3 +29,5 @@ SELECT *
 FROM view SAMPLE 0.1
 ORDER BY c DESC
 LIMIT 10;
+
+DROP TABLE view;

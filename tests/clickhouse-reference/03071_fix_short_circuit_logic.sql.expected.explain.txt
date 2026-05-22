@@ -1,3 +1,141 @@
+CreateFunctionQuery unhexPrefixed (children 2)
+ Identifier unhexPrefixed
+ Function lambda (children 1)
+  ExpressionList (children 2)
+   Function tuple (children 1)
+    ExpressionList (children 1)
+     Identifier value
+   Function unhex (children 1)
+    ExpressionList (children 1)
+     Function substring (children 1)
+      ExpressionList (children 2)
+       Identifier value
+       Literal UInt64_3
+
+CreateFunctionQuery hex2bytes (children 2)
+ Identifier hex2bytes
+ Function lambda (children 1)
+  ExpressionList (children 2)
+   Function tuple (children 1)
+    ExpressionList (children 1)
+     Identifier address
+   Function CAST (children 1)
+    ExpressionList (children 2)
+     Function unhexPrefixed (children 1)
+      ExpressionList (children 1)
+       Identifier address
+     Literal 'FixedString(20)'
+
+CreateFunctionQuery bytes2hex (children 2)
+ Identifier bytes2hex
+ Function lambda (children 1)
+  ExpressionList (children 2)
+   Function tuple (children 1)
+    ExpressionList (children 1)
+     Identifier address
+   Function concat (children 1)
+    ExpressionList (children 2)
+     Literal '0x'
+     Function lower (children 1)
+      ExpressionList (children 1)
+       Function hex (children 1)
+        ExpressionList (children 1)
+         Identifier address
+
+CreateQuery test (children 3)
+ Identifier test
+ Columns definition (children 1)
+  ExpressionList (children 5)
+   ColumnDeclaration transfer_id (children 1)
+    DataType String
+   ColumnDeclaration address (children 1)
+    DataType FixedString (children 1)
+     ExpressionList (children 1)
+      Literal UInt64_20
+   ColumnDeclaration value (children 1)
+    DataType UInt256
+   ColumnDeclaration block_timestamp (children 1)
+    DataType DateTime (children 1)
+     ExpressionList (children 1)
+      Literal 'UTC'
+   ColumnDeclaration token_address (children 1)
+    DataType FixedString (children 1)
+     ExpressionList (children 1)
+      Literal UInt64_20
+ Storage definition (children 4)
+  Function MergeTree
+  Function toYYYYMM (children 1)
+   ExpressionList (children 1)
+    Identifier block_timestamp
+  Function tuple (children 1)
+   ExpressionList (children 2)
+    Identifier address
+    Identifier block_timestamp
+  Function tuple (children 1)
+   ExpressionList (children 2)
+    Identifier address
+    Identifier block_timestamp
+
+InsertQuery   (children 2)
+ Identifier test
+ SelectWithUnionQuery (children 1)
+  ExpressionList (children 1)
+   SelectQuery (children 1)
+    ExpressionList (children 5)
+     Literal 'token-transfer-0x758f1bbabb160683e1c80ed52dcd24a32b599d40edf1cec91b5f1199c0e392a2-56'
+     Function hex2bytes (children 1)
+      ExpressionList (children 1)
+       Literal '0xd387a6e4e84a6c86bd90c158c6028a58cc8ac459'
+     Literal Float64_3e21
+     Literal '2024-01-02 16:54:59'
+     Literal 'abc'
+
+CreateQuery token_data (children 3)
+ Identifier token_data
+ Columns definition (children 1)
+  ExpressionList (children 3)
+   ColumnDeclaration token_address_hex (children 1)
+    DataType String
+   ColumnDeclaration chain (children 1)
+    DataType String
+   ColumnDeclaration is_blacklisted (children 1)
+    DataType Bool
+ Storage definition (children 1)
+  Function TinyLog
+
+InsertQuery   (children 2)
+ Identifier token_data
+ SelectWithUnionQuery (children 1)
+  ExpressionList (children 1)
+   SelectQuery (children 1)
+    ExpressionList (children 3)
+     Function bytes2hex (children 1)
+      ExpressionList (children 1)
+       Literal 'abc'
+     Literal 'zksync'
+     Literal Bool_0
+
+CreateQuery token_data_map (children 3)
+ Identifier token_data_map
+ ExpressionList (children 3)
+  DictionaryAttributeDeclaration token_address_hex (children 1)
+   DataType String
+  DictionaryAttributeDeclaration chain (children 1)
+   DataType String
+  DictionaryAttributeDeclaration is_blacklisted (children 1)
+   DataType Bool
+ Dictionary definition (children 4)
+  ExpressionList (children 2)
+   Identifier token_address_hex
+   Identifier chain
+  FunctionWithKeyValueArguments  clickhouse (children 1)
+   ExpressionList (children 1)
+    pair (children 1)
+     Identifier token_data
+  Dictionary lifetime
+  Dictionary layout (children 1)
+   ExpressionList
+
 SelectWithUnionQuery (children 1)
  ExpressionList (children 1)
   SelectQuery (children 3)

@@ -1,14 +1,21 @@
+-- { echoOn }
+
+SET allow_experimental_nullable_tuple_type = 1;
+
 -- Value of type Nullable(Tuple(...))
 SELECT
     CAST(tuple(1, 'a') AS Nullable(Tuple(Int32, String))) AS t,
     toTypeName(t),
     isNull(t);
+
 -- tuple() taking Nullable(Tuple(...)) as an argument
 SELECT
     tuple(
         CAST((1, 'a') AS Nullable(Tuple(Int32, String)))
     ) AS outer_t,
     toTypeName(outer_t);
+
+
 -- Both sides non-null Nullable(Tuple)
 SELECT
     tupleConcat(
@@ -17,6 +24,7 @@ SELECT
     ) AS res,
     toTypeName(res),
     isNull(res);
+
 -- Left side NULL
 SELECT
     tupleConcat(
@@ -25,6 +33,7 @@ SELECT
     ) AS res_null,
     toTypeName(res_null),
     isNull(res_null);
+
 -- Both sides non-null
 SELECT
     tupleDivide(
@@ -33,6 +42,7 @@ SELECT
     ) AS res,
     toTypeName(res),
     isNull(res);
+
 -- Left side NULL
 SELECT
     tupleDivide(
@@ -41,6 +51,8 @@ SELECT
     ) AS res_null,
     toTypeName(res_null),
     isNull(res_null);
+
+
 -- Non-null Nullable(Tuple), non-null number
 SELECT
     tupleDivideByNumber(
@@ -49,6 +61,7 @@ SELECT
     ) AS res,
     toTypeName(res),
     isNull(res);
+
 -- NULL tuple
 SELECT
     tupleDivideByNumber(
@@ -57,6 +70,7 @@ SELECT
     ) AS res_null,
     toTypeName(res_null),
     isNull(res_null);
+
 -- Index access on non-null Nullable(Tuple)
 SELECT
     tupleElement(
@@ -65,6 +79,7 @@ SELECT
     ) AS v,
     toTypeName(v),
     isNull(v);
+
 -- Index access on NULL tuple
 SELECT
     tupleElement(
@@ -73,6 +88,7 @@ SELECT
     ) AS v_null,
     toTypeName(v_null),
     isNull(v_null);
+
 -- Name access on Nullable(named Tuple)
 SELECT
     tupleElement(
@@ -84,6 +100,7 @@ SELECT
     ) AS v_name,
     toTypeName(v_name),
     isNull(v_name);
+
 SELECT
     t.2 AS v,
     toTypeName(v),
@@ -92,6 +109,7 @@ FROM
 (
     SELECT CAST((1, 'a') AS Nullable(Tuple(Int32, String))) AS t
 );
+
 -- Both non-null
 SELECT
     tupleHammingDistance(
@@ -100,6 +118,7 @@ SELECT
     ) AS d,
     toTypeName(d),
     isNull(d);
+
 -- One side NULL
 SELECT
     tupleHammingDistance(
@@ -108,6 +127,7 @@ SELECT
     ) AS d_null,
     toTypeName(d_null),
     isNull(d_null);
+
 -- Non-null
 SELECT
     tupleIntDiv(
@@ -116,6 +136,7 @@ SELECT
     ) AS res,
     toTypeName(res),
     isNull(res);
+
 -- Left side NULL
 SELECT
     tupleIntDiv(
@@ -124,6 +145,7 @@ SELECT
     ) AS res_null,
     toTypeName(res_null),
     isNull(res_null);
+
 -- Non-null
 SELECT
     tupleIntDivByNumber(
@@ -132,6 +154,7 @@ SELECT
     ) AS res,
     toTypeName(res),
     isNull(res);
+
 -- NULL tuple
 SELECT
     tupleIntDivByNumber(
@@ -140,6 +163,7 @@ SELECT
     ) AS res_null,
     toTypeName(res_null),
     isNull(res_null);
+
 -- Non-null tuples, some zero divisors
 SELECT
     tupleIntDivOrZero(
@@ -148,6 +172,7 @@ SELECT
     ) AS res,
     toTypeName(res),
     isNull(res);
+
 -- NULL numerator tuple
 SELECT
     tupleIntDivOrZero(
@@ -156,6 +181,7 @@ SELECT
     ) AS res_null,
     toTypeName(res_null),
     isNull(res_null);
+
 -- Non-null tuple, non-zero divisor
 SELECT
     tupleIntDivOrZeroByNumber(
@@ -164,6 +190,7 @@ SELECT
     ) AS res,
     toTypeName(res),
     isNull(res);
+
 -- Non-null tuple, zero divisor
 SELECT
     tupleIntDivOrZeroByNumber(
@@ -172,6 +199,7 @@ SELECT
     ) AS res_zero,
     toTypeName(res_zero),
     isNull(res_zero);
+
 -- NULL tuple
 SELECT
     tupleIntDivOrZeroByNumber(
@@ -180,6 +208,7 @@ SELECT
     ) AS res_null,
     toTypeName(res_null),
     isNull(res_null);
+
 -- Both non-null
 SELECT
     tupleMinus(
@@ -188,6 +217,7 @@ SELECT
     ) AS diff,
     toTypeName(diff),
     isNull(diff);
+
 -- One side NULL
 SELECT
     tupleMinus(
@@ -196,6 +226,7 @@ SELECT
     ) AS diff_null,
     toTypeName(diff_null),
     isNull(diff_null);
+
 -- Both non-null
 SELECT
     tupleModulo(
@@ -204,6 +235,7 @@ SELECT
     ) AS res,
     toTypeName(res),
     isNull(res);
+
 -- One side NULL
 SELECT
     tupleModulo(
@@ -212,6 +244,7 @@ SELECT
     ) AS res_null,
     toTypeName(res_null),
     isNull(res_null);
+
 -- Non-null
 SELECT
     tupleModuloByNumber(
@@ -220,6 +253,7 @@ SELECT
     ) AS res,
     toTypeName(res),
     isNull(res);
+
 -- NULL tuple
 SELECT
     tupleModuloByNumber(
@@ -228,6 +262,8 @@ SELECT
     ) AS res_null,
     toTypeName(res_null),
     isNull(res_null);
+
+
 -- Non-null
 SELECT
     tupleMultiply(
@@ -236,6 +272,7 @@ SELECT
     ) AS prod,
     toTypeName(prod),
     isNull(prod);
+
 -- One side NULL
 SELECT
     tupleMultiply(
@@ -244,6 +281,8 @@ SELECT
     ) AS prod_null,
     toTypeName(prod_null),
     isNull(prod_null);
+
+
 -- Non-null
 SELECT
     tupleMultiplyByNumber(
@@ -252,6 +291,7 @@ SELECT
     ) AS prod,
     toTypeName(prod),
     isNull(prod);
+
 -- NULL tuple
 SELECT
     tupleMultiplyByNumber(
@@ -260,6 +300,8 @@ SELECT
     ) AS prod_null,
     toTypeName(prod_null),
     isNull(prod_null);
+
+
 -- Non-null
 SELECT
     tupleNegate(
@@ -267,6 +309,7 @@ SELECT
     ) AS res,
     toTypeName(res),
     isNull(res);
+
 -- NULL tuple
 SELECT
     tupleNegate(
@@ -274,6 +317,8 @@ SELECT
     ) AS res_null,
     toTypeName(res_null),
     isNull(res_null);
+
+
 -- Both non-null
 SELECT
     tuplePlus(
@@ -282,6 +327,7 @@ SELECT
     ) AS sum_nn,
     toTypeName(sum_nn),
     isNull(sum_nn);
+
 -- One side NULL
 SELECT
     tuplePlus(

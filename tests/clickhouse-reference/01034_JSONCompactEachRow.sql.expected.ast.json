@@ -1,5 +1,36 @@
 [
   {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "test_table"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "test_table_2"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "input_format_null_as_default",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      }
+    ]
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -8,6 +39,56 @@
         "value": "1"
       }
     ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "test_table"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "value",
+        "type": {
+          "name": "UInt8"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "name",
+        "type": {
+          "name": "String"
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree",
+      "args": []
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "value"
+          ]
+        }
+      }
+    ],
+    "leadingComments": [
+      "/* Check JSONCompactEachRow Output */"
+    ]
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "test_table"
+      }
+    }
   },
   {
     "kind": "select",
@@ -79,7 +160,10 @@
         "direction": "ASC"
       }
     ],
-    "format": "JSONCompactEachRow"
+    "format": "JSONCompactEachRow",
+    "leadingComments": [
+      "/* Check Totals */"
+    ]
   },
   {
     "kind": "select",
@@ -102,7 +186,10 @@
       "kind": "tableRef",
       "table": "test_table"
     },
-    "format": "JSONCompactEachRowWithNamesAndTypes"
+    "format": "JSONCompactEachRowWithNamesAndTypes",
+    "leadingComments": [
+      "/* Check JSONCompactEachRowWithNames and JSONCompactEachRowWithNamesAndTypes Output */"
+    ]
   },
   {
     "kind": "select",
@@ -184,7 +271,10 @@
         "direction": "ASC"
       }
     ],
-    "format": "JSONCompactEachRowWithNamesAndTypes"
+    "format": "JSONCompactEachRowWithNamesAndTypes",
+    "leadingComments": [
+      "/* Check Totals */"
+    ]
   },
   {
     "kind": "select",
@@ -197,6 +287,97 @@
     ]
   },
   {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "test_table"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "v1",
+        "type": {
+          "name": "String"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "v2",
+        "type": {
+          "name": "UInt8"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "v3",
+        "defaultKind": "DEFAULT",
+        "defaultExpr": {
+          "kind": "binaryExpr",
+          "op": "*",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "v2"
+            ]
+          },
+          "right": {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "16"
+          }
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "v4",
+        "type": {
+          "name": "UInt8"
+        },
+        "defaultKind": "DEFAULT",
+        "defaultExpr": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "8"
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree",
+      "args": []
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "v2"
+          ]
+        }
+      }
+    ],
+    "leadingComments": [
+      "/* Check JSONCompactEachRow Input */"
+    ]
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "test_table"
+      }
+    }
+  },
+  {
+    "kind": "truncate",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "test_table"
+    }
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -204,6 +385,22 @@
         "type": "UInt64",
         "value": "6"
       }
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "input_format_null_as_default",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ],
+    "leadingComments": [
+      "/* Check input_format_null_as_default = 1 */"
     ]
   },
   {
@@ -215,6 +412,72 @@
         "value": "7"
       }
     ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "test_table_2"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "v1",
+        "type": {
+          "name": "UInt8"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "n",
+        "type": {
+          "name": "Nested",
+          "args": [
+            {
+              "kind": "namedField",
+              "name": "id",
+              "type": {
+                "name": "UInt8"
+              }
+            },
+            {
+              "kind": "namedField",
+              "name": "name",
+              "type": {
+                "name": "String"
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree",
+      "args": []
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "v1"
+          ]
+        }
+      }
+    ],
+    "leadingComments": [
+      "/* Check Nested */"
+    ]
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "test_table_2"
+      }
+    }
   },
   {
     "kind": "select",
@@ -230,6 +493,14 @@
     "format": "JSONCompactEachRow"
   },
   {
+    "kind": "truncate",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "test_table_2"
+    }
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -238,6 +509,26 @@
         "value": "8"
       }
     ]
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "test_table"
+      }
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "test_table"
+      }
+    }
   },
   {
     "kind": "select",
@@ -250,6 +541,26 @@
     ]
   },
   {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "test_table"
+      }
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "test_table"
+      }
+    }
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -258,6 +569,39 @@
         "value": "10"
       }
     ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "input_format_skip_unknown_fields",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "test_table"
+      }
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "test_table"
+      }
+    }
   },
   {
     "kind": "select",
@@ -270,6 +614,16 @@
     ]
   },
   {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "test_table"
+      }
+    }
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -278,6 +632,29 @@
         "value": "12"
       }
     ]
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "test_table_2"
+      }
+    },
+    "leadingComments": [
+      "/* Check Nested */"
+    ]
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "test_table_2"
+      }
+    }
   },
   {
     "kind": "select",

@@ -1,3 +1,61 @@
+DropQuery  src (children 1)
+ Identifier src
+
+DropQuery  dst (children 1)
+ Identifier dst
+
+CreateQuery src (children 3)
+ Identifier src
+ Columns definition (children 1)
+  ExpressionList (children 3)
+   ColumnDeclaration p (children 1)
+    DataType UInt64
+   ColumnDeclaration k (children 1)
+    DataType String
+   ColumnDeclaration d (children 1)
+    DataType UInt64
+ Storage definition (children 3)
+  Function MergeTree
+  Identifier p
+  Identifier k
+
+CreateQuery dst (children 3)
+ Identifier dst
+ Columns definition (children 1)
+  ExpressionList (children 3)
+   ColumnDeclaration p (children 1)
+    DataType UInt64
+   ColumnDeclaration k (children 1)
+    DataType String
+   ColumnDeclaration d (children 1)
+    DataType UInt64
+ Storage definition (children 4)
+  Function MergeTree
+  Identifier p
+  Identifier k
+  Set
+
+InsertQuery   (children 1)
+ Identifier src
+
+InsertQuery   (children 1)
+ Identifier src
+
+InsertQuery   (children 1)
+ Identifier src
+
+InsertQuery   (children 1)
+ Identifier src
+
+InsertQuery   (children 1)
+ Identifier dst
+
+InsertQuery   (children 1)
+ Identifier dst
+
+InsertQuery   (children 1)
+ Identifier dst
+
 SelectWithUnionQuery (children 1)
  ExpressionList (children 1)
   SelectQuery (children 2)
@@ -26,6 +84,71 @@ SelectWithUnionQuery (children 1)
      TableExpression (children 1)
       TableIdentifier dst
 
+AlterQuery  dst (children 2)
+ ExpressionList (children 1)
+  AlterCommand REPLACE_PARTITION (children 1)
+   Partition (children 1)
+    Literal UInt64_1
+ Identifier dst
+
+AlterQuery  src (children 2)
+ ExpressionList (children 1)
+  AlterCommand DROP_PARTITION (children 1)
+   Partition (children 1)
+    Literal UInt64_1
+ Identifier src
+
+AlterQuery  dst (children 2)
+ ExpressionList (children 1)
+  AlterCommand DROP_PARTITION (children 1)
+   Partition (children 1)
+    Literal UInt64_1
+ Identifier dst
+
+CreateQuery test_block_numbers (children 2)
+ Identifier test_block_numbers
+ Columns definition (children 1)
+  ExpressionList (children 1)
+   ColumnDeclaration m (children 1)
+    DataType UInt64
+
+InsertQuery   (children 2)
+ Identifier test_block_numbers
+ SelectWithUnionQuery (children 1)
+  ExpressionList (children 1)
+   SelectQuery (children 3)
+    ExpressionList (children 1)
+     Function max (alias m) (children 1)
+      ExpressionList (children 1)
+       Identifier max_block_number
+    TablesInSelectQuery (children 1)
+     TablesInSelectQueryElement (children 1)
+      TableExpression (children 1)
+       TableIdentifier system.parts
+    Function and (children 1)
+     ExpressionList (children 4)
+      Function equals (children 1)
+       ExpressionList (children 2)
+        Identifier database
+        Function currentDatabase (children 1)
+         ExpressionList
+      Function equals (children 1)
+       ExpressionList (children 2)
+        Identifier table
+        Literal 'dst'
+      Identifier active
+      Function like (children 1)
+       ExpressionList (children 2)
+        Identifier name
+        Literal '1_%'
+
+AlterQuery  dst (children 2)
+ ExpressionList (children 1)
+  AlterCommand REPLACE_PARTITION (children 1)
+   Partition (children 1)
+    Literal UInt64_1
+ Identifier dst
+
 SelectWithUnionQuery (children 1)
  ExpressionList (children 1)
   SelectQuery (children 2)
@@ -46,6 +169,37 @@ SelectWithUnionQuery (children 1)
      TableExpression (children 1)
       TableIdentifier test_block_numbers
 
+DropQuery  test_block_numbers (children 1)
+ Identifier test_block_numbers
+
+DropQuery  src (children 1)
+ Identifier src
+
+InsertQuery   (children 1)
+ Identifier src
+
+InsertQuery   (children 1)
+ Identifier src
+
+SYSTEM query (children 1)
+ Identifier dst
+
+InsertQuery   (children 1)
+ Identifier dst
+
+AlterQuery  dst (children 2)
+ ExpressionList (children 1)
+  AlterCommand REPLACE_PARTITION (children 1)
+   Partition (children 1)
+    Literal UInt64_1
+ Identifier dst
+
+AlterQuery  dst (children 2)
+ ExpressionList (children 1)
+  AlterCommand REPLACE_PARTITION (children 1)
+   Partition_ID 
+ Identifier dst
+
 SelectWithUnionQuery (children 1)
  ExpressionList (children 1)
   SelectQuery (children 2)
@@ -62,3 +216,45 @@ SelectWithUnionQuery (children 1)
     TablesInSelectQueryElement (children 1)
      TableExpression (children 1)
       TableIdentifier dst
+
+SYSTEM query (children 1)
+ Identifier dst
+
+Set
+
+OptimizeQuery  dst (children 1)
+ Identifier dst
+
+DetachQuery  dst (children 1)
+ Identifier dst
+
+AttachQuery dst (children 1)
+ Identifier dst
+
+AlterQuery  dst (children 2)
+ ExpressionList (children 1)
+  AlterCommand DROP_PARTITION (children 1)
+   Partition (children 1)
+    Literal UInt64_0
+ Identifier dst
+
+AlterQuery  dst (children 2)
+ ExpressionList (children 1)
+  AlterCommand DROP_PARTITION (children 1)
+   Partition (children 1)
+    Literal UInt64_1
+ Identifier dst
+
+AlterQuery  dst (children 2)
+ ExpressionList (children 1)
+  AlterCommand DROP_PARTITION (children 1)
+   Partition (children 1)
+    Literal UInt64_2
+ Identifier dst
+
+AlterQuery  dst (children 2)
+ ExpressionList (children 1)
+  AlterCommand ATTACH_PARTITION (children 1)
+   Partition (children 1)
+    Literal UInt64_1
+ Identifier dst

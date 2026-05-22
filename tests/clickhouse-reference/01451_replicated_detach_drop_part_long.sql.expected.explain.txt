@@ -1,3 +1,69 @@
+Set
+
+DropQuery  replica1 (children 1)
+ Identifier replica1
+
+DropQuery  replica2 (children 1)
+ Identifier replica2
+
+CreateQuery replica1 (children 3)
+ Identifier replica1
+ Columns definition (children 1)
+  ExpressionList (children 1)
+   ColumnDeclaration v (children 1)
+    DataType UInt8
+ Storage definition (children 3)
+  Function ReplicatedMergeTree (children 1)
+   ExpressionList (children 2)
+    Function concat (children 1)
+     ExpressionList (children 3)
+      Literal '/clickhouse/tables/{database}/'
+      Function currentDatabase (children 1)
+       ExpressionList
+      Literal 'test/01451/attach'
+    Literal 'r1'
+  Function tuple (children 1)
+   ExpressionList
+  Set
+
+CreateQuery replica2 (children 3)
+ Identifier replica2
+ Columns definition (children 1)
+  ExpressionList (children 1)
+   ColumnDeclaration v (children 1)
+    DataType UInt8
+ Storage definition (children 3)
+  Function ReplicatedMergeTree (children 1)
+   ExpressionList (children 2)
+    Function concat (children 1)
+     ExpressionList (children 3)
+      Literal '/clickhouse/tables/{database}/'
+      Function currentDatabase (children 1)
+       ExpressionList
+      Literal 'test/01451/attach'
+    Literal 'r2'
+  Function tuple (children 1)
+   ExpressionList
+  Set
+
+InsertQuery   (children 2)
+ Identifier replica1
+ Set
+
+InsertQuery   (children 2)
+ Identifier replica1
+ Set
+
+InsertQuery   (children 2)
+ Identifier replica1
+ Set
+
+AlterQuery  replica1 (children 2)
+ ExpressionList (children 1)
+  AlterCommand DROP_PARTITION (children 1)
+   Literal 'all_100_100_0'
+ Identifier replica1
+
 SelectWithUnionQuery (children 1)
  ExpressionList (children 1)
   SelectQuery (children 3)
@@ -10,6 +76,15 @@ SelectWithUnionQuery (children 1)
    ExpressionList (children 1)
     OrderByElement (children 1)
      Identifier v
+
+SYSTEM query (children 1)
+ Identifier replica2
+
+AlterQuery  replica2 (children 2)
+ ExpressionList (children 1)
+  AlterCommand DROP_PARTITION (children 1)
+   Literal 'all_1_1_0'
+ Identifier replica2
 
 SelectWithUnionQuery (children 1)
  ExpressionList (children 1)
@@ -32,11 +107,42 @@ SelectWithUnionQuery (children 1)
        Function currentDatabase (children 1)
         ExpressionList
 
+AlterQuery  replica2 (children 3)
+ ExpressionList (children 1)
+  AlterCommand ATTACH_PARTITION (children 1)
+   Literal 'all_1_1_0'
+ Identifier replica2
+ Set
+
+SYSTEM query (children 1)
+ Identifier replica1
+
 SelectWithUnionQuery (children 1)
  ExpressionList (children 1)
   SelectQuery (children 1)
    ExpressionList (children 1)
     Literal '-- drop part --'
+
+AlterQuery  replica1 (children 2)
+ ExpressionList (children 1)
+  AlterCommand DROP_PARTITION (children 1)
+   Literal 'all_3_3_0'
+ Identifier replica1
+
+AlterQuery  replica1 (children 2)
+ ExpressionList (children 1)
+  AlterCommand ATTACH_PARTITION (children 1)
+   Literal 'all_3_3_0'
+ Identifier replica1
+
+AlterQuery  replica1 (children 2)
+ ExpressionList (children 1)
+  AlterCommand MODIFY_SETTING (children 1)
+   Set
+ Identifier replica1
+
+OptimizeQuery  replica1_final (children 1)
+ Identifier replica1
 
 SelectWithUnionQuery (children 1)
  ExpressionList (children 1)
@@ -59,3 +165,9 @@ SelectWithUnionQuery (children 1)
        Identifier database
        Function currentDatabase (children 1)
         ExpressionList
+
+DropQuery  replica1 (children 1)
+ Identifier replica1
+
+DropQuery  replica2 (children 1)
+ Identifier replica2

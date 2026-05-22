@@ -1,5 +1,54 @@
 [
   {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "allow_deprecated_error_prone_window_functions",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "t"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "rDate",
+        "type": {
+          "name": "String"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "cpu_total",
+        "type": {
+          "name": "Int64"
+        }
+      }
+    ],
+    "engine": {
+      "name": "Log"
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "t"
+      }
+    }
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -15,7 +64,7 @@
         "kind": "select",
         "with": [
           {
-            "kind": "expr",
+            "kind": "cteExpr",
             "name": "cpu_total_7",
             "expr": {
               "kind": "functionCall",

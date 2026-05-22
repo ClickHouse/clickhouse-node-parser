@@ -14,8 +14,26 @@ SELECT
     arrayProduct([toDecimal64(1,8), toDecimal64(2,8), toDecimal64(3,8)]) AS a,
     toTypeName(a);
 
+DROP TABLE IF EXISTS test_aggregation;
+
+CREATE TABLE test_aggregation
+(
+    x Array(Int)
+)
+ENGINE = TinyLog;
+
+INSERT INTO test_aggregation;
+
 SELECT arrayProduct(x)
 FROM test_aggregation;
+
+DROP TABLE test_aggregation;
+
+CREATE TABLE test_aggregation
+(
+    x Array(Decimal64(8))
+)
+ENGINE = TinyLog;
 
 SELECT
     toTypeName(arrayProduct([toInt8(0)])),

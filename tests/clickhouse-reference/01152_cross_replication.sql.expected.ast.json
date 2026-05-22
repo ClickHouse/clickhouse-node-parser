@@ -1,5 +1,378 @@
 [
   {
+    "kind": "drop",
+    "targetType": "DATABASE",
+    "table": {
+      "kind": "tableRef",
+      "table": "shard_0"
+    },
+    "ifExists": true,
+    "leadingComments": [
+      "-- Tags: replica, no-parallel"
+    ]
+  },
+  {
+    "kind": "drop",
+    "targetType": "DATABASE",
+    "table": {
+      "kind": "tableRef",
+      "table": "shard_1"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "distributed_ddl_output_mode",
+        "value": {
+          "kind": "literal",
+          "type": "String",
+          "value": "none"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "demo_loan_01568_dist"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "createDatabase",
+    "name": "shard_0"
+  },
+  {
+    "kind": "createDatabase",
+    "name": "shard_1"
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "demo_loan_01568"
+    },
+    "onCluster": "test_cluster_two_shards_different_databases",
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "id",
+        "type": {
+          "name": "Int64"
+        },
+        "comment": "id"
+      },
+      {
+        "kind": "columnDef",
+        "name": "date_stat",
+        "type": {
+          "name": "Date"
+        },
+        "comment": "date of stat"
+      },
+      {
+        "kind": "columnDef",
+        "name": "customer_no",
+        "type": {
+          "name": "String"
+        },
+        "comment": "customer no"
+      },
+      {
+        "kind": "columnDef",
+        "name": "loan_principal",
+        "type": {
+          "name": "Float64"
+        },
+        "comment": "loan principal"
+      }
+    ],
+    "engine": {
+      "name": "ReplacingMergeTree",
+      "args": []
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "id"
+          ]
+        }
+      }
+    ],
+    "partitionBy": {
+      "kind": "functionCall",
+      "name": "toYYYYMM",
+      "args": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "date_stat"
+          ]
+        }
+      ]
+    },
+    "trailingComments": [
+      "-- { serverError NOT_IMPLEMENTED }"
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "distributed_ddl_entry_format_version",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "2"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "distributed_ddl_output_mode",
+        "value": {
+          "kind": "literal",
+          "type": "String",
+          "value": "throw"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "database": "shard_0",
+      "table": "demo_loan_01568"
+    },
+    "onCluster": "test_cluster_two_shards_different_databases",
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "id",
+        "type": {
+          "name": "Int64"
+        },
+        "comment": "id"
+      },
+      {
+        "kind": "columnDef",
+        "name": "date_stat",
+        "type": {
+          "name": "Date"
+        },
+        "comment": "date of stat"
+      },
+      {
+        "kind": "columnDef",
+        "name": "customer_no",
+        "type": {
+          "name": "String"
+        },
+        "comment": "customer no"
+      },
+      {
+        "kind": "columnDef",
+        "name": "loan_principal",
+        "type": {
+          "name": "Float64"
+        },
+        "comment": "loan principal"
+      }
+    ],
+    "engine": {
+      "name": "ReplacingMergeTree",
+      "args": []
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "id"
+          ]
+        }
+      }
+    ],
+    "partitionBy": {
+      "kind": "functionCall",
+      "name": "toYYYYMM",
+      "args": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "date_stat"
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "database": "shard_1",
+      "table": "demo_loan_01568"
+    },
+    "onCluster": "test_cluster_two_shards_different_databases",
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "id",
+        "type": {
+          "name": "Int64"
+        },
+        "comment": "id"
+      },
+      {
+        "kind": "columnDef",
+        "name": "date_stat",
+        "type": {
+          "name": "Date"
+        },
+        "comment": "date of stat"
+      },
+      {
+        "kind": "columnDef",
+        "name": "customer_no",
+        "type": {
+          "name": "String"
+        },
+        "comment": "customer no"
+      },
+      {
+        "kind": "columnDef",
+        "name": "loan_principal",
+        "type": {
+          "name": "Float64"
+        },
+        "comment": "loan principal"
+      }
+    ],
+    "engine": {
+      "name": "ReplacingMergeTree",
+      "args": []
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "id"
+          ]
+        }
+      }
+    ],
+    "partitionBy": {
+      "kind": "functionCall",
+      "name": "toYYYYMM",
+      "args": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "date_stat"
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "kind": "system",
+    "body": "SHOW TABLES FROM shard_0"
+  },
+  {
+    "kind": "system",
+    "body": "SHOW TABLES FROM shard_1"
+  },
+  {
+    "kind": "showCreate",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "database": "shard_0",
+      "table": "demo_loan_01568"
+    }
+  },
+  {
+    "kind": "showCreate",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "database": "shard_1",
+      "table": "demo_loan_01568"
+    }
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "demo_loan_01568_dist"
+    },
+    "asTable": {
+      "kind": "tableRef",
+      "database": "shard_0",
+      "table": "demo_loan_01568"
+    },
+    "engine": {
+      "name": "Distributed",
+      "args": [
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "test_cluster_two_shards_different_databases"
+        },
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": ""
+        },
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "demo_loan_01568"
+        },
+        {
+          "kind": "binaryExpr",
+          "op": "%",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "id"
+            ]
+          },
+          "right": {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "2"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "demo_loan_01568_dist"
+      }
+    }
+  },
+  {
+    "kind": "system",
+    "body": "SYSTEM FLUSH DISTRIBUTED demo_loan_01568_dist"
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -47,6 +420,30 @@
       "kind": "tableRef",
       "database": "shard_1",
       "table": "demo_loan_01568"
+    }
+  },
+  {
+    "kind": "drop",
+    "targetType": "DATABASE",
+    "table": {
+      "kind": "tableRef",
+      "table": "shard_0"
+    }
+  },
+  {
+    "kind": "drop",
+    "targetType": "DATABASE",
+    "table": {
+      "kind": "tableRef",
+      "table": "shard_1"
+    }
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "demo_loan_01568_dist"
     }
   }
 ]

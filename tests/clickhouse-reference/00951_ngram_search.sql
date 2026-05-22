@@ -26,6 +26,9 @@ select round(1000 * ngramSearchUTF8('абвгдеёжз', 'абвгдеёжз'))
 select round(1000 * ngramSearchUTF8('абвгдеёжз', 'абвгдеёж'));
 select round(1000 * ngramSearchUTF8('абвгдеёжз', 'гдеёзд'));
 select round(1000 * ngramSearchUTF8('абвгдеёжз', 'ёёёёёёёё'));
+drop table if exists test_entry_distance;
+create table test_entry_distance (Title String) engine = Memory;
+insert into test_entry_distance values ('привет как дела?... Херсон'), ('привет как дела клип - TUT.BY'), ('привет'), ('пап привет как дела - TUT.BY'), ('привет братан как дела - TUT.BY'), ('http://metric.ru/'), ('http://autometric.ru/'), ('http://top.bigmir.net/'), ('http://metris.ru/'), ('http://metrika.ru/'), ('');
 SELECT Title, round(1000 * distance) FROM test_entry_distance ORDER BY ngramSearchUTF8(Title, Title) as distance, Title;
 SELECT Title, round(1000 * distance) FROM test_entry_distance ORDER BY ngramSearchUTF8(Title, extract(Title, 'как дела')) as distance, Title;
 SELECT Title, round(1000 * distance) FROM test_entry_distance ORDER BY ngramSearchUTF8(Title, extract(Title, 'metr')) as distance, Title;

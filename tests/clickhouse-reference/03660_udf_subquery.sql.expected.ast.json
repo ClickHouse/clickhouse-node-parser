@@ -1,5 +1,171 @@
 [
   {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "enable_analyzer",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ],
+    "leadingComments": [
+      "-- Tags: no-parallel"
+    ]
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "dict"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "dict"
+    },
+    "engine": {
+      "name": "MergeTree",
+      "args": []
+    },
+    "asQuery": {
+      "kind": "union",
+      "queries": [
+        {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "alias",
+              "expr": {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "1"
+              },
+              "alias": "id"
+            },
+            {
+              "kind": "alias",
+              "expr": {
+                "kind": "literal",
+                "type": "String",
+                "value": "one"
+              },
+              "alias": "name"
+            }
+          ]
+        },
+        {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "alias",
+              "expr": {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "2"
+              },
+              "alias": "id"
+            },
+            {
+              "kind": "alias",
+              "expr": {
+                "kind": "literal",
+                "type": "String",
+                "value": "two"
+              },
+              "alias": "name"
+            }
+          ]
+        }
+      ]
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "id"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createFunction",
+    "name": "udf_type_of_int",
+    "functionExpr": {
+      "kind": "lambdaExpr",
+      "params": [
+        "int_"
+      ],
+      "body": {
+        "kind": "subqueryExpr",
+        "query": {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "functionCall",
+              "name": "if",
+              "args": [
+                {
+                  "kind": "binaryExpr",
+                  "op": "=",
+                  "left": {
+                    "kind": "columnRef",
+                    "parts": [
+                      "name"
+                    ]
+                  },
+                  "right": {
+                    "kind": "literal",
+                    "type": "String",
+                    "value": "one"
+                  }
+                },
+                {
+                  "kind": "literal",
+                  "type": "String",
+                  "value": "The One"
+                },
+                {
+                  "kind": "literal",
+                  "type": "String",
+                  "value": "other"
+                }
+              ]
+            }
+          ],
+          "from": {
+            "kind": "tableRef",
+            "table": "dict"
+          },
+          "where": {
+            "kind": "binaryExpr",
+            "op": "=",
+            "left": {
+              "kind": "columnRef",
+              "parts": [
+                "id"
+              ]
+            },
+            "right": {
+              "kind": "columnRef",
+              "parts": [
+                "int_"
+              ]
+            }
+          }
+        }
+      }
+    }
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -57,6 +223,9 @@
         },
         "direction": "ASC"
       }
+    ],
+    "leadingComments": [
+      "-- this part worked successfully"
     ]
   },
   {
@@ -76,7 +245,7 @@
       }
     ],
     "from": {
-      "kind": "tableFunction",
+      "kind": "tableFunctionRef",
       "name": "numbers",
       "args": [
         {
@@ -97,6 +266,9 @@
         },
         "direction": "ASC"
       }
+    ],
+    "leadingComments": [
+      "-- ... and this not!"
     ]
   },
   {
@@ -126,7 +298,7 @@
       }
     ],
     "from": {
-      "kind": "tableFunction",
+      "kind": "tableFunctionRef",
       "name": "numbers",
       "args": [
         {
@@ -197,7 +369,7 @@
       }
     ],
     "from": {
-      "kind": "tableFunction",
+      "kind": "tableFunctionRef",
       "name": "numbers",
       "args": [
         {
@@ -219,5 +391,21 @@
         "direction": "ASC"
       }
     ]
+  },
+  {
+    "kind": "drop",
+    "targetType": "FUNCTION",
+    "table": {
+      "kind": "tableRef",
+      "table": "udf_type_of_int"
+    }
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "dict"
+    }
   }
 ]

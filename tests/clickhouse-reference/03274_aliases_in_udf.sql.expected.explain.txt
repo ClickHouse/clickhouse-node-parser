@@ -1,3 +1,82 @@
+Set
+
+Set
+
+DropQuery  test_table (children 1)
+ Identifier test_table
+
+CreateFunctionQuery 03274_test_function (children 2)
+ Identifier 03274_test_function
+ Function lambda (children 1)
+  ExpressionList (children 2)
+   Function tuple (children 1)
+    ExpressionList (children 1)
+     Identifier input_column_name
+   Function tupleElement (children 1)
+    ExpressionList (children 2)
+     Function tuple (children 1)
+      ExpressionList (children 2)
+       Literal '1' (alias a)
+       Identifier input_column_name (alias input_column_name)
+     Literal UInt64_2
+
+CreateQuery test_table (children 3)
+ Identifier test_table
+ Columns definition (children 1)
+  ExpressionList (children 2)
+   ColumnDeclaration metadata_a (children 1)
+    DataType String
+   ColumnDeclaration metadata_b (children 1)
+    DataType String
+ Storage definition (children 2)
+  Function MergeTree (children 1)
+   ExpressionList
+  Function tuple (children 1)
+   ExpressionList
+
+AlterQuery  test_table (children 2)
+ ExpressionList (children 1)
+  AlterCommand ADD_COLUMN (children 1)
+   ColumnDeclaration mat_a (children 2)
+    DataType String
+    Function 03274_test_function (children 1)
+     ExpressionList (children 1)
+      Identifier metadata_a
+ Identifier test_table
+
+AlterQuery  test_table (children 2)
+ ExpressionList (children 1)
+  AlterCommand MATERIALIZE_COLUMN (children 1)
+   Identifier mat_a
+ Identifier test_table
+
+AlterQuery  test_table (children 2)
+ ExpressionList (children 1)
+  AlterCommand ADD_COLUMN (children 1)
+   ColumnDeclaration mat_b (children 2)
+    DataType String
+    Function 03274_test_function (children 1)
+     ExpressionList (children 1)
+      Identifier metadata_b
+ Identifier test_table
+
+Set
+
+AlterQuery  test_table (children 2)
+ ExpressionList (children 1)
+  AlterCommand MATERIALIZE_COLUMN (children 1)
+   Identifier mat_b
+ Identifier test_table
+
+InsertQuery   (children 2)
+ Identifier test_table
+ SelectWithUnionQuery (children 1)
+  ExpressionList (children 1)
+   SelectQuery (children 1)
+    ExpressionList (children 2)
+     Literal 'a'
+     Literal 'b'
+
 SelectWithUnionQuery (children 1)
  ExpressionList (children 1)
   SelectQuery (children 2)
@@ -17,3 +96,25 @@ SelectWithUnionQuery (children 1)
     TablesInSelectQueryElement (children 1)
      TableExpression (children 1)
       TableIdentifier test_table
+
+CreateFunctionQuery test_03274 (children 2)
+ Identifier test_03274
+ Function lambda (children 1)
+  ExpressionList (children 2)
+   Function tuple (children 1)
+    ExpressionList (children 1)
+     Identifier x
+   Function tuple (children 1)
+    ExpressionList (children 2)
+     Function plus (alias y) (children 1)
+      ExpressionList (children 2)
+       Identifier x
+       Literal UInt64_1
+     Function plus (children 1)
+      ExpressionList (children 2)
+       Identifier y
+       Literal UInt64_2
+
+DropFunctionQuery
+
+DropFunctionQuery

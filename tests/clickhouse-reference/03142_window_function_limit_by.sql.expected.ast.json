@@ -1,5 +1,162 @@
 [
   {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "enable_analyzer",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "error_win_func"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "k",
+        "type": {
+          "name": "String"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "in",
+        "type": {
+          "name": "UInt64"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "out",
+        "type": {
+          "name": "UInt64"
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "k"
+          ]
+        }
+      }
+    ],
+    "asQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "asterisk"
+        }
+      ],
+      "from": {
+        "kind": "tableFunctionRef",
+        "name": "VALUES",
+        "args": [
+          {
+            "kind": "tupleLiteral",
+            "elements": [
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "a"
+              },
+              {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "2"
+              },
+              {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "4"
+              }
+            ],
+            "source": "('a', 2, 4)"
+          },
+          {
+            "kind": "tupleLiteral",
+            "elements": [
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "a"
+              },
+              {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "4"
+              },
+              {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "2"
+              }
+            ],
+            "source": "('a', 4, 2)"
+          },
+          {
+            "kind": "tupleLiteral",
+            "elements": [
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "a"
+              },
+              {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "6"
+              },
+              {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "3"
+              }
+            ],
+            "source": "('a', 6, 3)"
+          },
+          {
+            "kind": "tupleLiteral",
+            "elements": [
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "a"
+              },
+              {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "8"
+              },
+              {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "4"
+              }
+            ],
+            "source": "('a', 8, 4)"
+          }
+        ]
+      }
+    },
+    "leadingComments": [
+      "-- https://github.com/ClickHouse/ClickHouse/issues/55965"
+    ]
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -76,8 +233,122 @@
     "windows": [
       {
         "name": "w",
-        "body": "ROWS BETWEEN CURRENT ROW AND 3 FOLLOWING"
+        "spec": {
+          "frame": {
+            "frameType": "rows",
+            "start": {
+              "kind": "currentRow"
+            },
+            "end": {
+              "kind": "following",
+              "expr": {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "3"
+              }
+            }
+          }
+        }
       }
+    ]
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "error_win_func"
+    }
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "t"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "n",
+        "type": {
+          "name": "String"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "st",
+        "type": {
+          "name": "String"
+        }
+      }
+    ],
+    "engine": {
+      "name": "Memory"
+    },
+    "asQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "asterisk"
+        }
+      ],
+      "from": {
+        "kind": "tableFunctionRef",
+        "name": "values",
+        "args": [
+          {
+            "kind": "tupleLiteral",
+            "elements": [
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "a"
+              },
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "x"
+              }
+            ],
+            "source": "('a', 'x')"
+          },
+          {
+            "kind": "tupleLiteral",
+            "elements": [
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "b"
+              },
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "y"
+              }
+            ],
+            "source": "('b', 'y')"
+          },
+          {
+            "kind": "tupleLiteral",
+            "elements": [
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "c"
+              },
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "z"
+              }
+            ],
+            "source": "('c', 'z')"
+          }
+        ]
+      }
+    },
+    "leadingComments": [
+      "-- https://github.com/ClickHouse/ClickHouse/issues/47217"
     ]
   },
   {
@@ -165,6 +436,14 @@
           ]
         }
       ]
+    }
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "t"
     }
   }
 ]

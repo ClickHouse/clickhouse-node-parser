@@ -1,3 +1,4 @@
+-- Tags: stateful
 SELECT
     EventDate,
     count() AS hits,

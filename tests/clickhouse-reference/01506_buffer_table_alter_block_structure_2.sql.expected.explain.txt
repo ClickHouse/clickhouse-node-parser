@@ -1,3 +1,66 @@
+DropQuery  buf_dest (children 1)
+ Identifier buf_dest
+
+DropQuery  buf (children 1)
+ Identifier buf
+
+CreateQuery buf_dest (children 3)
+ Identifier buf_dest
+ Columns definition (children 1)
+  ExpressionList (children 1)
+   ColumnDeclaration timestamp (children 1)
+    DataType DateTime
+ Storage definition (children 3)
+  Function MergeTree
+  Function toYYYYMMDD (children 1)
+   ExpressionList (children 1)
+    Identifier timestamp
+  Identifier timestamp
+
+CreateQuery buf (children 3)
+ Identifier buf
+ Columns definition (children 1)
+  ExpressionList (children 1)
+   ColumnDeclaration timestamp (children 1)
+    DataType DateTime
+ Storage definition (children 1)
+  Function Buffer (children 1)
+   ExpressionList (children 9)
+    Function currentDatabase (children 1)
+     ExpressionList
+    Identifier buf_dest
+    Literal UInt64_16
+    Literal UInt64_86400
+    Literal UInt64_86400
+    Literal UInt64_2000000
+    Literal UInt64_20000000
+    Literal UInt64_100000000
+    Literal UInt64_300000000
+
+<Explain Error>
+
+InsertQuery   (children 2)
+ Identifier buf
+ ExpressionList (children 1)
+  Identifier timestamp
+
+OptimizeQuery  buf (children 1)
+ Identifier buf
+
+AlterQuery  buf_dest (children 2)
+ ExpressionList (children 1)
+  AlterCommand ADD_COLUMN (children 1)
+   ColumnDeclaration s (children 1)
+    DataType String
+ Identifier buf_dest
+
+AlterQuery  buf (children 2)
+ ExpressionList (children 1)
+  AlterCommand ADD_COLUMN (children 1)
+   ColumnDeclaration s (children 1)
+    DataType String
+ Identifier buf
+
 SelectWithUnionQuery (children 1)
  ExpressionList (children 1)
   SelectQuery (children 2)
@@ -7,6 +70,12 @@ SelectWithUnionQuery (children 1)
     TablesInSelectQueryElement (children 1)
      TableExpression (children 1)
       TableIdentifier buf
+
+InsertQuery   (children 2)
+ Identifier buf
+ ExpressionList (children 2)
+  Identifier timestamp
+  Identifier s
 
 SelectWithUnionQuery (children 1)
  ExpressionList (children 1)

@@ -1,3 +1,39 @@
+-- Tags: no-replicated-database, no-shared-merge-tree
+-- Tag no-replicated-database: different number of replicas
+-- Tag no-shared-merge-tree: sync replica lightweight by default
+-- May affect part names
+SET prefer_warmed_unmerged_parts_seconds = 0;
+
+SET ignore_cold_parts_seconds = 0;
+
+CREATE TABLE rmt1
+(
+    n int
+)
+ENGINE = ReplicatedMergeTree('/test/{database}/02438/', '1')
+ORDER BY tuple()
+SETTINGS cache_populated_by_fetch = 0;
+
+CREATE TABLE rmt2
+(
+    n int
+)
+ENGINE = ReplicatedMergeTree('/test/{database}/02438/', '2')
+ORDER BY tuple()
+SETTINGS cache_populated_by_fetch = 0;
+
+SYSTEM stop replicated sends rmt1;
+
+SYSTEM stop merges rmt2;
+
+SET insert_keeper_fault_injection_probability = 0;
+
+INSERT INTO rmt1;
+
+INSERT INTO rmt1;
+
+SYSTEM sync replica rmt2 pull; -- does not wait
+
 SELECT
     type,
     new_part_name
@@ -20,6 +56,16 @@ SELECT
 FROM rmt2
 ORDER BY n ASC;
 
+SET optimize_throw_if_noop = 1;
+
+SYSTEM sync replica rmt1 pull;
+
+OPTIMIZE TABLE rmt1 FINAL;
+
+SYSTEM start replicated sends rmt1;
+
+SYSTEM sync replica rmt2 lightweight; -- waits for fetches, not merges
+
 SELECT
     3,
     n,
@@ -32,6 +78,16 @@ SELECT
     n
 FROM rmt2
 ORDER BY n ASC;
+
+SYSTEM start merges rmt2;
+
+SYSTEM sync replica rmt2;
+
+INSERT INTO rmt2;
+
+OPTIMIZE TABLE rmt2 FINAL;
+
+SYSTEM sync replica rmt1 strict;
 
 SELECT
     5,
@@ -46,3 +102,7 @@ SELECT
     _part
 FROM rmt2
 ORDER BY n ASC;
+
+DROP TABLE rmt1;
+
+DROP TABLE rmt2;

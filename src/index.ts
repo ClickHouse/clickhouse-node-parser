@@ -26,15 +26,178 @@ export type {
   FromExpr,
   OrderByItem,
   CTE,
+  QueryParam,
   SelectStatement,
+  CreateTableStatement,
+  CreateViewStatement,
+  CreateMaterializedViewStatement,
+  CreateDatabaseStatement,
+  CreateFunctionStatement,
+  CreateIndexStatement,
+  CreateDictionaryStatement,
+  CreateWorkloadStatement,
+  CreateUserStatement,
+  CreateRoleStatement,
+  CreateRowPolicyStatement,
+  CreateQuotaStatement,
+  CreateSettingsProfileStatement,
+  CreateNamedCollectionStatement,
+  CreateResourceStatement,
+  CreateWindowViewStatement,
+  CreateLiveViewStatement,
+  CreateStatement,
+  AlterStatement,
+  AlterCommand,
+  InsertStatement,
+  DropStatement,
+  TransactionControlStatement,
+  SetRoleStatement,
+  AccessControlName,
+  HostItem,
+  AccessControlSettingsItem,
+  RoleTarget,
+  DefaultRoleClause,
+  ColumnDef,
+  ConstraintDef,
+  IndexDef,
+  ProjectionDef,
+  TableElement,
+  EngineClause,
+  DataType,
+  DataTypeArg,
+  CodecItem,
+  IndexType,
   Statement,
+  NodeMetadata,
+  ASTNodeKind,
+  ASTNodeKindMap,
+  ASTNode,
+  SourceLocation,
 } from './ast';
+
+// ── Parent assignment ────────────────────────────────────────────────────────
+
+function setParents(statements: Statement[]): void {
+  const seen = new Set<unknown>();
+
+  function walk(node: unknown, parent: unknown): void {
+    if (node === null || node === undefined || typeof node !== 'object') {
+      return;
+    }
+    if (seen.has(node)) return;
+    seen.add(node);
+
+    if (Array.isArray(node)) {
+      for (const item of node) {
+        walk(item, parent);
+      }
+      return;
+    }
+
+    const obj = node as Record<string, unknown>;
+    if ('kind' in obj) {
+      obj.parent = parent;
+      for (const [key, value] of Object.entries(obj)) {
+        if (key === 'parent') continue;
+        if (typeof value === 'object' && value !== null) {
+          walk(value, obj);
+        }
+      }
+    } else {
+      for (const value of Object.values(obj)) {
+        if (typeof value === 'object' && value !== null) {
+          walk(value, parent);
+        }
+      }
+    }
+  }
+
+  walk(statements, undefined);
+}
 
 // ── Public API ────────────────────────────────────────────────────────────────
 
-export function parse(sql: string): Statement[] {
-  return peggyParse(sql) as Statement[];
+export type ParseOptions = {
+  /**
+   * When true, sets the `parent` reference on each AST node. The returned AST
+   * nodes will have circular references, breaking JSON serialization.
+   *
+   * Default: false
+   **/
+  setParents?: boolean;
+};
+
+export function parse(sql: string, options?: ParseOptions): Statement[] {
+  const statements = peggyParse(sql) as Statement[];
+  if (options?.setParents) {
+    setParents(statements);
+  }
+  return statements;
 }
 
-export { format } from './format';
+export { format, formatNode } from './format';
 export { formatExplain } from './explain';
+export { findNodes } from './find-nodes';
+export { transformNodes, type NodePositionMap } from './transform-nodes';
+export {
+  isNodeKind,
+  isLiteral,
+  isColumnRef,
+  isTableRef,
+  isAsterisk,
+  isQualifiedAsterisk,
+  isQueryParam,
+  isTupleExpansion,
+  isFunctionCall,
+  isCastExpr,
+  isLambdaExpr,
+  isSubqueryExpr,
+  isInExpr,
+  isUnaryExpr,
+  isBinaryExpr,
+  isNaryExpr,
+  isAlias,
+  isArrayLiteral,
+  isTupleLiteral,
+  isColumnsExpr,
+  isJsonSubcolumn,
+  isOrderByItem,
+  isSubqueryFrom,
+  isTableFunction,
+  isJoinExpr,
+  isArrayJoinExpr,
+  isSelectStatement,
+  isUnionStatement,
+  isIntersectStatement,
+  isExplainStatement,
+  isSetStatement,
+  isTransactionControlStatement,
+  isSetRoleStatement,
+  isUseStatement,
+  isSystemStatement,
+  isCreateTableStatement,
+  isCreateViewStatement,
+  isCreateMaterializedViewStatement,
+  isCreateDatabaseStatement,
+  isCreateFunctionStatement,
+  isCreateIndexStatement,
+  isCreateDictionaryStatement,
+  isCreateWorkloadStatement,
+  isCreateUserStatement,
+  isCreateRoleStatement,
+  isCreateRowPolicyStatement,
+  isCreateQuotaStatement,
+  isCreateSettingsProfileStatement,
+  isCreateNamedCollectionStatement,
+  isCreateResourceStatement,
+  isCreateWindowViewStatement,
+  isCreateLiveViewStatement,
+  isAlterStatement,
+  isAlterCommand,
+  isInsertStatement,
+  isDropStatement,
+  isColumnDef,
+  isConstraintDef,
+  isIndexDef,
+  isProjectionDef,
+} from './guards';

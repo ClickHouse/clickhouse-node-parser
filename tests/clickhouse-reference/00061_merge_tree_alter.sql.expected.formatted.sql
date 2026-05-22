@@ -1,3 +1,49 @@
+DROP TABLE IF EXISTS alter_00061;
+
+SET allow_deprecated_syntax_for_merge_tree = 1;
+
+CREATE TABLE alter_00061
+(
+    d Date,
+    k UInt64,
+    i32 Int32
+)
+ENGINE = MergeTree(d, k, 8192);
+
+INSERT INTO alter_00061;
+
+DESCRIBE TABLE alter_00061;
+
+SHOW CREATE TABLE alter_00061;
+
 SELECT *
 FROM alter_00061
 ORDER BY k ASC;
+
+ALTER TABLE alter_00061 ADD COLUMN n Nested(ui8 UInt8, s String);
+
+INSERT INTO alter_00061;
+
+ALTER TABLE alter_00061 ADD COLUMN `n.d` Array(Date);
+
+INSERT INTO alter_00061;
+
+ALTER TABLE alter_00061 ADD COLUMN s String DEFAULT '0';
+
+INSERT INTO alter_00061;
+
+ALTER TABLE alter_00061 DROP COLUMN `n.d`, MODIFY COLUMN s Int64;
+
+ALTER TABLE alter_00061 ADD COLUMN `n.d` Array(Date), MODIFY COLUMN s UInt32;
+
+OPTIMIZE TABLE alter_00061;
+
+ALTER TABLE alter_00061 DROP COLUMN `n.ui8`, DROP COLUMN `n.d`;
+
+ALTER TABLE alter_00061 DROP COLUMN `n.s`;
+
+ALTER TABLE alter_00061 ADD COLUMN `n.s` Array(String), ADD COLUMN `n.d` Array(Date);
+
+ALTER TABLE alter_00061 DROP COLUMN n;
+
+DROP TABLE alter_00061;

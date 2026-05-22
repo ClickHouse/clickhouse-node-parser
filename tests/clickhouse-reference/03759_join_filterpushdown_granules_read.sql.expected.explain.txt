@@ -1,3 +1,110 @@
+DropQuery  t_mem (children 1)
+ Identifier t_mem
+
+DropQuery  t_mt (children 1)
+ Identifier t_mt
+
+CreateQuery t_mem (children 3)
+ Identifier t_mem
+ Columns definition (children 1)
+  ExpressionList (children 2)
+   ColumnDeclaration a (children 1)
+    DataType Int32
+   ColumnDeclaration b (children 1)
+    DataType Int32
+ Storage definition (children 1)
+  Function Memory
+
+CreateQuery t_mt (children 3)
+ Identifier t_mt
+ Columns definition (children 1)
+  ExpressionList (children 2)
+   ColumnDeclaration a (children 1)
+    DataType Int32
+   ColumnDeclaration b (children 1)
+    DataType Int32
+ Storage definition (children 3)
+  Function MergeTree
+  Identifier a
+  Set
+
+InsertQuery   (children 2)
+ Identifier t_mem
+ SelectWithUnionQuery (children 1)
+  ExpressionList (children 1)
+   SelectQuery (children 2)
+    ExpressionList (children 2)
+     Identifier number
+     Function sipHash64 (children 1)
+      ExpressionList (children 2)
+       Identifier number
+       Literal UInt64_1
+    TablesInSelectQuery (children 1)
+     TablesInSelectQueryElement (children 1)
+      TableExpression (children 1)
+       Function numbers (children 1)
+        ExpressionList (children 1)
+         Literal UInt64_5000
+
+InsertQuery   (children 2)
+ Identifier t_mt
+ SelectWithUnionQuery (children 1)
+  ExpressionList (children 1)
+   SelectQuery (children 2)
+    ExpressionList (children 2)
+     Identifier number
+     Function sipHash64 (children 1)
+      ExpressionList (children 2)
+       Identifier number
+       Literal UInt64_2
+    TablesInSelectQuery (children 1)
+     TablesInSelectQueryElement (children 1)
+      TableExpression (children 1)
+       Function numbers (children 1)
+        ExpressionList (children 1)
+         Literal UInt64_5000
+
+DropQuery  t_view (children 1)
+ Identifier t_view
+
+CreateQuery t_view (children 2)
+ Identifier t_view
+ SelectWithUnionQuery (children 1)
+  ExpressionList (children 1)
+   SelectQuery (children 2)
+    ExpressionList (children 3)
+     Identifier a
+     Identifier b
+     Function concat (children 1)
+      ExpressionList (children 2)
+       Literal 'aaa_'
+       Function toString (children 1)
+        ExpressionList (children 1)
+         Identifier a
+    TablesInSelectQuery (children 1)
+     TablesInSelectQueryElement (children 1)
+      TableExpression (children 1)
+       TableIdentifier t_mt
+
+CreateQuery start_ts (children 2)
+ Identifier start_ts
+ SelectWithUnionQuery (children 1)
+  ExpressionList (children 1)
+   SelectQuery (children 1)
+    ExpressionList (children 1)
+     Function now (alias ts) (children 1)
+      ExpressionList
+
+Set
+
+Set
+
+Set
+
+Set
+
+Set
+
 SelectWithUnionQuery (children 2)
  ExpressionList (children 1)
   SelectQuery (children 4)
@@ -42,6 +149,28 @@ SelectWithUnionQuery (children 2)
    Set
  Identifier Null
 
+DropQuery  left_joined_view (children 1)
+ Identifier left_joined_view
+
+CreateQuery left_joined_view (children 2)
+ Identifier left_joined_view
+ SelectWithUnionQuery (children 1)
+  ExpressionList (children 1)
+   SelectQuery (children 2)
+    ExpressionList (children 2)
+     Identifier t1.a (alias t1_a)
+     Identifier t2.a (alias t2_a)
+    TablesInSelectQuery (children 2)
+     TablesInSelectQueryElement (children 1)
+      TableExpression (children 1)
+       TableIdentifier t_mt (alias t1)
+     TablesInSelectQueryElement (children 2)
+      TableExpression (children 1)
+       TableIdentifier t_mem (alias t2)
+      TableJoin (children 1)
+       ExpressionList (children 1)
+        Identifier b
+
 SelectWithUnionQuery (children 2)
  ExpressionList (children 1)
   SelectQuery (children 4)
@@ -58,6 +187,28 @@ SelectWithUnionQuery (children 2)
    Set
  Identifier Null
 
+DropQuery  right_joined_view (children 1)
+ Identifier right_joined_view
+
+CreateQuery right_joined_view (children 2)
+ Identifier right_joined_view
+ SelectWithUnionQuery (children 1)
+  ExpressionList (children 1)
+   SelectQuery (children 2)
+    ExpressionList (children 2)
+     Identifier t1.a (alias t1_a)
+     Identifier t2.a (alias t2_a)
+    TablesInSelectQuery (children 2)
+     TablesInSelectQueryElement (children 1)
+      TableExpression (children 1)
+       TableIdentifier t_mem (alias t1)
+     TablesInSelectQueryElement (children 2)
+      TableExpression (children 1)
+       TableIdentifier t_mt (alias t2)
+      TableJoin (children 1)
+       ExpressionList (children 1)
+        Identifier b
+
 SelectWithUnionQuery (children 2)
  ExpressionList (children 1)
   SelectQuery (children 4)
@@ -73,6 +224,8 @@ SelectWithUnionQuery (children 2)
      Literal UInt64_2000
    Set
  Identifier Null
+
+SYSTEM query
 
 SelectWithUnionQuery (children 1)
  ExpressionList (children 1)

@@ -1,3 +1,7 @@
+SET enable_analyzer = 1;
+
+SET joined_subquery_requires_alias = 0;
+
 SELECT *
 FROM
     (
@@ -126,7 +130,7 @@ LEFT JOIN (
         FROM `system`.one
     )
     ON val + 0 = val * 1
-ORDER BY `all` ASC;
+ORDER BY `all` ASC; -- { serverError INVALID_JOIN_ON_EXPRESSION }
 
 SELECT *
 FROM

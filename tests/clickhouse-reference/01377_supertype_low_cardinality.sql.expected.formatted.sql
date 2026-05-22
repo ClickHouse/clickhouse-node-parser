@@ -11,11 +11,49 @@ FROM (
 
 SELECT '---';
 
+CREATE TEMPORARY TABLE t1
+(
+    a String
+);
+
+CREATE TEMPORARY TABLE t2
+(
+    a LowCardinality(String)
+);
+
 SELECT a
 FROM t1
 UNION ALL
 SELECT a
 FROM t2;
+
+CREATE TEMPORARY TABLE a
+(
+    x String
+);
+
+CREATE TEMPORARY TABLE b
+(
+    x LowCardinality(String)
+);
+
+CREATE TEMPORARY TABLE c
+(
+    x Nullable(String)
+);
+
+CREATE TEMPORARY TABLE d
+(
+    x LowCardinality(Nullable(String))
+);
+
+INSERT INTO a;
+
+INSERT INTO b;
+
+INSERT INTO c;
+
+INSERT INTO d;
 
 SELECT x
 FROM a;

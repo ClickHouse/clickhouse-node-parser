@@ -1,4 +1,4 @@
-
+-- { echoOn }
 
 select sumIf(1, NULL);
 select sumIf(NULL, 1);

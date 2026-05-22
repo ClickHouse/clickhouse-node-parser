@@ -1,5 +1,20 @@
+-- { echoOn }
+DROP TABLE IF EXISTS array_element_or_null_test;
+CREATE TABLE array_element_or_null_test (arr Array(Int32), id Int32) ENGINE = Memory;
+insert into array_element_or_null_test VALUES ([11,12,13], 2), ([11,12], 3), ([11,12,13], -1), ([11,12], -2), ([11,12], -3), ([11], 0);
 select arrayElementOrNull(arr, id) from array_element_or_null_test;
+CREATE TABLE array_element_or_null_test (arr Array(Int32), id UInt32) ENGINE = Memory;
+insert into array_element_or_null_test VALUES ([11,12,13], 2), ([11,12], 3), ([11,12,13], 1), ([11,12], 4), ([11], 0);
+CREATE TABLE array_element_or_null_test (arr Array(String), id Int32) ENGINE = Memory;
+insert into array_element_or_null_test VALUES (['Abc','Df','Q'], 2), (['Abc','DEFQ'], 3), (['ABC','Q','ERT'], -1), (['Ab','ber'], -2), (['AB','asd'], -3), (['A'], 0);
+CREATE TABLE array_element_or_null_test (arr Array(String), id UInt32) ENGINE = Memory;
+insert into array_element_or_null_test VALUES (['Abc','Df','Q'], 2), (['Abc','DEFQ'], 3), (['ABC','Q','ERT'], 1), (['Ab','ber'], 4), (['A'], 0);
+CREATE TABLE array_element_or_null_test (id UInt32) ENGINE = Memory;
+insert into array_element_or_null_test VALUES (2), (1), (4), (3), (0);
 select [1, 2, 3] as arr, arrayElementOrNull(arr, id) from array_element_or_null_test;
+CREATE TABLE array_element_or_null_test (id Int32) ENGINE = Memory;
+insert into array_element_or_null_test VALUES (-2), (1), (-4), (3), (2), (-1), (4), (-3), (0);
+DROP TABLE array_element_or_null_test;
 SELECT arrayElementOrNull(range(0), -1);
 SELECT arrayElementOrNull(range(0), 1);
 SELECT arrayElementOrNull(range(number), 2) FROM system.numbers LIMIT 3;
@@ -24,3 +39,4 @@ SELECT materialize([toNullable(1)]) AS x, arrayElementOrNull(x, toNullable(1)) A
 SELECT [toNullable(1)] AS x, arrayElementOrNull(x, materialize(toNullable(1))) AS y;
 SELECT materialize([toNullable(1)]) AS x, arrayElementOrNull(x, materialize(toNullable(1))) AS y;
 select arrayElementOrNull(m, 0), materialize(map('key', 42)) as m; -- {serverError ILLEGAL_TYPE_OF_ARGUMENT}
+-- { echoOff }

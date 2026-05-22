@@ -1,5 +1,21 @@
 [
   {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "use_with_fill_by_sorting_prefix",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ],
+    "leadingComments": [
+      "-- { echoOn }"
+    ]
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -10,7 +26,7 @@
       }
     ],
     "from": {
-      "kind": "tableFunction",
+      "kind": "tableFunctionRef",
       "name": "numbers",
       "args": [
         {
@@ -55,7 +71,84 @@
           "value": "0"
         }
       }
+    ],
+    "leadingComments": [
+      "-- corner case with constant sort prefix"
     ]
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "ts"
+    },
+    "ifExists": true,
+    "leadingComments": [
+      "-- sensor table"
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "ts"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "sensor_id",
+        "type": {
+          "name": "UInt64"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "timestamp",
+        "type": {
+          "name": "UInt64"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "value",
+        "type": {
+          "name": "Float64"
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree",
+      "args": []
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "sensor_id"
+          ]
+        }
+      },
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "timestamp"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "ts"
+      }
+    }
   },
   {
     "kind": "select",
@@ -94,7 +187,47 @@
           "value": "1"
         }
       }
+    ],
+    "leadingComments": [
+      "-- FillingTransform: 6 rows will be processed in 1 chunks"
     ]
+  },
+  {
+    "kind": "system",
+    "body": "SYSTEM stop merges ts"
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "ts"
+      }
+    },
+    "leadingComments": [
+      "-- FillingTransform: 6 rows will be processed in 3 chunks with 2 rows each"
+    ]
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "ts"
+      }
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "ts"
+      }
+    }
   },
   {
     "kind": "select",
@@ -144,6 +277,29 @@
         }
       }
     ]
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "ts"
+      }
+    },
+    "leadingComments": [
+      "-- FillingTransform: 6 rows will be processed in 2 chunks with 3 rows each"
+    ]
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "ts"
+      }
+    }
   },
   {
     "kind": "select",
@@ -251,6 +407,10 @@
           }
         ]
       }
+    ],
+    "leadingComments": [
+      "-- FROM and TO",
+      "-- ASC order in sorting prefix"
     ]
   },
   {
@@ -379,6 +539,9 @@
           }
         ]
       }
+    ],
+    "leadingComments": [
+      "-- DESC order in sorting prefix"
     ]
   },
   {
@@ -502,6 +665,10 @@
           }
         ]
       }
+    ],
+    "leadingComments": [
+      "-- without TO",
+      "-- ASC order in sorting prefix"
     ]
   },
   {
@@ -620,6 +787,9 @@
           }
         ]
       }
+    ],
+    "leadingComments": [
+      "-- DESC order in sorting prefix"
     ]
   },
   {
@@ -738,6 +908,10 @@
           }
         ]
       }
+    ],
+    "leadingComments": [
+      "-- without FROM",
+      "-- ASC order in sorting prefix"
     ]
   },
   {
@@ -856,6 +1030,9 @@
           }
         ]
       }
+    ],
+    "leadingComments": [
+      "-- DESC order in sorting prefix"
     ]
   },
   {
@@ -984,6 +1161,12 @@
           }
         ]
       }
+    ],
+    "leadingComments": [
+      "-- checking that sorting prefix columns can't be used in INTERPOLATE"
+    ],
+    "trailingComments": [
+      "-- { serverError INVALID_WITH_FILL_EXPRESSION }"
     ]
   }
 ]

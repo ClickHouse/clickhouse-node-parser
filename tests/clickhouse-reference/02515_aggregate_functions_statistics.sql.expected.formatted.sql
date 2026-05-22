@@ -1,3 +1,16 @@
+DROP TABLE IF EXISTS fh;
+
+CREATE TABLE fh
+(
+    a_value UInt32,
+    b_value Float64,
+    c_value Float64,
+    d_value Float64
+)
+ENGINE = Memory;
+
+INSERT INTO fh (a_value, b_value, c_value, d_value);
+
 SELECT corrMatrix(a_value)
 FROM (
         SELECT a_value

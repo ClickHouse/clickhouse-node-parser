@@ -1,3 +1,27 @@
+-- Tags: no-parallel-replicas
+-- Tag no-parallel-replicas: output of explain is different
+SET enable_analyzer = 1;
+
+DROP TABLE IF EXISTS test;
+
+CREATE TABLE test
+(
+    x String,
+    y Tuple(s String),
+    z String,
+    PROJECTION sorted_by_company_name (    SELECT *
+    ORDER BY x ASC)
+)
+ENGINE = MergeTree()
+ORDER BY z
+SETTINGS index_granularity = 1;
+
+INSERT INTO test SELECT
+    concat('x_', number),
+    tuple(concat('y_', number)),
+    concat('z_', number)
+FROM numbers(5);
+
 SELECT count()
 FROM test
 WHERE x = 'x_1'
@@ -10,3 +34,5 @@ SELECT
 FROM test
 WHERE x = 'x_1'
     AND y.s = 'y_1';
+
+DROP TABLE test;

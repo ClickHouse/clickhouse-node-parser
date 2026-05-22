@@ -1,3 +1,66 @@
+-- Tags: long, no-azure-blob-storage
+SET allow_experimental_funnel_functions = 1;
+
+DROP TABLE IF EXISTS test_sequenceNextNode_Nullable;
+
+CREATE TABLE IF NOT EXISTS test_sequenceNextNode_Nullable
+(
+    dt DateTime,
+    id int,
+    action Nullable(String)
+)
+ENGINE = MergeTree()
+ORDER BY id
+PARTITION BY dt;
+
+INSERT INTO test_sequenceNextNode_Nullable;
+
+INSERT INTO test_sequenceNextNode_Nullable;
+
+INSERT INTO test_sequenceNextNode_Nullable;
+
+INSERT INTO test_sequenceNextNode_Nullable;
+
+INSERT INTO test_sequenceNextNode_Nullable;
+
+INSERT INTO test_sequenceNextNode_Nullable;
+
+INSERT INTO test_sequenceNextNode_Nullable;
+
+INSERT INTO test_sequenceNextNode_Nullable;
+
+INSERT INTO test_sequenceNextNode_Nullable;
+
+INSERT INTO test_sequenceNextNode_Nullable;
+
+INSERT INTO test_sequenceNextNode_Nullable;
+
+INSERT INTO test_sequenceNextNode_Nullable;
+
+INSERT INTO test_sequenceNextNode_Nullable;
+
+INSERT INTO test_sequenceNextNode_Nullable;
+
+INSERT INTO test_sequenceNextNode_Nullable;
+
+INSERT INTO test_sequenceNextNode_Nullable;
+
+INSERT INTO test_sequenceNextNode_Nullable;
+
+INSERT INTO test_sequenceNextNode_Nullable;
+
+INSERT INTO test_sequenceNextNode_Nullable;
+
+INSERT INTO test_sequenceNextNode_Nullable;
+
+INSERT INTO test_sequenceNextNode_Nullable;
+
+INSERT INTO test_sequenceNextNode_Nullable;
+
+INSERT INTO test_sequenceNextNode_Nullable;
+
+INSERT INTO test_sequenceNextNode_Nullable;
+
 SELECT
     '(forward, head, A)',
     id,
@@ -158,6 +221,16 @@ FROM test_sequenceNextNode_Nullable
 GROUP BY id
 ORDER BY id ASC;
 
+INSERT INTO test_sequenceNextNode_Nullable;
+
+INSERT INTO test_sequenceNextNode_Nullable;
+
+INSERT INTO test_sequenceNextNode_Nullable;
+
+INSERT INTO test_sequenceNextNode_Nullable;
+
+INSERT INTO test_sequenceNextNode_Nullable;
+
 SELECT
     '(forward, head, A) id >= 10',
     id,
@@ -211,6 +284,14 @@ FROM test_sequenceNextNode_Nullable
 WHERE id >= 10
 GROUP BY id
 ORDER BY id ASC;
+
+INSERT INTO test_sequenceNextNode_Nullable;
+
+INSERT INTO test_sequenceNextNode_Nullable;
+
+INSERT INTO test_sequenceNextNode_Nullable;
+
+INSERT INTO test_sequenceNextNode_Nullable;
 
 SELECT
     '(0, A) id = 11',
@@ -414,6 +495,67 @@ FROM test_sequenceNextNode_Nullable
 GROUP BY id
 ORDER BY id ASC;
 
+-- The same testcases for a non-null type.
+DROP TABLE IF EXISTS test_sequenceNextNode;
+
+CREATE TABLE IF NOT EXISTS test_sequenceNextNode
+(
+    dt DateTime,
+    id int,
+    action String
+)
+ENGINE = MergeTree()
+ORDER BY id
+PARTITION BY dt;
+
+INSERT INTO test_sequenceNextNode;
+
+INSERT INTO test_sequenceNextNode;
+
+INSERT INTO test_sequenceNextNode;
+
+INSERT INTO test_sequenceNextNode;
+
+INSERT INTO test_sequenceNextNode;
+
+INSERT INTO test_sequenceNextNode;
+
+INSERT INTO test_sequenceNextNode;
+
+INSERT INTO test_sequenceNextNode;
+
+INSERT INTO test_sequenceNextNode;
+
+INSERT INTO test_sequenceNextNode;
+
+INSERT INTO test_sequenceNextNode;
+
+INSERT INTO test_sequenceNextNode;
+
+INSERT INTO test_sequenceNextNode;
+
+INSERT INTO test_sequenceNextNode;
+
+INSERT INTO test_sequenceNextNode;
+
+INSERT INTO test_sequenceNextNode;
+
+INSERT INTO test_sequenceNextNode;
+
+INSERT INTO test_sequenceNextNode;
+
+INSERT INTO test_sequenceNextNode;
+
+INSERT INTO test_sequenceNextNode;
+
+INSERT INTO test_sequenceNextNode;
+
+INSERT INTO test_sequenceNextNode;
+
+INSERT INTO test_sequenceNextNode;
+
+INSERT INTO test_sequenceNextNode;
+
 SELECT
     '(forward, head, A)',
     id,
@@ -574,6 +716,14 @@ FROM test_sequenceNextNode
 GROUP BY id
 ORDER BY id ASC;
 
+INSERT INTO test_sequenceNextNode;
+
+INSERT INTO test_sequenceNextNode;
+
+INSERT INTO test_sequenceNextNode;
+
+INSERT INTO test_sequenceNextNode;
+
 SELECT
     '(forward, head, A) id >= 10',
     id,
@@ -627,6 +777,14 @@ FROM test_sequenceNextNode
 WHERE id >= 10
 GROUP BY id
 ORDER BY id ASC;
+
+INSERT INTO test_sequenceNextNode;
+
+INSERT INTO test_sequenceNextNode;
+
+INSERT INTO test_sequenceNextNode;
+
+INSERT INTO test_sequenceNextNode;
 
 SELECT
     '(0, A) id = 11',
@@ -838,11 +996,50 @@ FROM test_sequenceNextNode
 GROUP BY id
 ORDER BY id ASC;
 
+INSERT INTO test_sequenceNextNode;
+
 SELECT
     '(forward, head, A) id = 12',
     sequenceNextNode('forward', 'head')(dt, action, 1, action = 'A') AS next_node
 FROM test_sequenceNextNode
 WHERE id = 12;
+
+DROP TABLE IF EXISTS test_base_condition;
+
+CREATE TABLE IF NOT EXISTS test_base_condition
+(
+    dt DateTime,
+    id int,
+    action String,
+    referrer String
+)
+ENGINE = MergeTree()
+ORDER BY id
+PARTITION BY dt;
+
+INSERT INTO test_base_condition;
+
+INSERT INTO test_base_condition;
+
+INSERT INTO test_base_condition;
+
+INSERT INTO test_base_condition;
+
+INSERT INTO test_base_condition;
+
+INSERT INTO test_base_condition;
+
+INSERT INTO test_base_condition;
+
+INSERT INTO test_base_condition;
+
+INSERT INTO test_base_condition;
+
+INSERT INTO test_base_condition;
+
+INSERT INTO test_base_condition;
+
+INSERT INTO test_base_condition;
 
 SELECT
     '(forward, head, 1)',
@@ -923,3 +1120,5 @@ SELECT
 FROM test_base_condition
 GROUP BY id
 ORDER BY id ASC;
+
+SET allow_experimental_funnel_functions = 0;

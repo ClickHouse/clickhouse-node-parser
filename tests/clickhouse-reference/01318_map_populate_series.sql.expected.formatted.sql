@@ -1,3 +1,12 @@
+DROP TABLE IF EXISTS map_test;
+
+CREATE TABLE map_test
+ENGINE = TinyLog() AS
+(SELECT
+    (number + 1) AS n,
+    ([1, number], [1,2]) AS map
+FROM numbers(1, 5));
+
 SELECT mapPopulateSeries(map.1, map.2)
 FROM map_test;
 
@@ -21,6 +30,8 @@ FROM map_test;
 
 SELECT mapPopulateSeries([toUInt64(3), 4], map.2, n)
 FROM map_test;
+
+DROP TABLE map_test;
 
 SELECT
     mapPopulateSeries([toUInt8(1), 2], [toUInt8(1), 1]) AS res,
@@ -74,16 +85,17 @@ SELECT
     mapPopulateSeries([toInt64(-10), 2], [toInt64(1), 1], toInt64(-5)) AS res,
     toTypeName(res);
 
+-- empty
 SELECT mapPopulateSeries(cast([], 'Array(UInt8)'), cast([], 'Array(UInt8)'), 5);
 
 SELECT
     mapPopulateSeries(['1', '2'], [1, 1]) AS res,
-    toTypeName(res);
+    toTypeName(res); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
 SELECT
     mapPopulateSeries([1, 2, 3], [1, 1]) AS res,
-    toTypeName(res);
+    toTypeName(res); -- { serverError BAD_ARGUMENTS }
 
 SELECT
     mapPopulateSeries([1, 2], [1, 1, 1]) AS res,
-    toTypeName(res);
+    toTypeName(res); -- { serverError BAD_ARGUMENTS }

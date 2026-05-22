@@ -1,7 +1,13 @@
+SET log_queries = 1;
+
+SET log_profile_events = true;
+
 SELECT
     'SLEEP #1 TEST',
     sleep(0.001)
 FORMAT Null;
+
+SYSTEM FLUSH LOGS query_log;
 
 SELECT
     'SLEEP #1 CHECK',
@@ -64,6 +70,11 @@ WHERE like(query, '%SELECT ''SLEEP #4 TEST''%')
     AND event_date >= yesterday()
 FORMAT JSONEachRow;
 
+CREATE VIEW sleep_view
+AS
+SELECT sleepEachRow(0.001)
+FROM `system`.numbers;
+
 SELECT
     'SLEEP #5 CHECK',
     ProfileEvents['SleepFunctionCalls'] AS calls,
@@ -92,3 +103,5 @@ WHERE like(query, '%SELECT ''SLEEP #6 TEST''%')
     AND current_database = currentDatabase()
     AND event_date >= yesterday()
 FORMAT JSONEachRow;
+
+DROP TABLE sleep_view;

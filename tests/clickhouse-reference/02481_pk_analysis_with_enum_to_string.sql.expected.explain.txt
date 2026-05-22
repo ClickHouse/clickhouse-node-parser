@@ -1,3 +1,54 @@
+CreateQuery gen (children 3)
+ Identifier gen
+ Columns definition (children 1)
+  ExpressionList (children 7)
+   ColumnDeclaration repo_name (children 1)
+    DataType String
+   ColumnDeclaration event_type (children 1)
+    EnumDataType Enum8
+   ColumnDeclaration actor_login (children 1)
+    DataType String
+   ColumnDeclaration created_at (children 1)
+    DataType DateTime
+   ColumnDeclaration action (children 1)
+    EnumDataType Enum8
+   ColumnDeclaration number (children 1)
+    DataType UInt32
+   ColumnDeclaration merged_at (children 1)
+    DataType DateTime
+ Storage definition (children 1)
+  Function GenerateRandom
+
+CreateQuery github_events (children 2)
+ Identifier github_events
+ Storage definition (children 3)
+  Function MergeTree
+  Function tuple (children 1)
+   ExpressionList (children 3)
+    Identifier event_type
+    Identifier repo_name
+    Identifier created_at
+  Set
+
+InsertQuery   (children 2)
+ Identifier github_events
+ SelectWithUnionQuery (children 1)
+  ExpressionList (children 1)
+   SelectQuery (children 3)
+    ExpressionList (children 1)
+     Asterisk
+    TablesInSelectQuery (children 1)
+     TablesInSelectQueryElement (children 1)
+      TableExpression (children 1)
+       TableIdentifier gen
+    Literal UInt64_100000
+
+InsertQuery   (children 1)
+ Identifier github_events
+
+OptimizeQuery  github_events_final (children 1)
+ Identifier github_events
+
 SelectWithUnionQuery (children 1)
  ExpressionList (children 1)
   SelectQuery (children 3)

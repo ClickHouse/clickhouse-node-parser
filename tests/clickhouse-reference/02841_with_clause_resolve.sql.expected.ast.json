@@ -1,0 +1,3638 @@
+[
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "enable_analyzer",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "with": [
+      {
+        "kind": "cteExpr",
+        "name": "sample_frequency",
+        "expr": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "44100"
+        }
+      },
+      {
+        "kind": "cteExpr",
+        "name": "tick",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "number"
+          ]
+        }
+      },
+      {
+        "kind": "cteExpr",
+        "name": "time",
+        "expr": {
+          "kind": "binaryExpr",
+          "op": "/",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "tick"
+            ]
+          },
+          "right": {
+            "kind": "columnRef",
+            "parts": [
+              "sample_frequency"
+            ]
+          }
+        }
+      },
+      {
+        "kind": "cteExpr",
+        "name": "delay",
+        "expr": {
+          "kind": "lambdaExpr",
+          "params": [
+            "time",
+            "wave",
+            "delay_",
+            "decay",
+            "count"
+          ],
+          "body": {
+            "kind": "functionCall",
+            "name": "arraySum",
+            "args": [
+              {
+                "kind": "lambdaExpr",
+                "params": [
+                  "n1"
+                ],
+                "body": {
+                  "kind": "functionCall",
+                  "name": "wave",
+                  "args": [
+                    {
+                      "kind": "binaryExpr",
+                      "op": "-",
+                      "left": {
+                        "kind": "columnRef",
+                        "parts": [
+                          "time"
+                        ]
+                      },
+                      "right": {
+                        "kind": "binaryExpr",
+                        "op": "*",
+                        "left": {
+                          "kind": "columnRef",
+                          "parts": [
+                            "delay_"
+                          ]
+                        },
+                        "right": {
+                          "kind": "columnRef",
+                          "parts": [
+                            "n1"
+                          ]
+                        }
+                      }
+                    }
+                  ]
+                }
+              },
+              {
+                "kind": "functionCall",
+                "name": "range",
+                "args": [
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "count"
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "leadingComments": [
+          "-- Delay"
+        ]
+      },
+      {
+        "kind": "cteExpr",
+        "name": "kick",
+        "expr": {
+          "kind": "functionCall",
+          "name": "delay",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "time"
+              ]
+            },
+            {
+              "kind": "lambdaExpr",
+              "params": [
+                "time"
+              ],
+              "body": {
+                "kind": "literal",
+                "type": "Float64",
+                "value": "0.5"
+              },
+              "parenthesized": true
+            },
+            {
+              "kind": "literal",
+              "type": "Float64",
+              "value": "0.2"
+            },
+            {
+              "kind": "literal",
+              "type": "Float64",
+              "value": "0.5"
+            },
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "5"
+            }
+          ]
+        }
+      }
+    ],
+    "leadingComments": [
+      "-- Input"
+    ],
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "kick"
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "database": "system",
+      "table": "numbers"
+    },
+    "limit": {
+      "count": {
+        "kind": "literal",
+        "type": "UInt64",
+        "value": "5"
+      }
+    }
+  },
+  {
+    "kind": "select",
+    "with": [
+      {
+        "kind": "cteExpr",
+        "name": "sample_frequency",
+        "expr": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "44100"
+        }
+      },
+      {
+        "kind": "cteExpr",
+        "name": "tick",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "number"
+          ]
+        }
+      },
+      {
+        "kind": "cteExpr",
+        "name": "time",
+        "expr": {
+          "kind": "binaryExpr",
+          "op": "/",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "tick"
+            ]
+          },
+          "right": {
+            "kind": "columnRef",
+            "parts": [
+              "sample_frequency"
+            ]
+          }
+        }
+      },
+      {
+        "kind": "cteExpr",
+        "name": "master_volume",
+        "expr": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        },
+        "leadingComments": [
+          "-- Output control"
+        ]
+      },
+      {
+        "kind": "cteExpr",
+        "name": "clamp",
+        "expr": {
+          "kind": "lambdaExpr",
+          "params": [
+            "level"
+          ],
+          "body": {
+            "kind": "functionCall",
+            "name": "least",
+            "args": [
+              {
+                "kind": "literal",
+                "type": "Float64",
+                "value": "1.0"
+              },
+              {
+                "kind": "functionCall",
+                "name": "greatest",
+                "args": [
+                  {
+                    "kind": "literal",
+                    "type": "Float64",
+                    "value": "-1.0"
+                  },
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "level"
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      },
+      {
+        "kind": "cteExpr",
+        "name": "output",
+        "expr": {
+          "kind": "lambdaExpr",
+          "params": [
+            "level"
+          ],
+          "body": {
+            "kind": "castExpr",
+            "expr": {
+              "kind": "binaryExpr",
+              "op": "*",
+              "left": {
+                "kind": "binaryExpr",
+                "op": "*",
+                "left": {
+                  "kind": "functionCall",
+                  "name": "clamp",
+                  "args": [
+                    {
+                      "kind": "columnRef",
+                      "parts": [
+                        "level"
+                      ]
+                    }
+                  ]
+                },
+                "right": {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "0x7FFF"
+                }
+              },
+              "right": {
+                "kind": "columnRef",
+                "parts": [
+                  "master_volume"
+                ]
+              },
+              "parenthesized": true
+            },
+            "type": "Int16",
+            "operator": true
+          }
+        }
+      },
+      {
+        "kind": "cteExpr",
+        "name": "mono",
+        "expr": {
+          "kind": "lambdaExpr",
+          "params": [
+            "x"
+          ],
+          "body": {
+            "kind": "tupleLiteral",
+            "elements": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "x"
+                ]
+              },
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "x"
+                ]
+              }
+            ],
+            "source": "(x, x)"
+          }
+        }
+      },
+      {
+        "kind": "cteExpr",
+        "name": "sine_wave",
+        "expr": {
+          "kind": "lambdaExpr",
+          "params": [
+            "time"
+          ],
+          "body": {
+            "kind": "functionCall",
+            "name": "sin",
+            "args": [
+              {
+                "kind": "binaryExpr",
+                "op": "*",
+                "left": {
+                  "kind": "binaryExpr",
+                  "op": "*",
+                  "left": {
+                    "kind": "columnRef",
+                    "parts": [
+                      "time"
+                    ]
+                  },
+                  "right": {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "2"
+                  }
+                },
+                "right": {
+                  "kind": "functionCall",
+                  "name": "pi",
+                  "args": []
+                }
+              }
+            ]
+          }
+        },
+        "leadingComments": [
+          "-- Basic waves"
+        ]
+      },
+      {
+        "kind": "cteExpr",
+        "name": "square_wave",
+        "expr": {
+          "kind": "lambdaExpr",
+          "params": [
+            "time"
+          ],
+          "body": {
+            "kind": "binaryExpr",
+            "op": "-",
+            "left": {
+              "kind": "binaryExpr",
+              "op": "*",
+              "left": {
+                "kind": "binaryExpr",
+                "op": "%",
+                "left": {
+                  "kind": "castExpr",
+                  "expr": {
+                    "kind": "columnRef",
+                    "parts": [
+                      "time"
+                    ]
+                  },
+                  "type": "UInt64",
+                  "operator": true
+                },
+                "right": {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "2"
+                }
+              },
+              "right": {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "2"
+              }
+            },
+            "right": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "1"
+            }
+          }
+        }
+      },
+      {
+        "kind": "cteExpr",
+        "name": "sawtooth_wave",
+        "expr": {
+          "kind": "lambdaExpr",
+          "params": [
+            "time"
+          ],
+          "body": {
+            "kind": "binaryExpr",
+            "op": "-",
+            "left": {
+              "kind": "binaryExpr",
+              "op": "*",
+              "left": {
+                "kind": "binaryExpr",
+                "op": "-",
+                "left": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "time"
+                  ]
+                },
+                "right": {
+                  "kind": "functionCall",
+                  "name": "floor",
+                  "args": [
+                    {
+                      "kind": "columnRef",
+                      "parts": [
+                        "time"
+                      ]
+                    }
+                  ]
+                },
+                "parenthesized": true
+              },
+              "right": {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "2"
+              }
+            },
+            "right": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "1"
+            }
+          }
+        }
+      },
+      {
+        "kind": "cteExpr",
+        "name": "triangle_wave",
+        "expr": {
+          "kind": "lambdaExpr",
+          "params": [
+            "time"
+          ],
+          "body": {
+            "kind": "binaryExpr",
+            "op": "-",
+            "left": {
+              "kind": "binaryExpr",
+              "op": "*",
+              "left": {
+                "kind": "functionCall",
+                "name": "abs",
+                "args": [
+                  {
+                    "kind": "functionCall",
+                    "name": "sawtooth_wave",
+                    "args": [
+                      {
+                        "kind": "columnRef",
+                        "parts": [
+                          "time"
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              "right": {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "2"
+              }
+            },
+            "right": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "1"
+            }
+          }
+        }
+      },
+      {
+        "kind": "cteExpr",
+        "name": "lfo",
+        "expr": {
+          "kind": "lambdaExpr",
+          "params": [
+            "from",
+            "to",
+            "wave",
+            "time"
+          ],
+          "body": {
+            "kind": "binaryExpr",
+            "op": "+",
+            "left": {
+              "kind": "columnRef",
+              "parts": [
+                "from"
+              ]
+            },
+            "right": {
+              "kind": "binaryExpr",
+              "op": "*",
+              "left": {
+                "kind": "binaryExpr",
+                "op": "/",
+                "left": {
+                  "kind": "binaryExpr",
+                  "op": "+",
+                  "left": {
+                    "kind": "functionCall",
+                    "name": "wave",
+                    "args": [
+                      {
+                        "kind": "columnRef",
+                        "parts": [
+                          "time"
+                        ]
+                      }
+                    ]
+                  },
+                  "right": {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "1"
+                  },
+                  "parenthesized": true
+                },
+                "right": {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "2"
+                },
+                "parenthesized": true
+              },
+              "right": {
+                "kind": "binaryExpr",
+                "op": "-",
+                "left": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "to"
+                  ]
+                },
+                "right": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "from"
+                  ]
+                },
+                "parenthesized": true
+              }
+            }
+          }
+        },
+        "leadingComments": [
+          "-- Helpers"
+        ]
+      },
+      {
+        "kind": "cteExpr",
+        "name": "step_lfo",
+        "expr": {
+          "kind": "lambdaExpr",
+          "params": [
+            "from",
+            "to",
+            "steps",
+            "time"
+          ],
+          "body": {
+            "kind": "binaryExpr",
+            "op": "+",
+            "left": {
+              "kind": "columnRef",
+              "parts": [
+                "from"
+              ]
+            },
+            "right": {
+              "kind": "binaryExpr",
+              "op": "*",
+              "left": {
+                "kind": "binaryExpr",
+                "op": "/",
+                "left": {
+                  "kind": "functionCall",
+                  "name": "floor",
+                  "args": [
+                    {
+                      "kind": "binaryExpr",
+                      "op": "*",
+                      "left": {
+                        "kind": "binaryExpr",
+                        "op": "-",
+                        "left": {
+                          "kind": "columnRef",
+                          "parts": [
+                            "time"
+                          ]
+                        },
+                        "right": {
+                          "kind": "functionCall",
+                          "name": "floor",
+                          "args": [
+                            {
+                              "kind": "columnRef",
+                              "parts": [
+                                "time"
+                              ]
+                            }
+                          ]
+                        },
+                        "parenthesized": true
+                      },
+                      "right": {
+                        "kind": "columnRef",
+                        "parts": [
+                          "steps"
+                        ]
+                      }
+                    }
+                  ]
+                },
+                "right": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "steps"
+                  ]
+                }
+              },
+              "right": {
+                "kind": "binaryExpr",
+                "op": "-",
+                "left": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "to"
+                  ]
+                },
+                "right": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "from"
+                  ]
+                },
+                "parenthesized": true
+              }
+            }
+          }
+        }
+      },
+      {
+        "kind": "cteExpr",
+        "name": "exp_step_lfo",
+        "expr": {
+          "kind": "lambdaExpr",
+          "params": [
+            "from",
+            "to",
+            "steps",
+            "time"
+          ],
+          "body": {
+            "kind": "functionCall",
+            "name": "exp",
+            "args": [
+              {
+                "kind": "functionCall",
+                "name": "step_lfo",
+                "args": [
+                  {
+                    "kind": "functionCall",
+                    "name": "log",
+                    "args": [
+                      {
+                        "kind": "columnRef",
+                        "parts": [
+                          "from"
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "kind": "functionCall",
+                    "name": "log",
+                    "args": [
+                      {
+                        "kind": "columnRef",
+                        "parts": [
+                          "to"
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "steps"
+                    ]
+                  },
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "time"
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      },
+      {
+        "kind": "cteExpr",
+        "name": "uniform_noise",
+        "expr": {
+          "kind": "lambdaExpr",
+          "params": [
+            "time"
+          ],
+          "body": {
+            "kind": "binaryExpr",
+            "op": "/",
+            "left": {
+              "kind": "functionCall",
+              "name": "cityHash64",
+              "args": [
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "time"
+                  ]
+                }
+              ]
+            },
+            "right": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "0xFFFFFFFFFFFFFFFF"
+            }
+          }
+        },
+        "leadingComments": [
+          "-- Noise"
+        ]
+      },
+      {
+        "kind": "cteExpr",
+        "name": "white_noise",
+        "expr": {
+          "kind": "lambdaExpr",
+          "params": [
+            "time"
+          ],
+          "body": {
+            "kind": "functionCall",
+            "name": "erf",
+            "args": [
+              {
+                "kind": "functionCall",
+                "name": "uniform_noise",
+                "args": [
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "time"
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      },
+      {
+        "kind": "cteExpr",
+        "name": "bernoulli_noise",
+        "expr": {
+          "kind": "lambdaExpr",
+          "params": [
+            "time"
+          ],
+          "body": {
+            "kind": "functionCall",
+            "name": "if",
+            "args": [
+              {
+                "kind": "binaryExpr",
+                "op": "%",
+                "left": {
+                  "kind": "functionCall",
+                  "name": "cityHash64",
+                  "args": [
+                    {
+                      "kind": "columnRef",
+                      "parts": [
+                        "time"
+                      ]
+                    }
+                  ]
+                },
+                "right": {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "2"
+                }
+              },
+              {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "1"
+              },
+              {
+                "kind": "literal",
+                "type": "Int64",
+                "value": "-1"
+              }
+            ]
+          }
+        }
+      },
+      {
+        "kind": "cteExpr",
+        "name": "clipping",
+        "expr": {
+          "kind": "lambdaExpr",
+          "params": [
+            "x",
+            "amount"
+          ],
+          "body": {
+            "kind": "functionCall",
+            "name": "clamp",
+            "args": [
+              {
+                "kind": "binaryExpr",
+                "op": "*",
+                "left": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "x"
+                  ]
+                },
+                "right": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "amount"
+                  ]
+                }
+              }
+            ]
+          }
+        },
+        "leadingComments": [
+          "-- Distortion"
+        ]
+      },
+      {
+        "kind": "cteExpr",
+        "name": "power_distortion",
+        "expr": {
+          "kind": "lambdaExpr",
+          "params": [
+            "x",
+            "amount"
+          ],
+          "body": {
+            "kind": "functionCall",
+            "name": "clamp",
+            "args": [
+              {
+                "kind": "functionCall",
+                "name": "if",
+                "args": [
+                  {
+                    "kind": "binaryExpr",
+                    "op": ">",
+                    "left": {
+                      "kind": "columnRef",
+                      "parts": [
+                        "x"
+                      ]
+                    },
+                    "right": {
+                      "kind": "literal",
+                      "type": "UInt64",
+                      "value": "0"
+                    }
+                  },
+                  {
+                    "kind": "functionCall",
+                    "name": "pow",
+                    "args": [
+                      {
+                        "kind": "columnRef",
+                        "parts": [
+                          "x"
+                        ]
+                      },
+                      {
+                        "kind": "columnRef",
+                        "parts": [
+                          "amount"
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "kind": "functionCall",
+                    "name": "negate",
+                    "args": [
+                      {
+                        "kind": "functionCall",
+                        "name": "pow",
+                        "args": [
+                          {
+                            "kind": "functionCall",
+                            "name": "negate",
+                            "args": [
+                              {
+                                "kind": "columnRef",
+                                "parts": [
+                                  "x"
+                                ]
+                              }
+                            ]
+                          },
+                          {
+                            "kind": "columnRef",
+                            "parts": [
+                              "amount"
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      },
+      {
+        "kind": "cteExpr",
+        "name": "bitcrush",
+        "expr": {
+          "kind": "lambdaExpr",
+          "params": [
+            "x",
+            "amount"
+          ],
+          "body": {
+            "kind": "binaryExpr",
+            "op": "/",
+            "left": {
+              "kind": "functionCall",
+              "name": "round",
+              "args": [
+                {
+                  "kind": "binaryExpr",
+                  "op": "*",
+                  "left": {
+                    "kind": "columnRef",
+                    "parts": [
+                      "x"
+                    ]
+                  },
+                  "right": {
+                    "kind": "functionCall",
+                    "name": "exp2",
+                    "args": [
+                      {
+                        "kind": "columnRef",
+                        "parts": [
+                          "amount"
+                        ]
+                      }
+                    ]
+                  }
+                }
+              ]
+            },
+            "right": {
+              "kind": "functionCall",
+              "name": "exp2",
+              "args": [
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "amount"
+                  ]
+                }
+              ]
+            }
+          }
+        }
+      },
+      {
+        "kind": "cteExpr",
+        "name": "desample",
+        "expr": {
+          "kind": "lambdaExpr",
+          "params": [
+            "time",
+            "sample_frequency"
+          ],
+          "body": {
+            "kind": "binaryExpr",
+            "op": "/",
+            "left": {
+              "kind": "functionCall",
+              "name": "round",
+              "args": [
+                {
+                  "kind": "binaryExpr",
+                  "op": "*",
+                  "left": {
+                    "kind": "columnRef",
+                    "parts": [
+                      "time"
+                    ]
+                  },
+                  "right": {
+                    "kind": "columnRef",
+                    "parts": [
+                      "sample_frequency"
+                    ]
+                  }
+                }
+              ]
+            },
+            "right": {
+              "kind": "columnRef",
+              "parts": [
+                "sample_frequency"
+              ]
+            }
+          }
+        }
+      },
+      {
+        "kind": "cteExpr",
+        "name": "thin",
+        "expr": {
+          "kind": "lambdaExpr",
+          "params": [
+            "time",
+            "wave",
+            "amount"
+          ],
+          "body": {
+            "kind": "functionCall",
+            "name": "if",
+            "args": [
+              {
+                "kind": "binaryExpr",
+                "op": "<",
+                "left": {
+                  "kind": "binaryExpr",
+                  "op": "-",
+                  "left": {
+                    "kind": "columnRef",
+                    "parts": [
+                      "time"
+                    ]
+                  },
+                  "right": {
+                    "kind": "functionCall",
+                    "name": "floor",
+                    "args": [
+                      {
+                        "kind": "columnRef",
+                        "parts": [
+                          "time"
+                        ]
+                      }
+                    ]
+                  }
+                },
+                "right": {
+                  "kind": "binaryExpr",
+                  "op": "-",
+                  "left": {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "1"
+                  },
+                  "right": {
+                    "kind": "columnRef",
+                    "parts": [
+                      "amount"
+                    ]
+                  },
+                  "parenthesized": true
+                },
+                "parenthesized": true
+              },
+              {
+                "kind": "functionCall",
+                "name": "wave",
+                "args": [
+                  {
+                    "kind": "binaryExpr",
+                    "op": "*",
+                    "left": {
+                      "kind": "columnRef",
+                      "parts": [
+                        "time"
+                      ]
+                    },
+                    "right": {
+                      "kind": "binaryExpr",
+                      "op": "-",
+                      "left": {
+                        "kind": "literal",
+                        "type": "UInt64",
+                        "value": "1"
+                      },
+                      "right": {
+                        "kind": "columnRef",
+                        "parts": [
+                          "amount"
+                        ]
+                      },
+                      "parenthesized": true
+                    }
+                  }
+                ]
+              },
+              {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "0"
+              }
+            ]
+          }
+        }
+      },
+      {
+        "kind": "cteExpr",
+        "name": "skew",
+        "expr": {
+          "kind": "lambdaExpr",
+          "params": [
+            "time",
+            "wave",
+            "amount"
+          ],
+          "body": {
+            "kind": "functionCall",
+            "name": "wave",
+            "args": [
+              {
+                "kind": "binaryExpr",
+                "op": "+",
+                "left": {
+                  "kind": "functionCall",
+                  "name": "floor",
+                  "args": [
+                    {
+                      "kind": "columnRef",
+                      "parts": [
+                        "time"
+                      ]
+                    }
+                  ]
+                },
+                "right": {
+                  "kind": "functionCall",
+                  "name": "pow",
+                  "args": [
+                    {
+                      "kind": "binaryExpr",
+                      "op": "-",
+                      "left": {
+                        "kind": "columnRef",
+                        "parts": [
+                          "time"
+                        ]
+                      },
+                      "right": {
+                        "kind": "functionCall",
+                        "name": "floor",
+                        "args": [
+                          {
+                            "kind": "columnRef",
+                            "parts": [
+                              "time"
+                            ]
+                          }
+                        ]
+                      }
+                    },
+                    {
+                      "kind": "columnRef",
+                      "parts": [
+                        "amount"
+                      ]
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        }
+      },
+      {
+        "kind": "cteExpr",
+        "name": "combine",
+        "expr": {
+          "kind": "lambdaExpr",
+          "params": [
+            "a",
+            "b",
+            "weight"
+          ],
+          "body": {
+            "kind": "binaryExpr",
+            "op": "+",
+            "left": {
+              "kind": "binaryExpr",
+              "op": "*",
+              "left": {
+                "kind": "columnRef",
+                "parts": [
+                  "a"
+                ]
+              },
+              "right": {
+                "kind": "binaryExpr",
+                "op": "-",
+                "left": {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "1"
+                },
+                "right": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "weight"
+                  ]
+                },
+                "parenthesized": true
+              }
+            },
+            "right": {
+              "kind": "binaryExpr",
+              "op": "*",
+              "left": {
+                "kind": "columnRef",
+                "parts": [
+                  "b"
+                ]
+              },
+              "right": {
+                "kind": "columnRef",
+                "parts": [
+                  "weight"
+                ]
+              }
+            }
+          }
+        },
+        "leadingComments": [
+          "-- Combining"
+        ]
+      },
+      {
+        "kind": "cteExpr",
+        "name": "envelope",
+        "expr": {
+          "kind": "lambdaExpr",
+          "params": [
+            "time",
+            "offset",
+            "attack",
+            "hold",
+            "release"
+          ],
+          "body": {
+            "kind": "functionCall",
+            "name": "if",
+            "args": [
+              {
+                "kind": "binaryExpr",
+                "op": "<",
+                "left": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "time"
+                  ]
+                },
+                "right": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "offset"
+                  ]
+                }
+              },
+              {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "0"
+              },
+              {
+                "kind": "functionCall",
+                "name": "if",
+                "args": [
+                  {
+                    "kind": "binaryExpr",
+                    "op": "<",
+                    "left": {
+                      "kind": "columnRef",
+                      "parts": [
+                        "time"
+                      ]
+                    },
+                    "right": {
+                      "kind": "binaryExpr",
+                      "op": "+",
+                      "left": {
+                        "kind": "columnRef",
+                        "parts": [
+                          "offset"
+                        ]
+                      },
+                      "right": {
+                        "kind": "columnRef",
+                        "parts": [
+                          "attack"
+                        ]
+                      }
+                    }
+                  },
+                  {
+                    "kind": "binaryExpr",
+                    "op": "/",
+                    "left": {
+                      "kind": "binaryExpr",
+                      "op": "-",
+                      "left": {
+                        "kind": "columnRef",
+                        "parts": [
+                          "time"
+                        ]
+                      },
+                      "right": {
+                        "kind": "columnRef",
+                        "parts": [
+                          "offset"
+                        ]
+                      },
+                      "parenthesized": true
+                    },
+                    "right": {
+                      "kind": "columnRef",
+                      "parts": [
+                        "attack"
+                      ]
+                    },
+                    "parenthesized": true
+                  },
+                  {
+                    "kind": "functionCall",
+                    "name": "if",
+                    "args": [
+                      {
+                        "kind": "binaryExpr",
+                        "op": "<",
+                        "left": {
+                          "kind": "columnRef",
+                          "parts": [
+                            "time"
+                          ]
+                        },
+                        "right": {
+                          "kind": "binaryExpr",
+                          "op": "+",
+                          "left": {
+                            "kind": "binaryExpr",
+                            "op": "+",
+                            "left": {
+                              "kind": "columnRef",
+                              "parts": [
+                                "offset"
+                              ]
+                            },
+                            "right": {
+                              "kind": "columnRef",
+                              "parts": [
+                                "attack"
+                              ]
+                            }
+                          },
+                          "right": {
+                            "kind": "columnRef",
+                            "parts": [
+                              "hold"
+                            ]
+                          }
+                        }
+                      },
+                      {
+                        "kind": "literal",
+                        "type": "UInt64",
+                        "value": "1"
+                      },
+                      {
+                        "kind": "functionCall",
+                        "name": "if",
+                        "args": [
+                          {
+                            "kind": "binaryExpr",
+                            "op": "<",
+                            "left": {
+                              "kind": "columnRef",
+                              "parts": [
+                                "time"
+                              ]
+                            },
+                            "right": {
+                              "kind": "binaryExpr",
+                              "op": "+",
+                              "left": {
+                                "kind": "binaryExpr",
+                                "op": "+",
+                                "left": {
+                                  "kind": "binaryExpr",
+                                  "op": "+",
+                                  "left": {
+                                    "kind": "columnRef",
+                                    "parts": [
+                                      "offset"
+                                    ]
+                                  },
+                                  "right": {
+                                    "kind": "columnRef",
+                                    "parts": [
+                                      "attack"
+                                    ]
+                                  }
+                                },
+                                "right": {
+                                  "kind": "columnRef",
+                                  "parts": [
+                                    "hold"
+                                  ]
+                                }
+                              },
+                              "right": {
+                                "kind": "columnRef",
+                                "parts": [
+                                  "release"
+                                ]
+                              }
+                            }
+                          },
+                          {
+                            "kind": "binaryExpr",
+                            "op": "/",
+                            "left": {
+                              "kind": "binaryExpr",
+                              "op": "-",
+                              "left": {
+                                "kind": "binaryExpr",
+                                "op": "+",
+                                "left": {
+                                  "kind": "binaryExpr",
+                                  "op": "+",
+                                  "left": {
+                                    "kind": "binaryExpr",
+                                    "op": "+",
+                                    "left": {
+                                      "kind": "columnRef",
+                                      "parts": [
+                                        "offset"
+                                      ]
+                                    },
+                                    "right": {
+                                      "kind": "columnRef",
+                                      "parts": [
+                                        "attack"
+                                      ]
+                                    }
+                                  },
+                                  "right": {
+                                    "kind": "columnRef",
+                                    "parts": [
+                                      "hold"
+                                    ]
+                                  }
+                                },
+                                "right": {
+                                  "kind": "columnRef",
+                                  "parts": [
+                                    "release"
+                                  ]
+                                }
+                              },
+                              "right": {
+                                "kind": "columnRef",
+                                "parts": [
+                                  "time"
+                                ]
+                              },
+                              "parenthesized": true
+                            },
+                            "right": {
+                              "kind": "columnRef",
+                              "parts": [
+                                "release"
+                              ]
+                            }
+                          },
+                          {
+                            "kind": "literal",
+                            "type": "UInt64",
+                            "value": "0"
+                          }
+                        ],
+                        "parenthesized": true
+                      }
+                    ],
+                    "parenthesized": true
+                  }
+                ],
+                "parenthesized": true
+              }
+            ]
+          }
+        },
+        "leadingComments": [
+          "-- Envelopes"
+        ]
+      },
+      {
+        "kind": "cteExpr",
+        "name": "running_envelope",
+        "expr": {
+          "kind": "lambdaExpr",
+          "params": [
+            "bpm",
+            "time",
+            "offset",
+            "attack",
+            "hold",
+            "release"
+          ],
+          "body": {
+            "kind": "functionCall",
+            "name": "envelope",
+            "args": [
+              {
+                "kind": "binaryExpr",
+                "op": "-",
+                "left": {
+                  "kind": "binaryExpr",
+                  "op": "*",
+                  "left": {
+                    "kind": "columnRef",
+                    "parts": [
+                      "time"
+                    ]
+                  },
+                  "right": {
+                    "kind": "binaryExpr",
+                    "op": "/",
+                    "left": {
+                      "kind": "columnRef",
+                      "parts": [
+                        "bpm"
+                      ]
+                    },
+                    "right": {
+                      "kind": "literal",
+                      "type": "UInt64",
+                      "value": "60"
+                    },
+                    "parenthesized": true
+                  }
+                },
+                "right": {
+                  "kind": "functionCall",
+                  "name": "floor",
+                  "args": [
+                    {
+                      "kind": "binaryExpr",
+                      "op": "*",
+                      "left": {
+                        "kind": "columnRef",
+                        "parts": [
+                          "time"
+                        ]
+                      },
+                      "right": {
+                        "kind": "binaryExpr",
+                        "op": "/",
+                        "left": {
+                          "kind": "columnRef",
+                          "parts": [
+                            "bpm"
+                          ]
+                        },
+                        "right": {
+                          "kind": "literal",
+                          "type": "UInt64",
+                          "value": "60"
+                        },
+                        "parenthesized": true
+                      }
+                    }
+                  ]
+                }
+              },
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "offset"
+                ]
+              },
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "attack"
+                ]
+              },
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "hold"
+                ]
+              },
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "release"
+                ]
+              }
+            ]
+          }
+        }
+      },
+      {
+        "kind": "cteExpr",
+        "name": "sequencer",
+        "expr": {
+          "kind": "lambdaExpr",
+          "params": [
+            "sequence",
+            "time"
+          ],
+          "body": {
+            "kind": "functionCall",
+            "name": "arrayElement",
+            "args": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "sequence"
+                ]
+              },
+              {
+                "kind": "binaryExpr",
+                "op": "+",
+                "left": {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "1"
+                },
+                "right": {
+                  "kind": "binaryExpr",
+                  "op": "%",
+                  "left": {
+                    "kind": "castExpr",
+                    "expr": {
+                      "kind": "columnRef",
+                      "parts": [
+                        "time"
+                      ]
+                    },
+                    "type": "UInt64",
+                    "operator": true
+                  },
+                  "right": {
+                    "kind": "functionCall",
+                    "name": "length",
+                    "args": [
+                      {
+                        "kind": "columnRef",
+                        "parts": [
+                          "sequence"
+                        ]
+                      }
+                    ]
+                  }
+                }
+              }
+            ]
+          }
+        },
+        "leadingComments": [
+          "-- Sequencers"
+        ]
+      },
+      {
+        "kind": "cteExpr",
+        "name": "delay",
+        "expr": {
+          "kind": "lambdaExpr",
+          "params": [
+            "time",
+            "wave",
+            "delay",
+            "decay",
+            "count"
+          ],
+          "body": {
+            "kind": "functionCall",
+            "name": "arraySum",
+            "args": [
+              {
+                "kind": "lambdaExpr",
+                "params": [
+                  "n"
+                ],
+                "body": {
+                  "kind": "binaryExpr",
+                  "op": "*",
+                  "left": {
+                    "kind": "functionCall",
+                    "name": "wave",
+                    "args": [
+                      {
+                        "kind": "binaryExpr",
+                        "op": "-",
+                        "left": {
+                          "kind": "columnRef",
+                          "parts": [
+                            "time"
+                          ]
+                        },
+                        "right": {
+                          "kind": "binaryExpr",
+                          "op": "*",
+                          "left": {
+                            "kind": "columnRef",
+                            "parts": [
+                              "delay"
+                            ]
+                          },
+                          "right": {
+                            "kind": "columnRef",
+                            "parts": [
+                              "n"
+                            ]
+                          }
+                        }
+                      }
+                    ]
+                  },
+                  "right": {
+                    "kind": "functionCall",
+                    "name": "pow",
+                    "args": [
+                      {
+                        "kind": "columnRef",
+                        "parts": [
+                          "decay"
+                        ]
+                      },
+                      {
+                        "kind": "columnRef",
+                        "parts": [
+                          "n"
+                        ]
+                      }
+                    ]
+                  }
+                }
+              },
+              {
+                "kind": "functionCall",
+                "name": "range",
+                "args": [
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "count"
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "leadingComments": [
+          "-- Delay"
+        ]
+      },
+      {
+        "kind": "cteExpr",
+        "name": "kick",
+        "expr": {
+          "kind": "functionCall",
+          "name": "delay",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "time"
+              ]
+            },
+            {
+              "kind": "lambdaExpr",
+              "params": [
+                "time"
+              ],
+              "body": {
+                "kind": "binaryExpr",
+                "op": "*",
+                "left": {
+                  "kind": "functionCall",
+                  "name": "power_distortion",
+                  "args": [
+                    {
+                      "kind": "functionCall",
+                      "name": "sine_wave",
+                      "args": [
+                        {
+                          "kind": "binaryExpr",
+                          "op": "+",
+                          "left": {
+                            "kind": "binaryExpr",
+                            "op": "*",
+                            "left": {
+                              "kind": "columnRef",
+                              "parts": [
+                                "time"
+                              ]
+                            },
+                            "right": {
+                              "kind": "literal",
+                              "type": "UInt64",
+                              "value": "80"
+                            }
+                          },
+                          "right": {
+                            "kind": "functionCall",
+                            "name": "sine_wave",
+                            "args": [
+                              {
+                                "kind": "binaryExpr",
+                                "op": "*",
+                                "left": {
+                                  "kind": "columnRef",
+                                  "parts": [
+                                    "time"
+                                  ]
+                                },
+                                "right": {
+                                  "kind": "literal",
+                                  "type": "UInt64",
+                                  "value": "2"
+                                }
+                              }
+                            ]
+                          }
+                        }
+                      ]
+                    },
+                    {
+                      "kind": "functionCall",
+                      "name": "lfo",
+                      "args": [
+                        {
+                          "kind": "literal",
+                          "type": "Float64",
+                          "value": "0.5"
+                        },
+                        {
+                          "kind": "literal",
+                          "type": "UInt64",
+                          "value": "1"
+                        },
+                        {
+                          "kind": "columnRef",
+                          "parts": [
+                            "sine_wave"
+                          ]
+                        },
+                        {
+                          "kind": "binaryExpr",
+                          "op": "/",
+                          "left": {
+                            "kind": "columnRef",
+                            "parts": [
+                              "time"
+                            ]
+                          },
+                          "right": {
+                            "kind": "literal",
+                            "type": "UInt64",
+                            "value": "16"
+                          }
+                        }
+                      ]
+                    }
+                  ]
+                },
+                "right": {
+                  "kind": "functionCall",
+                  "name": "running_envelope",
+                  "args": [
+                    {
+                      "kind": "literal",
+                      "type": "UInt64",
+                      "value": "60"
+                    },
+                    {
+                      "kind": "columnRef",
+                      "parts": [
+                        "time"
+                      ]
+                    },
+                    {
+                      "kind": "literal",
+                      "type": "UInt64",
+                      "value": "0"
+                    },
+                    {
+                      "kind": "literal",
+                      "type": "Float64",
+                      "value": "0.0"
+                    },
+                    {
+                      "kind": "literal",
+                      "type": "Float64",
+                      "value": "0.01"
+                    },
+                    {
+                      "kind": "literal",
+                      "type": "Float64",
+                      "value": "0.1"
+                    }
+                  ]
+                }
+              },
+              "parenthesized": true
+            },
+            {
+              "kind": "literal",
+              "type": "Float64",
+              "value": "0.2"
+            },
+            {
+              "kind": "literal",
+              "type": "Float64",
+              "value": "0.5"
+            },
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "5"
+            }
+          ]
+        }
+      }
+    ],
+    "leadingComments": [
+      "-- Input"
+    ],
+    "select": [
+      {
+        "kind": "tupleLiteral",
+        "elements": [
+          {
+            "kind": "functionCall",
+            "name": "output",
+            "args": [
+              {
+                "kind": "binaryExpr",
+                "op": "+",
+                "left": {
+                  "kind": "binaryExpr",
+                  "op": "+",
+                  "left": {
+                    "kind": "binaryExpr",
+                    "op": "+",
+                    "left": {
+                      "kind": "binaryExpr",
+                      "op": "+",
+                      "left": {
+                        "kind": "columnRef",
+                        "parts": [
+                          "kick"
+                        ]
+                      },
+                      "right": {
+                        "kind": "binaryExpr",
+                        "op": "*",
+                        "left": {
+                          "kind": "functionCall",
+                          "name": "delay",
+                          "args": [
+                            {
+                              "kind": "columnRef",
+                              "parts": [
+                                "time"
+                              ]
+                            },
+                            {
+                              "kind": "lambdaExpr",
+                              "params": [
+                                "time"
+                              ],
+                              "body": {
+                                "kind": "functionCall",
+                                "name": "power_distortion",
+                                "args": [
+                                  {
+                                    "kind": "binaryExpr",
+                                    "op": "*",
+                                    "left": {
+                                      "kind": "functionCall",
+                                      "name": "sine_wave",
+                                      "args": [
+                                        {
+                                          "kind": "binaryExpr",
+                                          "op": "+",
+                                          "left": {
+                                            "kind": "binaryExpr",
+                                            "op": "*",
+                                            "left": {
+                                              "kind": "columnRef",
+                                              "parts": [
+                                                "time"
+                                              ]
+                                            },
+                                            "right": {
+                                              "kind": "literal",
+                                              "type": "UInt64",
+                                              "value": "50"
+                                            }
+                                          },
+                                          "right": {
+                                            "kind": "binaryExpr",
+                                            "op": "*",
+                                            "left": {
+                                              "kind": "literal",
+                                              "type": "UInt64",
+                                              "value": "1"
+                                            },
+                                            "right": {
+                                              "kind": "functionCall",
+                                              "name": "sine_wave",
+                                              "args": [
+                                                {
+                                                  "kind": "binaryExpr",
+                                                  "op": "+",
+                                                  "left": {
+                                                    "kind": "binaryExpr",
+                                                    "op": "*",
+                                                    "left": {
+                                                      "kind": "columnRef",
+                                                      "parts": [
+                                                        "time"
+                                                      ]
+                                                    },
+                                                    "right": {
+                                                      "kind": "literal",
+                                                      "type": "UInt64",
+                                                      "value": "100"
+                                                    }
+                                                  },
+                                                  "right": {
+                                                    "kind": "binaryExpr",
+                                                    "op": "/",
+                                                    "left": {
+                                                      "kind": "literal",
+                                                      "type": "UInt64",
+                                                      "value": "1"
+                                                    },
+                                                    "right": {
+                                                      "kind": "literal",
+                                                      "type": "UInt64",
+                                                      "value": "4"
+                                                    }
+                                                  }
+                                                }
+                                              ]
+                                            }
+                                          }
+                                        }
+                                      ]
+                                    },
+                                    "right": {
+                                      "kind": "functionCall",
+                                      "name": "running_envelope",
+                                      "args": [
+                                        {
+                                          "kind": "literal",
+                                          "type": "UInt64",
+                                          "value": "60"
+                                        },
+                                        {
+                                          "kind": "columnRef",
+                                          "parts": [
+                                            "time"
+                                          ]
+                                        },
+                                        {
+                                          "kind": "literal",
+                                          "type": "UInt64",
+                                          "value": "0"
+                                        },
+                                        {
+                                          "kind": "literal",
+                                          "type": "Float64",
+                                          "value": "0.01"
+                                        },
+                                        {
+                                          "kind": "literal",
+                                          "type": "Float64",
+                                          "value": "0.01"
+                                        },
+                                        {
+                                          "kind": "literal",
+                                          "type": "Float64",
+                                          "value": "0.1"
+                                        }
+                                      ]
+                                    }
+                                  },
+                                  {
+                                    "kind": "functionCall",
+                                    "name": "lfo",
+                                    "args": [
+                                      {
+                                        "kind": "literal",
+                                        "type": "UInt64",
+                                        "value": "1"
+                                      },
+                                      {
+                                        "kind": "literal",
+                                        "type": "Float64",
+                                        "value": "0.75"
+                                      },
+                                      {
+                                        "kind": "columnRef",
+                                        "parts": [
+                                          "triangle_wave"
+                                        ]
+                                      },
+                                      {
+                                        "kind": "binaryExpr",
+                                        "op": "/",
+                                        "left": {
+                                          "kind": "columnRef",
+                                          "parts": [
+                                            "time"
+                                          ]
+                                        },
+                                        "right": {
+                                          "kind": "literal",
+                                          "type": "UInt64",
+                                          "value": "8"
+                                        }
+                                      }
+                                    ]
+                                  }
+                                ]
+                              },
+                              "parenthesized": true
+                            },
+                            {
+                              "kind": "literal",
+                              "type": "Float64",
+                              "value": "0.2"
+                            },
+                            {
+                              "kind": "literal",
+                              "type": "Float64",
+                              "value": "0.5"
+                            },
+                            {
+                              "kind": "literal",
+                              "type": "UInt64",
+                              "value": "10"
+                            }
+                          ]
+                        },
+                        "right": {
+                          "kind": "functionCall",
+                          "name": "lfo",
+                          "args": [
+                            {
+                              "kind": "literal",
+                              "type": "Float64",
+                              "value": "0.5"
+                            },
+                            {
+                              "kind": "literal",
+                              "type": "UInt64",
+                              "value": "1"
+                            },
+                            {
+                              "kind": "columnRef",
+                              "parts": [
+                                "triangle_wave"
+                              ]
+                            },
+                            {
+                              "kind": "binaryExpr",
+                              "op": "/",
+                              "left": {
+                                "kind": "columnRef",
+                                "parts": [
+                                  "time"
+                                ]
+                              },
+                              "right": {
+                                "kind": "literal",
+                                "type": "UInt64",
+                                "value": "7"
+                              }
+                            }
+                          ]
+                        }
+                      }
+                    },
+                    "right": {
+                      "kind": "binaryExpr",
+                      "op": "*",
+                      "left": {
+                        "kind": "functionCall",
+                        "name": "delay",
+                        "args": [
+                          {
+                            "kind": "columnRef",
+                            "parts": [
+                              "time"
+                            ]
+                          },
+                          {
+                            "kind": "lambdaExpr",
+                            "params": [
+                              "time"
+                            ],
+                            "body": {
+                              "kind": "functionCall",
+                              "name": "power_distortion",
+                              "args": [
+                                {
+                                  "kind": "binaryExpr",
+                                  "op": "*",
+                                  "left": {
+                                    "kind": "functionCall",
+                                    "name": "sine_wave",
+                                    "args": [
+                                      {
+                                        "kind": "binaryExpr",
+                                        "op": "+",
+                                        "left": {
+                                          "kind": "binaryExpr",
+                                          "op": "*",
+                                          "left": {
+                                            "kind": "columnRef",
+                                            "parts": [
+                                              "time"
+                                            ]
+                                          },
+                                          "right": {
+                                            "kind": "functionCall",
+                                            "name": "sequencer",
+                                            "args": [
+                                              {
+                                                "kind": "arrayLiteral",
+                                                "elements": [
+                                                  {
+                                                    "kind": "literal",
+                                                    "type": "UInt64",
+                                                    "value": "50"
+                                                  },
+                                                  {
+                                                    "kind": "literal",
+                                                    "type": "UInt64",
+                                                    "value": "100"
+                                                  },
+                                                  {
+                                                    "kind": "literal",
+                                                    "type": "UInt64",
+                                                    "value": "200"
+                                                  },
+                                                  {
+                                                    "kind": "literal",
+                                                    "type": "UInt64",
+                                                    "value": "400"
+                                                  }
+                                                ],
+                                                "source": "[50, 100, 200, 400]"
+                                              },
+                                              {
+                                                "kind": "binaryExpr",
+                                                "op": "/",
+                                                "left": {
+                                                  "kind": "columnRef",
+                                                  "parts": [
+                                                    "time"
+                                                  ]
+                                                },
+                                                "right": {
+                                                  "kind": "literal",
+                                                  "type": "UInt64",
+                                                  "value": "2"
+                                                }
+                                              }
+                                            ]
+                                          }
+                                        },
+                                        "right": {
+                                          "kind": "binaryExpr",
+                                          "op": "*",
+                                          "left": {
+                                            "kind": "literal",
+                                            "type": "UInt64",
+                                            "value": "1"
+                                          },
+                                          "right": {
+                                            "kind": "functionCall",
+                                            "name": "sine_wave",
+                                            "args": [
+                                              {
+                                                "kind": "binaryExpr",
+                                                "op": "+",
+                                                "left": {
+                                                  "kind": "binaryExpr",
+                                                  "op": "*",
+                                                  "left": {
+                                                    "kind": "columnRef",
+                                                    "parts": [
+                                                      "time"
+                                                    ]
+                                                  },
+                                                  "right": {
+                                                    "kind": "functionCall",
+                                                    "name": "sequencer",
+                                                    "args": [
+                                                      {
+                                                        "kind": "arrayLiteral",
+                                                        "elements": [
+                                                          {
+                                                            "kind": "literal",
+                                                            "type": "UInt64",
+                                                            "value": "50"
+                                                          },
+                                                          {
+                                                            "kind": "literal",
+                                                            "type": "UInt64",
+                                                            "value": "100"
+                                                          },
+                                                          {
+                                                            "kind": "literal",
+                                                            "type": "UInt64",
+                                                            "value": "200"
+                                                          }
+                                                        ],
+                                                        "source": "[50, 100, 200]"
+                                                      },
+                                                      {
+                                                        "kind": "binaryExpr",
+                                                        "op": "/",
+                                                        "left": {
+                                                          "kind": "columnRef",
+                                                          "parts": [
+                                                            "time"
+                                                          ]
+                                                        },
+                                                        "right": {
+                                                          "kind": "literal",
+                                                          "type": "UInt64",
+                                                          "value": "4"
+                                                        }
+                                                      }
+                                                    ]
+                                                  }
+                                                },
+                                                "right": {
+                                                  "kind": "binaryExpr",
+                                                  "op": "/",
+                                                  "left": {
+                                                    "kind": "literal",
+                                                    "type": "UInt64",
+                                                    "value": "1"
+                                                  },
+                                                  "right": {
+                                                    "kind": "literal",
+                                                    "type": "UInt64",
+                                                    "value": "4"
+                                                  }
+                                                }
+                                              }
+                                            ]
+                                          }
+                                        }
+                                      }
+                                    ]
+                                  },
+                                  "right": {
+                                    "kind": "functionCall",
+                                    "name": "running_envelope",
+                                    "args": [
+                                      {
+                                        "kind": "literal",
+                                        "type": "UInt64",
+                                        "value": "60"
+                                      },
+                                      {
+                                        "kind": "columnRef",
+                                        "parts": [
+                                          "time"
+                                        ]
+                                      },
+                                      {
+                                        "kind": "literal",
+                                        "type": "Float64",
+                                        "value": "0.5"
+                                      },
+                                      {
+                                        "kind": "literal",
+                                        "type": "Float64",
+                                        "value": "0.01"
+                                      },
+                                      {
+                                        "kind": "literal",
+                                        "type": "Float64",
+                                        "value": "0.01"
+                                      },
+                                      {
+                                        "kind": "literal",
+                                        "type": "Float64",
+                                        "value": "0.1"
+                                      }
+                                    ]
+                                  }
+                                },
+                                {
+                                  "kind": "functionCall",
+                                  "name": "lfo",
+                                  "args": [
+                                    {
+                                      "kind": "literal",
+                                      "type": "UInt64",
+                                      "value": "1"
+                                    },
+                                    {
+                                      "kind": "literal",
+                                      "type": "Float64",
+                                      "value": "0.75"
+                                    },
+                                    {
+                                      "kind": "columnRef",
+                                      "parts": [
+                                        "triangle_wave"
+                                      ]
+                                    },
+                                    {
+                                      "kind": "binaryExpr",
+                                      "op": "/",
+                                      "left": {
+                                        "kind": "columnRef",
+                                        "parts": [
+                                          "time"
+                                        ]
+                                      },
+                                      "right": {
+                                        "kind": "literal",
+                                        "type": "UInt64",
+                                        "value": "8"
+                                      }
+                                    }
+                                  ]
+                                }
+                              ]
+                            },
+                            "parenthesized": true
+                          },
+                          {
+                            "kind": "literal",
+                            "type": "Float64",
+                            "value": "0.2"
+                          },
+                          {
+                            "kind": "literal",
+                            "type": "Float64",
+                            "value": "0.5"
+                          },
+                          {
+                            "kind": "literal",
+                            "type": "UInt64",
+                            "value": "10"
+                          }
+                        ]
+                      },
+                      "right": {
+                        "kind": "functionCall",
+                        "name": "lfo",
+                        "args": [
+                          {
+                            "kind": "literal",
+                            "type": "Float64",
+                            "value": "0.5"
+                          },
+                          {
+                            "kind": "literal",
+                            "type": "UInt64",
+                            "value": "1"
+                          },
+                          {
+                            "kind": "columnRef",
+                            "parts": [
+                              "triangle_wave"
+                            ]
+                          },
+                          {
+                            "kind": "binaryExpr",
+                            "op": "+",
+                            "left": {
+                              "kind": "literal",
+                              "type": "UInt64",
+                              "value": "16"
+                            },
+                            "right": {
+                              "kind": "binaryExpr",
+                              "op": "/",
+                              "left": {
+                                "kind": "columnRef",
+                                "parts": [
+                                  "time"
+                                ]
+                              },
+                              "right": {
+                                "kind": "literal",
+                                "type": "UInt64",
+                                "value": "11"
+                              }
+                            }
+                          }
+                        ]
+                      }
+                    }
+                  },
+                  "right": {
+                    "kind": "binaryExpr",
+                    "op": "*",
+                    "left": {
+                      "kind": "functionCall",
+                      "name": "delay",
+                      "args": [
+                        {
+                          "kind": "columnRef",
+                          "parts": [
+                            "time"
+                          ]
+                        },
+                        {
+                          "kind": "lambdaExpr",
+                          "params": [
+                            "time"
+                          ],
+                          "body": {
+                            "kind": "binaryExpr",
+                            "op": "*",
+                            "left": {
+                              "kind": "functionCall",
+                              "name": "white_noise",
+                              "args": [
+                                {
+                                  "kind": "columnRef",
+                                  "parts": [
+                                    "time"
+                                  ]
+                                }
+                              ]
+                            },
+                            "right": {
+                              "kind": "functionCall",
+                              "name": "running_envelope",
+                              "args": [
+                                {
+                                  "kind": "literal",
+                                  "type": "UInt64",
+                                  "value": "60"
+                                },
+                                {
+                                  "kind": "columnRef",
+                                  "parts": [
+                                    "time"
+                                  ]
+                                },
+                                {
+                                  "kind": "literal",
+                                  "type": "Float64",
+                                  "value": "0.75"
+                                },
+                                {
+                                  "kind": "literal",
+                                  "type": "Float64",
+                                  "value": "0.01"
+                                },
+                                {
+                                  "kind": "literal",
+                                  "type": "Float64",
+                                  "value": "0.01"
+                                },
+                                {
+                                  "kind": "literal",
+                                  "type": "Float64",
+                                  "value": "0.1"
+                                }
+                              ]
+                            }
+                          },
+                          "parenthesized": true
+                        },
+                        {
+                          "kind": "literal",
+                          "type": "Float64",
+                          "value": "0.2"
+                        },
+                        {
+                          "kind": "literal",
+                          "type": "Float64",
+                          "value": "0.5"
+                        },
+                        {
+                          "kind": "literal",
+                          "type": "UInt64",
+                          "value": "10"
+                        }
+                      ]
+                    },
+                    "right": {
+                      "kind": "functionCall",
+                      "name": "lfo",
+                      "args": [
+                        {
+                          "kind": "literal",
+                          "type": "Float64",
+                          "value": "0.5"
+                        },
+                        {
+                          "kind": "literal",
+                          "type": "UInt64",
+                          "value": "1"
+                        },
+                        {
+                          "kind": "columnRef",
+                          "parts": [
+                            "triangle_wave"
+                          ]
+                        },
+                        {
+                          "kind": "binaryExpr",
+                          "op": "+",
+                          "left": {
+                            "kind": "literal",
+                            "type": "UInt64",
+                            "value": "24"
+                          },
+                          "right": {
+                            "kind": "binaryExpr",
+                            "op": "/",
+                            "left": {
+                              "kind": "columnRef",
+                              "parts": [
+                                "time"
+                              ]
+                            },
+                            "right": {
+                              "kind": "literal",
+                              "type": "UInt64",
+                              "value": "13"
+                            }
+                          }
+                        }
+                      ]
+                    }
+                  }
+                },
+                "right": {
+                  "kind": "binaryExpr",
+                  "op": "*",
+                  "left": {
+                    "kind": "functionCall",
+                    "name": "sine_wave",
+                    "args": [
+                      {
+                        "kind": "binaryExpr",
+                        "op": "+",
+                        "left": {
+                          "kind": "binaryExpr",
+                          "op": "*",
+                          "left": {
+                            "kind": "columnRef",
+                            "parts": [
+                              "time"
+                            ]
+                          },
+                          "right": {
+                            "kind": "literal",
+                            "type": "UInt64",
+                            "value": "100"
+                          }
+                        },
+                        "right": {
+                          "kind": "binaryExpr",
+                          "op": "*",
+                          "left": {
+                            "kind": "literal",
+                            "type": "UInt64",
+                            "value": "1"
+                          },
+                          "right": {
+                            "kind": "functionCall",
+                            "name": "sine_wave",
+                            "args": [
+                              {
+                                "kind": "binaryExpr",
+                                "op": "+",
+                                "left": {
+                                  "kind": "binaryExpr",
+                                  "op": "*",
+                                  "left": {
+                                    "kind": "columnRef",
+                                    "parts": [
+                                      "time"
+                                    ]
+                                  },
+                                  "right": {
+                                    "kind": "literal",
+                                    "type": "UInt64",
+                                    "value": "10"
+                                  }
+                                },
+                                "right": {
+                                  "kind": "binaryExpr",
+                                  "op": "/",
+                                  "left": {
+                                    "kind": "literal",
+                                    "type": "UInt64",
+                                    "value": "1"
+                                  },
+                                  "right": {
+                                    "kind": "literal",
+                                    "type": "UInt64",
+                                    "value": "4"
+                                  }
+                                }
+                              }
+                            ]
+                          }
+                        }
+                      }
+                    ]
+                  },
+                  "right": {
+                    "kind": "functionCall",
+                    "name": "running_envelope",
+                    "args": [
+                      {
+                        "kind": "literal",
+                        "type": "UInt64",
+                        "value": "120"
+                      },
+                      {
+                        "kind": "columnRef",
+                        "parts": [
+                          "time"
+                        ]
+                      },
+                      {
+                        "kind": "literal",
+                        "type": "UInt64",
+                        "value": "0"
+                      },
+                      {
+                        "kind": "literal",
+                        "type": "Float64",
+                        "value": "0.01"
+                      },
+                      {
+                        "kind": "literal",
+                        "type": "Float64",
+                        "value": "0.01"
+                      },
+                      {
+                        "kind": "literal",
+                        "type": "Float64",
+                        "value": "0.1"
+                      }
+                    ]
+                  }
+                }
+              }
+            ]
+          },
+          {
+            "kind": "functionCall",
+            "name": "output",
+            "args": [
+              {
+                "kind": "binaryExpr",
+                "op": "+",
+                "left": {
+                  "kind": "binaryExpr",
+                  "op": "+",
+                  "left": {
+                    "kind": "binaryExpr",
+                    "op": "+",
+                    "left": {
+                      "kind": "columnRef",
+                      "parts": [
+                        "kick"
+                      ]
+                    },
+                    "right": {
+                      "kind": "binaryExpr",
+                      "op": "*",
+                      "left": {
+                        "kind": "functionCall",
+                        "name": "delay",
+                        "args": [
+                          {
+                            "kind": "binaryExpr",
+                            "op": "+",
+                            "left": {
+                              "kind": "columnRef",
+                              "parts": [
+                                "time"
+                              ]
+                            },
+                            "right": {
+                              "kind": "literal",
+                              "type": "Float64",
+                              "value": "0.01"
+                            }
+                          },
+                          {
+                            "kind": "lambdaExpr",
+                            "params": [
+                              "time"
+                            ],
+                            "body": {
+                              "kind": "functionCall",
+                              "name": "power_distortion",
+                              "args": [
+                                {
+                                  "kind": "binaryExpr",
+                                  "op": "*",
+                                  "left": {
+                                    "kind": "functionCall",
+                                    "name": "sine_wave",
+                                    "args": [
+                                      {
+                                        "kind": "binaryExpr",
+                                        "op": "+",
+                                        "left": {
+                                          "kind": "binaryExpr",
+                                          "op": "*",
+                                          "left": {
+                                            "kind": "columnRef",
+                                            "parts": [
+                                              "time"
+                                            ]
+                                          },
+                                          "right": {
+                                            "kind": "literal",
+                                            "type": "UInt64",
+                                            "value": "50"
+                                          }
+                                        },
+                                        "right": {
+                                          "kind": "binaryExpr",
+                                          "op": "*",
+                                          "left": {
+                                            "kind": "literal",
+                                            "type": "UInt64",
+                                            "value": "1"
+                                          },
+                                          "right": {
+                                            "kind": "functionCall",
+                                            "name": "sine_wave",
+                                            "args": [
+                                              {
+                                                "kind": "binaryExpr",
+                                                "op": "+",
+                                                "left": {
+                                                  "kind": "binaryExpr",
+                                                  "op": "*",
+                                                  "left": {
+                                                    "kind": "columnRef",
+                                                    "parts": [
+                                                      "time"
+                                                    ]
+                                                  },
+                                                  "right": {
+                                                    "kind": "literal",
+                                                    "type": "UInt64",
+                                                    "value": "100"
+                                                  }
+                                                },
+                                                "right": {
+                                                  "kind": "binaryExpr",
+                                                  "op": "/",
+                                                  "left": {
+                                                    "kind": "literal",
+                                                    "type": "UInt64",
+                                                    "value": "1"
+                                                  },
+                                                  "right": {
+                                                    "kind": "literal",
+                                                    "type": "UInt64",
+                                                    "value": "4"
+                                                  }
+                                                }
+                                              }
+                                            ]
+                                          }
+                                        }
+                                      }
+                                    ]
+                                  },
+                                  "right": {
+                                    "kind": "functionCall",
+                                    "name": "running_envelope",
+                                    "args": [
+                                      {
+                                        "kind": "literal",
+                                        "type": "UInt64",
+                                        "value": "60"
+                                      },
+                                      {
+                                        "kind": "columnRef",
+                                        "parts": [
+                                          "time"
+                                        ]
+                                      },
+                                      {
+                                        "kind": "literal",
+                                        "type": "UInt64",
+                                        "value": "0"
+                                      },
+                                      {
+                                        "kind": "literal",
+                                        "type": "Float64",
+                                        "value": "0.01"
+                                      },
+                                      {
+                                        "kind": "literal",
+                                        "type": "Float64",
+                                        "value": "0.01"
+                                      },
+                                      {
+                                        "kind": "literal",
+                                        "type": "Float64",
+                                        "value": "0.1"
+                                      }
+                                    ]
+                                  }
+                                },
+                                {
+                                  "kind": "functionCall",
+                                  "name": "lfo",
+                                  "args": [
+                                    {
+                                      "kind": "literal",
+                                      "type": "UInt64",
+                                      "value": "1"
+                                    },
+                                    {
+                                      "kind": "literal",
+                                      "type": "Float64",
+                                      "value": "0.75"
+                                    },
+                                    {
+                                      "kind": "columnRef",
+                                      "parts": [
+                                        "triangle_wave"
+                                      ]
+                                    },
+                                    {
+                                      "kind": "binaryExpr",
+                                      "op": "/",
+                                      "left": {
+                                        "kind": "columnRef",
+                                        "parts": [
+                                          "time"
+                                        ]
+                                      },
+                                      "right": {
+                                        "kind": "literal",
+                                        "type": "UInt64",
+                                        "value": "8"
+                                      }
+                                    }
+                                  ]
+                                }
+                              ]
+                            },
+                            "parenthesized": true
+                          },
+                          {
+                            "kind": "literal",
+                            "type": "Float64",
+                            "value": "0.2"
+                          },
+                          {
+                            "kind": "literal",
+                            "type": "Float64",
+                            "value": "0.5"
+                          },
+                          {
+                            "kind": "literal",
+                            "type": "UInt64",
+                            "value": "10"
+                          }
+                        ]
+                      },
+                      "right": {
+                        "kind": "functionCall",
+                        "name": "lfo",
+                        "args": [
+                          {
+                            "kind": "literal",
+                            "type": "Float64",
+                            "value": "0.5"
+                          },
+                          {
+                            "kind": "literal",
+                            "type": "UInt64",
+                            "value": "1"
+                          },
+                          {
+                            "kind": "columnRef",
+                            "parts": [
+                              "triangle_wave"
+                            ]
+                          },
+                          {
+                            "kind": "binaryExpr",
+                            "op": "/",
+                            "left": {
+                              "kind": "columnRef",
+                              "parts": [
+                                "time"
+                              ]
+                            },
+                            "right": {
+                              "kind": "literal",
+                              "type": "UInt64",
+                              "value": "7"
+                            }
+                          }
+                        ]
+                      }
+                    }
+                  },
+                  "right": {
+                    "kind": "binaryExpr",
+                    "op": "*",
+                    "left": {
+                      "kind": "functionCall",
+                      "name": "delay",
+                      "args": [
+                        {
+                          "kind": "binaryExpr",
+                          "op": "-",
+                          "left": {
+                            "kind": "columnRef",
+                            "parts": [
+                              "time"
+                            ]
+                          },
+                          "right": {
+                            "kind": "literal",
+                            "type": "Float64",
+                            "value": "0.01"
+                          }
+                        },
+                        {
+                          "kind": "lambdaExpr",
+                          "params": [
+                            "time"
+                          ],
+                          "body": {
+                            "kind": "functionCall",
+                            "name": "power_distortion",
+                            "args": [
+                              {
+                                "kind": "binaryExpr",
+                                "op": "*",
+                                "left": {
+                                  "kind": "functionCall",
+                                  "name": "sine_wave",
+                                  "args": [
+                                    {
+                                      "kind": "binaryExpr",
+                                      "op": "+",
+                                      "left": {
+                                        "kind": "binaryExpr",
+                                        "op": "*",
+                                        "left": {
+                                          "kind": "columnRef",
+                                          "parts": [
+                                            "time"
+                                          ]
+                                        },
+                                        "right": {
+                                          "kind": "functionCall",
+                                          "name": "sequencer",
+                                          "args": [
+                                            {
+                                              "kind": "arrayLiteral",
+                                              "elements": [
+                                                {
+                                                  "kind": "literal",
+                                                  "type": "UInt64",
+                                                  "value": "50"
+                                                },
+                                                {
+                                                  "kind": "literal",
+                                                  "type": "UInt64",
+                                                  "value": "100"
+                                                },
+                                                {
+                                                  "kind": "literal",
+                                                  "type": "UInt64",
+                                                  "value": "200"
+                                                },
+                                                {
+                                                  "kind": "literal",
+                                                  "type": "UInt64",
+                                                  "value": "400"
+                                                }
+                                              ],
+                                              "source": "[50, 100, 200, 400]"
+                                            },
+                                            {
+                                              "kind": "binaryExpr",
+                                              "op": "/",
+                                              "left": {
+                                                "kind": "columnRef",
+                                                "parts": [
+                                                  "time"
+                                                ]
+                                              },
+                                              "right": {
+                                                "kind": "literal",
+                                                "type": "UInt64",
+                                                "value": "2"
+                                              }
+                                            }
+                                          ]
+                                        }
+                                      },
+                                      "right": {
+                                        "kind": "binaryExpr",
+                                        "op": "*",
+                                        "left": {
+                                          "kind": "literal",
+                                          "type": "UInt64",
+                                          "value": "1"
+                                        },
+                                        "right": {
+                                          "kind": "functionCall",
+                                          "name": "sine_wave",
+                                          "args": [
+                                            {
+                                              "kind": "binaryExpr",
+                                              "op": "+",
+                                              "left": {
+                                                "kind": "binaryExpr",
+                                                "op": "*",
+                                                "left": {
+                                                  "kind": "columnRef",
+                                                  "parts": [
+                                                    "time"
+                                                  ]
+                                                },
+                                                "right": {
+                                                  "kind": "functionCall",
+                                                  "name": "sequencer",
+                                                  "args": [
+                                                    {
+                                                      "kind": "arrayLiteral",
+                                                      "elements": [
+                                                        {
+                                                          "kind": "literal",
+                                                          "type": "UInt64",
+                                                          "value": "50"
+                                                        },
+                                                        {
+                                                          "kind": "literal",
+                                                          "type": "UInt64",
+                                                          "value": "100"
+                                                        },
+                                                        {
+                                                          "kind": "literal",
+                                                          "type": "UInt64",
+                                                          "value": "200"
+                                                        }
+                                                      ],
+                                                      "source": "[50, 100, 200]"
+                                                    },
+                                                    {
+                                                      "kind": "binaryExpr",
+                                                      "op": "/",
+                                                      "left": {
+                                                        "kind": "columnRef",
+                                                        "parts": [
+                                                          "time"
+                                                        ]
+                                                      },
+                                                      "right": {
+                                                        "kind": "literal",
+                                                        "type": "UInt64",
+                                                        "value": "4"
+                                                      }
+                                                    }
+                                                  ]
+                                                }
+                                              },
+                                              "right": {
+                                                "kind": "binaryExpr",
+                                                "op": "/",
+                                                "left": {
+                                                  "kind": "literal",
+                                                  "type": "UInt64",
+                                                  "value": "1"
+                                                },
+                                                "right": {
+                                                  "kind": "literal",
+                                                  "type": "UInt64",
+                                                  "value": "4"
+                                                }
+                                              }
+                                            }
+                                          ]
+                                        }
+                                      }
+                                    }
+                                  ]
+                                },
+                                "right": {
+                                  "kind": "functionCall",
+                                  "name": "running_envelope",
+                                  "args": [
+                                    {
+                                      "kind": "literal",
+                                      "type": "UInt64",
+                                      "value": "60"
+                                    },
+                                    {
+                                      "kind": "columnRef",
+                                      "parts": [
+                                        "time"
+                                      ]
+                                    },
+                                    {
+                                      "kind": "literal",
+                                      "type": "Float64",
+                                      "value": "0.5"
+                                    },
+                                    {
+                                      "kind": "literal",
+                                      "type": "Float64",
+                                      "value": "0.01"
+                                    },
+                                    {
+                                      "kind": "literal",
+                                      "type": "Float64",
+                                      "value": "0.01"
+                                    },
+                                    {
+                                      "kind": "literal",
+                                      "type": "Float64",
+                                      "value": "0.1"
+                                    }
+                                  ]
+                                }
+                              },
+                              {
+                                "kind": "functionCall",
+                                "name": "lfo",
+                                "args": [
+                                  {
+                                    "kind": "literal",
+                                    "type": "UInt64",
+                                    "value": "1"
+                                  },
+                                  {
+                                    "kind": "literal",
+                                    "type": "Float64",
+                                    "value": "0.75"
+                                  },
+                                  {
+                                    "kind": "columnRef",
+                                    "parts": [
+                                      "triangle_wave"
+                                    ]
+                                  },
+                                  {
+                                    "kind": "binaryExpr",
+                                    "op": "/",
+                                    "left": {
+                                      "kind": "columnRef",
+                                      "parts": [
+                                        "time"
+                                      ]
+                                    },
+                                    "right": {
+                                      "kind": "literal",
+                                      "type": "UInt64",
+                                      "value": "8"
+                                    }
+                                  }
+                                ]
+                              }
+                            ]
+                          },
+                          "parenthesized": true
+                        },
+                        {
+                          "kind": "literal",
+                          "type": "Float64",
+                          "value": "0.2"
+                        },
+                        {
+                          "kind": "literal",
+                          "type": "Float64",
+                          "value": "0.5"
+                        },
+                        {
+                          "kind": "literal",
+                          "type": "UInt64",
+                          "value": "10"
+                        }
+                      ]
+                    },
+                    "right": {
+                      "kind": "functionCall",
+                      "name": "lfo",
+                      "args": [
+                        {
+                          "kind": "literal",
+                          "type": "Float64",
+                          "value": "0.5"
+                        },
+                        {
+                          "kind": "literal",
+                          "type": "UInt64",
+                          "value": "1"
+                        },
+                        {
+                          "kind": "columnRef",
+                          "parts": [
+                            "triangle_wave"
+                          ]
+                        },
+                        {
+                          "kind": "binaryExpr",
+                          "op": "+",
+                          "left": {
+                            "kind": "literal",
+                            "type": "UInt64",
+                            "value": "16"
+                          },
+                          "right": {
+                            "kind": "binaryExpr",
+                            "op": "/",
+                            "left": {
+                              "kind": "columnRef",
+                              "parts": [
+                                "time"
+                              ]
+                            },
+                            "right": {
+                              "kind": "literal",
+                              "type": "UInt64",
+                              "value": "11"
+                            }
+                          }
+                        }
+                      ]
+                    }
+                  }
+                },
+                "right": {
+                  "kind": "binaryExpr",
+                  "op": "*",
+                  "left": {
+                    "kind": "functionCall",
+                    "name": "delay",
+                    "args": [
+                      {
+                        "kind": "binaryExpr",
+                        "op": "+",
+                        "left": {
+                          "kind": "columnRef",
+                          "parts": [
+                            "time"
+                          ]
+                        },
+                        "right": {
+                          "kind": "literal",
+                          "type": "Float64",
+                          "value": "0.005"
+                        }
+                      },
+                      {
+                        "kind": "lambdaExpr",
+                        "params": [
+                          "time"
+                        ],
+                        "body": {
+                          "kind": "binaryExpr",
+                          "op": "*",
+                          "left": {
+                            "kind": "functionCall",
+                            "name": "white_noise",
+                            "args": [
+                              {
+                                "kind": "columnRef",
+                                "parts": [
+                                  "time"
+                                ]
+                              }
+                            ]
+                          },
+                          "right": {
+                            "kind": "functionCall",
+                            "name": "running_envelope",
+                            "args": [
+                              {
+                                "kind": "literal",
+                                "type": "UInt64",
+                                "value": "60"
+                              },
+                              {
+                                "kind": "columnRef",
+                                "parts": [
+                                  "time"
+                                ]
+                              },
+                              {
+                                "kind": "literal",
+                                "type": "Float64",
+                                "value": "0.75"
+                              },
+                              {
+                                "kind": "literal",
+                                "type": "Float64",
+                                "value": "0.01"
+                              },
+                              {
+                                "kind": "literal",
+                                "type": "Float64",
+                                "value": "0.01"
+                              },
+                              {
+                                "kind": "literal",
+                                "type": "Float64",
+                                "value": "0.1"
+                              }
+                            ]
+                          }
+                        },
+                        "parenthesized": true
+                      },
+                      {
+                        "kind": "literal",
+                        "type": "Float64",
+                        "value": "0.2"
+                      },
+                      {
+                        "kind": "literal",
+                        "type": "Float64",
+                        "value": "0.5"
+                      },
+                      {
+                        "kind": "literal",
+                        "type": "UInt64",
+                        "value": "10"
+                      }
+                    ]
+                  },
+                  "right": {
+                    "kind": "functionCall",
+                    "name": "lfo",
+                    "args": [
+                      {
+                        "kind": "literal",
+                        "type": "Float64",
+                        "value": "0.5"
+                      },
+                      {
+                        "kind": "literal",
+                        "type": "UInt64",
+                        "value": "1"
+                      },
+                      {
+                        "kind": "columnRef",
+                        "parts": [
+                          "triangle_wave"
+                        ]
+                      },
+                      {
+                        "kind": "binaryExpr",
+                        "op": "+",
+                        "left": {
+                          "kind": "literal",
+                          "type": "UInt64",
+                          "value": "24"
+                        },
+                        "right": {
+                          "kind": "binaryExpr",
+                          "op": "/",
+                          "left": {
+                            "kind": "columnRef",
+                            "parts": [
+                              "time"
+                            ]
+                          },
+                          "right": {
+                            "kind": "literal",
+                            "type": "UInt64",
+                            "value": "13"
+                          }
+                        }
+                      }
+                    ]
+                  }
+                }
+              }
+            ]
+          }
+        ],
+        "source": "(output(\n        kick +\n        delay(time, (time ->\n            power_distortion(\n                sine_wave(time * 50 + 1 * sine_wave(time * 100 + 1/4))\n                    * running_envelope(60, time, 0, 0.01, 0.01, 0.1),\n                lfo(1, 0.75, triangle_wave, time / 8))),\n            0.2, 0.5, 10)\n        * lfo(0.5, 1, triangle_wave, time / 7)\n\n        + delay(time, (time ->\n            power_distortion(\n                sine_wave(time * sequencer([50, 100, 200, 400], time / 2) + 1 * sine_wave(time * sequencer([50, 100, 200], time / 4) + 1/4))\n                    * running_envelope(60, time, 0.5, 0.01, 0.01, 0.1),\n                lfo(1, 0.75, triangle_wave, time / 8))),\n            0.2, 0.5, 10)\n        * lfo(0.5, 1, triangle_wave, 16 + time / 11)\n\n        + delay(time, (time ->\n            white_noise(time) * running_envelope(60, time, 0.75, 0.01, 0.01, 0.1)),\n            0.2, 0.5, 10)\n        * lfo(0.5, 1, triangle_wave, 24 + time / 13)\n\n        + sine_wave(time * 100 + 1 * sine_wave(time * 10 + 1/4))\n            * running_envelope(120, time, 0, 0.01, 0.01, 0.1)\n    ),\n\n    output(\n        kick +\n        delay(time + 0.01, (time ->\n            power_distortion(\n                sine_wave(time * 50 + 1 * sine_wave(time * 100 + 1/4))\n                    * running_envelope(60, time, 0, 0.01, 0.01, 0.1),\n                lfo(1, 0.75, triangle_wave, time / 8))),\n            0.2, 0.5, 10)\n        * lfo(0.5, 1, triangle_wave, time / 7)\n\n        + delay(time - 0.01, (time ->\n            power_distortion(\n                sine_wave(time * sequencer([50, 100, 200, 400], time / 2) + 1 * sine_wave(time * sequencer([50, 100, 200], time / 4) + 1/4))\n                    * running_envelope(60, time, 0.5, 0.01, 0.01, 0.1),\n                lfo(1, 0.75, triangle_wave, time / 8))),\n            0.2, 0.5, 10)\n        * lfo(0.5, 1, triangle_wave, 16 + time / 11)\n\n        + delay(time + 0.005, (time ->\n            white_noise(time) * running_envelope(60, time, 0.75, 0.01, 0.01, 0.1)),\n            0.2, 0.5, 10)\n        * lfo(0.5, 1, triangle_wave, 24 + time / 13)\n    ))"
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "database": "system",
+      "table": "numbers"
+    },
+    "limit": {
+      "count": {
+        "kind": "literal",
+        "type": "UInt64",
+        "value": "10"
+      }
+    }
+  }
+]

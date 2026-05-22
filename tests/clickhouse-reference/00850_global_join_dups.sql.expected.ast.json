@@ -1,5 +1,151 @@
 [
   {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "t_local"
+    },
+    "ifExists": true,
+    "leadingComments": [
+      "-- Tags: global"
+    ]
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "t1_00850"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "t2_00850"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "t_local"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "dummy",
+        "type": {
+          "name": "UInt8"
+        }
+      }
+    ],
+    "engine": {
+      "name": "Memory"
+    }
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "t1_00850"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "dummy",
+        "type": {
+          "name": "UInt8"
+        }
+      }
+    ],
+    "engine": {
+      "name": "Distributed",
+      "args": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "test_shard_localhost"
+          ]
+        },
+        {
+          "kind": "functionCall",
+          "name": "currentDatabase",
+          "args": []
+        },
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "t_local"
+        }
+      ]
+    }
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "t2_00850"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "dummy",
+        "type": {
+          "name": "UInt8"
+        }
+      }
+    ],
+    "engine": {
+      "name": "Distributed",
+      "args": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "test_shard_localhost"
+          ]
+        },
+        {
+          "kind": "functionCall",
+          "name": "currentDatabase",
+          "args": []
+        },
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "t_local"
+        }
+      ]
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "t_local"
+      }
+    }
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "joined_subquery_requires_alias",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      }
+    ]
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -11,7 +157,7 @@
         "kind": "tableRef",
         "table": "t1_00850"
       },
-      "kind": "join",
+      "kind": "joinExpr",
       "joinType": "INNER",
       "right": {
         "kind": "subqueryFrom",
@@ -38,7 +184,7 @@
                 }
               }
             },
-            "kind": "join",
+            "kind": "joinExpr",
             "joinType": "INNER",
             "right": {
               "kind": "subqueryFrom",
@@ -136,7 +282,7 @@
         "kind": "tableRef",
         "table": "t1_00850"
       },
-      "kind": "join",
+      "kind": "joinExpr",
       "joinType": "INNER",
       "right": {
         "kind": "subqueryFrom",
@@ -195,7 +341,7 @@
                 }
               }
             },
-            "kind": "join",
+            "kind": "joinExpr",
             "joinType": "INNER",
             "right": {
               "kind": "subqueryFrom",
@@ -248,7 +394,10 @@
           "dummy"
         ]
       }
-    }
+    },
+    "leadingComments": [
+      "-- query from fuzzer"
+    ]
   },
   {
     "kind": "select",
@@ -294,6 +443,30 @@
     ]
   },
   {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "t_local"
+    }
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "t1_00850"
+    }
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "t2_00850"
+    }
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -302,7 +475,7 @@
     ],
     "from": {
       "left": {
-        "kind": "tableFunction",
+        "kind": "tableFunctionRef",
         "name": "remote",
         "args": [
           {
@@ -319,7 +492,7 @@
           }
         ]
       },
-      "kind": "join",
+      "kind": "joinExpr",
       "joinType": "INNER",
       "right": {
         "kind": "subqueryFrom",
@@ -344,7 +517,7 @@
                   }
                 ],
                 "from": {
-                  "kind": "tableFunction",
+                  "kind": "tableFunctionRef",
                   "name": "remote",
                   "args": [
                     {
@@ -364,7 +537,7 @@
               },
               "alias": "t1_00850"
             },
-            "kind": "join",
+            "kind": "joinExpr",
             "joinType": "INNER",
             "right": {
               "kind": "subqueryFrom",
@@ -379,7 +552,7 @@
                   }
                 ],
                 "from": {
-                  "kind": "tableFunction",
+                  "kind": "tableFunctionRef",
                   "name": "remote",
                   "args": [
                     {
@@ -425,7 +598,7 @@
     ],
     "from": {
       "left": {
-        "kind": "tableFunction",
+        "kind": "tableFunctionRef",
         "name": "remote",
         "args": [
           {
@@ -442,7 +615,7 @@
           }
         ]
       },
-      "kind": "join",
+      "kind": "joinExpr",
       "joinType": "INNER",
       "right": {
         "kind": "subqueryFrom",
@@ -473,7 +646,7 @@
                   }
                 ],
                 "from": {
-                  "kind": "tableFunction",
+                  "kind": "tableFunctionRef",
                   "name": "remote",
                   "args": [
                     {
@@ -493,7 +666,7 @@
               },
               "alias": "t1_00850"
             },
-            "kind": "join",
+            "kind": "joinExpr",
             "joinType": "INNER",
             "right": {
               "kind": "subqueryFrom",
@@ -508,7 +681,7 @@
                   }
                 ],
                 "from": {
-                  "kind": "tableFunction",
+                  "kind": "tableFunctionRef",
                   "name": "remote",
                   "args": [
                     {
@@ -554,7 +727,7 @@
     ],
     "from": {
       "left": {
-        "kind": "tableFunction",
+        "kind": "tableFunctionRef",
         "name": "remote",
         "args": [
           {
@@ -571,7 +744,7 @@
           }
         ]
       },
-      "kind": "join",
+      "kind": "joinExpr",
       "joinType": "INNER",
       "right": {
         "kind": "subqueryFrom",
@@ -619,7 +792,7 @@
               },
               "alias": "t1_00850"
             },
-            "kind": "join",
+            "kind": "joinExpr",
             "joinType": "INNER",
             "right": {
               "kind": "subqueryFrom",
@@ -671,7 +844,7 @@
     ],
     "from": {
       "left": {
-        "kind": "tableFunction",
+        "kind": "tableFunctionRef",
         "name": "remote",
         "args": [
           {
@@ -688,7 +861,7 @@
           }
         ]
       },
-      "kind": "join",
+      "kind": "joinExpr",
       "joinType": "INNER",
       "right": {
         "kind": "subqueryFrom",
@@ -730,7 +903,7 @@
               },
               "alias": "t1_00850"
             },
-            "kind": "join",
+            "kind": "joinExpr",
             "joinType": "INNER",
             "right": {
               "kind": "subqueryFrom",
@@ -782,7 +955,7 @@
     ],
     "from": {
       "left": {
-        "kind": "tableFunction",
+        "kind": "tableFunctionRef",
         "name": "remote",
         "args": [
           {
@@ -799,7 +972,7 @@
           }
         ]
       },
-      "kind": "join",
+      "kind": "joinExpr",
       "joinType": "INNER",
       "right": {
         "kind": "subqueryFrom",
@@ -834,7 +1007,7 @@
                   }
                 ],
                 "from": {
-                  "kind": "tableFunction",
+                  "kind": "tableFunctionRef",
                   "name": "remote",
                   "args": [
                     {
@@ -854,7 +1027,7 @@
               },
               "alias": "t1_00850"
             },
-            "kind": "join",
+            "kind": "joinExpr",
             "joinType": "INNER",
             "right": {
               "kind": "subqueryFrom",
@@ -906,7 +1079,7 @@
     ],
     "from": {
       "left": {
-        "kind": "tableFunction",
+        "kind": "tableFunctionRef",
         "name": "remote",
         "args": [
           {
@@ -923,7 +1096,7 @@
           }
         ]
       },
-      "kind": "join",
+      "kind": "joinExpr",
       "joinType": "INNER",
       "right": {
         "kind": "subqueryFrom",
@@ -975,7 +1148,7 @@
               },
               "alias": "t1_00850"
             },
-            "kind": "join",
+            "kind": "joinExpr",
             "joinType": "INNER",
             "right": {
               "kind": "subqueryFrom",
@@ -990,7 +1163,7 @@
                   }
                 ],
                 "from": {
-                  "kind": "tableFunction",
+                  "kind": "tableFunctionRef",
                   "name": "remote",
                   "args": [
                     {

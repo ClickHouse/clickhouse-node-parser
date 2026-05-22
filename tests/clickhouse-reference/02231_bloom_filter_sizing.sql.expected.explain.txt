@@ -1,3 +1,46 @@
+DropQuery  bloom_filter_sizing_pk (children 1)
+ Identifier bloom_filter_sizing_pk
+
+CreateQuery bloom_filter_sizing_pk (children 3)
+ Identifier bloom_filter_sizing_pk
+ Columns definition (children 2)
+  ExpressionList (children 2)
+   ColumnDeclaration key (children 1)
+    DataType UInt64
+   ColumnDeclaration value (children 1)
+    DataType UInt64
+  ExpressionList (children 1)
+   Index (children 2)
+    Identifier key
+    Function bloom_filter (children 1)
+     ExpressionList (children 1)
+      Literal Float64_0.01
+ Storage definition (children 3)
+  Function MergeTree
+  Identifier key
+  Set
+
+InsertQuery   (children 2)
+ Identifier bloom_filter_sizing_pk
+ SelectWithUnionQuery (children 1)
+  ExpressionList (children 1)
+   SelectQuery (children 2)
+    ExpressionList (children 2)
+     Function modulo (alias key) (children 1)
+      ExpressionList (children 2)
+       Identifier number
+       Literal UInt64_100
+     Identifier number (alias value)
+    TablesInSelectQuery (children 1)
+     TablesInSelectQueryElement (children 1)
+      TableExpression (children 1)
+       Function numbers (children 1)
+        ExpressionList (children 1)
+         Literal UInt64_100000
+
+OptimizeQuery  bloom_filter_sizing_pk_final (children 1)
+ Identifier bloom_filter_sizing_pk
+
 SelectWithUnionQuery (children 1)
  ExpressionList (children 1)
   SelectQuery (children 3)
@@ -39,6 +82,56 @@ SelectWithUnionQuery (children 1)
        Identifier secondary_indices_uncompressed_bytes
        Literal UInt64_200
      Identifier active
+
+DropQuery  bloom_filter_sizing_sec (children 1)
+ Identifier bloom_filter_sizing_sec
+
+CreateQuery bloom_filter_sizing_sec (children 3)
+ Identifier bloom_filter_sizing_sec
+ Columns definition (children 2)
+  ExpressionList (children 3)
+   ColumnDeclaration key1 (children 1)
+    DataType UInt64
+   ColumnDeclaration key2 (children 1)
+    DataType UInt64
+   ColumnDeclaration value (children 1)
+    DataType UInt64
+  ExpressionList (children 1)
+   Index (children 2)
+    Identifier key2
+    Function bloom_filter (children 1)
+     ExpressionList (children 1)
+      Literal Float64_0.01
+ Storage definition (children 3)
+  Function MergeTree
+  Identifier key1
+  Set
+
+InsertQuery   (children 2)
+ Identifier bloom_filter_sizing_sec
+ SelectWithUnionQuery (children 1)
+  ExpressionList (children 1)
+   SelectQuery (children 2)
+    ExpressionList (children 3)
+     Function modulo (alias key1) (children 1)
+      ExpressionList (children 2)
+       Identifier number
+       Literal UInt64_100
+     Function modulo (alias key2) (children 1)
+      ExpressionList (children 2)
+       Function rand (children 1)
+        ExpressionList
+       Literal UInt64_100
+     Identifier number (alias value)
+    TablesInSelectQuery (children 1)
+     TablesInSelectQueryElement (children 1)
+      TableExpression (children 1)
+       Function numbers (children 1)
+        ExpressionList (children 1)
+         Literal UInt64_100000
+
+OptimizeQuery  bloom_filter_sizing_sec_final (children 1)
+ Identifier bloom_filter_sizing_sec
 
 SelectWithUnionQuery (children 1)
  ExpressionList (children 1)

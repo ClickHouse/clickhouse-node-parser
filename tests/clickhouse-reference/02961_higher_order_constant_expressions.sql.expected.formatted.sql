@@ -1,3 +1,5 @@
+SET enable_analyzer = 1;
+
 SELECT
     arrayMap(x -> x, [1, 2, 3]) AS x,
     isConstant(x);
@@ -30,4 +32,5 @@ FROM numbers(1);
 
 SELECT
     arrayMax([1, 2, 3]) AS x,
-    isConstant(x);
+    isConstant(x); -- Does not work yet:
+-- SELECT [1, 2, 3] IN arrayMap(x -> x, [1, 2, 3]);

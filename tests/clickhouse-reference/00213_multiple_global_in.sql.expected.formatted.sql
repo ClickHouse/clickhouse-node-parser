@@ -1,3 +1,4 @@
+-- Tags: global
 SELECT
     1 GLOBAL IN (
         SELECT 1

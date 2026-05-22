@@ -1,3 +1,7 @@
+-- Tags: stateful
+SET any_join_distinct_right_table_keys = 1;
+SET joined_subquery_requires_alias = 0;
+
 SELECT
     loyalty,
     count()
@@ -15,6 +19,8 @@ FROM test.hits ANY LEFT JOIN
 ) USING UserID
 GROUP BY loyalty
 ORDER BY loyalty ASC;
+
+
 SELECT
     loyalty,
     count()
@@ -36,6 +42,8 @@ FROM
 ) USING UserID
 GROUP BY loyalty
 ORDER BY loyalty ASC;
+
+
 SELECT
     loyalty,
     count()
@@ -63,6 +71,8 @@ FROM
 )
 GROUP BY loyalty
 ORDER BY loyalty ASC;
+
+
 SELECT
     loyalty,
     count() AS c,

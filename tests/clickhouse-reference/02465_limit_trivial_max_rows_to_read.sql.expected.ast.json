@@ -1,25 +1,131 @@
 [
   {
-    "kind": "select",
-    "select": [
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "t_max_rows_to_read"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "t_max_rows_to_read"
+    },
+    "tableElements": [
       {
-        "kind": "columnRef",
-        "parts": [
-          "number"
-        ]
+        "kind": "columnDef",
+        "name": "a",
+        "type": {
+          "name": "UInt64"
+        }
       }
     ],
-    "from": {
-      "kind": "tableFunction",
-      "name": "numbers",
-      "args": [
-        {
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "a"
+          ]
+        }
+      }
+    ],
+    "settings": [
+      {
+        "name": "index_granularity",
+        "value": {
           "kind": "literal",
           "type": "UInt64",
-          "value": "30"
+          "value": "4"
         }
-      ]
+      },
+      {
+        "name": "index_granularity_bytes",
+        "value": {
+          "kind": "literal",
+          "type": "String",
+          "value": "10Mi"
+        }
+      }
+    ],
+    "settingsAfterOrderBy": true
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "t_max_rows_to_read"
+      }
+    },
+    "selectQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "number"
+          ]
+        }
+      ],
+      "from": {
+        "kind": "tableFunctionRef",
+        "name": "numbers",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "100"
+          }
+        ]
+      }
     }
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "max_block_size",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "10"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "max_rows_to_read",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "20"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "read_overflow_mode",
+        "value": {
+          "kind": "literal",
+          "type": "String",
+          "value": "throw"
+        }
+      }
+    ]
   },
   {
     "kind": "select",
@@ -32,7 +138,32 @@
       }
     ],
     "from": {
-      "kind": "tableFunction",
+      "kind": "tableFunctionRef",
+      "name": "numbers",
+      "args": [
+        {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "30"
+        }
+      ]
+    },
+    "trailingComments": [
+      "-- { serverError TOO_MANY_ROWS }"
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "number"
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableFunctionRef",
       "name": "numbers",
       "args": [
         {
@@ -48,7 +179,10 @@
         "type": "UInt64",
         "value": "21"
       }
-    }
+    },
+    "trailingComments": [
+      "-- { serverError TOO_MANY_ROWS }"
+    ]
   },
   {
     "kind": "select",
@@ -61,7 +195,7 @@
       }
     ],
     "from": {
-      "kind": "tableFunction",
+      "kind": "tableFunctionRef",
       "name": "numbers",
       "args": [
         {
@@ -90,7 +224,7 @@
       }
     ],
     "from": {
-      "kind": "tableFunction",
+      "kind": "tableFunctionRef",
       "name": "numbers",
       "args": [
         {
@@ -148,7 +282,10 @@
       "kind": "literal",
       "type": "UInt64",
       "value": "11"
-    }
+    },
+    "trailingComments": [
+      "-- { serverError TOO_MANY_ROWS }"
+    ]
   },
   {
     "kind": "select",
@@ -185,6 +322,17 @@
         "type": "UInt64",
         "value": "1"
       }
+    },
+    "trailingComments": [
+      "-- { serverError TOO_MANY_ROWS }"
+    ]
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "t_max_rows_to_read"
     }
   }
 ]

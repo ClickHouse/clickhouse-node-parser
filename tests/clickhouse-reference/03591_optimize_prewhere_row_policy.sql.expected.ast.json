@@ -1,5 +1,105 @@
 [
   {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "use_query_condition_cache",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      }
+    ],
+    "leadingComments": [
+      "-- {echoOn}"
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "enable_parallel_replicas",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "use_statistics",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "03591_test"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "system",
+    "body": "DROP ROW POLICY IF EXISTS 03591_rp ON 03591_test"
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "03591_test"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "a",
+        "type": {
+          "name": "Int32"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "b",
+        "type": {
+          "name": "Int32"
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "functionCall",
+          "name": "tuple",
+          "args": []
+        }
+      }
+    ]
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "03591_test"
+      }
+    }
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -57,7 +157,46 @@
           "value": "1"
         }
       }
+    ],
+    "trailingComments": [
+      "-- {serverError FUNCTION_THROW_IF_VALUE_IS_NON_ZERO}"
     ]
+  },
+  {
+    "kind": "createRowPolicy",
+    "targets": [
+      {
+        "names": [
+          "03591_rp"
+        ],
+        "table": {
+          "kind": "tableRef",
+          "table": "03591_test"
+        }
+      }
+    ],
+    "hasRowKeyword": true,
+    "using": {
+      "kind": "binaryExpr",
+      "op": "=",
+      "left": {
+        "kind": "columnRef",
+        "parts": [
+          "b"
+        ]
+      },
+      "right": {
+        "kind": "literal",
+        "type": "UInt64",
+        "value": "2"
+      }
+    },
+    "to": {
+      "kind": "names",
+      "names": [
+        "CURRENT_USER"
+      ]
+    }
   },
   {
     "kind": "select",
@@ -108,6 +247,10 @@
     ]
   },
   {
+    "kind": "system",
+    "body": "DROP ROW POLICY 03591_rp ON 03591_test"
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -153,6 +296,9 @@
           "value": "1"
         }
       }
+    ],
+    "trailingComments": [
+      "-- {serverError FUNCTION_THROW_IF_VALUE_IS_NON_ZERO}"
     ]
   }
 ]

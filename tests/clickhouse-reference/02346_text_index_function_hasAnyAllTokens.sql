@@ -1,3 +1,20 @@
+-- Tags: no-parallel-replicas, long
+
+SET enable_analyzer = 1;
+SET enable_full_text_index = 1;
+SET use_query_condition_cache = 0;
+DROP TABLE IF EXISTS tab;
+CREATE TABLE tab
+(
+    id UInt32,
+    col_str String,
+    message String,
+    arr Array(String),
+    INDEX idx(`message`) TYPE text(tokenizer = 'splitByNonAlpha'),
+)
+ENGINE = MergeTree
+ORDER BY (id);
+INSERT INTO tab VALUES (1, 'b', 'b', ['c']), (2, 'c', 'c', ['c']), (3, '', '', ['']);
 -- Must accept two arguments
 SELECT id FROM tab WHERE hasAnyTokens(); -- { serverError NUMBER_OF_ARGUMENTS_DOESNT_MATCH }
 SELECT id FROM tab WHERE hasAnyTokens('a', 'b', 'c'); -- { serverError NUMBER_OF_ARGUMENTS_DOESNT_MATCH }
@@ -22,7 +39,7 @@ SELECT hasAnyToken('a b', ['b']) FORMAT Null;
 SELECT hasAllToken('a b', 'b') FORMAT Null;
 SELECT hasAllToken('a b', ['b']) FORMAT Null;
 -- We expected that the default tokenizer is used
-
+-- { echoOn }
 SELECT hasAnyTokens('a b', ['b']);
 SELECT hasAnyTokens('a b', ['c']);
 SELECT hasAnyTokens('a b', 'b');
@@ -65,7 +82,19 @@ SELECT count() FROM tab WHERE hasAllTokens(col_str, []);
 SELECT count() FROM tab WHERE hasAnyTokens(col_str, ['']);
 SELECT count() FROM tab WHERE hasAnyTokens(col_str, '');
 SELECT count() FROM tab WHERE hasAnyTokens(col_str, ['','']);
+-- { echoOff }
 
+DROP TABLE tab;
+-- Test specifically FixedString columns without text index
+CREATE TABLE tab
+(
+    id UInt8,
+    s FixedString(11)
+)
+ENGINE = MergeTree
+ORDER BY id;
+INSERT INTO tab VALUES (1, 'hello world'), (2, 'goodbye'), (3, 'hello moon');
+-- { echoOn }
 SELECT id FROM tab WHERE hasAnyTokens(s, ['hello']) ORDER BY id;
 SELECT id FROM tab WHERE hasAnyTokens(s, ['moon', 'goodbye']) ORDER BY id;
 SELECT id FROM tab WHERE hasAnyTokens(s, ['unknown', 'goodbye']) ORDER BY id;
@@ -73,11 +102,35 @@ SELECT id FROM tab WHERE hasAllTokens(s, ['hello', 'world']) ORDER BY id;
 SELECT id FROM tab WHERE hasAllTokens(s, ['goodbye']) ORDER BY id;
 SELECT id FROM tab WHERE hasAllTokens(s, ['hello', 'moon']) ORDER BY id;
 SELECT id FROM tab WHERE hasAllTokens(s, ['hello', 'unknown']) ORDER BY id;
+CREATE TABLE tab (
+    id Int,
+    text FixedString(16),
+    INDEX idx_text(text) TYPE text(tokenizer = 'splitByNonAlpha')
+)
+ENGINE=MergeTree()
+ORDER BY (id);
+INSERT INTO tab VALUES(1, toFixedString('bar', 3)), (2, toFixedString('foo', 3));
 SELECT groupArray(id) FROM tab WHERE hasAnyTokens(text, ['bar']);
 SELECT groupArray(id) FROM tab WHERE hasAllTokens(text, ['bar']);
 SELECT groupArray(id) FROM tab WHERE hasAnyTokens(text, 'bar');
 SELECT groupArray(id) FROM tab WHERE hasAllTokens(text, 'bar');
 SELECT '-- Default tokenizer';
+CREATE TABLE tab
+(
+    id UInt32,
+    message String,
+    INDEX idx(`message`) TYPE text(tokenizer = 'splitByNonAlpha'),
+)
+ENGINE = MergeTree
+ORDER BY (id);
+INSERT INTO tab(id, message)
+VALUES
+    (1, 'abc+ def- foo!'),
+    (2, 'abc+ def- bar?'),
+    (3, 'abc+ baz- foo!'),
+    (4, 'abc+ baz- bar?'),
+    (5, 'abc+ zzz- foo!'),
+    (6, 'abc+ zzz- bar?');
 SELECT groupArray(id) FROM tab WHERE hasAnyTokens(message, ['abc']);
 SELECT groupArray(id) FROM tab WHERE hasAnyTokens(message, ['ab']);
 SELECT groupArray(id) FROM tab WHERE hasAnyTokens(message, ['foo']);
@@ -103,6 +156,21 @@ SELECT groupArray(id) FROM tab WHERE hasAllTokens(message, 'ab+');
 SELECT groupArray(id) FROM tab WHERE hasAllTokens(message, 'foo-');
 SELECT groupArray(id) FROM tab WHERE hasAllTokens(message, 'abc+* foo+');
 SELECT groupArray(id) FROM tab WHERE hasAllTokens(message, 'abc ba');
+CREATE TABLE tab
+(
+    id UInt32,
+    message String,
+    INDEX idx(`message`) TYPE text(tokenizer = ngrams(4)),
+)
+ENGINE = MergeTree
+ORDER BY (id);
+INSERT INTO tab
+VALUES
+(1, 'abcdef'),
+(2, 'bcdefg'),
+(3, 'cdefgh'),
+(4, 'defghi'),
+(5, 'efghij');
 SELECT groupArray(id) FROM tab WHERE hasAnyTokens(message, ['efgh']);
 SELECT groupArray(id) FROM tab WHERE hasAnyTokens(message, ['efg']);
 SELECT groupArray(id) FROM tab WHERE hasAnyTokens(message, ['cdef']);
@@ -125,6 +193,21 @@ SELECT groupArray(id) FROM tab WHERE hasAllTokens(message, 'efg');
 SELECT groupArray(id) FROM tab WHERE hasAllTokens(message, 'efghi');
 SELECT groupArray(id) FROM tab WHERE hasAllTokens(message, 'cdefg');
 SELECT groupArray(id) FROM tab WHERE hasAllTokens(message, 'cdefgh');
+CREATE TABLE tab
+(
+    id UInt32,
+    message String,
+    INDEX idx(`message`) TYPE text(tokenizer = splitByString(['()', '\\'])),
+)
+ENGINE = MergeTree
+ORDER BY (id);
+INSERT INTO tab
+VALUES
+(1, '  a  bc d'),
+(2, '()()a()bc()d'),
+(3, ',()a(),bc,(),d,'),
+(4, '\\a\n\\bc\\d\n'),
+(5, '\na\n\\bc\\d\\');
 SELECT groupArray(id) FROM tab WHERE hasAnyTokens(message, ['a']);
 SELECT groupArray(id) FROM tab WHERE hasAnyTokens(message, ['bc']);
 SELECT groupArray(id) FROM tab WHERE hasAnyTokens(message, ['d']);
@@ -149,6 +232,20 @@ SELECT groupArray(id) FROM tab WHERE hasAllTokens(message, 'd()');
 SELECT groupArray(id) FROM tab WHERE hasAllTokens(message, 'a\\bc');
 SELECT groupArray(id) FROM tab WHERE hasAllTokens(message, 'a d');
 SELECT groupArray(id) FROM tab WHERE hasAllTokens(message, 'a\\,bc,()');
+CREATE TABLE tab
+(
+    id UInt32,
+    message String,
+    INDEX idx(`message`) TYPE text(tokenizer = 'array'),
+)
+ENGINE = MergeTree
+ORDER BY (id);
+INSERT INTO tab
+VALUES
+(1, 'abc def'),
+(2, 'abc fgh'),
+(3, 'def efg'),
+(4, 'abcdef');
 SELECT groupArray(id) FROM tab WHERE hasAnyTokens(message, ['def']);
 SELECT groupArray(id) FROM tab WHERE hasAnyTokens(message, ['abc', 'def']);
 SELECT groupArray(id) FROM tab WHERE hasAnyTokens(message, ['abcdef']);
@@ -160,12 +257,23 @@ SELECT groupArray(id) FROM tab WHERE hasAllTokens(message, ['abcdef']);
 SELECT groupArray(id) FROM tab WHERE hasAllTokens(message, 'abc');
 SELECT groupArray(id) FROM tab WHERE hasAllTokens(message, 'abc def');
 SELECT groupArray(id) FROM tab WHERE hasAllTokens(message, 'abcdef ');
+INSERT INTO tab VALUES
+    (1, 'hello world'),
+    (2, 'hello world, hello everyone');
 SELECT count() FROM tab WHERE hasAnyTokens(message, ['hello']);
 SELECT count() FROM tab WHERE hasAnyTokens(message, ['hello', 'hello']);
 SELECT count() FROM tab WHERE hasAnyTokens(message, 'hello hello');
 SELECT count() FROM tab WHERE hasAllTokens(message, ['hello']);
 SELECT count() FROM tab WHERE hasAllTokens(message, ['hello', 'hello']);
 SELECT count() FROM tab WHERE hasAllTokens(message, 'hello hello');
+CREATE TABLE tab
+(
+    id UInt32,
+    message String,
+    INDEX idx(message) TYPE text(tokenizer = 'splitByNonAlpha'),
+)
+ENGINE = MergeTree
+ORDER BY (id);
 SELECT groupArray(id) FROM tab WHERE hasAnyTokens(message, tokens('abc', 'splitByNonAlpha'));
 SELECT groupArray(id) FROM tab WHERE hasAnyTokens(message, tokens('ab', 'splitByNonAlpha'));
 SELECT groupArray(id) FROM tab WHERE hasAnyTokens(message, tokens('foo', 'splitByNonAlpha'));
@@ -215,6 +323,19 @@ SELECT groupArray(id) FROM tab WHERE hasAllTokens(message, tokens('abc', 'array'
 SELECT groupArray(id) FROM tab WHERE hasAllTokens(message, tokens('def', 'array'));
 SELECT groupArray(id) FROM tab WHERE hasAllTokens(message, arrayConcat(tokens('def', 'array'), tokens('def', 'array')));
 SELECT groupArray(id) FROM tab WHERE hasAllTokens(message, tokens('abcdef', 'array'));
+CREATE TABLE tab
+(
+    id UInt32,
+    message String,
+    INDEX idx(`message`) TYPE text(tokenizer = 'splitByNonAlpha') GRANULARITY 1
+)
+ENGINE = MergeTree
+ORDER BY (id)
+SETTINGS index_granularity = 1;
+INSERT INTO tab SELECT number, 'Hello, ClickHouse' FROM numbers(1024);
+INSERT INTO tab SELECT number, 'Hello, World' FROM numbers(1024);
+INSERT INTO tab SELECT number, 'Hallo, ClickHouse' FROM numbers(1024);
+INSERT INTO tab SELECT number, 'ClickHouse is fast, really fast!' FROM numbers(1024);
 SELECT trimLeft(explain) AS explain FROM (
     EXPLAIN indexes=1
     SELECT count() FROM tab WHERE hasAnyTokens(message, ['Click'])
@@ -359,6 +480,25 @@ SELECT trimLeft(explain) AS explain FROM (
 )
 WHERE explain LIKE '%Description:%' OR explain LIKE '%Parts:%' OR explain LIKE '%Granules:%'
 LIMIT 2, 3;
+CREATE TABLE tab
+(
+    id UInt32,
+    message String,
+    INDEX idx(`message`) TYPE text(tokenizer = 'splitByNonAlpha')
+)
+ENGINE = MergeTree
+ORDER BY (id)
+SETTINGS index_granularity = 1;
+INSERT INTO tab
+SELECT
+    number,
+    CASE
+        WHEN modulo(number, 4) = 0 THEN 'Hello, ClickHouse'
+        WHEN modulo(number, 4) = 1 THEN 'Hello, World'
+        WHEN modulo(number, 4) = 2 THEN 'Hallo, ClickHouse'
+        WHEN modulo(number, 4) = 3 THEN 'ClickHouse is the fast, really fast!'
+    END
+FROM numbers(1024);
 SELECT trimLeft(explain) AS explain FROM (
     EXPLAIN indexes=1
     SELECT count() FROM tab WHERE hasAnyTokens(message, ['Hello', 'World'])

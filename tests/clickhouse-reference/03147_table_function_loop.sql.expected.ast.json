@@ -7,7 +7,7 @@
       }
     ],
     "from": {
-      "kind": "tableFunction",
+      "kind": "tableFunctionRef",
       "name": "loop",
       "args": [
         {
@@ -29,7 +29,10 @@
         "type": "UInt64",
         "value": "10"
       }
-    }
+    },
+    "leadingComments": [
+      "-- Tags: no-parallel"
+    ]
   },
   {
     "kind": "select",
@@ -39,7 +42,7 @@
       }
     ],
     "from": {
-      "kind": "tableFunction",
+      "kind": "tableFunctionRef",
       "name": "loop",
       "args": [
         {
@@ -74,6 +77,35 @@
     ]
   },
   {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "t"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "n",
+        "type": {
+          "name": "Int8"
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "n"
+          ]
+        }
+      }
+    ]
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -81,12 +113,76 @@
       }
     ],
     "from": {
-      "kind": "tableFunction",
+      "kind": "tableFunctionRef",
       "name": "loop",
       "args": [
         {
           "kind": "columnRef",
           "parts": [
+            "t"
+          ]
+        }
+      ]
+    },
+    "limit": {
+      "count": {
+        "kind": "literal",
+        "type": "UInt64",
+        "value": "15"
+      }
+    },
+    "trailingComments": [
+      "-- { serverError TOO_MANY_RETRIES_TO_FETCH_PARTS }"
+    ]
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "t"
+      }
+    },
+    "selectQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "asterisk"
+        }
+      ],
+      "from": {
+        "kind": "tableFunctionRef",
+        "name": "numbers",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "10"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "asterisk"
+      }
+    ],
+    "from": {
+      "kind": "tableFunctionRef",
+      "name": "loop",
+      "args": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            {
+              "kind": "queryParam",
+              "name": "CLICKHOUSE_DATABASE",
+              "type": "Identifier"
+            },
             "t"
           ]
         }
@@ -108,35 +204,7 @@
       }
     ],
     "from": {
-      "kind": "tableFunction",
-      "name": "loop",
-      "args": [
-        {
-          "kind": "columnRef",
-          "parts": [
-            "{CLICKHOUSE_DATABASE:Identifier}",
-            "t"
-          ]
-        }
-      ]
-    },
-    "limit": {
-      "count": {
-        "kind": "literal",
-        "type": "UInt64",
-        "value": "15"
-      }
-    }
-  },
-  {
-    "kind": "select",
-    "select": [
-      {
-        "kind": "asterisk"
-      }
-    ],
-    "from": {
-      "kind": "tableFunction",
+      "kind": "tableFunctionRef",
       "name": "loop",
       "args": [
         {
@@ -168,7 +236,7 @@
       }
     ],
     "from": {
-      "kind": "tableFunction",
+      "kind": "tableFunctionRef",
       "name": "loop",
       "args": [
         {
@@ -182,6 +250,9 @@
           "value": ""
         }
       ]
-    }
+    },
+    "trailingComments": [
+      "-- { serverError UNKNOWN_TABLE }"
+    ]
   }
 ]

@@ -36,10 +36,10 @@
                   "name": "h3PolygonToCells",
                   "args": [
                     {
-                      "kind": "array",
+                      "kind": "arrayLiteral",
                       "elements": [
                         {
-                          "kind": "tuple",
+                          "kind": "tupleLiteral",
                           "elements": [
                             {
                               "kind": "literal",
@@ -55,7 +55,7 @@
                           "source": "(-122.4089866999972145,37.813318999983238)"
                         },
                         {
-                          "kind": "tuple",
+                          "kind": "tupleLiteral",
                           "elements": [
                             {
                               "kind": "literal",
@@ -71,7 +71,7 @@
                           "source": "(-122.3544736999993603,37.7198061999978478)"
                         },
                         {
-                          "kind": "tuple",
+                          "kind": "tupleLiteral",
                           "elements": [
                             {
                               "kind": "literal",
@@ -101,7 +101,7 @@
           ]
         },
         "right": {
-          "kind": "array",
+          "kind": "arrayLiteral",
           "elements": [
             {
               "kind": "literal",
@@ -142,6 +142,136 @@
           "source": "['872830820ffffff','872830828ffffff','87283082affffff','87283082bffffff','87283082effffff','872830870ffffff','872830876ffffff']"
         }
       }
+    ],
+    "leadingComments": [
+      "-- Tags: no-fasttest",
+      "-- example from h3 docs"
+    ]
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "rings"
+    },
+    "ifExists": true,
+    "leadingComments": [
+      "-- test both rings, polygons and multipolygons"
+    ]
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "polygons"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "multipolygons"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "rings"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "ring",
+        "type": {
+          "name": "Ring"
+        }
+      }
+    ],
+    "engine": {
+      "name": "Memory",
+      "args": []
+    }
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "polygons"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "polygon",
+        "type": {
+          "name": "Polygon"
+        }
+      }
+    ],
+    "engine": {
+      "name": "Memory",
+      "args": []
+    }
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "multipolygons"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "multipolygon",
+        "type": {
+          "name": "MultiPolygon"
+        }
+      }
+    ],
+    "engine": {
+      "name": "Memory",
+      "args": []
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "rings"
+      }
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "polygons"
+      }
+    },
+    "leadingComments": [
+      "-- expected: '8b63a9a9914cfff','8b63a9a99168fff','8b63a9a9916afff'"
+    ]
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "multipolygons"
+      }
+    },
+    "leadingComments": [
+      "-- expected: '8b63a9a9914cfff','8b63a9a99168fff'"
     ]
   },
   {
@@ -198,7 +328,7 @@
           ]
         },
         "right": {
-          "kind": "array",
+          "kind": "arrayLiteral",
           "elements": [
             {
               "kind": "literal",
@@ -223,7 +353,10 @@
     "from": {
       "kind": "tableRef",
       "table": "rings"
-    }
+    },
+    "leadingComments": [
+      "-- expected: '8b63a9a9914cfff','8b63a9a99168fff', '8b63a9a99bb3fff'"
+    ]
   },
   {
     "kind": "select",
@@ -279,7 +412,7 @@
           ]
         },
         "right": {
-          "kind": "array",
+          "kind": "arrayLiteral",
           "elements": [
             {
               "kind": "literal",
@@ -355,7 +488,7 @@
           ]
         },
         "right": {
-          "kind": "array",
+          "kind": "arrayLiteral",
           "elements": [
             {
               "kind": "literal",
@@ -378,6 +511,30 @@
       }
     ],
     "from": {
+      "kind": "tableRef",
+      "table": "multipolygons"
+    }
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "rings"
+    }
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "polygons"
+    }
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
       "kind": "tableRef",
       "table": "multipolygons"
     }

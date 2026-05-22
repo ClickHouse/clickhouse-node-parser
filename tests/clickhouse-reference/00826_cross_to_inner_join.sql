@@ -1,4 +1,14 @@
+SET enable_optimize_predicate_expression = 0;
+SET optimize_move_to_prewhere = 1;
+SET convert_query_to_cnf = 0;
 select * from system.one l cross join system.one r order by all;
+DROP TABLE IF EXISTS t1_00826;
+DROP TABLE IF EXISTS t2_00826;
+CREATE TABLE t1_00826 (a Int8, b Nullable(Int8)) ENGINE = Memory;
+CREATE TABLE t2_00826 (a Int8, b Nullable(Int8)) ENGINE = Memory;
+INSERT INTO t1_00826 values (1,1), (2,2);
+INSERT INTO t2_00826 values (1,1), (1,2);
+INSERT INTO t2_00826 (a) values (2), (3);
 SELECT '--- cross ---';
 SELECT * FROM t1_00826 cross join t2_00826 where t1_00826.a = t2_00826.a ORDER BY ALL;
 SELECT * FROM t1_00826 cross join t2_00826 where t1_00826.b = t2_00826.b ORDER BY ALL;
@@ -16,3 +26,5 @@ SELECT * FROM t1_00826, t2_00826 where t1_00826.a = t2_00826.a ORDER BY ALL;
 SELECT * FROM t1_00826, t2_00826 where t1_00826.b = t2_00826.b ORDER BY ALL;
 SELECT * FROM t1_00826, t2_00826 where t1_00826.a = t2_00826.a AND (t2_00826.b IS NULL OR t2_00826.b < 2)
 ORDER BY ALL;
+DROP TABLE t1_00826;
+DROP TABLE t2_00826;

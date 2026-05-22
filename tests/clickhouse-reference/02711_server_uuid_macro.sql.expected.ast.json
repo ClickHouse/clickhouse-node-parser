@@ -1,5 +1,58 @@
 [
   {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "test"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "test"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "x",
+        "type": {
+          "name": "UInt8"
+        }
+      }
+    ],
+    "engine": {
+      "name": "ReplicatedMergeTree",
+      "args": [
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "/clickhouse/tables/{database}/test/{shard}"
+        },
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "replica-{server_uuid}"
+        }
+      ]
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "x"
+          ]
+        }
+      }
+    ],
+    "leadingComments": [
+      "-- You can create a table with the {server_uuid} substituted."
+    ]
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -61,7 +114,10 @@
           }
         }
       ]
-    }
+    },
+    "leadingComments": [
+      "-- The server UUID is correctly substituted."
+    ]
   },
   {
     "kind": "select",
@@ -163,6 +219,53 @@
     }
   },
   {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "test2"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "x",
+        "type": {
+          "name": "UInt8"
+        }
+      }
+    ],
+    "engine": {
+      "name": "ReplicatedMergeTree",
+      "args": [
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "/clickhouse/tables/{database}/test/{shard}"
+        },
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "replica-{server_uuid}"
+        }
+      ]
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "x"
+          ]
+        }
+      }
+    ],
+    "leadingComments": [
+      "-- An attempt to create a second table with the same UUID results in error."
+    ],
+    "trailingComments": [
+      "-- { serverError REPLICA_ALREADY_EXISTS }"
+    ]
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -176,6 +279,20 @@
           }
         ]
       }
+    ],
+    "leadingComments": [
+      "-- The macro {server_uuid} is special, not a configuration-type macro. It's normal that it is inaccessible with the getMacro function."
+    ],
+    "trailingComments": [
+      "-- { serverError NO_ELEMENTS_IN_CONFIG }"
     ]
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "test"
+    }
   }
 ]

@@ -1,3 +1,31 @@
+-- Tags: zookeeper
+DROP TABLE IF EXISTS join_inner_table;
+
+CREATE TABLE join_inner_table
+(
+    id UUID,
+    key String,
+    number Int64,
+    value1 String,
+    value2 String,
+    time Int64
+)
+ENGINE = ReplicatedMergeTree('/clickhouse/tables/{database}/join_inner_table', 'r1')
+ORDER BY (id, number, key);
+
+INSERT INTO join_inner_table SELECT
+    '833c9e22-c245-4eb5-8745-117a9a1f26b1'::UUID AS id,
+    rowNumberInAllBlocks()::String AS key,
+    *
+FROM generateRandom('number Int64, value1 String, value2 String, time Int64', 1, 10, 2)
+LIMIT 100;
+
+SET max_parallel_replicas = 3;
+
+SET cluster_for_parallel_replicas = 'test_cluster_one_shard_three_replicas_localhost';
+
+SET joined_subquery_requires_alias = 0;
+
 SELECT
     key,
     value1,
@@ -16,6 +44,7 @@ ORDER BY
     value2 ASC
 LIMIT 10;
 
+-- Parallel inner query alone without analyzer
 SELECT
     key,
     value1,
@@ -38,6 +67,8 @@ SETTINGS
     enable_analyzer = 0,
     parallel_replicas_only_with_analyzer = 0;
 
+SYSTEM FLUSH LOGS query_log;
+
 SELECT
     ProfileEvents['ParallelReplicasQueryCount'],
     replaceRegexpAll(query, '_data_(\\d+)_(\\d+)', '_data_') AS query
@@ -53,6 +84,7 @@ WHERE event_date >= yesterday()
             AND like(query, '-- Parallel inner query alone without analyzer%')
     );
 
+-- Parallel inner query alone with analyzer
 SELECT
     key,
     value1,
@@ -73,6 +105,27 @@ LIMIT 10
 SETTINGS
     enable_parallel_replicas = 1,
     enable_analyzer = 1;
+
+---- Query with JOIN
+DROP TABLE IF EXISTS join_outer_table;
+
+CREATE TABLE join_outer_table
+(
+    id UUID,
+    key String,
+    otherValue1 String,
+    otherValue2 String,
+    time Int64
+)
+ENGINE = ReplicatedMergeTree('/clickhouse/tables/{database}/join_outer_table', 'r1')
+ORDER BY (id, time, key);
+
+INSERT INTO join_outer_table SELECT
+    '833c9e22-c245-4eb5-8745-117a9a1f26b1'::UUID AS id,
+    ((rowNumberInAllBlocks() % 10))::String AS key,
+    *
+FROM generateRandom('otherValue1 String, otherValue2 String, time Int64', 1, 10, 2)
+LIMIT 100;
 
 SELECT
     value1,
@@ -113,6 +166,7 @@ ORDER BY
     value1 ASC,
     value2 ASC;
 
+-- Parallel full query without analyzer
 SELECT
     value1,
     value2,
@@ -156,6 +210,7 @@ SETTINGS
     enable_analyzer = 0,
     parallel_replicas_only_with_analyzer = 0;
 
+-- Parallel full query with analyzer
 SELECT
     value1,
     value2,

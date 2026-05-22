@@ -1,3 +1,4 @@
+-- Bug 37909
 SELECT
     v_date AS vDate,
     round(sum(v_share)) AS v_sum
@@ -69,6 +70,8 @@ FROM (
         WHERE (v_date >= '2022-05-08')
             AND (v_date <= '2022-06-07')
     )
-GROUP BY vDate
+GROUP BY
+    /* WHERE (v_date >= '2022-05-08') AND (v_date <= '2022-06-07') placing condition has same effect */
+    vDate
 ORDER BY vDate ASC
-SETTINGS enable_analyzer = 1;
+SETTINGS enable_analyzer = 1; -- the query times out if enable_analyzer = 0

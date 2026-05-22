@@ -1,3 +1,18 @@
+-- Tags: no-object-storage
+SET merge_tree_read_split_ranges_into_intersecting_and_non_intersecting_injection_probability = 0.0;
+
+DROP TABLE IF EXISTS data_02233;
+
+CREATE TABLE data_02233
+(
+    parent_key Int,
+    child_key Int,
+    value Int
+)
+ENGINE = MergeTree()
+ORDER BY parent_key;
+
+-- before inserting data, it may produce empty header
 SELECT
     child_key,
     parent_key,
@@ -26,6 +41,13 @@ ORDER BY parent_key ASC
 SETTINGS
     max_threads = 1,
     optimize_aggregation_in_order = 1;
+
+-- { echoOn }
+INSERT INTO data_02233 SELECT
+    number % 10,
+    number % 3,
+    number
+FROM numbers(100);
 
 SELECT
     parent_key,
@@ -76,6 +98,7 @@ SETTINGS
     max_threads = 1,
     optimize_aggregation_in_order = 0;
 
+-- fuzzer
 SELECT
     child_key,
     parent_key,
@@ -108,3 +131,6 @@ ORDER BY
 SETTINGS
     max_threads = 1,
     optimize_aggregation_in_order = 1;
+
+-- { echoOff }
+DROP TABLE data_02233;

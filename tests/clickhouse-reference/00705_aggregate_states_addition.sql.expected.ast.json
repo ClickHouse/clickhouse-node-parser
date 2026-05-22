@@ -1,5 +1,73 @@
 [
   {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "send_logs_level",
+        "value": {
+          "kind": "literal",
+          "type": "String",
+          "value": "fatal"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "add_aggregate"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "add_aggregate"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "a",
+        "type": {
+          "name": "UInt32"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "b",
+        "type": {
+          "name": "UInt32"
+        }
+      }
+    ],
+    "engine": {
+      "name": "Memory"
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "add_aggregate"
+      }
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "add_aggregate"
+      }
+    }
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -224,7 +292,10 @@
           "table": "add_aggregate"
         }
       }
-    }
+    },
+    "trailingComments": [
+      "-- { serverError CANNOT_ADD_DIFFERENT_AGGREGATE_STATES }"
+    ]
   },
   {
     "kind": "select",
@@ -291,7 +362,10 @@
           "table": "add_aggregate"
         }
       }
-    }
+    },
+    "trailingComments": [
+      "-- { serverError CANNOT_ADD_DIFFERENT_AGGREGATE_STATES }"
+    ]
   },
   {
     "kind": "select",
@@ -653,6 +727,9 @@
           "table": "add_aggregate"
         }
       }
-    }
+    },
+    "trailingComments": [
+      "-- { serverError CANNOT_ADD_DIFFERENT_AGGREGATE_STATES }"
+    ]
   }
 ]

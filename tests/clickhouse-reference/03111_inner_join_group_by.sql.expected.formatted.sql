@@ -1,3 +1,6 @@
+-- https://github.com/ClickHouse/ClickHouse/issues/50705
+SET enable_analyzer = 1;
+
 SELECT
     count(s0.number),
     s1.half
@@ -12,4 +15,4 @@ INNER JOIN (
     ) AS s1
     ON s0.number = s1.number
 GROUP BY s0.number > 5
-LIMIT 10;
+LIMIT 10; -- {serverError NOT_AN_AGGREGATE}

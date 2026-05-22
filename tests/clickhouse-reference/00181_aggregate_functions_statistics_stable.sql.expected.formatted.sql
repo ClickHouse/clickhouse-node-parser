@@ -1,3 +1,20 @@
+SET any_join_distinct_right_table_keys = 1;
+
+SET joined_subquery_requires_alias = 0;
+
+DROP TABLE IF EXISTS series;
+
+CREATE TABLE series
+(
+    i UInt32,
+    x_value Float64,
+    y_value Float64
+)
+ENGINE = Memory;
+
+INSERT INTO series (i, x_value, y_value);
+
+/* varSampStable */
 SELECT varSampStable(x_value)
 FROM (
         SELECT x_value
@@ -20,6 +37,7 @@ FROM (
         FROM series
     );
 
+/* stddevSampStable */
 SELECT stddevSampStable(x_value)
 FROM (
         SELECT x_value
@@ -42,6 +60,7 @@ FROM (
         FROM series
     );
 
+/* varPopStable */
 SELECT varPopStable(x_value)
 FROM (
         SELECT x_value
@@ -64,6 +83,7 @@ FROM (
         FROM series
     );
 
+/* stddevPopStable */
 SELECT stddevPopStable(x_value)
 FROM (
         SELECT x_value
@@ -86,6 +106,7 @@ FROM (
         FROM series
     );
 
+/* covarSampStable */
 SELECT covarSampStable(x_value, y_value)
 FROM (
         SELECT
@@ -138,6 +159,7 @@ INNER JOIN (
     )
     USING (ID2);
 
+/* covarPopStable */
 SELECT covarPopStable(x_value, y_value)
 FROM (
         SELECT
@@ -190,6 +212,7 @@ INNER JOIN (
     )
     USING (ID2);
 
+/* corr */
 SELECT corrStable(x_value, y_value)
 FROM (
         SELECT
@@ -210,3 +233,5 @@ FROM (
 
 SELECT round(abs(corrStable(x_value, y_value) - covarPopStable(x_value, y_value) / ((stddevPopStable(x_value) * stddevPopStable(y_value)))), 6)
 FROM series;
+
+DROP TABLE series;

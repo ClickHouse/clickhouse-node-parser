@@ -31,6 +31,76 @@
   },
   {
     "kind": "select",
+    "with": [
+      {
+        "kind": "cteExpr",
+        "name": "mode",
+        "expr": {
+          "kind": "literal",
+          "type": "String",
+          "value": "aes-256-ecb"
+        }
+      },
+      {
+        "kind": "cteExpr",
+        "name": "plaintext",
+        "expr": {
+          "kind": "literal",
+          "type": "String",
+          "value": "Hello World!"
+        }
+      },
+      {
+        "kind": "cteExpr",
+        "name": "key",
+        "expr": {
+          "kind": "literal",
+          "type": "String",
+          "value": "test_key________________________"
+        }
+      }
+    ],
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "hex",
+        "args": [
+          {
+            "kind": "functionCall",
+            "name": "aes_encrypt_mysql",
+            "args": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "mode"
+                ]
+              },
+              {
+                "kind": "functionCall",
+                "name": "toNullable",
+                "args": [
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "plaintext"
+                    ]
+                  }
+                ]
+              },
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "key"
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "select",
     "select": [
       {
         "kind": "functionCall",
@@ -54,6 +124,658 @@
             "kind": "literal",
             "type": "String",
             "value": "test_key________________________"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "with": [
+      {
+        "kind": "cteExpr",
+        "name": "mode",
+        "expr": {
+          "kind": "literal",
+          "type": "String",
+          "value": "aes-256-ecb"
+        }
+      },
+      {
+        "kind": "cteExpr",
+        "name": "ciphertext",
+        "expr": {
+          "kind": "functionCall",
+          "name": "unhex",
+          "args": [
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "D1B43643E1D0E9390E39BA4EAE150851"
+            }
+          ]
+        }
+      },
+      {
+        "kind": "cteExpr",
+        "name": "key",
+        "expr": {
+          "kind": "literal",
+          "type": "String",
+          "value": "test_key________________________"
+        }
+      }
+    ],
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "hex",
+        "args": [
+          {
+            "kind": "functionCall",
+            "name": "aes_decrypt_mysql",
+            "args": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "mode"
+                ]
+              },
+              {
+                "kind": "functionCall",
+                "name": "toNullable",
+                "args": [
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "ciphertext"
+                    ]
+                  }
+                ]
+              },
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "key"
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "with": [
+      {
+        "kind": "cteExpr",
+        "name": "mode",
+        "expr": {
+          "kind": "literal",
+          "type": "String",
+          "value": "aes-256-ecb"
+        }
+      },
+      {
+        "kind": "cteExpr",
+        "name": "key",
+        "expr": {
+          "kind": "literal",
+          "type": "String",
+          "value": "test_key________________________"
+        }
+      }
+    ],
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "mode"
+        ]
+      },
+      {
+        "kind": "functionCall",
+        "name": "encrypt",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "mode"
+            ]
+          },
+          {
+            "kind": "castExpr",
+            "expr": {
+              "kind": "literal",
+              "type": "NULL",
+              "value": "NULL"
+            },
+            "type": "Nullable(String)"
+          },
+          {
+            "kind": "columnRef",
+            "parts": [
+              "key"
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "with": [
+      {
+        "kind": "cteExpr",
+        "name": "mode",
+        "expr": {
+          "kind": "literal",
+          "type": "String",
+          "value": "aes-256-gcm"
+        }
+      },
+      {
+        "kind": "cteExpr",
+        "name": "key",
+        "expr": {
+          "kind": "literal",
+          "type": "String",
+          "value": "test_key________________________"
+        }
+      },
+      {
+        "kind": "cteExpr",
+        "name": "iv",
+        "expr": {
+          "kind": "literal",
+          "type": "String",
+          "value": "test_iv_____"
+        }
+      }
+    ],
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "mode"
+        ]
+      },
+      {
+        "kind": "functionCall",
+        "name": "encrypt",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "mode"
+            ]
+          },
+          {
+            "kind": "castExpr",
+            "expr": {
+              "kind": "literal",
+              "type": "NULL",
+              "value": "NULL"
+            },
+            "type": "Nullable(String)"
+          },
+          {
+            "kind": "columnRef",
+            "parts": [
+              "key"
+            ]
+          },
+          {
+            "kind": "columnRef",
+            "parts": [
+              "iv"
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "with": [
+      {
+        "kind": "cteExpr",
+        "name": "mode",
+        "expr": {
+          "kind": "literal",
+          "type": "String",
+          "value": "aes-256-ecb"
+        }
+      },
+      {
+        "kind": "cteExpr",
+        "name": "key",
+        "expr": {
+          "kind": "literal",
+          "type": "String",
+          "value": "test_key________________________"
+        }
+      }
+    ],
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "mode"
+        ]
+      },
+      {
+        "kind": "functionCall",
+        "name": "hex",
+        "args": [
+          {
+            "kind": "functionCall",
+            "name": "encrypt",
+            "args": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "mode"
+                ]
+              },
+              {
+                "kind": "functionCall",
+                "name": "toNullable",
+                "args": [
+                  {
+                    "kind": "literal",
+                    "type": "String",
+                    "value": "Hello World!"
+                  }
+                ]
+              },
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "key"
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "with": [
+      {
+        "kind": "cteExpr",
+        "name": "mode",
+        "expr": {
+          "kind": "literal",
+          "type": "String",
+          "value": "aes-256-gcm"
+        }
+      },
+      {
+        "kind": "cteExpr",
+        "name": "key",
+        "expr": {
+          "kind": "literal",
+          "type": "String",
+          "value": "test_key________________________"
+        }
+      },
+      {
+        "kind": "cteExpr",
+        "name": "iv",
+        "expr": {
+          "kind": "literal",
+          "type": "String",
+          "value": "test_iv_____"
+        }
+      }
+    ],
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "mode"
+        ]
+      },
+      {
+        "kind": "functionCall",
+        "name": "hex",
+        "args": [
+          {
+            "kind": "functionCall",
+            "name": "encrypt",
+            "args": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "mode"
+                ]
+              },
+              {
+                "kind": "functionCall",
+                "name": "toNullable",
+                "args": [
+                  {
+                    "kind": "literal",
+                    "type": "String",
+                    "value": "Hello World!"
+                  }
+                ]
+              },
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "key"
+                ]
+              },
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "iv"
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "with": [
+      {
+        "kind": "cteExpr",
+        "name": "mode",
+        "expr": {
+          "kind": "literal",
+          "type": "String",
+          "value": "aes-256-ecb"
+        }
+      },
+      {
+        "kind": "cteExpr",
+        "name": "key",
+        "expr": {
+          "kind": "literal",
+          "type": "String",
+          "value": "test_key________________________"
+        }
+      }
+    ],
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "mode"
+        ]
+      },
+      {
+        "kind": "functionCall",
+        "name": "decrypt",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "mode"
+            ]
+          },
+          {
+            "kind": "castExpr",
+            "expr": {
+              "kind": "literal",
+              "type": "NULL",
+              "value": "NULL"
+            },
+            "type": "Nullable(String)"
+          },
+          {
+            "kind": "columnRef",
+            "parts": [
+              "key"
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "with": [
+      {
+        "kind": "cteExpr",
+        "name": "mode",
+        "expr": {
+          "kind": "literal",
+          "type": "String",
+          "value": "aes-256-gcm"
+        }
+      },
+      {
+        "kind": "cteExpr",
+        "name": "key",
+        "expr": {
+          "kind": "literal",
+          "type": "String",
+          "value": "test_key________________________"
+        }
+      },
+      {
+        "kind": "cteExpr",
+        "name": "iv",
+        "expr": {
+          "kind": "literal",
+          "type": "String",
+          "value": "test_iv_____"
+        }
+      }
+    ],
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "mode"
+        ]
+      },
+      {
+        "kind": "functionCall",
+        "name": "decrypt",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "mode"
+            ]
+          },
+          {
+            "kind": "castExpr",
+            "expr": {
+              "kind": "literal",
+              "type": "NULL",
+              "value": "NULL"
+            },
+            "type": "Nullable(String)"
+          },
+          {
+            "kind": "columnRef",
+            "parts": [
+              "key"
+            ]
+          },
+          {
+            "kind": "columnRef",
+            "parts": [
+              "iv"
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "with": [
+      {
+        "kind": "cteExpr",
+        "name": "mode",
+        "expr": {
+          "kind": "literal",
+          "type": "String",
+          "value": "aes-256-ecb"
+        }
+      },
+      {
+        "kind": "cteExpr",
+        "name": "ciphertext",
+        "expr": {
+          "kind": "functionCall",
+          "name": "unhex",
+          "args": [
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "D1B43643E1D0E9390E39BA4EAE150851"
+            }
+          ]
+        }
+      },
+      {
+        "kind": "cteExpr",
+        "name": "key",
+        "expr": {
+          "kind": "literal",
+          "type": "String",
+          "value": "test_key________________________"
+        }
+      }
+    ],
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "mode"
+        ]
+      },
+      {
+        "kind": "functionCall",
+        "name": "decrypt",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "mode"
+            ]
+          },
+          {
+            "kind": "functionCall",
+            "name": "toNullable",
+            "args": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "ciphertext"
+                ]
+              }
+            ]
+          },
+          {
+            "kind": "columnRef",
+            "parts": [
+              "key"
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "with": [
+      {
+        "kind": "cteExpr",
+        "name": "mode",
+        "expr": {
+          "kind": "literal",
+          "type": "String",
+          "value": "aes-256-gcm"
+        }
+      },
+      {
+        "kind": "cteExpr",
+        "name": "ciphertext",
+        "expr": {
+          "kind": "functionCall",
+          "name": "unhex",
+          "args": [
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "219E6478A1A3BB5B686DA4BAD70323F192EFEDCCBBD6F49E78A7E2F6"
+            }
+          ]
+        }
+      },
+      {
+        "kind": "cteExpr",
+        "name": "key",
+        "expr": {
+          "kind": "literal",
+          "type": "String",
+          "value": "test_key________________________"
+        }
+      },
+      {
+        "kind": "cteExpr",
+        "name": "iv",
+        "expr": {
+          "kind": "literal",
+          "type": "String",
+          "value": "test_iv_____"
+        }
+      }
+    ],
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "mode"
+        ]
+      },
+      {
+        "kind": "functionCall",
+        "name": "decrypt",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "mode"
+            ]
+          },
+          {
+            "kind": "functionCall",
+            "name": "toNullable",
+            "args": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "ciphertext"
+                ]
+              }
+            ]
+          },
+          {
+            "kind": "columnRef",
+            "parts": [
+              "key"
+            ]
+          },
+          {
+            "kind": "columnRef",
+            "parts": [
+              "iv"
+            ]
           }
         ]
       }

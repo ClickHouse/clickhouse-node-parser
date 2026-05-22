@@ -1,5 +1,300 @@
 [
   {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "merge"
+    },
+    "ifExists": true,
+    "leadingComments": [
+      "-- Tags: no-parallel"
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "merge"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "dt",
+        "type": {
+          "name": "Date"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "colAlias0",
+        "type": {
+          "name": "Int32"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "colAlias1",
+        "type": {
+          "name": "Int32"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "col2",
+        "type": {
+          "name": "Int32"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "colAlias2",
+        "type": {
+          "name": "UInt32"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "col3",
+        "type": {
+          "name": "Int32"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "colAlias3",
+        "type": {
+          "name": "UInt32"
+        }
+      }
+    ],
+    "engine": {
+      "name": "Merge",
+      "args": [
+        {
+          "kind": "functionCall",
+          "name": "currentDatabase",
+          "args": []
+        },
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "^alias_"
+        }
+      ]
+    }
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "alias_1"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "alias_2"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "alias_1"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "dt",
+        "type": {
+          "name": "Date"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "col",
+        "type": {
+          "name": "Int32"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "colAlias0",
+        "type": {
+          "name": "UInt32"
+        },
+        "defaultKind": "ALIAS",
+        "defaultExpr": {
+          "kind": "columnRef",
+          "parts": [
+            "col"
+          ]
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "colAlias1",
+        "type": {
+          "name": "UInt32"
+        },
+        "defaultKind": "ALIAS",
+        "defaultExpr": {
+          "kind": "binaryExpr",
+          "op": "+",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "col3"
+            ]
+          },
+          "right": {
+            "kind": "columnRef",
+            "parts": [
+              "colAlias0"
+            ]
+          }
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "col2",
+        "type": {
+          "name": "Int32"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "colAlias2",
+        "type": {
+          "name": "Int32"
+        },
+        "defaultKind": "ALIAS",
+        "defaultExpr": {
+          "kind": "binaryExpr",
+          "op": "+",
+          "left": {
+            "kind": "binaryExpr",
+            "op": "+",
+            "left": {
+              "kind": "columnRef",
+              "parts": [
+                "colAlias1"
+              ]
+            },
+            "right": {
+              "kind": "columnRef",
+              "parts": [
+                "col2"
+              ]
+            }
+          },
+          "right": {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "10"
+          }
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "col3",
+        "type": {
+          "name": "Int32"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "colAlias3",
+        "type": {
+          "name": "Int32"
+        },
+        "defaultKind": "ALIAS",
+        "defaultExpr": {
+          "kind": "binaryExpr",
+          "op": "+",
+          "left": {
+            "kind": "binaryExpr",
+            "op": "+",
+            "left": {
+              "kind": "columnRef",
+              "parts": [
+                "colAlias2"
+              ]
+            },
+            "right": {
+              "kind": "columnRef",
+              "parts": [
+                "colAlias1"
+              ]
+            }
+          },
+          "right": {
+            "kind": "columnRef",
+            "parts": [
+              "col3"
+            ]
+          }
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree",
+      "args": []
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "dt"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "alias_1"
+      }
+    },
+    "columns": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "dt"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "col"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "col2"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "col3"
+        ]
+      }
+    ]
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -76,6 +371,179 @@
       "kind": "tableRef",
       "table": "merge"
     }
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "alias_2"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "dt",
+        "type": {
+          "name": "Date"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "col",
+        "type": {
+          "name": "Int32"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "col2",
+        "type": {
+          "name": "Int32"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "colAlias0",
+        "type": {
+          "name": "UInt32"
+        },
+        "defaultKind": "ALIAS",
+        "defaultExpr": {
+          "kind": "columnRef",
+          "parts": [
+            "col"
+          ]
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "colAlias3",
+        "type": {
+          "name": "Int32"
+        },
+        "defaultKind": "ALIAS",
+        "defaultExpr": {
+          "kind": "binaryExpr",
+          "op": "+",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "col3"
+            ]
+          },
+          "right": {
+            "kind": "columnRef",
+            "parts": [
+              "colAlias0"
+            ]
+          }
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "colAlias1",
+        "type": {
+          "name": "UInt32"
+        },
+        "defaultKind": "ALIAS",
+        "defaultExpr": {
+          "kind": "binaryExpr",
+          "op": "+",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "colAlias0"
+            ]
+          },
+          "right": {
+            "kind": "columnRef",
+            "parts": [
+              "col2"
+            ]
+          }
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "colAlias2",
+        "type": {
+          "name": "Int32"
+        },
+        "defaultKind": "ALIAS",
+        "defaultExpr": {
+          "kind": "binaryExpr",
+          "op": "+",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "colAlias0"
+            ]
+          },
+          "right": {
+            "kind": "columnRef",
+            "parts": [
+              "colAlias1"
+            ]
+          }
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "col3",
+        "type": {
+          "name": "Int32"
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree",
+      "args": []
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "dt"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "alias_2"
+      }
+    },
+    "columns": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "dt"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "col"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "col2"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "col3"
+        ]
+      }
+    ]
   },
   {
     "kind": "select",

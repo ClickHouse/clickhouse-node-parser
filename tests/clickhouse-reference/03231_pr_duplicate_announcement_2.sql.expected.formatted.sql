@@ -1,3 +1,18 @@
+DROP TABLE IF EXISTS ANIMAL;
+
+CREATE TABLE ANIMAL
+(
+    ANIMAL Nullable(String)
+)
+ENGINE = ReplicatedMergeTree('/clickhouse/test/{database}/animal', 'r1')
+ORDER BY tuple();
+
+INSERT INTO ANIMAL (ANIMAL);
+
+SET joined_subquery_requires_alias = 0;
+
+SET allow_experimental_parallel_reading_from_replicas = 1, max_parallel_replicas = 3, cluster_for_parallel_replicas = 'test_cluster_one_shard_three_replicas_localhost';
+
 SELECT *
 FROM (
         SELECT
@@ -35,3 +50,5 @@ FROM (
         HAVING ANIMAL >= 0
     ) AS ANIMAL
 WHERE ANIMAL.ANIMAL >= 0;
+
+DROP TABLE ANIMAL;

@@ -10,6 +10,87 @@
     ]
   },
   {
+    "kind": "drop",
+    "targetType": "VIEW",
+    "table": {
+      "kind": "tableRef",
+      "table": "V_DELTA"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "users"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "users"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "uid",
+        "type": {
+          "name": "Int16"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "name",
+        "type": {
+          "name": "String"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "age",
+        "type": {
+          "name": "Int16"
+        }
+      }
+    ],
+    "engine": {
+      "name": "Memory"
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "users"
+      }
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "users"
+      }
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "users"
+      }
+    }
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -30,6 +111,61 @@
           ]
         },
         "direction": "ASC"
+      }
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "param_a1",
+        "value": {
+          "kind": "literal",
+          "type": "String",
+          "value": "10"
+        }
+      }
+    ],
+    "leadingComments": [
+      "-- set params"
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "param_a2",
+        "value": {
+          "kind": "literal",
+          "type": "String",
+          "value": "50"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "param_a3",
+        "value": {
+          "kind": "literal",
+          "type": "String",
+          "value": "10"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "param_a4",
+        "value": {
+          "kind": "literal",
+          "type": "String",
+          "value": "40"
+        }
       }
     ]
   },
@@ -56,6 +192,142 @@
         "name": "a4",
         "type": "Int32"
       }
+    ],
+    "leadingComments": [
+      "--check"
+    ]
+  },
+  {
+    "kind": "createView",
+    "table": {
+      "kind": "tableRef",
+      "table": "V_DELTA"
+    },
+    "orReplace": true,
+    "asQuery": {
+      "kind": "select",
+      "distinct": {
+        "kind": "distinct"
+      },
+      "select": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "uid"
+          ]
+        }
+      ],
+      "from": {
+        "kind": "subqueryFrom",
+        "query": {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "uid"
+              ]
+            },
+            {
+              "kind": "columnRef",
+              "parts": [
+                "name"
+              ]
+            },
+            {
+              "kind": "columnRef",
+              "parts": [
+                "age"
+              ]
+            }
+          ],
+          "from": {
+            "kind": "tableRef",
+            "table": "users"
+          },
+          "where": {
+            "kind": "naryExpr",
+            "op": "OR",
+            "operands": [
+              {
+                "kind": "binaryExpr",
+                "op": ">=",
+                "left": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "age"
+                  ]
+                },
+                "right": {
+                  "kind": "queryParam",
+                  "name": "a1",
+                  "type": "Int32"
+                }
+              },
+              {
+                "kind": "binaryExpr",
+                "op": ">=",
+                "left": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "age"
+                  ]
+                },
+                "right": {
+                  "kind": "queryParam",
+                  "name": "a2",
+                  "type": "Int32"
+                }
+              },
+              {
+                "kind": "binaryExpr",
+                "op": ">=",
+                "left": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "age"
+                  ]
+                },
+                "right": {
+                  "kind": "queryParam",
+                  "name": "a3",
+                  "type": "Int32"
+                }
+              },
+              {
+                "kind": "binaryExpr",
+                "op": ">=",
+                "left": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "age"
+                  ]
+                },
+                "right": {
+                  "kind": "queryParam",
+                  "name": "a4",
+                  "type": "Int32"
+                }
+              }
+            ]
+          }
+        }
+      },
+      "orderBy": [
+        {
+          "kind": "orderByItem",
+          "expr": {
+            "kind": "columnRef",
+            "parts": [
+              "uid"
+            ]
+          },
+          "direction": "ASC"
+        }
+      ]
+    },
+    "leadingComments": [
+      "-- using 4 param in the select of the view work here."
     ]
   },
   {
@@ -66,7 +338,7 @@
       }
     ],
     "from": {
-      "kind": "tableFunction",
+      "kind": "tableFunctionRef",
       "name": "V_DELTA",
       "args": [
         {
@@ -289,6 +561,195 @@
         },
         "direction": "ASC"
       }
+    ],
+    "leadingComments": [
+      "-- check individual query before the next part"
     ]
+  },
+  {
+    "kind": "createView",
+    "table": {
+      "kind": "tableRef",
+      "table": "V_DELTA"
+    },
+    "orReplace": true,
+    "asQuery": {
+      "kind": "select",
+      "distinct": {
+        "kind": "distinct"
+      },
+      "select": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "uid"
+          ]
+        }
+      ],
+      "from": {
+        "kind": "subqueryFrom",
+        "query": {
+          "kind": "intersect",
+          "op": "EXCEPT",
+          "left": {
+            "kind": "select",
+            "select": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "uid"
+                ]
+              },
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "name"
+                ]
+              },
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "age"
+                ]
+              }
+            ],
+            "from": {
+              "kind": "tableRef",
+              "table": "users"
+            },
+            "where": {
+              "kind": "naryExpr",
+              "op": "AND",
+              "operands": [
+                {
+                  "kind": "binaryExpr",
+                  "op": ">=",
+                  "left": {
+                    "kind": "columnRef",
+                    "parts": [
+                      "age"
+                    ]
+                  },
+                  "right": {
+                    "kind": "queryParam",
+                    "name": "a1",
+                    "type": "Int32"
+                  }
+                },
+                {
+                  "kind": "binaryExpr",
+                  "op": "<=",
+                  "left": {
+                    "kind": "columnRef",
+                    "parts": [
+                      "age"
+                    ]
+                  },
+                  "right": {
+                    "kind": "queryParam",
+                    "name": "a2",
+                    "type": "Int32"
+                  }
+                }
+              ]
+            }
+          },
+          "right": {
+            "kind": "select",
+            "select": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "uid"
+                ]
+              },
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "name"
+                ]
+              },
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "age"
+                ]
+              }
+            ],
+            "from": {
+              "kind": "tableRef",
+              "table": "users"
+            },
+            "where": {
+              "kind": "naryExpr",
+              "op": "AND",
+              "operands": [
+                {
+                  "kind": "binaryExpr",
+                  "op": ">=",
+                  "left": {
+                    "kind": "columnRef",
+                    "parts": [
+                      "age"
+                    ]
+                  },
+                  "right": {
+                    "kind": "queryParam",
+                    "name": "a3",
+                    "type": "Int32"
+                  }
+                },
+                {
+                  "kind": "binaryExpr",
+                  "op": "<=",
+                  "left": {
+                    "kind": "columnRef",
+                    "parts": [
+                      "age"
+                    ]
+                  },
+                  "right": {
+                    "kind": "queryParam",
+                    "name": "a4",
+                    "type": "Int32"
+                  }
+                }
+              ]
+            }
+          }
+        }
+      },
+      "orderBy": [
+        {
+          "kind": "orderByItem",
+          "expr": {
+            "kind": "columnRef",
+            "parts": [
+              "uid"
+            ]
+          },
+          "direction": "ASC"
+        }
+      ]
+    },
+    "leadingComments": [
+      "-- using 4 param in the select of the view do not work here."
+    ]
+  },
+  {
+    "kind": "drop",
+    "targetType": "VIEW",
+    "table": {
+      "kind": "tableRef",
+      "table": "V_DELTA"
+    }
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "users"
+    }
   }
 ]

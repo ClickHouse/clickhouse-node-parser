@@ -1,5 +1,52 @@
 [
   {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "t1"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "t1"
+    },
+    "asTableFunction": {
+      "name": "remote",
+      "args": [
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "localhost"
+        },
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "system.one"
+        }
+      ]
+    }
+  },
+  {
+    "kind": "rename",
+    "targetType": "TABLE",
+    "pairs": [
+      {
+        "from": {
+          "kind": "tableRef",
+          "table": "t1"
+        },
+        "to": {
+          "kind": "tableRef",
+          "table": "t2"
+        }
+      }
+    ]
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -9,6 +56,30 @@
     "from": {
       "kind": "tableRef",
       "table": "t2"
+    }
+  },
+  {
+    "kind": "rename",
+    "targetType": "TABLE",
+    "pairs": [
+      {
+        "from": {
+          "kind": "tableRef",
+          "table": "t2"
+        },
+        "to": {
+          "kind": "tableRef",
+          "table": "t1"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "t1"
     }
   }
 ]

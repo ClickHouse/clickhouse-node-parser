@@ -1,5 +1,125 @@
 [
   {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "foo"
+    },
+    "ifExists": true,
+    "leadingComments": [
+      "-- https://github.com/ClickHouse/ClickHouse/issues/64543"
+    ]
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "bar"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "foo"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "id",
+        "type": {
+          "name": "UInt64"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "seq",
+        "type": {
+          "name": "UInt64"
+        }
+      }
+    ],
+    "engine": {
+      "name": "Memory"
+    }
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "bar"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "id",
+        "type": {
+          "name": "UInt64"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "seq",
+        "type": {
+          "name": "UInt64"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "name",
+        "type": {
+          "name": "String"
+        }
+      }
+    ],
+    "engine": {
+      "name": "ReplacingMergeTree"
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "id"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "foo"
+      }
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "bar"
+      }
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "bar"
+      }
+    }
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -11,7 +131,7 @@
         "kind": "tableRef",
         "table": "bar"
       },
-      "kind": "join",
+      "kind": "joinExpr",
       "joinType": "INNER",
       "right": {
         "kind": "tableRef",
@@ -54,6 +174,93 @@
     ]
   },
   {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "t"
+    },
+    "ifExists": true,
+    "leadingComments": [
+      "-- Same problem possible can happen with array join"
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "t"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "k1",
+        "type": {
+          "name": "UInt64"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "k2",
+        "type": {
+          "name": "UInt64"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "v",
+        "type": {
+          "name": "UInt64"
+        }
+      }
+    ],
+    "engine": {
+      "name": "ReplacingMergeTree",
+      "args": []
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "k1"
+          ]
+        }
+      },
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "k2"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "optimize_on_insert",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "t"
+      }
+    }
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -63,10 +270,10 @@
           "name": "arrayJoin",
           "args": [
             {
-              "kind": "array",
+              "kind": "arrayLiteral",
               "elements": [
                 {
-                  "kind": "tuple",
+                  "kind": "tupleLiteral",
                   "elements": [
                     {
                       "kind": "columnRef",
@@ -84,7 +291,7 @@
                   "source": "(k1, v)"
                 },
                 {
-                  "kind": "tuple",
+                  "kind": "tupleLiteral",
                   "elements": [
                     {
                       "kind": "columnRef",
@@ -192,6 +399,9 @@
           "value": "0"
         }
       }
+    ],
+    "leadingComments": [
+      "-- { echo ON }"
     ]
   },
   {
@@ -204,10 +414,10 @@
           "name": "arrayJoin",
           "args": [
             {
-              "kind": "array",
+              "kind": "arrayLiteral",
               "elements": [
                 {
-                  "kind": "tuple",
+                  "kind": "tupleLiteral",
                   "elements": [
                     {
                       "kind": "columnRef",
@@ -225,7 +435,7 @@
                   "source": "(k1, v)"
                 },
                 {
-                  "kind": "tuple",
+                  "kind": "tupleLiteral",
                   "elements": [
                     {
                       "kind": "columnRef",
@@ -345,10 +555,10 @@
           "name": "arrayJoin",
           "args": [
             {
-              "kind": "array",
+              "kind": "arrayLiteral",
               "elements": [
                 {
-                  "kind": "tuple",
+                  "kind": "tupleLiteral",
                   "elements": [
                     {
                       "kind": "columnRef",
@@ -366,7 +576,7 @@
                   "source": "(k1, v)"
                 },
                 {
-                  "kind": "tuple",
+                  "kind": "tupleLiteral",
                   "elements": [
                     {
                       "kind": "columnRef",
@@ -486,10 +696,10 @@
           "name": "arrayJoin",
           "args": [
             {
-              "kind": "array",
+              "kind": "arrayLiteral",
               "elements": [
                 {
-                  "kind": "tuple",
+                  "kind": "tupleLiteral",
                   "elements": [
                     {
                       "kind": "columnRef",
@@ -507,7 +717,7 @@
                   "source": "(k1, v)"
                 },
                 {
-                  "kind": "tuple",
+                  "kind": "tupleLiteral",
                   "elements": [
                     {
                       "kind": "columnRef",
@@ -627,10 +837,10 @@
           "name": "arrayJoin",
           "args": [
             {
-              "kind": "array",
+              "kind": "arrayLiteral",
               "elements": [
                 {
-                  "kind": "tuple",
+                  "kind": "tupleLiteral",
                   "elements": [
                     {
                       "kind": "columnRef",
@@ -648,7 +858,7 @@
                   "source": "(k1, v)"
                 },
                 {
-                  "kind": "tuple",
+                  "kind": "tupleLiteral",
                   "elements": [
                     {
                       "kind": "columnRef",
@@ -768,10 +978,10 @@
           "name": "arrayJoin",
           "args": [
             {
-              "kind": "array",
+              "kind": "arrayLiteral",
               "elements": [
                 {
-                  "kind": "tuple",
+                  "kind": "tupleLiteral",
                   "elements": [
                     {
                       "kind": "columnRef",
@@ -789,7 +999,7 @@
                   "source": "(k1, v)"
                 },
                 {
-                  "kind": "tuple",
+                  "kind": "tupleLiteral",
                   "elements": [
                     {
                       "kind": "columnRef",

@@ -1,5 +1,113 @@
 [
   {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "test_02481_mismatch_files"
+    },
+    "ifExists": true,
+    "leadingComments": [
+      "-- Tags: no-parallel, no-fasttest",
+      "-- Tag no-fasttest: Depends on AWS",
+      "-- { echo }"
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "test_02481_mismatch_files"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "a",
+        "type": {
+          "name": "UInt64"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "b",
+        "type": {
+          "name": "String"
+        }
+      }
+    ],
+    "engine": {
+      "name": "S3",
+      "args": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "s3_conn"
+          ]
+        },
+        {
+          "kind": "binaryExpr",
+          "op": "=",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "filename"
+            ]
+          },
+          "right": {
+            "kind": "literal",
+            "type": "String",
+            "value": "test_02481_mismatch_files_{_partition_id}"
+          }
+        },
+        {
+          "kind": "binaryExpr",
+          "op": "=",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "format"
+            ]
+          },
+          "right": {
+            "kind": "columnRef",
+            "parts": [
+              "Parquet"
+            ]
+          }
+        }
+      ]
+    },
+    "partitionBy": {
+      "kind": "columnRef",
+      "parts": [
+        "a"
+      ]
+    }
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "s3_truncate_on_insert",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "test_02481_mismatch_files"
+      }
+    }
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -16,7 +124,7 @@
       }
     ],
     "from": {
-      "kind": "tableFunction",
+      "kind": "tableFunctionRef",
       "name": "s3",
       "args": [
         {
@@ -57,7 +165,10 @@
           }
         }
       ]
-    }
+    },
+    "trailingComments": [
+      "-- { serverError CANNOT_EXTRACT_TABLE_STRUCTURE }"
+    ]
   },
   {
     "kind": "select",
@@ -76,7 +187,7 @@
       }
     ],
     "from": {
-      "kind": "tableFunction",
+      "kind": "tableFunctionRef",
       "name": "s3",
       "args": [
         {
@@ -127,6 +238,9 @@
           "value": "1"
         }
       }
+    ],
+    "trailingComments": [
+      "-- { serverError FILE_DOESNT_EXIST }"
     ]
   }
 ]

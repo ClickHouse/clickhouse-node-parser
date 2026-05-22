@@ -1,5 +1,38 @@
 [
   {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "enable_analyzer",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ],
+    "leadingComments": [
+      "-- Tags: no-parallel"
+    ]
+  },
+  {
+    "kind": "describe",
+    "target": {
+      "kind": "subquery",
+      "query": {
+        "kind": "select",
+        "select": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "dummy"
+            ]
+          }
+        ]
+      }
+    }
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -21,6 +54,24 @@
     ]
   },
   {
+    "kind": "describe",
+    "target": {
+      "kind": "subquery",
+      "query": {
+        "kind": "select",
+        "select": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "one",
+              "dummy"
+            ]
+          }
+        ]
+      }
+    }
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -31,6 +82,25 @@
         ]
       }
     ]
+  },
+  {
+    "kind": "describe",
+    "target": {
+      "kind": "subquery",
+      "query": {
+        "kind": "select",
+        "select": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "system",
+              "one",
+              "dummy"
+            ]
+          }
+        ]
+      }
+    }
   },
   {
     "kind": "select",
@@ -46,6 +116,51 @@
     ]
   },
   {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "test_table"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "test_table"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "id",
+        "type": {
+          "name": "UInt64"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "value",
+        "type": {
+          "name": "String"
+        }
+      }
+    ],
+    "engine": {
+      "name": "TinyLog"
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "test_table"
+      }
+    }
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -58,7 +173,10 @@
     "from": {
       "kind": "tableRef",
       "table": "test_table"
-    }
+    },
+    "trailingComments": [
+      "-- { serverError UNKNOWN_IDENTIFIER }"
+    ]
   },
   {
     "kind": "select",
@@ -73,6 +191,30 @@
     "from": {
       "kind": "tableRef",
       "table": "test_unknown_table"
+    },
+    "trailingComments": [
+      "-- { serverError UNKNOWN_TABLE }"
+    ]
+  },
+  {
+    "kind": "describe",
+    "target": {
+      "kind": "subquery",
+      "query": {
+        "kind": "select",
+        "select": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "id"
+            ]
+          }
+        ],
+        "from": {
+          "kind": "tableRef",
+          "table": "test_table"
+        }
+      }
     }
   },
   {
@@ -91,6 +233,27 @@
     }
   },
   {
+    "kind": "describe",
+    "target": {
+      "kind": "subquery",
+      "query": {
+        "kind": "select",
+        "select": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "value"
+            ]
+          }
+        ],
+        "from": {
+          "kind": "tableRef",
+          "table": "test_table"
+        }
+      }
+    }
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -103,6 +266,33 @@
     "from": {
       "kind": "tableRef",
       "table": "test_table"
+    }
+  },
+  {
+    "kind": "describe",
+    "target": {
+      "kind": "subquery",
+      "query": {
+        "kind": "select",
+        "select": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "id"
+            ]
+          },
+          {
+            "kind": "columnRef",
+            "parts": [
+              "value"
+            ]
+          }
+        ],
+        "from": {
+          "kind": "tableRef",
+          "table": "test_table"
+        }
+      }
     }
   },
   {
@@ -127,6 +317,28 @@
     }
   },
   {
+    "kind": "describe",
+    "target": {
+      "kind": "subquery",
+      "query": {
+        "kind": "select",
+        "select": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "test_table",
+              "id"
+            ]
+          }
+        ],
+        "from": {
+          "kind": "tableRef",
+          "table": "test_table"
+        }
+      }
+    }
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -143,6 +355,28 @@
     }
   },
   {
+    "kind": "describe",
+    "target": {
+      "kind": "subquery",
+      "query": {
+        "kind": "select",
+        "select": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "test_table",
+              "value"
+            ]
+          }
+        ],
+        "from": {
+          "kind": "tableRef",
+          "table": "test_table"
+        }
+      }
+    }
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -156,6 +390,35 @@
     "from": {
       "kind": "tableRef",
       "table": "test_table"
+    }
+  },
+  {
+    "kind": "describe",
+    "target": {
+      "kind": "subquery",
+      "query": {
+        "kind": "select",
+        "select": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "test_table",
+              "id"
+            ]
+          },
+          {
+            "kind": "columnRef",
+            "parts": [
+              "test_table",
+              "value"
+            ]
+          }
+        ],
+        "from": {
+          "kind": "tableRef",
+          "table": "test_table"
+        }
+      }
     }
   },
   {
@@ -179,6 +442,36 @@
     "from": {
       "kind": "tableRef",
       "table": "test_table"
+    }
+  },
+  {
+    "kind": "describe",
+    "target": {
+      "kind": "subquery",
+      "query": {
+        "kind": "select",
+        "select": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "test",
+              "id"
+            ]
+          },
+          {
+            "kind": "columnRef",
+            "parts": [
+              "test",
+              "value"
+            ]
+          }
+        ],
+        "from": {
+          "kind": "tableRef",
+          "table": "test_table",
+          "alias": "test"
+        }
+      }
     }
   },
   {
@@ -206,6 +499,105 @@
     }
   },
   {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "test_table"
+    }
+  },
+  {
+    "kind": "drop",
+    "targetType": "DATABASE",
+    "table": {
+      "kind": "tableRef",
+      "table": "02337_db"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "createDatabase",
+    "name": "02337_db"
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "database": "02337_db",
+      "table": "test_table"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "database": "02337_db",
+      "table": "test_table"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "id",
+        "type": {
+          "name": "UInt64"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "value",
+        "type": {
+          "name": "String"
+        }
+      }
+    ],
+    "engine": {
+      "name": "TinyLog"
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "database": "02337_db",
+        "table": "test_table"
+      }
+    }
+  },
+  {
+    "kind": "describe",
+    "target": {
+      "kind": "subquery",
+      "query": {
+        "kind": "select",
+        "select": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "test_table",
+              "id"
+            ]
+          },
+          {
+            "kind": "columnRef",
+            "parts": [
+              "test_table",
+              "value"
+            ]
+          }
+        ],
+        "from": {
+          "kind": "tableRef",
+          "database": "02337_db",
+          "table": "test_table"
+        }
+      }
+    }
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -227,6 +619,38 @@
       "kind": "tableRef",
       "database": "02337_db",
       "table": "test_table"
+    }
+  },
+  {
+    "kind": "describe",
+    "target": {
+      "kind": "subquery",
+      "query": {
+        "kind": "select",
+        "select": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "02337_db",
+              "test_table",
+              "id"
+            ]
+          },
+          {
+            "kind": "columnRef",
+            "parts": [
+              "02337_db",
+              "test_table",
+              "value"
+            ]
+          }
+        ],
+        "from": {
+          "kind": "tableRef",
+          "database": "02337_db",
+          "table": "test_table"
+        }
+      }
     }
   },
   {
@@ -253,6 +677,37 @@
       "kind": "tableRef",
       "database": "02337_db",
       "table": "test_table"
+    }
+  },
+  {
+    "kind": "describe",
+    "target": {
+      "kind": "subquery",
+      "query": {
+        "kind": "select",
+        "select": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "test_table",
+              "id"
+            ]
+          },
+          {
+            "kind": "columnRef",
+            "parts": [
+              "test_table",
+              "value"
+            ]
+          }
+        ],
+        "from": {
+          "kind": "tableRef",
+          "database": "02337_db",
+          "table": "test_table",
+          "alias": "test_table"
+        }
+      }
     }
   },
   {
@@ -278,6 +733,23 @@
       "database": "02337_db",
       "table": "test_table",
       "alias": "test_table"
+    }
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "database": "02337_db",
+      "table": "test_table"
+    }
+  },
+  {
+    "kind": "drop",
+    "targetType": "DATABASE",
+    "table": {
+      "kind": "tableRef",
+      "table": "02337_db"
     }
   }
 ]

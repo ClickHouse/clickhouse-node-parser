@@ -1,3 +1,13 @@
+DROP TABLE IF EXISTS perf;
+
+CREATE TABLE perf
+(
+    site String,
+    user_id UInt64,
+    z Float64
+)
+ENGINE = Log;
+
 SELECT *
 FROM (
         SELECT perf_1.z AS z_1
@@ -50,3 +60,5 @@ FROM (
             ) AS js2
             USING (site)
     );
+
+DROP TABLE perf;

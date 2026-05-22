@@ -31,7 +31,7 @@
         },
         "alias": "t1"
       },
-      "kind": "join",
+      "kind": "joinExpr",
       "joinType": "INNER",
       "right": {
         "kind": "subqueryFrom",
@@ -76,7 +76,10 @@
           }
         }
       }
-    }
+    },
+    "leadingComments": [
+      "-- https://github.com/ClickHouse/ClickHouse/issues/9810"
+    ]
   },
   {
     "kind": "select",
@@ -110,7 +113,10 @@
           }
         ]
       }
-    }
+    },
+    "leadingComments": [
+      "-- even simpler cases"
+    ]
   },
   {
     "kind": "select",
@@ -145,7 +151,7 @@
           }
         ],
         "from": {
-          "kind": "tableFunction",
+          "kind": "tableFunctionRef",
           "name": "numbers",
           "args": [
             {
@@ -201,6 +207,36 @@
   },
   {
     "kind": "select",
+    "with": [
+      {
+        "kind": "cteExpr",
+        "name": "1",
+        "expr": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "3"
+        }
+      }
+    ],
+    "select": [
+      {
+        "kind": "literal",
+        "type": "UInt64",
+        "value": "1"
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "1"
+        ]
+      }
+    ],
+    "trailingComments": [
+      "-- { serverError AMBIGUOUS_COLUMN_NAME }"
+    ]
+  },
+  {
+    "kind": "select",
     "select": [
       {
         "kind": "literal",
@@ -230,7 +266,7 @@
         },
         "alias": "a"
       },
-      "kind": "join",
+      "kind": "joinExpr",
       "joinType": "LEFT",
       "right": {
         "kind": "subqueryFrom",
@@ -274,7 +310,10 @@
           }
         }
       }
-    }
+    },
+    "leadingComments": [
+      "-- https://github.com/ClickHouse/ClickHouse/issues/9953"
+    ]
   },
   {
     "kind": "select",
@@ -312,7 +351,7 @@
         },
         "alias": "a"
       },
-      "kind": "join",
+      "kind": "joinExpr",
       "joinType": "RIGHT",
       "right": {
         "kind": "subqueryFrom",
@@ -395,7 +434,7 @@
         },
         "alias": "a"
       },
-      "kind": "join",
+      "kind": "joinExpr",
       "joinType": "LEFT",
       "right": {
         "kind": "subqueryFrom",
@@ -488,7 +527,7 @@
         },
         "alias": "a"
       },
-      "kind": "join",
+      "kind": "joinExpr",
       "joinType": "RIGHT",
       "right": {
         "kind": "subqueryFrom",
@@ -562,7 +601,7 @@
                 "name": "arrayJoin",
                 "args": [
                   {
-                    "kind": "array",
+                    "kind": "arrayLiteral",
                     "elements": [
                       {
                         "kind": "literal",
@@ -585,7 +624,7 @@
         },
         "alias": "t1"
       },
-      "kind": "join",
+      "kind": "joinExpr",
       "joinType": "LEFT",
       "right": {
         "kind": "subqueryFrom",
@@ -639,6 +678,12 @@
           "value": "0"
         }
       }
+    ],
+    "leadingComments": [
+      "-- other cases with joins and constants"
+    ],
+    "trailingComments": [
+      "-- { serverError INVALID_JOIN_ON_EXPRESSION }"
     ]
   },
   {
@@ -674,7 +719,7 @@
                 "name": "arrayJoin",
                 "args": [
                   {
-                    "kind": "array",
+                    "kind": "arrayLiteral",
                     "elements": [
                       {
                         "kind": "literal",
@@ -697,7 +742,7 @@
         },
         "alias": "t1"
       },
-      "kind": "join",
+      "kind": "joinExpr",
       "joinType": "LEFT",
       "right": {
         "kind": "subqueryFrom",
@@ -819,7 +864,7 @@
                 "name": "arrayJoin",
                 "args": [
                   {
-                    "kind": "array",
+                    "kind": "arrayLiteral",
                     "elements": [
                       {
                         "kind": "literal",
@@ -842,7 +887,7 @@
         },
         "alias": "t1"
       },
-      "kind": "join",
+      "kind": "joinExpr",
       "joinType": "LEFT",
       "right": {
         "kind": "subqueryFrom",
@@ -896,6 +941,9 @@
           "value": "0"
         }
       }
+    ],
+    "trailingComments": [
+      "-- { serverError INVALID_JOIN_ON_EXPRESSION }"
     ]
   },
   {
@@ -964,7 +1012,7 @@
                 "name": "arrayJoin",
                 "args": [
                   {
-                    "kind": "array",
+                    "kind": "arrayLiteral",
                     "elements": [
                       {
                         "kind": "literal",
@@ -987,7 +1035,7 @@
         },
         "alias": "t1"
       },
-      "kind": "join",
+      "kind": "joinExpr",
       "joinType": "LEFT",
       "right": {
         "kind": "subqueryFrom",
@@ -1078,6 +1126,9 @@
           }
         ]
       }
-    }
+    },
+    "leadingComments": [
+      "-- https://github.com/ClickHouse/ClickHouse/issues/20624"
+    ]
   }
 ]

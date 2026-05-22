@@ -1,3 +1,5 @@
+SET enable_analyzer = 1;
+
 SELECT *
 FROM
     (
@@ -92,7 +94,7 @@ LEFT JOIN (
     ON (a.pk = b.pk)
     AND 1 != 1
     AND (a.dt >= b.dt)
-SETTINGS enable_analyzer = 0;
+SETTINGS enable_analyzer = 0; -- { serverError INVALID_JOIN_ON_EXPRESSION }
 
 SELECT b.dt
 FROM
@@ -112,6 +114,7 @@ LEFT JOIN (
     AND (a.dt >= b.dt)
 SETTINGS enable_analyzer = 1;
 
+-- Fuzzed
 SELECT *
 FROM
     (

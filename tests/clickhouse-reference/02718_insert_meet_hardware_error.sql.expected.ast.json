@@ -1,5 +1,82 @@
 [
   {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "t_hardware_error"
+    },
+    "ifExists": true,
+    "leadingComments": [
+      "-- Tags: zookeeper, no-parallel"
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "t_hardware_error"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "KeyID",
+        "type": {
+          "name": "UInt32"
+        }
+      }
+    ],
+    "engine": {
+      "name": "ReplicatedMergeTree",
+      "args": [
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "/clickhouse/tables/{shard}/{database}/t_async_insert_dedup"
+        },
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "{replica}"
+        }
+      ]
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "KeyID"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "t_hardware_error"
+      }
+    }
+  },
+  {
+    "kind": "system",
+    "body": "SYSTEM enable failpoint replicated_merge_tree_commit_zk_fail_after_op"
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "t_hardware_error"
+      }
+    }
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -9,6 +86,18 @@
       }
     ],
     "from": {
+      "kind": "tableRef",
+      "table": "t_hardware_error"
+    }
+  },
+  {
+    "kind": "system",
+    "body": "SYSTEM disable failpoint replicated_commit_zk_fail_after_op"
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
       "kind": "tableRef",
       "table": "t_hardware_error"
     }

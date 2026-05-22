@@ -1,3 +1,47 @@
+-- Tags: no-fasttest, no-parallel
+SET engine_file_truncate_on_insert = 1;
+
+SET output_format_parquet_use_custom_encoder = 1;
+
+SET output_format_parquet_row_group_size = 100;
+
+SET input_format_parquet_filter_push_down = 0;
+
+SET input_format_parquet_page_filter_push_down = 0;
+
+SET input_format_parquet_bloom_filter_push_down = 1;
+
+SET schema_inference_make_columns_nullable = 'auto';
+
+SET enable_analyzer = 1; -- required for multiple array joins
+
+SET max_block_size = 1000000; -- have only one block to make sure rows are split into row groups deterministically
+
+SET preferred_block_size_bytes = 1000000000000;
+
+CREATE TABLE data
+(
+    n UInt64,
+    s String,
+    l UInt256,
+    d Decimal128(4),
+    lc LowCardinality(String)
+)
+ENGINE = Memory;
+
+INSERT INTO data SELECT
+    number * 100,
+    toString(number * 10),
+    number * 10000000000000000000000000000000000000000::UInt256,
+    number * 123.456::Decimal128(4),
+    concat('lc', intDiv(number, 123) * 2)
+FROM numbers(1000);
+
+-- Baseline test without bloom filter.
+INSERT INTO FUNCTION file(bf_03263.parquet) SELECT *
+FROM data
+SETTINGS output_format_parquet_write_bloom_filter = 0;
+
 SELECT
     'no bf: metadata',
     rg.num_rows,
@@ -24,6 +68,11 @@ SELECT
     sum(n = 12345 AS cond)
 FROM file(bf_03263.parquet)
 WHERE indexHint(cond);
+
+-- With bloom filter.
+INSERT INTO FUNCTION file(bf_03263.parquet) SELECT *
+FROM data
+SETTINGS output_format_parquet_write_bloom_filter = 1;
 
 SELECT
     'bf: metadata',
@@ -107,6 +156,13 @@ SELECT
     sum(lc = 'lc1' AS cond)
 FROM file(bf_03263.parquet)
 WHERE indexHint(cond);
+
+-- Try different output_format_parquet_bloom_filter_bits_per_value, check that size changed.
+INSERT INTO FUNCTION file(bf_03263.parquet) SELECT *
+FROM data
+SETTINGS
+    output_format_parquet_write_bloom_filter = 1,
+    output_format_parquet_bloom_filter_bits_per_value = 30;
 
 SELECT
     'more bits per value: metadata',

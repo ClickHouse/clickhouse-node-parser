@@ -1,6 +1,6 @@
 -- Fixes bug: https://github.com/ClickHouse/ClickHouse/issues/91834
 
-
+-- { echoOn }
 
 SELECT 1 WHERE (assumeNotNull(materialize(NULL)), 1) <=> (1, 1); -- { serverError ILLEGAL_TYPE_OF_COLUMN_FOR_FILTER }
 

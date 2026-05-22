@@ -1,3 +1,66 @@
+DropQuery  test_01640 (children 1)
+ Identifier test_01640
+
+DropQuery  restore_01640 (children 1)
+ Identifier restore_01640
+
+CreateQuery test_01640 (children 3)
+ Identifier test_01640
+ Columns definition (children 1)
+  ExpressionList (children 3)
+   ColumnDeclaration i (children 1)
+    DataType Int64
+   ColumnDeclaration d (children 1)
+    DataType Date
+   ColumnDeclaration s (children 1)
+    DataType String
+ Storage definition (children 3)
+  Function ReplicatedMergeTree (children 1)
+   ExpressionList (children 2)
+    Literal '/clickhouse/{database}/{shard}/tables/test_01640'
+    Literal '{replica}'
+  Function toYYYYMM (children 1)
+   ExpressionList (children 1)
+    Identifier d
+  Identifier i
+
+InsertQuery   (children 1)
+ Identifier test_01640
+
+CreateQuery restore_01640 (children 3)
+ Identifier restore_01640
+ Columns definition (children 1)
+  ExpressionList (children 3)
+   ColumnDeclaration i (children 1)
+    DataType Int64
+   ColumnDeclaration d (children 1)
+    DataType Date
+   ColumnDeclaration s (children 1)
+    DataType String
+ Storage definition (children 3)
+  Function ReplicatedMergeTree (children 1)
+   ExpressionList (children 2)
+    Literal '/clickhouse/{database}/{shard}/tables/restore_01640'
+    Literal '{replica}'
+  Function toYYYYMM (children 1)
+   ExpressionList (children 1)
+    Identifier d
+  Identifier i
+
+AlterQuery  restore_01640 (children 3)
+ ExpressionList (children 1)
+  AlterCommand FETCH_PARTITION (children 1)
+   Partition (children 1)
+    Function tuple (children 1)
+     ExpressionList (children 1)
+      Function toYYYYMM (children 1)
+       ExpressionList (children 1)
+        Function toDate (children 1)
+         ExpressionList (children 1)
+          Literal '2021-01-01'
+ Identifier restore_01640
+ Set
+
 SelectWithUnionQuery (children 1)
  ExpressionList (children 1)
   SelectQuery (children 3)
@@ -19,6 +82,22 @@ SelectWithUnionQuery (children 1)
        Function currentDatabase (children 1)
         ExpressionList
 
+AlterQuery  restore_01640 (children 3)
+ ExpressionList (children 1)
+  AlterCommand ATTACH_PARTITION (children 1)
+   Partition (children 1)
+    Function tuple (children 1)
+     ExpressionList (children 1)
+      Function toYYYYMM (children 1)
+       ExpressionList (children 1)
+        Function toDate (children 1)
+         ExpressionList (children 1)
+          Literal '2021-01-01'
+ Identifier restore_01640
+ Set
+
+<Explain Error>
+
 SelectWithUnionQuery (children 1)
  ExpressionList (children 1)
   SelectQuery (children 2)
@@ -29,3 +108,9 @@ SelectWithUnionQuery (children 1)
     TablesInSelectQueryElement (children 1)
      TableExpression (children 1)
       TableIdentifier restore_01640
+
+DropQuery  test_01640 (children 1)
+ Identifier test_01640
+
+DropQuery  restore_01640 (children 1)
+ Identifier restore_01640

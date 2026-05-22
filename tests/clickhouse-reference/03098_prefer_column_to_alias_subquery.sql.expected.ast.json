@@ -1,5 +1,127 @@
 [
   {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "clickhouse_alias_issue_1"
+    },
+    "ifExists": true,
+    "leadingComments": [
+      "-- https://github.com/ClickHouse/ClickHouse/issues/47552"
+    ]
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "clickhouse_alias_issue_2"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "clickhouse_alias_issue_1"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "id",
+        "type": {
+          "name": "bigint"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "column_1",
+        "type": {
+          "name": "Nullable",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "Float32"
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "engine": {
+      "name": "Memory"
+    }
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "clickhouse_alias_issue_2"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "id",
+        "type": {
+          "name": "bigint"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "column_2",
+        "type": {
+          "name": "Nullable",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "Float32"
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "engine": {
+      "name": "Memory"
+    }
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "enable_analyzer",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "clickhouse_alias_issue_1"
+      }
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "clickhouse_alias_issue_2"
+      }
+    }
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -137,6 +259,15 @@
         },
         "direction": "DESC"
       }
+    ],
+    "leadingComments": [
+      "-- This query returns the expected result",
+      "-- 300\t\\N\t3",
+      "-- 200\t\\N\t2",
+      "-- 100\t\\N\t1",
+      "-- \\N\t30\t3",
+      "-- \\N\t20\t2",
+      "-- \\N\t10\t1"
     ]
   },
   {
@@ -344,6 +475,12 @@
           "value": "1"
         }
       }
+    ],
+    "leadingComments": [
+      "-- This query also returns the expected result",
+      "-- 300\t30\t3",
+      "-- 200\t20\t2",
+      "-- 100\t10\t1"
     ]
   },
   {
@@ -612,6 +749,12 @@
           "value": "1"
         }
       }
+    ],
+    "leadingComments": [
+      "-- Expected result :",
+      "-- 10\t3",
+      "-- 10\t2",
+      "-- 10\t1"
     ]
   },
   {
@@ -850,6 +993,10 @@
           ]
         }
       ]
-    }
+    },
+    "leadingComments": [
+      "-- Without the setting, the expected result is the same",
+      "-- but the actual result isn't wrong"
+    ]
   }
 ]

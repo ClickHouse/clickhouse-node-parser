@@ -1,3 +1,41 @@
+DROP TABLE IF EXISTS tab;
+
+CREATE TABLE tab
+(
+    k Nullable(UInt32),
+    k1 Nullable(UInt32),
+    k2 Nullable(UInt32),
+    v String
+)
+ENGINE = MergeTree
+ORDER BY tuple();
+
+INSERT INTO tab;
+
+DROP TABLE IF EXISTS mem;
+
+CREATE TABLE mem
+(
+    k UInt64,
+    v String
+)
+ENGINE = Join(`ANY`, `LEFT`, k);
+
+INSERT INTO mem;
+
+DROP TABLE IF EXISTS mem2;
+
+CREATE TABLE mem2
+(
+    k UInt64,
+    v String
+)
+ENGINE = Join(`ANY`, `RIGHT`, k);
+
+INSERT INTO mem2;
+
+SET enable_analyzer = 1;
+
 SELECT '-- no parallel replicas --';
 
 SELECT *
@@ -42,3 +80,9 @@ FROM (
             parallel_replicas_for_non_replicated_merge_tree = 1
     )
 WHERE ilike(`explain`, '%ReadFromRemoteParallelReplicas%');
+
+DROP TABLE mem2;
+
+DROP TABLE mem;
+
+DROP TABLE tab;

@@ -1,5 +1,218 @@
 [
   {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "rename1"
+    },
+    "ifExists": true,
+    "leadingComments": [
+      "-- Tags: replica, no-replicated-database",
+      "-- Tag no-replicated-database: Fails due to additional replicas or shards",
+      "-- The test is mostly outdated as now every replica is leader and can do OPTIMIZE locally."
+    ]
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "rename2"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "rename3"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "rename1"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "p",
+        "type": {
+          "name": "Int64"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "i",
+        "type": {
+          "name": "Int64"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "v",
+        "type": {
+          "name": "UInt64"
+        }
+      }
+    ],
+    "engine": {
+      "name": "ReplicatedReplacingMergeTree",
+      "args": [
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "/clickhouse/tables/{database}/rename"
+        },
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "1"
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "v"
+          ]
+        }
+      ]
+    },
+    "partitionBy": {
+      "kind": "columnRef",
+      "parts": [
+        "p"
+      ]
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "i"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "rename2"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "p",
+        "type": {
+          "name": "Int64"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "i",
+        "type": {
+          "name": "Int64"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "v",
+        "type": {
+          "name": "UInt64"
+        }
+      }
+    ],
+    "engine": {
+      "name": "ReplicatedReplacingMergeTree",
+      "args": [
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "/clickhouse/tables/{database}/rename"
+        },
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "2"
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "v"
+          ]
+        }
+      ]
+    },
+    "partitionBy": {
+      "kind": "columnRef",
+      "parts": [
+        "p"
+      ]
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "i"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "rename1"
+      }
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "rename1"
+      }
+    }
+  },
+  {
+    "kind": "system",
+    "body": "SYSTEM SYNC REPLICA rename1 PULL",
+    "trailingComments": [
+      "-- Avoid \"Cannot select parts for optimization: Entry for part 0_1_1_0 hasn't been read from the replication log yet\""
+    ]
+  },
+  {
+    "kind": "system",
+    "body": "SYSTEM SYNC REPLICA rename2"
+  },
+  {
+    "kind": "optimize",
+    "table": {
+      "kind": "tableRef",
+      "table": "rename1"
+    },
+    "final": true
+  },
+  {
+    "kind": "optimize",
+    "table": {
+      "kind": "tableRef",
+      "table": "rename2"
+    },
+    "final": true
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -10,5 +223,52 @@
       "kind": "tableRef",
       "table": "rename1"
     }
+  },
+  {
+    "kind": "rename",
+    "targetType": "TABLE",
+    "pairs": [
+      {
+        "from": {
+          "kind": "tableRef",
+          "table": "rename2"
+        },
+        "to": {
+          "kind": "tableRef",
+          "table": "rename3"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "rename1"
+      }
+    }
+  },
+  {
+    "kind": "system",
+    "body": "SYSTEM SYNC REPLICA rename3",
+    "trailingComments": [
+      "-- Make \"rename3\" to see all data parts."
+    ]
+  },
+  {
+    "kind": "optimize",
+    "table": {
+      "kind": "tableRef",
+      "table": "rename3"
+    }
+  },
+  {
+    "kind": "system",
+    "body": "SYSTEM SYNC REPLICA rename1",
+    "trailingComments": [
+      "-- Make \"rename1\" to see and process all scheduled merges."
+    ]
   }
 ]

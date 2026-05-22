@@ -1,3 +1,9 @@
+-- Tags: distributed
+
+SET log_queries=1;
+DROP TABLE IF EXISTS times;
+CREATE TEMPORARY TABLE times (t DateTime);
+INSERT INTO times SELECT now();
 SELECT count('special query for 01290_max_execution_speed_distributed')
 FROM
 (
@@ -11,6 +17,8 @@ FROM
 )
 SETTINGS max_execution_speed = 100000, timeout_before_checking_execution_speed = 0, max_block_size = 1000;
 SELECT max(t) - min(t) >= 1 FROM times;
+-- Check that the query was also throttled on "remote" servers.
+SYSTEM FLUSH LOGS query_log;
 SELECT DISTINCT query_duration_ms >= 500
 FROM system.query_log
 WHERE

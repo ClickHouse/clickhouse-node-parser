@@ -96,6 +96,16 @@ SELECT round(1000 * ngramDistanceUTF8('абвгдеёжз', 'гдеёзд'));
 
 SELECT round(1000 * ngramDistanceUTF8('абвгдеёжз', 'ёёёёёёёё'));
 
+DROP TABLE IF EXISTS test_distance;
+
+CREATE TABLE test_distance
+(
+    Title String
+)
+ENGINE = Memory;
+
+INSERT INTO test_distance;
+
 SELECT
     Title,
     round(1000 * distance)

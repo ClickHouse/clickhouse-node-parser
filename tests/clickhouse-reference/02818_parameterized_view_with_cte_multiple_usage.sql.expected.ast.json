@@ -1,5 +1,118 @@
 [
   {
+    "kind": "createView",
+    "table": {
+      "kind": "tableRef",
+      "table": "test_param_view"
+    },
+    "asQuery": {
+      "kind": "select",
+      "with": [
+        {
+          "kind": "cteExpr",
+          "name": "param_test_val",
+          "expr": {
+            "kind": "queryParam",
+            "name": "param_test_val",
+            "type": "UInt8"
+          }
+        }
+      ],
+      "select": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "param_test_val"
+          ]
+        },
+        {
+          "kind": "alias",
+          "expr": {
+            "kind": "functionCall",
+            "name": "arrayCount",
+            "args": [
+              {
+                "kind": "lambdaExpr",
+                "params": [
+                  "a"
+                ],
+                "body": {
+                  "kind": "binaryExpr",
+                  "op": "<",
+                  "left": {
+                    "kind": "columnRef",
+                    "parts": [
+                      "a"
+                    ]
+                  },
+                  "right": {
+                    "kind": "columnRef",
+                    "parts": [
+                      "param_test_val"
+                    ]
+                  },
+                  "parenthesized": true
+                }
+              },
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "t",
+                  "arr"
+                ]
+              }
+            ]
+          },
+          "alias": "cnt1"
+        }
+      ],
+      "from": {
+        "kind": "subqueryFrom",
+        "query": {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "alias",
+              "expr": {
+                "kind": "arrayLiteral",
+                "elements": [
+                  {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "1"
+                  },
+                  {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "2"
+                  },
+                  {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "3"
+                  },
+                  {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "4"
+                  },
+                  {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "5"
+                  }
+                ],
+                "source": "[1,2,3,4,5]"
+              },
+              "alias": "arr"
+            }
+          ]
+        },
+        "alias": "t"
+      }
+    }
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -7,7 +120,7 @@
       }
     ],
     "from": {
-      "kind": "tableFunction",
+      "kind": "tableFunctionRef",
       "name": "test_param_view",
       "args": [
         {
@@ -29,6 +142,168 @@
     }
   },
   {
+    "kind": "createView",
+    "table": {
+      "kind": "tableRef",
+      "table": "test_param_view2"
+    },
+    "asQuery": {
+      "kind": "select",
+      "with": [
+        {
+          "kind": "cteExpr",
+          "name": "param_test_val",
+          "expr": {
+            "kind": "queryParam",
+            "name": "param_test_val",
+            "type": "UInt8"
+          }
+        }
+      ],
+      "select": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "param_test_val"
+          ]
+        },
+        {
+          "kind": "alias",
+          "expr": {
+            "kind": "functionCall",
+            "name": "arrayCount",
+            "args": [
+              {
+                "kind": "lambdaExpr",
+                "params": [
+                  "a"
+                ],
+                "body": {
+                  "kind": "binaryExpr",
+                  "op": "<",
+                  "left": {
+                    "kind": "columnRef",
+                    "parts": [
+                      "a"
+                    ]
+                  },
+                  "right": {
+                    "kind": "columnRef",
+                    "parts": [
+                      "param_test_val"
+                    ]
+                  },
+                  "parenthesized": true
+                }
+              },
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "t",
+                  "arr"
+                ]
+              }
+            ]
+          },
+          "alias": "cnt1"
+        },
+        {
+          "kind": "alias",
+          "expr": {
+            "kind": "functionCall",
+            "name": "arrayCount",
+            "args": [
+              {
+                "kind": "lambdaExpr",
+                "params": [
+                  "a"
+                ],
+                "body": {
+                  "kind": "binaryExpr",
+                  "op": "<",
+                  "left": {
+                    "kind": "columnRef",
+                    "parts": [
+                      "a"
+                    ]
+                  },
+                  "right": {
+                    "kind": "binaryExpr",
+                    "op": "+",
+                    "left": {
+                      "kind": "columnRef",
+                      "parts": [
+                        "param_test_val"
+                      ]
+                    },
+                    "right": {
+                      "kind": "literal",
+                      "type": "UInt64",
+                      "value": "1"
+                    }
+                  },
+                  "parenthesized": true
+                }
+              },
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "t",
+                  "arr"
+                ]
+              }
+            ]
+          },
+          "alias": "cnt2"
+        }
+      ],
+      "from": {
+        "kind": "subqueryFrom",
+        "query": {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "alias",
+              "expr": {
+                "kind": "arrayLiteral",
+                "elements": [
+                  {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "1"
+                  },
+                  {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "2"
+                  },
+                  {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "3"
+                  },
+                  {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "4"
+                  },
+                  {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "5"
+                  }
+                ],
+                "source": "[1,2,3,4,5]"
+              },
+              "alias": "arr"
+            }
+          ]
+        },
+        "alias": "t"
+      }
+    }
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -36,7 +311,7 @@
       }
     ],
     "from": {
-      "kind": "tableFunction",
+      "kind": "tableFunctionRef",
       "name": "test_param_view2",
       "args": [
         {

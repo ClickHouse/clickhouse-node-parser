@@ -1,3 +1,87 @@
+Set
+
+Set
+
+CreateQuery a1_replicated (children 3)
+ Identifier a1_replicated
+ Columns definition (children 1)
+  ExpressionList (children 2)
+   ColumnDeclaration day (children 1)
+    DataType Date
+   ColumnDeclaration id (children 1)
+    DataType UInt32
+ Storage definition (children 2)
+  Function ReplicatedMergeTree (children 1)
+   ExpressionList (children 2)
+    Literal '/clickhouse/tables/{database}/a1_replicated'
+    Literal '1_replica'
+  Function tuple (children 1)
+   ExpressionList
+
+CreateQuery a1 (children 3)
+ Identifier a1
+ Columns definition (children 1)
+  ExpressionList (children 2)
+   ColumnDeclaration day (children 1)
+    DataType Date
+   ColumnDeclaration id (children 1)
+    DataType UInt32
+ Storage definition (children 1)
+  Function Distributed (children 1)
+   ExpressionList (children 4)
+    Literal 'test_shard_localhost'
+    Function currentDatabase (children 1)
+     ExpressionList
+    Identifier a1_replicated
+    Identifier id
+
+CreateQuery b1_replicated (children 3)
+ Identifier b1_replicated
+ Columns definition (children 1)
+  ExpressionList (children 2)
+   ColumnDeclaration day (children 1)
+    DataType Date
+   ColumnDeclaration id (children 1)
+    DataType UInt32
+ Storage definition (children 2)
+  Function ReplicatedMergeTree (children 1)
+   ExpressionList (children 2)
+    Literal '/clickhouse/tables/{database}/b1_replicated'
+    Literal '1_replica'
+  Function tuple (children 1)
+   ExpressionList
+
+CreateQuery b1 (children 3)
+ Identifier b1
+ Columns definition (children 1)
+  ExpressionList (children 2)
+   ColumnDeclaration day (children 1)
+    DataType Date
+   ColumnDeclaration id (children 1)
+    DataType UInt32
+ Storage definition (children 1)
+  Function Distributed (children 1)
+   ExpressionList (children 4)
+    Literal 'test_shard_localhost'
+    Function currentDatabase (children 1)
+     ExpressionList
+    Identifier b1_replicated
+    Identifier id
+
+InsertQuery   (children 2)
+ Identifier a1
+ ExpressionList (children 2)
+  Identifier day
+  Identifier id
+
+InsertQuery   (children 2)
+ Identifier b1
+ ExpressionList (children 2)
+  Identifier day
+  Identifier id
+
+Set
+
 SelectWithUnionQuery (children 1)
  ExpressionList (children 1)
   SelectQuery (children 4)
@@ -99,3 +183,5 @@ SelectWithUnionQuery (children 1)
    ExpressionList (children 1)
     OrderByElement (children 1)
      Identifier id
+
+Set

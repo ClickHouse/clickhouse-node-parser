@@ -1,5 +1,73 @@
 [
   {
+    "kind": "drop",
+    "targetType": "DATABASE",
+    "table": {
+      "kind": "tableRef",
+      "table": {
+        "kind": "queryParam",
+        "name": "CLICKHOUSE_DATABASE",
+        "type": "Identifier"
+      }
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "createDatabase",
+    "name": {
+      "kind": "queryParam",
+      "name": "CLICKHOUSE_DATABASE",
+      "type": "Identifier"
+    },
+    "ifNotExists": true,
+    "engine": {
+      "name": "Replicated",
+      "args": [
+        {
+          "kind": "functionCall",
+          "name": "concat",
+          "args": [
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "some/path/"
+            },
+            {
+              "kind": "functionCall",
+              "name": "currentDatabase",
+              "args": []
+            },
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "/replicated_database_test"
+            }
+          ]
+        },
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "shard_1"
+        },
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "replica_1"
+        }
+      ]
+    },
+    "settings": [
+      {
+        "name": "max_broken_tables_ratio",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  },
+  {
     "kind": "select",
     "select": [
       {

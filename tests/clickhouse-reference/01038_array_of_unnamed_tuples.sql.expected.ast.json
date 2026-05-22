@@ -1,5 +1,113 @@
 [
   {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "send_logs_level",
+        "value": {
+          "kind": "literal",
+          "type": "String",
+          "value": "fatal"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "array_of_tuples"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "array_of_tuples"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "f",
+        "type": {
+          "name": "Array",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "Tuple",
+                "args": [
+                  {
+                    "kind": "type",
+                    "type": {
+                      "name": "Float64"
+                    }
+                  },
+                  {
+                    "kind": "type",
+                    "type": {
+                      "name": "Float64"
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "s",
+        "type": {
+          "name": "Array",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "Tuple",
+                "args": [
+                  {
+                    "kind": "type",
+                    "type": {
+                      "name": "UInt8"
+                    }
+                  },
+                  {
+                    "kind": "type",
+                    "type": {
+                      "name": "UInt16"
+                    }
+                  },
+                  {
+                    "kind": "type",
+                    "type": {
+                      "name": "UInt32"
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "engine": {
+      "name": "Memory"
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "array_of_tuples"
+      }
+    }
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -25,6 +133,14 @@
       }
     ],
     "from": {
+      "kind": "tableRef",
+      "table": "array_of_tuples"
+    }
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
       "kind": "tableRef",
       "table": "array_of_tuples"
     }

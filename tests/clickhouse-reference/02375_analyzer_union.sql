@@ -1,3 +1,11 @@
+SET enable_analyzer = 0;
+DROP TABLE IF EXISTS test_table;
+CREATE TABLE test_table
+(
+    id UInt64,
+    value String
+) ENGINE=MergeTree ORDER BY tuple();
+INSERT INTO test_table VALUES (0, 'Value');
 SELECT 1 UNION ALL SELECT 1;
 SELECT '--';
 SELECT 1 UNION DISTINCT SELECT 1 UNION ALL SELECT 1;
@@ -13,3 +21,6 @@ SELECT id FROM (SELECT id FROM test_table UNION ALL SELECT id FROM test_table);
 SELECT id FROM (SELECT id FROM test_table UNION DISTINCT SELECT id FROM test_table);
 SELECT id FROM (SELECT id FROM test_table INTERSECT SELECT id FROM test_table);
 SELECT id FROM (SELECT id FROM test_table EXCEPT SELECT id FROM test_table);
+-- { echoOff }
+
+DROP TABLE test_table;

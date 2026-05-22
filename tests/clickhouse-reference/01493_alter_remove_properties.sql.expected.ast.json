@@ -1,5 +1,217 @@
 [
   {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "prop_table"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "prop_table"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "column_default",
+        "type": {
+          "name": "UInt64"
+        },
+        "defaultKind": "DEFAULT",
+        "defaultExpr": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "42"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "column_materialized",
+        "type": {
+          "name": "UInt64"
+        },
+        "defaultKind": "MATERIALIZED",
+        "defaultExpr": {
+          "kind": "binaryExpr",
+          "op": "*",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "column_default"
+            ]
+          },
+          "right": {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "42"
+          }
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "column_alias",
+        "type": {
+          "name": "UInt64"
+        },
+        "defaultKind": "ALIAS",
+        "defaultExpr": {
+          "kind": "binaryExpr",
+          "op": "+",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "column_default"
+            ]
+          },
+          "right": {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "1"
+          }
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "column_codec",
+        "type": {
+          "name": "String"
+        },
+        "codec": [
+          {
+            "name": "ZSTD",
+            "args": [
+              {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "10"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "kind": "columnDef",
+        "name": "column_comment",
+        "type": {
+          "name": "Date"
+        },
+        "comment": "Some comment"
+      },
+      {
+        "kind": "columnDef",
+        "name": "column_ttl",
+        "type": {
+          "name": "UInt64"
+        },
+        "ttl": {
+          "kind": "binaryExpr",
+          "op": "+",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "column_comment"
+            ]
+          },
+          "right": {
+            "kind": "functionCall",
+            "name": "toIntervalMonth",
+            "args": [
+              {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "1"
+              }
+            ]
+          }
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree",
+      "args": []
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "functionCall",
+          "name": "tuple",
+          "args": []
+        }
+      }
+    ],
+    "ttl": [
+      {
+        "expr": {
+          "kind": "binaryExpr",
+          "op": "+",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "column_comment"
+            ]
+          },
+          "right": {
+            "kind": "functionCall",
+            "name": "toIntervalMonth",
+            "args": [
+              {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "2"
+              }
+            ]
+          }
+        }
+      }
+    ]
+  },
+  {
+    "kind": "showCreate",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "prop_table"
+    }
+  },
+  {
+    "kind": "system",
+    "body": "SYSTEM STOP TTL MERGES prop_table"
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "prop_table"
+      }
+    },
+    "columns": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "column_codec"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "column_comment"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "column_ttl"
+        ]
+      }
+    ]
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -43,6 +255,93 @@
       "kind": "tableRef",
       "table": "prop_table"
     }
+  },
+  {
+    "kind": "alter",
+    "table": {
+      "kind": "tableRef",
+      "table": "prop_table"
+    },
+    "commands": [
+      {
+        "kind": "alterCommand",
+        "commandType": "MODIFY_COLUMN",
+        "column": {
+          "kind": "columnDef",
+          "name": "column_comment"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "alter",
+    "table": {
+      "kind": "tableRef",
+      "table": "prop_table"
+    },
+    "commands": [
+      {
+        "kind": "alterCommand",
+        "commandType": "MODIFY_COLUMN",
+        "column": {
+          "kind": "columnDef",
+          "name": "column_codec"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "alter",
+    "table": {
+      "kind": "tableRef",
+      "table": "prop_table"
+    },
+    "commands": [
+      {
+        "kind": "alterCommand",
+        "commandType": "MODIFY_COLUMN",
+        "column": {
+          "kind": "columnDef",
+          "name": "column_alias"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "prop_table"
+      }
+    },
+    "columns": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "column_alias"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "column_codec"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "column_comment"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "column_ttl"
+        ]
+      }
+    ]
   },
   {
     "kind": "select",
@@ -100,6 +399,166 @@
         "direction": "ASC"
       }
     ]
+  },
+  {
+    "kind": "alter",
+    "table": {
+      "kind": "tableRef",
+      "table": "prop_table"
+    },
+    "commands": [
+      {
+        "kind": "alterCommand",
+        "commandType": "MODIFY_COLUMN",
+        "column": {
+          "kind": "columnDef",
+          "name": "column_materialized"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "prop_table"
+      }
+    },
+    "columns": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "column_materialized"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "column_alias"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "column_codec"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "column_comment"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "column_ttl"
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "alter",
+    "table": {
+      "kind": "tableRef",
+      "table": "prop_table"
+    },
+    "commands": [
+      {
+        "kind": "alterCommand",
+        "commandType": "MODIFY_COLUMN",
+        "column": {
+          "kind": "columnDef",
+          "name": "column_default"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "prop_table"
+      }
+    },
+    "columns": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "column_materialized"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "column_alias"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "column_codec"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "column_comment"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "column_ttl"
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "alter",
+    "table": {
+      "kind": "tableRef",
+      "table": "prop_table"
+    },
+    "commands": [
+      {
+        "kind": "alterCommand",
+        "commandType": "REMOVE_TTL"
+      }
+    ]
+  },
+  {
+    "kind": "alter",
+    "table": {
+      "kind": "tableRef",
+      "table": "prop_table"
+    },
+    "commands": [
+      {
+        "kind": "alterCommand",
+        "commandType": "MODIFY_COLUMN",
+        "column": {
+          "kind": "columnDef",
+          "name": "column_ttl"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "system",
+    "body": "SYSTEM START TTL MERGES prop_table"
+  },
+  {
+    "kind": "optimize",
+    "table": {
+      "kind": "tableRef",
+      "table": "prop_table"
+    },
+    "final": true
   },
   {
     "kind": "select",

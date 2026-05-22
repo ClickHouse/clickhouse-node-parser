@@ -52,7 +52,7 @@ SELECT arrayShuffle([tuple(1, -1), tuple(99999999, -99999999), tuple(3, -3)], 0x
 
 SELECT arrayShuffle([tuple(1, NULL), tuple(2, 'a'), tuple(3, 'A')], 0xbadcafe);
 
-SELECT arrayPartialShuffle([]);
+SELECT arrayPartialShuffle([]); -- trivial cases (equivalent to arrayShuffle)
 
 SELECT arrayPartialShuffle([], 0);
 
@@ -106,7 +106,7 @@ SELECT arrayPartialShuffle([tuple(1, -1), tuple(99999999, -99999999), tuple(3, -
 
 SELECT arrayPartialShuffle([tuple(1, NULL), tuple(2, 'a'), tuple(3, 'A')], 0, 0xbadcafe);
 
-SELECT arrayPartialShuffle([NULL,NULL,NULL], 2);
+SELECT arrayPartialShuffle([NULL,NULL,NULL], 2); -- other, mostly non-trivial cases
 
 SELECT arrayPartialShuffle([1,2,3,4,5,6,7,8,9,10], 1, 0xbadcafe);
 
@@ -164,10 +164,10 @@ FROM numbers(10);
 SELECT arrayShuffle(materialize([1, 2, 3]), 42)
 FROM numbers(10);
 
-SELECT arrayShuffle(1);
+SELECT arrayShuffle(1); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
-SELECT arrayShuffle([1], 'a');
+SELECT arrayShuffle([1], 'a'); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
-SELECT arrayShuffle([1], 1.1);
+SELECT arrayShuffle([1], 1.1); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
-SELECT arrayShuffle([1], 0xcafe, 1);
+SELECT arrayShuffle([1], 0xcafe, 1); -- { serverError NUMBER_OF_ARGUMENTS_DOESNT_MATCH }

@@ -1,5 +1,76 @@
 [
   {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "enable_analyzer",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ],
+    "leadingComments": [
+      "-- Tags: long"
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "max_bytes_before_external_sort",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      }
+    ],
+    "leadingComments": [
+      "-- Too slow"
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "max_bytes_ratio_before_external_sort",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "max_bytes_before_external_group_by",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "max_bytes_ratio_before_external_group_by",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      }
+    ]
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -54,7 +125,7 @@
       }
     ],
     "from": {
-      "kind": "tableFunction",
+      "kind": "tableFunctionRef",
       "name": "numbers",
       "args": [
         {
@@ -63,7 +134,11 @@
           "value": "10"
         }
       ]
-    }
+    },
+    "leadingComments": [
+      "-- { echo }",
+      "-- just something basic"
+    ]
   },
   {
     "kind": "select",
@@ -127,7 +202,7 @@
       }
     ],
     "from": {
-      "kind": "tableFunction",
+      "kind": "tableFunctionRef",
       "name": "numbers",
       "args": [
         {
@@ -146,6 +221,9 @@
           "value": "2"
         }
       }
+    ],
+    "leadingComments": [
+      "-- proper calculation across blocks"
     ]
   },
   {
@@ -204,7 +282,7 @@
       }
     ],
     "from": {
-      "kind": "tableFunction",
+      "kind": "tableFunctionRef",
       "name": "numbers",
       "args": [
         {
@@ -213,7 +291,13 @@
           "value": "10"
         }
       ]
-    }
+    },
+    "leadingComments": [
+      "-- not a window function"
+    ],
+    "trailingComments": [
+      "-- { serverError UNKNOWN_AGGREGATE_FUNCTION }"
+    ]
   },
   {
     "kind": "select",
@@ -258,7 +342,7 @@
       }
     ],
     "from": {
-      "kind": "tableFunction",
+      "kind": "tableFunctionRef",
       "name": "numbers",
       "args": [
         {
@@ -267,7 +351,10 @@
           "value": "10"
         }
       ]
-    }
+    },
+    "leadingComments": [
+      "-- no partition by"
+    ]
   },
   {
     "kind": "select",
@@ -335,7 +422,7 @@
       }
     ],
     "from": {
-      "kind": "tableFunction",
+      "kind": "tableFunctionRef",
       "name": "numbers",
       "args": [
         {
@@ -344,7 +431,10 @@
           "value": "10"
         }
       ]
-    }
+    },
+    "leadingComments": [
+      "-- no order by"
+    ]
   },
   {
     "kind": "select",
@@ -416,7 +506,7 @@
       }
     ],
     "from": {
-      "kind": "tableFunction",
+      "kind": "tableFunctionRef",
       "name": "numbers",
       "args": [
         {
@@ -425,7 +515,10 @@
           "value": "10"
         }
       ]
-    }
+    },
+    "leadingComments": [
+      "-- can add an alias after window spec"
+    ]
   },
   {
     "kind": "select",
@@ -508,7 +601,7 @@
       }
     ],
     "from": {
-      "kind": "tableFunction",
+      "kind": "tableFunctionRef",
       "name": "numbers",
       "args": [
         {
@@ -529,6 +622,9 @@
         },
         "direction": "ASC"
       }
+    ],
+    "leadingComments": [
+      "-- now we should be able to compute expressions with window functions"
     ]
   },
   {
@@ -566,7 +662,7 @@
           }
         ],
         "from": {
-          "kind": "tableFunction",
+          "kind": "tableFunctionRef",
           "name": "numbers",
           "args": [
             {
@@ -592,7 +688,10 @@
         "type": "UInt64",
         "value": "0"
       }
-    }
+    },
+    "leadingComments": [
+      "-- must work in WHERE if you wrap it in a subquery"
+    ]
   },
   {
     "kind": "select",
@@ -660,7 +759,7 @@
       }
     ],
     "from": {
-      "kind": "tableFunction",
+      "kind": "tableFunctionRef",
       "name": "numbers",
       "args": [
         {
@@ -691,6 +790,9 @@
         },
         "direction": "ASC"
       }
+    ],
+    "leadingComments": [
+      "-- should work in ORDER BY"
     ]
   },
   {
@@ -728,7 +830,7 @@
           }
         ],
         "from": {
-          "kind": "tableFunction",
+          "kind": "tableFunctionRef",
           "name": "numbers",
           "args": [
             {
@@ -751,6 +853,9 @@
         },
         "direction": "ASC"
       }
+    ],
+    "leadingComments": [
+      "-- also works in ORDER BY if you wrap it in a subquery"
     ]
   },
   {
@@ -770,7 +875,7 @@
           }
         ],
         "from": {
-          "kind": "tableFunction",
+          "kind": "tableFunctionRef",
           "name": "numbers",
           "args": [
             {
@@ -823,6 +928,11 @@
         },
         "direction": "DESC"
       }
+    ],
+    "leadingComments": [
+      "-- Example with window function only in ORDER BY. Here we make a rank of all",
+      "-- numbers sorted descending, and then sort by this rank descending, and must get",
+      "-- the ascending order."
     ]
   },
   {
@@ -842,7 +952,7 @@
           }
         ],
         "from": {
-          "kind": "tableFunction",
+          "kind": "tableFunctionRef",
           "name": "numbers",
           "args": [
             {
@@ -934,6 +1044,11 @@
         },
         "direction": "DESC"
       }
+    ],
+    "leadingComments": [
+      "-- Aggregate functions as window function arguments. This query is semantically",
+      "-- the same as the above one, only we replace `number` with",
+      "-- `any(number) group by number` and so on."
     ]
   },
   {
@@ -967,7 +1082,7 @@
       }
     ],
     "from": {
-      "kind": "tableFunction",
+      "kind": "tableFunctionRef",
       "name": "numbers",
       "args": [
         {
@@ -976,7 +1091,10 @@
           "value": "1"
         }
       ]
-    }
+    },
+    "leadingComments": [
+      "-- some more simple cases w/aggregate functions"
+    ]
   },
   {
     "kind": "select",
@@ -1018,7 +1136,7 @@
       }
     ],
     "from": {
-      "kind": "tableFunction",
+      "kind": "tableFunctionRef",
       "name": "numbers",
       "args": [
         {
@@ -1069,7 +1187,7 @@
       }
     ],
     "from": {
-      "kind": "tableFunction",
+      "kind": "tableFunctionRef",
       "name": "numbers",
       "args": [
         {
@@ -1197,7 +1315,7 @@
       }
     ],
     "from": {
-      "kind": "tableFunction",
+      "kind": "tableFunctionRef",
       "name": "numbers",
       "args": [
         {
@@ -1228,6 +1346,11 @@
           "value": "2"
         }
       }
+    ],
+    "leadingComments": [
+      "-- different windows",
+      "-- an explain test would also be helpful, but it's too immature now and I don't",
+      "-- want to change reference all the time"
     ]
   },
   {
@@ -1347,7 +1470,7 @@
       }
     ],
     "from": {
-      "kind": "tableFunction",
+      "kind": "tableFunctionRef",
       "name": "numbers",
       "args": [
         {
@@ -1378,6 +1501,11 @@
           "value": "2"
         }
       }
+    ],
+    "leadingComments": [
+      "-- two functions over the same window",
+      "-- an explain test would also be helpful, but it's too immature now and I don't",
+      "-- want to change reference all the time"
     ]
   },
   {
@@ -1422,7 +1550,10 @@
           }
         ]
       }
-    }
+    },
+    "leadingComments": [
+      "-- check that we can work with constant columns"
+    ]
   },
   {
     "kind": "select",
@@ -1449,7 +1580,7 @@
       }
     ],
     "from": {
-      "kind": "tableFunction",
+      "kind": "tableFunctionRef",
       "name": "numbers",
       "args": [
         {
@@ -1458,7 +1589,10 @@
           "value": "3"
         }
       ]
-    }
+    },
+    "leadingComments": [
+      "-- an empty window definition is valid as well"
+    ]
   },
   {
     "kind": "select",
@@ -1478,7 +1612,7 @@
       }
     ],
     "from": {
-      "kind": "tableFunction",
+      "kind": "tableFunctionRef",
       "name": "numbers",
       "args": [
         {
@@ -1535,7 +1669,7 @@
       }
     ],
     "from": {
-      "kind": "tableFunction",
+      "kind": "tableFunctionRef",
       "name": "numbers",
       "args": [
         {
@@ -1544,7 +1678,11 @@
           "value": "3"
         }
       ]
-    }
+    },
+    "leadingComments": [
+      "-- This one tests we properly process the window  function arguments.",
+      "-- Seen errors like 'column `1` not found' from count(1)."
+    ]
   },
   {
     "kind": "select",
@@ -1573,7 +1711,7 @@
       }
     ],
     "from": {
-      "kind": "tableFunction",
+      "kind": "tableFunctionRef",
       "name": "numbers",
       "args": [
         {
@@ -1582,7 +1720,10 @@
           "value": "2"
         }
       ]
-    }
+    },
+    "leadingComments": [
+      "-- Should work in DISTINCT"
+    ]
   },
   {
     "kind": "select",
@@ -1612,7 +1753,7 @@
       }
     ],
     "from": {
-      "kind": "tableFunction",
+      "kind": "tableFunctionRef",
       "name": "numbers",
       "args": [
         {
@@ -1622,6 +1763,118 @@
         }
       ]
     }
+  },
+  {
+    "kind": "select",
+    "with": [
+      {
+        "kind": "cteExpr",
+        "name": "x",
+        "expr": {
+          "kind": "binaryExpr",
+          "op": "+",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "number"
+            ]
+          },
+          "right": {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "1"
+          }
+        }
+      }
+    ],
+    "select": [
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "intDiv",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "number"
+              ]
+            },
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "3"
+            }
+          ]
+        },
+        "alias": "y"
+      },
+      {
+        "kind": "functionCall",
+        "name": "sum",
+        "args": [
+          {
+            "kind": "binaryExpr",
+            "op": "+",
+            "left": {
+              "kind": "columnRef",
+              "parts": [
+                "x"
+              ]
+            },
+            "right": {
+              "kind": "columnRef",
+              "parts": [
+                "y"
+              ]
+            }
+          }
+        ],
+        "window": {
+          "partitionBy": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "y"
+              ]
+            }
+          ],
+          "orderBy": [
+            {
+              "kind": "orderByItem",
+              "expr": {
+                "kind": "columnRef",
+                "parts": [
+                  "x"
+                ]
+              },
+              "direction": "ASC"
+            }
+          ],
+          "frame": {
+            "frameType": "rows",
+            "start": {
+              "kind": "unbounded"
+            }
+          }
+        }
+      }
+    ],
+    "from": {
+      "kind": "tableFunctionRef",
+      "name": "numbers",
+      "args": [
+        {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "7"
+        }
+      ]
+    },
+    "leadingComments": [
+      "-- Various kinds of aliases are properly substituted into various parts of window",
+      "-- function definition."
+    ]
   },
   {
     "kind": "select",
@@ -1635,8 +1888,11 @@
     "windows": [
       {
         "name": "w1",
-        "body": ""
+        "spec": {}
       }
+    ],
+    "leadingComments": [
+      "-- WINDOW clause"
     ]
   },
   {
@@ -1668,7 +1924,7 @@
       }
     ],
     "from": {
-      "kind": "tableFunction",
+      "kind": "tableFunctionRef",
       "name": "numbers",
       "args": [
         {
@@ -1681,11 +1937,60 @@
     "windows": [
       {
         "name": "w1",
-        "body": "rows unbounded preceding"
+        "spec": {
+          "frame": {
+            "frameType": "rows",
+            "start": {
+              "kind": "unbounded"
+            }
+          }
+        }
       },
       {
         "name": "w2",
-        "body": "partition by intDiv(number, 3) as value order by number rows unbounded preceding"
+        "spec": {
+          "partitionBy": [
+            {
+              "kind": "alias",
+              "expr": {
+                "kind": "functionCall",
+                "name": "intDiv",
+                "args": [
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "number"
+                    ]
+                  },
+                  {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "3"
+                  }
+                ]
+              },
+              "alias": "value"
+            }
+          ],
+          "orderBy": [
+            {
+              "kind": "orderByItem",
+              "expr": {
+                "kind": "columnRef",
+                "parts": [
+                  "number"
+                ]
+              },
+              "direction": "ASC"
+            }
+          ],
+          "frame": {
+            "frameType": "rows",
+            "start": {
+              "kind": "unbounded"
+            }
+          }
+        }
       }
     ]
   },
@@ -1761,7 +2066,7 @@
       }
     ],
     "from": {
-      "kind": "tableFunction",
+      "kind": "tableFunctionRef",
       "name": "numbers",
       "args": [
         {
@@ -1774,8 +2079,38 @@
     "windows": [
       {
         "name": "w1",
-        "body": "partition by intDiv(number, 3) rows unbounded preceding"
+        "spec": {
+          "partitionBy": [
+            {
+              "kind": "functionCall",
+              "name": "intDiv",
+              "args": [
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "number"
+                  ]
+                },
+                {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "3"
+                }
+              ]
+            }
+          ],
+          "frame": {
+            "frameType": "rows",
+            "start": {
+              "kind": "unbounded"
+            }
+          }
+        }
       }
+    ],
+    "leadingComments": [
+      "-- FIXME both functions should use the same window, but they don't. Add an",
+      "-- EXPLAIN test for this."
     ]
   },
   {
@@ -1796,7 +2131,7 @@
       }
     ],
     "from": {
-      "kind": "tableFunction",
+      "kind": "tableFunctionRef",
       "name": "numbers",
       "args": [
         {
@@ -1805,7 +2140,11 @@
           "value": "3"
         }
       ]
-    }
+    },
+    "leadingComments": [
+      "-- RANGE frame",
+      "-- It's the default"
+    ]
   },
   {
     "kind": "select",
@@ -1876,7 +2215,7 @@
       }
     ],
     "from": {
-      "kind": "tableFunction",
+      "kind": "tableFunctionRef",
       "name": "numbers",
       "args": [
         {
@@ -1901,7 +2240,44 @@
     "windows": [
       {
         "name": "w",
-        "body": "partition by p order by o, number range unbounded preceding"
+        "spec": {
+          "partitionBy": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "p"
+              ]
+            }
+          ],
+          "orderBy": [
+            {
+              "kind": "orderByItem",
+              "expr": {
+                "kind": "columnRef",
+                "parts": [
+                  "o"
+                ]
+              },
+              "direction": "ASC"
+            },
+            {
+              "kind": "orderByItem",
+              "expr": {
+                "kind": "columnRef",
+                "parts": [
+                  "number"
+                ]
+              },
+              "direction": "ASC"
+            }
+          ],
+          "frame": {
+            "frameType": "range",
+            "start": {
+              "kind": "unbounded"
+            }
+          }
+        }
       }
     ],
     "settings": [
@@ -1913,6 +2289,11 @@
           "value": "5"
         }
       }
+    ],
+    "leadingComments": [
+      "-- Try some mutually prime sizes of partition, group and block, for the number",
+      "-- of rows that is their least common multiple + 1, so that we see all the",
+      "-- interesting corner cases."
     ]
   },
   {
@@ -1984,7 +2365,7 @@
       }
     ],
     "from": {
-      "kind": "tableFunction",
+      "kind": "tableFunctionRef",
       "name": "numbers",
       "args": [
         {
@@ -2009,7 +2390,44 @@
     "windows": [
       {
         "name": "w",
-        "body": "partition by p order by o, number range unbounded preceding"
+        "spec": {
+          "partitionBy": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "p"
+              ]
+            }
+          ],
+          "orderBy": [
+            {
+              "kind": "orderByItem",
+              "expr": {
+                "kind": "columnRef",
+                "parts": [
+                  "o"
+                ]
+              },
+              "direction": "ASC"
+            },
+            {
+              "kind": "orderByItem",
+              "expr": {
+                "kind": "columnRef",
+                "parts": [
+                  "number"
+                ]
+              },
+              "direction": "ASC"
+            }
+          ],
+          "frame": {
+            "frameType": "range",
+            "start": {
+              "kind": "unbounded"
+            }
+          }
+        }
       }
     ],
     "settings": [
@@ -2092,7 +2510,7 @@
       }
     ],
     "from": {
-      "kind": "tableFunction",
+      "kind": "tableFunctionRef",
       "name": "numbers",
       "args": [
         {
@@ -2117,7 +2535,44 @@
     "windows": [
       {
         "name": "w",
-        "body": "partition by p order by o, number range unbounded preceding"
+        "spec": {
+          "partitionBy": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "p"
+              ]
+            }
+          ],
+          "orderBy": [
+            {
+              "kind": "orderByItem",
+              "expr": {
+                "kind": "columnRef",
+                "parts": [
+                  "o"
+                ]
+              },
+              "direction": "ASC"
+            },
+            {
+              "kind": "orderByItem",
+              "expr": {
+                "kind": "columnRef",
+                "parts": [
+                  "number"
+                ]
+              },
+              "direction": "ASC"
+            }
+          ],
+          "frame": {
+            "frameType": "range",
+            "start": {
+              "kind": "unbounded"
+            }
+          }
+        }
       }
     ],
     "settings": [
@@ -2200,7 +2655,7 @@
       }
     ],
     "from": {
-      "kind": "tableFunction",
+      "kind": "tableFunctionRef",
       "name": "numbers",
       "args": [
         {
@@ -2225,7 +2680,44 @@
     "windows": [
       {
         "name": "w",
-        "body": "partition by p order by o, number range unbounded preceding"
+        "spec": {
+          "partitionBy": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "p"
+              ]
+            }
+          ],
+          "orderBy": [
+            {
+              "kind": "orderByItem",
+              "expr": {
+                "kind": "columnRef",
+                "parts": [
+                  "o"
+                ]
+              },
+              "direction": "ASC"
+            },
+            {
+              "kind": "orderByItem",
+              "expr": {
+                "kind": "columnRef",
+                "parts": [
+                  "number"
+                ]
+              },
+              "direction": "ASC"
+            }
+          ],
+          "frame": {
+            "frameType": "range",
+            "start": {
+              "kind": "unbounded"
+            }
+          }
+        }
       }
     ],
     "settings": [
@@ -2308,7 +2800,7 @@
       }
     ],
     "from": {
-      "kind": "tableFunction",
+      "kind": "tableFunctionRef",
       "name": "numbers",
       "args": [
         {
@@ -2333,7 +2825,44 @@
     "windows": [
       {
         "name": "w",
-        "body": "partition by p order by o, number range unbounded preceding"
+        "spec": {
+          "partitionBy": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "p"
+              ]
+            }
+          ],
+          "orderBy": [
+            {
+              "kind": "orderByItem",
+              "expr": {
+                "kind": "columnRef",
+                "parts": [
+                  "o"
+                ]
+              },
+              "direction": "ASC"
+            },
+            {
+              "kind": "orderByItem",
+              "expr": {
+                "kind": "columnRef",
+                "parts": [
+                  "number"
+                ]
+              },
+              "direction": "ASC"
+            }
+          ],
+          "frame": {
+            "frameType": "range",
+            "start": {
+              "kind": "unbounded"
+            }
+          }
+        }
       }
     ],
     "settings": [
@@ -2416,7 +2945,7 @@
       }
     ],
     "from": {
-      "kind": "tableFunction",
+      "kind": "tableFunctionRef",
       "name": "numbers",
       "args": [
         {
@@ -2441,7 +2970,34 @@
     "windows": [
       {
         "name": "w",
-        "body": "partition by p order by o range unbounded preceding"
+        "spec": {
+          "partitionBy": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "p"
+              ]
+            }
+          ],
+          "orderBy": [
+            {
+              "kind": "orderByItem",
+              "expr": {
+                "kind": "columnRef",
+                "parts": [
+                  "o"
+                ]
+              },
+              "direction": "ASC"
+            }
+          ],
+          "frame": {
+            "frameType": "range",
+            "start": {
+              "kind": "unbounded"
+            }
+          }
+        }
       }
     ],
     "settings": [
@@ -2515,7 +3071,7 @@
           }
         ],
         "from": {
-          "kind": "tableFunction",
+          "kind": "tableFunctionRef",
           "name": "numbers",
           "args": [
             {
@@ -2526,7 +3082,11 @@
           ]
         }
       }
-    }
+    },
+    "leadingComments": [
+      "-- A case where the partition end is in the current block, and the frame end",
+      "-- is triggered by the partition end."
+    ]
   },
   {
     "kind": "select",
@@ -2635,7 +3195,7 @@
           }
         ],
         "from": {
-          "kind": "tableFunction",
+          "kind": "tableFunctionRef",
           "name": "numbers",
           "args": [
             {
@@ -2650,11 +3210,71 @@
     "windows": [
       {
         "name": "wa",
-        "body": "partition by p order by o\n        range between unbounded preceding and unbounded following"
+        "spec": {
+          "partitionBy": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "p"
+              ]
+            }
+          ],
+          "orderBy": [
+            {
+              "kind": "orderByItem",
+              "expr": {
+                "kind": "columnRef",
+                "parts": [
+                  "o"
+                ]
+              },
+              "direction": "ASC"
+            }
+          ],
+          "frame": {
+            "frameType": "range",
+            "start": {
+              "kind": "unbounded"
+            },
+            "end": {
+              "kind": "unbounded"
+            }
+          }
+        }
       },
       {
         "name": "wo",
-        "body": "partition by p order by o\n        rows between unbounded preceding and unbounded following"
+        "spec": {
+          "partitionBy": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "p"
+              ]
+            }
+          ],
+          "orderBy": [
+            {
+              "kind": "orderByItem",
+              "expr": {
+                "kind": "columnRef",
+                "parts": [
+                  "o"
+                ]
+              },
+              "direction": "ASC"
+            }
+          ],
+          "frame": {
+            "frameType": "rows",
+            "start": {
+              "kind": "unbounded"
+            },
+            "end": {
+              "kind": "unbounded"
+            }
+          }
+        }
       }
     ],
     "settings": [
@@ -2666,6 +3286,9 @@
           "value": "2"
         }
       }
+    ],
+    "leadingComments": [
+      "-- UNBOUNDED FOLLOWING frame end"
     ]
   },
   {
@@ -2848,7 +3471,7 @@
           }
         ],
         "from": {
-          "kind": "tableFunction",
+          "kind": "tableFunctionRef",
           "name": "numbers",
           "args": [
             {
@@ -2891,6 +3514,9 @@
           "value": "2"
         }
       }
+    ],
+    "leadingComments": [
+      "-- ROWS offset frame start"
     ]
   },
   {
@@ -2993,7 +3619,7 @@
           }
         ],
         "from": {
-          "kind": "tableFunction",
+          "kind": "tableFunctionRef",
           "name": "numbers",
           "args": [
             {
@@ -3036,6 +3662,9 @@
           "value": "2"
         }
       }
+    ],
+    "leadingComments": [
+      "-- ROWS offset frame start and end"
     ]
   },
   {
@@ -3068,7 +3697,7 @@
       }
     ],
     "from": {
-      "kind": "tableFunction",
+      "kind": "tableFunctionRef",
       "name": "numbers",
       "args": [
         {
@@ -3164,7 +3793,7 @@
       }
     ],
     "from": {
-      "kind": "tableFunction",
+      "kind": "tableFunctionRef",
       "name": "numbers",
       "args": [
         {
@@ -3173,7 +3802,10 @@
           "value": "10"
         }
       ]
-    }
+    },
+    "leadingComments": [
+      "-- frame boundaries that runs into the partition end"
+    ]
   },
   {
     "kind": "select",
@@ -3240,7 +3872,7 @@
       }
     ],
     "from": {
-      "kind": "tableFunction",
+      "kind": "tableFunctionRef",
       "name": "numbers",
       "args": [
         {
@@ -3260,7 +3892,10 @@
         }
       }
     ],
-    "format": "Null"
+    "format": "Null",
+    "leadingComments": [
+      "-- seen a use-after-free under MSan in this query once"
+    ]
   },
   {
     "kind": "select",
@@ -3271,6 +3906,9 @@
         "args": [],
         "window": {}
       }
+    ],
+    "leadingComments": [
+      "-- a corner case"
     ]
   },
   {
@@ -3390,7 +4028,7 @@
           }
         ],
         "from": {
-          "kind": "tableFunction",
+          "kind": "tableFunctionRef",
           "name": "numbers",
           "args": [
             {
@@ -3443,6 +4081,9 @@
           "value": "2"
         }
       }
+    ],
+    "leadingComments": [
+      "-- RANGE CURRENT ROW frame start"
     ]
   },
   {
@@ -3490,7 +4131,7 @@
       }
     ],
     "from": {
-      "kind": "tableFunction",
+      "kind": "tableFunctionRef",
       "name": "numbers",
       "args": [
         {
@@ -3570,7 +4211,7 @@
           }
         ],
         "from": {
-          "kind": "tableFunction",
+          "kind": "tableFunctionRef",
           "name": "numbers",
           "args": [
             {
@@ -3597,8 +4238,44 @@
     "windows": [
       {
         "name": "w",
-        "body": "order by x asc range between 1 preceding and 2 following"
+        "spec": {
+          "orderBy": [
+            {
+              "kind": "orderByItem",
+              "expr": {
+                "kind": "columnRef",
+                "parts": [
+                  "x"
+                ]
+              },
+              "direction": "ASC"
+            }
+          ],
+          "frame": {
+            "frameType": "range",
+            "start": {
+              "kind": "preceding",
+              "expr": {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "1"
+              }
+            },
+            "end": {
+              "kind": "following",
+              "expr": {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "2"
+              }
+            }
+          }
+        }
       }
+    ],
+    "leadingComments": [
+      "-- RANGE OFFSET",
+      "-- a basic RANGE OFFSET frame"
     ]
   },
   {
@@ -3742,7 +4419,7 @@
           }
         ],
         "from": {
-          "kind": "tableFunction",
+          "kind": "tableFunctionRef",
           "name": "numbers",
           "args": [
             {
@@ -3769,8 +4446,43 @@
     "windows": [
       {
         "name": "w",
-        "body": "order by x range between 1 preceding and 2 following"
+        "spec": {
+          "orderBy": [
+            {
+              "kind": "orderByItem",
+              "expr": {
+                "kind": "columnRef",
+                "parts": [
+                  "x"
+                ]
+              },
+              "direction": "ASC"
+            }
+          ],
+          "frame": {
+            "frameType": "range",
+            "start": {
+              "kind": "preceding",
+              "expr": {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "1"
+              }
+            },
+            "end": {
+              "kind": "following",
+              "expr": {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "2"
+              }
+            }
+          }
+        }
       }
+    ],
+    "leadingComments": [
+      "-- overflow conditions"
     ]
   },
   {
@@ -3981,7 +4693,7 @@
           }
         ],
         "from": {
-          "kind": "tableFunction",
+          "kind": "tableFunctionRef",
           "name": "numbers",
           "args": [
             {
@@ -4008,7 +4720,39 @@
     "windows": [
       {
         "name": "w",
-        "body": "order by x range between 1 preceding and 2 following"
+        "spec": {
+          "orderBy": [
+            {
+              "kind": "orderByItem",
+              "expr": {
+                "kind": "columnRef",
+                "parts": [
+                  "x"
+                ]
+              },
+              "direction": "ASC"
+            }
+          ],
+          "frame": {
+            "frameType": "range",
+            "start": {
+              "kind": "preceding",
+              "expr": {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "1"
+              }
+            },
+            "end": {
+              "kind": "following",
+              "expr": {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "2"
+              }
+            }
+          }
+        }
       }
     ]
   },
@@ -4153,7 +4897,7 @@
           }
         ],
         "from": {
-          "kind": "tableFunction",
+          "kind": "tableFunctionRef",
           "name": "numbers",
           "args": [
             {
@@ -4180,8 +4924,45 @@
     "windows": [
       {
         "name": "w",
-        "body": "order by x range between 255 preceding and 255 following"
+        "spec": {
+          "orderBy": [
+            {
+              "kind": "orderByItem",
+              "expr": {
+                "kind": "columnRef",
+                "parts": [
+                  "x"
+                ]
+              },
+              "direction": "ASC"
+            }
+          ],
+          "frame": {
+            "frameType": "range",
+            "start": {
+              "kind": "preceding",
+              "expr": {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "255"
+              }
+            },
+            "end": {
+              "kind": "following",
+              "expr": {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "255"
+              }
+            }
+          }
+        }
       }
+    ],
+    "leadingComments": [
+      "-- We need large offsets to trigger overflow to positive direction, or",
+      "-- else the frame end runs into partition end w/o overflow and doesn't move",
+      "-- after that. The frame from this query is equivalent to the entire partition."
     ]
   },
   {
@@ -4253,7 +5034,7 @@
           }
         ],
         "from": {
-          "kind": "tableFunction",
+          "kind": "tableFunctionRef",
           "name": "numbers",
           "args": [
             {
@@ -4281,7 +5062,39 @@
     "windows": [
       {
         "name": "w",
-        "body": "order by x desc range between 1 preceding and 2 following"
+        "spec": {
+          "orderBy": [
+            {
+              "kind": "orderByItem",
+              "expr": {
+                "kind": "columnRef",
+                "parts": [
+                  "x"
+                ]
+              },
+              "direction": "DESC"
+            }
+          ],
+          "frame": {
+            "frameType": "range",
+            "start": {
+              "kind": "preceding",
+              "expr": {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "1"
+              }
+            },
+            "end": {
+              "kind": "following",
+              "expr": {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "2"
+              }
+            }
+          }
+        }
       }
     ],
     "settings": [
@@ -4293,6 +5106,9 @@
           "value": "1"
         }
       }
+    ],
+    "leadingComments": [
+      "-- RANGE OFFSET ORDER BY DESC"
     ]
   },
   {
@@ -4364,7 +5180,7 @@
           }
         ],
         "from": {
-          "kind": "tableFunction",
+          "kind": "tableFunctionRef",
           "name": "numbers",
           "args": [
             {
@@ -4392,7 +5208,34 @@
     "windows": [
       {
         "name": "w",
-        "body": "order by x desc range between 1 preceding and unbounded following"
+        "spec": {
+          "orderBy": [
+            {
+              "kind": "orderByItem",
+              "expr": {
+                "kind": "columnRef",
+                "parts": [
+                  "x"
+                ]
+              },
+              "direction": "DESC"
+            }
+          ],
+          "frame": {
+            "frameType": "range",
+            "start": {
+              "kind": "preceding",
+              "expr": {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "1"
+              }
+            },
+            "end": {
+              "kind": "unbounded"
+            }
+          }
+        }
       }
     ],
     "settings": [
@@ -4475,7 +5318,7 @@
           }
         ],
         "from": {
-          "kind": "tableFunction",
+          "kind": "tableFunctionRef",
           "name": "numbers",
           "args": [
             {
@@ -4503,7 +5346,34 @@
     "windows": [
       {
         "name": "w",
-        "body": "order by x desc range between unbounded preceding and 2 following"
+        "spec": {
+          "orderBy": [
+            {
+              "kind": "orderByItem",
+              "expr": {
+                "kind": "columnRef",
+                "parts": [
+                  "x"
+                ]
+              },
+              "direction": "DESC"
+            }
+          ],
+          "frame": {
+            "frameType": "range",
+            "start": {
+              "kind": "unbounded"
+            },
+            "end": {
+              "kind": "following",
+              "expr": {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "2"
+              }
+            }
+          }
+        }
       }
     ],
     "settings": [
@@ -4586,7 +5456,7 @@
           }
         ],
         "from": {
-          "kind": "tableFunction",
+          "kind": "tableFunctionRef",
           "name": "numbers",
           "args": [
             {
@@ -4614,7 +5484,34 @@
     "windows": [
       {
         "name": "w",
-        "body": "order by x desc range between unbounded preceding and 2 preceding"
+        "spec": {
+          "orderBy": [
+            {
+              "kind": "orderByItem",
+              "expr": {
+                "kind": "columnRef",
+                "parts": [
+                  "x"
+                ]
+              },
+              "direction": "DESC"
+            }
+          ],
+          "frame": {
+            "frameType": "range",
+            "start": {
+              "kind": "unbounded"
+            },
+            "end": {
+              "kind": "preceding",
+              "expr": {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "2"
+              }
+            }
+          }
+        }
       }
     ],
     "settings": [
@@ -5015,7 +5912,7 @@
           }
         ],
         "from": {
-          "kind": "tableFunction",
+          "kind": "tableFunctionRef",
           "name": "numbers",
           "args": [
             {
@@ -5039,6 +5936,11 @@
         },
         "direction": "ASC"
       }
+    ],
+    "leadingComments": [
+      "-- Check that we put windows in such an order that we can reuse the sort.",
+      "-- First, check that at least the result is correct when we have many windows",
+      "-- with different sort order."
     ]
   },
   {
@@ -5098,7 +6000,7 @@
       }
     ],
     "from": {
-      "kind": "tableFunction",
+      "kind": "tableFunctionRef",
       "name": "numbers",
       "args": [
         {
@@ -5107,7 +6009,86 @@
           "value": "2"
         }
       ]
-    }
+    },
+    "leadingComments": [
+      "-- A test case for the sort comparator found by fuzzer."
+    ]
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "window_mt"
+    },
+    "ifExists": true,
+    "leadingComments": [
+      "-- optimize_read_in_order conflicts with sorting for window functions, check that",
+      "-- it is disabled."
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "window_mt"
+    },
+    "engine": {
+      "name": "MergeTree"
+    },
+    "asQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "number"
+          ]
+        },
+        {
+          "kind": "alias",
+          "expr": {
+            "kind": "functionCall",
+            "name": "mod",
+            "args": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "number"
+                ]
+              },
+              {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "3"
+              }
+            ]
+          },
+          "alias": "p"
+        }
+      ],
+      "from": {
+        "kind": "tableFunctionRef",
+        "name": "numbers",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "100"
+          }
+        ]
+      }
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "number"
+          ]
+        }
+      }
+    ]
   },
   {
     "kind": "select",
@@ -5236,6 +6217,14 @@
     ]
   },
   {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "window_mt"
+    }
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -5336,7 +6325,7 @@
           }
         ],
         "from": {
-          "kind": "tableFunction",
+          "kind": "tableFunctionRef",
           "name": "numbers",
           "args": [
             {
@@ -5406,7 +6395,38 @@
     "windows": [
       {
         "name": "w",
-        "body": "partition by p order by o, number"
+        "spec": {
+          "partitionBy": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "p"
+              ]
+            }
+          ],
+          "orderBy": [
+            {
+              "kind": "orderByItem",
+              "expr": {
+                "kind": "columnRef",
+                "parts": [
+                  "o"
+                ]
+              },
+              "direction": "ASC"
+            },
+            {
+              "kind": "orderByItem",
+              "expr": {
+                "kind": "columnRef",
+                "parts": [
+                  "number"
+                ]
+              },
+              "direction": "ASC"
+            }
+          ]
+        }
       }
     ],
     "settings": [
@@ -5418,6 +6438,9 @@
           "value": "2"
         }
       }
+    ],
+    "leadingComments": [
+      "-- some true window functions -- rank and friends"
     ]
   },
   {
@@ -5515,7 +6538,7 @@
       }
     ],
     "from": {
-      "kind": "tableFunction",
+      "kind": "tableFunctionRef",
       "name": "numbers",
       "args": [
         {
@@ -5524,7 +6547,10 @@
           "value": "5"
         }
       ]
-    }
+    },
+    "leadingComments": [
+      "-- our replacement for lag/lead"
+    ]
   },
   {
     "kind": "select",
@@ -5743,7 +6769,7 @@
           }
         ],
         "from": {
-          "kind": "tableFunction",
+          "kind": "tableFunctionRef",
           "name": "numbers",
           "args": [
             {
@@ -5770,7 +6796,37 @@
     "windows": [
       {
         "name": "w",
-        "body": "partition by p order by number\n    rows between unbounded preceding and unbounded following"
+        "spec": {
+          "partitionBy": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "p"
+              ]
+            }
+          ],
+          "orderBy": [
+            {
+              "kind": "orderByItem",
+              "expr": {
+                "kind": "columnRef",
+                "parts": [
+                  "number"
+                ]
+              },
+              "direction": "ASC"
+            }
+          ],
+          "frame": {
+            "frameType": "rows",
+            "start": {
+              "kind": "unbounded"
+            },
+            "end": {
+              "kind": "unbounded"
+            }
+          }
+        }
       }
     ],
     "settings": [
@@ -5782,7 +6838,13 @@
           "value": "3"
         }
       }
+    ],
+    "leadingComments": [
+      "-- variants of lag/lead that respect the frame"
     ]
+  },
+  {
+    "kind": "empty"
   },
   {
     "kind": "select",
@@ -5805,6 +6867,9 @@
         ],
         "window": {}
       }
+    ],
+    "leadingComments": [
+      "-- careful with auto-application of Null combinator"
     ]
   },
   {
@@ -5822,6 +6887,9 @@
         ],
         "window": {}
       }
+    ],
+    "trailingComments": [
+      "-- { serverError BAD_ARGUMENTS }"
     ]
   },
   {
@@ -5872,6 +6940,9 @@
         ],
         "window": {}
       }
+    ],
+    "leadingComments": [
+      "-- this is the same as `select max(Null::Nullable(Nothing))`"
     ]
   },
   {
@@ -5965,7 +7036,7 @@
       }
     ],
     "from": {
-      "kind": "tableFunction",
+      "kind": "tableFunctionRef",
       "name": "numbers",
       "args": [
         {
@@ -5978,8 +7049,25 @@
     "windows": [
       {
         "name": "w",
-        "body": "ORDER BY number ASC"
+        "spec": {
+          "orderBy": [
+            {
+              "kind": "orderByItem",
+              "expr": {
+                "kind": "columnRef",
+                "parts": [
+                  "number"
+                ]
+              },
+              "direction": "ASC"
+            }
+          ]
+        }
       }
+    ],
+    "leadingComments": [
+      "-- to make lagInFrame return null for out-of-frame rows, cast the argument to",
+      "-- Nullable; otherwise, it returns default values."
     ]
   },
   {
@@ -6017,7 +7105,7 @@
       }
     ],
     "from": {
-      "kind": "tableFunction",
+      "kind": "tableFunctionRef",
       "name": "numbers",
       "args": [
         {
@@ -6042,8 +7130,43 @@
     "windows": [
       {
         "name": "w",
-        "body": "order by number range between 1 preceding and 1 following"
+        "spec": {
+          "orderBy": [
+            {
+              "kind": "orderByItem",
+              "expr": {
+                "kind": "columnRef",
+                "parts": [
+                  "number"
+                ]
+              },
+              "direction": "ASC"
+            }
+          ],
+          "frame": {
+            "frameType": "range",
+            "start": {
+              "kind": "preceding",
+              "expr": {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "1"
+              }
+            },
+            "end": {
+              "kind": "following",
+              "expr": {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "1"
+              }
+            }
+          }
+        }
       }
+    ],
+    "leadingComments": [
+      "-- case-insensitive SQL-standard synonyms for any and anyLast"
     ]
   },
   {
@@ -6141,7 +7264,7 @@
       }
     ],
     "from": {
-      "kind": "tableFunction",
+      "kind": "tableFunctionRef",
       "name": "numbers",
       "args": [
         {
@@ -6166,8 +7289,24 @@
     "windows": [
       {
         "name": "w",
-        "body": "order by number"
+        "spec": {
+          "orderBy": [
+            {
+              "kind": "orderByItem",
+              "expr": {
+                "kind": "columnRef",
+                "parts": [
+                  "number"
+                ]
+              },
+              "direction": "ASC"
+            }
+          ]
+        }
       }
+    ],
+    "leadingComments": [
+      "-- nth_value without specific frame range given"
     ]
   },
   {
@@ -6265,7 +7404,7 @@
       }
     ],
     "from": {
-      "kind": "tableFunction",
+      "kind": "tableFunctionRef",
       "name": "numbers",
       "args": [
         {
@@ -6290,8 +7429,43 @@
     "windows": [
       {
         "name": "w",
-        "body": "order by number range between 1 preceding and 1 following"
+        "spec": {
+          "orderBy": [
+            {
+              "kind": "orderByItem",
+              "expr": {
+                "kind": "columnRef",
+                "parts": [
+                  "number"
+                ]
+              },
+              "direction": "ASC"
+            }
+          ],
+          "frame": {
+            "frameType": "range",
+            "start": {
+              "kind": "preceding",
+              "expr": {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "1"
+              }
+            },
+            "end": {
+              "kind": "following",
+              "expr": {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "1"
+              }
+            }
+          }
+        }
       }
+    ],
+    "leadingComments": [
+      "-- nth_value with frame range specified"
     ]
   },
   {
@@ -6359,7 +7533,7 @@
       }
     ],
     "from": {
-      "kind": "tableFunction",
+      "kind": "tableFunctionRef",
       "name": "numbers",
       "args": [
         {
@@ -6372,8 +7546,25 @@
     "windows": [
       {
         "name": "w",
-        "body": "ORDER BY number ASC"
+        "spec": {
+          "orderBy": [
+            {
+              "kind": "orderByItem",
+              "expr": {
+                "kind": "columnRef",
+                "parts": [
+                  "number"
+                ]
+              },
+              "direction": "ASC"
+            }
+          ]
+        }
       }
+    ],
+    "leadingComments": [
+      "-- to make nth_value return null for out-of-frame rows, cast the argument to",
+      "-- Nullable; otherwise, it returns default values."
     ]
   },
   {
@@ -6396,6 +7587,12 @@
         ],
         "window": {}
       }
+    ],
+    "leadingComments": [
+      "-- nth_value UBsan"
+    ],
+    "trailingComments": [
+      "-- { serverError BAD_ARGUMENTS }"
     ]
   },
   {
@@ -6418,6 +7615,9 @@
         ],
         "window": {}
       }
+    ],
+    "trailingComments": [
+      "-- { serverError BAD_ARGUMENTS }"
     ]
   },
   {
@@ -6430,7 +7630,10 @@
           {
             "kind": "literal",
             "type": "UInt64",
-            "value": "1"
+            "value": "1",
+            "trailingComments": [
+              "/* INT64_MAX+1 */"
+            ]
           },
           {
             "kind": "binaryExpr",
@@ -6449,6 +7652,9 @@
         ],
         "window": {}
       }
+    ],
+    "trailingComments": [
+      "-- { serverError BAD_ARGUMENTS }"
     ]
   },
   {
@@ -6461,7 +7667,10 @@
           {
             "kind": "literal",
             "type": "UInt64",
-            "value": "1"
+            "value": "1",
+            "trailingComments": [
+              "/* INT64_MAX */"
+            ]
           },
           {
             "kind": "literal",
@@ -6515,6 +7724,12 @@
         ],
         "window": {}
       }
+    ],
+    "leadingComments": [
+      "-- lagInFrame UBsan"
+    ],
+    "trailingComments": [
+      "-- { serverError BAD_ARGUMENTS }"
     ]
   },
   {
@@ -6549,7 +7764,10 @@
           {
             "kind": "literal",
             "type": "UInt64",
-            "value": "1"
+            "value": "1",
+            "trailingComments": [
+              "/* INT64_MAX+1 */"
+            ]
           },
           {
             "kind": "binaryExpr",
@@ -6568,6 +7786,9 @@
         ],
         "window": {}
       }
+    ],
+    "trailingComments": [
+      "-- { serverError BAD_ARGUMENTS }"
     ]
   },
   {
@@ -6580,7 +7801,10 @@
           {
             "kind": "literal",
             "type": "UInt64",
-            "value": "1"
+            "value": "1",
+            "trailingComments": [
+              "/* INT64_MAX */"
+            ]
           },
           {
             "kind": "literal",
@@ -6634,6 +7858,12 @@
         ],
         "window": {}
       }
+    ],
+    "leadingComments": [
+      "-- leadInFrame UBsan"
+    ],
+    "trailingComments": [
+      "-- { serverError BAD_ARGUMENTS }"
     ]
   },
   {
@@ -6668,7 +7898,10 @@
           {
             "kind": "literal",
             "type": "UInt64",
-            "value": "1"
+            "value": "1",
+            "trailingComments": [
+              "/* INT64_MAX+1 */"
+            ]
           },
           {
             "kind": "binaryExpr",
@@ -6687,6 +7920,9 @@
         ],
         "window": {}
       }
+    ],
+    "trailingComments": [
+      "-- { serverError BAD_ARGUMENTS }"
     ]
   },
   {
@@ -6699,7 +7935,10 @@
           {
             "kind": "literal",
             "type": "UInt64",
-            "value": "1"
+            "value": "1",
+            "trailingComments": [
+              "/* INT64_MAX */"
+            ]
           },
           {
             "kind": "literal",
@@ -6753,6 +7992,12 @@
         ],
         "window": {}
       }
+    ],
+    "leadingComments": [
+      "-- nth_value Msan"
+    ],
+    "trailingComments": [
+      "-- { serverError BAD_ARGUMENTS }"
     ]
   },
   {
@@ -6775,6 +8020,12 @@
         ],
         "window": {}
       }
+    ],
+    "leadingComments": [
+      "-- lagInFrame Msan"
+    ],
+    "trailingComments": [
+      "-- { serverError BAD_ARGUMENTS }"
     ]
   },
   {
@@ -6797,6 +8048,12 @@
         ],
         "window": {}
       }
+    ],
+    "leadingComments": [
+      "-- leadInFrame Msan"
+    ],
+    "trailingComments": [
+      "-- { serverError BAD_ARGUMENTS }"
     ]
   },
   {
@@ -6810,7 +8067,7 @@
       }
     ],
     "from": {
-      "kind": "tableFunction",
+      "kind": "tableFunctionRef",
       "name": "numbers",
       "args": [
         {
@@ -6834,7 +8091,11 @@
         "type": "UInt64",
         "value": "2"
       }
-    }
+    },
+    "leadingComments": [
+      "-- In this case, we had a problem with PartialSortingTransform returning zero-row",
+      "-- chunks for input chunks w/o columns."
+    ]
   },
   {
     "kind": "select",
@@ -7007,7 +8268,7 @@
       }
     ],
     "from": {
-      "kind": "tableFunction",
+      "kind": "tableFunctionRef",
       "name": "numbers",
       "args": [
         {
@@ -7016,7 +8277,10 @@
           "value": "7"
         }
       ]
-    }
+    },
+    "leadingComments": [
+      "-- floating point RANGE frame"
+    ]
   },
   {
     "kind": "select",
@@ -7062,7 +8326,7 @@
       }
     ],
     "from": {
-      "kind": "tableFunction",
+      "kind": "tableFunctionRef",
       "name": "numbers",
       "args": [
         {
@@ -7071,7 +8335,13 @@
           "value": "1"
         }
       ]
-    }
+    },
+    "leadingComments": [
+      "-- negative offsets should not be allowed"
+    ],
+    "trailingComments": [
+      "-- { serverError BAD_ARGUMENTS }"
+    ]
   },
   {
     "kind": "select",
@@ -7117,7 +8387,7 @@
       }
     ],
     "from": {
-      "kind": "tableFunction",
+      "kind": "tableFunctionRef",
       "name": "numbers",
       "args": [
         {
@@ -7126,7 +8396,10 @@
           "value": "1"
         }
       ]
-    }
+    },
+    "trailingComments": [
+      "-- { serverError BAD_ARGUMENTS }"
+    ]
   },
   {
     "kind": "select",
@@ -7172,7 +8445,7 @@
       }
     ],
     "from": {
-      "kind": "tableFunction",
+      "kind": "tableFunctionRef",
       "name": "numbers",
       "args": [
         {
@@ -7181,7 +8454,10 @@
           "value": "1"
         }
       ]
-    }
+    },
+    "trailingComments": [
+      "-- { serverError BAD_ARGUMENTS }"
+    ]
   },
   {
     "kind": "select",
@@ -7227,7 +8503,7 @@
       }
     ],
     "from": {
-      "kind": "tableFunction",
+      "kind": "tableFunctionRef",
       "name": "numbers",
       "args": [
         {
@@ -7236,7 +8512,10 @@
           "value": "1"
         }
       ]
-    }
+    },
+    "trailingComments": [
+      "-- { serverError BAD_ARGUMENTS }"
+    ]
   },
   {
     "kind": "select",
@@ -7349,7 +8628,7 @@
           }
         ],
         "from": {
-          "kind": "tableFunction",
+          "kind": "tableFunctionRef",
           "name": "numbers_mt",
           "args": [
             {
@@ -7370,6 +8649,9 @@
           "value": "7"
         }
       }
+    ],
+    "leadingComments": [
+      "-- a test with aggregate function that allocates memory in arena"
     ]
   },
   {
@@ -7493,7 +8775,7 @@
                   }
                 ],
                 "from": {
-                  "kind": "tableFunction",
+                  "kind": "tableFunctionRef",
                   "name": "numbers",
                   "args": [
                     {
@@ -7519,7 +8801,10 @@
           }
         }
       }
-    }
+    },
+    "leadingComments": [
+      "-- a test with aggregate function which is -state type"
+    ]
   },
   {
     "kind": "select",
@@ -7552,7 +8837,7 @@
       }
     ],
     "from": {
-      "kind": "tableFunction",
+      "kind": "tableFunctionRef",
       "name": "numbers",
       "args": [
         {
@@ -7561,7 +8846,14 @@
           "value": "2"
         }
       ]
-    }
+    },
+    "leadingComments": [
+      "-- -INT_MIN row offset that can lead to problems with negation, found when fuzzing",
+      "-- under UBSan. Should be limited to at most INT_MAX."
+    ],
+    "trailingComments": [
+      "-- { serverError BAD_ARGUMENTS }"
+    ]
   },
   {
     "kind": "select",
@@ -7592,7 +8884,7 @@
         },
         "alias": "l"
       },
-      "kind": "join",
+      "kind": "joinExpr",
       "joinType": "INNER",
       "right": {
         "kind": "subqueryFrom",
@@ -7618,7 +8910,11 @@
           "a"
         ]
       }
-    }
+    },
+    "leadingComments": [
+      "-- Somehow in this case WindowTransform gets empty input chunks not marked as",
+      "-- input end, and then two (!) empty input chunks marked as input end. Whatever."
+    ]
   },
   {
     "kind": "select",
@@ -7634,7 +8930,10 @@
       "kind": "literal",
       "type": "NULL",
       "value": "NULL"
-    }
+    },
+    "leadingComments": [
+      "-- This case works as expected, one empty input chunk marked as input end."
+    ]
   },
   {
     "kind": "select",
@@ -7660,7 +8959,7 @@
       }
     ],
     "from": {
-      "kind": "tableFunction",
+      "kind": "tableFunctionRef",
       "name": "numbers",
       "args": [
         {
@@ -7705,12 +9004,78 @@
     "windows": [
       {
         "name": "w0",
-        "body": "partition by intDiv(number, 5) as p"
+        "spec": {
+          "partitionBy": [
+            {
+              "kind": "alias",
+              "expr": {
+                "kind": "functionCall",
+                "name": "intDiv",
+                "args": [
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "number"
+                    ]
+                  },
+                  {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "5"
+                  }
+                ]
+              },
+              "alias": "p"
+            }
+          ]
+        }
       },
       {
         "name": "w1",
-        "body": "w0 order by mod(number, 3) as o, number"
+        "spec": {
+          "orderBy": [
+            {
+              "kind": "orderByItem",
+              "expr": {
+                "kind": "alias",
+                "expr": {
+                  "kind": "functionCall",
+                  "name": "mod",
+                  "args": [
+                    {
+                      "kind": "columnRef",
+                      "parts": [
+                        "number"
+                      ]
+                    },
+                    {
+                      "kind": "literal",
+                      "type": "UInt64",
+                      "value": "3"
+                    }
+                  ]
+                },
+                "alias": "o"
+              },
+              "direction": "ASC"
+            },
+            {
+              "kind": "orderByItem",
+              "expr": {
+                "kind": "columnRef",
+                "parts": [
+                  "number"
+                ]
+              },
+              "direction": "ASC"
+            }
+          ],
+          "baseWindow": "w0"
+        }
       }
+    ],
+    "leadingComments": [
+      "-- Inheriting another window."
     ]
   },
   {
@@ -7733,7 +9098,7 @@
       }
     ],
     "from": {
-      "kind": "tableFunction",
+      "kind": "tableFunctionRef",
       "name": "numbers",
       "args": [
         {
@@ -7746,8 +9111,34 @@
     "windows": [
       {
         "name": "w",
-        "body": "partition by intDiv(number, 5)"
+        "spec": {
+          "partitionBy": [
+            {
+              "kind": "functionCall",
+              "name": "intDiv",
+              "args": [
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "number"
+                  ]
+                },
+                {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "5"
+                }
+              ]
+            }
+          ]
+        }
       }
+    ],
+    "leadingComments": [
+      "-- can't redefine PARTITION BY"
+    ],
+    "trailingComments": [
+      "-- { serverError BAD_ARGUMENTS }"
     ]
   },
   {
@@ -7774,7 +9165,7 @@
       }
     ],
     "from": {
-      "kind": "tableFunction",
+      "kind": "tableFunctionRef",
       "name": "numbers",
       "args": [
         {
@@ -7787,8 +9178,57 @@
     "windows": [
       {
         "name": "w",
-        "body": "partition by intDiv(number, 5) order by mod(number, 3)"
+        "spec": {
+          "partitionBy": [
+            {
+              "kind": "functionCall",
+              "name": "intDiv",
+              "args": [
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "number"
+                  ]
+                },
+                {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "5"
+                }
+              ]
+            }
+          ],
+          "orderBy": [
+            {
+              "kind": "orderByItem",
+              "expr": {
+                "kind": "functionCall",
+                "name": "mod",
+                "args": [
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "number"
+                    ]
+                  },
+                  {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "3"
+                  }
+                ]
+              },
+              "direction": "ASC"
+            }
+          ]
+        }
       }
+    ],
+    "leadingComments": [
+      "-- can't redefine existing ORDER BY"
+    ],
+    "trailingComments": [
+      "-- { serverError BAD_ARGUMENTS }"
     ]
   },
   {
@@ -7809,7 +9249,7 @@
       }
     ],
     "from": {
-      "kind": "tableFunction",
+      "kind": "tableFunctionRef",
       "name": "numbers",
       "args": [
         {
@@ -7822,8 +9262,63 @@
     "windows": [
       {
         "name": "w",
-        "body": "partition by intDiv(number, 5) order by mod(number, 3) rows unbounded preceding"
+        "spec": {
+          "partitionBy": [
+            {
+              "kind": "functionCall",
+              "name": "intDiv",
+              "args": [
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "number"
+                  ]
+                },
+                {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "5"
+                }
+              ]
+            }
+          ],
+          "orderBy": [
+            {
+              "kind": "orderByItem",
+              "expr": {
+                "kind": "functionCall",
+                "name": "mod",
+                "args": [
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "number"
+                    ]
+                  },
+                  {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "3"
+                  }
+                ]
+              },
+              "direction": "ASC"
+            }
+          ],
+          "frame": {
+            "frameType": "rows",
+            "start": {
+              "kind": "unbounded"
+            }
+          }
+        }
       }
+    ],
+    "leadingComments": [
+      "-- parent window can't have frame"
+    ],
+    "trailingComments": [
+      "-- { serverError BAD_ARGUMENTS }"
     ]
   },
   {
@@ -7837,7 +9332,7 @@
       }
     ],
     "from": {
-      "kind": "tableFunction",
+      "kind": "tableFunctionRef",
       "name": "numbers",
       "args": [
         {
@@ -7850,8 +9345,11 @@
     "windows": [
       {
         "name": "w",
-        "body": ""
+        "spec": {}
       }
+    ],
+    "leadingComments": [
+      "-- looks weird but probably should work -- this is a window that inherits and changes nothing"
     ]
   },
   {
@@ -7870,6 +9368,12 @@
           }
         }
       }
+    ],
+    "leadingComments": [
+      "-- nonexistent parent window"
+    ],
+    "trailingComments": [
+      "-- { serverError BAD_ARGUMENTS }"
     ]
   }
 ]

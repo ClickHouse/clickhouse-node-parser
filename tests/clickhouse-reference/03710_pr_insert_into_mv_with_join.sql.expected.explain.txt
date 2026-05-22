@@ -1,3 +1,120 @@
+DropQuery  mv (children 1)
+ Identifier mv
+
+DropQuery  n1_n2_join (children 1)
+ Identifier n1_n2_join
+
+DropQuery  n1 (children 1)
+ Identifier n1
+
+DropQuery  n2 (children 1)
+ Identifier n2
+
+CreateQuery n1 (children 3)
+ Identifier n1
+ Columns definition (children 1)
+  ExpressionList (children 2)
+   ColumnDeclaration key (children 1)
+    DataType UInt64
+   ColumnDeclaration value (children 1)
+    DataType String
+ Storage definition (children 3)
+  Function MergeTree
+  Identifier key
+  Set
+
+CreateQuery n2 (children 3)
+ Identifier n2
+ Columns definition (children 1)
+  ExpressionList (children 2)
+   ColumnDeclaration key (children 1)
+    DataType UInt64
+   ColumnDeclaration value (children 1)
+    DataType Int64
+ Storage definition (children 3)
+  Function MergeTree
+  Identifier key
+  Set
+
+CreateQuery n1_n2_join (children 3)
+ Identifier n1_n2_join
+ Columns definition (children 1)
+  ExpressionList (children 3)
+   ColumnDeclaration k (children 1)
+    DataType UInt64
+   ColumnDeclaration v1 (children 1)
+    DataType String
+   ColumnDeclaration v2 (children 1)
+    DataType Int64
+ Storage definition (children 2)
+  Function MergeTree
+  Identifier k
+
+CreateQuery mv (children 3)
+ Identifier mv
+ SelectWithUnionQuery (children 1)
+  ExpressionList (children 1)
+   SelectQuery (children 3)
+    ExpressionList (children 3)
+     Identifier n1.key (alias k)
+     Identifier n1.value (alias v1)
+     Identifier n2.value (alias v2)
+    TablesInSelectQuery (children 2)
+     TablesInSelectQueryElement (children 1)
+      TableExpression (children 1)
+       TableIdentifier n1
+     TablesInSelectQueryElement (children 2)
+      TableExpression (children 1)
+       TableIdentifier n2
+      TableJoin (children 1)
+       Function equals (children 1)
+        ExpressionList (children 2)
+         Identifier n1.key
+         Identifier n2.key
+    ExpressionList (children 1)
+     OrderByElement (children 1)
+      Identifier n1.key
+ ViewTargets
+
+InsertQuery   (children 2)
+ Identifier n2
+ SelectWithUnionQuery (children 1)
+  ExpressionList (children 1)
+   SelectQuery (children 2)
+    ExpressionList (children 2)
+     Identifier number
+     Function negate (children 1)
+      ExpressionList (children 1)
+       Identifier number
+    TablesInSelectQuery (children 1)
+     TablesInSelectQueryElement (children 1)
+      TableExpression (children 1)
+       Function numbers (children 1)
+        ExpressionList (children 1)
+         Literal UInt64_10
+
+Set
+
+InsertQuery   (children 1)
+ Identifier n1
+
+InsertQuery   (children 2)
+ Identifier n1
+ SelectWithUnionQuery (children 1)
+  ExpressionList (children 1)
+   SelectQuery (children 2)
+    ExpressionList (children 2)
+     Identifier number
+     Function toString (children 1)
+      ExpressionList (children 1)
+       Identifier number
+    TablesInSelectQuery (children 1)
+     TablesInSelectQueryElement (children 1)
+      TableExpression (children 1)
+       Function numbers (children 1)
+        ExpressionList (children 1)
+         Literal UInt64_10
+
 SelectWithUnionQuery (children 1)
  ExpressionList (children 1)
   SelectQuery (children 3)

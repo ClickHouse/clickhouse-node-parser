@@ -1,3 +1,13 @@
+DROP TABLE IF EXISTS t;
+
+CREATE TABLE t
+ENGINE = Log AS
+SELECT *
+FROM `system`.numbers
+LIMIT 20;
+
+SET enable_optimize_predicate_expression = 1;
+
 SELECT number
 FROM (
         SELECT number
@@ -15,3 +25,5 @@ FROM (
         LIMIT 5
     )
 WHERE number % 2;
+
+DROP TABLE t;

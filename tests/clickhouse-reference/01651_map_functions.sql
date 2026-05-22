@@ -1,3 +1,8 @@
+SET use_variant_as_common_type = 0;
+-- Map(String, String)
+drop table if exists table_map;
+create table table_map (a Map(String, String), b String, c Array(String), d Array(String)) engine = Memory;
+insert into table_map values ({'name':'zhangsan', 'age':'10'}, 'name', ['name', 'age'], ['zhangsan', '10']), ({'name':'lisi', 'gender':'female'},'age',['name', 'gender'], ['lisi', 'female']);
 select mapContains(a, 'name') from table_map;
 select mapContains(a, 'gender') from table_map;
 select mapContains(a, 'abc') from table_map;
@@ -5,6 +10,10 @@ select mapContains(a, b) from table_map;
 select mapContains(a, 10) from table_map; -- { serverError NO_COMMON_TYPE }
 select mapKeys(a) from table_map;
 select mapFromArrays(c, d) from table_map;
+drop table table_map;
+-- Map(UInt8, UInt8)
+create table table_map (a Map(UInt8, Int), b UInt8, c UInt32, d Array(String), e Array(String)) engine = MergeTree order by tuple();
+insert into table_map select map(number, number), number, number, [number, number, number], [number*2, number*3, number*4] from numbers(1000, 3);
 select mapContains(a, b), mapContains(a, c), mapContains(a, 233) from table_map;
 select mapContains(a, 'aaa') from table_map; -- { serverError NO_COMMON_TYPE }
 select mapContains(b, 'aaa') from table_map; -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
@@ -16,6 +25,8 @@ select map('aa', 4, 'bb' , 5) as m, mapContains(m, 'aa'), mapContains(m, 'k');
 -- Map(Float32, UInt8)
 select map(0.1::Float32, 4, 0.2::Float32, 5) as m, mapKeys(m), mapValues(m);
 select map(0.1::Float32, 4, 0.2::Float32, 5) as m, mapContains(m, 0.1::Float32), mapContains(m, 0.3::Float32);
+-- Map(LowCardinality(UInt8), UInt8)
+set allow_suspicious_low_cardinality_types = 1;
 select map(1::LowCardinality(UInt8), 4, 2::LowCardinality(UInt8), 5) as m, mapKeys(m), mapValues(m);
 select map(1::LowCardinality(UInt8), 4, 2::LowCardinality(UInt8), 5) as m, mapContains(m, 1), mapContains (m, 3), mapContains(m, 1::LowCardinality(UInt8)), mapContains(m, 3::LowCardinality(UInt8));
 -- Map(Array(UInt8), UInt8)

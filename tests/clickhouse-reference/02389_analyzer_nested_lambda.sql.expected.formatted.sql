@@ -1,3 +1,8 @@
+SET enable_analyzer = 1;
+
+SET max_execution_time = 300;
+
+-- { echoOn }
 SELECT arrayMap(x -> x + arrayMap(x -> x + 1, [1])[1], [1,2,3]);
 
 SELECT '--';
@@ -35,6 +40,25 @@ SELECT
         SELECT 5
     ) AS subquery,
     arrayMap(x -> x + arrayMap(x -> subquery, [1])[1], [1,2,3]);
+
+WITH x -> toString(x) AS lambda
+
+SELECT arrayMap(x -> lambda(x), [1,2,3]);
+
+WITH x -> toString(x) AS lambda
+
+SELECT arrayMap(x -> arrayMap(y -> concat(lambda(x), '_', lambda(y)), [1,2,3]), [1,2,3]);
+
+DROP TABLE IF EXISTS test_table;
+
+CREATE TABLE test_table
+(
+    id UInt64,
+    value String
+)
+ENGINE = TinyLog;
+
+INSERT INTO test_table;
 
 SELECT arrayMap(x -> x + arrayMap(x -> id, [1])[1], [1,2,3])
 FROM test_table;
@@ -94,13 +118,31 @@ SELECT arrayMap(x -> id + arrayMap(x -> id + (
     ), [1])[1], [1,2,3])
 FROM test_table;
 
+WITH x -> toString(id) AS lambda
+
+SELECT arrayMap(x -> lambda(x), [1,2,3])
+FROM test_table;
+
+WITH x -> toString(id) AS lambda
+
+SELECT arrayMap(x -> arrayMap(y -> lambda(y), [1,2,3]), [1,2,3])
+FROM test_table;
+
+WITH x -> toString(id) AS lambda
+
+SELECT arrayMap(x -> arrayMap(y -> concat(lambda(x), '_', lambda(y)), [1,2,3]), [1,2,3])
+FROM test_table;
+
 SELECT arrayMap(x -> concat(concat(concat(concat(concat(toString(id), '___\0_______\0____'), toString(id), concat(concat(toString(id), ''), toString(id)), toString(id)), arrayMap(x -> concat(concat(concat(concat(toString(id), ''), toString(id)), toString(id), '___\0_______\0____'), toString(id)) AS lambda, [NULL, inf, 1, 1]), concat(toString(id), NULL), toString(id)), toString(id))) AS lambda, [NULL, NULL, 2147483647])
 FROM test_table
 WHERE concat(concat(concat(toString(id), '___\0_______\0____'), toString(id)), concat(toString(id), NULL), toString(id));
 
 SELECT arrayMap(x -> splitByChar(toString(id), arrayMap(x -> toString(1), [NULL])), [NULL])
-FROM test_table;
+FROM test_table; -- { serverError ILLEGAL_COLUMN };
 
+DROP TABLE test_table;
+
+-- { echoOff }
 SELECT
     groupArray(number) AS counts,
     arraySum(arrayMap(x -> (x + 1), counts)) AS hello,

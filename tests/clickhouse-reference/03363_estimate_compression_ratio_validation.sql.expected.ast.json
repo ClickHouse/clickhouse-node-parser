@@ -1,5 +1,50 @@
 [
   {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "test_table_for_estimate_compression_ratio"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "test_table_for_estimate_compression_ratio"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "some_column",
+        "type": {
+          "name": "Int64"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "other_column",
+        "type": {
+          "name": "Int64"
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "some_column"
+          ]
+        }
+      }
+    ]
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -36,7 +81,10 @@
     "from": {
       "kind": "tableRef",
       "table": "test_table_for_estimate_compression_ratio"
-    }
+    },
+    "trailingComments": [
+      "-- { serverError 42 }"
+    ]
   },
   {
     "kind": "select",
@@ -74,7 +122,10 @@
     "from": {
       "kind": "tableRef",
       "table": "test_table_for_estimate_compression_ratio"
-    }
+    },
+    "trailingComments": [
+      "-- { serverError 456 }"
+    ]
   },
   {
     "kind": "select",
@@ -107,7 +158,10 @@
     "from": {
       "kind": "tableRef",
       "table": "test_table_for_estimate_compression_ratio"
-    }
+    },
+    "trailingComments": [
+      "-- { serverError 457 }"
+    ]
   },
   {
     "kind": "select",
@@ -140,7 +194,10 @@
     "from": {
       "kind": "tableRef",
       "table": "test_table_for_estimate_compression_ratio"
-    }
+    },
+    "trailingComments": [
+      "-- positive case, should always be 0"
+    ]
   },
   {
     "kind": "select",
@@ -173,7 +230,10 @@
     "from": {
       "kind": "tableRef",
       "table": "test_table_for_estimate_compression_ratio"
-    }
+    },
+    "leadingComments": [
+      "-- order is not important"
+    ]
   },
   {
     "kind": "select",
@@ -201,7 +261,13 @@
     "from": {
       "kind": "tableRef",
       "table": "test_table_for_estimate_compression_ratio"
-    }
+    },
+    "leadingComments": [
+      "-- block_size_bytes > 0"
+    ],
+    "trailingComments": [
+      "-- { serverError BAD_QUERY_PARAMETER }"
+    ]
   },
   {
     "kind": "select",
@@ -224,6 +290,12 @@
           }
         ]
       }
+    ],
+    "leadingComments": [
+      "-- and now with some data"
+    ],
+    "trailingComments": [
+      "-- { serverError BAD_QUERY_PARAMETER }"
     ]
   }
 ]

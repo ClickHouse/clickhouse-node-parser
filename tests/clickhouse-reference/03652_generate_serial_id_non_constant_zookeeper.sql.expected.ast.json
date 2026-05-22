@@ -1,0 +1,125 @@
+[
+  {
+    "kind": "select",
+    "with": [
+      {
+        "kind": "cteExpr",
+        "name": "key1",
+        "expr": {
+          "kind": "functionCall",
+          "name": "concat",
+          "args": [
+            {
+              "kind": "functionCall",
+              "name": "currentDatabase",
+              "args": []
+            },
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "_test1_"
+            },
+            {
+              "kind": "binaryExpr",
+              "op": "MOD",
+              "left": {
+                "kind": "columnRef",
+                "parts": [
+                  "number"
+                ]
+              },
+              "right": {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "3"
+              },
+              "parenthesized": true
+            }
+          ]
+        }
+      },
+      {
+        "kind": "cteExpr",
+        "name": "key2",
+        "expr": {
+          "kind": "functionCall",
+          "name": "concat",
+          "args": [
+            {
+              "kind": "functionCall",
+              "name": "currentDatabase",
+              "args": []
+            },
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "_test2_"
+            },
+            {
+              "kind": "binaryExpr",
+              "op": "DIV",
+              "left": {
+                "kind": "columnRef",
+                "parts": [
+                  "number"
+                ]
+              },
+              "right": {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "3"
+              },
+              "parenthesized": true
+            }
+          ]
+        }
+      }
+    ],
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "number"
+        ]
+      },
+      {
+        "kind": "functionCall",
+        "name": "generateSerialID",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "key1"
+            ]
+          }
+        ]
+      },
+      {
+        "kind": "functionCall",
+        "name": "generateSerialID",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "key2"
+            ]
+          }
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableFunctionRef",
+      "name": "numbers",
+      "args": [
+        {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "10"
+        }
+      ]
+    },
+    "leadingComments": [
+      "-- Tags: zookeeper"
+    ]
+  }
+]

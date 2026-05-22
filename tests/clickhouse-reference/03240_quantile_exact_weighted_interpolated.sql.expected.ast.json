@@ -1,5 +1,291 @@
 [
   {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "decimal"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "decimal"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "a",
+        "type": {
+          "name": "Decimal32",
+          "args": [
+            {
+              "kind": "literal",
+              "value": "4"
+            }
+          ]
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "b",
+        "type": {
+          "name": "Decimal64",
+          "args": [
+            {
+              "kind": "literal",
+              "value": "8"
+            }
+          ]
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "c",
+        "type": {
+          "name": "Decimal128",
+          "args": [
+            {
+              "kind": "literal",
+              "value": "8"
+            }
+          ]
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "f",
+        "type": {
+          "name": "Float64"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "d",
+        "type": {
+          "name": "Date"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "w",
+        "type": {
+          "name": "UInt64"
+        }
+      }
+    ],
+    "engine": {
+      "name": "Memory"
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "decimal"
+      }
+    },
+    "columns": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "a"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "b"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "c"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "f"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "d"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "w"
+        ]
+      }
+    ],
+    "selectQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "functionCall",
+          "name": "toDecimal32",
+          "args": [
+            {
+              "kind": "binaryExpr",
+              "op": "-",
+              "left": {
+                "kind": "columnRef",
+                "parts": [
+                  "number"
+                ]
+              },
+              "right": {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "50"
+              }
+            },
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "4"
+            }
+          ]
+        },
+        {
+          "kind": "binaryExpr",
+          "op": "/",
+          "left": {
+            "kind": "functionCall",
+            "name": "toDecimal64",
+            "args": [
+              {
+                "kind": "binaryExpr",
+                "op": "-",
+                "left": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "number"
+                  ]
+                },
+                "right": {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "50"
+                }
+              },
+              {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "8"
+              }
+            ]
+          },
+          "right": {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "3"
+          }
+        },
+        {
+          "kind": "binaryExpr",
+          "op": "/",
+          "left": {
+            "kind": "functionCall",
+            "name": "toDecimal128",
+            "args": [
+              {
+                "kind": "binaryExpr",
+                "op": "-",
+                "left": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "number"
+                  ]
+                },
+                "right": {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "50"
+                }
+              },
+              {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "8"
+              }
+            ]
+          },
+          "right": {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "5"
+          }
+        },
+        {
+          "kind": "binaryExpr",
+          "op": "/",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "number"
+            ]
+          },
+          "right": {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "2"
+          }
+        },
+        {
+          "kind": "functionCall",
+          "name": "addDays",
+          "args": [
+            {
+              "kind": "functionCall",
+              "name": "toDate",
+              "args": [
+                {
+                  "kind": "literal",
+                  "type": "String",
+                  "value": "2024-01-01"
+                }
+              ]
+            },
+            {
+              "kind": "columnRef",
+              "parts": [
+                "number"
+              ]
+            }
+          ]
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "number"
+          ]
+        }
+      ],
+      "from": {
+        "kind": "tableRef",
+        "database": "system",
+        "table": "numbers"
+      },
+      "limit": {
+        "count": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "101"
+        }
+      }
+    }
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -1322,7 +1608,7 @@
           }
         ],
         "from": {
-          "kind": "tableFunction",
+          "kind": "tableFunctionRef",
           "name": "numbers",
           "args": [
             {

@@ -1,5 +1,387 @@
 [
   {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "enable_analyzer",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "test_table"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "test_table"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "id",
+        "type": {
+          "name": "UInt64"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "value",
+        "type": {
+          "name": "String"
+        }
+      }
+    ],
+    "engine": {
+      "name": "TinyLog"
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "test_table"
+      }
+    }
+  },
+  {
+    "kind": "select",
+    "with": [
+      {
+        "kind": "cteExpr",
+        "name": "lambda",
+        "expr": {
+          "kind": "lambdaExpr",
+          "params": [
+            "x"
+          ],
+          "body": {
+            "kind": "binaryExpr",
+            "op": "+",
+            "left": {
+              "kind": "columnRef",
+              "parts": [
+                "x"
+              ]
+            },
+            "right": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "1"
+            }
+          }
+        }
+      }
+    ],
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "lambda",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "1"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "with": [
+      {
+        "kind": "cteExpr",
+        "name": "lambda",
+        "expr": {
+          "kind": "lambdaExpr",
+          "params": [
+            "x"
+          ],
+          "body": {
+            "kind": "functionCall",
+            "name": "toString",
+            "args": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "x"
+                ]
+              }
+            ]
+          }
+        }
+      }
+    ],
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "lambda",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "1"
+          }
+        ]
+      },
+      {
+        "kind": "functionCall",
+        "name": "lambda",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "NULL",
+            "value": "NULL"
+          }
+        ]
+      },
+      {
+        "kind": "functionCall",
+        "name": "lambda",
+        "args": [
+          {
+            "kind": "arrayLiteral",
+            "elements": [
+              {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "1"
+              },
+              {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "2"
+              },
+              {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "3"
+              }
+            ],
+            "source": "[1,2,3]"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "with": [
+      {
+        "kind": "cteExpr",
+        "name": "lambda_1",
+        "expr": {
+          "kind": "lambdaExpr",
+          "params": [
+            "x"
+          ],
+          "body": {
+            "kind": "functionCall",
+            "name": "toString",
+            "args": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "x"
+                ]
+              }
+            ]
+          }
+        }
+      },
+      {
+        "kind": "cteExpr",
+        "name": "lambda_2",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "lambda_1"
+          ]
+        }
+      },
+      {
+        "kind": "cteExpr",
+        "name": "lambda_3",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "lambda_2"
+          ]
+        }
+      }
+    ],
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "lambda_1",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "1"
+          }
+        ]
+      },
+      {
+        "kind": "functionCall",
+        "name": "lambda_2",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "NULL",
+            "value": "NULL"
+          }
+        ]
+      },
+      {
+        "kind": "functionCall",
+        "name": "lambda_3",
+        "args": [
+          {
+            "kind": "arrayLiteral",
+            "elements": [
+              {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "1"
+              },
+              {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "2"
+              },
+              {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "3"
+              }
+            ],
+            "source": "[1,2,3]"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "with": [
+      {
+        "kind": "cteExpr",
+        "name": "lambda",
+        "expr": {
+          "kind": "lambdaExpr",
+          "params": [
+            "x"
+          ],
+          "body": {
+            "kind": "binaryExpr",
+            "op": "+",
+            "left": {
+              "kind": "columnRef",
+              "parts": [
+                "x"
+              ]
+            },
+            "right": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "1"
+            }
+          }
+        }
+      }
+    ],
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "lambda",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "id"
+            ]
+          }
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "test_table"
+    }
+  },
+  {
+    "kind": "select",
+    "with": [
+      {
+        "kind": "cteExpr",
+        "name": "lambda",
+        "expr": {
+          "kind": "lambdaExpr",
+          "params": [
+            "x"
+          ],
+          "body": {
+            "kind": "functionCall",
+            "name": "toString",
+            "args": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "x"
+                ]
+              }
+            ]
+          }
+        }
+      }
+    ],
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "lambda",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "id"
+            ]
+          }
+        ]
+      },
+      {
+        "kind": "functionCall",
+        "name": "lambda",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "value"
+            ]
+          }
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "test_table"
+    }
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -28,7 +410,72 @@
             }
           },
           {
-            "kind": "array",
+            "kind": "arrayLiteral",
+            "elements": [
+              {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "1"
+              },
+              {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "2"
+              },
+              {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "3"
+              }
+            ],
+            "source": "[1,2,3]"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "with": [
+      {
+        "kind": "cteExpr",
+        "name": "lambda",
+        "expr": {
+          "kind": "lambdaExpr",
+          "params": [
+            "x"
+          ],
+          "body": {
+            "kind": "binaryExpr",
+            "op": "+",
+            "left": {
+              "kind": "columnRef",
+              "parts": [
+                "x"
+              ]
+            },
+            "right": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "1"
+            }
+          }
+        }
+      }
+    ],
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "arrayMap",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "lambda"
+            ]
+          },
+          {
+            "kind": "arrayLiteral",
             "elements": [
               {
                 "kind": "literal",
@@ -83,7 +530,7 @@
             "alias": "lambda"
           },
           {
-            "kind": "array",
+            "kind": "arrayLiteral",
             "elements": [
               {
                 "kind": "literal",
@@ -116,7 +563,7 @@
             ]
           },
           {
-            "kind": "array",
+            "kind": "arrayLiteral",
             "elements": [
               {
                 "kind": "literal",
@@ -142,6 +589,105 @@
   },
   {
     "kind": "select",
+    "with": [
+      {
+        "kind": "cteExpr",
+        "name": "lambda_1",
+        "expr": {
+          "kind": "lambdaExpr",
+          "params": [
+            "x"
+          ],
+          "body": {
+            "kind": "functionCall",
+            "name": "toString",
+            "args": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "x"
+                ]
+              }
+            ]
+          }
+        }
+      }
+    ],
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "arrayMap",
+        "args": [
+          {
+            "kind": "alias",
+            "expr": {
+              "kind": "columnRef",
+              "parts": [
+                "lambda_1"
+              ]
+            },
+            "alias": "lambda_2"
+          },
+          {
+            "kind": "arrayLiteral",
+            "elements": [
+              {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "1"
+              },
+              {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "2"
+              },
+              {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "3"
+              }
+            ],
+            "source": "[1,2,3]"
+          }
+        ]
+      },
+      {
+        "kind": "functionCall",
+        "name": "arrayMap",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "lambda_2"
+            ]
+          },
+          {
+            "kind": "arrayLiteral",
+            "elements": [
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "1"
+              },
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "2"
+              },
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "3"
+              }
+            ],
+            "source": "['1', '2', '3']"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "select",
     "select": [
       {
         "kind": "functionCall",
@@ -160,7 +706,7 @@
             }
           },
           {
-            "kind": "array",
+            "kind": "arrayLiteral",
             "elements": [
               {
                 "kind": "literal",
@@ -218,7 +764,7 @@
             }
           },
           {
-            "kind": "array",
+            "kind": "arrayLiteral",
             "elements": [
               {
                 "kind": "literal",
@@ -306,7 +852,7 @@
             "alias": "lambda"
           },
           {
-            "kind": "array",
+            "kind": "arrayLiteral",
             "elements": [
               {
                 "kind": "literal",
@@ -325,6 +871,1046 @@
               }
             ],
             "source": "[1,2,3]"
+          }
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "test_table"
+    }
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "test_table_tuple"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "test_table_tuple"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "id",
+        "type": {
+          "name": "UInt64"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "value",
+        "type": {
+          "name": "Tuple",
+          "args": [
+            {
+              "kind": "namedField",
+              "name": "value_0_level_0",
+              "type": {
+                "name": "String"
+              }
+            },
+            {
+              "kind": "namedField",
+              "name": "value_1_level_0",
+              "type": {
+                "name": "String"
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "engine": {
+      "name": "TinyLog"
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "test_table_tuple"
+      }
+    }
+  },
+  {
+    "kind": "select",
+    "with": [
+      {
+        "kind": "cteExpr",
+        "name": "lambda",
+        "expr": {
+          "kind": "lambdaExpr",
+          "params": [
+            "x"
+          ],
+          "body": {
+            "kind": "functionCall",
+            "name": "concat",
+            "args": [
+              {
+                "kind": "functionCall",
+                "name": "concat",
+                "args": [
+                  {
+                    "kind": "functionCall",
+                    "name": "toString",
+                    "args": [
+                      {
+                        "kind": "columnRef",
+                        "parts": [
+                          "x",
+                          "id"
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "kind": "literal",
+                    "type": "String",
+                    "value": "_"
+                  }
+                ]
+              },
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "x",
+                  "value"
+                ]
+              }
+            ]
+          }
+        }
+      }
+    ],
+    "select": [
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "cast",
+          "args": [
+            {
+              "kind": "tupleLiteral",
+              "elements": [
+                {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "1"
+                },
+                {
+                  "kind": "literal",
+                  "type": "String",
+                  "value": "Value"
+                }
+              ],
+              "source": "(1, 'Value')"
+            },
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "Tuple (id UInt64, value String)"
+            }
+          ]
+        },
+        "alias": "value"
+      },
+      {
+        "kind": "functionCall",
+        "name": "lambda",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "value"
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "with": [
+      {
+        "kind": "cteExpr",
+        "name": "lambda",
+        "expr": {
+          "kind": "lambdaExpr",
+          "params": [
+            "x"
+          ],
+          "body": {
+            "kind": "functionCall",
+            "name": "concat",
+            "args": [
+              {
+                "kind": "functionCall",
+                "name": "concat",
+                "args": [
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "x",
+                      "value_0_level_0"
+                    ]
+                  },
+                  {
+                    "kind": "literal",
+                    "type": "String",
+                    "value": "_"
+                  }
+                ]
+              },
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "x",
+                  "value_1_level_0"
+                ]
+              }
+            ]
+          }
+        }
+      }
+    ],
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "lambda",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "value"
+            ]
+          }
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "test_table_tuple"
+    }
+  },
+  {
+    "kind": "select",
+    "with": [
+      {
+        "kind": "cteExpr",
+        "name": "lambda",
+        "expr": {
+          "kind": "lambdaExpr",
+          "params": [
+            "x"
+          ],
+          "body": {
+            "kind": "asterisk"
+          }
+        }
+      }
+    ],
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "lambda",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "1"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "with": [
+      {
+        "kind": "cteExpr",
+        "name": "lambda",
+        "expr": {
+          "kind": "lambdaExpr",
+          "params": [
+            "x"
+          ],
+          "body": {
+            "kind": "asterisk"
+          }
+        }
+      }
+    ],
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "lambda",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "1"
+          }
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "test_table"
+    }
+  },
+  {
+    "kind": "select",
+    "with": [
+      {
+        "kind": "cteExpr",
+        "name": "compound_value",
+        "expr": {
+          "kind": "functionCall",
+          "name": "cast",
+          "args": [
+            {
+              "kind": "functionCall",
+              "name": "tuple",
+              "args": [
+                {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "1"
+                }
+              ]
+            },
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "Tuple (value UInt64)"
+            }
+          ]
+        }
+      }
+    ],
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "arrayMap",
+        "args": [
+          {
+            "kind": "lambdaExpr",
+            "params": [
+              "x"
+            ],
+            "body": {
+              "kind": "qualifiedAsterisk",
+              "parts": [
+                "compound_value"
+              ]
+            }
+          },
+          {
+            "kind": "arrayLiteral",
+            "elements": [
+              {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "1"
+              },
+              {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "2"
+              },
+              {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "3"
+              }
+            ],
+            "source": "[1,2,3]"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "with": [
+      {
+        "kind": "cteExpr",
+        "name": "compound_value",
+        "expr": {
+          "kind": "functionCall",
+          "name": "cast",
+          "args": [
+            {
+              "kind": "functionCall",
+              "name": "tuple",
+              "args": [
+                {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "1"
+                },
+                {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "1"
+                }
+              ]
+            },
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "Tuple (value_1 UInt64, value_2 UInt64)"
+            }
+          ]
+        }
+      }
+    ],
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "arrayMap",
+        "args": [
+          {
+            "kind": "lambdaExpr",
+            "params": [
+              "x"
+            ],
+            "body": {
+              "kind": "qualifiedAsterisk",
+              "parts": [
+                "compound_value"
+              ]
+            }
+          },
+          {
+            "kind": "arrayLiteral",
+            "elements": [
+              {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "1"
+              },
+              {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "2"
+              },
+              {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "3"
+              }
+            ],
+            "source": "[1,2,3]"
+          }
+        ]
+      }
+    ],
+    "trailingComments": [
+      "-- { serverError UNSUPPORTED_METHOD }"
+    ]
+  },
+  {
+    "kind": "select",
+    "with": [
+      {
+        "kind": "cteExpr",
+        "name": "compound_value",
+        "expr": {
+          "kind": "functionCall",
+          "name": "cast",
+          "args": [
+            {
+              "kind": "functionCall",
+              "name": "tuple",
+              "args": [
+                {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "1"
+                },
+                {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "1"
+                }
+              ]
+            },
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "Tuple (value_1 UInt64, value_2 UInt64)"
+            }
+          ]
+        }
+      }
+    ],
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "arrayMap",
+        "args": [
+          {
+            "kind": "lambdaExpr",
+            "params": [
+              "x"
+            ],
+            "body": {
+              "kind": "functionCall",
+              "name": "plus",
+              "args": [
+                {
+                  "kind": "qualifiedAsterisk",
+                  "parts": [
+                    "compound_value"
+                  ]
+                }
+              ]
+            }
+          },
+          {
+            "kind": "arrayLiteral",
+            "elements": [
+              {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "1"
+              },
+              {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "2"
+              },
+              {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "3"
+              }
+            ],
+            "source": "[1,2,3]"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "with": [
+      {
+        "kind": "cteExpr",
+        "name": "compound_value",
+        "expr": {
+          "kind": "functionCall",
+          "name": "cast",
+          "args": [
+            {
+              "kind": "functionCall",
+              "name": "tuple",
+              "args": [
+                {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "1"
+                }
+              ]
+            },
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "Tuple (value UInt64)"
+            }
+          ]
+        }
+      }
+    ],
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "id"
+        ]
+      },
+      {
+        "kind": "qualifiedAsterisk",
+        "parts": [
+          "test_table"
+        ],
+        "transformers": [
+          {
+            "kind": "apply",
+            "func": {
+              "kind": "lambdaExpr",
+              "params": [
+                "x"
+              ],
+              "body": {
+                "kind": "qualifiedAsterisk",
+                "parts": [
+                  "compound_value"
+                ]
+              }
+            }
+          }
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "test_table"
+    }
+  },
+  {
+    "kind": "select",
+    "with": [
+      {
+        "kind": "cteExpr",
+        "name": "compound_value",
+        "expr": {
+          "kind": "functionCall",
+          "name": "cast",
+          "args": [
+            {
+              "kind": "functionCall",
+              "name": "tuple",
+              "args": [
+                {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "1"
+                },
+                {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "1"
+                }
+              ]
+            },
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "Tuple (value_1 UInt64, value_2 UInt64)"
+            }
+          ]
+        }
+      }
+    ],
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "id"
+        ]
+      },
+      {
+        "kind": "qualifiedAsterisk",
+        "parts": [
+          "test_table"
+        ],
+        "transformers": [
+          {
+            "kind": "apply",
+            "func": {
+              "kind": "lambdaExpr",
+              "params": [
+                "x"
+              ],
+              "body": {
+                "kind": "qualifiedAsterisk",
+                "parts": [
+                  "compound_value"
+                ]
+              }
+            }
+          }
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "test_table"
+    },
+    "trailingComments": [
+      "-- { serverError UNSUPPORTED_METHOD }"
+    ]
+  },
+  {
+    "kind": "select",
+    "with": [
+      {
+        "kind": "cteExpr",
+        "name": "compound_value",
+        "expr": {
+          "kind": "functionCall",
+          "name": "cast",
+          "args": [
+            {
+              "kind": "functionCall",
+              "name": "tuple",
+              "args": [
+                {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "1"
+                },
+                {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "1"
+                }
+              ]
+            },
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "Tuple (value_1 UInt64, value_2 UInt64)"
+            }
+          ]
+        }
+      }
+    ],
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "id"
+        ]
+      },
+      {
+        "kind": "qualifiedAsterisk",
+        "parts": [
+          "test_table"
+        ],
+        "transformers": [
+          {
+            "kind": "apply",
+            "func": {
+              "kind": "lambdaExpr",
+              "params": [
+                "x"
+              ],
+              "body": {
+                "kind": "functionCall",
+                "name": "plus",
+                "args": [
+                  {
+                    "kind": "qualifiedAsterisk",
+                    "parts": [
+                      "compound_value"
+                    ]
+                  }
+                ]
+              }
+            }
+          }
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "test_table"
+    }
+  },
+  {
+    "kind": "select",
+    "with": [
+      {
+        "kind": "cteExpr",
+        "name": "lambda",
+        "expr": {
+          "kind": "lambdaExpr",
+          "params": [
+            "x"
+          ],
+          "body": {
+            "kind": "functionCall",
+            "name": "untuple",
+            "args": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "x"
+                ]
+              }
+            ]
+          }
+        }
+      }
+    ],
+    "select": [
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "cast",
+          "args": [
+            {
+              "kind": "tupleLiteral",
+              "elements": [
+                {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "1"
+                },
+                {
+                  "kind": "literal",
+                  "type": "String",
+                  "value": "Value"
+                }
+              ],
+              "source": "(1, 'Value')"
+            },
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "Tuple (id UInt64, value String)"
+            }
+          ]
+        },
+        "alias": "value"
+      },
+      {
+        "kind": "functionCall",
+        "name": "lambda",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "value"
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "with": [
+      {
+        "kind": "cteExpr",
+        "name": "lambda",
+        "expr": {
+          "kind": "lambdaExpr",
+          "params": [
+            "functor",
+            "x"
+          ],
+          "body": {
+            "kind": "functionCall",
+            "name": "functor",
+            "args": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "x"
+                ]
+              }
+            ]
+          }
+        }
+      },
+      {
+        "kind": "cteExpr",
+        "name": "functor_1",
+        "expr": {
+          "kind": "lambdaExpr",
+          "params": [
+            "x"
+          ],
+          "body": {
+            "kind": "binaryExpr",
+            "op": "+",
+            "left": {
+              "kind": "columnRef",
+              "parts": [
+                "x"
+              ]
+            },
+            "right": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "1"
+            }
+          }
+        }
+      },
+      {
+        "kind": "cteExpr",
+        "name": "functor_2",
+        "expr": {
+          "kind": "lambdaExpr",
+          "params": [
+            "x"
+          ],
+          "body": {
+            "kind": "functionCall",
+            "name": "toString",
+            "args": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "x"
+                ]
+              }
+            ]
+          }
+        }
+      }
+    ],
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "lambda",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "functor_1"
+            ]
+          },
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "1"
+          }
+        ]
+      },
+      {
+        "kind": "functionCall",
+        "name": "lambda",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "functor_2"
+            ]
+          },
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "1"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "with": [
+      {
+        "kind": "cteExpr",
+        "name": "lambda",
+        "expr": {
+          "kind": "lambdaExpr",
+          "params": [
+            "functor",
+            "x"
+          ],
+          "body": {
+            "kind": "functionCall",
+            "name": "functor",
+            "args": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "x"
+                ]
+              }
+            ]
+          }
+        }
+      },
+      {
+        "kind": "cteExpr",
+        "name": "functor_1",
+        "expr": {
+          "kind": "lambdaExpr",
+          "params": [
+            "x"
+          ],
+          "body": {
+            "kind": "binaryExpr",
+            "op": "+",
+            "left": {
+              "kind": "columnRef",
+              "parts": [
+                "x"
+              ]
+            },
+            "right": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "1"
+            }
+          }
+        }
+      },
+      {
+        "kind": "cteExpr",
+        "name": "functor_2",
+        "expr": {
+          "kind": "lambdaExpr",
+          "params": [
+            "x"
+          ],
+          "body": {
+            "kind": "functionCall",
+            "name": "toString",
+            "args": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "x"
+                ]
+              }
+            ]
+          }
+        }
+      }
+    ],
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "lambda",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "functor_1"
+            ]
+          },
+          {
+            "kind": "columnRef",
+            "parts": [
+              "id"
+            ]
+          }
+        ]
+      },
+      {
+        "kind": "functionCall",
+        "name": "lambda",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "functor_2"
+            ]
+          },
+          {
+            "kind": "columnRef",
+            "parts": [
+              "id"
+            ]
           }
         ]
       }
@@ -375,7 +1961,83 @@
             ]
           },
           {
-            "kind": "array",
+            "kind": "arrayLiteral",
+            "elements": [
+              {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "1"
+              },
+              {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "2"
+              },
+              {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "3"
+              }
+            ],
+            "source": "[1, 2, 3]"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "with": [
+      {
+        "kind": "cteExpr",
+        "name": "lambda",
+        "expr": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "222"
+        }
+      }
+    ],
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "arrayMap",
+        "args": [
+          {
+            "kind": "functionCall",
+            "name": "lambda",
+            "args": [
+              {
+                "kind": "functionCall",
+                "name": "tuple",
+                "args": [
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "x"
+                    ]
+                  }
+                ]
+              },
+              {
+                "kind": "binaryExpr",
+                "op": "+",
+                "left": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "x"
+                  ]
+                },
+                "right": {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "1"
+                }
+              }
+            ]
+          },
+          {
+            "kind": "arrayLiteral",
             "elements": [
               {
                 "kind": "literal",
@@ -440,7 +2102,7 @@
             ]
           },
           {
-            "kind": "array",
+            "kind": "arrayLiteral",
             "elements": [
               {
                 "kind": "literal",
@@ -476,7 +2138,7 @@
             "name": "lambda",
             "args": [
               {
-                "kind": "tuple",
+                "kind": "tupleLiteral",
                 "elements": [
                   {
                     "kind": "columnRef",
@@ -502,7 +2164,7 @@
             ]
           },
           {
-            "kind": "array",
+            "kind": "arrayLiteral",
             "elements": [
               {
                 "kind": "literal",
@@ -518,7 +2180,7 @@
             "source": "['world', 'hello']"
           },
           {
-            "kind": "array",
+            "kind": "arrayLiteral",
             "elements": [
               {
                 "kind": "literal",
@@ -535,6 +2197,575 @@
           }
         ]
       }
+    ]
+  },
+  {
+    "kind": "select",
+    "with": [
+      {
+        "kind": "cteExpr",
+        "name": "lambda",
+        "expr": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "222"
+        }
+      }
+    ],
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "arrayMap",
+        "args": [
+          {
+            "kind": "functionCall",
+            "name": "lambda",
+            "args": [
+              {
+                "kind": "functionCall",
+                "name": "tuple",
+                "args": [
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "x"
+                    ]
+                  }
+                ]
+              },
+              {
+                "kind": "binaryExpr",
+                "op": "+",
+                "left": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "x"
+                  ]
+                },
+                "right": {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "1"
+                }
+              }
+            ]
+          },
+          {
+            "kind": "arrayLiteral",
+            "elements": [
+              {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "1"
+              },
+              {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "2"
+              },
+              {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "3"
+              }
+            ],
+            "source": "[1, 2, 3]"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "with": [
+      {
+        "kind": "cteExpr",
+        "name": "lambda",
+        "expr": {
+          "kind": "lambdaExpr",
+          "params": [
+            "x"
+          ],
+          "body": {
+            "kind": "binaryExpr",
+            "op": "+",
+            "left": {
+              "kind": "columnRef",
+              "parts": [
+                "x"
+              ]
+            },
+            "right": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "1"
+            }
+          }
+        }
+      }
+    ],
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "arrayMap",
+        "args": [
+          {
+            "kind": "functionCall",
+            "name": "lambda",
+            "args": [
+              {
+                "kind": "functionCall",
+                "name": "tuple",
+                "args": [
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "x"
+                    ]
+                  }
+                ]
+              },
+              {
+                "kind": "binaryExpr",
+                "op": "+",
+                "left": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "x"
+                  ]
+                },
+                "right": {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "1"
+                }
+              }
+            ]
+          },
+          {
+            "kind": "arrayLiteral",
+            "elements": [
+              {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "1"
+              },
+              {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "2"
+              },
+              {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "3"
+              }
+            ],
+            "source": "[1, 2, 3]"
+          }
+        ]
+      },
+      {
+        "kind": "functionCall",
+        "name": "lambda",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "1"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "with": [
+      {
+        "kind": "cteExpr",
+        "name": "lambda",
+        "expr": {
+          "kind": "lambdaExpr",
+          "params": [
+            "x",
+            "y"
+          ],
+          "body": {
+            "kind": "columnRef",
+            "parts": [
+              "y"
+            ]
+          }
+        }
+      }
+    ],
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "arrayMap",
+        "args": [
+          {
+            "kind": "functionCall",
+            "name": "lambda",
+            "args": [
+              {
+                "kind": "functionCall",
+                "name": "tuple",
+                "args": [
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "x"
+                    ]
+                  }
+                ]
+              },
+              {
+                "kind": "binaryExpr",
+                "op": "+",
+                "left": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "x"
+                  ]
+                },
+                "right": {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "1"
+                }
+              }
+            ]
+          },
+          {
+            "kind": "arrayLiteral",
+            "elements": [
+              {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "1"
+              },
+              {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "2"
+              },
+              {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "3"
+              }
+            ],
+            "source": "[1, 2, 3]"
+          }
+        ]
+      },
+      {
+        "kind": "functionCall",
+        "name": "lambda",
+        "args": [
+          {
+            "kind": "functionCall",
+            "name": "tuple",
+            "args": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "x"
+                ]
+              }
+            ]
+          },
+          {
+            "kind": "binaryExpr",
+            "op": "+",
+            "left": {
+              "kind": "columnRef",
+              "parts": [
+                "x"
+              ]
+            },
+            "right": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "1"
+            }
+          }
+        ]
+      },
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        },
+        "alias": "x"
+      }
+    ],
+    "leadingComments": [
+      "-- lambda(tuple(x), x + 1) parsed as lambda definion but not as call of lambda defined in WITH"
+    ],
+    "trailingComments": [
+      "-- { serverError BAD_ARGUMENTS }"
+    ]
+  },
+  {
+    "kind": "select",
+    "with": [
+      {
+        "kind": "cteExpr",
+        "name": "lambda2",
+        "expr": {
+          "kind": "lambdaExpr",
+          "params": [
+            "x",
+            "y"
+          ],
+          "body": {
+            "kind": "columnRef",
+            "parts": [
+              "y"
+            ]
+          }
+        }
+      }
+    ],
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "arrayMap",
+        "args": [
+          {
+            "kind": "functionCall",
+            "name": "lambda",
+            "args": [
+              {
+                "kind": "functionCall",
+                "name": "tuple",
+                "args": [
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "x"
+                    ]
+                  }
+                ]
+              },
+              {
+                "kind": "binaryExpr",
+                "op": "+",
+                "left": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "x"
+                  ]
+                },
+                "right": {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "1"
+                }
+              }
+            ]
+          },
+          {
+            "kind": "arrayLiteral",
+            "elements": [
+              {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "1"
+              },
+              {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "2"
+              },
+              {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "3"
+              }
+            ],
+            "source": "[1, 2, 3]"
+          }
+        ]
+      },
+      {
+        "kind": "functionCall",
+        "name": "lambda2",
+        "args": [
+          {
+            "kind": "functionCall",
+            "name": "tuple",
+            "args": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "x"
+                ]
+              }
+            ]
+          },
+          {
+            "kind": "binaryExpr",
+            "op": "+",
+            "left": {
+              "kind": "columnRef",
+              "parts": [
+                "x"
+              ]
+            },
+            "right": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "1"
+            }
+          }
+        ]
+      },
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        },
+        "alias": "x"
+      }
+    ]
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "test_table_tuple"
+    }
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "test_table"
+    }
+  },
+  {
+    "kind": "select",
+    "with": [
+      {
+        "kind": "cteExpr",
+        "name": "lambda",
+        "expr": {
+          "kind": "lambdaExpr",
+          "params": [
+            "x"
+          ],
+          "body": {
+            "kind": "binaryExpr",
+            "op": "+",
+            "left": {
+              "kind": "functionCall",
+              "name": "lambda",
+              "args": [
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "x"
+                  ]
+                }
+              ]
+            },
+            "right": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "1"
+            },
+            "parenthesized": true
+          }
+        }
+      }
+    ],
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "lambda",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "1"
+          }
+        ]
+      }
+    ],
+    "trailingComments": [
+      "-- {serverError UNSUPPORTED_METHOD }"
+    ]
+  },
+  {
+    "kind": "select",
+    "with": [
+      {
+        "kind": "cteExpr",
+        "name": "lambda",
+        "expr": {
+          "kind": "lambdaExpr",
+          "params": [
+            "x"
+          ],
+          "body": {
+            "kind": "binaryExpr",
+            "op": "+",
+            "left": {
+              "kind": "functionCall",
+              "name": "lambda1",
+              "args": [
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "x"
+                  ]
+                }
+              ]
+            },
+            "right": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "1"
+            },
+            "parenthesized": true
+          }
+        }
+      },
+      {
+        "kind": "cteExpr",
+        "name": "lambda1",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "lambda"
+          ]
+        }
+      }
+    ],
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "lambda",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "1"
+          }
+        ]
+      }
+    ],
+    "trailingComments": [
+      "-- {serverError UNSUPPORTED_METHOD }"
     ]
   }
 ]

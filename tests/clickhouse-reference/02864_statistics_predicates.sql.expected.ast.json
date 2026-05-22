@@ -1,5 +1,731 @@
 [
   {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "allow_experimental_statistics",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ],
+    "leadingComments": [
+      "-- Tags: no-fasttest",
+      "-- no-fasttest: 'countmin' sketches need a 3rd party library",
+      "-- Tests the cross product of all predicates with all right-hand sides on all data types and all statistics types."
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "use_statistics",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "tab"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "tab"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "u64",
+        "type": {
+          "name": "UInt64"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "u64_tdigest",
+        "type": {
+          "name": "UInt64"
+        },
+        "statistics": [
+          {
+            "name": "tdigest"
+          }
+        ]
+      },
+      {
+        "kind": "columnDef",
+        "name": "u64_minmax",
+        "type": {
+          "name": "UInt64"
+        },
+        "statistics": [
+          {
+            "name": "minmax"
+          }
+        ]
+      },
+      {
+        "kind": "columnDef",
+        "name": "u64_countmin",
+        "type": {
+          "name": "UInt64"
+        },
+        "statistics": [
+          {
+            "name": "countmin"
+          }
+        ]
+      },
+      {
+        "kind": "columnDef",
+        "name": "u64_uniq",
+        "type": {
+          "name": "UInt64"
+        },
+        "statistics": [
+          {
+            "name": "uniq"
+          }
+        ]
+      },
+      {
+        "kind": "columnDef",
+        "name": "f64",
+        "type": {
+          "name": "Float64"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "f64_tdigest",
+        "type": {
+          "name": "Float64"
+        },
+        "statistics": [
+          {
+            "name": "tdigest"
+          }
+        ]
+      },
+      {
+        "kind": "columnDef",
+        "name": "f64_minmax",
+        "type": {
+          "name": "Float64"
+        },
+        "statistics": [
+          {
+            "name": "minmax"
+          }
+        ]
+      },
+      {
+        "kind": "columnDef",
+        "name": "f64_countmin",
+        "type": {
+          "name": "Float64"
+        },
+        "statistics": [
+          {
+            "name": "countmin"
+          }
+        ]
+      },
+      {
+        "kind": "columnDef",
+        "name": "f64_uniq",
+        "type": {
+          "name": "Float64"
+        },
+        "statistics": [
+          {
+            "name": "uniq"
+          }
+        ]
+      },
+      {
+        "kind": "columnDef",
+        "name": "dt",
+        "type": {
+          "name": "DateTime"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "dt_tdigest",
+        "type": {
+          "name": "DateTime"
+        },
+        "statistics": [
+          {
+            "name": "tdigest"
+          }
+        ]
+      },
+      {
+        "kind": "columnDef",
+        "name": "dt_minmax",
+        "type": {
+          "name": "DateTime"
+        },
+        "statistics": [
+          {
+            "name": "minmax"
+          }
+        ]
+      },
+      {
+        "kind": "columnDef",
+        "name": "dt_countmin",
+        "type": {
+          "name": "DateTime"
+        },
+        "statistics": [
+          {
+            "name": "countmin"
+          }
+        ]
+      },
+      {
+        "kind": "columnDef",
+        "name": "dt_uniq",
+        "type": {
+          "name": "DateTime"
+        },
+        "statistics": [
+          {
+            "name": "uniq"
+          }
+        ]
+      },
+      {
+        "kind": "columnDef",
+        "name": "b",
+        "type": {
+          "name": "Bool"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "b_tdigest",
+        "type": {
+          "name": "Bool"
+        },
+        "statistics": [
+          {
+            "name": "tdigest"
+          }
+        ]
+      },
+      {
+        "kind": "columnDef",
+        "name": "b_minmax",
+        "type": {
+          "name": "Bool"
+        },
+        "statistics": [
+          {
+            "name": "minmax"
+          }
+        ]
+      },
+      {
+        "kind": "columnDef",
+        "name": "b_countmin",
+        "type": {
+          "name": "Bool"
+        },
+        "statistics": [
+          {
+            "name": "countmin"
+          }
+        ]
+      },
+      {
+        "kind": "columnDef",
+        "name": "b_uniq",
+        "type": {
+          "name": "Bool"
+        },
+        "statistics": [
+          {
+            "name": "uniq"
+          }
+        ]
+      },
+      {
+        "kind": "columnDef",
+        "name": "s",
+        "type": {
+          "name": "String"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "s_countmin",
+        "type": {
+          "name": "String"
+        },
+        "statistics": [
+          {
+            "name": "countmin"
+          }
+        ]
+      },
+      {
+        "kind": "columnDef",
+        "name": "s_uniq",
+        "type": {
+          "name": "String"
+        },
+        "statistics": [
+          {
+            "name": "uniq"
+          }
+        ]
+      }
+    ],
+    "engine": {
+      "name": "MergeTree",
+      "args": []
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "functionCall",
+          "name": "tuple",
+          "args": []
+        }
+      }
+    ],
+    "settings": [
+      {
+        "name": "min_bytes_for_wide_part",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      }
+    ],
+    "settingsAfterOrderBy": true
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "tab"
+      }
+    },
+    "selectQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "binaryExpr",
+          "op": "%",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "number"
+            ]
+          },
+          "right": {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "1000"
+          },
+          "trailingComments": [
+            "-- u64"
+          ]
+        },
+        {
+          "kind": "binaryExpr",
+          "op": "%",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "number"
+            ]
+          },
+          "right": {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "1000"
+          }
+        },
+        {
+          "kind": "binaryExpr",
+          "op": "%",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "number"
+            ]
+          },
+          "right": {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "1000"
+          }
+        },
+        {
+          "kind": "binaryExpr",
+          "op": "%",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "number"
+            ]
+          },
+          "right": {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "1000"
+          }
+        },
+        {
+          "kind": "binaryExpr",
+          "op": "%",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "number"
+            ]
+          },
+          "right": {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "1000"
+          }
+        },
+        {
+          "kind": "binaryExpr",
+          "op": "%",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "number"
+            ]
+          },
+          "right": {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "1000"
+          },
+          "trailingComments": [
+            "-- f64"
+          ]
+        },
+        {
+          "kind": "binaryExpr",
+          "op": "%",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "number"
+            ]
+          },
+          "right": {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "1000"
+          }
+        },
+        {
+          "kind": "binaryExpr",
+          "op": "%",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "number"
+            ]
+          },
+          "right": {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "1000"
+          }
+        },
+        {
+          "kind": "binaryExpr",
+          "op": "%",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "number"
+            ]
+          },
+          "right": {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "1000"
+          }
+        },
+        {
+          "kind": "binaryExpr",
+          "op": "%",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "number"
+            ]
+          },
+          "right": {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "1000"
+          }
+        },
+        {
+          "kind": "binaryExpr",
+          "op": "%",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "number"
+            ]
+          },
+          "right": {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "1000"
+          },
+          "trailingComments": [
+            "-- dt"
+          ]
+        },
+        {
+          "kind": "binaryExpr",
+          "op": "%",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "number"
+            ]
+          },
+          "right": {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "1000"
+          }
+        },
+        {
+          "kind": "binaryExpr",
+          "op": "%",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "number"
+            ]
+          },
+          "right": {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "1000"
+          }
+        },
+        {
+          "kind": "binaryExpr",
+          "op": "%",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "number"
+            ]
+          },
+          "right": {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "1000"
+          }
+        },
+        {
+          "kind": "binaryExpr",
+          "op": "%",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "number"
+            ]
+          },
+          "right": {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "1000"
+          }
+        },
+        {
+          "kind": "binaryExpr",
+          "op": "%",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "number"
+            ]
+          },
+          "right": {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "2"
+          },
+          "trailingComments": [
+            "-- b"
+          ]
+        },
+        {
+          "kind": "binaryExpr",
+          "op": "%",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "number"
+            ]
+          },
+          "right": {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "2"
+          }
+        },
+        {
+          "kind": "binaryExpr",
+          "op": "%",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "number"
+            ]
+          },
+          "right": {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "2"
+          }
+        },
+        {
+          "kind": "binaryExpr",
+          "op": "%",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "number"
+            ]
+          },
+          "right": {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "2"
+          }
+        },
+        {
+          "kind": "binaryExpr",
+          "op": "%",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "number"
+            ]
+          },
+          "right": {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "2"
+          }
+        },
+        {
+          "kind": "functionCall",
+          "name": "toString",
+          "args": [
+            {
+              "kind": "binaryExpr",
+              "op": "%",
+              "left": {
+                "kind": "columnRef",
+                "parts": [
+                  "number"
+                ]
+              },
+              "right": {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "1000"
+              }
+            }
+          ]
+        },
+        {
+          "kind": "functionCall",
+          "name": "toString",
+          "args": [
+            {
+              "kind": "binaryExpr",
+              "op": "%",
+              "left": {
+                "kind": "columnRef",
+                "parts": [
+                  "number"
+                ]
+              },
+              "right": {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "1000"
+              }
+            }
+          ]
+        },
+        {
+          "kind": "functionCall",
+          "name": "toString",
+          "args": [
+            {
+              "kind": "binaryExpr",
+              "op": "%",
+              "left": {
+                "kind": "columnRef",
+                "parts": [
+                  "number"
+                ]
+              },
+              "right": {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "1000"
+              }
+            }
+          ]
+        }
+      ],
+      "from": {
+        "kind": "tableRef",
+        "database": "system",
+        "table": "numbers"
+      },
+      "limit": {
+        "count": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "10000"
+        }
+      }
+    }
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -525,7 +1251,10 @@
         "type": "String",
         "value": "7.7"
       }
-    }
+    },
+    "trailingComments": [
+      "-- { serverError TYPE_MISMATCH }"
+    ]
   },
   {
     "kind": "select",
@@ -558,7 +1287,10 @@
         "type": "String",
         "value": "7.7"
       }
-    }
+    },
+    "trailingComments": [
+      "-- { serverError TYPE_MISMATCH }"
+    ]
   },
   {
     "kind": "select",
@@ -591,7 +1323,10 @@
         "type": "String",
         "value": "7.7"
       }
-    }
+    },
+    "trailingComments": [
+      "-- { serverError TYPE_MISMATCH }"
+    ]
   },
   {
     "kind": "select",
@@ -624,7 +1359,10 @@
         "type": "String",
         "value": "7.7"
       }
-    }
+    },
+    "trailingComments": [
+      "-- { serverError TYPE_MISMATCH }"
+    ]
   },
   {
     "kind": "select",
@@ -657,7 +1395,10 @@
         "type": "String",
         "value": "7.7"
       }
-    }
+    },
+    "trailingComments": [
+      "-- { serverError TYPE_MISMATCH }"
+    ]
   },
   {
     "kind": "select",
@@ -1185,7 +1926,10 @@
         "type": "String",
         "value": "7.7"
       }
-    }
+    },
+    "trailingComments": [
+      "-- { serverError TYPE_MISMATCH }"
+    ]
   },
   {
     "kind": "select",
@@ -1218,7 +1962,10 @@
         "type": "String",
         "value": "7.7"
       }
-    }
+    },
+    "trailingComments": [
+      "-- { serverError TYPE_MISMATCH }"
+    ]
   },
   {
     "kind": "select",
@@ -1251,7 +1998,10 @@
         "type": "String",
         "value": "7.7"
       }
-    }
+    },
+    "trailingComments": [
+      "-- { serverError TYPE_MISMATCH }"
+    ]
   },
   {
     "kind": "select",
@@ -1284,7 +2034,10 @@
         "type": "String",
         "value": "7.7"
       }
-    }
+    },
+    "trailingComments": [
+      "-- { serverError TYPE_MISMATCH }"
+    ]
   },
   {
     "kind": "select",
@@ -1317,7 +2070,10 @@
         "type": "String",
         "value": "7.7"
       }
-    }
+    },
+    "trailingComments": [
+      "-- { serverError TYPE_MISMATCH }"
+    ]
   },
   {
     "kind": "select",
@@ -3990,7 +4746,10 @@
         "type": "UInt64",
         "value": "7"
       }
-    }
+    },
+    "trailingComments": [
+      "-- { serverError NO_COMMON_TYPE }"
+    ]
   },
   {
     "kind": "select",
@@ -4023,7 +4782,14 @@
         "type": "UInt64",
         "value": "7"
       }
-    }
+    },
+    "leadingComments": [
+      "-- SELECT count(*) FROM tab WHERE s_tdigest = 7; -- not supported",
+      "-- SELECT count(*) FROM tab WHERE s_minmax = 7; -- not supported"
+    ],
+    "trailingComments": [
+      "-- { serverError NO_COMMON_TYPE }"
+    ]
   },
   {
     "kind": "select",
@@ -4056,7 +4822,10 @@
         "type": "UInt64",
         "value": "7"
       }
-    }
+    },
+    "trailingComments": [
+      "-- { serverError NO_COMMON_TYPE }"
+    ]
   },
   {
     "kind": "select",
@@ -4122,7 +4891,11 @@
         "type": "String",
         "value": "7"
       }
-    }
+    },
+    "leadingComments": [
+      "-- SELECT count(*) FROM tab WHERE s_tdigest = '7'; -- not supported",
+      "-- SELECT count(*) FROM tab WHERE s_minmax = '7'; -- not supported"
+    ]
   },
   {
     "kind": "select",
@@ -4155,6 +4928,14 @@
         "type": "String",
         "value": "7"
       }
+    }
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "tab"
     }
   }
 ]

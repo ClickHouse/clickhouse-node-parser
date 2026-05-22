@@ -24,15 +24,15 @@ SELECT splitByRegexp('^', 'a^b^c');
 
 SELECT splitByRegexp('$', 'a$b$c');
 
-SELECT splitByRegexp('+', 'a+b+c');
+SELECT splitByRegexp('+', 'a+b+c'); -- { serverError CANNOT_COMPILE_REGEXP }
 
-SELECT splitByRegexp('?', 'a?b?c');
+SELECT splitByRegexp('?', 'a?b?c'); -- { serverError CANNOT_COMPILE_REGEXP }
 
-SELECT splitByRegexp('(', 'a(b(c');
+SELECT splitByRegexp('(', 'a(b(c'); -- { serverError CANNOT_COMPILE_REGEXP }
 
 SELECT splitByRegexp(')', 'a)b)c');
 
-SELECT splitByRegexp('[', 'a[b[c');
+SELECT splitByRegexp('[', 'a[b[c'); -- { serverError CANNOT_COMPILE_REGEXP }
 
 SELECT splitByRegexp(']', 'a]b]c');
 
@@ -44,4 +44,4 @@ SELECT splitByRegexp('|', 'a|b|c');
 
 SELECT splitByRegexp('\\', 'a\\b\\c');
 
-SELECT splitByRegexp(materialize(1), NULL, 3);
+SELECT splitByRegexp(materialize(1), NULL, 3); -- { serverError ILLEGAL_COLUMN }

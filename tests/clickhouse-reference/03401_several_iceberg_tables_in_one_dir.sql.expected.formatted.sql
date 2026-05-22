@@ -1,3 +1,5 @@
+-- Tags: no-fasttest
+-- Tag no-fasttest: Depends on AWS
 SELECT *
 FROM icebergS3(s3_conn, filename = 'merged_several_tables_test' SETTINGS iceberg_metadata_table_uuid = 'ea8d1178-7756-4b89-b21f-00e9f31fe03e')
 ORDER BY id ASC;
@@ -12,7 +14,7 @@ ORDER BY id ASC;
 
 SELECT *
 FROM icebergS3(s3_conn, filename = 'merged_several_tables_test' SETTINGS iceberg_metadata_table_uuid = '88005553-5352-8222-8993-abacaba01010')
-ORDER BY id ASC;
+ORDER BY id ASC; -- { serverError FILE_DOESNT_EXIST }
 
 SELECT count()
 FROM icebergS3(s3_conn, filename = 'merged_several_tables_test' SETTINGS iceberg_metadata_file_path = 'metadata/00001-aec4e034-3f73-48f7-87ad-51b7b42a8db7.metadata.json');

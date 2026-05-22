@@ -1,0 +1,7 @@
+(SELECT 1);
+
+(SELECT 2)
+UNION ALL
+(SELECT 2);
+
+(SELECT (3));

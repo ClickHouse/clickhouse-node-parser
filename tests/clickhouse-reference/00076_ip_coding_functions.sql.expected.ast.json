@@ -1,5 +1,18 @@
 [
   {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "cast_ipv4_ipv6_default_on_conversion_error",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -849,6 +862,58 @@
           }
         ]
       }
+    ],
+    "leadingComments": [
+      "/* IPv4ToIPv6 */"
+    ]
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "addresses"
+    },
+    "ifExists": true,
+    "leadingComments": [
+      "/* Тест с таблицей */"
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "addresses"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "addr",
+        "type": {
+          "name": "UInt32"
+        }
+      }
+    ],
+    "engine": {
+      "name": "Memory"
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "addresses"
+      }
+    },
+    "columns": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "addr"
+        ]
+      }
     ]
   },
   {
@@ -920,6 +985,10 @@
           }
         ]
       }
+    ],
+    "leadingComments": [
+      "/* cutIPv6 */",
+      "/*  Реальный IPv6-адрес */"
     ]
   },
   {
@@ -1987,6 +2056,9 @@
           }
         ]
       }
+    ],
+    "leadingComments": [
+      "/*  IPv4-mapped IPv6-адрес */"
     ]
   },
   {
@@ -3361,6 +3433,43 @@
             "type": "UInt64",
             "value": "16"
           }
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "addresses"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "addr",
+        "type": {
+          "name": "String"
+        }
+      }
+    ],
+    "engine": {
+      "name": "Memory"
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "addresses"
+      }
+    },
+    "columns": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "addr"
         ]
       }
     ]
@@ -3426,6 +3535,24 @@
     ]
   },
   {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "addresses"
+      }
+    },
+    "columns": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "addr"
+        ]
+      }
+    ]
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -3484,5 +3611,13 @@
         "direction": "ASC"
       }
     ]
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "addresses"
+    }
   }
 ]

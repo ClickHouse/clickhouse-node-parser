@@ -1,2 +1,24 @@
+DROP TABLE IF EXISTS t;
+
+CREATE TABLE t
+(
+    i int,
+    j int,
+    PROJECTION p (    SELECT i
+    ORDER BY i ASC)
+)
+ENGINE = MergeTree
+ORDER BY tuple();
+
+INSERT INTO t;
+
+SYSTEM stop merges t;
+
+SET alter_sync = 0;
+
+ALTER TABLE t RENAME COLUMN j TO k;
+
 SELECT *
 FROM t;
+
+DROP TABLE t;

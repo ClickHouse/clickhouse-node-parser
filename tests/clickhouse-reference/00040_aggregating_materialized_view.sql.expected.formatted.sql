@@ -1,3 +1,22 @@
+-- Tags: stateful
+DROP TABLE IF EXISTS basic_00040;
+
+SET allow_deprecated_syntax_for_merge_tree = 1;
+
+CREATE MATERIALIZED VIEW basic_00040
+ENGINE = AggregatingMergeTree(StartDate, (CounterID, StartDate), 8192)
+POPULATE
+AS
+SELECT
+    CounterID,
+    StartDate,
+    sumState(Sign) AS Visits,
+    uniqState(UserID) AS Users
+FROM test.visits
+GROUP BY
+    CounterID,
+    StartDate;
+
 SELECT
     StartDate,
     sumMerge(Visits) AS Visits,
@@ -23,3 +42,5 @@ FROM test.visits
 WHERE CounterID = 942285
 GROUP BY StartDate
 ORDER BY StartDate ASC;
+
+DROP TABLE basic_00040;

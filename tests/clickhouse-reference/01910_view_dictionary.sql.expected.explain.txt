@@ -1,3 +1,63 @@
+DropQuery  dictionary_source_en (children 1)
+ Identifier dictionary_source_en
+
+DropQuery  dictionary_source_ru (children 1)
+ Identifier dictionary_source_ru
+
+DropQuery  dictionary_source_view (children 1)
+ Identifier dictionary_source_view
+
+DropQuery  flat_dictionary (children 1)
+ Identifier flat_dictionary
+
+CreateQuery dictionary_source_en (children 3)
+ Identifier dictionary_source_en
+ Columns definition (children 1)
+  ExpressionList (children 2)
+   ColumnDeclaration id (children 1)
+    DataType UInt64
+   ColumnDeclaration value (children 1)
+    DataType String
+ Storage definition (children 1)
+  Function TinyLog
+
+InsertQuery   (children 1)
+ Identifier dictionary_source_en
+
+CreateQuery dictionary_source_ru (children 3)
+ Identifier dictionary_source_ru
+ Columns definition (children 1)
+  ExpressionList (children 2)
+   ColumnDeclaration id (children 1)
+    DataType UInt64
+   ColumnDeclaration value (children 1)
+    DataType String
+ Storage definition (children 1)
+  Function TinyLog
+
+InsertQuery   (children 1)
+ Identifier dictionary_source_ru
+
+CreateQuery dictionary_source_view (children 2)
+ Identifier dictionary_source_view
+ SelectWithUnionQuery (children 1)
+  ExpressionList (children 1)
+   SelectQuery (children 2)
+    ExpressionList (children 3)
+     Identifier id
+     Identifier dictionary_source_en.value (alias value_en)
+     Identifier dictionary_source_ru.value (alias value_ru)
+    TablesInSelectQuery (children 2)
+     TablesInSelectQueryElement (children 1)
+      TableExpression (children 1)
+       TableIdentifier dictionary_source_en
+     TablesInSelectQueryElement (children 2)
+      TableExpression (children 1)
+       TableIdentifier dictionary_source_ru
+      TableJoin (children 1)
+       ExpressionList (children 1)
+        Identifier id
+
 SelectWithUnionQuery (children 1)
  ExpressionList (children 1)
   SelectQuery (children 3)
@@ -10,6 +70,35 @@ SelectWithUnionQuery (children 1)
    ExpressionList (children 1)
     OrderByElement (children 1)
      Identifier id
+
+CreateQuery flat_dictionary (children 3)
+ Identifier flat_dictionary
+ ExpressionList (children 3)
+  DictionaryAttributeDeclaration id (children 1)
+   DataType UInt64
+  DictionaryAttributeDeclaration value_en (children 1)
+   DataType String
+  DictionaryAttributeDeclaration value_ru (children 1)
+   DataType String
+ Dictionary definition (children 4)
+  ExpressionList (children 1)
+   Identifier id
+  FunctionWithKeyValueArguments  clickhouse (children 1)
+   ExpressionList (children 5)
+    pair (children 1)
+     Literal 'localhost'
+    pair (children 1)
+     Function tcpPort (children 1)
+      ExpressionList
+    pair (children 1)
+     Literal 'default'
+    pair (children 1)
+     Literal ''
+    pair (children 1)
+     Literal 'dictionary_source_view'
+  Dictionary lifetime
+  Dictionary layout (children 1)
+   ExpressionList
 
 SelectWithUnionQuery (children 1)
  ExpressionList (children 1)
@@ -45,3 +134,15 @@ SelectWithUnionQuery (children 1)
       Function numbers (children 1)
        ExpressionList (children 1)
         Literal UInt64_3
+
+DropQuery  dictionary_source_en (children 1)
+ Identifier dictionary_source_en
+
+DropQuery  dictionary_source_ru (children 1)
+ Identifier dictionary_source_ru
+
+DropQuery  flat_dictionary (children 1)
+ Identifier flat_dictionary
+
+DropQuery  dictionary_source_view (children 1)
+ Identifier dictionary_source_view

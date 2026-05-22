@@ -1,5 +1,93 @@
 [
   {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "parallel_replicas_local_plan",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "tab"
+    },
+    "ifExists": true,
+    "leadingComments": [
+      "-- Test for issue #75523"
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "tab"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "id",
+        "type": {
+          "name": "UInt64"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "col",
+        "type": {
+          "name": "Float"
+        }
+      },
+      {
+        "kind": "indexDef",
+        "name": "col_idx",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "col"
+          ]
+        },
+        "indexType": {
+          "name": "minmax"
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree",
+      "args": []
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "id"
+          ]
+        }
+      }
+    ],
+    "trailingComments": [
+      "-- This is important. We want to have additional primary index that does not use the column `col`."
+    ]
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "tab"
+      }
+    }
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -305,7 +393,10 @@
         "value": "2"
       },
       "commaSyntax": true
-    }
+    },
+    "trailingComments": [
+      "-- Skip the primary index parts and granules."
+    ]
   },
   {
     "kind": "select",
@@ -441,7 +532,10 @@
         "value": "2"
       },
       "commaSyntax": true
-    }
+    },
+    "trailingComments": [
+      "-- Skip the primary index parts and granules."
+    ]
   },
   {
     "kind": "select",
@@ -577,7 +671,10 @@
         "value": "2"
       },
       "commaSyntax": true
-    }
+    },
+    "trailingComments": [
+      "-- Skip the primary index parts and granules."
+    ]
   },
   {
     "kind": "select",
@@ -713,6 +810,17 @@
         "value": "2"
       },
       "commaSyntax": true
+    },
+    "trailingComments": [
+      "-- Skip the primary index parts and granules."
+    ]
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "tab"
     }
   }
 ]

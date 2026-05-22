@@ -1,3 +1,4 @@
+-- { echo }
 SELECT materialize([[13]])[1::Int8];
 
 SELECT materialize([['Hello']])[1::Int8];

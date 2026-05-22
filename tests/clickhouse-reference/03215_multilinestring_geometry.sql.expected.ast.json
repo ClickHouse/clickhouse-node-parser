@@ -13,6 +13,9 @@
           }
         ]
       }
+    ],
+    "leadingComments": [
+      "-- { echoOn }"
     ]
   },
   {
@@ -121,6 +124,325 @@
   },
   {
     "kind": "select",
+    "with": [
+      {
+        "kind": "cteExpr",
+        "name": "x",
+        "expr": {
+          "kind": "functionCall",
+          "name": "wkt",
+          "args": [
+            {
+              "kind": "functionCall",
+              "name": "CAST",
+              "args": [
+                {
+                  "kind": "arrayLiteral",
+                  "elements": [
+                    {
+                      "kind": "arrayLiteral",
+                      "elements": [
+                        {
+                          "kind": "tupleLiteral",
+                          "elements": [
+                            {
+                              "kind": "literal",
+                              "type": "UInt64",
+                              "value": "1"
+                            },
+                            {
+                              "kind": "literal",
+                              "type": "UInt64",
+                              "value": "1"
+                            }
+                          ],
+                          "source": "(1, 1)"
+                        },
+                        {
+                          "kind": "tupleLiteral",
+                          "elements": [
+                            {
+                              "kind": "literal",
+                              "type": "UInt64",
+                              "value": "2"
+                            },
+                            {
+                              "kind": "literal",
+                              "type": "UInt64",
+                              "value": "2"
+                            }
+                          ],
+                          "source": "(2, 2)"
+                        },
+                        {
+                          "kind": "tupleLiteral",
+                          "elements": [
+                            {
+                              "kind": "literal",
+                              "type": "UInt64",
+                              "value": "3"
+                            },
+                            {
+                              "kind": "literal",
+                              "type": "UInt64",
+                              "value": "3"
+                            }
+                          ],
+                          "source": "(3, 3)"
+                        },
+                        {
+                          "kind": "tupleLiteral",
+                          "elements": [
+                            {
+                              "kind": "literal",
+                              "type": "UInt64",
+                              "value": "1"
+                            },
+                            {
+                              "kind": "literal",
+                              "type": "UInt64",
+                              "value": "1"
+                            }
+                          ],
+                          "source": "(1, 1)"
+                        }
+                      ],
+                      "source": "[(1, 1), (2, 2), (3, 3), (1, 1)]"
+                    }
+                  ],
+                  "source": "[[(1, 1), (2, 2), (3, 3), (1, 1)]]"
+                },
+                {
+                  "kind": "literal",
+                  "type": "String",
+                  "value": "Array(Array(Tuple(Float64, Float64)))"
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ],
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "x"
+        ]
+      },
+      {
+        "kind": "functionCall",
+        "name": "toTypeName",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "x"
+            ]
+          }
+        ]
+      },
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "readWKTPolygon",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "x"
+              ]
+            }
+          ]
+        },
+        "alias": "y"
+      },
+      {
+        "kind": "functionCall",
+        "name": "toTypeName",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "y"
+            ]
+          }
+        ]
+      }
+    ],
+    "leadingComments": [
+      "-- Native Array(Array(Tuple(Float64, Float64))) is treated as Polygon, not as MultiLineString."
+    ]
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "t"
+    },
+    "ifExists": true,
+    "leadingComments": [
+      "-- Non constant tests"
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "t"
+    },
+    "ifNotExists": true,
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "shape",
+        "type": {
+          "name": "Array",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "Array",
+                "args": [
+                  {
+                    "kind": "type",
+                    "type": {
+                      "name": "Tuple",
+                      "args": [
+                        {
+                          "kind": "type",
+                          "type": {
+                            "name": "Float64"
+                          }
+                        },
+                        {
+                          "kind": "type",
+                          "type": {
+                            "name": "Float64"
+                          }
+                        }
+                      ]
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "wkt_string",
+        "type": {
+          "name": "String"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "ord",
+        "type": {
+          "name": "Float64"
+        }
+      }
+    ],
+    "engine": {
+      "name": "Memory"
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "t"
+      }
+    },
+    "columns": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "ord"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "shape"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "wkt_string"
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "t"
+      }
+    },
+    "columns": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "ord"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "shape"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "wkt_string"
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "t"
+      }
+    },
+    "columns": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "ord"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "shape"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "wkt_string"
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "select",
     "select": [
       {
         "kind": "functionCall",
@@ -184,6 +506,10 @@
         },
         "direction": "ASC"
       }
+    ],
+    "leadingComments": [
+      "-- Native Array(Array(Tuple(Float64, Float64))) is treated as Polygon, not as MultiLineString.",
+      "-- but reading MultiLineString should still return an Array(Array(Tuple(Float64, Float64)))"
     ]
   }
 ]

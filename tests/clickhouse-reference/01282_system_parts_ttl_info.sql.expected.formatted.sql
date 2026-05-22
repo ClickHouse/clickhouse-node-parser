@@ -1,3 +1,18 @@
+DROP TABLE IF EXISTS ttl;
+
+CREATE TABLE ttl
+(
+    d DateTime
+)
+ENGINE = MergeTree
+ORDER BY tuple()
+TTL d + toIntervalDay(10)
+SETTINGS remove_empty_parts = 0;
+
+SYSTEM STOP MERGES ttl;
+
+INSERT INTO ttl;
+
 SELECT
     `rows`,
     delete_ttl_info_min,
@@ -8,6 +23,10 @@ SELECT
 FROM `system`.parts
 WHERE database = currentDatabase()
     AND table = 'ttl';
+
+SYSTEM START MERGES ttl;
+
+OPTIMIZE TABLE ttl FINAL;
 
 SELECT
     `rows`,
@@ -20,3 +39,5 @@ FROM `system`.parts
 WHERE database = currentDatabase()
     AND table = 'ttl'
     AND active;
+
+DROP TABLE ttl;

@@ -1,0 +1,360 @@
+[
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "t0"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "t1"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "t3"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "t0"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "pkey",
+        "type": {
+          "name": "UInt32"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "c1",
+        "type": {
+          "name": "UInt32"
+        }
+      }
+    ],
+    "primaryKeyInSchema": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "pkey"
+        ]
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    }
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "t1"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "vkey",
+        "type": {
+          "name": "UInt32"
+        }
+      }
+    ],
+    "primaryKeyInSchema": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "vkey"
+        ]
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    }
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "t3"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "c17",
+        "type": {
+          "name": "String"
+        }
+      }
+    ],
+    "primaryKeyInSchema": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "c17"
+        ]
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "t1"
+      }
+    }
+  },
+  {
+    "kind": "select",
+    "with": [
+      {
+        "kind": "cteSubquery",
+        "name": "cte_1",
+        "query": {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "alias",
+              "expr": {
+                "kind": "columnRef",
+                "parts": [
+                  "subq_1",
+                  "c_5_c1698_16"
+                ]
+              },
+              "alias": "c_2_c1702_3"
+            },
+            {
+              "kind": "alias",
+              "expr": {
+                "kind": "columnRef",
+                "parts": [
+                  "subq_1",
+                  "c_5_c1694_12"
+                ]
+              },
+              "alias": "c_2_c1703_4"
+            }
+          ],
+          "from": {
+            "kind": "subqueryFrom",
+            "query": {
+              "kind": "select",
+              "select": [
+                {
+                  "kind": "alias",
+                  "expr": {
+                    "kind": "functionCall",
+                    "name": "covarPop",
+                    "args": [
+                      {
+                        "kind": "literal",
+                        "type": "Int64",
+                        "value": "0",
+                        "source": "-0"
+                      },
+                      {
+                        "kind": "literal",
+                        "type": "UInt64",
+                        "value": "74"
+                      }
+                    ]
+                  },
+                  "alias": "c_5_c1686_4"
+                },
+                {
+                  "kind": "alias",
+                  "expr": {
+                    "kind": "functionCall",
+                    "name": "sumWithOverflow",
+                    "args": [
+                      {
+                        "kind": "literal",
+                        "type": "UInt64",
+                        "value": "0"
+                      }
+                    ]
+                  },
+                  "alias": "c_5_c1694_12"
+                },
+                {
+                  "kind": "alias",
+                  "expr": {
+                    "kind": "functionCall",
+                    "name": "covarPop",
+                    "args": [
+                      {
+                        "kind": "literal",
+                        "type": "Float64",
+                        "value": "-53.64"
+                      },
+                      {
+                        "kind": "literal",
+                        "type": "Float64",
+                        "value": "92.63"
+                      }
+                    ]
+                  },
+                  "alias": "c_5_c1698_16"
+                }
+              ],
+              "from": {
+                "kind": "tableRef",
+                "table": "t3",
+                "alias": "ref_8"
+              },
+              "groupBy": {
+                "kind": "expressions",
+                "items": [
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "ref_8",
+                      "c17"
+                    ]
+                  }
+                ]
+              }
+            },
+            "alias": "subq_1"
+          }
+        }
+      }
+    ],
+    "select": [
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "ref_15",
+            "c_2_c1703_4"
+          ]
+        },
+        "alias": "c_2_c1723_6"
+      },
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "ref_15",
+            "c_2_c1702_3"
+          ]
+        },
+        "alias": "c_2_c1724_7"
+      }
+    ],
+    "from": {
+      "left": {
+        "left": {
+          "kind": "tableRef",
+          "table": "t0",
+          "alias": "ref_14"
+        },
+        "kind": "joinExpr",
+        "joinType": "RIGHT",
+        "right": {
+          "kind": "tableRef",
+          "table": "cte_1",
+          "alias": "ref_15"
+        },
+        "constraint": {
+          "kind": "on",
+          "expr": {
+            "kind": "binaryExpr",
+            "op": "=",
+            "left": {
+              "kind": "columnRef",
+              "parts": [
+                "ref_14",
+                "c1"
+              ]
+            },
+            "right": {
+              "kind": "columnRef",
+              "parts": [
+                "ref_15",
+                "c_2_c1702_3"
+              ]
+            },
+            "parenthesized": true
+          }
+        }
+      },
+      "kind": "joinExpr",
+      "joinType": "RIGHT",
+      "right": {
+        "kind": "tableRef",
+        "table": "t1",
+        "alias": "ref_16"
+      },
+      "constraint": {
+        "kind": "on",
+        "expr": {
+          "kind": "binaryExpr",
+          "op": "=",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "ref_14",
+              "pkey"
+            ]
+          },
+          "right": {
+            "kind": "columnRef",
+            "parts": [
+              "ref_16",
+              "vkey"
+            ]
+          },
+          "parenthesized": true
+        }
+      }
+    }
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "t0"
+    }
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "t1"
+    }
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "t3"
+    }
+  }
+]

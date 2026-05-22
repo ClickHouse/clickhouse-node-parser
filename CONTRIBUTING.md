@@ -13,7 +13,7 @@ npm install
 
 ## Commands
 
-### `npm run generate`
+### `npm run generate:parser`
 
 Re-generates the parser from the Peggy Grammar. Run this whenever changing the grammar.
 

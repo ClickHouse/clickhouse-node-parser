@@ -26,17 +26,19 @@ SELECT
     1 AS x,
     roundDown(x, [6, 5, 4]);
 
-SELECT
-    1 AS x,
-    roundDown(x, []);
+SET send_logs_level = 'fatal';
 
 SELECT
     1 AS x,
-    roundDown(x, emptyArrayUInt8());
+    roundDown(x, []); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
+
+SELECT
+    1 AS x,
+    roundDown(x, emptyArrayUInt8()); -- { serverError ILLEGAL_COLUMN }
 
 SELECT roundDown(number, [number])
 FROM `system`.numbers
-LIMIT 10;
+LIMIT 10; -- { serverError ILLEGAL_COLUMN }
 
 SELECT
     1 AS x,

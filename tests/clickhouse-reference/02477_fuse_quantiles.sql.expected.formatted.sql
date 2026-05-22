@@ -1,3 +1,21 @@
+SET enable_analyzer = 1;
+
+SET optimize_syntax_fuse_functions = 1;
+
+DROP TABLE IF EXISTS fuse_tbl;
+
+CREATE TABLE fuse_tbl
+(
+    a Nullable(Int32),
+    b Int32
+)
+ENGINE = Log;
+
+INSERT INTO fuse_tbl SELECT
+    number,
+    number + 1
+FROM numbers(1000);
+
 SELECT
     quantile(0.8)(a),
     toTypeName(quantile(0.8)(a)),
@@ -40,3 +58,5 @@ FROM (
             )
         GROUP BY x
     );
+
+DROP TABLE fuse_tbl;

@@ -1,3 +1,13 @@
+DROP TABLE IF EXISTS mt;
+
+CREATE TABLE mt
+(
+    x UInt8,
+    y Date
+)
+ENGINE = MergeTree
+ORDER BY x;
+
 SELECT count()
 FROM
     mt
@@ -7,3 +17,5 @@ LEFT JOIN (
     USING (x)
 PREWHERE x IN (1)
 WHERE y = today();
+
+DROP TABLE mt;

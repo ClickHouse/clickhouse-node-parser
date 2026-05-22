@@ -1,3 +1,42 @@
+-- Tags: stateful, long, no-parallel, no-asan, no-tsan, no-ubsan, no-msan
+-- no-*san: too long.
+DROP TABLE IF EXISTS hits_text;
+
+CREATE TABLE hits_text
+(
+    CounterID UInt32,
+    EventDate Date,
+    UserID UInt32,
+    SearchPhrase String,
+    URL String
+)
+ENGINE = MergeTree
+ORDER BY (CounterID, EventDate);
+
+SET enable_full_text_index = 1;
+
+SET use_query_condition_cache = 0;
+
+ALTER TABLE hits_text ADD INDEX idx_search_phrase SearchPhrase TYPE text(tokenizer = 'splitByNonAlpha') GRANULARITY 8;
+
+ALTER TABLE hits_text ADD INDEX idx_url URL TYPE text(tokenizer = 'splitByNonAlpha') GRANULARITY 8;
+
+SET max_insert_threads = 4;
+
+INSERT INTO hits_text SELECT
+    CounterID,
+    EventDate,
+    UserID,
+    SearchPhrase,
+    URL
+FROM test.hits;
+
+SET use_skip_indexes = 0;
+
+SET use_skip_indexes_on_data_read = 0;
+
+SET force_data_skipping_indices = '';
+
 SELECT count()
 FROM hits_text
 WHERE hasToken(SearchPhrase, 'video');
@@ -72,6 +111,16 @@ FROM hits_text
 WHERE hasToken(URL, 'auto')
     AND hasToken(SearchPhrase, 'bmw');
 
+SET use_skip_indexes = 1;
+
+SET use_skip_indexes_on_data_read = 1;
+
+SET force_data_skipping_indices = 'idx_search_phrase';
+
+SET force_data_skipping_indices = 'idx_url';
+
+SET force_data_skipping_indices = 'idx_search_phrase,idx_url';
+
 SELECT count()
 FROM hits_text
 WHERE hasAnyTokens(URL, ['https', 'http']);
@@ -98,3 +147,5 @@ SELECT count()
 FROM hits_text
 WHERE hasAnyTokens(URL, ['market', 'shop'])
     OR hasAnyTokens(SearchPhrase, ['market', 'shop']);
+
+DROP TABLE hits_text;

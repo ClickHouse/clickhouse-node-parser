@@ -1,0 +1,35 @@
+DROP TABLE IF EXISTS pipe;
+
+DROP TABLE IF EXISTS src;
+
+DROP TABLE IF EXISTS dest;
+
+CREATE TABLE src
+(
+    v UInt64
+)
+ENGINE = Null;
+
+CREATE TABLE dest
+(
+    v UInt64
+)
+ENGINE = MergeTree()
+ORDER BY v;
+
+CREATE MATERIALIZED VIEW pipe
+TO dest
+AS
+SELECT v
+FROM src;
+
+ALTER TABLE dest ADD COLUMN v2 UInt64;
+
+ALTER TABLE pipe MODIFY QUERY SELECT
+    v * 2 AS v,
+    1 AS v2
+FROM src;
+
+DESCRIBE TABLE pipe;
+
+SHOW CREATE TABLE pipe;

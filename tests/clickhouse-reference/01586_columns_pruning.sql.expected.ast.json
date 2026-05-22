@@ -1,5 +1,18 @@
 [
   {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "max_memory_usage",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "10000000000"
+        }
+      }
+    ]
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -50,7 +63,7 @@
           }
         ],
         "from": {
-          "kind": "tableFunction",
+          "kind": "tableFunctionRef",
           "name": "numbers",
           "args": [
             {
@@ -72,7 +85,10 @@
           ]
         }
       }
-    }
+    },
+    "leadingComments": [
+      "-- Unneeded column is removed from subquery."
+    ]
   },
   {
     "kind": "select",
@@ -129,7 +145,7 @@
           }
         ],
         "from": {
-          "kind": "tableFunction",
+          "kind": "tableFunctionRef",
           "name": "numbers",
           "args": [
             {
@@ -163,6 +179,12 @@
           ]
         }
       }
-    }
+    },
+    "leadingComments": [
+      "-- Unneeded column cannot be removed from subquery and the query is out of memory"
+    ],
+    "trailingComments": [
+      "-- { serverError MEMORY_LIMIT_EXCEEDED }"
+    ]
   }
 ]

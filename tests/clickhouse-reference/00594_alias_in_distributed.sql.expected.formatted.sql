@@ -1,3 +1,25 @@
+-- Tags: distributed
+DROP TABLE IF EXISTS alias_local10;
+
+DROP TABLE IF EXISTS alias10;
+
+SET allow_deprecated_syntax_for_merge_tree = 1;
+
+CREATE TABLE alias_local10
+(
+    Id Int8,
+    EventDate Date DEFAULT '2000-01-01',
+    field1 Int8,
+    field2 String,
+    field3 ALIAS multiIf(field1 = 1, field2, '0')
+)
+ENGINE = MergeTree(EventDate, (Id, EventDate), 8192);
+
+CREATE TABLE alias10 AS alias_local10
+ENGINE = Distributed(test_shard_localhost, currentDatabase(), alias_local10, cityHash64(Id));
+
+INSERT INTO alias_local10 (Id, EventDate, field1, field2);
+
 SELECT
     field1,
     field2,
@@ -65,3 +87,17 @@ WHERE field3 = '12345';
 SELECT field3
 FROM alias10
 WHERE field3 = '12345';
+
+DROP TABLE alias10;
+
+CREATE TABLE alias10
+(
+    Id Int8,
+    EventDate Date,
+    field1 Int8,
+    field2 String,
+    field3 String
+)
+ENGINE = Distributed(test_shard_localhost, currentDatabase(), alias_local10);
+
+DROP TABLE alias_local10;

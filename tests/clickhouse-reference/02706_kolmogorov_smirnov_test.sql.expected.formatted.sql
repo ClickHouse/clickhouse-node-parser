@@ -1,3 +1,14 @@
+DROP TABLE IF EXISTS kstest;
+
+CREATE TABLE kstest
+(
+    `left` Float64,
+    `right` Float64
+)
+ENGINE = Memory;
+
+INSERT INTO kstest;
+
 SELECT
     roundBankers(kolmogorovSmirnovTest(`left`, `right`).2, 6),
     roundBankers(kolmogorovSmirnovTest('two-sided')(`left`, `right`).2, 6),
@@ -26,3 +37,7 @@ SELECT
     roundBankers(kolmogorovSmirnovTest('less', 'asymp')(`left`, `right`).1, 6),
     roundBankers(kolmogorovSmirnovTest('greater', 'asymp')(`left`, `right`).1, 6)
 FROM kstest;
+
+INSERT INTO kstest;
+
+INSERT INTO kstest;

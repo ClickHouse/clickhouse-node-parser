@@ -4,7 +4,7 @@ FROM (
         UNION ALL
         SELECT materialize(toInt128(-2))
     )
-WHERE x;
+WHERE x; -- { serverError ILLEGAL_TYPE_OF_COLUMN_FOR_FILTER }
 
 SELECT *
 FROM (

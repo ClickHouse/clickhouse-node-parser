@@ -1,3 +1,100 @@
+DropQuery  dest_table_mv (children 1)
+ Identifier dest_table_mv
+
+DropQuery  left_table (children 1)
+ Identifier left_table
+
+DropQuery  right_table (children 1)
+ Identifier right_table
+
+DropQuery  dest_table (children 1)
+ Identifier dest_table
+
+DropQuery  src_table (children 1)
+ Identifier src_table
+
+DropQuery  dst_mv (children 1)
+ Identifier dst_mv
+
+DropQuery  dst_mv_1 (children 1)
+ Identifier dst_mv_1
+
+DropQuery  dst_mv_2 (children 1)
+ Identifier dst_mv_2
+
+CreateQuery src_table (children 2)
+ Identifier src_table
+ Storage definition (children 1)
+  Function Memory
+
+CreateQuery dst_mv_1 (children 3)
+ Identifier dst_mv_1
+ SelectWithUnionQuery (children 1)
+  ExpressionList (children 1)
+   SelectQuery (children 2)
+    ExpressionList (children 2)
+     Asterisk
+     Subquery (alias cnt) (children 1)
+      SelectWithUnionQuery (children 1)
+       ExpressionList (children 1)
+        SelectQuery (children 2)
+         ExpressionList (children 1)
+          Function count (children 1)
+           ExpressionList
+         TablesInSelectQuery (children 1)
+          TablesInSelectQueryElement (children 1)
+           TableExpression (children 1)
+            TableIdentifier src_table
+    TablesInSelectQuery (children 1)
+     TablesInSelectQueryElement (children 1)
+      TableExpression (children 1)
+       TableIdentifier src_table
+ ViewTargets (children 1)
+  Storage definition (children 1)
+   Function Memory
+
+InsertQuery   (children 2)
+ Identifier src_table
+ SelectWithUnionQuery (children 1)
+  ExpressionList (children 1)
+   SelectQuery (children 2)
+    ExpressionList (children 1)
+     Literal UInt64_1
+    TablesInSelectQuery (children 1)
+     TablesInSelectQueryElement (children 1)
+      TableExpression (children 1)
+       Function numbers (children 1)
+        ExpressionList (children 1)
+         Literal UInt64_3
+
+InsertQuery   (children 2)
+ Identifier src_table
+ SelectWithUnionQuery (children 1)
+  ExpressionList (children 1)
+   SelectQuery (children 2)
+    ExpressionList (children 1)
+     Literal UInt64_2
+    TablesInSelectQuery (children 1)
+     TablesInSelectQueryElement (children 1)
+      TableExpression (children 1)
+       Function numbers (children 1)
+        ExpressionList (children 1)
+         Literal UInt64_2
+
+InsertQuery   (children 2)
+ Identifier src_table
+ SelectWithUnionQuery (children 1)
+  ExpressionList (children 1)
+   SelectQuery (children 2)
+    ExpressionList (children 1)
+     Literal UInt64_3
+    TablesInSelectQuery (children 1)
+     TablesInSelectQueryElement (children 1)
+      TableExpression (children 1)
+       Function numbers (children 1)
+        ExpressionList (children 1)
+         Literal UInt64_1
+
 SelectWithUnionQuery (children 1)
  ExpressionList (children 1)
   SelectQuery (children 3)
@@ -10,6 +107,126 @@ SelectWithUnionQuery (children 1)
    ExpressionList (children 1)
     OrderByElement (children 1)
      Identifier number
+
+CreateQuery dest_table (children 3)
+ Identifier dest_table
+ Columns definition (children 1)
+  ExpressionList (children 3)
+   ColumnDeclaration Date (children 1)
+    DataType Date
+   ColumnDeclaration Id (children 1)
+    DataType UInt64
+   ColumnDeclaration Units (children 1)
+    DataType Float32
+ Storage definition (children 1)
+  Function Memory
+
+CreateQuery left_table (children 1)
+ Identifier left_table
+
+CreateQuery right_table (children 1)
+ Identifier right_table
+
+InsertQuery   (children 2)
+ Identifier right_table
+ SelectWithUnionQuery (children 1)
+  ExpressionList (children 1)
+   SelectQuery (children 2)
+    ExpressionList (children 3)
+     Function plus (children 1)
+      ExpressionList (children 2)
+       Function toDate (children 1)
+        ExpressionList (children 1)
+         Literal '2020-01-01'
+       Identifier number
+     Identifier number
+     Function divide (children 1)
+      ExpressionList (children 2)
+       Identifier number
+       Literal UInt64_2
+    TablesInSelectQuery (children 1)
+     TablesInSelectQueryElement (children 1)
+      TableExpression (children 1)
+       Function numbers (children 1)
+        ExpressionList (children 1)
+         Literal UInt64_10
+
+CreateQuery dest_table_mv (children 3)
+ Identifier dest_table_mv
+ SelectWithUnionQuery (children 1)
+  ExpressionList (children 1)
+   SelectQuery (children 2)
+    ExpressionList (children 3)
+     Identifier Date
+     Identifier Id
+     Identifier Units
+    TablesInSelectQuery (children 2)
+     TablesInSelectQueryElement (children 1)
+      TableExpression (children 1)
+       Subquery (alias t1) (children 1)
+        SelectWithUnionQuery (children 1)
+         ExpressionList (children 1)
+          SelectQuery (children 2)
+           ExpressionList (children 1)
+            Asterisk
+           TablesInSelectQuery (children 1)
+            TablesInSelectQueryElement (children 1)
+             TableExpression (children 1)
+              TableIdentifier left_table
+     TablesInSelectQueryElement (children 2)
+      TableExpression (children 1)
+       Subquery (alias t2) (children 1)
+        SelectWithUnionQuery (children 1)
+         ExpressionList (children 1)
+          SelectQuery (children 4)
+           ExpressionList (children 1)
+            Subquery (alias dt) (children 1)
+             SelectWithUnionQuery (children 1)
+              ExpressionList (children 1)
+               SelectQuery (children 3)
+                ExpressionList (children 1)
+                 Identifier Date
+                TablesInSelectQuery (children 1)
+                 TablesInSelectQueryElement (children 1)
+                  TableExpression (children 1)
+                   TableIdentifier left_table
+                Literal UInt64_1
+           ExpressionList (children 1)
+            Asterisk
+           TablesInSelectQuery (children 1)
+            TablesInSelectQueryElement (children 1)
+             TableExpression (children 1)
+              TableIdentifier right_table
+           Function equals (children 1)
+            ExpressionList (children 2)
+             Identifier Date
+             Identifier dt
+      TableJoin (children 1)
+       ExpressionList (children 2)
+        Identifier Date
+        Identifier Id
+ ViewTargets
+
+InsertQuery   (children 2)
+ Identifier left_table
+ SelectWithUnionQuery (children 1)
+  ExpressionList (children 1)
+   SelectQuery (children 2)
+    ExpressionList (children 3)
+     Function toDate (children 1)
+      ExpressionList (children 1)
+       Literal '2020-01-01'
+     Literal UInt64_0
+     Function multiply (children 1)
+      ExpressionList (children 2)
+       Identifier number
+       Literal UInt64_2
+    TablesInSelectQuery (children 1)
+     TablesInSelectQueryElement (children 1)
+      TableExpression (children 1)
+       Function numbers (children 1)
+        ExpressionList (children 1)
+         Literal UInt64_3
 
 SelectWithUnionQuery (children 1)
  ExpressionList (children 1)
@@ -27,3 +244,66 @@ SelectWithUnionQuery (children 1)
      Identifier Id
     OrderByElement (children 1)
      Identifier Units
+
+InsertQuery   (children 2)
+ Identifier left_table
+ SelectWithUnionQuery (children 1)
+  ExpressionList (children 1)
+   SelectQuery (children 2)
+    ExpressionList (children 3)
+     Function toDate (children 1)
+      ExpressionList (children 1)
+       Literal '2020-01-01'
+     Literal UInt64_5
+     Function multiply (children 1)
+      ExpressionList (children 2)
+       Identifier number
+       Literal UInt64_2
+    TablesInSelectQuery (children 1)
+     TablesInSelectQueryElement (children 1)
+      TableExpression (children 1)
+       Function numbers (children 1)
+        ExpressionList (children 1)
+         Literal UInt64_3
+
+TruncateQuery  left_table (children 1)
+ Identifier left_table
+
+InsertQuery   (children 2)
+ Identifier left_table
+ SelectWithUnionQuery (children 1)
+  ExpressionList (children 1)
+   SelectQuery (children 2)
+    ExpressionList (children 3)
+     Function plus (children 1)
+      ExpressionList (children 2)
+       Function toDate (children 1)
+        ExpressionList (children 1)
+         Literal '2020-01-01'
+       Literal UInt64_5
+     Literal UInt64_5
+     Function multiply (children 1)
+      ExpressionList (children 2)
+       Identifier number
+       Literal UInt64_2
+    TablesInSelectQuery (children 1)
+     TablesInSelectQueryElement (children 1)
+      TableExpression (children 1)
+       Function numbers (children 1)
+        ExpressionList (children 1)
+         Literal UInt64_3
+
+DropQuery  dest_table_mv (children 1)
+ Identifier dest_table_mv
+
+DropQuery  left_table (children 1)
+ Identifier left_table
+
+DropQuery  right_table (children 1)
+ Identifier right_table
+
+DropQuery  dest_table (children 1)
+ Identifier dest_table
+
+DropQuery  src_table (children 1)
+ Identifier src_table

@@ -1,5 +1,21 @@
 [
   {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "allow_introspection_functions",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      }
+    ],
+    "leadingComments": [
+      "-- Tags: no-tsan, no-asan, no-ubsan, no-msan, no-debug, no-fasttest, no-llvm-coverage"
+    ]
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -13,6 +29,69 @@
           }
         ]
       }
+    ],
+    "trailingComments": [
+      "-- { serverError FUNCTION_NOT_ALLOWED }"
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "allow_introspection_functions",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "query_profiler_real_time_period_ns",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "query_profiler_cpu_time_period_ns",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1000000"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "log_queries",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      },
+      {
+        "name": "max_rows_to_read",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      }
     ]
   },
   {
@@ -25,7 +104,7 @@
       }
     ],
     "from": {
-      "kind": "tableFunction",
+      "kind": "tableFunctionRef",
       "name": "numbers_mt",
       "args": [
         {
@@ -44,6 +123,278 @@
           "value": "02161_test_case"
         }
       }
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "log_queries",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "query_profiler_cpu_time_period_ns",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "system",
+    "body": "SYSTEM FLUSH LOGS query_log, trace_log"
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "max_execution_time",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "300"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "with": [
+      {
+        "kind": "cteSubquery",
+        "name": "lineWithInlines",
+        "query": {
+          "kind": "select",
+          "distinct": {
+            "kind": "distinct"
+          },
+          "select": [
+            {
+              "kind": "alias",
+              "expr": {
+                "kind": "functionCall",
+                "name": "addressToLineWithInlines",
+                "args": [
+                  {
+                    "kind": "functionCall",
+                    "name": "arrayJoin",
+                    "args": [
+                      {
+                        "kind": "columnRef",
+                        "parts": [
+                          "trace"
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              "alias": "lineWithInlines"
+            }
+          ],
+          "from": {
+            "kind": "tableRef",
+            "database": "system",
+            "table": "trace_log"
+          },
+          "where": {
+            "kind": "binaryExpr",
+            "op": "=",
+            "left": {
+              "kind": "columnRef",
+              "parts": [
+                "query_id"
+              ]
+            },
+            "right": {
+              "kind": "subqueryExpr",
+              "query": {
+                "kind": "select",
+                "select": [
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "query_id"
+                    ]
+                  }
+                ],
+                "from": {
+                  "kind": "tableRef",
+                  "database": "system",
+                  "table": "query_log"
+                },
+                "where": {
+                  "kind": "naryExpr",
+                  "op": "AND",
+                  "operands": [
+                    {
+                      "kind": "binaryExpr",
+                      "op": "=",
+                      "left": {
+                        "kind": "columnRef",
+                        "parts": [
+                          "current_database"
+                        ]
+                      },
+                      "right": {
+                        "kind": "functionCall",
+                        "name": "currentDatabase",
+                        "args": []
+                      }
+                    },
+                    {
+                      "kind": "binaryExpr",
+                      "op": "=",
+                      "left": {
+                        "kind": "columnRef",
+                        "parts": [
+                          "log_comment"
+                        ]
+                      },
+                      "right": {
+                        "kind": "literal",
+                        "type": "String",
+                        "value": "02161_test_case"
+                      }
+                    }
+                  ]
+                },
+                "orderBy": [
+                  {
+                    "kind": "orderByItem",
+                    "expr": {
+                      "kind": "columnRef",
+                      "parts": [
+                        "event_time"
+                      ]
+                    },
+                    "direction": "DESC"
+                  }
+                ],
+                "limit": {
+                  "count": {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "1"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    ],
+    "select": [
+      {
+        "kind": "literal",
+        "type": "String",
+        "value": "has inlines:"
+      },
+      {
+        "kind": "functionCall",
+        "name": "or",
+        "args": [
+          {
+            "kind": "binaryExpr",
+            "op": ">",
+            "left": {
+              "kind": "functionCall",
+              "name": "max",
+              "args": [
+                {
+                  "kind": "functionCall",
+                  "name": "length",
+                  "args": [
+                    {
+                      "kind": "columnRef",
+                      "parts": [
+                        "lineWithInlines"
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            "right": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "1"
+            }
+          },
+          {
+            "kind": "binaryExpr",
+            "op": "=",
+            "left": {
+              "kind": "functionCall",
+              "name": "max",
+              "args": [
+                {
+                  "kind": "functionCall",
+                  "name": "locate",
+                  "args": [
+                    {
+                      "kind": "functionCall",
+                      "name": "arrayElement",
+                      "args": [
+                        {
+                          "kind": "columnRef",
+                          "parts": [
+                            "lineWithInlines"
+                          ]
+                        },
+                        {
+                          "kind": "literal",
+                          "type": "UInt64",
+                          "value": "1"
+                        }
+                      ]
+                    },
+                    {
+                      "kind": "literal",
+                      "type": "String",
+                      "value": ":"
+                    }
+                  ]
+                }
+              ]
+            },
+            "right": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "0"
+            }
+          }
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "lineWithInlines"
+    },
+    "settings": [
+      {
+        "name": "short_circuit_function_evaluation",
+        "value": {
+          "kind": "literal",
+          "type": "String",
+          "value": "enable"
+        }
+      }
+    ],
+    "trailingComments": [
+      "-- `max(length(lineWithInlines)) > 1` check there is any inlines.",
+      "-- `max(locate(lineWithInlines[1], ':')) = 0` check whether none could get a symbol."
     ]
   }
 ]

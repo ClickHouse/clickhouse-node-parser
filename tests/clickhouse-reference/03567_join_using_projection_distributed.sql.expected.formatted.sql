@@ -1,3 +1,27 @@
+DROP TABLE IF EXISTS t1;
+
+DROP TABLE IF EXISTS t2;
+
+CREATE TABLE t1
+(
+    key String,
+    attr UInt32
+)
+ENGINE = MergeTree
+ORDER BY key;
+
+CREATE TABLE t2
+(
+    key String,
+    attr UInt32
+)
+ENGINE = MergeTree
+ORDER BY key;
+
+INSERT INTO t1;
+
+INSERT INTO t2;
+
 SELECT
     multiIf(key = 'a', 'AA', key = 'b', 'BB', 'other') AS key1,
     *

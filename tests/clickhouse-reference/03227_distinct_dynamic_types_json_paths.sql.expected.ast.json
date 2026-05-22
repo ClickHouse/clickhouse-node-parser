@@ -1,5 +1,369 @@
 [
   {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "allow_experimental_dynamic_type",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ],
+    "leadingComments": [
+      "-- Tags: long"
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "enable_json_type",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "allow_experimental_variant_type",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "use_variant_as_common_type",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "max_block_size",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "10000"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "test_json_dynamic_aggregate_functions"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "test_json_dynamic_aggregate_functions"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "json",
+        "type": {
+          "name": "JSON",
+          "args": [
+            {
+              "kind": "namedField",
+              "name": "a1",
+              "type": {
+                "name": "String"
+              }
+            },
+            {
+              "kind": "setting",
+              "name": "max_dynamic_paths",
+              "value": {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "2"
+              }
+            },
+            {
+              "kind": "setting",
+              "name": "max_dynamic_types",
+              "value": {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "2"
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "engine": {
+      "name": "Memory"
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "test_json_dynamic_aggregate_functions"
+      }
+    },
+    "selectQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "functionCall",
+          "name": "toJSONString",
+          "args": [
+            {
+              "kind": "functionCall",
+              "name": "map",
+              "args": [
+                {
+                  "kind": "functionCall",
+                  "name": "concat",
+                  "args": [
+                    {
+                      "kind": "literal",
+                      "type": "String",
+                      "value": "a"
+                    },
+                    {
+                      "kind": "binaryExpr",
+                      "op": "%",
+                      "left": {
+                        "kind": "columnRef",
+                        "parts": [
+                          "number"
+                        ]
+                      },
+                      "right": {
+                        "kind": "literal",
+                        "type": "UInt64",
+                        "value": "13"
+                      }
+                    }
+                  ]
+                },
+                {
+                  "kind": "functionCall",
+                  "name": "multiIf",
+                  "args": [
+                    {
+                      "kind": "binaryExpr",
+                      "op": "==",
+                      "left": {
+                        "kind": "binaryExpr",
+                        "op": "%",
+                        "left": {
+                          "kind": "columnRef",
+                          "parts": [
+                            "number"
+                          ]
+                        },
+                        "right": {
+                          "kind": "literal",
+                          "type": "UInt64",
+                          "value": "5"
+                        }
+                      },
+                      "right": {
+                        "kind": "literal",
+                        "type": "UInt64",
+                        "value": "0"
+                      }
+                    },
+                    {
+                      "kind": "literal",
+                      "type": "NULL",
+                      "value": "NULL"
+                    },
+                    {
+                      "kind": "binaryExpr",
+                      "op": "==",
+                      "left": {
+                        "kind": "binaryExpr",
+                        "op": "%",
+                        "left": {
+                          "kind": "columnRef",
+                          "parts": [
+                            "number"
+                          ]
+                        },
+                        "right": {
+                          "kind": "literal",
+                          "type": "UInt64",
+                          "value": "5"
+                        }
+                      },
+                      "right": {
+                        "kind": "literal",
+                        "type": "UInt64",
+                        "value": "1"
+                      }
+                    },
+                    {
+                      "kind": "castExpr",
+                      "expr": {
+                        "kind": "columnRef",
+                        "parts": [
+                          "number"
+                        ]
+                      },
+                      "type": "UInt32",
+                      "operator": true
+                    },
+                    {
+                      "kind": "binaryExpr",
+                      "op": "==",
+                      "left": {
+                        "kind": "binaryExpr",
+                        "op": "%",
+                        "left": {
+                          "kind": "columnRef",
+                          "parts": [
+                            "number"
+                          ]
+                        },
+                        "right": {
+                          "kind": "literal",
+                          "type": "UInt64",
+                          "value": "5"
+                        }
+                      },
+                      "right": {
+                        "kind": "literal",
+                        "type": "UInt64",
+                        "value": "2"
+                      }
+                    },
+                    {
+                      "kind": "functionCall",
+                      "name": "concat",
+                      "args": [
+                        {
+                          "kind": "literal",
+                          "type": "String",
+                          "value": "str_"
+                        },
+                        {
+                          "kind": "columnRef",
+                          "parts": [
+                            "number"
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "kind": "binaryExpr",
+                      "op": "==",
+                      "left": {
+                        "kind": "binaryExpr",
+                        "op": "%",
+                        "left": {
+                          "kind": "columnRef",
+                          "parts": [
+                            "number"
+                          ]
+                        },
+                        "right": {
+                          "kind": "literal",
+                          "type": "UInt64",
+                          "value": "5"
+                        }
+                      },
+                      "right": {
+                        "kind": "literal",
+                        "type": "UInt64",
+                        "value": "3"
+                      }
+                    },
+                    {
+                      "kind": "functionCall",
+                      "name": "range",
+                      "args": [
+                        {
+                          "kind": "binaryExpr",
+                          "op": "%",
+                          "left": {
+                            "kind": "columnRef",
+                            "parts": [
+                              "number"
+                            ]
+                          },
+                          "right": {
+                            "kind": "literal",
+                            "type": "UInt64",
+                            "value": "5"
+                          }
+                        }
+                      ]
+                    },
+                    {
+                      "kind": "functionCall",
+                      "name": "toBool",
+                      "args": [
+                        {
+                          "kind": "binaryExpr",
+                          "op": "%",
+                          "left": {
+                            "kind": "columnRef",
+                            "parts": [
+                              "number"
+                            ]
+                          },
+                          "right": {
+                            "kind": "literal",
+                            "type": "UInt64",
+                            "value": "2"
+                          }
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "from": {
+        "kind": "tableFunctionRef",
+        "name": "numbers",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "100000"
+          }
+        ]
+      }
+    }
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -670,7 +1034,7 @@
       }
     ],
     "from": {
-      "kind": "tableFunction",
+      "kind": "tableFunctionRef",
       "name": "remote",
       "args": [
         {
@@ -715,7 +1079,7 @@
       }
     ],
     "from": {
-      "kind": "tableFunction",
+      "kind": "tableFunctionRef",
       "name": "remote",
       "args": [
         {
@@ -761,7 +1125,7 @@
       }
     ],
     "from": {
-      "kind": "tableFunction",
+      "kind": "tableFunctionRef",
       "name": "remote",
       "args": [
         {
@@ -806,7 +1170,7 @@
       }
     ],
     "from": {
-      "kind": "tableFunction",
+      "kind": "tableFunctionRef",
       "name": "remote",
       "args": [
         {
@@ -873,7 +1237,7 @@
       }
     ],
     "from": {
-      "kind": "tableFunction",
+      "kind": "tableFunctionRef",
       "name": "remote",
       "args": [
         {
@@ -941,7 +1305,7 @@
       }
     ],
     "from": {
-      "kind": "tableFunction",
+      "kind": "tableFunctionRef",
       "name": "remote",
       "args": [
         {
@@ -1030,7 +1394,7 @@
       }
     ],
     "from": {
-      "kind": "tableFunction",
+      "kind": "tableFunctionRef",
       "name": "remote",
       "args": [
         {
@@ -1097,7 +1461,7 @@
       }
     ],
     "from": {
-      "kind": "tableFunction",
+      "kind": "tableFunctionRef",
       "name": "remote",
       "args": [
         {
@@ -1165,7 +1529,7 @@
       }
     ],
     "from": {
-      "kind": "tableFunction",
+      "kind": "tableFunctionRef",
       "name": "remote",
       "args": [
         {
@@ -1217,7 +1581,7 @@
       }
     ],
     "from": {
-      "kind": "tableFunction",
+      "kind": "tableFunctionRef",
       "name": "remote",
       "args": [
         {
@@ -1306,7 +1670,7 @@
       }
     ],
     "from": {
-      "kind": "tableFunction",
+      "kind": "tableFunctionRef",
       "name": "remote",
       "args": [
         {
@@ -1396,7 +1760,7 @@
       }
     ],
     "from": {
-      "kind": "tableFunction",
+      "kind": "tableFunctionRef",
       "name": "remote",
       "args": [
         {
@@ -1467,7 +1831,10 @@
     "from": {
       "kind": "tableRef",
       "table": "test_json_dynamic_aggregate_functions"
-    }
+    },
+    "trailingComments": [
+      "-- {serverError NUMBER_OF_ARGUMENTS_DOESNT_MATCH}"
+    ]
   },
   {
     "kind": "select",
@@ -1493,7 +1860,10 @@
     "from": {
       "kind": "tableRef",
       "table": "test_json_dynamic_aggregate_functions"
-    }
+    },
+    "trailingComments": [
+      "-- {serverError NUMBER_OF_ARGUMENTS_DOESNT_MATCH}"
+    ]
   },
   {
     "kind": "select",
@@ -1513,7 +1883,10 @@
     "from": {
       "kind": "tableRef",
       "table": "test_json_dynamic_aggregate_functions"
-    }
+    },
+    "trailingComments": [
+      "-- {serverError ILLEGAL_TYPE_OF_ARGUMENT}"
+    ]
   },
   {
     "kind": "select",
@@ -1527,7 +1900,10 @@
     "from": {
       "kind": "tableRef",
       "table": "test_json_dynamic_aggregate_functions"
-    }
+    },
+    "trailingComments": [
+      "-- {serverError NUMBER_OF_ARGUMENTS_DOESNT_MATCH}"
+    ]
   },
   {
     "kind": "select",
@@ -1553,7 +1929,10 @@
     "from": {
       "kind": "tableRef",
       "table": "test_json_dynamic_aggregate_functions"
-    }
+    },
+    "trailingComments": [
+      "-- {serverError NUMBER_OF_ARGUMENTS_DOESNT_MATCH}"
+    ]
   },
   {
     "kind": "select",
@@ -1573,7 +1952,10 @@
     "from": {
       "kind": "tableRef",
       "table": "test_json_dynamic_aggregate_functions"
-    }
+    },
+    "trailingComments": [
+      "-- {serverError ILLEGAL_TYPE_OF_ARGUMENT}"
+    ]
   },
   {
     "kind": "select",
@@ -1587,7 +1969,10 @@
     "from": {
       "kind": "tableRef",
       "table": "test_json_dynamic_aggregate_functions"
-    }
+    },
+    "trailingComments": [
+      "-- {serverError NUMBER_OF_ARGUMENTS_DOESNT_MATCH}"
+    ]
   },
   {
     "kind": "select",
@@ -1614,7 +1999,10 @@
     "from": {
       "kind": "tableRef",
       "table": "test_json_dynamic_aggregate_functions"
-    }
+    },
+    "trailingComments": [
+      "-- {serverError NUMBER_OF_ARGUMENTS_DOESNT_MATCH}"
+    ]
   },
   {
     "kind": "select",
@@ -1632,6 +2020,17 @@
       }
     ],
     "from": {
+      "kind": "tableRef",
+      "table": "test_json_dynamic_aggregate_functions"
+    },
+    "trailingComments": [
+      "-- {serverError ILLEGAL_TYPE_OF_ARGUMENT}"
+    ]
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
       "kind": "tableRef",
       "table": "test_json_dynamic_aggregate_functions"
     }

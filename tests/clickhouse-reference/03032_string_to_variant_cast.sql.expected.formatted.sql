@@ -1,3 +1,5 @@
+SET allow_experimental_variant_type = 1;
+
 SELECT
     CAST('42', 'Variant(String, UInt64)') AS v,
     variantType(v);
@@ -20,7 +22,7 @@ SELECT
 
 SELECT
     CAST('42', 'Variant(Date)') AS v,
-    variantType(v);
+    variantType(v); -- {serverError INCORRECT_DATA}
 
 SELECT
     accurateCastOrNull('42', 'Variant(Date)') AS v,

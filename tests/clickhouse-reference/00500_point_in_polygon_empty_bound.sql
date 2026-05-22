@@ -1,3 +1,4 @@
+SET validate_polygons = 0;
 SELECT pointInPolygon((0., 0.), [(0., 0.)]);
 SELECT pointInPolygon((1., 1.), [(0., 0.)]);
 SELECT pointInPolygon((0., 0.), [(0., 0.), (0., 0.)]);
@@ -7,6 +8,30 @@ SELECT pointInPolygon((2., 2.), [(0., 0.), (5., 5.), (5., 0.)], [(2., 2.)]);
 SELECT pointInPolygon((2., 2.), [(0., 0.), (5., 5.), (5., 0.)], [(2., 2.), (5., 2.)]);
 SELECT pointInPolygon((2.5, 2.5), [(0., 0.), (5., 0.), (10., 0.)], [(2., 2.), (3., 3.), (3., 2.)]);
 SELECT pointInPolygon((1., 1.), [(0., 0.), (5., 0.), (10., 0.)], [(2., 2.), (3., 3.), (3., 2.)]);
+DROP TABLE IF EXISTS points_test;
+CREATE TABLE points_test
+(
+    x  Float64,
+    y  Float64,
+    note String
+)
+ENGINE = TinyLog;
+INSERT INTO points_test (x, y, note) VALUES
+(3, 3, 'poly-0 | hole-0'),
+(7, 3, 'poly-0 | hole-1'),
+(5, 7, 'poly-0 | hole-2'),
+(1, 1, 'poly-0 solid'),
+(9, 9, 'poly-0 solid'),
+(23, 3, 'poly-1 | hole-0'),
+(27, 3, 'poly-1 | hole-1'),
+(25, 7, 'poly-1 | hole-2'),
+(21, 1, 'poly-1 solid'),
+(29, 9, 'poly-1 solid'),
+(-1,-1, 'outside all'),
+(15, 5, 'outside all'),
+(35, 5, 'outside all'),
+(-10, -10, 'outside all (on empty bound polygon)'),
+(500, 3, 'outside all (on empty bound polygon)');
 SELECT x, y, note,
 pointInPolygon( (x, y),
 [

@@ -1,6 +1,8 @@
+-- https://github.com/ClickHouse/ClickHouse/issues/36702
+-- Two tables joined: correctly raises error for non-existent column q2.b
 SELECT
     q1.a,
-    countIf(q1.a, q2.b > 1)
+    countIf(q1.a, q2.b > 1) -- { serverError UNKNOWN_IDENTIFIER }
 FROM
     (
         SELECT
@@ -15,9 +17,10 @@ INNER JOIN (
     USING (a)
 GROUP BY q1.a;
 
+-- Three tables joined: should also raise error for non-existent column q2.b
 SELECT
     q1.a,
-    countIf(q1.a, q2.b > 1)
+    countIf(q1.a, q2.b > 1) -- { serverError UNKNOWN_IDENTIFIER }
 FROM
     (
         SELECT

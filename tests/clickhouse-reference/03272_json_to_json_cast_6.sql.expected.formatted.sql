@@ -1,3 +1,5 @@
+SET enable_analyzer = 1;
+
 SELECT
     '{"a" : [{"b" : 42}]}'::JSON(a Array(JSON)) AS json,
     json.a.b,

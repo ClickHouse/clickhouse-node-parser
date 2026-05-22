@@ -1,5 +1,285 @@
 [
   {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "max_block_size",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "20000"
+        }
+      }
+    ],
+    "leadingComments": [
+      "-- Random settings limits: index_granularity=(None, 60000)",
+      "-- Tags: long",
+      "-- test is derived from 03246_alter_from_string_to_json.sql"
+    ]
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "test"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "test"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "x",
+        "type": {
+          "name": "UInt64"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "json",
+        "type": {
+          "name": "String"
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "x"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "test"
+      }
+    },
+    "selectQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "number"
+          ]
+        },
+        {
+          "kind": "functionCall",
+          "name": "toJSONString",
+          "args": [
+            {
+              "kind": "functionCall",
+              "name": "map",
+              "args": [
+                {
+                  "kind": "functionCall",
+                  "name": "concat",
+                  "args": [
+                    {
+                      "kind": "literal",
+                      "type": "String",
+                      "value": "key"
+                    },
+                    {
+                      "kind": "functionCall",
+                      "name": "multiIf",
+                      "args": [
+                        {
+                          "kind": "binaryExpr",
+                          "op": "<",
+                          "left": {
+                            "kind": "columnRef",
+                            "parts": [
+                              "number"
+                            ]
+                          },
+                          "right": {
+                            "kind": "literal",
+                            "type": "UInt64",
+                            "value": "60000"
+                          }
+                        },
+                        {
+                          "kind": "binaryExpr",
+                          "op": "%",
+                          "left": {
+                            "kind": "columnRef",
+                            "parts": [
+                              "number"
+                            ]
+                          },
+                          "right": {
+                            "kind": "literal",
+                            "type": "UInt64",
+                            "value": "2"
+                          }
+                        },
+                        {
+                          "kind": "binaryExpr",
+                          "op": "<",
+                          "left": {
+                            "kind": "columnRef",
+                            "parts": [
+                              "number"
+                            ]
+                          },
+                          "right": {
+                            "kind": "literal",
+                            "type": "UInt64",
+                            "value": "120000"
+                          }
+                        },
+                        {
+                          "kind": "binaryExpr",
+                          "op": "+",
+                          "left": {
+                            "kind": "binaryExpr",
+                            "op": "%",
+                            "left": {
+                              "kind": "columnRef",
+                              "parts": [
+                                "number"
+                              ]
+                            },
+                            "right": {
+                              "kind": "literal",
+                              "type": "UInt64",
+                              "value": "2"
+                            }
+                          },
+                          "right": {
+                            "kind": "literal",
+                            "type": "UInt64",
+                            "value": "2"
+                          }
+                        },
+                        {
+                          "kind": "binaryExpr",
+                          "op": "+",
+                          "left": {
+                            "kind": "binaryExpr",
+                            "op": "%",
+                            "left": {
+                              "kind": "columnRef",
+                              "parts": [
+                                "number"
+                              ]
+                            },
+                            "right": {
+                              "kind": "literal",
+                              "type": "UInt64",
+                              "value": "2"
+                            }
+                          },
+                          "right": {
+                            "kind": "literal",
+                            "type": "UInt64",
+                            "value": "4"
+                          }
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "kind": "functionCall",
+                  "name": "concat",
+                  "args": [
+                    {
+                      "kind": "literal",
+                      "type": "String",
+                      "value": "value"
+                    },
+                    {
+                      "kind": "columnRef",
+                      "parts": [
+                        "number"
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "from": {
+        "kind": "tableFunctionRef",
+        "name": "numbers",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "200000"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "kind": "alter",
+    "table": {
+      "kind": "tableRef",
+      "table": "test"
+    },
+    "commands": [
+      {
+        "kind": "alterCommand",
+        "commandType": "MODIFY_COLUMN",
+        "column": {
+          "kind": "columnDef",
+          "name": "json",
+          "type": {
+            "name": "JSON"
+          }
+        }
+      }
+    ],
+    "settings": [
+      {
+        "name": "mutations_sync",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "optimize_read_in_order",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      }
+    ],
+    "trailingComments": [
+      "-- disabling read in order optimization leads to error"
+    ]
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -111,6 +391,14 @@
       "kind": "literal",
       "type": "UInt64",
       "value": "120000"
+    }
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "test"
     }
   }
 ]

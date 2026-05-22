@@ -1,3 +1,5 @@
+SET session_timezone = 'UTC';
+
 SELECT JSONExtract('{"utc" : 1747771112221}', 'utc', 'DateTime64(3)');
 
 SELECT JSONExtract('{"utc" : -1747771112221}', 'utc', 'DateTime64(3)');

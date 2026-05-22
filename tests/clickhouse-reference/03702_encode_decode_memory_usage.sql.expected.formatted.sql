@@ -1,3 +1,4 @@
+-- Tags: no-fasttest
 SELECT base32Decode(s)
 FROM (
         SELECT base32Encode(randomString(100)) AS s

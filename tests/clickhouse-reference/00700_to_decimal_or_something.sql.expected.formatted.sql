@@ -5,7 +5,7 @@ SELECT
 
 SELECT toDecimal32OrZero('1.1', 0);
 
-SELECT toDecimal32OrZero(1.1, 0);
+SELECT toDecimal32OrZero(1.1, 0); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
 SELECT
     toDecimal128OrZero('', 0) AS x,
@@ -43,11 +43,11 @@ SELECT toDecimal128OrZero('-99999999999999999999999999999999999999', 0);
 
 SELECT toDecimal64OrZero('-100000000000000000000000000000000000000', 0);
 
-SELECT toDecimal32OrZero('1', rowNumberInBlock());
+SELECT toDecimal32OrZero('1', rowNumberInBlock()); -- { serverError ILLEGAL_COLUMN }
 
-SELECT toDecimal64OrZero('1', rowNumberInBlock());
+SELECT toDecimal64OrZero('1', rowNumberInBlock()); -- { serverError ILLEGAL_COLUMN }
 
-SELECT toDecimal128OrZero('1', rowNumberInBlock());
+SELECT toDecimal128OrZero('1', rowNumberInBlock()); -- { serverError ILLEGAL_COLUMN }
 
 SELECT '----';
 
@@ -58,7 +58,7 @@ SELECT
 
 SELECT toDecimal32OrNull('1.1', 0);
 
-SELECT toDecimal32OrNull(1.1, 0);
+SELECT toDecimal32OrNull(1.1, 0); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
 SELECT
     toDecimal128OrNull('', 0) AS x,
@@ -96,8 +96,8 @@ SELECT toDecimal128OrNull('-99999999999999999999999999999999999999', 0);
 
 SELECT toDecimal64OrNull('-100000000000000000000000000000000000000', 0);
 
-SELECT toDecimal32OrNull('1', rowNumberInBlock());
+SELECT toDecimal32OrNull('1', rowNumberInBlock()); -- { serverError ILLEGAL_COLUMN }
 
-SELECT toDecimal64OrNull('1', rowNumberInBlock());
+SELECT toDecimal64OrNull('1', rowNumberInBlock()); -- { serverError ILLEGAL_COLUMN }
 
-SELECT toDecimal128OrNull('1', rowNumberInBlock());
+SELECT toDecimal128OrNull('1', rowNumberInBlock()); -- { serverError ILLEGAL_COLUMN }

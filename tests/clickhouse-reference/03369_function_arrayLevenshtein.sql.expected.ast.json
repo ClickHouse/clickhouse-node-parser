@@ -1,5 +1,69 @@
 [
   {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "simple_levenshtein"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "lhs",
+        "type": {
+          "name": "Array",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "UInt8"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "rhs",
+        "type": {
+          "name": "Array",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "UInt8"
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "functionCall",
+          "name": "tuple",
+          "args": []
+        }
+      }
+    ],
+    "leadingComments": [
+      "-- arrayLevenshteinDistance"
+    ]
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "simple_levenshtein"
+      }
+    }
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -34,7 +98,7 @@
         "name": "arrayLevenshteinDistance",
         "args": [
           {
-            "kind": "array",
+            "kind": "arrayLiteral",
             "elements": [
               {
                 "kind": "literal",
@@ -50,7 +114,7 @@
             "source": "['1', '2']"
           },
           {
-            "kind": "array",
+            "kind": "arrayLiteral",
             "elements": [
               {
                 "kind": "literal",
@@ -67,7 +131,7 @@
         "name": "arrayLevenshteinDistance",
         "args": [
           {
-            "kind": "array",
+            "kind": "arrayLiteral",
             "elements": [
               {
                 "kind": "functionCall",
@@ -105,7 +169,7 @@
             "source": "[toFixedString('1', 16), toFixedString('2', 16)]"
           },
           {
-            "kind": "array",
+            "kind": "arrayLiteral",
             "elements": [
               {
                 "kind": "functionCall",
@@ -133,7 +197,7 @@
         "name": "arrayLevenshteinDistance",
         "args": [
           {
-            "kind": "array",
+            "kind": "arrayLiteral",
             "elements": [
               {
                 "kind": "functionCall",
@@ -150,7 +214,7 @@
             "source": "[toUInt16(1)]"
           },
           {
-            "kind": "array",
+            "kind": "arrayLiteral",
             "elements": [
               {
                 "kind": "functionCall",
@@ -178,7 +242,7 @@
         "name": "arrayLevenshteinDistance",
         "args": [
           {
-            "kind": "array",
+            "kind": "arrayLiteral",
             "elements": [
               {
                 "kind": "functionCall",
@@ -200,7 +264,7 @@
             "source": "[toFloat32(1.1), 2]"
           },
           {
-            "kind": "array",
+            "kind": "arrayLiteral",
             "elements": [
               {
                 "kind": "functionCall",
@@ -223,7 +287,7 @@
         "name": "arrayLevenshteinDistance",
         "args": [
           {
-            "kind": "array",
+            "kind": "arrayLiteral",
             "elements": [
               {
                 "kind": "functionCall",
@@ -245,7 +309,7 @@
             "source": "[toFloat64(1.1), 2]"
           },
           {
-            "kind": "array",
+            "kind": "arrayLiteral",
             "elements": [
               {
                 "kind": "functionCall",
@@ -268,7 +332,7 @@
         "name": "arrayLevenshteinDistance",
         "args": [
           {
-            "kind": "array",
+            "kind": "arrayLiteral",
             "elements": [
               {
                 "kind": "functionCall",
@@ -296,7 +360,7 @@
             "source": "[toDate('2025-01-01'), toDate('2025-01-02')]"
           },
           {
-            "kind": "array",
+            "kind": "arrayLiteral",
             "elements": [
               {
                 "kind": "functionCall",
@@ -314,7 +378,104 @@
           }
         ]
       }
+    ],
+    "leadingComments": [
+      "-- arrayLevenshteinDistance for different types"
     ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "weighted_levenshtein"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "lhs",
+        "type": {
+          "name": "Array",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "String"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "rhs",
+        "type": {
+          "name": "Array",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "String"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "lhs_weights",
+        "type": {
+          "name": "Array",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "Float64"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "rhs_weights",
+        "type": {
+          "name": "Array",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "Float64"
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "functionCall",
+          "name": "tuple",
+          "args": []
+        }
+      }
+    ],
+    "leadingComments": [
+      "-- arrayLevenshteinDistanceWeighted"
+    ]
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "weighted_levenshtein"
+      }
+    }
   },
   {
     "kind": "select",
@@ -363,7 +524,7 @@
         "name": "arrayLevenshteinDistanceWeighted",
         "args": [
           {
-            "kind": "array",
+            "kind": "arrayLiteral",
             "elements": [
               {
                 "kind": "literal",
@@ -379,7 +540,7 @@
             "source": "['1', '2']"
           },
           {
-            "kind": "array",
+            "kind": "arrayLiteral",
             "elements": [
               {
                 "kind": "literal",
@@ -390,7 +551,7 @@
             "source": "['1']"
           },
           {
-            "kind": "array",
+            "kind": "arrayLiteral",
             "elements": [
               {
                 "kind": "literal",
@@ -406,7 +567,7 @@
             "source": "[1., 2]"
           },
           {
-            "kind": "array",
+            "kind": "arrayLiteral",
             "elements": [
               {
                 "kind": "literal",
@@ -423,7 +584,7 @@
         "name": "arrayLevenshteinDistanceWeighted",
         "args": [
           {
-            "kind": "array",
+            "kind": "arrayLiteral",
             "elements": [
               {
                 "kind": "functionCall",
@@ -461,7 +622,7 @@
             "source": "[toFixedString('1', 16), toFixedString('2', 16)]"
           },
           {
-            "kind": "array",
+            "kind": "arrayLiteral",
             "elements": [
               {
                 "kind": "functionCall",
@@ -483,7 +644,7 @@
             "source": "[toFixedString('1', 16)]"
           },
           {
-            "kind": "array",
+            "kind": "arrayLiteral",
             "elements": [
               {
                 "kind": "literal",
@@ -499,7 +660,7 @@
             "source": "[1., 2]"
           },
           {
-            "kind": "array",
+            "kind": "arrayLiteral",
             "elements": [
               {
                 "kind": "literal",
@@ -516,7 +677,7 @@
         "name": "arrayLevenshteinDistanceWeighted",
         "args": [
           {
-            "kind": "array",
+            "kind": "arrayLiteral",
             "elements": [
               {
                 "kind": "functionCall",
@@ -533,7 +694,7 @@
             "source": "[toUInt16(1)]"
           },
           {
-            "kind": "array",
+            "kind": "arrayLiteral",
             "elements": [
               {
                 "kind": "functionCall",
@@ -555,7 +716,7 @@
             "source": "[toUInt16(2), 1]"
           },
           {
-            "kind": "array",
+            "kind": "arrayLiteral",
             "elements": [
               {
                 "kind": "literal",
@@ -566,7 +727,7 @@
             "source": "[1.]"
           },
           {
-            "kind": "array",
+            "kind": "arrayLiteral",
             "elements": [
               {
                 "kind": "literal",
@@ -588,7 +749,7 @@
         "name": "arrayLevenshteinDistanceWeighted",
         "args": [
           {
-            "kind": "array",
+            "kind": "arrayLiteral",
             "elements": [
               {
                 "kind": "functionCall",
@@ -610,7 +771,7 @@
             "source": "[toFloat32(1.1), 2]"
           },
           {
-            "kind": "array",
+            "kind": "arrayLiteral",
             "elements": [
               {
                 "kind": "functionCall",
@@ -627,7 +788,7 @@
             "source": "[toFloat32(1.1)]"
           },
           {
-            "kind": "array",
+            "kind": "arrayLiteral",
             "elements": [
               {
                 "kind": "literal",
@@ -643,7 +804,7 @@
             "source": "[1., 2]"
           },
           {
-            "kind": "array",
+            "kind": "arrayLiteral",
             "elements": [
               {
                 "kind": "literal",
@@ -660,7 +821,7 @@
         "name": "arrayLevenshteinDistanceWeighted",
         "args": [
           {
-            "kind": "array",
+            "kind": "arrayLiteral",
             "elements": [
               {
                 "kind": "functionCall",
@@ -682,7 +843,7 @@
             "source": "[toFloat64(1.1), 2]"
           },
           {
-            "kind": "array",
+            "kind": "arrayLiteral",
             "elements": [
               {
                 "kind": "functionCall",
@@ -699,7 +860,7 @@
             "source": "[toFloat64(1.1)]"
           },
           {
-            "kind": "array",
+            "kind": "arrayLiteral",
             "elements": [
               {
                 "kind": "literal",
@@ -715,7 +876,7 @@
             "source": "[1., 2]"
           },
           {
-            "kind": "array",
+            "kind": "arrayLiteral",
             "elements": [
               {
                 "kind": "literal",
@@ -732,7 +893,7 @@
         "name": "arrayLevenshteinDistanceWeighted",
         "args": [
           {
-            "kind": "array",
+            "kind": "arrayLiteral",
             "elements": [
               {
                 "kind": "functionCall",
@@ -760,7 +921,7 @@
             "source": "[toDate('2025-01-01'), toDate('2025-01-02')]"
           },
           {
-            "kind": "array",
+            "kind": "arrayLiteral",
             "elements": [
               {
                 "kind": "functionCall",
@@ -777,7 +938,7 @@
             "source": "[toDate('2025-01-01')]"
           },
           {
-            "kind": "array",
+            "kind": "arrayLiteral",
             "elements": [
               {
                 "kind": "literal",
@@ -793,7 +954,7 @@
             "source": "[1., 2]"
           },
           {
-            "kind": "array",
+            "kind": "arrayLiteral",
             "elements": [
               {
                 "kind": "literal",
@@ -805,6 +966,9 @@
           }
         ]
       }
+    ],
+    "leadingComments": [
+      "-- arrayLevenshteinDistance for different arrays' types"
     ]
   },
   {
@@ -815,7 +979,7 @@
         "name": "arrayLevenshteinDistanceWeighted",
         "args": [
           {
-            "kind": "array",
+            "kind": "arrayLiteral",
             "elements": [
               {
                 "kind": "literal",
@@ -831,7 +995,7 @@
             "source": "['1', '2']"
           },
           {
-            "kind": "array",
+            "kind": "arrayLiteral",
             "elements": [
               {
                 "kind": "literal",
@@ -842,7 +1006,7 @@
             "source": "['1']"
           },
           {
-            "kind": "array",
+            "kind": "arrayLiteral",
             "elements": [
               {
                 "kind": "functionCall",
@@ -864,7 +1028,7 @@
             "source": "[toUInt8(1), 2]"
           },
           {
-            "kind": "array",
+            "kind": "arrayLiteral",
             "elements": [
               {
                 "kind": "functionCall",
@@ -887,7 +1051,7 @@
         "name": "arrayLevenshteinDistanceWeighted",
         "args": [
           {
-            "kind": "array",
+            "kind": "arrayLiteral",
             "elements": [
               {
                 "kind": "literal",
@@ -903,7 +1067,7 @@
             "source": "['1', '2']"
           },
           {
-            "kind": "array",
+            "kind": "arrayLiteral",
             "elements": [
               {
                 "kind": "literal",
@@ -914,7 +1078,7 @@
             "source": "['1']"
           },
           {
-            "kind": "array",
+            "kind": "arrayLiteral",
             "elements": [
               {
                 "kind": "functionCall",
@@ -936,7 +1100,7 @@
             "source": "[toUInt16(1), 2]"
           },
           {
-            "kind": "array",
+            "kind": "arrayLiteral",
             "elements": [
               {
                 "kind": "functionCall",
@@ -959,7 +1123,7 @@
         "name": "arrayLevenshteinDistanceWeighted",
         "args": [
           {
-            "kind": "array",
+            "kind": "arrayLiteral",
             "elements": [
               {
                 "kind": "literal",
@@ -975,7 +1139,7 @@
             "source": "['1', '2']"
           },
           {
-            "kind": "array",
+            "kind": "arrayLiteral",
             "elements": [
               {
                 "kind": "literal",
@@ -986,7 +1150,7 @@
             "source": "['1']"
           },
           {
-            "kind": "array",
+            "kind": "arrayLiteral",
             "elements": [
               {
                 "kind": "functionCall",
@@ -1008,7 +1172,7 @@
             "source": "[toUInt32(1), 2]"
           },
           {
-            "kind": "array",
+            "kind": "arrayLiteral",
             "elements": [
               {
                 "kind": "functionCall",
@@ -1031,7 +1195,7 @@
         "name": "arrayLevenshteinDistanceWeighted",
         "args": [
           {
-            "kind": "array",
+            "kind": "arrayLiteral",
             "elements": [
               {
                 "kind": "literal",
@@ -1047,7 +1211,7 @@
             "source": "['1', '2']"
           },
           {
-            "kind": "array",
+            "kind": "arrayLiteral",
             "elements": [
               {
                 "kind": "literal",
@@ -1058,7 +1222,7 @@
             "source": "['1']"
           },
           {
-            "kind": "array",
+            "kind": "arrayLiteral",
             "elements": [
               {
                 "kind": "functionCall",
@@ -1080,7 +1244,7 @@
             "source": "[toUInt64(1), 2]"
           },
           {
-            "kind": "array",
+            "kind": "arrayLiteral",
             "elements": [
               {
                 "kind": "functionCall",
@@ -1103,7 +1267,7 @@
         "name": "arrayLevenshteinDistanceWeighted",
         "args": [
           {
-            "kind": "array",
+            "kind": "arrayLiteral",
             "elements": [
               {
                 "kind": "literal",
@@ -1119,7 +1283,7 @@
             "source": "['1', '2']"
           },
           {
-            "kind": "array",
+            "kind": "arrayLiteral",
             "elements": [
               {
                 "kind": "literal",
@@ -1130,7 +1294,7 @@
             "source": "['1']"
           },
           {
-            "kind": "array",
+            "kind": "arrayLiteral",
             "elements": [
               {
                 "kind": "functionCall",
@@ -1152,7 +1316,7 @@
             "source": "[toUInt128(1), 2]"
           },
           {
-            "kind": "array",
+            "kind": "arrayLiteral",
             "elements": [
               {
                 "kind": "functionCall",
@@ -1175,7 +1339,7 @@
         "name": "arrayLevenshteinDistanceWeighted",
         "args": [
           {
-            "kind": "array",
+            "kind": "arrayLiteral",
             "elements": [
               {
                 "kind": "literal",
@@ -1191,7 +1355,7 @@
             "source": "['1', '2']"
           },
           {
-            "kind": "array",
+            "kind": "arrayLiteral",
             "elements": [
               {
                 "kind": "literal",
@@ -1202,7 +1366,7 @@
             "source": "['1']"
           },
           {
-            "kind": "array",
+            "kind": "arrayLiteral",
             "elements": [
               {
                 "kind": "functionCall",
@@ -1224,7 +1388,7 @@
             "source": "[toUInt256(1), 2]"
           },
           {
-            "kind": "array",
+            "kind": "arrayLiteral",
             "elements": [
               {
                 "kind": "functionCall",
@@ -1247,7 +1411,7 @@
         "name": "arrayLevenshteinDistanceWeighted",
         "args": [
           {
-            "kind": "array",
+            "kind": "arrayLiteral",
             "elements": [
               {
                 "kind": "literal",
@@ -1263,7 +1427,7 @@
             "source": "['1', '2']"
           },
           {
-            "kind": "array",
+            "kind": "arrayLiteral",
             "elements": [
               {
                 "kind": "literal",
@@ -1274,7 +1438,7 @@
             "source": "['1']"
           },
           {
-            "kind": "array",
+            "kind": "arrayLiteral",
             "elements": [
               {
                 "kind": "functionCall",
@@ -1302,7 +1466,7 @@
             "source": "[toInt8(1), toInt8(2)]"
           },
           {
-            "kind": "array",
+            "kind": "arrayLiteral",
             "elements": [
               {
                 "kind": "functionCall",
@@ -1318,6 +1482,9 @@
             ],
             "source": "[toInt8(1)]"
           }
+        ],
+        "trailingComments": [
+          "-- automatic type assumption gives Int16"
         ]
       },
       {
@@ -1325,7 +1492,7 @@
         "name": "arrayLevenshteinDistanceWeighted",
         "args": [
           {
-            "kind": "array",
+            "kind": "arrayLiteral",
             "elements": [
               {
                 "kind": "literal",
@@ -1341,7 +1508,7 @@
             "source": "['1', '2']"
           },
           {
-            "kind": "array",
+            "kind": "arrayLiteral",
             "elements": [
               {
                 "kind": "literal",
@@ -1352,7 +1519,7 @@
             "source": "['1']"
           },
           {
-            "kind": "array",
+            "kind": "arrayLiteral",
             "elements": [
               {
                 "kind": "functionCall",
@@ -1374,7 +1541,7 @@
             "source": "[toInt16(1), 2]"
           },
           {
-            "kind": "array",
+            "kind": "arrayLiteral",
             "elements": [
               {
                 "kind": "functionCall",
@@ -1397,7 +1564,7 @@
         "name": "arrayLevenshteinDistanceWeighted",
         "args": [
           {
-            "kind": "array",
+            "kind": "arrayLiteral",
             "elements": [
               {
                 "kind": "literal",
@@ -1413,7 +1580,7 @@
             "source": "['1', '2']"
           },
           {
-            "kind": "array",
+            "kind": "arrayLiteral",
             "elements": [
               {
                 "kind": "literal",
@@ -1424,7 +1591,7 @@
             "source": "['1']"
           },
           {
-            "kind": "array",
+            "kind": "arrayLiteral",
             "elements": [
               {
                 "kind": "functionCall",
@@ -1446,7 +1613,7 @@
             "source": "[toInt32(1), 2]"
           },
           {
-            "kind": "array",
+            "kind": "arrayLiteral",
             "elements": [
               {
                 "kind": "functionCall",
@@ -1469,7 +1636,7 @@
         "name": "arrayLevenshteinDistanceWeighted",
         "args": [
           {
-            "kind": "array",
+            "kind": "arrayLiteral",
             "elements": [
               {
                 "kind": "literal",
@@ -1485,7 +1652,7 @@
             "source": "['1', '2']"
           },
           {
-            "kind": "array",
+            "kind": "arrayLiteral",
             "elements": [
               {
                 "kind": "literal",
@@ -1496,7 +1663,7 @@
             "source": "['1']"
           },
           {
-            "kind": "array",
+            "kind": "arrayLiteral",
             "elements": [
               {
                 "kind": "functionCall",
@@ -1518,7 +1685,7 @@
             "source": "[toInt64(1), 2]"
           },
           {
-            "kind": "array",
+            "kind": "arrayLiteral",
             "elements": [
               {
                 "kind": "functionCall",
@@ -1541,7 +1708,7 @@
         "name": "arrayLevenshteinDistanceWeighted",
         "args": [
           {
-            "kind": "array",
+            "kind": "arrayLiteral",
             "elements": [
               {
                 "kind": "literal",
@@ -1557,7 +1724,7 @@
             "source": "['1', '2']"
           },
           {
-            "kind": "array",
+            "kind": "arrayLiteral",
             "elements": [
               {
                 "kind": "literal",
@@ -1568,7 +1735,7 @@
             "source": "['1']"
           },
           {
-            "kind": "array",
+            "kind": "arrayLiteral",
             "elements": [
               {
                 "kind": "functionCall",
@@ -1590,7 +1757,7 @@
             "source": "[toInt128(1), 2]"
           },
           {
-            "kind": "array",
+            "kind": "arrayLiteral",
             "elements": [
               {
                 "kind": "functionCall",
@@ -1613,7 +1780,7 @@
         "name": "arrayLevenshteinDistanceWeighted",
         "args": [
           {
-            "kind": "array",
+            "kind": "arrayLiteral",
             "elements": [
               {
                 "kind": "literal",
@@ -1629,7 +1796,7 @@
             "source": "['1', '2']"
           },
           {
-            "kind": "array",
+            "kind": "arrayLiteral",
             "elements": [
               {
                 "kind": "literal",
@@ -1640,7 +1807,7 @@
             "source": "['1']"
           },
           {
-            "kind": "array",
+            "kind": "arrayLiteral",
             "elements": [
               {
                 "kind": "functionCall",
@@ -1662,7 +1829,7 @@
             "source": "[toInt256(1), 2]"
           },
           {
-            "kind": "array",
+            "kind": "arrayLiteral",
             "elements": [
               {
                 "kind": "functionCall",
@@ -1685,7 +1852,7 @@
         "name": "arrayLevenshteinDistanceWeighted",
         "args": [
           {
-            "kind": "array",
+            "kind": "arrayLiteral",
             "elements": [
               {
                 "kind": "literal",
@@ -1701,7 +1868,7 @@
             "source": "['1', '2']"
           },
           {
-            "kind": "array",
+            "kind": "arrayLiteral",
             "elements": [
               {
                 "kind": "literal",
@@ -1712,7 +1879,7 @@
             "source": "['1']"
           },
           {
-            "kind": "array",
+            "kind": "arrayLiteral",
             "elements": [
               {
                 "kind": "functionCall",
@@ -1734,7 +1901,7 @@
             "source": "[toFloat32(1), 2]"
           },
           {
-            "kind": "array",
+            "kind": "arrayLiteral",
             "elements": [
               {
                 "kind": "functionCall",
@@ -1757,7 +1924,7 @@
         "name": "arrayLevenshteinDistanceWeighted",
         "args": [
           {
-            "kind": "array",
+            "kind": "arrayLiteral",
             "elements": [
               {
                 "kind": "literal",
@@ -1773,7 +1940,7 @@
             "source": "['1', '2']"
           },
           {
-            "kind": "array",
+            "kind": "arrayLiteral",
             "elements": [
               {
                 "kind": "literal",
@@ -1784,7 +1951,7 @@
             "source": "['1']"
           },
           {
-            "kind": "array",
+            "kind": "arrayLiteral",
             "elements": [
               {
                 "kind": "functionCall",
@@ -1806,7 +1973,7 @@
             "source": "[toFloat64(1), 2]"
           },
           {
-            "kind": "array",
+            "kind": "arrayLiteral",
             "elements": [
               {
                 "kind": "functionCall",
@@ -1824,6 +1991,9 @@
           }
         ]
       }
+    ],
+    "leadingComments": [
+      "-- arrayLevenshteinDistanceWeighted for different weight types"
     ]
   },
   {
@@ -1874,7 +2044,10 @@
     "from": {
       "kind": "tableRef",
       "table": "weighted_levenshtein"
-    }
+    },
+    "leadingComments": [
+      "-- arraySimilarity"
+    ]
   },
   {
     "kind": "select",
@@ -1884,7 +2057,7 @@
         "name": "arraySimilarity",
         "args": [
           {
-            "kind": "array",
+            "kind": "arrayLiteral",
             "elements": [
               {
                 "kind": "literal",
@@ -1900,7 +2073,7 @@
             "source": "['1', '2']"
           },
           {
-            "kind": "array",
+            "kind": "arrayLiteral",
             "elements": [
               {
                 "kind": "literal",
@@ -1911,7 +2084,7 @@
             "source": "['1']"
           },
           {
-            "kind": "array",
+            "kind": "arrayLiteral",
             "elements": [
               {
                 "kind": "literal",
@@ -1927,7 +2100,7 @@
             "source": "[1., 2]"
           },
           {
-            "kind": "array",
+            "kind": "arrayLiteral",
             "elements": [
               {
                 "kind": "literal",
@@ -1944,7 +2117,7 @@
         "name": "arraySimilarity",
         "args": [
           {
-            "kind": "array",
+            "kind": "arrayLiteral",
             "elements": [
               {
                 "kind": "functionCall",
@@ -1982,7 +2155,7 @@
             "source": "[toFixedString('1', 16), toFixedString('2', 16)]"
           },
           {
-            "kind": "array",
+            "kind": "arrayLiteral",
             "elements": [
               {
                 "kind": "functionCall",
@@ -2004,7 +2177,7 @@
             "source": "[toFixedString('1', 16)]"
           },
           {
-            "kind": "array",
+            "kind": "arrayLiteral",
             "elements": [
               {
                 "kind": "literal",
@@ -2020,7 +2193,7 @@
             "source": "[1., 2]"
           },
           {
-            "kind": "array",
+            "kind": "arrayLiteral",
             "elements": [
               {
                 "kind": "literal",
@@ -2037,7 +2210,7 @@
         "name": "arraySimilarity",
         "args": [
           {
-            "kind": "array",
+            "kind": "arrayLiteral",
             "elements": [
               {
                 "kind": "functionCall",
@@ -2054,7 +2227,7 @@
             "source": "[toUInt16(1)]"
           },
           {
-            "kind": "array",
+            "kind": "arrayLiteral",
             "elements": [
               {
                 "kind": "functionCall",
@@ -2076,7 +2249,7 @@
             "source": "[toUInt16(2), 1]"
           },
           {
-            "kind": "array",
+            "kind": "arrayLiteral",
             "elements": [
               {
                 "kind": "literal",
@@ -2087,7 +2260,7 @@
             "source": "[1.]"
           },
           {
-            "kind": "array",
+            "kind": "arrayLiteral",
             "elements": [
               {
                 "kind": "literal",
@@ -2109,7 +2282,7 @@
         "name": "arraySimilarity",
         "args": [
           {
-            "kind": "array",
+            "kind": "arrayLiteral",
             "elements": [
               {
                 "kind": "functionCall",
@@ -2131,7 +2304,7 @@
             "source": "[toFloat32(1.1), 2]"
           },
           {
-            "kind": "array",
+            "kind": "arrayLiteral",
             "elements": [
               {
                 "kind": "functionCall",
@@ -2148,7 +2321,7 @@
             "source": "[toFloat32(1.1)]"
           },
           {
-            "kind": "array",
+            "kind": "arrayLiteral",
             "elements": [
               {
                 "kind": "literal",
@@ -2164,7 +2337,7 @@
             "source": "[1., 2]"
           },
           {
-            "kind": "array",
+            "kind": "arrayLiteral",
             "elements": [
               {
                 "kind": "literal",
@@ -2181,7 +2354,7 @@
         "name": "arraySimilarity",
         "args": [
           {
-            "kind": "array",
+            "kind": "arrayLiteral",
             "elements": [
               {
                 "kind": "functionCall",
@@ -2203,7 +2376,7 @@
             "source": "[toFloat64(1.1), 2]"
           },
           {
-            "kind": "array",
+            "kind": "arrayLiteral",
             "elements": [
               {
                 "kind": "functionCall",
@@ -2220,7 +2393,7 @@
             "source": "[toFloat64(1.1)]"
           },
           {
-            "kind": "array",
+            "kind": "arrayLiteral",
             "elements": [
               {
                 "kind": "literal",
@@ -2236,7 +2409,7 @@
             "source": "[1., 2]"
           },
           {
-            "kind": "array",
+            "kind": "arrayLiteral",
             "elements": [
               {
                 "kind": "literal",
@@ -2253,7 +2426,7 @@
         "name": "arraySimilarity",
         "args": [
           {
-            "kind": "array",
+            "kind": "arrayLiteral",
             "elements": [
               {
                 "kind": "functionCall",
@@ -2281,7 +2454,7 @@
             "source": "[toDate('2025-01-01'), toDate('2025-01-02')]"
           },
           {
-            "kind": "array",
+            "kind": "arrayLiteral",
             "elements": [
               {
                 "kind": "functionCall",
@@ -2298,7 +2471,7 @@
             "source": "[toDate('2025-01-01')]"
           },
           {
-            "kind": "array",
+            "kind": "arrayLiteral",
             "elements": [
               {
                 "kind": "literal",
@@ -2314,7 +2487,7 @@
             "source": "[1., 2]"
           },
           {
-            "kind": "array",
+            "kind": "arrayLiteral",
             "elements": [
               {
                 "kind": "literal",
@@ -2326,6 +2499,9 @@
           }
         ]
       }
+    ],
+    "leadingComments": [
+      "-- arraySimilarity for different arrays' types"
     ]
   },
   {
@@ -2336,7 +2512,7 @@
         "name": "arraySimilarity",
         "args": [
           {
-            "kind": "array",
+            "kind": "arrayLiteral",
             "elements": [
               {
                 "kind": "literal",
@@ -2352,7 +2528,7 @@
             "source": "['1', '2']"
           },
           {
-            "kind": "array",
+            "kind": "arrayLiteral",
             "elements": [
               {
                 "kind": "literal",
@@ -2363,7 +2539,7 @@
             "source": "['1']"
           },
           {
-            "kind": "array",
+            "kind": "arrayLiteral",
             "elements": [
               {
                 "kind": "functionCall",
@@ -2385,7 +2561,7 @@
             "source": "[toUInt8(1), 2]"
           },
           {
-            "kind": "array",
+            "kind": "arrayLiteral",
             "elements": [
               {
                 "kind": "functionCall",
@@ -2408,7 +2584,7 @@
         "name": "arraySimilarity",
         "args": [
           {
-            "kind": "array",
+            "kind": "arrayLiteral",
             "elements": [
               {
                 "kind": "literal",
@@ -2424,7 +2600,7 @@
             "source": "['1', '2']"
           },
           {
-            "kind": "array",
+            "kind": "arrayLiteral",
             "elements": [
               {
                 "kind": "literal",
@@ -2435,7 +2611,7 @@
             "source": "['1']"
           },
           {
-            "kind": "array",
+            "kind": "arrayLiteral",
             "elements": [
               {
                 "kind": "functionCall",
@@ -2457,7 +2633,7 @@
             "source": "[toUInt16(1), 2]"
           },
           {
-            "kind": "array",
+            "kind": "arrayLiteral",
             "elements": [
               {
                 "kind": "functionCall",
@@ -2480,7 +2656,7 @@
         "name": "arraySimilarity",
         "args": [
           {
-            "kind": "array",
+            "kind": "arrayLiteral",
             "elements": [
               {
                 "kind": "literal",
@@ -2496,7 +2672,7 @@
             "source": "['1', '2']"
           },
           {
-            "kind": "array",
+            "kind": "arrayLiteral",
             "elements": [
               {
                 "kind": "literal",
@@ -2507,7 +2683,7 @@
             "source": "['1']"
           },
           {
-            "kind": "array",
+            "kind": "arrayLiteral",
             "elements": [
               {
                 "kind": "functionCall",
@@ -2529,7 +2705,7 @@
             "source": "[toUInt32(1), 2]"
           },
           {
-            "kind": "array",
+            "kind": "arrayLiteral",
             "elements": [
               {
                 "kind": "functionCall",
@@ -2552,7 +2728,7 @@
         "name": "arraySimilarity",
         "args": [
           {
-            "kind": "array",
+            "kind": "arrayLiteral",
             "elements": [
               {
                 "kind": "literal",
@@ -2568,7 +2744,7 @@
             "source": "['1', '2']"
           },
           {
-            "kind": "array",
+            "kind": "arrayLiteral",
             "elements": [
               {
                 "kind": "literal",
@@ -2579,7 +2755,7 @@
             "source": "['1']"
           },
           {
-            "kind": "array",
+            "kind": "arrayLiteral",
             "elements": [
               {
                 "kind": "functionCall",
@@ -2601,7 +2777,7 @@
             "source": "[toUInt64(1), 2]"
           },
           {
-            "kind": "array",
+            "kind": "arrayLiteral",
             "elements": [
               {
                 "kind": "functionCall",
@@ -2624,7 +2800,7 @@
         "name": "arraySimilarity",
         "args": [
           {
-            "kind": "array",
+            "kind": "arrayLiteral",
             "elements": [
               {
                 "kind": "literal",
@@ -2640,7 +2816,7 @@
             "source": "['1', '2']"
           },
           {
-            "kind": "array",
+            "kind": "arrayLiteral",
             "elements": [
               {
                 "kind": "literal",
@@ -2651,7 +2827,7 @@
             "source": "['1']"
           },
           {
-            "kind": "array",
+            "kind": "arrayLiteral",
             "elements": [
               {
                 "kind": "functionCall",
@@ -2673,7 +2849,7 @@
             "source": "[toUInt128(1), 2]"
           },
           {
-            "kind": "array",
+            "kind": "arrayLiteral",
             "elements": [
               {
                 "kind": "functionCall",
@@ -2696,7 +2872,7 @@
         "name": "arraySimilarity",
         "args": [
           {
-            "kind": "array",
+            "kind": "arrayLiteral",
             "elements": [
               {
                 "kind": "literal",
@@ -2712,7 +2888,7 @@
             "source": "['1', '2']"
           },
           {
-            "kind": "array",
+            "kind": "arrayLiteral",
             "elements": [
               {
                 "kind": "literal",
@@ -2723,7 +2899,7 @@
             "source": "['1']"
           },
           {
-            "kind": "array",
+            "kind": "arrayLiteral",
             "elements": [
               {
                 "kind": "functionCall",
@@ -2745,7 +2921,7 @@
             "source": "[toUInt256(1), 2]"
           },
           {
-            "kind": "array",
+            "kind": "arrayLiteral",
             "elements": [
               {
                 "kind": "functionCall",
@@ -2768,7 +2944,7 @@
         "name": "arraySimilarity",
         "args": [
           {
-            "kind": "array",
+            "kind": "arrayLiteral",
             "elements": [
               {
                 "kind": "literal",
@@ -2784,7 +2960,7 @@
             "source": "['1', '2']"
           },
           {
-            "kind": "array",
+            "kind": "arrayLiteral",
             "elements": [
               {
                 "kind": "literal",
@@ -2795,7 +2971,7 @@
             "source": "['1']"
           },
           {
-            "kind": "array",
+            "kind": "arrayLiteral",
             "elements": [
               {
                 "kind": "functionCall",
@@ -2823,7 +2999,7 @@
             "source": "[toInt8(1), toInt8(2)]"
           },
           {
-            "kind": "array",
+            "kind": "arrayLiteral",
             "elements": [
               {
                 "kind": "functionCall",
@@ -2839,6 +3015,9 @@
             ],
             "source": "[toInt8(1)]"
           }
+        ],
+        "trailingComments": [
+          "-- automatic type assumption gives Int16"
         ]
       },
       {
@@ -2846,7 +3025,7 @@
         "name": "arraySimilarity",
         "args": [
           {
-            "kind": "array",
+            "kind": "arrayLiteral",
             "elements": [
               {
                 "kind": "literal",
@@ -2862,7 +3041,7 @@
             "source": "['1', '2']"
           },
           {
-            "kind": "array",
+            "kind": "arrayLiteral",
             "elements": [
               {
                 "kind": "literal",
@@ -2873,7 +3052,7 @@
             "source": "['1']"
           },
           {
-            "kind": "array",
+            "kind": "arrayLiteral",
             "elements": [
               {
                 "kind": "functionCall",
@@ -2895,7 +3074,7 @@
             "source": "[toInt16(1), 2]"
           },
           {
-            "kind": "array",
+            "kind": "arrayLiteral",
             "elements": [
               {
                 "kind": "functionCall",
@@ -2918,7 +3097,7 @@
         "name": "arraySimilarity",
         "args": [
           {
-            "kind": "array",
+            "kind": "arrayLiteral",
             "elements": [
               {
                 "kind": "literal",
@@ -2934,7 +3113,7 @@
             "source": "['1', '2']"
           },
           {
-            "kind": "array",
+            "kind": "arrayLiteral",
             "elements": [
               {
                 "kind": "literal",
@@ -2945,7 +3124,7 @@
             "source": "['1']"
           },
           {
-            "kind": "array",
+            "kind": "arrayLiteral",
             "elements": [
               {
                 "kind": "functionCall",
@@ -2967,7 +3146,7 @@
             "source": "[toInt32(1), 2]"
           },
           {
-            "kind": "array",
+            "kind": "arrayLiteral",
             "elements": [
               {
                 "kind": "functionCall",
@@ -2990,7 +3169,7 @@
         "name": "arraySimilarity",
         "args": [
           {
-            "kind": "array",
+            "kind": "arrayLiteral",
             "elements": [
               {
                 "kind": "literal",
@@ -3006,7 +3185,7 @@
             "source": "['1', '2']"
           },
           {
-            "kind": "array",
+            "kind": "arrayLiteral",
             "elements": [
               {
                 "kind": "literal",
@@ -3017,7 +3196,7 @@
             "source": "['1']"
           },
           {
-            "kind": "array",
+            "kind": "arrayLiteral",
             "elements": [
               {
                 "kind": "functionCall",
@@ -3039,7 +3218,7 @@
             "source": "[toInt64(1), 2]"
           },
           {
-            "kind": "array",
+            "kind": "arrayLiteral",
             "elements": [
               {
                 "kind": "functionCall",
@@ -3062,7 +3241,7 @@
         "name": "arraySimilarity",
         "args": [
           {
-            "kind": "array",
+            "kind": "arrayLiteral",
             "elements": [
               {
                 "kind": "literal",
@@ -3078,7 +3257,7 @@
             "source": "['1', '2']"
           },
           {
-            "kind": "array",
+            "kind": "arrayLiteral",
             "elements": [
               {
                 "kind": "literal",
@@ -3089,7 +3268,7 @@
             "source": "['1']"
           },
           {
-            "kind": "array",
+            "kind": "arrayLiteral",
             "elements": [
               {
                 "kind": "functionCall",
@@ -3111,7 +3290,7 @@
             "source": "[toInt128(1), 2]"
           },
           {
-            "kind": "array",
+            "kind": "arrayLiteral",
             "elements": [
               {
                 "kind": "functionCall",
@@ -3134,7 +3313,7 @@
         "name": "arraySimilarity",
         "args": [
           {
-            "kind": "array",
+            "kind": "arrayLiteral",
             "elements": [
               {
                 "kind": "literal",
@@ -3150,7 +3329,7 @@
             "source": "['1', '2']"
           },
           {
-            "kind": "array",
+            "kind": "arrayLiteral",
             "elements": [
               {
                 "kind": "literal",
@@ -3161,7 +3340,7 @@
             "source": "['1']"
           },
           {
-            "kind": "array",
+            "kind": "arrayLiteral",
             "elements": [
               {
                 "kind": "functionCall",
@@ -3183,7 +3362,7 @@
             "source": "[toInt256(1), 2]"
           },
           {
-            "kind": "array",
+            "kind": "arrayLiteral",
             "elements": [
               {
                 "kind": "functionCall",
@@ -3206,7 +3385,7 @@
         "name": "arraySimilarity",
         "args": [
           {
-            "kind": "array",
+            "kind": "arrayLiteral",
             "elements": [
               {
                 "kind": "literal",
@@ -3222,7 +3401,7 @@
             "source": "['1', '2']"
           },
           {
-            "kind": "array",
+            "kind": "arrayLiteral",
             "elements": [
               {
                 "kind": "literal",
@@ -3233,7 +3412,7 @@
             "source": "['1']"
           },
           {
-            "kind": "array",
+            "kind": "arrayLiteral",
             "elements": [
               {
                 "kind": "functionCall",
@@ -3255,7 +3434,7 @@
             "source": "[toFloat32(1), 2]"
           },
           {
-            "kind": "array",
+            "kind": "arrayLiteral",
             "elements": [
               {
                 "kind": "functionCall",
@@ -3278,7 +3457,7 @@
         "name": "arraySimilarity",
         "args": [
           {
-            "kind": "array",
+            "kind": "arrayLiteral",
             "elements": [
               {
                 "kind": "literal",
@@ -3294,7 +3473,7 @@
             "source": "['1', '2']"
           },
           {
-            "kind": "array",
+            "kind": "arrayLiteral",
             "elements": [
               {
                 "kind": "literal",
@@ -3305,7 +3484,7 @@
             "source": "['1']"
           },
           {
-            "kind": "array",
+            "kind": "arrayLiteral",
             "elements": [
               {
                 "kind": "functionCall",
@@ -3327,7 +3506,7 @@
             "source": "[toFloat64(1), 2]"
           },
           {
-            "kind": "array",
+            "kind": "arrayLiteral",
             "elements": [
               {
                 "kind": "functionCall",
@@ -3345,6 +3524,9 @@
           }
         ]
       }
+    ],
+    "leadingComments": [
+      "-- arraySimilarity for different weight types"
     ]
   },
   {
@@ -3384,7 +3566,13 @@
     "from": {
       "kind": "tableRef",
       "table": "weighted_levenshtein"
-    }
+    },
+    "leadingComments": [
+      "-- errors NUMBER_OF_ARGUMENTS_DOESNT_MATCH"
+    ],
+    "trailingComments": [
+      "-- { serverError NUMBER_OF_ARGUMENTS_DOESNT_MATCH }"
+    ]
   },
   {
     "kind": "select",
@@ -3411,7 +3599,10 @@
     "from": {
       "kind": "tableRef",
       "table": "simple_levenshtein"
-    }
+    },
+    "trailingComments": [
+      "-- { serverError NUMBER_OF_ARGUMENTS_DOESNT_MATCH }"
+    ]
   },
   {
     "kind": "select",
@@ -3449,7 +3640,10 @@
     "from": {
       "kind": "tableRef",
       "table": "simple_levenshtein"
-    }
+    },
+    "trailingComments": [
+      "-- { serverError NUMBER_OF_ARGUMENTS_DOESNT_MATCH }"
+    ]
   },
   {
     "kind": "select",
@@ -3464,7 +3658,7 @@
             "value": "1"
           },
           {
-            "kind": "array",
+            "kind": "arrayLiteral",
             "elements": [
               {
                 "kind": "literal",
@@ -3476,6 +3670,12 @@
           }
         ]
       }
+    ],
+    "leadingComments": [
+      "-- errors ILLEGAL_TYPE_OF_ARGUMENT"
+    ],
+    "trailingComments": [
+      "-- { serverError ILLEGAL_TYPE_OF_ARGUMENT }"
     ]
   },
   {
@@ -3486,7 +3686,7 @@
         "name": "arrayLevenshteinDistanceWeighted",
         "args": [
           {
-            "kind": "array",
+            "kind": "arrayLiteral",
             "elements": [
               {
                 "kind": "literal",
@@ -3502,7 +3702,7 @@
             "value": "1"
           },
           {
-            "kind": "array",
+            "kind": "arrayLiteral",
             "elements": [
               {
                 "kind": "literal",
@@ -3518,7 +3718,7 @@
             "source": "[1, 2]"
           },
           {
-            "kind": "array",
+            "kind": "arrayLiteral",
             "elements": [
               {
                 "kind": "literal",
@@ -3530,6 +3730,9 @@
           }
         ]
       }
+    ],
+    "trailingComments": [
+      "-- { serverError ILLEGAL_TYPE_OF_ARGUMENT }"
     ]
   },
   {
@@ -3540,7 +3743,7 @@
         "name": "arraySimilarity",
         "args": [
           {
-            "kind": "array",
+            "kind": "arrayLiteral",
             "elements": [
               {
                 "kind": "literal",
@@ -3561,7 +3764,7 @@
             "value": "1"
           },
           {
-            "kind": "array",
+            "kind": "arrayLiteral",
             "elements": [
               {
                 "kind": "literal",
@@ -3577,7 +3780,7 @@
             "source": "[1, 2]"
           },
           {
-            "kind": "array",
+            "kind": "arrayLiteral",
             "elements": [
               {
                 "kind": "literal",
@@ -3589,6 +3792,9 @@
           }
         ]
       }
+    ],
+    "trailingComments": [
+      "-- { serverError ILLEGAL_TYPE_OF_ARGUMENT }"
     ]
   },
   {
@@ -3599,7 +3805,7 @@
         "name": "arrayLevenshteinDistanceWeighted",
         "args": [
           {
-            "kind": "array",
+            "kind": "arrayLiteral",
             "elements": [
               {
                 "kind": "literal",
@@ -3615,7 +3821,7 @@
             "source": "[1, 2]"
           },
           {
-            "kind": "array",
+            "kind": "arrayLiteral",
             "elements": [
               {
                 "kind": "literal",
@@ -3626,7 +3832,7 @@
             "source": "[1]"
           },
           {
-            "kind": "array",
+            "kind": "arrayLiteral",
             "elements": [
               {
                 "kind": "literal",
@@ -3642,7 +3848,7 @@
             "source": "[1., 2]"
           },
           {
-            "kind": "array",
+            "kind": "arrayLiteral",
             "elements": [
               {
                 "kind": "literal",
@@ -3659,6 +3865,12 @@
           }
         ]
       }
+    ],
+    "leadingComments": [
+      "--"
+    ],
+    "trailingComments": [
+      "-- { serverError SIZES_OF_ARRAYS_DONT_MATCH }"
     ]
   },
   {
@@ -3669,7 +3881,7 @@
         "name": "arraySimilarity",
         "args": [
           {
-            "kind": "array",
+            "kind": "arrayLiteral",
             "elements": [
               {
                 "kind": "literal",
@@ -3685,7 +3897,7 @@
             "source": "[1, 2]"
           },
           {
-            "kind": "array",
+            "kind": "arrayLiteral",
             "elements": [
               {
                 "kind": "literal",
@@ -3696,7 +3908,7 @@
             "source": "[1]"
           },
           {
-            "kind": "array",
+            "kind": "arrayLiteral",
             "elements": [
               {
                 "kind": "literal",
@@ -3712,7 +3924,7 @@
             "source": "[1., 2]"
           },
           {
-            "kind": "array",
+            "kind": "arrayLiteral",
             "elements": [
               {
                 "kind": "literal",
@@ -3729,6 +3941,9 @@
           }
         ]
       }
+    ],
+    "trailingComments": [
+      "-- { serverError SIZES_OF_ARRAYS_DONT_MATCH }"
     ]
   }
 ]

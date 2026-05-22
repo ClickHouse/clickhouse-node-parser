@@ -1,8 +1,40 @@
+-- Tags: no-parallel, no-fasttest, no-ordinary-database
+-- no-parallel: looks at server-wide metrics
+-- Tests the vector index cache.
+SET parallel_replicas_local_plan = 1;
+
+SYSTEM CLEAR VECTOR SIMILARITY INDEX CACHE;
+
 SELECT
     metric,
     value
 FROM `system`.metrics
 WHERE metric = 'VectorSimilarityIndexCacheBytes';
+
+DROP TABLE IF EXISTS tab;
+
+CREATE TABLE tab
+(
+    id Int32,
+    vec Array(Float32),
+    INDEX idx vec TYPE vector_similarity('hnsw', 'L2Distance', 2)
+)
+ENGINE = MergeTree
+ORDER BY id;
+
+INSERT INTO tab;
+
+WITH [0.0, 2.0] AS reference_vec
+
+SELECT
+    id,
+    vec,
+    L2Distance(vec, reference_vec)
+FROM tab
+ORDER BY L2Distance(vec, reference_vec) ASC
+LIMIT 3;
+
+SYSTEM FLUSH LOGS query_log;
 
 SELECT
     ProfileEvents['VectorSimilarityIndexCacheHits'],

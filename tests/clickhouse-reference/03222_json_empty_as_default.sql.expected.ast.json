@@ -1,5 +1,26 @@
 [
   {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "input_format_json_empty_as_default",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      },
+      {
+        "name": "allow_experimental_variant_type",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -10,7 +31,7 @@
       }
     ],
     "from": {
-      "kind": "tableFunction",
+      "kind": "tableFunctionRef",
       "name": "format",
       "args": [
         {
@@ -30,7 +51,11 @@
           "value": "{\"x\":\"\"}"
         }
       ]
-    }
+    },
+    "leadingComments": [
+      "-- Simple types",
+      "-- { echoOn }"
+    ]
   },
   {
     "kind": "select",
@@ -43,7 +68,7 @@
       }
     ],
     "from": {
-      "kind": "tableFunction",
+      "kind": "tableFunctionRef",
       "name": "format",
       "args": [
         {
@@ -87,7 +112,7 @@
       }
     ],
     "from": {
-      "kind": "tableFunction",
+      "kind": "tableFunctionRef",
       "name": "format",
       "args": [
         {
@@ -131,7 +156,7 @@
       }
     ],
     "from": {
-      "kind": "tableFunction",
+      "kind": "tableFunctionRef",
       "name": "format",
       "args": [
         {
@@ -164,7 +189,7 @@
       }
     ],
     "from": {
-      "kind": "tableFunction",
+      "kind": "tableFunctionRef",
       "name": "format",
       "args": [
         {
@@ -197,7 +222,7 @@
       }
     ],
     "from": {
-      "kind": "tableFunction",
+      "kind": "tableFunctionRef",
       "name": "format",
       "args": [
         {
@@ -230,7 +255,7 @@
       }
     ],
     "from": {
-      "kind": "tableFunction",
+      "kind": "tableFunctionRef",
       "name": "format",
       "args": [
         {
@@ -253,6 +278,160 @@
     }
   },
   {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "table1"
+    },
+    "ifExists": true,
+    "leadingComments": [
+      "-- { echoOff }",
+      "-- Simple type AggregateFunction"
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "table1"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "col",
+        "type": {
+          "name": "AggregateFunction",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "uniq"
+              }
+            },
+            {
+              "kind": "type",
+              "type": {
+                "name": "UInt64"
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "engine": {
+      "name": "Memory",
+      "args": []
+    }
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "table2"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "table2"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "UserID",
+        "type": {
+          "name": "UInt64"
+        }
+      }
+    ],
+    "engine": {
+      "name": "Memory",
+      "args": []
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "table1"
+      }
+    },
+    "selectQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "functionCall",
+          "name": "uniqState",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "UserID"
+              ]
+            }
+          ]
+        }
+      ],
+      "from": {
+        "kind": "tableRef",
+        "table": "table2"
+      }
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "table1"
+      }
+    },
+    "selectQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "x"
+          ]
+        }
+      ],
+      "from": {
+        "kind": "tableFunctionRef",
+        "name": "format",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "JSONEachRow"
+            ]
+          },
+          {
+            "kind": "alias",
+            "expr": {
+              "kind": "literal",
+              "type": "String",
+              "value": "x AggregateFunction(uniq, UInt64)"
+            },
+            "alias": "T"
+          },
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": "{\"x\":\"\"}"
+          }
+        ]
+      }
+    }
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -271,7 +450,100 @@
     "from": {
       "kind": "tableRef",
       "table": "table1"
+    },
+    "leadingComments": [
+      "-- { echoOn }"
+    ]
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "table1"
+    },
+    "leadingComments": [
+      "-- { echoOff }"
+    ]
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "table2"
     }
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "table1"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "address",
+        "type": {
+          "name": "IPv6"
+        },
+        "defaultKind": "DEFAULT",
+        "defaultExpr": {
+          "kind": "functionCall",
+          "name": "toIPv6",
+          "args": [
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "2001:db8:3333:4444:5555:6666:7777:8888"
+            }
+          ]
+        }
+      }
+    ],
+    "engine": {
+      "name": "Memory",
+      "args": []
+    },
+    "leadingComments": [
+      "-- The setting input_format_defaults_for_omitted_fields determines the default value if enabled."
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "input_format_defaults_for_omitted_fields",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "table1"
+      }
+    }
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "input_format_defaults_for_omitted_fields",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
   },
   {
     "kind": "select",
@@ -295,6 +567,9 @@
         },
         "direction": "ASC"
       }
+    ],
+    "leadingComments": [
+      "-- { echoOn }"
     ]
   },
   {
@@ -308,7 +583,7 @@
       }
     ],
     "from": {
-      "kind": "tableFunction",
+      "kind": "tableFunctionRef",
       "name": "format",
       "args": [
         {
@@ -328,7 +603,11 @@
           "value": "{\"x\":\"\"}"
         }
       ]
-    }
+    },
+    "leadingComments": [
+      "-- Nullable",
+      "-- { echoOn }"
+    ]
   },
   {
     "kind": "select",
@@ -341,7 +620,7 @@
       }
     ],
     "from": {
-      "kind": "tableFunction",
+      "kind": "tableFunctionRef",
       "name": "format",
       "args": [
         {
@@ -361,7 +640,10 @@
           "value": "{\"x\":[\"00000000-0000-0000-0000-000000000000\",\"b15f852c-c41a-4fd6-9247-1929c841715e\",\"\"]}"
         }
       ]
-    }
+    },
+    "leadingComments": [
+      "-- Compound types"
+    ]
   },
   {
     "kind": "select",
@@ -374,7 +656,7 @@
       }
     ],
     "from": {
-      "kind": "tableFunction",
+      "kind": "tableFunctionRef",
       "name": "format",
       "args": [
         {
@@ -407,7 +689,7 @@
       }
     ],
     "from": {
-      "kind": "tableFunction",
+      "kind": "tableFunctionRef",
       "name": "format",
       "args": [
         {
@@ -440,7 +722,7 @@
       }
     ],
     "from": {
-      "kind": "tableFunction",
+      "kind": "tableFunctionRef",
       "name": "format",
       "args": [
         {
@@ -473,7 +755,7 @@
       }
     ],
     "from": {
-      "kind": "tableFunction",
+      "kind": "tableFunctionRef",
       "name": "format",
       "args": [
         {
@@ -506,7 +788,7 @@
       }
     ],
     "from": {
-      "kind": "tableFunction",
+      "kind": "tableFunctionRef",
       "name": "format",
       "args": [
         {
@@ -526,7 +808,10 @@
           "value": "{\"x\":[[\"2001:db8:3333:4444:CCCC:DDDD:EEEE:FFFF\", \"\"], [\"\", \"2001:db8:3333:4444:5555:6666:7777:8888\"]]}"
         }
       ]
-    }
+    },
+    "leadingComments": [
+      "-- Deep composition"
+    ]
   },
   {
     "kind": "select",
@@ -539,7 +824,7 @@
       }
     ],
     "from": {
-      "kind": "tableFunction",
+      "kind": "tableFunctionRef",
       "name": "format",
       "args": [
         {
@@ -572,7 +857,7 @@
       }
     ],
     "from": {
-      "kind": "tableFunction",
+      "kind": "tableFunctionRef",
       "name": "format",
       "args": [
         {
@@ -605,7 +890,7 @@
       }
     ],
     "from": {
-      "kind": "tableFunction",
+      "kind": "tableFunctionRef",
       "name": "format",
       "args": [
         {

@@ -1,3 +1,5 @@
+SET enable_analyzer = 1;
+
 SELECT
     number,
     lag(number, 1, 8472) OVER () AS lag,
@@ -17,25 +19,27 @@ SELECT
     lead(number, 1, 8472) OVER (ROWS BETWEEN UNBOUNDED PRECEDING AND UNBOUNDED PRECEDING) AS lead
 FROM numbers(5)
 ORDER BY number ASC
-FORMAT Pretty;
+FORMAT Pretty; -- { serverError BAD_ARGUMENTS }
 
 SELECT
     number,
     lag(number, 1, 8472) OVER (ROWS BETWEEN UNBOUNDED PRECEDING AND UNBOUNDED PRECEDING) AS lag
 FROM numbers(5)
 ORDER BY number ASC
-FORMAT Pretty;
+FORMAT Pretty; -- { serverError BAD_ARGUMENTS }
+
+SET enable_analyzer = 0;
 
 SELECT
     number,
     lead(number, 1, 8472) OVER () AS lead
 FROM numbers(5)
 ORDER BY number ASC
-FORMAT Pretty;
+FORMAT Pretty; -- { serverError NOT_IMPLEMENTED }
 
 SELECT
     number,
     lag(number, 1, 8472) OVER () AS lag
 FROM numbers(5)
 ORDER BY number ASC
-FORMAT Pretty;
+FORMAT Pretty; -- { serverError NOT_IMPLEMENTED }

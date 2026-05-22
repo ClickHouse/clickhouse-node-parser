@@ -1,5 +1,61 @@
 [
   {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "tab"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "tab"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "haystack",
+        "type": {
+          "name": "String"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "pattern",
+        "type": {
+          "name": "String"
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree",
+      "args": []
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "haystack"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "tab"
+      }
+    }
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -23,7 +79,13 @@
     "from": {
       "kind": "tableRef",
       "table": "tab"
-    }
+    },
+    "leadingComments": [
+      "-- const pattern"
+    ],
+    "trailingComments": [
+      "-- { serverError CANNOT_PARSE_ESCAPE_SEQUENCE }"
+    ]
   },
   {
     "kind": "select",
@@ -50,6 +112,12 @@
     "from": {
       "kind": "tableRef",
       "table": "tab"
-    }
+    },
+    "leadingComments": [
+      "-- non-const pattern"
+    ],
+    "trailingComments": [
+      "-- { serverError CANNOT_PARSE_ESCAPE_SEQUENCE }"
+    ]
   }
 ]

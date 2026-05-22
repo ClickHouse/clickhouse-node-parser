@@ -1,3 +1,58 @@
+DropQuery  test_alter_drop_comment (children 1)
+ Identifier test_alter_drop_comment
+
+CreateQuery test_alter_drop_comment (children 3)
+ Identifier test_alter_drop_comment
+ Columns definition (children 1)
+  ExpressionList (children 3)
+   ColumnDeclaration c0 (children 1)
+    DataType Int
+   ColumnDeclaration c1 (children 1)
+    DataType Int
+   ColumnDeclaration c2 (children 1)
+    DataType String
+ Storage definition (children 1)
+  Function Memory
+
+AlterQuery  test_alter_drop_comment (children 2)
+ ExpressionList (children 2)
+  AlterCommand DROP_COLUMN (children 1)
+   Identifier c0
+  AlterCommand COMMENT_COLUMN (children 2)
+   Identifier c0
+   Literal 'this comment should be silently ignored'
+ Identifier test_alter_drop_comment
+
+DescribeQuery (children 1)
+ TableExpression (children 1)
+  TableIdentifier test_alter_drop_comment
+
+AlterQuery  test_alter_drop_comment (children 2)
+ ExpressionList (children 1)
+  AlterCommand COMMENT_COLUMN (children 2)
+   Identifier non_existent_column
+   Literal 'this should be ignored'
+ Identifier test_alter_drop_comment
+
+AlterQuery  test_alter_drop_comment (children 2)
+ ExpressionList (children 1)
+  AlterCommand COMMENT_COLUMN (children 2)
+   Identifier non_existent_column
+   Literal 'this should fail'
+ Identifier test_alter_drop_comment
+
+AlterQuery  test_alter_drop_comment (children 2)
+ ExpressionList (children 3)
+  AlterCommand DROP_COLUMN (children 1)
+   Identifier c1
+  AlterCommand COMMENT_COLUMN (children 2)
+   Identifier c1
+   Literal 'dropped column comment'
+  AlterCommand COMMENT_COLUMN (children 2)
+   Identifier c2
+   Literal 'existing column comment'
+ Identifier test_alter_drop_comment
+
 SelectWithUnionQuery (children 1)
  ExpressionList (children 1)
   SelectQuery (children 4)
@@ -23,3 +78,63 @@ SelectWithUnionQuery (children 1)
    ExpressionList (children 1)
     OrderByElement (children 1)
      Identifier name
+
+DropQuery  test_alter_drop_comment (children 1)
+ Identifier test_alter_drop_comment
+
+CreateQuery test_alter_drop_comment_mt (children 3)
+ Identifier test_alter_drop_comment_mt
+ Columns definition (children 1)
+  ExpressionList (children 3)
+   ColumnDeclaration id (children 1)
+    DataType Int32
+   ColumnDeclaration value (children 1)
+    DataType String
+   ColumnDeclaration status (children 1)
+    DataType Int8
+ Storage definition (children 2)
+  Function MergeTree (children 1)
+   ExpressionList
+  Identifier id
+
+AlterQuery  test_alter_drop_comment_mt (children 2)
+ ExpressionList (children 3)
+  AlterCommand DROP_COLUMN (children 1)
+   Identifier status
+  AlterCommand COMMENT_COLUMN (children 2)
+   Identifier status
+   Literal 'dropped status column'
+  AlterCommand COMMENT_COLUMN (children 2)
+   Identifier value
+   Literal 'existing value column'
+ Identifier test_alter_drop_comment_mt
+
+DescribeQuery (children 1)
+ TableExpression (children 1)
+  TableIdentifier test_alter_drop_comment_mt
+
+DropQuery  test_alter_drop_comment_mt (children 1)
+ Identifier test_alter_drop_comment_mt
+
+CreateQuery test_alter_fail (children 3)
+ Identifier test_alter_fail
+ Columns definition (children 1)
+  ExpressionList (children 2)
+   ColumnDeclaration c0 (children 1)
+    DataType Int
+   ColumnDeclaration c1 (children 1)
+    DataType Int
+ Storage definition (children 1)
+  Function Memory
+
+AlterQuery  test_alter_fail (children 2)
+ ExpressionList (children 2)
+  AlterCommand DROP_COLUMN (children 1)
+   Identifier c0
+  AlterCommand COMMENT_COLUMN (children 2)
+   Identifier c0
+   Literal 'this should fail'
+ Identifier test_alter_fail
+
+DropQuery  test_alter_fail (children 1)
+ Identifier test_alter_fail

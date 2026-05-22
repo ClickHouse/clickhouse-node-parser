@@ -1,3 +1,5 @@
+SET session_timezone = 'UTC';
+
 SELECT parseDateTime64BestEffort('1744042005.1', 1);
 
 SELECT parseDateTime64BestEffort('1744042005.12', 2);

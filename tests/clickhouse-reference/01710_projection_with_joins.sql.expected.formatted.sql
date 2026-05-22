@@ -1,3 +1,17 @@
+DROP TABLE IF EXISTS t;
+
+CREATE TABLE t
+(
+    s UInt16,
+    l UInt16,
+    PROJECTION p (    SELECT
+        s,
+        l
+    ORDER BY l ASC)
+)
+ENGINE = MergeTree
+ORDER BY s;
+
 SELECT s
 FROM
     t
@@ -17,6 +31,18 @@ INNER JOIN (
     USING (s)
 ORDER BY s ASC
 SETTINGS optimize_use_projections = 0;
+
+DROP TABLE t;
+
+DROP TABLE IF EXISTS mt;
+
+CREATE TABLE mt
+(
+    id1 Int8,
+    id2 Int8
+)
+ENGINE = MergeTree
+ORDER BY tuple();
 
 SELECT alias1
 FROM
@@ -56,6 +82,28 @@ INNER JOIN (
 ORDER BY id1 ASC
 SETTINGS optimize_use_projections = 1;
 
+DROP TABLE mt;
+
+DROP TABLE IF EXISTS j;
+
+CREATE TABLE j
+(
+    id1 Int8,
+    id2 Int8,
+    PROJECTION p (    SELECT
+        id1,
+        id2
+    ORDER BY id2 ASC)
+)
+ENGINE = MergeTree
+ORDER BY id1
+SETTINGS index_granularity = 1;
+
+INSERT INTO j SELECT
+    number,
+    number
+FROM numbers(10);
+
 SELECT alias1
 FROM
     (
@@ -75,3 +123,5 @@ INNER JOIN (
 WHERE id2 IN (2, 3, 4)
 ORDER BY id1 ASC
 SETTINGS optimize_use_projections = 1;
+
+DROP TABLE j;

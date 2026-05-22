@@ -1,5 +1,96 @@
 [
   {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "enable_analyzer",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ],
+    "leadingComments": [
+      "-- https://github.com/ClickHouse/ClickHouse/issues/23194",
+      "-- This test add query-templates for fuzzer"
+    ]
+  },
+  {
+    "kind": "drop",
+    "targetType": "DATABASE",
+    "table": {
+      "kind": "tableRef",
+      "table": {
+        "kind": "queryParam",
+        "name": "CLICKHOUSE_DATABASE",
+        "type": "Identifier"
+      }
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "createDatabase",
+    "name": {
+      "kind": "queryParam",
+      "name": "CLICKHOUSE_DATABASE",
+      "type": "Identifier"
+    }
+  },
+  {
+    "kind": "use",
+    "database": {
+      "kind": "queryParam",
+      "name": "CLICKHOUSE_DATABASE",
+      "type": "Identifier"
+    }
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "table"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "column",
+        "type": {
+          "name": "UInt64"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "nest",
+        "type": {
+          "name": "Nested",
+          "args": [
+            {
+              "kind": "namedField",
+              "name": "key",
+              "type": {
+                "name": "Nested",
+                "args": [
+                  {
+                    "kind": "namedField",
+                    "name": "subkey",
+                    "type": {
+                      "name": "UInt16"
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "engine": {
+      "name": "Memory",
+      "args": []
+    }
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -17,6 +108,10 @@
     }
   },
   {
+    "kind": "use",
+    "database": "default"
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -28,7 +123,11 @@
     ],
     "from": {
       "kind": "tableRef",
-      "database": "{CLICKHOUSE_DATABASE:Identifier}",
+      "database": {
+        "kind": "queryParam",
+        "name": "CLICKHOUSE_DATABASE",
+        "type": "Identifier"
+      },
       "table": "table"
     }
   },
@@ -38,7 +137,11 @@
       {
         "kind": "columnRef",
         "parts": [
-          "{CLICKHOUSE_DATABASE:Identifier}",
+          {
+            "kind": "queryParam",
+            "name": "CLICKHOUSE_DATABASE",
+            "type": "Identifier"
+          },
           "table",
           "column"
         ]
@@ -93,7 +196,7 @@
             }
           ],
           "from": {
-            "kind": "tableFunction",
+            "kind": "tableFunctionRef",
             "name": "VALUES",
             "args": [
               {
@@ -102,7 +205,7 @@
                 "value": "x UInt16, y UInt16"
               },
               {
-                "kind": "tuple",
+                "kind": "tupleLiteral",
                 "elements": [
                   {
                     "kind": "literal",
@@ -122,7 +225,7 @@
         },
         "alias": "t1"
       },
-      "kind": "join",
+      "kind": "joinExpr",
       "joinType": "CROSS",
       "right": {
         "kind": "subqueryFrom",
@@ -143,7 +246,7 @@
             }
           ],
           "from": {
-            "kind": "tableFunction",
+            "kind": "tableFunctionRef",
             "name": "VALUES",
             "args": [
               {
@@ -152,7 +255,7 @@
                 "value": "x UInt16, z UInt16"
               },
               {
-                "kind": "tuple",
+                "kind": "tupleLiteral",
                 "elements": [
                   {
                     "kind": "literal",
@@ -172,7 +275,10 @@
         },
         "alias": "t2"
       }
-    }
+    },
+    "leadingComments": [
+      "--"
+    ]
   },
   {
     "kind": "select",
@@ -253,7 +359,10 @@
     "from": {
       "kind": "tableRef",
       "table": "table"
-    }
+    },
+    "leadingComments": [
+      "--"
+    ]
   },
   {
     "kind": "select",
@@ -271,7 +380,7 @@
         "kind": "tableRef",
         "table": "table"
       },
-      "kind": "arrayJoin",
+      "kind": "arrayJoinExpr",
       "joinType": "ARRAY",
       "expressions": [
         {
@@ -299,7 +408,7 @@
             {
               "kind": "alias",
               "expr": {
-                "kind": "array",
+                "kind": "arrayLiteral",
                 "elements": [
                   {
                     "kind": "literal",
@@ -324,7 +433,7 @@
           ]
         }
       },
-      "kind": "arrayJoin",
+      "kind": "arrayJoinExpr",
       "joinType": "ARRAY",
       "expressions": [
         {
@@ -348,13 +457,13 @@
         "kind": "tableRef",
         "table": "table"
       },
-      "kind": "arrayJoin",
+      "kind": "arrayJoinExpr",
       "joinType": "ARRAY",
       "expressions": [
         {
           "kind": "alias",
           "expr": {
-            "kind": "array",
+            "kind": "arrayLiteral",
             "elements": [
               {
                 "kind": "literal",

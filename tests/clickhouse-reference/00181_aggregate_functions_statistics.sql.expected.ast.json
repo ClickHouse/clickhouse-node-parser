@@ -1,5 +1,103 @@
 [
   {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "any_join_distinct_right_table_keys",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "joined_subquery_requires_alias",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "series"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "series"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "i",
+        "type": {
+          "name": "UInt32"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "x_value",
+        "type": {
+          "name": "Float64"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "y_value",
+        "type": {
+          "name": "Float64"
+        }
+      }
+    ],
+    "engine": {
+      "name": "Memory"
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "series"
+      }
+    },
+    "columns": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "i"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "x_value"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "y_value"
+        ]
+      }
+    ]
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -39,7 +137,10 @@
           }
         }
       }
-    }
+    },
+    "leadingComments": [
+      "/* varSamp */"
+    ]
   },
   {
     "kind": "select",
@@ -278,7 +379,10 @@
           }
         }
       }
-    }
+    },
+    "leadingComments": [
+      "/* stddevSamp */"
+    ]
   },
   {
     "kind": "select",
@@ -523,7 +627,10 @@
           }
         }
       }
-    }
+    },
+    "leadingComments": [
+      "/* skewSamp */"
+    ]
   },
   {
     "kind": "select",
@@ -972,7 +1079,10 @@
           }
         }
       }
-    }
+    },
+    "leadingComments": [
+      "/* kurtSamp */"
+    ]
   },
   {
     "kind": "select",
@@ -1560,7 +1670,10 @@
           }
         }
       }
-    }
+    },
+    "leadingComments": [
+      "/* varPop */"
+    ]
   },
   {
     "kind": "select",
@@ -1789,7 +1902,10 @@
           }
         }
       }
-    }
+    },
+    "leadingComments": [
+      "/* stddevPop */"
+    ]
   },
   {
     "kind": "select",
@@ -2024,7 +2140,10 @@
           }
         }
       }
-    }
+    },
+    "leadingComments": [
+      "/* skewPop */"
+    ]
   },
   {
     "kind": "select",
@@ -2463,7 +2582,10 @@
           }
         }
       }
-    }
+    },
+    "leadingComments": [
+      "/* kurtPop */"
+    ]
   },
   {
     "kind": "select",
@@ -3053,7 +3175,10 @@
           }
         }
       }
-    }
+    },
+    "leadingComments": [
+      "/* covarSamp */"
+    ]
   },
   {
     "kind": "select",
@@ -3159,7 +3284,7 @@
                 "name": "arrayJoin",
                 "args": [
                   {
-                    "kind": "array",
+                    "kind": "arrayLiteral",
                     "elements": [
                       {
                         "kind": "literal",
@@ -3202,7 +3327,7 @@
           }
         }
       },
-      "kind": "join",
+      "kind": "joinExpr",
       "joinType": "INNER",
       "right": {
         "kind": "subqueryFrom",
@@ -3216,7 +3341,7 @@
                 "name": "arrayJoin",
                 "args": [
                   {
-                    "kind": "array",
+                    "kind": "arrayLiteral",
                     "elements": [
                       {
                         "kind": "literal",
@@ -3331,7 +3456,7 @@
                               "name": "arrayJoin",
                               "args": [
                                 {
-                                  "kind": "array",
+                                  "kind": "arrayLiteral",
                                   "elements": [
                                     {
                                       "kind": "literal",
@@ -3431,7 +3556,7 @@
                     }
                   }
                 },
-                "kind": "join",
+                "kind": "joinExpr",
                 "joinType": "INNER",
                 "right": {
                   "kind": "subqueryFrom",
@@ -3546,7 +3671,10 @@
           }
         }
       }
-    }
+    },
+    "leadingComments": [
+      "/* covarPop */"
+    ]
   },
   {
     "kind": "select",
@@ -3652,7 +3780,7 @@
                 "name": "arrayJoin",
                 "args": [
                   {
-                    "kind": "array",
+                    "kind": "arrayLiteral",
                     "elements": [
                       {
                         "kind": "literal",
@@ -3695,7 +3823,7 @@
           }
         }
       },
-      "kind": "join",
+      "kind": "joinExpr",
       "joinType": "INNER",
       "right": {
         "kind": "subqueryFrom",
@@ -3709,7 +3837,7 @@
                 "name": "arrayJoin",
                 "args": [
                   {
-                    "kind": "array",
+                    "kind": "arrayLiteral",
                     "elements": [
                       {
                         "kind": "literal",
@@ -3814,7 +3942,7 @@
                               "name": "arrayJoin",
                               "args": [
                                 {
-                                  "kind": "array",
+                                  "kind": "arrayLiteral",
                                   "elements": [
                                     {
                                       "kind": "literal",
@@ -3914,7 +4042,7 @@
                     }
                   }
                 },
-                "kind": "join",
+                "kind": "joinExpr",
                 "joinType": "INNER",
                 "right": {
                   "kind": "subqueryFrom",
@@ -4029,7 +4157,10 @@
           }
         }
       }
-    }
+    },
+    "leadingComments": [
+      "/* corr */"
+    ]
   },
   {
     "kind": "select",
@@ -4192,6 +4323,9 @@
         "type": "String",
         "value": "----quantile----"
       }
+    ],
+    "leadingComments": [
+      "/* quantile AND quantileExact */"
     ]
   },
   {
@@ -4226,7 +4360,7 @@
       }
     ],
     "from": {
-      "kind": "tableFunction",
+      "kind": "tableFunctionRef",
       "name": "numbers",
       "args": [
         {
@@ -4269,7 +4403,7 @@
       }
     ],
     "from": {
-      "kind": "tableFunction",
+      "kind": "tableFunctionRef",
       "name": "numbers",
       "args": [
         {
@@ -4318,7 +4452,7 @@
       }
     ],
     "from": {
-      "kind": "tableFunction",
+      "kind": "tableFunctionRef",
       "name": "numbers",
       "args": [
         {
@@ -4367,7 +4501,7 @@
       }
     ],
     "from": {
-      "kind": "tableFunction",
+      "kind": "tableFunctionRef",
       "name": "numbers",
       "args": [
         {
@@ -4410,7 +4544,7 @@
       }
     ],
     "from": {
-      "kind": "tableFunction",
+      "kind": "tableFunctionRef",
       "name": "numbers",
       "args": [
         {
@@ -4459,7 +4593,7 @@
       }
     ],
     "from": {
-      "kind": "tableFunction",
+      "kind": "tableFunctionRef",
       "name": "numbers",
       "args": [
         {
@@ -4508,7 +4642,7 @@
       }
     ],
     "from": {
-      "kind": "tableFunction",
+      "kind": "tableFunctionRef",
       "name": "numbers",
       "args": [
         {
@@ -4517,6 +4651,14 @@
           "value": "90"
         }
       ]
+    }
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "series"
     }
   }
 ]

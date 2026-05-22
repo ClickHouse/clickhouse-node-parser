@@ -1,5 +1,172 @@
 [
   {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "enum_alter_issue"
+    },
+    "ifExists": true,
+    "leadingComments": [
+      "-- Tags: zookeeper, no-replicated-database",
+      "-- Tag no-replicated-database: Fails due to additional replicas or shards"
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "enum_alter_issue"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "a",
+        "type": {
+          "name": "Enum16",
+          "args": [
+            {
+              "kind": "enumValues",
+              "values": [
+                {
+                  "name": "one",
+                  "value": "1"
+                },
+                {
+                  "name": "two",
+                  "value": "2"
+                }
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "b",
+        "type": {
+          "name": "Int"
+        }
+      }
+    ],
+    "engine": {
+      "name": "ReplicatedMergeTree",
+      "args": [
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "/clickhouse/tables/{database}/test_02012/enum_alter_issue"
+        },
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "r2"
+        }
+      ]
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "b"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "enum_alter_issue"
+      }
+    }
+  },
+  {
+    "kind": "alter",
+    "table": {
+      "kind": "tableRef",
+      "table": "enum_alter_issue"
+    },
+    "commands": [
+      {
+        "kind": "alterCommand",
+        "commandType": "DROP_PARTITION",
+        "partition": {
+          "partitionKind": "id",
+          "id": {
+            "kind": "literal",
+            "type": "String",
+            "value": "all"
+          }
+        }
+      }
+    ]
+  },
+  {
+    "kind": "alter",
+    "table": {
+      "kind": "tableRef",
+      "table": "enum_alter_issue"
+    },
+    "commands": [
+      {
+        "kind": "alterCommand",
+        "commandType": "MODIFY_COLUMN",
+        "column": {
+          "kind": "columnDef",
+          "name": "a",
+          "type": {
+            "name": "Enum8",
+            "args": [
+              {
+                "kind": "enumValues",
+                "values": [
+                  {
+                    "name": "one",
+                    "value": "1"
+                  },
+                  {
+                    "name": "two",
+                    "value": "2"
+                  },
+                  {
+                    "name": "three",
+                    "value": "3"
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      }
+    ]
+  },
+  {
+    "kind": "alter",
+    "table": {
+      "kind": "tableRef",
+      "table": "enum_alter_issue"
+    },
+    "commands": [
+      {
+        "kind": "alterCommand",
+        "commandType": "ATTACH_PARTITION",
+        "partition": {
+          "partitionKind": "id",
+          "id": {
+            "kind": "literal",
+            "type": "String",
+            "value": "all"
+          }
+        }
+      }
+    ]
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -7,6 +174,14 @@
       }
     ],
     "from": {
+      "kind": "tableRef",
+      "table": "enum_alter_issue"
+    }
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
       "kind": "tableRef",
       "table": "enum_alter_issue"
     }

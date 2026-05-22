@@ -1,3 +1,8 @@
+-- https://github.com/ClickHouse/ClickHouse/issues/56521
+SYSTEM FLUSH LOGS query_log;
+
+SET enable_analyzer = 1;
+
 SELECT
     count(1) AS num,
     hostName() AS hostName

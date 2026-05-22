@@ -1,5 +1,315 @@
 [
   {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "test_max_insert_bytes"
+    },
+    "ifExists": true,
+    "leadingComments": [
+      "-- Tags: no-async-insert",
+      "-- no-async-insert: Test expects new part for each insert",
+      "-- Tests how input format parsers form blocks based on min/max thresholds via clickhouse-client",
+      "-- 1. Creates 4 test tables",
+      "-- 2. Inserts 8 rows (inline CSV format) via client with different block formation thresholds:",
+      "--    - Test 1: max_insert_block_size_bytes=8 (emit block when reaching 8 bytes)",
+      "--    - Test 2: min_insert_block_size_rows=2 AND min_insert_block_size_bytes=16 (emit when both met)",
+      "--    - Test 3: min_insert_block_size_rows=4 (emit when 4 rows accumulated)",
+      "--    - Test 4: min_insert_block_size_bytes=32 (emit when 32 bytes accumulated)",
+      "-- 3. Verifies the number of parts created to confirm the new isEnoughSize() logic:",
+      "--    - min thresholds use AND: both rows AND bytes must be satisfied",
+      "--    - max thresholds use OR: either rows OR bytes triggers block emission"
+    ]
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "test_min_insert_rows_bytes"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "test_min_insert_rows"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "test_min_insert_bytes"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "test_max_insert_bytes"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "id",
+        "type": {
+          "name": "UInt64"
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree",
+      "args": []
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "id"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "test_min_insert_rows_bytes"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "id",
+        "type": {
+          "name": "UInt64"
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree",
+      "args": []
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "id"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "test_min_insert_rows"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "id",
+        "type": {
+          "name": "UInt64"
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree",
+      "args": []
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "id"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "test_min_insert_bytes"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "id",
+        "type": {
+          "name": "UInt64"
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree",
+      "args": []
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "id"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "max_insert_block_size_rows",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "100000000"
+        }
+      }
+    ],
+    "leadingComments": [
+      "-- Set max_insert_block_size_bytes smaller than max_insert_block_size (rows)"
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "max_insert_block_size_bytes",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "8"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "min_insert_block_size_rows",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      }
+    ],
+    "leadingComments": [
+      "-- Turn off squashing"
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "min_insert_block_size_bytes",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "test_max_insert_bytes"
+      }
+    }
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "min_insert_block_size_rows",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "2"
+        }
+      }
+    ],
+    "leadingComments": [
+      "-- Set min_insert_block_size_rows and min_insert_block_size_bytes to 2 and 16 so that blocks are formed by 2"
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "min_insert_block_size_bytes",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "16"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "test_min_insert_rows_bytes"
+      }
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "test_min_insert_rows"
+      }
+    }
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "min_insert_block_size_bytes",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "32"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "test_min_insert_bytes"
+      }
+    }
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -143,7 +453,10 @@
           "parenthesized": true
         }
       ]
-    }
+    },
+    "leadingComments": [
+      "-- We expect to see 8 parts inserted"
+    ]
   },
   {
     "kind": "select",
@@ -289,7 +602,10 @@
           "parenthesized": true
         }
       ]
-    }
+    },
+    "leadingComments": [
+      "-- We expect to see 4 parts inserted"
+    ]
   },
   {
     "kind": "select",
@@ -435,7 +751,10 @@
           "parenthesized": true
         }
       ]
-    }
+    },
+    "leadingComments": [
+      "-- We expect to see 2 parts inserted"
+    ]
   },
   {
     "kind": "select",
@@ -581,6 +900,9 @@
           "parenthesized": true
         }
       ]
-    }
+    },
+    "leadingComments": [
+      "-- We expect to see 2 parts inserted"
+    ]
   }
 ]

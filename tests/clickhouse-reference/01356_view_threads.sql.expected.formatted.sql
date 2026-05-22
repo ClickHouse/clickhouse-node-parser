@@ -1,9 +1,27 @@
+-- Tags: no-parallel, no-fasttest
+-- no-parallel: it checks the number of threads, which can be lowered in presence of other queries
+DROP TABLE IF EXISTS table_01356_view_threads;
+
+CREATE VIEW table_01356_view_threads
+AS
+SELECT
+    number % 10 AS g,
+    sum(number) AS s
+FROM numbers_mt(1000000)
+GROUP BY g;
+
+SET log_queries = 1;
+
+SET max_threads = 16;
+
 SELECT
     g % 2 AS gg,
     sum(s)
 FROM table_01356_view_threads
 GROUP BY gg
 ORDER BY gg ASC;
+
+SYSTEM flush logs query_log;
 
 SELECT length(thread_ids) >= 1
 FROM `system`.query_log

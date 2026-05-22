@@ -1,5 +1,158 @@
 [
   {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "use_hive_partitioning",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      }
+    ],
+    "leadingComments": [
+      "-- Tags: no-parallel"
+    ],
+    "trailingComments": [
+      "-- required because of \"?query=select\""
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "file_delim"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "a",
+        "type": {
+          "name": "int"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "b",
+        "type": {
+          "name": "int"
+        }
+      }
+    ],
+    "engine": {
+      "name": "File",
+      "args": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "CSV"
+          ]
+        },
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "01545_url_file_format_settings.csv"
+        }
+      ]
+    },
+    "settings": [
+      {
+        "name": "format_csv_delimiter",
+        "value": {
+          "kind": "literal",
+          "type": "String",
+          "value": "|"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "truncate",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "file_delim"
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "file_delim"
+      }
+    },
+    "selectQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        },
+        {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "2"
+        }
+      ]
+    }
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "url_delim"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "a",
+        "type": {
+          "name": "int"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "b",
+        "type": {
+          "name": "int"
+        }
+      }
+    ],
+    "engine": {
+      "name": "URL",
+      "args": [
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "http://127.0.0.1:8123/?query=select%201%2C%202%20format%20CSV%20settings%20format_csv_delimiter%3D%27/%27%3B%0A"
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "CSV"
+          ]
+        }
+      ]
+    },
+    "settings": [
+      {
+        "name": "format_csv_delimiter",
+        "value": {
+          "kind": "literal",
+          "type": "String",
+          "value": "/"
+        }
+      }
+    ],
+    "leadingComments": [
+      "-- select 1, 2 format CSV settings format_csv_delimiter='/';"
+    ]
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -31,7 +184,7 @@
       }
     ],
     "from": {
-      "kind": "tableFunction",
+      "kind": "tableFunctionRef",
       "name": "file",
       "args": [
         {
@@ -71,7 +224,7 @@
       }
     ],
     "from": {
-      "kind": "tableFunction",
+      "kind": "tableFunctionRef",
       "name": "url",
       "args": [
         {
@@ -102,5 +255,21 @@
         }
       }
     ]
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "file_delim"
+    }
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "url_delim"
+    }
   }
 ]

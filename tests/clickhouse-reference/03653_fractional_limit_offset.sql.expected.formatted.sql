@@ -1,3 +1,5 @@
+SET enable_analyzer = 0;
+
 SELECT number
 FROM numbers(10)
 LIMIT 0.1;
@@ -123,6 +125,20 @@ FROM numbers(1000000)
 LIMIT 1
 OFFSET 0.0999999;
 
+DROP TABLE IF EXISTS num_tab;
+
+CREATE TABLE num_tab
+(
+    id UInt8,
+    val UInt32
+)
+ENGINE = MergeTree
+ORDER BY (id, val) AS
+SELECT
+    number % 2 AS id,
+    number AS val
+FROM numbers(20);
+
 SELECT IF((count() = 5)
     AND (min(val) = 15)
     AND (max(val) = 19)
@@ -138,8 +154,16 @@ FROM (
         OFFSET 0.75
     );
 
+CREATE TABLE num_tab
+ENGINE = MergeTree
+ORDER BY number AS
+SELECT number
+FROM numbers(1000000);
+
 SELECT number
 FROM num_tab
 ORDER BY number ASC
 LIMIT 10
 OFFSET 0.99999;
+
+SET enable_analyzer = 1;

@@ -1,3 +1,56 @@
+-- Tags: no-fasttest
+-- Tag no-fasttest: needs s2
+DROP TABLE IF EXISTS s2_indexes;
+
+CREATE TABLE s2_indexes
+(
+    s2_index UInt64,
+    longitude Float64,
+    latitude Float64
+)
+ENGINE = Memory;
+
+-- Random geo coordinates were generated using S2Testing::RandomPoint() method from s2 API.
+INSERT INTO s2_indexes;
+
+INSERT INTO s2_indexes;
+
+INSERT INTO s2_indexes;
+
+INSERT INTO s2_indexes;
+
+INSERT INTO s2_indexes;
+
+INSERT INTO s2_indexes;
+
+INSERT INTO s2_indexes;
+
+INSERT INTO s2_indexes;
+
+INSERT INTO s2_indexes;
+
+INSERT INTO s2_indexes;
+
+INSERT INTO s2_indexes;
+
+INSERT INTO s2_indexes;
+
+INSERT INTO s2_indexes;
+
+INSERT INTO s2_indexes;
+
+INSERT INTO s2_indexes;
+
+INSERT INTO s2_indexes;
+
+INSERT INTO s2_indexes;
+
+INSERT INTO s2_indexes;
+
+INSERT INTO s2_indexes;
+
+INSERT INTO s2_indexes;
+
 SELECT
     s2ToGeo(s2_index),
     geoToS2(longitude, latitude)
@@ -18,12 +71,12 @@ FROM (
         ORDER BY s2_index ASC
     );
 
-SELECT s2ToGeo(toUInt64(-1));
+SELECT s2ToGeo(toUInt64(-1)); -- { serverError BAD_ARGUMENTS }
 
-SELECT s2ToGeo(nan);
+SELECT s2ToGeo(nan); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
-SELECT geoToS2(toFloat64(toUInt64(-1)), toFloat64(toUInt64(-1)));
+SELECT geoToS2(toFloat64(toUInt64(-1)), toFloat64(toUInt64(-1))); -- { serverError BAD_ARGUMENTS }
 
-SELECT geoToS2(nan, nan);
+SELECT geoToS2(nan, nan); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
-SELECT geoToS2(-inf, 1.1754943508222875e-38);
+SELECT geoToS2(-inf, 1.1754943508222875e-38); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }

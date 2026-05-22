@@ -1,0 +1,271 @@
+[
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "table_2009_part"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "i",
+        "type": {
+          "name": "Int64"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "d",
+        "type": {
+          "name": "Date"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "s",
+        "type": {
+          "name": "String"
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "partitionBy": {
+      "kind": "functionCall",
+      "name": "toYYYYMM",
+      "args": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "d"
+          ]
+        }
+      ]
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "i"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "kind": "alter",
+    "table": {
+      "kind": "tableRef",
+      "table": "table_2009_part"
+    },
+    "commands": [
+      {
+        "kind": "alterCommand",
+        "commandType": "ATTACH_PARTITION",
+        "partition": {
+          "partitionKind": "expr",
+          "expr": {
+            "kind": "functionCall",
+            "name": "tuple",
+            "args": [
+              {
+                "kind": "functionCall",
+                "name": "arrayJoin",
+                "args": [
+                  {
+                    "kind": "arrayLiteral",
+                    "elements": [
+                      {
+                        "kind": "literal",
+                        "type": "UInt64",
+                        "value": "0"
+                      },
+                      {
+                        "kind": "literal",
+                        "type": "UInt64",
+                        "value": "1"
+                      }
+                    ],
+                    "source": "[0, 1]"
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      }
+    ],
+    "trailingComments": [
+      "-- {serverError BAD_ARGUMENTS}"
+    ]
+  },
+  {
+    "kind": "alter",
+    "table": {
+      "kind": "tableRef",
+      "table": "table_2009_part"
+    },
+    "commands": [
+      {
+        "kind": "alterCommand",
+        "commandType": "ATTACH_PARTITION",
+        "partition": {
+          "partitionKind": "expr",
+          "expr": {
+            "kind": "functionCall",
+            "name": "tuple",
+            "args": [
+              {
+                "kind": "functionCall",
+                "name": "toYYYYMM",
+                "args": [
+                  {
+                    "kind": "functionCall",
+                    "name": "toDate",
+                    "args": [
+                      {
+                        "kind": "arrayLiteral",
+                        "elements": [
+                          {
+                            "kind": "functionCall",
+                            "name": "arrayJoin",
+                            "args": [
+                              {
+                                "kind": "arrayLiteral",
+                                "elements": [
+                                  {
+                                    "kind": "functionCall",
+                                    "name": "arrayJoin",
+                                    "args": [
+                                      {
+                                        "kind": "arrayLiteral",
+                                        "elements": [
+                                          {
+                                            "kind": "functionCall",
+                                            "name": "arrayJoin",
+                                            "args": [
+                                              {
+                                                "kind": "arrayLiteral",
+                                                "elements": [
+                                                  {
+                                                    "kind": "functionCall",
+                                                    "name": "arrayJoin",
+                                                    "args": [
+                                                      {
+                                                        "kind": "arrayLiteral",
+                                                        "elements": [
+                                                          {
+                                                            "kind": "literal",
+                                                            "type": "UInt64",
+                                                            "value": "3"
+                                                          },
+                                                          {
+                                                            "kind": "functionCall",
+                                                            "name": "materialize",
+                                                            "args": [
+                                                              {
+                                                                "kind": "literal",
+                                                                "type": "NULL",
+                                                                "value": "NULL"
+                                                              }
+                                                            ]
+                                                          },
+                                                          {
+                                                            "kind": "functionCall",
+                                                            "name": "arrayJoin",
+                                                            "args": [
+                                                              {
+                                                                "kind": "arrayLiteral",
+                                                                "elements": [
+                                                                  {
+                                                                    "kind": "literal",
+                                                                    "type": "UInt64",
+                                                                    "value": "1025"
+                                                                  },
+                                                                  {
+                                                                    "kind": "functionCall",
+                                                                    "name": "materialize",
+                                                                    "args": [
+                                                                      {
+                                                                        "kind": "literal",
+                                                                        "type": "NULL",
+                                                                        "value": "NULL"
+                                                                      }
+                                                                    ]
+                                                                  },
+                                                                  {
+                                                                    "kind": "functionCall",
+                                                                    "name": "materialize",
+                                                                    "args": [
+                                                                      {
+                                                                        "kind": "literal",
+                                                                        "type": "NULL",
+                                                                        "value": "NULL"
+                                                                      }
+                                                                    ]
+                                                                  }
+                                                                ],
+                                                                "source": "[1025, materialize(NULL), materialize(NULL)]"
+                                                              }
+                                                            ]
+                                                          },
+                                                          {
+                                                            "kind": "literal",
+                                                            "type": "NULL",
+                                                            "value": "NULL"
+                                                          }
+                                                        ],
+                                                        "source": "[3, materialize(NULL), arrayJoin([1025, materialize(NULL), materialize(NULL)]), NULL]"
+                                                      }
+                                                    ]
+                                                  }
+                                                ],
+                                                "source": "[arrayJoin([3, materialize(NULL), arrayJoin([1025, materialize(NULL), materialize(NULL)]), NULL])]"
+                                              }
+                                            ]
+                                          }
+                                        ],
+                                        "source": "[arrayJoin([arrayJoin([3, materialize(NULL), arrayJoin([1025, materialize(NULL), materialize(NULL)]), NULL])])]"
+                                      }
+                                    ]
+                                  },
+                                  {
+                                    "kind": "functionCall",
+                                    "name": "materialize",
+                                    "args": [
+                                      {
+                                        "kind": "literal",
+                                        "type": "NULL",
+                                        "value": "NULL"
+                                      }
+                                    ]
+                                  }
+                                ],
+                                "source": "[arrayJoin([arrayJoin([arrayJoin([3, materialize(NULL), arrayJoin([1025, materialize(NULL), materialize(NULL)]), NULL])])]), materialize(NULL)]"
+                              }
+                            ]
+                          }
+                        ],
+                        "source": "[arrayJoin([arrayJoin([arrayJoin([arrayJoin([3, materialize(NULL), arrayJoin([1025, materialize(NULL), materialize(NULL)]), NULL])])]), materialize(NULL)])]"
+                      },
+                      {
+                        "kind": "literal",
+                        "type": "NULL",
+                        "value": "NULL"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      }
+    ],
+    "trailingComments": [
+      "-- {serverError BAD_ARGUMENTS}"
+    ]
+  }
+]

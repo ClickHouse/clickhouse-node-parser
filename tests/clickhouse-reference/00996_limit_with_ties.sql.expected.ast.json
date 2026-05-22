@@ -1,5 +1,52 @@
 [
   {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "ties"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "ties"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "a",
+        "type": {
+          "name": "Int"
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "functionCall",
+          "name": "tuple",
+          "args": []
+        }
+      }
+    ]
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "ties"
+      }
+    }
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -103,6 +150,19 @@
       },
       "withTies": true
     }
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "max_block_size",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "2"
+        }
+      }
+    ]
   },
   {
     "kind": "select",
@@ -298,6 +358,19 @@
     }
   },
   {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "max_block_size",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "3"
+        }
+      }
+    ]
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -369,7 +442,7 @@
           }
         ],
         "from": {
-          "kind": "tableFunction",
+          "kind": "tableFunctionRef",
           "name": "numbers",
           "args": [
             {
@@ -415,7 +488,10 @@
           "withTies": true
         }
       }
-    }
+    },
+    "trailingComments": [
+      "--TODO replace \"number > 100\" with \"number > 100 as n\""
+    ]
   },
   {
     "kind": "select",
@@ -454,7 +530,7 @@
           }
         ],
         "from": {
-          "kind": "tableFunction",
+          "kind": "tableFunctionRef",
           "name": "numbers",
           "args": [
             {
@@ -497,6 +573,19 @@
     }
   },
   {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "max_block_size",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "5"
+        }
+      }
+    ]
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -533,7 +622,7 @@
           }
         ],
         "from": {
-          "kind": "tableFunction",
+          "kind": "tableFunctionRef",
           "name": "numbers",
           "args": [
             {
@@ -590,7 +679,7 @@
         "kind": "select",
         "with": [
           {
-            "kind": "subquery",
+            "kind": "cteSubquery",
             "name": "data",
             "query": {
               "kind": "union",
@@ -603,7 +692,7 @@
                     }
                   ],
                   "from": {
-                    "kind": "tableFunction",
+                    "kind": "tableFunctionRef",
                     "name": "numbers",
                     "args": [
                       {
@@ -627,7 +716,7 @@
                     }
                   ],
                   "from": {
-                    "kind": "tableFunction",
+                    "kind": "tableFunctionRef",
                     "name": "numbers",
                     "args": [
                       {
@@ -722,7 +811,7 @@
         "kind": "select",
         "with": [
           {
-            "kind": "subquery",
+            "kind": "cteSubquery",
             "name": "data",
             "query": {
               "kind": "union",
@@ -735,7 +824,7 @@
                     }
                   ],
                   "from": {
-                    "kind": "tableFunction",
+                    "kind": "tableFunctionRef",
                     "name": "numbers",
                     "args": [
                       {
@@ -759,7 +848,7 @@
                     }
                   ],
                   "from": {
-                    "kind": "tableFunction",
+                    "kind": "tableFunctionRef",
                     "name": "numbers",
                     "args": [
                       {
@@ -837,6 +926,14 @@
           "withTies": true
         }
       }
+    }
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "ties"
     }
   }
 ]

@@ -1,3 +1,16 @@
+-- Freeze some settings to produce stable query plans
+SET enable_analyzer = 1;
+
+SET enable_parallel_replicas = 0;
+
+SET join_algorithm = 'hash,parallel_hash';
+
+SET query_plan_optimize_join_order_algorithm = 'greedy';
+
+SET query_plan_optimize_join_order_limit = 1;
+
+SET query_plan_join_swap_table = 0;
+
 SELECT *
 FROM
     (
@@ -13,6 +26,8 @@ SETTINGS
     enable_join_runtime_filters = 1,
     join_runtime_filter_exact_values_limit = 100,
     log_comment = 'Q1';
+
+SYSTEM FLUSH LOGS system.query_log;
 
 SELECT
     ProfileEvents['RuntimeFilterRowsChecked'],

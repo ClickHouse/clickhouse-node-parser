@@ -1,5 +1,116 @@
 [
   {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "enable_analyzer",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ],
+    "leadingComments": [
+      "-- https://github.com/ClickHouse/ClickHouse/issues/11068"
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "vt"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "datetime_value",
+        "type": {
+          "name": "DateTime"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "value",
+        "type": {
+          "name": "Float64"
+        }
+      }
+    ],
+    "engine": {
+      "name": "Memory"
+    }
+  },
+  {
+    "kind": "createView",
+    "table": {
+      "kind": "tableRef",
+      "table": "computed_datum_hours"
+    },
+    "asQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "alias",
+          "expr": {
+            "kind": "functionCall",
+            "name": "toStartOfHour",
+            "args": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "b",
+                  "datetime_value"
+                ]
+              }
+            ]
+          },
+          "alias": "datetime_desc"
+        },
+        {
+          "kind": "alias",
+          "expr": {
+            "kind": "functionCall",
+            "name": "sum",
+            "args": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "b",
+                  "value"
+                ]
+              }
+            ]
+          },
+          "alias": "value"
+        }
+      ],
+      "from": {
+        "kind": "tableRef",
+        "table": "vt",
+        "alias": "b"
+      },
+      "groupBy": {
+        "kind": "expressions",
+        "items": [
+          {
+            "kind": "functionCall",
+            "name": "toStartOfHour",
+            "args": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "b",
+                  "datetime_value"
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    }
+  },
+  {
     "kind": "select",
     "select": [
       {

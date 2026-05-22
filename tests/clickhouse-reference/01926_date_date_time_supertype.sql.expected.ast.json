@@ -7,7 +7,7 @@
         "name": "toTypeName",
         "args": [
           {
-            "kind": "array",
+            "kind": "arrayLiteral",
             "elements": [
               {
                 "kind": "functionCall",
@@ -51,7 +51,7 @@
         "name": "toTypeName",
         "args": [
           {
-            "kind": "array",
+            "kind": "arrayLiteral",
             "elements": [
               {
                 "kind": "functionCall",
@@ -116,7 +116,7 @@
         "name": "toTypeName",
         "args": [
           {
-            "kind": "array",
+            "kind": "arrayLiteral",
             "elements": [
               {
                 "kind": "functionCall",
@@ -193,6 +193,226 @@
         ]
       }
     ]
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "predicate_table"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "predicate_table"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "value",
+        "type": {
+          "name": "UInt8"
+        }
+      }
+    ],
+    "engine": {
+      "name": "TinyLog"
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "predicate_table"
+      }
+    }
+  },
+  {
+    "kind": "select",
+    "with": [
+      {
+        "kind": "cteExpr",
+        "name": "a",
+        "expr": {
+          "kind": "functionCall",
+          "name": "toDate",
+          "args": [
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "2000-01-01"
+            }
+          ]
+        }
+      },
+      {
+        "kind": "cteExpr",
+        "name": "b",
+        "expr": {
+          "kind": "functionCall",
+          "name": "toDateTime",
+          "args": [
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "2000-01-01"
+            },
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "Asia/Istanbul"
+            }
+          ]
+        }
+      }
+    ],
+    "select": [
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "if",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "value"
+              ]
+            },
+            {
+              "kind": "columnRef",
+              "parts": [
+                "b"
+              ]
+            },
+            {
+              "kind": "columnRef",
+              "parts": [
+                "a"
+              ]
+            }
+          ]
+        },
+        "alias": "result"
+      },
+      {
+        "kind": "functionCall",
+        "name": "toTypeName",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "result"
+            ]
+          }
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "predicate_table"
+    }
+  },
+  {
+    "kind": "select",
+    "with": [
+      {
+        "kind": "cteExpr",
+        "name": "a",
+        "expr": {
+          "kind": "functionCall",
+          "name": "toDateTime",
+          "args": [
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "2000-01-01"
+            },
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "Asia/Istanbul"
+            }
+          ]
+        }
+      },
+      {
+        "kind": "cteExpr",
+        "name": "b",
+        "expr": {
+          "kind": "functionCall",
+          "name": "toDateTime64",
+          "args": [
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "2000-01-01"
+            },
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "5"
+            },
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "Asia/Istanbul"
+            }
+          ]
+        }
+      }
+    ],
+    "select": [
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "if",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "value"
+              ]
+            },
+            {
+              "kind": "columnRef",
+              "parts": [
+                "b"
+              ]
+            },
+            {
+              "kind": "columnRef",
+              "parts": [
+                "a"
+              ]
+            }
+          ]
+        },
+        "alias": "result"
+      },
+      {
+        "kind": "functionCall",
+        "name": "toTypeName",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "result"
+            ]
+          }
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "predicate_table"
+    }
   },
   {
     "kind": "select",

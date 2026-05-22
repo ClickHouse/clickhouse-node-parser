@@ -37,12 +37,23 @@ FROM numbers(5);
 SELECT range(number) * 42
 FROM numbers(5);
 
+CREATE TABLE my_table
+(
+    values Array(Int32)
+)
+ENGINE = MergeTree()
+ORDER BY values;
+
+INSERT INTO my_table (values);
+
 SELECT values * 5
 FROM my_table
 WHERE arrayExists(x -> x > 5, values);
+
+DROP TABLE my_table;
 
 SELECT [6, 6, 3] % 2;
 
 SELECT [6, 6, 3] / 2.5::Decimal(1, 1);
 
-SELECT [1] / 'a';
+SELECT [1] / 'a'; -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }

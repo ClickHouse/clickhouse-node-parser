@@ -1,3 +1,15 @@
+DROP TABLE IF EXISTS points_test;
+
+CREATE TABLE points_test
+(
+    x Float64,
+    y Float64,
+    note String
+)
+ENGINE = TinyLog;
+
+INSERT INTO points_test (x, y, note);
+
 SELECT
     x,
     y,

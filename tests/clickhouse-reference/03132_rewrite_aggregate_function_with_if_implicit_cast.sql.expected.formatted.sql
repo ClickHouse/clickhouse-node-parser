@@ -1,3 +1,6 @@
+SET enable_analyzer = 1;
+
+-- { echoOn }
 SELECT concat(1, sum(if(0, toUInt128(concat('%', toLowCardinality(toNullable(1)), toUInt256(1))), materialize(0))));
 
 SELECT

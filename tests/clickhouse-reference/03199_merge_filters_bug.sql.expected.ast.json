@@ -1,0 +1,546 @@
+[
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "allow_reorder_prewhere_conditions",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "t1"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "t2"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "t1"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "s1",
+        "type": {
+          "name": "String"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "s2",
+        "type": {
+          "name": "String"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "s3",
+        "type": {
+          "name": "String"
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "functionCall",
+          "name": "tuple",
+          "args": []
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "t2"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "fs1",
+        "type": {
+          "name": "FixedString",
+          "args": [
+            {
+              "kind": "literal",
+              "value": "10"
+            }
+          ]
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "fs2",
+        "type": {
+          "name": "FixedString",
+          "args": [
+            {
+              "kind": "literal",
+              "value": "10"
+            }
+          ]
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "functionCall",
+          "name": "tuple",
+          "args": []
+        }
+      }
+    ]
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "t1"
+      }
+    },
+    "selectQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "alias",
+          "expr": {
+            "kind": "functionCall",
+            "name": "repeat",
+            "args": [
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "t"
+              },
+              {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "15"
+              }
+            ]
+          },
+          "alias": "s1"
+        },
+        {
+          "kind": "alias",
+          "expr": {
+            "kind": "literal",
+            "type": "String",
+            "value": "test"
+          },
+          "alias": "s2"
+        },
+        {
+          "kind": "alias",
+          "expr": {
+            "kind": "literal",
+            "type": "String",
+            "value": "test"
+          },
+          "alias": "s3"
+        }
+      ]
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "t1"
+      }
+    },
+    "selectQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "functionCall",
+          "name": "substring",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "s1"
+              ]
+            },
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "1"
+            },
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "10"
+            }
+          ]
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "s2"
+          ]
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "s3"
+          ]
+        }
+      ],
+      "from": {
+        "kind": "tableFunctionRef",
+        "name": "generateRandom",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": "s1 String, s2 String, s3 String"
+          }
+        ]
+      },
+      "limit": {
+        "count": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "10000"
+        }
+      }
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "t2"
+      }
+    },
+    "selectQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "asterisk"
+        }
+      ],
+      "from": {
+        "kind": "tableFunctionRef",
+        "name": "generateRandom",
+        "args": []
+      },
+      "limit": {
+        "count": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "10000"
+        }
+      }
+    }
+  },
+  {
+    "kind": "select",
+    "with": [
+      {
+        "kind": "cteSubquery",
+        "name": "tmp1",
+        "query": {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "alias",
+              "expr": {
+                "kind": "functionCall",
+                "name": "CAST",
+                "args": [
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "s1"
+                    ]
+                  },
+                  {
+                    "kind": "literal",
+                    "type": "String",
+                    "value": "FixedString(10)"
+                  }
+                ]
+              },
+              "alias": "fs1"
+            },
+            {
+              "kind": "alias",
+              "expr": {
+                "kind": "columnRef",
+                "parts": [
+                  "s2"
+                ]
+              },
+              "alias": "sector"
+            },
+            {
+              "kind": "columnRef",
+              "parts": [
+                "s3"
+              ]
+            }
+          ],
+          "from": {
+            "kind": "tableRef",
+            "table": "t1"
+          },
+          "where": {
+            "kind": "binaryExpr",
+            "op": "!=",
+            "left": {
+              "kind": "columnRef",
+              "parts": [
+                "s3"
+              ]
+            },
+            "right": {
+              "kind": "literal",
+              "type": "String",
+              "value": "test"
+            },
+            "parenthesized": true
+          }
+        }
+      }
+    ],
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "fs1"
+        ]
+      }
+    ],
+    "from": {
+      "left": {
+        "kind": "tableRef",
+        "table": "t2"
+      },
+      "kind": "joinExpr",
+      "joinType": "LEFT",
+      "right": {
+        "kind": "tableRef",
+        "table": "tmp1"
+      },
+      "constraint": {
+        "kind": "using",
+        "columns": [
+          "fs1"
+        ]
+      }
+    },
+    "where": {
+      "kind": "inExpr",
+      "negated": false,
+      "expr": {
+        "kind": "columnRef",
+        "parts": [
+          "fs1"
+        ]
+      },
+      "values": [
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "test"
+        }
+      ],
+      "parenthesized": true
+    },
+    "settings": [
+      {
+        "name": "enable_multiple_prewhere_read_steps",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      },
+      {
+        "name": "query_plan_merge_filters",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "with": [
+      {
+        "kind": "cteSubquery",
+        "name": "tmp1",
+        "query": {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "alias",
+              "expr": {
+                "kind": "functionCall",
+                "name": "CAST",
+                "args": [
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "s1"
+                    ]
+                  },
+                  {
+                    "kind": "literal",
+                    "type": "String",
+                    "value": "FixedString(10)"
+                  }
+                ]
+              },
+              "alias": "fs1"
+            },
+            {
+              "kind": "alias",
+              "expr": {
+                "kind": "columnRef",
+                "parts": [
+                  "s2"
+                ]
+              },
+              "alias": "sector"
+            },
+            {
+              "kind": "columnRef",
+              "parts": [
+                "s3"
+              ]
+            }
+          ],
+          "from": {
+            "kind": "tableRef",
+            "table": "t1"
+          },
+          "where": {
+            "kind": "binaryExpr",
+            "op": "!=",
+            "left": {
+              "kind": "columnRef",
+              "parts": [
+                "s3"
+              ]
+            },
+            "right": {
+              "kind": "literal",
+              "type": "String",
+              "value": "test"
+            },
+            "parenthesized": true
+          }
+        }
+      }
+    ],
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "fs1"
+        ]
+      }
+    ],
+    "from": {
+      "left": {
+        "kind": "tableRef",
+        "table": "t2"
+      },
+      "kind": "joinExpr",
+      "joinType": "LEFT",
+      "right": {
+        "kind": "tableRef",
+        "table": "tmp1"
+      },
+      "constraint": {
+        "kind": "using",
+        "columns": [
+          "fs1"
+        ]
+      }
+    },
+    "where": {
+      "kind": "inExpr",
+      "negated": false,
+      "expr": {
+        "kind": "columnRef",
+        "parts": [
+          "fs1"
+        ]
+      },
+      "values": [
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "test"
+        }
+      ],
+      "parenthesized": true
+    },
+    "settings": [
+      {
+        "name": "enable_multiple_prewhere_read_steps",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      },
+      {
+        "name": "query_plan_merge_filters",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "optimize",
+    "table": {
+      "kind": "tableRef",
+      "table": "t1"
+    },
+    "final": true
+  }
+]

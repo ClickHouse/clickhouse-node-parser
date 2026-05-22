@@ -1,5 +1,84 @@
 [
   {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "parallel_replicas_local_plan",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "foo"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "foo"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "id",
+        "type": {
+          "name": "UInt8"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "path",
+        "type": {
+          "name": "String"
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "path"
+          ]
+        }
+      }
+    ],
+    "settings": [
+      {
+        "name": "index_granularity",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ],
+    "settingsAfterOrderBy": true
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "foo"
+      }
+    }
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -80,7 +159,10 @@
           "value": "%Condition%"
         }
       ]
-    }
+    },
+    "leadingComments": [
+      "-- check if also escaped sequence are properly extracted"
+    ]
   },
   {
     "kind": "select",
@@ -1816,7 +1898,10 @@
           "value": "%Condition%"
         }
       ]
-    }
+    },
+    "leadingComments": [
+      "-- those regex chars prevent the index use (only 3 first chars used during index scan)"
+    ]
   },
   {
     "kind": "select",
@@ -2560,7 +2645,10 @@
           "value": "%Condition%"
         }
       ]
-    }
+    },
+    "leadingComments": [
+      "-- here the forth char is not used during index, because it has 0+ quantifier"
+    ]
   },
   {
     "kind": "select",
@@ -2932,7 +3020,10 @@
           "value": "%Condition%"
         }
       ]
-    }
+    },
+    "leadingComments": [
+      "-- some unsupported regex chars - only 3 first chars used during index scan"
+    ]
   },
   {
     "kind": "select",
@@ -3180,7 +3271,10 @@
           "value": "%Condition%"
         }
       ]
-    }
+    },
+    "leadingComments": [
+      "-- fully disabled for pipes - see https://github.com/ClickHouse/ClickHouse/pull/54696"
+    ]
   },
   {
     "kind": "select",
@@ -3221,6 +3315,9 @@
           "value": "1"
         }
       }
+    ],
+    "trailingComments": [
+      "-- { serverError INDEX_NOT_USED }"
     ]
   },
   {
@@ -3345,6 +3442,9 @@
           "value": "1"
         }
       }
+    ],
+    "trailingComments": [
+      "-- { serverError INDEX_NOT_USED }"
     ]
   }
 ]

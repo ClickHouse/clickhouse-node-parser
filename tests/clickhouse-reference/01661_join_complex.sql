@@ -51,4 +51,17 @@ select * from (select 'a' as a, 'b' as b, 'c' as c, 'd' as d, 'e' as e, 'f' as f
 select * from (select 'a' as a, 'b' as b, 'c' as c, 'd' as d, 'e' as e, 'f' as f) as t1 right join (select 'a' as a, 'b' as b, 'c' as c, 'd' as d, 'e' as e, 'f' as f) as t2 on (t1.d = t2.b or t1.c = t2.b) or t1.e = t2.e ORDER BY ALL SETTINGS enable_analyzer = 1, query_plan_use_new_logical_join_step = 0;
 select * from (select 'a' as a, 'b' as b, 'c' as c, 'd' as d, 'e' as e, 'f' as f) as t1 inner join (select 'a' as a, 'b' as b, 'c' as c, 'd' as d, 'e' as e, 'f' as f) as t2 on (t1.d = t2.b or t1.c = t2.b) or (t1.e = t2.e and t1.a=t2.a and t2.f=t1.f) ORDER BY ALL SETTINGS enable_analyzer = 1, query_plan_use_new_logical_join_step = 0;
 select * from (select 'a' as a, 'b' as b, 'c' as c, 'd' as d, 'e' as e, 'f' as f) as t1 inner join (select 'a' as a, 'b' as b, 'c' as c, 'd' as d, 'e' as e, 'f' as f) as t2 on (t1.d = t2.b or t1.c = t2.b) and (t1.e = t2.e or t1.f=t2.f) SETTINGS enable_analyzer = 1;
+SET joined_subquery_requires_alias = 0;
+SET max_threads = 1;
+drop table if exists tab2;
+drop table if exists tab3;
+create table tab2 (a2 Int32, b2 Int32) engine = MergeTree order by a2;
+create table tab3 (a3 Int32, b3 Int32) engine = MergeTree order by a3;
+insert into tab2 values (2, 3);
+insert into tab2 values (6, 4);
+insert into tab3 values (2, 3);
+insert into tab3 values (5, 4);
+insert into tab3 values (100, 4);
 select a2, b2, a3, b3 from tab2 any left join tab3 on a2=a3 and a2 +1 = b3 + 0 or b2=b3 and a2 +1 = b3 + 0 ORDER BY ALL;
+drop table tab2;
+drop table tab3;

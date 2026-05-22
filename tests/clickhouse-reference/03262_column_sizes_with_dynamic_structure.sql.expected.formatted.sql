@@ -1,3 +1,24 @@
+-- Tags: no-random-settings, no-fasttest
+SET allow_experimental_dynamic_type = 1;
+
+SET enable_json_type = 1;
+
+DROP TABLE IF EXISTS test;
+
+CREATE TABLE test
+(
+    d Dynamic,
+    json JSON
+)
+ENGINE = MergeTree
+ORDER BY tuple()
+SETTINGS min_rows_for_wide_part = 0, min_bytes_for_wide_part = 1, object_serialization_version = 'v2', dynamic_serialization_version = 'v2';
+
+INSERT INTO test SELECT
+    number,
+    '{"a" : 42, "b" : "Hello, World"}'
+FROM numbers(10000000);
+
 SELECT
     table,
     sum(`rows`) AS `rows`,
@@ -10,3 +31,5 @@ WHERE active
     AND (table = 'test')
 GROUP BY table
 ORDER BY table ASC;
+
+DROP TABLE test;

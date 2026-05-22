@@ -1,6 +1,364 @@
 [
   {
     "kind": "select",
+    "with": [
+      {
+        "kind": "cteSubquery",
+        "name": "c",
+        "query": {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "alias",
+              "expr": {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "1"
+              },
+              "alias": "ID"
+            },
+            {
+              "kind": "alias",
+              "expr": {
+                "kind": "functionCall",
+                "name": "toDate",
+                "args": [
+                  {
+                    "kind": "literal",
+                    "type": "String",
+                    "value": "2023-06-24"
+                  }
+                ]
+              },
+              "alias": "dt"
+            },
+            {
+              "kind": "alias",
+              "expr": {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "0"
+              },
+              "alias": "p"
+            }
+          ]
+        }
+      }
+    ],
+    "select": [
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "multiIf",
+          "args": [
+            {
+              "kind": "binaryExpr",
+              "op": "=",
+              "left": {
+                "kind": "columnRef",
+                "parts": [
+                  "t",
+                  "ID"
+                ]
+              },
+              "right": {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "1"
+              }
+            },
+            {
+              "kind": "functionCall",
+              "name": "formatRowNoNewline",
+              "args": [
+                {
+                  "kind": "literal",
+                  "type": "String",
+                  "value": "JSONEachRow"
+                },
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "dd"
+                  ]
+                }
+              ]
+            },
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": ""
+            }
+          ]
+        },
+        "alias": "params"
+      }
+    ],
+    "from": {
+      "kind": "subqueryFrom",
+      "query": {
+        "kind": "select",
+        "select": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "ID"
+            ]
+          },
+          {
+            "kind": "alias",
+            "expr": {
+              "kind": "functionCall",
+              "name": "multiIf",
+              "args": [
+                {
+                  "kind": "binaryExpr",
+                  "op": "=",
+                  "left": {
+                    "kind": "columnRef",
+                    "parts": [
+                      "p"
+                    ]
+                  },
+                  "right": {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "0"
+                  }
+                },
+                {
+                  "kind": "functionCall",
+                  "name": "toString",
+                  "args": [
+                    {
+                      "kind": "functionCall",
+                      "name": "plus",
+                      "args": [
+                        {
+                          "kind": "columnRef",
+                          "parts": [
+                            "dt"
+                          ]
+                        },
+                        {
+                          "kind": "functionCall",
+                          "name": "toIntervalHour",
+                          "args": [
+                            {
+                              "kind": "columnRef",
+                              "parts": [
+                                "p"
+                              ]
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "kind": "literal",
+                  "type": "String",
+                  "value": "2022-01-01"
+                }
+              ]
+            },
+            "alias": "dd"
+          }
+        ],
+        "from": {
+          "kind": "tableRef",
+          "table": "c"
+        }
+      },
+      "alias": "t"
+    }
+  },
+  {
+    "kind": "select",
+    "with": [
+      {
+        "kind": "cteSubquery",
+        "name": "c",
+        "query": {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "alias",
+              "expr": {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "1"
+              },
+              "alias": "ID"
+            },
+            {
+              "kind": "alias",
+              "expr": {
+                "kind": "functionCall",
+                "name": "toDate",
+                "args": [
+                  {
+                    "kind": "literal",
+                    "type": "String",
+                    "value": "2023-06-24"
+                  }
+                ]
+              },
+              "alias": "dt"
+            },
+            {
+              "kind": "alias",
+              "expr": {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "0"
+              },
+              "alias": "p"
+            }
+          ]
+        }
+      }
+    ],
+    "select": [
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "multiIf",
+          "args": [
+            {
+              "kind": "binaryExpr",
+              "op": "=",
+              "left": {
+                "kind": "columnRef",
+                "parts": [
+                  "t",
+                  "ID"
+                ]
+              },
+              "right": {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "1"
+              }
+            },
+            {
+              "kind": "functionCall",
+              "name": "formatRowNoNewline",
+              "args": [
+                {
+                  "kind": "literal",
+                  "type": "String",
+                  "value": "JSONEachRow"
+                },
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "dd"
+                  ]
+                }
+              ]
+            },
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": ""
+            }
+          ]
+        },
+        "alias": "params"
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "dd"
+        ]
+      }
+    ],
+    "from": {
+      "kind": "subqueryFrom",
+      "query": {
+        "kind": "select",
+        "select": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "ID"
+            ]
+          },
+          {
+            "kind": "alias",
+            "expr": {
+              "kind": "functionCall",
+              "name": "multiIf",
+              "args": [
+                {
+                  "kind": "binaryExpr",
+                  "op": "=",
+                  "left": {
+                    "kind": "columnRef",
+                    "parts": [
+                      "p"
+                    ]
+                  },
+                  "right": {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "0"
+                  }
+                },
+                {
+                  "kind": "functionCall",
+                  "name": "toString",
+                  "args": [
+                    {
+                      "kind": "functionCall",
+                      "name": "plus",
+                      "args": [
+                        {
+                          "kind": "columnRef",
+                          "parts": [
+                            "dt"
+                          ]
+                        },
+                        {
+                          "kind": "functionCall",
+                          "name": "toIntervalHour",
+                          "args": [
+                            {
+                              "kind": "columnRef",
+                              "parts": [
+                                "p"
+                              ]
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "kind": "literal",
+                  "type": "String",
+                  "value": "2022-01-01"
+                }
+              ]
+            },
+            "alias": "dd"
+          }
+        ],
+        "from": {
+          "kind": "tableRef",
+          "table": "c"
+        }
+      },
+      "alias": "t"
+    }
+  },
+  {
+    "kind": "select",
     "select": [
       {
         "kind": "alias",

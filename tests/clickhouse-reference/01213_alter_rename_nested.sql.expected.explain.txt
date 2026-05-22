@@ -1,3 +1,80 @@
+DropQuery  table_for_rename_nested (children 1)
+ Identifier table_for_rename_nested
+
+CreateQuery table_for_rename_nested (children 3)
+ Identifier table_for_rename_nested
+ Columns definition (children 1)
+  ExpressionList (children 4)
+   ColumnDeclaration date (children 1)
+    DataType Date
+   ColumnDeclaration key (children 1)
+    DataType UInt64
+   ColumnDeclaration n (children 1)
+    DataType Nested (children 1)
+     ExpressionList (children 2)
+      NameTypePair x (children 1)
+       DataType UInt32
+      NameTypePair y (children 1)
+       DataType String
+   ColumnDeclaration value1 (children 1)
+    DataType Array (children 1)
+     ExpressionList (children 1)
+      DataType Array (children 1)
+       ExpressionList (children 1)
+        DataType LowCardinality (children 1)
+         ExpressionList (children 1)
+          DataType String
+ Storage definition (children 3)
+  Function MergeTree (children 1)
+   ExpressionList
+  Identifier date
+  Identifier key
+
+InsertQuery   (children 3)
+ Identifier table_for_rename_nested
+ ExpressionList (children 5)
+  Identifier date
+  Identifier key
+  Identifier n.x
+  Identifier n.y
+  Identifier value1
+ SelectWithUnionQuery (children 1)
+  ExpressionList (children 1)
+   SelectQuery (children 2)
+    ExpressionList (children 5)
+     Function toDate (children 1)
+      ExpressionList (children 1)
+       Literal '2019-10-01'
+     Identifier number
+     Function array (children 1)
+      ExpressionList (children 3)
+       Function plus (children 1)
+        ExpressionList (children 2)
+         Identifier number
+         Literal UInt64_1
+       Function plus (children 1)
+        ExpressionList (children 2)
+         Identifier number
+         Literal UInt64_2
+       Function plus (children 1)
+        ExpressionList (children 2)
+         Identifier number
+         Literal UInt64_3
+     Literal Array_['a', 'b', 'c']
+     Function array (children 1)
+      ExpressionList (children 1)
+       Function array (children 1)
+        ExpressionList (children 1)
+         Function toString (children 1)
+          ExpressionList (children 1)
+           Identifier number
+    TablesInSelectQuery (children 1)
+     TablesInSelectQueryElement (children 1)
+      TableExpression (children 1)
+       Function numbers (children 1)
+        ExpressionList (children 1)
+         Literal UInt64_10
+
 SelectWithUnionQuery (children 1)
  ExpressionList (children 1)
   SelectQuery (children 3)
@@ -25,6 +102,23 @@ SelectWithUnionQuery (children 1)
     ExpressionList (children 2)
      Identifier key
      Literal UInt64_7
+
+ShowCreateTableQuery  table_for_rename_nested (children 1)
+ Identifier table_for_rename_nested
+
+AlterQuery  table_for_rename_nested (children 2)
+ ExpressionList (children 1)
+  AlterCommand RENAME_COLUMN (children 2)
+   Identifier n.x
+   Identifier n.renamed_x
+ Identifier table_for_rename_nested
+
+AlterQuery  table_for_rename_nested (children 2)
+ ExpressionList (children 1)
+  AlterCommand RENAME_COLUMN (children 2)
+   Identifier n.y
+   Identifier n.renamed_y
+ Identifier table_for_rename_nested
 
 SelectWithUnionQuery (children 1)
  ExpressionList (children 1)
@@ -55,6 +149,27 @@ SelectWithUnionQuery (children 1)
     ExpressionList (children 2)
      Identifier key
      Literal UInt64_7
+
+AlterQuery  table_for_rename_nested (children 2)
+ ExpressionList (children 1)
+  AlterCommand RENAME_COLUMN (children 2)
+   Identifier n.renamed_x
+   Identifier not_nested_x
+ Identifier table_for_rename_nested
+
+AlterQuery  table_for_rename_nested (children 2)
+ ExpressionList (children 1)
+  AlterCommand RENAME_COLUMN (children 2)
+   Identifier n
+   Identifier renamed_n
+ Identifier table_for_rename_nested
+
+AlterQuery  table_for_rename_nested (children 2)
+ ExpressionList (children 1)
+  AlterCommand RENAME_COLUMN (children 2)
+   Identifier value1
+   Identifier renamed_value1
+ Identifier table_for_rename_nested
 
 SelectWithUnionQuery (children 1)
  ExpressionList (children 1)

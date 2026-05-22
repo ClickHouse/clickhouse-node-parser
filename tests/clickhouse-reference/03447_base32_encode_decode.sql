@@ -1,5 +1,50 @@
 SELECT base32Encode('This is a test string');
 SELECT base32Encode('This is a test string', 'Second arg'); -- { serverError NUMBER_OF_ARGUMENTS_DOESNT_MATCH }
+DROP TABLE IF EXISTS t3447;
+CREATE TABLE t3447 (id Int32, str String, b32 String) ENGINE = Memory;
+INSERT INTO t3447 VALUES
+    (100, '', ''),
+    (101, 'f', 'MY======'),
+    (102, 'fo', 'MZXQ===='),
+    (103, 'foo', 'MZXW6==='),
+    (104, 'foob', 'MZXW6YQ='),
+    (105, 'fooba', 'MZXW6YTB'),
+    (106, 'foobar', 'MZXW6YTBOI======'),
+
+    (200, '\x00', 'AA======'),
+    (201, '\x00\x00', 'AAAA===='),
+    (202, '\x00\x00\x00', 'AAAAA==='),
+    (203, '\x00\x00\x00\x00', 'AAAAAAA='),
+    (204, '\x00\x00\x00\x00\x00', 'AAAAAAAA'),
+
+    (300, '\xFF', '74======'),
+    (301, '\xFF\xFF', '777Q===='),
+    (302, '\xFF\xFF\xFF', '77776==='),
+    (303, '\xFF\xFF\xFF\xFF', '777777Y='),
+    (304, '\xFF\xFF\xFF\xFF\xFF', '77777777'),
+
+    (400, '\x01\x23\x45\x67\x89', 'AERUKZ4J'),
+    (401, '\xAB\xCD\xEF\x01\x23', 'VPG66AJD'),
+
+    (402, '1234567890', 'GEZDGNBVGY3TQOJQ'),
+    (403, 'The quick brown fox jumps over the lazy dog', 'KRUGKIDROVUWG2ZAMJZG653OEBTG66BANJ2W24DTEBXXMZLSEB2GQZJANRQXU6JAMRXWO==='),
+
+    (500, 'a', 'ME======'),
+    (501, 'ab', 'MFRA===='),
+    (502, 'abc', 'MFRGG==='),
+    (503, 'abcd', 'MFRGGZA='),
+    (504, 'abcde', 'MFRGGZDF'),
+    (505, 'abcdef', 'MFRGGZDFMY======'),
+    (506, 'foo', 'MZXW6==='),
+    (507, 'foobar', 'MZXW6YTBOI======'),
+    (508, 'Hello world!', 'JBSWY3DPEB3W64TMMQQQ===='),
+    (509, 'Hold my beer', 'JBXWYZBANV4SAYTFMVZA===='),
+    (510, 'Hold another beer', 'JBXWYZBAMFXG65DIMVZCAYTFMVZA===='),
+    (511, 'And a wine', 'IFXGIIDBEB3WS3TF'),
+    (512, 'And another wine', 'IFXGIIDBNZXXI2DFOIQHO2LOMU======'),
+    (513, 'And a lemonade', 'IFXGIIDBEBWGK3LPNZQWIZI='),
+    (514, 't1Zv2yaZ', 'OQYVU5RSPFQVU==='),
+    (515, 'And another wine', 'IFXGIIDBNZXXI2DFOIQHO2LOMU======');
 SELECT id, str AS input, hex(str) AS input_hex, base32Encode(str) AS result, b32, result == b32 FROM t3447;
 SELECT id, b32 as input, base32Decode(input) AS result, hex(result) as result_hex, hex(str) as expected_hex, result == str FROM t3447;
 SELECT id, lower(b32) as input, base32Decode(input) AS result, hex(result) as result_hex, hex(str) as expected_hex, result == str FROM t3447;

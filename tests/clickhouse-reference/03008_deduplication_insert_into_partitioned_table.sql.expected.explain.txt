@@ -1,3 +1,67 @@
+DropQuery  partitioned_table (children 1)
+ Identifier partitioned_table
+
+DropQuery  mv_table (children 1)
+ Identifier mv_table
+
+Set
+
+CreateQuery partitioned_table (children 3)
+ Identifier partitioned_table
+ Columns definition (children 1)
+  ExpressionList (children 2)
+   ColumnDeclaration key (children 1)
+    DataType Int64
+   ColumnDeclaration value (children 1)
+    DataType String
+ Storage definition (children 3)
+  Function ReplicatedMergeTree (children 1)
+   ExpressionList (children 2)
+    Literal '/clickhouse/tables/{database}/03008_deduplication_insert_into_partitioned_table'
+    Literal '{replica}'
+  Function modulo (children 1)
+   ExpressionList (children 2)
+    Identifier key
+    Literal UInt64_10
+  Function tuple (children 1)
+   ExpressionList
+
+CreateQuery mv_table (children 4)
+ Identifier mv_table
+ Columns definition (children 1)
+  ExpressionList (children 2)
+   ColumnDeclaration key (children 1)
+    DataType Int64
+   ColumnDeclaration value (children 1)
+    DataType String
+ SelectWithUnionQuery (children 1)
+  ExpressionList (children 1)
+   SelectQuery (children 2)
+    ExpressionList (children 2)
+     Identifier key
+     Identifier value
+    TablesInSelectQuery (children 1)
+     TablesInSelectQueryElement (children 1)
+      TableExpression (children 1)
+       TableIdentifier partitioned_table
+ ViewTargets (children 1)
+  Storage definition (children 2)
+   Function ReplicatedMergeTree (children 1)
+    ExpressionList (children 2)
+     Literal '/clickhouse/tables/{database}/03008_deduplication_insert_into_partitioned_table_mv'
+     Literal '{replica}'
+   Function tuple (children 1)
+    ExpressionList
+
+InsertQuery   (children 1)
+ Identifier partitioned_table
+
+InsertQuery   (children 1)
+ Identifier partitioned_table
+
+InsertQuery   (children 1)
+ Identifier partitioned_table
+
 SelectWithUnionQuery (children 1)
  ExpressionList (children 1)
   SelectQuery (children 3)
@@ -23,3 +87,33 @@ SelectWithUnionQuery (children 1)
    ExpressionList (children 1)
     OrderByElement (children 1)
      Identifier ALL
+
+DropQuery  partitioned_table (children 1)
+ Identifier partitioned_table
+
+DropQuery  mv_table (children 1)
+ Identifier mv_table
+
+InsertQuery   (children 2)
+ Identifier partitioned_table
+ Set
+
+InsertQuery   (children 2)
+ Identifier partitioned_table
+ Set
+
+InsertQuery   (children 2)
+ Identifier partitioned_table
+ Set
+
+InsertQuery   (children 2)
+ Identifier partitioned_table
+ Set
+
+InsertQuery   (children 2)
+ Identifier partitioned_table
+ Set
+
+InsertQuery   (children 2)
+ Identifier partitioned_table
+ Set

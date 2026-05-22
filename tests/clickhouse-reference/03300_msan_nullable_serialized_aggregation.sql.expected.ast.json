@@ -1,5 +1,25 @@
 [
   {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "allow_experimental_nullable_tuple_type",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ],
+    "leadingComments": [
+      "-- Test case extracted from AST fuzzer failure",
+      "-- https://s3.amazonaws.com/clickhouse-test-reports/json.html?PR=95226&sha=4092c976e68130b7d6993e747e14ed6645efd0fa&name_0=PR&name_1=AST%20fuzzer%20%28amd_msan%29",
+      "-- MemorySanitizer: use-of-uninitialized-value in CRC32Hash during nullable_serialized aggregation",
+      "-- The bug was in ColumnNullable::getSerializedValueSize which returned 1 + nested_size even for NULL values,",
+      "-- but serializeValueIntoMemory only writes 1 byte for NULLs, leaving uninitialized memory."
+    ]
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -55,243 +75,9 @@
           ]
         }
       ]
-    }
-  },
-  {
-    "kind": "select",
-    "select": [
-      {
-        "kind": "functionCall",
-        "name": "tuple",
-        "args": [
-          {
-            "kind": "functionCall",
-            "name": "tuple",
-            "args": [
-              {
-                "kind": "functionCall",
-                "name": "materialize",
-                "args": [
-                  {
-                    "kind": "literal",
-                    "type": "NULL",
-                    "value": "NULL"
-                  }
-                ]
-              }
-            ]
-          },
-          {
-            "kind": "literal",
-            "type": "UInt64",
-            "value": "42"
-          },
-          {
-            "kind": "functionCall",
-            "name": "CAST",
-            "args": [
-              {
-                "kind": "functionCall",
-                "name": "tuple",
-                "args": [
-                  {
-                    "kind": "literal",
-                    "type": "NULL",
-                    "value": "NULL"
-                  },
-                  {
-                    "kind": "literal",
-                    "type": "NULL",
-                    "value": "NULL"
-                  }
-                ]
-              },
-              {
-                "kind": "literal",
-                "type": "String",
-                "value": "Nullable(Tuple(Nullable(UInt32), Nullable(UInt32)))"
-              }
-            ]
-          },
-          {
-            "kind": "functionCall",
-            "name": "toNullable",
-            "args": [
-              {
-                "kind": "literal",
-                "type": "NULL",
-                "value": "NULL"
-              }
-            ]
-          }
-        ]
-      },
-      {
-        "kind": "inExpr",
-        "negated": false,
-        "expr": {
-          "kind": "tuple",
-          "elements": [
-            {
-              "kind": "literal",
-              "type": "NULL",
-              "value": "NULL"
-            },
-            {
-              "kind": "literal",
-              "type": "NULL",
-              "value": "NULL"
-            }
-          ],
-          "source": "(NULL, NULL)"
-        },
-        "values": [
-          {
-            "kind": "functionCall",
-            "name": "CAST",
-            "args": [
-              {
-                "kind": "functionCall",
-                "name": "tuple",
-                "args": [
-                  {
-                    "kind": "literal",
-                    "type": "NULL",
-                    "value": "NULL"
-                  },
-                  {
-                    "kind": "literal",
-                    "type": "UInt64",
-                    "value": "1"
-                  }
-                ]
-              },
-              {
-                "kind": "literal",
-                "type": "String",
-                "value": "Nullable(Tuple(Nullable(UInt32), Nullable(UInt32)))"
-              }
-            ]
-          }
-        ]
-      }
-    ],
-    "groupBy": {
-      "kind": "expressions",
-      "items": [
-        {
-          "kind": "literal",
-          "type": "UInt64",
-          "value": "1"
-        },
-        {
-          "kind": "functionCall",
-          "name": "isZeroOrNull",
-          "args": [
-            {
-              "kind": "functionCall",
-              "name": "assumeNotNull",
-              "args": [
-                {
-                  "kind": "functionCall",
-                  "name": "materialize",
-                  "args": [
-                    {
-                      "kind": "literal",
-                      "type": "NULL",
-                      "value": "NULL"
-                    }
-                  ]
-                }
-              ]
-            }
-          ]
-        },
-        {
-          "kind": "functionCall",
-          "name": "tuple",
-          "args": [
-            {
-              "kind": "literal",
-              "type": "UInt64",
-              "value": "1"
-            },
-            {
-              "kind": "literal",
-              "type": "NULL",
-              "value": "NULL"
-            }
-          ]
-        },
-        {
-          "kind": "inExpr",
-          "negated": false,
-          "expr": {
-            "kind": "tuple",
-            "elements": [
-              {
-                "kind": "literal",
-                "type": "NULL",
-                "value": "NULL"
-              },
-              {
-                "kind": "literal",
-                "type": "NULL",
-                "value": "NULL"
-              }
-            ],
-            "source": "(NULL, NULL)"
-          },
-          "values": [
-            {
-              "kind": "functionCall",
-              "name": "CAST",
-              "args": [
-                {
-                  "kind": "functionCall",
-                  "name": "tuple",
-                  "args": [
-                    {
-                      "kind": "literal",
-                      "type": "NULL",
-                      "value": "NULL"
-                    },
-                    {
-                      "kind": "literal",
-                      "type": "NULL",
-                      "value": "NULL"
-                    }
-                  ]
-                },
-                {
-                  "kind": "literal",
-                  "type": "String",
-                  "value": "Nullable(Tuple(Nullable(UInt32), Nullable(UInt32)))"
-                }
-              ]
-            }
-          ],
-          "global": true
-        }
-      ]
     },
-    "settings": [
-      {
-        "name": "transform_null_in",
-        "value": {
-          "kind": "literal",
-          "type": "UInt64",
-          "value": "0"
-        }
-      },
-      {
-        "name": "enable_analyzer",
-        "value": {
-          "kind": "literal",
-          "type": "UInt64",
-          "value": "1"
-        }
-      }
+    "leadingComments": [
+      "-- Minimal reproducer"
     ]
   },
   {
@@ -367,7 +153,7 @@
         "kind": "inExpr",
         "negated": false,
         "expr": {
-          "kind": "tuple",
+          "kind": "tupleLiteral",
           "elements": [
             {
               "kind": "literal",
@@ -464,7 +250,247 @@
           "kind": "inExpr",
           "negated": false,
           "expr": {
-            "kind": "tuple",
+            "kind": "tupleLiteral",
+            "elements": [
+              {
+                "kind": "literal",
+                "type": "NULL",
+                "value": "NULL"
+              },
+              {
+                "kind": "literal",
+                "type": "NULL",
+                "value": "NULL"
+              }
+            ],
+            "source": "(NULL, NULL)"
+          },
+          "values": [
+            {
+              "kind": "functionCall",
+              "name": "CAST",
+              "args": [
+                {
+                  "kind": "functionCall",
+                  "name": "tuple",
+                  "args": [
+                    {
+                      "kind": "literal",
+                      "type": "NULL",
+                      "value": "NULL"
+                    },
+                    {
+                      "kind": "literal",
+                      "type": "NULL",
+                      "value": "NULL"
+                    }
+                  ]
+                },
+                {
+                  "kind": "literal",
+                  "type": "String",
+                  "value": "Nullable(Tuple(Nullable(UInt32), Nullable(UInt32)))"
+                }
+              ]
+            }
+          ],
+          "global": true
+        }
+      ]
+    },
+    "settings": [
+      {
+        "name": "transform_null_in",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      },
+      {
+        "name": "enable_analyzer",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ],
+    "leadingComments": [
+      "-- Original failing query from AST fuzzer"
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "tuple",
+        "args": [
+          {
+            "kind": "functionCall",
+            "name": "tuple",
+            "args": [
+              {
+                "kind": "functionCall",
+                "name": "materialize",
+                "args": [
+                  {
+                    "kind": "literal",
+                    "type": "NULL",
+                    "value": "NULL"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "42"
+          },
+          {
+            "kind": "functionCall",
+            "name": "CAST",
+            "args": [
+              {
+                "kind": "functionCall",
+                "name": "tuple",
+                "args": [
+                  {
+                    "kind": "literal",
+                    "type": "NULL",
+                    "value": "NULL"
+                  },
+                  {
+                    "kind": "literal",
+                    "type": "NULL",
+                    "value": "NULL"
+                  }
+                ]
+              },
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "Nullable(Tuple(Nullable(UInt32), Nullable(UInt32)))"
+              }
+            ]
+          },
+          {
+            "kind": "functionCall",
+            "name": "toNullable",
+            "args": [
+              {
+                "kind": "literal",
+                "type": "NULL",
+                "value": "NULL"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "kind": "inExpr",
+        "negated": false,
+        "expr": {
+          "kind": "tupleLiteral",
+          "elements": [
+            {
+              "kind": "literal",
+              "type": "NULL",
+              "value": "NULL"
+            },
+            {
+              "kind": "literal",
+              "type": "NULL",
+              "value": "NULL"
+            }
+          ],
+          "source": "(NULL, NULL)"
+        },
+        "values": [
+          {
+            "kind": "functionCall",
+            "name": "CAST",
+            "args": [
+              {
+                "kind": "functionCall",
+                "name": "tuple",
+                "args": [
+                  {
+                    "kind": "literal",
+                    "type": "NULL",
+                    "value": "NULL"
+                  },
+                  {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "1"
+                  }
+                ]
+              },
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "Nullable(Tuple(Nullable(UInt32), Nullable(UInt32)))"
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "groupBy": {
+      "kind": "expressions",
+      "items": [
+        {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        },
+        {
+          "kind": "functionCall",
+          "name": "isZeroOrNull",
+          "args": [
+            {
+              "kind": "functionCall",
+              "name": "assumeNotNull",
+              "args": [
+                {
+                  "kind": "functionCall",
+                  "name": "materialize",
+                  "args": [
+                    {
+                      "kind": "literal",
+                      "type": "NULL",
+                      "value": "NULL"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "kind": "functionCall",
+          "name": "tuple",
+          "args": [
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "1"
+            },
+            {
+              "kind": "literal",
+              "type": "NULL",
+              "value": "NULL"
+            }
+          ]
+        },
+        {
+          "kind": "inExpr",
+          "negated": false,
+          "expr": {
+            "kind": "tupleLiteral",
             "elements": [
               {
                 "kind": "literal",
@@ -529,6 +555,9 @@
           "value": "0"
         }
       }
+    ],
+    "trailingComments": [
+      "-- { serverError ILLEGAL_COLUMN }"
     ]
   },
   {
@@ -585,7 +614,7 @@
           }
         ],
         "from": {
-          "kind": "tableFunction",
+          "kind": "tableFunctionRef",
           "name": "numbers",
           "args": [
             {
@@ -657,6 +686,9 @@
         },
         "direction": "ASC"
       }
+    ],
+    "leadingComments": [
+      "-- Multiple nullable tuples in GROUP BY"
     ]
   },
   {
@@ -710,7 +742,10 @@
           "value": "1"
         }
       ]
-    }
+    },
+    "leadingComments": [
+      "-- Nested nullable tuples"
+    ]
   },
   {
     "kind": "select",
@@ -811,7 +846,7 @@
           }
         ],
         "from": {
-          "kind": "tableFunction",
+          "kind": "tableFunctionRef",
           "name": "numbers",
           "args": [
             {
@@ -845,6 +880,9 @@
         },
         "direction": "ASC"
       }
+    ],
+    "leadingComments": [
+      "-- Mix of null and non-null values"
     ]
   }
 ]

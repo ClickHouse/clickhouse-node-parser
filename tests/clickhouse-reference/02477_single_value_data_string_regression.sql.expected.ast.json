@@ -1,5 +1,46 @@
 [
   {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "argmaxstate_hex_small"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "v",
+        "type": {
+          "name": "String"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "state",
+        "type": {
+          "name": "String"
+        }
+      }
+    ],
+    "engine": {
+      "name": "TinyLog"
+    },
+    "leadingComments": [
+      "-- Context: https://github.com/ClickHouse/ClickHouse/issues/42916",
+      "-- STRING WITH 10 CHARACTERS",
+      "-- SELECT version() AS v, hex(argMaxState('0123456789', number)) AS state FROM numbers(1) FORMAT CSV"
+    ]
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "argmaxstate_hex_small"
+      }
+    }
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -35,7 +76,7 @@
               }
             ],
             "from": {
-              "kind": "tableFunction",
+              "kind": "tableFunctionRef",
               "name": "numbers",
               "args": [
                 {
@@ -73,7 +114,10 @@
         "type": "String",
         "value": "22.8.5.29"
       }
-    }
+    },
+    "leadingComments": [
+      "-- Assert that the current version will write the same as 22.8.5 (last known good 22.8 minor)"
+    ]
   },
   {
     "kind": "select",
@@ -116,6 +160,49 @@
     "from": {
       "kind": "tableRef",
       "table": "argmaxstate_hex_small"
+    },
+    "leadingComments": [
+      "-- Assert that the current version can read correctly both the old and the regression states"
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "argmaxstate_hex_large"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "v",
+        "type": {
+          "name": "String"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "state",
+        "type": {
+          "name": "String"
+        }
+      }
+    ],
+    "engine": {
+      "name": "TinyLog"
+    },
+    "leadingComments": [
+      "-- STRING WITH 54 characters",
+      "-- SELECT version() AS v, hex(argMaxState('ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz', number)) AS state FROM numbers(1) FORMAT CSV"
+    ]
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "argmaxstate_hex_large"
+      }
     }
   },
   {
@@ -154,7 +241,7 @@
               }
             ],
             "from": {
-              "kind": "tableFunction",
+              "kind": "tableFunctionRef",
               "name": "numbers",
               "args": [
                 {
@@ -238,6 +325,46 @@
     }
   },
   {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "argmaxstate_hex_empty"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "v",
+        "type": {
+          "name": "String"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "state",
+        "type": {
+          "name": "String"
+        }
+      }
+    ],
+    "engine": {
+      "name": "TinyLog"
+    },
+    "leadingComments": [
+      "-- STRING WITH 0 characters",
+      "-- SELECT version() AS v, hex(argMaxState('', number)) AS state FROM numbers(1) FORMAT CSV"
+    ]
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "argmaxstate_hex_empty"
+      }
+    }
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -273,7 +400,7 @@
               }
             ],
             "from": {
-              "kind": "tableFunction",
+              "kind": "tableFunctionRef",
               "name": "numbers",
               "args": [
                 {
@@ -392,6 +519,10 @@
           }
         ]
       }
+    ],
+    "leadingComments": [
+      "-- Right in the border of small and large buffers",
+      "-- SELECT hex(argMaxState('0123456789012345678901234567890123456789012345' as a, number)) AS state, length(a) FROM numbers(1) FORMAT CSV"
     ]
   },
   {
@@ -468,6 +599,9 @@
           }
         ]
       }
+    ],
+    "leadingComments": [
+      "-- SELECT hex(argMaxState('01234567890123456789012345678901234567890123456' as a, number)) AS state, length(a) FROM numbers(1) FORMAT CSV"
     ]
   },
   {
@@ -544,6 +678,9 @@
           }
         ]
       }
+    ],
+    "leadingComments": [
+      "-- SELECT hex(argMaxState('012345678901234567890123456789012345678901234567' as a, number)) AS state, length(a) FROM numbers(1) FORMAT CSV"
     ]
   },
   {
@@ -620,6 +757,10 @@
           }
         ]
       }
+    ],
+    "leadingComments": [
+      "-- Right in the allocation limit (power of 2)",
+      "-- SELECT hex(argMaxState('012345678901234567890123456789012345678901234567890123456789012' as a, number)) AS state, length(a) FROM numbers(1) FORMAT CSV"
     ]
   },
   {
@@ -696,6 +837,9 @@
           }
         ]
       }
+    ],
+    "leadingComments": [
+      "-- SELECT hex(argMaxState('0123456789012345678901234567890123456789012345678901234567890123' as a, number)) AS state, length(a) FROM numbers(1) FORMAT CSV"
     ]
   },
   {
@@ -1080,7 +1224,10 @@
           }
         ]
       }
-    }
+    },
+    "trailingComments": [
+      "-- { serverError CANNOT_READ_ALL_DATA }"
+    ]
   },
   {
     "kind": "select",
@@ -1153,7 +1300,10 @@
           }
         ]
       }
-    }
+    },
+    "trailingComments": [
+      "-- { serverError CANNOT_READ_ALL_DATA }"
+    ]
   },
   {
     "kind": "select",
@@ -1226,7 +1376,10 @@
           }
         ]
       }
-    }
+    },
+    "trailingComments": [
+      "-- { serverError CANNOT_READ_ALL_DATA }"
+    ]
   },
   {
     "kind": "select",
@@ -1299,7 +1452,10 @@
           }
         ]
       }
-    }
+    },
+    "trailingComments": [
+      "-- { serverError CANNOT_READ_ALL_DATA }"
+    ]
   },
   {
     "kind": "select",
@@ -1372,7 +1528,10 @@
           }
         ]
       }
-    }
+    },
+    "trailingComments": [
+      "-- { serverError CANNOT_READ_ALL_DATA }"
+    ]
   },
   {
     "kind": "select",
@@ -1465,7 +1624,11 @@
           }
         ]
       }
-    }
+    },
+    "leadingComments": [
+      "-- The following query works, but it's too long and consumes to much memory",
+      "-- SELECT '2^30-1', length(maxMerge(x)) from (select CAST(unhex('ffffff3f') || randomString(0x3FFFFFFF - 1) || 'x', 'AggregateFunction(max, String)') as x);"
+    ]
   },
   {
     "kind": "select",
@@ -1596,6 +1759,9 @@
           }
         ]
       }
+    ],
+    "trailingComments": [
+      "-- { serverError INCORRECT_DATA }"
     ]
   },
   {
@@ -1746,6 +1912,9 @@
           }
         ]
       }
+    ],
+    "trailingComments": [
+      "-- { serverError INCORRECT_DATA }"
     ]
   },
   {
@@ -1816,6 +1985,9 @@
           }
         ]
       }
+    ],
+    "trailingComments": [
+      "-- { serverError INCORRECT_DATA }"
     ]
   },
   {
@@ -1854,7 +2026,193 @@
           }
         ]
       }
+    ],
+    "trailingComments": [
+      "-- { serverError INCORRECT_DATA }"
     ]
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "aggr"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "aggr"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "n",
+        "type": {
+          "name": "int"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "s",
+        "type": {
+          "name": "AggregateFunction",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "max"
+              }
+            },
+            {
+              "kind": "type",
+              "type": {
+                "name": "String"
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "n"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "aggr"
+      }
+    },
+    "selectQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        },
+        {
+          "kind": "functionCall",
+          "name": "maxState",
+          "args": [
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": ""
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "aggr"
+      }
+    },
+    "selectQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "2"
+        },
+        {
+          "kind": "functionCall",
+          "name": "maxState",
+          "args": [
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "\\0"
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "aggr"
+      }
+    },
+    "selectQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "3"
+        },
+        {
+          "kind": "functionCall",
+          "name": "maxState",
+          "args": [
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "\\0\\0\\0\\0"
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "aggr"
+      }
+    },
+    "selectQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "4"
+        },
+        {
+          "kind": "functionCall",
+          "name": "maxState",
+          "args": [
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "abrac\\0dabra\\0"
+            }
+          ]
+        }
+      ]
+    }
   },
   {
     "kind": "select",
@@ -1955,6 +2313,14 @@
       }
     ],
     "from": {
+      "kind": "tableRef",
+      "table": "aggr"
+    }
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
       "kind": "tableRef",
       "table": "aggr"
     }

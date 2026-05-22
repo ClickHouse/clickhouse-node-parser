@@ -1,11 +1,133 @@
 [
   {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "txn_counters"
+    },
+    "ifExists": true,
+    "leadingComments": [
+      "-- Tags: no-ordinary-database, no-encrypted-storage"
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "txn_counters"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "n",
+        "type": {
+          "name": "Int64"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "creation_tid",
+        "defaultKind": "DEFAULT",
+        "defaultExpr": {
+          "kind": "functionCall",
+          "name": "transactionID",
+          "args": []
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "n"
+          ]
+        }
+      }
+    ],
+    "settings": [
+      {
+        "name": "old_parts_lifetime",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "3600"
+        }
+      }
+    ],
+    "settingsAfterOrderBy": true
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "txn_counters"
+      }
+    },
+    "columns": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "n"
+        ]
+      }
+    ]
+  },
+  {
     "kind": "select",
     "select": [
       {
         "kind": "functionCall",
         "name": "transactionID",
         "args": []
+      }
+    ]
+  },
+  {
+    "kind": "system",
+    "body": "SYSTEM stop merges txn_counters",
+    "leadingComments": [
+      "-- stop background cleanup"
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "throw_on_unsupported_query_inside_transaction",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "system",
+    "body": "begin transaction"
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "txn_counters"
+      }
+    },
+    "columns": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "n"
+        ]
       }
     ]
   },
@@ -50,7 +172,7 @@
         "kind": "tableRef",
         "table": "txn_counters"
       },
-      "kind": "join",
+      "kind": "joinExpr",
       "joinType": "INNER",
       "right": {
         "kind": "tableRef",
@@ -221,6 +343,28 @@
     ]
   },
   {
+    "kind": "system",
+    "body": "rollback"
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "txn_counters"
+      }
+    },
+    "columns": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "n"
+        ]
+      }
+    ]
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -261,7 +405,7 @@
         "kind": "tableRef",
         "table": "txn_counters"
       },
-      "kind": "join",
+      "kind": "joinExpr",
       "joinType": "INNER",
       "right": {
         "kind": "tableRef",
@@ -467,6 +611,44 @@
     ]
   },
   {
+    "kind": "system",
+    "body": "commit"
+  },
+  {
+    "kind": "detach",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "txn_counters"
+    }
+  },
+  {
+    "kind": "attach",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "txn_counters"
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "txn_counters"
+      }
+    },
+    "columns": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "n"
+        ]
+      }
+    ]
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -507,7 +689,7 @@
         "kind": "tableRef",
         "table": "txn_counters"
       },
-      "kind": "join",
+      "kind": "joinExpr",
       "joinType": "INNER",
       "right": {
         "kind": "tableRef",
@@ -713,6 +895,49 @@
     ]
   },
   {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "txn_counters"
+      }
+    },
+    "columns": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "n"
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "alter",
+    "table": {
+      "kind": "tableRef",
+      "table": "txn_counters"
+    },
+    "commands": [
+      {
+        "kind": "alterCommand",
+        "commandType": "DROP_PARTITION",
+        "partition": {
+          "partitionKind": "id",
+          "id": {
+            "kind": "literal",
+            "type": "String",
+            "value": "all"
+          }
+        }
+      }
+    ]
+  },
+  {
+    "kind": "system",
+    "body": "SYSTEM flush logs transactions_info_log"
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -882,6 +1107,9 @@
               }
             ]
           }
+        ],
+        "trailingComments": [
+          "-- ignore fault injection after commit"
         ]
       },
       {
@@ -1108,5 +1336,13 @@
         "direction": "ASC"
       }
     ]
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "txn_counters"
+    }
   }
 ]

@@ -1,3 +1,15 @@
+CREATE TABLE test
+(
+    number UInt64
+)
+ENGINE = MergeTree
+ORDER BY number;
+
+SYSTEM stop merges test;
+
+INSERT INTO test SELECT number
+FROM numbers(100000);
+
 SELECT '-- count';
 
 SELECT

@@ -1,3 +1,6 @@
+-- Tags: long
+SET send_logs_level = 'fatal';
+
 SELECT
     toInt8(0) AS x,
     toInt8(1) AS y,
@@ -84,7 +87,7 @@ SELECT
     (if((x > y), x, y)) AS z,
     toTypeName(x),
     toTypeName(y),
-    toTypeName(z);
+    toTypeName(z); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
 SELECT
     toInt8(0) AS x,
@@ -204,7 +207,7 @@ SELECT
     (if((x > y), x, y)) AS z,
     toTypeName(x),
     toTypeName(y),
-    toTypeName(z);
+    toTypeName(z); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
 SELECT
     toInt16(0) AS x,
@@ -324,7 +327,7 @@ SELECT
     (if((x > y), x, y)) AS z,
     toTypeName(x),
     toTypeName(y),
-    toTypeName(z);
+    toTypeName(z); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
 SELECT
     toInt32(0) AS x,
@@ -444,7 +447,7 @@ SELECT
     (if((x > y), x, y)) AS z,
     toTypeName(x),
     toTypeName(y),
-    toTypeName(z);
+    toTypeName(z); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
 SELECT
     toInt64(0) AS x,
@@ -564,7 +567,7 @@ SELECT
     (if((x > y), x, y)) AS z,
     toTypeName(x),
     toTypeName(y),
-    toTypeName(z);
+    toTypeName(z); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
 SELECT
     toUInt8(0) AS x,
@@ -684,7 +687,7 @@ SELECT
     (if((x > y), x, y)) AS z,
     toTypeName(x),
     toTypeName(y),
-    toTypeName(z);
+    toTypeName(z); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
 SELECT
     toUInt16(0) AS x,
@@ -804,7 +807,7 @@ SELECT
     (if((x > y), x, y)) AS z,
     toTypeName(x),
     toTypeName(y),
-    toTypeName(z);
+    toTypeName(z); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
 SELECT
     toUInt32(0) AS x,
@@ -924,7 +927,7 @@ SELECT
     (if((x > y), x, y)) AS z,
     toTypeName(x),
     toTypeName(y),
-    toTypeName(z);
+    toTypeName(z); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
 SELECT
     toUInt64(0) AS x,
@@ -964,7 +967,7 @@ SELECT
     (if((x > y), x, y)) AS z,
     toTypeName(x),
     toTypeName(y),
-    toTypeName(z);
+    toTypeName(z); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
 SELECT
     toDate(0) AS x,
@@ -972,7 +975,7 @@ SELECT
     (if((x > y), x, y)) AS z,
     toTypeName(x),
     toTypeName(y),
-    toTypeName(z);
+    toTypeName(z); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
 SELECT
     toDate(0) AS x,
@@ -980,7 +983,7 @@ SELECT
     (if((x > y), x, y)) AS z,
     toTypeName(x),
     toTypeName(y),
-    toTypeName(z);
+    toTypeName(z); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
 SELECT
     toDate(0) AS x,
@@ -988,7 +991,7 @@ SELECT
     (if((x > y), x, y)) AS z,
     toTypeName(x),
     toTypeName(y),
-    toTypeName(z);
+    toTypeName(z); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
 SELECT
     toDate(0) AS x,
@@ -996,7 +999,7 @@ SELECT
     (if((x > y), x, y)) AS z,
     toTypeName(x),
     toTypeName(y),
-    toTypeName(z);
+    toTypeName(z); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
 SELECT
     toDate(0) AS x,
@@ -1004,7 +1007,7 @@ SELECT
     (if((x > y), x, y)) AS z,
     toTypeName(x),
     toTypeName(y),
-    toTypeName(z);
+    toTypeName(z); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
 SELECT
     toDate(0) AS x,
@@ -1012,7 +1015,7 @@ SELECT
     (if((x > y), x, y)) AS z,
     toTypeName(x),
     toTypeName(y),
-    toTypeName(z);
+    toTypeName(z); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
 SELECT
     toDate(0) AS x,
@@ -1020,7 +1023,7 @@ SELECT
     (if((x > y), x, y)) AS z,
     toTypeName(x),
     toTypeName(y),
-    toTypeName(z);
+    toTypeName(z); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
 SELECT
     toDate(0) AS x,
@@ -1028,7 +1031,7 @@ SELECT
     (if((x > y), x, y)) AS z,
     toTypeName(x),
     toTypeName(y),
-    toTypeName(z);
+    toTypeName(z); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
 SELECT
     toDate(0) AS x,
@@ -1036,7 +1039,7 @@ SELECT
     (if((x > y), x, y)) AS z,
     toTypeName(x),
     toTypeName(y),
-    toTypeName(z);
+    toTypeName(z); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
 SELECT
     toDate(0) AS x,
@@ -1060,7 +1063,7 @@ SELECT
     (if((x = 0), x, y)) AS z,
     toTypeName(x),
     toTypeName(y),
-    toTypeName(z);
+    toTypeName(z); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
 SELECT
     toDate(0) AS x,
@@ -1068,7 +1071,7 @@ SELECT
     (if((x = 0), x, y)) AS z,
     toTypeName(x),
     toTypeName(y),
-    toTypeName(z);
+    toTypeName(z); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
 SELECT
     toDate(0) AS x,
@@ -1076,7 +1079,7 @@ SELECT
     (if((x = 0), x, y)) AS z,
     toTypeName(x),
     toTypeName(y),
-    toTypeName(z);
+    toTypeName(z); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
 SELECT
     toDateTime(0, 'Asia/Istanbul') AS x,
@@ -1284,7 +1287,7 @@ SELECT
     (if((x > y), x, y)) AS z,
     toTypeName(x),
     toTypeName(y),
-    toTypeName(z);
+    toTypeName(z); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
 SELECT
     materialize(toInt8(0)) AS x,
@@ -1404,7 +1407,7 @@ SELECT
     (if((x > y), x, y)) AS z,
     toTypeName(x),
     toTypeName(y),
-    toTypeName(z);
+    toTypeName(z); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
 SELECT
     materialize(toInt16(0)) AS x,
@@ -1524,7 +1527,7 @@ SELECT
     (if((x > y), x, y)) AS z,
     toTypeName(x),
     toTypeName(y),
-    toTypeName(z);
+    toTypeName(z); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
 SELECT
     materialize(toInt32(0)) AS x,
@@ -1644,7 +1647,7 @@ SELECT
     (if((x > y), x, y)) AS z,
     toTypeName(x),
     toTypeName(y),
-    toTypeName(z);
+    toTypeName(z); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
 SELECT
     materialize(toInt64(0)) AS x,
@@ -1764,7 +1767,7 @@ SELECT
     (if((x > y), x, y)) AS z,
     toTypeName(x),
     toTypeName(y),
-    toTypeName(z);
+    toTypeName(z); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
 SELECT
     materialize(toUInt8(0)) AS x,
@@ -1884,7 +1887,7 @@ SELECT
     (if((x > y), x, y)) AS z,
     toTypeName(x),
     toTypeName(y),
-    toTypeName(z);
+    toTypeName(z); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
 SELECT
     materialize(toUInt16(0)) AS x,
@@ -2004,7 +2007,7 @@ SELECT
     (if((x > y), x, y)) AS z,
     toTypeName(x),
     toTypeName(y),
-    toTypeName(z);
+    toTypeName(z); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
 SELECT
     materialize(toUInt32(0)) AS x,
@@ -2124,7 +2127,7 @@ SELECT
     (if((x > y), x, y)) AS z,
     toTypeName(x),
     toTypeName(y),
-    toTypeName(z);
+    toTypeName(z); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
 SELECT
     materialize(toUInt64(0)) AS x,
@@ -2164,7 +2167,7 @@ SELECT
     (if((x > y), x, y)) AS z,
     toTypeName(x),
     toTypeName(y),
-    toTypeName(z);
+    toTypeName(z); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
 SELECT
     materialize(toDate(0)) AS x,
@@ -2172,7 +2175,7 @@ SELECT
     (if((x > y), x, y)) AS z,
     toTypeName(x),
     toTypeName(y),
-    toTypeName(z);
+    toTypeName(z); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
 SELECT
     materialize(toDate(0)) AS x,
@@ -2180,7 +2183,7 @@ SELECT
     (if((x > y), x, y)) AS z,
     toTypeName(x),
     toTypeName(y),
-    toTypeName(z);
+    toTypeName(z); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
 SELECT
     materialize(toDate(0)) AS x,
@@ -2188,7 +2191,7 @@ SELECT
     (if((x > y), x, y)) AS z,
     toTypeName(x),
     toTypeName(y),
-    toTypeName(z);
+    toTypeName(z); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
 SELECT
     materialize(toDate(0)) AS x,
@@ -2196,7 +2199,7 @@ SELECT
     (if((x > y), x, y)) AS z,
     toTypeName(x),
     toTypeName(y),
-    toTypeName(z);
+    toTypeName(z); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
 SELECT
     materialize(toDate(0)) AS x,
@@ -2204,7 +2207,7 @@ SELECT
     (if((x > y), x, y)) AS z,
     toTypeName(x),
     toTypeName(y),
-    toTypeName(z);
+    toTypeName(z); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
 SELECT
     materialize(toDate(0)) AS x,
@@ -2212,7 +2215,7 @@ SELECT
     (if((x > y), x, y)) AS z,
     toTypeName(x),
     toTypeName(y),
-    toTypeName(z);
+    toTypeName(z); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
 SELECT
     materialize(toDate(0)) AS x,
@@ -2220,7 +2223,7 @@ SELECT
     (if((x > y), x, y)) AS z,
     toTypeName(x),
     toTypeName(y),
-    toTypeName(z);
+    toTypeName(z); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
 SELECT
     materialize(toDate(0)) AS x,
@@ -2228,7 +2231,7 @@ SELECT
     (if((x > y), x, y)) AS z,
     toTypeName(x),
     toTypeName(y),
-    toTypeName(z);
+    toTypeName(z); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
 SELECT
     materialize(toDate(0)) AS x,
@@ -2236,7 +2239,7 @@ SELECT
     (if((x > y), x, y)) AS z,
     toTypeName(x),
     toTypeName(y),
-    toTypeName(z);
+    toTypeName(z); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
 SELECT
     materialize(toDate(0)) AS x,
@@ -2260,7 +2263,7 @@ SELECT
     (if((x = 0), x, y)) AS z,
     toTypeName(x),
     toTypeName(y),
-    toTypeName(z);
+    toTypeName(z); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
 SELECT
     materialize(toDate(0)) AS x,
@@ -2268,7 +2271,7 @@ SELECT
     (if((x = 0), x, y)) AS z,
     toTypeName(x),
     toTypeName(y),
-    toTypeName(z);
+    toTypeName(z); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
 SELECT
     materialize(toDate(0)) AS x,
@@ -2276,7 +2279,7 @@ SELECT
     (if((x = 0), x, y)) AS z,
     toTypeName(x),
     toTypeName(y),
-    toTypeName(z);
+    toTypeName(z); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
 SELECT
     materialize(toDateTime(0, 'Asia/Istanbul')) AS x,

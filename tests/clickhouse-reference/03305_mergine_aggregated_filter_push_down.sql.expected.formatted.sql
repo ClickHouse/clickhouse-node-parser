@@ -1,3 +1,28 @@
+-- Tags: no-random-merge-tree-settings
+-- add_minmax_index_for_numeric_columns=0: Different plan (would use the index on x)
+CREATE TABLE tab
+(
+    x UInt32,
+    y UInt32,
+    z UInt32
+)
+ENGINE = MergeTree
+ORDER BY x
+SETTINGS min_rows_for_wide_part = 0, min_bytes_for_wide_part = 0, add_minmax_index_for_numeric_columns = 0;
+
+INSERT INTO tab SELECT
+    number,
+    number,
+    number
+FROM numbers(8129 * 123);
+
+SET enable_analyzer = 1;
+
+SET prefer_localhost_replica = 1;
+
+SET optimize_aggregation_in_order = 0, optimize_read_in_order = 0;
+
+-- { echoOn }
 SELECT *
 FROM (
         SELECT
@@ -28,3 +53,5 @@ FROM (
         GROUP BY GROUPING SETS ((x, z + 1), (x, z + 2))
     )
 WHERE q = 42;
+
+SET group_by_use_nulls = 1;

@@ -1,5 +1,687 @@
 [
   {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "fx_1m"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "fx_5m"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "fx_1m"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "symbol",
+        "type": {
+          "name": "LowCardinality",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "String"
+              }
+            }
+          ]
+        },
+        "codec": [
+          {
+            "name": "ZSTD"
+          }
+        ]
+      },
+      {
+        "kind": "columnDef",
+        "name": "dt_close",
+        "type": {
+          "name": "DateTime64",
+          "args": [
+            {
+              "kind": "literal",
+              "value": "3"
+            },
+            {
+              "kind": "literal",
+              "value": "'UTC'"
+            }
+          ]
+        },
+        "codec": [
+          {
+            "name": "DoubleDelta"
+          },
+          {
+            "name": "ZSTD"
+          }
+        ]
+      },
+      {
+        "kind": "columnDef",
+        "name": "open",
+        "type": {
+          "name": "Float32"
+        },
+        "codec": [
+          {
+            "name": "Delta"
+          },
+          {
+            "name": "ZSTD"
+          }
+        ]
+      },
+      {
+        "kind": "columnDef",
+        "name": "high",
+        "type": {
+          "name": "Float32"
+        },
+        "codec": [
+          {
+            "name": "Delta"
+          },
+          {
+            "name": "ZSTD"
+          }
+        ]
+      },
+      {
+        "kind": "columnDef",
+        "name": "low",
+        "type": {
+          "name": "Float32"
+        },
+        "codec": [
+          {
+            "name": "Delta"
+          },
+          {
+            "name": "ZSTD"
+          }
+        ]
+      },
+      {
+        "kind": "columnDef",
+        "name": "close",
+        "type": {
+          "name": "Float32"
+        },
+        "codec": [
+          {
+            "name": "Delta"
+          },
+          {
+            "name": "ZSTD"
+          }
+        ]
+      },
+      {
+        "kind": "columnDef",
+        "name": "volume",
+        "type": {
+          "name": "Float32"
+        },
+        "codec": [
+          {
+            "name": "Delta"
+          },
+          {
+            "name": "ZSTD"
+          }
+        ]
+      }
+    ],
+    "engine": {
+      "name": "MergeTree",
+      "args": []
+    },
+    "partitionBy": {
+      "kind": "functionCall",
+      "name": "toYear",
+      "args": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "dt_close"
+          ]
+        }
+      ]
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "symbol"
+          ]
+        }
+      },
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "dt_close"
+          ]
+        }
+      }
+    ],
+    "settings": [
+      {
+        "name": "index_granularity",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "8192"
+        }
+      },
+      {
+        "name": "index_granularity_bytes",
+        "value": {
+          "kind": "literal",
+          "type": "String",
+          "value": "10Mi"
+        }
+      }
+    ],
+    "settingsAfterOrderBy": true,
+    "leadingComments": [
+      "-- create source table"
+    ]
+  },
+  {
+    "kind": "alter",
+    "table": {
+      "kind": "tableRef",
+      "table": "fx_1m"
+    },
+    "commands": [
+      {
+        "kind": "alterCommand",
+        "commandType": "ADD_PROJECTION",
+        "projection": {
+          "kind": "projectionDef",
+          "name": "fx_5m",
+          "query": {
+            "kind": "select",
+            "select": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "symbol"
+                ]
+              },
+              {
+                "kind": "alias",
+                "expr": {
+                  "kind": "functionCall",
+                  "name": "toStartOfInterval",
+                  "args": [
+                    {
+                      "kind": "columnRef",
+                      "parts": [
+                        "dt_close"
+                      ]
+                    },
+                    {
+                      "kind": "functionCall",
+                      "name": "toIntervalSecond",
+                      "args": [
+                        {
+                          "kind": "literal",
+                          "type": "UInt64",
+                          "value": "300"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                "alias": "dt_close"
+              },
+              {
+                "kind": "functionCall",
+                "name": "argMin",
+                "args": [
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "open"
+                    ]
+                  },
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "dt_close"
+                    ]
+                  }
+                ]
+              },
+              {
+                "kind": "functionCall",
+                "name": "max",
+                "args": [
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "high"
+                    ]
+                  }
+                ]
+              },
+              {
+                "kind": "functionCall",
+                "name": "min",
+                "args": [
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "low"
+                    ]
+                  }
+                ]
+              },
+              {
+                "kind": "functionCall",
+                "name": "argMax",
+                "args": [
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "close"
+                    ]
+                  },
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "dt_close"
+                    ]
+                  }
+                ]
+              },
+              {
+                "kind": "alias",
+                "expr": {
+                  "kind": "functionCall",
+                  "name": "sum",
+                  "args": [
+                    {
+                      "kind": "columnRef",
+                      "parts": [
+                        "volume"
+                      ]
+                    }
+                  ]
+                },
+                "alias": "volume"
+              }
+            ],
+            "groupBy": {
+              "kind": "expressions",
+              "items": [
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "symbol"
+                  ]
+                },
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "dt_close"
+                  ]
+                }
+              ]
+            }
+          }
+        }
+      }
+    ],
+    "leadingComments": [
+      "-- add projection"
+    ]
+  },
+  {
+    "kind": "alter",
+    "table": {
+      "kind": "tableRef",
+      "table": "fx_1m"
+    },
+    "commands": [
+      {
+        "kind": "alterCommand",
+        "commandType": "MATERIALIZE_PROJECTION",
+        "projectionName": "fx_5m"
+      }
+    ],
+    "settings": [
+      {
+        "name": "mutations_sync",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "2"
+        }
+      }
+    ],
+    "leadingComments": [
+      "-- materialize projection"
+    ]
+  },
+  {
+    "kind": "createView",
+    "table": {
+      "kind": "tableRef",
+      "table": "fx_5m"
+    },
+    "asQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "symbol"
+          ]
+        },
+        {
+          "kind": "alias",
+          "expr": {
+            "kind": "functionCall",
+            "name": "toStartOfInterval",
+            "args": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "dt_close"
+                ]
+              },
+              {
+                "kind": "functionCall",
+                "name": "toIntervalSecond",
+                "args": [
+                  {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "300"
+                  }
+                ]
+              }
+            ]
+          },
+          "alias": "dt_close"
+        },
+        {
+          "kind": "alias",
+          "expr": {
+            "kind": "functionCall",
+            "name": "argMin",
+            "args": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "open"
+                ]
+              },
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "dt_close"
+                ]
+              }
+            ]
+          },
+          "alias": "open"
+        },
+        {
+          "kind": "alias",
+          "expr": {
+            "kind": "functionCall",
+            "name": "max",
+            "args": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "high"
+                ]
+              }
+            ]
+          },
+          "alias": "high"
+        },
+        {
+          "kind": "alias",
+          "expr": {
+            "kind": "functionCall",
+            "name": "min",
+            "args": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "low"
+                ]
+              }
+            ]
+          },
+          "alias": "low"
+        },
+        {
+          "kind": "alias",
+          "expr": {
+            "kind": "functionCall",
+            "name": "argMax",
+            "args": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "close"
+                ]
+              },
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "dt_close"
+                ]
+              }
+            ]
+          },
+          "alias": "close"
+        },
+        {
+          "kind": "alias",
+          "expr": {
+            "kind": "functionCall",
+            "name": "sum",
+            "args": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "volume"
+                ]
+              }
+            ]
+          },
+          "alias": "volume"
+        }
+      ],
+      "from": {
+        "kind": "tableRef",
+        "table": "fx_1m"
+      },
+      "groupBy": {
+        "kind": "expressions",
+        "items": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "symbol"
+            ]
+          },
+          {
+            "kind": "columnRef",
+            "parts": [
+              "dt_close"
+            ]
+          }
+        ]
+      }
+    },
+    "leadingComments": [
+      "-- create view using projection"
+    ]
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "fx_1m"
+      }
+    },
+    "selectQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "EURUSD"
+        },
+        {
+          "kind": "binaryExpr",
+          "op": "+",
+          "left": {
+            "kind": "functionCall",
+            "name": "toDateTime64",
+            "args": [
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "2022-12-12 12:00:00"
+              },
+              {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "3"
+              },
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "UTC"
+              }
+            ]
+          },
+          "right": {
+            "kind": "columnRef",
+            "parts": [
+              "number"
+            ]
+          }
+        },
+        {
+          "kind": "binaryExpr",
+          "op": "+",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "number"
+            ]
+          },
+          "right": {
+            "kind": "functionCall",
+            "name": "randCanonical",
+            "args": []
+          }
+        },
+        {
+          "kind": "binaryExpr",
+          "op": "+",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "number"
+            ]
+          },
+          "right": {
+            "kind": "functionCall",
+            "name": "randCanonical",
+            "args": []
+          }
+        },
+        {
+          "kind": "binaryExpr",
+          "op": "+",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "number"
+            ]
+          },
+          "right": {
+            "kind": "functionCall",
+            "name": "randCanonical",
+            "args": []
+          }
+        },
+        {
+          "kind": "binaryExpr",
+          "op": "+",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "number"
+            ]
+          },
+          "right": {
+            "kind": "functionCall",
+            "name": "randCanonical",
+            "args": []
+          }
+        },
+        {
+          "kind": "binaryExpr",
+          "op": "+",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "number"
+            ]
+          },
+          "right": {
+            "kind": "functionCall",
+            "name": "randCanonical",
+            "args": []
+          }
+        }
+      ],
+      "from": {
+        "kind": "tableFunctionRef",
+        "name": "numbers",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "1000000"
+          }
+        ]
+      }
+    },
+    "leadingComments": [
+      "-- insert sample data"
+    ]
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -92,6 +774,25 @@
         "direction": "ASC"
       }
     ],
-    "format": "Null"
+    "format": "Null",
+    "leadingComments": [
+      "-- segmentation fault (filter on dt_close column)"
+    ]
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "fx_5m"
+    }
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "fx_1m"
+    }
   }
 ]

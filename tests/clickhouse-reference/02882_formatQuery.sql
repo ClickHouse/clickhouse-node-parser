@@ -1,3 +1,9 @@
+DROP TABLE IF EXISTS all_valid;
+CREATE TABLE all_valid (id UInt64, query String) ENGINE=MergeTree ORDER BY id;
+INSERT INTO all_valid VALUES (1, 'SELECT 1') (2, 'SeLeCt 22') (3, 'InSerT into TAB values (\'\')');
+DROP TABLE IF EXISTS some_invalid;
+CREATE TABLE some_invalid (id UInt64, query String) ENGINE=MergeTree ORDER BY id;
+INSERT INTO some_invalid VALUES (1, 'SELECT 1') (2, 'SeLeCt 2') (3, 'bad 3') (4, 'select 4') (5, 'bad 5') (6, '') (7, 'SELECT 7');
 SELECT '-- formatQuery';
 SELECT formatQuery('SELECT 1;');
 SELECT formatQuery('SELECT 1');
@@ -23,3 +29,5 @@ SELECT id, query, formatQuerySingleLine(query) FROM all_valid ORDER BY id;
 SELECT id, query, formatQuerySingleLine(query) FROM some_invalid ORDER BY id; -- { serverError SYNTAX_ERROR }
 SELECT id, query, formatQuerySingleLineOrNull(query) FROM all_valid ORDER BY id;
 SELECT id, query, formatQuerySingleLineOrNull(query) FROM some_invalid ORDER BY id;
+DROP TABLE all_valid;
+DROP TABLE some_invalid;

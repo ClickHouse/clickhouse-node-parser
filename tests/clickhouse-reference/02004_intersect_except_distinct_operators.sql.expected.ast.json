@@ -1,5 +1,34 @@
 [
   {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "intersect_default_mode",
+        "value": {
+          "kind": "literal",
+          "type": "String",
+          "value": "DISTINCT"
+        }
+      }
+    ],
+    "leadingComments": [
+      "-- { echo }"
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "except_default_mode",
+        "value": {
+          "kind": "literal",
+          "type": "String",
+          "value": "DISTINCT"
+        }
+      }
+    ]
+  },
+  {
     "kind": "intersect",
     "op": "INTERSECT",
     "left": {
@@ -108,7 +137,7 @@
         }
       ],
       "from": {
-        "kind": "tableFunction",
+        "kind": "tableFunctionRef",
         "name": "numbers",
         "args": [
           {
@@ -130,7 +159,7 @@
         }
       ],
       "from": {
-        "kind": "tableFunction",
+        "kind": "tableFunctionRef",
         "name": "numbers",
         "args": [
           {
@@ -161,7 +190,7 @@
         }
       ],
       "from": {
-        "kind": "tableFunction",
+        "kind": "tableFunctionRef",
         "name": "numbers",
         "args": [
           {
@@ -183,7 +212,7 @@
         }
       ],
       "from": {
-        "kind": "tableFunction",
+        "kind": "tableFunctionRef",
         "name": "numbers",
         "args": [
           {
@@ -224,7 +253,7 @@
         }
       ],
       "from": {
-        "kind": "tableFunction",
+        "kind": "tableFunctionRef",
         "name": "numbers",
         "args": [
           {
@@ -270,7 +299,7 @@
         }
       ],
       "from": {
-        "kind": "tableFunction",
+        "kind": "tableFunctionRef",
         "name": "numbers",
         "args": [
           {
@@ -711,7 +740,7 @@
         }
       ],
       "from": {
-        "kind": "tableFunction",
+        "kind": "tableFunctionRef",
         "name": "numbers",
         "args": [
           {
@@ -753,7 +782,7 @@
             }
           ],
           "from": {
-            "kind": "tableFunction",
+            "kind": "tableFunctionRef",
             "name": "numbers",
             "args": [
               {
@@ -775,7 +804,7 @@
             }
           ],
           "from": {
-            "kind": "tableFunction",
+            "kind": "tableFunctionRef",
             "name": "numbers",
             "args": [
               {
@@ -803,7 +832,7 @@
           }
         ],
         "from": {
-          "kind": "tableFunction",
+          "kind": "tableFunctionRef",
           "name": "numbers",
           "args": [
             {
@@ -831,7 +860,7 @@
         }
       ],
       "from": {
-        "kind": "tableFunction",
+        "kind": "tableFunctionRef",
         "name": "numbers",
         "args": [
           {
@@ -885,6 +914,269 @@
   },
   {
     "kind": "select",
+    "with": [
+      {
+        "kind": "cteExpr",
+        "name": "a",
+        "expr": {
+          "kind": "subqueryExpr",
+          "query": {
+            "kind": "intersect",
+            "op": "INTERSECT",
+            "left": {
+              "kind": "select",
+              "select": [
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "number"
+                  ]
+                }
+              ],
+              "from": {
+                "kind": "tableFunctionRef",
+                "name": "numbers",
+                "args": [
+                  {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "10"
+                  }
+                ]
+              }
+            },
+            "right": {
+              "kind": "select",
+              "select": [
+                {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "5"
+                }
+              ]
+            }
+          }
+        }
+      }
+    ],
+    "select": [
+      {
+        "kind": "binaryExpr",
+        "op": "*",
+        "left": {
+          "kind": "columnRef",
+          "parts": [
+            "a"
+          ]
+        },
+        "right": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "10"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "intersect",
+    "op": "EXCEPT",
+    "left": {
+      "kind": "select",
+      "with": [
+        {
+          "kind": "cteExpr",
+          "name": "a",
+          "expr": {
+            "kind": "subqueryExpr",
+            "query": {
+              "kind": "intersect",
+              "op": "EXCEPT",
+              "left": {
+                "kind": "select",
+                "select": [
+                  {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "5"
+                  }
+                ]
+              },
+              "right": {
+                "kind": "select",
+                "select": [
+                  {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "1"
+                  }
+                ]
+              }
+            }
+          }
+        }
+      ],
+      "select": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "a"
+          ]
+        }
+      ]
+    },
+    "right": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "5"
+        }
+      ]
+    }
+  },
+  {
+    "kind": "intersect",
+    "op": "INTERSECT",
+    "left": {
+      "kind": "select",
+      "with": [
+        {
+          "kind": "cteExpr",
+          "name": "a",
+          "expr": {
+            "kind": "subqueryExpr",
+            "query": {
+              "kind": "intersect",
+              "op": "INTERSECT",
+              "left": {
+                "kind": "select",
+                "select": [
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "number"
+                    ]
+                  }
+                ],
+                "from": {
+                  "kind": "tableFunctionRef",
+                  "name": "numbers",
+                  "args": [
+                    {
+                      "kind": "literal",
+                      "type": "UInt64",
+                      "value": "10"
+                    }
+                  ]
+                }
+              },
+              "right": {
+                "kind": "select",
+                "select": [
+                  {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "5"
+                  }
+                ]
+              }
+            }
+          }
+        }
+      ],
+      "select": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "a"
+          ]
+        }
+      ]
+    },
+    "right": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      ]
+    }
+  },
+  {
+    "kind": "intersect",
+    "op": "EXCEPT",
+    "left": {
+      "kind": "select",
+      "with": [
+        {
+          "kind": "cteExpr",
+          "name": "a",
+          "expr": {
+            "kind": "subqueryExpr",
+            "query": {
+              "kind": "intersect",
+              "op": "INTERSECT",
+              "left": {
+                "kind": "select",
+                "select": [
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "number"
+                    ]
+                  }
+                ],
+                "from": {
+                  "kind": "tableFunctionRef",
+                  "name": "numbers",
+                  "args": [
+                    {
+                      "kind": "literal",
+                      "type": "UInt64",
+                      "value": "10"
+                    }
+                  ]
+                }
+              },
+              "right": {
+                "kind": "select",
+                "select": [
+                  {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "5"
+                  }
+                ]
+              }
+            }
+          }
+        }
+      ],
+      "select": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "a"
+          ]
+        }
+      ]
+    },
+    "right": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      ]
+    }
+  },
+  {
+    "kind": "select",
     "select": [
       {
         "kind": "functionCall",
@@ -908,7 +1200,7 @@
             }
           ],
           "from": {
-            "kind": "tableFunction",
+            "kind": "tableFunctionRef",
             "name": "numbers",
             "args": [
               {
@@ -957,7 +1249,7 @@
             }
           ],
           "from": {
-            "kind": "tableFunction",
+            "kind": "tableFunctionRef",
             "name": "numbers",
             "args": [
               {
@@ -979,7 +1271,7 @@
             }
           ],
           "from": {
-            "kind": "tableFunction",
+            "kind": "tableFunctionRef",
             "name": "numbers",
             "args": [
               {
@@ -1029,7 +1321,7 @@
                 }
               ],
               "from": {
-                "kind": "tableFunction",
+                "kind": "tableFunctionRef",
                 "name": "numbers",
                 "args": [
                   {
@@ -1051,7 +1343,7 @@
                 }
               ],
               "from": {
-                "kind": "tableFunction",
+                "kind": "tableFunctionRef",
                 "name": "numbers",
                 "args": [
                   {
@@ -1079,7 +1371,7 @@
               }
             ],
             "from": {
-              "kind": "tableFunction",
+              "kind": "tableFunctionRef",
               "name": "numbers",
               "args": [
                 {
@@ -1107,7 +1399,7 @@
             }
           ],
           "from": {
-            "kind": "tableFunction",
+            "kind": "tableFunctionRef",
             "name": "numbers",
             "args": [
               {
@@ -1160,7 +1452,7 @@
                     }
                   ],
                   "from": {
-                    "kind": "tableFunction",
+                    "kind": "tableFunctionRef",
                     "name": "numbers",
                     "args": [
                       {
@@ -1182,7 +1474,7 @@
                     }
                   ],
                   "from": {
-                    "kind": "tableFunction",
+                    "kind": "tableFunctionRef",
                     "name": "numbers",
                     "args": [
                       {
@@ -1210,7 +1502,7 @@
                   }
                 ],
                 "from": {
-                  "kind": "tableFunction",
+                  "kind": "tableFunctionRef",
                   "name": "numbers",
                   "args": [
                     {
@@ -1238,7 +1530,7 @@
                 }
               ],
               "from": {
-                "kind": "tableFunction",
+                "kind": "tableFunctionRef",
                 "name": "numbers",
                 "args": [
                   {
@@ -1266,7 +1558,7 @@
               }
             ],
             "from": {
-              "kind": "tableFunction",
+              "kind": "tableFunctionRef",
               "name": "numbers",
               "args": [
                 {
@@ -1317,7 +1609,7 @@
                 }
               ],
               "from": {
-                "kind": "tableFunction",
+                "kind": "tableFunctionRef",
                 "name": "numbers",
                 "args": [
                   {
@@ -1339,7 +1631,7 @@
                 }
               ],
               "from": {
-                "kind": "tableFunction",
+                "kind": "tableFunctionRef",
                 "name": "numbers",
                 "args": [
                   {
@@ -1367,7 +1659,7 @@
               }
             ],
             "from": {
-              "kind": "tableFunction",
+              "kind": "tableFunctionRef",
               "name": "numbers",
               "args": [
                 {
@@ -1395,7 +1687,7 @@
             }
           ],
           "from": {
-            "kind": "tableFunction",
+            "kind": "tableFunctionRef",
             "name": "numbers",
             "args": [
               {
@@ -1492,6 +1784,114 @@
             }
           ]
         }
+      }
+    },
+    "limit": {
+      "count": {
+        "kind": "literal",
+        "type": "UInt64",
+        "value": "100"
+      }
+    }
+  },
+  {
+    "kind": "select",
+    "with": [
+      {
+        "kind": "cteExpr",
+        "name": "max",
+        "expr": {
+          "kind": "subqueryExpr",
+          "query": {
+            "kind": "select",
+            "select": [
+              {
+                "kind": "functionCall",
+                "name": "count",
+                "args": []
+              }
+            ],
+            "from": {
+              "kind": "subqueryFrom",
+              "query": {
+                "kind": "intersect",
+                "op": "EXCEPT",
+                "left": {
+                  "kind": "union",
+                  "queries": [
+                    {
+                      "kind": "select",
+                      "select": [
+                        {
+                          "kind": "literal",
+                          "type": "UInt64",
+                          "value": "1"
+                        }
+                      ]
+                    },
+                    {
+                      "kind": "select",
+                      "select": [
+                        {
+                          "kind": "literal",
+                          "type": "UInt64",
+                          "value": "2"
+                        }
+                      ]
+                    }
+                  ],
+                  "unionMode": "DISTINCT"
+                },
+                "right": {
+                  "kind": "select",
+                  "select": [
+                    {
+                      "kind": "literal",
+                      "type": "UInt64",
+                      "value": "1"
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    ],
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "count",
+        "args": []
+      }
+    ],
+    "from": {
+      "kind": "subqueryFrom",
+      "query": {
+        "kind": "union",
+        "queries": [
+          {
+            "kind": "select",
+            "select": [
+              {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "1"
+              }
+            ]
+          },
+          {
+            "kind": "select",
+            "select": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "max"
+                ]
+              }
+            ]
+          }
+        ]
       }
     },
     "limit": {
@@ -1907,7 +2307,8 @@
             "value": "2"
           }
         ]
-      }
+      },
+      "parenthesized": true
     }
   },
   {
@@ -1978,7 +2379,8 @@
               }
             ]
           }
-        ]
+        ],
+        "parenthesized": true
       }
     },
     "right": {
@@ -2071,5 +2473,44 @@
         }
       }
     }
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "limit",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "intersect",
+    "op": "INTERSECT",
+    "left": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      ],
+      "parenthesized": true
+    },
+    "right": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      ]
+    },
+    "parenthesized": true
   }
 ]

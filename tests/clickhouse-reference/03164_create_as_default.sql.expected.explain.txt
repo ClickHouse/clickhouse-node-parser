@@ -1,3 +1,44 @@
+DropQuery  src_table (children 1)
+ Identifier src_table
+
+DropQuery  copied_table (children 1)
+ Identifier copied_table
+
+CreateQuery src_table (children 3)
+ Identifier src_table
+ Columns definition (children 1)
+  ExpressionList (children 2)
+   ColumnDeclaration time (children 2)
+    DataType DateTime (children 1)
+     ExpressionList (children 1)
+      Literal 'UTC'
+    Function fromUnixTimestamp (children 1)
+     ExpressionList (children 1)
+      Identifier sipTimestamp
+   ColumnDeclaration sipTimestamp (children 1)
+    DataType UInt64
+ Storage definition (children 2)
+  Function MergeTree
+  Identifier time
+
+InsertQuery   (children 2)
+ Identifier src_table
+ ExpressionList (children 1)
+  Identifier sipTimestamp
+
+CreateQuery copied_table (children 1)
+ Identifier copied_table
+
+AlterQuery  copied_table (children 2)
+ ExpressionList (children 1)
+  AlterCommand RENAME_COLUMN (children 2)
+   Identifier sipTimestamp
+   Identifier timestamp
+ Identifier copied_table
+
+ShowCreateTableQuery  src_table (children 1)
+ Identifier src_table
+
 SelectWithUnionQuery (children 1)
  ExpressionList (children 1)
   SelectQuery (children 4)
@@ -50,3 +91,9 @@ SelectWithUnionQuery (children 2)
     OrderByElement (children 1)
      Identifier time
  Identifier JSONEachRow
+
+DropQuery  src_table (children 1)
+ Identifier src_table
+
+DropQuery  copied_table (children 1)
+ Identifier copied_table

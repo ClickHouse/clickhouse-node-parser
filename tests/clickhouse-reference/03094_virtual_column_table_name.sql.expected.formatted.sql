@@ -1,3 +1,204 @@
+SET enable_analyzer = 1;
+
+DROP TABLE IF EXISTS m0;
+
+DROP TABLE IF EXISTS m1;
+
+DROP TABLE IF EXISTS m2;
+
+DROP TABLE IF EXISTS m3;
+
+DROP TABLE IF EXISTS m4;
+
+DROP TABLE IF EXISTS m5;
+
+DROP TABLE IF EXISTS d1;
+
+DROP TABLE IF EXISTS d2;
+
+DROP TABLE IF EXISTS d3;
+
+DROP TABLE IF EXISTS d4;
+
+DROP TABLE IF EXISTS d5;
+
+DROP TABLE IF EXISTS d6;
+
+DROP TABLE IF EXISTS d7;
+
+DROP TABLE IF EXISTS d8;
+
+DROP TABLE IF EXISTS temp1;
+
+DROP TABLE IF EXISTS temp2;
+
+DROP TABLE IF EXISTS buffer1;
+
+DROP VIEW IF EXISTS view1;
+
+DROP VIEW IF EXISTS view2;
+
+DROP VIEW IF EXISTS mv1;
+
+DROP VIEW IF EXISTS mv2;
+
+DROP TABLE IF EXISTS dist5;
+
+DROP TABLE IF EXISTS dist6;
+
+CREATE TABLE d1
+(
+    key Int,
+    value Int
+)
+ENGINE = Memory();
+
+CREATE TABLE d2
+(
+    key Int,
+    value Int
+)
+ENGINE = MergeTree()
+ORDER BY key;
+
+CREATE TABLE d3
+(
+    _table Int,
+    value Int
+)
+ENGINE = Memory();
+
+CREATE TABLE d8
+(
+    key Int,
+    value Int
+)
+ENGINE = Memory();
+
+CREATE TEMPORARY TABLE temp1
+(
+    key Int
+);
+
+CREATE TEMPORARY TABLE temp2
+(
+    key Int
+);
+
+CREATE TABLE m0
+ENGINE = Merge(currentDatabase(), '^(d1|d2)$');
+
+CREATE TABLE d4
+ENGINE = Distributed('test_shard_localhost', currentDatabase(), d8, rand());
+
+CREATE TABLE dist5
+ENGINE = Distributed('test_shard_localhost', currentDatabase(), d4, rand());
+
+CREATE TABLE dist6
+ENGINE = Distributed('test_shard_localhost', currentDatabase(), m0, rand());
+
+INSERT INTO d1;
+
+INSERT INTO d1;
+
+INSERT INTO d2;
+
+INSERT INTO d2;
+
+INSERT INTO d3;
+
+INSERT INTO d3;
+
+INSERT INTO d8;
+
+INSERT INTO d8;
+
+INSERT INTO temp1;
+
+INSERT INTO temp2;
+
+CREATE TABLE m1
+ENGINE = Merge(currentDatabase(), '^(d1|d2)$');
+
+CREATE TABLE m2
+ENGINE = Merge(currentDatabase(), '^(d1|d4)$');
+
+CREATE TABLE m3
+ENGINE = Merge(currentDatabase(), '^(m1|d2)$');
+
+CREATE TABLE m4
+ENGINE = Merge(currentDatabase(), '^(m2|d2)$');
+
+CREATE TABLE m5
+ENGINE = Merge(currentDatabase(), '^(m1|m2)$');
+
+CREATE VIEW view1
+AS
+SELECT
+    key,
+    _table
+FROM d1;
+
+CREATE VIEW view2
+AS
+SELECT key
+FROM d1;
+
+CREATE TABLE d5
+(
+    key Int,
+    value Int
+)
+ENGINE = MergeTree()
+ORDER BY key;
+
+INSERT INTO d5;
+
+INSERT INTO d5;
+
+CREATE TABLE buffer1 AS d5
+ENGINE = Buffer(currentDatabase(), d5, 1, 10000, 10000, 10000, 10000, 100000000, 100000000);
+
+INSERT INTO buffer1;
+
+CREATE TABLE d6
+(
+    key Int,
+    value Int
+)
+ENGINE = MergeTree
+ORDER BY value;
+
+CREATE TABLE d7
+(
+    key Int,
+    value Int
+)
+ENGINE = SummingMergeTree
+ORDER BY key;
+
+CREATE MATERIALIZED VIEW mv1
+TO d7
+AS
+SELECT
+    key,
+    count(value) AS value
+FROM d6
+GROUP BY key;
+
+CREATE MATERIALIZED VIEW mv2
+ENGINE = SummingMergeTree
+ORDER BY key
+AS
+SELECT
+    key,
+    count(value) AS value
+FROM d6
+GROUP BY key;
+
+INSERT INTO d6;
+
+-- { echoOn }
 SELECT _table
 FROM d1;
 
@@ -197,4 +398,4 @@ ORDER BY key ASC;
 
 SELECT *
 FROM d1
-PREWHERE _table = 'd1';
+PREWHERE _table = 'd1'; -- { serverError ILLEGAL_PREWHERE }

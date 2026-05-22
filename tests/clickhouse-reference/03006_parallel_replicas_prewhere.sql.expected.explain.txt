@@ -1,0 +1,60 @@
+DROP ROW POLICY query
+
+DropQuery  url_na_log (children 1)
+ Identifier url_na_log
+
+CreateQuery url_na_log (children 3)
+ Identifier url_na_log
+ Columns definition (children 1)
+  ExpressionList (children 2)
+   ColumnDeclaration SiteId (children 1)
+    DataType UInt32
+   ColumnDeclaration DateVisit (children 1)
+    DataType Date
+ Storage definition (children 4)
+  Function MergeTree
+  Identifier SiteId
+  Function tuple (children 1)
+   ExpressionList (children 2)
+    Identifier SiteId
+    Identifier DateVisit
+  Set
+
+CREATE ROW POLICY or ALTER ROW POLICY query
+
+InsertQuery   (children 3)
+ Identifier url_na_log
+ SelectWithUnionQuery (children 1)
+  ExpressionList (children 1)
+   SelectQuery (children 3)
+    ExpressionList (children 2)
+     Literal UInt64_209
+     Function plus (children 1)
+      ExpressionList (children 2)
+       Function CAST (children 1)
+        ExpressionList (children 2)
+         Literal '2022-08-09'
+         Literal 'Date'
+       Function toIntervalDay (children 1)
+        ExpressionList (children 1)
+         Function intDiv (children 1)
+          ExpressionList (children 2)
+           Identifier number
+           Literal UInt64_10000
+    TablesInSelectQuery (children 1)
+     TablesInSelectQueryElement (children 1)
+      TableExpression (children 1)
+       Function numbers (children 1)
+        ExpressionList (children 1)
+         Literal UInt64_130000
+    Set
+ Set
+
+Set
+
+Set
+
+DROP ROW POLICY query
+
+DropQuery  url_na_log (children 1)
+ Identifier url_na_log

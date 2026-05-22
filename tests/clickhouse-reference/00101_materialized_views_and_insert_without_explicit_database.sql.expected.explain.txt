@@ -1,3 +1,98 @@
+DropQuery  test_table (children 1)
+ Identifier test_table
+
+DropQuery  test_view (children 1)
+ Identifier test_view
+
+DropQuery  test_view_filtered (children 1)
+ Identifier test_view_filtered
+
+Set
+
+CreateQuery test_table (children 3)
+ Identifier test_table
+ Columns definition (children 1)
+  ExpressionList (children 5)
+   ColumnDeclaration EventDate (children 1)
+    DataType Date
+   ColumnDeclaration CounterID (children 1)
+    DataType UInt32
+   ColumnDeclaration UserID (children 1)
+    DataType UInt64
+   ColumnDeclaration EventTime (children 1)
+    DataType DateTime (children 1)
+     ExpressionList (children 1)
+      Literal 'America/Los_Angeles'
+   ColumnDeclaration UTCEventTime (children 1)
+    DataType DateTime (children 1)
+     ExpressionList (children 1)
+      Literal 'UTC'
+ Storage definition (children 1)
+  Function MergeTree (children 1)
+   ExpressionList (children 3)
+    Identifier EventDate
+    Identifier CounterID
+    Literal UInt64_8192
+
+CreateQuery test_view (children 4)
+ Identifier test_view
+ Columns definition (children 1)
+  ExpressionList (children 2)
+   ColumnDeclaration Rows (children 1)
+    DataType UInt64
+   ColumnDeclaration MaxHitTime (children 1)
+    DataType DateTime (children 1)
+     ExpressionList (children 1)
+      Literal 'America/Los_Angeles'
+ SelectWithUnionQuery (children 1)
+  ExpressionList (children 1)
+   SelectQuery (children 2)
+    ExpressionList (children 2)
+     Function count (alias Rows) (children 1)
+      ExpressionList
+     Function max (alias MaxHitTime) (children 1)
+      ExpressionList (children 1)
+       Identifier UTCEventTime
+    TablesInSelectQuery (children 1)
+     TablesInSelectQueryElement (children 1)
+      TableExpression (children 1)
+       TableIdentifier test_table
+ ViewTargets (children 1)
+  Storage definition (children 1)
+   Function Memory
+
+CreateQuery test_view_filtered (children 4)
+ Identifier test_view_filtered
+ Columns definition (children 1)
+  ExpressionList (children 2)
+   ColumnDeclaration EventDate (children 1)
+    DataType Date
+   ColumnDeclaration CounterID (children 1)
+    DataType UInt32
+ SelectWithUnionQuery (children 1)
+  ExpressionList (children 1)
+   SelectQuery (children 3)
+    ExpressionList (children 2)
+     Identifier CounterID
+     Identifier EventDate
+    TablesInSelectQuery (children 1)
+     TablesInSelectQueryElement (children 1)
+      TableExpression (children 1)
+       TableIdentifier test_table
+    Function less (children 1)
+     ExpressionList (children 2)
+      Identifier EventDate
+      Literal '2013-01-01'
+ ViewTargets (children 1)
+  Storage definition (children 1)
+   Function Memory
+
+InsertQuery   (children 2)
+ Identifier test_table
+ ExpressionList (children 2)
+  Identifier EventDate
+  Identifier UTCEventTime
+
 SelectWithUnionQuery (children 1)
  ExpressionList (children 1)
   SelectQuery (children 2)
@@ -27,3 +122,140 @@ SelectWithUnionQuery (children 1)
     TablesInSelectQueryElement (children 1)
      TableExpression (children 1)
       TableIdentifier test_view_filtered
+
+DropQuery  test_table (children 1)
+ Identifier test_table
+
+DropQuery  test_view (children 1)
+ Identifier test_view
+
+DropQuery  test_view_filtered (children 1)
+ Identifier test_view_filtered
+
+<Query Parameters>
+
+<Query Parameters>
+
+DropQuery  tmp (children 1)
+ Identifier tmp
+
+DropQuery  tmp_mv (children 1)
+ Identifier tmp_mv
+
+DropQuery  tmp_mv2 (children 1)
+ Identifier tmp_mv2
+
+DropQuery  tmp_mv3 (children 1)
+ Identifier tmp_mv3
+
+DropQuery  tmp_mv4 (children 1)
+ Identifier tmp_mv4
+
+DropQuery  .inner.tmp_mv (children 1)
+ Identifier .inner.tmp_mv
+
+DropQuery  .inner.tmp_mv2 (children 1)
+ Identifier .inner.tmp_mv2
+
+DropQuery  .inner.tmp_mv3 (children 1)
+ Identifier .inner.tmp_mv3
+
+DropQuery  .inner.tmp_mv4 (children 1)
+ Identifier .inner.tmp_mv4
+
+CreateQuery tmp (children 3)
+ Identifier tmp
+ Columns definition (children 1)
+  ExpressionList (children 2)
+   ColumnDeclaration date (children 1)
+    DataType Date
+   ColumnDeclaration name (children 1)
+    DataType String
+ Storage definition (children 1)
+  Function Memory
+
+CreateQuery tmp_mv (children 3)
+ Identifier tmp_mv
+ SelectWithUnionQuery (children 1)
+  ExpressionList (children 1)
+   SelectQuery (children 3)
+    ExpressionList (children 3)
+     Identifier date
+     Identifier name
+     Function countState (alias cc) (children 1)
+      ExpressionList
+    TablesInSelectQuery (children 1)
+     TablesInSelectQueryElement (children 1)
+      TableExpression (children 1)
+       TableIdentifier tmp
+    ExpressionList (children 2)
+     Identifier date
+     Identifier name
+ ViewTargets (children 1)
+  Storage definition (children 1)
+   Function AggregatingMergeTree (children 1)
+    ExpressionList (children 3)
+     Identifier date
+     Function tuple (children 1)
+      ExpressionList (children 2)
+       Identifier date
+       Identifier name
+     Literal UInt64_8192
+
+CreateQuery tmp_mv2 (children 1)
+ Identifier tmp_mv2
+
+CreateQuery tmp_mv3 (children 2)
+ Identifier tmp_mv3
+ Storage definition (children 1)
+  Function Memory
+
+CreateQuery tmp_mv4 (children 3)
+ Identifier tmp_mv4
+ SelectWithUnionQuery (children 1)
+  ExpressionList (children 1)
+   SelectQuery (children 2)
+    ExpressionList (children 1)
+     Asterisk
+    TablesInSelectQuery (children 1)
+     TablesInSelectQueryElement (children 1)
+      TableExpression (children 1)
+       TableIdentifier tmp_mv
+ ViewTargets (children 1)
+  Storage definition (children 1)
+   Function AggregatingMergeTree (children 1)
+    ExpressionList (children 3)
+     Identifier date
+     Identifier date
+     Literal UInt64_8192
+
+DropQuery  tmp_mv (children 1)
+ Identifier tmp_mv
+
+DropQuery  tmp_mv2 (children 1)
+ Identifier tmp_mv2
+
+DropQuery  tmp_mv3 (children 1)
+ Identifier tmp_mv3
+
+DropQuery  tmp_mv4 (children 1)
+ Identifier tmp_mv4
+
+ExistsTableQuery  .inner.tmp_mv (children 1)
+ Identifier .inner.tmp_mv
+
+ExistsTableQuery  .inner.tmp_mv2 (children 1)
+ Identifier .inner.tmp_mv2
+
+ExistsTableQuery  .inner.tmp_mv3 (children 1)
+ Identifier .inner.tmp_mv3
+
+ExistsTableQuery  .inner.tmp_mv4 (children 1)
+ Identifier .inner.tmp_mv4
+
+DropQuery  tmp (children 1)
+ Identifier tmp
+
+<Query Parameters>
+
+<Query Parameters>

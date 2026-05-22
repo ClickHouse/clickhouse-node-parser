@@ -1,3 +1,42 @@
+-- Tags: distributed
+DROP TABLE IF EXISTS ids;
+
+DROP TABLE IF EXISTS data;
+
+DROP TABLE IF EXISTS data2;
+
+CREATE TABLE ids
+(
+    id UUID,
+    whatever String
+)
+ENGINE = MergeTree
+ORDER BY tuple();
+
+INSERT INTO ids;
+
+CREATE TABLE data
+(
+    id UUID,
+    event_time DateTime,
+    status String
+)
+ENGINE = MergeTree
+ORDER BY tuple();
+
+INSERT INTO data;
+
+CREATE TABLE data2
+(
+    id UUID,
+    event_time DateTime,
+    status String
+)
+ENGINE = MergeTree
+ORDER BY tuple();
+
+INSERT INTO data2;
+
 SELECT
     id,
     whatever

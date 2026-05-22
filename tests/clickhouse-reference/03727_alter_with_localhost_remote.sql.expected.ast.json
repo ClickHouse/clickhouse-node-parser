@@ -1,0 +1,195 @@
+[
+  {
+    "kind": "system",
+    "body": "DROP USER IF EXISTS test_03727",
+    "leadingComments": [
+      "-- Tags: no-replicated-database, no-parallel"
+    ]
+  },
+  {
+    "kind": "createUser",
+    "names": [
+      {
+        "name": "test_03727"
+      }
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "normal"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "n",
+        "type": {
+          "name": "Int32"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "s",
+        "type": {
+          "name": "String"
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree",
+      "args": []
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "n"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "secret"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "s",
+        "type": {
+          "name": "String"
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree",
+      "args": []
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "s"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "normal"
+      }
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "secret"
+      }
+    }
+  },
+  {
+    "kind": "system",
+    "body": "GRANT ALTER UPDATE ON normal TO test_03727"
+  },
+  {
+    "kind": "system",
+    "body": "GRANT READ ON REMOTE to test_03727"
+  },
+  {
+    "kind": "system",
+    "body": "GRANT CREATE TEMPORARY TABLE ON *.* TO test_03727"
+  },
+  {
+    "kind": "executeAs",
+    "user": "test_03727",
+    "statement": {
+      "kind": "alter",
+      "table": {
+        "kind": "tableRef",
+        "table": "normal"
+      },
+      "commands": [
+        {
+          "kind": "alterCommand",
+          "commandType": "UPDATE",
+          "assignments": [
+            {
+              "column": "s",
+              "expr": {
+                "kind": "subqueryExpr",
+                "query": {
+                  "kind": "select",
+                  "select": [
+                    {
+                      "kind": "asterisk"
+                    }
+                  ],
+                  "from": {
+                    "kind": "tableFunctionRef",
+                    "name": "remote",
+                    "args": [
+                      {
+                        "kind": "literal",
+                        "type": "String",
+                        "value": "localhost"
+                      },
+                      {
+                        "kind": "functionCall",
+                        "name": "currentDatabase",
+                        "args": []
+                      },
+                      {
+                        "kind": "literal",
+                        "type": "String",
+                        "value": "secret"
+                      }
+                    ]
+                  },
+                  "limit": {
+                    "count": {
+                      "kind": "literal",
+                      "type": "UInt64",
+                      "value": "1"
+                    }
+                  }
+                }
+              }
+            }
+          ],
+          "where": {
+            "kind": "binaryExpr",
+            "op": "=",
+            "left": {
+              "kind": "columnRef",
+              "parts": [
+                "n"
+              ]
+            },
+            "right": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "1"
+            }
+          }
+        }
+      ]
+    },
+    "trailingComments": [
+      "-- { serverError ACCESS_DENIED }"
+    ]
+  }
+]

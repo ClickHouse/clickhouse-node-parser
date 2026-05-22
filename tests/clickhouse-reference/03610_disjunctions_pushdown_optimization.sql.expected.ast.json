@@ -1,11 +1,173 @@
 [
   {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "enable_analyzer",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ],
+    "leadingComments": [
+      "-- Test: Disjunctions pushdown into JOIN branches",
+      "-- This test exercises the optimizer controlled by the setting `use_join_disjunctions_push_down`.",
+      "-- It checks that disjunctions (OR) over conjunctions can be split and pushed as per-side",
+      "-- pre-join filters without changing query results, and that when the optimization is disabled",
+      "-- such pre-join filters are not produced. It also validates join-order-dependent pushdown"
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "enable_join_runtime_filters",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "tp1"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "tp2"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "tp1"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "k",
+        "type": {
+          "name": "Int32"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "a",
+        "type": {
+          "name": "Int32"
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree",
+      "args": []
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "k"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "tp2"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "k",
+        "type": {
+          "name": "Int32"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "x",
+        "type": {
+          "name": "Int32"
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree",
+      "args": []
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "k"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "tp1"
+      }
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "tp2"
+      }
+    }
+  },
+  {
     "kind": "select",
     "select": [
       {
         "kind": "literal",
         "type": "String",
         "value": "--- CASE A: plan (enabled) ---"
+      }
+    ],
+    "leadingComments": [
+      "-- We need to make sure that query plan creates the JOIN filter only with the optimization enabled, and WHERE filter in both cases",
+      "---------- CASE A ----------"
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "use_join_disjunctions_push_down",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
       }
     ]
   },
@@ -86,7 +248,7 @@
               "table": "tp1",
               "alias": "t1"
             },
-            "kind": "join",
+            "kind": "joinExpr",
             "joinType": "INNER",
             "right": {
               "kind": "tableRef",
@@ -259,6 +421,19 @@
     "format": "TSV"
   },
   {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "use_join_disjunctions_push_down",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      }
+    ]
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -289,7 +464,7 @@
         "table": "tp1",
         "alias": "t1"
       },
-      "kind": "join",
+      "kind": "joinExpr",
       "joinType": "INNER",
       "right": {
         "kind": "tableRef",
@@ -507,7 +682,7 @@
               "table": "tp1",
               "alias": "t1"
             },
-            "kind": "join",
+            "kind": "joinExpr",
             "joinType": "INNER",
             "right": {
               "kind": "tableRef",
@@ -652,7 +827,7 @@
         "table": "tp1",
         "alias": "t1"
       },
-      "kind": "join",
+      "kind": "joinExpr",
       "joinType": "INNER",
       "right": {
         "kind": "tableRef",
@@ -812,7 +987,7 @@
               "table": "tp1",
               "alias": "t1"
             },
-            "kind": "join",
+            "kind": "joinExpr",
             "joinType": "INNER",
             "right": {
               "kind": "tableRef",
@@ -971,7 +1146,7 @@
         "table": "tp1",
         "alias": "t1"
       },
-      "kind": "join",
+      "kind": "joinExpr",
       "joinType": "INNER",
       "right": {
         "kind": "tableRef",
@@ -1069,6 +1244,115 @@
     ]
   },
   {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "tp1"
+    }
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "tp2"
+    }
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "table1"
+    },
+    "ifExists": true,
+    "leadingComments": [
+      "---------- CASE D ----------"
+    ]
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "table2"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "table1"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "a",
+        "type": {
+          "name": "UInt32"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "b",
+        "type": {
+          "name": "String"
+        }
+      }
+    ],
+    "engine": {
+      "name": "Memory"
+    }
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "table2"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "c",
+        "type": {
+          "name": "UInt32"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "d",
+        "type": {
+          "name": "String"
+        }
+      }
+    ],
+    "engine": {
+      "name": "Memory"
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "table1"
+      }
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "table2"
+      }
+    }
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -1126,7 +1410,7 @@
               "kind": "tableRef",
               "table": "table1"
             },
-            "kind": "join",
+            "kind": "joinExpr",
             "joinType": "INNER",
             "right": {
               "kind": "tableRef",
@@ -1341,7 +1625,7 @@
         "kind": "tableRef",
         "table": "table1"
       },
-      "kind": "join",
+      "kind": "joinExpr",
       "joinType": "INNER",
       "right": {
         "kind": "tableRef",
@@ -1516,6 +1800,22 @@
     "format": "TSV"
   },
   {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "table1"
+    }
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "table2"
+    }
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -1535,7 +1835,7 @@
     ],
     "from": {
       "left": {
-        "kind": "tableFunction",
+        "kind": "tableFunctionRef",
         "name": "numbers",
         "args": [
           {
@@ -1546,10 +1846,10 @@
         ],
         "alias": "n1"
       },
-      "kind": "join",
+      "kind": "joinExpr",
       "joinType": "CROSS",
       "right": {
-        "kind": "tableFunction",
+        "kind": "tableFunctionRef",
         "name": "numbers",
         "args": [
           {
@@ -1775,7 +2075,7 @@
               "from": {
                 "left": {
                   "left": {
-                    "kind": "tableFunction",
+                    "kind": "tableFunctionRef",
                     "name": "numbers",
                     "args": [
                       {
@@ -1786,10 +2086,10 @@
                     ],
                     "alias": "n2"
                   },
-                  "kind": "join",
+                  "kind": "joinExpr",
                   "joinType": "CROSS",
                   "right": {
-                    "kind": "tableFunction",
+                    "kind": "tableFunctionRef",
                     "name": "numbers",
                     "args": [
                       {
@@ -1801,10 +2101,10 @@
                     "alias": "n3"
                   }
                 },
-                "kind": "join",
+                "kind": "joinExpr",
                 "joinType": "CROSS",
                 "right": {
-                  "kind": "tableFunction",
+                  "kind": "tableFunctionRef",
                   "name": "numbers",
                   "args": [
                     {

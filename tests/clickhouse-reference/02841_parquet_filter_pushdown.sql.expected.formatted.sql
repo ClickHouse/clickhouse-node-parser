@@ -1,3 +1,51 @@
+-- Tags: no-fasttest, no-parallel
+SET output_format_parquet_row_group_size = 100;
+
+SET input_format_null_as_default = 1;
+
+SET engine_file_truncate_on_insert = 1;
+
+SET optimize_or_like_chain = 0;
+
+SET max_block_size = 100000;
+
+SET max_insert_threads = 1;
+
+SET input_format_parquet_bloom_filter_push_down = 0;
+
+SET input_format_parquet_page_filter_push_down = 0;
+
+-- Try all the types.
+INSERT INTO FUNCTION file('02841.parquet') WITH 5000 - number AS n
+
+SELECT
+    number,
+    intDiv(n, 11)::UInt8 AS u8,
+    n::UInt16 AS u16,
+    n::UInt32 AS u32,
+    n::UInt64 AS u64,
+    intDiv(n, 11)::Int8 AS i8,
+    n::Int16 AS i16,
+    n::Int32 AS i32,
+    n::Int64 AS i64,
+    toDate32(n * 500000) AS date32,
+    toDateTime64(n * 1e6, 3) AS dt64_ms,
+    toDateTime64(n * 1e6, 6) AS dt64_us,
+    toDateTime64(n * 1e6, 9) AS dt64_ns,
+    toDateTime64(n * 1e6, 0) AS dt64_s,
+    toDateTime64(n * 1e6, 2) AS dt64_cs,
+    ((n / 1000))::Float32 AS f32,
+    ((n / 1000))::Float64 AS f64,
+    n::String AS s,
+    n::String::FixedString(9) AS fs,
+    n::Decimal32(3) / 1234 AS d32,
+    n::Decimal64(10) / 12345678 AS d64,
+    n::Decimal128(20) / 123456789012345 AS d128,
+    n::Decimal256(40) / 123456789012345 / 678901234567890 AS d256
+FROM numbers(10000);
+
+DESCRIBE TABLE file('02841.parquet');
+
 SELECT
     count(),
     sum(number)
@@ -182,9 +230,22 @@ SELECT
 FROM file('02841.parquet')
 WHERE indexHint(u32 + 1000000 == 999000);
 
+INSERT INTO FUNCTION file('02841.parquet') SELECT arrayStringConcat(range(number * 1000000)) AS s
+FROM numbers(2);
+
 SELECT count()
 FROM file('02841.parquet')
 WHERE indexHint(s > '');
+
+INSERT INTO FUNCTION file('02841.parquet') SELECT
+    number,
+    if(number % 234 == 0, NULL, number) AS sometimes_null,
+    toNullable(number) AS never_null,
+    if(number % 345 == 0, number::String, NULL) AS mostly_null,
+    toLowCardinality(if(number % 234 == 0, NULL, number)) AS sometimes_null_lc,
+    toLowCardinality(toNullable(number)) AS never_null_lc,
+    toLowCardinality(if(number % 345 == 0, number::String, NULL)) AS mostly_null_lc
+FROM numbers(1000);
 
 SELECT
     count(),
@@ -246,6 +307,7 @@ SELECT
 FROM file('02841.parquet')
 WHERE indexHint(never_null_lc < 150);
 
+-- Quirk with infinities: this reads too much because KeyCondition represents NULLs as infinities.
 SELECT
     count(),
     sum(number)
@@ -258,11 +320,18 @@ SELECT
 FROM file('02841.parquet')
 WHERE indexHint(sometimes_null_lc < 150);
 
+INSERT INTO FUNCTION file('02841.parquet') SELECT
+    number,
+    if(number % 234 == 0, NULL, number + 100) AS positive_or_null,
+    if(number % 234 == 0, NULL, negate(number) - 100) AS negative_or_null,
+    if(number % 234 == 0, NULL, 'I am a string') AS string_or_null
+FROM numbers(1000);
+
 SELECT
     count(),
     sum(number)
 FROM file('02841.parquet')
-WHERE indexHint(positive_or_null < 50);
+WHERE indexHint(positive_or_null < 50); -- quirk with infinities
 
 SELECT
     count(),
@@ -286,8 +355,9 @@ SELECT
     count(),
     sum(number)
 FROM file('02841.parquet')
-WHERE indexHint(string_or_null == '');
+WHERE indexHint(string_or_null == ''); -- quirk with infinities
 
+-- Parquet index analysis doesn't support empty() function yet
 SELECT
     count(),
     sum(number)
@@ -302,9 +372,13 @@ FROM file('02841.parquet', Parquet, 'number UInt64, nEgAtIvE_oR_nUlL Int64')
 WHERE indexHint(nEgAtIvE_oR_nUlL > -50)
 SETTINGS input_format_parquet_case_insensitive_column_matching = 1;
 
+INSERT INTO FUNCTION file('02841.parquet') SELECT 42 AS x;
+
 SELECT *
 FROM file('02841.parquet', Parquet, 'x Nullable(String)')
 WHERE x NOT IN (1);
+
+INSERT INTO FUNCTION file('t.parquet', Parquet, 'x String');
 
 SELECT *
 FROM file('t.parquet', Parquet, 'x Int64')

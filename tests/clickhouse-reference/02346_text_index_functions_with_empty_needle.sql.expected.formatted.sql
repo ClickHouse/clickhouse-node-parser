@@ -1,3 +1,22 @@
+-- Test the behavior of text index functions with empty needle
+-- They should not match anything
+-- In search{All,Any} empty needle is different from empty list:
+-- See: 02346_text_index_bug86300
+SET enable_full_text_index = 1;
+
+DROP TABLE IF EXISTS tab;
+
+CREATE TABLE tab
+(
+    id Int,
+    text String,
+    INDEX idx_text text TYPE text(tokenizer = 'splitByNonAlpha')
+)
+ENGINE = MergeTree()
+ORDER BY (id);
+
+INSERT INTO tab;
+
 SELECT '-- Plain text index search functions';
 
 SELECT count()
@@ -23,3 +42,5 @@ WHERE NOT hasAllTokens(text, ['']);
 SELECT count()
 FROM tab
 WHERE NOT hasToken(text, '');
+
+DROP TABLE tab;

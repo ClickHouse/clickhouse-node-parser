@@ -1,3 +1,48 @@
+DropQuery  test_alter_attach_01901S (children 1)
+ Identifier test_alter_attach_01901S
+
+DropQuery  test_alter_attach_01901D (children 1)
+ Identifier test_alter_attach_01901D
+
+CreateQuery test_alter_attach_01901S (children 3)
+ Identifier test_alter_attach_01901S
+ Columns definition (children 1)
+  ExpressionList (children 2)
+   ColumnDeclaration A (children 1)
+    DataType Int64
+   ColumnDeclaration D (children 1)
+    DataType date
+ Storage definition (children 3)
+  Function MergeTree
+  Identifier D
+  Identifier A
+
+InsertQuery   (children 1)
+ Identifier test_alter_attach_01901S
+
+CreateQuery test_alter_attach_01901D (children 3)
+ Identifier test_alter_attach_01901D
+ Columns definition (children 1)
+  ExpressionList (children 2)
+   ColumnDeclaration A (children 1)
+    DataType Int64
+   ColumnDeclaration D (children 1)
+    DataType date
+ Storage definition (children 3)
+  Function ReplicatedMergeTree (children 1)
+   ExpressionList (children 2)
+    Literal '/clickhouse/tables/{database}/test_alter_attach_01901D'
+    Literal 'r1'
+  Identifier D
+  Identifier A
+
+AlterQuery  test_alter_attach_01901D (children 2)
+ ExpressionList (children 1)
+  AlterCommand REPLACE_PARTITION (children 1)
+   Partition (children 1)
+    Literal '2020-01-01'
+ Identifier test_alter_attach_01901D
+
 SelectWithUnionQuery (children 1)
  ExpressionList (children 1)
   SelectQuery (children 2)
@@ -19,3 +64,16 @@ SelectWithUnionQuery (children 1)
     TablesInSelectQueryElement (children 1)
      TableExpression (children 1)
       TableIdentifier test_alter_attach_01901S
+
+AlterQuery  test_alter_attach_01901D (children 2)
+ ExpressionList (children 1)
+  AlterCommand REPLACE_PARTITION (children 1)
+   Partition (children 1)
+    Literal '2020-01-01'
+ Identifier test_alter_attach_01901D
+
+DropQuery  test_alter_attach_01901S (children 1)
+ Identifier test_alter_attach_01901S
+
+DropQuery  test_alter_attach_01901D (children 1)
+ Identifier test_alter_attach_01901D

@@ -5,7 +5,7 @@ FROM (
                 SELECT 1048576 AS x
             )
     )
-FORMAT Null;
+FORMAT Null; -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
 SELECT groupArrayMerge(1048577)(y * 1048576)
 FROM (
@@ -29,4 +29,4 @@ SELECT quantileResampleMerge(0.5, 257, 65536, 1)(tuple(*).1)
 FROM (
         SELECT quantileResampleState(0.10, 1, 2, 42)(number, number)
         FROM numbers(100)
-    );
+    ); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }

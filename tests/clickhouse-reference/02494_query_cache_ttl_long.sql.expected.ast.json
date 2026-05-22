@@ -1,5 +1,15 @@
 [
   {
+    "kind": "system",
+    "body": "SYSTEM CLEAR QUERY CACHE",
+    "leadingComments": [
+      "-- Tags: no-fasttest, no-parallel, long",
+      "-- Tag no-fasttest: Test runtime is > 6 sec",
+      "-- Tag long: Test runtime is > 6 sec",
+      "-- Tag no-parallel: Messes with internal cache"
+    ]
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -25,6 +35,9 @@
           "value": "3"
         }
       }
+    ],
+    "leadingComments": [
+      "-- Cache query result into query cache with a TTL of 3 sec"
     ]
   },
   {
@@ -44,7 +57,10 @@
       "kind": "tableRef",
       "database": "system",
       "table": "query_cache"
-    }
+    },
+    "leadingComments": [
+      "-- Expect one non-stale cache entry"
+    ]
   },
   {
     "kind": "select",
@@ -76,6 +92,9 @@
           }
         ]
       }
+    ],
+    "leadingComments": [
+      "-- Wait until entry is expired"
     ]
   },
   {

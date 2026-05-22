@@ -333,7 +333,7 @@ FROM (
                 SELECT [[2, 1], [1, 2], [0, 3], [4, 4], [5, 5], [1, 6], [0, 7], [10, 8]] AS d
             )
         ARRAY JOIN d
-        WINDOW w AS (ORDER BY 1 ASC Rows BETWEEN 2 PRECEDING AND 2 FOLLOWING)
+        WINDOW w AS (ORDER BY 1 ASC ROWS BETWEEN 2 PRECEDING AND 2 FOLLOWING)
     );
 
 SELECT
@@ -352,7 +352,7 @@ FROM (
             exponentialTimeDecayedCount(100)(t) AS count,
             exponentialTimeDecayedAvg(100)(x, t) AS avg
         FROM numbers(1000000)
-        WINDOW w AS (ORDER BY 1 ASC Rows BETWEEN 2 PRECEDING AND 2 FOLLOWING)
+        WINDOW w AS (ORDER BY 1 ASC ROWS BETWEEN 2 PRECEDING AND 2 FOLLOWING)
     )
 FORMAT Null;
 
@@ -370,5 +370,5 @@ FROM (
                 SELECT [[2, 1], [1, 2], [10, 3], [4, 4], [5, 5], [1, 6], [10, 7], [10, 8], [10, 9], [9.81, 10], [9.9, 11]] AS d
             )
         ARRAY JOIN d
-        WINDOW w AS (ORDER BY 1 ASC Rows BETWEEN 2 PRECEDING AND 2 FOLLOWING)
+        WINDOW w AS (ORDER BY 1 ASC ROWS BETWEEN 2 PRECEDING AND 2 FOLLOWING)
     );

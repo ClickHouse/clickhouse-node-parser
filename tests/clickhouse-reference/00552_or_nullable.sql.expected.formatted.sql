@@ -98,6 +98,16 @@ FROM (
         LIMIT 10
     );
 
+DROP TABLE IF EXISTS test;
+
+CREATE TABLE test
+(
+    x Nullable(Int32)
+)
+ENGINE = Log;
+
+INSERT INTO test;
+
 SELECT *
 FROM test;
 
@@ -113,3 +123,5 @@ WHERE x != 0
 SELECT x
 FROM test
 WHERE x != 1;
+
+DROP TABLE test;

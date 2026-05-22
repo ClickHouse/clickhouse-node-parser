@@ -1,3 +1,77 @@
+-- Tags: no-async-insert
+-- no-async-insert: Test expects new part for each insert
+-- Tests how input format parsers form blocks based on min/max thresholds via clickhouse-client
+-- 1. Creates 4 test tables
+-- 2. Inserts 8 rows (inline CSV format) via client with different block formation thresholds:
+--    - Test 1: max_insert_block_size_bytes=8 (emit block when reaching 8 bytes)
+--    - Test 2: min_insert_block_size_rows=2 AND min_insert_block_size_bytes=16 (emit when both met)
+--    - Test 3: min_insert_block_size_rows=4 (emit when 4 rows accumulated)
+--    - Test 4: min_insert_block_size_bytes=32 (emit when 32 bytes accumulated)
+-- 3. Verifies the number of parts created to confirm the new isEnoughSize() logic:
+--    - min thresholds use AND: both rows AND bytes must be satisfied
+--    - max thresholds use OR: either rows OR bytes triggers block emission
+DROP TABLE IF EXISTS test_max_insert_bytes;
+
+DROP TABLE IF EXISTS test_min_insert_rows_bytes;
+
+DROP TABLE IF EXISTS test_min_insert_rows;
+
+DROP TABLE IF EXISTS test_min_insert_bytes;
+
+CREATE TABLE test_max_insert_bytes
+(
+    id UInt64
+)
+ENGINE = MergeTree()
+ORDER BY id;
+
+CREATE TABLE test_min_insert_rows_bytes
+(
+    id UInt64
+)
+ENGINE = MergeTree()
+ORDER BY id;
+
+CREATE TABLE test_min_insert_rows
+(
+    id UInt64
+)
+ENGINE = MergeTree()
+ORDER BY id;
+
+CREATE TABLE test_min_insert_bytes
+(
+    id UInt64
+)
+ENGINE = MergeTree()
+ORDER BY id;
+
+-- Set max_insert_block_size_bytes smaller than max_insert_block_size (rows)
+SET max_insert_block_size_rows = 100000000;
+
+SET max_insert_block_size_bytes = 8;
+
+-- Turn off squashing
+SET min_insert_block_size_rows = 0;
+
+SET min_insert_block_size_bytes = 0;
+
+INSERT INTO test_max_insert_bytes;
+
+-- Set min_insert_block_size_rows and min_insert_block_size_bytes to 2 and 16 so that blocks are formed by 2
+SET min_insert_block_size_rows = 2;
+
+SET min_insert_block_size_bytes = 16;
+
+INSERT INTO test_min_insert_rows_bytes;
+
+INSERT INTO test_min_insert_rows;
+
+SET min_insert_block_size_bytes = 32;
+
+INSERT INTO test_min_insert_bytes;
+
+-- We expect to see 8 parts inserted
 SELECT count()
 FROM `system`.part_log
 WHERE table = 'test_max_insert_bytes'
@@ -10,6 +84,7 @@ WHERE table = 'test_max_insert_bytes'
             AND current_database = currentDatabase()
     ));
 
+-- We expect to see 4 parts inserted
 SELECT count()
 FROM `system`.part_log
 WHERE table = 'test_min_insert_rows_bytes'
@@ -22,6 +97,7 @@ WHERE table = 'test_min_insert_rows_bytes'
             AND current_database = currentDatabase()
     ));
 
+-- We expect to see 2 parts inserted
 SELECT count()
 FROM `system`.part_log
 WHERE table = 'test_min_insert_rows'
@@ -34,6 +110,7 @@ WHERE table = 'test_min_insert_rows'
             AND current_database = currentDatabase()
     ));
 
+-- We expect to see 2 parts inserted
 SELECT count()
 FROM `system`.part_log
 WHERE table = 'test_min_insert_bytes'

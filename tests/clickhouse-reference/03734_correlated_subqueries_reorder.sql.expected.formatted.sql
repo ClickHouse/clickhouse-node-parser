@@ -1,3 +1,48 @@
+SET enable_analyzer = 1;
+
+SET query_plan_optimize_join_order_limit = 10;
+
+SET use_statistics = 1;
+
+SET correlated_subqueries_substitute_equivalent_expressions = 0;
+
+SET correlated_subqueries_use_in_memory_buffer = 1;
+
+SET enable_parallel_replicas = 0;
+
+SET query_plan_optimize_join_order_algorithm = 'dpsize';
+
+SET query_plan_join_swap_table = 'auto';
+
+SET enable_join_runtime_filters = 0;
+
+CREATE TABLE lineitem
+(
+    l_orderkey Int32,
+    l_partkey Int32,
+    l_quantity Decimal(15, 2),
+    l_extendedprice Decimal(15, 2)
+)
+ORDER BY (l_orderkey)
+SETTINGS auto_statistics_types = 'uniq';
+
+INSERT INTO lineitem SELECT
+    1 AS l_orderkey,
+    number % 10 AS l_partkey,
+    toDecimal64(number % 100, 2) AS l_quantity,
+    toDecimal64(number % 1000, 2) AS l_extendedprice
+FROM numbers(100);
+
+CREATE TABLE part
+(
+    p_partkey Int32
+)
+ORDER BY (p_partkey)
+SETTINGS auto_statistics_types = 'uniq';
+
+INSERT INTO part SELECT *
+FROM numbers(10000);
+
 SELECT `explain`
 FROM (
         EXPLAIN actions = 1, keep_logical_steps = 1
@@ -22,5 +67,7 @@ WHERE ilike(`explain`, '%ReadFrom%')
     OR ilike(`explain`, '%JoinLogical%')
     OR ilike(`explain`, '% Type: %')
     OR ilike(`explain`, '%Save%');
+
+SET query_plan_optimize_join_order_limit = 0;
 
 SELECT '-- No join order optimization --';

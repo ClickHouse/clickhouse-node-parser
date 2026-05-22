@@ -1,5 +1,94 @@
 [
   {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "t0"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "t0"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "c0",
+        "type": {
+          "name": "JSON"
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree",
+      "args": []
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "c0"
+          ]
+        }
+      }
+    ],
+    "trailingComments": [
+      "-- { serverError DATA_TYPE_CANNOT_BE_USED_IN_KEY }"
+    ]
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "t0"
+      }
+    },
+    "columns": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "c0"
+        ]
+      }
+    ],
+    "trailingComments": [
+      "-- { serverError UNKNOWN_TABLE }"
+    ]
+  },
+  {
+    "kind": "delete",
+    "table": {
+      "kind": "tableRef",
+      "table": "t0"
+    },
+    "where": {
+      "kind": "literal",
+      "type": "Bool",
+      "value": "1"
+    },
+    "trailingComments": [
+      "-- { serverError UNKNOWN_TABLE }"
+    ]
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "t0"
+    },
+    "trailingComments": [
+      "-- { serverError UNKNOWN_TABLE }"
+    ]
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -7,6 +96,75 @@
         "type": "String",
         "value": "---"
       }
+    ]
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "t1"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "t1"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "c0",
+        "type": {
+          "name": "JSON"
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree",
+      "args": []
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "functionCall",
+          "name": "tuple",
+          "args": []
+        }
+      }
+    ],
+    "partitionBy": {
+      "kind": "columnRef",
+      "parts": [
+        "c0"
+      ],
+      "parenthesized": true
+    },
+    "trailingComments": [
+      "-- { serverError DATA_TYPE_CANNOT_BE_USED_IN_KEY }"
+    ]
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "t1"
+      }
+    },
+    "columns": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "c0"
+        ]
+      }
+    ],
+    "trailingComments": [
+      "-- { serverError UNKNOWN_TABLE }"
     ]
   },
   {
@@ -34,6 +192,36 @@
         },
         "direction": "ASC"
       }
+    ],
+    "trailingComments": [
+      "-- { serverError UNKNOWN_TABLE }"
+    ]
+  },
+  {
+    "kind": "alter",
+    "table": {
+      "kind": "tableRef",
+      "table": "t1"
+    },
+    "commands": [
+      {
+        "kind": "alterCommand",
+        "commandType": "APPLY_DELETED_MASK"
+      }
+    ],
+    "trailingComments": [
+      "-- { serverError UNKNOWN_TABLE }"
+    ]
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "t1"
+    },
+    "trailingComments": [
+      "-- { serverError UNKNOWN_TABLE }"
     ]
   }
 ]

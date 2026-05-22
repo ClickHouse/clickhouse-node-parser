@@ -1,3 +1,15 @@
+DROP TABLE IF EXISTS join_tbl;
+
+CREATE TABLE join_tbl
+(
+    id String,
+    name String,
+    lcname LowCardinality(String)
+)
+ENGINE = Join(`any`, `left`, id);
+
+INSERT INTO join_tbl;
+
 SELECT joinGet('join_tbl', 'name', 'xxx') == 'yyy';
 
 SELECT joinGet('join_tbl', 'name', toLowCardinality('xxx')) == 'yyy';

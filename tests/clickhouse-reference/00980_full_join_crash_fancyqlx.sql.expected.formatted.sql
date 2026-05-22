@@ -1,3 +1,23 @@
+DROP TABLE IF EXISTS test_join;
+
+CREATE TABLE test_join
+(
+    date Date,
+    id Int32,
+    name Nullable(String)
+)
+ENGINE = MergeTree
+ORDER BY id
+PARTITION BY date;
+
+INSERT INTO test_join;
+
+INSERT INTO test_join;
+
+INSERT INTO test_join;
+
+INSERT INTO test_join;
+
 SELECT
     id,
     date,
@@ -29,3 +49,5 @@ FULL JOIN (
 ORDER BY
     id ASC,
     name ASC;
+
+DROP TABLE test_join;

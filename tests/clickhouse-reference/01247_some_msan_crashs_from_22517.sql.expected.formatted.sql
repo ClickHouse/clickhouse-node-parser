@@ -21,4 +21,4 @@ FROM (
             ignore(-2) ASC,
             identity(x) DESC
     )
-FORMAT Null;
+FORMAT Null; -- { serverError UNKNOWN_IDENTIFIER }

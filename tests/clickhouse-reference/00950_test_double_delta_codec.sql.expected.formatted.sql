@@ -1,3 +1,115 @@
+-- Tags: no-random-merge-tree-settings
+DROP TABLE IF EXISTS codecTest;
+
+CREATE TABLE codecTest
+(
+    key UInt64,
+    ref_valueU64 UInt64,
+    ref_valueU32 UInt32,
+    ref_valueU16 UInt16,
+    ref_valueU8 UInt8,
+    ref_valueI64 Int64,
+    ref_valueI32 Int32,
+    ref_valueI16 Int16,
+    ref_valueI8 Int8,
+    ref_valueDT DateTime,
+    ref_valueD Date,
+    valueU64 UInt64 CODEC(DoubleDelta),
+    valueU32 UInt32 CODEC(DoubleDelta),
+    valueU16 UInt16 CODEC(DoubleDelta),
+    valueU8 UInt8 CODEC(DoubleDelta),
+    valueI64 Int64 CODEC(DoubleDelta),
+    valueI32 Int32 CODEC(DoubleDelta),
+    valueI16 Int16 CODEC(DoubleDelta),
+    valueI8 Int8 CODEC(DoubleDelta),
+    valueDT DateTime CODEC(DoubleDelta),
+    valueD Date CODEC(DoubleDelta)
+)
+ENGINE = MergeTree
+ORDER BY key
+SETTINGS min_bytes_for_wide_part = 0, ratio_of_defaults_for_sparse_serialization = 1;
+
+-- checking for overflow
+INSERT INTO codecTest (key, ref_valueU64, valueU64, ref_valueI64, valueI64);
+
+-- n^3 covers all double delta storage cases, from small difference between neighbouref_values (stride) to big.
+INSERT INTO codecTest (key, ref_valueU64, valueU64, ref_valueU32, valueU32, ref_valueU16, valueU16, ref_valueU8, valueU8, ref_valueI64, valueI64, ref_valueI32, valueI32, ref_valueI16, valueI16, ref_valueI8, valueI8, ref_valueDT, valueDT, ref_valueD, valueD) SELECT
+    number AS n,
+    n * n * n AS v,
+    v,
+    v,
+    v,
+    v,
+    v,
+    v,
+    v,
+    v,
+    v,
+    v,
+    v,
+    v,
+    v,
+    v,
+    v,
+    toDateTime(v),
+    toDateTime(v),
+    toDate(v),
+    toDate(v)
+FROM `system`.numbers
+LIMIT 101, 1000;
+
+-- best case - constant stride
+INSERT INTO codecTest (key, ref_valueU64, valueU64, ref_valueU32, valueU32, ref_valueU16, valueU16, ref_valueU8, valueU8, ref_valueI64, valueI64, ref_valueI32, valueI32, ref_valueI16, valueI16, ref_valueI8, valueI8, ref_valueDT, valueDT, ref_valueD, valueD) SELECT
+    number AS n,
+    n AS v,
+    v,
+    v,
+    v,
+    v,
+    v,
+    v,
+    v,
+    v,
+    v,
+    v,
+    v,
+    v,
+    v,
+    v,
+    v,
+    toDateTime(v),
+    toDateTime(v),
+    toDate(v),
+    toDate(v)
+FROM `system`.numbers
+LIMIT 2001, 1000;
+
+-- worst case - random stride
+INSERT INTO codecTest (key, ref_valueU64, valueU64, ref_valueU32, valueU32, ref_valueU16, valueU16, ref_valueU8, valueU8, ref_valueI64, valueI64, ref_valueI32, valueI32, ref_valueI16, valueI16, ref_valueI8, valueI8, ref_valueDT, valueDT, ref_valueD, valueD) SELECT
+    number AS n,
+    n + ((rand64() - 9223372036854775807)) / 1000 AS v,
+    v,
+    v,
+    v,
+    v,
+    v,
+    v,
+    v,
+    v,
+    v,
+    v,
+    v,
+    v,
+    v,
+    v,
+    v,
+    toDateTime(v),
+    toDateTime(v),
+    toDate(v),
+    toDate(v)
+FROM `system`.numbers
+LIMIT 3001, 1000;
+
 SELECT
     key,
     ref_valueU64,

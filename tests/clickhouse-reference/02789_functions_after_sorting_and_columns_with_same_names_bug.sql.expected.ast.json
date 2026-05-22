@@ -1,5 +1,73 @@
 [
   {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "test"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "test1"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "test"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "pt",
+        "type": {
+          "name": "String"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "count_distinct_exposure_uv",
+        "type": {
+          "name": "AggregateFunction",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "uniqHLL12"
+              }
+            },
+            {
+              "kind": "type",
+              "type": {
+                "name": "Int64"
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "engine": {
+      "name": "AggregatingMergeTree"
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "pt"
+          ]
+        }
+      }
+    ]
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -438,7 +506,7 @@
               },
               "alias": "m0"
             },
-            "kind": "join",
+            "kind": "joinExpr",
             "joinType": "LEFT",
             "right": {
               "kind": "subqueryFrom",
@@ -648,7 +716,7 @@
               }
             }
           },
-          "kind": "join",
+          "kind": "joinExpr",
           "joinType": "LEFT",
           "right": {
             "kind": "subqueryFrom",
@@ -901,6 +969,32 @@
     ]
   },
   {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "test1"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "pt",
+        "type": {
+          "name": "String"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "exposure_uv",
+        "type": {
+          "name": "Float64"
+        }
+      }
+    ],
+    "engine": {
+      "name": "Memory"
+    }
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -976,7 +1070,7 @@
               },
               "alias": "m0"
             },
-            "kind": "join",
+            "kind": "joinExpr",
             "joinType": "LEFT",
             "right": {
               "kind": "subqueryFrom",
@@ -1025,7 +1119,7 @@
               }
             }
           },
-          "kind": "join",
+          "kind": "joinExpr",
           "joinType": "LEFT",
           "right": {
             "kind": "subqueryFrom",
@@ -1144,7 +1238,7 @@
         },
         "alias": "m0"
       },
-      "kind": "join",
+      "kind": "joinExpr",
       "joinType": "FULL",
       "right": {
         "kind": "subqueryFrom",

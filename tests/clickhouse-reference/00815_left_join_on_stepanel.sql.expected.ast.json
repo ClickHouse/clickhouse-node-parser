@@ -1,5 +1,81 @@
 [
   {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "fact_cpc_clicks"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "dim_model"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "fact_cpc_clicks"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "model_id",
+        "type": {
+          "name": "UInt8"
+        }
+      }
+    ],
+    "engine": {
+      "name": "Memory"
+    }
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "dim_model"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "model_id",
+        "type": {
+          "name": "UInt8"
+        }
+      }
+    ],
+    "engine": {
+      "name": "Memory"
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "fact_cpc_clicks"
+      }
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "dim_model"
+      }
+    }
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -16,7 +92,7 @@
         "table": "fact_cpc_clicks",
         "alias": "f"
       },
-      "kind": "join",
+      "kind": "joinExpr",
       "joinType": "LEFT",
       "right": {
         "kind": "tableRef",
@@ -54,6 +130,10 @@
     }
   },
   {
+    "kind": "use",
+    "database": "default"
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -67,15 +147,23 @@
     "from": {
       "left": {
         "kind": "tableRef",
-        "database": "{CLICKHOUSE_DATABASE:Identifier}",
+        "database": {
+          "kind": "queryParam",
+          "name": "CLICKHOUSE_DATABASE",
+          "type": "Identifier"
+        },
         "table": "fact_cpc_clicks",
         "alias": "f"
       },
-      "kind": "join",
+      "kind": "joinExpr",
       "joinType": "LEFT",
       "right": {
         "kind": "tableRef",
-        "database": "{CLICKHOUSE_DATABASE:Identifier}",
+        "database": {
+          "kind": "queryParam",
+          "name": "CLICKHOUSE_DATABASE",
+          "type": "Identifier"
+        },
         "table": "dim_model",
         "alias": "d"
       },
@@ -106,6 +194,18 @@
         "kind": "literal",
         "type": "UInt64",
         "value": "10"
+      }
+    }
+  },
+  {
+    "kind": "drop",
+    "targetType": "DATABASE",
+    "table": {
+      "kind": "tableRef",
+      "table": {
+        "kind": "queryParam",
+        "name": "CLICKHOUSE_DATABASE",
+        "type": "Identifier"
       }
     }
   }

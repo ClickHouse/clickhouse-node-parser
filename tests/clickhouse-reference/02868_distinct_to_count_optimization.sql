@@ -1,3 +1,14 @@
+drop table if exists test_rewrite_uniq_to_count;
+CREATE TABLE test_rewrite_uniq_to_count
+(
+    `a` UInt8,
+    `b` UInt8,
+    `c` UInt8
+) ENGINE = MergeTree ORDER BY `a`;
+INSERT INTO test_rewrite_uniq_to_count values ('1', '1', '1'), ('1', '1', '1');
+INSERT INTO test_rewrite_uniq_to_count values ('2', '2', '2'), ('2', '2', '2');
+INSERT INTO test_rewrite_uniq_to_count values ('3', '3', '3'), ('3', '3', '3');
+set optimize_uniq_to_count=true;
 SELECT uniq(a) FROM (SELECT DISTINCT a FROM test_rewrite_uniq_to_count) settings enable_analyzer=0;
 SELECT uniq(a) FROM (SELECT DISTINCT a FROM test_rewrite_uniq_to_count) settings enable_analyzer=1;
 SELECT uniq(t.a) FROM (SELECT DISTINCT a FROM test_rewrite_uniq_to_count) t settings enable_analyzer=0;

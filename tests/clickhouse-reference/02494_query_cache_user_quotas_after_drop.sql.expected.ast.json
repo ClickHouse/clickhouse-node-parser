@@ -1,5 +1,32 @@
 [
   {
+    "kind": "system",
+    "body": "SYSTEM CLEAR QUERY CACHE",
+    "leadingComments": [
+      "-- Tags: no-parallel",
+      "-- Tag no-parallel: Messes with internal cache",
+      "-- Tests per-user quotas of the query cache. Settings 'query_cache_max_size_in_bytes' and 'query_cache_max_entries' are actually supposed to",
+      "-- be used in a settings profile, together with a readonly constraint. For simplicity, test both settings stand-alone in a stateless test",
+      "-- instead of an integration test - the relevant logic will still be covered by that."
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "query_cache_max_entries",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ],
+    "leadingComments": [
+      "-- Run SELECT with quota that current user may write only 1 entry in the query cache"
+    ]
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -56,7 +83,27 @@
       "kind": "tableRef",
       "database": "system",
       "table": "query_cache"
-    }
+    },
+    "trailingComments": [
+      "-- expect 1 entry"
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "query_cache_max_entries",
+        "value": {
+          "kind": "columnRef",
+          "parts": [
+            "DEFAULT"
+          ]
+        }
+      }
+    ],
+    "leadingComments": [
+      "-- Run SELECTs again but w/o quota"
+    ]
   },
   {
     "kind": "select",
@@ -106,6 +153,12 @@
         "type": "String",
         "value": "--"
       }
+    ],
+    "leadingComments": [
+      "-- Run the same as above after a DROP QUERY CACHE."
+    ],
+    "trailingComments": [
+      "-- SELECT '---';"
     ]
   }
 ]

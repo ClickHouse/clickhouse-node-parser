@@ -1,5 +1,84 @@
 [
   {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "dist_01757"
+    },
+    "ifExists": true,
+    "leadingComments": [
+      "-- Tags: shard"
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "dist_01757"
+    },
+    "asTable": {
+      "kind": "tableRef",
+      "database": "system",
+      "table": "one"
+    },
+    "engine": {
+      "name": "Distributed",
+      "args": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "test_cluster_two_shards"
+          ]
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "system"
+          ]
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "one"
+          ]
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "dummy"
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "optimize_skip_unused_shards",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "force_optimize_skip_unused_shards",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "2"
+        }
+      }
+    ]
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -33,7 +112,10 @@
         }
       ]
     },
-    "format": "Null"
+    "format": "Null",
+    "leadingComments": [
+      "-- in"
+    ]
   },
   {
     "kind": "select",
@@ -122,6 +204,12 @@
           "value": "1"
         }
       }
+    ],
+    "leadingComments": [
+      "-- in negative"
+    ],
+    "trailingComments": [
+      "-- { serverError UNABLE_TO_SKIP_UNUSED_SHARDS }"
     ]
   },
   {
@@ -180,6 +268,12 @@
           "value": "1"
         }
       }
+    ],
+    "leadingComments": [
+      "-- or negative"
+    ],
+    "trailingComments": [
+      "-- { serverError UNABLE_TO_SKIP_UNUSED_SHARDS }"
     ]
   },
   {
@@ -239,6 +333,9 @@
           "value": "2"
         }
       }
+    ],
+    "leadingComments": [
+      "-- or"
     ]
   },
   {
@@ -305,6 +402,13 @@
           "value": "0"
         }
       }
+    ],
+    "leadingComments": [
+      "-- and negative",
+      "-- disabled for analyzer cause new implementation consider `dummy = 0 and dummy = 1` as constant False."
+    ],
+    "trailingComments": [
+      "-- { serverError UNABLE_TO_SKIP_UNUSED_SHARDS }"
     ]
   },
   {
@@ -386,6 +490,9 @@
           "value": "0"
         }
       }
+    ],
+    "trailingComments": [
+      "-- { serverError UNABLE_TO_SKIP_UNUSED_SHARDS }"
     ]
   },
   {
@@ -467,6 +574,9 @@
           "value": "0"
         }
       }
+    ],
+    "trailingComments": [
+      "-- { serverError UNABLE_TO_SKIP_UNUSED_SHARDS }"
     ]
   },
   {
@@ -525,6 +635,9 @@
           "value": "2"
         }
       }
+    ],
+    "leadingComments": [
+      "-- and"
     ]
   },
   {
@@ -642,6 +755,12 @@
           "value": "0"
         }
       }
+    ],
+    "leadingComments": [
+      "-- ARGUMENT_OUT_OF_BOUND error"
+    ],
+    "trailingComments": [
+      "-- { serverError ARGUMENT_OUT_OF_BOUND }"
     ]
   },
   {
@@ -686,7 +805,18 @@
           "value": "9223372036854775808"
         }
       }
+    ],
+    "trailingComments": [
+      "-- { serverError ARGUMENT_OUT_OF_BOUND }"
     ]
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "dist_01757"
+    }
   },
   {
     "kind": "select",
@@ -696,7 +826,7 @@
       }
     ],
     "from": {
-      "kind": "tableFunction",
+      "kind": "tableFunctionRef",
       "name": "remote",
       "args": [
         {
@@ -767,6 +897,9 @@
         }
       }
     ],
-    "format": "Null"
+    "format": "Null",
+    "leadingComments": [
+      "-- fuzzed"
+    ]
   }
 ]

@@ -1,2 +1,11 @@
+-- creating this data type is allowed by default:
+CREATE TEMPORARY TABLE test
+(
+    x LowCardinality(UUID)
+);
+
+-- you can use it:
+INSERT INTO test;
+
 SELECT *
 FROM test;

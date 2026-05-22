@@ -1,3 +1,7 @@
+-- Tags: stateful, distributed, no-object-storage
+-- no-object-storage: https://github.com/ClickHouse/ClickHouse/issues/74943
+SET max_rows_to_read = '100M';
+
 SELECT sum(cityHash64(*))
 FROM (
         SELECT

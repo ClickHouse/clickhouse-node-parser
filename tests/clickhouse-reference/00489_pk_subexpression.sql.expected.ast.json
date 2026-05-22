@@ -1,5 +1,216 @@
 [
   {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "pk"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "allow_deprecated_syntax_for_merge_tree",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "pk"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "d",
+        "type": {
+          "name": "Date"
+        },
+        "defaultKind": "DEFAULT",
+        "defaultExpr": {
+          "kind": "literal",
+          "type": "String",
+          "value": "2000-01-01"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "x",
+        "type": {
+          "name": "DateTime"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "y",
+        "type": {
+          "name": "UInt64"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "z",
+        "type": {
+          "name": "UInt64"
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree",
+      "args": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "d"
+          ]
+        },
+        {
+          "kind": "tupleLiteral",
+          "elements": [
+            {
+              "kind": "functionCall",
+              "name": "toStartOfMinute",
+              "args": [
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "x"
+                  ]
+                },
+                {
+                  "kind": "literal",
+                  "type": "String",
+                  "value": "UTC"
+                }
+              ]
+            },
+            {
+              "kind": "columnRef",
+              "parts": [
+                "y"
+              ]
+            },
+            {
+              "kind": "columnRef",
+              "parts": [
+                "z"
+              ]
+            }
+          ],
+          "source": "(toStartOfMinute(x, 'UTC'), y, z)"
+        },
+        {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      ]
+    },
+    "leadingComments": [
+      "-- NOTE: here the timezone is pinned to UTC, to avoid issues with \"partial",
+      "-- timezones\" (timezones that does not starts from 00:00), like",
+      "-- Africa/Monrovia, for which toStartOfMinute(0) and toStartOfMinute(59) can",
+      "-- give different values:",
+      "--",
+      "--     SELECT",
+      "--         toDateTime(0, 'Africa/Monrovia') AS sec0,",
+      "--         toDateTime(59, 'Africa/Monrovia') AS sec59",
+      "--",
+      "--     ┌────────────────sec0─┬───────────────sec59─┐",
+      "--     │ 1969-12-31 23:15:30 │ 1969-12-31 23:16:29 │",
+      "--     └─────────────────────┴─────────────────────┘",
+      "--"
+    ]
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "pk"
+      }
+    },
+    "columns": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "x"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "y"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "z"
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "min_insert_block_size_rows",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      },
+      {
+        "name": "min_insert_block_size_bytes",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "max_block_size",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "max_rows_to_read",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "5"
+        }
+      }
+    ],
+    "leadingComments": [
+      "-- Test inferred limit"
+    ]
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -83,6 +294,19 @@
         }
       ]
     }
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "max_rows_to_read",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "9"
+        }
+      }
+    ]
   },
   {
     "kind": "select",
@@ -222,6 +446,22 @@
         ]
       }
     }
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "max_rows_to_read",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "4"
+        }
+      }
+    ],
+    "leadingComments": [
+      "-- Index works on interval 00:01:00 - 00:01:59"
+    ]
   },
   {
     "kind": "select",
@@ -435,6 +675,14 @@
           }
         }
       ]
+    }
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "pk"
     }
   }
 ]

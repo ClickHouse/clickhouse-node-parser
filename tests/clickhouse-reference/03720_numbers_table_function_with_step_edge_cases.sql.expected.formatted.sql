@@ -1,3 +1,5 @@
+-- { echoOn }
+-- Logical error query
 SELECT DISTINCT number * 1
 FROM numbers(10, sipHash64(sipHash64(sipHash64(2), 1), 1, 2, *), sipHash64(sipHash64(29103473, sipHash64(1), '3', sipHash64(1), 1)))
 GROUP BY
@@ -7,6 +9,7 @@ WITH TOTALS
 ORDER BY 1 ASC
 SETTINGS enable_analyzer = 1;
 
+-- Simplified version of the above query
 SELECT number
 FROM numbers(10, 14630045721179951620, 6670599363308407409);
 
@@ -91,6 +94,8 @@ LIMIT 0;
 SELECT *
 FROM `system`.numbers
 LIMIT 0;
+
+SET max_threads = 10;
 
 SELECT number
 FROM numbers_mt(10, 14630045721179951620, 6670599363308407409);

@@ -1,3 +1,28 @@
+DropQuery  test_table_replicated (children 1)
+ Identifier test_table_replicated
+
+CreateQuery test_table_replicated (children 3)
+ Identifier test_table_replicated
+ Columns definition (children 1)
+  ExpressionList (children 2)
+   ColumnDeclaration id (children 1)
+    DataType UInt64
+   ColumnDeclaration value (children 1)
+    DataType String
+ Storage definition (children 2)
+  Function ReplicatedMergeTree (children 1)
+   ExpressionList (children 2)
+    Literal '/clickhouse/tables/{database}/test_table_replicated'
+    Literal '1_replica'
+  Identifier id
+
+AlterQuery  test_table_replicated (children 2)
+ ExpressionList (children 1)
+  AlterCommand ADD_COLUMN (children 1)
+   ColumnDeclaration insert_time (children 1)
+    DataType DateTime
+ Identifier test_table_replicated
+
 SelectWithUnionQuery (children 2)
  ExpressionList (children 1)
   SelectQuery (children 3)
@@ -39,6 +64,29 @@ SelectWithUnionQuery (children 2)
        Identifier name
        Literal 'metadata'
  Identifier Vertical
+
+DropQuery  test_table_replicated_second (children 1)
+ Identifier test_table_replicated_second
+
+CreateQuery test_table_replicated_second (children 3)
+ Identifier test_table_replicated_second
+ Columns definition (children 1)
+  ExpressionList (children 3)
+   ColumnDeclaration id (children 1)
+    DataType UInt64
+   ColumnDeclaration value (children 1)
+    DataType String
+   ColumnDeclaration insert_time (children 1)
+    DataType DateTime
+ Storage definition (children 2)
+  Function ReplicatedMergeTree (children 1)
+   ExpressionList (children 2)
+    Literal '/clickhouse/tables/{database}/test_table_replicated'
+    Literal '2_replica'
+  Identifier id
+
+DropQuery  test_table_replicated (children 1)
+ Identifier test_table_replicated
 
 SelectWithUnionQuery (children 1)
  ExpressionList (children 1)
@@ -87,3 +135,20 @@ SelectWithUnionQuery (children 2)
        Identifier name
        Literal 'metadata_version'
  Identifier Vertical
+
+SYSTEM query (children 1)
+ Identifier test_table_replicated_second
+
+AlterQuery  test_table_replicated_second (children 2)
+ ExpressionList (children 1)
+  AlterCommand ADD_COLUMN (children 1)
+   ColumnDeclaration insert_time_updated (children 1)
+    DataType DateTime
+ Identifier test_table_replicated_second
+
+DescribeQuery (children 1)
+ TableExpression (children 1)
+  TableIdentifier test_table_replicated_second
+
+DropQuery  test_table_replicated_second (children 1)
+ Identifier test_table_replicated_second

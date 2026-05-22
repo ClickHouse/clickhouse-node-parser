@@ -1,3 +1,17 @@
+DROP TABLE IF EXISTS test54378;
+
+SET allow_deprecated_syntax_for_merge_tree = 1;
+
+CREATE TABLE test54378
+(
+    part_date Date,
+    pk_date Date,
+    date Date
+)
+ENGINE = MergeTree(part_date, pk_date, 8192);
+
+INSERT INTO test54378;
+
 SELECT 111
 FROM test54378
 WHERE part_date = '2018-04-19';
@@ -112,6 +126,8 @@ PREWHERE date IN (
         SELECT toDate('2018-04-19')
     );
 
+SET optimize_move_to_prewhere = 0;
+
 SELECT 311
 FROM test54378
 WHERE part_date = '2018-04-19';
@@ -168,6 +184,8 @@ WHERE date IN (
         SELECT toDate('2018-04-19')
     );
 
+SET optimize_move_to_prewhere = 1;
+
 SELECT 411
 FROM test54378
 WHERE part_date = '2018-04-19';
@@ -223,3 +241,5 @@ FROM test54378
 WHERE date IN (
         SELECT toDate('2018-04-19')
     );
+
+DROP TABLE test54378;

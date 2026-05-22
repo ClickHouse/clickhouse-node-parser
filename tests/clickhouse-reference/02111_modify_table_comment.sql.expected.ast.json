@@ -1,0 +1,139 @@
+[
+  {
+    "kind": "drop",
+    "targetType": "DATABASE",
+    "table": {
+      "kind": "tableRef",
+      "table": "02111_modify_table_comment"
+    },
+    "ifExists": true,
+    "leadingComments": [
+      "-- Tags: no-parallel"
+    ]
+  },
+  {
+    "kind": "createDatabase",
+    "name": "02111_modify_table_comment"
+  },
+  {
+    "kind": "use",
+    "database": "02111_modify_table_comment"
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "t"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "n",
+        "type": {
+          "name": "Int8"
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "n"
+          ]
+        }
+      }
+    ],
+    "comment": "this is a MergeTree table"
+  },
+  {
+    "kind": "showCreate",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "t"
+    }
+  },
+  {
+    "kind": "alter",
+    "table": {
+      "kind": "tableRef",
+      "table": "t"
+    },
+    "commands": [
+      {
+        "kind": "alterCommand",
+        "commandType": "MODIFY_COMMENT",
+        "comment": {
+          "kind": "literal",
+          "type": "String",
+          "value": "MergeTree Table"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "t_merge"
+    },
+    "asTable": {
+      "kind": "tableRef",
+      "table": "t"
+    },
+    "engine": {
+      "name": "Merge",
+      "args": [
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "02111_modify_table_comment"
+        },
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "t"
+        }
+      ]
+    },
+    "comment": "this is a Merge table"
+  },
+  {
+    "kind": "showCreate",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "t_merge"
+    }
+  },
+  {
+    "kind": "alter",
+    "table": {
+      "kind": "tableRef",
+      "table": "t_merge"
+    },
+    "commands": [
+      {
+        "kind": "alterCommand",
+        "commandType": "MODIFY_COMMENT",
+        "comment": {
+          "kind": "literal",
+          "type": "String",
+          "value": "Merge Table"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "drop",
+    "targetType": "DATABASE",
+    "table": {
+      "kind": "tableRef",
+      "table": "02111_modify_table_comment"
+    }
+  }
+]

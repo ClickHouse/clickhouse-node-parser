@@ -1,3 +1,103 @@
+DropQuery  users (children 1)
+ Identifier users
+
+DropQuery  messages (children 1)
+ Identifier messages
+
+CreateQuery users (children 3)
+ Identifier users
+ Columns definition (children 1)
+  ExpressionList (children 2)
+   ColumnDeclaration id (children 1)
+    DataType Int64
+   ColumnDeclaration name (children 1)
+    DataType String
+ Storage definition (children 2)
+  Function ReplicatedMergeTree (children 1)
+   ExpressionList (children 2)
+    Literal '/clickhouse/{database}/tables/03623_users'
+    Literal 'r1'
+  Function tuple (children 1)
+   ExpressionList
+
+CreateQuery messages (children 3)
+ Identifier messages
+ Columns definition (children 1)
+  ExpressionList (children 3)
+   ColumnDeclaration id (children 1)
+    DataType Int64
+   ColumnDeclaration user_id (children 1)
+    DataType Int64
+   ColumnDeclaration text (children 1)
+    DataType String
+ Storage definition (children 2)
+  Function ReplicatedMergeTree (children 1)
+   ExpressionList (children 2)
+    Literal '/clickhouse/{database}/tables/03623_messages'
+    Literal 'r1'
+  Function tuple (children 1)
+   ExpressionList
+
+InsertQuery   (children 2)
+ Identifier users
+ SelectWithUnionQuery (children 1)
+  ExpressionList (children 1)
+   SelectQuery (children 2)
+    ExpressionList (children 2)
+     Identifier number
+     Function concat (children 1)
+      ExpressionList (children 2)
+       Literal 'user_'
+       Function toString (children 1)
+        ExpressionList (children 1)
+         Identifier number
+    TablesInSelectQuery (children 1)
+     TablesInSelectQueryElement (children 1)
+      TableExpression (children 1)
+       Function numbers (children 1)
+        ExpressionList (children 1)
+         Literal UInt64_10
+
+InsertQuery   (children 2)
+ Identifier users
+ SelectWithUnionQuery (children 1)
+  ExpressionList (children 1)
+   SelectQuery (children 1)
+    ExpressionList (children 2)
+     Literal UInt64_11
+     Function concat (children 1)
+      ExpressionList (children 2)
+       Literal 'user_'
+       Function toString (children 1)
+        ExpressionList (children 1)
+         Literal UInt64_11
+
+InsertQuery   (children 2)
+ Identifier messages
+ SelectWithUnionQuery (children 1)
+  ExpressionList (children 1)
+   SelectQuery (children 2)
+    ExpressionList (children 3)
+     Function plus (children 1)
+      ExpressionList (children 2)
+       Literal UInt64_100
+       Identifier number
+     Identifier number
+     Function concat (children 1)
+      ExpressionList (children 2)
+       Literal 'message_'
+       Function toString (children 1)
+        ExpressionList (children 1)
+         Identifier number
+    TablesInSelectQuery (children 1)
+     TablesInSelectQueryElement (children 1)
+      TableExpression (children 1)
+       Function numbers (children 1)
+        ExpressionList (children 1)
+         Literal UInt64_11
+
+Set
+
 SelectWithUnionQuery (children 1)
  ExpressionList (children 1)
   SelectQuery (children 1)
@@ -225,3 +325,9 @@ SelectWithUnionQuery (children 1)
      Identifier user_id
     OrderByElement (children 1)
      Identifier c
+
+DropQuery  users (children 1)
+ Identifier users
+
+DropQuery  messages (children 1)
+ Identifier messages

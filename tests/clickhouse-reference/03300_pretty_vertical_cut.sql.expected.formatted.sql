@@ -1,3 +1,5 @@
+SET output_format_pretty_max_rows = 10;
+
 SELECT
     number,
     concat('Hello', number)
@@ -15,3 +17,5 @@ SELECT
     concat('Hello', number)
 FROM numbers(25)
 FORMAT PrettySpace;
+
+SET output_format_pretty_max_rows = 11;

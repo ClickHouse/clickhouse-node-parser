@@ -1,5 +1,51 @@
 [
   {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "t0"
+    },
+    "engine": {
+      "name": "IcebergS3",
+      "args": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "s3_conn"
+          ]
+        },
+        {
+          "kind": "binaryExpr",
+          "op": "=",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "filename"
+            ]
+          },
+          "right": {
+            "kind": "literal",
+            "type": "String",
+            "value": "issue87414/test/t0"
+          }
+        }
+      ]
+    },
+    "settings": [
+      {
+        "name": "iceberg_metadata_file_path",
+        "value": {
+          "kind": "literal",
+          "type": "String",
+          "value": "metadata/v2.metadata.json"
+        }
+      }
+    ],
+    "leadingComments": [
+      "-- Tags: no-fasttest, no-parallel-replicas"
+    ]
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -28,5 +74,92 @@
       "kind": "tableRef",
       "table": "t0"
     }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "t0"
+      }
+    },
+    "columns": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "c0"
+        ]
+      }
+    ],
+    "insertSettings": [
+      {
+        "name": "write_full_path_in_iceberg_metadata",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      },
+      {
+        "name": "allow_experimental_insert_into_iceberg",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "t0"
+    }
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "t0"
+    },
+    "engine": {
+      "name": "IcebergS3",
+      "args": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "s3_conn"
+          ]
+        },
+        {
+          "kind": "binaryExpr",
+          "op": "=",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "filename"
+            ]
+          },
+          "right": {
+            "kind": "literal",
+            "type": "String",
+            "value": "issue87414/test/t0"
+          }
+        }
+      ]
+    },
+    "settings": [
+      {
+        "name": "iceberg_metadata_file_path",
+        "value": {
+          "kind": "literal",
+          "type": "String",
+          "value": "metadata/v3.metadata.json"
+        }
+      }
+    ]
   }
 ]

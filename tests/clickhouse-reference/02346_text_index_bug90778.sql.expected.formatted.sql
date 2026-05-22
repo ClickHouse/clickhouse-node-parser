@@ -1,3 +1,18 @@
+-- Tags: no-parallel-replicas
+SET enable_full_text_index = 1;
+
+DROP TABLE IF EXISTS tab;
+
+CREATE TABLE tab
+(
+    col LowCardinality(String),
+    INDEX idx col TYPE text(tokenizer = 'array')
+)
+ENGINE = MergeTree
+ORDER BY tuple();
+
+INSERT INTO tab;
+
 SELECT count()
 FROM tab
 WHERE col = 'config';
@@ -29,3 +44,5 @@ FROM (
             query_plan_text_index_add_hint = 1
     )
 WHERE like(`explain`, '%Filter column:%');
+
+DROP TABLE tab;

@@ -1,3 +1,135 @@
+DropQuery  summing_table01747 (children 1)
+ Identifier summing_table01747
+
+DropQuery  rates01747 (children 1)
+ Identifier rates01747
+
+DropQuery  agg_view01747 (children 1)
+ Identifier agg_view01747
+
+DropQuery  dictst01747 (children 1)
+ Identifier dictst01747
+
+DropQuery default dict01747 (children 2)
+ Identifier default
+ Identifier dict01747
+
+CreateQuery summing_table01747 (children 3)
+ Identifier summing_table01747
+ Columns definition (children 1)
+  ExpressionList (children 4)
+   ColumnDeclaration some_name (children 1)
+    DataType String
+   ColumnDeclaration user_id (children 1)
+    DataType UInt64
+   ColumnDeclaration amount (children 1)
+    DataType Int64
+   ColumnDeclaration currency (children 1)
+    DataType String
+ Storage definition (children 2)
+  Function SummingMergeTree (children 1)
+   ExpressionList
+  Identifier some_name
+
+CreateQuery rates01747 (children 2)
+ Identifier rates01747
+ SelectWithUnionQuery (children 1)
+  ExpressionList (children 1)
+   SelectQuery (children 1)
+    ExpressionList (children 3)
+     Literal 'USD' (alias from_currency)
+     Literal 'EUR' (alias to_currency)
+     Literal Float64_1.2 (alias rates01747)
+
+InsertQuery   (children 1)
+ Identifier summing_table01747
+
+CreateQuery dictst01747 (children 4)
+ Identifier dictst01747
+ Columns definition (children 1)
+  ExpressionList (children 3)
+   ColumnDeclaration some_name (children 1)
+    DataType String
+   ColumnDeclaration field1 (children 1)
+    DataType String
+   ColumnDeclaration field2 (children 1)
+    DataType UInt8
+ Storage definition (children 1)
+  Function Memory
+ SelectWithUnionQuery (children 1)
+  ExpressionList (children 1)
+   SelectQuery (children 1)
+    ExpressionList (children 3)
+     Literal 'name'
+     Literal 'test'
+     Literal UInt64_33
+
+CreateQuery default dict01747 (children 4)
+ Identifier default
+ Identifier dict01747
+ ExpressionList (children 3)
+  DictionaryAttributeDeclaration some_name (children 1)
+   DataType String
+  DictionaryAttributeDeclaration field1 (children 1)
+   DataType String
+  DictionaryAttributeDeclaration field2 (children 1)
+   DataType UInt8
+ Dictionary definition (children 4)
+  ExpressionList (children 1)
+   Identifier some_name
+  FunctionWithKeyValueArguments  clickhouse (children 1)
+   ExpressionList (children 5)
+    pair (children 1)
+     Literal 'localhost'
+    pair (children 1)
+     Function tcpPort (children 1)
+      ExpressionList
+    pair (children 1)
+     Identifier dictst01747
+    pair (children 1)
+     Function currentDatabase (children 1)
+      ExpressionList
+    pair (children 1)
+     Literal 'default'
+  Dictionary lifetime
+  Dictionary layout (children 1)
+   ExpressionList
+
+CreateQuery agg_view01747 (children 2)
+ Identifier agg_view01747
+ SelectWithUnionQuery (children 1)
+  ExpressionList (children 1)
+   SelectQuery (children 2)
+    ExpressionList (children 4)
+     Identifier summing_table01747.some_name (alias some_name)
+     Function dictGet (alias field1) (children 1)
+      ExpressionList (children 3)
+       Literal 'default.dict01747'
+       Literal 'field1'
+       Function tuple (children 1)
+        ExpressionList (children 1)
+         Identifier some_name
+     Function dictGet (alias field2) (children 1)
+      ExpressionList (children 3)
+       Literal 'default.dict01747'
+       Literal 'field2'
+       Function tuple (children 1)
+        ExpressionList (children 1)
+         Identifier some_name
+     Identifier rates01747.rates01747 (alias rates01747)
+    TablesInSelectQuery (children 2)
+     TablesInSelectQueryElement (children 1)
+      TableExpression (children 1)
+       TableIdentifier summing_table01747
+     TablesInSelectQueryElement (children 2)
+      TableExpression (children 1)
+       TableIdentifier rates01747
+      TableJoin (children 1)
+       Function equals (children 1)
+        ExpressionList (children 2)
+         Identifier rates01747.from_currency
+         Identifier summing_table01747.currency
+
 SelectWithUnionQuery (children 1)
  ExpressionList (children 1)
   SelectQuery (children 2)
@@ -21,3 +153,19 @@ SelectWithUnionQuery (children 1)
     ExpressionList (children 2)
      Identifier field1
      Literal 'test'
+
+DropQuery  summing_table01747 (children 1)
+ Identifier summing_table01747
+
+DropQuery  rates01747 (children 1)
+ Identifier rates01747
+
+DropQuery  agg_view01747 (children 1)
+ Identifier agg_view01747
+
+DropQuery default dict01747 (children 2)
+ Identifier default
+ Identifier dict01747
+
+DropQuery  dictst01747 (children 1)
+ Identifier dictst01747

@@ -1,5 +1,70 @@
 [
   {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "data_01730"
+    },
+    "ifExists": true,
+    "leadingComments": [
+      "-- Tags: long, distributed, no-random-settings"
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "max_rows_to_read",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      },
+      {
+        "name": "max_result_rows",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      },
+      {
+        "name": "max_bytes_before_external_group_by",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      },
+      {
+        "name": "max_bytes_ratio_before_external_group_by",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "enable_parallel_blocks_marshalling",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      }
+    ],
+    "leadingComments": [
+      "-- Memory limit exceeded"
+    ]
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -7,7 +72,7 @@
       }
     ],
     "from": {
-      "kind": "tableFunction",
+      "kind": "tableFunctionRef",
       "name": "remote",
       "args": [
         {
@@ -29,7 +94,7 @@
                   }
                 ],
                 "from": {
-                  "kind": "tableFunction",
+                  "kind": "tableFunctionRef",
                   "name": "numbers",
                   "args": [
                     {
@@ -92,6 +157,12 @@
           "value": "100Mi"
         }
       }
+    ],
+    "leadingComments": [
+      "-- does not use 127.1 due to prefer_localhost_replica"
+    ],
+    "trailingComments": [
+      "-- { serverError MEMORY_LIMIT_EXCEEDED }"
     ]
   },
   {
@@ -102,7 +173,7 @@
       }
     ],
     "from": {
-      "kind": "tableFunction",
+      "kind": "tableFunctionRef",
       "name": "remote",
       "args": [
         {
@@ -124,7 +195,7 @@
                   }
                 ],
                 "from": {
-                  "kind": "tableFunction",
+                  "kind": "tableFunctionRef",
                   "name": "numbers",
                   "args": [
                     {
@@ -187,6 +258,9 @@
           "value": "100Mi"
         }
       }
+    ],
+    "leadingComments": [
+      "-- no memory limit error, because with distributed_group_by_no_merge=2 remote servers will do ORDER BY and will cut to the LIMIT"
     ]
   },
   {
@@ -197,7 +271,7 @@
       }
     ],
     "from": {
-      "kind": "tableFunction",
+      "kind": "tableFunctionRef",
       "name": "remote",
       "args": [
         {
@@ -219,7 +293,7 @@
                   }
                 ],
                 "from": {
-                  "kind": "tableFunction",
+                  "kind": "tableFunctionRef",
                   "name": "numbers",
                   "args": [
                     {
@@ -290,6 +364,69 @@
           "value": "4294967296"
         }
       }
+    ],
+    "leadingComments": [
+      "-- since the MergingSortedTransform will start processing only when all ports (remotes) will have some data,",
+      "-- and the query with GROUP BY on remote servers will first do GROUP BY and then send the block,",
+      "-- so the initiator will first receive all blocks from remotes and only after start merging,",
+      "-- and will hit the memory limit."
+    ],
+    "trailingComments": [
+      "-- { serverError MEMORY_LIMIT_EXCEEDED }"
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "data_01730"
+    },
+    "engine": {
+      "name": "MergeTree",
+      "args": []
+    },
+    "asQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "alias",
+          "expr": {
+            "kind": "columnRef",
+            "parts": [
+              "number"
+            ]
+          },
+          "alias": "key"
+        }
+      ],
+      "from": {
+        "kind": "tableFunctionRef",
+        "name": "numbers",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "Float64",
+            "value": "1e6"
+          }
+        ]
+      }
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "key"
+          ]
+        }
+      }
+    ],
+    "leadingComments": [
+      "-- with optimize_aggregation_in_order=1 remote servers will produce blocks more frequently,",
+      "-- since they don't need to wait until the aggregation will be finished,",
+      "-- and so the query will not hit the memory limit error.",
+      "-- Set max_threads equal to the number of replicas so that we don't have too many threads",
+      "-- receiving the small blocks."
     ]
   },
   {
@@ -300,7 +437,7 @@
       }
     ],
     "from": {
-      "kind": "tableFunction",
+      "kind": "tableFunctionRef",
       "name": "remote",
       "args": [
         {
@@ -386,5 +523,13 @@
       }
     ],
     "format": "Null"
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "data_01730"
+    }
   }
 ]

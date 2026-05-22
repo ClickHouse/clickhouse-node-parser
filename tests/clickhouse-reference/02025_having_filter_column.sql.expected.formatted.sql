@@ -1,3 +1,16 @@
+DROP TABLE IF EXISTS test;
+
+-- #29010
+CREATE TABLE test
+(
+    d DateTime,
+    a String,
+    b UInt64
+)
+ENGINE = MergeTree
+ORDER BY d
+PARTITION BY toDate(d);
+
 SELECT *
 FROM (
         SELECT
@@ -8,6 +21,7 @@ FROM (
     )
 WHERE a <> '';
 
+-- the same query, but after syntax optimization
 SELECT
     a,
     value

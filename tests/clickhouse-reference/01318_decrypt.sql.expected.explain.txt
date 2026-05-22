@@ -303,6 +303,51 @@ SelectWithUnionQuery (children 1)
         Literal '1111111111111111'
       Literal ''
 
+CreateQuery encryption_test (children 3)
+ Identifier encryption_test
+ Columns definition (children 1)
+  ExpressionList (children 6)
+   ColumnDeclaration input (children 1)
+    DataType String
+   ColumnDeclaration key (children 2)
+    DataType String
+    Function unhex (children 1)
+     ExpressionList (children 1)
+      Literal 'fb9958e2e897ef3fdb49067b51a24af645b3626eed2f9ea1dc7fd4dd71b7e38f9a68db2a3184f952382c783785f9d77bf923577108a88adaacae5c141b1576b0'
+   ColumnDeclaration iv (children 2)
+    DataType String
+    Function unhex (children 1)
+     ExpressionList (children 1)
+      Literal '8CA3554377DFF8A369BC50A89780DD85'
+   ColumnDeclaration key32 (children 2)
+    DataType String
+    Function substring (children 1)
+     ExpressionList (children 3)
+      Identifier key
+      Literal UInt64_1
+      Literal UInt64_32
+   ColumnDeclaration key24 (children 2)
+    DataType String
+    Function substring (children 1)
+     ExpressionList (children 3)
+      Identifier key
+      Literal UInt64_1
+      Literal UInt64_24
+   ColumnDeclaration key16 (children 2)
+    DataType String
+    Function substring (children 1)
+     ExpressionList (children 3)
+      Identifier key
+      Literal UInt64_1
+      Literal UInt64_16
+ Storage definition (children 1)
+  Function Memory
+
+InsertQuery   (children 2)
+ Identifier encryption_test
+ ExpressionList (children 1)
+  Identifier input
+
 SelectWithUnionQuery (children 1)
  ExpressionList (children 1)
   SelectQuery (children 2)
@@ -953,6 +998,66 @@ SelectWithUnionQuery (children 1)
 
 SelectWithUnionQuery (children 1)
  ExpressionList (children 1)
+  SelectQuery (children 2)
+   ExpressionList (children 6)
+    Function unhex (alias key) (children 1)
+     ExpressionList (children 1)
+      Literal 'eebc1f57487f51921c0465665f8ae6d1658bb26de6f8a069a3520293a572078f'
+    Function unhex (alias tag) (children 1)
+     ExpressionList (children 1)
+      Literal '67ba0510262ae487d737ee6298f77e0c'
+    Function unhex (alias iv) (children 1)
+     ExpressionList (children 1)
+      Literal '99aa3e68ed8173a0eed06684'
+    Function unhex (alias plaintext) (children 1)
+     ExpressionList (children 1)
+      Literal 'f56e87055bc32d0eeb31b2eacc2bf2a5'
+    Function unhex (alias aad) (children 1)
+     ExpressionList (children 1)
+      Literal '4d23c3cec334b49bdb370c437fec78de'
+    Function unhex (alias ciphertext) (children 1)
+     ExpressionList (children 1)
+      Literal 'f7264413a84c0e7cd536867eb9f21736'
+   ExpressionList (children 2)
+    Function hex (alias plaintext_actual) (children 1)
+     ExpressionList (children 1)
+      Function decrypt (children 1)
+       ExpressionList (children 5)
+        Literal 'aes-256-gcm'
+        Function concat (children 1)
+         ExpressionList (children 2)
+          Identifier ciphertext
+          Identifier tag
+        Identifier key
+        Identifier iv
+        Identifier aad
+    Function equals (children 1)
+     ExpressionList (children 2)
+      Identifier plaintext_actual
+      Function hex (children 1)
+       ExpressionList (children 1)
+        Identifier plaintext
+
+CreateQuery decrypt_null (children 3)
+ Identifier decrypt_null
+ Columns definition (children 1)
+  ExpressionList (children 4)
+   ColumnDeclaration dt (children 1)
+    DataType DateTime
+   ColumnDeclaration user_id (children 1)
+    DataType UInt32
+   ColumnDeclaration encrypted (children 1)
+    DataType String
+   ColumnDeclaration iv (children 1)
+    DataType String
+ Storage definition (children 1)
+  Function Memory
+
+InsertQuery   (children 1)
+ Identifier decrypt_null
+
+SelectWithUnionQuery (children 1)
+ ExpressionList (children 1)
   SelectQuery (children 3)
    ExpressionList (children 2)
     Identifier dt
@@ -1022,3 +1127,6 @@ SelectWithUnionQuery (children 1)
    ExpressionList (children 1)
     OrderByElement (children 1)
      Identifier user_id
+
+DropQuery  encryption_test (children 1)
+ Identifier encryption_test

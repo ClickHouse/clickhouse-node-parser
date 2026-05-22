@@ -1,0 +1,158 @@
+[
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "my_table"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "drop",
+    "targetType": "VIEW",
+    "table": {
+      "kind": "tableRef",
+      "table": "my_view"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "my_table"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "Id",
+        "type": {
+          "name": "UInt32"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "Object",
+        "type": {
+          "name": "Nested",
+          "args": [
+            {
+              "kind": "namedField",
+              "name": "Key",
+              "type": {
+                "name": "UInt8"
+              }
+            },
+            {
+              "kind": "namedField",
+              "name": "Value",
+              "type": {
+                "name": "String"
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "Id"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createView",
+    "table": {
+      "kind": "tableRef",
+      "table": "my_view"
+    },
+    "asQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "asterisk",
+          "transformers": [
+            {
+              "kind": "replace",
+              "items": [
+                {
+                  "expr": {
+                    "kind": "functionCall",
+                    "name": "arrayMap",
+                    "args": [
+                      {
+                        "kind": "lambdaExpr",
+                        "params": [
+                          "x"
+                        ],
+                        "body": {
+                          "kind": "binaryExpr",
+                          "op": "+",
+                          "left": {
+                            "kind": "columnRef",
+                            "parts": [
+                              "x"
+                            ]
+                          },
+                          "right": {
+                            "kind": "literal",
+                            "type": "UInt64",
+                            "value": "1"
+                          }
+                        }
+                      },
+                      {
+                        "kind": "columnRef",
+                        "parts": [
+                          "Object.Key"
+                        ]
+                      }
+                    ]
+                  },
+                  "alias": "Object.Key"
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "from": {
+        "kind": "tableRef",
+        "table": "my_table"
+      }
+    }
+  },
+  {
+    "kind": "showCreate",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "my_view"
+    }
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "my_table"
+    }
+  },
+  {
+    "kind": "drop",
+    "targetType": "VIEW",
+    "table": {
+      "kind": "tableRef",
+      "table": "my_view"
+    }
+  }
+]

@@ -1,5 +1,9 @@
+SET log_formatted_queries = 1;
+
 SELECT '02005_log_formatted_queries.sql'
 FROM `system`.one;
+
+SYSTEM flush logs query_log;
 
 SELECT
     query,

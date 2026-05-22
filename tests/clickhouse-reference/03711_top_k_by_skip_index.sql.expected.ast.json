@@ -1,5 +1,198 @@
 [
   {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "merge_tree_read_split_ranges_into_intersecting_and_non_intersecting_injection_probability",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      }
+    ],
+    "leadingComments": [
+      "-- Test for verifying TopN optimizations",
+      "-- Tags: no-parallel-replicas"
+    ],
+    "trailingComments": [
+      "-- for stable max_rows_to_read"
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "read_overflow_mode",
+        "value": {
+          "kind": "literal",
+          "type": "String",
+          "value": "break"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "tab"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "tab"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "id",
+        "type": {
+          "name": "Int32"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "v1",
+        "type": {
+          "name": "Int32"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "v2",
+        "type": {
+          "name": "Int32"
+        }
+      },
+      {
+        "kind": "indexDef",
+        "name": "v1idx",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "v1"
+          ]
+        },
+        "indexType": {
+          "name": "minmax"
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "id"
+          ]
+        }
+      }
+    ],
+    "settings": [
+      {
+        "name": "index_granularity",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "64"
+        }
+      },
+      {
+        "name": "min_bytes_for_wide_part",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      },
+      {
+        "name": "min_bytes_for_full_part_storage",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      },
+      {
+        "name": "max_bytes_to_merge_at_max_space_in_pool",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      },
+      {
+        "name": "use_const_adaptive_granularity",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      },
+      {
+        "name": "index_granularity_bytes",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      }
+    ],
+    "settingsAfterOrderBy": true
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "tab"
+      }
+    },
+    "selectQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "number"
+          ]
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "number"
+          ]
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "number"
+          ]
+        }
+      ],
+      "from": {
+        "kind": "tableFunctionRef",
+        "name": "numbers",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "10000"
+          }
+        ]
+      }
+    }
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -63,6 +256,9 @@
           "value": "0"
         }
       }
+    ],
+    "leadingComments": [
+      "-- Only 10 granules should be read"
     ]
   },
   {
@@ -241,7 +437,10 @@
           "value": "%TopK%"
         }
       ]
-    }
+    },
+    "leadingComments": [
+      "-- Verify EXPLAIN indexes=1 output to confirm skip index usage for top-n"
+    ]
   },
   {
     "kind": "select",
@@ -368,7 +567,10 @@
           "value": "%TopK%"
         }
       ]
-    }
+    },
+    "leadingComments": [
+      "--  If WHERE clause is present, TopN via skip index only optimization not possible - row should not seen"
+    ]
   },
   {
     "kind": "select",
@@ -495,7 +697,10 @@
           "value": "%topK%"
         }
       ]
-    }
+    },
+    "leadingComments": [
+      "-- Verify that dynamic filter injects PREWHERE dynamic filter"
+    ]
   },
   {
     "kind": "select",
@@ -568,6 +773,9 @@
           "value": "1"
         }
       }
+    ],
+    "leadingComments": [
+      "-- Verify execution of dynamic filter"
     ]
   }
 ]

@@ -1,3 +1,60 @@
+-- Tags: long, no-object-storage, no-asan, no-msan
+SET joined_subquery_requires_alias = 0;
+
+-- We are no longer interested in the old analyzer.
+SET enable_analyzer = 1;
+
+-- This test (SELECT) without cache can take tens minutes
+DROP TABLE IF EXISTS dict_string;
+
+DROP TABLE IF EXISTS dict_ui64;
+
+DROP TABLE IF EXISTS video_views;
+
+SET allow_deprecated_syntax_for_merge_tree = 1;
+
+CREATE TABLE video_views
+(
+    entityIri String,
+    courseId UInt64,
+    learnerId UInt64,
+    actorId UInt64,
+    duration UInt16,
+    fullWatched UInt8,
+    fullWatchedDate DateTime,
+    fullWatchedDuration UInt16,
+    fullWatchedTime UInt16,
+    fullWatchedViews UInt16,
+    `views.viewId` Array(String),
+    `views.startedAt` Array(DateTime),
+    `views.endedAt` Array(DateTime),
+    `views.viewDuration` Array(UInt16),
+    `views.watchedPart` Array(Float32),
+    `views.fullWatched` Array(UInt8),
+    `views.progress` Array(Float32),
+    `views.reject` Array(UInt8),
+    `views.viewNumber` Array(UInt16),
+    `views.repeatingView` Array(UInt8),
+    `views.ranges` Array(String),
+    version DateTime
+)
+ENGINE = ReplacingMergeTree(version)
+ORDER BY (learnerId, entityIri)
+PARTITION BY entityIri
+SETTINGS index_granularity = 8192;
+
+CREATE TABLE dict_string
+(
+    entityIri String
+)
+ENGINE = Memory;
+
+CREATE TABLE dict_ui64
+(
+    learnerId UInt64
+)
+ENGINE = Memory;
+
 SELECT
     entityIri,
     `watchers-count`,
@@ -435,6 +492,30 @@ FROM (
             )
             USING (entityIri)
     );
+
+DROP TABLE dict_string;
+
+DROP TABLE dict_ui64;
+
+DROP TABLE video_views;
+
+-- Test for tsan: Ensure cache is used from one thread
+SET max_threads = 32, max_memory_usage = '10G';
+
+DROP TABLE IF EXISTS sample_00632;
+
+CREATE TABLE sample_00632
+(
+    d Date DEFAULT '2000-01-01',
+    x UInt16
+)
+ENGINE = MergeTree(d, x, x, 10);
+
+INSERT INTO sample_00632 (x) SELECT toUInt16(number) AS x
+FROM `system`.numbers
+LIMIT 65536;
+
+SET max_execution_time = 300;
 
 SELECT count()
 FROM (
@@ -1145,3 +1226,5 @@ FROM (
         GROUP BY x
         ORDER BY x ASC
     );
+
+DROP TABLE sample_00632;

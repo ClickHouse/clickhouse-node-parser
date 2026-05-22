@@ -400,4 +400,4 @@ SELECT
     roundBankers(toInt32(50), 4) AS roundInt50,
     roundBankers(toInt32(500), 4) AS roundInt500;
 
-SELECT ceil(29375422, -54212);
+SELECT ceil(29375422, -54212); --{serverError ARGUMENT_OUT_OF_BOUND}

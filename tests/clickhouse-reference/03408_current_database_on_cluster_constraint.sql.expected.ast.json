@@ -1,0 +1,93 @@
+[
+  {
+    "kind": "drop",
+    "targetType": "DATABASE",
+    "table": {
+      "kind": "tableRef",
+      "table": "shard_0"
+    },
+    "ifExists": true,
+    "leadingComments": [
+      "-- Tags: replica, no-parallel"
+    ]
+  },
+  {
+    "kind": "createDatabase",
+    "name": "shard_0"
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "distributed_ddl_entry_format_version",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "2"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "distributed_ddl_output_mode",
+        "value": {
+          "kind": "literal",
+          "type": "String",
+          "value": "throw"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "database": "shard_0",
+      "table": "t0"
+    },
+    "onCluster": "'test_cluster_two_shards_different_databases'",
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "c0",
+        "type": {
+          "name": "Int"
+        }
+      },
+      {
+        "kind": "constraintDef",
+        "name": "cc",
+        "constraintType": "CHECK",
+        "expr": {
+          "kind": "functionCall",
+          "name": "currentDatabase",
+          "args": []
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree",
+      "args": []
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "functionCall",
+          "name": "tuple",
+          "args": []
+        }
+      }
+    ]
+  },
+  {
+    "kind": "drop",
+    "targetType": "DATABASE",
+    "table": {
+      "kind": "tableRef",
+      "table": "shard_0"
+    }
+  }
+]

@@ -1,0 +1,34 @@
+DROP TABLE IF EXISTS src;
+
+DROP TABLE IF EXISTS dst;
+
+DROP VIEW IF EXISTS v;
+
+CREATE TABLE src
+(
+    x Nullable(Int32)
+)
+ENGINE = Memory;
+
+ALTER TABLE src MODIFY COLUMN x Nullable(Nothing); -- {serverError DATA_TYPE_CANNOT_BE_USED_IN_TABLES}
+
+CREATE TABLE dst
+(
+    x Nullable(Int32)
+)
+ENGINE = Memory;
+
+CREATE MATERIALIZED VIEW v
+TO dst
+AS
+SELECT x
+FROM src;
+
+ALTER TABLE v MODIFY QUERY SELECT NULL AS x
+FROM src; -- {serverError DATA_TYPE_CANNOT_BE_USED_IN_TABLES}
+
+DROP VIEW v;
+
+DROP TABLE dst;
+
+DROP TABLE src;

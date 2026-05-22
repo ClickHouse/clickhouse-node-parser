@@ -1,5 +1,87 @@
 [
   {
+    "kind": "drop",
+    "targetType": "DATABASE",
+    "table": {
+      "kind": "tableRef",
+      "table": "02661_db"
+    },
+    "ifExists": true,
+    "leadingComments": [
+      "-- Tags: no-parallel",
+      "-- Case 1: RENAME DATABASE"
+    ]
+  },
+  {
+    "kind": "drop",
+    "targetType": "DATABASE",
+    "table": {
+      "kind": "tableRef",
+      "table": "02661_db1"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "param_old_db_name",
+        "value": {
+          "kind": "columnRef",
+          "parts": [
+            "02661_db"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "param_new_db_name",
+        "value": {
+          "kind": "columnRef",
+          "parts": [
+            "02661_db1"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createDatabase",
+    "name": {
+      "kind": "queryParam",
+      "name": "old_db_name",
+      "type": "Identifier"
+    }
+  },
+  {
+    "kind": "rename",
+    "targetType": "DATABASE",
+    "pairs": [
+      {
+        "from": {
+          "kind": "tableRef",
+          "table": {
+            "kind": "queryParam",
+            "name": "old_db_name",
+            "type": "Identifier"
+          }
+        },
+        "to": {
+          "kind": "tableRef",
+          "table": {
+            "kind": "queryParam",
+            "name": "new_db_name",
+            "type": "Identifier"
+          }
+        }
+      }
+    ]
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -31,6 +113,126 @@
     }
   },
   {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "02661_t"
+    },
+    "ifExists": true,
+    "leadingComments": [
+      "-- Case 2: RENAME TABLE"
+    ]
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "02661_t1"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "param_old_tbl_name",
+        "value": {
+          "kind": "columnRef",
+          "parts": [
+            "02661_t"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "param_new_tbl_name",
+        "value": {
+          "kind": "columnRef",
+          "parts": [
+            "02661_t1"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "database": {
+        "kind": "queryParam",
+        "name": "new_db_name",
+        "type": "Identifier"
+      },
+      "table": {
+        "kind": "queryParam",
+        "name": "old_tbl_name",
+        "type": "Identifier"
+      }
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "a",
+        "type": {
+          "name": "UInt64"
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "functionCall",
+          "name": "tuple",
+          "args": []
+        }
+      }
+    ]
+  },
+  {
+    "kind": "rename",
+    "targetType": "TABLE",
+    "pairs": [
+      {
+        "from": {
+          "kind": "tableRef",
+          "database": {
+            "kind": "queryParam",
+            "name": "new_db_name",
+            "type": "Identifier"
+          },
+          "table": {
+            "kind": "queryParam",
+            "name": "old_tbl_name",
+            "type": "Identifier"
+          }
+        },
+        "to": {
+          "kind": "tableRef",
+          "database": {
+            "kind": "queryParam",
+            "name": "new_db_name",
+            "type": "Identifier"
+          },
+          "table": {
+            "kind": "queryParam",
+            "name": "new_tbl_name",
+            "type": "Identifier"
+          }
+        }
+      }
+    ]
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -59,7 +261,144 @@
         "name": "new_tbl_name",
         "type": "String"
       }
+    },
+    "leadingComments": [
+      "-- NOTE: no 'database = currentDatabase()' on purpose"
+    ]
+  },
+  {
+    "kind": "drop",
+    "targetType": "DICTIONARY",
+    "table": {
+      "kind": "tableRef",
+      "table": "02661_d"
+    },
+    "ifExists": true,
+    "leadingComments": [
+      "-- Case 3: RENAME DICTIONARY"
+    ]
+  },
+  {
+    "kind": "drop",
+    "targetType": "DICTIONARY",
+    "table": {
+      "kind": "tableRef",
+      "table": "02661_d1"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "param_old_dict_name",
+        "value": {
+          "kind": "columnRef",
+          "parts": [
+            "02661_d"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "param_new_dict_name",
+        "value": {
+          "kind": "columnRef",
+          "parts": [
+            "02661_d1"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createDictionary",
+    "table": {
+      "kind": "tableRef",
+      "database": {
+        "kind": "queryParam",
+        "name": "new_db_name",
+        "type": "Identifier"
+      },
+      "table": {
+        "kind": "queryParam",
+        "name": "old_dict_name",
+        "type": "Identifier"
+      }
+    },
+    "dictAttrs": [
+      {
+        "name": "id",
+        "type": {
+          "name": "UInt64"
+        }
+      },
+      {
+        "name": "val",
+        "type": {
+          "name": "UInt8"
+        }
+      }
+    ],
+    "dictDef": {
+      "primaryKey": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "id"
+          ]
+        }
+      ],
+      "source": {
+        "name": "null",
+        "pairs": []
+      },
+      "layout": {
+        "name": "FLAT",
+        "pairs": []
+      },
+      "lifetime": {
+        "value": 0
+      }
     }
+  },
+  {
+    "kind": "rename",
+    "targetType": "DICTIONARY",
+    "pairs": [
+      {
+        "from": {
+          "kind": "tableRef",
+          "database": {
+            "kind": "queryParam",
+            "name": "new_db_name",
+            "type": "Identifier"
+          },
+          "table": {
+            "kind": "queryParam",
+            "name": "old_dict_name",
+            "type": "Identifier"
+          }
+        },
+        "to": {
+          "kind": "tableRef",
+          "database": {
+            "kind": "queryParam",
+            "name": "new_db_name",
+            "type": "Identifier"
+          },
+          "table": {
+            "kind": "queryParam",
+            "name": "new_dict_name",
+            "type": "Identifier"
+          }
+        }
+      }
+    ]
   },
   {
     "kind": "select",
@@ -89,6 +428,88 @@
         "kind": "queryParam",
         "name": "new_dict_name",
         "type": "String"
+      }
+    }
+  },
+  {
+    "kind": "rename",
+    "targetType": "TABLE",
+    "pairs": [
+      {
+        "from": {
+          "kind": "tableRef",
+          "database": {
+            "kind": "queryParam",
+            "name": "new_db_name",
+            "type": "Identifier"
+          },
+          "table": {
+            "kind": "queryParam",
+            "name": "old_tbl_name",
+            "type": "Identifier"
+          }
+        },
+        "to": {
+          "kind": "tableRef",
+          "database": {
+            "kind": "queryParam",
+            "name": "new_db_name",
+            "type": "Identifier"
+          },
+          "table": {
+            "kind": "queryParam",
+            "name": "new_tbl_name",
+            "type": "Identifier"
+          }
+        }
+      }
+    ],
+    "exchange": true
+  },
+  {
+    "kind": "rename",
+    "targetType": "DICTIONARY",
+    "pairs": [
+      {
+        "from": {
+          "kind": "tableRef",
+          "database": {
+            "kind": "queryParam",
+            "name": "new_db_name",
+            "type": "Identifier"
+          },
+          "table": {
+            "kind": "queryParam",
+            "name": "old_dict_name",
+            "type": "Identifier"
+          }
+        },
+        "to": {
+          "kind": "tableRef",
+          "database": {
+            "kind": "queryParam",
+            "name": "new_db_name",
+            "type": "Identifier"
+          },
+          "table": {
+            "kind": "queryParam",
+            "name": "new_dict_name",
+            "type": "Identifier"
+          }
+        }
+      }
+    ],
+    "exchange": true
+  },
+  {
+    "kind": "drop",
+    "targetType": "DATABASE",
+    "table": {
+      "kind": "tableRef",
+      "table": {
+        "kind": "queryParam",
+        "name": "new_db_name",
+        "type": "Identifier"
       }
     }
   }

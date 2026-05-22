@@ -442,7 +442,19 @@ SELECT
     toFixedString('Hello', 10),
     bin(bitShiftRight(toFixedString('Hello', 10), 80));
 
-SELECT bin(bitShiftRight('Hello', 40));
+DROP TABLE IF EXISTS test_bit_shift_right_string_integer;
+
+CREATE TABLE test_bit_shift_right_string_integer
+(
+    str String,
+    fixedStr FixedString(10),
+    id Int64
+)
+ENGINE = Log;
+
+INSERT INTO test_bit_shift_right_string_integer;
+
+SELECT bin(bitShiftRight('Hello', 40)); --A blank line
 
 SELECT
     id AS shift_right_bit,

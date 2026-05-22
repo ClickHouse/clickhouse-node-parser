@@ -1,5 +1,284 @@
 [
   {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "prd_bid_events_simple_no_partition"
+    },
+    "ifExists": true,
+    "leadingComments": [
+      "-- See also 03604_key_condition_set_tuple_bug.sql‎"
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "prd_bid_events_simple_no_partition"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "type",
+        "type": {
+          "name": "LowCardinality",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "String"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "timestamp",
+        "type": {
+          "name": "DateTime64",
+          "args": [
+            {
+              "kind": "literal",
+              "value": "9"
+            }
+          ]
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree",
+      "args": []
+    },
+    "primaryKey": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "timestamp"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "type"
+        ]
+      }
+    ],
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "timestamp"
+          ]
+        }
+      },
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "type"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "prd_bid_events_simple_no_partition"
+      }
+    },
+    "selectQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "functionCall",
+          "name": "arrayElement",
+          "args": [
+            {
+              "kind": "arrayLiteral",
+              "elements": [
+                {
+                  "kind": "literal",
+                  "type": "String",
+                  "value": "impression"
+                },
+                {
+                  "kind": "literal",
+                  "type": "String",
+                  "value": "start"
+                },
+                {
+                  "kind": "literal",
+                  "type": "String",
+                  "value": "firstQuartile"
+                },
+                {
+                  "kind": "literal",
+                  "type": "String",
+                  "value": "midpoint"
+                },
+                {
+                  "kind": "literal",
+                  "type": "String",
+                  "value": "thirdQuartile"
+                },
+                {
+                  "kind": "literal",
+                  "type": "String",
+                  "value": "complete"
+                },
+                {
+                  "kind": "literal",
+                  "type": "String",
+                  "value": "ad_request"
+                },
+                {
+                  "kind": "literal",
+                  "type": "String",
+                  "value": "random_value"
+                }
+              ],
+              "source": "[\n        'impression',\n        'start',\n        'firstQuartile',\n        'midpoint',\n        'thirdQuartile',\n        'complete',\n        'ad_request',\n        'random_value'\n    ]"
+            },
+            {
+              "kind": "binaryExpr",
+              "op": "+",
+              "left": {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "1"
+              },
+              "right": {
+                "kind": "binaryExpr",
+                "op": "%",
+                "left": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "number"
+                  ]
+                },
+                "right": {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "8"
+                },
+                "parenthesized": true
+              }
+            }
+          ]
+        },
+        {
+          "kind": "functionCall",
+          "name": "toDateTime64",
+          "args": [
+            {
+              "kind": "binaryExpr",
+              "op": "-",
+              "left": {
+                "kind": "binaryExpr",
+                "op": "-",
+                "left": {
+                  "kind": "binaryExpr",
+                  "op": "-",
+                  "left": {
+                    "kind": "literal",
+                    "type": "String",
+                    "value": "2025-11-19 14:26:52"
+                  },
+                  "right": {
+                    "kind": "functionCall",
+                    "name": "toIntervalDay",
+                    "args": [
+                      {
+                        "kind": "binaryExpr",
+                        "op": "%",
+                        "left": {
+                          "kind": "columnRef",
+                          "parts": [
+                            "number"
+                          ]
+                        },
+                        "right": {
+                          "kind": "literal",
+                          "type": "UInt64",
+                          "value": "30"
+                        }
+                      }
+                    ]
+                  }
+                },
+                "right": {
+                  "kind": "functionCall",
+                  "name": "toIntervalSecond",
+                  "args": [
+                    {
+                      "kind": "binaryExpr",
+                      "op": "%",
+                      "left": {
+                        "kind": "columnRef",
+                        "parts": [
+                          "number"
+                        ]
+                      },
+                      "right": {
+                        "kind": "literal",
+                        "type": "UInt64",
+                        "value": "86400"
+                      }
+                    }
+                  ]
+                }
+              },
+              "right": {
+                "kind": "functionCall",
+                "name": "toIntervalMillisecond",
+                "args": [
+                  {
+                    "kind": "binaryExpr",
+                    "op": "%",
+                    "left": {
+                      "kind": "columnRef",
+                      "parts": [
+                        "number"
+                      ]
+                    },
+                    "right": {
+                      "kind": "literal",
+                      "type": "UInt64",
+                      "value": "1000"
+                    }
+                  }
+                ]
+              }
+            },
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "9"
+            }
+          ]
+        }
+      ],
+      "from": {
+        "kind": "tableFunctionRef",
+        "name": "numbers",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "500000"
+          }
+        ]
+      }
+    }
+  },
+  {
     "kind": "select",
     "select": [
       {

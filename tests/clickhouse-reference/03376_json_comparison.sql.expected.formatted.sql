@@ -1,3 +1,5 @@
+SET enable_json_type = 1;
+
 SELECT
     '{}'::JSON AS j1,
     '{}'::JSON AS j2,
@@ -530,6 +532,15 @@ SELECT
     j1 = j2,
     j1 > j2;
 
+CREATE TABLE test
+(
+    json1 JSON(max_dynamic_paths = 2, a UInt32),
+    json2 JSON(max_dynamic_paths = 2, a UInt32)
+)
+ENGINE = Memory;
+
+INSERT INTO test;
+
 SELECT
     json1,
     json2,
@@ -538,3 +549,5 @@ SELECT
     json1 < json2,
     json1 > json2
 FROM test;
+
+DROP TABLE test;

@@ -1,3 +1,19 @@
+-- add_minmax_index_for_numeric_columns=0: Different plan
+DROP TABLE IF EXISTS test_table;
+
+CREATE TABLE test_table
+(
+    k UInt64
+)
+ENGINE = MergeTree
+ORDER BY k
+SETTINGS index_granularity = 8192, index_granularity_bytes = '10Mi', add_minmax_index_for_numeric_columns = 0;
+
+INSERT INTO test_table SELECT number
+FROM numbers(100000);
+
+SET enable_analyzer = 1;
+
 SELECT *
 FROM test_table
 WHERE k IN (100) = 1;
@@ -54,6 +70,7 @@ FROM test_table
 WHERE (((k NOT IN (99) = 1)
     AND (k IN (100) = 1))) = 1;
 
+-- we skip optimizing queries with toNullable(0 or 1) but lets make sure they still work
 SELECT *
 FROM test_table
 WHERE (k = 101) = toLowCardinality(toNullable(1));
@@ -136,3 +153,5 @@ FROM (
             OR (k IN (100) = 1))) = 1
     )
 WHERE like(`explain`, '%Granules: 1/%');
+
+DROP TABLE test_table;

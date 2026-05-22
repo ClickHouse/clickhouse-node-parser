@@ -17,6 +17,10 @@ FROM remote('127.0.0.{2,3}', `system`.one)
 LIMIT 1
 SETTINGS distributed_group_by_no_merge = 1;
 
+SET max_distributed_connections = 1;
+
+SET max_threads = 1;
+
 SELECT *
 FROM (
         SELECT
@@ -45,6 +49,13 @@ SELECT dummy AS d
 FROM remote('127.0.0.{2,3}', `system`.one)
 ORDER BY d ASC
 SETTINGS distributed_group_by_no_merge = 2;
+
+DROP TABLE IF EXISTS data_00184;
+
+CREATE TABLE data_00184
+ENGINE = Memory() AS
+SELECT *
+FROM numbers(2);
 
 SELECT number
 FROM remote('127.0.0.{2,3}', currentDatabase(), data_00184)
@@ -89,3 +100,5 @@ SETTINGS distributed_group_by_no_merge = 2;
 SELECT assumeNotNull(argMax(dummy, 1))
 FROM remote('127.1', `system`.one)
 SETTINGS distributed_group_by_no_merge = 2;
+
+DROP TABLE data_00184;

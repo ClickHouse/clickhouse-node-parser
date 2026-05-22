@@ -1,5 +1,14 @@
 [
   {
+    "kind": "system",
+    "body": "SYSTEM CLEAR QUERY CACHE",
+    "leadingComments": [
+      "-- Tags: no-parallel",
+      "-- Tag no-parallel: Messes with internal cache",
+      "-- Test for Bug 56258"
+    ]
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -133,6 +142,44 @@
     ]
   },
   {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "tab"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "tab"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "c",
+        "type": {
+          "name": "UInt64"
+        }
+      }
+    ],
+    "engine": {
+      "name": "Memory"
+    },
+    "asQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      ]
+    }
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -186,6 +233,453 @@
           "value": "1"
         }
       }
+    ]
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "tab"
+    }
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "tab"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "c",
+        "type": {
+          "name": "UInt64"
+        }
+      }
+    ],
+    "engine": {
+      "name": "Memory"
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "sum",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "c"
+            ]
+          }
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "tab"
+    },
+    "settings": [
+      {
+        "name": "read_overflow_mode",
+        "value": {
+          "kind": "literal",
+          "type": "String",
+          "value": "break"
+        }
+      },
+      {
+        "name": "use_query_cache",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ],
+    "trailingComments": [
+      "-- { serverError QUERY_CACHE_USED_WITH_NON_THROW_OVERFLOW_MODE }"
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "sum",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "c"
+            ]
+          }
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "tab"
+    },
+    "settings": [
+      {
+        "name": "read_overflow_mode_leaf",
+        "value": {
+          "kind": "literal",
+          "type": "String",
+          "value": "break"
+        }
+      },
+      {
+        "name": "use_query_cache",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ],
+    "trailingComments": [
+      "-- { serverError QUERY_CACHE_USED_WITH_NON_THROW_OVERFLOW_MODE }"
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "sum",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "c"
+            ]
+          }
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "tab"
+    },
+    "settings": [
+      {
+        "name": "group_by_overflow_mode",
+        "value": {
+          "kind": "literal",
+          "type": "String",
+          "value": "break"
+        }
+      },
+      {
+        "name": "use_query_cache",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ],
+    "trailingComments": [
+      "-- { serverError QUERY_CACHE_USED_WITH_NON_THROW_OVERFLOW_MODE }"
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "sum",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "c"
+            ]
+          }
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "tab"
+    },
+    "settings": [
+      {
+        "name": "sort_overflow_mode",
+        "value": {
+          "kind": "literal",
+          "type": "String",
+          "value": "break"
+        }
+      },
+      {
+        "name": "use_query_cache",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ],
+    "trailingComments": [
+      "-- { serverError QUERY_CACHE_USED_WITH_NON_THROW_OVERFLOW_MODE }"
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "sum",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "c"
+            ]
+          }
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "tab"
+    },
+    "settings": [
+      {
+        "name": "result_overflow_mode",
+        "value": {
+          "kind": "literal",
+          "type": "String",
+          "value": "break"
+        }
+      },
+      {
+        "name": "use_query_cache",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ],
+    "trailingComments": [
+      "-- { serverError QUERY_CACHE_USED_WITH_NON_THROW_OVERFLOW_MODE }"
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "sum",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "c"
+            ]
+          }
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "tab"
+    },
+    "settings": [
+      {
+        "name": "timeout_overflow_mode",
+        "value": {
+          "kind": "literal",
+          "type": "String",
+          "value": "break"
+        }
+      },
+      {
+        "name": "use_query_cache",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ],
+    "trailingComments": [
+      "-- { serverError QUERY_CACHE_USED_WITH_NON_THROW_OVERFLOW_MODE }"
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "sum",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "c"
+            ]
+          }
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "tab"
+    },
+    "settings": [
+      {
+        "name": "set_overflow_mode",
+        "value": {
+          "kind": "literal",
+          "type": "String",
+          "value": "break"
+        }
+      },
+      {
+        "name": "use_query_cache",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ],
+    "trailingComments": [
+      "-- { serverError QUERY_CACHE_USED_WITH_NON_THROW_OVERFLOW_MODE }"
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "sum",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "c"
+            ]
+          }
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "tab"
+    },
+    "settings": [
+      {
+        "name": "join_overflow_mode",
+        "value": {
+          "kind": "literal",
+          "type": "String",
+          "value": "break"
+        }
+      },
+      {
+        "name": "use_query_cache",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ],
+    "trailingComments": [
+      "-- { serverError QUERY_CACHE_USED_WITH_NON_THROW_OVERFLOW_MODE }"
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "sum",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "c"
+            ]
+          }
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "tab"
+    },
+    "settings": [
+      {
+        "name": "transfer_overflow_mode",
+        "value": {
+          "kind": "literal",
+          "type": "String",
+          "value": "break"
+        }
+      },
+      {
+        "name": "use_query_cache",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ],
+    "trailingComments": [
+      "-- { serverError QUERY_CACHE_USED_WITH_NON_THROW_OVERFLOW_MODE }"
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "sum",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "c"
+            ]
+          }
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "tab"
+    },
+    "settings": [
+      {
+        "name": "distinct_overflow_mode",
+        "value": {
+          "kind": "literal",
+          "type": "String",
+          "value": "break"
+        }
+      },
+      {
+        "name": "use_query_cache",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ],
+    "trailingComments": [
+      "-- { serverError QUERY_CACHE_USED_WITH_NON_THROW_OVERFLOW_MODE }"
     ]
   }
 ]

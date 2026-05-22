@@ -1,0 +1,116 @@
+[
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "data"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "data"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "key",
+        "type": {
+          "name": "Int"
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree",
+      "args": []
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "key"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "data"
+      }
+    }
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "param_part",
+        "value": {
+          "kind": "literal",
+          "type": "String",
+          "value": "all_1_1_0"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "system",
+    "body": "alter table data detach part {part:String}"
+  },
+  {
+    "kind": "system",
+    "body": "alter table data attach part {part:String}"
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "param_part",
+        "value": {
+          "kind": "literal",
+          "type": "String",
+          "value": "all_2_2_0"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "system",
+    "body": "alter table data drop detached part {part:String} settings allow_drop_detached=1"
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "data"
+      }
+    }
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "param_part",
+        "value": {
+          "kind": "literal",
+          "type": "String",
+          "value": "all_3_3_0"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "system",
+    "body": "alter table data drop part {part:String}"
+  }
+]

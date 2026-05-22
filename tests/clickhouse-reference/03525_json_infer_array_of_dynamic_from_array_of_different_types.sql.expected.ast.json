@@ -1,5 +1,41 @@
 [
   {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "enable_analyzer",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "describe",
+    "target": {
+      "kind": "function",
+      "func": {
+        "kind": "tableFunctionRef",
+        "name": "format",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "JSONEachRow"
+            ]
+          },
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": "{\"a\" : [42, \"hello\", [1, 2, 3]]}"
+          }
+        ]
+      }
+    }
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -52,7 +88,7 @@
       }
     ],
     "from": {
-      "kind": "tableFunction",
+      "kind": "tableFunctionRef",
       "name": "format",
       "args": [
         {
@@ -70,73 +106,26 @@
     }
   },
   {
-    "kind": "select",
-    "select": [
-      {
-        "kind": "columnRef",
-        "parts": [
-          "a"
-        ]
-      },
-      {
-        "kind": "functionCall",
-        "name": "toTypeName",
+    "kind": "describe",
+    "target": {
+      "kind": "function",
+      "func": {
+        "kind": "tableFunctionRef",
+        "name": "format",
         "args": [
           {
             "kind": "columnRef",
             "parts": [
-              "a"
+              "JSONEachRow"
             ]
-          }
-        ]
-      },
-      {
-        "kind": "functionCall",
-        "name": "arrayMap",
-        "args": [
-          {
-            "kind": "lambdaExpr",
-            "params": [
-              "x"
-            ],
-            "body": {
-              "kind": "functionCall",
-              "name": "dynamicType",
-              "args": [
-                {
-                  "kind": "columnRef",
-                  "parts": [
-                    "x"
-                  ]
-                }
-              ]
-            }
           },
           {
-            "kind": "columnRef",
-            "parts": [
-              "a"
-            ]
+            "kind": "literal",
+            "type": "String",
+            "value": "{\"a\" : [42, \"hello\"]}"
           }
         ]
       }
-    ],
-    "from": {
-      "kind": "tableFunction",
-      "name": "format",
-      "args": [
-        {
-          "kind": "columnRef",
-          "parts": [
-            "JSONEachRow"
-          ]
-        },
-        {
-          "kind": "literal",
-          "type": "String",
-          "value": "{\"a\" : [42, \"hello\"]}"
-        }
-      ]
     }
   },
   {
@@ -192,7 +181,100 @@
       }
     ],
     "from": {
-      "kind": "tableFunction",
+      "kind": "tableFunctionRef",
+      "name": "format",
+      "args": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "JSONEachRow"
+          ]
+        },
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "{\"a\" : [42, \"hello\"]}"
+        }
+      ]
+    }
+  },
+  {
+    "kind": "describe",
+    "target": {
+      "kind": "function",
+      "func": {
+        "kind": "tableFunctionRef",
+        "name": "format",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "JSONEachRow"
+            ]
+          },
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": "{\"a\" : [42, \"hello\", {\"b\" : 42}]}"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "a"
+        ]
+      },
+      {
+        "kind": "functionCall",
+        "name": "toTypeName",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "a"
+            ]
+          }
+        ]
+      },
+      {
+        "kind": "functionCall",
+        "name": "arrayMap",
+        "args": [
+          {
+            "kind": "lambdaExpr",
+            "params": [
+              "x"
+            ],
+            "body": {
+              "kind": "functionCall",
+              "name": "dynamicType",
+              "args": [
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "x"
+                  ]
+                }
+              ]
+            }
+          },
+          {
+            "kind": "columnRef",
+            "parts": [
+              "a"
+            ]
+          }
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableFunctionRef",
       "name": "format",
       "args": [
         {

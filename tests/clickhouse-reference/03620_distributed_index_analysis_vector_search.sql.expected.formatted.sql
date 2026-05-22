@@ -1,3 +1,27 @@
+-- Tags: no-fasttest
+SET allow_experimental_parallel_reading_from_replicas = 0;
+
+SET enable_analyzer = 1;
+
+DROP TABLE IF EXISTS dist_vec;
+
+CREATE TABLE dist_vec
+(
+    id UInt32,
+    vec Array(Float32),
+    INDEX idx_vec vec TYPE vector_similarity('hnsw', 'L2Distance', 2)
+)
+ENGINE = MergeTree
+ORDER BY id
+SETTINGS index_granularity = 8, distributed_index_analysis_min_parts_to_activate = 0, distributed_index_analysis_min_indexes_size_to_activate = 10;
+
+SYSTEM STOP MERGES dist_vec;
+
+INSERT INTO dist_vec SELECT
+    number,
+    [number/100, number/100]
+FROM numbers(100);
+
 SELECT *
 FROM dist_vec
 ORDER BY L2Distance(vec, [0.3, 0.3]) ASC
@@ -19,6 +43,9 @@ SETTINGS
     max_parallel_replicas = 3,
     cluster_for_parallel_replicas = 'parallel_replicas';
 
+-- Common from 03620_distributed_index_analysis.sql
+SYSTEM flush logs query_log;
+
 SELECT format('distributed_index_analysis={}, DistributedIndexAnalysisMicroseconds>0={}, DistributedIndexAnalysisMissingParts={}, DistributedIndexAnalysisScheduledReplicas={}, DistributedIndexAnalysisFailedReplicas>0={}', `Settings`['distributed_index_analysis'], ProfileEvents['DistributedIndexAnalysisMicroseconds'] > 0, ProfileEvents['DistributedIndexAnalysisMissingParts'], ProfileEvents['DistributedIndexAnalysisScheduledReplicas'], ProfileEvents['DistributedIndexAnalysisFailedReplicas'] > 0)
 FROM `system`.query_log
 WHERE current_database = currentDatabase()
@@ -30,6 +57,7 @@ WHERE current_database = currentDatabase()
     AND endsWith(log_comment, concat('-', currentDatabase()))
 ORDER BY event_time_microseconds ASC;
 
+-- Presence of this metric confirms vector index was used after index analysis
 SELECT sum(ProfileEvents['USearchSearchCount']) > 0
 FROM `system`.query_log
 WHERE initial_query_id = (

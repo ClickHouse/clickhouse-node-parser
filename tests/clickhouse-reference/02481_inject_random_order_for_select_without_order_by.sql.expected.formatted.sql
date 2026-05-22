@@ -1,3 +1,10 @@
+-- A test for setting `inject_random_order_for_select_without_order_by`
+-- The setting is disabled by default, enable it for the test.
+SET inject_random_order_for_select_without_order_by = 1;
+
+-- Works only with enabled analyzer
+SET enable_analyzer = 1;
+
 SELECT count()
 FROM (
         EXPLAIN PLAN
@@ -25,3 +32,6 @@ FROM (
         FROM numbers(5)
     )
 WHERE like(`explain`, '%Sorting%');
+
+-- Now disable the setting
+SET inject_random_order_for_select_without_order_by = 0;

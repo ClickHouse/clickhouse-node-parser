@@ -18,6 +18,16 @@ SELECT arrayMin([[3], [1], [2]]);
 
 SELECT arrayMax([[3], [1], [2]]);
 
+DROP TABLE IF EXISTS test_aggregation;
+
+CREATE TABLE test_aggregation
+(
+    x Array(Int)
+)
+ENGINE = TinyLog;
+
+INSERT INTO test_aggregation;
+
 SELECT arrayMin(x)
 FROM test_aggregation;
 
@@ -29,6 +39,42 @@ FROM test_aggregation;
 
 SELECT arrayAvg(x)
 FROM test_aggregation;
+
+DROP TABLE test_aggregation;
+
+CREATE TABLE test_aggregation
+(
+    x Array(Decimal64(8))
+)
+ENGINE = TinyLog;
+
+WITH ['2023-04-05 00:25:23', '2023-04-05 00:25:24']::Array(DateTime) AS dt
+
+SELECT
+    arrayMax(dt),
+    arrayMin(dt),
+    arrayDifference(dt);
+
+WITH ['2023-04-05 00:25:23.123', '2023-04-05 00:25:24.124']::Array(DateTime64(3)) AS dt
+
+SELECT
+    arrayMax(dt),
+    arrayMin(dt),
+    arrayDifference(dt);
+
+WITH ['2023-04-05', '2023-04-06']::Array(Date) AS d
+
+SELECT
+    arrayMax(d),
+    arrayMin(d),
+    arrayDifference(d);
+
+WITH ['2023-04-05', '2023-04-06']::Array(Date32) AS d
+
+SELECT
+    arrayMax(d),
+    arrayMin(d),
+    arrayDifference(d);
 
 SELECT
     toTypeName(arrayMin([toInt8(0)])),

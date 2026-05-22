@@ -1,24 +1,51 @@
 [
   {
-    "kind": "select",
-    "select": [
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "row_limits_test"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "set",
+    "settings": [
       {
-        "kind": "functionCall",
-        "name": "count",
-        "args": []
-      }
-    ],
-    "from": {
-      "kind": "tableFunction",
-      "name": "numbers",
-      "args": [
-        {
+        "name": "max_block_size",
+        "value": {
           "kind": "literal",
           "type": "UInt64",
-          "value": "30"
+          "value": "10"
         }
-      ]
-    }
+      }
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "max_rows_to_read",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "20"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "read_overflow_mode",
+        "value": {
+          "kind": "literal",
+          "type": "String",
+          "value": "throw"
+        }
+      }
+    ]
   },
   {
     "kind": "select",
@@ -30,7 +57,31 @@
       }
     ],
     "from": {
-      "kind": "tableFunction",
+      "kind": "tableFunctionRef",
+      "name": "numbers",
+      "args": [
+        {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "30"
+        }
+      ]
+    },
+    "trailingComments": [
+      "-- { serverError TOO_MANY_ROWS }"
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "count",
+        "args": []
+      }
+    ],
+    "from": {
+      "kind": "tableFunctionRef",
       "name": "numbers",
       "args": [
         {
@@ -51,7 +102,7 @@
       }
     ],
     "from": {
-      "kind": "tableFunction",
+      "kind": "tableFunctionRef",
       "name": "numbers",
       "args": [
         {
@@ -72,7 +123,7 @@
       }
     ],
     "from": {
-      "kind": "tableFunction",
+      "kind": "tableFunctionRef",
       "name": "numbers",
       "args": [
         {
@@ -81,7 +132,10 @@
           "value": "21"
         }
       ]
-    }
+    },
+    "trailingComments": [
+      "-- { serverError TOO_MANY_ROWS }"
+    ]
   },
   {
     "kind": "select",
@@ -91,7 +145,7 @@
       }
     ],
     "from": {
-      "kind": "tableFunction",
+      "kind": "tableFunctionRef",
       "name": "numbers",
       "args": [
         {
@@ -100,7 +154,26 @@
           "value": "30"
         }
       ]
-    }
+    },
+    "leadingComments": [
+      "-- check early exception if the estimated number of rows is high"
+    ],
+    "trailingComments": [
+      "-- { serverError TOO_MANY_ROWS }"
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "read_overflow_mode",
+        "value": {
+          "kind": "literal",
+          "type": "String",
+          "value": "break"
+        }
+      }
+    ]
   },
   {
     "kind": "select",
@@ -112,7 +185,7 @@
       }
     ],
     "from": {
-      "kind": "tableFunction",
+      "kind": "tableFunctionRef",
       "name": "numbers",
       "args": [
         {
@@ -133,7 +206,7 @@
       }
     ],
     "from": {
-      "kind": "tableFunction",
+      "kind": "tableFunctionRef",
       "name": "numbers",
       "args": [
         {
@@ -143,6 +216,289 @@
         }
       ]
     }
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "max_block_size",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "11"
+        }
+      }
+    ],
+    "leadingComments": [
+      "-- the same for uneven block sizes"
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "max_block_size",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "9"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "row_limits_fail_fast"
+    },
+    "ifExists": true,
+    "leadingComments": [
+      "-- When reaching row limits, make sure we don't do a large amount of range scans and continue",
+      "-- processing all parts when we don't need to. For instance, we create 3 parts below with 10,000 rows in each",
+      "-- and we have a row limit <= 1000, we shouldn't exceed this value when max_threads = 1.",
+      "-- (process_part in MergeTreeDataSelectExecutor uses a thread pool the size of max_threads to read data,",
+      "-- so we can exceed it slightly if max_threads > 1, but we'll still prevent a lot of scans and part processing)"
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "row_limits_fail_fast"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "key",
+        "type": {
+          "name": "UInt64"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "value",
+        "type": {
+          "name": "String"
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree",
+      "args": []
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "key"
+          ]
+        }
+      }
+    ],
+    "settings": [
+      {
+        "name": "index_granularity",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "100"
+        }
+      }
+    ],
+    "settingsAfterOrderBy": true
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "max_rows_to_read",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      }
+    ],
+    "trailingComments": [
+      "-- so we don't hit row limits when populating data"
+    ]
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "row_limits_fail_fast"
+      }
+    },
+    "selectQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "number"
+          ]
+        },
+        {
+          "kind": "functionCall",
+          "name": "toString",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "number"
+              ]
+            }
+          ]
+        }
+      ],
+      "from": {
+        "kind": "tableFunctionRef",
+        "name": "numbers",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "10000"
+          }
+        ]
+      }
+    },
+    "leadingComments": [
+      "-- Insert multiple parts with significant data. Multiple parts is important because row limit checks",
+      "-- are checked per part when determining what ranges need to be read for the query."
+    ]
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "row_limits_fail_fast"
+      }
+    },
+    "selectQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "binaryExpr",
+          "op": "+",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "number"
+            ]
+          },
+          "right": {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "10000"
+          }
+        },
+        {
+          "kind": "functionCall",
+          "name": "toString",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "number"
+              ]
+            }
+          ]
+        }
+      ],
+      "from": {
+        "kind": "tableFunctionRef",
+        "name": "numbers",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "10000"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "row_limits_fail_fast"
+      }
+    },
+    "selectQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "binaryExpr",
+          "op": "+",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "number"
+            ]
+          },
+          "right": {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "20000"
+          }
+        },
+        {
+          "kind": "functionCall",
+          "name": "toString",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "number"
+              ]
+            }
+          ]
+        }
+      ],
+      "from": {
+        "kind": "tableFunctionRef",
+        "name": "numbers",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "10000"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "kind": "system",
+    "body": "SYSTEM STOP MERGES row_limits_fail_fast",
+    "leadingComments": [
+      "-- to keep the number of parts predictable"
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "max_rows_to_read",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1000"
+        }
+      }
+    ]
   },
   {
     "kind": "select",
@@ -171,7 +527,13 @@
         "type": "UInt64",
         "value": "500000"
       }
-    }
+    },
+    "leadingComments": [
+      "-- Should fail fast during PK filtering - query selects more rows than limit"
+    ],
+    "trailingComments": [
+      "-- { serverError TOO_MANY_ROWS }"
+    ]
   },
   {
     "kind": "select",
@@ -254,7 +616,26 @@
           ]
         }
       ]
-    }
+    },
+    "leadingComments": [
+      "-- Test with specific key ranges"
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "max_rows_to_read",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "100"
+        }
+      }
+    ],
+    "leadingComments": [
+      "-- Test explicit scan to verify fail-fast during data reading"
+    ]
   },
   {
     "kind": "select",
@@ -282,7 +663,26 @@
         "value": "200"
       }
     },
-    "format": "Null"
+    "format": "Null",
+    "trailingComments": [
+      "-- { serverError TOO_MANY_ROWS }"
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "max_rows_to_read",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "150"
+        }
+      }
+    ],
+    "leadingComments": [
+      "-- Test with selective filter - needs at least 1 granule"
+    ]
   },
   {
     "kind": "select",
@@ -336,6 +736,90 @@
     }
   },
   {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "max_rows_to_read_leaf",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1000"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "read_overflow_mode_leaf",
+        "value": {
+          "kind": "literal",
+          "type": "String",
+          "value": "throw"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "max_rows_to_read",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "600"
+        }
+      }
+    ],
+    "leadingComments": [
+      "-- Reset and test break mode still works and we fail fast"
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "max_rows_to_read_leaf",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "max_threads",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "4"
+        }
+      }
+    ],
+    "leadingComments": [
+      "-- Test fail-fast with multiple threads"
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "max_rows_to_read",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "500"
+        }
+      }
+    ]
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -362,7 +846,10 @@
         "type": "UInt64",
         "value": "100000"
       }
-    }
+    },
+    "trailingComments": [
+      "-- { serverError TOO_MANY_ROWS }"
+    ]
   },
   {
     "kind": "select",
@@ -391,6 +878,17 @@
         "type": "UInt64",
         "value": "400"
       }
+    },
+    "leadingComments": [
+      "-- But should succeed when actual filtered result is small"
+    ]
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "row_limits_fail_fast"
     }
   }
 ]

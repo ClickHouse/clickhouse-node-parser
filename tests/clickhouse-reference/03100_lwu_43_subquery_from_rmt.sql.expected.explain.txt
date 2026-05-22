@@ -1,3 +1,49 @@
+DropQuery  lightweight_test (children 1)
+ Identifier lightweight_test
+
+DropQuery  keys (children 1)
+ Identifier keys
+
+CreateQuery lightweight_test (children 3)
+ Identifier lightweight_test
+ Columns definition (children 1)
+  ExpressionList (children 3)
+   ColumnDeclaration ts (children 1)
+    DataType DateTime
+   ColumnDeclaration value (children 1)
+    DataType String
+   ColumnDeclaration key (children 1)
+    DataType String
+ Storage definition (children 4)
+  Function ReplicatedMergeTree (children 1)
+   ExpressionList (children 2)
+    Literal '/clickhouse/tables/{database}/lightweight_test'
+    Literal '1'
+  Function toYYYYMMDD (children 1)
+   ExpressionList (children 1)
+    Identifier ts
+  Identifier key
+  Set
+
+CreateQuery keys (children 3)
+ Identifier keys
+ Columns definition (children 1)
+  ExpressionList (children 1)
+   ColumnDeclaration key (children 1)
+    DataType String
+ Storage definition (children 2)
+  Function ReplicatedMergeTree (children 1)
+   ExpressionList (children 2)
+    Literal '/clickhouse/tables/{database}/keys'
+    Literal '1'
+  Identifier key
+
+InsertQuery   (children 1)
+ Identifier lightweight_test
+
+InsertQuery   (children 1)
+ Identifier keys
+
 SelectWithUnionQuery (children 1)
  ExpressionList (children 1)
   SelectQuery (children 3)
@@ -11,3 +57,22 @@ SelectWithUnionQuery (children 1)
    ExpressionList (children 1)
     OrderByElement (children 1)
      Identifier key
+
+UpdateQuery  lightweight_test (children 3)
+ Identifier lightweight_test
+ Function in (children 1)
+  ExpressionList (children 2)
+   Identifier key
+   Subquery (children 1)
+    SelectWithUnionQuery (children 1)
+     ExpressionList (children 1)
+      SelectQuery (children 2)
+       ExpressionList (children 1)
+        Identifier key
+       TablesInSelectQuery (children 1)
+        TablesInSelectQueryElement (children 1)
+         TableExpression (children 1)
+          TableIdentifier keys
+ ExpressionList (children 1)
+  Assignment value (children 1)
+   Literal 'UPDATED-1'

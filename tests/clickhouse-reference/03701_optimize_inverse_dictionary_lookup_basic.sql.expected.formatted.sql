@@ -1,3 +1,49 @@
+-- Tags: no-replicated-database, no-parallel-replicas
+-- no-parallel, no-parallel-replicas: Dictionary is not created in parallel replicas.
+SET enable_analyzer = 1;
+
+SET optimize_inverse_dictionary_lookup = 1;
+
+SET optimize_or_like_chain = 0;
+
+DROP DICTIONARY IF EXISTS colors;
+
+DROP TABLE IF EXISTS ref_colors;
+
+CREATE TABLE ref_colors
+(
+    id UInt64,
+    name String,
+    n UInt64
+)
+ENGINE = MergeTree
+ORDER BY id;
+
+INSERT INTO ref_colors;
+
+CREATE DICTIONARY colors
+(
+    id UInt64,
+    name String,
+    n UInt64
+)
+PRIMARY KEY id
+SOURCE(clickhouse(TABLE 'ref_colors'))
+LIFETIME(0)
+LAYOUT(HASHED());
+
+DROP TABLE IF EXISTS t;
+
+CREATE TABLE t
+(
+    color_id UInt64,
+    payload String
+)
+ENGINE = MergeTree
+ORDER BY color_id;
+
+INSERT INTO t;
+
 SELECT
     color_id,
     payload
@@ -244,13 +290,109 @@ FROM t
 WHERE dictGetString('colors', 'name', color_id) = payload
 ORDER BY color_id ASC;
 
+-- Validation of attribute name
+CREATE DICTIONARY dict
+(
+    c0 UInt128
+)
+PRIMARY KEY (c0)
+SOURCE(null())
+LIFETIME(0)
+LAYOUT(FLAT());
+
 SELECT
     *,
     dictGetUInt16('dict', 'c0', t1.c0) = true
-FROM dict AS t1;
+FROM dict AS t1; -- { serverError BAD_ARGUMENTS }
+
+DROP TABLE IF EXISTS t__fuzz_0;
+
+CREATE TABLE t__fuzz_0
+(
+    color_id UInt64,
+    payload String
+)
+ENGINE = MergeTree
+ORDER BY color_id;
+
+CREATE DICTIONARY colors
+(
+    color_id UInt64,
+    payload String
+)
+PRIMARY KEY color_id
+SOURCE(clickhouse(TABLE 't__fuzz_0'))
+LIFETIME(0)
+LAYOUT(HASHED());
 
 SELECT equals(materialize(9), CAST('red' AS Nullable(String)) = dictGetString('colors', 'payload', color_id))
 FROM t__fuzz_0;
+
+SET allow_suspicious_low_cardinality_types = 1;
+
+DROP DICTIONARY IF EXISTS dictionary_all;
+
+DROP TABLE IF EXISTS ref_table_all;
+
+DROP TABLE IF EXISTS tab__fuzz_24;
+
+CREATE TABLE tab__fuzz_24
+(
+    id LowCardinality(UInt16),
+    payload LowCardinality(Nullable(Int8))
+)
+ENGINE = MergeTree
+ORDER BY id;
+
+INSERT INTO tab__fuzz_24;
+
+CREATE TABLE ref_table_all
+(
+    id UInt64,
+    name String,
+    i8 String,
+    i16 String,
+    i32 String,
+    i64 String,
+    u8 String,
+    u16 String,
+    u32 String,
+    u64 String,
+    f32 String,
+    f64 String,
+    d String,
+    dt String,
+    uid String,
+    ip4 String,
+    ip6 String
+)
+ENGINE = MergeTree
+ORDER BY id;
+
+CREATE DICTIONARY dictionary_all
+(
+    id UInt64,
+    name String,
+    i8 String,
+    i16 String,
+    i32 String,
+    i64 String,
+    u8 String,
+    u16 String,
+    u32 String,
+    u64 String,
+    f32 String,
+    f64 String,
+    d String,
+    dt String,
+    uid String,
+    ip4 String,
+    ip6 String
+)
+PRIMARY KEY id
+SOURCE(clickhouse(TABLE 'ref_table_all'))
+LIFETIME(MIN 0 MAX 0)
+LAYOUT(HASHED());
 
 SELECT DISTINCT
     13,

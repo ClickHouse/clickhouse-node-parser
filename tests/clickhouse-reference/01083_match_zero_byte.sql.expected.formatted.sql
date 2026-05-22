@@ -1,3 +1,5 @@
+-- Tags: no-fasttest
+-- no-fasttest: Requires vectorscan
 SELECT match('a key="v" ', 'key="(.*?)"');
 
 SELECT match(materialize('a key="v" '), 'key="(.*?)"');
@@ -15,12 +17,14 @@ SELECT
     length(haystack),
     extract(haystack, 'key="(.*?)"') AS needle;
 
+-- works, result = v
 SELECT
     concat(unhex('00'), ' key="v" ') AS haystack,
     length(haystack),
     extract(haystack, 'key="(.*?)"') AS needle;
 
+-- before fix: returns nothing (zero-byte in the begining of haystack)
 SELECT
     number AS char_code,
     extract(concat(char(char_code), ' key="v" ') AS haystack, 'key="(.*?)"') AS needle
-FROM numbers(256);
+FROM numbers(256); -- every other chars codes (except of zero byte) works ok

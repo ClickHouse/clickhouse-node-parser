@@ -1,5 +1,93 @@
 [
   {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "test_alter_atomic"
+    },
+    "ifExists": true,
+    "leadingComments": [
+      "-- Tags: no-replicated-database",
+      "-- Test for issue #70678: ALTER UPDATE with RENAME unexpected behavior",
+      "-- If the ALTER statement is atomic, both UPDATE and RENAME should either",
+      "-- succeed together or fail together.",
+      "-- The fix rejects UPDATE + RENAME on the same column early to ensure atomicity."
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "test_alter_atomic"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "c0",
+        "type": {
+          "name": "Int32"
+        }
+      }
+    ],
+    "engine": {
+      "name": "Memory"
+    },
+    "leadingComments": [
+      "-- Test 1: Memory engine - UPDATE + RENAME on same column should be rejected"
+    ]
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "test_alter_atomic"
+      }
+    }
+  },
+  {
+    "kind": "alter",
+    "table": {
+      "kind": "tableRef",
+      "table": "test_alter_atomic"
+    },
+    "commands": [
+      {
+        "kind": "alterCommand",
+        "commandType": "UPDATE",
+        "assignments": [
+          {
+            "column": "c0",
+            "expr": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "1"
+            }
+          }
+        ],
+        "where": {
+          "kind": "literal",
+          "type": "Bool",
+          "value": "1"
+        }
+      },
+      {
+        "kind": "alterCommand",
+        "commandType": "RENAME_COLUMN",
+        "oldName": "c0",
+        "newName": "c1"
+      }
+    ],
+    "leadingComments": [
+      "-- This should fail early with a clear error, without making any changes"
+    ],
+    "trailingComments": [
+      "-- { serverError BAD_ARGUMENTS }"
+    ]
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -9,7 +97,10 @@
     "from": {
       "kind": "tableRef",
       "table": "test_alter_atomic"
-    }
+    },
+    "leadingComments": [
+      "-- Verify the column still has its original name (c0) since the ALTER was rejected"
+    ]
   },
   {
     "kind": "select",
@@ -64,6 +155,19 @@
     }
   },
   {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "test_alter_atomic"
+      }
+    },
+    "leadingComments": [
+      "-- The INSERT should succeed since atomicity is preserved"
+    ]
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -86,6 +190,63 @@
         "direction": "ASC"
       }
     ]
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "test_alter_atomic"
+    }
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "test_alter_atomic"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "key",
+        "type": {
+          "name": "Int32"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "c0",
+        "type": {
+          "name": "Int32"
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "key"
+          ]
+        }
+      }
+    ],
+    "leadingComments": [
+      "-- Test 2: MergeTree engine - same behavior expected"
+    ]
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "test_alter_atomic"
+      }
+    }
   },
   {
     "kind": "select",
@@ -149,7 +310,20 @@
         },
         "direction": "ASC"
       }
+    ],
+    "leadingComments": [
+      "-- Verify column still has original name"
     ]
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "test_alter_atomic"
+      }
+    }
   },
   {
     "kind": "select",
@@ -176,6 +350,139 @@
     ]
   },
   {
+    "kind": "alter",
+    "table": {
+      "kind": "tableRef",
+      "table": "test_alter_atomic"
+    },
+    "commands": [
+      {
+        "kind": "alterCommand",
+        "commandType": "DELETE",
+        "where": {
+          "kind": "binaryExpr",
+          "op": "=",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "c0"
+            ]
+          },
+          "right": {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "0"
+          }
+        }
+      },
+      {
+        "kind": "alterCommand",
+        "commandType": "RENAME_COLUMN",
+        "oldName": "c0",
+        "newName": "c1"
+      }
+    ],
+    "leadingComments": [
+      "-- This should fail early with a clear error"
+    ],
+    "trailingComments": [
+      "-- { serverError BAD_ARGUMENTS }"
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "test_alter_atomic"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "key",
+        "type": {
+          "name": "Int32"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "c0",
+        "type": {
+          "name": "Int32"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "c1",
+        "type": {
+          "name": "Int32"
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "key"
+          ]
+        }
+      }
+    ],
+    "leadingComments": [
+      "-- Test 4: Verify UPDATE + RENAME on DIFFERENT columns works fine"
+    ]
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "test_alter_atomic"
+      }
+    }
+  },
+  {
+    "kind": "alter",
+    "table": {
+      "kind": "tableRef",
+      "table": "test_alter_atomic"
+    },
+    "commands": [
+      {
+        "kind": "alterCommand",
+        "commandType": "UPDATE",
+        "assignments": [
+          {
+            "column": "c0",
+            "expr": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "100"
+            }
+          }
+        ],
+        "where": {
+          "kind": "literal",
+          "type": "Bool",
+          "value": "1"
+        }
+      },
+      {
+        "kind": "alterCommand",
+        "commandType": "RENAME_COLUMN",
+        "oldName": "c1",
+        "newName": "c2"
+      }
+    ],
+    "leadingComments": [
+      "-- UPDATE c0, RENAME c1 should work because they are different columns"
+    ]
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -191,7 +498,7 @@
       }
     ],
     "from": {
-      "kind": "tableFunction",
+      "kind": "tableFunctionRef",
       "name": "numbers",
       "args": [
         {
@@ -211,7 +518,10 @@
         }
       }
     ],
-    "format": "Null"
+    "format": "Null",
+    "leadingComments": [
+      "-- Wait for mutation to complete"
+    ]
   },
   {
     "kind": "select",
@@ -239,5 +549,52 @@
       "kind": "tableRef",
       "table": "test_alter_atomic"
     }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "test_alter_atomic"
+      }
+    }
+  },
+  {
+    "kind": "alter",
+    "table": {
+      "kind": "tableRef",
+      "table": "test_alter_atomic"
+    },
+    "commands": [
+      {
+        "kind": "alterCommand",
+        "commandType": "DELETE",
+        "where": {
+          "kind": "binaryExpr",
+          "op": "=",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "c0"
+            ]
+          },
+          "right": {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "10"
+          }
+        }
+      },
+      {
+        "kind": "alterCommand",
+        "commandType": "RENAME_COLUMN",
+        "oldName": "c1",
+        "newName": "c2"
+      }
+    ],
+    "leadingComments": [
+      "-- DELETE based on c0, RENAME c1 should work because they are different columns"
+    ]
   }
 ]

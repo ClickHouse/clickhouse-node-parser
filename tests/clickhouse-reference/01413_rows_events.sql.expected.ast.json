@@ -1,5 +1,80 @@
 [
   {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "rows_events_test"
+    },
+    "ifExists": true,
+    "leadingComments": [
+      "-- Tags: no-async-insert",
+      "-- The correct profile event appears in the secondary query with query_kind: AsyncInsertFlush",
+      "-- add_minmax_index_for_numeric_columns=0: We are checking exact rows read, and that number will be different if we have an index on v"
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "rows_events_test"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "k",
+        "type": {
+          "name": "UInt32"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "v",
+        "type": {
+          "name": "UInt32"
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "k"
+          ]
+        }
+      }
+    ],
+    "settings": [
+      {
+        "name": "add_minmax_index_for_numeric_columns",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      }
+    ],
+    "settingsAfterOrderBy": true
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "rows_events_test"
+      }
+    }
+  },
+  {
+    "kind": "system",
+    "body": "SYSTEM FLUSH LOGS query_log"
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -221,6 +296,16 @@
     }
   },
   {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "rows_events_test"
+      }
+    }
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -229,7 +314,10 @@
     ],
     "from": {
       "kind": "tableRef",
-      "table": "rows_events_test"
+      "table": "rows_events_test",
+      "leadingComments": [
+        "/* test 01413, query 3 */"
+      ]
     },
     "where": {
       "kind": "binaryExpr",
@@ -466,6 +554,14 @@
         "type": "UInt64",
         "value": "1"
       }
+    }
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "rows_events_test"
     }
   }
 ]

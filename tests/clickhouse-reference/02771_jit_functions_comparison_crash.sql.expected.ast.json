@@ -1,0 +1,421 @@
+[
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "compile_expressions",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "min_count_to_compile_expression",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "test_table_1"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "test_table_1"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "pkey",
+        "type": {
+          "name": "UInt32"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "c8",
+        "type": {
+          "name": "UInt32"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "c9",
+        "type": {
+          "name": "String"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "c10",
+        "type": {
+          "name": "Float32"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "c11",
+        "type": {
+          "name": "String"
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "pkey"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "test_table_2"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "test_table_2"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "vkey",
+        "type": {
+          "name": "UInt32"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "pkey",
+        "type": {
+          "name": "UInt32"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "c15",
+        "type": {
+          "name": "UInt32"
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "vkey"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "with": [
+      {
+        "kind": "cteSubquery",
+        "name": "test_cte",
+        "query": {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "alias",
+              "expr": {
+                "kind": "columnRef",
+                "parts": [
+                  "ref_10",
+                  "c11"
+                ]
+              },
+              "alias": "c_2_c2350_1"
+            },
+            {
+              "kind": "alias",
+              "expr": {
+                "kind": "columnRef",
+                "parts": [
+                  "ref_9",
+                  "c9"
+                ]
+              },
+              "alias": "c_2_c2351_2"
+            }
+          ],
+          "from": {
+            "left": {
+              "left": {
+                "kind": "tableRef",
+                "table": "test_table_1",
+                "alias": "ref_9"
+              },
+              "kind": "joinExpr",
+              "joinType": "RIGHT",
+              "right": {
+                "kind": "tableRef",
+                "table": "test_table_1",
+                "alias": "ref_10"
+              },
+              "constraint": {
+                "kind": "on",
+                "expr": {
+                  "kind": "binaryExpr",
+                  "op": "=",
+                  "left": {
+                    "kind": "columnRef",
+                    "parts": [
+                      "ref_9",
+                      "c11"
+                    ]
+                  },
+                  "right": {
+                    "kind": "columnRef",
+                    "parts": [
+                      "ref_10",
+                      "c9"
+                    ]
+                  },
+                  "parenthesized": true
+                }
+              }
+            },
+            "kind": "joinExpr",
+            "joinType": "INNER",
+            "right": {
+              "kind": "tableRef",
+              "table": "test_table_2",
+              "alias": "ref_11"
+            },
+            "constraint": {
+              "kind": "on",
+              "expr": {
+                "kind": "binaryExpr",
+                "op": "=",
+                "left": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "ref_10",
+                    "c8"
+                  ]
+                },
+                "right": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "ref_11",
+                    "vkey"
+                  ]
+                },
+                "parenthesized": true
+              }
+            }
+          },
+          "where": {
+            "kind": "functionCall",
+            "name": "and",
+            "args": [
+              {
+                "kind": "functionCall",
+                "name": "greaterOrEquals",
+                "args": [
+                  {
+                    "kind": "binaryExpr",
+                    "op": "+",
+                    "left": {
+                      "kind": "columnRef",
+                      "parts": [
+                        "ref_10",
+                        "pkey"
+                      ]
+                    },
+                    "right": {
+                      "kind": "columnRef",
+                      "parts": [
+                        "ref_11",
+                        "pkey"
+                      ]
+                    },
+                    "parenthesized": true
+                  },
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "ref_11",
+                      "vkey"
+                    ]
+                  }
+                ]
+              },
+              {
+                "kind": "functionCall",
+                "name": "lessOrEquals",
+                "args": [
+                  {
+                    "kind": "binaryExpr",
+                    "op": "+",
+                    "left": {
+                      "kind": "columnRef",
+                      "parts": [
+                        "ref_10",
+                        "pkey"
+                      ]
+                    },
+                    "right": {
+                      "kind": "columnRef",
+                      "parts": [
+                        "ref_11",
+                        "pkey"
+                      ]
+                    },
+                    "parenthesized": true
+                  },
+                  {
+                    "kind": "functionCall",
+                    "name": "multiIf",
+                    "args": [
+                      {
+                        "kind": "binaryExpr",
+                        "op": ">=",
+                        "left": {
+                          "kind": "literal",
+                          "type": "Float64",
+                          "value": "-30.87"
+                        },
+                        "right": {
+                          "kind": "columnRef",
+                          "parts": [
+                            "ref_9",
+                            "c10"
+                          ]
+                        },
+                        "parenthesized": true
+                      },
+                      {
+                        "kind": "columnRef",
+                        "parts": [
+                          "ref_11",
+                          "c15"
+                        ]
+                      },
+                      {
+                        "kind": "columnRef",
+                        "parts": [
+                          "ref_11",
+                          "pkey"
+                        ]
+                      }
+                    ],
+                    "parenthesized": true
+                  }
+                ]
+              }
+            ],
+            "parenthesized": true
+          }
+        }
+      }
+    ],
+    "select": [
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "ref_13",
+            "c_2_c2350_1"
+          ]
+        },
+        "alias": "c_2_c2357_3"
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "test_cte",
+      "alias": "ref_13"
+    },
+    "where": {
+      "kind": "inExpr",
+      "negated": false,
+      "expr": {
+        "kind": "columnRef",
+        "parts": [
+          "ref_13",
+          "c_2_c2351_2"
+        ],
+        "parenthesized": true
+      },
+      "values": {
+        "kind": "subqueryExpr",
+        "query": {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "alias",
+              "expr": {
+                "kind": "columnRef",
+                "parts": [
+                  "ref_14",
+                  "c_2_c2351_2"
+                ]
+              },
+              "alias": "c_5_c2352_0"
+            }
+          ],
+          "from": {
+            "kind": "tableRef",
+            "table": "test_cte",
+            "alias": "ref_14"
+          }
+        }
+      }
+    }
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "test_table_1"
+    }
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "test_table_2"
+    }
+  }
+]

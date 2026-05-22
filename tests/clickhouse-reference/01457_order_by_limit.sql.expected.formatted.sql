@@ -1,3 +1,15 @@
+DROP TABLE IF EXISTS order_by_another;
+
+CREATE TABLE order_by_another
+(
+    a Nullable(UInt64),
+    b UInt64
+)
+ENGINE = MergeTree
+ORDER BY tuple();
+
+INSERT INTO order_by_another;
+
 SELECT
     a,
     b

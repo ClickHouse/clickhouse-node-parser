@@ -1,3 +1,72 @@
+DropQuery  table_for_synchronous_mutations1 (children 1)
+ Identifier table_for_synchronous_mutations1
+
+DropQuery  table_for_synchronous_mutations2 (children 1)
+ Identifier table_for_synchronous_mutations2
+
+CreateQuery table_for_synchronous_mutations1 (children 3)
+ Identifier table_for_synchronous_mutations1
+ Columns definition (children 1)
+  ExpressionList (children 2)
+   ColumnDeclaration k (children 1)
+    DataType UInt32
+   ColumnDeclaration v1 (children 1)
+    DataType UInt64
+ Storage definition (children 3)
+  Function ReplicatedMergeTree (children 1)
+   ExpressionList (children 2)
+    Literal '/clickhouse/tables/{database}/test_01049/table_for_synchronous_mutations'
+    Literal '1'
+  Identifier k
+  Set
+
+CreateQuery table_for_synchronous_mutations2 (children 3)
+ Identifier table_for_synchronous_mutations2
+ Columns definition (children 1)
+  ExpressionList (children 2)
+   ColumnDeclaration k (children 1)
+    DataType UInt32
+   ColumnDeclaration v1 (children 1)
+    DataType UInt64
+ Storage definition (children 3)
+  Function ReplicatedMergeTree (children 1)
+   ExpressionList (children 2)
+    Literal '/clickhouse/tables/{database}/test_01049/table_for_synchronous_mutations'
+    Literal '2'
+  Identifier k
+  Set
+
+InsertQuery   (children 2)
+ Identifier table_for_synchronous_mutations1
+ SelectWithUnionQuery (children 1)
+  ExpressionList (children 1)
+   SelectQuery (children 2)
+    ExpressionList (children 2)
+     Identifier number
+     Identifier number
+    TablesInSelectQuery (children 1)
+     TablesInSelectQueryElement (children 1)
+      TableExpression (children 1)
+       Function numbers (children 1)
+        ExpressionList (children 1)
+         Literal UInt64_100000
+
+SYSTEM query (children 1)
+ Identifier table_for_synchronous_mutations2
+
+AlterQuery  table_for_synchronous_mutations1 (children 3)
+ ExpressionList (children 1)
+  AlterCommand UPDATE (children 2)
+   Literal UInt64_1
+   ExpressionList (children 1)
+    Assignment v1 (children 1)
+     Function plus (children 1)
+      ExpressionList (children 2)
+       Identifier v1
+       Literal UInt64_1
+ Identifier table_for_synchronous_mutations1
+ Set
+
 SelectWithUnionQuery (children 1)
  ExpressionList (children 1)
   SelectQuery (children 3)
@@ -18,6 +87,50 @@ SelectWithUnionQuery (children 1)
       ExpressionList (children 2)
        Identifier table
        Literal 'table_for_synchronous_mutations1'
+
+DropQuery  table_for_synchronous_mutations_no_replication (children 1)
+ Identifier table_for_synchronous_mutations_no_replication
+
+CreateQuery table_for_synchronous_mutations_no_replication (children 3)
+ Identifier table_for_synchronous_mutations_no_replication
+ Columns definition (children 1)
+  ExpressionList (children 2)
+   ColumnDeclaration k (children 1)
+    DataType UInt32
+   ColumnDeclaration v1 (children 1)
+    DataType UInt64
+ Storage definition (children 3)
+  Function MergeTree
+  Identifier k
+  Set
+
+InsertQuery   (children 2)
+ Identifier table_for_synchronous_mutations_no_replication
+ SelectWithUnionQuery (children 1)
+  ExpressionList (children 1)
+   SelectQuery (children 2)
+    ExpressionList (children 2)
+     Identifier number
+     Identifier number
+    TablesInSelectQuery (children 1)
+     TablesInSelectQueryElement (children 1)
+      TableExpression (children 1)
+       Function numbers (children 1)
+        ExpressionList (children 1)
+         Literal UInt64_100000
+
+AlterQuery  table_for_synchronous_mutations_no_replication (children 3)
+ ExpressionList (children 1)
+  AlterCommand UPDATE (children 2)
+   Literal UInt64_1
+   ExpressionList (children 1)
+    Assignment v1 (children 1)
+     Function plus (children 1)
+      ExpressionList (children 2)
+       Identifier v1
+       Literal UInt64_1
+ Identifier table_for_synchronous_mutations_no_replication
+ Set
 
 SelectWithUnionQuery (children 1)
  ExpressionList (children 1)

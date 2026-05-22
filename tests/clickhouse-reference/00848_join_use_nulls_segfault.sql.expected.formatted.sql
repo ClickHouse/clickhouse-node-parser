@@ -1,3 +1,36 @@
+SET any_join_distinct_right_table_keys = 1;
+
+SET enable_analyzer = 1;
+
+DROP TABLE IF EXISTS t1_00848;
+
+DROP TABLE IF EXISTS t2_00848;
+
+DROP TABLE IF EXISTS t3_00848;
+
+CREATE TABLE t1_00848
+(
+    id String
+)
+ENGINE = Memory;
+
+CREATE TABLE t2_00848
+(
+    id Nullable(String)
+)
+ENGINE = Memory;
+
+CREATE TABLE t3_00848
+(
+    id Nullable(String),
+    not_id Nullable(String)
+)
+ENGINE = Memory;
+
+INSERT INTO t1_00848;
+
+INSERT INTO t3_00848 (id);
+
 SELECT
     *,
     toTypeName(t1.id),
@@ -186,6 +219,8 @@ ORDER BY
     t1.id ASC,
     t3.id ASC;
 
+SET join_use_nulls = 1;
+
 SELECT
     *,
     toTypeName(t1.id),
@@ -263,3 +298,9 @@ FROM
 LEFT JOIN t3_00848 AS t3
     USING (id)
 ORDER BY id ASC;
+
+DROP TABLE t1_00848;
+
+DROP TABLE t2_00848;
+
+DROP TABLE t3_00848;

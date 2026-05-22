@@ -1,3 +1,58 @@
+CreateQuery ts_raw_data (children 3)
+ Identifier ts_raw_data
+ Columns definition (children 1)
+  ExpressionList (children 2)
+   ColumnDeclaration timestamp (children 1)
+    DataType DateTime64 (children 1)
+     ExpressionList (children 2)
+      Literal UInt64_3
+      Literal 'UTC'
+   ColumnDeclaration value (children 1)
+    DataType Float64
+ Storage definition (children 2)
+  Function MergeTree (children 1)
+   ExpressionList
+  Identifier timestamp
+
+InsertQuery   (children 2)
+ Identifier ts_raw_data
+ SelectWithUnionQuery (children 1)
+  ExpressionList (children 1)
+   SelectQuery (children 2)
+    ExpressionList (children 2)
+     Function CAST (alias timestamp) (children 1)
+      ExpressionList (children 2)
+       Function tupleElement (children 1)
+        ExpressionList (children 2)
+         Function arrayJoin (children 1)
+          ExpressionList (children 1)
+           Asterisk
+         Literal UInt64_1
+       Literal 'DateTime64(3, \'UTC\')'
+     Function tupleElement (alias value) (children 1)
+      ExpressionList (children 2)
+       Function arrayJoin (children 1)
+        ExpressionList (children 1)
+         Asterisk
+       Literal UInt64_2
+    TablesInSelectQuery (children 1)
+     TablesInSelectQueryElement (children 1)
+      TableExpression (children 1)
+       Subquery (children 1)
+        SelectWithUnionQuery (children 1)
+         ExpressionList (children 1)
+          SelectQuery (children 1)
+           ExpressionList (children 1)
+            Function array (children 1)
+             ExpressionList (children 7)
+              Literal Tuple_(Float64_1734955421.02, UInt64_0)
+              Literal Tuple_(Float64_1734955436.02, UInt64_5)
+              Literal Tuple_(Float64_1734955451.02, UInt64_3)
+              Literal Tuple_(Float64_1734955451.02, UInt64_2)
+              Literal Tuple_(Float64_1734955435.02, UInt64_4)
+              Literal Tuple_(Float64_1734955436.02, UInt64_3)
+              Literal Tuple_(Float64_1734955511.02, UInt64_5)
+
 SelectWithUnionQuery (children 1)
  ExpressionList (children 1)
   SelectQuery (children 2)
@@ -7,6 +62,8 @@ SelectWithUnionQuery (children 1)
     TablesInSelectQueryElement (children 1)
      TableExpression (children 1)
       TableIdentifier ts_raw_data
+
+Set
 
 SelectWithUnionQuery (children 1)
  ExpressionList (children 1)
@@ -21,3 +78,6 @@ SelectWithUnionQuery (children 1)
     TablesInSelectQueryElement (children 1)
      TableExpression (children 1)
       TableIdentifier ts_raw_data
+
+DropQuery  ts_raw_data (children 1)
+ Identifier ts_raw_data

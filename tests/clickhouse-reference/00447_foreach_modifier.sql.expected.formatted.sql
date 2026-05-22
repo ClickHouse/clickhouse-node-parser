@@ -1,3 +1,12 @@
+CREATE TABLE IF NOT EXISTS data
+(
+    sketch Array(Int8)
+)
+ENGINE = MergeTree
+ORDER BY tuple();
+
+INSERT INTO data;
+
 SELECT max(sketch)
 FROM data;
 
@@ -6,6 +15,8 @@ FROM data;
 
 SELECT maxForEach(sketch)
 FROM data;
+
+DROP TABLE data;
 
 SELECT
     k,

@@ -1,3 +1,7 @@
+SET joined_subquery_requires_alias = 0;
+
+SET enable_analyzer = 1;
+
 SELECT
     ax,
     c
@@ -71,6 +75,29 @@ INNER JOIN `system`.one AS s2
 INNER JOIN `system`.one AS s3
     ON s1.c = s3.dummy
 ARRAY JOIN ax;
+
+SET joined_subquery_requires_alias = 1;
+
+DROP TABLE IF EXISTS f;
+
+DROP TABLE IF EXISTS d;
+
+CREATE TABLE f
+(
+    d_ids Array(Int64)
+)
+ENGINE = TinyLog;
+
+INSERT INTO f;
+
+CREATE TABLE d
+(
+    id Int64,
+    name String
+)
+ENGINE = TinyLog;
+
+INSERT INTO d;
 
 SELECT
     d_ids,

@@ -1,3 +1,6 @@
+-- add_minmax_index_for_numeric_columns=0: Different plan
+SET use_statistics = 0;
+
 SELECT *
 FROM (
         SELECT
@@ -46,6 +49,20 @@ FROM (
             s2
     )
 WHERE s2 = '2';
+
+DROP TABLE IF EXISTS Test;
+
+CREATE TABLE Test
+ENGINE = MergeTree()
+PRIMARY KEY (String1, String2)
+ORDER BY (String1, String2)
+SETTINGS index_granularity = 8192, index_granularity_bytes = '10Mi', add_minmax_index_for_numeric_columns = 0 AS
+SELECT
+    concat('String1_', toString(number)) AS String1,
+    concat('String2_', toString(number)) AS String2,
+    concat('String3_', toString(number)) AS String3,
+    concat('String4_', toString(number % 4)) AS String4
+FROM numbers(1);
 
 SELECT *
 FROM (
@@ -97,6 +114,19 @@ WHERE a = 1
     OR x != 1))
     AND x = 1;
 
+DROP TABLE IF EXISTS t;
+
+CREATE TABLE t
+(
+    a UInt8
+)
+ENGINE = MergeTree
+ORDER BY a
+SETTINGS index_granularity = 8192, index_granularity_bytes = '10Mi';
+
+INSERT INTO t SELECT *
+FROM numbers(2);
+
 SELECT a
 FROM
     t AS t1
@@ -104,6 +134,32 @@ INNER JOIN t AS t2
     ON t1.a = t2.a
 WHERE t1.a;
 
+DROP TABLE IF EXISTS t1;
+
+DROP TABLE IF EXISTS t2;
+
+CREATE TABLE t1
+(
+    id Int64,
+    create_time DateTime
+)
+ENGINE = MergeTree
+ORDER BY id
+SETTINGS index_granularity = 8192, index_granularity_bytes = '10Mi', add_minmax_index_for_numeric_columns = 0;
+
+CREATE TABLE t2
+(
+    delete_time DateTime
+)
+ENGINE = MergeTree
+ORDER BY delete_time
+SETTINGS index_granularity = 8192, index_granularity_bytes = '10Mi', add_minmax_index_for_numeric_columns = 0;
+
+INSERT INTO t1;
+
+INSERT INTO t2;
+
+-- expected to get row (1, 3, 1, 4) from JOIN and empty result from the query
 SELECT *
 FROM
     (

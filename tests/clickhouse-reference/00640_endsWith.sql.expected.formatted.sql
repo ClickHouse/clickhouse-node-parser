@@ -16,6 +16,18 @@ SELECT endsWith('123', '32');
 
 SELECT endsWith('123', '');
 
+DROP TABLE IF EXISTS endsWith_test;
+
+CREATE TABLE endsWith_test
+(
+    S1 String,
+    S2 String,
+    S3 FixedString(2)
+)
+ENGINE = Memory;
+
+INSERT INTO endsWith_test;
+
 SELECT COUNT()
 FROM endsWith_test
 WHERE endsWith(S1, S1);
@@ -28,4 +40,6 @@ SELECT COUNT()
 FROM endsWith_test
 WHERE endsWith(S2, S3);
 
-SELECT endsWith([], 'str');
+SELECT endsWith([], 'str'); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
+
+DROP TABLE endsWith_test;

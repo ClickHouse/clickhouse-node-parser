@@ -1,0 +1,119 @@
+Set
+
+Set
+
+Set
+
+Set
+
+Set
+
+Set
+
+Set
+
+Set
+
+DropQuery  proj_agg_02343 (children 1)
+ Identifier proj_agg_02343
+
+CreateQuery proj_agg_02343 (children 3)
+ Identifier proj_agg_02343
+ Columns definition (children 2)
+  ExpressionList (children 4)
+   ColumnDeclaration k1 (children 1)
+    DataType UInt32
+   ColumnDeclaration k2 (children 1)
+    DataType UInt32
+   ColumnDeclaration k3 (children 1)
+    DataType UInt32
+   ColumnDeclaration value (children 1)
+    DataType UInt32
+  ExpressionList (children 1)
+   Projection (children 1)
+    ProjectionSelectQuery (children 2)
+     ExpressionList (children 4)
+      Identifier k1
+      Identifier k2
+      Identifier k3
+      Function sum (children 1)
+       ExpressionList (children 1)
+        Identifier value
+     ExpressionList (children 3)
+      Identifier k1
+      Identifier k2
+      Identifier k3
+ Storage definition (children 2)
+  Function MergeTree
+  Function tuple (children 1)
+   ExpressionList
+
+InsertQuery   (children 2)
+ Identifier proj_agg_02343
+ SelectWithUnionQuery (children 1)
+  ExpressionList (children 1)
+   SelectQuery (children 2)
+    ExpressionList (children 4)
+     Literal UInt64_1
+     Function modulo (children 1)
+      ExpressionList (children 2)
+       Identifier number
+       Literal UInt64_2
+     Function modulo (children 1)
+      ExpressionList (children 2)
+       Identifier number
+       Literal UInt64_4
+     Identifier number
+    TablesInSelectQuery (children 1)
+     TablesInSelectQueryElement (children 1)
+      TableExpression (children 1)
+       Function numbers (children 1)
+        ExpressionList (children 1)
+         Literal UInt64_100000
+
+OptimizeQuery  proj_agg_02343_final (children 1)
+ Identifier proj_agg_02343
+
+CreateQuery t (children 3)
+ Identifier t
+ Columns definition (children 1)
+  ExpressionList (children 1)
+   ColumnDeclaration a (children 1)
+    DataType UInt64
+ Storage definition (children 2)
+  Function MergeTree
+  Identifier a
+
+SYSTEM query (children 1)
+ Identifier t
+
+CreateQuery dist_t (children 2)
+ Identifier dist_t
+ Storage definition (children 1)
+  Function Distributed (children 1)
+   ExpressionList (children 4)
+    Identifier test_cluster_two_shards
+    Function currentDatabase (children 1)
+     ExpressionList
+    Identifier t
+    Function modulo (children 1)
+     ExpressionList (children 2)
+      Identifier a
+      Literal UInt64_2
+
+SYSTEM query (children 1)
+ Identifier dist_t
+
+InsertQuery   (children 2)
+ Identifier dist_t
+ SelectWithUnionQuery (children 1)
+  ExpressionList (children 1)
+   SelectQuery (children 2)
+    ExpressionList (children 1)
+     Identifier number
+    TablesInSelectQuery (children 1)
+     TablesInSelectQueryElement (children 1)
+      TableExpression (children 1)
+       Function numbers_mt (children 1)
+        ExpressionList (children 1)
+         Literal UInt64_10

@@ -1,16 +1,17 @@
-SELECT extractAllGroupsVertical();
+-- error cases
+SELECT extractAllGroupsVertical(); --{serverError NUMBER_OF_ARGUMENTS_DOESNT_MATCH} not enough arguments
 
-SELECT extractAllGroupsVertical('hello');
+SELECT extractAllGroupsVertical('hello'); --{serverError NUMBER_OF_ARGUMENTS_DOESNT_MATCH} not enough arguments
 
-SELECT extractAllGroupsVertical('hello', 123);
+SELECT extractAllGroupsVertical('hello', 123); --{serverError ILLEGAL_TYPE_OF_ARGUMENT} invalid argument type
 
-SELECT extractAllGroupsVertical(123, 'world');
+SELECT extractAllGroupsVertical(123, 'world'); --{serverError ILLEGAL_TYPE_OF_ARGUMENT}  invalid argument type
 
-SELECT extractAllGroupsVertical('hello world', '(((');
+SELECT extractAllGroupsVertical('hello world', '((('); --{serverError CANNOT_COMPILE_REGEXP}  invalid re
 
-SELECT extractAllGroupsVertical('hello world', materialize('\\w+'));
+SELECT extractAllGroupsVertical('hello world', materialize('\\w+')); --{serverError ILLEGAL_COLUMN} non-const needle
 
-SELECT extractAllGroupsVertical('hello world', '\\w+');
+SELECT extractAllGroupsVertical('hello world', '\\w+'); -- { serverError BAD_ARGUMENTS } 0 groups
 
 SELECT extractAllGroupsVertical('hello world', '(\\w+)');
 

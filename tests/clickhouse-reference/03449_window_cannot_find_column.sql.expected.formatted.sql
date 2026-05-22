@@ -1,0 +1,30 @@
+DROP TABLE IF EXISTS t0;
+
+DROP TABLE IF EXISTS t3;
+
+CREATE TABLE t0
+(
+    vkey UInt32,
+    PRIMARY KEY(vkey)
+)
+ENGINE = MergeTree;
+
+CREATE VIEW t3
+AS
+SELECT DISTINCT ref_0.vkey AS c_2_c16_0
+FROM t0 AS ref_0;
+
+INSERT INTO t0;
+
+WITH cte_4 AS (
+    SELECT rank() AS c_2_c2398_0
+    FROM t3 AS ref_15
+    WINDOW w0 AS (PARTITION BY ref_15.c_2_c16_0 ORDER BY ref_15.c_2_c16_0 DESC)
+)
+
+SELECT DISTINCT ref_39.c_2_c2398_0 AS c_9_c2479_0
+FROM cte_4 AS ref_39;
+
+DROP TABLE t3;
+
+DROP TABLE t0;

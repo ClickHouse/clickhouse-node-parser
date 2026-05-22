@@ -1,0 +1,457 @@
+[
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "alter_sync",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "2"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "max_parallel_replicas",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "3"
+        }
+      },
+      {
+        "name": "cluster_for_parallel_replicas",
+        "value": {
+          "kind": "literal",
+          "type": "String",
+          "value": "test_cluster_one_shard_three_replicas_localhost"
+        }
+      },
+      {
+        "name": "parallel_replicas_for_non_replicated_merge_tree",
+        "value": {
+          "kind": "literal",
+          "type": "Bool",
+          "value": "1"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "t1"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "t1__fuzz_26"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "t1__fuzz_26"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "a",
+        "type": {
+          "name": "Nullable",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "Float64"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "b",
+        "type": {
+          "name": "Nullable",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "Float32"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "pk",
+        "type": {
+          "name": "Int64"
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "pk"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "t1"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "a",
+        "type": {
+          "name": "Float64"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "b",
+        "type": {
+          "name": "Int64"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "pk",
+        "type": {
+          "name": "String"
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree",
+      "args": []
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "pk"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "kind": "alter",
+    "table": {
+      "kind": "tableRef",
+      "table": "t1"
+    },
+    "commands": [
+      {
+        "kind": "alterCommand",
+        "commandType": "MODIFY_COLUMN",
+        "column": {
+          "kind": "columnDef",
+          "name": "a",
+          "type": {
+            "name": "Float64"
+          },
+          "ttl": {
+            "kind": "binaryExpr",
+            "op": "+",
+            "left": {
+              "kind": "functionCall",
+              "name": "toDateTime",
+              "args": [
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "b"
+                  ]
+                }
+              ]
+            },
+            "right": {
+              "kind": "functionCall",
+              "name": "toIntervalMonth",
+              "args": [
+                {
+                  "kind": "functionCall",
+                  "name": "viewExplain",
+                  "args": [
+                    {
+                      "kind": "literal",
+                      "type": "String",
+                      "value": "EXPLAIN"
+                    },
+                    {
+                      "kind": "literal",
+                      "type": "String",
+                      "value": "actions = 1"
+                    },
+                    {
+                      "kind": "subqueryExpr",
+                      "query": {
+                        "kind": "select",
+                        "select": [
+                          {
+                            "kind": "functionCall",
+                            "name": "toIntervalMonth",
+                            "args": [
+                              {
+                                "kind": "literal",
+                                "type": "UInt64",
+                                "value": "1"
+                              }
+                            ]
+                          },
+                          {
+                            "kind": "literal",
+                            "type": "UInt64",
+                            "value": "2"
+                          }
+                        ],
+                        "from": {
+                          "kind": "tableRef",
+                          "table": "t1__fuzz_26"
+                        },
+                        "groupBy": {
+                          "kind": "expressions",
+                          "items": [
+                            {
+                              "kind": "functionCall",
+                              "name": "toFixedString",
+                              "args": [
+                                {
+                                  "kind": "literal",
+                                  "type": "String",
+                                  "value": "%Prewhere%"
+                                },
+                                {
+                                  "kind": "literal",
+                                  "type": "UInt64",
+                                  "value": "10"
+                                }
+                              ]
+                            },
+                            {
+                              "kind": "functionCall",
+                              "name": "toNullable",
+                              "args": [
+                                {
+                                  "kind": "literal",
+                                  "type": "UInt64",
+                                  "value": "12"
+                                }
+                              ]
+                            }
+                          ]
+                        },
+                        "withRollup": true
+                      }
+                    }
+                  ]
+                },
+                {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "1"
+                }
+              ]
+            }
+          }
+        },
+        "parenthesized": true
+      }
+    ],
+    "settings": [
+      {
+        "name": "allow_experimental_parallel_reading_from_replicas",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ],
+    "trailingComments": [
+      "-- { serverError UNKNOWN_FUNCTION }"
+    ]
+  },
+  {
+    "kind": "alter",
+    "table": {
+      "kind": "tableRef",
+      "table": "t1"
+    },
+    "commands": [
+      {
+        "kind": "alterCommand",
+        "commandType": "MODIFY_COLUMN",
+        "column": {
+          "kind": "columnDef",
+          "name": "a",
+          "type": {
+            "name": "Float64"
+          },
+          "ttl": {
+            "kind": "binaryExpr",
+            "op": "+",
+            "left": {
+              "kind": "functionCall",
+              "name": "toDateTime",
+              "args": [
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "b"
+                  ]
+                }
+              ]
+            },
+            "right": {
+              "kind": "functionCall",
+              "name": "toIntervalMonth",
+              "args": [
+                {
+                  "kind": "functionCall",
+                  "name": "viewExplain",
+                  "args": [
+                    {
+                      "kind": "literal",
+                      "type": "String",
+                      "value": "EXPLAIN"
+                    },
+                    {
+                      "kind": "literal",
+                      "type": "String",
+                      "value": "actions = 1"
+                    },
+                    {
+                      "kind": "subqueryExpr",
+                      "query": {
+                        "kind": "select",
+                        "select": [
+                          {
+                            "kind": "functionCall",
+                            "name": "toIntervalMonth",
+                            "args": [
+                              {
+                                "kind": "literal",
+                                "type": "UInt64",
+                                "value": "1"
+                              }
+                            ]
+                          },
+                          {
+                            "kind": "literal",
+                            "type": "UInt64",
+                            "value": "2"
+                          }
+                        ],
+                        "from": {
+                          "kind": "tableRef",
+                          "table": "t1__fuzz_26"
+                        },
+                        "groupBy": {
+                          "kind": "expressions",
+                          "items": [
+                            {
+                              "kind": "functionCall",
+                              "name": "toFixedString",
+                              "args": [
+                                {
+                                  "kind": "literal",
+                                  "type": "String",
+                                  "value": "%Prewhere%"
+                                },
+                                {
+                                  "kind": "literal",
+                                  "type": "UInt64",
+                                  "value": "10"
+                                }
+                              ]
+                            },
+                            {
+                              "kind": "functionCall",
+                              "name": "toNullable",
+                              "args": [
+                                {
+                                  "kind": "literal",
+                                  "type": "UInt64",
+                                  "value": "12"
+                                }
+                              ]
+                            }
+                          ]
+                        },
+                        "withRollup": true
+                      }
+                    }
+                  ]
+                },
+                {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "1"
+                }
+              ]
+            }
+          }
+        },
+        "parenthesized": true
+      }
+    ],
+    "settings": [
+      {
+        "name": "allow_experimental_parallel_reading_from_replicas",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      }
+    ],
+    "trailingComments": [
+      "-- { serverError UNKNOWN_FUNCTION }"
+    ]
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "t1"
+    }
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "t1__fuzz_26"
+    }
+  }
+]

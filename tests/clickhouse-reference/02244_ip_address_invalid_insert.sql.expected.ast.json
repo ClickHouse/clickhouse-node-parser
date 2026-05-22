@@ -1,5 +1,66 @@
 [
   {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "test_table_ipv4"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "test_table_ipv4"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "ip",
+        "type": {
+          "name": "String"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "ipv4",
+        "type": {
+          "name": "IPv4"
+        }
+      }
+    ],
+    "engine": {
+      "name": "TinyLog"
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "test_table_ipv4"
+      }
+    },
+    "trailingComments": [
+      "--{error CANNOT_PARSE_IPV4}"
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "input_format_ipv4_default_on_conversion_error",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -19,6 +80,109 @@
       "kind": "tableRef",
       "table": "test_table_ipv4"
     }
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "input_format_ipv4_default_on_conversion_error",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "test_table_ipv4"
+    }
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "test_table_ipv4_materialized"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "test_table_ipv4_materialized"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "ip",
+        "type": {
+          "name": "String"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "ipv6",
+        "type": {
+          "name": "IPv4"
+        },
+        "defaultKind": "MATERIALIZED",
+        "defaultExpr": {
+          "kind": "functionCall",
+          "name": "toIPv4",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "ip"
+              ]
+            }
+          ]
+        }
+      }
+    ],
+    "engine": {
+      "name": "TinyLog"
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "test_table_ipv4_materialized"
+      }
+    },
+    "columns": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "ip"
+        ]
+      }
+    ],
+    "trailingComments": [
+      "--{serverError CANNOT_PARSE_IPV4}"
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "cast_ipv4_ipv6_default_on_conversion_error",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
   },
   {
     "kind": "select",
@@ -42,6 +206,88 @@
     }
   },
   {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "cast_ipv4_ipv6_default_on_conversion_error",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "test_table_ipv4_materialized"
+    }
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "test_table_ipv6"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "test_table_ipv6"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "ip",
+        "type": {
+          "name": "String"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "ipv6",
+        "type": {
+          "name": "IPv6"
+        }
+      }
+    ],
+    "engine": {
+      "name": "TinyLog"
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "test_table_ipv6"
+      }
+    },
+    "trailingComments": [
+      "--{error CANNOT_PARSE_IPV6}"
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "input_format_ipv6_default_on_conversion_error",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -63,6 +309,96 @@
     }
   },
   {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "input_format_ipv6_default_on_conversion_error",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "test_table_ipv6"
+    }
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "test_table_ipv6_materialized"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "test_table_ipv6_materialized"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "ip",
+        "type": {
+          "name": "String"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "ipv6",
+        "type": {
+          "name": "IPv6"
+        },
+        "defaultKind": "MATERIALIZED",
+        "defaultExpr": {
+          "kind": "functionCall",
+          "name": "toIPv6",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "ip"
+              ]
+            }
+          ]
+        }
+      }
+    ],
+    "engine": {
+      "name": "TinyLog"
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "test_table_ipv6_materialized"
+      }
+    },
+    "columns": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "ip"
+        ]
+      }
+    ],
+    "trailingComments": [
+      "--{serverError CANNOT_PARSE_IPV6}"
+    ]
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -79,6 +415,14 @@
       }
     ],
     "from": {
+      "kind": "tableRef",
+      "table": "test_table_ipv6_materialized"
+    }
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
       "kind": "tableRef",
       "table": "test_table_ipv6_materialized"
     }

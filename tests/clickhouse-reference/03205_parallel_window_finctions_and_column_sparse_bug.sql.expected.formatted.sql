@@ -1,3 +1,19 @@
+CREATE TABLE t
+(
+    c Int32,
+    d Bool
+)
+ENGINE = MergeTree
+ORDER BY c;
+
+SYSTEM stop merges t;
+
+INSERT INTO t;
+
+INSERT INTO t;
+
+INSERT INTO t;
+
 SELECT
     d,
     c,
@@ -20,6 +36,26 @@ ORDER BY
     d ASC,
     c8 ASC
 SETTINGS max_threads = 2;
+
+DROP TABLE t;
+
+CREATE TABLE t
+(
+    c Int32 PRIMARY KEY,
+    s Bool,
+    w Float64
+)
+PRIMARY KEY c;
+
+INSERT INTO t;
+
+INSERT INTO t;
+
+INSERT INTO t;
+
+INSERT INTO t;
+
+INSERT INTO t;
 
 SELECT *
 FROM (

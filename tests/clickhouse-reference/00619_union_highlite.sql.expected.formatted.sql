@@ -1,3 +1,17 @@
+DROP TABLE IF EXISTS `union`;
+
+CREATE VIEW `union`
+AS
+SELECT 1 AS test
+UNION ALL
+SELECT 2;
+
 SELECT *
 FROM `union`
 ORDER BY test ASC;
+
+DETACH TABLE `union`;
+
+ATTACH TABLE `union`;
+
+DROP TABLE `union`;

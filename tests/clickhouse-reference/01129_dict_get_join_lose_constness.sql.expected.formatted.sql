@@ -1,3 +1,17 @@
+-- Tags: no-parallel
+DROP DICTIONARY IF EXISTS `system`.dict1;
+
+CREATE DICTIONARY IF NOT EXISTS `system`.dict1
+(
+    bytes_allocated UInt64,
+    element_count Int32,
+    loading_start_time DateTime
+)
+PRIMARY KEY bytes_allocated
+SOURCE(clickhouse(HOST 'localhost' PORT tcpPort() USER 'default' PASSWORD '' TABLE 'dictionaries' DB 'system'))
+LIFETIME(0)
+LAYOUT(HASHED());
+
 SELECT
     join_key,
     toTimeZone(dictGetDateTime('system.dict1', 'loading_start_time', toUInt64(dict_key)), 'UTC') AS datetime

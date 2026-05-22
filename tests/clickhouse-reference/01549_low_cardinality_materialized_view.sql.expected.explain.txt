@@ -1,3 +1,50 @@
+DropQuery  HASH_MV (children 1)
+ Identifier HASH_MV
+
+DropQuery  HASH_TEST_INSERT (children 1)
+ Identifier HASH_TEST_INSERT
+
+CreateQuery HASH_TEST_INSERT (children 3)
+ Identifier HASH_TEST_INSERT
+ Columns definition (children 1)
+  ExpressionList (children 1)
+   ColumnDeclaration STR_VAL (children 1)
+    DataType String
+ Storage definition (children 1)
+  Function Null
+
+CreateQuery HASH_MV (children 4)
+ Identifier HASH_MV
+ Columns definition (children 1)
+  ExpressionList (children 2)
+   ColumnDeclaration HASH_VAL (children 1)
+    DataType UInt64
+   ColumnDeclaration STR_VAL (children 1)
+    DataType LowCardinality (children 1)
+     ExpressionList (children 1)
+      DataType String
+ SelectWithUnionQuery (children 1)
+  ExpressionList (children 1)
+   SelectQuery (children 2)
+    ExpressionList (children 2)
+     Function xxHash64 (alias HASH_VAL) (children 1)
+      ExpressionList (children 1)
+       Identifier STR_VAL
+     Function toLowCardinality (alias STR_VAL) (children 1)
+      ExpressionList (children 1)
+       Identifier STR_VAL
+    TablesInSelectQuery (children 1)
+     TablesInSelectQueryElement (children 1)
+      TableExpression (children 1)
+       TableIdentifier HASH_TEST_INSERT
+ ViewTargets (children 1)
+  Storage definition (children 2)
+   Function ReplacingMergeTree
+   Identifier HASH_VAL
+
+InsertQuery   (children 1)
+ Identifier HASH_TEST_INSERT
+
 SelectWithUnionQuery (children 1)
  ExpressionList (children 1)
   SelectQuery (children 2)
@@ -7,3 +54,22 @@ SelectWithUnionQuery (children 1)
     TablesInSelectQueryElement (children 1)
      TableExpression (children 1)
       TableIdentifier HASH_MV
+
+DescribeQuery (children 1)
+ TableExpression (children 1)
+  Subquery (children 1)
+   SelectWithUnionQuery (children 1)
+    ExpressionList (children 1)
+     SelectQuery (children 2)
+      ExpressionList (children 1)
+       Asterisk
+      TablesInSelectQuery (children 1)
+       TablesInSelectQueryElement (children 1)
+        TableExpression (children 1)
+         TableIdentifier HASH_MV
+
+DropQuery  HASH_MV (children 1)
+ Identifier HASH_MV
+
+DropQuery  HASH_TEST_INSERT (children 1)
+ Identifier HASH_TEST_INSERT

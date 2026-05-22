@@ -1,3 +1,5 @@
+-- { echoOn }
+-- Tuples with NaN
 SELECT
     min((c1, c2)),
     max((c1, c2))
@@ -38,6 +40,7 @@ FROM values((-5, 0), (nan, 0.), (0., 0.), (5., 5.))
 ORDER BY t DESC
 LIMIT 1;
 
+-- Tuples with NULL
 SELECT
     min((c1, c2)),
     max((c1, c2))
@@ -78,6 +81,7 @@ FROM values((NULL, 0.), (0., 0.), (5., 5.), (NULL, 0.))
 ORDER BY t DESC
 LIMIT 1;
 
+-- Map with NULL
 SELECT
     min(map(0, c1)),
     max(map(0, c1))

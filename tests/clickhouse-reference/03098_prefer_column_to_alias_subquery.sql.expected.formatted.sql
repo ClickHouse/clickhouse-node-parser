@@ -1,3 +1,35 @@
+-- https://github.com/ClickHouse/ClickHouse/issues/47552
+DROP TABLE IF EXISTS clickhouse_alias_issue_1;
+
+DROP TABLE IF EXISTS clickhouse_alias_issue_2;
+
+CREATE TABLE clickhouse_alias_issue_1
+(
+    id bigint,
+    column_1 Nullable(Float32)
+)
+ENGINE = Memory;
+
+CREATE TABLE clickhouse_alias_issue_2
+(
+    id bigint,
+    column_2 Nullable(Float32)
+)
+ENGINE = Memory;
+
+SET enable_analyzer = 1;
+
+INSERT INTO clickhouse_alias_issue_1;
+
+INSERT INTO clickhouse_alias_issue_2;
+
+-- This query returns the expected result
+-- 300	\N	3
+-- 200	\N	2
+-- 100	\N	1
+-- \N	30	3
+-- \N	20	2
+-- \N	10	1
 SELECT *
 FROM (
         SELECT
@@ -19,6 +51,10 @@ ORDER BY `ALL` DESC;
 
 SELECT '-------------------------';
 
+-- This query also returns the expected result
+-- 300	30	3
+-- 200	20	2
+-- 100	10	1
 SELECT
     max(column_1) AS column_1,
     max(column_2) AS column_2,
@@ -43,6 +79,10 @@ GROUP BY id
 ORDER BY id DESC
 SETTINGS prefer_column_name_to_alias = 1;
 
+-- Expected result :
+-- 10	3
+-- 10	2
+-- 10	1
 SELECT
     column_1 / column_2,
     id
@@ -75,6 +115,8 @@ WHERE isNotNull(column_1)
     AND isNotNull(column_2)
 SETTINGS prefer_column_name_to_alias = 1;
 
+-- Without the setting, the expected result is the same
+-- but the actual result isn't wrong
 SELECT
     column_1 / column_2,
     id

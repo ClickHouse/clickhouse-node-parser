@@ -1,3 +1,4 @@
+-- Tags: no-fasttest
 SELECT round(geoToH3(toFloat64(1), toFloat64(0), arrayJoin([1,2])), 2);
 
 SELECT h3ToParent(641573946153969375, arrayJoin([1,2]));
@@ -12,7 +13,7 @@ SELECT
     NULL,
     toFloat64('-1'),
     -2147483648,
-    h3CellAreaM2(arrayJoin([9223372036854775807, 65535, NULL]));
+    h3CellAreaM2(arrayJoin([9223372036854775807, 65535, NULL])); -- { serverError INCORRECT_DATA }
 
 SELECT round(h3CellAreaRads2(arrayJoin([579205133326352383,589753847883235327,594082350283882495])), 2);
 
@@ -20,7 +21,7 @@ SELECT
     NULL,
     toFloat64('-1'),
     -2147483648,
-    h3CellAreaRads2(arrayJoin([9223372036854775807, 65535, NULL]));
+    h3CellAreaRads2(arrayJoin([9223372036854775807, 65535, NULL])); -- { serverError INCORRECT_DATA }
 
 SELECT h3GetResolution(arrayJoin([579205133326352383,589753847883235327,594082350283882495]));
 
@@ -29,6 +30,12 @@ SELECT round(h3EdgeAngle(arrayJoin([0,1,2])), 2);
 SELECT round(h3EdgeLengthM(arrayJoin([0,1,2])), 2);
 
 SELECT round(h3EdgeLengthKm(arrayJoin([0,1,2])), 2);
+
+WITH h3ToGeo(arrayJoin([579205133326352383,589753847883235327,594082350283882495])) AS p
+
+SELECT
+    round(p.1, 2),
+    round(p.2, 2);
 
 SELECT arrayMap(p -> (round(p.1, 2), round(p.2, 2)), h3ToGeoBoundary(arrayJoin([579205133326352383,589753847883235327,594082350283882495])));
 
@@ -64,6 +71,6 @@ SELECT h3NumHexagons(arrayJoin([1,2,3]));
 
 SELECT h3Line(arrayJoin([stringToH3('85283473fffffff')]), arrayJoin([stringToH3('8528342bfffffff')]));
 
-SELECT h3HexRing(arrayJoin([579205133326352383]), arrayJoin([toUInt16(1),toUInt16(2),toUInt16(3)]));
+SELECT h3HexRing(arrayJoin([579205133326352383]), arrayJoin([toUInt16(1),toUInt16(2),toUInt16(3)])); -- { serverError INCORRECT_DATA }
 
 SELECT h3HexRing(arrayJoin([581276613233082367]), arrayJoin([toUInt16(0),toUInt16(1),toUInt16(2)]));

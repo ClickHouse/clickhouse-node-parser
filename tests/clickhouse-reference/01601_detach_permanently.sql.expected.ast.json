@@ -1,5 +1,268 @@
 [
   {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "send_logs_level",
+        "value": {
+          "kind": "literal",
+          "type": "String",
+          "value": "fatal"
+        }
+      }
+    ],
+    "leadingComments": [
+      "-- Tags: no-parallel, log-engine"
+    ]
+  },
+  {
+    "kind": "drop",
+    "targetType": "DATABASE",
+    "table": {
+      "kind": "tableRef",
+      "table": "test1601_detach_permanently_atomic"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "createDatabase",
+    "name": "test1601_detach_permanently_atomic",
+    "engine": {
+      "name": "Atomic"
+    }
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "database": "test1601_detach_permanently_atomic",
+      "table": "test_name_reuse"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "number",
+        "type": {
+          "name": "UInt64"
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "functionCall",
+          "name": "tuple",
+          "args": []
+        }
+      }
+    ]
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "database": "test1601_detach_permanently_atomic",
+        "table": "test_name_reuse"
+      }
+    },
+    "selectQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "asterisk"
+        }
+      ],
+      "from": {
+        "kind": "tableFunctionRef",
+        "name": "numbers",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "100"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "kind": "detach",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "database": "test1601_detach_permanently_atomic",
+      "table": "test_name_reuse"
+    },
+    "permanently": true
+  },
+  {
+    "kind": "detach",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "database": "test1601_detach_permanently_atomic",
+      "table": "test_name_reuse"
+    },
+    "trailingComments": [
+      "-- { serverError UNKNOWN_TABLE }"
+    ]
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "database": "test1601_detach_permanently_atomic",
+      "table": "test_name_reuse"
+    },
+    "trailingComments": [
+      "-- { serverError UNKNOWN_TABLE }"
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "database": "test1601_detach_permanently_atomic",
+      "table": "test_name_rename_attempt"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "number",
+        "type": {
+          "name": "UInt64"
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "functionCall",
+          "name": "tuple",
+          "args": []
+        }
+      }
+    ]
+  },
+  {
+    "kind": "rename",
+    "targetType": "TABLE",
+    "pairs": [
+      {
+        "from": {
+          "kind": "tableRef",
+          "database": "test1601_detach_permanently_atomic",
+          "table": "test_name_rename_attempt"
+        },
+        "to": {
+          "kind": "tableRef",
+          "database": "test1601_detach_permanently_atomic",
+          "table": "test_name_reuse"
+        }
+      }
+    ],
+    "trailingComments": [
+      "-- { serverError TABLE_ALREADY_EXISTS }"
+    ]
+  },
+  {
+    "kind": "rename",
+    "targetType": "TABLE",
+    "pairs": [
+      {
+        "from": {
+          "kind": "tableRef",
+          "database": "test1601_detach_permanently_atomic",
+          "table": "test_name_rename_attempt"
+        },
+        "to": {
+          "kind": "tableRef",
+          "database": "test1601_detach_permanently_atomic",
+          "table": "test_name_reuse"
+        }
+      }
+    ],
+    "exchange": true,
+    "trailingComments": [
+      "-- { serverError UNKNOWN_TABLE }"
+    ]
+  },
+  {
+    "kind": "showCreate",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "database": "test1601_detach_permanently_atomic",
+      "table": "test_name_reuse"
+    },
+    "format": "Vertical"
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "database": "test1601_detach_permanently_atomic",
+      "table": "test_name_reuse"
+    },
+    "attach": true,
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "number",
+        "type": {
+          "name": "UInt64"
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "functionCall",
+          "name": "tuple",
+          "args": []
+        }
+      }
+    ],
+    "settings": [
+      {
+        "name": "index_granularity",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "8192"
+        }
+      }
+    ],
+    "settingsAfterOrderBy": true,
+    "leadingComments": [
+      "-- STD_EXCEPTION occured when running flaky test, the table directory's access right was removed. Refer `DatabaseCatalog::maybeRemoveDirectory`."
+    ],
+    "trailingComments": [
+      "-- { serverError TABLE_ALREADY_EXISTS, STD_EXCEPTION }"
+    ]
+  },
+  {
+    "kind": "attach",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "database": "test1601_detach_permanently_atomic",
+      "table": "test_name_reuse"
+    }
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -15,6 +278,24 @@
     }
   },
   {
+    "kind": "detach",
+    "targetType": "DATABASE",
+    "database": "test1601_detach_permanently_atomic"
+  },
+  {
+    "kind": "attach",
+    "targetType": "DATABASE",
+    "database": "test1601_detach_permanently_atomic"
+  },
+  {
+    "kind": "drop",
+    "targetType": "DATABASE",
+    "table": {
+      "kind": "tableRef",
+      "table": "test1601_detach_permanently_atomic"
+    }
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -22,6 +303,262 @@
         "type": "String",
         "value": "-----------------------"
       }
+    ]
+  },
+  {
+    "kind": "drop",
+    "targetType": "DATABASE",
+    "table": {
+      "kind": "tableRef",
+      "table": "test1601_detach_permanently_ordinary"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "allow_deprecated_database_ordinary",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createDatabase",
+    "name": "test1601_detach_permanently_ordinary",
+    "engine": {
+      "name": "Ordinary"
+    },
+    "leadingComments": [
+      "-- Creation of a database with Ordinary engine emits a warning."
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "database": "test1601_detach_permanently_ordinary",
+      "table": "test_name_reuse"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "number",
+        "type": {
+          "name": "UInt64"
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "functionCall",
+          "name": "tuple",
+          "args": []
+        }
+      }
+    ]
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "database": "test1601_detach_permanently_ordinary",
+        "table": "test_name_reuse"
+      }
+    },
+    "selectQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "asterisk"
+        }
+      ],
+      "from": {
+        "kind": "tableFunctionRef",
+        "name": "numbers",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "100"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "kind": "detach",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "database": "test1601_detach_permanently_ordinary",
+      "table": "test_name_reuse"
+    },
+    "permanently": true
+  },
+  {
+    "kind": "detach",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "database": "test1601_detach_permanently_ordinary",
+      "table": "test_name_reuse"
+    },
+    "trailingComments": [
+      "-- { serverError UNKNOWN_TABLE }"
+    ]
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "database": "test1601_detach_permanently_ordinary",
+      "table": "test_name_reuse"
+    },
+    "trailingComments": [
+      "-- { serverError UNKNOWN_TABLE }"
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "database": "test1601_detach_permanently_ordinary",
+      "table": "test_name_rename_attempt"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "number",
+        "type": {
+          "name": "UInt64"
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "functionCall",
+          "name": "tuple",
+          "args": []
+        }
+      }
+    ]
+  },
+  {
+    "kind": "rename",
+    "targetType": "TABLE",
+    "pairs": [
+      {
+        "from": {
+          "kind": "tableRef",
+          "database": "test1601_detach_permanently_ordinary",
+          "table": "test_name_rename_attempt"
+        },
+        "to": {
+          "kind": "tableRef",
+          "database": "test1601_detach_permanently_ordinary",
+          "table": "test_name_reuse"
+        }
+      }
+    ],
+    "trailingComments": [
+      "-- { serverError TABLE_ALREADY_EXISTS }"
+    ]
+  },
+  {
+    "kind": "showCreate",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "database": "test1601_detach_permanently_ordinary",
+      "table": "test_name_reuse"
+    },
+    "format": "Vertical"
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "database": "test1601_detach_permanently_ordinary",
+      "table": "test_name_reuse"
+    },
+    "attach": true,
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "number",
+        "type": {
+          "name": "UInt64"
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "functionCall",
+          "name": "tuple",
+          "args": []
+        }
+      }
+    ],
+    "settings": [
+      {
+        "name": "index_granularity",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "8192"
+        }
+      }
+    ],
+    "settingsAfterOrderBy": true
+  },
+  {
+    "kind": "attach",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "database": "test1601_detach_permanently_ordinary",
+      "table": "test_name_reuse"
+    }
+  },
+  {
+    "kind": "detach",
+    "targetType": "DATABASE",
+    "database": "test1601_detach_permanently_ordinary"
+  },
+  {
+    "kind": "attach",
+    "targetType": "DATABASE",
+    "database": "test1601_detach_permanently_ordinary"
+  },
+  {
+    "kind": "drop",
+    "targetType": "DATABASE",
+    "table": {
+      "kind": "tableRef",
+      "table": "test1601_detach_permanently_ordinary"
+    },
+    "trailingComments": [
+      "-- { serverError DATABASE_NOT_EMPTY }"
     ]
   }
 ]

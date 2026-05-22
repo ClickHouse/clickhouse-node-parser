@@ -1,3 +1,15 @@
+DROP TABLE IF EXISTS t_subcolumns_if;
+
+CREATE TABLE t_subcolumns_if
+(
+    id Nullable(Int64)
+)
+ENGINE = MergeTree
+ORDER BY tuple();
+
+INSERT INTO t_subcolumns_if SELECT number::Nullable(Int64) AS number
+FROM numbers(10000);
+
 SELECT sum(multiIf(isNotNull(id), 1, 0))
 FROM t_subcolumns_if
 SETTINGS

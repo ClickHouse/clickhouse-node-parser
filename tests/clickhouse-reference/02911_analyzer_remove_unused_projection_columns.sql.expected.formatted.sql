@@ -1,3 +1,19 @@
+SET enable_analyzer = 1;
+
+DROP TABLE IF EXISTS test_table;
+
+CREATE TABLE test_table
+(
+    id UInt64,
+    value String
+)
+ENGINE = MergeTree
+ORDER BY id;
+
+INSERT INTO test_table;
+
+SET max_columns_to_read = 1;
+
 SELECT id
 FROM (
         SELECT *
@@ -55,3 +71,5 @@ FROM (
             value
         FROM test_table
     );
+
+DROP TABLE test_table;

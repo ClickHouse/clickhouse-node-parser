@@ -1,3 +1,17 @@
+SET enable_json_type = 1;
+
+SET output_format_native_write_json_as_string = 0;
+
+DROP TABLE IF EXISTS test;
+
+CREATE TABLE test
+(
+    json JSON(max_dynamic_paths = 8, max_dynamic_types = 4)
+)
+ENGINE = Memory;
+
+INSERT INTO test;
+
 SELECT arrayJoin(distinctJSONPathsAndTypes(json))
 FROM test;
 
@@ -29,6 +43,17 @@ SELECT
 FROM test
 FORMAT JSONColumns;
 
+DROP TABLE IF EXISTS test2;
+
+CREATE TABLE test2
+(
+    json JSON(max_dynamic_paths = 16, max_dynamic_types = 8)
+)
+ENGINE = Memory;
+
+INSERT INTO test2 SELECT json
+FROM test;
+
 SELECT arrayJoin(distinctJSONPathsAndTypes(json))
 FROM test2;
 
@@ -41,6 +66,15 @@ FROM test2;
 SELECT arrayJoin(distinctJSONPathsAndTypes(arrayJoin(json.`k9[]`)))
 FROM test2;
 
+CREATE TABLE test3
+(
+    json JSON(max_dynamic_paths = 4, max_dynamic_types = 2)
+)
+ENGINE = Memory;
+
+INSERT INTO test3 SELECT json
+FROM test;
+
 SELECT arrayJoin(distinctJSONPathsAndTypes(json))
 FROM test3;
 
@@ -53,6 +87,15 @@ FROM test3;
 SELECT arrayJoin(distinctJSONPathsAndTypes(arrayJoin(json.`k9[]`)))
 FROM test3;
 
+CREATE TABLE test4
+(
+    json JSON(max_dynamic_paths = 8, max_dynamic_types = 4)
+)
+ENGINE = Memory;
+
+INSERT INTO test4 SELECT json
+FROM test2;
+
 SELECT arrayJoin(distinctJSONPathsAndTypes(json))
 FROM test4;
 
@@ -64,3 +107,11 @@ FROM test4;
 
 SELECT arrayJoin(distinctJSONPathsAndTypes(arrayJoin(json.`k9[]`)))
 FROM test4;
+
+DROP TABLE test;
+
+DROP TABLE test2;
+
+DROP TABLE test3;
+
+DROP TABLE test4;

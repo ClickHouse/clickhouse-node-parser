@@ -1,3 +1,5 @@
+SET session_timezone = 'UTC';
+
 SELECT sipHash64('{"a" : 42, "b" : "str", "c" : [{"d" : 1}, {"e" : 2}]}'::JSON);
 
 SELECT sipHash64('{"a" : 42, "b" : "str", "c" : [{"d" : 1}, {"e" : 2}], "f" : null}'::JSON);
@@ -34,7 +36,31 @@ SELECT sipHash64(tuple(map('json', [toNullable('{"a" : 42, "b" : "str", "c" : [{
 
 SELECT sipHash64(tuple(map('json', [toNullable('{"a" : 42, "b" : "str", "c" : [{"d" : 1}, {"e" : 2}]}'::JSON(a Dynamic))])));
 
+DROP TABLE IF EXISTS test;
+
+CREATE TABLE test
+(
+    json JSON
+)
+ENGINE = Memory;
+
+INSERT INTO test;
+
 SELECT
     json,
     sipHash64(json)
 FROM test;
+
+DROP TABLE test;
+
+CREATE TABLE test
+(
+    json JSON(max_dynamic_types = 0)
+)
+ENGINE = Memory;
+
+CREATE TABLE test
+(
+    json JSON(max_dynamic_paths = 0)
+)
+ENGINE = Memory;

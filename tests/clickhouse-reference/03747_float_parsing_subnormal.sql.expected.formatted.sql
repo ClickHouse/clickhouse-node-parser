@@ -1,3 +1,4 @@
+-- { echoOn }
 SELECT
     'FLOAT NORMAL DBL MIN',
     2.2250738585072014e-308,

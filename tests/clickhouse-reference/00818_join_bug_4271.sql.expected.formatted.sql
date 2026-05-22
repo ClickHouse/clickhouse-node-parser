@@ -1,3 +1,27 @@
+DROP TABLE IF EXISTS t_00818;
+
+DROP TABLE IF EXISTS s_00818;
+
+CREATE TABLE t_00818
+(
+    a Nullable(Int64),
+    b Nullable(Int64),
+    c Nullable(String)
+)
+ENGINE = Memory;
+
+CREATE TABLE s_00818
+(
+    a Nullable(Int64),
+    b Nullable(Int64),
+    c Nullable(String)
+)
+ENGINE = Memory;
+
+INSERT INTO t_00818;
+
+INSERT INTO s_00818;
+
 SELECT *
 FROM
     t_00818
@@ -36,3 +60,7 @@ LEFT JOIN s_00818
     ON t_00818.a = s_00818.a
     AND t_00818.b = s_00818.a
 ORDER BY t_00818.a ASC;
+
+DROP TABLE t_00818;
+
+DROP TABLE s_00818;

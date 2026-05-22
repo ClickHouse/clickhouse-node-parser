@@ -1,5 +1,53 @@
 [
   {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "mergetree_00673"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "mergetree_00673"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "x",
+        "type": {
+          "name": "UInt64"
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "x"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "mergetree_00673"
+      }
+    }
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -209,7 +257,7 @@
                                                                                             }
                                                                                           ],
                                                                                           "from": {
-                                                                                            "kind": "tableFunction",
+                                                                                            "kind": "tableFunctionRef",
                                                                                             "name": "numbers",
                                                                                             "args": [
                                                                                               {
@@ -261,6 +309,27 @@
           }
         }
       }
+    }
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "force_primary_key",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "mergetree_00673"
     }
   }
 ]

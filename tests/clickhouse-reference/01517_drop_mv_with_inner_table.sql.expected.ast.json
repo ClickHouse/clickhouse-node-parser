@@ -1,0 +1,329 @@
+[
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "send_logs_level",
+        "value": {
+          "kind": "literal",
+          "type": "String",
+          "value": "fatal"
+        }
+      }
+    ],
+    "leadingComments": [
+      "-- Tags: no-parallel"
+    ]
+  },
+  {
+    "kind": "drop",
+    "targetType": "DATABASE",
+    "table": {
+      "kind": "tableRef",
+      "table": "db_01517_atomic"
+    },
+    "ifExists": true,
+    "leadingComments": [
+      "--",
+      "-- Atomic no SYNC",
+      "-- (should go first to check that thread for DROP TABLE does not hang)",
+      "--"
+    ]
+  },
+  {
+    "kind": "createDatabase",
+    "name": "db_01517_atomic",
+    "engine": {
+      "name": "Atomic"
+    }
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "database": "db_01517_atomic",
+      "table": "source"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "key",
+        "type": {
+          "name": "Int"
+        }
+      }
+    ],
+    "engine": {
+      "name": "Null"
+    }
+  },
+  {
+    "kind": "createMaterializedView",
+    "table": {
+      "kind": "tableRef",
+      "database": "db_01517_atomic",
+      "table": "mv"
+    },
+    "engine": {
+      "name": "Null"
+    },
+    "asQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "asterisk"
+        }
+      ],
+      "from": {
+        "kind": "tableRef",
+        "database": "db_01517_atomic",
+        "table": "source"
+      }
+    }
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "database": "db_01517_atomic",
+      "table": "mv"
+    }
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "database": "db_01517_atomic",
+      "table": "source"
+    },
+    "leadingComments": [
+      "-- ensure that the inner had been removed after sync drop"
+    ]
+  },
+  {
+    "kind": "system",
+    "body": "show tables from db_01517_atomic"
+  },
+  {
+    "kind": "drop",
+    "targetType": "DATABASE",
+    "table": {
+      "kind": "tableRef",
+      "table": "db_01517_atomic_sync"
+    },
+    "ifExists": true,
+    "leadingComments": [
+      "--",
+      "-- Atomic",
+      "--"
+    ]
+  },
+  {
+    "kind": "createDatabase",
+    "name": "db_01517_atomic_sync",
+    "engine": {
+      "name": "Atomic"
+    }
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "database": "db_01517_atomic_sync",
+      "table": "source"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "key",
+        "type": {
+          "name": "Int"
+        }
+      }
+    ],
+    "engine": {
+      "name": "Null"
+    }
+  },
+  {
+    "kind": "createMaterializedView",
+    "table": {
+      "kind": "tableRef",
+      "database": "db_01517_atomic_sync",
+      "table": "mv"
+    },
+    "engine": {
+      "name": "Null"
+    },
+    "asQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "asterisk"
+        }
+      ],
+      "from": {
+        "kind": "tableRef",
+        "database": "db_01517_atomic_sync",
+        "table": "source"
+      }
+    }
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "database": "db_01517_atomic_sync",
+      "table": "mv"
+    },
+    "leadingComments": [
+      "-- drops it and hangs with Atomic engine, due to recursive DROP"
+    ]
+  },
+  {
+    "kind": "system",
+    "body": "show tables from db_01517_atomic_sync"
+  },
+  {
+    "kind": "drop",
+    "targetType": "DATABASE",
+    "table": {
+      "kind": "tableRef",
+      "table": "db_01517_ordinary"
+    },
+    "ifExists": true,
+    "leadingComments": [
+      "--",
+      "-- Ordinary",
+      "---"
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "allow_deprecated_database_ordinary",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createDatabase",
+    "name": "db_01517_ordinary",
+    "engine": {
+      "name": "Ordinary"
+    },
+    "leadingComments": [
+      "-- Creation of a database with Ordinary engine emits a warning."
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "database": "db_01517_ordinary",
+      "table": "source"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "key",
+        "type": {
+          "name": "Int"
+        }
+      }
+    ],
+    "engine": {
+      "name": "Null"
+    }
+  },
+  {
+    "kind": "createMaterializedView",
+    "table": {
+      "kind": "tableRef",
+      "database": "db_01517_ordinary",
+      "table": "mv"
+    },
+    "engine": {
+      "name": "Null"
+    },
+    "asQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "asterisk"
+        }
+      ],
+      "from": {
+        "kind": "tableRef",
+        "database": "db_01517_ordinary",
+        "table": "source"
+      }
+    }
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "database": "db_01517_ordinary",
+      "table": "mv"
+    },
+    "leadingComments": [
+      "-- drops it and hangs with Atomic engine, due to recursive DROP"
+    ]
+  },
+  {
+    "kind": "system",
+    "body": "show tables from db_01517_ordinary"
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "database": "db_01517_atomic_sync",
+      "table": "source"
+    }
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "database": "db_01517_ordinary",
+      "table": "source"
+    }
+  },
+  {
+    "kind": "drop",
+    "targetType": "DATABASE",
+    "table": {
+      "kind": "tableRef",
+      "table": "db_01517_atomic"
+    }
+  },
+  {
+    "kind": "drop",
+    "targetType": "DATABASE",
+    "table": {
+      "kind": "tableRef",
+      "table": "db_01517_atomic_sync"
+    }
+  },
+  {
+    "kind": "drop",
+    "targetType": "DATABASE",
+    "table": {
+      "kind": "tableRef",
+      "table": "db_01517_ordinary"
+    }
+  }
+]

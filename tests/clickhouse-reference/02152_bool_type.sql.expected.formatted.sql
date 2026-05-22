@@ -1,3 +1,5 @@
+SET output_format_pretty_color = 1;
+
 SELECT CAST('True', 'Bool');
 
 SELECT CAST('On', 'Bool');
@@ -29,6 +31,10 @@ SELECT CAST('0', 'Bool');
 SELECT CAST('disabled', 'Bool');
 
 SELECT CAST('disable', 'Bool');
+
+SET bool_true_representation = 'Custom true';
+
+SET bool_false_representation = 'Custom false';
 
 SELECT CAST('true', 'Bool')
 FORMAT CSV;

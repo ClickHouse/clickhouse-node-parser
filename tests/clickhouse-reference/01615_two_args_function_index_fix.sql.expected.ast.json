@@ -1,5 +1,67 @@
 [
   {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "bad_date_time"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "bad_date_time"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "time",
+        "type": {
+          "name": "Datetime",
+          "args": [
+            {
+              "kind": "literal",
+              "value": "'Asia/Istanbul'"
+            }
+          ]
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "count",
+        "type": {
+          "name": "UInt16"
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree",
+      "args": []
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "time"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "bad_date_time"
+      }
+    }
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -122,6 +184,9 @@
           ]
         }
       ]
-    }
+    },
+    "leadingComments": [
+      "-- primary key analysis was wrong in previous versions and did not take the timezone argument into account, so empty result was given."
+    ]
   }
 ]

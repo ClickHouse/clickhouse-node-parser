@@ -1,3 +1,20 @@
+SYSTEM query (children 1)
+ Identifier tbl
+
+CreateQuery replacing_mt (children 3)
+ Identifier replacing_mt
+ Columns definition (children 1)
+  ExpressionList (children 1)
+   ColumnDeclaration x (children 1)
+    DataType String
+ Storage definition (children 2)
+  Function ReplacingMergeTree (children 1)
+   ExpressionList
+  Identifier x
+
+InsertQuery   (children 1)
+ Identifier replacing_mt
+
 SelectWithUnionQuery (children 1)
  ExpressionList (children 1)
   SelectQuery (children 2)
@@ -8,6 +25,38 @@ SelectWithUnionQuery (children 1)
     TablesInSelectQueryElement (children 1)
      TableExpression (children 1)
       TableIdentifier replacing_mt
+
+Set
+
+CreateQuery lhs (children 3)
+ Identifier lhs
+ Columns definition (children 1)
+  ExpressionList (children 1)
+   ColumnDeclaration x (children 1)
+    DataType String
+ Storage definition (children 2)
+  Function ReplacingMergeTree (children 1)
+   ExpressionList
+  Identifier x
+
+CreateQuery rhs (children 3)
+ Identifier rhs
+ Columns definition (children 1)
+  ExpressionList (children 1)
+   ColumnDeclaration x (children 1)
+    DataType String
+ Storage definition (children 2)
+  Function ReplacingMergeTree (children 1)
+   ExpressionList
+  Identifier x
+
+InsertQuery   (children 1)
+ Identifier lhs
+
+InsertQuery   (children 1)
+ Identifier rhs
+
+Set
 
 SelectWithUnionQuery (children 1)
  ExpressionList (children 1)
@@ -28,6 +77,20 @@ SelectWithUnionQuery (children 1)
         Identifier lhs.x
         Identifier rhs.x
 
+CreateQuery regular_mt_table (children 3)
+ Identifier regular_mt_table
+ Columns definition (children 1)
+  ExpressionList (children 1)
+   ColumnDeclaration x (children 1)
+    DataType String
+ Storage definition (children 2)
+  Function MergeTree (children 1)
+   ExpressionList
+  Identifier x
+
+InsertQuery   (children 1)
+ Identifier regular_mt_table
+
 SelectWithUnionQuery (children 1)
  ExpressionList (children 1)
   SelectQuery (children 2)
@@ -39,6 +102,33 @@ SelectWithUnionQuery (children 1)
      TableExpression (children 1)
       TableIdentifier regular_mt_table
 
+CreateQuery mv_regular_mt_table (children 3)
+ Identifier mv_regular_mt_table
+ SelectWithUnionQuery (children 1)
+  ExpressionList (children 1)
+   SelectQuery (children 2)
+    ExpressionList (children 1)
+     Asterisk
+    TablesInSelectQuery (children 1)
+     TablesInSelectQueryElement (children 1)
+      TableExpression (children 1)
+       TableIdentifier regular_mt_table
+ ViewTargets
+
+CreateQuery nv_regular_mt_table (children 2)
+ Identifier nv_regular_mt_table
+ SelectWithUnionQuery (children 1)
+  ExpressionList (children 1)
+   SelectQuery (children 2)
+    ExpressionList (children 1)
+     Asterisk
+    TablesInSelectQuery (children 1)
+     TablesInSelectQueryElement (children 1)
+      TableExpression (children 1)
+       TableIdentifier mv_regular_mt_table
+
+Set
+
 SelectWithUnionQuery (children 1)
  ExpressionList (children 1)
   SelectQuery (children 2)
@@ -49,6 +139,69 @@ SelectWithUnionQuery (children 1)
     TablesInSelectQueryElement (children 1)
      TableExpression (children 1)
       TableIdentifier nv_regular_mt_table
+
+CreateQuery left_table (children 3)
+ Identifier left_table
+ Columns definition (children 1)
+  ExpressionList (children 2)
+   ColumnDeclaration id (children 1)
+    DataType UInt64
+   ColumnDeclaration val_left (children 1)
+    DataType String
+ Storage definition (children 2)
+  Function ReplacingMergeTree (children 1)
+   ExpressionList
+  Identifier id
+
+CreateQuery middle_table (children 3)
+ Identifier middle_table
+ Columns definition (children 1)
+  ExpressionList (children 2)
+   ColumnDeclaration id (children 1)
+    DataType UInt64
+   ColumnDeclaration val_middle (children 1)
+    DataType String
+ Storage definition (children 2)
+  Function MergeTree (children 1)
+   ExpressionList
+  Identifier id
+
+CreateQuery right_table (children 3)
+ Identifier right_table
+ Columns definition (children 1)
+  ExpressionList (children 2)
+   ColumnDeclaration id (children 1)
+    DataType UInt64
+   ColumnDeclaration val_right (children 1)
+    DataType String
+ Storage definition (children 2)
+  Function ReplacingMergeTree (children 1)
+   ExpressionList
+  Identifier id
+
+InsertQuery   (children 1)
+ Identifier left_table
+
+InsertQuery   (children 1)
+ Identifier left_table
+
+InsertQuery   (children 1)
+ Identifier left_table
+
+InsertQuery   (children 1)
+ Identifier middle_table
+
+InsertQuery   (children 1)
+ Identifier middle_table
+
+InsertQuery   (children 1)
+ Identifier right_table
+
+InsertQuery   (children 1)
+ Identifier right_table
+
+InsertQuery   (children 1)
+ Identifier right_table
 
 SelectWithUnionQuery (children 1)
  ExpressionList (children 1)
@@ -139,6 +292,49 @@ SelectWithUnionQuery (children 1)
     OrderByElement (children 1)
      Identifier val_right
 
+DropQuery  left_table (children 1)
+ Identifier left_table
+
+DropQuery  middle_table (children 1)
+ Identifier middle_table
+
+DropQuery  right_table (children 1)
+ Identifier right_table
+
+CreateQuery right_table_local (children 3)
+ Identifier right_table_local
+ Columns definition (children 1)
+  ExpressionList (children 2)
+   ColumnDeclaration id (children 1)
+    DataType UInt64
+   ColumnDeclaration val_right (children 1)
+    DataType String
+ Storage definition (children 2)
+  Function ReplacingMergeTree (children 1)
+   ExpressionList
+  Identifier id
+
+CreateQuery right_table (children 2)
+ Identifier right_table
+ Storage definition (children 1)
+  Function Distributed (children 1)
+   ExpressionList (children 3)
+    Literal 'test_shard_localhost'
+    Function currentDatabase (children 1)
+     ExpressionList
+    Identifier right_table_local
+
+InsertQuery   (children 1)
+ Identifier right_table_local
+
+InsertQuery   (children 1)
+ Identifier right_table_local
+
+InsertQuery   (children 1)
+ Identifier right_table_local
+
+Set
+
 SelectWithUnionQuery (children 1)
  ExpressionList (children 1)
   SelectQuery (children 3)
@@ -178,6 +374,92 @@ SelectWithUnionQuery (children 1)
      Identifier val_middle
     OrderByElement (children 1)
      Identifier val_right
+
+Set
+
+DropQuery  table_to_merge_a (children 1)
+ Identifier table_to_merge_a
+
+DropQuery  table_to_merge_b (children 1)
+ Identifier table_to_merge_b
+
+DropQuery  table_to_merge_c (children 1)
+ Identifier table_to_merge_c
+
+DropQuery  merge_table (children 1)
+ Identifier merge_table
+
+CreateQuery table_to_merge_a (children 3)
+ Identifier table_to_merge_a
+ Columns definition (children 1)
+  ExpressionList (children 2)
+   ColumnDeclaration id (children 1)
+    DataType UInt64
+   ColumnDeclaration val (children 1)
+    DataType String
+ Storage definition (children 2)
+  Function ReplacingMergeTree (children 1)
+   ExpressionList
+  Identifier id
+
+CreateQuery table_to_merge_b (children 3)
+ Identifier table_to_merge_b
+ Columns definition (children 1)
+  ExpressionList (children 2)
+   ColumnDeclaration id (children 1)
+    DataType UInt64
+   ColumnDeclaration val (children 1)
+    DataType String
+ Storage definition (children 2)
+  Function MergeTree (children 1)
+   ExpressionList
+  Identifier id
+
+CreateQuery table_to_merge_c (children 3)
+ Identifier table_to_merge_c
+ Columns definition (children 1)
+  ExpressionList (children 2)
+   ColumnDeclaration id (children 1)
+    DataType UInt64
+   ColumnDeclaration val (children 1)
+    DataType String
+ Storage definition (children 2)
+  Function ReplacingMergeTree (children 1)
+   ExpressionList
+  Identifier id
+
+CreateQuery merge_table (children 2)
+ Identifier merge_table
+ Storage definition (children 1)
+  Function Merge (children 1)
+   ExpressionList (children 2)
+    Function currentDatabase (children 1)
+     ExpressionList
+    Literal '^(table_to_merge_[a-z])$'
+
+InsertQuery   (children 1)
+ Identifier table_to_merge_a
+
+InsertQuery   (children 1)
+ Identifier table_to_merge_a
+
+InsertQuery   (children 1)
+ Identifier table_to_merge_a
+
+InsertQuery   (children 1)
+ Identifier table_to_merge_b
+
+InsertQuery   (children 1)
+ Identifier table_to_merge_b
+
+InsertQuery   (children 1)
+ Identifier table_to_merge_c
+
+InsertQuery   (children 1)
+ Identifier table_to_merge_c
+
+InsertQuery   (children 1)
+ Identifier table_to_merge_c
 
 SelectWithUnionQuery (children 1)
  ExpressionList (children 1)

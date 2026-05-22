@@ -1,28 +1,33 @@
-SELECT __actionName();
+-- This functions should not be called directly, only for internal use.
+-- However, we cannot completely forbid it (becasue query can came from another server, for example)
+-- Check that usage of these functions does not lead to crash or logical error
+SET enable_analyzer = 1;
 
-SELECT __actionName('aaa', 'aaa', 'aaa');
+SELECT __actionName(); -- { serverError NUMBER_OF_ARGUMENTS_DOESNT_MATCH }
+
+SELECT __actionName('aaa', 'aaa', 'aaa'); -- { serverError NUMBER_OF_ARGUMENTS_DOESNT_MATCH }
 
 SELECT __actionName('aaa', '')
-SETTINGS enable_analyzer = 1;
+SETTINGS enable_analyzer = 1; -- { serverError BAD_ARGUMENTS }
 
-SELECT __actionName('aaa', materialize('aaa'));
+SELECT __actionName('aaa', materialize('aaa')); -- { serverError BAD_ARGUMENTS,ILLEGAL_COLUMN }
 
-SELECT __actionName(materialize('aaa'), 'aaa');
+SELECT __actionName(materialize('aaa'), 'aaa'); -- { serverError ILLEGAL_COLUMN }
 
 SELECT __actionName('aaa', 'aaa');
 
 SELECT concat(__actionName('aaa', toNullable('x')), '1')
-GROUP BY __actionName('aaa', 'x');
+GROUP BY __actionName('aaa', 'x'); -- { serverError BAD_ARGUMENTS }
 
-SELECT __getScalar('aaa');
+SELECT __getScalar('aaa'); -- { serverError BAD_ARGUMENTS }
 
-SELECT __getScalar();
+SELECT __getScalar(); -- { serverError NUMBER_OF_ARGUMENTS_DOESNT_MATCH }
 
-SELECT __getScalar(1);
+SELECT __getScalar(1); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
-SELECT __getScalar(materialize('1'));
+SELECT __getScalar(materialize('1')); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
-SELECT __getScalar(concat(toNullable(materialize(1))) - NULL);
+SELECT __getScalar(concat(toNullable(materialize(1))) - NULL); -- { serverError BAD_ARGUMENTS }
 
 SELECT __scalarSubqueryResult('1');
 
@@ -32,6 +37,6 @@ SELECT
 
 SELECT
     __scalarSubqueryResult(a, a),
-    materialize('1') AS a;
+    materialize('1') AS a; -- { serverError NUMBER_OF_ARGUMENTS_DOESNT_MATCH }
 
 SELECT 1 AS __grouping_set;

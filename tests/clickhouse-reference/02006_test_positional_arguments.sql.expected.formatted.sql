@@ -1,3 +1,24 @@
+SET group_by_two_level_threshold = 100000;
+
+SET enable_positional_arguments = 1;
+
+SET enable_analyzer = 1;
+
+DROP TABLE IF EXISTS test;
+
+DROP TABLE IF EXISTS test2;
+
+CREATE TABLE test
+(
+    x1 Int,
+    x2 Int,
+    x3 Int
+)
+ENGINE = Memory();
+
+INSERT INTO test;
+
+-- { echo }
 SELECT
     x3,
     x2,
@@ -138,7 +159,7 @@ SELECT
 FROM test
 GROUP BY
     1,
-    2;
+    2; -- { serverError ILLEGAL_TYPE_OF_ARGUMENT, 184 }
 
 SELECT
     1 + max(x1),
@@ -146,7 +167,7 @@ SELECT
 FROM test
 GROUP BY
     1,
-    2;
+    2; -- { serverError ILLEGAL_TYPE_OF_ARGUMENT, 184 }
 
 SELECT
     max(x1),
@@ -154,7 +175,7 @@ SELECT
 FROM test
 GROUP BY
     -2,
-    -1;
+    -1; -- { serverError ILLEGAL_TYPE_OF_ARGUMENT, 184 }
 
 SELECT
     1 + max(x1),
@@ -162,7 +183,17 @@ SELECT
 FROM test
 GROUP BY
     -2,
-    -1;
+    -1; -- { serverError ILLEGAL_TYPE_OF_ARGUMENT, 184 }
+
+CREATE TABLE test2
+(
+    x1 Int,
+    x2 Int,
+    x3 Int
+)
+ENGINE = Memory;
+
+INSERT INTO test2;
 
 SELECT
     x1,
@@ -278,6 +309,24 @@ FROM (
         ORDER BY 1 ASC
     );
 
+DROP TABLE IF EXISTS tp2;
+
+CREATE TABLE tp2
+(
+    first_col String,
+    second_col Int32
+)
+ENGINE = MergeTree()
+ORDER BY tuple();
+
+INSERT INTO tp2 SELECT
+    'bbb',
+    1;
+
+INSERT INTO tp2 SELECT
+    'aaa',
+    2;
+
 SELECT count(*)
 FROM (
         SELECT
@@ -324,8 +373,35 @@ FROM (
     )
 ORDER BY 1 ASC;
 
+WITH res AS (
+    SELECT first_col
+    FROM (
+            SELECT
+                first_col,
+                second_col AS total
+            FROM tp2
+            ORDER BY 2 DESC
+        )
+    LIMIT 1
+)
+
+SELECT *
+FROM res;
+
+CREATE TABLE test
+(
+    id UInt32,
+    time UInt32,
+    INDEX id id TYPE set(0) GRANULARITY 3,
+    INDEX time time TYPE minmax GRANULARITY 3
+)
+ENGINE = MergeTree()
+ORDER BY (time);
+
 SELECT
     count(*) AS value,
     0 AS data
 FROM test
 GROUP BY data;
+
+DROP TABLE test;

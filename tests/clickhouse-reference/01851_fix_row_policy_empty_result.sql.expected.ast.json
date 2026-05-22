@@ -1,5 +1,98 @@
 [
   {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "tbl"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "tbl"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "s",
+        "type": {
+          "name": "String"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "i",
+        "type": {
+          "name": "int"
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "i"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "tbl"
+      }
+    }
+  },
+  {
+    "kind": "system",
+    "body": "drop row policy if exists filter on tbl"
+  },
+  {
+    "kind": "createRowPolicy",
+    "targets": [
+      {
+        "names": [
+          "filter"
+        ],
+        "table": {
+          "kind": "tableRef",
+          "table": "tbl"
+        }
+      }
+    ],
+    "hasRowKeyword": true,
+    "using": {
+      "kind": "binaryExpr",
+      "op": "=",
+      "left": {
+        "kind": "columnRef",
+        "parts": [
+          "s"
+        ]
+      },
+      "right": {
+        "kind": "literal",
+        "type": "String",
+        "value": "non_existing_domain"
+      },
+      "parenthesized": true
+    },
+    "to": {
+      "kind": "all"
+    }
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -39,6 +132,18 @@
         "type": "UInt64",
         "value": "123"
       }
+    }
+  },
+  {
+    "kind": "system",
+    "body": "drop row policy filter on tbl"
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "tbl"
     }
   }
 ]

@@ -1,3 +1,5 @@
+SET output_format_pretty_display_footer_column_names = 0;
+
 SELECT
     s,
     parseDateTime64BestEffortUS(s, 3, 'UTC') AS a

@@ -1,3 +1,57 @@
+DropQuery  replicated_truncate1 (children 1)
+ Identifier replicated_truncate1
+
+DropQuery  replicated_truncate2 (children 1)
+ Identifier replicated_truncate2
+
+Set
+
+CreateQuery replicated_truncate1 (children 3)
+ Identifier replicated_truncate1
+ Columns definition (children 1)
+  ExpressionList (children 3)
+   ColumnDeclaration d (children 1)
+    DataType Date
+   ColumnDeclaration k (children 1)
+    DataType UInt64
+   ColumnDeclaration i32 (children 1)
+    DataType Int32
+ Storage definition (children 3)
+  Function ReplicatedMergeTree (children 1)
+   ExpressionList (children 2)
+    Literal '/clickhouse/tables/{database}/test_00623/truncate'
+    Literal 'r1'
+  Function toYYYYMM (children 1)
+   ExpressionList (children 1)
+    Identifier d
+  Identifier k
+
+CreateQuery replicated_truncate2 (children 3)
+ Identifier replicated_truncate2
+ Columns definition (children 1)
+  ExpressionList (children 3)
+   ColumnDeclaration d (children 1)
+    DataType Date
+   ColumnDeclaration k (children 1)
+    DataType UInt64
+   ColumnDeclaration i32 (children 1)
+    DataType Int32
+ Storage definition (children 3)
+  Function ReplicatedMergeTree (children 1)
+   ExpressionList (children 2)
+    Literal '/clickhouse/tables/{database}/test_00623/truncate'
+    Literal 'r2'
+  Function toYYYYMM (children 1)
+   ExpressionList (children 1)
+    Identifier d
+  Identifier k
+
+InsertQuery   (children 1)
+ Identifier replicated_truncate1
+
+SYSTEM query (children 1)
+ Identifier replicated_truncate2
+
 SelectWithUnionQuery (children 1)
  ExpressionList (children 1)
   SelectQuery (children 3)
@@ -23,3 +77,7 @@ SelectWithUnionQuery (children 1)
    ExpressionList (children 1)
     OrderByElement (children 1)
      Identifier k
+
+TruncateQuery  replicated_truncate1 (children 2)
+ Identifier replicated_truncate1
+ Set

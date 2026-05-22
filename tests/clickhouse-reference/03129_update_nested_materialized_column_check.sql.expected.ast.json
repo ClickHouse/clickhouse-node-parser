@@ -1,5 +1,191 @@
 [
   {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "asterisk_include_materialized_columns",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "elements"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "id",
+        "type": {
+          "name": "UInt32"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "nested.key",
+        "type": {
+          "name": "Array",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "String"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "nested.value",
+        "type": {
+          "name": "Array",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "String"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "nested.key_hashed",
+        "type": {
+          "name": "Array",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "UInt64"
+              }
+            }
+          ]
+        },
+        "defaultKind": "MATERIALIZED",
+        "defaultExpr": {
+          "kind": "functionCall",
+          "name": "arrayMap",
+          "args": [
+            {
+              "kind": "lambdaExpr",
+              "params": [
+                "x"
+              ],
+              "body": {
+                "kind": "functionCall",
+                "name": "sipHash64",
+                "args": [
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "x"
+                    ]
+                  }
+                ]
+              }
+            },
+            {
+              "kind": "columnRef",
+              "parts": [
+                "nested",
+                "key"
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "nested.val_hashed",
+        "type": {
+          "name": "Array",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "UInt64"
+              }
+            }
+          ]
+        },
+        "defaultKind": "MATERIALIZED",
+        "defaultExpr": {
+          "kind": "functionCall",
+          "name": "arrayMap",
+          "args": [
+            {
+              "kind": "lambdaExpr",
+              "params": [
+                "x"
+              ],
+              "body": {
+                "kind": "functionCall",
+                "name": "sipHash64",
+                "args": [
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "x"
+                    ]
+                  }
+                ]
+              }
+            },
+            {
+              "kind": "columnRef",
+              "parts": [
+                "nested",
+                "value"
+              ]
+            }
+          ]
+        }
+      }
+    ],
+    "engine": {
+      "name": "Memory"
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "elements"
+      }
+    },
+    "columns": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "id"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "nested.key"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "nested.value"
+        ]
+      }
+    ]
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -10,5 +196,221 @@
       "kind": "tableRef",
       "table": "elements"
     }
+  },
+  {
+    "kind": "alter",
+    "table": {
+      "kind": "tableRef",
+      "table": "elements"
+    },
+    "commands": [
+      {
+        "kind": "alterCommand",
+        "commandType": "UPDATE",
+        "assignments": [
+          {
+            "column": "nested.key",
+            "expr": {
+              "kind": "functionCall",
+              "name": "arrayFilter",
+              "args": [
+                {
+                  "kind": "lambdaExpr",
+                  "params": [
+                    "x",
+                    "v"
+                  ],
+                  "body": {
+                    "kind": "unaryExpr",
+                    "op": "NOT",
+                    "expr": {
+                      "kind": "functionCall",
+                      "name": "match",
+                      "args": [
+                        {
+                          "kind": "columnRef",
+                          "parts": [
+                            "v"
+                          ]
+                        },
+                        {
+                          "kind": "literal",
+                          "type": "String",
+                          "value": "chocolatine"
+                        }
+                      ]
+                    }
+                  }
+                },
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "nested.key"
+                  ]
+                },
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "nested.value"
+                  ]
+                }
+              ]
+            }
+          },
+          {
+            "column": "nested.value",
+            "expr": {
+              "kind": "functionCall",
+              "name": "arrayFilter",
+              "args": [
+                {
+                  "kind": "lambdaExpr",
+                  "params": [
+                    "x",
+                    "v"
+                  ],
+                  "body": {
+                    "kind": "unaryExpr",
+                    "op": "NOT",
+                    "expr": {
+                      "kind": "functionCall",
+                      "name": "match",
+                      "args": [
+                        {
+                          "kind": "columnRef",
+                          "parts": [
+                            "v"
+                          ]
+                        },
+                        {
+                          "kind": "literal",
+                          "type": "String",
+                          "value": "chocolatine"
+                        }
+                      ]
+                    }
+                  }
+                },
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "nested.value"
+                  ]
+                },
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "nested.value"
+                  ]
+                }
+              ]
+            }
+          }
+        ],
+        "where": {
+          "kind": "binaryExpr",
+          "op": "=",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "id"
+            ]
+          },
+          "right": {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "5555"
+          }
+        }
+      }
+    ],
+    "settings": [
+      {
+        "name": "mutations_sync",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "alter",
+    "table": {
+      "kind": "tableRef",
+      "table": "elements"
+    },
+    "commands": [
+      {
+        "kind": "alterCommand",
+        "commandType": "UPDATE",
+        "assignments": [
+          {
+            "column": "nested.value",
+            "expr": {
+              "kind": "functionCall",
+              "name": "arrayMap",
+              "args": [
+                {
+                  "kind": "lambdaExpr",
+                  "params": [
+                    "x"
+                  ],
+                  "body": {
+                    "kind": "functionCall",
+                    "name": "concat",
+                    "args": [
+                      {
+                        "kind": "columnRef",
+                        "parts": [
+                          "x"
+                        ]
+                      },
+                      {
+                        "kind": "literal",
+                        "type": "String",
+                        "value": " au chocolat"
+                      }
+                    ]
+                  }
+                },
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "nested.value"
+                  ]
+                }
+              ]
+            }
+          }
+        ],
+        "where": {
+          "kind": "binaryExpr",
+          "op": "=",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "id"
+            ]
+          },
+          "right": {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "5555"
+          }
+        }
+      }
+    ],
+    "settings": [
+      {
+        "name": "mutations_sync",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
   }
 ]

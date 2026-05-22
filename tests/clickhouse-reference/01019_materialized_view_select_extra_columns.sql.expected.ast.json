@@ -1,5 +1,164 @@
 [
   {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "allow_materialized_view_with_bad_select",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "mv_extra_columns_dst"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "mv_extra_columns_src"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "mv_extra_columns_view"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "mv_extra_columns_dst"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "v",
+        "type": {
+          "name": "UInt64"
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree",
+      "args": []
+    },
+    "partitionBy": {
+      "kind": "functionCall",
+      "name": "tuple",
+      "args": []
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "v"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "mv_extra_columns_src"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "v1",
+        "type": {
+          "name": "UInt64"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "v2",
+        "type": {
+          "name": "UInt64"
+        }
+      }
+    ],
+    "engine": {
+      "name": "Null"
+    }
+  },
+  {
+    "kind": "createMaterializedView",
+    "table": {
+      "kind": "tableRef",
+      "table": "mv_extra_columns_view"
+    },
+    "toTable": {
+      "kind": "tableRef",
+      "table": "mv_extra_columns_dst"
+    },
+    "asQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "alias",
+          "expr": {
+            "kind": "columnRef",
+            "parts": [
+              "v1"
+            ]
+          },
+          "alias": "v"
+        },
+        {
+          "kind": "alias",
+          "expr": {
+            "kind": "columnRef",
+            "parts": [
+              "v2"
+            ]
+          },
+          "alias": "v2"
+        }
+      ],
+      "from": {
+        "kind": "tableRef",
+        "table": "mv_extra_columns_src"
+      }
+    },
+    "leadingComments": [
+      "-- Extra columns are ignored when pushing to destination table.",
+      "-- This test exists to prevent unintended changes to existing behaviour.",
+      "--",
+      "-- Although this behaviour might not be ideal it can be exploited for 0-downtime changes to materialized views.",
+      "-- Step 1: Add new column to source table. Step 2: Create new view reading source column.",
+      "-- Step 3: Swap views using `RENAME TABLE`. Step 4: Add new column to destination table as well."
+    ]
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "mv_extra_columns_src"
+      }
+    }
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -33,6 +192,33 @@
     "from": {
       "kind": "tableRef",
       "table": "mv_extra_columns_view"
+    },
+    "trailingComments": [
+      "-- { serverError NOT_FOUND_COLUMN_IN_BLOCK }"
+    ]
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "mv_extra_columns_view"
+    }
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "mv_extra_columns_src"
+    }
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "mv_extra_columns_dst"
     }
   }
 ]

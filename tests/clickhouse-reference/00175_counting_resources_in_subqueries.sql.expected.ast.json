@@ -1,5 +1,37 @@
 [
   {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "optimize_use_implicit_projections",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      }
+    ],
+    "leadingComments": [
+      "-- Tags: stateful"
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "max_rows_to_read",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1000000"
+        }
+      }
+    ],
+    "leadingComments": [
+      "-- the work for scalar subquery is properly accounted:"
+    ]
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -45,6 +77,9 @@
           }
         }
       }
+    ],
+    "trailingComments": [
+      "-- { serverError TOO_MANY_ROWS }"
     ]
   },
   {
@@ -93,6 +128,25 @@
           }
         }
       }
+    ],
+    "trailingComments": [
+      "-- { serverError TOO_MANY_ROWS }"
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "max_rows_to_read",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "15000000"
+        }
+      }
+    ],
+    "leadingComments": [
+      "-- this query reads from the table twice:"
     ]
   },
   {
@@ -162,7 +216,10 @@
           }
         ]
       }
-    }
+    },
+    "trailingComments": [
+      "-- { serverError TOO_MANY_ROWS }"
+    ]
   },
   {
     "kind": "select",
@@ -221,7 +278,26 @@
           }
         }
       }
-    }
+    },
+    "trailingComments": [
+      "-- { serverError TOO_MANY_ROWS }"
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "max_rows_to_read",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "10000000"
+        }
+      }
+    ],
+    "leadingComments": [
+      "-- this query is using index but have to read all the data twice."
+    ]
   },
   {
     "kind": "select",
@@ -280,6 +356,9 @@
           }
         }
       }
-    }
+    },
+    "trailingComments": [
+      "-- { serverError TOO_MANY_ROWS }"
+    ]
   }
 ]

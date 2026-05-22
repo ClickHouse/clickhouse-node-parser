@@ -1,3 +1,7 @@
+SET allow_experimental_dynamic_type = 1;
+
+SET input_format_json_infer_array_of_dynamic_from_array_of_different_types = 0;
+
 SELECT
     d,
     dynamicType(d)
@@ -75,6 +79,18 @@ FROM format(Values, 'd Dynamic', '
 ')
 FORMAT Values;
 
+DROP TABLE IF EXISTS test;
+
+CREATE TABLE test
+(
+    s String
+)
+ENGINE = Memory;
+
+INSERT INTO test;
+
+SET cast_string_to_dynamic_use_inference = 1;
+
 SELECT
     s::Dynamic AS d,
     dynamicType(d)
@@ -85,3 +101,5 @@ SELECT
     dynamicType(d),
     isDynamicElementInSharedData(d)
 FROM test;
+
+DROP TABLE test;

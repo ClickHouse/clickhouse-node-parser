@@ -1,3 +1,19 @@
+DROP TABLE IF EXISTS ints;
+
+CREATE TABLE ints
+(
+    i64 Int64,
+    i32 Int32
+)
+ENGINE = Memory;
+
+SET join_algorithm = 'partial_merge';
+
+INSERT INTO ints SELECT
+    1 AS i64,
+    number AS i32
+FROM numbers(2);
+
 SELECT *
 FROM
     ints AS l
@@ -27,4 +43,6 @@ RIGHT JOIN (
         SELECT number AS s
         FROM numbers(2)
     ) AS t2
-    USING (s);
+    USING (s); -- { serverError NOT_FOUND_COLUMN_IN_BLOCK, UNKNOWN_IDENTIFIER }
+
+DROP TABLE ints;

@@ -1,3 +1,48 @@
+SET output_format_pretty_squash_consecutive_ms = 0;
+
+SET output_format_pretty_max_column_name_width_cut_to = 0;
+
+DROP TABLE IF EXISTS unicode;
+
+CREATE TABLE unicode
+(
+    c1 String,
+    c2 String
+)
+ENGINE = Memory;
+
+INSERT INTO unicode;
+
+INSERT INTO unicode;
+
+INSERT INTO unicode;
+
+INSERT INTO unicode;
+
+INSERT INTO unicode;
+
+INSERT INTO unicode;
+
+INSERT INTO unicode;
+
+INSERT INTO unicode;
+
+INSERT INTO unicode;
+
+INSERT INTO unicode;
+
+INSERT INTO unicode;
+
+INSERT INTO unicode;
+
+INSERT INTO unicode;
+
+INSERT INTO unicode;
+
+INSERT INTO unicode;
+
+INSERT INTO unicode;
+
 SELECT *
 FROM unicode
 SETTINGS max_threads = 1

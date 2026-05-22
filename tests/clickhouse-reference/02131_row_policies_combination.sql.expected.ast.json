@@ -1,5 +1,73 @@
 [
   {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "02131_rptable"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "02131_rptable"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "x",
+        "type": {
+          "name": "UInt8"
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "x"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "02131_rptable"
+      }
+    }
+  },
+  {
+    "kind": "system",
+    "body": "DROP ROW POLICY IF EXISTS 02131_filter_1 ON 02131_rptable"
+  },
+  {
+    "kind": "system",
+    "body": "DROP ROW POLICY IF EXISTS 02131_filter_2 ON 02131_rptable"
+  },
+  {
+    "kind": "system",
+    "body": "DROP ROW POLICY IF EXISTS 02131_filter_3 ON 02131_rptable"
+  },
+  {
+    "kind": "system",
+    "body": "DROP ROW POLICY IF EXISTS 02131_filter_4 ON 02131_rptable"
+  },
+  {
+    "kind": "system",
+    "body": "DROP ROW POLICY IF EXISTS 02131_filter_5 ON 02131_rptable"
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -9,6 +77,117 @@
     "from": {
       "kind": "tableRef",
       "table": "02131_rptable"
+    }
+  },
+  {
+    "kind": "createRowPolicy",
+    "targets": [
+      {
+        "names": [
+          "02131_filter_1"
+        ],
+        "table": {
+          "kind": "tableRef",
+          "table": "02131_rptable"
+        }
+      }
+    ],
+    "hasRowKeyword": true,
+    "using": {
+      "kind": "alias",
+      "expr": {
+        "kind": "binaryExpr",
+        "op": "=",
+        "left": {
+          "kind": "columnRef",
+          "parts": [
+            "x"
+          ]
+        },
+        "right": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      },
+      "alias": "permissive"
+    },
+    "to": {
+      "kind": "all"
+    }
+  },
+  {
+    "kind": "createRowPolicy",
+    "targets": [
+      {
+        "names": [
+          "02131_filter_2"
+        ],
+        "table": {
+          "kind": "tableRef",
+          "table": "02131_rptable"
+        }
+      }
+    ],
+    "hasRowKeyword": true,
+    "using": {
+      "kind": "alias",
+      "expr": {
+        "kind": "binaryExpr",
+        "op": "=",
+        "left": {
+          "kind": "columnRef",
+          "parts": [
+            "x"
+          ]
+        },
+        "right": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "2"
+        }
+      },
+      "alias": "permissive"
+    },
+    "to": {
+      "kind": "all"
+    }
+  },
+  {
+    "kind": "createRowPolicy",
+    "targets": [
+      {
+        "names": [
+          "02131_filter_3"
+        ],
+        "table": {
+          "kind": "tableRef",
+          "table": "02131_rptable"
+        }
+      }
+    ],
+    "hasRowKeyword": true,
+    "using": {
+      "kind": "alias",
+      "expr": {
+        "kind": "binaryExpr",
+        "op": "=",
+        "left": {
+          "kind": "columnRef",
+          "parts": [
+            "x"
+          ]
+        },
+        "right": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "3"
+        }
+      },
+      "alias": "permissive"
+    },
+    "to": {
+      "kind": "all"
     }
   },
   {
@@ -143,5 +322,107 @@
         }
       }
     ]
+  },
+  {
+    "kind": "createRowPolicy",
+    "targets": [
+      {
+        "names": [
+          "02131_filter_4"
+        ],
+        "table": {
+          "kind": "tableRef",
+          "table": "02131_rptable"
+        }
+      }
+    ],
+    "hasRowKeyword": true,
+    "using": {
+      "kind": "alias",
+      "expr": {
+        "kind": "binaryExpr",
+        "op": "<=",
+        "left": {
+          "kind": "columnRef",
+          "parts": [
+            "x"
+          ]
+        },
+        "right": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "2"
+        }
+      },
+      "alias": "restrictive"
+    },
+    "to": {
+      "kind": "all"
+    }
+  },
+  {
+    "kind": "createRowPolicy",
+    "targets": [
+      {
+        "names": [
+          "02131_filter_5"
+        ],
+        "table": {
+          "kind": "tableRef",
+          "table": "02131_rptable"
+        }
+      }
+    ],
+    "hasRowKeyword": true,
+    "using": {
+      "kind": "alias",
+      "expr": {
+        "kind": "binaryExpr",
+        "op": ">=",
+        "left": {
+          "kind": "columnRef",
+          "parts": [
+            "x"
+          ]
+        },
+        "right": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "2"
+        }
+      },
+      "alias": "restrictive"
+    },
+    "to": {
+      "kind": "all"
+    }
+  },
+  {
+    "kind": "system",
+    "body": "DROP ROW POLICY 02131_filter_1 ON 02131_rptable"
+  },
+  {
+    "kind": "system",
+    "body": "DROP ROW POLICY 02131_filter_2 ON 02131_rptable"
+  },
+  {
+    "kind": "system",
+    "body": "DROP ROW POLICY 02131_filter_3 ON 02131_rptable"
+  },
+  {
+    "kind": "system",
+    "body": "DROP ROW POLICY 02131_filter_4 ON 02131_rptable"
+  },
+  {
+    "kind": "system",
+    "body": "DROP ROW POLICY 02131_filter_5 ON 02131_rptable"
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "02131_rptable"
+    }
   }
 ]

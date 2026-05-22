@@ -1,3 +1,5 @@
+SET enable_analyzer = 1;
+
 SELECT tupleElement('{"a" : 42}'::JSON, 'a');
 
 SELECT tupleElement('{"a" : 42}'::JSON(a UInt32), 'a');
@@ -22,6 +24,16 @@ SELECT tupleElement(materialize(['{"a" : 42}'])::Array(JSON)[1], 'a');
 
 SELECT tupleElement(materialize(['{"a" : 42}'])::Array(JSON(a UInt32))[1], 'a');
 
+DROP TABLE IF EXISTS test;
+
+CREATE TABLE test
+(
+    json JSON(a UInt32)
+)
+ENGINE = Memory;
+
+INSERT INTO test;
+
 SELECT tupleElement(json, 'a')
 FROM test;
 
@@ -36,3 +48,5 @@ FROM test;
 
 SELECT tupleElement(json.c[1], 'd')
 FROM test;
+
+DROP TABLE test;

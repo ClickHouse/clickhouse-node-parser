@@ -1,3 +1,62 @@
+DropQuery  test_move_partition_src (children 1)
+ Identifier test_move_partition_src
+
+DropQuery  test_move_partition_dest (children 1)
+ Identifier test_move_partition_dest
+
+CreateQuery test_move_partition_src (children 3)
+ Identifier test_move_partition_src
+ Columns definition (children 1)
+  ExpressionList (children 2)
+   ColumnDeclaration pk (children 1)
+    DataType UInt8
+   ColumnDeclaration val (children 1)
+    DataType UInt32
+ Storage definition (children 4)
+  Function MergeTree (children 1)
+   ExpressionList
+  Identifier pk
+  Function tuple (children 1)
+   ExpressionList (children 2)
+    Identifier pk
+    Identifier val
+  Set
+
+CreateQuery test_move_partition_dest (children 3)
+ Identifier test_move_partition_dest
+ Columns definition (children 1)
+  ExpressionList (children 2)
+   ColumnDeclaration pk (children 1)
+    DataType UInt8
+   ColumnDeclaration val (children 1)
+    DataType UInt32
+ Storage definition (children 4)
+  Function MergeTree (children 1)
+   ExpressionList
+  Identifier pk
+  Function tuple (children 1)
+   ExpressionList (children 2)
+    Identifier pk
+    Identifier val
+  Set
+
+InsertQuery   (children 2)
+ Identifier test_move_partition_src
+ SelectWithUnionQuery (children 1)
+  ExpressionList (children 1)
+   SelectQuery (children 3)
+    ExpressionList (children 2)
+     Function modulo (children 1)
+      ExpressionList (children 2)
+       Identifier number
+       Literal UInt64_2
+     Identifier number
+    TablesInSelectQuery (children 1)
+     TablesInSelectQueryElement (children 1)
+      TableExpression (children 1)
+       TableIdentifier system.numbers
+    Literal UInt64_10000000
+
 SelectWithUnionQuery (children 1)
  ExpressionList (children 1)
   SelectQuery (children 2)
@@ -19,3 +78,16 @@ SelectWithUnionQuery (children 1)
     TablesInSelectQueryElement (children 1)
      TableExpression (children 1)
       TableIdentifier test_move_partition_dest
+
+AlterQuery  test_move_partition_src (children 2)
+ ExpressionList (children 1)
+  AlterCommand MOVE_PARTITION (children 1)
+   Partition (children 1)
+    Literal UInt64_1
+ Identifier test_move_partition_src
+
+DropQuery  test_move_partition_src (children 1)
+ Identifier test_move_partition_src
+
+DropQuery  test_move_partition_dest (children 1)
+ Identifier test_move_partition_dest

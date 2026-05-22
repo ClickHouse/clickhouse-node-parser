@@ -1,3 +1,17 @@
+-- Tags: distributed
+-- Test from the issue https://github.com/ClickHouse/ClickHouse/issues/2610
+DROP TABLE IF EXISTS data_01227;
+
+CREATE TABLE data_01227
+(
+    key Int
+)
+ENGINE = MergeTree()
+ORDER BY key;
+
+INSERT INTO data_01227 SELECT *
+FROM numbers(10);
+
 SELECT *
 FROM remote('127.1', currentDatabase(), data_01227)
 PREWHERE key GLOBAL IN (
@@ -13,3 +27,5 @@ PREWHERE key GLOBAL IN (
         FROM data_01227
         PREWHERE key = 2
     );
+
+DROP TABLE data_01227;

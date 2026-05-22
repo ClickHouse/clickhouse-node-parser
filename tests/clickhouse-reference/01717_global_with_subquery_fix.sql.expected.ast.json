@@ -1,0 +1,201 @@
+[
+  {
+    "kind": "select",
+    "with": [
+      {
+        "kind": "cteExpr",
+        "name": "withA",
+        "expr": {
+          "kind": "subqueryExpr",
+          "query": {
+            "kind": "select",
+            "select": [
+              {
+                "kind": "functionCall",
+                "name": "countDistinct",
+                "args": [
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "colU"
+                    ]
+                  }
+                ]
+              }
+            ],
+            "from": {
+              "kind": "tableRef",
+              "table": "tabA"
+            }
+          }
+        }
+      },
+      {
+        "kind": "cteExpr",
+        "name": "withB",
+        "expr": {
+          "kind": "subqueryExpr",
+          "query": {
+            "kind": "select",
+            "select": [
+              {
+                "kind": "functionCall",
+                "name": "countDistinct",
+                "args": [
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "colU"
+                    ]
+                  }
+                ]
+              }
+            ],
+            "from": {
+              "kind": "tableRef",
+              "table": "tabA"
+            }
+          }
+        }
+      }
+    ],
+    "select": [
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "binaryExpr",
+          "op": "/",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "withA"
+            ]
+          },
+          "right": {
+            "kind": "columnRef",
+            "parts": [
+              "withB"
+            ]
+          }
+        },
+        "alias": "ratio"
+      }
+    ],
+    "from": {
+      "kind": "subqueryFrom",
+      "query": {
+        "kind": "select",
+        "select": [
+          {
+            "kind": "alias",
+            "expr": {
+              "kind": "columnRef",
+              "parts": [
+                "date"
+              ]
+            },
+            "alias": "period"
+          },
+          {
+            "kind": "columnRef",
+            "parts": [
+              "colX"
+            ]
+          }
+        ],
+        "from": {
+          "kind": "subqueryFrom",
+          "query": {
+            "kind": "select",
+            "select": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "date"
+                ]
+              },
+              {
+                "kind": "alias",
+                "expr": {
+                  "kind": "functionCall",
+                  "name": "if",
+                  "args": [
+                    {
+                      "kind": "inExpr",
+                      "negated": false,
+                      "expr": {
+                        "kind": "columnRef",
+                        "parts": [
+                          "colA"
+                        ]
+                      },
+                      "values": {
+                        "kind": "subqueryExpr",
+                        "query": {
+                          "kind": "select",
+                          "select": [
+                            {
+                              "kind": "columnRef",
+                              "parts": [
+                                "colB"
+                              ]
+                            }
+                          ],
+                          "from": {
+                            "kind": "tableRef",
+                            "table": "tabC"
+                          }
+                        }
+                      }
+                    },
+                    {
+                      "kind": "literal",
+                      "type": "UInt64",
+                      "value": "0"
+                    },
+                    {
+                      "kind": "columnRef",
+                      "parts": [
+                        "colA"
+                      ]
+                    }
+                  ]
+                },
+                "alias": "colX"
+              }
+            ],
+            "from": {
+              "kind": "tableRef",
+              "table": "tabB"
+            }
+          },
+          "alias": "tempB"
+        },
+        "groupBy": {
+          "kind": "expressions",
+          "items": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "period"
+              ]
+            },
+            {
+              "kind": "columnRef",
+              "parts": [
+                "colX"
+              ]
+            }
+          ]
+        }
+      },
+      "alias": "main"
+    },
+    "leadingComments": [
+      "-- Tags: global"
+    ],
+    "trailingComments": [
+      "-- {serverError UNKNOWN_TABLE}"
+    ]
+  }
+]

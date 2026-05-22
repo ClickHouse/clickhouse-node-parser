@@ -1,5 +1,126 @@
 [
   {
+    "kind": "drop",
+    "targetType": "DATABASE",
+    "table": {
+      "kind": "tableRef",
+      "table": "memory_db"
+    },
+    "ifExists": true,
+    "leadingComments": [
+      "-- Tags: no-parallel, no-shared-merge-tree",
+      "-- no-parallel: creates own database",
+      "-- no-shared-merge-tree: doesn't support databases without UUID",
+      "-- Testcase for https://github.com/ClickHouse/ClickHouse/issues/92863",
+      "-- Tables/parts without UUID should not enter into the query condition cache."
+    ]
+  },
+  {
+    "kind": "createDatabase",
+    "name": "memory_db",
+    "engine": {
+      "name": "Memory"
+    }
+  },
+  {
+    "kind": "use",
+    "database": "memory_db"
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "tab"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "id",
+        "type": {
+          "name": "Int32"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "val",
+        "type": {
+          "name": "Int32"
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "id"
+          ]
+        }
+      }
+    ],
+    "settings": [
+      {
+        "name": "index_granularity",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "8"
+        }
+      }
+    ],
+    "settingsAfterOrderBy": true
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "tab"
+      }
+    },
+    "selectQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "number"
+          ]
+        },
+        {
+          "kind": "binaryExpr",
+          "op": "*",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "number"
+            ]
+          },
+          "right": {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "8"
+          }
+        }
+      ],
+      "from": {
+        "kind": "tableFunctionRef",
+        "name": "numbers",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "100"
+          }
+        ]
+      }
+    }
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -28,7 +149,27 @@
         "type": "String",
         "value": "memory_db"
       }
-    }
+    },
+    "leadingComments": [
+      "-- Prints 00000000-0000-0000-0000-000000000000."
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "use_query_condition_cache",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "system",
+    "body": "SYSTEM CLEAR QUERY CONDITION CACHE"
   },
   {
     "kind": "select",
@@ -47,7 +188,10 @@
       "kind": "tableRef",
       "database": "system",
       "table": "query_condition_cache"
-    }
+    },
+    "trailingComments": [
+      "-- no entry"
+    ]
   },
   {
     "kind": "select",
@@ -80,6 +224,25 @@
         "type": "UInt64",
         "value": "24"
       }
+    },
+    "trailingComments": [
+      "-- 1 match"
+    ]
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "tab"
+    }
+  },
+  {
+    "kind": "drop",
+    "targetType": "DATABASE",
+    "table": {
+      "kind": "tableRef",
+      "table": "memory_db"
     }
   }
 ]

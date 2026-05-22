@@ -1,4 +1,15 @@
 SELECT '-------- Bloom filter --------';
+DROP TABLE IF EXISTS 03165_token_bf;
+SET enable_full_text_index=1;
+CREATE TABLE 03165_token_bf
+(
+    id Int64,
+    message String,
+    INDEX idx_message message TYPE tokenbf_v1(32768, 3, 2) GRANULARITY 1
+)
+ENGINE = MergeTree
+ORDER BY id;
+INSERT INTO 03165_token_bf VALUES(1, 'Service is not ready');
 SELECT trim(explain)
 FROM (
     EXPLAIN indexes = 1 SELECT * FROM 03165_token_bf WHERE startsWith(message, 'Serv')
@@ -53,6 +64,17 @@ FROM (
 )
 WHERE explain LIKE '%Parts:%';
 SELECT * FROM 03165_token_bf WHERE multiSearchAny(message, [' wx ', 'yz']);
+SET enable_full_text_index = 1;
+DROP TABLE IF EXISTS 03165_token_ft;
+CREATE TABLE 03165_token_ft
+(
+    id Int64,
+    message String,
+    INDEX idx_message message TYPE text(tokenizer = 'splitByNonAlpha') GRANULARITY 1
+)
+ENGINE = MergeTree
+ORDER BY id;
+INSERT INTO 03165_token_ft VALUES(1, 'Service is not ready');
 SELECT trim(explain)
 FROM (
     EXPLAIN indexes = 1 SELECT * FROM 03165_token_ft WHERE startsWith(message, 'Serv')

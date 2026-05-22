@@ -1,0 +1,1018 @@
+[
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "enable_analyzer",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ],
+    "leadingComments": [
+      "-- https://www.philipzucker.com/sql_graph_csp/"
+    ]
+  },
+  {
+    "kind": "select",
+    "with": [
+      {
+        "kind": "cteSubquery",
+        "name": "digits",
+        "query": {
+          "kind": "union",
+          "queries": [
+            {
+              "kind": "select",
+              "select": [
+                {
+                  "kind": "alias",
+                  "expr": {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "0"
+                  },
+                  "alias": "digit"
+                }
+              ]
+            },
+            {
+              "kind": "select",
+              "select": [
+                {
+                  "kind": "binaryExpr",
+                  "op": "+",
+                  "left": {
+                    "kind": "columnRef",
+                    "parts": [
+                      "digit"
+                    ]
+                  },
+                  "right": {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "1"
+                  }
+                }
+              ],
+              "from": {
+                "kind": "tableRef",
+                "table": "digits"
+              },
+              "where": {
+                "kind": "binaryExpr",
+                "op": "<",
+                "left": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "digit"
+                  ]
+                },
+                "right": {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "9"
+                }
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "recursive": true,
+    "select": [
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "s",
+            "digit"
+          ]
+        },
+        "alias": "S"
+      },
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "e",
+            "digit"
+          ]
+        },
+        "alias": "E"
+      },
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "n",
+            "digit"
+          ]
+        },
+        "alias": "N"
+      },
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "d",
+            "digit"
+          ]
+        },
+        "alias": "D"
+      },
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "m",
+            "digit"
+          ]
+        },
+        "alias": "M"
+      },
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "o",
+            "digit"
+          ]
+        },
+        "alias": "O"
+      },
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "r",
+            "digit"
+          ]
+        },
+        "alias": "R"
+      },
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "y",
+            "digit"
+          ]
+        },
+        "alias": "Y"
+      }
+    ],
+    "from": {
+      "left": {
+        "left": {
+          "left": {
+            "left": {
+              "left": {
+                "left": {
+                  "left": {
+                    "kind": "tableRef",
+                    "table": "digits",
+                    "alias": "s"
+                  },
+                  "kind": "joinExpr",
+                  "joinType": "CROSS",
+                  "right": {
+                    "kind": "tableRef",
+                    "table": "digits",
+                    "alias": "e"
+                  }
+                },
+                "kind": "joinExpr",
+                "joinType": "CROSS",
+                "right": {
+                  "kind": "tableRef",
+                  "table": "digits",
+                  "alias": "n"
+                }
+              },
+              "kind": "joinExpr",
+              "joinType": "CROSS",
+              "right": {
+                "kind": "tableRef",
+                "table": "digits",
+                "alias": "d"
+              }
+            },
+            "kind": "joinExpr",
+            "joinType": "CROSS",
+            "right": {
+              "kind": "tableRef",
+              "table": "digits",
+              "alias": "m"
+            }
+          },
+          "kind": "joinExpr",
+          "joinType": "CROSS",
+          "right": {
+            "kind": "tableRef",
+            "table": "digits",
+            "alias": "o"
+          }
+        },
+        "kind": "joinExpr",
+        "joinType": "CROSS",
+        "right": {
+          "kind": "tableRef",
+          "table": "digits",
+          "alias": "r"
+        }
+      },
+      "kind": "joinExpr",
+      "joinType": "CROSS",
+      "right": {
+        "kind": "tableRef",
+        "table": "digits",
+        "alias": "y"
+      }
+    },
+    "where": {
+      "kind": "naryExpr",
+      "op": "AND",
+      "operands": [
+        {
+          "kind": "binaryExpr",
+          "op": "<>",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "s",
+              "digit"
+            ]
+          },
+          "right": {
+            "kind": "columnRef",
+            "parts": [
+              "e",
+              "digit"
+            ]
+          }
+        },
+        {
+          "kind": "binaryExpr",
+          "op": "<>",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "s",
+              "digit"
+            ]
+          },
+          "right": {
+            "kind": "columnRef",
+            "parts": [
+              "n",
+              "digit"
+            ]
+          }
+        },
+        {
+          "kind": "binaryExpr",
+          "op": "<>",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "s",
+              "digit"
+            ]
+          },
+          "right": {
+            "kind": "columnRef",
+            "parts": [
+              "d",
+              "digit"
+            ]
+          }
+        },
+        {
+          "kind": "binaryExpr",
+          "op": "<>",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "s",
+              "digit"
+            ]
+          },
+          "right": {
+            "kind": "columnRef",
+            "parts": [
+              "m",
+              "digit"
+            ]
+          }
+        },
+        {
+          "kind": "binaryExpr",
+          "op": "<>",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "s",
+              "digit"
+            ]
+          },
+          "right": {
+            "kind": "columnRef",
+            "parts": [
+              "o",
+              "digit"
+            ]
+          }
+        },
+        {
+          "kind": "binaryExpr",
+          "op": "<>",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "s",
+              "digit"
+            ]
+          },
+          "right": {
+            "kind": "columnRef",
+            "parts": [
+              "r",
+              "digit"
+            ]
+          }
+        },
+        {
+          "kind": "binaryExpr",
+          "op": "<>",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "s",
+              "digit"
+            ]
+          },
+          "right": {
+            "kind": "columnRef",
+            "parts": [
+              "y",
+              "digit"
+            ]
+          }
+        },
+        {
+          "kind": "binaryExpr",
+          "op": "<>",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "e",
+              "digit"
+            ]
+          },
+          "right": {
+            "kind": "columnRef",
+            "parts": [
+              "n",
+              "digit"
+            ]
+          }
+        },
+        {
+          "kind": "binaryExpr",
+          "op": "<>",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "e",
+              "digit"
+            ]
+          },
+          "right": {
+            "kind": "columnRef",
+            "parts": [
+              "d",
+              "digit"
+            ]
+          }
+        },
+        {
+          "kind": "binaryExpr",
+          "op": "<>",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "e",
+              "digit"
+            ]
+          },
+          "right": {
+            "kind": "columnRef",
+            "parts": [
+              "m",
+              "digit"
+            ]
+          }
+        },
+        {
+          "kind": "binaryExpr",
+          "op": "<>",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "e",
+              "digit"
+            ]
+          },
+          "right": {
+            "kind": "columnRef",
+            "parts": [
+              "o",
+              "digit"
+            ]
+          }
+        },
+        {
+          "kind": "binaryExpr",
+          "op": "<>",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "e",
+              "digit"
+            ]
+          },
+          "right": {
+            "kind": "columnRef",
+            "parts": [
+              "r",
+              "digit"
+            ]
+          }
+        },
+        {
+          "kind": "binaryExpr",
+          "op": "<>",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "e",
+              "digit"
+            ]
+          },
+          "right": {
+            "kind": "columnRef",
+            "parts": [
+              "y",
+              "digit"
+            ]
+          }
+        },
+        {
+          "kind": "binaryExpr",
+          "op": "<>",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "n",
+              "digit"
+            ]
+          },
+          "right": {
+            "kind": "columnRef",
+            "parts": [
+              "d",
+              "digit"
+            ]
+          }
+        },
+        {
+          "kind": "binaryExpr",
+          "op": "<>",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "n",
+              "digit"
+            ]
+          },
+          "right": {
+            "kind": "columnRef",
+            "parts": [
+              "m",
+              "digit"
+            ]
+          }
+        },
+        {
+          "kind": "binaryExpr",
+          "op": "<>",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "n",
+              "digit"
+            ]
+          },
+          "right": {
+            "kind": "columnRef",
+            "parts": [
+              "o",
+              "digit"
+            ]
+          }
+        },
+        {
+          "kind": "binaryExpr",
+          "op": "<>",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "n",
+              "digit"
+            ]
+          },
+          "right": {
+            "kind": "columnRef",
+            "parts": [
+              "r",
+              "digit"
+            ]
+          }
+        },
+        {
+          "kind": "binaryExpr",
+          "op": "<>",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "n",
+              "digit"
+            ]
+          },
+          "right": {
+            "kind": "columnRef",
+            "parts": [
+              "y",
+              "digit"
+            ]
+          }
+        },
+        {
+          "kind": "binaryExpr",
+          "op": "<>",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "d",
+              "digit"
+            ]
+          },
+          "right": {
+            "kind": "columnRef",
+            "parts": [
+              "m",
+              "digit"
+            ]
+          }
+        },
+        {
+          "kind": "binaryExpr",
+          "op": "<>",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "d",
+              "digit"
+            ]
+          },
+          "right": {
+            "kind": "columnRef",
+            "parts": [
+              "o",
+              "digit"
+            ]
+          }
+        },
+        {
+          "kind": "binaryExpr",
+          "op": "<>",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "d",
+              "digit"
+            ]
+          },
+          "right": {
+            "kind": "columnRef",
+            "parts": [
+              "r",
+              "digit"
+            ]
+          }
+        },
+        {
+          "kind": "binaryExpr",
+          "op": "<>",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "d",
+              "digit"
+            ]
+          },
+          "right": {
+            "kind": "columnRef",
+            "parts": [
+              "y",
+              "digit"
+            ]
+          }
+        },
+        {
+          "kind": "binaryExpr",
+          "op": "<>",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "m",
+              "digit"
+            ]
+          },
+          "right": {
+            "kind": "columnRef",
+            "parts": [
+              "o",
+              "digit"
+            ]
+          }
+        },
+        {
+          "kind": "binaryExpr",
+          "op": "<>",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "m",
+              "digit"
+            ]
+          },
+          "right": {
+            "kind": "columnRef",
+            "parts": [
+              "r",
+              "digit"
+            ]
+          }
+        },
+        {
+          "kind": "binaryExpr",
+          "op": "<>",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "m",
+              "digit"
+            ]
+          },
+          "right": {
+            "kind": "columnRef",
+            "parts": [
+              "y",
+              "digit"
+            ]
+          }
+        },
+        {
+          "kind": "binaryExpr",
+          "op": "<>",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "o",
+              "digit"
+            ]
+          },
+          "right": {
+            "kind": "columnRef",
+            "parts": [
+              "r",
+              "digit"
+            ]
+          }
+        },
+        {
+          "kind": "binaryExpr",
+          "op": "<>",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "o",
+              "digit"
+            ]
+          },
+          "right": {
+            "kind": "columnRef",
+            "parts": [
+              "y",
+              "digit"
+            ]
+          }
+        },
+        {
+          "kind": "binaryExpr",
+          "op": "<>",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "r",
+              "digit"
+            ]
+          },
+          "right": {
+            "kind": "columnRef",
+            "parts": [
+              "y",
+              "digit"
+            ]
+          }
+        },
+        {
+          "kind": "binaryExpr",
+          "op": "<>",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "s",
+              "digit"
+            ]
+          },
+          "right": {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "0"
+          }
+        },
+        {
+          "kind": "binaryExpr",
+          "op": "<>",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "m",
+              "digit"
+            ]
+          },
+          "right": {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "0"
+          }
+        },
+        {
+          "kind": "binaryExpr",
+          "op": "=",
+          "left": {
+            "kind": "binaryExpr",
+            "op": "+",
+            "left": {
+              "kind": "binaryExpr",
+              "op": "+",
+              "left": {
+                "kind": "binaryExpr",
+                "op": "+",
+                "left": {
+                  "kind": "binaryExpr",
+                  "op": "+",
+                  "left": {
+                    "kind": "binaryExpr",
+                    "op": "*",
+                    "left": {
+                      "kind": "literal",
+                      "type": "UInt64",
+                      "value": "1000"
+                    },
+                    "right": {
+                      "kind": "columnRef",
+                      "parts": [
+                        "s",
+                        "digit"
+                      ]
+                    }
+                  },
+                  "right": {
+                    "kind": "binaryExpr",
+                    "op": "*",
+                    "left": {
+                      "kind": "literal",
+                      "type": "UInt64",
+                      "value": "100"
+                    },
+                    "right": {
+                      "kind": "columnRef",
+                      "parts": [
+                        "e",
+                        "digit"
+                      ]
+                    }
+                  }
+                },
+                "right": {
+                  "kind": "binaryExpr",
+                  "op": "*",
+                  "left": {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "10"
+                  },
+                  "right": {
+                    "kind": "columnRef",
+                    "parts": [
+                      "n",
+                      "digit"
+                    ]
+                  }
+                }
+              },
+              "right": {
+                "kind": "columnRef",
+                "parts": [
+                  "d",
+                  "digit"
+                ]
+              },
+              "parenthesized": true
+            },
+            "right": {
+              "kind": "binaryExpr",
+              "op": "+",
+              "left": {
+                "kind": "binaryExpr",
+                "op": "+",
+                "left": {
+                  "kind": "binaryExpr",
+                  "op": "+",
+                  "left": {
+                    "kind": "binaryExpr",
+                    "op": "*",
+                    "left": {
+                      "kind": "literal",
+                      "type": "UInt64",
+                      "value": "1000"
+                    },
+                    "right": {
+                      "kind": "columnRef",
+                      "parts": [
+                        "m",
+                        "digit"
+                      ]
+                    }
+                  },
+                  "right": {
+                    "kind": "binaryExpr",
+                    "op": "*",
+                    "left": {
+                      "kind": "literal",
+                      "type": "UInt64",
+                      "value": "100"
+                    },
+                    "right": {
+                      "kind": "columnRef",
+                      "parts": [
+                        "o",
+                        "digit"
+                      ]
+                    }
+                  }
+                },
+                "right": {
+                  "kind": "binaryExpr",
+                  "op": "*",
+                  "left": {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "10"
+                  },
+                  "right": {
+                    "kind": "columnRef",
+                    "parts": [
+                      "r",
+                      "digit"
+                    ]
+                  }
+                }
+              },
+              "right": {
+                "kind": "columnRef",
+                "parts": [
+                  "e",
+                  "digit"
+                ]
+              },
+              "parenthesized": true
+            }
+          },
+          "right": {
+            "kind": "binaryExpr",
+            "op": "+",
+            "left": {
+              "kind": "binaryExpr",
+              "op": "+",
+              "left": {
+                "kind": "binaryExpr",
+                "op": "+",
+                "left": {
+                  "kind": "binaryExpr",
+                  "op": "+",
+                  "left": {
+                    "kind": "binaryExpr",
+                    "op": "*",
+                    "left": {
+                      "kind": "literal",
+                      "type": "UInt64",
+                      "value": "10000"
+                    },
+                    "right": {
+                      "kind": "columnRef",
+                      "parts": [
+                        "m",
+                        "digit"
+                      ]
+                    }
+                  },
+                  "right": {
+                    "kind": "binaryExpr",
+                    "op": "*",
+                    "left": {
+                      "kind": "literal",
+                      "type": "UInt64",
+                      "value": "1000"
+                    },
+                    "right": {
+                      "kind": "columnRef",
+                      "parts": [
+                        "o",
+                        "digit"
+                      ]
+                    }
+                  }
+                },
+                "right": {
+                  "kind": "binaryExpr",
+                  "op": "*",
+                  "left": {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "100"
+                  },
+                  "right": {
+                    "kind": "columnRef",
+                    "parts": [
+                      "n",
+                      "digit"
+                    ]
+                  }
+                }
+              },
+              "right": {
+                "kind": "binaryExpr",
+                "op": "*",
+                "left": {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "10"
+                },
+                "right": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "e",
+                    "digit"
+                  ]
+                }
+              }
+            },
+            "right": {
+              "kind": "columnRef",
+              "parts": [
+                "y",
+                "digit"
+              ]
+            },
+            "parenthesized": true
+          }
+        }
+      ]
+    }
+  }
+]

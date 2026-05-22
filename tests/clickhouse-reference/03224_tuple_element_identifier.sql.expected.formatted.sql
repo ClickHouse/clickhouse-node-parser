@@ -1,3 +1,7 @@
+SET enable_analyzer = 1;
+
+SET enable_named_columns_in_function_tuple = 1;
+
 SELECT
     JSONExtract('{"hello":[{"world":"wtf"}]}', 'Tuple(hello Array(Tuple(world String)))') AS x,
     x.hello,
@@ -11,7 +15,7 @@ SELECT
 SELECT
     JSONExtract('{"hello":[{" wow ":"wtf"}]}', 'Tuple(hello Array(Tuple(` wow ` String)))') AS x,
     x.hello,
-    tupleElement(x.hello[1], 'wow');
+    tupleElement(x.hello[1], 'wow'); -- { serverError NOT_FOUND_COLUMN_IN_BLOCK }
 
 SELECT tupleElement(tuple('Hello' AS world), 'world');
 

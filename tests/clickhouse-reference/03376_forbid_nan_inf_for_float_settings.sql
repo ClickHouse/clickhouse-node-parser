@@ -1,0 +1,3 @@
+SET log_queries_probability = inf; --  { serverError CANNOT_PARSE_NUMBER }
+SET log_queries_probability = nan; --  { serverError CANNOT_PARSE_NUMBER }
+SET log_queries_probability = -inf; --  { serverError CANNOT_PARSE_NUMBER }

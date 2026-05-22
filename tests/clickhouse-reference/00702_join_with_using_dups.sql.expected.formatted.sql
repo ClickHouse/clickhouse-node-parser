@@ -1,3 +1,27 @@
+DROP TABLE IF EXISTS X;
+
+DROP TABLE IF EXISTS Y;
+
+CREATE TABLE X
+(
+    id Int32,
+    x_name String
+)
+ENGINE = MergeTree
+ORDER BY tuple();
+
+CREATE TABLE Y
+(
+    id Int32,
+    y_name String
+)
+ENGINE = MergeTree
+ORDER BY tuple();
+
+INSERT INTO X (id, x_name);
+
+INSERT INTO Y (id, y_name);
+
 SELECT
     X.*,
     Y.*
@@ -125,3 +149,7 @@ ORDER BY
     j.id ASC,
     s.x_name ASC,
     j.y_name ASC;
+
+DROP TABLE X;
+
+DROP TABLE Y;

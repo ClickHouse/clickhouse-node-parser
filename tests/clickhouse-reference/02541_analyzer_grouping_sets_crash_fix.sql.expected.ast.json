@@ -1,0 +1,165 @@
+[
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "enable_analyzer",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "with": [
+      {
+        "kind": "cteExpr",
+        "name": "four",
+        "expr": {
+          "kind": "functionCall",
+          "name": "pow",
+          "args": [
+            {
+              "kind": "literal",
+              "type": "NULL",
+              "value": "NULL"
+            },
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "256"
+            }
+          ]
+        }
+      }
+    ],
+    "select": [
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "literal",
+          "type": "NULL",
+          "value": "NULL"
+        },
+        "alias": "two"
+      }
+    ],
+    "groupBy": {
+      "kind": "groupingSets",
+      "sets": [
+        [
+          {
+            "kind": "functionCall",
+            "name": "pow",
+            "args": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "two"
+                ]
+              },
+              {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "65536"
+              }
+            ]
+          }
+        ]
+      ]
+    }
+  },
+  {
+    "kind": "select",
+    "with": [
+      {
+        "kind": "cteExpr",
+        "name": "four",
+        "expr": {
+          "kind": "subqueryExpr",
+          "query": {
+            "kind": "select",
+            "select": [
+              {
+                "kind": "functionCall",
+                "name": "pow",
+                "args": [
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "two"
+                    ]
+                  },
+                  {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "1"
+                  }
+                ]
+              }
+            ],
+            "groupBy": {
+              "kind": "groupingSets",
+              "sets": [
+                [
+                  {
+                    "kind": "functionCall",
+                    "name": "pow",
+                    "args": [
+                      {
+                        "kind": "literal",
+                        "type": "UInt64",
+                        "value": "1"
+                      },
+                      {
+                        "kind": "literal",
+                        "type": "UInt64",
+                        "value": "9"
+                      }
+                    ]
+                  }
+                ]
+              ]
+            }
+          }
+        }
+      }
+    ],
+    "select": [
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "2"
+        },
+        "alias": "two"
+      }
+    ],
+    "groupBy": {
+      "kind": "expressions",
+      "items": [
+        {
+          "kind": "functionCall",
+          "name": "pow",
+          "args": [
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "1"
+            },
+            {
+              "kind": "columnRef",
+              "parts": [
+                "two"
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  }
+]

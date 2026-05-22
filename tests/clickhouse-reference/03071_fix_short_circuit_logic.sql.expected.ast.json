@@ -1,5 +1,399 @@
 [
   {
+    "kind": "createFunction",
+    "name": "unhexPrefixed",
+    "functionExpr": {
+      "kind": "lambdaExpr",
+      "params": [
+        "value"
+      ],
+      "body": {
+        "kind": "functionCall",
+        "name": "unhex",
+        "args": [
+          {
+            "kind": "functionCall",
+            "name": "substring",
+            "args": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "value"
+                ]
+              },
+              {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "3"
+              }
+            ]
+          }
+        ]
+      }
+    }
+  },
+  {
+    "kind": "createFunction",
+    "name": "hex2bytes",
+    "functionExpr": {
+      "kind": "lambdaExpr",
+      "params": [
+        "address"
+      ],
+      "body": {
+        "kind": "functionCall",
+        "name": "CAST",
+        "args": [
+          {
+            "kind": "functionCall",
+            "name": "unhexPrefixed",
+            "args": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "address"
+                ]
+              }
+            ]
+          },
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": "FixedString(20)"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "kind": "createFunction",
+    "name": "bytes2hex",
+    "functionExpr": {
+      "kind": "lambdaExpr",
+      "params": [
+        "address"
+      ],
+      "body": {
+        "kind": "functionCall",
+        "name": "concat",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": "0x"
+          },
+          {
+            "kind": "functionCall",
+            "name": "lower",
+            "args": [
+              {
+                "kind": "functionCall",
+                "name": "hex",
+                "args": [
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "address"
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    }
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "test"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "transfer_id",
+        "type": {
+          "name": "String"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "address",
+        "type": {
+          "name": "FixedString",
+          "args": [
+            {
+              "kind": "literal",
+              "value": "20"
+            }
+          ]
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "value",
+        "type": {
+          "name": "UInt256"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "block_timestamp",
+        "type": {
+          "name": "DateTime",
+          "args": [
+            {
+              "kind": "literal",
+              "value": "'UTC'"
+            }
+          ]
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "token_address",
+        "type": {
+          "name": "FixedString",
+          "args": [
+            {
+              "kind": "literal",
+              "value": "20"
+            }
+          ]
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "partitionBy": {
+      "kind": "functionCall",
+      "name": "toYYYYMM",
+      "args": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "block_timestamp"
+          ]
+        }
+      ]
+    },
+    "primaryKey": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "address"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "block_timestamp"
+        ]
+      }
+    ],
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "address"
+          ]
+        }
+      },
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "block_timestamp"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "test"
+      }
+    },
+    "selectQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "token-transfer-0x758f1bbabb160683e1c80ed52dcd24a32b599d40edf1cec91b5f1199c0e392a2-56"
+        },
+        {
+          "kind": "functionCall",
+          "name": "hex2bytes",
+          "args": [
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "0xd387a6e4e84a6c86bd90c158c6028a58cc8ac459"
+            }
+          ]
+        },
+        {
+          "kind": "literal",
+          "type": "Float64",
+          "value": "3000000000000000000000"
+        },
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "2024-01-02 16:54:59"
+        },
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "abc"
+        }
+      ]
+    }
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "token_data"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "token_address_hex",
+        "type": {
+          "name": "String"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "chain",
+        "type": {
+          "name": "String"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "is_blacklisted",
+        "type": {
+          "name": "Bool"
+        }
+      }
+    ],
+    "engine": {
+      "name": "TinyLog"
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "token_data"
+      }
+    },
+    "selectQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "functionCall",
+          "name": "bytes2hex",
+          "args": [
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "abc"
+            }
+          ]
+        },
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "zksync"
+        },
+        {
+          "kind": "literal",
+          "type": "Bool",
+          "value": "0"
+        }
+      ]
+    }
+  },
+  {
+    "kind": "createDictionary",
+    "table": {
+      "kind": "tableRef",
+      "table": "token_data_map"
+    },
+    "dictAttrs": [
+      {
+        "name": "token_address_hex",
+        "type": {
+          "name": "String"
+        }
+      },
+      {
+        "name": "chain",
+        "type": {
+          "name": "String"
+        }
+      },
+      {
+        "name": "is_blacklisted",
+        "type": {
+          "name": "Bool"
+        }
+      }
+    ],
+    "dictDef": {
+      "primaryKey": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "token_address_hex"
+          ]
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "chain"
+          ]
+        }
+      ],
+      "source": {
+        "name": "clickhouse",
+        "pairs": [
+          {
+            "name": "table",
+            "value": {
+              "kind": "columnRef",
+              "parts": [
+                "token_data"
+              ]
+            }
+          }
+        ]
+      },
+      "lifetime": {
+        "min": 200,
+        "max": 300
+      },
+      "layout": {
+        "name": "COMPLEX_KEY_HASHED_ARRAY",
+        "pairs": []
+      }
+    }
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -164,7 +558,7 @@
                   "value": "is_blacklisted"
                 },
                 {
-                  "kind": "tuple",
+                  "kind": "tupleLiteral",
                   "elements": [
                     {
                       "kind": "columnRef",

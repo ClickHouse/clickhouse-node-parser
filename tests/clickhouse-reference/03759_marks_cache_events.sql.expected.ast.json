@@ -1,5 +1,81 @@
 [
   {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "data"
+    },
+    "ifExists": true,
+    "leadingComments": [
+      "-- Tags: no-parallel-replicas, no-parallel",
+      "-- Test depends on mark cache, don't run with others in parallel"
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "data"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "key",
+        "type": {
+          "name": "Int"
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree",
+      "args": []
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "functionCall",
+          "name": "tuple",
+          "args": []
+        }
+      }
+    ],
+    "settings": [
+      {
+        "name": "prewarm_mark_cache",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      }
+    ],
+    "settingsAfterOrderBy": true
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "load_marks_asynchronously",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "data"
+      }
+    }
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -20,7 +96,31 @@
           "value": "0"
         }
       }
+    ],
+    "leadingComments": [
+      "--",
+      "-- SELECTs",
+      "--"
     ]
+  },
+  {
+    "kind": "detach",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "data"
+    },
+    "leadingComments": [
+      "-- drop marks cache"
+    ]
+  },
+  {
+    "kind": "attach",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "data"
+    }
   },
   {
     "kind": "select",
@@ -44,6 +144,10 @@
         }
       }
     ]
+  },
+  {
+    "kind": "system",
+    "body": "SYSTEM flush logs query_log"
   },
   {
     "kind": "select",
@@ -194,6 +298,24 @@
       }
     ],
     "format": "CSVWithNames"
+  },
+  {
+    "kind": "optimize",
+    "table": {
+      "kind": "tableRef",
+      "table": "data"
+    },
+    "final": true,
+    "leadingComments": [
+      "--",
+      "-- metrics for merges",
+      "--",
+      "-- only hits"
+    ]
+  },
+  {
+    "kind": "system",
+    "body": "SYSTEM flush logs part_log"
   },
   {
     "kind": "select",

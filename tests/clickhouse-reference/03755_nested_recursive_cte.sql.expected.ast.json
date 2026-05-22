@@ -1,5 +1,73 @@
 [
   {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "t0"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "t0"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "x",
+        "type": {
+          "name": "Int32"
+        }
+      }
+    ],
+    "engine": {
+      "name": "Memory"
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "t0"
+      }
+    }
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "max_recursive_cte_evaluation_depth",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "5"
+        }
+      }
+    ],
+    "leadingComments": [
+      "-- The original problematic query pattern - inner CTE references outer CTE",
+      "-- Using count() to get deterministic output regardless of how many rows are produced before hitting the limit"
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "enable_analyzer",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -23,7 +91,7 @@
         "kind": "select",
         "with": [
           {
-            "kind": "subquery",
+            "kind": "cteSubquery",
             "name": "q",
             "query": {
               "kind": "union",
@@ -46,7 +114,7 @@
                   "kind": "select",
                   "with": [
                     {
-                      "kind": "subquery",
+                      "kind": "cteSubquery",
                       "name": "x",
                       "query": {
                         "kind": "union",
@@ -106,12 +174,14 @@
                                   "value": "0"
                                 }
                               }
-                            ]
+                            ],
+                            "parenthesized": true
                           }
                         ]
                       }
                     }
                   ],
+                  "recursive": true,
                   "select": [
                     {
                       "kind": "literal",
@@ -129,6 +199,7 @@
             }
           }
         ],
+        "recursive": true,
         "select": [
           {
             "kind": "literal",
@@ -141,6 +212,17 @@
           "table": "q"
         }
       }
+    },
+    "trailingComments": [
+      "-- { serverError TOO_DEEP_RECURSION }"
+    ]
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "t0"
     }
   }
 ]

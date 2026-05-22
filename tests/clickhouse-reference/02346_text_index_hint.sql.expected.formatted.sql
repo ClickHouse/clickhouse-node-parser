@@ -1,4 +1,29 @@
+-- Tags: no-parallel-replicas
+SET enable_analyzer = 1;
+
+SET enable_full_text_index = 1;
+
+SET use_skip_indexes_on_data_read = 1;
+
+SET query_plan_text_index_add_hint = 1;
+
+SET use_statistics = 0;
+
+-- Tests text search setting 'query_plan_text_index_add_hint' with different tokenizers
+DROP TABLE IF EXISTS tab;
+
 SELECT '-- splitByNonAlpha';
+
+CREATE TABLE tab
+(
+    s String,
+    INDEX idx s TYPE text(tokenizer = splitByNonAlpha) GRANULARITY 4
+)
+ENGINE = MergeTree
+ORDER BY tuple();
+
+INSERT INTO tab SELECT number
+FROM numbers(100000);
 
 SELECT count()
 FROM tab
@@ -27,3 +52,21 @@ FROM (
         SETTINGS use_skip_indexes_on_data_read = 1
     )
 WHERE ilike(`explain`, '%filter column%');
+
+DROP TABLE tab;
+
+CREATE TABLE tab
+(
+    s String,
+    INDEX idx s TYPE text(tokenizer = `array`) GRANULARITY 4
+)
+ENGINE = MergeTree
+ORDER BY tuple();
+
+CREATE TABLE tab
+(
+    s String,
+    INDEX idx s TYPE text(tokenizer = ngrams(3)) GRANULARITY 4
+)
+ENGINE = MergeTree
+ORDER BY tuple();

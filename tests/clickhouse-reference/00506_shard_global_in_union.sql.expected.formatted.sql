@@ -1,3 +1,4 @@
+-- Tags: shard
 SELECT X
 FROM (
         SELECT *
@@ -12,6 +13,17 @@ FROM (
             4
     )
 ORDER BY X ASC;
+
+DROP TABLE IF EXISTS globalin;
+
+CREATE TABLE globalin
+(
+    CounterID UInt32,
+    StartDate Date
+)
+ENGINE = Memory;
+
+INSERT INTO globalin;
 
 SELECT *
 FROM (
@@ -56,6 +68,19 @@ FROM (
 
 SELECT 'finish ===========================;';
 
+DROP TABLE globalin;
+
+DROP TABLE IF EXISTS union_bug;
+
+CREATE TABLE union_bug
+(
+    Event String,
+    Datetime DateTime('Asia/Istanbul')
+)
+ENGINE = Memory;
+
+INSERT INTO union_bug;
+
 SELECT *
 FROM (
         SELECT *
@@ -111,3 +136,5 @@ FROM (
         WHERE Event = 'B'
     )
 ORDER BY Datetime ASC;
+
+DROP TABLE union_bug;

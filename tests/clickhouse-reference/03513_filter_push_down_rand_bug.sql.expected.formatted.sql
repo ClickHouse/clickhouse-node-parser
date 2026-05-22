@@ -1,3 +1,14 @@
+DROP TABLE IF EXISTS users_items;
+
+CREATE TABLE users_items
+(
+    user_id UInt64
+)
+ENGINE = Log;
+
+INSERT INTO users_items SELECT bitAnd(number, 15)
+FROM numbers(64);
+
 SELECT sum(in_sample)
 FROM (
         WITH RandomUsers AS (

@@ -1,5 +1,121 @@
 [
   {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "tables": [
+      {
+        "kind": "tableRef",
+        "table": "inner_view"
+      },
+      {
+        "kind": "tableRef",
+        "table": "outer_view_hardcoded_ok"
+      },
+      {
+        "kind": "tableRef",
+        "table": "outer_view_parameterized_ko"
+      }
+    ],
+    "ifExists": true
+  },
+  {
+    "kind": "createView",
+    "table": {
+      "kind": "tableRef",
+      "table": "inner_view"
+    },
+    "asQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "alias",
+          "expr": {
+            "kind": "binaryExpr",
+            "op": "+",
+            "left": {
+              "kind": "queryParam",
+              "name": "inner_a",
+              "type": "Int32"
+            },
+            "right": {
+              "kind": "queryParam",
+              "name": "inner_b",
+              "type": "Int32"
+            }
+          },
+          "alias": "n"
+        }
+      ]
+    }
+  },
+  {
+    "kind": "createView",
+    "table": {
+      "kind": "tableRef",
+      "table": "outer_view_hardcoded_ok"
+    },
+    "asQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "alias",
+          "expr": {
+            "kind": "binaryExpr",
+            "op": "*",
+            "left": {
+              "kind": "columnRef",
+              "parts": [
+                "n"
+              ]
+            },
+            "right": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "2"
+            }
+          },
+          "alias": "c"
+        }
+      ],
+      "from": {
+        "kind": "tableFunctionRef",
+        "name": "inner_view",
+        "args": [
+          {
+            "kind": "binaryExpr",
+            "op": "=",
+            "left": {
+              "kind": "columnRef",
+              "parts": [
+                "inner_a"
+              ]
+            },
+            "right": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "1"
+            }
+          },
+          {
+            "kind": "binaryExpr",
+            "op": "=",
+            "left": {
+              "kind": "columnRef",
+              "parts": [
+                "inner_b"
+              ]
+            },
+            "right": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "2"
+            }
+          }
+        ]
+      }
+    }
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -12,6 +128,73 @@
     }
   },
   {
+    "kind": "createView",
+    "table": {
+      "kind": "tableRef",
+      "table": "outer_view_parameterized_ko"
+    },
+    "asQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "alias",
+          "expr": {
+            "kind": "binaryExpr",
+            "op": "*",
+            "left": {
+              "kind": "columnRef",
+              "parts": [
+                "n"
+              ]
+            },
+            "right": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "2"
+            }
+          },
+          "alias": "c"
+        }
+      ],
+      "from": {
+        "kind": "tableFunctionRef",
+        "name": "inner_view",
+        "args": [
+          {
+            "kind": "binaryExpr",
+            "op": "=",
+            "left": {
+              "kind": "columnRef",
+              "parts": [
+                "inner_a"
+              ]
+            },
+            "right": {
+              "kind": "queryParam",
+              "name": "a",
+              "type": "Int32"
+            }
+          },
+          {
+            "kind": "binaryExpr",
+            "op": "=",
+            "left": {
+              "kind": "columnRef",
+              "parts": [
+                "inner_b"
+              ]
+            },
+            "right": {
+              "kind": "queryParam",
+              "name": "b",
+              "type": "Int32"
+            }
+          }
+        ]
+      }
+    }
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -19,7 +202,7 @@
       }
     ],
     "from": {
-      "kind": "tableFunction",
+      "kind": "tableFunctionRef",
       "name": "outer_view_parameterized_ko",
       "args": [
         {
@@ -54,5 +237,23 @@
         }
       ]
     }
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "tables": [
+      {
+        "kind": "tableRef",
+        "table": "inner_view"
+      },
+      {
+        "kind": "tableRef",
+        "table": "outer_view_hardcoded_ok"
+      },
+      {
+        "kind": "tableRef",
+        "table": "outer_view_parameterized_ko"
+      }
+    ]
   }
 ]

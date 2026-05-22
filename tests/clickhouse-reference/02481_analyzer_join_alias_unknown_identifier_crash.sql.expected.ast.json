@@ -1,48 +1,104 @@
 [
   {
-    "kind": "select",
-    "select": [
+    "kind": "set",
+    "settings": [
       {
-        "kind": "functionCall",
-        "name": "toTypeName",
-        "args": [
-          {
-            "kind": "columnRef",
-            "parts": [
-              "t2_value"
-            ]
-          }
-        ]
+        "name": "enable_analyzer",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "test_table_join_1"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "test_table_join_1"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "id",
+        "type": {
+          "name": "UInt8"
+        }
       },
       {
-        "kind": "alias",
-        "expr": {
-          "kind": "columnRef",
-          "parts": [
-            "t2",
-            "value"
-          ]
-        },
-        "alias": "t2_value"
+        "kind": "columnDef",
+        "name": "value",
+        "type": {
+          "name": "String"
+        }
       }
     ],
-    "from": {
-      "left": {
+    "engine": {
+      "name": "TinyLog"
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
         "kind": "tableRef",
-        "table": "test_table_join_1",
-        "alias": "t1"
+        "table": "test_table_join_1"
+      }
+    }
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "test_table_join_2"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "test_table_join_2"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "id",
+        "type": {
+          "name": "UInt16"
+        }
       },
-      "kind": "join",
-      "joinType": "INNER",
-      "right": {
+      {
+        "kind": "columnDef",
+        "name": "value",
+        "type": {
+          "name": "String"
+        }
+      }
+    ],
+    "engine": {
+      "name": "TinyLog"
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
         "kind": "tableRef",
         "table": "test_table_join_2"
-      },
-      "constraint": {
-        "kind": "using",
-        "columns": [
-          "id"
-        ]
       }
     }
   },
@@ -79,7 +135,57 @@
         "table": "test_table_join_1",
         "alias": "t1"
       },
-      "kind": "join",
+      "kind": "joinExpr",
+      "joinType": "INNER",
+      "right": {
+        "kind": "tableRef",
+        "table": "test_table_join_2"
+      },
+      "constraint": {
+        "kind": "using",
+        "columns": [
+          "id"
+        ]
+      }
+    },
+    "trailingComments": [
+      "-- { serverError UNKNOWN_IDENTIFIER };"
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "toTypeName",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "t2_value"
+            ]
+          }
+        ]
+      },
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "t2",
+            "value"
+          ]
+        },
+        "alias": "t2_value"
+      }
+    ],
+    "from": {
+      "left": {
+        "kind": "tableRef",
+        "table": "test_table_join_1",
+        "alias": "t1"
+      },
+      "kind": "joinExpr",
       "joinType": "INNER",
       "right": {
         "kind": "tableRef",
@@ -92,6 +198,22 @@
           "id"
         ]
       }
+    }
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "test_table_join_1"
+    }
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "test_table_join_2"
     }
   }
 ]

@@ -1,3 +1,114 @@
+SET enable_analyzer = 1;
+DROP TABLE IF EXISTS 03611_nscmp_tbl;
+CREATE TABLE 03611_nscmp_tbl
+(
+    `key` Int64,
+    `c_int8` Nullable(Int8),
+    `c_int16` Nullable(Int16),
+    `c_int32` Nullable(Int32),
+    `c_int64` Nullable(Int64),
+    `c_uint8` Nullable(UInt8),
+    `c_uint16` Nullable(UInt16),
+    `c_uint32` Nullable(UInt32),
+    `c_uint64` Nullable(UInt64),
+    `c_float32` Nullable(Float32),
+    `c_float64` Nullable(Float64),
+    `c_decimal` Nullable(Decimal(18, 4)),
+    `c_date` Nullable(Date),
+    `c_datetime` Nullable(DateTime),
+    `c_dt64` Nullable(DateTime64(3)),
+    `c_string` Nullable(String),
+    `c_fstring` Nullable(FixedString(4)),
+    `c_enum8` Nullable(Enum8('a' = 1, 'b' = 2, '' = 0)),
+    `c_enum16` Nullable(Enum16('x' = 100, 'y' = 200, '' = 0)),
+    `c_array` Array(Nullable(Int32)),
+    `c_tuple` Tuple(Nullable(Int32),Nullable(String)),
+    `c_map` Map(String, Nullable(Int32)),
+    `c_nullable` Nullable(Int32),
+    `c_uuid` Nullable(UUID),
+    `c_ipv4` Nullable(IPv4),
+    `c_ipv6` Nullable(IPv6),
+    `c_json` Nullable(JSON),
+    `c_nested` Nested(
+        id Nullable(Int32),
+        value Nullable(String)
+    ),
+    `c_variant` Variant(UInt64, String, Array(UInt64)),
+    `c_dynamic` Dynamic
+)
+ENGINE = MergeTree
+ORDER BY key;
+INSERT INTO 03611_nscmp_tbl VALUES
+(
+    1,
+    1,1,1,1, 1,1,1,1, 1.0,1.0, 123.4567,
+    '2025-09-22', '2025-09-22 12:34:56', '2025-09-22 12:34:56.789',
+    'abc','abcd','a','x',
+    [1,2,3],
+    (1,'t'),
+    map('k1',1),
+    100,
+    generateUUIDv4(),
+    '127.0.0.1',
+    '::1',
+    '{"k":"v"}',
+    [1],       -- c_nested.id
+    ['test nested'], -- c_nested.value
+    'test variant', -- c_variant
+    'test dynamic'  -- c_dynamic
+),
+(
+    2,
+    NULL,NULL,NULL,NULL, NULL,NULL,NULL,NULL, NULL,NULL, NULL,
+    NULL, NULL, NULL,
+    NULL, NULL, NULL, NULL,
+    NULL, NULL,
+    NULL,
+    NULL,
+    NULL,
+    NULL,
+    NULL,
+    NULL,
+    NULL,   -- c_nested.id NULL
+    NULL,   -- c_nested.value NULL
+    NULL,   -- c_variant
+    NULL    -- c_dynamic
+),
+(
+    3,
+    2,2,2,2, 2,2,2,2, nan,nan, 999.9999,
+    '2025-09-23', '2025-09-23 01:02:03', '2025-09-23 01:02:03.321',
+    'xyz','zzzz','b','y',
+    [4,5],
+    (2,'u'),
+    map('k2',2),
+    200,
+    generateUUIDv4(),
+    '10.0.0.1',
+    '2001:db8::1',
+    '{"k2":"v2"}',
+    [201],          -- c_nested.id
+    ['nested_val'],  -- c_nested.value
+    24, -- c_variant
+    12  -- c_dynamic
+),
+(
+    4,
+    -5,-5,-5,-5, 255,65535,4294967295,18446744073709551615, -1,0.0, -123.0001,
+    '1970-01-01', '1970-01-01 00:00:00', '1970-01-01 00:00:00.000',
+    '', 'aaaa','a','x',
+    [],(0,''),
+    map('edge',-1),
+    NULL,
+    generateUUIDv4(),
+    '0.0.0.0',
+    '::',
+    '{}',
+    [],   -- c_nested.id empty
+    [],    -- c_nested.value empty
+    [1, 2, 3],  -- c_variant
+    [2, 3, 4]   -- c_dynamic
+);
 SELECT
     -- Integers
     c_int8 <=> c_int8 AS c_int8_self_eq,
@@ -370,6 +481,19 @@ SELECT
     c_map <=> c_tuple,
     c_map IS DISTINCT FROM c_tuple
 FROM 03611_nscmp_tbl;   -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
+DROP TABLE IF EXISTS 03611_t_nullsafe;
+CREATE TABLE IF NOT EXISTS 03611_t_nullsafe
+(
+    id Int32,
+    a Nullable(Int32),
+    b Nullable(Int32),
+    txt Nullable(String)
+) ENGINE = Memory;
+INSERT INTO 03611_t_nullsafe VALUES
+(1, 1, 1, 'x'),
+(2, 1, NULL, 'x'),
+(3, NULL, NULL, 'y'),
+(4, 2, 2, 'z');
 SELECT id, a, b,
        (a <=> b) AS null_safe_equal,
        (a IS DISTINCT FROM b) AS null_safe_distinct

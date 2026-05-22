@@ -1,3 +1,25 @@
+-- Tags: no-parallel
+-- Looks like you cannot use the query parameter as a column name.
+-- https://github.com/ClickHouse/ClickHouse/issues/23194
+SET enable_analyzer = 1;
+
+DROP DATABASE IF EXISTS db1_03101;
+
+DROP DATABASE IF EXISTS db2_03101;
+
+CREATE DATABASE db1_03101;
+
+CREATE DATABASE db2_03101;
+
+USE db1_03101;
+
+CREATE TABLE db1_03101.tbl
+(
+    col String,
+    db1_03101 Nested(tbl Nested(col String))
+)
+ENGINE = Memory;
+
 SELECT db1_03101.tbl.col
 FROM db1_03101.tbl;
 
@@ -21,11 +43,13 @@ SELECT '---';
 SELECT *
 GROUP BY *;
 
+-- not ok as every component of ORDER BY may contain ASC/DESC and COLLATE; though can be supported in some sense
+-- but it works
 SELECT *
 ORDER BY * ASC;
 
 SELECT *
-WHERE *;
+WHERE *; -- { serverError UNEXPECTED_EXPRESSION }
 
 SELECT *
 FROM
@@ -36,6 +60,7 @@ CROSS JOIN (
         SELECT 2 AS b
     ) AS u;
 
+-- equivalent to:
 SELECT
     a,
     b
@@ -56,6 +81,7 @@ CROSS JOIN (
         SELECT 1 AS a
     ) AS u;
 
+-- equivalent to:
 SELECT
     t.a,
     u.a
@@ -67,14 +93,39 @@ CROSS JOIN (
         SELECT 1 AS a
     ) AS u;
 
+---- TODO: think about it
+--CREATE TABLE db1_03101.t
+--(
+--    a UInt16
+--)
+--ENGINE = Memory;
+--
+--CREATE TABLE db2_03101.t
+--(
+--    a UInt16
+--)
+--ENGINE = Memory;
+--
+--SELECT * FROM (SELECT 1 AS a) AS db2_03101.t, (SELECT 1 AS a) AS db1_03101.t;
+---- equivalent to:
+--SELECT db2_03101.t.a, db1_03101.t.a FROM (SELECT 1 AS a) AS db2_03101.t, (SELECT 1 AS a) AS db1_03101.t;
+CREATE TABLE t
+(
+    x String,
+    nest Nested(a String, b String)
+)
+ENGINE = Memory;
+
 SELECT *
 FROM t;
 
+-- equivalent to:
 SELECT
     x,
     nest.*
 FROM t;
 
+-- equivalent to:
 SELECT
     x,
     nest.a,

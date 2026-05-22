@@ -1,5 +1,56 @@
 [
   {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "log_query_threads",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ],
+    "leadingComments": [
+      "--",
+      "-- This is a cleaner approach for writing a test that relies on system.query_log/query_thread_log.",
+      "--",
+      "-- It uses current database, and since clickhouse-test will generate random for",
+      "-- each run you can run the test multiple times without worrying about",
+      "-- overlaps.",
+      "--",
+      "-- There is still event_date/event_time filter for better performance",
+      "-- (even though this is not relevant for runs on CI)",
+      "--"
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "log_queries_min_type",
+        "value": {
+          "kind": "literal",
+          "type": "String",
+          "value": "QUERY_FINISH"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "log_queries",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -14,6 +65,36 @@
       "table": "one"
     },
     "format": "Null"
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "log_queries",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "log_query_threads",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "system",
+    "body": "SYSTEM flush logs query_log, query_thread_log"
   },
   {
     "kind": "select",
@@ -158,6 +239,10 @@
           }
         }
       ]
-    }
+    },
+    "leadingComments": [
+      "-- at least two threads for processing",
+      "-- (but one just waits for another, sigh)"
+    ]
   }
 ]

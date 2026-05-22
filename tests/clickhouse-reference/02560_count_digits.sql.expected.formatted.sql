@@ -28,6 +28,7 @@ SELECT countDigits(-123.4567890::Decimal128(7));
 
 SELECT countDigits(-123.45678901::Decimal256(8));
 
+-- this behavior can be surprising, but actually reasonable:
 SELECT countDigits(-123.456::Decimal32(5));
 
 SELECT countDigits(-123.4567::Decimal64(6));

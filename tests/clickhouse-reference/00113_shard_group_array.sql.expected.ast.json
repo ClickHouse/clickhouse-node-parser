@@ -95,7 +95,10 @@
         "type": "UInt64",
         "value": "10"
       }
-    }
+    },
+    "leadingComments": [
+      "-- Tags: shard"
+    ]
   },
   {
     "kind": "select",
@@ -214,6 +217,70 @@
     }
   },
   {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "numbers_mt"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "numbers_mt"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "number",
+        "type": {
+          "name": "UInt64"
+        }
+      }
+    ],
+    "engine": {
+      "name": "Log"
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "numbers_mt"
+      }
+    },
+    "selectQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "asterisk"
+        }
+      ],
+      "from": {
+        "kind": "tableRef",
+        "database": "system",
+        "table": "numbers"
+      },
+      "offset": {
+        "kind": "literal",
+        "type": "UInt64",
+        "value": "1000000"
+      },
+      "limit": {
+        "count": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        },
+        "commaSyntax": true
+      }
+    }
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -307,7 +374,7 @@
           }
         }
       },
-      "kind": "arrayJoin",
+      "kind": "arrayJoinExpr",
       "joinType": "ARRAY",
       "expressions": [
         {
@@ -431,7 +498,7 @@
           }
         }
       },
-      "kind": "arrayJoin",
+      "kind": "arrayJoinExpr",
       "joinType": "ARRAY",
       "expressions": [
         {
@@ -582,7 +649,7 @@
                 "name": "groupArray",
                 "args": [
                   {
-                    "kind": "array",
+                    "kind": "arrayLiteral",
                     "elements": [
                       {
                         "kind": "functionCall",
@@ -642,7 +709,7 @@
           }
         }
       },
-      "kind": "arrayJoin",
+      "kind": "arrayJoinExpr",
       "joinType": "ARRAY",
       "expressions": [
         {
@@ -775,7 +842,7 @@
                 "name": "groupArray",
                 "args": [
                   {
-                    "kind": "array",
+                    "kind": "arrayLiteral",
                     "elements": [
                       {
                         "kind": "columnRef",
@@ -823,7 +890,7 @@
           }
         }
       },
-      "kind": "arrayJoin",
+      "kind": "arrayJoinExpr",
       "joinType": "ARRAY",
       "expressions": [
         {
@@ -913,7 +980,7 @@
             }
           ],
           "from": {
-            "kind": "tableFunction",
+            "kind": "tableFunctionRef",
             "name": "remote",
             "args": [
               {
@@ -946,7 +1013,7 @@
           }
         }
       },
-      "kind": "arrayJoin",
+      "kind": "arrayJoinExpr",
       "joinType": "ARRAY",
       "expressions": [
         {
@@ -1054,7 +1121,7 @@
             }
           ],
           "from": {
-            "kind": "tableFunction",
+            "kind": "tableFunctionRef",
             "name": "remote",
             "args": [
               {
@@ -1087,7 +1154,7 @@
           }
         }
       },
-      "kind": "arrayJoin",
+      "kind": "arrayJoinExpr",
       "joinType": "ARRAY",
       "expressions": [
         {
@@ -1238,7 +1305,7 @@
                 "name": "groupArray",
                 "args": [
                   {
-                    "kind": "array",
+                    "kind": "arrayLiteral",
                     "elements": [
                       {
                         "kind": "functionCall",
@@ -1282,7 +1349,7 @@
             }
           ],
           "from": {
-            "kind": "tableFunction",
+            "kind": "tableFunctionRef",
             "name": "remote",
             "args": [
               {
@@ -1315,7 +1382,7 @@
           }
         }
       },
-      "kind": "arrayJoin",
+      "kind": "arrayJoinExpr",
       "joinType": "ARRAY",
       "expressions": [
         {
@@ -1328,6 +1395,50 @@
     }
   },
   {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "numbers_mt"
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "numbers_mt"
+      }
+    },
+    "selectQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "asterisk"
+        }
+      ],
+      "from": {
+        "kind": "tableRef",
+        "database": "system",
+        "table": "numbers"
+      },
+      "offset": {
+        "kind": "literal",
+        "type": "UInt64",
+        "value": "1048575"
+      },
+      "limit": {
+        "count": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        },
+        "commaSyntax": true
+      }
+    }
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -1658,7 +1769,7 @@
               {
                 "kind": "alias",
                 "expr": {
-                  "kind": "array",
+                  "kind": "arrayLiteral",
                   "elements": [
                     {
                       "kind": "functionCall",
@@ -1881,7 +1992,7 @@
       }
     ],
     "from": {
-      "kind": "tableFunction",
+      "kind": "tableFunctionRef",
       "name": "remote",
       "args": [
         {
@@ -2048,7 +2159,7 @@
       }
     ],
     "from": {
-      "kind": "tableFunction",
+      "kind": "tableFunctionRef",
       "name": "remote",
       "args": [
         {
@@ -2142,7 +2253,7 @@
               {
                 "kind": "alias",
                 "expr": {
-                  "kind": "array",
+                  "kind": "arrayLiteral",
                   "elements": [
                     {
                       "kind": "functionCall",
@@ -2221,7 +2332,7 @@
       }
     ],
     "from": {
-      "kind": "tableFunction",
+      "kind": "tableFunctionRef",
       "name": "remote",
       "args": [
         {
@@ -2276,6 +2387,10 @@
         "value": "9"
       },
       "commaSyntax": true
-    }
+    },
+    "trailingComments": [
+      "-- Check binary compatibility:",
+      "-- clickhouse-client -h old -q \"SELECT arrayReduce('groupArrayState', [['1'], ['22'], ['333']]) FORMAT RowBinary\" | clickhouse-local -s --input-format RowBinary --structure \"d AggregateFunction(groupArray2, Array(String))\" -q \"SELECT groupArray2Merge(d) FROM table\""
+    ]
   }
 ]

@@ -1,3 +1,5 @@
+SET optimize_functions_to_subcolumns = 1;
+
 SELECT count(*)
 FROM
     numbers(2) AS n1

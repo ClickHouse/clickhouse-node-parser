@@ -1,5 +1,1229 @@
 [
   {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "part"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "supplier"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "partsupp"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "customer"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "orders"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "lineitem"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "nation"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "region"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "enable_analyzer",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "cross_to_inner_join_rewrite",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "part"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "p_partkey",
+        "type": {
+          "name": "Int32"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "p_name",
+        "type": {
+          "name": "String"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "p_mfgr",
+        "type": {
+          "name": "FixedString",
+          "args": [
+            {
+              "kind": "literal",
+              "value": "25"
+            }
+          ]
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "p_brand",
+        "type": {
+          "name": "FixedString",
+          "args": [
+            {
+              "kind": "literal",
+              "value": "10"
+            }
+          ]
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "p_type",
+        "type": {
+          "name": "String"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "p_size",
+        "type": {
+          "name": "Int32"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "p_container",
+        "type": {
+          "name": "FixedString",
+          "args": [
+            {
+              "kind": "literal",
+              "value": "10"
+            }
+          ]
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "p_retailprice",
+        "type": {
+          "name": "Decimal",
+          "args": [
+            {
+              "kind": "literal",
+              "value": "18"
+            },
+            {
+              "kind": "literal",
+              "value": "2"
+            }
+          ]
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "p_comment",
+        "type": {
+          "name": "String"
+        }
+      },
+      {
+        "kind": "constraintDef",
+        "name": "pk",
+        "constraintType": "CHECK",
+        "expr": {
+          "kind": "binaryExpr",
+          "op": ">=",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "p_partkey"
+            ]
+          },
+          "right": {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "0"
+          }
+        }
+      },
+      {
+        "kind": "constraintDef",
+        "name": "positive",
+        "constraintType": "CHECK",
+        "expr": {
+          "kind": "naryExpr",
+          "op": "AND",
+          "operands": [
+            {
+              "kind": "binaryExpr",
+              "op": ">=",
+              "left": {
+                "kind": "columnRef",
+                "parts": [
+                  "p_size"
+                ]
+              },
+              "right": {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "0"
+              }
+            },
+            {
+              "kind": "binaryExpr",
+              "op": ">=",
+              "left": {
+                "kind": "columnRef",
+                "parts": [
+                  "p_retailprice"
+                ]
+              },
+              "right": {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "0"
+              }
+            }
+          ],
+          "parenthesized": true
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "p_partkey"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "supplier"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "s_suppkey",
+        "type": {
+          "name": "Int32"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "s_name",
+        "type": {
+          "name": "FixedString",
+          "args": [
+            {
+              "kind": "literal",
+              "value": "25"
+            }
+          ]
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "s_address",
+        "type": {
+          "name": "String"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "s_nationkey",
+        "type": {
+          "name": "Int32"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "s_phone",
+        "type": {
+          "name": "FixedString",
+          "args": [
+            {
+              "kind": "literal",
+              "value": "15"
+            }
+          ]
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "s_acctbal",
+        "type": {
+          "name": "Decimal",
+          "args": [
+            {
+              "kind": "literal",
+              "value": "18"
+            },
+            {
+              "kind": "literal",
+              "value": "2"
+            }
+          ]
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "s_comment",
+        "type": {
+          "name": "String"
+        }
+      },
+      {
+        "kind": "constraintDef",
+        "name": "pk",
+        "constraintType": "CHECK",
+        "expr": {
+          "kind": "binaryExpr",
+          "op": ">=",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "s_suppkey"
+            ]
+          },
+          "right": {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "0"
+          }
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "s_suppkey"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "partsupp"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "ps_partkey",
+        "type": {
+          "name": "Int32"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "ps_suppkey",
+        "type": {
+          "name": "Int32"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "ps_availqty",
+        "type": {
+          "name": "Int32"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "ps_supplycost",
+        "type": {
+          "name": "Decimal",
+          "args": [
+            {
+              "kind": "literal",
+              "value": "18"
+            },
+            {
+              "kind": "literal",
+              "value": "2"
+            }
+          ]
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "ps_comment",
+        "type": {
+          "name": "String"
+        }
+      },
+      {
+        "kind": "constraintDef",
+        "name": "pk",
+        "constraintType": "CHECK",
+        "expr": {
+          "kind": "binaryExpr",
+          "op": ">=",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "ps_partkey"
+            ]
+          },
+          "right": {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "0"
+          }
+        }
+      },
+      {
+        "kind": "constraintDef",
+        "name": "c1",
+        "constraintType": "CHECK",
+        "expr": {
+          "kind": "naryExpr",
+          "op": "AND",
+          "operands": [
+            {
+              "kind": "binaryExpr",
+              "op": ">=",
+              "left": {
+                "kind": "columnRef",
+                "parts": [
+                  "ps_availqty"
+                ]
+              },
+              "right": {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "0"
+              }
+            },
+            {
+              "kind": "binaryExpr",
+              "op": ">=",
+              "left": {
+                "kind": "columnRef",
+                "parts": [
+                  "ps_supplycost"
+                ]
+              },
+              "right": {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "0"
+              }
+            }
+          ],
+          "parenthesized": true
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "ps_partkey"
+          ]
+        }
+      },
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "ps_suppkey"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "customer"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "c_custkey",
+        "type": {
+          "name": "Int32"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "c_name",
+        "type": {
+          "name": "String"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "c_address",
+        "type": {
+          "name": "String"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "c_nationkey",
+        "type": {
+          "name": "Int32"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "c_phone",
+        "type": {
+          "name": "FixedString",
+          "args": [
+            {
+              "kind": "literal",
+              "value": "15"
+            }
+          ]
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "c_acctbal",
+        "type": {
+          "name": "Decimal",
+          "args": [
+            {
+              "kind": "literal",
+              "value": "18"
+            },
+            {
+              "kind": "literal",
+              "value": "2"
+            }
+          ]
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "c_mktsegment",
+        "type": {
+          "name": "FixedString",
+          "args": [
+            {
+              "kind": "literal",
+              "value": "10"
+            }
+          ]
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "c_comment",
+        "type": {
+          "name": "String"
+        }
+      },
+      {
+        "kind": "constraintDef",
+        "name": "pk",
+        "constraintType": "CHECK",
+        "expr": {
+          "kind": "binaryExpr",
+          "op": ">=",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "c_custkey"
+            ]
+          },
+          "right": {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "0"
+          }
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "c_custkey"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "orders"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "o_orderkey",
+        "type": {
+          "name": "Int32"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "o_custkey",
+        "type": {
+          "name": "Int32"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "o_orderstatus",
+        "type": {
+          "name": "FixedString",
+          "args": [
+            {
+              "kind": "literal",
+              "value": "1"
+            }
+          ]
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "o_totalprice",
+        "type": {
+          "name": "Decimal",
+          "args": [
+            {
+              "kind": "literal",
+              "value": "18"
+            },
+            {
+              "kind": "literal",
+              "value": "2"
+            }
+          ]
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "o_orderdate",
+        "type": {
+          "name": "Date"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "o_orderpriority",
+        "type": {
+          "name": "FixedString",
+          "args": [
+            {
+              "kind": "literal",
+              "value": "15"
+            }
+          ]
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "o_clerk",
+        "type": {
+          "name": "FixedString",
+          "args": [
+            {
+              "kind": "literal",
+              "value": "15"
+            }
+          ]
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "o_shippriority",
+        "type": {
+          "name": "Int32"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "o_comment",
+        "type": {
+          "name": "String"
+        }
+      },
+      {
+        "kind": "constraintDef",
+        "name": "c1",
+        "constraintType": "CHECK",
+        "expr": {
+          "kind": "binaryExpr",
+          "op": ">=",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "o_totalprice"
+            ]
+          },
+          "right": {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "0"
+          }
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "o_orderdate"
+          ]
+        }
+      },
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "o_orderkey"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "lineitem"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "l_orderkey",
+        "type": {
+          "name": "Int32"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "l_partkey",
+        "type": {
+          "name": "Int32"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "l_suppkey",
+        "type": {
+          "name": "Int32"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "l_linenumber",
+        "type": {
+          "name": "Int32"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "l_quantity",
+        "type": {
+          "name": "Decimal",
+          "args": [
+            {
+              "kind": "literal",
+              "value": "18"
+            },
+            {
+              "kind": "literal",
+              "value": "2"
+            }
+          ]
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "l_extendedprice",
+        "type": {
+          "name": "Decimal",
+          "args": [
+            {
+              "kind": "literal",
+              "value": "18"
+            },
+            {
+              "kind": "literal",
+              "value": "2"
+            }
+          ]
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "l_discount",
+        "type": {
+          "name": "Decimal",
+          "args": [
+            {
+              "kind": "literal",
+              "value": "18"
+            },
+            {
+              "kind": "literal",
+              "value": "2"
+            }
+          ]
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "l_tax",
+        "type": {
+          "name": "Decimal",
+          "args": [
+            {
+              "kind": "literal",
+              "value": "18"
+            },
+            {
+              "kind": "literal",
+              "value": "2"
+            }
+          ]
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "l_returnflag",
+        "type": {
+          "name": "FixedString",
+          "args": [
+            {
+              "kind": "literal",
+              "value": "1"
+            }
+          ]
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "l_linestatus",
+        "type": {
+          "name": "FixedString",
+          "args": [
+            {
+              "kind": "literal",
+              "value": "1"
+            }
+          ]
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "l_shipdate",
+        "type": {
+          "name": "Date"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "l_commitdate",
+        "type": {
+          "name": "Date"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "l_receiptdate",
+        "type": {
+          "name": "Date"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "l_shipinstruct",
+        "type": {
+          "name": "FixedString",
+          "args": [
+            {
+              "kind": "literal",
+              "value": "25"
+            }
+          ]
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "l_shipmode",
+        "type": {
+          "name": "FixedString",
+          "args": [
+            {
+              "kind": "literal",
+              "value": "10"
+            }
+          ]
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "l_comment",
+        "type": {
+          "name": "String"
+        }
+      },
+      {
+        "kind": "constraintDef",
+        "name": "c1",
+        "constraintType": "CHECK",
+        "expr": {
+          "kind": "naryExpr",
+          "op": "AND",
+          "operands": [
+            {
+              "kind": "binaryExpr",
+              "op": ">=",
+              "left": {
+                "kind": "columnRef",
+                "parts": [
+                  "l_quantity"
+                ]
+              },
+              "right": {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "0"
+              }
+            },
+            {
+              "kind": "binaryExpr",
+              "op": ">=",
+              "left": {
+                "kind": "columnRef",
+                "parts": [
+                  "l_extendedprice"
+                ]
+              },
+              "right": {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "0"
+              }
+            },
+            {
+              "kind": "binaryExpr",
+              "op": ">=",
+              "left": {
+                "kind": "columnRef",
+                "parts": [
+                  "l_tax"
+                ]
+              },
+              "right": {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "0"
+              }
+            },
+            {
+              "kind": "binaryExpr",
+              "op": "<=",
+              "left": {
+                "kind": "columnRef",
+                "parts": [
+                  "l_shipdate"
+                ]
+              },
+              "right": {
+                "kind": "columnRef",
+                "parts": [
+                  "l_receiptdate"
+                ]
+              }
+            }
+          ],
+          "parenthesized": true
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "l_shipdate"
+          ]
+        }
+      },
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "l_receiptdate"
+          ]
+        }
+      },
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "l_orderkey"
+          ]
+        }
+      },
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "l_linenumber"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "nation"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "n_nationkey",
+        "type": {
+          "name": "Int32"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "n_name",
+        "type": {
+          "name": "FixedString",
+          "args": [
+            {
+              "kind": "literal",
+              "value": "25"
+            }
+          ]
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "n_regionkey",
+        "type": {
+          "name": "Int32"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "n_comment",
+        "type": {
+          "name": "String"
+        }
+      },
+      {
+        "kind": "constraintDef",
+        "name": "pk",
+        "constraintType": "CHECK",
+        "expr": {
+          "kind": "binaryExpr",
+          "op": ">=",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "n_nationkey"
+            ]
+          },
+          "right": {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "0"
+          }
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "n_nationkey"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "region"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "r_regionkey",
+        "type": {
+          "name": "Int32"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "r_name",
+        "type": {
+          "name": "FixedString",
+          "args": [
+            {
+              "kind": "literal",
+              "value": "25"
+            }
+          ]
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "r_comment",
+        "type": {
+          "name": "String"
+        }
+      },
+      {
+        "kind": "constraintDef",
+        "name": "pk",
+        "constraintType": "CHECK",
+        "expr": {
+          "kind": "binaryExpr",
+          "op": ">=",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "r_regionkey"
+            ]
+          },
+          "right": {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "0"
+          }
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "r_regionkey"
+          ]
+        }
+      }
+    ]
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -360,28 +1584,28 @@
               "kind": "tableRef",
               "table": "part"
             },
-            "kind": "join",
+            "kind": "joinExpr",
             "joinType": "CROSS",
             "right": {
               "kind": "tableRef",
               "table": "supplier"
             }
           },
-          "kind": "join",
+          "kind": "joinExpr",
           "joinType": "CROSS",
           "right": {
             "kind": "tableRef",
             "table": "partsupp"
           }
         },
-        "kind": "join",
+        "kind": "joinExpr",
         "joinType": "CROSS",
         "right": {
           "kind": "tableRef",
           "table": "nation"
         }
       },
-      "kind": "join",
+      "kind": "joinExpr",
       "joinType": "CROSS",
       "right": {
         "kind": "tableRef",
@@ -537,21 +1761,21 @@
                       "kind": "tableRef",
                       "table": "partsupp"
                     },
-                    "kind": "join",
+                    "kind": "joinExpr",
                     "joinType": "CROSS",
                     "right": {
                       "kind": "tableRef",
                       "table": "supplier"
                     }
                   },
-                  "kind": "join",
+                  "kind": "joinExpr",
                   "joinType": "CROSS",
                   "right": {
                     "kind": "tableRef",
                     "table": "nation"
                   }
                 },
-                "kind": "join",
+                "kind": "joinExpr",
                 "joinType": "CROSS",
                 "right": {
                   "kind": "tableRef",
@@ -772,14 +1996,14 @@
           "kind": "tableRef",
           "table": "customer"
         },
-        "kind": "join",
+        "kind": "joinExpr",
         "joinType": "CROSS",
         "right": {
           "kind": "tableRef",
           "table": "orders"
         }
       },
-      "kind": "join",
+      "kind": "joinExpr",
       "joinType": "CROSS",
       "right": {
         "kind": "tableRef",
@@ -1182,35 +2406,35 @@
                 "kind": "tableRef",
                 "table": "customer"
               },
-              "kind": "join",
+              "kind": "joinExpr",
               "joinType": "CROSS",
               "right": {
                 "kind": "tableRef",
                 "table": "orders"
               }
             },
-            "kind": "join",
+            "kind": "joinExpr",
             "joinType": "CROSS",
             "right": {
               "kind": "tableRef",
               "table": "lineitem"
             }
           },
-          "kind": "join",
+          "kind": "joinExpr",
           "joinType": "CROSS",
           "right": {
             "kind": "tableRef",
             "table": "supplier"
           }
         },
-        "kind": "join",
+        "kind": "joinExpr",
         "joinType": "CROSS",
         "right": {
           "kind": "tableRef",
           "table": "nation"
         }
       },
-      "kind": "join",
+      "kind": "joinExpr",
       "joinType": "CROSS",
       "right": {
         "kind": "tableRef",
@@ -1771,28 +2995,28 @@
                     "kind": "tableRef",
                     "table": "supplier"
                   },
-                  "kind": "join",
+                  "kind": "joinExpr",
                   "joinType": "CROSS",
                   "right": {
                     "kind": "tableRef",
                     "table": "lineitem"
                   }
                 },
-                "kind": "join",
+                "kind": "joinExpr",
                 "joinType": "CROSS",
                 "right": {
                   "kind": "tableRef",
                   "table": "orders"
                 }
               },
-              "kind": "join",
+              "kind": "joinExpr",
               "joinType": "CROSS",
               "right": {
                 "kind": "tableRef",
                 "table": "customer"
               }
             },
-            "kind": "join",
+            "kind": "joinExpr",
             "joinType": "CROSS",
             "right": {
               "kind": "tableRef",
@@ -1800,7 +3024,7 @@
               "alias": "n1"
             }
           },
-          "kind": "join",
+          "kind": "joinExpr",
           "joinType": "CROSS",
           "right": {
             "kind": "tableRef",
@@ -2244,35 +3468,35 @@
                         "kind": "tableRef",
                         "table": "part"
                       },
-                      "kind": "join",
+                      "kind": "joinExpr",
                       "joinType": "CROSS",
                       "right": {
                         "kind": "tableRef",
                         "table": "supplier"
                       }
                     },
-                    "kind": "join",
+                    "kind": "joinExpr",
                     "joinType": "CROSS",
                     "right": {
                       "kind": "tableRef",
                       "table": "lineitem"
                     }
                   },
-                  "kind": "join",
+                  "kind": "joinExpr",
                   "joinType": "CROSS",
                   "right": {
                     "kind": "tableRef",
                     "table": "orders"
                   }
                 },
-                "kind": "join",
+                "kind": "joinExpr",
                 "joinType": "CROSS",
                 "right": {
                   "kind": "tableRef",
                   "table": "customer"
                 }
               },
-              "kind": "join",
+              "kind": "joinExpr",
               "joinType": "CROSS",
               "right": {
                 "kind": "tableRef",
@@ -2280,7 +3504,7 @@
                 "alias": "n1"
               }
             },
-            "kind": "join",
+            "kind": "joinExpr",
             "joinType": "CROSS",
             "right": {
               "kind": "tableRef",
@@ -2288,7 +3512,7 @@
               "alias": "n2"
             }
           },
-          "kind": "join",
+          "kind": "joinExpr",
           "joinType": "CROSS",
           "right": {
             "kind": "tableRef",
@@ -2658,35 +3882,35 @@
                     "kind": "tableRef",
                     "table": "part"
                   },
-                  "kind": "join",
+                  "kind": "joinExpr",
                   "joinType": "CROSS",
                   "right": {
                     "kind": "tableRef",
                     "table": "supplier"
                   }
                 },
-                "kind": "join",
+                "kind": "joinExpr",
                 "joinType": "CROSS",
                 "right": {
                   "kind": "tableRef",
                   "table": "lineitem"
                 }
               },
-              "kind": "join",
+              "kind": "joinExpr",
               "joinType": "CROSS",
               "right": {
                 "kind": "tableRef",
                 "table": "partsupp"
               }
             },
-            "kind": "join",
+            "kind": "joinExpr",
             "joinType": "CROSS",
             "right": {
               "kind": "tableRef",
               "table": "orders"
             }
           },
-          "kind": "join",
+          "kind": "joinExpr",
           "joinType": "CROSS",
           "right": {
             "kind": "tableRef",
@@ -2954,21 +4178,21 @@
             "kind": "tableRef",
             "table": "customer"
           },
-          "kind": "join",
+          "kind": "joinExpr",
           "joinType": "CROSS",
           "right": {
             "kind": "tableRef",
             "table": "orders"
           }
         },
-        "kind": "join",
+        "kind": "joinExpr",
         "joinType": "CROSS",
         "right": {
           "kind": "tableRef",
           "table": "lineitem"
         }
       },
-      "kind": "join",
+      "kind": "joinExpr",
       "joinType": "CROSS",
       "right": {
         "kind": "tableRef",
@@ -3176,6 +4400,9 @@
         "type": "UInt64",
         "value": "11"
       }
+    ],
+    "trailingComments": [
+      "-- TODO: remove toDecimal()"
     ]
   },
   {
@@ -3220,14 +4447,14 @@
           "kind": "tableRef",
           "table": "partsupp"
         },
-        "kind": "join",
+        "kind": "joinExpr",
         "joinType": "CROSS",
         "right": {
           "kind": "tableRef",
           "table": "supplier"
         }
       },
-      "kind": "join",
+      "kind": "joinExpr",
       "joinType": "CROSS",
       "right": {
         "kind": "tableRef",
@@ -3377,20 +4604,25 @@
                 "kind": "tableRef",
                 "table": "partsupp"
               },
-              "kind": "join",
+              "kind": "joinExpr",
               "joinType": "CROSS",
               "right": {
                 "kind": "tableRef",
                 "table": "supplier"
               }
             },
-            "kind": "join",
+            "kind": "joinExpr",
             "joinType": "CROSS",
             "right": {
               "kind": "tableRef",
               "table": "nation"
             }
           },
+          "fromLeadingComments": [
+            "--                                                  ^^^^^^^^^^^^",
+            "-- The above constant needs to be adjusted according",
+            "-- to the scale factor (SF): constant = 0.0001 / SF."
+          ],
           "where": {
             "kind": "naryExpr",
             "op": "AND",
@@ -3609,7 +4841,7 @@
         "kind": "tableRef",
         "table": "orders"
       },
-      "kind": "join",
+      "kind": "joinExpr",
       "joinType": "CROSS",
       "right": {
         "kind": "tableRef",
@@ -3839,7 +5071,7 @@
             "kind": "tableRef",
             "table": "customer"
           },
-          "kind": "join",
+          "kind": "joinExpr",
           "joinType": "LEFT",
           "right": {
             "kind": "tableRef",
@@ -4085,7 +5317,7 @@
         "kind": "tableRef",
         "table": "lineitem"
       },
-      "kind": "join",
+      "kind": "joinExpr",
       "joinType": "CROSS",
       "right": {
         "kind": "tableRef",
@@ -4184,6 +5416,229 @@
   },
   {
     "kind": "select",
+    "with": [
+      {
+        "kind": "cteSubquery",
+        "name": "revenue_view",
+        "query": {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "alias",
+              "expr": {
+                "kind": "columnRef",
+                "parts": [
+                  "l_suppkey"
+                ]
+              },
+              "alias": "supplier_no"
+            },
+            {
+              "kind": "alias",
+              "expr": {
+                "kind": "functionCall",
+                "name": "sum",
+                "args": [
+                  {
+                    "kind": "binaryExpr",
+                    "op": "*",
+                    "left": {
+                      "kind": "columnRef",
+                      "parts": [
+                        "l_extendedprice"
+                      ]
+                    },
+                    "right": {
+                      "kind": "binaryExpr",
+                      "op": "-",
+                      "left": {
+                        "kind": "literal",
+                        "type": "UInt64",
+                        "value": "1"
+                      },
+                      "right": {
+                        "kind": "columnRef",
+                        "parts": [
+                          "l_discount"
+                        ]
+                      },
+                      "parenthesized": true
+                    }
+                  }
+                ]
+              },
+              "alias": "total_revenue"
+            }
+          ],
+          "from": {
+            "kind": "tableRef",
+            "table": "lineitem"
+          },
+          "where": {
+            "kind": "naryExpr",
+            "op": "AND",
+            "operands": [
+              {
+                "kind": "binaryExpr",
+                "op": ">=",
+                "left": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "l_shipdate"
+                  ]
+                },
+                "right": {
+                  "kind": "literal",
+                  "type": "String",
+                  "value": "1996-01-01"
+                }
+              },
+              {
+                "kind": "binaryExpr",
+                "op": "<",
+                "left": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "l_shipdate"
+                  ]
+                },
+                "right": {
+                  "kind": "literal",
+                  "type": "String",
+                  "value": "1996-04-01"
+                }
+              }
+            ]
+          },
+          "groupBy": {
+            "kind": "expressions",
+            "items": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "l_suppkey"
+                ]
+              }
+            ]
+          }
+        }
+      }
+    ],
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "s_suppkey"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "s_name"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "s_address"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "s_phone"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "total_revenue"
+        ]
+      }
+    ],
+    "from": {
+      "left": {
+        "kind": "tableRef",
+        "table": "supplier"
+      },
+      "kind": "joinExpr",
+      "joinType": "CROSS",
+      "right": {
+        "kind": "tableRef",
+        "table": "revenue_view"
+      }
+    },
+    "where": {
+      "kind": "naryExpr",
+      "op": "AND",
+      "operands": [
+        {
+          "kind": "binaryExpr",
+          "op": "=",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "s_suppkey"
+            ]
+          },
+          "right": {
+            "kind": "columnRef",
+            "parts": [
+              "supplier_no"
+            ]
+          }
+        },
+        {
+          "kind": "binaryExpr",
+          "op": "=",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "total_revenue"
+            ]
+          },
+          "right": {
+            "kind": "subqueryExpr",
+            "query": {
+              "kind": "select",
+              "select": [
+                {
+                  "kind": "functionCall",
+                  "name": "max",
+                  "args": [
+                    {
+                      "kind": "columnRef",
+                      "parts": [
+                        "total_revenue"
+                      ]
+                    }
+                  ]
+                }
+              ],
+              "from": {
+                "kind": "tableRef",
+                "table": "revenue_view"
+              }
+            }
+          }
+        }
+      ]
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "s_suppkey"
+          ]
+        },
+        "direction": "ASC"
+      }
+    ]
+  },
+  {
+    "kind": "select",
     "select": [
       {
         "kind": "literal",
@@ -4235,7 +5690,7 @@
         "kind": "tableRef",
         "table": "partsupp"
       },
-      "kind": "join",
+      "kind": "joinExpr",
       "joinType": "CROSS",
       "right": {
         "kind": "tableRef",
@@ -4503,7 +5958,7 @@
         "kind": "tableRef",
         "table": "lineitem"
       },
-      "kind": "join",
+      "kind": "joinExpr",
       "joinType": "CROSS",
       "right": {
         "kind": "tableRef",
@@ -4684,14 +6139,14 @@
           "kind": "tableRef",
           "table": "customer"
         },
-        "kind": "join",
+        "kind": "joinExpr",
         "joinType": "CROSS",
         "right": {
           "kind": "tableRef",
           "table": "orders"
         }
       },
-      "kind": "join",
+      "kind": "joinExpr",
       "joinType": "CROSS",
       "right": {
         "kind": "tableRef",
@@ -4916,7 +6371,7 @@
         "kind": "tableRef",
         "table": "lineitem"
       },
-      "kind": "join",
+      "kind": "joinExpr",
       "joinType": "CROSS",
       "right": {
         "kind": "tableRef",
@@ -5519,7 +6974,7 @@
         "kind": "tableRef",
         "table": "supplier"
       },
-      "kind": "join",
+      "kind": "joinExpr",
       "joinType": "CROSS",
       "right": {
         "kind": "tableRef",
@@ -5833,7 +7288,7 @@
             "kind": "tableRef",
             "table": "supplier"
           },
-          "kind": "join",
+          "kind": "joinExpr",
           "joinType": "CROSS",
           "right": {
             "kind": "tableRef",
@@ -5841,14 +7296,14 @@
             "alias": "l1"
           }
         },
-        "kind": "join",
+        "kind": "joinExpr",
         "joinType": "CROSS",
         "right": {
           "kind": "tableRef",
           "table": "orders"
         }
       },
-      "kind": "join",
+      "kind": "joinExpr",
       "joinType": "CROSS",
       "right": {
         "kind": "tableRef",
@@ -6495,5 +7950,69 @@
         "direction": "ASC"
       }
     ]
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "part"
+    }
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "supplier"
+    }
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "partsupp"
+    }
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "customer"
+    }
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "orders"
+    }
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "lineitem"
+    }
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "nation"
+    }
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "region"
+    }
   }
 ]

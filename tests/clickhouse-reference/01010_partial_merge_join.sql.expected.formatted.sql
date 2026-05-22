@@ -1,3 +1,39 @@
+DROP TABLE IF EXISTS t0;
+
+DROP TABLE IF EXISTS t1;
+
+DROP TABLE IF EXISTS t2;
+
+CREATE TABLE t0
+(
+    x UInt32,
+    y UInt64
+)
+ENGINE = MergeTree
+ORDER BY (x, y);
+
+CREATE TABLE t1
+(
+    x UInt32,
+    y UInt64
+)
+ENGINE = MergeTree
+ORDER BY (x, y);
+
+CREATE TABLE t2
+(
+    x UInt32,
+    y UInt64
+)
+ENGINE = MergeTree
+ORDER BY (x, y);
+
+INSERT INTO t1 (x, y);
+
+SET join_algorithm = 'prefer_partial_merge';
+
+SET any_join_distinct_right_table_keys = 1;
+
 SELECT *
 FROM
     t1
@@ -101,6 +137,18 @@ FROM
     t0
 INNER JOIN t1
     ON t1.x = t0.x;
+
+SET join_use_nulls = 1;
+
+INSERT INTO t1 (x, y);
+
+INSERT INTO t1 (x, y);
+
+INSERT INTO t2 (x, y);
+
+INSERT INTO t2 (x, y);
+
+SET join_use_nulls = 0;
 
 SELECT
     t1.*,
@@ -245,3 +293,9 @@ INNER JOIN t2
 ORDER BY
     x ASC,
     t2.y ASC;
+
+DROP TABLE t0;
+
+DROP TABLE t1;
+
+DROP TABLE t2;

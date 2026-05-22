@@ -1,3 +1,45 @@
+CREATE TABLE t1
+(
+    id Int32,
+    fid Int32,
+    tid Int32
+)
+ENGINE = MergeTree
+ORDER BY tuple();
+
+CREATE TABLE t2
+(
+    id Int32,
+    status Nullable(String),
+    resource_id Nullable(Int32)
+)
+ENGINE = MergeTree
+ORDER BY tuple();
+
+CREATE TABLE t3
+(
+    id Int32,
+    status String
+)
+ENGINE = MergeTree
+ORDER BY tuple();
+
+INSERT INTO t1 SELECT * REPLACE (1 AS fid, 2 AS tid)
+FROM generateRandom(1, 2, 2)
+LIMIT 1000;
+
+INSERT INTO t2 SELECT * REPLACE (1 AS id, 'OPEN' AS status, NULL AS resource_id)
+FROM generateRandom(1, 2, 2)
+LIMIT 1000;
+
+INSERT INTO t3 SELECT * REPLACE ('BACKLOG' AS status, 2 AS id)
+FROM generateRandom(1, 2, 2)
+LIMIT 1000;
+
+SET enable_parallel_replicas = 0;
+
+SET enable_analyzer = 1;
+
 SELECT 1
 FROM
     t2
@@ -10,6 +52,8 @@ WHERE true
     AND (t2.status IN ('OPEN'))
     AND (t3.status IN ('BACKLOG'))
 SETTINGS log_comment = '03594_push_more_filters_down_joins';
+
+SYSTEM FLUSH LOGS query_log;
 
 SELECT throwIf(ProfileEvents['JoinResultRowCount'] != 0)
 FROM `system`.query_log

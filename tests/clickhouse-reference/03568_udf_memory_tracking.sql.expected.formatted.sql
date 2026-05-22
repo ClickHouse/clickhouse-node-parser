@@ -1,3 +1,5 @@
+SET log_queries = 1;
+
 SELECT test_function(number, 0)
 FROM numbers(100)
 FORMAT Null
@@ -7,6 +9,8 @@ SELECT test_function(number, 0)
 FROM numbers(200)
 FORMAT Null
 SETTINGS max_threads = 1, max_block_size = 1;
+
+SYSTEM FLUSH LOGS query_log;
 
 SELECT
     count() AS queries,

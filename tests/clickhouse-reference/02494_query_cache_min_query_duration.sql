@@ -1,3 +1,7 @@
+-- Tags: no-parallel
+-- Tag no-parallel: Messes with internal cache
+
+SYSTEM CLEAR QUERY CACHE;
 -- This creates an entry in the query cache ...
 SELECT 1 SETTINGS use_query_cache = true;
 SELECT COUNT(*) FROM system.query_cache;

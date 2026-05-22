@@ -1,3 +1,71 @@
+DropQuery  test_merge (children 1)
+ Identifier test_merge
+
+DropQuery  test_merge_distributed (children 1)
+ Identifier test_merge_distributed
+
+DropQuery  test_distributed_merge (children 1)
+ Identifier test_distributed_merge
+
+DropQuery  test_distributed (children 1)
+ Identifier test_distributed
+
+DropQuery  test_local (children 1)
+ Identifier test_local
+
+CreateQuery test_local (children 4)
+ Identifier test_local
+ Columns definition (children 1)
+  ExpressionList (children 1)
+   ColumnDeclaration name (children 1)
+    DataType String
+ Storage definition (children 2)
+  Function MergeTree
+  Identifier name
+ SelectWithUnionQuery (children 1)
+  ExpressionList (children 1)
+   SelectQuery (children 1)
+    ExpressionList (children 1)
+     Literal 'x'
+
+CreateQuery test_distributed (children 2)
+ Identifier test_distributed
+ Storage definition (children 1)
+  Function Distributed (children 1)
+   ExpressionList (children 3)
+    Identifier test_shard_localhost
+    Function currentDatabase (children 1)
+     ExpressionList
+    Identifier test_local
+
+CreateQuery test_merge (children 2)
+ Identifier test_merge
+ Storage definition (children 1)
+  Function Merge (children 1)
+   ExpressionList (children 2)
+    Function currentDatabase (children 1)
+     ExpressionList
+    Literal 'test_local'
+
+CreateQuery test_merge_distributed (children 2)
+ Identifier test_merge_distributed
+ Storage definition (children 1)
+  Function Distributed (children 1)
+   ExpressionList (children 3)
+    Identifier test_shard_localhost
+    Function currentDatabase (children 1)
+     ExpressionList
+    Identifier test_merge
+
+CreateQuery test_distributed_merge (children 2)
+ Identifier test_distributed_merge
+ Storage definition (children 1)
+  Function Merge (children 1)
+   ExpressionList (children 2)
+    Function currentDatabase (children 1)
+     ExpressionList
+    Literal 'test_distributed'
+
 SelectWithUnionQuery (children 1)
  ExpressionList (children 1)
   SelectQuery (children 1)
@@ -351,3 +419,18 @@ SelectWithUnionQuery (children 1)
               Function currentDatabase (children 1)
                ExpressionList
               Identifier test_merge
+
+DropQuery  test_merge (children 1)
+ Identifier test_merge
+
+DropQuery  test_merge_distributed (children 1)
+ Identifier test_merge_distributed
+
+DropQuery  test_distributed_merge (children 1)
+ Identifier test_distributed_merge
+
+DropQuery  test_distributed (children 1)
+ Identifier test_distributed
+
+DropQuery  test_local (children 1)
+ Identifier test_local

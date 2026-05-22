@@ -1,3 +1,18 @@
+-- Tests that functions replaceOne(), replaceAll(), replaceRegexpOne(), replaceRegexpAll() work with with non-const pattern and replacement arguments
+DROP TABLE IF EXISTS test_tab;
+
+CREATE TABLE test_tab
+(
+    id UInt32,
+    haystack String,
+    needle String,
+    replacement String
+)
+ENGINE = MergeTree()
+ORDER BY id;
+
+INSERT INTO test_tab;
+
 SELECT
     id,
     haystack,
@@ -213,6 +228,8 @@ SELECT
     replaceRegexpOne('Hello World', needle, replacement)
 FROM test_tab
 ORDER BY id ASC;
+
+INSERT INTO test_tab;
 
 SELECT replaceAll(haystack, needle, 'x')
 FROM test_tab;

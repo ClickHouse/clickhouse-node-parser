@@ -19,3 +19,5 @@ FROM (
         FROM `system`.one
         WHERE NOT 1
     );
+
+SET aggregate_functions_null_for_empty = 1;

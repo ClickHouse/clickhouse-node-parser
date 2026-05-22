@@ -1,3 +1,91 @@
+DropQuery  distributed_table_merged (children 1)
+ Identifier distributed_table_merged
+
+DropQuery  distributed_table_1 (children 1)
+ Identifier distributed_table_1
+
+DropQuery  distributed_table_2 (children 1)
+ Identifier distributed_table_2
+
+DropQuery  local_table_1 (children 1)
+ Identifier local_table_1
+
+DropQuery  local_table_2 (children 1)
+ Identifier local_table_2
+
+DropQuery  local_table_merged (children 1)
+ Identifier local_table_merged
+
+CreateQuery local_table_1 (children 3)
+ Identifier local_table_1
+ Columns definition (children 1)
+  ExpressionList (children 1)
+   ColumnDeclaration id (children 1)
+    DataType String
+ Storage definition (children 2)
+  Function MergeTree
+  Identifier id
+
+CreateQuery local_table_2 (children 3)
+ Identifier local_table_2
+ Columns definition (children 1)
+  ExpressionList (children 1)
+   ColumnDeclaration id (children 1)
+    DataType String
+ Storage definition (children 2)
+  Function MergeTree
+  Identifier id
+
+CreateQuery local_table_merged (children 3)
+ Identifier local_table_merged
+ Columns definition (children 1)
+  ExpressionList (children 1)
+   ColumnDeclaration id (children 1)
+    DataType String
+ Storage definition (children 1)
+  Function Merge (children 1)
+   ExpressionList (children 2)
+    Literal 'default'
+    Literal 'local_table_1|local_table_2'
+
+CreateQuery distributed_table_1 (children 3)
+ Identifier distributed_table_1
+ Columns definition (children 1)
+  ExpressionList (children 1)
+   ColumnDeclaration id (children 1)
+    DataType String
+ Storage definition (children 1)
+  Function Distributed (children 1)
+   ExpressionList (children 3)
+    Identifier test_shard_localhost
+    Identifier default
+    Identifier local_table_1
+
+CreateQuery distributed_table_2 (children 3)
+ Identifier distributed_table_2
+ Columns definition (children 1)
+  ExpressionList (children 1)
+   ColumnDeclaration id (children 1)
+    DataType String
+ Storage definition (children 1)
+  Function Distributed (children 1)
+   ExpressionList (children 3)
+    Identifier test_shard_localhost
+    Identifier default
+    Identifier local_table_2
+
+CreateQuery distributed_table_merged (children 3)
+ Identifier distributed_table_merged
+ Columns definition (children 1)
+  ExpressionList (children 1)
+   ColumnDeclaration id (children 1)
+    DataType String
+ Storage definition (children 1)
+  Function Merge (children 1)
+   ExpressionList (children 2)
+    Literal 'default'
+    Literal 'distributed_table_1|distributed_table_2'
+
 SelectWithUnionQuery (children 1)
  ExpressionList (children 1)
   SelectQuery (children 2)
@@ -7,3 +95,6 @@ SelectWithUnionQuery (children 1)
     TablesInSelectQueryElement (children 1)
      TableExpression (children 1)
       TableIdentifier distributed_table_merged
+
+DropQuery  local_table_merged (children 1)
+ Identifier local_table_merged

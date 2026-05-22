@@ -1,5 +1,216 @@
 [
   {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "enable_analyzer",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ],
+    "leadingComments": [
+      "-- { echoOn }"
+    ]
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "tree"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "tree"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "id",
+        "type": {
+          "name": "UInt64"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "link",
+        "type": {
+          "name": "Nullable",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "UInt64"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "data",
+        "type": {
+          "name": "String"
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "functionCall",
+          "name": "tuple",
+          "args": []
+        }
+      }
+    ]
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "tree"
+      }
+    }
+  },
+  {
+    "kind": "select",
+    "with": [
+      {
+        "kind": "cteSubquery",
+        "name": "search_tree",
+        "query": {
+          "kind": "union",
+          "queries": [
+            {
+              "kind": "select",
+              "select": [
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "id"
+                  ]
+                },
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "link"
+                  ]
+                },
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "data"
+                  ]
+                }
+              ],
+              "from": {
+                "kind": "tableRef",
+                "table": "tree",
+                "alias": "t"
+              },
+              "where": {
+                "kind": "binaryExpr",
+                "op": "=",
+                "left": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "t",
+                    "id"
+                  ]
+                },
+                "right": {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "0"
+                }
+              }
+            },
+            {
+              "kind": "select",
+              "select": [
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "t",
+                    "id"
+                  ]
+                },
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "t",
+                    "link"
+                  ]
+                },
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "t",
+                    "data"
+                  ]
+                }
+              ],
+              "from": {
+                "left": {
+                  "kind": "tableRef",
+                  "table": "tree",
+                  "alias": "t"
+                },
+                "kind": "joinExpr",
+                "joinType": "CROSS",
+                "right": {
+                  "kind": "tableRef",
+                  "table": "search_tree",
+                  "alias": "st"
+                }
+              },
+              "where": {
+                "kind": "binaryExpr",
+                "op": "=",
+                "left": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "t",
+                    "link"
+                  ]
+                },
+                "right": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "st",
+                    "id"
+                  ]
+                }
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "recursive": true,
+    "select": [
+      {
+        "kind": "asterisk"
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "search_tree"
+    }
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -7,6 +218,820 @@
         "type": "String",
         "value": "--"
       }
+    ]
+  },
+  {
+    "kind": "select",
+    "with": [
+      {
+        "kind": "cteSubquery",
+        "name": "search_tree",
+        "query": {
+          "kind": "union",
+          "queries": [
+            {
+              "kind": "select",
+              "select": [
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "id"
+                  ]
+                },
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "link"
+                  ]
+                },
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "data"
+                  ]
+                },
+                {
+                  "kind": "alias",
+                  "expr": {
+                    "kind": "arrayLiteral",
+                    "elements": [
+                      {
+                        "kind": "columnRef",
+                        "parts": [
+                          "t",
+                          "id"
+                        ]
+                      }
+                    ],
+                    "source": "[t.id]"
+                  },
+                  "alias": "path"
+                }
+              ],
+              "from": {
+                "kind": "tableRef",
+                "table": "tree",
+                "alias": "t"
+              },
+              "where": {
+                "kind": "binaryExpr",
+                "op": "=",
+                "left": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "t",
+                    "id"
+                  ]
+                },
+                "right": {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "0"
+                }
+              }
+            },
+            {
+              "kind": "select",
+              "select": [
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "t",
+                    "id"
+                  ]
+                },
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "t",
+                    "link"
+                  ]
+                },
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "t",
+                    "data"
+                  ]
+                },
+                {
+                  "kind": "functionCall",
+                  "name": "arrayConcat",
+                  "args": [
+                    {
+                      "kind": "columnRef",
+                      "parts": [
+                        "path"
+                      ]
+                    },
+                    {
+                      "kind": "arrayLiteral",
+                      "elements": [
+                        {
+                          "kind": "columnRef",
+                          "parts": [
+                            "t",
+                            "id"
+                          ]
+                        }
+                      ],
+                      "source": "[t.id]"
+                    }
+                  ]
+                }
+              ],
+              "from": {
+                "left": {
+                  "kind": "tableRef",
+                  "table": "tree",
+                  "alias": "t"
+                },
+                "kind": "joinExpr",
+                "joinType": "CROSS",
+                "right": {
+                  "kind": "tableRef",
+                  "table": "search_tree",
+                  "alias": "st"
+                }
+              },
+              "where": {
+                "kind": "binaryExpr",
+                "op": "=",
+                "left": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "t",
+                    "link"
+                  ]
+                },
+                "right": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "st",
+                    "id"
+                  ]
+                }
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "recursive": true,
+    "select": [
+      {
+        "kind": "asterisk"
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "search_tree"
+    }
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "tree"
+    }
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "department"
+    },
+    "ifExists": true,
+    "leadingComments": [
+      "/**\n  * Based on https://github.com/postgres/postgres/blob/master/src/test/regress/sql/with.sql, license:\n  *\n  * PostgreSQL Database Management System\n  * (formerly known as Postgres, then as Postgres95)\n  *\n  * Portions Copyright (c) 1996-2024, PostgreSQL Global Development Group\n  *\n  * Portions Copyright (c) 1994, The Regents of the University of California\n  *\n  * Permission to use, copy, modify, and distribute this software and its\n  * documentation for any purpose, without fee, and without a written agreement\n  * is hereby granted, provided that the above copyright notice and this\n  * paragraph and the following two paragraphs appear in all copies.\n  *\n  * IN NO EVENT SHALL THE UNIVERSITY OF CALIFORNIA BE LIABLE TO ANY PARTY FOR\n  * DIRECT, INDIRECT, SPECIAL, INCIDENTAL, OR CONSEQUENTIAL DAMAGES, INCLUDING\n  * LOST PROFITS, ARISING OUT OF THE USE OF THIS SOFTWARE AND ITS\n  * DOCUMENTATION, EVEN IF THE UNIVERSITY OF CALIFORNIA HAS BEEN ADVISED OF THE\n  * POSSIBILITY OF SUCH DAMAGE.\n  *\n  * THE UNIVERSITY OF CALIFORNIA SPECIFICALLY DISCLAIMS ANY WARRANTIES,\n  * INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY\n  * AND FITNESS FOR A PARTICULAR PURPOSE.  THE SOFTWARE PROVIDED HEREUNDER IS\n  * ON AN \"AS IS\" BASIS, AND THE UNIVERSITY OF CALIFORNIA HAS NO OBLIGATIONS TO\n  *PROVIDE MAINTENANCE, SUPPORT, UPDATES, ENHANCEMENTS, OR MODIFICATIONS.\n  */",
+      "--",
+      "-- Tests for common table expressions (WITH query, ... SELECT ...)",
+      "--",
+      "--",
+      "-- Some examples with a tree",
+      "--",
+      "-- department structure represented here is as follows:",
+      "--",
+      "-- ROOT-+->A-+->B-+->C",
+      "--      |         |",
+      "--      |         +->D-+->F",
+      "--      +->E-+->G"
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "department"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "id",
+        "type": {
+          "name": "UInt64"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "parent_department",
+        "type": {
+          "name": "UInt64"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "name",
+        "type": {
+          "name": "String"
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "functionCall",
+          "name": "tuple",
+          "args": []
+        }
+      }
+    ]
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "department"
+      }
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "department"
+      }
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "department"
+      }
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "department"
+      }
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "department"
+      }
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "department"
+      }
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "department"
+      }
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "department"
+      }
+    }
+  },
+  {
+    "kind": "select",
+    "with": [
+      {
+        "kind": "cteSubquery",
+        "name": "subdepartment",
+        "query": {
+          "kind": "union",
+          "queries": [
+            {
+              "kind": "select",
+              "select": [
+                {
+                  "kind": "alias",
+                  "expr": {
+                    "kind": "columnRef",
+                    "parts": [
+                      "name"
+                    ]
+                  },
+                  "alias": "root_name"
+                },
+                {
+                  "kind": "asterisk"
+                }
+              ],
+              "from": {
+                "kind": "tableRef",
+                "table": "department"
+              },
+              "where": {
+                "kind": "binaryExpr",
+                "op": "=",
+                "left": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "name"
+                  ]
+                },
+                "right": {
+                  "kind": "literal",
+                  "type": "String",
+                  "value": "A"
+                }
+              }
+            },
+            {
+              "kind": "select",
+              "select": [
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "sd",
+                    "root_name"
+                  ]
+                },
+                {
+                  "kind": "qualifiedAsterisk",
+                  "parts": [
+                    "d"
+                  ]
+                }
+              ],
+              "from": {
+                "left": {
+                  "kind": "tableRef",
+                  "table": "department",
+                  "alias": "d"
+                },
+                "kind": "joinExpr",
+                "joinType": "CROSS",
+                "right": {
+                  "kind": "tableRef",
+                  "table": "subdepartment",
+                  "alias": "sd"
+                }
+              },
+              "where": {
+                "kind": "binaryExpr",
+                "op": "=",
+                "left": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "d",
+                    "parent_department"
+                  ]
+                },
+                "right": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "sd",
+                    "id"
+                  ]
+                }
+              },
+              "leadingComments": [
+                "-- recursive term"
+              ]
+            }
+          ],
+          "leadingComments": [
+            "-- non recursive term"
+          ]
+        }
+      }
+    ],
+    "recursive": true,
+    "select": [
+      {
+        "kind": "asterisk"
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "subdepartment"
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "name"
+          ]
+        },
+        "direction": "ASC"
+      }
+    ],
+    "leadingComments": [
+      "-- extract all departments under 'A'. Result should be A, B, C, D and F"
+    ]
+  },
+  {
+    "kind": "select",
+    "with": [
+      {
+        "kind": "cteSubquery",
+        "name": "subdepartment",
+        "query": {
+          "kind": "union",
+          "queries": [
+            {
+              "kind": "select",
+              "select": [
+                {
+                  "kind": "alias",
+                  "expr": {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "1"
+                  },
+                  "alias": "level"
+                },
+                {
+                  "kind": "asterisk"
+                }
+              ],
+              "from": {
+                "kind": "tableRef",
+                "table": "department"
+              },
+              "where": {
+                "kind": "binaryExpr",
+                "op": "=",
+                "left": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "name"
+                  ]
+                },
+                "right": {
+                  "kind": "literal",
+                  "type": "String",
+                  "value": "A"
+                }
+              }
+            },
+            {
+              "kind": "select",
+              "select": [
+                {
+                  "kind": "binaryExpr",
+                  "op": "+",
+                  "left": {
+                    "kind": "columnRef",
+                    "parts": [
+                      "sd",
+                      "level"
+                    ]
+                  },
+                  "right": {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "1"
+                  }
+                },
+                {
+                  "kind": "qualifiedAsterisk",
+                  "parts": [
+                    "d"
+                  ]
+                }
+              ],
+              "from": {
+                "left": {
+                  "kind": "tableRef",
+                  "table": "department",
+                  "alias": "d"
+                },
+                "kind": "joinExpr",
+                "joinType": "CROSS",
+                "right": {
+                  "kind": "tableRef",
+                  "table": "subdepartment",
+                  "alias": "sd"
+                }
+              },
+              "where": {
+                "kind": "binaryExpr",
+                "op": "=",
+                "left": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "d",
+                    "parent_department"
+                  ]
+                },
+                "right": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "sd",
+                    "id"
+                  ]
+                }
+              },
+              "leadingComments": [
+                "-- recursive term"
+              ]
+            }
+          ],
+          "leadingComments": [
+            "-- non recursive term"
+          ]
+        }
+      }
+    ],
+    "recursive": true,
+    "select": [
+      {
+        "kind": "asterisk"
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "subdepartment"
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "name"
+          ]
+        },
+        "direction": "ASC"
+      }
+    ],
+    "leadingComments": [
+      "-- extract all departments under 'A' with \"level\" number"
+    ]
+  },
+  {
+    "kind": "select",
+    "with": [
+      {
+        "kind": "cteSubquery",
+        "name": "subdepartment",
+        "query": {
+          "kind": "union",
+          "queries": [
+            {
+              "kind": "select",
+              "select": [
+                {
+                  "kind": "alias",
+                  "expr": {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "1"
+                  },
+                  "alias": "level"
+                },
+                {
+                  "kind": "asterisk"
+                }
+              ],
+              "from": {
+                "kind": "tableRef",
+                "table": "department"
+              },
+              "where": {
+                "kind": "binaryExpr",
+                "op": "=",
+                "left": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "name"
+                  ]
+                },
+                "right": {
+                  "kind": "literal",
+                  "type": "String",
+                  "value": "A"
+                }
+              }
+            },
+            {
+              "kind": "select",
+              "select": [
+                {
+                  "kind": "binaryExpr",
+                  "op": "+",
+                  "left": {
+                    "kind": "columnRef",
+                    "parts": [
+                      "sd",
+                      "level"
+                    ]
+                  },
+                  "right": {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "1"
+                  }
+                },
+                {
+                  "kind": "qualifiedAsterisk",
+                  "parts": [
+                    "d"
+                  ]
+                }
+              ],
+              "from": {
+                "left": {
+                  "kind": "tableRef",
+                  "table": "department",
+                  "alias": "d"
+                },
+                "kind": "joinExpr",
+                "joinType": "CROSS",
+                "right": {
+                  "kind": "tableRef",
+                  "table": "subdepartment",
+                  "alias": "sd"
+                }
+              },
+              "where": {
+                "kind": "binaryExpr",
+                "op": "=",
+                "left": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "d",
+                    "parent_department"
+                  ]
+                },
+                "right": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "sd",
+                    "id"
+                  ]
+                }
+              },
+              "leadingComments": [
+                "-- recursive term"
+              ]
+            }
+          ],
+          "leadingComments": [
+            "-- non recursive term"
+          ]
+        }
+      }
+    ],
+    "recursive": true,
+    "select": [
+      {
+        "kind": "asterisk"
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "subdepartment"
+    },
+    "where": {
+      "kind": "binaryExpr",
+      "op": ">=",
+      "left": {
+        "kind": "columnRef",
+        "parts": [
+          "level"
+        ]
+      },
+      "right": {
+        "kind": "literal",
+        "type": "UInt64",
+        "value": "2"
+      }
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "name"
+          ]
+        },
+        "direction": "ASC"
+      }
+    ],
+    "leadingComments": [
+      "-- extract all departments under 'A' with \"level\" number.",
+      "-- Only shows level 2 or more"
+    ]
+  },
+  {
+    "kind": "select",
+    "with": [
+      {
+        "kind": "cteSubquery",
+        "name": "subdepartment",
+        "query": {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "asterisk"
+            }
+          ],
+          "from": {
+            "kind": "tableRef",
+            "table": "department"
+          },
+          "where": {
+            "kind": "binaryExpr",
+            "op": "=",
+            "left": {
+              "kind": "columnRef",
+              "parts": [
+                "name"
+              ]
+            },
+            "right": {
+              "kind": "literal",
+              "type": "String",
+              "value": "A"
+            }
+          },
+          "leadingComments": [
+            "-- note lack of recursive UNION structure"
+          ]
+        }
+      }
+    ],
+    "recursive": true,
+    "select": [
+      {
+        "kind": "asterisk"
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "subdepartment"
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "name"
+          ]
+        },
+        "direction": "ASC"
+      }
+    ],
+    "leadingComments": [
+      "-- \"RECURSIVE\" is ignored if the query has no self-reference"
     ]
   },
   {
@@ -22,7 +1047,7 @@
         "kind": "select",
         "with": [
           {
-            "kind": "subquery",
+            "kind": "cteSubquery",
             "name": "q",
             "query": {
               "kind": "union",
@@ -43,7 +1068,7 @@
                   "kind": "select",
                   "with": [
                     {
-                      "kind": "subquery",
+                      "kind": "cteSubquery",
                       "name": "x",
                       "query": {
                         "kind": "select",
@@ -74,6 +1099,7 @@
             }
           }
         ],
+        "recursive": true,
         "select": [
           {
             "kind": "asterisk"
@@ -123,6 +1149,9 @@
         },
         "direction": "ASC"
       }
+    ],
+    "leadingComments": [
+      "-- corner case in which sub-WITH gets initialized first"
     ]
   },
   {
@@ -138,7 +1167,7 @@
         "kind": "select",
         "with": [
           {
-            "kind": "subquery",
+            "kind": "cteSubquery",
             "name": "q",
             "query": {
               "kind": "union",
@@ -159,7 +1188,7 @@
                   "kind": "select",
                   "with": [
                     {
-                      "kind": "subquery",
+                      "kind": "cteSubquery",
                       "name": "x",
                       "query": {
                         "kind": "union",
@@ -203,12 +1232,14 @@
                                   "table": "x"
                                 }
                               }
-                            ]
+                            ],
+                            "parenthesized": true
                           }
                         ]
                       }
                     }
                   ],
+                  "recursive": true,
                   "select": [
                     {
                       "kind": "asterisk"
@@ -224,6 +1255,7 @@
             }
           }
         ],
+        "recursive": true,
         "select": [
           {
             "kind": "asterisk"
@@ -273,6 +1305,9 @@
         },
         "direction": "ASC"
       }
+    ],
+    "trailingComments": [
+      "-- { echoOff }"
     ]
   }
 ]

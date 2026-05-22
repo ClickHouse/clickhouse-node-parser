@@ -1,3 +1,6 @@
+-- Tags: stateful
+SET max_rows_to_read = 60000;
+
 SELECT count()
 FROM test.hits
 WHERE negate(CounterID) = -1731;
@@ -21,6 +24,8 @@ WHERE toInt32(CounterID) = 1731;
 SELECT count()
 FROM test.hits
 WHERE toFloat32(CounterID) = 1731;
+
+SET max_rows_to_read = 0;
 
 SELECT count()
 FROM test.hits
@@ -62,11 +67,15 @@ SELECT
 FROM test.hits
 WHERE toInt16(CounterID) = 1731;
 
+SET max_rows_to_read = 500000;
+
 SELECT
     uniq(CounterID),
     count()
 FROM test.hits
 WHERE toString(CounterID) = '1731';
+
+SET max_rows_to_read = 2200000;
 
 SELECT count()
 FROM test.hits
@@ -167,6 +176,8 @@ WHERE toInt64(EventDate) = toInt64(toDate('2014-03-20'));
 SELECT count()
 FROM test.hits
 WHERE toDateTime(EventDate) = '2014-03-20 00:00:00';
+
+SET max_rows_to_read = 50000;
 
 SELECT count()
 FROM test.hits

@@ -1,3 +1,26 @@
+DROP TABLE IF EXISTS users;
+
+DROP TABLE IF EXISTS users_ext;
+
+CREATE TABLE users
+(
+    uid Int16,
+    name String,
+    age Int16
+)
+ENGINE = Memory;
+
+INSERT INTO users;
+
+CREATE TABLE users_ext
+(
+    uid Int16,
+    nullableStringCol Nullable(String)
+)
+ENGINE = Memory;
+
+INSERT INTO users_ext;
+
 SELECT isNotNull(nullableStringCol)
 FROM
     users

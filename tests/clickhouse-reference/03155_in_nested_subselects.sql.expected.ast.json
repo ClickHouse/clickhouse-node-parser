@@ -1,5 +1,270 @@
 [
   {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "enable_analyzer",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ],
+    "leadingComments": [
+      "-- https://github.com/ClickHouse/ClickHouse/issues/63833"
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "parallel_replicas_local_plan",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "Example"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "id",
+        "type": {
+          "name": "Int32"
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "id"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "Example"
+      }
+    },
+    "selectQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "alias",
+          "expr": {
+            "kind": "columnRef",
+            "parts": [
+              "number"
+            ]
+          },
+          "alias": "id"
+        }
+      ],
+      "from": {
+        "kind": "tableFunctionRef",
+        "name": "numbers",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "2"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "Null"
+    },
+    "engine": {
+      "name": "Null"
+    },
+    "asTable": {
+      "kind": "tableRef",
+      "table": "Example"
+    }
+  },
+  {
+    "kind": "createMaterializedView",
+    "table": {
+      "kind": "tableRef",
+      "table": "Transform"
+    },
+    "toTable": {
+      "kind": "tableRef",
+      "table": "Example"
+    },
+    "asQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "asterisk"
+        }
+      ],
+      "from": {
+        "left": {
+          "kind": "tableRef",
+          "table": "Null"
+        },
+        "kind": "joinExpr",
+        "joinType": "INNER",
+        "right": {
+          "kind": "subqueryFrom",
+          "query": {
+            "kind": "select",
+            "select": [
+              {
+                "kind": "asterisk"
+              }
+            ],
+            "from": {
+              "kind": "tableRef",
+              "table": "Example"
+            },
+            "where": {
+              "kind": "inExpr",
+              "negated": false,
+              "expr": {
+                "kind": "columnRef",
+                "parts": [
+                  "id"
+                ]
+              },
+              "values": {
+                "kind": "subqueryExpr",
+                "query": {
+                  "kind": "select",
+                  "select": [
+                    {
+                      "kind": "asterisk"
+                    }
+                  ],
+                  "from": {
+                    "kind": "subqueryFrom",
+                    "query": {
+                      "kind": "select",
+                      "select": [
+                        {
+                          "kind": "asterisk"
+                        }
+                      ],
+                      "from": {
+                        "kind": "subqueryFrom",
+                        "query": {
+                          "kind": "select",
+                          "select": [
+                            {
+                              "kind": "asterisk"
+                            }
+                          ],
+                          "from": {
+                            "kind": "subqueryFrom",
+                            "query": {
+                              "kind": "select",
+                              "select": [
+                                {
+                                  "kind": "asterisk"
+                                }
+                              ],
+                              "from": {
+                                "kind": "subqueryFrom",
+                                "query": {
+                                  "kind": "select",
+                                  "select": [
+                                    {
+                                      "kind": "asterisk"
+                                    }
+                                  ],
+                                  "from": {
+                                    "kind": "tableRef",
+                                    "table": "Null"
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "alias": "old"
+        },
+        "constraint": {
+          "kind": "using",
+          "columns": [
+            "id"
+          ]
+        }
+      }
+    },
+    "leadingComments": [
+      "--create table Null engine=MergeTree order by id as Example ;"
+    ]
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "Null"
+      }
+    },
+    "selectQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "alias",
+          "expr": {
+            "kind": "columnRef",
+            "parts": [
+              "number"
+            ]
+          },
+          "alias": "id"
+        }
+      ],
+      "from": {
+        "kind": "tableFunctionRef",
+        "name": "numbers",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "2"
+          }
+        ]
+      }
+    }
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -21,6 +286,9 @@
         },
         "direction": "ASC"
       }
+    ],
+    "trailingComments": [
+      "-- should return 4 rows"
     ]
   }
 ]

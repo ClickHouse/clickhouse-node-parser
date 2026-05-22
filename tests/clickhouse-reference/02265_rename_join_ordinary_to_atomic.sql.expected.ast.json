@@ -1,5 +1,135 @@
 [
   {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "send_logs_level",
+        "value": {
+          "kind": "literal",
+          "type": "String",
+          "value": "fatal"
+        }
+      }
+    ],
+    "leadingComments": [
+      "-- Tags: no-parallel"
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "allow_deprecated_database_ordinary",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "drop",
+    "targetType": "DATABASE",
+    "table": {
+      "kind": "tableRef",
+      "table": "02265_atomic_db"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "drop",
+    "targetType": "DATABASE",
+    "table": {
+      "kind": "tableRef",
+      "table": "02265_ordinary_db"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "createDatabase",
+    "name": "02265_atomic_db",
+    "engine": {
+      "name": "Atomic"
+    }
+  },
+  {
+    "kind": "createDatabase",
+    "name": "02265_ordinary_db",
+    "engine": {
+      "name": "Ordinary"
+    }
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "database": "02265_ordinary_db",
+      "table": "join_table"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "a",
+        "type": {
+          "name": "Int64"
+        }
+      }
+    ],
+    "engine": {
+      "name": "Join",
+      "args": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "ALL"
+          ]
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "LEFT"
+          ]
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "a"
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "database": "02265_ordinary_db",
+        "table": "join_table"
+      }
+    }
+  },
+  {
+    "kind": "rename",
+    "targetType": "TABLE",
+    "pairs": [
+      {
+        "from": {
+          "kind": "tableRef",
+          "database": "02265_ordinary_db",
+          "table": "join_table"
+        },
+        "to": {
+          "kind": "tableRef",
+          "database": "02265_atomic_db",
+          "table": "join_table"
+        }
+      }
+    ]
+  },
+  {
     "kind": "select",
     "select": [
       {

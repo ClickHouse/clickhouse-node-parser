@@ -1,3 +1,14 @@
+-- https://github.com/ClickHouse/ClickHouse/issues/35652
+SET enable_analyzer = 1;
+
+CREATE TABLE test
+(
+    id UInt64
+)
+ENGINE = MergeTree()
+ORDER BY intHash32(id)
+SAMPLE BY intHash32(id);
+
 SELECT
     any(id),
     any(id) AS id

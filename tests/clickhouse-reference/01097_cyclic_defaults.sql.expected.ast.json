@@ -1,5 +1,385 @@
 [
   {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "table_with_cyclic_defaults"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "table_with_cyclic_defaults"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "a",
+        "defaultKind": "DEFAULT",
+        "defaultExpr": {
+          "kind": "columnRef",
+          "parts": [
+            "b"
+          ]
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "b",
+        "defaultKind": "DEFAULT",
+        "defaultExpr": {
+          "kind": "columnRef",
+          "parts": [
+            "a"
+          ]
+        }
+      }
+    ],
+    "engine": {
+      "name": "Memory"
+    },
+    "trailingComments": [
+      "--{serverError CYCLIC_ALIASES}"
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "table_with_cyclic_defaults"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "a",
+        "defaultKind": "DEFAULT",
+        "defaultExpr": {
+          "kind": "binaryExpr",
+          "op": "+",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "b"
+            ]
+          },
+          "right": {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "1"
+          }
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "b",
+        "defaultKind": "DEFAULT",
+        "defaultExpr": {
+          "kind": "binaryExpr",
+          "op": "*",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "a"
+            ]
+          },
+          "right": {
+            "kind": "columnRef",
+            "parts": [
+              "a"
+            ]
+          }
+        }
+      }
+    ],
+    "engine": {
+      "name": "Memory"
+    },
+    "trailingComments": [
+      "--{serverError CYCLIC_ALIASES}"
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "table_with_cyclic_defaults"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "a",
+        "defaultKind": "DEFAULT",
+        "defaultExpr": {
+          "kind": "columnRef",
+          "parts": [
+            "b"
+          ]
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "b",
+        "defaultKind": "DEFAULT",
+        "defaultExpr": {
+          "kind": "functionCall",
+          "name": "toString",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "c"
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "c",
+        "defaultKind": "DEFAULT",
+        "defaultExpr": {
+          "kind": "functionCall",
+          "name": "concat",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "a"
+              ]
+            },
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "1"
+            }
+          ]
+        }
+      }
+    ],
+    "engine": {
+      "name": "Memory"
+    },
+    "trailingComments": [
+      "--{serverError CYCLIC_ALIASES}"
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "table_with_cyclic_defaults"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "a",
+        "defaultKind": "DEFAULT",
+        "defaultExpr": {
+          "kind": "columnRef",
+          "parts": [
+            "b"
+          ]
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "b",
+        "defaultKind": "DEFAULT",
+        "defaultExpr": {
+          "kind": "columnRef",
+          "parts": [
+            "c"
+          ]
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "c",
+        "defaultKind": "DEFAULT",
+        "defaultExpr": {
+          "kind": "binaryExpr",
+          "op": "*",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "a"
+            ]
+          },
+          "right": {
+            "kind": "columnRef",
+            "parts": [
+              "b"
+            ]
+          }
+        }
+      }
+    ],
+    "engine": {
+      "name": "Memory"
+    },
+    "trailingComments": [
+      "--{serverError CYCLIC_ALIASES}"
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "table_with_cyclic_defaults"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "a",
+        "type": {
+          "name": "String"
+        },
+        "defaultKind": "DEFAULT",
+        "defaultExpr": {
+          "kind": "columnRef",
+          "parts": [
+            "b"
+          ]
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "b",
+        "type": {
+          "name": "String"
+        },
+        "defaultKind": "DEFAULT",
+        "defaultExpr": {
+          "kind": "columnRef",
+          "parts": [
+            "a"
+          ]
+        }
+      }
+    ],
+    "engine": {
+      "name": "Memory"
+    },
+    "trailingComments": [
+      "--{serverError CYCLIC_ALIASES}"
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "table_with_cyclic_defaults"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "a",
+        "type": {
+          "name": "String"
+        }
+      }
+    ],
+    "engine": {
+      "name": "Memory"
+    }
+  },
+  {
+    "kind": "alter",
+    "table": {
+      "kind": "tableRef",
+      "table": "table_with_cyclic_defaults"
+    },
+    "commands": [
+      {
+        "kind": "alterCommand",
+        "commandType": "ADD_COLUMN",
+        "column": {
+          "kind": "columnDef",
+          "name": "c",
+          "type": {
+            "name": "String"
+          },
+          "defaultKind": "DEFAULT",
+          "defaultExpr": {
+            "kind": "columnRef",
+            "parts": [
+              "b"
+            ]
+          }
+        }
+      },
+      {
+        "kind": "alterCommand",
+        "commandType": "ADD_COLUMN",
+        "column": {
+          "kind": "columnDef",
+          "name": "b",
+          "type": {
+            "name": "String"
+          },
+          "defaultKind": "DEFAULT",
+          "defaultExpr": {
+            "kind": "columnRef",
+            "parts": [
+              "c"
+            ]
+          }
+        }
+      }
+    ],
+    "trailingComments": [
+      "--{serverError CYCLIC_ALIASES}"
+    ]
+  },
+  {
+    "kind": "alter",
+    "table": {
+      "kind": "tableRef",
+      "table": "table_with_cyclic_defaults"
+    },
+    "commands": [
+      {
+        "kind": "alterCommand",
+        "commandType": "ADD_COLUMN",
+        "column": {
+          "kind": "columnDef",
+          "name": "b",
+          "type": {
+            "name": "String"
+          },
+          "defaultKind": "DEFAULT",
+          "defaultExpr": {
+            "kind": "columnRef",
+            "parts": [
+              "a"
+            ]
+          }
+        }
+      },
+      {
+        "kind": "alterCommand",
+        "commandType": "MODIFY_COLUMN",
+        "column": {
+          "kind": "columnDef",
+          "name": "a",
+          "defaultKind": "DEFAULT",
+          "defaultExpr": {
+            "kind": "columnRef",
+            "parts": [
+              "b"
+            ]
+          }
+        }
+      }
+    ],
+    "trailingComments": [
+      "--{serverError CYCLIC_ALIASES}"
+    ]
+  },
+  {
     "kind": "select",
     "select": [
       {

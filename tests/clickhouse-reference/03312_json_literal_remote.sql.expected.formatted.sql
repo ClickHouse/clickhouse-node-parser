@@ -1,3 +1,12 @@
+-- Tags: no-fasttest
+SET enable_json_type = 1;
+
+SET enable_analyzer = 1;
+
+SET output_format_native_write_json_as_string = 0;
+
+SET input_format_json_infer_array_of_dynamic_from_array_of_different_types = 0;
+
 SELECT
     '{"a" : false}'::JSON AS json,
     JSONAllPathsWithTypes(json)

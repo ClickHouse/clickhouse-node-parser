@@ -1,5 +1,237 @@
 [
   {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "execute_on_single_replica_r1"
+    },
+    "ifExists": true,
+    "leadingComments": [
+      "-- Tags: long, replica, no-replicated-database, no-parallel, no-object-storage",
+      "-- Tag no-replicated-database: Fails due to additional replicas or shards",
+      "-- Tag no-parallel: static zk path"
+    ]
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "execute_on_single_replica_r2"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "execute_on_single_replica_r1"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "x",
+        "type": {
+          "name": "UInt64"
+        }
+      }
+    ],
+    "engine": {
+      "name": "ReplicatedMergeTree",
+      "args": [
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "/clickhouse/tables/test_01532/execute_on_single_replica"
+        },
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "r1"
+        }
+      ]
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "functionCall",
+          "name": "tuple",
+          "args": []
+        }
+      }
+    ],
+    "settings": [
+      {
+        "name": "execute_merges_on_single_replica_time_threshold",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "10"
+        }
+      }
+    ],
+    "settingsAfterOrderBy": true,
+    "leadingComments": [
+      "/* that test requires fixed zookeeper path, so we cannot use ReplicatedMergeTree({database}) */"
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "execute_on_single_replica_r2"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "x",
+        "type": {
+          "name": "UInt64"
+        }
+      }
+    ],
+    "engine": {
+      "name": "ReplicatedMergeTree",
+      "args": [
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "/clickhouse/tables/test_01532/execute_on_single_replica"
+        },
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "r2"
+        }
+      ]
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "functionCall",
+          "name": "tuple",
+          "args": []
+        }
+      }
+    ],
+    "settings": [
+      {
+        "name": "execute_merges_on_single_replica_time_threshold",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "10"
+        }
+      }
+    ],
+    "settingsAfterOrderBy": true
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "execute_on_single_replica_r1"
+      }
+    },
+    "insertSettings": [
+      {
+        "name": "insert_keeper_fault_injection_probability",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "system",
+    "body": "SYSTEM SYNC REPLICA execute_on_single_replica_r2"
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "optimize_throw_if_noop",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "optimize",
+    "table": {
+      "kind": "tableRef",
+      "table": "execute_on_single_replica_r1"
+    },
+    "final": true,
+    "leadingComments": [
+      "/* all_0_0_1 - will be merged by r1, and downloaded by r2 */"
+    ]
+  },
+  {
+    "kind": "optimize",
+    "table": {
+      "kind": "tableRef",
+      "table": "execute_on_single_replica_r2"
+    },
+    "final": true,
+    "leadingComments": [
+      "/* all_0_0_2 - will be merged by r1, and downloaded by r2 */"
+    ]
+  },
+  {
+    "kind": "system",
+    "body": "SYSTEM SYNC REPLICA execute_on_single_replica_r1"
+  },
+  {
+    "kind": "system",
+    "body": "SYSTEM STOP REPLICATION QUEUES execute_on_single_replica_r2"
+  },
+  {
+    "kind": "optimize",
+    "table": {
+      "kind": "tableRef",
+      "table": "execute_on_single_replica_r1"
+    },
+    "final": true,
+    "settings": [
+      {
+        "name": "replication_alter_partitions_sync",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      }
+    ],
+    "leadingComments": [
+      "/* all_0_0_5 - should be merged by r2, but it has replication queue stopped, so r1 do the merge */"
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "function_sleep_max_microseconds_per_block",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "10000000"
+        }
+      }
+    ],
+    "leadingComments": [
+      "/* if we will check immediately we can find the log entry unchecked */"
+    ]
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -7,7 +239,7 @@
       }
     ],
     "from": {
-      "kind": "tableFunction",
+      "kind": "tableFunctionRef",
       "name": "numbers",
       "args": [
         {
@@ -131,7 +363,10 @@
         "direction": "ASC"
       }
     ],
-    "format": "Vertical"
+    "format": "Vertical",
+    "leadingComments": [
+      "/* we can now check that r1 waits for r2 */"
+    ]
   },
   {
     "kind": "select",
@@ -141,7 +376,7 @@
       }
     ],
     "from": {
-      "kind": "tableFunction",
+      "kind": "tableFunctionRef",
       "name": "numbers",
       "args": [
         {
@@ -161,7 +396,77 @@
           "value": "1"
         }
       ]
-    }
+    },
+    "leadingComments": [
+      "/* we have execute_merges_on_single_replica_time_threshold exceeded */"
+    ]
+  },
+  {
+    "kind": "system",
+    "body": "SYSTEM START REPLICATION QUEUES execute_on_single_replica_r2"
+  },
+  {
+    "kind": "alter",
+    "table": {
+      "kind": "tableRef",
+      "table": "execute_on_single_replica_r1"
+    },
+    "commands": [
+      {
+        "kind": "alterCommand",
+        "commandType": "MODIFY_SETTING",
+        "settings": [
+          {
+            "name": "execute_merges_on_single_replica_time_threshold",
+            "value": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "0"
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "alter",
+    "table": {
+      "kind": "tableRef",
+      "table": "execute_on_single_replica_r2"
+    },
+    "commands": [
+      {
+        "kind": "alterCommand",
+        "commandType": "MODIFY_SETTING",
+        "settings": [
+          {
+            "name": "execute_merges_on_single_replica_time_threshold",
+            "value": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "0"
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "replication_alter_partitions_sync",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "2"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "system",
+    "body": "SYSTEM FLUSH LOGS part_log"
   },
   {
     "kind": "select",
@@ -360,5 +665,21 @@
       }
     ],
     "format": "Vertical"
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "execute_on_single_replica_r1"
+    }
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "execute_on_single_replica_r2"
+    }
   }
 ]

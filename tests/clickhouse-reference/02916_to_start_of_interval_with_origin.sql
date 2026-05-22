@@ -1,3 +1,4 @@
+set session_timezone = 'UTC';
 SELECT '-- Negative tests';
 -- time and origin arguments must have the same type
 SELECT toStartOfInterval(toDate('2023-01-02 14:45:50'), toIntervalSecond(5), toDate32('2023-01-02 14:44:30')); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }

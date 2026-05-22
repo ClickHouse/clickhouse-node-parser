@@ -1,3 +1,25 @@
+DROP TABLE IF EXISTS t1;
+
+DROP TABLE IF EXISTS t2;
+
+CREATE TABLE t1
+(
+    id Int32,
+    key String
+)
+ENGINE = Memory;
+
+CREATE TABLE t2
+(
+    id Int32,
+    key String
+)
+ENGINE = Memory;
+
+INSERT INTO t1;
+
+INSERT INTO t2;
+
 SELECT *
 FROM
     t1

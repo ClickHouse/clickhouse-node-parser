@@ -1,7 +1,30 @@
+SET allow_experimental_dynamic_type = 1;
+
+DROP TABLE IF EXISTS test_max_types;
+
+CREATE TABLE test_max_types
+(
+    d Dynamic(max_types = 5)
+)
+ENGINE = Memory;
+
+INSERT INTO test_max_types;
+
 SELECT
     d,
     dynamicType(d)
 FROM test_max_types;
+
+DROP TABLE IF EXISTS test_nested_dynamic;
+
+CREATE TABLE test_nested_dynamic
+(
+    d1 Dynamic,
+    d2 Dynamic(max_types = 2)
+)
+ENGINE = Memory;
+
+INSERT INTO test_nested_dynamic;
 
 SELECT
     d1,
@@ -9,6 +32,16 @@ SELECT
     d2,
     dynamicType(d2)
 FROM test_nested_dynamic;
+
+DROP TABLE IF EXISTS test_rapid_schema;
+
+CREATE TABLE test_rapid_schema
+(
+    d Dynamic
+)
+ENGINE = Memory;
+
+INSERT INTO test_rapid_schema;
 
 SELECT
     d,
@@ -31,3 +64,9 @@ FROM (
                 FROM numbers(10000)
             )
     );
+
+DROP TABLE test_max_types;
+
+DROP TABLE test_nested_dynamic;
+
+DROP TABLE test_rapid_schema;

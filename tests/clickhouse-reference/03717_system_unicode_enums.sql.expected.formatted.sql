@@ -1,3 +1,5 @@
+-- Tags: no-fasttest
+-- ^ depends on ICU library
 SELECT
     code_point,
     code_point_value,

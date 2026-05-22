@@ -1,5 +1,34 @@
+DROP TABLE IF EXISTS distributed_tbl;
+
+DROP TABLE IF EXISTS merge_tree_table;
+
+CREATE TABLE merge_tree_table
+(
+    Date Date,
+    SomeType UInt8,
+    Alternative1 UInt64,
+    Alternative2 UInt64,
+    User UInt32,
+    CharID UInt64 ALIAS multiIf(SomeType IN (3, 4, 11), 0, SomeType IN (7, 8), Alternative1, Alternative2)
+)
+ENGINE = MergeTree()
+ORDER BY tuple();
+
+INSERT INTO merge_tree_table;
+
 SELECT count()
 FROM merge_tree_table;
+
+CREATE TABLE distributed_tbl
+(
+    Date Date,
+    SomeType UInt8,
+    Alternative1 UInt64,
+    Alternative2 UInt64,
+    CharID UInt64,
+    User UInt32
+)
+ENGINE = Distributed(test_shard_localhost, currentDatabase(), merge_tree_table);
 
 SELECT identity(CharID) AS x
 FROM distributed_tbl

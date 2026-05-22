@@ -1,3 +1,77 @@
+-- Tags: no-replicated-database, no-parallel-replicas
+-- no-parallel, no-parallel-replicas: Dictionary is not created in parallel replicas.
+SET enable_analyzer = 1;
+
+SET optimize_inverse_dictionary_lookup = 1;
+
+SET optimize_or_like_chain = 0;
+
+DROP DICTIONARY IF EXISTS dictionary_all;
+
+DROP TABLE IF EXISTS ref_table_all;
+
+DROP TABLE IF EXISTS tab;
+
+CREATE TABLE ref_table_all
+(
+    id UInt64,
+    name String,
+    i8 String,
+    i16 String,
+    i32 String,
+    i64 String,
+    u8 String,
+    u16 String,
+    u32 String,
+    u64 String,
+    f32 String,
+    f64 String,
+    d String,
+    dt String,
+    uid String,
+    ip4 String,
+    ip6 String
+)
+ENGINE = MergeTree
+ORDER BY id;
+
+INSERT INTO ref_table_all;
+
+CREATE DICTIONARY dictionary_all
+(
+    id UInt64,
+    name String,
+    i8 String,
+    i16 String,
+    i32 String,
+    i64 String,
+    u8 String,
+    u16 String,
+    u32 String,
+    u64 String,
+    f32 String,
+    f64 String,
+    d String,
+    dt String,
+    uid String,
+    ip4 String,
+    ip6 String
+)
+PRIMARY KEY id
+SOURCE(clickhouse(TABLE 'ref_table_all'))
+LIFETIME(0)
+LAYOUT(HASHED());
+
+CREATE TABLE tab
+(
+    id UInt64,
+    payload String
+)
+ENGINE = MergeTree
+ORDER BY id;
+
+INSERT INTO tab;
+
 SELECT
     id,
     payload

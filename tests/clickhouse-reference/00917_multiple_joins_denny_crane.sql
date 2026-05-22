@@ -1,3 +1,10 @@
+SET joined_subquery_requires_alias = 0;
+
+DROP TABLE IF EXISTS ANIMAL;
+
+CREATE TABLE ANIMAL ( ANIMAL Nullable(String) ) engine = MergeTree ORDER BY tuple();
+INSERT INTO ANIMAL (ANIMAL) VALUES ('CAT'), ('FISH'), ('DOG'), ('HORSE'), ('BIRD');
+
 select * from (
 select x.b x, count(distinct x.c) ANIMAL
 from (
@@ -11,3 +18,5 @@ where x.b >= 'CAT'
 group by x.b
 having ANIMAL >= 0) ANIMAL
 where ANIMAL.ANIMAL >= 0;
+
+DROP TABLE ANIMAL;

@@ -25,7 +25,7 @@ SELECT
     (
         SELECT max(number)
         FROM numbers(1000)
-    ) AS n2;
+    ) AS n2; -- Cached
 
 SELECT
     '#02136_scalar_subquery_4',
@@ -34,7 +34,9 @@ SELECT
         FROM numbers(1000)
     ) AS n
 FROM `system`.numbers
-LIMIT 2;
+LIMIT 2; -- Cached
+
+SYSTEM FLUSH LOGS query_log;
 
 SELECT
     read_rows,

@@ -1,3 +1,14 @@
+SET allow_experimental_nullable_tuple_type = 1;
+
+WITH (
+        SELECT tuple('1', toDateTime64('2024-01-01 00:00:00', 6, 'UTC'), 3)
+    ) AS result
+
+SELECT
+    result.1,
+    result.2,
+    result.3;
+
 SELECT CAST(NULL AS Nullable(Tuple(Int32, String))).1;
 
 SELECT toTypeName(CAST(NULL AS Nullable(Tuple(Int32, String))).1);
@@ -14,11 +25,22 @@ SELECT [CAST(([1, 2, 3], 'a') AS Nullable(Tuple(Array(Int32), String))), CAST(NU
 
 SELECT toTypeName([CAST(([1, 2, 3], 'a') AS Nullable(Tuple(Array(Int32), String))), CAST(NULL AS Nullable(Tuple(Array(Int32), String))), NULL].1);
 
-SELECT CAST(NULL AS Nullable(Tuple(Int8, String))).3;
+SELECT CAST(NULL AS Nullable(Tuple(Int8, String))).3; -- { serverError NOT_FOUND_COLUMN_IN_BLOCK }
 
 SELECT tupleElement(CAST([(1, 7), (3, 4), (2, 8)] AS Array(Nullable(Tuple(x Int8, y Int8)))), 'y');
 
 SELECT toTypeName(tupleElement(CAST([(1, 7), (3, 4), (2, 8)] AS Array(Nullable(Tuple(x Int8, y Int8)))), 'y'));
+
+WITH data AS (
+    SELECT [
+        CAST((1, 7) AS Nullable(Tuple(x Int8, y Int8))),
+        NULL,
+        CAST((2, 8) AS Nullable(Tuple(x Int8, y Int8)))
+    ] AS arr
+)
+
+SELECT tupleElement(arr, 'y')
+FROM data;
 
 SELECT [CAST((1, 'a') AS Nullable(Tuple(Nullable(Int32), String))), NULL].1;
 
@@ -48,7 +70,7 @@ SELECT [[CAST((1, 'a') AS Nullable(Tuple(Int32, String))), NULL], [NULL, CAST((2
 
 SELECT toTypeName([[CAST((1, 'a') AS Nullable(Tuple(Int32, String))), NULL], [NULL, CAST((2, 'b') AS Nullable(Tuple(Int32, String)))]].1);
 
-SELECT CAST(tuple() AS Nullable(Tuple())).1;
+SELECT CAST(tuple() AS Nullable(Tuple())).1; -- { serverError NOT_FOUND_COLUMN_IN_BLOCK }
 
 SELECT [CAST(NULL AS Nullable(Tuple(Int32, String))), NULL, NULL].1;
 
@@ -98,6 +120,23 @@ SELECT [
     CAST((3, 'c') AS Nullable(Tuple(Int32, String)))
 ].2;
 
+DROP TABLE IF EXISTS test_nullable_tuples;
+
+DROP TABLE IF EXISTS test_array_nullable_tuples;
+
+DROP TABLE IF EXISTS test_nullable_named_tuples;
+
+DROP TABLE IF EXISTS test_complex_nullable;
+
+CREATE TABLE test_nullable_tuples
+(
+    id UInt32,
+    data Nullable(Tuple(Int32, String))
+)
+ENGINE = Memory;
+
+INSERT INTO test_nullable_tuples;
+
 SELECT
     id,
     data.1 AS value,
@@ -133,6 +172,15 @@ SELECT
     count(data.1) AS count_non_null
 FROM test_nullable_tuples;
 
+CREATE TABLE test_array_nullable_tuples
+(
+    id UInt32,
+    records Array(Nullable(Tuple(Int32, String)))
+)
+ENGINE = Memory;
+
+INSERT INTO test_array_nullable_tuples;
+
 SELECT
     id,
     records.1 AS values,
@@ -158,6 +206,15 @@ WHERE isNotNull(record)
 ORDER BY
     id ASC,
     value ASC;
+
+CREATE TABLE test_nullable_named_tuples
+(
+    id UInt32,
+    person Nullable(Tuple(name String, age UInt8, salary Float64))
+)
+ENGINE = Memory;
+
+INSERT INTO test_nullable_named_tuples;
 
 SELECT
     id,
@@ -241,6 +298,15 @@ SELECT
     tupleElement(data, 5, 'default_string') AS value
 FROM test_nullable_tuples
 ORDER BY id ASC;
+
+CREATE TABLE test_complex_nullable
+(
+    id UInt32,
+    matrix Array(Array(Nullable(Tuple(x Int32, y Int32))))
+)
+ENGINE = Memory;
+
+INSERT INTO test_complex_nullable;
 
 SELECT
     id,

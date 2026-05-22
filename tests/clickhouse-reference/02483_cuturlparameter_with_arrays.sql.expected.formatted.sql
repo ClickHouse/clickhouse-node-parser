@@ -1,3 +1,6 @@
+SET enable_analyzer = 1;
+
+-- { echoOn }
 SELECT
     cutURLParameter('http://bigmir.net/?a=b&c=d', []),
     cutURLParameter('http://bigmir.net/?a=b&c=d', ['a']),
@@ -56,4 +59,4 @@ SELECT
     cutURLParameter(materialize('//bigmir.net/?a=b&c=d#e&g=h'), ['e', 'g']),
     cutURLParameter(materialize('//bigmir.net/?a=b&c=d#test?e=f&g=h'), ['test', 'e']),
     cutURLParameter(materialize('//bigmir.net/?a=b&c=d#test?e=f&g=h'), ['test', 'g'])
-FORMAT Vertical;
+FORMAT Vertical; -- { echoOff }

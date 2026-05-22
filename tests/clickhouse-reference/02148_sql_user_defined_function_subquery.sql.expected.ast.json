@@ -1,5 +1,38 @@
 [
   {
+    "kind": "drop",
+    "targetType": "FUNCTION",
+    "table": {
+      "kind": "tableRef",
+      "table": "02148_test_function"
+    },
+    "ifExists": true,
+    "leadingComments": [
+      "-- Tags: no-parallel"
+    ]
+  },
+  {
+    "kind": "createFunction",
+    "name": "02148_test_function",
+    "functionExpr": {
+      "kind": "lambdaExpr",
+      "params": [],
+      "body": {
+        "kind": "subqueryExpr",
+        "query": {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "1"
+            }
+          ]
+        }
+      }
+    }
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -8,6 +41,68 @@
         "args": []
       }
     ]
+  },
+  {
+    "kind": "createFunction",
+    "name": "02148_test_function",
+    "functionExpr": {
+      "kind": "lambdaExpr",
+      "params": [],
+      "body": {
+        "kind": "subqueryExpr",
+        "query": {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "2"
+            }
+          ]
+        }
+      }
+    }
+  },
+  {
+    "kind": "drop",
+    "targetType": "FUNCTION",
+    "table": {
+      "kind": "tableRef",
+      "table": "02148_test_function"
+    }
+  },
+  {
+    "kind": "createFunction",
+    "name": "02148_test_function",
+    "functionExpr": {
+      "kind": "lambdaExpr",
+      "params": [
+        "x"
+      ],
+      "body": {
+        "kind": "subqueryExpr",
+        "query": {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "binaryExpr",
+              "op": "+",
+              "left": {
+                "kind": "columnRef",
+                "parts": [
+                  "x"
+                ]
+              },
+              "right": {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "1"
+              }
+            }
+          ]
+        }
+      }
+    }
   },
   {
     "kind": "select",
@@ -24,6 +119,46 @@
         ]
       }
     ]
+  },
+  {
+    "kind": "drop",
+    "targetType": "FUNCTION",
+    "table": {
+      "kind": "tableRef",
+      "table": "02148_test_function_nested"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "createFunction",
+    "name": "02148_test_function_nested",
+    "functionExpr": {
+      "kind": "lambdaExpr",
+      "params": [
+        "x"
+      ],
+      "body": {
+        "kind": "functionCall",
+        "name": "02148_test_function",
+        "args": [
+          {
+            "kind": "binaryExpr",
+            "op": "+",
+            "left": {
+              "kind": "columnRef",
+              "parts": [
+                "x"
+              ]
+            },
+            "right": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "2"
+            }
+          }
+        ]
+      }
+    }
   },
   {
     "kind": "select",
@@ -40,5 +175,129 @@
         ]
       }
     ]
+  },
+  {
+    "kind": "drop",
+    "targetType": "FUNCTION",
+    "table": {
+      "kind": "tableRef",
+      "table": "02148_test_function_nested"
+    }
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "02148_test_table"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "02148_test_table"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "id",
+        "type": {
+          "name": "UInt64"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "value",
+        "type": {
+          "name": "String"
+        }
+      }
+    ],
+    "engine": {
+      "name": "TinyLog"
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "02148_test_table"
+      }
+    }
+  },
+  {
+    "kind": "createFunction",
+    "name": "02148_test_function",
+    "functionExpr": {
+      "kind": "lambdaExpr",
+      "params": [],
+      "body": {
+        "kind": "subqueryExpr",
+        "query": {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "asterisk"
+            }
+          ],
+          "from": {
+            "kind": "tableRef",
+            "table": "02148_test_table"
+          },
+          "limit": {
+            "count": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "1"
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "kind": "createFunction",
+    "name": "02148_test_function",
+    "functionExpr": {
+      "kind": "lambdaExpr",
+      "params": [],
+      "body": {
+        "kind": "subqueryExpr",
+        "query": {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "value"
+              ]
+            }
+          ],
+          "from": {
+            "kind": "tableRef",
+            "table": "02148_test_table"
+          },
+          "limit": {
+            "count": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "1"
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "02148_test_table"
+    }
   }
 ]

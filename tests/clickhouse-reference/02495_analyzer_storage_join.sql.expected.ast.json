@@ -1,5 +1,148 @@
 [
   {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "t"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "t1"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "tj"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "enable_analyzer",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "single_join_prefer_left_table",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "tj"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "key2",
+        "type": {
+          "name": "UInt64"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "key1",
+        "type": {
+          "name": "Int64"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "a",
+        "type": {
+          "name": "UInt64"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "b",
+        "type": {
+          "name": "UInt64"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "x",
+        "type": {
+          "name": "UInt64"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "y",
+        "type": {
+          "name": "UInt64"
+        }
+      }
+    ],
+    "engine": {
+      "name": "Join",
+      "args": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "ALL"
+          ]
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "RIGHT"
+          ]
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "key1"
+          ]
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "key2"
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "tj"
+      }
+    }
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -10,6 +153,49 @@
     ]
   },
   {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "t1"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "id2",
+        "type": {
+          "name": "UInt64"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "id1",
+        "type": {
+          "name": "Int64"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "val",
+        "type": {
+          "name": "UInt64"
+        }
+      }
+    ],
+    "engine": {
+      "name": "Memory"
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "t1"
+      }
+    }
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -21,7 +207,7 @@
         "kind": "tableRef",
         "table": "t1"
       },
-      "kind": "join",
+      "kind": "joinExpr",
       "joinType": "RIGHT",
       "right": {
         "kind": "tableRef",
@@ -126,7 +312,7 @@
         "kind": "tableRef",
         "table": "t1"
       },
-      "kind": "join",
+      "kind": "joinExpr",
       "joinType": "RIGHT",
       "right": {
         "kind": "tableRef",
@@ -236,7 +422,7 @@
         "kind": "tableRef",
         "table": "t1"
       },
-      "kind": "join",
+      "kind": "joinExpr",
       "joinType": "RIGHT",
       "right": {
         "kind": "tableRef",
@@ -329,7 +515,7 @@
         "kind": "tableRef",
         "table": "t1"
       },
-      "kind": "join",
+      "kind": "joinExpr",
       "joinType": "RIGHT",
       "right": {
         "kind": "tableRef",
@@ -410,7 +596,7 @@
         "kind": "tableRef",
         "table": "t1"
       },
-      "kind": "join",
+      "kind": "joinExpr",
       "joinType": "RIGHT",
       "right": {
         "kind": "tableRef",
@@ -491,7 +677,7 @@
         "kind": "tableRef",
         "table": "t1"
       },
-      "kind": "join",
+      "kind": "joinExpr",
       "joinType": "RIGHT",
       "right": {
         "kind": "tableRef",
@@ -558,726 +744,61 @@
     "format": "TSVWithNames"
   },
   {
-    "kind": "select",
-    "select": [
-      {
-        "kind": "asterisk"
-      }
-    ],
-    "from": {
-      "left": {
-        "kind": "tableRef",
-        "table": "t"
-      },
-      "kind": "join",
-      "joinType": "RIGHT",
-      "right": {
-        "kind": "tableRef",
-        "table": "tj"
-      },
-      "constraint": {
-        "kind": "using",
-        "columns": [
-          "key1",
-          "key2"
-        ]
-      }
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "t"
     },
-    "orderBy": [
+    "tableElements": [
       {
-        "kind": "orderByItem",
-        "expr": {
-          "kind": "columnRef",
-          "parts": [
-            "key1"
-          ]
-        },
-        "direction": "ASC"
+        "kind": "columnDef",
+        "name": "key2",
+        "type": {
+          "name": "UInt64"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "key1",
+        "type": {
+          "name": "Int64"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "b",
+        "type": {
+          "name": "UInt64"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "x",
+        "type": {
+          "name": "UInt64"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "val",
+        "type": {
+          "name": "UInt64"
+        }
       }
     ],
-    "format": "TSVWithNames"
+    "engine": {
+      "name": "Memory"
+    }
   },
   {
-    "kind": "select",
-    "select": [
-      {
-        "kind": "columnRef",
-        "parts": [
-          "key1"
-        ]
-      }
-    ],
-    "from": {
-      "left": {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
         "kind": "tableRef",
         "table": "t"
-      },
-      "kind": "join",
-      "joinType": "RIGHT",
-      "right": {
-        "kind": "tableRef",
-        "table": "tj"
-      },
-      "constraint": {
-        "kind": "using",
-        "columns": [
-          "key1",
-          "key2"
-        ]
       }
-    },
-    "orderBy": [
-      {
-        "kind": "orderByItem",
-        "expr": {
-          "kind": "columnRef",
-          "parts": [
-            "key1"
-          ]
-        },
-        "direction": "ASC"
-      }
-    ],
-    "format": "TSVWithNames"
-  },
-  {
-    "kind": "select",
-    "select": [
-      {
-        "kind": "columnRef",
-        "parts": [
-          "t",
-          "key1"
-        ]
-      },
-      {
-        "kind": "columnRef",
-        "parts": [
-          "tj",
-          "key1"
-        ]
-      }
-    ],
-    "from": {
-      "left": {
-        "kind": "tableRef",
-        "table": "t"
-      },
-      "kind": "join",
-      "joinType": "RIGHT",
-      "right": {
-        "kind": "tableRef",
-        "table": "tj"
-      },
-      "constraint": {
-        "kind": "using",
-        "columns": [
-          "key1",
-          "key2"
-        ]
-      }
-    },
-    "orderBy": [
-      {
-        "kind": "orderByItem",
-        "expr": {
-          "kind": "columnRef",
-          "parts": [
-            "key1"
-          ]
-        },
-        "direction": "ASC"
-      }
-    ],
-    "format": "TSVWithNames"
-  },
-  {
-    "kind": "select",
-    "select": [
-      {
-        "kind": "columnRef",
-        "parts": [
-          "t",
-          "key2"
-        ]
-      },
-      {
-        "kind": "columnRef",
-        "parts": [
-          "tj",
-          "key2"
-        ]
-      }
-    ],
-    "from": {
-      "left": {
-        "kind": "tableRef",
-        "table": "t"
-      },
-      "kind": "join",
-      "joinType": "RIGHT",
-      "right": {
-        "kind": "tableRef",
-        "table": "tj"
-      },
-      "constraint": {
-        "kind": "using",
-        "columns": [
-          "key1",
-          "key2"
-        ]
-      }
-    },
-    "orderBy": [
-      {
-        "kind": "orderByItem",
-        "expr": {
-          "kind": "columnRef",
-          "parts": [
-            "key1"
-          ]
-        },
-        "direction": "ASC"
-      }
-    ],
-    "format": "TSVWithNames"
-  },
-  {
-    "kind": "select",
-    "select": [
-      {
-        "kind": "columnRef",
-        "parts": [
-          "t",
-          "b"
-        ]
-      },
-      {
-        "kind": "columnRef",
-        "parts": [
-          "tj",
-          "b"
-        ]
-      }
-    ],
-    "from": {
-      "left": {
-        "kind": "tableRef",
-        "table": "t"
-      },
-      "kind": "join",
-      "joinType": "RIGHT",
-      "right": {
-        "kind": "tableRef",
-        "table": "tj"
-      },
-      "constraint": {
-        "kind": "using",
-        "columns": [
-          "key1",
-          "key2"
-        ]
-      }
-    },
-    "orderBy": [
-      {
-        "kind": "orderByItem",
-        "expr": {
-          "kind": "columnRef",
-          "parts": [
-            "key1"
-          ]
-        },
-        "direction": "ASC"
-      }
-    ],
-    "format": "TSVWithNames"
-  },
-  {
-    "kind": "select",
-    "select": [
-      {
-        "kind": "columnRef",
-        "parts": [
-          "t",
-          "x"
-        ]
-      },
-      {
-        "kind": "columnRef",
-        "parts": [
-          "tj",
-          "b"
-        ]
-      }
-    ],
-    "from": {
-      "left": {
-        "kind": "tableRef",
-        "table": "t"
-      },
-      "kind": "join",
-      "joinType": "RIGHT",
-      "right": {
-        "kind": "tableRef",
-        "table": "tj"
-      },
-      "constraint": {
-        "kind": "using",
-        "columns": [
-          "key1",
-          "key2"
-        ]
-      }
-    },
-    "orderBy": [
-      {
-        "kind": "orderByItem",
-        "expr": {
-          "kind": "columnRef",
-          "parts": [
-            "key1"
-          ]
-        },
-        "direction": "ASC"
-      }
-    ],
-    "format": "TSVWithNames"
-  },
-  {
-    "kind": "select",
-    "select": [
-      {
-        "kind": "columnRef",
-        "parts": [
-          "tj",
-          "a"
-        ]
-      }
-    ],
-    "from": {
-      "left": {
-        "kind": "tableRef",
-        "table": "t"
-      },
-      "kind": "join",
-      "joinType": "RIGHT",
-      "right": {
-        "kind": "tableRef",
-        "table": "tj"
-      },
-      "constraint": {
-        "kind": "using",
-        "columns": [
-          "key1",
-          "key2"
-        ]
-      }
-    },
-    "orderBy": [
-      {
-        "kind": "orderByItem",
-        "expr": {
-          "kind": "columnRef",
-          "parts": [
-            "key1"
-          ]
-        },
-        "direction": "ASC"
-      }
-    ],
-    "format": "TSVWithNames"
-  },
-  {
-    "kind": "select",
-    "select": [
-      {
-        "kind": "columnRef",
-        "parts": [
-          "tj",
-          "b"
-        ]
-      }
-    ],
-    "from": {
-      "left": {
-        "kind": "tableRef",
-        "table": "t"
-      },
-      "kind": "join",
-      "joinType": "RIGHT",
-      "right": {
-        "kind": "tableRef",
-        "table": "tj"
-      },
-      "constraint": {
-        "kind": "using",
-        "columns": [
-          "key1",
-          "key2"
-        ]
-      }
-    },
-    "orderBy": [
-      {
-        "kind": "orderByItem",
-        "expr": {
-          "kind": "columnRef",
-          "parts": [
-            "key1"
-          ]
-        },
-        "direction": "ASC"
-      }
-    ],
-    "format": "TSVWithNames"
-  },
-  {
-    "kind": "select",
-    "select": [
-      {
-        "kind": "columnRef",
-        "parts": [
-          "tj",
-          "x"
-        ]
-      }
-    ],
-    "from": {
-      "left": {
-        "kind": "tableRef",
-        "table": "t"
-      },
-      "kind": "join",
-      "joinType": "RIGHT",
-      "right": {
-        "kind": "tableRef",
-        "table": "tj"
-      },
-      "constraint": {
-        "kind": "using",
-        "columns": [
-          "key1",
-          "key2"
-        ]
-      }
-    },
-    "orderBy": [
-      {
-        "kind": "orderByItem",
-        "expr": {
-          "kind": "columnRef",
-          "parts": [
-            "key1"
-          ]
-        },
-        "direction": "ASC"
-      }
-    ],
-    "format": "TSVWithNames"
-  },
-  {
-    "kind": "select",
-    "select": [
-      {
-        "kind": "columnRef",
-        "parts": [
-          "tj",
-          "y"
-        ]
-      }
-    ],
-    "from": {
-      "left": {
-        "kind": "tableRef",
-        "table": "t"
-      },
-      "kind": "join",
-      "joinType": "RIGHT",
-      "right": {
-        "kind": "tableRef",
-        "table": "tj"
-      },
-      "constraint": {
-        "kind": "using",
-        "columns": [
-          "key1",
-          "key2"
-        ]
-      }
-    },
-    "orderBy": [
-      {
-        "kind": "orderByItem",
-        "expr": {
-          "kind": "columnRef",
-          "parts": [
-            "key1"
-          ]
-        },
-        "direction": "ASC"
-      }
-    ],
-    "format": "TSVWithNames"
-  },
-  {
-    "kind": "select",
-    "select": [
-      {
-        "kind": "columnRef",
-        "parts": [
-          "a"
-        ]
-      }
-    ],
-    "from": {
-      "left": {
-        "kind": "tableRef",
-        "table": "t"
-      },
-      "kind": "join",
-      "joinType": "RIGHT",
-      "right": {
-        "kind": "tableRef",
-        "table": "tj"
-      },
-      "constraint": {
-        "kind": "using",
-        "columns": [
-          "key1",
-          "key2"
-        ]
-      }
-    },
-    "orderBy": [
-      {
-        "kind": "orderByItem",
-        "expr": {
-          "kind": "columnRef",
-          "parts": [
-            "key1"
-          ]
-        },
-        "direction": "ASC"
-      }
-    ],
-    "format": "TSVWithNames"
-  },
-  {
-    "kind": "select",
-    "select": [
-      {
-        "kind": "columnRef",
-        "parts": [
-          "b"
-        ]
-      }
-    ],
-    "from": {
-      "left": {
-        "kind": "tableRef",
-        "table": "t"
-      },
-      "kind": "join",
-      "joinType": "RIGHT",
-      "right": {
-        "kind": "tableRef",
-        "table": "tj"
-      },
-      "constraint": {
-        "kind": "using",
-        "columns": [
-          "key1",
-          "key2"
-        ]
-      }
-    },
-    "orderBy": [
-      {
-        "kind": "orderByItem",
-        "expr": {
-          "kind": "columnRef",
-          "parts": [
-            "key1"
-          ]
-        },
-        "direction": "ASC"
-      }
-    ],
-    "format": "TSVWithNames"
-  },
-  {
-    "kind": "select",
-    "select": [
-      {
-        "kind": "columnRef",
-        "parts": [
-          "x"
-        ]
-      }
-    ],
-    "from": {
-      "left": {
-        "kind": "tableRef",
-        "table": "t"
-      },
-      "kind": "join",
-      "joinType": "RIGHT",
-      "right": {
-        "kind": "tableRef",
-        "table": "tj"
-      },
-      "constraint": {
-        "kind": "using",
-        "columns": [
-          "key1",
-          "key2"
-        ]
-      }
-    },
-    "orderBy": [
-      {
-        "kind": "orderByItem",
-        "expr": {
-          "kind": "columnRef",
-          "parts": [
-            "key1"
-          ]
-        },
-        "direction": "ASC"
-      }
-    ],
-    "format": "TSVWithNames"
-  },
-  {
-    "kind": "select",
-    "select": [
-      {
-        "kind": "columnRef",
-        "parts": [
-          "y"
-        ]
-      }
-    ],
-    "from": {
-      "left": {
-        "kind": "tableRef",
-        "table": "t"
-      },
-      "kind": "join",
-      "joinType": "RIGHT",
-      "right": {
-        "kind": "tableRef",
-        "table": "tj"
-      },
-      "constraint": {
-        "kind": "using",
-        "columns": [
-          "key1",
-          "key2"
-        ]
-      }
-    },
-    "orderBy": [
-      {
-        "kind": "orderByItem",
-        "expr": {
-          "kind": "columnRef",
-          "parts": [
-            "key1"
-          ]
-        },
-        "direction": "ASC"
-      }
-    ],
-    "format": "TSVWithNames"
-  },
-  {
-    "kind": "select",
-    "select": [
-      {
-        "kind": "columnRef",
-        "parts": [
-          "t",
-          "val"
-        ]
-      }
-    ],
-    "from": {
-      "left": {
-        "kind": "tableRef",
-        "table": "t"
-      },
-      "kind": "join",
-      "joinType": "RIGHT",
-      "right": {
-        "kind": "tableRef",
-        "table": "tj"
-      },
-      "constraint": {
-        "kind": "using",
-        "columns": [
-          "key1",
-          "key2"
-        ]
-      }
-    },
-    "orderBy": [
-      {
-        "kind": "orderByItem",
-        "expr": {
-          "kind": "columnRef",
-          "parts": [
-            "key1"
-          ]
-        },
-        "direction": "ASC"
-      }
-    ],
-    "format": "TSVWithNames"
-  },
-  {
-    "kind": "select",
-    "select": [
-      {
-        "kind": "columnRef",
-        "parts": [
-          "val"
-        ]
-      }
-    ],
-    "from": {
-      "left": {
-        "kind": "tableRef",
-        "table": "t"
-      },
-      "kind": "join",
-      "joinType": "RIGHT",
-      "right": {
-        "kind": "tableRef",
-        "table": "tj"
-      },
-      "constraint": {
-        "kind": "using",
-        "columns": [
-          "key1",
-          "key2"
-        ]
-      }
-    },
-    "orderBy": [
-      {
-        "kind": "orderByItem",
-        "expr": {
-          "kind": "columnRef",
-          "parts": [
-            "key1"
-          ]
-        },
-        "direction": "ASC"
-      }
-    ],
-    "format": "TSVWithNames"
+    }
   },
   {
     "kind": "select",
@@ -1291,56 +812,18 @@
         "kind": "tableRef",
         "table": "t"
       },
-      "kind": "join",
+      "kind": "joinExpr",
       "joinType": "RIGHT",
       "right": {
         "kind": "tableRef",
         "table": "tj"
       },
       "constraint": {
-        "kind": "on",
-        "expr": {
-          "kind": "naryExpr",
-          "op": "AND",
-          "operands": [
-            {
-              "kind": "binaryExpr",
-              "op": "==",
-              "left": {
-                "kind": "columnRef",
-                "parts": [
-                  "t",
-                  "key1"
-                ]
-              },
-              "right": {
-                "kind": "columnRef",
-                "parts": [
-                  "tj",
-                  "key1"
-                ]
-              }
-            },
-            {
-              "kind": "binaryExpr",
-              "op": "==",
-              "left": {
-                "kind": "columnRef",
-                "parts": [
-                  "t",
-                  "key2"
-                ]
-              },
-              "right": {
-                "kind": "columnRef",
-                "parts": [
-                  "tj",
-                  "key2"
-                ]
-              }
-            }
-          ]
-        }
+        "kind": "using",
+        "columns": [
+          "key1",
+          "key2"
+        ]
       }
     },
     "orderBy": [
@@ -1349,7 +832,6 @@
         "expr": {
           "kind": "columnRef",
           "parts": [
-            "t",
             "key1"
           ]
         },
@@ -1373,56 +855,18 @@
         "kind": "tableRef",
         "table": "t"
       },
-      "kind": "join",
+      "kind": "joinExpr",
       "joinType": "RIGHT",
       "right": {
         "kind": "tableRef",
         "table": "tj"
       },
       "constraint": {
-        "kind": "on",
-        "expr": {
-          "kind": "naryExpr",
-          "op": "AND",
-          "operands": [
-            {
-              "kind": "binaryExpr",
-              "op": "==",
-              "left": {
-                "kind": "columnRef",
-                "parts": [
-                  "t",
-                  "key1"
-                ]
-              },
-              "right": {
-                "kind": "columnRef",
-                "parts": [
-                  "tj",
-                  "key1"
-                ]
-              }
-            },
-            {
-              "kind": "binaryExpr",
-              "op": "==",
-              "left": {
-                "kind": "columnRef",
-                "parts": [
-                  "t",
-                  "key2"
-                ]
-              },
-              "right": {
-                "kind": "columnRef",
-                "parts": [
-                  "tj",
-                  "key2"
-                ]
-              }
-            }
-          ]
-        }
+        "kind": "using",
+        "columns": [
+          "key1",
+          "key2"
+        ]
       }
     },
     "orderBy": [
@@ -1431,7 +875,6 @@
         "expr": {
           "kind": "columnRef",
           "parts": [
-            "t",
             "key1"
           ]
         },
@@ -1463,56 +906,18 @@
         "kind": "tableRef",
         "table": "t"
       },
-      "kind": "join",
+      "kind": "joinExpr",
       "joinType": "RIGHT",
       "right": {
         "kind": "tableRef",
         "table": "tj"
       },
       "constraint": {
-        "kind": "on",
-        "expr": {
-          "kind": "naryExpr",
-          "op": "AND",
-          "operands": [
-            {
-              "kind": "binaryExpr",
-              "op": "==",
-              "left": {
-                "kind": "columnRef",
-                "parts": [
-                  "t",
-                  "key1"
-                ]
-              },
-              "right": {
-                "kind": "columnRef",
-                "parts": [
-                  "tj",
-                  "key1"
-                ]
-              }
-            },
-            {
-              "kind": "binaryExpr",
-              "op": "==",
-              "left": {
-                "kind": "columnRef",
-                "parts": [
-                  "t",
-                  "key2"
-                ]
-              },
-              "right": {
-                "kind": "columnRef",
-                "parts": [
-                  "tj",
-                  "key2"
-                ]
-              }
-            }
-          ]
-        }
+        "kind": "using",
+        "columns": [
+          "key1",
+          "key2"
+        ]
       }
     },
     "orderBy": [
@@ -1521,7 +926,6 @@
         "expr": {
           "kind": "columnRef",
           "parts": [
-            "t",
             "key1"
           ]
         },
@@ -1553,56 +957,18 @@
         "kind": "tableRef",
         "table": "t"
       },
-      "kind": "join",
+      "kind": "joinExpr",
       "joinType": "RIGHT",
       "right": {
         "kind": "tableRef",
         "table": "tj"
       },
       "constraint": {
-        "kind": "on",
-        "expr": {
-          "kind": "naryExpr",
-          "op": "AND",
-          "operands": [
-            {
-              "kind": "binaryExpr",
-              "op": "==",
-              "left": {
-                "kind": "columnRef",
-                "parts": [
-                  "t",
-                  "key1"
-                ]
-              },
-              "right": {
-                "kind": "columnRef",
-                "parts": [
-                  "tj",
-                  "key1"
-                ]
-              }
-            },
-            {
-              "kind": "binaryExpr",
-              "op": "==",
-              "left": {
-                "kind": "columnRef",
-                "parts": [
-                  "t",
-                  "key2"
-                ]
-              },
-              "right": {
-                "kind": "columnRef",
-                "parts": [
-                  "tj",
-                  "key2"
-                ]
-              }
-            }
-          ]
-        }
+        "kind": "using",
+        "columns": [
+          "key1",
+          "key2"
+        ]
       }
     },
     "orderBy": [
@@ -1611,7 +977,6 @@
         "expr": {
           "kind": "columnRef",
           "parts": [
-            "t",
             "key1"
           ]
         },
@@ -1643,56 +1008,18 @@
         "kind": "tableRef",
         "table": "t"
       },
-      "kind": "join",
+      "kind": "joinExpr",
       "joinType": "RIGHT",
       "right": {
         "kind": "tableRef",
         "table": "tj"
       },
       "constraint": {
-        "kind": "on",
-        "expr": {
-          "kind": "naryExpr",
-          "op": "AND",
-          "operands": [
-            {
-              "kind": "binaryExpr",
-              "op": "==",
-              "left": {
-                "kind": "columnRef",
-                "parts": [
-                  "t",
-                  "key1"
-                ]
-              },
-              "right": {
-                "kind": "columnRef",
-                "parts": [
-                  "tj",
-                  "key1"
-                ]
-              }
-            },
-            {
-              "kind": "binaryExpr",
-              "op": "==",
-              "left": {
-                "kind": "columnRef",
-                "parts": [
-                  "t",
-                  "key2"
-                ]
-              },
-              "right": {
-                "kind": "columnRef",
-                "parts": [
-                  "tj",
-                  "key2"
-                ]
-              }
-            }
-          ]
-        }
+        "kind": "using",
+        "columns": [
+          "key1",
+          "key2"
+        ]
       }
     },
     "orderBy": [
@@ -1701,7 +1028,6 @@
         "expr": {
           "kind": "columnRef",
           "parts": [
-            "t",
             "key1"
           ]
         },
@@ -1733,56 +1059,18 @@
         "kind": "tableRef",
         "table": "t"
       },
-      "kind": "join",
+      "kind": "joinExpr",
       "joinType": "RIGHT",
       "right": {
         "kind": "tableRef",
         "table": "tj"
       },
       "constraint": {
-        "kind": "on",
-        "expr": {
-          "kind": "naryExpr",
-          "op": "AND",
-          "operands": [
-            {
-              "kind": "binaryExpr",
-              "op": "==",
-              "left": {
-                "kind": "columnRef",
-                "parts": [
-                  "t",
-                  "key1"
-                ]
-              },
-              "right": {
-                "kind": "columnRef",
-                "parts": [
-                  "tj",
-                  "key1"
-                ]
-              }
-            },
-            {
-              "kind": "binaryExpr",
-              "op": "==",
-              "left": {
-                "kind": "columnRef",
-                "parts": [
-                  "t",
-                  "key2"
-                ]
-              },
-              "right": {
-                "kind": "columnRef",
-                "parts": [
-                  "tj",
-                  "key2"
-                ]
-              }
-            }
-          ]
-        }
+        "kind": "using",
+        "columns": [
+          "key1",
+          "key2"
+        ]
       }
     },
     "orderBy": [
@@ -1791,7 +1079,6 @@
         "expr": {
           "kind": "columnRef",
           "parts": [
-            "t",
             "key1"
           ]
         },
@@ -1816,56 +1103,18 @@
         "kind": "tableRef",
         "table": "t"
       },
-      "kind": "join",
+      "kind": "joinExpr",
       "joinType": "RIGHT",
       "right": {
         "kind": "tableRef",
         "table": "tj"
       },
       "constraint": {
-        "kind": "on",
-        "expr": {
-          "kind": "naryExpr",
-          "op": "AND",
-          "operands": [
-            {
-              "kind": "binaryExpr",
-              "op": "==",
-              "left": {
-                "kind": "columnRef",
-                "parts": [
-                  "t",
-                  "key1"
-                ]
-              },
-              "right": {
-                "kind": "columnRef",
-                "parts": [
-                  "tj",
-                  "key1"
-                ]
-              }
-            },
-            {
-              "kind": "binaryExpr",
-              "op": "==",
-              "left": {
-                "kind": "columnRef",
-                "parts": [
-                  "t",
-                  "key2"
-                ]
-              },
-              "right": {
-                "kind": "columnRef",
-                "parts": [
-                  "tj",
-                  "key2"
-                ]
-              }
-            }
-          ]
-        }
+        "kind": "using",
+        "columns": [
+          "key1",
+          "key2"
+        ]
       }
     },
     "orderBy": [
@@ -1874,7 +1123,6 @@
         "expr": {
           "kind": "columnRef",
           "parts": [
-            "t",
             "key1"
           ]
         },
@@ -1899,56 +1147,18 @@
         "kind": "tableRef",
         "table": "t"
       },
-      "kind": "join",
+      "kind": "joinExpr",
       "joinType": "RIGHT",
       "right": {
         "kind": "tableRef",
         "table": "tj"
       },
       "constraint": {
-        "kind": "on",
-        "expr": {
-          "kind": "naryExpr",
-          "op": "AND",
-          "operands": [
-            {
-              "kind": "binaryExpr",
-              "op": "==",
-              "left": {
-                "kind": "columnRef",
-                "parts": [
-                  "t",
-                  "key1"
-                ]
-              },
-              "right": {
-                "kind": "columnRef",
-                "parts": [
-                  "tj",
-                  "key1"
-                ]
-              }
-            },
-            {
-              "kind": "binaryExpr",
-              "op": "==",
-              "left": {
-                "kind": "columnRef",
-                "parts": [
-                  "t",
-                  "key2"
-                ]
-              },
-              "right": {
-                "kind": "columnRef",
-                "parts": [
-                  "tj",
-                  "key2"
-                ]
-              }
-            }
-          ]
-        }
+        "kind": "using",
+        "columns": [
+          "key1",
+          "key2"
+        ]
       }
     },
     "orderBy": [
@@ -1957,7 +1167,6 @@
         "expr": {
           "kind": "columnRef",
           "parts": [
-            "t",
             "key1"
           ]
         },
@@ -1982,56 +1191,18 @@
         "kind": "tableRef",
         "table": "t"
       },
-      "kind": "join",
+      "kind": "joinExpr",
       "joinType": "RIGHT",
       "right": {
         "kind": "tableRef",
         "table": "tj"
       },
       "constraint": {
-        "kind": "on",
-        "expr": {
-          "kind": "naryExpr",
-          "op": "AND",
-          "operands": [
-            {
-              "kind": "binaryExpr",
-              "op": "==",
-              "left": {
-                "kind": "columnRef",
-                "parts": [
-                  "t",
-                  "key1"
-                ]
-              },
-              "right": {
-                "kind": "columnRef",
-                "parts": [
-                  "tj",
-                  "key1"
-                ]
-              }
-            },
-            {
-              "kind": "binaryExpr",
-              "op": "==",
-              "left": {
-                "kind": "columnRef",
-                "parts": [
-                  "t",
-                  "key2"
-                ]
-              },
-              "right": {
-                "kind": "columnRef",
-                "parts": [
-                  "tj",
-                  "key2"
-                ]
-              }
-            }
-          ]
-        }
+        "kind": "using",
+        "columns": [
+          "key1",
+          "key2"
+        ]
       }
     },
     "orderBy": [
@@ -2040,7 +1211,6 @@
         "expr": {
           "kind": "columnRef",
           "parts": [
-            "t",
             "key1"
           ]
         },
@@ -2065,56 +1235,18 @@
         "kind": "tableRef",
         "table": "t"
       },
-      "kind": "join",
+      "kind": "joinExpr",
       "joinType": "RIGHT",
       "right": {
         "kind": "tableRef",
         "table": "tj"
       },
       "constraint": {
-        "kind": "on",
-        "expr": {
-          "kind": "naryExpr",
-          "op": "AND",
-          "operands": [
-            {
-              "kind": "binaryExpr",
-              "op": "==",
-              "left": {
-                "kind": "columnRef",
-                "parts": [
-                  "t",
-                  "key1"
-                ]
-              },
-              "right": {
-                "kind": "columnRef",
-                "parts": [
-                  "tj",
-                  "key1"
-                ]
-              }
-            },
-            {
-              "kind": "binaryExpr",
-              "op": "==",
-              "left": {
-                "kind": "columnRef",
-                "parts": [
-                  "t",
-                  "key2"
-                ]
-              },
-              "right": {
-                "kind": "columnRef",
-                "parts": [
-                  "tj",
-                  "key2"
-                ]
-              }
-            }
-          ]
-        }
+        "kind": "using",
+        "columns": [
+          "key1",
+          "key2"
+        ]
       }
     },
     "orderBy": [
@@ -2123,7 +1255,6 @@
         "expr": {
           "kind": "columnRef",
           "parts": [
-            "t",
             "key1"
           ]
         },
@@ -2147,56 +1278,18 @@
         "kind": "tableRef",
         "table": "t"
       },
-      "kind": "join",
+      "kind": "joinExpr",
       "joinType": "RIGHT",
       "right": {
         "kind": "tableRef",
         "table": "tj"
       },
       "constraint": {
-        "kind": "on",
-        "expr": {
-          "kind": "naryExpr",
-          "op": "AND",
-          "operands": [
-            {
-              "kind": "binaryExpr",
-              "op": "==",
-              "left": {
-                "kind": "columnRef",
-                "parts": [
-                  "t",
-                  "key1"
-                ]
-              },
-              "right": {
-                "kind": "columnRef",
-                "parts": [
-                  "tj",
-                  "key1"
-                ]
-              }
-            },
-            {
-              "kind": "binaryExpr",
-              "op": "==",
-              "left": {
-                "kind": "columnRef",
-                "parts": [
-                  "t",
-                  "key2"
-                ]
-              },
-              "right": {
-                "kind": "columnRef",
-                "parts": [
-                  "tj",
-                  "key2"
-                ]
-              }
-            }
-          ]
-        }
+        "kind": "using",
+        "columns": [
+          "key1",
+          "key2"
+        ]
       }
     },
     "orderBy": [
@@ -2205,7 +1298,6 @@
         "expr": {
           "kind": "columnRef",
           "parts": [
-            "t",
             "key1"
           ]
         },
@@ -2229,56 +1321,18 @@
         "kind": "tableRef",
         "table": "t"
       },
-      "kind": "join",
+      "kind": "joinExpr",
       "joinType": "RIGHT",
       "right": {
         "kind": "tableRef",
         "table": "tj"
       },
       "constraint": {
-        "kind": "on",
-        "expr": {
-          "kind": "naryExpr",
-          "op": "AND",
-          "operands": [
-            {
-              "kind": "binaryExpr",
-              "op": "==",
-              "left": {
-                "kind": "columnRef",
-                "parts": [
-                  "t",
-                  "key1"
-                ]
-              },
-              "right": {
-                "kind": "columnRef",
-                "parts": [
-                  "tj",
-                  "key1"
-                ]
-              }
-            },
-            {
-              "kind": "binaryExpr",
-              "op": "==",
-              "left": {
-                "kind": "columnRef",
-                "parts": [
-                  "t",
-                  "key2"
-                ]
-              },
-              "right": {
-                "kind": "columnRef",
-                "parts": [
-                  "tj",
-                  "key2"
-                ]
-              }
-            }
-          ]
-        }
+        "kind": "using",
+        "columns": [
+          "key1",
+          "key2"
+        ]
       }
     },
     "orderBy": [
@@ -2287,14 +1341,16 @@
         "expr": {
           "kind": "columnRef",
           "parts": [
-            "t",
             "key1"
           ]
         },
         "direction": "ASC"
       }
     ],
-    "format": "TSVWithNames"
+    "format": "TSVWithNames",
+    "trailingComments": [
+      "-- { serverError AMBIGUOUS_IDENTIFIER }"
+    ]
   },
   {
     "kind": "select",
@@ -2311,56 +1367,18 @@
         "kind": "tableRef",
         "table": "t"
       },
-      "kind": "join",
+      "kind": "joinExpr",
       "joinType": "RIGHT",
       "right": {
         "kind": "tableRef",
         "table": "tj"
       },
       "constraint": {
-        "kind": "on",
-        "expr": {
-          "kind": "naryExpr",
-          "op": "AND",
-          "operands": [
-            {
-              "kind": "binaryExpr",
-              "op": "==",
-              "left": {
-                "kind": "columnRef",
-                "parts": [
-                  "t",
-                  "key1"
-                ]
-              },
-              "right": {
-                "kind": "columnRef",
-                "parts": [
-                  "tj",
-                  "key1"
-                ]
-              }
-            },
-            {
-              "kind": "binaryExpr",
-              "op": "==",
-              "left": {
-                "kind": "columnRef",
-                "parts": [
-                  "t",
-                  "key2"
-                ]
-              },
-              "right": {
-                "kind": "columnRef",
-                "parts": [
-                  "tj",
-                  "key2"
-                ]
-              }
-            }
-          ]
-        }
+        "kind": "using",
+        "columns": [
+          "key1",
+          "key2"
+        ]
       }
     },
     "orderBy": [
@@ -2369,14 +1387,16 @@
         "expr": {
           "kind": "columnRef",
           "parts": [
-            "t",
             "key1"
           ]
         },
         "direction": "ASC"
       }
     ],
-    "format": "TSVWithNames"
+    "format": "TSVWithNames",
+    "trailingComments": [
+      "-- { serverError AMBIGUOUS_IDENTIFIER }"
+    ]
   },
   {
     "kind": "select",
@@ -2393,56 +1413,18 @@
         "kind": "tableRef",
         "table": "t"
       },
-      "kind": "join",
+      "kind": "joinExpr",
       "joinType": "RIGHT",
       "right": {
         "kind": "tableRef",
         "table": "tj"
       },
       "constraint": {
-        "kind": "on",
-        "expr": {
-          "kind": "naryExpr",
-          "op": "AND",
-          "operands": [
-            {
-              "kind": "binaryExpr",
-              "op": "==",
-              "left": {
-                "kind": "columnRef",
-                "parts": [
-                  "t",
-                  "key1"
-                ]
-              },
-              "right": {
-                "kind": "columnRef",
-                "parts": [
-                  "tj",
-                  "key1"
-                ]
-              }
-            },
-            {
-              "kind": "binaryExpr",
-              "op": "==",
-              "left": {
-                "kind": "columnRef",
-                "parts": [
-                  "t",
-                  "key2"
-                ]
-              },
-              "right": {
-                "kind": "columnRef",
-                "parts": [
-                  "tj",
-                  "key2"
-                ]
-              }
-            }
-          ]
-        }
+        "kind": "using",
+        "columns": [
+          "key1",
+          "key2"
+        ]
       }
     },
     "orderBy": [
@@ -2451,7 +1433,6 @@
         "expr": {
           "kind": "columnRef",
           "parts": [
-            "t",
             "key1"
           ]
         },
@@ -2476,56 +1457,18 @@
         "kind": "tableRef",
         "table": "t"
       },
-      "kind": "join",
+      "kind": "joinExpr",
       "joinType": "RIGHT",
       "right": {
         "kind": "tableRef",
         "table": "tj"
       },
       "constraint": {
-        "kind": "on",
-        "expr": {
-          "kind": "naryExpr",
-          "op": "AND",
-          "operands": [
-            {
-              "kind": "binaryExpr",
-              "op": "==",
-              "left": {
-                "kind": "columnRef",
-                "parts": [
-                  "t",
-                  "key1"
-                ]
-              },
-              "right": {
-                "kind": "columnRef",
-                "parts": [
-                  "tj",
-                  "key1"
-                ]
-              }
-            },
-            {
-              "kind": "binaryExpr",
-              "op": "==",
-              "left": {
-                "kind": "columnRef",
-                "parts": [
-                  "t",
-                  "key2"
-                ]
-              },
-              "right": {
-                "kind": "columnRef",
-                "parts": [
-                  "tj",
-                  "key2"
-                ]
-              }
-            }
-          ]
-        }
+        "kind": "using",
+        "columns": [
+          "key1",
+          "key2"
+        ]
       }
     },
     "orderBy": [
@@ -2534,7 +1477,6 @@
         "expr": {
           "kind": "columnRef",
           "parts": [
-            "t",
             "key1"
           ]
         },
@@ -2558,56 +1500,18 @@
         "kind": "tableRef",
         "table": "t"
       },
-      "kind": "join",
+      "kind": "joinExpr",
       "joinType": "RIGHT",
       "right": {
         "kind": "tableRef",
         "table": "tj"
       },
       "constraint": {
-        "kind": "on",
-        "expr": {
-          "kind": "naryExpr",
-          "op": "AND",
-          "operands": [
-            {
-              "kind": "binaryExpr",
-              "op": "==",
-              "left": {
-                "kind": "columnRef",
-                "parts": [
-                  "t",
-                  "key1"
-                ]
-              },
-              "right": {
-                "kind": "columnRef",
-                "parts": [
-                  "tj",
-                  "key1"
-                ]
-              }
-            },
-            {
-              "kind": "binaryExpr",
-              "op": "==",
-              "left": {
-                "kind": "columnRef",
-                "parts": [
-                  "t",
-                  "key2"
-                ]
-              },
-              "right": {
-                "kind": "columnRef",
-                "parts": [
-                  "tj",
-                  "key2"
-                ]
-              }
-            }
-          ]
-        }
+        "kind": "using",
+        "columns": [
+          "key1",
+          "key2"
+        ]
       }
     },
     "orderBy": [
@@ -2616,7 +1520,6 @@
         "expr": {
           "kind": "columnRef",
           "parts": [
-            "t",
             "key1"
           ]
         },
@@ -2637,7 +1540,1362 @@
         "kind": "tableRef",
         "table": "t"
       },
-      "kind": "join",
+      "kind": "joinExpr",
+      "joinType": "RIGHT",
+      "right": {
+        "kind": "tableRef",
+        "table": "tj"
+      },
+      "constraint": {
+        "kind": "on",
+        "expr": {
+          "kind": "naryExpr",
+          "op": "AND",
+          "operands": [
+            {
+              "kind": "binaryExpr",
+              "op": "==",
+              "left": {
+                "kind": "columnRef",
+                "parts": [
+                  "t",
+                  "key1"
+                ]
+              },
+              "right": {
+                "kind": "columnRef",
+                "parts": [
+                  "tj",
+                  "key1"
+                ]
+              }
+            },
+            {
+              "kind": "binaryExpr",
+              "op": "==",
+              "left": {
+                "kind": "columnRef",
+                "parts": [
+                  "t",
+                  "key2"
+                ]
+              },
+              "right": {
+                "kind": "columnRef",
+                "parts": [
+                  "tj",
+                  "key2"
+                ]
+              }
+            }
+          ]
+        }
+      }
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "t",
+            "key1"
+          ]
+        },
+        "direction": "ASC"
+      }
+    ],
+    "format": "TSVWithNames"
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "key1"
+        ]
+      }
+    ],
+    "from": {
+      "left": {
+        "kind": "tableRef",
+        "table": "t"
+      },
+      "kind": "joinExpr",
+      "joinType": "RIGHT",
+      "right": {
+        "kind": "tableRef",
+        "table": "tj"
+      },
+      "constraint": {
+        "kind": "on",
+        "expr": {
+          "kind": "naryExpr",
+          "op": "AND",
+          "operands": [
+            {
+              "kind": "binaryExpr",
+              "op": "==",
+              "left": {
+                "kind": "columnRef",
+                "parts": [
+                  "t",
+                  "key1"
+                ]
+              },
+              "right": {
+                "kind": "columnRef",
+                "parts": [
+                  "tj",
+                  "key1"
+                ]
+              }
+            },
+            {
+              "kind": "binaryExpr",
+              "op": "==",
+              "left": {
+                "kind": "columnRef",
+                "parts": [
+                  "t",
+                  "key2"
+                ]
+              },
+              "right": {
+                "kind": "columnRef",
+                "parts": [
+                  "tj",
+                  "key2"
+                ]
+              }
+            }
+          ]
+        }
+      }
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "t",
+            "key1"
+          ]
+        },
+        "direction": "ASC"
+      }
+    ],
+    "format": "TSVWithNames",
+    "trailingComments": [
+      "-- { serverError AMBIGUOUS_IDENTIFIER }"
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "t",
+          "key1"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "tj",
+          "key1"
+        ]
+      }
+    ],
+    "from": {
+      "left": {
+        "kind": "tableRef",
+        "table": "t"
+      },
+      "kind": "joinExpr",
+      "joinType": "RIGHT",
+      "right": {
+        "kind": "tableRef",
+        "table": "tj"
+      },
+      "constraint": {
+        "kind": "on",
+        "expr": {
+          "kind": "naryExpr",
+          "op": "AND",
+          "operands": [
+            {
+              "kind": "binaryExpr",
+              "op": "==",
+              "left": {
+                "kind": "columnRef",
+                "parts": [
+                  "t",
+                  "key1"
+                ]
+              },
+              "right": {
+                "kind": "columnRef",
+                "parts": [
+                  "tj",
+                  "key1"
+                ]
+              }
+            },
+            {
+              "kind": "binaryExpr",
+              "op": "==",
+              "left": {
+                "kind": "columnRef",
+                "parts": [
+                  "t",
+                  "key2"
+                ]
+              },
+              "right": {
+                "kind": "columnRef",
+                "parts": [
+                  "tj",
+                  "key2"
+                ]
+              }
+            }
+          ]
+        }
+      }
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "t",
+            "key1"
+          ]
+        },
+        "direction": "ASC"
+      }
+    ],
+    "format": "TSVWithNames"
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "t",
+          "key2"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "tj",
+          "key2"
+        ]
+      }
+    ],
+    "from": {
+      "left": {
+        "kind": "tableRef",
+        "table": "t"
+      },
+      "kind": "joinExpr",
+      "joinType": "RIGHT",
+      "right": {
+        "kind": "tableRef",
+        "table": "tj"
+      },
+      "constraint": {
+        "kind": "on",
+        "expr": {
+          "kind": "naryExpr",
+          "op": "AND",
+          "operands": [
+            {
+              "kind": "binaryExpr",
+              "op": "==",
+              "left": {
+                "kind": "columnRef",
+                "parts": [
+                  "t",
+                  "key1"
+                ]
+              },
+              "right": {
+                "kind": "columnRef",
+                "parts": [
+                  "tj",
+                  "key1"
+                ]
+              }
+            },
+            {
+              "kind": "binaryExpr",
+              "op": "==",
+              "left": {
+                "kind": "columnRef",
+                "parts": [
+                  "t",
+                  "key2"
+                ]
+              },
+              "right": {
+                "kind": "columnRef",
+                "parts": [
+                  "tj",
+                  "key2"
+                ]
+              }
+            }
+          ]
+        }
+      }
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "t",
+            "key1"
+          ]
+        },
+        "direction": "ASC"
+      }
+    ],
+    "format": "TSVWithNames"
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "t",
+          "b"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "tj",
+          "b"
+        ]
+      }
+    ],
+    "from": {
+      "left": {
+        "kind": "tableRef",
+        "table": "t"
+      },
+      "kind": "joinExpr",
+      "joinType": "RIGHT",
+      "right": {
+        "kind": "tableRef",
+        "table": "tj"
+      },
+      "constraint": {
+        "kind": "on",
+        "expr": {
+          "kind": "naryExpr",
+          "op": "AND",
+          "operands": [
+            {
+              "kind": "binaryExpr",
+              "op": "==",
+              "left": {
+                "kind": "columnRef",
+                "parts": [
+                  "t",
+                  "key1"
+                ]
+              },
+              "right": {
+                "kind": "columnRef",
+                "parts": [
+                  "tj",
+                  "key1"
+                ]
+              }
+            },
+            {
+              "kind": "binaryExpr",
+              "op": "==",
+              "left": {
+                "kind": "columnRef",
+                "parts": [
+                  "t",
+                  "key2"
+                ]
+              },
+              "right": {
+                "kind": "columnRef",
+                "parts": [
+                  "tj",
+                  "key2"
+                ]
+              }
+            }
+          ]
+        }
+      }
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "t",
+            "key1"
+          ]
+        },
+        "direction": "ASC"
+      }
+    ],
+    "format": "TSVWithNames"
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "t",
+          "x"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "tj",
+          "b"
+        ]
+      }
+    ],
+    "from": {
+      "left": {
+        "kind": "tableRef",
+        "table": "t"
+      },
+      "kind": "joinExpr",
+      "joinType": "RIGHT",
+      "right": {
+        "kind": "tableRef",
+        "table": "tj"
+      },
+      "constraint": {
+        "kind": "on",
+        "expr": {
+          "kind": "naryExpr",
+          "op": "AND",
+          "operands": [
+            {
+              "kind": "binaryExpr",
+              "op": "==",
+              "left": {
+                "kind": "columnRef",
+                "parts": [
+                  "t",
+                  "key1"
+                ]
+              },
+              "right": {
+                "kind": "columnRef",
+                "parts": [
+                  "tj",
+                  "key1"
+                ]
+              }
+            },
+            {
+              "kind": "binaryExpr",
+              "op": "==",
+              "left": {
+                "kind": "columnRef",
+                "parts": [
+                  "t",
+                  "key2"
+                ]
+              },
+              "right": {
+                "kind": "columnRef",
+                "parts": [
+                  "tj",
+                  "key2"
+                ]
+              }
+            }
+          ]
+        }
+      }
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "t",
+            "key1"
+          ]
+        },
+        "direction": "ASC"
+      }
+    ],
+    "format": "TSVWithNames"
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "tj",
+          "a"
+        ]
+      }
+    ],
+    "from": {
+      "left": {
+        "kind": "tableRef",
+        "table": "t"
+      },
+      "kind": "joinExpr",
+      "joinType": "RIGHT",
+      "right": {
+        "kind": "tableRef",
+        "table": "tj"
+      },
+      "constraint": {
+        "kind": "on",
+        "expr": {
+          "kind": "naryExpr",
+          "op": "AND",
+          "operands": [
+            {
+              "kind": "binaryExpr",
+              "op": "==",
+              "left": {
+                "kind": "columnRef",
+                "parts": [
+                  "t",
+                  "key1"
+                ]
+              },
+              "right": {
+                "kind": "columnRef",
+                "parts": [
+                  "tj",
+                  "key1"
+                ]
+              }
+            },
+            {
+              "kind": "binaryExpr",
+              "op": "==",
+              "left": {
+                "kind": "columnRef",
+                "parts": [
+                  "t",
+                  "key2"
+                ]
+              },
+              "right": {
+                "kind": "columnRef",
+                "parts": [
+                  "tj",
+                  "key2"
+                ]
+              }
+            }
+          ]
+        }
+      }
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "t",
+            "key1"
+          ]
+        },
+        "direction": "ASC"
+      }
+    ],
+    "format": "TSVWithNames"
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "tj",
+          "b"
+        ]
+      }
+    ],
+    "from": {
+      "left": {
+        "kind": "tableRef",
+        "table": "t"
+      },
+      "kind": "joinExpr",
+      "joinType": "RIGHT",
+      "right": {
+        "kind": "tableRef",
+        "table": "tj"
+      },
+      "constraint": {
+        "kind": "on",
+        "expr": {
+          "kind": "naryExpr",
+          "op": "AND",
+          "operands": [
+            {
+              "kind": "binaryExpr",
+              "op": "==",
+              "left": {
+                "kind": "columnRef",
+                "parts": [
+                  "t",
+                  "key1"
+                ]
+              },
+              "right": {
+                "kind": "columnRef",
+                "parts": [
+                  "tj",
+                  "key1"
+                ]
+              }
+            },
+            {
+              "kind": "binaryExpr",
+              "op": "==",
+              "left": {
+                "kind": "columnRef",
+                "parts": [
+                  "t",
+                  "key2"
+                ]
+              },
+              "right": {
+                "kind": "columnRef",
+                "parts": [
+                  "tj",
+                  "key2"
+                ]
+              }
+            }
+          ]
+        }
+      }
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "t",
+            "key1"
+          ]
+        },
+        "direction": "ASC"
+      }
+    ],
+    "format": "TSVWithNames"
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "tj",
+          "x"
+        ]
+      }
+    ],
+    "from": {
+      "left": {
+        "kind": "tableRef",
+        "table": "t"
+      },
+      "kind": "joinExpr",
+      "joinType": "RIGHT",
+      "right": {
+        "kind": "tableRef",
+        "table": "tj"
+      },
+      "constraint": {
+        "kind": "on",
+        "expr": {
+          "kind": "naryExpr",
+          "op": "AND",
+          "operands": [
+            {
+              "kind": "binaryExpr",
+              "op": "==",
+              "left": {
+                "kind": "columnRef",
+                "parts": [
+                  "t",
+                  "key1"
+                ]
+              },
+              "right": {
+                "kind": "columnRef",
+                "parts": [
+                  "tj",
+                  "key1"
+                ]
+              }
+            },
+            {
+              "kind": "binaryExpr",
+              "op": "==",
+              "left": {
+                "kind": "columnRef",
+                "parts": [
+                  "t",
+                  "key2"
+                ]
+              },
+              "right": {
+                "kind": "columnRef",
+                "parts": [
+                  "tj",
+                  "key2"
+                ]
+              }
+            }
+          ]
+        }
+      }
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "t",
+            "key1"
+          ]
+        },
+        "direction": "ASC"
+      }
+    ],
+    "format": "TSVWithNames"
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "tj",
+          "y"
+        ]
+      }
+    ],
+    "from": {
+      "left": {
+        "kind": "tableRef",
+        "table": "t"
+      },
+      "kind": "joinExpr",
+      "joinType": "RIGHT",
+      "right": {
+        "kind": "tableRef",
+        "table": "tj"
+      },
+      "constraint": {
+        "kind": "on",
+        "expr": {
+          "kind": "naryExpr",
+          "op": "AND",
+          "operands": [
+            {
+              "kind": "binaryExpr",
+              "op": "==",
+              "left": {
+                "kind": "columnRef",
+                "parts": [
+                  "t",
+                  "key1"
+                ]
+              },
+              "right": {
+                "kind": "columnRef",
+                "parts": [
+                  "tj",
+                  "key1"
+                ]
+              }
+            },
+            {
+              "kind": "binaryExpr",
+              "op": "==",
+              "left": {
+                "kind": "columnRef",
+                "parts": [
+                  "t",
+                  "key2"
+                ]
+              },
+              "right": {
+                "kind": "columnRef",
+                "parts": [
+                  "tj",
+                  "key2"
+                ]
+              }
+            }
+          ]
+        }
+      }
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "t",
+            "key1"
+          ]
+        },
+        "direction": "ASC"
+      }
+    ],
+    "format": "TSVWithNames"
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "a"
+        ]
+      }
+    ],
+    "from": {
+      "left": {
+        "kind": "tableRef",
+        "table": "t"
+      },
+      "kind": "joinExpr",
+      "joinType": "RIGHT",
+      "right": {
+        "kind": "tableRef",
+        "table": "tj"
+      },
+      "constraint": {
+        "kind": "on",
+        "expr": {
+          "kind": "naryExpr",
+          "op": "AND",
+          "operands": [
+            {
+              "kind": "binaryExpr",
+              "op": "==",
+              "left": {
+                "kind": "columnRef",
+                "parts": [
+                  "t",
+                  "key1"
+                ]
+              },
+              "right": {
+                "kind": "columnRef",
+                "parts": [
+                  "tj",
+                  "key1"
+                ]
+              }
+            },
+            {
+              "kind": "binaryExpr",
+              "op": "==",
+              "left": {
+                "kind": "columnRef",
+                "parts": [
+                  "t",
+                  "key2"
+                ]
+              },
+              "right": {
+                "kind": "columnRef",
+                "parts": [
+                  "tj",
+                  "key2"
+                ]
+              }
+            }
+          ]
+        }
+      }
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "t",
+            "key1"
+          ]
+        },
+        "direction": "ASC"
+      }
+    ],
+    "format": "TSVWithNames"
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "b"
+        ]
+      }
+    ],
+    "from": {
+      "left": {
+        "kind": "tableRef",
+        "table": "t"
+      },
+      "kind": "joinExpr",
+      "joinType": "RIGHT",
+      "right": {
+        "kind": "tableRef",
+        "table": "tj"
+      },
+      "constraint": {
+        "kind": "on",
+        "expr": {
+          "kind": "naryExpr",
+          "op": "AND",
+          "operands": [
+            {
+              "kind": "binaryExpr",
+              "op": "==",
+              "left": {
+                "kind": "columnRef",
+                "parts": [
+                  "t",
+                  "key1"
+                ]
+              },
+              "right": {
+                "kind": "columnRef",
+                "parts": [
+                  "tj",
+                  "key1"
+                ]
+              }
+            },
+            {
+              "kind": "binaryExpr",
+              "op": "==",
+              "left": {
+                "kind": "columnRef",
+                "parts": [
+                  "t",
+                  "key2"
+                ]
+              },
+              "right": {
+                "kind": "columnRef",
+                "parts": [
+                  "tj",
+                  "key2"
+                ]
+              }
+            }
+          ]
+        }
+      }
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "t",
+            "key1"
+          ]
+        },
+        "direction": "ASC"
+      }
+    ],
+    "format": "TSVWithNames",
+    "trailingComments": [
+      "-- { serverError AMBIGUOUS_IDENTIFIER }"
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "x"
+        ]
+      }
+    ],
+    "from": {
+      "left": {
+        "kind": "tableRef",
+        "table": "t"
+      },
+      "kind": "joinExpr",
+      "joinType": "RIGHT",
+      "right": {
+        "kind": "tableRef",
+        "table": "tj"
+      },
+      "constraint": {
+        "kind": "on",
+        "expr": {
+          "kind": "naryExpr",
+          "op": "AND",
+          "operands": [
+            {
+              "kind": "binaryExpr",
+              "op": "==",
+              "left": {
+                "kind": "columnRef",
+                "parts": [
+                  "t",
+                  "key1"
+                ]
+              },
+              "right": {
+                "kind": "columnRef",
+                "parts": [
+                  "tj",
+                  "key1"
+                ]
+              }
+            },
+            {
+              "kind": "binaryExpr",
+              "op": "==",
+              "left": {
+                "kind": "columnRef",
+                "parts": [
+                  "t",
+                  "key2"
+                ]
+              },
+              "right": {
+                "kind": "columnRef",
+                "parts": [
+                  "tj",
+                  "key2"
+                ]
+              }
+            }
+          ]
+        }
+      }
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "t",
+            "key1"
+          ]
+        },
+        "direction": "ASC"
+      }
+    ],
+    "format": "TSVWithNames",
+    "trailingComments": [
+      "-- { serverError AMBIGUOUS_IDENTIFIER }"
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "y"
+        ]
+      }
+    ],
+    "from": {
+      "left": {
+        "kind": "tableRef",
+        "table": "t"
+      },
+      "kind": "joinExpr",
+      "joinType": "RIGHT",
+      "right": {
+        "kind": "tableRef",
+        "table": "tj"
+      },
+      "constraint": {
+        "kind": "on",
+        "expr": {
+          "kind": "naryExpr",
+          "op": "AND",
+          "operands": [
+            {
+              "kind": "binaryExpr",
+              "op": "==",
+              "left": {
+                "kind": "columnRef",
+                "parts": [
+                  "t",
+                  "key1"
+                ]
+              },
+              "right": {
+                "kind": "columnRef",
+                "parts": [
+                  "tj",
+                  "key1"
+                ]
+              }
+            },
+            {
+              "kind": "binaryExpr",
+              "op": "==",
+              "left": {
+                "kind": "columnRef",
+                "parts": [
+                  "t",
+                  "key2"
+                ]
+              },
+              "right": {
+                "kind": "columnRef",
+                "parts": [
+                  "tj",
+                  "key2"
+                ]
+              }
+            }
+          ]
+        }
+      }
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "t",
+            "key1"
+          ]
+        },
+        "direction": "ASC"
+      }
+    ],
+    "format": "TSVWithNames"
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "t",
+          "val"
+        ]
+      }
+    ],
+    "from": {
+      "left": {
+        "kind": "tableRef",
+        "table": "t"
+      },
+      "kind": "joinExpr",
+      "joinType": "RIGHT",
+      "right": {
+        "kind": "tableRef",
+        "table": "tj"
+      },
+      "constraint": {
+        "kind": "on",
+        "expr": {
+          "kind": "naryExpr",
+          "op": "AND",
+          "operands": [
+            {
+              "kind": "binaryExpr",
+              "op": "==",
+              "left": {
+                "kind": "columnRef",
+                "parts": [
+                  "t",
+                  "key1"
+                ]
+              },
+              "right": {
+                "kind": "columnRef",
+                "parts": [
+                  "tj",
+                  "key1"
+                ]
+              }
+            },
+            {
+              "kind": "binaryExpr",
+              "op": "==",
+              "left": {
+                "kind": "columnRef",
+                "parts": [
+                  "t",
+                  "key2"
+                ]
+              },
+              "right": {
+                "kind": "columnRef",
+                "parts": [
+                  "tj",
+                  "key2"
+                ]
+              }
+            }
+          ]
+        }
+      }
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "t",
+            "key1"
+          ]
+        },
+        "direction": "ASC"
+      }
+    ],
+    "format": "TSVWithNames"
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "val"
+        ]
+      }
+    ],
+    "from": {
+      "left": {
+        "kind": "tableRef",
+        "table": "t"
+      },
+      "kind": "joinExpr",
+      "joinType": "RIGHT",
+      "right": {
+        "kind": "tableRef",
+        "table": "tj"
+      },
+      "constraint": {
+        "kind": "on",
+        "expr": {
+          "kind": "naryExpr",
+          "op": "AND",
+          "operands": [
+            {
+              "kind": "binaryExpr",
+              "op": "==",
+              "left": {
+                "kind": "columnRef",
+                "parts": [
+                  "t",
+                  "key1"
+                ]
+              },
+              "right": {
+                "kind": "columnRef",
+                "parts": [
+                  "tj",
+                  "key1"
+                ]
+              }
+            },
+            {
+              "kind": "binaryExpr",
+              "op": "==",
+              "left": {
+                "kind": "columnRef",
+                "parts": [
+                  "t",
+                  "key2"
+                ]
+              },
+              "right": {
+                "kind": "columnRef",
+                "parts": [
+                  "tj",
+                  "key2"
+                ]
+              }
+            }
+          ]
+        }
+      }
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "t",
+            "key1"
+          ]
+        },
+        "direction": "ASC"
+      }
+    ],
+    "format": "TSVWithNames"
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "asterisk"
+      }
+    ],
+    "from": {
+      "left": {
+        "kind": "tableRef",
+        "table": "t"
+      },
+      "kind": "joinExpr",
       "joinType": "RIGHT",
       "right": {
         "kind": "tableRef",
@@ -2698,7 +2956,10 @@
         }
       }
     },
-    "format": "TSVWithNames"
+    "format": "TSVWithNames",
+    "trailingComments": [
+      "-- { serverError INCOMPATIBLE_TYPE_OF_JOIN }"
+    ]
   },
   {
     "kind": "select",
@@ -2712,7 +2973,7 @@
         "kind": "tableRef",
         "table": "t"
       },
-      "kind": "join",
+      "kind": "joinExpr",
       "joinType": "RIGHT",
       "right": {
         "kind": "tableRef",
@@ -2812,7 +3073,10 @@
         "direction": "ASC"
       }
     ],
-    "format": "TSVWithNames"
+    "format": "TSVWithNames",
+    "trailingComments": [
+      "-- Ok: expression on the left table"
+    ]
   },
   {
     "kind": "select",
@@ -2826,7 +3090,7 @@
         "kind": "tableRef",
         "table": "t"
       },
-      "kind": "join",
+      "kind": "joinExpr",
       "joinType": "RIGHT",
       "right": {
         "kind": "tableRef",
@@ -2914,7 +3178,10 @@
         }
       }
     ],
-    "format": "TSVWithNames"
+    "format": "TSVWithNames",
+    "trailingComments": [
+      "-- { serverError INCOMPATIBLE_TYPE_OF_JOIN }"
+    ]
   },
   {
     "kind": "select",
@@ -2928,7 +3195,7 @@
         "kind": "tableRef",
         "table": "t"
       },
-      "kind": "join",
+      "kind": "joinExpr",
       "joinType": "RIGHT",
       "right": {
         "kind": "tableRef",
@@ -3038,7 +3305,7 @@
         "kind": "tableRef",
         "table": "t"
       },
-      "kind": "join",
+      "kind": "joinExpr",
       "joinType": "RIGHT",
       "right": {
         "kind": "tableRef",
@@ -3104,7 +3371,10 @@
         }
       }
     },
-    "format": "TSVWithNames"
+    "format": "TSVWithNames",
+    "trailingComments": [
+      "-- { serverError INCOMPATIBLE_TYPE_OF_JOIN }"
+    ]
   },
   {
     "kind": "select",
@@ -3118,7 +3388,7 @@
         "kind": "tableRef",
         "table": "t"
       },
-      "kind": "join",
+      "kind": "joinExpr",
       "joinType": "RIGHT",
       "right": {
         "kind": "tableRef",
@@ -3186,7 +3456,10 @@
         }
       }
     },
-    "format": "TSVWithNames"
+    "format": "TSVWithNames",
+    "trailingComments": [
+      "-- { serverError INCOMPATIBLE_TYPE_OF_JOIN }"
+    ]
   },
   {
     "kind": "select",
@@ -3200,7 +3473,7 @@
         "kind": "tableRef",
         "table": "t"
       },
-      "kind": "join",
+      "kind": "joinExpr",
       "joinType": "RIGHT",
       "right": {
         "kind": "tableRef",
@@ -3292,7 +3565,10 @@
         "direction": "ASC"
       }
     ],
-    "format": "TSVWithNames"
+    "format": "TSVWithNames",
+    "trailingComments": [
+      "-- Ok: t.b from the left table"
+    ]
   },
   {
     "kind": "select",
@@ -3306,7 +3582,7 @@
         "kind": "tableRef",
         "table": "t"
       },
-      "kind": "join",
+      "kind": "joinExpr",
       "joinType": "RIGHT",
       "right": {
         "kind": "tableRef",
@@ -3372,7 +3648,10 @@
         }
       }
     },
-    "format": "TSVWithNames"
+    "format": "TSVWithNames",
+    "trailingComments": [
+      "-- { serverError INCOMPATIBLE_TYPE_OF_JOIN }"
+    ]
   },
   {
     "kind": "select",
@@ -3386,7 +3665,7 @@
         "kind": "tableRef",
         "table": "t"
       },
-      "kind": "join",
+      "kind": "joinExpr",
       "joinType": "RIGHT",
       "right": {
         "kind": "tableRef",
@@ -3465,7 +3744,10 @@
         }
       }
     ],
-    "format": "TSVWithNames"
+    "format": "TSVWithNames",
+    "trailingComments": [
+      "-- { serverError INCOMPATIBLE_TYPE_OF_JOIN }"
+    ]
   },
   {
     "kind": "select",
@@ -3479,7 +3761,7 @@
         "kind": "tableRef",
         "table": "t"
       },
-      "kind": "join",
+      "kind": "joinExpr",
       "joinType": "RIGHT",
       "right": {
         "kind": "tableRef",
@@ -3580,7 +3862,7 @@
         "kind": "tableRef",
         "table": "t"
       },
-      "kind": "join",
+      "kind": "joinExpr",
       "joinType": "RIGHT",
       "right": {
         "kind": "tableRef",
@@ -3637,7 +3919,10 @@
         }
       }
     },
-    "format": "TSVWithNames"
+    "format": "TSVWithNames",
+    "trailingComments": [
+      "-- { serverError ILLEGAL_TYPE_OF_ARGUMENT }"
+    ]
   },
   {
     "kind": "select",
@@ -3651,7 +3936,7 @@
         "kind": "tableRef",
         "table": "t"
       },
-      "kind": "join",
+      "kind": "joinExpr",
       "joinType": "RIGHT",
       "right": {
         "kind": "tableRef",
@@ -3666,7 +3951,10 @@
         }
       }
     },
-    "format": "TSVWithNames"
+    "format": "TSVWithNames",
+    "trailingComments": [
+      "-- { serverError INVALID_JOIN_ON_EXPRESSION }"
+    ]
   },
   {
     "kind": "select",
@@ -3680,7 +3968,7 @@
         "kind": "tableRef",
         "table": "t"
       },
-      "kind": "join",
+      "kind": "joinExpr",
       "joinType": "RIGHT",
       "right": {
         "kind": "tableRef",
@@ -3759,7 +4047,10 @@
         }
       }
     ],
-    "format": "TSVWithNames"
+    "format": "TSVWithNames",
+    "trailingComments": [
+      "-- { serverError INCOMPATIBLE_TYPE_OF_JOIN }"
+    ]
   },
   {
     "kind": "select",
@@ -3773,7 +4064,7 @@
         "kind": "tableRef",
         "table": "t"
       },
-      "kind": "join",
+      "kind": "joinExpr",
       "joinType": "RIGHT",
       "right": {
         "kind": "tableRef",
@@ -3874,7 +4165,7 @@
         "kind": "tableRef",
         "table": "t"
       },
-      "kind": "join",
+      "kind": "joinExpr",
       "joinType": "RIGHT",
       "right": {
         "kind": "tableRef",
@@ -3889,7 +4180,10 @@
         }
       }
     },
-    "format": "TSVWithNames"
+    "format": "TSVWithNames",
+    "trailingComments": [
+      "-- { serverError INCOMPATIBLE_TYPE_OF_JOIN }"
+    ]
   },
   {
     "kind": "select",
@@ -3903,7 +4197,7 @@
         "kind": "tableRef",
         "table": "t"
       },
-      "kind": "join",
+      "kind": "joinExpr",
       "joinType": "RIGHT",
       "right": {
         "kind": "tableRef",
@@ -3918,6 +4212,9 @@
         }
       }
     },
-    "format": "TSVWithNames"
+    "format": "TSVWithNames",
+    "trailingComments": [
+      "-- { serverError INCOMPATIBLE_TYPE_OF_JOIN }"
+    ]
   }
 ]

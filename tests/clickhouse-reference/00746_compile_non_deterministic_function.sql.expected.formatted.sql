@@ -1,3 +1,19 @@
+SET compile_expressions = 1;
+
+SET min_count_to_compile_expression = 1;
+
+DROP TABLE IF EXISTS time_table;
+
+CREATE TABLE time_table
+(
+    timecol DateTime,
+    value Int32
+)
+ENGINE = MergeTree
+ORDER BY tuple();
+
+INSERT INTO time_table;
+
 SELECT COUNT()
 FROM time_table
 WHERE value < now() - 1
@@ -6,3 +22,5 @@ WHERE value < now() - 1
     AND timecol < now() - 1;
 
 SELECT sleep(3);
+
+INSERT INTO time_table;

@@ -1,5 +1,94 @@
 [
   {
+    "kind": "insert",
+    "target": {
+      "kind": "function",
+      "func": {
+        "kind": "tableFunctionRef",
+        "name": "s3",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "s3_conn"
+            ]
+          },
+          {
+            "kind": "binaryExpr",
+            "op": "=",
+            "left": {
+              "kind": "columnRef",
+              "parts": [
+                "filename"
+              ]
+            },
+            "right": {
+              "kind": "functionCall",
+              "name": "concat",
+              "args": [
+                {
+                  "kind": "functionCall",
+                  "name": "currentDatabase",
+                  "args": []
+                },
+                {
+                  "kind": "literal",
+                  "type": "String",
+                  "value": "/{_partition_id}/test.parquet"
+                }
+              ]
+            }
+          },
+          {
+            "kind": "binaryExpr",
+            "op": "=",
+            "left": {
+              "kind": "columnRef",
+              "parts": [
+                "format"
+              ]
+            },
+            "right": {
+              "kind": "columnRef",
+              "parts": [
+                "Parquet"
+              ]
+            }
+          }
+        ]
+      }
+    },
+    "partitionBy": {
+      "kind": "literal",
+      "type": "UInt64",
+      "value": "1"
+    },
+    "selectQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "asterisk"
+        }
+      ],
+      "from": {
+        "kind": "tableRef",
+        "database": "system",
+        "table": "numbers"
+      },
+      "limit": {
+        "count": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "10"
+        }
+      }
+    },
+    "leadingComments": [
+      "-- Tags: no-fasttest",
+      "-- ^ for S3"
+    ]
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -7,7 +96,7 @@
       }
     ],
     "from": {
-      "kind": "tableFunction",
+      "kind": "tableFunctionRef",
       "name": "s3",
       "args": [
         {
@@ -46,6 +135,91 @@
     }
   },
   {
+    "kind": "insert",
+    "target": {
+      "kind": "function",
+      "func": {
+        "kind": "tableFunctionRef",
+        "name": "s3",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "s3_conn"
+            ]
+          },
+          {
+            "kind": "binaryExpr",
+            "op": "=",
+            "left": {
+              "kind": "columnRef",
+              "parts": [
+                "filename"
+              ]
+            },
+            "right": {
+              "kind": "functionCall",
+              "name": "concat",
+              "args": [
+                {
+                  "kind": "functionCall",
+                  "name": "currentDatabase",
+                  "args": []
+                },
+                {
+                  "kind": "literal",
+                  "type": "String",
+                  "value": "/{_partition_id}/test.parquet"
+                }
+              ]
+            }
+          },
+          {
+            "kind": "binaryExpr",
+            "op": "=",
+            "left": {
+              "kind": "columnRef",
+              "parts": [
+                "format"
+              ]
+            },
+            "right": {
+              "kind": "columnRef",
+              "parts": [
+                "Parquet"
+              ]
+            }
+          }
+        ]
+      }
+    },
+    "partitionBy": {
+      "kind": "literal",
+      "type": "UInt64",
+      "value": "2"
+    },
+    "selectQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "asterisk"
+        }
+      ],
+      "from": {
+        "kind": "tableRef",
+        "database": "system",
+        "table": "numbers"
+      },
+      "limit": {
+        "count": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "10"
+        }
+      }
+    }
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -53,7 +227,7 @@
       }
     ],
     "from": {
-      "kind": "tableFunction",
+      "kind": "tableFunctionRef",
       "name": "s3",
       "args": [
         {

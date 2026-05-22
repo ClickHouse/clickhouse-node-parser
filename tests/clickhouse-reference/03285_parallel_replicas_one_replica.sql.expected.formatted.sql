@@ -1,3 +1,11 @@
+CREATE TABLE src
+(
+    y Int8
+)
+ENGINE = MergeTree
+ORDER BY y AS
+SELECT 1;
+
 SELECT 1
 FROM (
         SELECT 2

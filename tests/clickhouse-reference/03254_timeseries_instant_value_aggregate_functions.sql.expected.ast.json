@@ -1,5 +1,1954 @@
 [
   {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "allow_experimental_ts_to_grid_aggregate_function",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "cluster_for_parallel_replicas",
+        "value": {
+          "kind": "literal",
+          "type": "String",
+          "value": "test_shard_localhost"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "t_resampled_timeseries"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "step",
+        "type": {
+          "name": "UInt32"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "metric_id",
+        "type": {
+          "name": "UInt64"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "grid_timestamp",
+        "type": {
+          "name": "DateTime",
+          "args": [
+            {
+              "kind": "literal",
+              "value": "'UTC'"
+            }
+          ]
+        },
+        "codec": [
+          {
+            "name": "DoubleDelta"
+          },
+          {
+            "name": "ZSTD"
+          }
+        ]
+      },
+      {
+        "kind": "columnDef",
+        "name": "samples",
+        "type": {
+          "name": "Tuple",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "Array",
+                "args": [
+                  {
+                    "kind": "type",
+                    "type": {
+                      "name": "DateTime",
+                      "args": [
+                        {
+                          "kind": "literal",
+                          "value": "'UTC'"
+                        }
+                      ]
+                    }
+                  }
+                ]
+              }
+            },
+            {
+              "kind": "type",
+              "type": {
+                "name": "Array",
+                "args": [
+                  {
+                    "kind": "type",
+                    "type": {
+                      "name": "Float64"
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "engine": {
+      "name": "AggregatingMergeTree",
+      "args": []
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "step"
+          ]
+        }
+      },
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "metric_id"
+          ]
+        }
+      },
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "grid_timestamp"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "t_resampled_timeseries"
+      }
+    },
+    "columns": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "step"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "metric_id"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "grid_timestamp"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "samples"
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "with": [
+      {
+        "kind": "cteExpr",
+        "name": "start_ts",
+        "expr": {
+          "kind": "functionCall",
+          "name": "toDateTime",
+          "args": [
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "2024-12-12 12:00:10"
+            },
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "UTC"
+            }
+          ]
+        }
+      },
+      {
+        "kind": "cteExpr",
+        "name": "end_ts",
+        "expr": {
+          "kind": "functionCall",
+          "name": "toDateTime",
+          "args": [
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "2024-12-12 12:01:00"
+            },
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "UTC"
+            }
+          ]
+        }
+      },
+      {
+        "kind": "cteExpr",
+        "name": "step_sec",
+        "expr": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "10"
+        }
+      },
+      {
+        "kind": "cteExpr",
+        "name": "window_sec",
+        "expr": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "50"
+        }
+      },
+      {
+        "kind": "cteExpr",
+        "name": "grid",
+        "expr": {
+          "kind": "functionCall",
+          "name": "range",
+          "args": [
+            {
+              "kind": "functionCall",
+              "name": "toUnixTimestamp",
+              "args": [
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "start_ts"
+                  ]
+                }
+              ]
+            },
+            {
+              "kind": "binaryExpr",
+              "op": "+",
+              "left": {
+                "kind": "functionCall",
+                "name": "toUnixTimestamp",
+                "args": [
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "end_ts"
+                    ]
+                  }
+                ]
+              },
+              "right": {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "1"
+              }
+            },
+            {
+              "kind": "columnRef",
+              "parts": [
+                "step_sec"
+              ]
+            }
+          ]
+        }
+      }
+    ],
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "metric_id"
+        ]
+      },
+      {
+        "kind": "functionCall",
+        "name": "arrayJoin",
+        "args": [
+          {
+            "kind": "functionCall",
+            "name": "arrayZip",
+            "args": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "grid"
+                ]
+              },
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "irate_values"
+                ]
+              },
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "irate_values_scale_3"
+                ]
+              },
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "idelta_values"
+                ]
+              },
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "rate_values"
+                ]
+              },
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "rate_values_scale_5"
+                ]
+              },
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "delta_values"
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "from": {
+      "kind": "subqueryFrom",
+      "query": {
+        "kind": "select",
+        "select": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "metric_id"
+            ]
+          },
+          {
+            "kind": "alias",
+            "expr": {
+              "kind": "functionCall",
+              "name": "timeSeriesInstantRateToGrid",
+              "params": [
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "start_ts"
+                  ]
+                },
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "end_ts"
+                  ]
+                },
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "step_sec"
+                  ]
+                },
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "window_sec"
+                  ]
+                }
+              ],
+              "args": [
+                {
+                  "kind": "functionCall",
+                  "name": "tupleElement",
+                  "args": [
+                    {
+                      "kind": "columnRef",
+                      "parts": [
+                        "samples"
+                      ]
+                    },
+                    {
+                      "kind": "literal",
+                      "type": "UInt64",
+                      "value": "1"
+                    }
+                  ]
+                },
+                {
+                  "kind": "functionCall",
+                  "name": "tupleElement",
+                  "args": [
+                    {
+                      "kind": "columnRef",
+                      "parts": [
+                        "samples"
+                      ]
+                    },
+                    {
+                      "kind": "literal",
+                      "type": "UInt64",
+                      "value": "2"
+                    }
+                  ]
+                }
+              ]
+            },
+            "alias": "irate_values"
+          },
+          {
+            "kind": "alias",
+            "expr": {
+              "kind": "functionCall",
+              "name": "timeSeriesInstantRateToGrid",
+              "params": [
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "start_ts"
+                  ]
+                },
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "end_ts"
+                  ]
+                },
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "step_sec"
+                  ]
+                },
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "window_sec"
+                  ]
+                }
+              ],
+              "args": [
+                {
+                  "kind": "castExpr",
+                  "expr": {
+                    "kind": "functionCall",
+                    "name": "tupleElement",
+                    "args": [
+                      {
+                        "kind": "columnRef",
+                        "parts": [
+                          "samples"
+                        ]
+                      },
+                      {
+                        "kind": "literal",
+                        "type": "UInt64",
+                        "value": "1"
+                      }
+                    ]
+                  },
+                  "type": "Array(DateTime64(3, 'UTC'))",
+                  "operator": true
+                },
+                {
+                  "kind": "functionCall",
+                  "name": "tupleElement",
+                  "args": [
+                    {
+                      "kind": "columnRef",
+                      "parts": [
+                        "samples"
+                      ]
+                    },
+                    {
+                      "kind": "literal",
+                      "type": "UInt64",
+                      "value": "2"
+                    }
+                  ]
+                }
+              ]
+            },
+            "alias": "irate_values_scale_3"
+          },
+          {
+            "kind": "alias",
+            "expr": {
+              "kind": "functionCall",
+              "name": "timeSeriesInstantDeltaToGrid",
+              "params": [
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "start_ts"
+                  ]
+                },
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "end_ts"
+                  ]
+                },
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "step_sec"
+                  ]
+                },
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "window_sec"
+                  ]
+                }
+              ],
+              "args": [
+                {
+                  "kind": "functionCall",
+                  "name": "tupleElement",
+                  "args": [
+                    {
+                      "kind": "columnRef",
+                      "parts": [
+                        "samples"
+                      ]
+                    },
+                    {
+                      "kind": "literal",
+                      "type": "UInt64",
+                      "value": "1"
+                    }
+                  ]
+                },
+                {
+                  "kind": "functionCall",
+                  "name": "tupleElement",
+                  "args": [
+                    {
+                      "kind": "columnRef",
+                      "parts": [
+                        "samples"
+                      ]
+                    },
+                    {
+                      "kind": "literal",
+                      "type": "UInt64",
+                      "value": "2"
+                    }
+                  ]
+                }
+              ]
+            },
+            "alias": "idelta_values"
+          },
+          {
+            "kind": "alias",
+            "expr": {
+              "kind": "functionCall",
+              "name": "timeSeriesRateToGrid",
+              "params": [
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "start_ts"
+                  ]
+                },
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "end_ts"
+                  ]
+                },
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "step_sec"
+                  ]
+                },
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "window_sec"
+                  ]
+                }
+              ],
+              "args": [
+                {
+                  "kind": "functionCall",
+                  "name": "tupleElement",
+                  "args": [
+                    {
+                      "kind": "columnRef",
+                      "parts": [
+                        "samples"
+                      ]
+                    },
+                    {
+                      "kind": "literal",
+                      "type": "UInt64",
+                      "value": "1"
+                    }
+                  ]
+                },
+                {
+                  "kind": "functionCall",
+                  "name": "tupleElement",
+                  "args": [
+                    {
+                      "kind": "columnRef",
+                      "parts": [
+                        "samples"
+                      ]
+                    },
+                    {
+                      "kind": "literal",
+                      "type": "UInt64",
+                      "value": "2"
+                    }
+                  ]
+                }
+              ]
+            },
+            "alias": "rate_values"
+          },
+          {
+            "kind": "alias",
+            "expr": {
+              "kind": "functionCall",
+              "name": "timeSeriesRateToGrid",
+              "params": [
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "start_ts"
+                  ]
+                },
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "end_ts"
+                  ]
+                },
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "step_sec"
+                  ]
+                },
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "window_sec"
+                  ]
+                }
+              ],
+              "args": [
+                {
+                  "kind": "castExpr",
+                  "expr": {
+                    "kind": "functionCall",
+                    "name": "tupleElement",
+                    "args": [
+                      {
+                        "kind": "columnRef",
+                        "parts": [
+                          "samples"
+                        ]
+                      },
+                      {
+                        "kind": "literal",
+                        "type": "UInt64",
+                        "value": "1"
+                      }
+                    ]
+                  },
+                  "type": "Array(DateTime64(5, 'UTC'))",
+                  "operator": true
+                },
+                {
+                  "kind": "functionCall",
+                  "name": "tupleElement",
+                  "args": [
+                    {
+                      "kind": "columnRef",
+                      "parts": [
+                        "samples"
+                      ]
+                    },
+                    {
+                      "kind": "literal",
+                      "type": "UInt64",
+                      "value": "2"
+                    }
+                  ]
+                }
+              ]
+            },
+            "alias": "rate_values_scale_5"
+          },
+          {
+            "kind": "alias",
+            "expr": {
+              "kind": "functionCall",
+              "name": "timeSeriesDeltaToGrid",
+              "params": [
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "start_ts"
+                  ]
+                },
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "end_ts"
+                  ]
+                },
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "step_sec"
+                  ]
+                },
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "window_sec"
+                  ]
+                }
+              ],
+              "args": [
+                {
+                  "kind": "functionCall",
+                  "name": "tupleElement",
+                  "args": [
+                    {
+                      "kind": "columnRef",
+                      "parts": [
+                        "samples"
+                      ]
+                    },
+                    {
+                      "kind": "literal",
+                      "type": "UInt64",
+                      "value": "1"
+                    }
+                  ]
+                },
+                {
+                  "kind": "functionCall",
+                  "name": "tupleElement",
+                  "args": [
+                    {
+                      "kind": "columnRef",
+                      "parts": [
+                        "samples"
+                      ]
+                    },
+                    {
+                      "kind": "literal",
+                      "type": "UInt64",
+                      "value": "2"
+                    }
+                  ]
+                }
+              ]
+            },
+            "alias": "delta_values"
+          }
+        ],
+        "from": {
+          "kind": "tableFunctionRef",
+          "name": "clusterAllReplicas",
+          "args": [
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "test_shard_localhost"
+            },
+            {
+              "kind": "functionCall",
+              "name": "currentDatabase",
+              "args": []
+            },
+            {
+              "kind": "columnRef",
+              "parts": [
+                "t_resampled_timeseries"
+              ]
+            }
+          ]
+        },
+        "groupBy": {
+          "kind": "expressions",
+          "items": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "metric_id"
+              ]
+            }
+          ]
+        }
+      }
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "metric_id"
+          ]
+        },
+        "direction": "ASC"
+      }
+    ],
+    "settings": [
+      {
+        "name": "enable_parallel_replicas",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      },
+      {
+        "name": "max_parallel_replicas",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "3"
+        }
+      },
+      {
+        "name": "parallel_replicas_for_non_replicated_merge_tree",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      },
+      {
+        "name": "enable_analyzer",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "t_resampled_timeseries_64"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "step",
+        "type": {
+          "name": "UInt32"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "metric_id",
+        "type": {
+          "name": "UInt64"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "grid_timestamp",
+        "type": {
+          "name": "DateTime",
+          "args": [
+            {
+              "kind": "literal",
+              "value": "'UTC'"
+            }
+          ]
+        },
+        "codec": [
+          {
+            "name": "DoubleDelta"
+          },
+          {
+            "name": "ZSTD"
+          }
+        ]
+      },
+      {
+        "kind": "columnDef",
+        "name": "samples",
+        "type": {
+          "name": "Tuple",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "Array",
+                "args": [
+                  {
+                    "kind": "type",
+                    "type": {
+                      "name": "DateTime64",
+                      "args": [
+                        {
+                          "kind": "literal",
+                          "value": "3"
+                        },
+                        {
+                          "kind": "literal",
+                          "value": "'UTC'"
+                        }
+                      ]
+                    }
+                  }
+                ]
+              }
+            },
+            {
+              "kind": "type",
+              "type": {
+                "name": "Array",
+                "args": [
+                  {
+                    "kind": "type",
+                    "type": {
+                      "name": "Float64"
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "engine": {
+      "name": "AggregatingMergeTree",
+      "args": []
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "step"
+          ]
+        }
+      },
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "metric_id"
+          ]
+        }
+      },
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "grid_timestamp"
+          ]
+        }
+      }
+    ],
+    "leadingComments": [
+      "-- Test with DateTime64"
+    ]
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "t_resampled_timeseries_64"
+      }
+    },
+    "columns": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "step"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "metric_id"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "grid_timestamp"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "samples"
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "with": [
+      {
+        "kind": "cteExpr",
+        "name": "start_ts",
+        "expr": {
+          "kind": "functionCall",
+          "name": "toDateTime64",
+          "args": [
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "2024-12-12 12:00:10"
+            },
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "3"
+            },
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "UTC"
+            }
+          ]
+        }
+      },
+      {
+        "kind": "cteExpr",
+        "name": "end_ts",
+        "expr": {
+          "kind": "functionCall",
+          "name": "toDateTime64",
+          "args": [
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "2024-12-12 12:01:00"
+            },
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "3"
+            },
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "UTC"
+            }
+          ]
+        }
+      },
+      {
+        "kind": "cteExpr",
+        "name": "step_sec",
+        "expr": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "10"
+        }
+      },
+      {
+        "kind": "cteExpr",
+        "name": "window_sec",
+        "expr": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "50"
+        }
+      },
+      {
+        "kind": "cteExpr",
+        "name": "grid",
+        "expr": {
+          "kind": "functionCall",
+          "name": "range",
+          "args": [
+            {
+              "kind": "functionCall",
+              "name": "toUnixTimestamp",
+              "args": [
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "start_ts"
+                  ]
+                }
+              ]
+            },
+            {
+              "kind": "binaryExpr",
+              "op": "+",
+              "left": {
+                "kind": "functionCall",
+                "name": "toUnixTimestamp",
+                "args": [
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "end_ts"
+                    ]
+                  }
+                ]
+              },
+              "right": {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "1"
+              }
+            },
+            {
+              "kind": "columnRef",
+              "parts": [
+                "step_sec"
+              ]
+            }
+          ]
+        }
+      }
+    ],
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "metric_id"
+        ]
+      },
+      {
+        "kind": "functionCall",
+        "name": "arrayJoin",
+        "args": [
+          {
+            "kind": "functionCall",
+            "name": "arrayZip",
+            "args": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "grid"
+                ]
+              },
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "irate_values"
+                ]
+              },
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "idelta_values"
+                ]
+              },
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "rate_values"
+                ]
+              },
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "delta_values"
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "from": {
+      "kind": "subqueryFrom",
+      "query": {
+        "kind": "select",
+        "select": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "metric_id"
+            ]
+          },
+          {
+            "kind": "alias",
+            "expr": {
+              "kind": "functionCall",
+              "name": "timeSeriesInstantRateToGrid",
+              "params": [
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "start_ts"
+                  ]
+                },
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "end_ts"
+                  ]
+                },
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "step_sec"
+                  ]
+                },
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "window_sec"
+                  ]
+                }
+              ],
+              "args": [
+                {
+                  "kind": "functionCall",
+                  "name": "tupleElement",
+                  "args": [
+                    {
+                      "kind": "columnRef",
+                      "parts": [
+                        "samples"
+                      ]
+                    },
+                    {
+                      "kind": "literal",
+                      "type": "UInt64",
+                      "value": "1"
+                    }
+                  ]
+                },
+                {
+                  "kind": "functionCall",
+                  "name": "tupleElement",
+                  "args": [
+                    {
+                      "kind": "columnRef",
+                      "parts": [
+                        "samples"
+                      ]
+                    },
+                    {
+                      "kind": "literal",
+                      "type": "UInt64",
+                      "value": "2"
+                    }
+                  ]
+                }
+              ]
+            },
+            "alias": "irate_values"
+          },
+          {
+            "kind": "alias",
+            "expr": {
+              "kind": "functionCall",
+              "name": "timeSeriesInstantDeltaToGrid",
+              "params": [
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "start_ts"
+                  ]
+                },
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "end_ts"
+                  ]
+                },
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "step_sec"
+                  ]
+                },
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "window_sec"
+                  ]
+                }
+              ],
+              "args": [
+                {
+                  "kind": "functionCall",
+                  "name": "tupleElement",
+                  "args": [
+                    {
+                      "kind": "columnRef",
+                      "parts": [
+                        "samples"
+                      ]
+                    },
+                    {
+                      "kind": "literal",
+                      "type": "UInt64",
+                      "value": "1"
+                    }
+                  ]
+                },
+                {
+                  "kind": "functionCall",
+                  "name": "tupleElement",
+                  "args": [
+                    {
+                      "kind": "columnRef",
+                      "parts": [
+                        "samples"
+                      ]
+                    },
+                    {
+                      "kind": "literal",
+                      "type": "UInt64",
+                      "value": "2"
+                    }
+                  ]
+                }
+              ]
+            },
+            "alias": "idelta_values"
+          },
+          {
+            "kind": "alias",
+            "expr": {
+              "kind": "functionCall",
+              "name": "timeSeriesRateToGrid",
+              "params": [
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "start_ts"
+                  ]
+                },
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "end_ts"
+                  ]
+                },
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "step_sec"
+                  ]
+                },
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "window_sec"
+                  ]
+                }
+              ],
+              "args": [
+                {
+                  "kind": "functionCall",
+                  "name": "tupleElement",
+                  "args": [
+                    {
+                      "kind": "columnRef",
+                      "parts": [
+                        "samples"
+                      ]
+                    },
+                    {
+                      "kind": "literal",
+                      "type": "UInt64",
+                      "value": "1"
+                    }
+                  ]
+                },
+                {
+                  "kind": "functionCall",
+                  "name": "tupleElement",
+                  "args": [
+                    {
+                      "kind": "columnRef",
+                      "parts": [
+                        "samples"
+                      ]
+                    },
+                    {
+                      "kind": "literal",
+                      "type": "UInt64",
+                      "value": "2"
+                    }
+                  ]
+                }
+              ]
+            },
+            "alias": "rate_values"
+          },
+          {
+            "kind": "alias",
+            "expr": {
+              "kind": "functionCall",
+              "name": "timeSeriesDeltaToGrid",
+              "params": [
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "start_ts"
+                  ]
+                },
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "end_ts"
+                  ]
+                },
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "step_sec"
+                  ]
+                },
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "window_sec"
+                  ]
+                }
+              ],
+              "args": [
+                {
+                  "kind": "functionCall",
+                  "name": "tupleElement",
+                  "args": [
+                    {
+                      "kind": "columnRef",
+                      "parts": [
+                        "samples"
+                      ]
+                    },
+                    {
+                      "kind": "literal",
+                      "type": "UInt64",
+                      "value": "1"
+                    }
+                  ]
+                },
+                {
+                  "kind": "functionCall",
+                  "name": "tupleElement",
+                  "args": [
+                    {
+                      "kind": "columnRef",
+                      "parts": [
+                        "samples"
+                      ]
+                    },
+                    {
+                      "kind": "literal",
+                      "type": "UInt64",
+                      "value": "2"
+                    }
+                  ]
+                }
+              ]
+            },
+            "alias": "delta_values"
+          }
+        ],
+        "from": {
+          "kind": "tableFunctionRef",
+          "name": "clusterAllReplicas",
+          "args": [
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "test_shard_localhost"
+            },
+            {
+              "kind": "functionCall",
+              "name": "currentDatabase",
+              "args": []
+            },
+            {
+              "kind": "columnRef",
+              "parts": [
+                "t_resampled_timeseries_64"
+              ]
+            }
+          ]
+        },
+        "groupBy": {
+          "kind": "expressions",
+          "items": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "metric_id"
+              ]
+            }
+          ]
+        }
+      }
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "metric_id"
+          ]
+        },
+        "direction": "ASC"
+      }
+    ],
+    "settings": [
+      {
+        "name": "enable_parallel_replicas",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      },
+      {
+        "name": "max_parallel_replicas",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "3"
+        }
+      },
+      {
+        "name": "parallel_replicas_for_non_replicated_merge_tree",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      },
+      {
+        "name": "enable_analyzer",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "with": [
+      {
+        "kind": "cteExpr",
+        "name": "data",
+        "expr": {
+          "kind": "castExpr",
+          "expr": {
+            "kind": "arrayLiteral",
+            "elements": [
+              {
+                "kind": "tupleLiteral",
+                "elements": [
+                  {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "1600000000"
+                  },
+                  {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "10"
+                  }
+                ],
+                "source": "(1600000000, 10)"
+              },
+              {
+                "kind": "tupleLiteral",
+                "elements": [
+                  {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "1600000010"
+                  },
+                  {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "20"
+                  }
+                ],
+                "source": "(1600000010, 20)"
+              },
+              {
+                "kind": "tupleLiteral",
+                "elements": [
+                  {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "1600000020"
+                  },
+                  {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "30"
+                  }
+                ],
+                "source": "(1600000020, 30)"
+              },
+              {
+                "kind": "tupleLiteral",
+                "elements": [
+                  {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "1600000030"
+                  },
+                  {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "40"
+                  }
+                ],
+                "source": "(1600000030, 40)"
+              },
+              {
+                "kind": "tupleLiteral",
+                "elements": [
+                  {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "1600000040"
+                  },
+                  {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "10"
+                  }
+                ],
+                "source": "(1600000040, 10)"
+              },
+              {
+                "kind": "tupleLiteral",
+                "elements": [
+                  {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "1600000050"
+                  },
+                  {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "70"
+                  }
+                ],
+                "source": "(1600000050, 70)"
+              },
+              {
+                "kind": "tupleLiteral",
+                "elements": [
+                  {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "1600000060"
+                  },
+                  {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "90"
+                  }
+                ],
+                "source": "(1600000060, 90)"
+              },
+              {
+                "kind": "tupleLiteral",
+                "elements": [
+                  {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "1600000270"
+                  },
+                  {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "20"
+                  }
+                ],
+                "source": "(1600000270, 20)"
+              },
+              {
+                "kind": "tupleLiteral",
+                "elements": [
+                  {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "1600000330"
+                  },
+                  {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "10"
+                  }
+                ],
+                "source": "(1600000330, 10)"
+              }
+            ],
+            "source": "[\n(1600000000, 10),\n(1600000010, 20),\n(1600000020, 30),\n(1600000030, 40),\n(1600000040, 10),\n(1600000050, 70),\n(1600000060, 90),\n(1600000270, 20),\n(1600000330, 10)\n]"
+          },
+          "type": "Array(Tuple(UInt32, Float64))",
+          "operator": true
+        }
+      }
+    ],
+    "select": [
+      {
+        "kind": "asterisk"
+      }
+    ],
+    "from": {
+      "kind": "subqueryFrom",
+      "query": {
+        "kind": "union",
+        "queries": [
+          {
+            "kind": "select",
+            "select": [
+              {
+                "kind": "alias",
+                "expr": {
+                  "kind": "literal",
+                  "type": "String",
+                  "value": "delta"
+                },
+                "alias": "name"
+              },
+              {
+                "kind": "functionCall",
+                "name": "timeSeriesDeltaToGrid",
+                "params": [
+                  {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "1600000010"
+                  },
+                  {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "1600000320"
+                  },
+                  {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "10"
+                  },
+                  {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "300"
+                  }
+                ],
+                "args": [
+                  {
+                    "kind": "functionCall",
+                    "name": "tupleElement",
+                    "args": [
+                      {
+                        "kind": "columnRef",
+                        "parts": [
+                          "data"
+                        ]
+                      },
+                      {
+                        "kind": "literal",
+                        "type": "UInt64",
+                        "value": "1"
+                      }
+                    ]
+                  },
+                  {
+                    "kind": "functionCall",
+                    "name": "tupleElement",
+                    "args": [
+                      {
+                        "kind": "columnRef",
+                        "parts": [
+                          "data"
+                        ]
+                      },
+                      {
+                        "kind": "literal",
+                        "type": "UInt64",
+                        "value": "2"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "kind": "select",
+            "select": [
+              {
+                "kind": "alias",
+                "expr": {
+                  "kind": "literal",
+                  "type": "String",
+                  "value": "idelta"
+                },
+                "alias": "name"
+              },
+              {
+                "kind": "functionCall",
+                "name": "timeSeriesInstantDeltaToGrid",
+                "params": [
+                  {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "1600000010"
+                  },
+                  {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "1600000320"
+                  },
+                  {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "10"
+                  },
+                  {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "300"
+                  }
+                ],
+                "args": [
+                  {
+                    "kind": "functionCall",
+                    "name": "tupleElement",
+                    "args": [
+                      {
+                        "kind": "columnRef",
+                        "parts": [
+                          "data"
+                        ]
+                      },
+                      {
+                        "kind": "literal",
+                        "type": "UInt64",
+                        "value": "1"
+                      }
+                    ]
+                  },
+                  {
+                    "kind": "functionCall",
+                    "name": "tupleElement",
+                    "args": [
+                      {
+                        "kind": "columnRef",
+                        "parts": [
+                          "data"
+                        ]
+                      },
+                      {
+                        "kind": "literal",
+                        "type": "UInt64",
+                        "value": "2"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "name"
+          ]
+        },
+        "direction": "ASC"
+      }
+    ],
+    "leadingComments": [
+      "-- Another test with a reset"
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "serialize_query_plan",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      },
+      {
+        "name": "prefer_localhost_replica",
+        "value": {
+          "kind": "literal",
+          "type": "Bool",
+          "value": "0"
+        }
+      }
+    ],
+    "leadingComments": [
+      "-- Tests to validate block header compatibility in queries with parallel replicas"
+    ]
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -748,7 +2697,7 @@
       }
     ],
     "from": {
-      "kind": "tableFunction",
+      "kind": "tableFunctionRef",
       "name": "clusterAllReplicas",
       "args": [
         {
@@ -1477,7 +3426,7 @@
       }
     ],
     "from": {
-      "kind": "tableFunction",
+      "kind": "tableFunctionRef",
       "name": "clusterAllReplicas",
       "args": [
         {

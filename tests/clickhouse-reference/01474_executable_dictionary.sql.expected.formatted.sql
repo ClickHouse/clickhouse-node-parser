@@ -1,3 +1,5 @@
+-- Tags: no-tsan, no-parallel
+-- Tag no-tsan: informational stderr from sanitizer at start
 SELECT
     number,
     dictGet('executable_complex', 'a', (number, number)) AS a,

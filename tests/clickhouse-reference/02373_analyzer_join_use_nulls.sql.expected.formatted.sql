@@ -1,3 +1,40 @@
+SET enable_analyzer = 1;
+
+SET join_use_nulls = 1;
+
+DROP TABLE IF EXISTS test_table_join_1;
+
+CREATE TABLE test_table_join_1
+(
+    id UInt64,
+    value String
+)
+ENGINE = MergeTree
+ORDER BY tuple();
+
+DROP TABLE IF EXISTS test_table_join_2;
+
+CREATE TABLE test_table_join_2
+(
+    id UInt64,
+    value String
+)
+ENGINE = MergeTree
+ORDER BY tuple();
+
+INSERT INTO test_table_join_1;
+
+INSERT INTO test_table_join_1;
+
+INSERT INTO test_table_join_1;
+
+INSERT INTO test_table_join_2;
+
+INSERT INTO test_table_join_2;
+
+INSERT INTO test_table_join_2;
+
+-- { echoOn }
 SELECT
     t1.id AS t1_id,
     toTypeName(t1_id),
@@ -127,3 +164,8 @@ FROM
 FULL JOIN test_table_join_2 AS t2
     USING (id)
 ORDER BY `ALL` ASC;
+
+-- { echoOff }
+DROP TABLE test_table_join_1;
+
+DROP TABLE test_table_join_2;

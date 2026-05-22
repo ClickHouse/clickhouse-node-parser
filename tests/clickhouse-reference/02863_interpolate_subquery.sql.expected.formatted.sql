@@ -1,3 +1,13 @@
+-- https://github.com/ClickHouse/ClickHouse/issues/53640
+DROP TABLE IF EXISTS tab;
+
+CREATE TABLE tab
+(
+    i UInt32,
+    a UInt32
+)
+ENGINE = Memory;
+
 SELECT
     i,
     col1
@@ -9,3 +19,5 @@ FROM (
         FROM tab
         ORDER BY i ASC WITH FILL INTERPOLATE (col1 AS col1 + col2, col2)
     );
+
+DROP TABLE tab;

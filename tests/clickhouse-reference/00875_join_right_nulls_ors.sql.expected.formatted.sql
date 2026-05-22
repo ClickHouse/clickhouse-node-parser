@@ -1,3 +1,39 @@
+DROP TABLE IF EXISTS t;
+
+DROP TABLE IF EXISTS nt;
+
+DROP TABLE IF EXISTS ntxy;
+
+CREATE TABLE t
+(
+    x String
+)
+ENGINE = MergeTree
+ORDER BY tuple();
+
+CREATE TABLE nt
+(
+    x Nullable(String)
+)
+ENGINE = MergeTree
+ORDER BY tuple();
+
+CREATE TABLE ntxy
+(
+    x Nullable(String),
+    y Nullable(String)
+)
+ENGINE = MergeTree
+ORDER BY tuple();
+
+INSERT INTO t (x);
+
+INSERT INTO nt (x);
+
+INSERT INTO ntxy (x, y);
+
+SET join_use_nulls = 1;
+
 SELECT
     'n rj n',
     t1.x,
@@ -96,3 +132,9 @@ FULL JOIN t AS t2
     ON t2.x = t1.y
     OR t1.x = t2.x
 ORDER BY t1.x ASC;
+
+DROP TABLE t;
+
+DROP TABLE nt;
+
+DROP TABLE ntxy;

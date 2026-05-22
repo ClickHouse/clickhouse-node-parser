@@ -1,3 +1,37 @@
+DROP TABLE IF EXISTS X;
+
+DROP TABLE IF EXISTS Y;
+
+SET min_bytes_to_use_direct_io = 0; -- min_bytes_to_use_direct_io > 0 is broken and leads to unexpected results, https://github.com/ClickHouse/ClickHouse/issues/65690
+
+CREATE TABLE X
+(
+    id Int32,
+    x_a String,
+    x_b Nullable(Int32)
+)
+ENGINE = ReplicatedMergeTree('/clickhouse/{database}/X', '1')
+ORDER BY tuple();
+
+CREATE TABLE Y
+(
+    id Int32,
+    y_a String,
+    y_b Nullable(String)
+)
+ENGINE = ReplicatedMergeTree('/clickhouse/{database}/Y', '1')
+ORDER BY tuple();
+
+INSERT INTO X (id, x_a, x_b);
+
+INSERT INTO X (id, x_a);
+
+INSERT INTO Y (id, y_a);
+
+INSERT INTO Y (id, y_a, y_b);
+
+SET enable_analyzer = 1, enable_parallel_replicas = 1, max_parallel_replicas = 3, cluster_for_parallel_replicas = 'test_cluster_one_shard_three_replicas_localhost';
+
 SELECT
     X.*,
     Y.*
@@ -423,3 +457,7 @@ ORDER BY
     s.id ASC,
     s.x_a ASC,
     s.x_b ASC;
+
+DROP TABLE X;
+
+DROP TABLE Y;

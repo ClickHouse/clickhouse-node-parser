@@ -1,3 +1,4 @@
+-- Tests that functions `toDayOfWeek()`, 'toWeek()' and 'toYearWeek()' accepts a date given as string (for compatibility with MySQL)
 SELECT '-- Constant argument';
 
 SELECT
@@ -18,11 +19,34 @@ SELECT
     toYearWeek('2016-06-15 23:00:00'),
     toYearWeek('2016-06-15 23:00:00.123456');
 
-SELECT toDayOfWeek('invalid');
+SELECT toDayOfWeek('invalid'); -- { serverError CANNOT_PARSE_DATETIME }
 
-SELECT toWeek('invalid');
+SELECT toWeek('invalid'); -- { serverError CANNOT_PARSE_DATETIME }
 
-SELECT toYearWeek('invalid');
+SELECT toYearWeek('invalid'); -- { serverError CANNOT_PARSE_DATETIME }
+
+DROP TABLE IF EXISTS tab;
+
+CREATE TABLE tab
+(
+    d Date,
+    dt DateTime('UTC'),
+    dt64 DateTime64(6, 'UTC'),
+    str_d String,
+    str_dt String,
+    str_dt64 String,
+    invalid String
+)
+ENGINE = MergeTree
+ORDER BY dt;
+
+INSERT INTO tab;
+
+INSERT INTO tab;
+
+INSERT INTO tab;
+
+INSERT INTO tab;
 
 SELECT
     toDayOfWeek(d),
@@ -55,10 +79,12 @@ FROM tab
 ORDER BY d ASC;
 
 SELECT toDayOfWeek(invalid)
-FROM tab;
+FROM tab; -- { serverError CANNOT_PARSE_DATETIME }
 
 SELECT toWeek(invalid)
-FROM tab;
+FROM tab; -- { serverError CANNOT_PARSE_DATETIME }
 
 SELECT toYearWeek(invalid)
-FROM tab;
+FROM tab; -- { serverError CANNOT_PARSE_DATETIME }
+
+DROP TABLE tab;

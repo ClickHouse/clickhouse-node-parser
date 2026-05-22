@@ -1,3 +1,102 @@
+DropQuery  with_deduplication (children 1)
+ Identifier with_deduplication
+
+DropQuery  without_deduplication (children 1)
+ Identifier without_deduplication
+
+DropQuery  with_deduplication_mv (children 1)
+ Identifier with_deduplication_mv
+
+DropQuery  without_deduplication_mv (children 1)
+ Identifier without_deduplication_mv
+
+Set
+
+Set
+
+CreateQuery with_deduplication (children 3)
+ Identifier with_deduplication
+ Columns definition (children 1)
+  ExpressionList (children 1)
+   ColumnDeclaration x (children 1)
+    DataType UInt32
+ Storage definition (children 2)
+  Function ReplicatedMergeTree (children 1)
+   ExpressionList (children 2)
+    Literal '/clickhouse/tables/{database}/test_00510/with_deduplication'
+    Literal 'r1'
+  Identifier x
+
+CreateQuery without_deduplication (children 3)
+ Identifier without_deduplication
+ Columns definition (children 1)
+  ExpressionList (children 1)
+   ColumnDeclaration x (children 1)
+    DataType UInt32
+ Storage definition (children 3)
+  Function ReplicatedMergeTree (children 1)
+   ExpressionList (children 2)
+    Literal '/clickhouse/tables/{database}/test_00510/without_deduplication'
+    Literal 'r1'
+  Identifier x
+  Set
+
+CreateQuery with_deduplication_mv (children 3)
+ Identifier with_deduplication_mv
+ SelectWithUnionQuery (children 1)
+  ExpressionList (children 1)
+   SelectQuery (children 2)
+    ExpressionList (children 2)
+     Literal UInt64_0 (alias dummy)
+     Function countState (alias cnt) (children 1)
+      ExpressionList (children 1)
+       Identifier x
+    TablesInSelectQuery (children 1)
+     TablesInSelectQueryElement (children 1)
+      TableExpression (children 1)
+       TableIdentifier with_deduplication
+ ViewTargets (children 1)
+  Storage definition (children 2)
+   Function ReplicatedAggregatingMergeTree (children 1)
+    ExpressionList (children 2)
+     Literal '/clickhouse/tables/{database}/test_00510/with_deduplication_mv'
+     Literal 'r1'
+   Identifier dummy
+
+CreateQuery without_deduplication_mv (children 3)
+ Identifier without_deduplication_mv
+ SelectWithUnionQuery (children 1)
+  ExpressionList (children 1)
+   SelectQuery (children 2)
+    ExpressionList (children 2)
+     Literal UInt64_0 (alias dummy)
+     Function countState (alias cnt) (children 1)
+      ExpressionList (children 1)
+       Identifier x
+    TablesInSelectQuery (children 1)
+     TablesInSelectQueryElement (children 1)
+      TableExpression (children 1)
+       TableIdentifier without_deduplication
+ ViewTargets (children 1)
+  Storage definition (children 2)
+   Function ReplicatedAggregatingMergeTree (children 1)
+    ExpressionList (children 2)
+     Literal '/clickhouse/tables/{database}/test_00510/without_deduplication_mv'
+     Literal 'r1'
+   Identifier dummy
+
+InsertQuery   (children 1)
+ Identifier with_deduplication
+
+InsertQuery   (children 1)
+ Identifier with_deduplication
+
+InsertQuery   (children 1)
+ Identifier without_deduplication
+
+InsertQuery   (children 1)
+ Identifier without_deduplication
+
 SelectWithUnionQuery (children 1)
  ExpressionList (children 1)
   SelectQuery (children 2)
@@ -43,3 +142,49 @@ SelectWithUnionQuery (children 1)
     TablesInSelectQueryElement (children 1)
      TableExpression (children 1)
       TableIdentifier without_deduplication_mv
+
+AlterQuery  .inner_id.00000510-1000-4000-8000-000000000001 (children 2)
+ ExpressionList (children 1)
+  AlterCommand DROP_PARTITION (children 1)
+   Partition_ID Literal_'all' (children 1)
+    Literal 'all'
+ Identifier .inner_id.00000510-1000-4000-8000-000000000001
+
+AlterQuery  .inner_id.00000510-1000-4000-8000-000000000002 (children 2)
+ ExpressionList (children 1)
+  AlterCommand DROP_PARTITION (children 1)
+   Partition_ID Literal_'all' (children 1)
+    Literal 'all'
+ Identifier .inner_id.00000510-1000-4000-8000-000000000002
+
+InsertQuery   (children 2)
+ Identifier .inner_id.00000510-1000-4000-8000-000000000001
+ SelectWithUnionQuery (children 1)
+  ExpressionList (children 1)
+   SelectQuery (children 1)
+    ExpressionList (children 2)
+     Literal UInt64_0 (alias dummy)
+     Function arrayReduce (alias cnt) (children 1)
+      ExpressionList (children 2)
+       Literal 'countState'
+       Function array (children 1)
+        ExpressionList (children 1)
+         Function toUInt32 (children 1)
+          ExpressionList (children 1)
+           Literal UInt64_42
+
+InsertQuery   (children 2)
+ Identifier .inner_id.00000510-1000-4000-8000-000000000002
+ SelectWithUnionQuery (children 1)
+  ExpressionList (children 1)
+   SelectQuery (children 1)
+    ExpressionList (children 2)
+     Literal UInt64_0 (alias dummy)
+     Function arrayReduce (alias cnt) (children 1)
+      ExpressionList (children 2)
+       Literal 'countState'
+       Function array (children 1)
+        ExpressionList (children 1)
+         Function toUInt32 (children 1)
+          ExpressionList (children 1)
+           Literal UInt64_42

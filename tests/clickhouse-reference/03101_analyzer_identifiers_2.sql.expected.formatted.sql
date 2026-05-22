@@ -1,3 +1,12 @@
+-- https://github.com/ClickHouse/ClickHouse/issues/23194
+SET enable_analyzer = 1;
+
+CREATE TEMPORARY TABLE test1
+(
+    a String,
+    nest Nested(x String, y String)
+);
+
 SELECT
     a,
     nest.*
@@ -11,6 +20,12 @@ SELECT
 FROM
     test1
 ARRAY JOIN nest AS n;
+
+CREATE TEMPORARY TABLE test2
+(
+    a String,
+    nest Array(Tuple(x String, y String))
+);
 
 SELECT
     a,
@@ -66,20 +81,49 @@ SELECT
         SELECT x
     );
 
+WITH 123 AS x
+
+SELECT 555
+FROM (
+        SELECT
+            a,
+            x
+        FROM (
+                SELECT
+                    1 AS a,
+                    2 AS b
+            )
+    );
+
+-- here we refer to table `test1` (defined as subquery) three times, one of them inside another scalar subquery.
+WITH t AS (
+    SELECT 1
+)
+
+SELECT
+    t,
+    (
+        SELECT *
+        FROM t
+    )
+FROM t; -- { serverError UNKNOWN_IDENTIFIER }
+
+-- throws, because x is not visible outside.
 SELECT x
 FROM (
         SELECT y
         FROM VALUES('y UInt16', (2))
         WHERE ((1 AS x)) = y
-    ) AS t;
+    ) AS t; -- { serverError UNKNOWN_IDENTIFIER }
 
+-- throws, because the table name `t` is not visible outside
 SELECT t.x
 FROM (
         SELECT *
         FROM (
                 SELECT 1 AS x
             ) AS t
-    );
+    ); -- { serverError UNKNOWN_IDENTIFIER }
 
 SELECT x
 FROM (
@@ -106,28 +150,33 @@ FROM (
         FROM test1
     ) AS t;
 
+-- this is wrong, the `tbl` name is not exported
 SELECT test1.a
 FROM (
         SELECT a
         FROM test1
-    ) AS t;
+    ) AS t; -- { serverError UNKNOWN_IDENTIFIER }
 
+-- this is also wrong, the `t2` alias is not exported
 SELECT test1.a
 FROM (
         SELECT a
         FROM test1 AS t2
-    ) AS t;
+    ) AS t; -- { serverError UNKNOWN_IDENTIFIER }
 
+-- does not work, `x` is not visible;
 SELECT
     x,
     (
         SELECT 1 AS x
-    );
+    ); -- { serverError UNKNOWN_IDENTIFIER }
 
+-- does not work either;
 SELECT x IN (
         SELECT 1 AS x
-    );
+    ); -- { serverError UNKNOWN_IDENTIFIER }
 
+-- this will work, but keep in mind that there are two different `x`.
 SELECT x IN (
         SELECT 1 AS x
     )
@@ -151,7 +200,7 @@ FROM (
 
 SELECT
     1 AS x,
-    2 AS x;
+    2 AS x; -- { serverError MULTIPLE_EXPRESSIONS_FOR_ALIAS }
 
 SELECT arrayMap(x -> x + 1, [1, 2]);
 
@@ -175,8 +224,10 @@ FROM (
 
 SELECT
     arrayMap(x -> [y * 2, (x + 1) AS y, 1 AS z], [1, 2]),
-    y;
+    y; -- { serverError UNKNOWN_IDENTIFIER }
 
+-- TODO: this must work
+--SELECT arrayMap(x -> [y * 2, (x + 1) AS y, 1 AS z], [1, 2]), z;
 SELECT
     arrayMap(x -> (x + 1) AS y, [3, 5]),
-    arrayMap(x -> (concat(x, 'hello')) AS y, ['qq', 'ww']);
+    arrayMap(x -> (concat(x, 'hello')) AS y, ['qq', 'ww']); -- { serverError MULTIPLE_EXPRESSIONS_FOR_ALIAS }

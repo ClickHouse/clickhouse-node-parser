@@ -1,3 +1,4 @@
+CREATE TABLE t1 (c0 Int32, PRIMARY KEY (c0)) ENGINE = MergeTree;
 SELECT DISTINCT *
 FROM
 (
@@ -28,3 +29,4 @@ FROM
     FROM t1
     WHERE t1.c0 > (0 IS NULL)
 );
+

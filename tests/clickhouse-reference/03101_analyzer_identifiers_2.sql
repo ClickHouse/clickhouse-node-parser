@@ -1,5 +1,9 @@
+-- https://github.com/ClickHouse/ClickHouse/issues/23194
+SET enable_analyzer = 1;
+CREATE TEMPORARY TABLE test1 (a String, nest Nested(x String, y String));
 SELECT a, nest.* FROM test1 ARRAY JOIN nest;
 SELECT a, n.* FROM test1 ARRAY JOIN nest AS n;
+CREATE TEMPORARY TABLE test2 (a String, nest Array(Tuple(x String, y String)));
 SELECT a, nest.* FROM test2 ARRAY JOIN nest;
 SELECT a, n.* FROM test2 ARRAY JOIN nest AS n;
 SELECT 1 AS x, x, x + 1;
@@ -9,6 +13,9 @@ SELECT '---';
 SELECT 123 AS x FROM (SELECT a, x FROM (SELECT 1 AS a, 2 AS b));
 SELECT 123 AS x, (SELECT x) AS y;
 SELECT 123 AS x, 123 IN (SELECT x);
+WITH 123 AS x SELECT 555 FROM (SELECT a, x FROM (SELECT 1 AS a, 2 AS b));
+-- here we refer to table `test1` (defined as subquery) three times, one of them inside another scalar subquery.
+WITH t AS (SELECT 1) SELECT t, (SELECT * FROM t) FROM t; -- { serverError UNKNOWN_IDENTIFIER }
 -- throws, because x is not visible outside.
 SELECT x FROM (SELECT y FROM VALUES ('y UInt16', (2)) WHERE (1 AS x) = y) AS t;  -- { serverError UNKNOWN_IDENTIFIER }
 -- throws, because the table name `t` is not visible outside

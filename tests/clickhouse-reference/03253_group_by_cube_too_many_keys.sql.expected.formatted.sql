@@ -68,4 +68,4 @@ FROM (
             '' AS c64
     )
 GROUP BY ALL
-WITH CUBE;
+WITH CUBE; -- { serverError TOO_MANY_COLUMNS }

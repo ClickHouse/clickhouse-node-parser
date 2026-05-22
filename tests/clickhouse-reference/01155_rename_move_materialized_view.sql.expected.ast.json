@@ -1,5 +1,536 @@
 [
   {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "enable_analyzer",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ],
+    "leadingComments": [
+      "-- Tags: no-parallel"
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "send_logs_level",
+        "value": {
+          "kind": "literal",
+          "type": "String",
+          "value": "fatal"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "prefer_localhost_replica",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "drop",
+    "targetType": "DATABASE",
+    "table": {
+      "kind": "tableRef",
+      "table": "test_01155_ordinary"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "drop",
+    "targetType": "DATABASE",
+    "table": {
+      "kind": "tableRef",
+      "table": "test_01155_atomic"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "allow_deprecated_database_ordinary",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createDatabase",
+    "name": "test_01155_ordinary",
+    "engine": {
+      "name": "Ordinary"
+    },
+    "leadingComments": [
+      "-- Creation of a database with Ordinary engine emits a warning."
+    ]
+  },
+  {
+    "kind": "createDatabase",
+    "name": "test_01155_atomic",
+    "engine": {
+      "name": "Atomic"
+    }
+  },
+  {
+    "kind": "use",
+    "database": "test_01155_ordinary"
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "src"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "s",
+        "type": {
+          "name": "String"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "x",
+        "type": {
+          "name": "String"
+        },
+        "defaultKind": "DEFAULT",
+        "defaultExpr": {
+          "kind": "literal",
+          "type": "String",
+          "value": "a"
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree",
+      "args": []
+    },
+    "partitionBy": {
+      "kind": "functionCall",
+      "name": "tuple",
+      "args": []
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "s"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createMaterializedView",
+    "table": {
+      "kind": "tableRef",
+      "table": "mv1"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "s",
+        "type": {
+          "name": "String"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "x",
+        "type": {
+          "name": "String"
+        },
+        "defaultKind": "DEFAULT",
+        "defaultExpr": {
+          "kind": "literal",
+          "type": "String",
+          "value": "b"
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree",
+      "args": []
+    },
+    "partitionBy": {
+      "kind": "functionCall",
+      "name": "tuple",
+      "args": []
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "s"
+          ]
+        }
+      }
+    ],
+    "asQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "alias",
+          "expr": {
+            "kind": "functionCall",
+            "name": "concat",
+            "args": [
+              {
+                "kind": "functionCall",
+                "name": "tupleElement",
+                "args": [
+                  {
+                    "kind": "functionCall",
+                    "name": "tuple",
+                    "args": [
+                      {
+                        "kind": "asterisk"
+                      }
+                    ]
+                  },
+                  {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "1"
+                  }
+                ]
+              },
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "mv1"
+              }
+            ]
+          },
+          "alias": "s"
+        }
+      ],
+      "from": {
+        "kind": "tableRef",
+        "table": "src"
+      }
+    }
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "dst"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "s",
+        "type": {
+          "name": "String"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "x",
+        "type": {
+          "name": "String"
+        },
+        "defaultKind": "DEFAULT",
+        "defaultExpr": {
+          "kind": "literal",
+          "type": "String",
+          "value": "c"
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree",
+      "args": []
+    },
+    "partitionBy": {
+      "kind": "functionCall",
+      "name": "tuple",
+      "args": []
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "s"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createMaterializedView",
+    "table": {
+      "kind": "tableRef",
+      "table": "mv2"
+    },
+    "toTable": {
+      "kind": "tableRef",
+      "table": "dst"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "s",
+        "type": {
+          "name": "String"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "x",
+        "type": {
+          "name": "String"
+        },
+        "defaultKind": "DEFAULT",
+        "defaultExpr": {
+          "kind": "literal",
+          "type": "String",
+          "value": "d"
+        }
+      }
+    ],
+    "asQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "alias",
+          "expr": {
+            "kind": "functionCall",
+            "name": "concat",
+            "args": [
+              {
+                "kind": "functionCall",
+                "name": "tupleElement",
+                "args": [
+                  {
+                    "kind": "functionCall",
+                    "name": "tuple",
+                    "args": [
+                      {
+                        "kind": "asterisk"
+                      }
+                    ]
+                  },
+                  {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "1"
+                  }
+                ]
+              },
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "mv2"
+              }
+            ]
+          },
+          "alias": "s"
+        }
+      ],
+      "from": {
+        "kind": "tableRef",
+        "table": "src"
+      }
+    }
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "dist"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "s",
+        "type": {
+          "name": "String"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "x",
+        "type": {
+          "name": "String"
+        },
+        "defaultKind": "DEFAULT",
+        "defaultExpr": {
+          "kind": "literal",
+          "type": "String",
+          "value": "asdf"
+        }
+      }
+    ],
+    "engine": {
+      "name": "Distributed",
+      "args": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "test_shard_localhost"
+          ]
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "test_01155_ordinary"
+          ]
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "src"
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "dist"
+      }
+    },
+    "columns": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "s"
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "system",
+    "body": "SYSTEM FLUSH DISTRIBUTED  dist"
+  },
+  {
+    "kind": "createDictionary",
+    "table": {
+      "kind": "tableRef",
+      "table": "dict"
+    },
+    "dictAttrs": [
+      {
+        "name": "s",
+        "type": {
+          "name": "String"
+        }
+      },
+      {
+        "name": "x",
+        "type": {
+          "name": "String"
+        },
+        "defaultValue": {
+          "kind": "literal",
+          "type": "String",
+          "value": "qwerty"
+        }
+      }
+    ],
+    "dictDef": {
+      "primaryKey": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "s"
+          ]
+        }
+      ],
+      "source": {
+        "name": "clickhouse",
+        "pairs": [
+          {
+            "name": "HOST",
+            "value": {
+              "kind": "literal",
+              "type": "String",
+              "value": "localhost"
+            }
+          },
+          {
+            "name": "PORT",
+            "value": {
+              "kind": "functionCall",
+              "name": "tcpPort",
+              "args": []
+            }
+          },
+          {
+            "name": "USER",
+            "value": {
+              "kind": "literal",
+              "type": "String",
+              "value": "default"
+            }
+          },
+          {
+            "name": "TABLE",
+            "value": {
+              "kind": "literal",
+              "type": "String",
+              "value": "dist"
+            }
+          },
+          {
+            "name": "DB",
+            "value": {
+              "kind": "literal",
+              "type": "String",
+              "value": "test_01155_ordinary"
+            }
+          }
+        ]
+      },
+      "lifetime": {
+        "min": 0,
+        "max": 2
+      },
+      "layout": {
+        "name": "COMPLEX_KEY_CACHE",
+        "pairs": [
+          {
+            "name": "SIZE_IN_CELLS",
+            "value": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "123"
+            }
+          }
+        ]
+      }
+    }
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -56,7 +587,7 @@
           }
         ],
         "from": {
-          "kind": "tableFunction",
+          "kind": "tableFunctionRef",
           "name": "merge",
           "args": [
             {
@@ -94,6 +625,9 @@
         },
         "direction": "ASC"
       }
+    ],
+    "leadingComments": [
+      "-- FIXME Cannot convert column `1` because it is non constant in source stream but must be constant in result"
     ]
   },
   {
@@ -119,6 +653,24 @@
             "value": "before moving tables"
           }
         ]
+      }
+    ]
+  },
+  {
+    "kind": "rename",
+    "targetType": "DICTIONARY",
+    "pairs": [
+      {
+        "from": {
+          "kind": "tableRef",
+          "database": "test_01155_ordinary",
+          "table": "dict"
+        },
+        "to": {
+          "kind": "tableRef",
+          "database": "test_01155_ordinary",
+          "table": "dict1"
+        }
       }
     ]
   },
@@ -190,6 +742,165 @@
         "value": "test_01155_ordinary"
       }
     }
+  },
+  {
+    "kind": "rename",
+    "targetType": "TABLE",
+    "pairs": [
+      {
+        "from": {
+          "kind": "tableRef",
+          "database": "test_01155_ordinary",
+          "table": "dict1"
+        },
+        "to": {
+          "kind": "tableRef",
+          "database": "test_01155_ordinary",
+          "table": "dict"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "system",
+    "body": "SHOW TABLES FROM test_01155_ordinary"
+  },
+  {
+    "kind": "rename",
+    "targetType": "TABLE",
+    "pairs": [
+      {
+        "from": {
+          "kind": "tableRef",
+          "database": "test_01155_ordinary",
+          "table": "mv1"
+        },
+        "to": {
+          "kind": "tableRef",
+          "database": "test_01155_atomic",
+          "table": "mv1"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "rename",
+    "targetType": "TABLE",
+    "pairs": [
+      {
+        "from": {
+          "kind": "tableRef",
+          "database": "test_01155_ordinary",
+          "table": "mv2"
+        },
+        "to": {
+          "kind": "tableRef",
+          "database": "test_01155_atomic",
+          "table": "mv2"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "rename",
+    "targetType": "TABLE",
+    "pairs": [
+      {
+        "from": {
+          "kind": "tableRef",
+          "database": "test_01155_ordinary",
+          "table": "dst"
+        },
+        "to": {
+          "kind": "tableRef",
+          "database": "test_01155_atomic",
+          "table": "dst"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "rename",
+    "targetType": "TABLE",
+    "pairs": [
+      {
+        "from": {
+          "kind": "tableRef",
+          "database": "test_01155_ordinary",
+          "table": "src"
+        },
+        "to": {
+          "kind": "tableRef",
+          "database": "test_01155_atomic",
+          "table": "src"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "check_table_dependencies",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      }
+    ],
+    "trailingComments": [
+      "-- Otherwise we'll get error \"test_01155_ordinary.dict depends on test_01155_ordinary.dist\" in the next line."
+    ]
+  },
+  {
+    "kind": "rename",
+    "targetType": "TABLE",
+    "pairs": [
+      {
+        "from": {
+          "kind": "tableRef",
+          "database": "test_01155_ordinary",
+          "table": "dist"
+        },
+        "to": {
+          "kind": "tableRef",
+          "database": "test_01155_atomic",
+          "table": "dist"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "check_table_dependencies",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "rename",
+    "targetType": "DICTIONARY",
+    "pairs": [
+      {
+        "from": {
+          "kind": "tableRef",
+          "database": "test_01155_ordinary",
+          "table": "dict"
+        },
+        "to": {
+          "kind": "tableRef",
+          "database": "test_01155_atomic",
+          "table": "dict"
+        }
+      }
+    ]
   },
   {
     "kind": "select",
@@ -286,6 +997,37 @@
     }
   },
   {
+    "kind": "drop",
+    "targetType": "DATABASE",
+    "table": {
+      "kind": "tableRef",
+      "table": "test_01155_ordinary"
+    }
+  },
+  {
+    "kind": "use",
+    "database": "default"
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "database": "test_01155_atomic",
+        "table": "src"
+      }
+    },
+    "columns": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "s"
+        ]
+      }
+    ]
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -329,7 +1071,7 @@
       }
     ],
     "from": {
-      "kind": "tableFunction",
+      "kind": "tableFunctionRef",
       "name": "merge",
       "args": [
         {
@@ -365,6 +1107,9 @@
         },
         "direction": "ASC"
       }
+    ],
+    "trailingComments": [
+      "-- { serverError UNKNOWN_DATABASE }"
     ]
   },
   {
@@ -389,6 +1134,43 @@
             "type": "String",
             "value": "after moving tables"
           }
+        ]
+      }
+    ],
+    "trailingComments": [
+      "-- { serverError BAD_ARGUMENTS }"
+    ]
+  },
+  {
+    "kind": "rename",
+    "targetType": "DATABASE",
+    "pairs": [
+      {
+        "from": {
+          "kind": "tableRef",
+          "table": "test_01155_atomic"
+        },
+        "to": {
+          "kind": "tableRef",
+          "table": "test_01155_ordinary"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "dist"
+      }
+    },
+    "columns": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "s"
         ]
       }
     ]
@@ -450,7 +1232,7 @@
           }
         ],
         "from": {
-          "kind": "tableFunction",
+          "kind": "tableFunctionRef",
           "name": "merge",
           "args": [
             {
@@ -572,6 +1354,182 @@
     }
   },
   {
+    "kind": "rename",
+    "targetType": "DATABASE",
+    "pairs": [
+      {
+        "from": {
+          "kind": "tableRef",
+          "table": "test_01155_ordinary"
+        },
+        "to": {
+          "kind": "tableRef",
+          "table": "test_01155_atomic"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "send_logs_level",
+        "value": {
+          "kind": "literal",
+          "type": "String",
+          "value": "fatal"
+        }
+      }
+    ],
+    "leadingComments": [
+      "-- Creation of a database with Ordinary engine emits a warning."
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "send_logs_level",
+        "value": {
+          "kind": "literal",
+          "type": "String",
+          "value": "warning"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "showCreate",
+    "targetType": "DATABASE",
+    "database": "test_01155_atomic"
+  },
+  {
+    "kind": "rename",
+    "targetType": "TABLE",
+    "pairs": [
+      {
+        "from": {
+          "kind": "tableRef",
+          "database": "test_01155_atomic",
+          "table": "mv1"
+        },
+        "to": {
+          "kind": "tableRef",
+          "database": "test_01155_ordinary",
+          "table": "mv1"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "rename",
+    "targetType": "TABLE",
+    "pairs": [
+      {
+        "from": {
+          "kind": "tableRef",
+          "database": "test_01155_atomic",
+          "table": "mv2"
+        },
+        "to": {
+          "kind": "tableRef",
+          "database": "test_01155_ordinary",
+          "table": "mv2"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "rename",
+    "targetType": "TABLE",
+    "pairs": [
+      {
+        "from": {
+          "kind": "tableRef",
+          "database": "test_01155_atomic",
+          "table": "dst"
+        },
+        "to": {
+          "kind": "tableRef",
+          "database": "test_01155_ordinary",
+          "table": "dst"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "rename",
+    "targetType": "TABLE",
+    "pairs": [
+      {
+        "from": {
+          "kind": "tableRef",
+          "database": "test_01155_atomic",
+          "table": "src"
+        },
+        "to": {
+          "kind": "tableRef",
+          "database": "test_01155_ordinary",
+          "table": "src"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "rename",
+    "targetType": "TABLE",
+    "pairs": [
+      {
+        "from": {
+          "kind": "tableRef",
+          "database": "test_01155_atomic",
+          "table": "dist"
+        },
+        "to": {
+          "kind": "tableRef",
+          "database": "test_01155_ordinary",
+          "table": "dist"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "rename",
+    "targetType": "DICTIONARY",
+    "pairs": [
+      {
+        "from": {
+          "kind": "tableRef",
+          "database": "test_01155_atomic",
+          "table": "dict"
+        },
+        "to": {
+          "kind": "tableRef",
+          "database": "test_01155_ordinary",
+          "table": "dict"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "dist"
+      }
+    },
+    "columns": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "s"
+        ]
+      }
+    ]
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -628,7 +1586,7 @@
           }
         ],
         "from": {
-          "kind": "tableFunction",
+          "kind": "tableFunctionRef",
           "name": "merge",
           "args": [
             {
@@ -693,5 +1651,9 @@
         ]
       }
     ]
+  },
+  {
+    "kind": "system",
+    "body": "SHOW TABLES FROM test_01155_atomic"
   }
 ]

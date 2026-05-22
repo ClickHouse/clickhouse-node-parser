@@ -1,3 +1,29 @@
+-- Tags: shard, no-parallel
+DROP DATABASE IF EXISTS test_01383;
+
+CREATE DATABASE test_01383;
+
+CREATE TABLE test_01383.fact
+(
+    id1 Int64,
+    id2 Int64,
+    value Int64
+)
+ENGINE = MergeTree()
+ORDER BY id1;
+
+CREATE TABLE test_01383.dimension
+(
+    id1 Int64,
+    name String
+)
+ENGINE = MergeTree()
+ORDER BY id1;
+
+INSERT INTO test_01383.fact;
+
+INSERT INTO test_01383.dimension;
+
 SELECT
     f.id1 AS ID,
     d.name AS Name,
@@ -11,3 +37,5 @@ GROUP BY
     ID,
     Name
 ORDER BY ID ASC;
+
+DROP DATABASE test_01383;

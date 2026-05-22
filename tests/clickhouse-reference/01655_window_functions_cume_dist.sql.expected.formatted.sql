@@ -1,3 +1,8 @@
+-- Tags: long
+-- { echo }
+-- Test for the cume_dist window function.
+SET enable_analyzer = 1;
+
 SELECT '-- Basic functionality';
 
 SELECT
@@ -16,6 +21,17 @@ SELECT
     cume_dist() OVER (ORDER BY number DESC)
 FROM numbers(5);
 
+CREATE TABLE IF NOT EXISTS test_cume_dist
+(
+    a Int,
+    b Nullable(Int)
+)
+ENGINE = Memory;
+
+TRUNCATE TABLE test_cume_dist;
+
+INSERT INTO test_cume_dist;
+
 SELECT
     a,
     b,
@@ -25,6 +41,8 @@ ORDER BY
     b ASC,
     a ASC;
 
+INSERT INTO test_cume_dist;
+
 SELECT
     a,
     b,
@@ -33,6 +51,8 @@ FROM test_cume_dist
 ORDER BY
     a ASC,
     b ASC;
+
+INSERT INTO test_cume_dist;
 
 SELECT
     a,
@@ -72,4 +92,6 @@ WHERE a = 7;
 SELECT
     number,
     cume_dist() OVER (ORDER BY number ASC ROWS BETWEEN 1 PRECEDING AND 1 FOLLOWING)
-FROM numbers(5);
+FROM numbers(5); -- { serverError BAD_ARGUMENTS }
+
+DROP TABLE test_cume_dist;

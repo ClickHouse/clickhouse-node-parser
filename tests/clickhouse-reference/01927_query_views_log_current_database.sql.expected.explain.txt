@@ -1,3 +1,186 @@
+Set
+
+Set
+
+CreateQuery table_a (children 3)
+ Identifier table_a
+ Columns definition (children 1)
+  ExpressionList (children 2)
+   ColumnDeclaration a (children 1)
+    DataType String
+   ColumnDeclaration b (children 1)
+    DataType Int64
+ Storage definition (children 2)
+  Function MergeTree
+  Identifier b
+
+CreateQuery table_b (children 3)
+ Identifier table_b
+ Columns definition (children 1)
+  ExpressionList (children 2)
+   ColumnDeclaration a (children 1)
+    DataType Float64
+   ColumnDeclaration count (children 1)
+    DataType Int64
+ Storage definition (children 2)
+  Function MergeTree
+  Function tuple (children 1)
+   ExpressionList
+
+CreateQuery table_c (children 3)
+ Identifier table_c
+ Columns definition (children 1)
+  ExpressionList (children 1)
+   ColumnDeclaration a (children 1)
+    DataType Float64
+ Storage definition (children 2)
+  Function MergeTree
+  Identifier a
+
+CreateQuery table_d (children 3)
+ Identifier table_d
+ Columns definition (children 1)
+  ExpressionList (children 2)
+   ColumnDeclaration a (children 1)
+    DataType Float64
+   ColumnDeclaration count (children 1)
+    DataType Int64
+ Storage definition (children 2)
+  Function MergeTree
+  Identifier a
+
+CreateQuery table_e (children 3)
+ Identifier table_e
+ Columns definition (children 1)
+  ExpressionList (children 2)
+   ColumnDeclaration a (children 1)
+    DataType Float64
+   ColumnDeclaration count (children 1)
+    DataType Int64
+ Storage definition (children 2)
+  Function MergeTree
+  Identifier a
+
+CreateQuery table_f (children 3)
+ Identifier table_f
+ Columns definition (children 1)
+  ExpressionList (children 2)
+   ColumnDeclaration a (children 1)
+    DataType Float64
+   ColumnDeclaration count (children 1)
+    DataType Int64
+ Storage definition (children 2)
+  Function MergeTree
+  Identifier a
+
+CreateQuery matview_a_to_b (children 3)
+ Identifier matview_a_to_b
+ SelectWithUnionQuery (children 1)
+  ExpressionList (children 1)
+   SelectQuery (children 2)
+    ExpressionList (children 2)
+     Function toFloat64 (alias a) (children 1)
+      ExpressionList (children 1)
+       Identifier a
+     Function plus (alias count) (children 1)
+      ExpressionList (children 2)
+       Identifier b
+       Function sleepEachRow (children 1)
+        ExpressionList (children 1)
+         Literal Float64_0.000001
+    TablesInSelectQuery (children 1)
+     TablesInSelectQueryElement (children 1)
+      TableExpression (children 1)
+       TableIdentifier table_a
+ ViewTargets
+
+CreateQuery matview_b_to_c (children 3)
+ Identifier matview_b_to_c
+ SelectWithUnionQuery (children 1)
+  ExpressionList (children 1)
+   SelectQuery (children 2)
+    ExpressionList (children 1)
+     Function SUM (alias a) (children 1)
+      ExpressionList (children 1)
+       Function plus (children 1)
+        ExpressionList (children 2)
+         Identifier a
+         Function sleepEachRow (children 1)
+          ExpressionList (children 1)
+           Literal Float64_0.000002
+    TablesInSelectQuery (children 1)
+     TablesInSelectQueryElement (children 1)
+      TableExpression (children 1)
+       TableIdentifier table_b
+ ViewTargets
+
+CreateQuery matview_join_d_e (children 3)
+ Identifier matview_join_d_e
+ SelectWithUnionQuery (children 1)
+  ExpressionList (children 1)
+   SelectQuery (children 2)
+    ExpressionList (children 2)
+     Identifier table_d.a (alias a)
+     Function plus (alias count) (children 1)
+      ExpressionList (children 2)
+       Identifier table_e.count
+       Function sleepEachRow (children 1)
+        ExpressionList (children 1)
+         Literal Float64_0.000003
+    TablesInSelectQuery (children 2)
+     TablesInSelectQueryElement (children 1)
+      TableExpression (children 1)
+       TableIdentifier table_d
+     TablesInSelectQueryElement (children 2)
+      TableExpression (children 1)
+       TableIdentifier table_e
+      TableJoin (children 1)
+       Function equals (children 1)
+        ExpressionList (children 2)
+         Identifier table_d.a
+         Identifier table_e.a
+ ViewTargets
+
+Set
+
+Set
+
+Set
+
+Set
+
+InsertQuery   (children 2)
+ Identifier table_a
+ SelectWithUnionQuery (children 1)
+  ExpressionList (children 1)
+   SelectQuery (children 2)
+    ExpressionList (children 2)
+     Literal '111'
+     Asterisk
+    TablesInSelectQuery (children 1)
+     TablesInSelectQueryElement (children 1)
+      TableExpression (children 1)
+       Function numbers (children 1)
+        ExpressionList (children 1)
+         Literal UInt64_100
+
+InsertQuery   (children 2)
+ Identifier table_d
+ SelectWithUnionQuery (children 1)
+  ExpressionList (children 1)
+   SelectQuery (children 2)
+    ExpressionList (children 2)
+     Literal Float64_0.5
+     Asterisk
+    TablesInSelectQuery (children 1)
+     TablesInSelectQueryElement (children 1)
+      TableExpression (children 1)
+       Function numbers (children 1)
+        ExpressionList (children 1)
+         Literal UInt64_50
+
+SYSTEM query
+
 SelectWithUnionQuery (children 2)
  ExpressionList (children 1)
   SelectQuery (children 3)
@@ -271,3 +454,30 @@ SelectWithUnionQuery (children 2)
     OrderByElement (children 1)
      Identifier view_name
  Identifier Vertical
+
+DropQuery  matview_a_to_b (children 1)
+ Identifier matview_a_to_b
+
+DropQuery  matview_b_to_c (children 1)
+ Identifier matview_b_to_c
+
+DropQuery  matview_join_d_e (children 1)
+ Identifier matview_join_d_e
+
+DropQuery  table_f (children 1)
+ Identifier table_f
+
+DropQuery  table_e (children 1)
+ Identifier table_e
+
+DropQuery  table_d (children 1)
+ Identifier table_d
+
+DropQuery  table_c (children 1)
+ Identifier table_c
+
+DropQuery  table_b (children 1)
+ Identifier table_b
+
+DropQuery  table_a (children 1)
+ Identifier table_a

@@ -1,3 +1,17 @@
+DROP TABLE IF EXISTS geohash_test_data;
+
+CREATE TABLE geohash_test_data
+(
+    latitude Float64,
+    longitude Float64,
+    encoded String
+)
+ENGINE = MergeTree
+ORDER BY (latitude, longitude, encoded);
+
+-- data obtained from geohash.com
+INSERT INTO geohash_test_data;
+
 SELECT geohashEncode(181.0, 91.0);
 
 SELECT geohashEncode(-181.0, -91.0);
@@ -20,6 +34,7 @@ SELECT geohashEncode(-5.60302734375, materialize(42.593994140625), 0);
 
 SELECT geohashEncode(materialize(-5.60302734375), 42.593994140625, 0);
 
+-- here results are strings, so reference may contain values to match for equality.
 SELECT
     1 AS p,
     geohashEncode(longitude, latitude, p) AS actual,

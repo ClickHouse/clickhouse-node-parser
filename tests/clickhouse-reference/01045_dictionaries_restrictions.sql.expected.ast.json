@@ -1,5 +1,80 @@
 [
   {
+    "kind": "createDictionary",
+    "table": {
+      "kind": "tableRef",
+      "database": {
+        "kind": "queryParam",
+        "name": "CLICKHOUSE_DATABASE",
+        "type": "Identifier"
+      },
+      "table": "restricted_dict"
+    },
+    "dictAttrs": [
+      {
+        "name": "key",
+        "type": {
+          "name": "UInt64"
+        }
+      },
+      {
+        "name": "value",
+        "type": {
+          "name": "String"
+        }
+      }
+    ],
+    "dictDef": {
+      "primaryKey": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "key"
+          ]
+        }
+      ],
+      "source": {
+        "name": "executable",
+        "pairs": [
+          {
+            "name": "COMMAND",
+            "value": {
+              "kind": "literal",
+              "type": "String",
+              "value": "echo -E \"1\\thello\""
+            }
+          },
+          {
+            "name": "FORMAT",
+            "value": {
+              "kind": "columnRef",
+              "parts": [
+                "TabSeparated"
+              ]
+            }
+          }
+        ]
+      },
+      "lifetime": {
+        "min": 0,
+        "max": 1
+      },
+      "layout": {
+        "name": "CACHE",
+        "pairs": [
+          {
+            "name": "SIZE_IN_CELLS",
+            "value": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "10"
+            }
+          }
+        ]
+      }
+    }
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -40,6 +115,26 @@
           }
         ]
       }
+    ],
+    "leadingComments": [
+      "-- because of lazy load we can check only in dictGet query"
+    ],
+    "trailingComments": [
+      "-- {serverError DICTIONARY_ACCESS_DENIED}"
     ]
+  },
+  {
+    "kind": "drop",
+    "targetType": "DICTIONARY",
+    "table": {
+      "kind": "tableRef",
+      "database": {
+        "kind": "queryParam",
+        "name": "CLICKHOUSE_DATABASE",
+        "type": "Identifier"
+      },
+      "table": "restricted_dict"
+    },
+    "ifExists": true
   }
 ]

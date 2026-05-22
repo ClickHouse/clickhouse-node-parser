@@ -1,3 +1,36 @@
+DROP TABLE IF EXISTS test_table;
+
+SET allow_experimental_statistics = 1;
+
+SET insert_keeper_fault_injection_probability = 0.0;
+
+CREATE TABLE test_table
+(
+    id UInt64,
+    v1 String STATISTICS(uniq),
+    v2 UInt64 STATISTICS(tdigest),
+    v3 String
+)
+ENGINE = ReplicatedMergeTree('/clickhouse/tables/{database}/test_table', '1')
+ORDER BY id
+SETTINGS enable_block_number_column = 0, enable_block_offset_column = 0, auto_statistics_types = 'uniq,minmax';
+
+SYSTEM STOP MERGES test_table;
+
+INSERT INTO test_table SELECT
+    number,
+    if(rand() % 100 = 0, 'foo', ''),
+    rand() % 2,
+    rand() % 2
+FROM numbers(100000);
+
+INSERT INTO test_table SELECT
+    number,
+    if(rand() % 100 = 0, 'bar', ''),
+    rand() % 2 + 5,
+    rand() % 2 + 5
+FROM numbers(100000);
+
 SELECT
     name,
     column,
@@ -24,3 +57,11 @@ SELECT
     uniqExact(v3)
 FROM test_table
 WHERE NOT ignore(*);
+
+SYSTEM START MERGES test_table;
+
+OPTIMIZE TABLE test_table FINAL;
+
+DETACH TABLE test_table;
+
+ATTACH TABLE test_table;

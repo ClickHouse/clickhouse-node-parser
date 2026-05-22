@@ -1,3 +1,20 @@
+-- Tags: no-fasttest
+SET allow_experimental_dynamic_type = 1;
+
+DROP TABLE IF EXISTS test;
+
+CREATE TABLE test
+(
+    x UInt64,
+    d Dynamic
+)
+ENGINE = Memory;
+
+INSERT INTO test SELECT
+    number,
+    number
+FROM numbers(4);
+
 SELECT
     d + 1 AS res,
     toTypeName(res)
@@ -248,6 +265,32 @@ SELECT
     toTypeName(res)
 FROM test;
 
+DROP TABLE test;
+
+CREATE TABLE test
+(
+    x Nullable(UInt64),
+    d Dynamic
+)
+ENGINE = Memory;
+
+INSERT INTO test SELECT
+    if(number % 2, NULL, number),
+    number
+FROM numbers(4);
+
+CREATE TABLE test
+(
+    x String,
+    d Dynamic
+)
+ENGINE = Memory;
+
+INSERT INTO test SELECT
+    concat('str_', number),
+    concat('str_', number)
+FROM numbers(4);
+
 SELECT
     d < 'str_2' AS res,
     toTypeName(res)
@@ -325,10 +368,73 @@ SELECT
     toTypeName(res)
 FROM test;
 
+TRUNCATE TABLE test;
+
+INSERT INTO test SELECT
+    concat('str_', number),
+    toFixedString(concat('str_', number), 5)
+FROM numbers(4);
+
+CREATE TABLE test
+(
+    x Nullable(String),
+    d Dynamic
+)
+ENGINE = Memory;
+
+INSERT INTO test SELECT
+    if(number % 2, NULL, concat('str_', number)),
+    concat('str_', number)
+FROM numbers(4);
+
+INSERT INTO test SELECT
+    if(number % 2, NULL, concat('str_', number)),
+    toFixedString(concat('str_', number), 5)
+FROM numbers(4);
+
+INSERT INTO test SELECT
+    number,
+    if(number % 2, NULL, number)
+FROM numbers(4);
+
 SELECT
     sipHash64(d, d) AS res,
     toTypeName(res)
 FROM test;
+
+INSERT INTO test SELECT
+    if(number % 2, NULL, number),
+    if(number % 2, NULL, number)
+FROM numbers(4);
+
+INSERT INTO test SELECT
+    if(number % 2, NULL, number),
+    NULL
+FROM numbers(4);
+
+INSERT INTO test SELECT
+    concat('str_', number),
+    if(number % 2, NULL, concat('str_', number))
+FROM numbers(4);
+
+INSERT INTO test SELECT
+    concat('str_', number),
+    if(number % 2, NULL, toFixedString(concat('str_', number), 5))
+FROM numbers(4);
+
+INSERT INTO test SELECT
+    if(number % 2, NULL, concat('str_', number)),
+    if(number % 2, NULL, toFixedString(concat('str_', number), 5))
+FROM numbers(4);
+
+CREATE TABLE test
+(
+    x UInt64,
+    d Dynamic(max_types = 5)
+)
+ENGINE = Memory;
+
+INSERT INTO test;
 
 SELECT
     d + 1 AS res,
@@ -405,19 +511,34 @@ SELECT *
 FROM test
 WHERE d = 5;
 
+INSERT INTO test;
+
+CREATE TABLE test
+(
+    d Dynamic
+)
+ENGINE = Memory;
+
+INSERT INTO test;
+
+INSERT INTO test SELECT range(number + 1)
+FROM numbers(4);
+
 SELECT
     d[1] AS res,
     toTypeName(res)
 FROM test;
 
+INSERT INTO test;
+
 SELECT d + 1
-FROM test;
+FROM test; -- {serverError ILLEGAL_TYPE_OF_ARGUMENT}
 
 SELECT length(d)
-FROM test;
+FROM test; -- {serverError ILLEGAL_TYPE_OF_ARGUMENT}
 
 SELECT d[1]
-FROM test;
+FROM test; -- {serverError ILLEGAL_TYPE_OF_ARGUMENT}
 
 SELECT sipHash64(d)
 FROM test;

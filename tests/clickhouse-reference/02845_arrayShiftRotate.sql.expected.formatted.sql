@@ -58,6 +58,19 @@ SELECT arrayShiftRight([[1, 2], [3, 4], [5, 6]], 2, [7, 8]);
 
 SELECT arrayShiftRight(CAST('[1, 2, 3, 4, 5, 6]', 'Array(UInt16)'), 1, 1000);
 
+DROP TABLE IF EXISTS t02845;
+
+CREATE TABLE t02845
+(
+    a Array(UInt8),
+    s Int16,
+    d UInt8
+)
+ENGINE = MergeTree
+ORDER BY d;
+
+INSERT INTO t02845;
+
 SELECT '-- arrayRotateLeft';
 
 SELECT arrayRotateLeft(a, 2)
@@ -94,6 +107,6 @@ SELECT arrayShiftLeft([30000], 3, 5);
 
 SELECT arrayShiftLeft([[1]], 3, []);
 
-SELECT arrayShiftLeft(['foo'], 3, 3);
+SELECT arrayShiftLeft(['foo'], 3, 3); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
-SELECT arrayShiftLeft([1], 3, 'foo');
+SELECT arrayShiftLeft([1], 3, 'foo'); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }

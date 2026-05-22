@@ -1,5 +1,185 @@
 [
   {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "lhs"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "a",
+        "type": {
+          "name": "UInt64"
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "functionCall",
+          "name": "tuple",
+          "args": []
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "rhs"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "a",
+        "type": {
+          "name": "UInt64"
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "functionCall",
+          "name": "tuple",
+          "args": []
+        }
+      }
+    ]
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "lhs"
+      }
+    },
+    "selectQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "asterisk"
+        }
+      ],
+      "from": {
+        "kind": "tableFunctionRef",
+        "name": "numbers_mt",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "Float64",
+            "value": "1e5"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "rhs"
+      }
+    },
+    "selectQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "asterisk"
+        }
+      ],
+      "from": {
+        "kind": "tableFunctionRef",
+        "name": "numbers_mt",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "Float64",
+            "value": "1e6"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "enable_parallel_replicas",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      }
+    ],
+    "trailingComments": [
+      "-- join optimization (and table size estimation) disabled with parallel replicas"
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "enable_analyzer",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      },
+      {
+        "name": "use_query_condition_cache",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "join_algorithm",
+        "value": {
+          "kind": "literal",
+          "type": "String",
+          "value": "direct,parallel_hash,hash"
+        }
+      }
+    ],
+    "trailingComments": [
+      "-- default"
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "parallel_hash_join_threshold",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "100001"
+        }
+      }
+    ]
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -42,7 +222,7 @@
               "table": "lhs",
               "alias": "t0"
             },
-            "kind": "join",
+            "kind": "joinExpr",
             "joinType": "INNER",
             "right": {
               "kind": "tableRef",
@@ -100,7 +280,10 @@
           "value": "%Algorithm%"
         }
       ]
-    }
+    },
+    "leadingComments": [
+      "-- Tables should be swapped; the new right table is below the threshold - use HashJoin"
+    ]
   },
   {
     "kind": "select",
@@ -145,7 +328,7 @@
               "table": "lhs",
               "alias": "t0"
             },
-            "kind": "join",
+            "kind": "joinExpr",
             "joinType": "INNER",
             "right": {
               "kind": "tableRef",
@@ -203,7 +386,10 @@
           "value": "%Algorithm%"
         }
       ]
-    }
+    },
+    "leadingComments": [
+      "-- Tables were not swapped; the right table is above the threshold - use ConcurrentHashJoin"
+    ]
   },
   {
     "kind": "select",
@@ -248,7 +434,7 @@
               "table": "lhs",
               "alias": "t0"
             },
-            "kind": "join",
+            "kind": "joinExpr",
             "joinType": "INNER",
             "right": {
               "kind": "tableRef",
@@ -306,7 +492,27 @@
           "value": "%Algorithm%"
         }
       ]
-    }
+    },
+    "leadingComments": [
+      "-- Check estimations obtained from the cache",
+      "-- Tables should be swapped; the new right table is below the threshold - use HashJoin"
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "join_algorithm",
+        "value": {
+          "kind": "literal",
+          "type": "String",
+          "value": "parallel_hash"
+        }
+      }
+    ],
+    "leadingComments": [
+      "-- Same queries but we cannot do fallback to `hash`"
+    ]
   },
   {
     "kind": "select",
@@ -321,7 +527,7 @@
         "table": "lhs",
         "alias": "t0"
       },
-      "kind": "join",
+      "kind": "joinExpr",
       "joinType": "INNER",
       "right": {
         "kind": "subqueryFrom",
@@ -387,7 +593,11 @@
         }
       }
     ],
-    "format": "Null"
+    "format": "Null",
+    "leadingComments": [
+      "-- Check estimations obtained from the cache",
+      "-- Right table is big, regardless of cardinality of join key, we should use ConcurrentHashJoin"
+    ]
   },
   {
     "kind": "select",
@@ -432,7 +642,7 @@
               "table": "lhs",
               "alias": "t0"
             },
-            "kind": "join",
+            "kind": "joinExpr",
             "joinType": "INNER",
             "right": {
               "kind": "subqueryFrom",
@@ -532,7 +742,7 @@
         "table": "lhs",
         "alias": "t0"
       },
-      "kind": "join",
+      "kind": "joinExpr",
       "joinType": "INNER",
       "right": {
         "kind": "tableRef",
@@ -587,7 +797,10 @@
         }
       }
     ],
-    "format": "Null"
+    "format": "Null",
+    "leadingComments": [
+      "-- Right table is big, but only a small fraction of rows reaches the join - use HashJoin"
+    ]
   },
   {
     "kind": "select",
@@ -632,7 +845,7 @@
               "table": "lhs",
               "alias": "t0"
             },
-            "kind": "join",
+            "kind": "joinExpr",
             "joinType": "INNER",
             "right": {
               "kind": "tableRef",

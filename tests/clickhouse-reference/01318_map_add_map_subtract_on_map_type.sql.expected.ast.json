@@ -1,5 +1,84 @@
 [
   {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "tab"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "tab"
+    },
+    "engine": {
+      "name": "Memory",
+      "args": []
+    },
+    "asQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "alias",
+          "expr": {
+            "kind": "functionCall",
+            "name": "map",
+            "args": [
+              {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "1"
+              },
+              {
+                "kind": "functionCall",
+                "name": "toInt32",
+                "args": [
+                  {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "2"
+                  }
+                ]
+              },
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "number"
+                ]
+              },
+              {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "2"
+              }
+            ]
+          },
+          "alias": "m"
+        }
+      ],
+      "from": {
+        "kind": "tableFunctionRef",
+        "name": "numbers",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "1"
+          },
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "10"
+          }
+        ]
+      },
+      "parenthesized": true
+    }
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -24,6 +103,12 @@
           }
         ]
       }
+    ],
+    "leadingComments": [
+      "-- mapAdd"
+    ],
+    "trailingComments": [
+      "-- { serverError NUMBER_OF_ARGUMENTS_DOESNT_MATCH }"
     ]
   },
   {
@@ -61,7 +146,10 @@
     "from": {
       "kind": "tableRef",
       "table": "tab"
-    }
+    },
+    "trailingComments": [
+      "-- { serverError ILLEGAL_TYPE_OF_ARGUMENT }"
+    ]
   },
   {
     "kind": "select",
@@ -177,6 +265,17 @@
     }
   },
   {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "tab"
+    },
+    "leadingComments": [
+      "-- cleanup"
+    ]
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -265,6 +364,9 @@
           }
         ]
       }
+    ],
+    "leadingComments": [
+      "-- check types"
     ]
   },
   {
@@ -1556,6 +1658,9 @@
           }
         ]
       }
+    ],
+    "trailingComments": [
+      "-- { serverError ILLEGAL_TYPE_OF_ARGUMENT }"
     ]
   },
   {
@@ -1835,6 +1940,9 @@
           }
         ]
       }
+    ],
+    "trailingComments": [
+      "-- { serverError ILLEGAL_TYPE_OF_ARGUMENT }"
     ]
   },
   {
@@ -1891,7 +1999,7 @@
       }
     ],
     "from": {
-      "kind": "tableFunction",
+      "kind": "tableFunctionRef",
       "name": "values",
       "args": [
         {
@@ -2001,7 +2109,7 @@
       }
     ],
     "from": {
-      "kind": "tableFunction",
+      "kind": "tableFunctionRef",
       "name": "values",
       "args": [
         {
@@ -2095,7 +2203,7 @@
       }
     ],
     "from": {
-      "kind": "tableFunction",
+      "kind": "tableFunctionRef",
       "name": "values",
       "args": [
         {
@@ -2187,7 +2295,7 @@
       }
     ],
     "from": {
-      "kind": "tableFunction",
+      "kind": "tableFunctionRef",
       "name": "values",
       "args": [
         {
@@ -2196,7 +2304,7 @@
           "value": "key Enum16('a'=1, 'b'=2), val Int16"
         },
         {
-          "kind": "tuple",
+          "kind": "tupleLiteral",
           "elements": [
             {
               "kind": "literal",
@@ -2212,7 +2320,7 @@
           "source": "('a', 1)"
         },
         {
-          "kind": "tuple",
+          "kind": "tupleLiteral",
           "elements": [
             {
               "kind": "literal",
@@ -2293,7 +2401,7 @@
       }
     ],
     "from": {
-      "kind": "tableFunction",
+      "kind": "tableFunctionRef",
       "name": "values",
       "args": [
         {
@@ -2302,7 +2410,7 @@
           "value": "key Enum8('a'=1, 'b'=2), val Int16"
         },
         {
-          "kind": "tuple",
+          "kind": "tupleLiteral",
           "elements": [
             {
               "kind": "literal",
@@ -2318,7 +2426,7 @@
           "source": "('a', 1)"
         },
         {
-          "kind": "tuple",
+          "kind": "tupleLiteral",
           "elements": [
             {
               "kind": "literal",
@@ -2399,7 +2507,7 @@
       }
     ],
     "from": {
-      "kind": "tableFunction",
+      "kind": "tableFunctionRef",
       "name": "values",
       "args": [
         {
@@ -2408,7 +2516,7 @@
           "value": "key UUID, val Int32"
         },
         {
-          "kind": "tuple",
+          "kind": "tupleLiteral",
           "elements": [
             {
               "kind": "literal",
@@ -2424,7 +2532,7 @@
           "source": "('00000000-89ab-cdef-0123-456789abcdef', 1)"
         },
         {
-          "kind": "tuple",
+          "kind": "tupleLiteral",
           "elements": [
             {
               "kind": "literal",
@@ -2531,6 +2639,9 @@
           }
         ]
       }
+    ],
+    "leadingComments": [
+      "-- mapSubtract, same rules as mapAdd"
     ]
   },
   {
@@ -2622,6 +2733,9 @@
           }
         ]
       }
+    ],
+    "trailingComments": [
+      "-- overflow"
     ]
   },
   {

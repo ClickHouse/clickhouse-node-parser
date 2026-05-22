@@ -1,5 +1,62 @@
 [
   {
+    "kind": "drop",
+    "targetType": "DATABASE",
+    "table": {
+      "kind": "tableRef",
+      "table": "db_1"
+    },
+    "ifExists": true,
+    "leadingComments": [
+      "-- Tags: no-parallel"
+    ]
+  },
+  {
+    "kind": "drop",
+    "targetType": "DATABASE",
+    "table": {
+      "kind": "tableRef",
+      "table": "db_2"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "drop",
+    "targetType": "DATABASE",
+    "table": {
+      "kind": "tableRef",
+      "table": "db_3"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "drop",
+    "targetType": "DATABASE",
+    "table": {
+      "kind": "tableRef",
+      "table": "db_4"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "drop",
+    "targetType": "DATABASE",
+    "table": {
+      "kind": "tableRef",
+      "table": "db_5"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "drop",
+    "targetType": "DATABASE",
+    "table": {
+      "kind": "tableRef",
+      "table": "db_6"
+    },
+    "ifExists": true
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -8,6 +65,150 @@
         "value": "-----------------------"
       }
     ]
+  },
+  {
+    "kind": "createDatabase",
+    "name": "db_1",
+    "engine": {
+      "name": "Replicated",
+      "args": [
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "/test/db_1"
+        },
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "{shard}"
+        },
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "{replica}"
+        }
+      ]
+    }
+  },
+  {
+    "kind": "createDatabase",
+    "name": "db_2",
+    "engine": {
+      "name": "Replicated",
+      "args": [
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "/test/db_2"
+        },
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "{shard}"
+        },
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "{replica}"
+        }
+      ]
+    }
+  },
+  {
+    "kind": "createDatabase",
+    "name": "db_3",
+    "engine": {
+      "name": "Replicated",
+      "args": [
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "/test/db_3"
+        },
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "{shard}"
+        },
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "{replica}"
+        }
+      ]
+    }
+  },
+  {
+    "kind": "createDatabase",
+    "name": "db_4",
+    "engine": {
+      "name": "Replicated",
+      "args": [
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "/test/db_4"
+        },
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "{shard}"
+        },
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "{replica}"
+        }
+      ]
+    }
+  },
+  {
+    "kind": "createDatabase",
+    "name": "db_5",
+    "engine": {
+      "name": "Replicated",
+      "args": [
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "/test/db_5"
+        },
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "{shard}"
+        },
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "{replica}"
+        }
+      ]
+    }
+  },
+  {
+    "kind": "createDatabase",
+    "name": "db_6",
+    "engine": {
+      "name": "Replicated",
+      "args": [
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "/test/db_6"
+        },
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "{shard}"
+        },
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "{replica}"
+        }
+      ]
+    }
   },
   {
     "kind": "select",
@@ -333,6 +534,32 @@
     }
   },
   {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "max_block_size",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "2"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "max_block_size",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "6"
+        }
+      }
+    ]
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -538,6 +765,57 @@
           ]
         },
         "direction": "ASC"
+      }
+    ]
+  },
+  {
+    "kind": "drop",
+    "targetType": "DATABASE",
+    "table": {
+      "kind": "tableRef",
+      "table": "db_1"
+    }
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "distributed_ddl_output_mode",
+        "value": {
+          "kind": "literal",
+          "type": "String",
+          "value": "throw"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "database": "db_2",
+      "table": "test_table"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "n",
+        "type": {
+          "name": "Int64"
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "n"
+          ]
+        }
       }
     ]
   },

@@ -1,3 +1,16 @@
+DROP TABLE IF EXISTS set_index;
+
+CREATE TABLE set_index
+(
+    a Int32,
+    b Int32,
+    INDEX b_set b TYPE set(0) GRANULARITY 1
+)
+ENGINE = MergeTree
+ORDER BY tuple();
+
+INSERT INTO set_index;
+
 SELECT b
 FROM set_index
 WHERE a = 1

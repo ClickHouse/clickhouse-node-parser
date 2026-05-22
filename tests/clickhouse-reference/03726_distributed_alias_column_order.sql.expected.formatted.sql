@@ -1,3 +1,15 @@
+DROP TABLE IF EXISTS test_local;
+
+CREATE TABLE test_local
+(
+    a UInt64,
+    e String ALIAS 'e',
+    f String ALIAS 'f'
+)
+ENGINE = Memory;
+
+INSERT INTO test_local;
+
 SELECT
     e,
     f

@@ -1,3 +1,19 @@
+SET enable_analyzer = 1;
+
+DROP TABLE IF EXISTS test_table;
+
+CREATE TABLE test_table
+(
+    id UInt64,
+    value String,
+    value_array Array(UInt64),
+    value_array_array Array(Array(UInt64))
+)
+ENGINE = MergeTree
+ORDER BY tuple();
+
+INSERT INTO test_table;
+
 SELECT
     id,
     value,
@@ -14,6 +30,25 @@ SELECT
 FROM
     test_table
 ARRAY JOIN [1, 2, 3] AS value;
+
+WITH [1, 2, 3] AS constant_array
+
+SELECT
+    id,
+    value
+FROM
+    test_table
+ARRAY JOIN constant_array AS value;
+
+WITH [1, 2, 3] AS constant_array
+
+SELECT
+    id,
+    value,
+    value_1
+FROM
+    test_table
+ARRAY JOIN constant_array AS value_1;
 
 SELECT
     id,
@@ -101,7 +136,10 @@ ARRAY JOIN [0] AS elem, arrayMap(x -> concat(x, ignore(ignore(toLowCardinality('
 WHERE NOT ignore(elem)
 GROUP BY
     sum(ignore(ignore(ignore(1., 1, 36, 8, 8), ignore(52, 37, 37, '03147_parquet_memory_tracking.parquet', 37, 37, toUInt256(37), 37, 37, toNullable(37), 37, 37), 1., 1, 36, 8, 8), emptyArrayToSingle(arrayMap(x -> toString(x), arrayMap(x -> nullIf(x, 2), arrayJoin([[1]])))))),
-    modulo(toLowCardinality('03147_parquet_memory_tracking.parquet'), number, toLowCardinality(3));
+    modulo(toLowCardinality('03147_parquet_memory_tracking.parquet'), number, toLowCardinality(3)); -- { serverError UNKNOWN_IDENTIFIER }
+
+-- { echoOff }
+DROP TABLE test_table;
 
 SELECT
     [1, 2] AS arr,

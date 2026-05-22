@@ -1,5 +1,456 @@
 [
   {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "output_format_json_quote_64bit_integers",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      }
+    ],
+    "leadingComments": [
+      "-- Tags: no-s3-storage, long, no-msan, no-tsan, no-asan, no-ubsan"
+    ]
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "test"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "test"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "json",
+        "type": {
+          "name": "JSON",
+          "args": [
+            {
+              "kind": "setting",
+              "name": "max_dynamic_paths",
+              "value": {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "0"
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "functionCall",
+          "name": "tuple",
+          "args": []
+        }
+      }
+    ],
+    "settings": [
+      {
+        "name": "index_granularity",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      },
+      {
+        "name": "min_bytes_for_wide_part",
+        "value": {
+          "kind": "literal",
+          "type": "String",
+          "value": "200G"
+        }
+      },
+      {
+        "name": "min_rows_for_wide_part",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      },
+      {
+        "name": "write_marks_for_substreams_in_compact_parts",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      },
+      {
+        "name": "object_serialization_version",
+        "value": {
+          "kind": "literal",
+          "type": "String",
+          "value": "v3"
+        }
+      },
+      {
+        "name": "object_shared_data_serialization_version",
+        "value": {
+          "kind": "literal",
+          "type": "String",
+          "value": "advanced"
+        }
+      },
+      {
+        "name": "object_shared_data_serialization_version_for_zero_level_parts",
+        "value": {
+          "kind": "literal",
+          "type": "String",
+          "value": "advanced"
+        }
+      },
+      {
+        "name": "object_shared_data_buckets_for_compact_part",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ],
+    "settingsAfterOrderBy": true
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "test"
+      }
+    },
+    "selectQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "functionCall",
+          "name": "toJSONString",
+          "args": [
+            {
+              "kind": "castExpr",
+              "expr": {
+                "kind": "functionCall",
+                "name": "arrayMap",
+                "args": [
+                  {
+                    "kind": "lambdaExpr",
+                    "params": [
+                      "x"
+                    ],
+                    "body": {
+                      "kind": "functionCall",
+                      "name": "tuple",
+                      "args": [
+                        {
+                          "kind": "functionCall",
+                          "name": "concat",
+                          "args": [
+                            {
+                              "kind": "literal",
+                              "type": "String",
+                              "value": "key"
+                            },
+                            {
+                              "kind": "columnRef",
+                              "parts": [
+                                "x"
+                              ]
+                            }
+                          ]
+                        },
+                        {
+                          "kind": "columnRef",
+                          "parts": [
+                            "x"
+                          ]
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "kind": "functionCall",
+                    "name": "range",
+                    "args": [
+                      {
+                        "kind": "literal",
+                        "type": "UInt64",
+                        "value": "255"
+                      }
+                    ]
+                  }
+                ]
+              },
+              "type": "Map(String, UInt32)",
+              "operator": true
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "test"
+      }
+    },
+    "selectQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "functionCall",
+          "name": "toJSONString",
+          "args": [
+            {
+              "kind": "castExpr",
+              "expr": {
+                "kind": "functionCall",
+                "name": "arrayMap",
+                "args": [
+                  {
+                    "kind": "lambdaExpr",
+                    "params": [
+                      "x"
+                    ],
+                    "body": {
+                      "kind": "functionCall",
+                      "name": "tuple",
+                      "args": [
+                        {
+                          "kind": "functionCall",
+                          "name": "concat",
+                          "args": [
+                            {
+                              "kind": "literal",
+                              "type": "String",
+                              "value": "key"
+                            },
+                            {
+                              "kind": "columnRef",
+                              "parts": [
+                                "x"
+                              ]
+                            }
+                          ]
+                        },
+                        {
+                          "kind": "columnRef",
+                          "parts": [
+                            "x"
+                          ]
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "kind": "functionCall",
+                    "name": "range",
+                    "args": [
+                      {
+                        "kind": "literal",
+                        "type": "UInt64",
+                        "value": "256"
+                      }
+                    ]
+                  }
+                ]
+              },
+              "type": "Map(String, UInt32)",
+              "operator": true
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "test"
+      }
+    },
+    "selectQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "functionCall",
+          "name": "toJSONString",
+          "args": [
+            {
+              "kind": "castExpr",
+              "expr": {
+                "kind": "functionCall",
+                "name": "arrayMap",
+                "args": [
+                  {
+                    "kind": "lambdaExpr",
+                    "params": [
+                      "x"
+                    ],
+                    "body": {
+                      "kind": "functionCall",
+                      "name": "tuple",
+                      "args": [
+                        {
+                          "kind": "functionCall",
+                          "name": "concat",
+                          "args": [
+                            {
+                              "kind": "literal",
+                              "type": "String",
+                              "value": "key"
+                            },
+                            {
+                              "kind": "columnRef",
+                              "parts": [
+                                "x"
+                              ]
+                            }
+                          ]
+                        },
+                        {
+                          "kind": "columnRef",
+                          "parts": [
+                            "x"
+                          ]
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "kind": "functionCall",
+                    "name": "range",
+                    "args": [
+                      {
+                        "kind": "literal",
+                        "type": "UInt64",
+                        "value": "65535"
+                      }
+                    ]
+                  }
+                ]
+              },
+              "type": "Map(String, UInt32)",
+              "operator": true
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "test"
+      }
+    },
+    "selectQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "functionCall",
+          "name": "toJSONString",
+          "args": [
+            {
+              "kind": "castExpr",
+              "expr": {
+                "kind": "functionCall",
+                "name": "arrayMap",
+                "args": [
+                  {
+                    "kind": "lambdaExpr",
+                    "params": [
+                      "x"
+                    ],
+                    "body": {
+                      "kind": "functionCall",
+                      "name": "tuple",
+                      "args": [
+                        {
+                          "kind": "functionCall",
+                          "name": "concat",
+                          "args": [
+                            {
+                              "kind": "literal",
+                              "type": "String",
+                              "value": "key"
+                            },
+                            {
+                              "kind": "columnRef",
+                              "parts": [
+                                "x"
+                              ]
+                            }
+                          ]
+                        },
+                        {
+                          "kind": "columnRef",
+                          "parts": [
+                            "x"
+                          ]
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "kind": "functionCall",
+                    "name": "range",
+                    "args": [
+                      {
+                        "kind": "literal",
+                        "type": "UInt64",
+                        "value": "65536"
+                      }
+                    ]
+                  }
+                ]
+              },
+              "type": "Map(String, UInt32)",
+              "operator": true
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "kind": "optimize",
+    "table": {
+      "kind": "tableRef",
+      "table": "test"
+    },
+    "final": true
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -36,5 +487,13 @@
         "direction": "ASC"
       }
     ]
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "test"
+    }
   }
 ]

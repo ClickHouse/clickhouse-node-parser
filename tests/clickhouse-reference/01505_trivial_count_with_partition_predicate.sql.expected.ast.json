@@ -1,5 +1,138 @@
 [
   {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "test1"
+    },
+    "ifExists": true,
+    "leadingComments": [
+      "-- add_minmax_index_for_numeric_columns=0: Changes how many rows are read"
+    ]
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "test_tuple"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "test_two_args"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "test1"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "p",
+        "type": {
+          "name": "DateTime"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "k",
+        "type": {
+          "name": "int"
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "partitionBy": {
+      "kind": "functionCall",
+      "name": "toDate",
+      "args": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "p"
+          ]
+        }
+      ]
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "k"
+          ]
+        }
+      }
+    ],
+    "settings": [
+      {
+        "name": "index_granularity",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      },
+      {
+        "name": "add_minmax_index_for_numeric_columns",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      }
+    ],
+    "settingsAfterOrderBy": true
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "test1"
+      }
+    }
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "max_rows_to_read",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "optimize_use_implicit_projections",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -21,6 +154,9 @@
           "value": "3"
         }
       }
+    ],
+    "leadingComments": [
+      "-- non-optimized"
     ]
   },
   {
@@ -62,7 +198,10 @@
         "type": "UInt64",
         "value": "1999"
       }
-    }
+    },
+    "leadingComments": [
+      "-- optimized (toYear is monotonic and we provide the partition expr as is)"
+    ]
   },
   {
     "kind": "select",
@@ -97,7 +236,13 @@
           }
         ]
       }
-    }
+    },
+    "leadingComments": [
+      "-- non-optimized (toDate(DateTime) is always monotonic, but we cannot relaxing the predicates to do trivial count())"
+    ],
+    "trailingComments": [
+      "-- { serverError TOO_MANY_ROWS }"
+    ]
   },
   {
     "kind": "select",
@@ -180,7 +325,10 @@
           }
         }
       ]
-    }
+    },
+    "leadingComments": [
+      "-- optimized (partition expr wrapped with non-monotonic functions)"
+    ]
   },
   {
     "kind": "select",
@@ -319,7 +467,13 @@
           }
         }
       ]
-    }
+    },
+    "leadingComments": [
+      "-- non-optimized (some predicate depends on non-partition_expr columns)"
+    ],
+    "trailingComments": [
+      "-- { serverError TOO_MANY_ROWS }"
+    ]
   },
   {
     "kind": "select",
@@ -354,7 +508,10 @@
         "type": "String",
         "value": "2020-09-01"
       }
-    }
+    },
+    "leadingComments": [
+      "-- optimized"
+    ]
   },
   {
     "kind": "select",
@@ -410,6 +567,105 @@
           }
         }
       ]
+    },
+    "leadingComments": [
+      "-- non-optimized"
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "test_tuple"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "p",
+        "type": {
+          "name": "DateTime"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "i",
+        "type": {
+          "name": "int"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "j",
+        "type": {
+          "name": "int"
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "partitionBy": {
+      "kind": "tupleLiteral",
+      "elements": [
+        {
+          "kind": "functionCall",
+          "name": "toDate",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "p"
+              ]
+            }
+          ]
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "i"
+          ]
+        }
+      ],
+      "source": "(toDate(p), i)"
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "j"
+          ]
+        }
+      }
+    ],
+    "settings": [
+      {
+        "name": "index_granularity",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      },
+      {
+        "name": "add_minmax_index_for_numeric_columns",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      }
+    ],
+    "settingsAfterOrderBy": true
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "test_tuple"
+      }
     }
   },
   {
@@ -445,7 +701,10 @@
         "type": "String",
         "value": "2020-09-01"
       }
-    }
+    },
+    "leadingComments": [
+      "-- optimized"
+    ]
   },
   {
     "kind": "select",
@@ -501,7 +760,10 @@
           }
         }
       ]
-    }
+    },
+    "leadingComments": [
+      "-- optimized"
+    ]
   },
   {
     "kind": "select",
@@ -530,7 +792,10 @@
         "type": "UInt64",
         "value": "2"
       }
-    }
+    },
+    "leadingComments": [
+      "-- optimized"
+    ]
   },
   {
     "kind": "select",
@@ -559,7 +824,10 @@
         "type": "UInt64",
         "value": "1"
       }
-    }
+    },
+    "leadingComments": [
+      "-- optimized"
+    ]
   },
   {
     "kind": "select",
@@ -575,13 +843,13 @@
         "kind": "tableRef",
         "table": "test_tuple"
       },
-      "kind": "arrayJoin",
+      "kind": "arrayJoinExpr",
       "joinType": "ARRAY",
       "expressions": [
         {
           "kind": "alias",
           "expr": {
-            "kind": "array",
+            "kind": "arrayLiteral",
             "elements": [
               {
                 "kind": "columnRef",
@@ -622,7 +890,13 @@
         "type": "String",
         "value": "2020-09-01"
       }
-    }
+    },
+    "leadingComments": [
+      "-- non-optimized"
+    ],
+    "trailingComments": [
+      "-- { serverError TOO_MANY_ROWS }"
+    ]
   },
   {
     "kind": "select",
@@ -638,13 +912,13 @@
         "kind": "tableRef",
         "table": "test_tuple"
       },
-      "kind": "arrayJoin",
+      "kind": "arrayJoinExpr",
       "joinType": "ARRAY",
       "expressions": [
         {
           "kind": "alias",
           "expr": {
-            "kind": "array",
+            "kind": "arrayLiteral",
             "elements": [
               {
                 "kind": "literal",
@@ -709,13 +983,13 @@
         "kind": "tableRef",
         "table": "test_tuple"
       },
-      "kind": "arrayJoin",
+      "kind": "arrayJoinExpr",
       "joinType": "ARRAY",
       "expressions": [
         {
           "kind": "alias",
           "expr": {
-            "kind": "array",
+            "kind": "arrayLiteral",
             "elements": [
               {
                 "kind": "literal",
@@ -759,7 +1033,13 @@
         "type": "String",
         "value": "2020-09-01"
       }
-    }
+    },
+    "leadingComments": [
+      "-- non-optimized"
+    ],
+    "trailingComments": [
+      "-- { serverError TOO_MANY_ROWS }"
+    ]
   },
   {
     "kind": "select",
@@ -775,13 +1055,13 @@
         "kind": "tableRef",
         "table": "test_tuple"
       },
-      "kind": "arrayJoin",
+      "kind": "arrayJoinExpr",
       "joinType": "ARRAY",
       "expressions": [
         {
           "kind": "alias",
           "expr": {
-            "kind": "array",
+            "kind": "arrayLiteral",
             "elements": [
               {
                 "kind": "literal",
@@ -838,6 +1118,94 @@
     ]
   },
   {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "test_two_args"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "i",
+        "type": {
+          "name": "int"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "j",
+        "type": {
+          "name": "int"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "k",
+        "type": {
+          "name": "int"
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "partitionBy": {
+      "kind": "binaryExpr",
+      "op": "+",
+      "left": {
+        "kind": "columnRef",
+        "parts": [
+          "i"
+        ]
+      },
+      "right": {
+        "kind": "columnRef",
+        "parts": [
+          "j"
+        ]
+      }
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "k"
+          ]
+        }
+      }
+    ],
+    "settings": [
+      {
+        "name": "index_granularity",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      },
+      {
+        "name": "add_minmax_index_for_numeric_columns",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      }
+    ],
+    "settingsAfterOrderBy": true
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "test_two_args"
+      }
+    }
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -874,7 +1242,10 @@
         "type": "UInt64",
         "value": "3"
       }
-    }
+    },
+    "leadingComments": [
+      "-- optimized"
+    ]
   },
   {
     "kind": "select",
@@ -903,6 +1274,36 @@
         "type": "UInt64",
         "value": "1"
       }
+    },
+    "leadingComments": [
+      "-- non-optimized"
+    ],
+    "trailingComments": [
+      "-- { serverError TOO_MANY_ROWS }"
+    ]
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "test1"
+    }
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "test_tuple"
+    }
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "test_two_args"
     }
   }
 ]

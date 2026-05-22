@@ -1,3 +1,18 @@
+-- Tags: no-fasttest, no-shared-merge-tree, use-rocksdb
+-- Tag no-fasttest -- due to EmbeddedRocksDB
+-- Tag no-shared-merge-tree -- due to system.replication_queue
+DROP TABLE IF EXISTS `null`;
+
+DROP TABLE IF EXISTS dist;
+
+CREATE TABLE `null` AS `system`.one
+ENGINE = Null;
+
+CREATE TABLE dist AS `null`
+ENGINE = Distributed(test_cluster_two_shards, currentDatabase(), 'null', rand());
+
+INSERT INTO dist SETTINGS prefer_localhost_replica = 0;
+
 SELECT
     'system.distribution_queue',
     count()
@@ -6,6 +21,17 @@ WHERE exists((
         SELECT 1
     ))
     AND database = currentDatabase();
+
+DROP TABLE IF EXISTS rocksdb;
+
+CREATE TABLE rocksdb
+(
+    key Int
+)
+ENGINE = EmbeddedRocksDB()
+PRIMARY KEY key;
+
+INSERT INTO rocksdb;
 
 SELECT
     'system.rocksdb',
@@ -25,6 +51,17 @@ WHERE exists((
     ))
     AND database = currentDatabase();
 
+DROP TABLE IF EXISTS mt;
+
+CREATE TABLE mt
+(
+    key Int
+)
+ENGINE = MergeTree()
+ORDER BY key;
+
+ALTER TABLE mt DELETE WHERE 1;
+
 SELECT
     'system.mutations',
     count()
@@ -33,6 +70,30 @@ WHERE exists((
         SELECT 1
     ))
     AND database = currentDatabase();
+
+DROP TABLE IF EXISTS rep1;
+
+DROP TABLE IF EXISTS rep2;
+
+CREATE TABLE rep1
+(
+    key Int
+)
+ENGINE = ReplicatedMergeTree('/{database}/rep', '{table}')
+ORDER BY key;
+
+CREATE TABLE rep2
+(
+    key Int
+)
+ENGINE = ReplicatedMergeTree('/{database}/rep', '{table}')
+ORDER BY key;
+
+SYSTEM stop fetches rep2;
+
+INSERT INTO rep1;
+
+SYSTEM sync replica rep2 pull;
 
 SELECT
     'system.replication_queue',

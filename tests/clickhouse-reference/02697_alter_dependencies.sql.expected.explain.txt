@@ -1,3 +1,74 @@
+CreateQuery mv_source (children 3)
+ Identifier mv_source
+ Columns definition (children 1)
+  ExpressionList (children 2)
+   ColumnDeclaration a (children 1)
+    DataType Int64
+   ColumnDeclaration insert_time (children 1)
+    DataType DateTime
+ Storage definition (children 2)
+  Function MergeTree (children 1)
+   ExpressionList
+  Identifier insert_time
+
+CreateQuery mv_target (children 3)
+ Identifier mv_target
+ Columns definition (children 1)
+  ExpressionList (children 2)
+   ColumnDeclaration a (children 1)
+    DataType Int64
+   ColumnDeclaration insert_time (children 1)
+    DataType DateTime
+ Storage definition (children 2)
+  Function MergeTree (children 1)
+   ExpressionList
+  Identifier insert_time
+
+CreateQuery source_to_target (children 3)
+ Identifier source_to_target
+ SelectWithUnionQuery (children 1)
+  ExpressionList (children 1)
+   SelectQuery (children 3)
+    ExpressionList (children 1)
+     Asterisk
+    TablesInSelectQuery (children 1)
+     TablesInSelectQueryElement (children 1)
+      TableExpression (children 1)
+       TableIdentifier mv_source
+    Function notIn (children 1)
+     ExpressionList (children 2)
+      Identifier a
+      Subquery (children 1)
+       SelectWithUnionQuery (children 1)
+        ExpressionList (children 1)
+         SelectQuery (children 2)
+          ExpressionList (children 1)
+           Function sleepEachRow (children 1)
+            ExpressionList (children 1)
+             Literal Float64_0.1
+          TablesInSelectQuery (children 1)
+           TablesInSelectQueryElement (children 1)
+            TableExpression (children 1)
+             Function numbers (children 1)
+              ExpressionList (children 1)
+               Literal UInt64_50
+ ViewTargets
+
+AlterQuery  mv_source (children 2)
+ ExpressionList (children 1)
+  AlterCommand MODIFY_TTL (children 1)
+   ExpressionList (children 1)
+    TTLElement (children 1)
+     Function plus (children 1)
+      ExpressionList (children 2)
+       Identifier insert_time
+       Function toIntervalDay (children 1)
+        ExpressionList (children 1)
+         Literal UInt64_1
+ Identifier mv_source
+
+SYSTEM query
+
 SelectWithUnionQuery (children 1)
  ExpressionList (children 1)
   SelectQuery (children 3)

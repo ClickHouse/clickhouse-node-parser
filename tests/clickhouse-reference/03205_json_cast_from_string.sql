@@ -1,3 +1,6 @@
+-- Tags: no-fasttest
+set enable_json_type=1;
+
 select materialize('{}')::JSON;
 select materialize('{"a" : 42, "b" : "Hello"}')::JSON;
 select materialize('{"a" : {"b" : {"c" : {"d" : 42}, "e" : 43}, "f" : 44}, "g" : 44}')::JSON;
@@ -9,6 +12,7 @@ select materialize('{"a" : {"b" : {"c" : {"d" : 42}, "e" : 43}, "f" : 44}, "g" :
 select materialize('{"a" : {"b" : {"c" : {"d" : 42}, "e" : 43}, "f" : 44}, "g" : 44}')::JSON(SKIP REGEXP '.*a.*b');
 select materialize('{"a" : {"b" : {"c" : {"d" : 42}, "e" : 43}, "f" : 44}, "g" : 44}')::JSON(SKIP REGEXP '.*a.*');
 select materialize('{"a" : {"b" : {"c" : {"d" : 42}, "e" : 43}, "f" : 44}, "g" : 44}')::JSON(SKIP REGEXP '.*');
+
 select materialize('{"a" : {"b" : {"c" : {"d" : 42}, "e" : 43}, "f" : 44}, "g" : 44}')::JSON as json, JSONAllPathsWithTypes(json), JSONDynamicPathsWithTypes(json), JSONSharedDataPathsWithTypes(json);
 select materialize('{"a" : {"b" : {"c" : {"d" : 42}, "e" : 43}, "f" : 44}, "g" : 44}')::JSON(max_dynamic_paths = 2) as json, JSONAllPathsWithTypes(json), JSONDynamicPathsWithTypes(json), JSONSharedDataPathsWithTypes(json);
 select materialize('{"a" : {"b" : {"c" : {"d" : 42}, "e" : 43}, "f" : 44}, "g" : 44}')::JSON(max_dynamic_paths = 1) as json, JSONAllPathsWithTypes(json), JSONDynamicPathsWithTypes(json), JSONSharedDataPathsWithTypes(json);

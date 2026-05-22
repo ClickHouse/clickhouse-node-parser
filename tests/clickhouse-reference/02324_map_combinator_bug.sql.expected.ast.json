@@ -1,5 +1,252 @@
 [
   {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "segfault"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "segfault_mv"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "segfault"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "id",
+        "type": {
+          "name": "UInt32"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "uuid",
+        "type": {
+          "name": "UUID"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "tags_ids",
+        "type": {
+          "name": "Array",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "UInt32"
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree",
+      "args": []
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "id"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createMaterializedView",
+    "table": {
+      "kind": "tableRef",
+      "table": "segfault_mv"
+    },
+    "engine": {
+      "name": "AggregatingMergeTree",
+      "args": []
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "id"
+          ]
+        }
+      }
+    ],
+    "asQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "id"
+          ]
+        },
+        {
+          "kind": "alias",
+          "expr": {
+            "kind": "functionCall",
+            "name": "uniqState",
+            "args": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "uuid"
+                ]
+              }
+            ]
+          },
+          "alias": "uniq_uuids"
+        },
+        {
+          "kind": "alias",
+          "expr": {
+            "kind": "functionCall",
+            "name": "uniqMapState",
+            "args": [
+              {
+                "kind": "functionCall",
+                "name": "CAST",
+                "args": [
+                  {
+                    "kind": "tupleLiteral",
+                    "elements": [
+                      {
+                        "kind": "columnRef",
+                        "parts": [
+                          "tags_ids"
+                        ]
+                      },
+                      {
+                        "kind": "functionCall",
+                        "name": "arrayMap",
+                        "args": [
+                          {
+                            "kind": "lambdaExpr",
+                            "params": [
+                              "_"
+                            ],
+                            "body": {
+                              "kind": "functionCall",
+                              "name": "toString",
+                              "args": [
+                                {
+                                  "kind": "columnRef",
+                                  "parts": [
+                                    "uuid"
+                                  ]
+                                }
+                              ]
+                            }
+                          },
+                          {
+                            "kind": "columnRef",
+                            "parts": [
+                              "tags_ids"
+                            ]
+                          }
+                        ]
+                      }
+                    ],
+                    "source": "(tags_ids, arrayMap(_ -> toString(uuid), tags_ids))"
+                  },
+                  {
+                    "kind": "literal",
+                    "type": "String",
+                    "value": "Map(UInt32, String)"
+                  }
+                ]
+              }
+            ]
+          },
+          "alias": "uniq_tags_ids"
+        }
+      ],
+      "from": {
+        "kind": "tableRef",
+        "table": "segfault"
+      },
+      "groupBy": {
+        "kind": "expressions",
+        "items": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "id"
+            ]
+          }
+        ]
+      }
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "segfault"
+      }
+    },
+    "selectQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "asterisk"
+        }
+      ],
+      "from": {
+        "kind": "tableFunctionRef",
+        "name": "generateRandom",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": "id UInt32, uuid UUID, c Array(UInt32)"
+          },
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "10"
+          },
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "5"
+          },
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "5"
+          }
+        ]
+      },
+      "limit": {
+        "count": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "100"
+        }
+      }
+    }
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -11,7 +258,7 @@
             "name": "CAST",
             "args": [
               {
-                "kind": "tuple",
+                "kind": "tupleLiteral",
                 "elements": [
                   {
                     "kind": "functionCall",

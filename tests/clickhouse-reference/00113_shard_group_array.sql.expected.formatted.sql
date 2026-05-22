@@ -1,3 +1,4 @@
+-- Tags: shard
 SELECT
     intDiv(number, 100) AS k,
     length(groupArray(number))
@@ -24,6 +25,18 @@ FROM (
         FROM `system`.numbers
         LIMIT 10
     );
+
+DROP TABLE IF EXISTS numbers_mt;
+
+CREATE TABLE numbers_mt
+(
+    number UInt64
+)
+ENGINE = Log;
+
+INSERT INTO numbers_mt SELECT *
+FROM `system`.numbers
+LIMIT 1, 1000000;
 
 SELECT
     count(),
@@ -126,6 +139,12 @@ FROM
     )
 ARRAY JOIN ns;
 
+DROP TABLE numbers_mt;
+
+INSERT INTO numbers_mt SELECT *
+FROM `system`.numbers
+LIMIT 1, 1048575;
+
 SELECT
     roundToExp2(number) AS k,
     length(groupArray(1)(number AS i)),
@@ -184,4 +203,5 @@ SELECT
 FROM remote('127.0.0.{2,3}', currentDatabase(), 'numbers_mt')
 GROUP BY k
 ORDER BY k ASC
-LIMIT 9, 11;
+LIMIT 9, 11; -- Check binary compatibility:
+-- clickhouse-client -h old -q "SELECT arrayReduce('groupArrayState', [['1'], ['22'], ['333']]) FORMAT RowBinary" | clickhouse-local -s --input-format RowBinary --structure "d AggregateFunction(groupArray2, Array(String))" -q "SELECT groupArray2Merge(d) FROM table"

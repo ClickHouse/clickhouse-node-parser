@@ -1,3 +1,4 @@
+-- week mode [0,7],  week test case. refer to the mysql test case
 SELECT
     toWeek(toDate('1998-01-01')),
     toWeek(toDate('1997-01-01')),
@@ -166,6 +167,7 @@ SELECT
     toYearWeek(toDate('2000-12-31'), 6),
     toYearWeek(toDate('2000-12-31'), 7);
 
+-- week mode 8,9	
 SELECT
     toDate('2016-12-21') + number AS d,
     toWeek(d, 8) AS week8,
@@ -181,3 +183,45 @@ SELECT
     toYearWeek(d, 8, 'Asia/Istanbul') AS yearWeek8,
     toYearWeek(d, 9, 'Asia/Istanbul') AS yearWeek9
 FROM numbers(21);
+
+-- toStartOfWeek
+WITH toDate('2018-12-25') + number AS d,
+
+toDate32(d) AS d32,
+
+toDateTime(d) AS dt,
+
+toDateTime64(d, 0) AS dt64
+
+SELECT
+    dt64,
+    toStartOfWeek(d) AS wd_sun,
+    toStartOfWeek(d32) AS wd32_sun,
+    toStartOfWeek(dt) AS wdt_sun,
+    toStartOfWeek(dt64) AS wdt64_sun,
+    toStartOfWeek(d, 1) AS wd_mon,
+    toStartOfWeek(d32, 1) AS wd32_mon,
+    toStartOfWeek(dt, 1) AS wdt_mon,
+    toStartOfWeek(dt64, 1) AS wdt64_mon
+FROM numbers(10);
+
+-- toLastDayOfWeek
+WITH toDate('2018-12-25') + number AS d,
+
+toDate32(d) AS d32,
+
+toDateTime(d) AS dt,
+
+toDateTime64(d, 0) AS dt64
+
+SELECT
+    dt64,
+    toLastDayOfWeek(d) AS wd_sun,
+    toLastDayOfWeek(d32) AS wd32_sun,
+    toLastDayOfWeek(dt) AS wdt_sun,
+    toLastDayOfWeek(dt64) AS wdt64_sun,
+    toLastDayOfWeek(d, 1) AS wd_mon,
+    toLastDayOfWeek(d32, 1) AS wd32_mon,
+    toLastDayOfWeek(dt, 1) AS wdt_mon,
+    toLastDayOfWeek(dt64, 1) AS wdt64_mon
+FROM numbers(10);

@@ -1,3 +1,20 @@
+SET allow_experimental_nullable_tuple_type = 1;
+DROP TABLE IF EXISTS tuple_test;
+CREATE TABLE tuple_test
+(
+    id  UInt64,
+    tup Nullable(Tuple(u UInt64, s String)),
+    n   Nullable(UInt64)
+)
+ENGINE = MergeTree
+ORDER BY id;
+INSERT INTO tuple_test (id, tup, n) VALUES
+    (1, tuple(11, 'alpha'), 100),
+    (2, NULL,                200),
+    (3, tuple(33, 'gamma'),  NULL),
+    (4, tuple(44, 'delta'),  400),
+    (5, tuple(11, 'beta'),   500),
+    (6, NULL,                NULL);
 SELECT id, tup, n, isNull(tup), isNull(n)
 FROM tuple_test
 ORDER BY id;
@@ -325,6 +342,28 @@ SELECT
     isNull(tup.u) as u_is_null
 FROM tuple_test
 ORDER BY id;
+WITH filtered AS (
+    SELECT id, tup
+    FROM tuple_test
+    WHERE tup IS NOT NULL
+)
+SELECT id, tup.u, tup.s
+FROM filtered
+ORDER BY id
+SETTINGS enable_analyzer = 1; -- CTE tup.u notation is not recognized in old analyzer
+WITH stats AS (
+    SELECT
+        avg(tup.u) as avg_u,
+        max(tup.u) as max_u
+    FROM tuple_test
+)
+SELECT
+    id,
+    tup.u,
+    tup.u - (SELECT avg_u FROM stats) as diff_from_avg
+FROM tuple_test
+WHERE tup IS NOT NULL
+ORDER BY id;
 SELECT groupArray(tup) as tuple_array
 FROM tuple_test;
 SELECT
@@ -366,6 +405,19 @@ FROM (
 GROUP BY category
 ORDER BY category
 SETTINGS enable_analyzer = 1; -- Here, tup.u notation is not recognized in old analyzer
+DROP TABLE IF EXISTS test_nullable_tuple;
+CREATE TABLE test_nullable_tuple
+(
+    data Nullable(Tuple(String, UInt64))
+)
+ENGINE = MergeTree
+ORDER BY tuple();
+INSERT INTO test_nullable_tuple VALUES
+    (('Alice', 100)),
+    (NULL),
+    (('Bob', 200)),
+    (NULL),
+    (('Charlie', 300));
 SELECT
     tupleElement(data, 1), tupleElement(data, 1), tupleElement(data, 2)
 FROM test_nullable_tuple;

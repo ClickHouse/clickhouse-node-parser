@@ -1,3 +1,31 @@
+DROP TABLE IF EXISTS product_groups;
+
+DROP TABLE IF EXISTS products;
+
+CREATE TABLE product_groups
+(
+    group_id Int64,
+    group_name String
+)
+ENGINE = Memory;
+
+CREATE TABLE products
+(
+    product_id Int64,
+    product_name String,
+    price DECIMAL(11, 2),
+    group_id Int64
+)
+ENGINE = Memory;
+
+INSERT INTO product_groups;
+
+INSERT INTO products (product_id, product_name, group_id, price);
+
+INSERT INTO product_groups;
+
+INSERT INTO products (product_id, product_name, group_id, price);
+
 SELECT *
 FROM (
         SELECT
@@ -15,6 +43,10 @@ ORDER BY
     group_name ASC,
     price ASC,
     product_name ASC;
+
+DROP TABLE product_groups;
+
+DROP TABLE products;
 
 SELECT
     number,

@@ -1,5 +1,63 @@
 [
   {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "enable_analyzer",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "test_table"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "test_table"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "id",
+        "type": {
+          "name": "UInt64"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "value",
+        "type": {
+          "name": "String"
+        }
+      }
+    ],
+    "engine": {
+      "name": "TinyLog"
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "test_table"
+      }
+    }
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -50,6 +108,74 @@
       "kind": "tableRef",
       "table": "test_table"
     }
+  },
+  {
+    "kind": "select",
+    "with": [
+      {
+        "kind": "cteExpr",
+        "name": "lambda",
+        "expr": {
+          "kind": "lambdaExpr",
+          "params": [
+            "x"
+          ],
+          "body": {
+            "kind": "binaryExpr",
+            "op": "+",
+            "left": {
+              "kind": "columnRef",
+              "parts": [
+                "x"
+              ]
+            },
+            "right": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "1"
+            }
+          }
+        }
+      },
+      {
+        "kind": "cteExpr",
+        "name": "lambda",
+        "expr": {
+          "kind": "lambdaExpr",
+          "params": [
+            "x"
+          ],
+          "body": {
+            "kind": "binaryExpr",
+            "op": "+",
+            "left": {
+              "kind": "columnRef",
+              "parts": [
+                "x"
+              ]
+            },
+            "right": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "1"
+            }
+          }
+        }
+      }
+    ],
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "lambda",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "1"
+          }
+        ]
+      }
+    ]
   },
   {
     "kind": "select",
@@ -111,6 +237,9 @@
         },
         "alias": "value"
       }
+    ],
+    "trailingComments": [
+      "-- { serverError MULTIPLE_EXPRESSIONS_FOR_ALIAS }"
     ]
   },
   {
@@ -145,6 +274,9 @@
         },
         "alias": "value"
       }
+    ],
+    "trailingComments": [
+      "-- { serverError MULTIPLE_EXPRESSIONS_FOR_ALIAS }"
     ]
   },
   {
@@ -176,6 +308,176 @@
         },
         "alias": "subquery"
       }
+    ],
+    "trailingComments": [
+      "-- { serverError MULTIPLE_EXPRESSIONS_FOR_ALIAS }"
+    ]
+  },
+  {
+    "kind": "select",
+    "with": [
+      {
+        "kind": "cteExpr",
+        "name": "lambda",
+        "expr": {
+          "kind": "lambdaExpr",
+          "params": [
+            "x"
+          ],
+          "body": {
+            "kind": "binaryExpr",
+            "op": "+",
+            "left": {
+              "kind": "columnRef",
+              "parts": [
+                "x"
+              ]
+            },
+            "right": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "1"
+            }
+          }
+        }
+      },
+      {
+        "kind": "cteExpr",
+        "name": "lambda",
+        "expr": {
+          "kind": "lambdaExpr",
+          "params": [
+            "x"
+          ],
+          "body": {
+            "kind": "binaryExpr",
+            "op": "+",
+            "left": {
+              "kind": "columnRef",
+              "parts": [
+                "x"
+              ]
+            },
+            "right": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "2"
+            }
+          }
+        }
+      }
+    ],
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "lambda",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "1"
+          }
+        ]
+      }
+    ],
+    "trailingComments": [
+      "-- { serverError MULTIPLE_EXPRESSIONS_FOR_ALIAS }"
+    ]
+  },
+  {
+    "kind": "select",
+    "with": [
+      {
+        "kind": "cteExpr",
+        "name": "lambda",
+        "expr": {
+          "kind": "lambdaExpr",
+          "params": [
+            "x"
+          ],
+          "body": {
+            "kind": "binaryExpr",
+            "op": "+",
+            "left": {
+              "kind": "columnRef",
+              "parts": [
+                "x"
+              ]
+            },
+            "right": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "1"
+            }
+          }
+        }
+      }
+    ],
+    "select": [
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "subqueryExpr",
+          "query": {
+            "kind": "select",
+            "select": [
+              {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "1"
+              }
+            ]
+          }
+        },
+        "alias": "lambda"
+      }
+    ],
+    "trailingComments": [
+      "-- { serverError MULTIPLE_EXPRESSIONS_FOR_ALIAS }"
+    ]
+  },
+  {
+    "kind": "select",
+    "with": [
+      {
+        "kind": "cteExpr",
+        "name": "lambda",
+        "expr": {
+          "kind": "lambdaExpr",
+          "params": [
+            "x"
+          ],
+          "body": {
+            "kind": "binaryExpr",
+            "op": "+",
+            "left": {
+              "kind": "columnRef",
+              "parts": [
+                "x"
+              ]
+            },
+            "right": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "1"
+            }
+          }
+        }
+      }
+    ],
+    "select": [
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        },
+        "alias": "lambda"
+      }
+    ],
+    "trailingComments": [
+      "-- { serverError MULTIPLE_EXPRESSIONS_FOR_ALIAS }"
     ]
   },
   {
@@ -205,7 +507,10 @@
     "from": {
       "kind": "tableRef",
       "table": "test_table"
-    }
+    },
+    "trailingComments": [
+      "-- { serverError MULTIPLE_EXPRESSIONS_FOR_ALIAS }"
+    ]
   },
   {
     "kind": "select",
@@ -234,7 +539,10 @@
     "from": {
       "kind": "tableRef",
       "table": "test_table"
-    }
+    },
+    "trailingComments": [
+      "-- { serverError MULTIPLE_EXPRESSIONS_FOR_ALIAS }"
+    ]
   },
   {
     "kind": "select",
@@ -271,6 +579,17 @@
       }
     ],
     "from": {
+      "kind": "tableRef",
+      "table": "test_table"
+    },
+    "trailingComments": [
+      "-- { serverError MULTIPLE_EXPRESSIONS_FOR_ALIAS }"
+    ]
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
       "kind": "tableRef",
       "table": "test_table"
     }

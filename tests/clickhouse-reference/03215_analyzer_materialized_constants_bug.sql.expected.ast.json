@@ -1,5 +1,18 @@
 [
   {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "enable_analyzer",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -32,7 +45,7 @@
       }
     ],
     "from": {
-      "kind": "tableFunction",
+      "kind": "tableFunctionRef",
       "name": "remote",
       "args": [
         {
@@ -126,7 +139,7 @@
       }
     ],
     "from": {
-      "kind": "tableFunction",
+      "kind": "tableFunctionRef",
       "name": "remote",
       "args": [
         {
@@ -168,6 +181,259 @@
                   "kind": "literal",
                   "type": "UInt64",
                   "value": "1"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "test__fuzz_21"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "test__fuzz_21"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "x",
+        "type": {
+          "name": "Decimal",
+          "args": [
+            {
+              "kind": "literal",
+              "value": "18"
+            },
+            {
+              "kind": "literal",
+              "value": "10"
+            }
+          ]
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "x"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "test__fuzz_21"
+      }
+    }
+  },
+  {
+    "kind": "select",
+    "with": [
+      {
+        "kind": "cteExpr",
+        "name": "v",
+        "expr": {
+          "kind": "subqueryExpr",
+          "query": {
+            "kind": "select",
+            "select": [
+              {
+                "kind": "functionCall",
+                "name": "CAST",
+                "args": [
+                  {
+                    "kind": "functionCall",
+                    "name": "toFixedString",
+                    "args": [
+                      {
+                        "kind": "functionCall",
+                        "name": "toFixedString",
+                        "args": [
+                          {
+                            "kind": "functionCall",
+                            "name": "materialize",
+                            "args": [
+                              {
+                                "kind": "functionCall",
+                                "name": "toFixedString",
+                                "args": [
+                                  {
+                                    "kind": "literal",
+                                    "type": "String",
+                                    "value": "111111111111111111111111111111111111111"
+                                  },
+                                  {
+                                    "kind": "literal",
+                                    "type": "UInt64",
+                                    "value": "39"
+                                  }
+                                ]
+                              }
+                            ]
+                          },
+                          {
+                            "kind": "literal",
+                            "type": "UInt64",
+                            "value": "39"
+                          }
+                        ]
+                      },
+                      {
+                        "kind": "literal",
+                        "type": "UInt64",
+                        "value": "39"
+                      }
+                    ]
+                  },
+                  {
+                    "kind": "literal",
+                    "type": "String",
+                    "value": "UInt128"
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      }
+    ],
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "coalesce",
+        "args": [
+          {
+            "kind": "functionCall",
+            "name": "materialize",
+            "args": [
+              {
+                "kind": "functionCall",
+                "name": "toLowCardinality",
+                "args": [
+                  {
+                    "kind": "functionCall",
+                    "name": "toNullable",
+                    "args": [
+                      {
+                        "kind": "literal",
+                        "type": "UInt64",
+                        "value": "1"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "10"
+          },
+          {
+            "kind": "literal",
+            "type": "NULL",
+            "value": "NULL"
+          }
+        ]
+      },
+      {
+        "kind": "functionCall",
+        "name": "max",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "v"
+            ]
+          }
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableFunctionRef",
+      "name": "remote",
+      "args": [
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "127.0.0.{1,2}"
+        },
+        {
+          "kind": "functionCall",
+          "name": "currentDatabase",
+          "args": []
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "test__fuzz_21"
+          ]
+        }
+      ]
+    },
+    "groupBy": {
+      "kind": "expressions",
+      "items": [
+        {
+          "kind": "functionCall",
+          "name": "coalesce",
+          "args": [
+            {
+              "kind": "literal",
+              "type": "NULL",
+              "value": "NULL"
+            }
+          ]
+        },
+        {
+          "kind": "functionCall",
+          "name": "coalesce",
+          "args": [
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "1"
+            },
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "10"
+            },
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "10"
+            },
+            {
+              "kind": "functionCall",
+              "name": "materialize",
+              "args": [
+                {
+                  "kind": "literal",
+                  "type": "NULL",
+                  "value": "NULL"
                 }
               ]
             }

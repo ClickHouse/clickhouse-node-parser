@@ -1,3 +1,22 @@
+-- Tags: no-fasttest
+SET enable_json_type = 1;
+
+DROP TABLE IF EXISTS t_json_local;
+
+DROP TABLE IF EXISTS t_json_dist;
+
+CREATE TABLE t_json_local
+(
+    data JSON
+)
+ENGINE = MergeTree
+ORDER BY tuple();
+
+CREATE TABLE t_json_dist AS t_json_local
+ENGINE = Distributed(test_cluster_two_shards, currentDatabase(), t_json_local);
+
+INSERT INTO t_json_local;
+
 SELECT
     data,
     JSONAllPathsWithTypes(data)

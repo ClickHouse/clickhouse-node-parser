@@ -54,6 +54,8 @@ SELECT *
 FROM format(JSONCompactEachRowWithNames, 'x UInt32, z UInt32', '["x","y"]\n[1,1]\n[2]\n[]\n[3,3,3,3]')
 SETTINGS input_format_json_compact_allow_variable_number_of_columns = 1;
 
+SET format_custom_escaping_rule = 'CSV', format_custom_field_delimiter = '<field_delimiter>', format_custom_row_before_delimiter = '<row_before_delimiter>', format_custom_row_after_delimiter = '<row_after_delimiter>', format_custom_row_between_delimiter = '<row_between_delimiter>', format_custom_result_before_delimiter = '<result_before_delimiter>', format_custom_result_after_delimiter = '<result_after_delimiter>';
+
 SELECT *
 FROM format(CustomSeparated, 'x UInt32, y UInt32', '<result_before_delimiter><row_before_delimiter>1<field_delimiter>1<row_after_delimiter><row_between_delimiter><row_before_delimiter>2<row_after_delimiter><row_between_delimiter><row_before_delimiter><row_after_delimiter><row_between_delimiter><row_before_delimiter>3<field_delimiter>3<field_delimiter>3<field_delimiter>3<row_after_delimiter><result_after_delimiter>')
 SETTINGS input_format_custom_allow_variable_number_of_columns = 1;

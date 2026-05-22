@@ -1,5 +1,49 @@
 [
   {
+    "kind": "system",
+    "body": "SYSTEM CLEAR QUERY CACHE",
+    "leadingComments": [
+      "-- Tags: no-parallel",
+      "-- Tag no-parallel: Messes with internal cache",
+      "-- Test for issue #77553: SQL-defined UDFs may be non-deterministic. The query cache should treat them as such, i.e. reject them.",
+      "-- Also see test_executable_function_query_cache in tests/integration/test_executable_user_defined_function"
+    ]
+  },
+  {
+    "kind": "drop",
+    "targetType": "FUNCTION",
+    "table": {
+      "kind": "tableRef",
+      "table": "udf"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "createFunction",
+    "name": "udf",
+    "functionExpr": {
+      "kind": "lambdaExpr",
+      "params": [
+        "a"
+      ],
+      "body": {
+        "kind": "binaryExpr",
+        "op": "+",
+        "left": {
+          "kind": "columnRef",
+          "parts": [
+            "a"
+          ]
+        },
+        "right": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    }
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -42,6 +86,9 @@
           "value": "throw"
         }
       }
+    ],
+    "trailingComments": [
+      "-- { serverError QUERY_CACHE_USED_WITH_NONDETERMINISTIC_FUNCTIONS }"
     ]
   },
   {
@@ -132,5 +179,13 @@
         }
       }
     ]
+  },
+  {
+    "kind": "drop",
+    "targetType": "FUNCTION",
+    "table": {
+      "kind": "tableRef",
+      "table": "udf"
+    }
   }
 ]

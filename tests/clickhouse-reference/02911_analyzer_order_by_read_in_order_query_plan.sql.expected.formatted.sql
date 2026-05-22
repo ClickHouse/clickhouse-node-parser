@@ -1,3 +1,34 @@
+SET optimize_read_in_order = 1, query_plan_read_in_order = 1, enable_analyzer = 1;
+
+DROP TABLE IF EXISTS tab;
+
+DROP TABLE IF EXISTS tab2;
+
+DROP TABLE IF EXISTS tab3;
+
+DROP TABLE IF EXISTS tab4;
+
+DROP TABLE IF EXISTS tab5;
+
+CREATE TABLE tab
+(
+    a UInt32,
+    b UInt32,
+    c UInt32,
+    d UInt32
+)
+ENGINE = MergeTree
+ORDER BY (((a + b)) * c, sin(a / b));
+
+INSERT INTO tab SELECT
+    number,
+    number,
+    number,
+    number
+FROM numbers(5);
+
+-- { echoOn }
+-- Exact match, single key
 SELECT *
 FROM tab
 ORDER BY ((a + b)) * c ASC;
@@ -24,6 +55,7 @@ FROM (
     )
 WHERE like(`explain`, '%sort description%');
 
+-- Exact match, full key
 SELECT *
 FROM tab
 ORDER BY
@@ -58,6 +90,7 @@ FROM (
     )
 WHERE like(`explain`, '%sort description%');
 
+-- Exact match, mixed direction
 SELECT *
 FROM tab
 ORDER BY
@@ -92,6 +125,7 @@ FROM (
     )
 WHERE like(`explain`, '%sort description%');
 
+-- Wrong order, full sort
 SELECT *
 FROM tab
 ORDER BY
@@ -109,6 +143,7 @@ FROM (
     )
 WHERE ilike(`explain`, '%sort description%');
 
+-- Fixed point
 SELECT *
 FROM tab
 WHERE ((a + b)) * c = 8
@@ -166,6 +201,7 @@ FROM (
     )
 WHERE ilike(`explain`, '%sort description%');
 
+-- Wrong order with fixed point
 SELECT *
 FROM tab
 WHERE ((a + b)) * c = 8
@@ -181,6 +217,7 @@ FROM (
     )
 WHERE ilike(`explain`, '%sort description%');
 
+-- Monotonicity
 SELECT *
 FROM tab
 ORDER BY intDiv(((a + b)) * c, 2) ASC;
@@ -211,6 +248,7 @@ FROM (
     )
 WHERE like(`explain`, '%sort description%');
 
+-- select * from tab order by (a + b) * c, intDiv(sin(a / b), 2);
 SELECT *
 FROM (
         EXPLAIN PLAN actions = 1
@@ -222,6 +260,7 @@ FROM (
     )
 WHERE like(`explain`, '%sort description%');
 
+-- select * from tab order by (a + b) * c desc , intDiv(sin(a / b), 2);
 SELECT *
 FROM (
         EXPLAIN PLAN actions = 1
@@ -233,6 +272,7 @@ FROM (
     )
 WHERE like(`explain`, '%sort description%');
 
+-- select * from tab order by (a + b) * c, intDiv(sin(a / b), 2) desc;
 SELECT *
 FROM (
         EXPLAIN PLAN actions = 1
@@ -244,6 +284,7 @@ FROM (
     )
 WHERE like(`explain`, '%sort description%');
 
+-- select * from tab order by (a + b) * c desc, intDiv(sin(a / b), 2) desc;
 SELECT *
 FROM (
         EXPLAIN PLAN actions = 1
@@ -255,6 +296,7 @@ FROM (
     )
 WHERE like(`explain`, '%sort description%');
 
+-- select * from tab order by (a + b) * c desc, intDiv(sin(a / b), -2);
 SELECT *
 FROM (
         EXPLAIN PLAN actions = 1
@@ -266,6 +308,7 @@ FROM (
     )
 WHERE like(`explain`, '%sort description%');
 
+-- select * from tab order by (a + b) * c desc, intDiv(intDiv(sin(a / b), -2), -3);
 SELECT *
 FROM (
         EXPLAIN PLAN actions = 1
@@ -277,6 +320,7 @@ FROM (
     )
 WHERE like(`explain`, '%sort description%');
 
+-- select * from tab order by (a + b) * c, intDiv(intDiv(sin(a / b), -2), -3);
 SELECT *
 FROM (
         EXPLAIN PLAN actions = 1
@@ -288,6 +332,7 @@ FROM (
     )
 WHERE like(`explain`, '%sort description%');
 
+-- Aliases
 SELECT *
 FROM (
         SELECT
@@ -377,6 +422,23 @@ FROM (
     )
 WHERE like(`explain`, '%sort description%');
 
+-- { echoOff }
+CREATE TABLE tab2
+(
+    x DateTime,
+    y UInt32,
+    z UInt32
+)
+ENGINE = MergeTree
+ORDER BY (x, y);
+
+INSERT INTO tab2 SELECT
+    toDate('2020-02-02') + number,
+    number,
+    number
+FROM numbers(4);
+
+-- { echoOn }
 SELECT *
 FROM tab2
 ORDER BY
@@ -411,6 +473,7 @@ FROM (
     )
 WHERE like(`explain`, '%sort description%');
 
+-- select * from tab2 where toTimezone(x, 'CET') = '2020-02-03 01:00:00' order by intDiv(intDiv(y, -2), -3);
 SELECT *
 FROM (
         EXPLAIN PLAN actions = 1
@@ -421,6 +484,60 @@ FROM (
     )
 WHERE like(`explain`, '%sort description%');
 
+-- { echoOff }
+CREATE TABLE tab3
+(
+    a UInt32,
+    b UInt32,
+    c UInt32,
+    d UInt32
+)
+ENGINE = MergeTree
+ORDER BY (((a + b)) * c, sin(a / b));
+
+INSERT INTO tab3 SELECT
+    number,
+    number,
+    number,
+    number
+FROM numbers(5);
+
+CREATE TABLE tab4
+(
+    a UInt32,
+    b UInt32,
+    c UInt32,
+    d UInt32
+)
+ENGINE = MergeTree
+ORDER BY sin(a / b);
+
+INSERT INTO tab4 SELECT
+    number,
+    number,
+    number,
+    number
+FROM numbers(5);
+
+CREATE TABLE tab5
+(
+    a UInt32,
+    b UInt32,
+    c UInt32,
+    d UInt32
+)
+ENGINE = MergeTree
+ORDER BY ((a + b)) * c;
+
+INSERT INTO tab5 SELECT
+    number,
+    number,
+    number,
+    number
+FROM numbers(5);
+
+-- { echoOn }
+-- Union (not fully supported)
 SELECT *
 FROM (
         SELECT *
@@ -565,6 +682,7 @@ FROM (
 WHERE like(`explain`, '%sort description%')
     OR like(`explain`, '%ReadType%');
 
+-- Union with limit
 SELECT *
 FROM (
         SELECT *
@@ -598,6 +716,10 @@ WHERE ilike(`explain`, '%sort description%')
     OR like(`explain`, '%ReadType%')
     OR like(`explain`, '%Limit%');
 
+-- In this example, we read-in-order from tab up to ((a + b) * c, sin(a / b)) and from tab5 up to ((a + b) * c).
+-- In case of tab5, there would be two finish sorting transforms: ((a + b) * c) -> ((a + b) * c, sin(a / b)) -> ((a + b) * c, sin(a / b), d).
+-- It's important that ((a + b) * c) -> ((a + b) * c does not have LIMIT. We can add LIMIT WITH TIES later, when sorting alog support it.
+-- In case of tab4, we do full sorting by ((a + b) * c, sin(a / b), d) with LIMIT. We can replace it to sorting by ((a + b) * c, sin(a / b)) and LIMIT WITH TIES, when sorting alog support it.
 SELECT *
 FROM (
         SELECT *

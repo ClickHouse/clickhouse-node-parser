@@ -1,0 +1,108 @@
+[
+  {
+    "kind": "select",
+    "with": [
+      {
+        "kind": "cteExpr",
+        "name": "t",
+        "expr": {
+          "kind": "binaryExpr",
+          "op": "+",
+          "left": {
+            "kind": "functionCall",
+            "name": "toDateTime",
+            "args": [
+              {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "1509138000"
+              }
+            ]
+          },
+          "right": {
+            "kind": "binaryExpr",
+            "op": "*",
+            "left": {
+              "kind": "columnRef",
+              "parts": [
+                "number"
+              ]
+            },
+            "right": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "300"
+            }
+          }
+        }
+      }
+    ],
+    "select": [
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "toHour",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "t"
+              ]
+            },
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "Asia/Kolkata"
+            }
+          ]
+        },
+        "alias": "h"
+      },
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "toString",
+          "args": [
+            {
+              "kind": "functionCall",
+              "name": "toStartOfHour",
+              "args": [
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "t"
+                  ]
+                },
+                {
+                  "kind": "literal",
+                  "type": "String",
+                  "value": "Asia/Kolkata"
+                }
+              ]
+            },
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "Asia/Kolkata"
+            }
+          ]
+        },
+        "alias": "h_start"
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "database": "system",
+      "table": "numbers"
+    },
+    "limit": {
+      "count": {
+        "kind": "literal",
+        "type": "UInt64",
+        "value": "12"
+      }
+    }
+  }
+]

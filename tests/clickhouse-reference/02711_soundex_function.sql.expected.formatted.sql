@@ -26,9 +26,24 @@ SELECT soundex('Smith');
 
 SELECT '---';
 
+-- same input strings but in a table
+DROP TABLE IF EXISTS tab;
+
+CREATE TABLE tab
+(
+    col String
+)
+ENGINE = MergeTree
+ORDER BY col;
+
+INSERT INTO tab;
+
 SELECT soundex(col)
 FROM tab;
 
-SELECT soundex(toFixedString('Smith', 5));
+DROP TABLE tab;
 
-SELECT soundex(5);
+-- negative tests
+SELECT soundex(toFixedString('Smith', 5)); -- { serverError ILLEGAL_COLUMN }
+
+SELECT soundex(5); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }

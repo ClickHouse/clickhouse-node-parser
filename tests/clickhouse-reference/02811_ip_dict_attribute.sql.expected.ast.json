@@ -1,5 +1,152 @@
 [
   {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "src"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "id",
+        "type": {
+          "name": "UInt64"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "ip4",
+        "type": {
+          "name": "IPv4"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "ip6",
+        "type": {
+          "name": "IPv6"
+        }
+      }
+    ],
+    "engine": {
+      "name": "Memory"
+    },
+    "asQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "asterisk"
+        }
+      ],
+      "from": {
+        "kind": "tableFunctionRef",
+        "name": "VALUES",
+        "args": [
+          {
+            "kind": "tupleLiteral",
+            "elements": [
+              {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "1"
+              },
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "1.1.1.1"
+              },
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "::1.1.1.1"
+              }
+            ],
+            "source": "(1, '1.1.1.1', '::1.1.1.1')"
+          },
+          {
+            "kind": "tupleLiteral",
+            "elements": [
+              {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "2"
+              },
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "2.2.2.2"
+              },
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "::2.2.2.2"
+              }
+            ],
+            "source": "(2, '2.2.2.2', '::2.2.2.2')"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "kind": "createDictionary",
+    "table": {
+      "kind": "tableRef",
+      "table": "dict"
+    },
+    "dictAttrs": [
+      {
+        "name": "id",
+        "type": {
+          "name": "UInt64"
+        }
+      },
+      {
+        "name": "ip4",
+        "type": {
+          "name": "IPv4"
+        }
+      },
+      {
+        "name": "ip6",
+        "type": {
+          "name": "IPv6"
+        }
+      }
+    ],
+    "dictDef": {
+      "primaryKey": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "id"
+          ]
+        }
+      ],
+      "layout": {
+        "name": "HASHED",
+        "pairs": []
+      },
+      "source": {
+        "name": "clickhouse",
+        "pairs": [
+          {
+            "name": "table",
+            "value": {
+              "kind": "columnRef",
+              "parts": [
+                "src"
+              ]
+            }
+          }
+        ]
+      },
+      "lifetime": {
+        "value": 10
+      }
+    }
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -12,7 +159,7 @@
             "value": "dict"
           },
           {
-            "kind": "tuple",
+            "kind": "tupleLiteral",
             "elements": [
               {
                 "kind": "literal",
@@ -32,7 +179,7 @@
             "name": "arrayJoin",
             "args": [
               {
-                "kind": "array",
+                "kind": "arrayLiteral",
                 "elements": [
                   {
                     "kind": "literal",
@@ -52,5 +199,21 @@
         ]
       }
     ]
+  },
+  {
+    "kind": "drop",
+    "targetType": "DICTIONARY",
+    "table": {
+      "kind": "tableRef",
+      "table": "dict"
+    }
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "src"
+    }
   }
 ]

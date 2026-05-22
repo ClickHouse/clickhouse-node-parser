@@ -1,5 +1,21 @@
 [
   {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "enable_analyzer",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ],
+    "leadingComments": [
+      "-- https://github.com/ClickHouse/ClickHouse/issues/56503"
+    ]
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -39,7 +55,7 @@
               }
             ],
             "from": {
-              "kind": "tableFunction",
+              "kind": "tableFunctionRef",
               "name": "numbers",
               "args": [
                 {
@@ -52,10 +68,10 @@
           },
           "alias": "tb1"
         },
-        "kind": "join",
+        "kind": "joinExpr",
         "joinType": "CROSS",
         "right": {
-          "kind": "tableFunction",
+          "kind": "tableFunctionRef",
           "name": "values",
           "args": [
             {
@@ -82,7 +98,7 @@
           "alias": "pt"
         }
       },
-      "kind": "join",
+      "kind": "joinExpr",
       "joinType": "LEFT",
       "right": {
         "kind": "subqueryFrom",
@@ -118,7 +134,7 @@
                 }
               ],
               "from": {
-                "kind": "tableFunction",
+                "kind": "tableFunctionRef",
                 "name": "numbers",
                 "args": [
                   {

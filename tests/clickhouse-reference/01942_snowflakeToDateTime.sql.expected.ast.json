@@ -1,5 +1,21 @@
 [
   {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "allow_deprecated_snowflake_conversion_functions",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ],
+    "trailingComments": [
+      "-- Force-enable deprecated snowflake conversion functions (in case this is randomized in CI)"
+    ]
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -7,6 +23,12 @@
         "name": "snowflakeToDateTime",
         "args": []
       }
+    ],
+    "leadingComments": [
+      "-- Error cases"
+    ],
+    "trailingComments": [
+      "-- {serverError NUMBER_OF_ARGUMENTS_DOESNT_MATCH}"
     ]
   },
   {
@@ -17,6 +39,9 @@
         "name": "snowflakeToDateTime64",
         "args": []
       }
+    ],
+    "trailingComments": [
+      "-- {serverError NUMBER_OF_ARGUMENTS_DOESNT_MATCH}"
     ]
   },
   {
@@ -33,6 +58,9 @@
           }
         ]
       }
+    ],
+    "trailingComments": [
+      "-- {serverError ILLEGAL_TYPE_OF_ARGUMENT}"
     ]
   },
   {
@@ -49,6 +77,9 @@
           }
         ]
       }
+    ],
+    "trailingComments": [
+      "-- {serverError ILLEGAL_TYPE_OF_ARGUMENT}"
     ]
   },
   {
@@ -70,6 +101,9 @@
           }
         ]
       }
+    ],
+    "trailingComments": [
+      "-- {serverError ILLEGAL_TYPE_OF_ARGUMENT}"
     ]
   },
   {
@@ -91,6 +125,9 @@
           }
         ]
       }
+    ],
+    "trailingComments": [
+      "-- {serverError ILLEGAL_TYPE_OF_ARGUMENT}"
     ]
   },
   {
@@ -122,6 +159,9 @@
           "value": "0"
         }
       }
+    ],
+    "trailingComments": [
+      "-- { serverError DEPRECATED_FUNCTION }"
     ]
   },
   {
@@ -153,7 +193,273 @@
           "value": "0"
         }
       }
+    ],
+    "trailingComments": [
+      "-- { serverError DEPRECATED_FUNCTION }"
     ]
+  },
+  {
+    "kind": "select",
+    "with": [
+      {
+        "kind": "cteExpr",
+        "name": "i64",
+        "expr": {
+          "kind": "castExpr",
+          "expr": {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "1426860704886947840"
+          },
+          "type": "Int64"
+        }
+      },
+      {
+        "kind": "cteExpr",
+        "name": "tz",
+        "expr": {
+          "kind": "literal",
+          "type": "String",
+          "value": "UTC"
+        }
+      }
+    ],
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "tz"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "i64"
+        ]
+      },
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "snowflakeToDateTime",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "i64"
+              ]
+            },
+            {
+              "kind": "columnRef",
+              "parts": [
+                "tz"
+              ]
+            }
+          ]
+        },
+        "alias": "dt"
+      },
+      {
+        "kind": "functionCall",
+        "name": "toTypeName",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "dt"
+            ]
+          }
+        ]
+      },
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "snowflakeToDateTime64",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "i64"
+              ]
+            },
+            {
+              "kind": "columnRef",
+              "parts": [
+                "tz"
+              ]
+            }
+          ]
+        },
+        "alias": "dt64"
+      },
+      {
+        "kind": "functionCall",
+        "name": "toTypeName",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "dt64"
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "with": [
+      {
+        "kind": "cteExpr",
+        "name": "i64",
+        "expr": {
+          "kind": "castExpr",
+          "expr": {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "1426860704886947840"
+          },
+          "type": "Int64"
+        }
+      },
+      {
+        "kind": "cteExpr",
+        "name": "tz",
+        "expr": {
+          "kind": "literal",
+          "type": "String",
+          "value": "Asia/Shanghai"
+        }
+      }
+    ],
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "tz"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "i64"
+        ]
+      },
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "snowflakeToDateTime",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "i64"
+              ]
+            },
+            {
+              "kind": "columnRef",
+              "parts": [
+                "tz"
+              ]
+            }
+          ]
+        },
+        "alias": "dt"
+      },
+      {
+        "kind": "functionCall",
+        "name": "toTypeName",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "dt"
+            ]
+          }
+        ]
+      },
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "snowflakeToDateTime64",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "i64"
+              ]
+            },
+            {
+              "kind": "columnRef",
+              "parts": [
+                "tz"
+              ]
+            }
+          ]
+        },
+        "alias": "dt64"
+      },
+      {
+        "kind": "functionCall",
+        "name": "toTypeName",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "dt64"
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "tab"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "tab"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "val",
+        "type": {
+          "name": "Int64"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "tz",
+        "type": {
+          "name": "String"
+        }
+      }
+    ],
+    "engine": {
+      "name": "Log"
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "tab"
+      }
+    }
   },
   {
     "kind": "select",
@@ -264,5 +570,13 @@
         }
       }
     ]
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "tab"
+    }
   }
 ]

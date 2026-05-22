@@ -1,3 +1,7 @@
+SET enable_analyzer = 1;
+
+SET allow_experimental_correlated_subqueries = 1;
+
 SELECT deltaSumMerge(`rows`) AS delta_sum
 FROM (
         SELECT *
@@ -21,7 +25,15 @@ FROM (
             ignore(*, *, 10, *, 10, 10, 10, 10, 10, *, toUInt128(10), 10, *, 10, isNull(NULL), 10, 10) ASC,
             x ASC
     )
-ORDER BY `ALL` DESC;
+ORDER BY `ALL` DESC; -- { serverError ILLEGAL_AGGREGATION }
+
+CREATE TABLE t
+(
+    id Int64,
+    path String
+)
+ENGINE = MergeTree
+ORDER BY path;
 
 SELECT `explain`
 FROM (
@@ -32,4 +44,4 @@ FROM (
                 WHERE a
             ))
     )
-WHERE equals(id AS a);
+WHERE equals(id AS a); -- { serverError BAD_ARGUMENTS }

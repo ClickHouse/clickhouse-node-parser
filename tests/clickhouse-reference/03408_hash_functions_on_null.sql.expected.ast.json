@@ -13,6 +13,9 @@
           }
         ]
       }
+    ],
+    "leadingComments": [
+      "-- { echoOn }"
     ]
   },
   {
@@ -39,7 +42,7 @@
         "name": "xxHash64",
         "args": [
           {
-            "kind": "array",
+            "kind": "arrayLiteral",
             "elements": [],
             "source": "[]"
           }
@@ -55,7 +58,7 @@
         "name": "xxHash64",
         "args": [
           {
-            "kind": "array",
+            "kind": "arrayLiteral",
             "elements": [
               {
                 "kind": "literal",
@@ -77,7 +80,7 @@
         "name": "xxHash64",
         "args": [
           {
-            "kind": "array",
+            "kind": "arrayLiteral",
             "elements": [
               {
                 "kind": "literal",
@@ -104,7 +107,7 @@
         "name": "xxHash64",
         "args": [
           {
-            "kind": "array",
+            "kind": "arrayLiteral",
             "elements": [
               {
                 "kind": "castExpr",
@@ -131,7 +134,7 @@
         "name": "xxHash64",
         "args": [
           {
-            "kind": "array",
+            "kind": "arrayLiteral",
             "elements": [
               {
                 "kind": "castExpr",
@@ -325,7 +328,7 @@
             "name": "materialize",
             "args": [
               {
-                "kind": "array",
+                "kind": "arrayLiteral",
                 "elements": [],
                 "source": "[]"
               }
@@ -347,7 +350,7 @@
             "name": "materialize",
             "args": [
               {
-                "kind": "array",
+                "kind": "arrayLiteral",
                 "elements": [
                   {
                     "kind": "literal",
@@ -375,7 +378,7 @@
             "name": "materialize",
             "args": [
               {
-                "kind": "array",
+                "kind": "arrayLiteral",
                 "elements": [
                   {
                     "kind": "literal",
@@ -408,7 +411,7 @@
             "name": "materialize",
             "args": [
               {
-                "kind": "array",
+                "kind": "arrayLiteral",
                 "elements": [
                   {
                     "kind": "castExpr",
@@ -441,7 +444,7 @@
             "name": "materialize",
             "args": [
               {
-                "kind": "array",
+                "kind": "arrayLiteral",
                 "elements": [
                   {
                     "kind": "castExpr",
@@ -612,6 +615,51 @@
     ]
   },
   {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "test_hash_on_null"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "a",
+        "type": {
+          "name": "Array",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "Nullable",
+                "args": [
+                  {
+                    "kind": "type",
+                    "type": {
+                      "name": "Int64"
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "engine": {
+      "name": "Memory"
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "test_hash_on_null"
+      }
+    }
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -640,7 +688,7 @@
         "name": "cityHash64",
         "args": [
           {
-            "kind": "array",
+            "kind": "arrayLiteral",
             "elements": [
               {
                 "kind": "literal",
@@ -662,7 +710,7 @@
         "name": "cityHash64",
         "args": [
           {
-            "kind": "array",
+            "kind": "arrayLiteral",
             "elements": [
               {
                 "kind": "functionCall",
@@ -823,6 +871,43 @@
     ]
   },
   {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "test_mix_null"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "a",
+        "type": {
+          "name": "Nullable",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "Int64"
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "engine": {
+      "name": "Memory"
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "test_mix_null"
+      }
+    }
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -865,6 +950,118 @@
     "from": {
       "kind": "tableRef",
       "table": "test_mix_null"
+    }
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "t"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "a",
+        "type": {
+          "name": "Array",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "Tuple",
+                "args": [
+                  {
+                    "kind": "namedField",
+                    "name": "x",
+                    "type": {
+                      "name": "Nullable",
+                      "args": [
+                        {
+                          "kind": "type",
+                          "type": {
+                            "name": "Int64"
+                          }
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "kind": "namedField",
+                    "name": "y",
+                    "type": {
+                      "name": "Map",
+                      "args": [
+                        {
+                          "kind": "type",
+                          "type": {
+                            "name": "Int64"
+                          }
+                        },
+                        {
+                          "kind": "type",
+                          "type": {
+                            "name": "Nullable",
+                            "args": [
+                              {
+                                "kind": "type",
+                                "type": {
+                                  "name": "String"
+                                }
+                              }
+                            ]
+                          }
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "kind": "namedField",
+                    "name": "z",
+                    "type": {
+                      "name": "LowCardinality",
+                      "args": [
+                        {
+                          "kind": "type",
+                          "type": {
+                            "name": "Nullable",
+                            "args": [
+                              {
+                                "kind": "type",
+                                "type": {
+                                  "name": "FixedString",
+                                  "args": [
+                                    {
+                                      "kind": "literal",
+                                      "value": "16"
+                                    }
+                                  ]
+                                }
+                              }
+                            ]
+                          }
+                        }
+                      ]
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "engine": {
+      "name": "Memory"
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "t"
+      }
     }
   },
   {
@@ -1022,7 +1219,7 @@
             "name": "materialize",
             "args": [
               {
-                "kind": "tuple",
+                "kind": "tupleLiteral",
                 "elements": [
                   {
                     "kind": "castExpr",
@@ -1058,7 +1255,7 @@
       }
     ],
     "from": {
-      "kind": "tableFunction",
+      "kind": "tableFunctionRef",
       "name": "numbers",
       "args": [
         {
@@ -1067,7 +1264,10 @@
           "value": "2"
         }
       ]
-    }
+    },
+    "leadingComments": [
+      "--- Keyed."
+    ]
   },
   {
     "kind": "select",
@@ -1077,7 +1277,7 @@
         "name": "sipHash64Keyed",
         "args": [
           {
-            "kind": "tuple",
+            "kind": "tupleLiteral",
             "elements": [
               {
                 "kind": "castExpr",
@@ -1117,7 +1317,7 @@
       }
     ],
     "from": {
-      "kind": "tableFunction",
+      "kind": "tableFunctionRef",
       "name": "numbers",
       "args": [
         {
@@ -1140,7 +1340,7 @@
             "name": "materialize",
             "args": [
               {
-                "kind": "tuple",
+                "kind": "tupleLiteral",
                 "elements": [
                   {
                     "kind": "castExpr",
@@ -1182,7 +1382,7 @@
       }
     ],
     "from": {
-      "kind": "tableFunction",
+      "kind": "tableFunctionRef",
       "name": "numbers",
       "args": [
         {
@@ -1201,7 +1401,7 @@
         "name": "sipHash64Keyed",
         "args": [
           {
-            "kind": "tuple",
+            "kind": "tupleLiteral",
             "elements": [
               {
                 "kind": "castExpr",
@@ -1237,7 +1437,7 @@
       }
     ],
     "from": {
-      "kind": "tableFunction",
+      "kind": "tableFunctionRef",
       "name": "numbers",
       "args": [
         {
@@ -1289,7 +1489,7 @@
           }
         ],
         "from": {
-          "kind": "tableFunction",
+          "kind": "tableFunctionRef",
           "name": "generateRandom",
           "args": []
         },
@@ -1301,6 +1501,9 @@
           }
         }
       }
-    }
+    },
+    "leadingComments": [
+      "-- Make sure all types are allowed."
+    ]
   }
 ]

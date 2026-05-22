@@ -1,3 +1,5 @@
+SET send_logs_level = 'fatal';
+
 SELECT
     (
         SELECT (
@@ -60,10 +62,12 @@ SELECT
         SELECT 1
     ) AS y);
 
+-- SELECT (SELECT uniqState(''));
 SELECT (
         SELECT throwIf(1 + dummy)
-    );
+    ); -- { serverError FUNCTION_THROW_IF_VALUE_IS_NON_ZERO }
 
+-- Scalar subquery with 0 rows must return Null
 SELECT (
         SELECT 1
         WHERE 0
@@ -76,11 +80,13 @@ SELECT (
         WHERE 0
     );
 
+-- But array can't be inside nullable
 SELECT (
         SELECT [1]
         WHERE 0
-    );
+    ); -- { serverError INCORRECT_RESULT_OF_SCALAR_SUBQUERY }
 
+-- Works for not-empty casle
 SELECT (
         SELECT
             1,
@@ -91,7 +97,8 @@ SELECT (
         SELECT [1]
     );
 
+-- Several rows
 SELECT (
         SELECT number
         FROM numbers(2)
-    );
+    ); -- { serverError INCORRECT_RESULT_OF_SCALAR_SUBQUERY }

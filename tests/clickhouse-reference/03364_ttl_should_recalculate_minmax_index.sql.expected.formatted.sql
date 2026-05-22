@@ -1,3 +1,21 @@
+-- { echoOn }
+DROP TABLE IF EXISTS x;
+
+CREATE TABLE x
+(
+    dt DateTime,
+    i Int32
+)
+ENGINE = MergeTree
+ORDER BY dt
+PARTITION BY indexHint(dt)
+TTL dt + toIntervalDay(15)
+SETTINGS index_granularity = 8192;
+
+INSERT INTO x;
+
+OPTIMIZE TABLE x FINAL;
+
 SELECT i
 FROM x;
 
@@ -11,3 +29,5 @@ SELECT (
         SELECT minDistinct(dt)
         FROM x
     );
+
+DROP TABLE x;

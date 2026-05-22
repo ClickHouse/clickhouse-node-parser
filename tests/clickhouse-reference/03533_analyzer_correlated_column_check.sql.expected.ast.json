@@ -1,5 +1,31 @@
 [
   {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "enable_analyzer",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "allow_experimental_correlated_subqueries",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -56,7 +82,7 @@
                           "name": "arrayJoin",
                           "args": [
                             {
-                              "kind": "array",
+                              "kind": "arrayLiteral",
                               "elements": [
                                 {
                                   "kind": "literal",
@@ -98,7 +124,7 @@
                           "name": "arrayJoin",
                           "args": [
                             {
-                              "kind": "array",
+                              "kind": "arrayLiteral",
                               "elements": [
                                 {
                                   "kind": "literal",
@@ -436,6 +462,45 @@
         },
         "direction": "DESC"
       }
+    ],
+    "trailingComments": [
+      "-- { serverError ILLEGAL_AGGREGATION }"
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "t"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "id",
+        "type": {
+          "name": "Int64"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "path",
+        "type": {
+          "name": "String"
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "path"
+          ]
+        }
+      }
     ]
   },
   {
@@ -458,7 +523,7 @@
           }
         ],
         "from": {
-          "kind": "tableFunction",
+          "kind": "tableFunctionRef",
           "name": "viewExplain",
           "args": [
             {
@@ -509,6 +574,9 @@
           "alias": "a"
         }
       ]
-    }
+    },
+    "trailingComments": [
+      "-- { serverError BAD_ARGUMENTS }"
+    ]
   }
 ]

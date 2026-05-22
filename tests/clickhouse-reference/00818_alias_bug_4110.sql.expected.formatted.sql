@@ -1,3 +1,5 @@
+SET enable_analyzer = 1;
+
 SELECT
     s.a AS a,
     s.a + 1 AS b
@@ -81,11 +83,19 @@ SELECT
     b + 1 AS a
 FROM (
         SELECT 10 AS a
-    );
+    ); -- { serverError CYCLIC_ALIASES, UNKNOWN_IDENTIFIER }
 
 SELECT
     10 AS a,
-    a + 1 AS a;
+    a + 1 AS a; -- { serverError UNKNOWN_IDENTIFIER }
+
+WITH 10 AS a
+
+SELECT a AS a; -- { serverError UNKNOWN_IDENTIFIER }
+
+WITH 10 AS a
+
+SELECT a + 1 AS a; -- { serverError UNKNOWN_IDENTIFIER }
 
 SELECT 0 AS t
 FROM (
@@ -99,7 +109,20 @@ FROM (
     ) AS data
 WHERE data.value > 0;
 
+DROP TABLE IF EXISTS test_00818;
+
+CREATE TABLE test_00818
+(
+    field String,
+    not_field String
+)
+ENGINE = Memory;
+
+INSERT INTO test_00818 (field, not_field);
+
 SELECT
     test_00818.field AS other_field,
     test_00818.not_field AS field
 FROM test_00818;
+
+DROP TABLE test_00818;

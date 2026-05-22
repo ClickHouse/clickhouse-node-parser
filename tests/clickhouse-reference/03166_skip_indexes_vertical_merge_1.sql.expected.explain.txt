@@ -1,3 +1,49 @@
+DropQuery  t_ind_merge_1 (children 1)
+ Identifier t_ind_merge_1
+
+Set
+
+CreateQuery t_ind_merge_1 (children 3)
+ Identifier t_ind_merge_1
+ Columns definition (children 2)
+  ExpressionList (children 4)
+   ColumnDeclaration a (children 1)
+    DataType UInt64
+   ColumnDeclaration b (children 1)
+    DataType UInt64
+   ColumnDeclaration c (children 1)
+    DataType UInt64
+   ColumnDeclaration d (children 1)
+    DataType UInt64
+  ExpressionList (children 1)
+   Index (children 2)
+    Identifier b
+    Function minmax (children 1)
+     ExpressionList
+ Storage definition (children 3)
+  Function MergeTree
+  Identifier a
+  Set
+
+InsertQuery   (children 2)
+ Identifier t_ind_merge_1
+ SelectWithUnionQuery (children 1)
+  ExpressionList (children 1)
+   SelectQuery (children 2)
+    ExpressionList (children 4)
+     Identifier number
+     Identifier number
+     Function rand (children 1)
+      ExpressionList
+     Function rand (children 1)
+      ExpressionList
+    TablesInSelectQuery (children 1)
+     TablesInSelectQueryElement (children 1)
+      TableExpression (children 1)
+       Function numbers (children 1)
+        ExpressionList (children 1)
+         Literal UInt64_1000
+
 SelectWithUnionQuery (children 1)
  ExpressionList (children 1)
   SelectQuery (children 4)
@@ -13,3 +59,88 @@ SelectWithUnionQuery (children 1)
      Identifier b
      Literal UInt64_100
    Set
+
+OptimizeQuery  t_ind_merge_1_final (children 1)
+ Identifier t_ind_merge_1
+
+SYSTEM query
+
+Set
+
+SelectWithUnionQuery (children 1)
+ ExpressionList (children 1)
+  SelectQuery (children 5)
+   ExpressionList (children 2)
+    Subquery (alias uuid) (children 1)
+     SelectWithUnionQuery (children 1)
+      ExpressionList (children 1)
+       SelectQuery (children 3)
+        ExpressionList (children 1)
+         Identifier uuid
+        TablesInSelectQuery (children 1)
+         TablesInSelectQueryElement (children 1)
+          TableExpression (children 1)
+           TableIdentifier system.tables
+        Function and (children 1)
+         ExpressionList (children 2)
+          Function equals (children 1)
+           ExpressionList (children 2)
+            Identifier database
+            Function currentDatabase (children 1)
+             ExpressionList
+          Function equals (children 1)
+           ExpressionList (children 2)
+            Identifier table
+            Literal 't_ind_merge_1'
+    Function arrayElement (alias groups) (children 1)
+     ExpressionList (children 2)
+      Function extractAllGroupsVertical (children 1)
+       ExpressionList (children 2)
+        Identifier message
+        Literal 'containing (\\d+) columns \\((\\d+) merged, (\\d+) gathered\\)'
+      Literal UInt64_1
+   ExpressionList (children 3)
+    Function arrayElement (alias total) (children 1)
+     ExpressionList (children 2)
+      Identifier groups
+      Literal UInt64_1
+    Function arrayElement (alias merged) (children 1)
+     ExpressionList (children 2)
+      Identifier groups
+      Literal UInt64_2
+    Function arrayElement (alias gathered) (children 1)
+     ExpressionList (children 2)
+      Identifier groups
+      Literal UInt64_3
+   TablesInSelectQuery (children 1)
+    TablesInSelectQueryElement (children 1)
+     TableExpression (children 1)
+      TableIdentifier system.text_log
+   Function and (children 1)
+    ExpressionList (children 2)
+     Function or (children 1)
+      ExpressionList (children 2)
+       Function equals (children 1)
+        ExpressionList (children 2)
+         Identifier query_id
+         Function concat (children 1)
+          ExpressionList (children 2)
+           Identifier uuid
+           Literal '::all_1_2_1'
+       Function equals (children 1)
+        ExpressionList (children 2)
+         Identifier query_id
+         Function concat (children 1)
+          ExpressionList (children 2)
+           Function currentDatabase (children 1)
+            ExpressionList
+           Literal '.t_ind_merge_1::all_1_2_1'
+     Function notEmpty (children 1)
+      ExpressionList (children 1)
+       Identifier groups
+   ExpressionList (children 1)
+    OrderByElement (children 1)
+     Identifier event_time_microseconds
+
+DropQuery  t_ind_merge_1 (children 1)
+ Identifier t_ind_merge_1

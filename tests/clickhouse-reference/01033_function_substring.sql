@@ -10,6 +10,9 @@ SELECT substring(toFixedString(toString(number), 4), 1, 3) FROM system.numbers L
 SELECT substring(toFixedString(toString(number), 4), 1, number % 5) FROM system.numbers LIMIT 995, 10;
 SELECT substring(toFixedString(toString(number), 4), 1 + number % 5) FROM system.numbers LIMIT 995, 10;
 SELECT substring(toFixedString(toString(number), 4), 1 + number % 5, 1 + number % 3) FROM system.numbers LIMIT 995, 10;
+DROP TABLE IF EXISTS tab;
+CREATE TABLE tab(e8 Enum8('hello' = -5, 'world' = 15), e16 Enum16('shark' = -999, 'eagle' = 9999)) ENGINE MergeTree ORDER BY tuple();
+INSERT INTO TABLE tab VALUES ('hello', 'shark'), ('world', 'eagle');
 -- positive offsets (slice from left)
 SELECT substring(e8, 1), substring (e16, 1) FROM tab;
 SELECT substring(e8, 2, 10), substring (e16, 2, 10) FROM tab;
@@ -19,6 +22,7 @@ SELECT substring(e8, -2, 10), substring (e16, -2, 10) FROM tab;
 -- zero offset/length
 SELECT substring(e8, 1, 0), substring (e16, 1, 0) FROM tab;
 SELECT substring(CAST('foo', 'Enum8(\'foo\' = 1)'), 1, 1), substring(CAST('foo', 'Enum16(\'foo\' = 1111)'), 1, 2);
+DROP TABLE tab;
 SELECT substring('abc', number - 5) FROM system.numbers LIMIT 10;
 SELECT substring(materialize('abc'), number - 5) FROM system.numbers LIMIT 10;
 SELECT substring(toFixedString('abc', 3), number - 5) FROM system.numbers LIMIT 10;
@@ -39,10 +43,13 @@ SELECT substring(cast('abcdefgh' AS FixedString(8)), 2, -2);
 SELECT substring(cast('abcdefgh' AS FixedString(8)), materialize(2), -2);
 SELECT substring(cast('abcdefgh' AS FixedString(8)), 2, materialize(-2));
 SELECT substring(cast('abcdefgh' AS FixedString(8)), materialize(2), materialize(-2));
+CREATE TABLE tab (s String, l Int8, r Int8) ENGINE = Memory;
+INSERT INTO tab VALUES ('abcdefgh', 2, -2), ('12345678', 3, -3);
 SELECT substring(s, 2, -2) FROM tab;
 SELECT substring(s, l, -2) FROM tab;
 SELECT substring(s, 2, r) FROM tab;
 SELECT substring(s, l, r) FROM tab;
+CREATE TABLE tab (s FixedString(8), l Int8, r Int8) ENGINE = Memory;
 SELECT substring('abcdefgh', -2, -2);
 SELECT substring(materialize('abcdefgh'), -2, -2);
 SELECT substring(materialize('abcdefgh'), materialize(-2), materialize(-2));
@@ -55,10 +62,23 @@ SELECT substring(materialize(cast('abcdefgh' AS FixedString(8))), materialize(-2
 SELECT substring(cast('abcdefgh' AS FixedString(8)), -2, -1);
 SELECT substring(materialize(cast('abcdefgh' AS FixedString(8))), -2, -1);
 SELECT substring(materialize(cast('abcdefgh' AS FixedString(8))), materialize(-2), materialize(-1));
+DROP TABLE IF EXISTS t;
+CREATE TABLE t
+(
+    s String,
+    l Int8,
+    r Int8
+) ENGINE = Memory;
+INSERT INTO t VALUES ('abcdefgh', -2, -2),('12345678', -3, -3);
 SELECT substring(s, -2, -2) FROM t;
 SELECT substring(s, l, -2) FROM t;
 SELECT substring(s, -2, r) FROM t;
 SELECT substring(s, l, r) FROM t;
+CREATE TABLE t(
+                  s FixedString(8),
+                  l Int8,
+                  r Int8
+) engine = Memory;
 /** NOTE: The behaviour of substring and substringUTF8 is inconsistent when negative offset is greater than string size:
   * substring:
   *      hello

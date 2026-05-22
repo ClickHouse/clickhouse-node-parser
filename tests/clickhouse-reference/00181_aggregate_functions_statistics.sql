@@ -1,7 +1,17 @@
+SET any_join_distinct_right_table_keys = 1;
+SET joined_subquery_requires_alias = 0;
+
+DROP TABLE IF EXISTS series;
+
+CREATE TABLE series(i UInt32, x_value Float64, y_value Float64) ENGINE = Memory;
+
+INSERT INTO series(i, x_value, y_value) VALUES (1, 5.6,-4.4),(2, -9.6,3),(3, -1.3,-4),(4, 5.3,9.7),(5, 4.4,0.037),(6, -8.6,-7.8),(7, 5.1,9.3),(8, 7.9,-3.6),(9, -8.2,0.62),(10, -3,7.3);
+
 /* varSamp */
 
 SELECT varSamp(x_value) FROM (SELECT x_value FROM series LIMIT 0);
 SELECT varSamp(x_value) FROM (SELECT x_value FROM series LIMIT 1);
+
 SELECT round(abs(res1 - res2), 6) FROM
 (
 SELECT
@@ -9,10 +19,12 @@ SELECT
     (sum(x_value * x_value) - ((sum(x_value) * sum(x_value)) / count())) / (count() - 1) AS res2
 FROM series
 );
+
 /* stddevSamp */
 
 SELECT stddevSamp(x_value) FROM (SELECT x_value FROM series LIMIT 0);
 SELECT stddevSamp(x_value) FROM (SELECT x_value FROM series LIMIT 1);
+
 SELECT round(abs(res1 - res2), 6) FROM
 (
 SELECT
@@ -20,10 +32,12 @@ SELECT
     sqrt((sum(x_value * x_value) - ((sum(x_value) * sum(x_value)) / count())) / (count() - 1)) AS res2
 FROM series
 );
+
 /* skewSamp */
 
 SELECT skewSamp(x_value) FROM (SELECT x_value FROM series LIMIT 0);
 SELECT skewSamp(x_value) FROM (SELECT x_value FROM series LIMIT 1);
+
 SELECT round(abs(res1 - res2), 6) FROM
 (
 SELECT
@@ -35,10 +49,12 @@ SELECT
     ) / pow((sum(x_value * x_value) - ((sum(x_value) * sum(x_value)) / count())) / (count() - 1), 1.5) AS res2
 FROM series
 );
+
 /* kurtSamp */
 
 SELECT kurtSamp(x_value) FROM (SELECT x_value FROM series LIMIT 0);
 SELECT kurtSamp(x_value) FROM (SELECT x_value FROM series LIMIT 1);
+
 SELECT round(abs(res1 - res2), 6) FROM
 (
 SELECT
@@ -51,10 +67,12 @@ SELECT
     ) / pow((sum(x_value * x_value) - ((sum(x_value) * sum(x_value)) / count())) / (count() - 1), 2) AS res2
 FROM series
 );
+
 /* varPop */
 
 SELECT varPop(x_value) FROM (SELECT x_value FROM series LIMIT 0);
 SELECT varPop(x_value) FROM (SELECT x_value FROM series LIMIT 1);
+
 SELECT round(abs(res1 - res2), 6) FROM
 (
 SELECT
@@ -62,10 +80,12 @@ SELECT
     (sum(x_value * x_value) - ((sum(x_value) * sum(x_value)) / count())) / count() AS res2
 FROM series
 );
+
 /* stddevPop */
 
 SELECT stddevPop(x_value) FROM (SELECT x_value FROM series LIMIT 0);
 SELECT stddevPop(x_value) FROM (SELECT x_value FROM series LIMIT 1);
+
 SELECT round(abs(res1 - res2), 6) FROM
 (
 SELECT
@@ -73,10 +93,12 @@ SELECT
     sqrt((sum(x_value * x_value) - ((sum(x_value) * sum(x_value)) / count())) / count()) AS res2
 FROM series
 );
+
 /* skewPop */
 
 SELECT skewPop(x_value) FROM (SELECT x_value FROM series LIMIT 0);
 SELECT skewPop(x_value) FROM (SELECT x_value FROM series LIMIT 1);
+
 SELECT round(abs(res1 - res2), 6) FROM
 (
 SELECT
@@ -88,10 +110,12 @@ SELECT
     ) / pow((sum(x_value * x_value) - ((sum(x_value) * sum(x_value)) / count())) / count(), 1.5) AS res2
 FROM series
 );
+
 /* kurtPop */
 
 SELECT kurtPop(x_value) FROM (SELECT x_value FROM series LIMIT 0);
 SELECT kurtPop(x_value) FROM (SELECT x_value FROM series LIMIT 1);
+
 SELECT round(abs(res1 - res2), 6) FROM
 (
 SELECT
@@ -104,10 +128,12 @@ SELECT
     ) / pow((sum(x_value * x_value) - ((sum(x_value) * sum(x_value)) / count())) / count(), 2) AS res2
 FROM series
 );
+
 /* covarSamp */
 
 SELECT covarSamp(x_value, y_value) FROM (SELECT x_value, y_value FROM series LIMIT 0);
 SELECT covarSamp(x_value, y_value) FROM (SELECT x_value, y_value FROM series LIMIT 1);
+
 SELECT round(abs(COVAR1 - COVAR2), 6)
 FROM
 (
@@ -140,10 +166,12 @@ FROM
         ) USING ID
     )
 ) USING ID2;
+
 /* covarPop */
 
 SELECT covarPop(x_value, y_value) FROM (SELECT x_value, y_value FROM series LIMIT 0);
 SELECT covarPop(x_value, y_value) FROM (SELECT x_value, y_value FROM series LIMIT 1);
+
 SELECT round(abs(COVAR1 - COVAR2), 6)
 FROM
 (
@@ -176,17 +204,25 @@ FROM
         ) USING ID
     )
 ) USING ID2;
+
 /* corr */
 
 SELECT corr(x_value, y_value) FROM (SELECT x_value, y_value FROM series LIMIT 0);
 SELECT corr(x_value, y_value) FROM (SELECT x_value, y_value FROM series LIMIT 1);
+
 SELECT round(abs(corr(x_value, y_value) - covarPop(x_value, y_value) / (stddevPop(x_value) * stddevPop(y_value))), 6) FROM series;
+
 /* quantile AND quantileExact */
 SELECT '----quantile----';
+
 SELECT quantileExactIf(number, number > 0) FROM numbers(90);
+
 SELECT quantileExactIf(number, number > 100) FROM numbers(90);
 SELECT quantileExactIf(toFloat32(number) , number > 100) FROM numbers(90);
 SELECT quantileExactIf(toFloat64(number) , number > 100) FROM numbers(90);
+
 SELECT quantileIf(number, number > 100) FROM numbers(90);
 SELECT quantileIf(toFloat32(number) , number > 100) FROM numbers(90);
 SELECT quantileIf(toFloat64(number) , number > 100) FROM numbers(90);
+
+DROP TABLE series;

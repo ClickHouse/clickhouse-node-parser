@@ -1,0 +1,517 @@
+[
+  {
+    "kind": "select",
+    "with": [
+      {
+        "kind": "cteExpr",
+        "name": "x",
+        "expr": {
+          "kind": "literal",
+          "type": "String",
+          "value": "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
+        }
+      },
+      {
+        "kind": "cteExpr",
+        "name": "spaces",
+        "expr": {
+          "kind": "functionCall",
+          "name": "replaceRegexpAll",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "x"
+              ]
+            },
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "."
+            },
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": " "
+            }
+          ]
+        }
+      },
+      {
+        "kind": "cteExpr",
+        "name": "s",
+        "expr": {
+          "kind": "functionCall",
+          "name": "concat",
+          "args": [
+            {
+              "kind": "functionCall",
+              "name": "substring",
+              "args": [
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "spaces"
+                  ]
+                },
+                {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "1"
+                },
+                {
+                  "kind": "binaryExpr",
+                  "op": "%",
+                  "left": {
+                    "kind": "functionCall",
+                    "name": "rand",
+                    "args": [
+                      {
+                        "kind": "literal",
+                        "type": "UInt64",
+                        "value": "1"
+                      }
+                    ]
+                  },
+                  "right": {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "62"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "functionCall",
+              "name": "substring",
+              "args": [
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "x"
+                  ]
+                },
+                {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "1"
+                },
+                {
+                  "kind": "binaryExpr",
+                  "op": "%",
+                  "left": {
+                    "kind": "functionCall",
+                    "name": "rand",
+                    "args": [
+                      {
+                        "kind": "literal",
+                        "type": "UInt64",
+                        "value": "2"
+                      }
+                    ]
+                  },
+                  "right": {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "62"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "functionCall",
+              "name": "substring",
+              "args": [
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "spaces"
+                  ]
+                },
+                {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "1"
+                },
+                {
+                  "kind": "binaryExpr",
+                  "op": "%",
+                  "left": {
+                    "kind": "functionCall",
+                    "name": "rand",
+                    "args": [
+                      {
+                        "kind": "literal",
+                        "type": "UInt64",
+                        "value": "3"
+                      }
+                    ]
+                  },
+                  "right": {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "62"
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "kind": "cteExpr",
+        "name": "sl",
+        "expr": {
+          "kind": "functionCall",
+          "name": "trimLeft",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "s"
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "kind": "cteExpr",
+        "name": "sr",
+        "expr": {
+          "kind": "functionCall",
+          "name": "trimRight",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "s"
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "kind": "cteExpr",
+        "name": "t",
+        "expr": {
+          "kind": "functionCall",
+          "name": "trimBoth",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "s"
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "kind": "cteExpr",
+        "name": "slr",
+        "expr": {
+          "kind": "functionCall",
+          "name": "replaceRegexpOne",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "s"
+              ]
+            },
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "^ +"
+            },
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": ""
+            }
+          ]
+        }
+      },
+      {
+        "kind": "cteExpr",
+        "name": "srr",
+        "expr": {
+          "kind": "functionCall",
+          "name": "replaceRegexpOne",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "s"
+              ]
+            },
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": " +$"
+            },
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": ""
+            }
+          ]
+        }
+      },
+      {
+        "kind": "cteExpr",
+        "name": "tr",
+        "expr": {
+          "kind": "functionCall",
+          "name": "replaceRegexpOne",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "s"
+              ]
+            },
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "^ *(.*?) *$"
+            },
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "\\\\1"
+            }
+          ]
+        }
+      }
+    ],
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "replaceAll",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "s"
+            ]
+          },
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": " "
+          },
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": "_"
+          }
+        ]
+      },
+      {
+        "kind": "functionCall",
+        "name": "replaceAll",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "sl"
+            ]
+          },
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": " "
+          },
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": "_"
+          }
+        ]
+      },
+      {
+        "kind": "functionCall",
+        "name": "replaceAll",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "slr"
+            ]
+          },
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": " "
+          },
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": "_"
+          }
+        ]
+      },
+      {
+        "kind": "functionCall",
+        "name": "replaceAll",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "sr"
+            ]
+          },
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": " "
+          },
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": "_"
+          }
+        ]
+      },
+      {
+        "kind": "functionCall",
+        "name": "replaceAll",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "srr"
+            ]
+          },
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": " "
+          },
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": "_"
+          }
+        ]
+      },
+      {
+        "kind": "functionCall",
+        "name": "replaceAll",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "t"
+            ]
+          },
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": " "
+          },
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": "_"
+          }
+        ]
+      },
+      {
+        "kind": "functionCall",
+        "name": "replaceAll",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "tr"
+            ]
+          },
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": " "
+          },
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": "_"
+          }
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableFunctionRef",
+      "name": "numbers",
+      "args": [
+        {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "100000"
+        }
+      ]
+    },
+    "where": {
+      "kind": "unaryExpr",
+      "op": "NOT",
+      "expr": {
+        "kind": "naryExpr",
+        "op": "AND",
+        "operands": [
+          {
+            "kind": "binaryExpr",
+            "op": "=",
+            "left": {
+              "kind": "columnRef",
+              "parts": [
+                "sl"
+              ]
+            },
+            "right": {
+              "kind": "columnRef",
+              "parts": [
+                "slr"
+              ]
+            },
+            "parenthesized": true
+          },
+          {
+            "kind": "binaryExpr",
+            "op": "=",
+            "left": {
+              "kind": "columnRef",
+              "parts": [
+                "sr"
+              ]
+            },
+            "right": {
+              "kind": "columnRef",
+              "parts": [
+                "srr"
+              ]
+            },
+            "parenthesized": true
+          },
+          {
+            "kind": "binaryExpr",
+            "op": "=",
+            "left": {
+              "kind": "columnRef",
+              "parts": [
+                "t"
+              ]
+            },
+            "right": {
+              "kind": "columnRef",
+              "parts": [
+                "tr"
+              ]
+            },
+            "parenthesized": true
+          }
+        ]
+      }
+    }
+  }
+]

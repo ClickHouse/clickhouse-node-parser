@@ -1,3 +1,21 @@
+-- Tags: no-parallel-replicas
+
+DROP TABLE IF EXISTS tab;
+CREATE TABLE tab ( `k` Nullable(UInt32), `k1` Nullable(UInt32), `k2` Nullable(UInt32), `v` String ) ENGINE = MergeTree ORDER BY tuple();
+INSERT INTO tab VALUES (1, 1, 1, 'a'), (2, 2, 2, 'b');
+DROP TABLE IF EXISTS mem;
+CREATE TABLE mem ( `k` UInt64, `v` String ) ENGINE = Join(ANY, LEFT, k);
+INSERT INTO mem VALUES (1, 'A'), (2, 'B'), (3, 'B');
+DROP TABLE IF EXISTS mem2;
+CREATE TABLE mem2 ( `k` UInt64, `v` String ) ENGINE = Join(ANY, RIGHT, k);
+INSERT INTO mem2 VALUES (1, 'A'), (2, 'B'), (3, 'B');
+DROP TABLE IF EXISTS mem3;
+CREATE TABLE mem3 ( `k` UInt64, `v` String ) ENGINE = Join(ALL, FULL, k) SETTINGS join_use_nulls = 1;
+INSERT INTO mem3 VALUES (1, 'A'), (2, 'B'), (3, 'B');
+DROP TABLE IF EXISTS mem4;
+CREATE TABLE mem4 ( `k1` UInt64, `k2` UInt64, `v` String ) ENGINE = Join(ALL, FULL, k1, k2);
+INSERT INTO mem4 VALUES (1, 1, 'A'), (2, 2, 'B'), (3, 3, 'B');
+SET enable_analyzer = 1;
 SELECT '-----';
 SELECT *
 FROM tab

@@ -1,3 +1,55 @@
+SET enable_analyzer = 1;
+
+SET single_join_prefer_left_table = 0;
+
+DROP TABLE IF EXISTS test_table_join_1;
+
+CREATE TABLE test_table_join_1
+(
+    id UInt64,
+    value String
+)
+ENGINE = MergeTree
+ORDER BY tuple();
+
+DROP TABLE IF EXISTS test_table_join_2;
+
+CREATE TABLE test_table_join_2
+(
+    id UInt64,
+    value String
+)
+ENGINE = MergeTree
+ORDER BY tuple();
+
+DROP TABLE IF EXISTS test_table_join_3;
+
+CREATE TABLE test_table_join_3
+(
+    id UInt64,
+    value String
+)
+ENGINE = MergeTree
+ORDER BY tuple();
+
+INSERT INTO test_table_join_1;
+
+INSERT INTO test_table_join_1;
+
+INSERT INTO test_table_join_1;
+
+INSERT INTO test_table_join_2;
+
+INSERT INTO test_table_join_2;
+
+INSERT INTO test_table_join_2;
+
+INSERT INTO test_table_join_3;
+
+INSERT INTO test_table_join_3;
+
+INSERT INTO test_table_join_3;
+
 SELECT
     test_table_join_1.id,
     test_table_join_1.value,
@@ -82,9 +134,15 @@ ORDER BY `ALL` ASC;
 SELECT id
 FROM
     test_table_join_1
-CROSS JOIN test_table_join_2;
+CROSS JOIN test_table_join_2; -- { serverError AMBIGUOUS_IDENTIFIER }
 
 SELECT value
 FROM
     test_table_join_1
-CROSS JOIN test_table_join_2;
+CROSS JOIN test_table_join_2; -- { serverError AMBIGUOUS_IDENTIFIER }
+
+DROP TABLE test_table_join_1;
+
+DROP TABLE test_table_join_2;
+
+DROP TABLE test_table_join_3;

@@ -1,3 +1,14 @@
+DROP TABLE IF EXISTS Dates;
+
+CREATE TABLE Dates
+(
+    date DateTime('UTC')
+)
+ENGINE = MergeTree()
+ORDER BY date;
+
+INSERT INTO Dates;
+
 SELECT formatDateTime((
         SELECT date
         FROM Dates
@@ -14,7 +25,7 @@ SELECT formatDateTime((
         SELECT materialize(date)
         FROM Dates
     ), '%H%i%S', if(number % 2, '', 'Europe/Amsterdam'))
-FROM numbers(5);
+FROM numbers(5); -- {serverError ILLEGAL_TYPE_OF_ARGUMENT}
 
 SELECT toString((
         SELECT date
@@ -32,4 +43,6 @@ SELECT toString((
         SELECT materialize(date)
         FROM Dates
     ), if(number % 2, 'America/Los_Angeles', ''))
-FROM numbers(5);
+FROM numbers(5); -- {serverError ILLEGAL_TYPE_OF_ARGUMENT}
+
+DROP TABLE Dates;

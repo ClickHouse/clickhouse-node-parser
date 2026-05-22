@@ -1,5 +1,49 @@
 [
   {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "allow_deprecated_database_ordinary",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ],
+    "leadingComments": [
+      "-- Tags: no-fasttest",
+      "-- - no-fasttest -- no SQLite"
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "send_logs_level",
+        "value": {
+          "kind": "literal",
+          "type": "String",
+          "value": "error"
+        }
+      }
+    ],
+    "leadingComments": [
+      "-- Suppress \"Server has databases (for example `X`) with Ordinary engine, which was deprecated.\""
+    ]
+  },
+  {
+    "kind": "createDatabase",
+    "name": {
+      "kind": "queryParam",
+      "name": "CLICKHOUSE_DATABASE_1",
+      "type": "Identifier"
+    },
+    "engine": {
+      "name": "Ordinary"
+    }
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -34,6 +78,86 @@
         "name": "CLICKHOUSE_DATABASE_1",
         "type": "String"
       }
+    }
+  },
+  {
+    "kind": "drop",
+    "targetType": "DATABASE",
+    "table": {
+      "kind": "tableRef",
+      "table": {
+        "kind": "queryParam",
+        "name": "CLICKHOUSE_DATABASE_1",
+        "type": "Identifier"
+      }
+    }
+  },
+  {
+    "kind": "createDatabase",
+    "name": {
+      "kind": "queryParam",
+      "name": "CLICKHOUSE_DATABASE_1",
+      "type": "Identifier"
+    },
+    "engine": {
+      "name": "Atomic"
+    }
+  },
+  {
+    "kind": "createDatabase",
+    "name": {
+      "kind": "queryParam",
+      "name": "CLICKHOUSE_DATABASE_1",
+      "type": "Identifier"
+    },
+    "engine": {
+      "name": "Memory"
+    }
+  },
+  {
+    "kind": "createDatabase",
+    "name": {
+      "kind": "queryParam",
+      "name": "CLICKHOUSE_DATABASE_1",
+      "type": "Identifier"
+    },
+    "engine": {
+      "name": "Replicated",
+      "args": [
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "/test/{database}/rdb"
+        },
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "s1"
+        },
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "r1"
+        }
+      ]
+    }
+  },
+  {
+    "kind": "createDatabase",
+    "name": {
+      "kind": "queryParam",
+      "name": "CLICKHOUSE_DATABASE_1",
+      "type": "Identifier"
+    },
+    "engine": {
+      "name": "SQLite",
+      "args": [
+        {
+          "kind": "queryParam",
+          "name": "CLICKHOUSE_DATABASE_1",
+          "type": "String"
+        }
+      ]
     }
   }
 ]

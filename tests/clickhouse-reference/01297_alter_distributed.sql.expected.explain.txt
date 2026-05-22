@@ -1,3 +1,103 @@
+DropQuery  merge_distributed (children 1)
+ Identifier merge_distributed
+
+DropQuery  merge_distributed1 (children 1)
+ Identifier merge_distributed1
+
+Set
+
+CreateQuery merge_distributed1 (children 3)
+ Identifier merge_distributed1
+ Columns definition (children 1)
+  ExpressionList (children 7)
+   ColumnDeclaration CounterID (children 1)
+    DataType UInt32
+   ColumnDeclaration StartDate (children 1)
+    DataType Date
+   ColumnDeclaration Sign (children 1)
+    DataType Int8
+   ColumnDeclaration VisitID (children 1)
+    DataType UInt64
+   ColumnDeclaration UserID (children 1)
+    DataType UInt64
+   ColumnDeclaration StartTime (children 1)
+    DataType DateTime
+   ColumnDeclaration ClickLogID (children 1)
+    DataType UInt64
+ Storage definition (children 1)
+  Function CollapsingMergeTree (children 1)
+   ExpressionList (children 5)
+    Identifier StartDate
+    Function intHash32 (children 1)
+     ExpressionList (children 1)
+      Identifier UserID
+    Function tuple (children 1)
+     ExpressionList (children 5)
+      Identifier CounterID
+      Identifier StartDate
+      Function intHash32 (children 1)
+       ExpressionList (children 1)
+        Identifier UserID
+      Identifier VisitID
+      Identifier ClickLogID
+    Literal UInt64_8192
+    Identifier Sign
+
+InsertQuery   (children 1)
+ Identifier merge_distributed1
+
+CreateQuery merge_distributed (children 3)
+ Identifier merge_distributed
+ Columns definition (children 1)
+  ExpressionList (children 7)
+   ColumnDeclaration CounterID (children 1)
+    DataType UInt32
+   ColumnDeclaration StartDate (children 1)
+    DataType Date
+   ColumnDeclaration Sign (children 1)
+    DataType Int8
+   ColumnDeclaration VisitID (children 1)
+    DataType UInt64
+   ColumnDeclaration UserID (children 1)
+    DataType UInt64
+   ColumnDeclaration StartTime (children 1)
+    DataType DateTime
+   ColumnDeclaration ClickLogID (children 1)
+    DataType UInt64
+ Storage definition (children 1)
+  Function Distributed (children 1)
+   ExpressionList (children 3)
+    Identifier test_shard_localhost
+    Function currentDatabase (children 1)
+     ExpressionList
+    Identifier merge_distributed1
+
+AlterQuery  merge_distributed1 (children 2)
+ ExpressionList (children 1)
+  AlterCommand ADD_COLUMN (children 2)
+   ColumnDeclaration dummy (children 1)
+    DataType String
+   Identifier CounterID
+ Identifier merge_distributed1
+
+AlterQuery  merge_distributed (children 2)
+ ExpressionList (children 1)
+  AlterCommand ADD_COLUMN (children 2)
+   ColumnDeclaration dummy (children 1)
+    DataType String
+   Identifier CounterID
+ Identifier merge_distributed
+
+DescribeQuery (children 1)
+ TableExpression (children 1)
+  TableIdentifier merge_distributed
+
+ShowCreateTableQuery  merge_distributed (children 1)
+ Identifier merge_distributed
+
+InsertQuery   (children 1)
+ Identifier merge_distributed1
+
 SelectWithUnionQuery (children 1)
  ExpressionList (children 1)
   SelectQuery (children 4)
@@ -14,6 +114,20 @@ SelectWithUnionQuery (children 1)
      Literal ''
    Literal UInt64_10
 
+AlterQuery  merge_distributed (children 2)
+ ExpressionList (children 1)
+  AlterCommand DROP_COLUMN (children 1)
+   Identifier dummy
+ Identifier merge_distributed
+
+AlterQuery  merge_distributed (children 2)
+ ExpressionList (children 1)
+  AlterCommand ADD_COLUMN (children 2)
+   ColumnDeclaration dummy1 (children 1)
+    DataType String
+   Identifier CounterID
+ Identifier merge_distributed
+
 SelectWithUnionQuery (children 1)
  ExpressionList (children 1)
   SelectQuery (children 4)
@@ -29,3 +143,9 @@ SelectWithUnionQuery (children 1)
      Identifier dummy1
      Literal ''
    Literal UInt64_10
+
+DropQuery  merge_distributed (children 1)
+ Identifier merge_distributed
+
+DropQuery  merge_distributed1 (children 1)
+ Identifier merge_distributed1

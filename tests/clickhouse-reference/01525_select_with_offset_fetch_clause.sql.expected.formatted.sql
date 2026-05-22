@@ -4,6 +4,17 @@ ORDER BY number DESC
 LIMIT 3 WITH TIES
 OFFSET 2;
 
+DROP TABLE IF EXISTS test_fetch;
+
+CREATE TABLE test_fetch
+(
+    a Int32,
+    b Int32
+)
+ENGINE = Memory;
+
+INSERT INTO test_fetch;
+
 SELECT *
 FROM (
         SELECT *
@@ -29,3 +40,5 @@ FROM (
 ORDER BY
     a ASC,
     b ASC;
+
+DROP TABLE test_fetch;

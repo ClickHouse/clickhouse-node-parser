@@ -1,3 +1,4 @@
+-- Tags: stateful
 SELECT
     CounterID AS k,
     quantileBFloat16(0.5)(ResolutionWidth)
@@ -20,3 +21,6 @@ ORDER BY
 LIMIT 10
 SETTINGS group_by_use_nulls = 1
 FORMAT Null;
+
+-- { echoOn }
+SET enable_analyzer = 1;

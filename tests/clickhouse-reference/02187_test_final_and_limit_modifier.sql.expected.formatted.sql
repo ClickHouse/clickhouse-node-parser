@@ -1,3 +1,17 @@
+DROP TABLE IF EXISTS test_02187;
+
+CREATE TABLE test_02187
+(
+    info String,
+    id Int32
+)
+ENGINE = ReplacingMergeTree(id)
+ORDER BY id;
+
+INSERT INTO test_02187;
+
+INSERT INTO test_02187;
+
 SELECT *
 FROM test_02187 FINAL;
 

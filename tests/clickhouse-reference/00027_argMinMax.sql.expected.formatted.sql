@@ -1,3 +1,4 @@
+-- types
 SELECT
     argMin(x.1, x.2),
     argMax(x.1, x.2)
@@ -30,6 +31,7 @@ FROM (
         FROM numbers(10)
     );
 
+-- array
 SELECT
     argMinArray(id, num),
     argMaxArray(id, num)

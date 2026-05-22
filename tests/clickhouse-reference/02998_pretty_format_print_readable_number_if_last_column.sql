@@ -1,3 +1,4 @@
+SET output_format_pretty_display_footer_column_names=0;
 SELECT 1_000_000 as a FORMAT Pretty;
 SELECT 1_000_000 as a FORMAT PrettyNoEscapes;
 SELECT 1_000_000 as a FORMAT PrettyMonoBlock;
@@ -10,6 +11,7 @@ SELECT 1_000_000 as a FORMAT PrettySpace;
 SELECT 1_000_000 as a FORMAT PrettySpaceNoEscapes;
 SELECT 1_000_000 as a FORMAT PrettySpaceMonoBlock;
 SELECT 1_000_000 as a FORMAT PrettySpaceNoEscapesMonoBlock;
+
 SELECT 1_000_000 as a SETTINGS output_format_pretty_single_large_number_tip_threshold = 1000 FORMAT Pretty;
 SELECT 1_000_000 as a SETTINGS output_format_pretty_single_large_number_tip_threshold = 1000 FORMAT PrettyNoEscapes;
 SELECT 1_000_000 as a SETTINGS output_format_pretty_single_large_number_tip_threshold = 1000 FORMAT PrettyMonoBlock;
@@ -22,6 +24,7 @@ SELECT 1_000_000 as a SETTINGS output_format_pretty_single_large_number_tip_thre
 SELECT 1_000_000 as a SETTINGS output_format_pretty_single_large_number_tip_threshold = 1000 FORMAT PrettySpaceNoEscapes;
 SELECT 1_000_000 as a SETTINGS output_format_pretty_single_large_number_tip_threshold = 1000 FORMAT PrettySpaceMonoBlock;
 SELECT 1_000_000 as a SETTINGS output_format_pretty_single_large_number_tip_threshold = 1000 FORMAT PrettySpaceNoEscapesMonoBlock;
+
 SELECT 1_000_001 as a FORMAT Pretty;
 SELECT 1_000_001 as a FORMAT PrettyNoEscapes;
 SELECT 1_000_001 as a FORMAT PrettyMonoBlock;
@@ -34,6 +37,7 @@ SELECT 1_000_001 as a FORMAT PrettySpace;
 SELECT 1_000_001 as a FORMAT PrettySpaceNoEscapes;
 SELECT 1_000_001 as a FORMAT PrettySpaceMonoBlock;
 SELECT 1_000_001 as a FORMAT PrettySpaceNoEscapesMonoBlock;
+
 SELECT 1_000_000_000 as a FORMAT Pretty;
 SELECT 1_000_000_000 as a FORMAT PrettyNoEscapes;
 SELECT 1_000_000_000 as a FORMAT PrettyMonoBlock;
@@ -46,6 +50,7 @@ SELECT 1_000_000_000 as a FORMAT PrettySpace;
 SELECT 1_000_000_000 as a FORMAT PrettySpaceNoEscapes;
 SELECT 1_000_000_000 as a FORMAT PrettySpaceMonoBlock;
 SELECT 1_000_000_000 as a FORMAT PrettySpaceNoEscapesMonoBlock;
+
 SELECT '2024-02-29' as a, 1_000_000_000 as b FORMAT Pretty;
 SELECT '2024-02-29' as a, 1_000_000_000 as b FORMAT PrettyNoEscapes;
 SELECT '2024-02-29' as a, 1_000_000_000 as b FORMAT PrettyMonoBlock;
@@ -58,6 +63,7 @@ SELECT '2024-02-29' as a, 1_000_000_000 as b FORMAT PrettySpace;
 SELECT '2024-02-29' as a, 1_000_000_000 as b FORMAT PrettySpaceNoEscapes;
 SELECT '2024-02-29' as a, 1_000_000_000 as b FORMAT PrettySpaceMonoBlock;
 SELECT '2024-02-29' as a, 1_000_000_000 as b FORMAT PrettySpaceNoEscapesMonoBlock;
+
 SELECT 1_000_000_000 as a, '2024-02-29' as b FORMAT Pretty;
 SELECT 1_000_000_000 as a, '2024-02-29' as b FORMAT PrettyNoEscapes;
 SELECT 1_000_000_000 as a, '2024-02-29' as b FORMAT PrettyMonoBlock;
@@ -70,6 +76,7 @@ SELECT 1_000_000_000 as a, '2024-02-29' as b FORMAT PrettySpace;
 SELECT 1_000_000_000 as a, '2024-02-29' as b FORMAT PrettySpaceNoEscapes;
 SELECT 1_000_000_000 as a, '2024-02-29' as b FORMAT PrettySpaceMonoBlock;
 SELECT 1_000_000_000 as a, '2024-02-29' as b FORMAT PrettySpaceNoEscapesMonoBlock;
+
 SELECT 1_000_000_000 as a FROM system.numbers LIMIT 2 FORMAT Pretty;
 SELECT 1_000_000_000 as a FROM system.numbers LIMIT 2 FORMAT PrettyNoEscapes;
 SELECT 1_000_000_000 as a FROM system.numbers LIMIT 2 FORMAT PrettyMonoBlock;
@@ -82,6 +89,8 @@ SELECT 1_000_000_000 as a FROM system.numbers LIMIT 2 FORMAT PrettySpace;
 SELECT 1_000_000_000 as a FROM system.numbers LIMIT 2 FORMAT PrettySpaceNoEscapes;
 SELECT 1_000_000_000 as a FROM system.numbers LIMIT 2 FORMAT PrettySpaceMonoBlock;
 SELECT 1_000_000_000 as a FROM system.numbers LIMIT 2 FORMAT PrettySpaceNoEscapesMonoBlock;
+
+SET output_format_pretty_single_large_number_tip_threshold=1;
 SELECT '2024-02-29'::Date FORMAT Pretty;
 SELECT '2024-02-29'::Date FORMAT PrettyNoEscapes;
 SELECT '2024-02-29'::Date FORMAT PrettyMonoBlock;

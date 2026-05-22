@@ -1,3 +1,12 @@
+DROP TABLE IF EXISTS t0;
+
+CREATE TABLE t0
+(
+    c0 Int
+)
+ENGINE = MergeTree()
+ORDER BY tuple();
+
 SELECT t0.c0
 FROM
     t0
@@ -9,3 +18,5 @@ SETTINGS
     query_plan_use_logical_join_step = 0,
     use_join_disjunctions_push_down = 1,
     enable_analyzer = 1;
+
+DROP TABLE t0;

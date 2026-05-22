@@ -1,5 +1,50 @@
 [
   {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "mann_whitney_test"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "mann_whitney_test"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "left",
+        "type": {
+          "name": "Float64"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "right",
+        "type": {
+          "name": "UInt8"
+        }
+      }
+    ],
+    "engine": {
+      "name": "Memory"
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "mann_whitney_test"
+      }
+    }
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -40,5 +85,315 @@
         "value": "0.5426959774289482"
       }
     ]
+  },
+  {
+    "kind": "select",
+    "with": [
+      {
+        "kind": "cteExpr",
+        "name": "pair",
+        "expr": {
+          "kind": "functionCall",
+          "name": "mannWhitneyUTest",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "left"
+              ]
+            },
+            {
+              "kind": "columnRef",
+              "parts": [
+                "right"
+              ]
+            }
+          ]
+        }
+      }
+    ],
+    "select": [
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "roundBankers",
+          "args": [
+            {
+              "kind": "functionCall",
+              "name": "tupleElement",
+              "args": [
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "pair"
+                  ]
+                },
+                {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "1"
+                }
+              ]
+            },
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "16"
+            }
+          ]
+        },
+        "alias": "t_stat"
+      },
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "roundBankers",
+          "args": [
+            {
+              "kind": "functionCall",
+              "name": "tupleElement",
+              "args": [
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "pair"
+                  ]
+                },
+                {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "2"
+                }
+              ]
+            },
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "16"
+            }
+          ]
+        },
+        "alias": "p_value"
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "mann_whitney_test"
+    }
+  },
+  {
+    "kind": "select",
+    "with": [
+      {
+        "kind": "cteExpr",
+        "name": "pair",
+        "expr": {
+          "kind": "functionCall",
+          "name": "mannWhitneyUTest",
+          "params": [
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "two-sided"
+            },
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "1"
+            }
+          ],
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "left"
+              ]
+            },
+            {
+              "kind": "columnRef",
+              "parts": [
+                "right"
+              ]
+            }
+          ]
+        }
+      }
+    ],
+    "select": [
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "roundBankers",
+          "args": [
+            {
+              "kind": "functionCall",
+              "name": "tupleElement",
+              "args": [
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "pair"
+                  ]
+                },
+                {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "1"
+                }
+              ]
+            },
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "16"
+            }
+          ]
+        },
+        "alias": "t_stat"
+      },
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "roundBankers",
+          "args": [
+            {
+              "kind": "functionCall",
+              "name": "tupleElement",
+              "args": [
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "pair"
+                  ]
+                },
+                {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "2"
+                }
+              ]
+            },
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "16"
+            }
+          ]
+        },
+        "alias": "p_value"
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "mann_whitney_test"
+    }
+  },
+  {
+    "kind": "select",
+    "with": [
+      {
+        "kind": "cteExpr",
+        "name": "pair",
+        "expr": {
+          "kind": "functionCall",
+          "name": "mannWhitneyUTest",
+          "params": [
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "two-sided"
+            }
+          ],
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "left"
+              ]
+            },
+            {
+              "kind": "columnRef",
+              "parts": [
+                "right"
+              ]
+            }
+          ]
+        }
+      }
+    ],
+    "select": [
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "roundBankers",
+          "args": [
+            {
+              "kind": "functionCall",
+              "name": "tupleElement",
+              "args": [
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "pair"
+                  ]
+                },
+                {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "1"
+                }
+              ]
+            },
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "16"
+            }
+          ]
+        },
+        "alias": "t_stat"
+      },
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "roundBankers",
+          "args": [
+            {
+              "kind": "functionCall",
+              "name": "tupleElement",
+              "args": [
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "pair"
+                  ]
+                },
+                {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "2"
+                }
+              ]
+            },
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "16"
+            }
+          ]
+        },
+        "alias": "p_value"
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "mann_whitney_test"
+    }
   }
 ]

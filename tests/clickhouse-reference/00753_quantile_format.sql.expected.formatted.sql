@@ -1,3 +1,13 @@
+DROP TABLE IF EXISTS datetime;
+
+CREATE TABLE datetime
+(
+    d DateTime('UTC')
+)
+ENGINE = Memory;
+
+INSERT INTO datetime (d);
+
 SELECT quantile(0.2)(d)
 FROM datetime;
 
@@ -69,3 +79,5 @@ FROM datetime;
 
 SELECT quantilesBFloat16Weighted(0.2)(d, 1)
 FROM datetime;
+
+DROP TABLE datetime;

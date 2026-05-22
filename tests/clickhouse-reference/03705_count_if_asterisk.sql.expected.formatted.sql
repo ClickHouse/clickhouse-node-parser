@@ -1,6 +1,8 @@
+-- Basic countIf with asterisk
 SELECT countIf(*, number < 5)
 FROM numbers(10);
 
+-- countIf with asterisk and multiple columns in subquery
 SELECT countIf(*, number < 20)
 FROM (
         SELECT
@@ -10,6 +12,7 @@ FROM (
         FROM numbers(100)
     );
 
+-- count with filter syntax
 SELECT countIf(number < 20)
 FROM (
         SELECT

@@ -1,3 +1,7 @@
+-- Tags: no-debug, no-fasttest, use-vectorscan
+
+set max_hyperscan_regexp_length = 1;
+set max_hyperscan_regexp_total_length = 1;
 select multiMatchAny('123', ['1']);
 select multiMatchAny('123', ['12']); -- { serverError BAD_ARGUMENTS }
 select multiMatchAny('123', ['1', '2']); -- { serverError BAD_ARGUMENTS }

@@ -1,3 +1,198 @@
+DropQuery  fx_1m (children 1)
+ Identifier fx_1m
+
+DropQuery  fx_5m (children 1)
+ Identifier fx_5m
+
+CreateQuery fx_1m (children 3)
+ Identifier fx_1m
+ Columns definition (children 1)
+  ExpressionList (children 7)
+   ColumnDeclaration symbol (children 2)
+    DataType LowCardinality (children 1)
+     ExpressionList (children 1)
+      DataType String
+    Function CODEC (children 1)
+     ExpressionList (children 1)
+      Function ZSTD
+   ColumnDeclaration dt_close (children 2)
+    DataType DateTime64 (children 1)
+     ExpressionList (children 2)
+      Literal UInt64_3
+      Literal 'UTC'
+    Function CODEC (children 1)
+     ExpressionList (children 2)
+      Function DoubleDelta
+      Function ZSTD
+   ColumnDeclaration open (children 2)
+    DataType Float32
+    Function CODEC (children 1)
+     ExpressionList (children 2)
+      Function Delta
+      Function ZSTD
+   ColumnDeclaration high (children 2)
+    DataType Float32
+    Function CODEC (children 1)
+     ExpressionList (children 2)
+      Function Delta
+      Function ZSTD
+   ColumnDeclaration low (children 2)
+    DataType Float32
+    Function CODEC (children 1)
+     ExpressionList (children 2)
+      Function Delta
+      Function ZSTD
+   ColumnDeclaration close (children 2)
+    DataType Float32
+    Function CODEC (children 1)
+     ExpressionList (children 2)
+      Function Delta
+      Function ZSTD
+   ColumnDeclaration volume (children 2)
+    DataType Float32
+    Function CODEC (children 1)
+     ExpressionList (children 2)
+      Function Delta
+      Function ZSTD
+ Storage definition (children 4)
+  Function MergeTree (children 1)
+   ExpressionList
+  Function toYear (children 1)
+   ExpressionList (children 1)
+    Identifier dt_close
+  Function tuple (children 1)
+   ExpressionList (children 2)
+    Identifier symbol
+    Identifier dt_close
+  Set
+
+AlterQuery  fx_1m (children 2)
+ ExpressionList (children 1)
+  AlterCommand ADD_PROJECTION (children 1)
+   Projection (children 1)
+    ProjectionSelectQuery (children 2)
+     ExpressionList (children 7)
+      Identifier symbol
+      Function toStartOfInterval (alias dt_close) (children 1)
+       ExpressionList (children 2)
+        Identifier dt_close
+        Function toIntervalSecond (children 1)
+         ExpressionList (children 1)
+          Literal UInt64_300
+      Function argMin (children 1)
+       ExpressionList (children 2)
+        Identifier open
+        Identifier dt_close
+      Function max (children 1)
+       ExpressionList (children 1)
+        Identifier high
+      Function min (children 1)
+       ExpressionList (children 1)
+        Identifier low
+      Function argMax (children 1)
+       ExpressionList (children 2)
+        Identifier close
+        Identifier dt_close
+      Function sum (alias volume) (children 1)
+       ExpressionList (children 1)
+        Identifier volume
+     ExpressionList (children 2)
+      Identifier symbol
+      Identifier dt_close
+ Identifier fx_1m
+
+AlterQuery  fx_1m (children 3)
+ ExpressionList (children 1)
+  AlterCommand MATERIALIZE_PROJECTION (children 1)
+   Identifier fx_5m
+ Identifier fx_1m
+ Set
+
+CreateQuery fx_5m (children 2)
+ Identifier fx_5m
+ SelectWithUnionQuery (children 1)
+  ExpressionList (children 1)
+   SelectQuery (children 3)
+    ExpressionList (children 7)
+     Identifier symbol
+     Function toStartOfInterval (alias dt_close) (children 1)
+      ExpressionList (children 2)
+       Identifier dt_close
+       Function toIntervalSecond (children 1)
+        ExpressionList (children 1)
+         Literal UInt64_300
+     Function argMin (alias open) (children 1)
+      ExpressionList (children 2)
+       Identifier open
+       Identifier dt_close
+     Function max (alias high) (children 1)
+      ExpressionList (children 1)
+       Identifier high
+     Function min (alias low) (children 1)
+      ExpressionList (children 1)
+       Identifier low
+     Function argMax (alias close) (children 1)
+      ExpressionList (children 2)
+       Identifier close
+       Identifier dt_close
+     Function sum (alias volume) (children 1)
+      ExpressionList (children 1)
+       Identifier volume
+    TablesInSelectQuery (children 1)
+     TablesInSelectQueryElement (children 1)
+      TableExpression (children 1)
+       TableIdentifier fx_1m
+    ExpressionList (children 2)
+     Identifier symbol
+     Identifier dt_close
+
+InsertQuery   (children 2)
+ Identifier fx_1m
+ SelectWithUnionQuery (children 1)
+  ExpressionList (children 1)
+   SelectQuery (children 2)
+    ExpressionList (children 7)
+     Literal 'EURUSD'
+     Function plus (children 1)
+      ExpressionList (children 2)
+       Function toDateTime64 (children 1)
+        ExpressionList (children 3)
+         Literal '2022-12-12 12:00:00'
+         Literal UInt64_3
+         Literal 'UTC'
+       Identifier number
+     Function plus (children 1)
+      ExpressionList (children 2)
+       Identifier number
+       Function randCanonical (children 1)
+        ExpressionList
+     Function plus (children 1)
+      ExpressionList (children 2)
+       Identifier number
+       Function randCanonical (children 1)
+        ExpressionList
+     Function plus (children 1)
+      ExpressionList (children 2)
+       Identifier number
+       Function randCanonical (children 1)
+        ExpressionList
+     Function plus (children 1)
+      ExpressionList (children 2)
+       Identifier number
+       Function randCanonical (children 1)
+        ExpressionList
+     Function plus (children 1)
+      ExpressionList (children 2)
+       Identifier number
+       Function randCanonical (children 1)
+        ExpressionList
+    TablesInSelectQuery (children 1)
+     TablesInSelectQueryElement (children 1)
+      TableExpression (children 1)
+       Function numbers (children 1)
+        ExpressionList (children 1)
+         Literal UInt64_1000000
+
 SelectWithUnionQuery (children 2)
  ExpressionList (children 1)
   SelectQuery (children 4)
@@ -28,3 +223,9 @@ SelectWithUnionQuery (children 2)
     OrderByElement (children 1)
      Identifier dt_close
  Identifier Null
+
+DropQuery  fx_5m (children 1)
+ Identifier fx_5m
+
+DropQuery  fx_1m (children 1)
+ Identifier fx_1m

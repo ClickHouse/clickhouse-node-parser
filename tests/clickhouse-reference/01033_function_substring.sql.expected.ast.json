@@ -22,12 +22,15 @@
             "value": "hello"
           },
           {
-            "kind": "array",
+            "kind": "arrayLiteral",
             "elements": [],
             "source": "[]"
           }
         ]
       }
+    ],
+    "trailingComments": [
+      "-- { serverError ILLEGAL_TYPE_OF_ARGUMENT }"
     ]
   },
   {
@@ -48,12 +51,15 @@
             "value": "1"
           },
           {
-            "kind": "array",
+            "kind": "arrayLiteral",
             "elements": [],
             "source": "[]"
           }
         ]
       }
+    ],
+    "trailingComments": [
+      "-- { serverError ILLEGAL_TYPE_OF_ARGUMENT }"
     ]
   },
   {
@@ -113,6 +119,9 @@
           }
         ]
       }
+    ],
+    "trailingComments": [
+      "-- { serverError ZERO_ARRAY_OR_TUPLE_INDEX }"
     ]
   },
   {
@@ -562,6 +571,90 @@
     }
   },
   {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "tab"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "tab"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "e8",
+        "type": {
+          "name": "Enum8",
+          "args": [
+            {
+              "kind": "enumValues",
+              "values": [
+                {
+                  "name": "hello",
+                  "value": "-5"
+                },
+                {
+                  "name": "world",
+                  "value": "15"
+                }
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "e16",
+        "type": {
+          "name": "Enum16",
+          "args": [
+            {
+              "kind": "enumValues",
+              "values": [
+                {
+                  "name": "shark",
+                  "value": "-999"
+                },
+                {
+                  "name": "eagle",
+                  "value": "9999"
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "functionCall",
+          "name": "tuple",
+          "args": []
+        }
+      }
+    ]
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "tab"
+      }
+    }
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -602,7 +695,10 @@
     "from": {
       "kind": "tableRef",
       "table": "tab"
-    }
+    },
+    "leadingComments": [
+      "-- positive offsets (slice from left)"
+    ]
   },
   {
     "kind": "select",
@@ -698,7 +794,10 @@
     "from": {
       "kind": "tableRef",
       "table": "tab"
-    }
+    },
+    "leadingComments": [
+      "-- negative offsets (slice from right)"
+    ]
   },
   {
     "kind": "select",
@@ -804,7 +903,10 @@
     "from": {
       "kind": "tableRef",
       "table": "tab"
-    }
+    },
+    "leadingComments": [
+      "-- zero offset/length"
+    ]
   },
   {
     "kind": "select",
@@ -874,6 +976,14 @@
         ]
       }
     ]
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "tab"
+    }
   },
   {
     "kind": "select",
@@ -1634,6 +1744,49 @@
     ]
   },
   {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "tab"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "s",
+        "type": {
+          "name": "String"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "l",
+        "type": {
+          "name": "Int8"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "r",
+        "type": {
+          "name": "Int8"
+        }
+      }
+    ],
+    "engine": {
+      "name": "Memory"
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "tab"
+      }
+    }
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -1759,6 +1912,45 @@
     "from": {
       "kind": "tableRef",
       "table": "tab"
+    }
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "tab"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "s",
+        "type": {
+          "name": "FixedString",
+          "args": [
+            {
+              "kind": "literal",
+              "value": "8"
+            }
+          ]
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "l",
+        "type": {
+          "name": "Int8"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "r",
+        "type": {
+          "name": "Int8"
+        }
+      }
+    ],
+    "engine": {
+      "name": "Memory"
     }
   },
   {
@@ -2194,6 +2386,58 @@
     ]
   },
   {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "t"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "t"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "s",
+        "type": {
+          "name": "String"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "l",
+        "type": {
+          "name": "Int8"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "r",
+        "type": {
+          "name": "Int8"
+        }
+      }
+    ],
+    "engine": {
+      "name": "Memory"
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "t"
+      }
+    }
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -2319,6 +2563,45 @@
     "from": {
       "kind": "tableRef",
       "table": "t"
+    }
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "t"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "s",
+        "type": {
+          "name": "FixedString",
+          "args": [
+            {
+              "kind": "literal",
+              "value": "8"
+            }
+          ]
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "l",
+        "type": {
+          "name": "Int8"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "r",
+        "type": {
+          "name": "Int8"
+        }
+      }
+    ],
+    "engine": {
+      "name": "Memory"
     }
   },
   {
@@ -2348,7 +2631,7 @@
       }
     ],
     "from": {
-      "kind": "tableFunction",
+      "kind": "tableFunctionRef",
       "name": "numbers",
       "args": [
         {
@@ -2358,7 +2641,10 @@
         }
       ]
     },
-    "format": "Null"
+    "format": "Null",
+    "leadingComments": [
+      "/** NOTE: The behaviour of substring and substringUTF8 is inconsistent when negative offset is greater than string size:\n  * substring:\n  *      hello\n  * ^-----^ - offset -10, length 7, result: \"he\"\n  * substringUTF8:\n  *      hello\n  *      ^-----^ - offset -10, length 7, result: \"hello\"\n  * This may be subject for change.\n  */"
+    ]
   },
   {
     "kind": "select",

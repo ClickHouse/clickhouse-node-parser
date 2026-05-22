@@ -1,3 +1,23 @@
+-- Tags: long
+SET max_bytes_before_external_sort = '1M';
+
+SET max_bytes_ratio_before_external_sort = 0;
+
+SET max_block_size = DEFAULT;
+
+SET max_bytes_before_external_group_by = '1M';
+
+SET max_bytes_ratio_before_external_group_by = 0;
+
+SET group_by_two_level_threshold = '100K';
+
+SET group_by_two_level_threshold_bytes = '50M';
+
+SET max_memory_usage = '1G';
+
+CREATE TEMPORARY TABLE start_ts AS
+(SELECT now() AS ts);
+
 SELECT *
 FROM (
         SELECT
@@ -54,6 +74,10 @@ SETTINGS
     temporary_files_codec = 'LZ4'
 FORMAT Null;
 
+SET max_bytes_in_join = '1M';
+
+SET join_algorithm = 'grace_hash', grace_hash_join_initial_buckets = 32, grace_hash_join_max_buckets = 32;
+
 SELECT *
 FROM
     (
@@ -90,6 +114,8 @@ SETTINGS
     temporary_files_codec = 'LZ4'
 FORMAT Null;
 
+SET join_algorithm = 'partial_merge';
+
 SELECT *
 FROM
     (
@@ -125,6 +151,8 @@ SETTINGS
     log_comment = '03772_temporary_files_codec/partial_merge_join',
     temporary_files_codec = 'LZ4'
 FORMAT Null;
+
+SYSTEM FLUSH LOGS system.query_log;
 
 SELECT
     log_comment,

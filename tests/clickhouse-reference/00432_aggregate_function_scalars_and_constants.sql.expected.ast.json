@@ -1,5 +1,210 @@
 [
   {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "agg_func_col"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "allow_deprecated_syntax_for_merge_tree",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "agg_func_col"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "p",
+        "type": {
+          "name": "Date"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "k",
+        "type": {
+          "name": "UInt8"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "d",
+        "type": {
+          "name": "AggregateFunction",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "sum"
+              }
+            },
+            {
+              "kind": "type",
+              "type": {
+                "name": "UInt64"
+              }
+            }
+          ]
+        },
+        "defaultKind": "DEFAULT",
+        "defaultExpr": {
+          "kind": "functionCall",
+          "name": "arrayReduce",
+          "args": [
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "sumState"
+            },
+            {
+              "kind": "arrayLiteral",
+              "elements": [
+                {
+                  "kind": "functionCall",
+                  "name": "toUInt64",
+                  "args": [
+                    {
+                      "kind": "literal",
+                      "type": "UInt64",
+                      "value": "200"
+                    }
+                  ]
+                }
+              ],
+              "source": "[toUInt64(200)]"
+            }
+          ]
+        }
+      }
+    ],
+    "engine": {
+      "name": "AggregatingMergeTree",
+      "args": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "p"
+          ]
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "k"
+          ]
+        },
+        {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      ]
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "agg_func_col"
+      }
+    },
+    "columns": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "k"
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "agg_func_col"
+      }
+    },
+    "columns": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "k"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "d"
+        ]
+      }
+    ],
+    "selectQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "alias",
+          "expr": {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "1"
+          },
+          "alias": "k"
+        },
+        {
+          "kind": "alias",
+          "expr": {
+            "kind": "functionCall",
+            "name": "arrayReduce",
+            "args": [
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "sumState"
+              },
+              {
+                "kind": "arrayLiteral",
+                "elements": [
+                  {
+                    "kind": "functionCall",
+                    "name": "toUInt64",
+                    "args": [
+                      {
+                        "kind": "literal",
+                        "type": "UInt64",
+                        "value": "100"
+                      }
+                    ]
+                  }
+                ],
+                "source": "[toUInt64(100)]"
+              }
+            ]
+          },
+          "alias": "d"
+        }
+      ]
+    }
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -46,6 +251,40 @@
           ]
         },
         "direction": "ASC"
+      }
+    ]
+  },
+  {
+    "kind": "alter",
+    "table": {
+      "kind": "tableRef",
+      "table": "agg_func_col"
+    },
+    "commands": [
+      {
+        "kind": "alterCommand",
+        "commandType": "ADD_COLUMN",
+        "column": {
+          "kind": "columnDef",
+          "name": "af_avg1",
+          "type": {
+            "name": "AggregateFunction",
+            "args": [
+              {
+                "kind": "type",
+                "type": {
+                  "name": "avg"
+                }
+              },
+              {
+                "kind": "type",
+                "type": {
+                  "name": "UInt8"
+                }
+              }
+            ]
+          }
+        }
       }
     ]
   },
@@ -108,6 +347,92 @@
           ]
         },
         "direction": "ASC"
+      }
+    ]
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "agg_func_col"
+      }
+    },
+    "columns": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "k"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "af_avg1"
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "alter",
+    "table": {
+      "kind": "tableRef",
+      "table": "agg_func_col"
+    },
+    "commands": [
+      {
+        "kind": "alterCommand",
+        "commandType": "ADD_COLUMN",
+        "column": {
+          "kind": "columnDef",
+          "name": "af_gua",
+          "type": {
+            "name": "AggregateFunction",
+            "args": [
+              {
+                "kind": "type",
+                "type": {
+                  "name": "groupUniqArray"
+                }
+              },
+              {
+                "kind": "type",
+                "type": {
+                  "name": "String"
+                }
+              }
+            ]
+          },
+          "defaultKind": "DEFAULT",
+          "defaultExpr": {
+            "kind": "functionCall",
+            "name": "arrayReduce",
+            "args": [
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "groupUniqArrayState"
+              },
+              {
+                "kind": "arrayLiteral",
+                "elements": [
+                  {
+                    "kind": "literal",
+                    "type": "String",
+                    "value": "---"
+                  },
+                  {
+                    "kind": "literal",
+                    "type": "String",
+                    "value": "---"
+                  }
+                ],
+                "source": "['---', '---']"
+              }
+            ]
+          }
+        }
       }
     ]
   },
@@ -186,6 +511,43 @@
     ]
   },
   {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "agg_func_col"
+      }
+    },
+    "columns": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "k"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "af_avg1"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "af_gua"
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "optimize",
+    "table": {
+      "kind": "tableRef",
+      "table": "agg_func_col"
+    }
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -198,7 +560,7 @@
             "value": "groupUniqArrayIf"
           },
           {
-            "kind": "array",
+            "kind": "arrayLiteral",
             "elements": [
               {
                 "kind": "literal",
@@ -219,7 +581,7 @@
             "source": "['---', '---', 't1']"
           },
           {
-            "kind": "array",
+            "kind": "arrayLiteral",
             "elements": [
               {
                 "kind": "literal",
@@ -256,7 +618,7 @@
             "value": "groupUniqArrayMergeIf"
           },
           {
-            "kind": "array",
+            "kind": "arrayLiteral",
             "elements": [
               {
                 "kind": "functionCall",
@@ -268,7 +630,7 @@
                     "value": "groupUniqArrayState"
                   },
                   {
-                    "kind": "array",
+                    "kind": "arrayLiteral",
                     "elements": [
                       {
                         "kind": "literal",
@@ -295,7 +657,7 @@
                     "value": "groupUniqArrayState"
                   },
                   {
-                    "kind": "array",
+                    "kind": "arrayLiteral",
                     "elements": [
                       {
                         "kind": "literal",
@@ -316,7 +678,7 @@
             "source": "[arrayReduce('groupUniqArrayState', ['---', '---']), arrayReduce('groupUniqArrayState', ['t1', 't'])]"
           },
           {
-            "kind": "array",
+            "kind": "arrayLiteral",
             "elements": [
               {
                 "kind": "literal",
@@ -351,7 +713,7 @@
               "value": "avgState"
             },
             {
-              "kind": "array",
+              "kind": "arrayLiteral",
               "elements": [
                 {
                   "kind": "literal",
@@ -374,7 +736,7 @@
                 "value": "avgState"
               },
               {
-                "kind": "array",
+                "kind": "arrayLiteral",
                 "elements": [
                   {
                     "kind": "literal",
@@ -401,7 +763,7 @@
                 "value": "avgState"
               },
               {
-                "kind": "array",
+                "kind": "arrayLiteral",
                 "elements": [
                   {
                     "kind": "literal",
@@ -433,7 +795,7 @@
               "value": "avgState"
             },
             {
-              "kind": "array",
+              "kind": "arrayLiteral",
               "elements": [
                 {
                   "kind": "literal",
@@ -456,7 +818,7 @@
                 "value": "avgState"
               },
               {
-                "kind": "array",
+                "kind": "arrayLiteral",
                 "elements": [
                   {
                     "kind": "literal",
@@ -483,7 +845,7 @@
                 "value": "avgState"
               },
               {
-                "kind": "array",
+                "kind": "arrayLiteral",
                 "elements": [
                   {
                     "kind": "literal",
@@ -512,7 +874,7 @@
             "value": "uniqExactMerge"
           },
           {
-            "kind": "array",
+            "kind": "arrayLiteral",
             "elements": [
               {
                 "kind": "functionCall",
@@ -524,7 +886,7 @@
                     "value": "uniqExactMergeState"
                   },
                   {
-                    "kind": "array",
+                    "kind": "arrayLiteral",
                     "elements": [
                       {
                         "kind": "functionCall",
@@ -536,7 +898,7 @@
                             "value": "uniqExactState"
                           },
                           {
-                            "kind": "array",
+                            "kind": "arrayLiteral",
                             "elements": [
                               {
                                 "kind": "literal",
@@ -558,7 +920,7 @@
                             "value": "uniqExactState"
                           },
                           {
-                            "kind": "array",
+                            "kind": "arrayLiteral",
                             "elements": [
                               {
                                 "kind": "literal",
@@ -595,7 +957,7 @@
             "value": "uniqExactMerge"
           },
           {
-            "kind": "array",
+            "kind": "arrayLiteral",
             "elements": [
               {
                 "kind": "functionCall",
@@ -607,7 +969,7 @@
                     "value": "uniqExactMergeState"
                   },
                   {
-                    "kind": "array",
+                    "kind": "arrayLiteral",
                     "elements": [
                       {
                         "kind": "functionCall",
@@ -619,7 +981,7 @@
                             "value": "uniqExactState"
                           },
                           {
-                            "kind": "array",
+                            "kind": "arrayLiteral",
                             "elements": [
                               {
                                 "kind": "literal",
@@ -641,7 +1003,7 @@
                             "value": "uniqExactState"
                           },
                           {
-                            "kind": "array",
+                            "kind": "arrayLiteral",
                             "elements": [
                               {
                                 "kind": "literal",

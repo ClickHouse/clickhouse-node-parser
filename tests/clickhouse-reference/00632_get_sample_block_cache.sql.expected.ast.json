@@ -1,5 +1,415 @@
 [
   {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "joined_subquery_requires_alias",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      }
+    ],
+    "leadingComments": [
+      "-- Tags: long, no-object-storage, no-asan, no-msan"
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "enable_analyzer",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ],
+    "leadingComments": [
+      "-- We are no longer interested in the old analyzer."
+    ]
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "dict_string"
+    },
+    "ifExists": true,
+    "leadingComments": [
+      "-- This test (SELECT) without cache can take tens minutes"
+    ]
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "dict_ui64"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "video_views"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "allow_deprecated_syntax_for_merge_tree",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "video_views"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "entityIri",
+        "type": {
+          "name": "String"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "courseId",
+        "type": {
+          "name": "UInt64"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "learnerId",
+        "type": {
+          "name": "UInt64"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "actorId",
+        "type": {
+          "name": "UInt64"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "duration",
+        "type": {
+          "name": "UInt16"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "fullWatched",
+        "type": {
+          "name": "UInt8"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "fullWatchedDate",
+        "type": {
+          "name": "DateTime"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "fullWatchedDuration",
+        "type": {
+          "name": "UInt16"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "fullWatchedTime",
+        "type": {
+          "name": "UInt16"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "fullWatchedViews",
+        "type": {
+          "name": "UInt16"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "views.viewId",
+        "type": {
+          "name": "Array",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "String"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "views.startedAt",
+        "type": {
+          "name": "Array",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "DateTime"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "views.endedAt",
+        "type": {
+          "name": "Array",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "DateTime"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "views.viewDuration",
+        "type": {
+          "name": "Array",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "UInt16"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "views.watchedPart",
+        "type": {
+          "name": "Array",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "Float32"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "views.fullWatched",
+        "type": {
+          "name": "Array",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "UInt8"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "views.progress",
+        "type": {
+          "name": "Array",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "Float32"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "views.reject",
+        "type": {
+          "name": "Array",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "UInt8"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "views.viewNumber",
+        "type": {
+          "name": "Array",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "UInt16"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "views.repeatingView",
+        "type": {
+          "name": "Array",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "UInt8"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "views.ranges",
+        "type": {
+          "name": "Array",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "String"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "version",
+        "type": {
+          "name": "DateTime"
+        }
+      }
+    ],
+    "engine": {
+      "name": "ReplacingMergeTree",
+      "args": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "version"
+          ]
+        }
+      ]
+    },
+    "partitionBy": {
+      "kind": "columnRef",
+      "parts": [
+        "entityIri"
+      ]
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "learnerId"
+          ]
+        }
+      },
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "entityIri"
+          ]
+        }
+      }
+    ],
+    "settings": [
+      {
+        "name": "index_granularity",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "8192"
+        }
+      }
+    ],
+    "settingsAfterOrderBy": true
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "dict_string"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "entityIri",
+        "type": {
+          "name": "String"
+        }
+      }
+    ],
+    "engine": {
+      "name": "Memory"
+    }
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "dict_ui64"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "learnerId",
+        "type": {
+          "name": "UInt64"
+        }
+      }
+    ],
+    "engine": {
+      "name": "Memory"
+    }
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -1251,7 +1661,7 @@
                                                                                                   }
                                                                                                 }
                                                                                               },
-                                                                                              "kind": "join",
+                                                                                              "kind": "joinExpr",
                                                                                               "joinType": "LEFT",
                                                                                               "right": {
                                                                                                 "kind": "subqueryFrom",
@@ -1287,7 +1697,7 @@
                                                                                                       "table": "video_views",
                                                                                                       "final": true
                                                                                                     },
-                                                                                                    "kind": "arrayJoin",
+                                                                                                    "kind": "arrayJoinExpr",
                                                                                                     "joinType": "ARRAY",
                                                                                                     "expressions": [
                                                                                                       {
@@ -1377,7 +1787,7 @@
                                                                                             }
                                                                                           }
                                                                                         },
-                                                                                        "kind": "join",
+                                                                                        "kind": "joinExpr",
                                                                                         "joinType": "LEFT",
                                                                                         "right": {
                                                                                           "kind": "subqueryFrom",
@@ -1448,7 +1858,7 @@
                                                                                                     "table": "video_views",
                                                                                                     "final": true
                                                                                                   },
-                                                                                                  "kind": "arrayJoin",
+                                                                                                  "kind": "arrayJoinExpr",
                                                                                                   "joinType": "ARRAY",
                                                                                                   "expressions": [
                                                                                                     {
@@ -1579,7 +1989,7 @@
                                                                                       }
                                                                                     }
                                                                                   },
-                                                                                  "kind": "join",
+                                                                                  "kind": "joinExpr",
                                                                                   "joinType": "LEFT",
                                                                                   "right": {
                                                                                     "kind": "subqueryFrom",
@@ -1616,7 +2026,7 @@
                                                                                           "table": "video_views",
                                                                                           "final": true
                                                                                         },
-                                                                                        "kind": "arrayJoin",
+                                                                                        "kind": "arrayJoinExpr",
                                                                                         "joinType": "ARRAY",
                                                                                         "expressions": [
                                                                                           {
@@ -1728,7 +2138,7 @@
                                                                                 }
                                                                               }
                                                                             },
-                                                                            "kind": "join",
+                                                                            "kind": "joinExpr",
                                                                             "joinType": "LEFT",
                                                                             "right": {
                                                                               "kind": "subqueryFrom",
@@ -1791,7 +2201,7 @@
                                                                                         "table": "video_views",
                                                                                         "final": true
                                                                                       },
-                                                                                      "kind": "arrayJoin",
+                                                                                      "kind": "arrayJoinExpr",
                                                                                       "joinType": "ARRAY",
                                                                                       "expressions": [
                                                                                         {
@@ -1922,7 +2332,7 @@
                                                                           }
                                                                         }
                                                                       },
-                                                                      "kind": "join",
+                                                                      "kind": "joinExpr",
                                                                       "joinType": "LEFT",
                                                                       "right": {
                                                                         "kind": "subqueryFrom",
@@ -1959,7 +2369,7 @@
                                                                               "table": "video_views",
                                                                               "final": true
                                                                             },
-                                                                            "kind": "arrayJoin",
+                                                                            "kind": "arrayJoinExpr",
                                                                             "joinType": "ARRAY",
                                                                             "expressions": [
                                                                               {
@@ -2049,7 +2459,7 @@
                                                                     }
                                                                   }
                                                                 },
-                                                                "kind": "join",
+                                                                "kind": "joinExpr",
                                                                 "joinType": "LEFT",
                                                                 "right": {
                                                                   "kind": "subqueryFrom",
@@ -2086,7 +2496,7 @@
                                                                         "table": "video_views",
                                                                         "final": true
                                                                       },
-                                                                      "kind": "arrayJoin",
+                                                                      "kind": "arrayJoinExpr",
                                                                       "joinType": "ARRAY",
                                                                       "expressions": [
                                                                         {
@@ -2176,7 +2586,7 @@
                                                               }
                                                             }
                                                           },
-                                                          "kind": "join",
+                                                          "kind": "joinExpr",
                                                           "joinType": "LEFT",
                                                           "right": {
                                                             "kind": "subqueryFrom",
@@ -2205,7 +2615,7 @@
                                                                   "table": "video_views",
                                                                   "final": true
                                                                 },
-                                                                "kind": "arrayJoin",
+                                                                "kind": "arrayJoinExpr",
                                                                 "joinType": "ARRAY",
                                                                 "expressions": [
                                                                   {
@@ -2317,7 +2727,7 @@
                                                         }
                                                       }
                                                     },
-                                                    "kind": "join",
+                                                    "kind": "joinExpr",
                                                     "joinType": "LEFT",
                                                     "right": {
                                                       "kind": "subqueryFrom",
@@ -2388,7 +2798,7 @@
                                                                 "table": "video_views",
                                                                 "final": true
                                                               },
-                                                              "kind": "arrayJoin",
+                                                              "kind": "arrayJoinExpr",
                                                               "joinType": "ARRAY",
                                                               "expressions": [
                                                                 {
@@ -2497,7 +2907,7 @@
                                                   }
                                                 }
                                               },
-                                              "kind": "join",
+                                              "kind": "joinExpr",
                                               "joinType": "LEFT",
                                               "right": {
                                                 "kind": "subqueryFrom",
@@ -2611,7 +3021,7 @@
                                             }
                                           }
                                         },
-                                        "kind": "join",
+                                        "kind": "joinExpr",
                                         "joinType": "LEFT",
                                         "right": {
                                           "kind": "subqueryFrom",
@@ -2725,7 +3135,7 @@
                                       }
                                     }
                                   },
-                                  "kind": "join",
+                                  "kind": "joinExpr",
                                   "joinType": "LEFT",
                                   "right": {
                                     "kind": "subqueryFrom",
@@ -2860,7 +3270,7 @@
                                 }
                               }
                             },
-                            "kind": "join",
+                            "kind": "joinExpr",
                             "joinType": "LEFT",
                             "right": {
                               "kind": "subqueryFrom",
@@ -2896,7 +3306,7 @@
                                     "table": "video_views",
                                     "final": true
                                   },
-                                  "kind": "arrayJoin",
+                                  "kind": "arrayJoinExpr",
                                   "joinType": "ARRAY",
                                   "expressions": [
                                     {
@@ -2986,7 +3396,7 @@
                           }
                         }
                       },
-                      "kind": "join",
+                      "kind": "joinExpr",
                       "joinType": "LEFT",
                       "right": {
                         "kind": "subqueryFrom",
@@ -3121,7 +3531,7 @@
                     }
                   }
                 },
-                "kind": "join",
+                "kind": "joinExpr",
                 "joinType": "LEFT",
                 "right": {
                   "kind": "subqueryFrom",
@@ -3150,7 +3560,7 @@
                         "table": "video_views",
                         "final": true
                       },
-                      "kind": "arrayJoin",
+                      "kind": "arrayJoinExpr",
                       "joinType": "ARRAY",
                       "expressions": [
                         {
@@ -3240,7 +3650,7 @@
               }
             }
           },
-          "kind": "join",
+          "kind": "joinExpr",
           "joinType": "LEFT",
           "right": {
             "kind": "subqueryFrom",
@@ -3354,6 +3764,184 @@
         }
       }
     }
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "dict_string"
+    }
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "dict_ui64"
+    }
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "video_views"
+    }
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "max_threads",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "32"
+        }
+      },
+      {
+        "name": "max_memory_usage",
+        "value": {
+          "kind": "literal",
+          "type": "String",
+          "value": "10G"
+        }
+      }
+    ],
+    "leadingComments": [
+      "-- Test for tsan: Ensure cache is used from one thread"
+    ]
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "sample_00632"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "sample_00632"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "d",
+        "type": {
+          "name": "Date"
+        },
+        "defaultKind": "DEFAULT",
+        "defaultExpr": {
+          "kind": "literal",
+          "type": "String",
+          "value": "2000-01-01"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "x",
+        "type": {
+          "name": "UInt16"
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree",
+      "args": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "d"
+          ]
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "x"
+          ]
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "x"
+          ]
+        },
+        {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "10"
+        }
+      ]
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "sample_00632"
+      }
+    },
+    "columns": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "x"
+        ]
+      }
+    ],
+    "selectQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "alias",
+          "expr": {
+            "kind": "functionCall",
+            "name": "toUInt16",
+            "args": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "number"
+                ]
+              }
+            ]
+          },
+          "alias": "x"
+        }
+      ],
+      "from": {
+        "kind": "tableRef",
+        "database": "system",
+        "table": "numbers"
+      },
+      "limit": {
+        "count": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "65536"
+        }
+      }
+    }
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "max_execution_time",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "300"
+        }
+      }
+    ]
   },
   {
     "kind": "select",
@@ -7217,6 +7805,14 @@
           }
         ]
       }
+    }
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "sample_00632"
     }
   }
 ]

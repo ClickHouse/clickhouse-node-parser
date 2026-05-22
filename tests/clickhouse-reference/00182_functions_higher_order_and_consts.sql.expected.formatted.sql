@@ -1,3 +1,4 @@
+--{echoOn}
 SELECT '---map--';
 
 SELECT arrayMap(x -> 123, emptyArrayUInt8());
@@ -34,9 +35,9 @@ SELECT arrayFilter(x -> x > 2, [1, 2, 3]);
 
 SELECT arrayFilter(x -> NULL, [1, 2, 3]);
 
-SELECT arrayFilter(x -> 1.1, [1, 2, 3]);
+SELECT arrayFilter(x -> 1.1, [1, 2, 3]); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
-SELECT arrayFilter(x -> 'string', [1, 2, 3]);
+SELECT arrayFilter(x -> 'string', [1, 2, 3]); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
 SELECT arrayCount(x -> 0, emptyArrayUInt8());
 
@@ -60,7 +61,7 @@ SELECT arrayCount(x -> x > 1, [1, 2, 3]);
 
 SELECT arrayCount(x -> NULL, [1, 2, 3]);
 
-SELECT arrayCount(x -> 'string', [1, 2, 3]);
+SELECT arrayCount(x -> 'string', [1, 2, 3]); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
 SELECT arraySum(x -> 0, emptyArrayUInt8());
 
@@ -102,7 +103,7 @@ SELECT arrayAll(x -> x, [1, 2, 3]);
 
 SELECT arrayAll(x -> NULL, [1, 2, 3]);
 
-SELECT arrayAll(x -> 'string', [1, 2, 3]);
+SELECT arrayAll(x -> 'string', [1, 2, 3]); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
 SELECT arrayExists(x -> 0, emptyArrayUInt8());
 
@@ -144,7 +145,7 @@ SELECT arrayFirst(x -> x, [1, 2, 3]);
 
 SELECT arrayFirst(x -> NULL, [1, 2, 3]);
 
-SELECT arrayFirst(x -> 'string', [1, 2, 3]);
+SELECT arrayFirst(x -> 'string', [1, 2, 3]); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
 SELECT arrayLast(x -> 0, emptyArrayUInt8());
 
@@ -170,7 +171,7 @@ SELECT arrayLast(x -> x, [1, 2, 3]);
 
 SELECT arrayLast(x -> NULL, [1, 2, 3]);
 
-SELECT arrayLast(x -> 'string', [1, 2, 3]);
+SELECT arrayLast(x -> 'string', [1, 2, 3]); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
 SELECT arrayFirstIndex(x -> 0, emptyArrayUInt8());
 
@@ -196,7 +197,7 @@ SELECT arrayFirstIndex(x -> x, [1, 2, 3]);
 
 SELECT arrayFirstIndex(x -> NULL, [1, 2, 3]);
 
-SELECT arrayFirstIndex(x -> 'string', [1, 2, 3]);
+SELECT arrayFirstIndex(x -> 'string', [1, 2, 3]); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
 SELECT arrayLastIndex(x -> 0, emptyArrayUInt8());
 
@@ -222,7 +223,7 @@ SELECT arrayLastIndex(x -> x, [1, 2, 3]);
 
 SELECT arrayLastIndex(x -> NULL, [1, 2, 3]);
 
-SELECT arrayLastIndex(x -> 'string', [1, 2, 3]);
+SELECT arrayLastIndex(x -> 'string', [1, 2, 3]); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
 SELECT arrayCumSum(x -> 0, emptyArrayUInt8());
 
@@ -330,7 +331,7 @@ LIMIT 10;
 
 SELECT arrayExists(x -> x, [1, 2, 3]);
 
-SELECT arrayExists(x -> 'string', [1, 2, 3]);
+SELECT arrayExists(x -> 'string', [1, 2, 3]); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
 SELECT arrayFirst(x -> materialize(0), emptyArrayUInt8());
 

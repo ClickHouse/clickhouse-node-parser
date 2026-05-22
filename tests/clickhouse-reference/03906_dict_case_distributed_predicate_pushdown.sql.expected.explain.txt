@@ -1,3 +1,58 @@
+Set
+
+DropQuery  t_dict_dist_local (children 1)
+ Identifier t_dict_dist_local
+
+DropQuery  d_dict_dist (children 1)
+ Identifier d_dict_dist
+
+DropQuery  t_dict_dist (children 1)
+ Identifier t_dict_dist
+
+CreateQuery t_dict_dist_local (children 3)
+ Identifier t_dict_dist_local
+ Columns definition (children 1)
+  ExpressionList (children 2)
+   ColumnDeclaration id (children 1)
+    DataType Int64
+   ColumnDeclaration c (children 1)
+    DataType String
+ Storage definition (children 2)
+  Function MergeTree (children 1)
+   ExpressionList
+  Identifier id
+
+InsertQuery   (children 1)
+ Identifier t_dict_dist_local
+
+CreateQuery d_dict_dist (children 3)
+ Identifier d_dict_dist
+ ExpressionList (children 2)
+  DictionaryAttributeDeclaration id (children 1)
+   DataType Int64
+  DictionaryAttributeDeclaration d (children 1)
+   DataType String
+ Dictionary definition (children 4)
+  ExpressionList (children 1)
+   Identifier id
+  FunctionWithKeyValueArguments  clickhouse (children 1)
+   ExpressionList (children 1)
+    pair (children 1)
+     Literal '\n    SELECT * FROM (\n        SELECT toInt64(1) AS id, \'alpha\' AS d\n        UNION ALL\n        SELECT toInt64(2) AS id, \'beta\' AS d\n    )\n'
+  Dictionary lifetime
+  Dictionary layout (children 1)
+   ExpressionList
+
+CreateQuery t_dict_dist (children 2)
+ Identifier t_dict_dist
+ Storage definition (children 1)
+  Function Distributed (children 1)
+   ExpressionList (children 3)
+    Identifier test_shard_localhost
+    Function currentDatabase (children 1)
+     ExpressionList
+    Identifier t_dict_dist_local
+
 SelectWithUnionQuery (children 1)
  ExpressionList (children 1)
   SelectQuery (children 4)
@@ -52,3 +107,12 @@ SelectWithUnionQuery (children 1)
    ExpressionList (children 1)
     OrderByElement (children 1)
      Identifier id
+
+DropQuery  t_dict_dist (children 1)
+ Identifier t_dict_dist
+
+DropQuery  d_dict_dist (children 1)
+ Identifier d_dict_dist
+
+DropQuery  t_dict_dist_local (children 1)
+ Identifier t_dict_dist_local

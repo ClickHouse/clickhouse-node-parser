@@ -1,3 +1,379 @@
+Set
+
+Set
+
+Set
+
+Set
+
+Set
+
+Set
+
+DropQuery  target_table (children 1)
+ Identifier target_table
+
+DropQuery  logins (children 1)
+ Identifier logins
+
+DropQuery  mv_logins2target (children 1)
+ Identifier mv_logins2target
+
+DropQuery  checkouts (children 1)
+ Identifier checkouts
+
+DropQuery  mv_checkouts2target (children 1)
+ Identifier mv_checkouts2target
+
+CreateQuery target_table (children 3)
+ Identifier target_table
+ Storage definition (children 3)
+  Function SummingMergeTree (children 1)
+   ExpressionList
+  Identifier id
+  Set
+ SelectWithUnionQuery (children 1)
+  ExpressionList (children 1)
+   SelectQuery (children 4)
+    ExpressionList (children 5)
+     Identifier number (alias id)
+     Function maxState (alias latest_login_time) (children 1)
+      ExpressionList (children 1)
+       Function toDateTime (children 1)
+        ExpressionList (children 2)
+         Literal UInt64_0
+         Literal 'UTC'
+     Function maxState (alias latest_checkout_time) (children 1)
+      ExpressionList (children 1)
+       Function toDateTime (children 1)
+        ExpressionList (children 2)
+         Literal UInt64_0
+         Literal 'UTC'
+     Function minState (alias fastest_session) (children 1)
+      ExpressionList (children 1)
+       Function toUInt64 (children 1)
+        ExpressionList (children 1)
+         Literal Int64_-1
+     Function maxState (alias biggest_inactivity_period) (children 1)
+      ExpressionList (children 1)
+       Function toUInt64 (children 1)
+        ExpressionList (children 1)
+         Literal UInt64_0
+    TablesInSelectQuery (children 1)
+     TablesInSelectQueryElement (children 1)
+      TableExpression (children 1)
+       Function numbers (children 1)
+        ExpressionList (children 1)
+         Literal UInt64_50000
+    ExpressionList (children 1)
+     Identifier id
+    Set
+
+CreateQuery logins (children 3)
+ Identifier logins
+ Columns definition (children 1)
+  ExpressionList (children 2)
+   ColumnDeclaration id (children 1)
+    DataType UInt64
+   ColumnDeclaration ts (children 1)
+    DataType DateTime (children 1)
+     ExpressionList (children 1)
+      Literal 'UTC'
+ Storage definition (children 2)
+  Function MergeTree
+  Identifier id
+
+CreateQuery mv_logins2target (children 3)
+ Identifier mv_logins2target
+ SelectWithUnionQuery (children 1)
+  ExpressionList (children 1)
+   SelectQuery (children 3)
+    ExpressionList (children 5)
+     Identifier id
+     Function maxState (alias latest_login_time) (children 1)
+      ExpressionList (children 1)
+       Identifier ts
+     Function maxState (alias latest_checkout_time) (children 1)
+      ExpressionList (children 1)
+       Function toDateTime (children 1)
+        ExpressionList (children 2)
+         Literal UInt64_0
+         Literal 'UTC'
+     Function minState (alias fastest_session) (children 1)
+      ExpressionList (children 1)
+       Function toUInt64 (children 1)
+        ExpressionList (children 1)
+         Literal Int64_-1
+     Function if (alias biggest_inactivity_period) (children 1)
+      ExpressionList (children 3)
+       Function greater (children 1)
+        ExpressionList (children 2)
+         Function max (children 1)
+          ExpressionList (children 1)
+           Identifier current_latest_checkout_time
+         Literal UInt64_0
+       Function maxState (children 1)
+        ExpressionList (children 1)
+         Function toUInt64 (children 1)
+          ExpressionList (children 1)
+           Function minus (children 1)
+            ExpressionList (children 2)
+             Identifier ts
+             Identifier current_latest_checkout_time
+       Function maxState (children 1)
+        ExpressionList (children 1)
+         Function toUInt64 (children 1)
+          ExpressionList (children 1)
+           Literal UInt64_0
+    TablesInSelectQuery (children 2)
+     TablesInSelectQueryElement (children 1)
+      TableExpression (children 1)
+       TableIdentifier logins
+     TablesInSelectQueryElement (children 2)
+      TableExpression (children 1)
+       Subquery (children 1)
+        SelectWithUnionQuery (children 1)
+         ExpressionList (children 1)
+          SelectQuery (children 4)
+           ExpressionList (children 2)
+            Identifier id
+            Function maxMerge (alias current_latest_checkout_time) (children 1)
+             ExpressionList (children 1)
+              Identifier latest_checkout_time
+           TablesInSelectQuery (children 1)
+            TablesInSelectQueryElement (children 1)
+             TableExpression (children 1)
+              TableIdentifier target_table
+           Function in (children 1)
+            ExpressionList (children 2)
+             Identifier id
+             Subquery (children 1)
+              SelectWithUnionQuery (children 1)
+               ExpressionList (children 1)
+                SelectQuery (children 2)
+                 ExpressionList (children 1)
+                  Identifier id
+                 TablesInSelectQuery (children 1)
+                  TablesInSelectQueryElement (children 1)
+                   TableExpression (children 1)
+                    TableIdentifier logins
+           ExpressionList (children 1)
+            Identifier id
+      TableJoin (children 1)
+       ExpressionList (children 1)
+        Identifier id
+    ExpressionList (children 1)
+     Identifier id
+ ViewTargets
+
+CreateQuery checkouts (children 3)
+ Identifier checkouts
+ Columns definition (children 1)
+  ExpressionList (children 2)
+   ColumnDeclaration id (children 1)
+    DataType UInt64
+   ColumnDeclaration ts (children 1)
+    DataType DateTime (children 1)
+     ExpressionList (children 1)
+      Literal 'UTC'
+ Storage definition (children 2)
+  Function MergeTree
+  Identifier id
+
+CreateQuery mv_checkouts2target (children 3)
+ Identifier mv_checkouts2target
+ SelectWithUnionQuery (children 1)
+  ExpressionList (children 1)
+   SelectQuery (children 3)
+    ExpressionList (children 5)
+     Identifier id
+     Function maxState (alias latest_login_time) (children 1)
+      ExpressionList (children 1)
+       Function toDateTime (children 1)
+        ExpressionList (children 2)
+         Literal UInt64_0
+         Literal 'UTC'
+     Function maxState (alias latest_checkout_time) (children 1)
+      ExpressionList (children 1)
+       Identifier ts
+     Function if (alias fastest_session) (children 1)
+      ExpressionList (children 3)
+       Function greater (children 1)
+        ExpressionList (children 2)
+         Function max (children 1)
+          ExpressionList (children 1)
+           Identifier current_latest_login_time
+         Literal UInt64_0
+       Function minState (children 1)
+        ExpressionList (children 1)
+         Function toUInt64 (children 1)
+          ExpressionList (children 1)
+           Function minus (children 1)
+            ExpressionList (children 2)
+             Identifier ts
+             Identifier current_latest_login_time
+       Function minState (children 1)
+        ExpressionList (children 1)
+         Function toUInt64 (children 1)
+          ExpressionList (children 1)
+           Literal Int64_-1
+     Function maxState (alias biggest_inactivity_period) (children 1)
+      ExpressionList (children 1)
+       Function toUInt64 (children 1)
+        ExpressionList (children 1)
+         Literal UInt64_0
+    TablesInSelectQuery (children 2)
+     TablesInSelectQueryElement (children 1)
+      TableExpression (children 1)
+       TableIdentifier checkouts
+     TablesInSelectQueryElement (children 2)
+      TableExpression (children 1)
+       Subquery (children 1)
+        SelectWithUnionQuery (children 1)
+         ExpressionList (children 1)
+          SelectQuery (children 4)
+           ExpressionList (children 2)
+            Identifier id
+            Function maxMerge (alias current_latest_login_time) (children 1)
+             ExpressionList (children 1)
+              Identifier latest_login_time
+           TablesInSelectQuery (children 1)
+            TablesInSelectQueryElement (children 1)
+             TableExpression (children 1)
+              TableIdentifier target_table
+           Function in (children 1)
+            ExpressionList (children 2)
+             Identifier id
+             Subquery (children 1)
+              SelectWithUnionQuery (children 1)
+               ExpressionList (children 1)
+                SelectQuery (children 2)
+                 ExpressionList (children 1)
+                  Identifier id
+                 TablesInSelectQuery (children 1)
+                  TablesInSelectQueryElement (children 1)
+                   TableExpression (children 1)
+                    TableIdentifier checkouts
+           ExpressionList (children 1)
+            Identifier id
+      TableJoin (children 1)
+       ExpressionList (children 1)
+        Identifier id
+    ExpressionList (children 1)
+     Identifier id
+ ViewTargets
+
+SYSTEM query (children 1)
+ Identifier target_table
+
+SYSTEM query (children 1)
+ Identifier checkouts
+
+SYSTEM query (children 1)
+ Identifier logins
+
+InsertQuery   (children 2)
+ Identifier logins
+ SelectWithUnionQuery (children 1)
+  ExpressionList (children 1)
+   SelectQuery (children 2)
+    ExpressionList (children 2)
+     Identifier number (alias id)
+     Literal '2000-01-01 08:00:00'
+    TablesInSelectQuery (children 1)
+     TablesInSelectQueryElement (children 1)
+      TableExpression (children 1)
+       Function numbers (children 1)
+        ExpressionList (children 1)
+         Literal UInt64_50000
+
+InsertQuery   (children 2)
+ Identifier checkouts
+ SelectWithUnionQuery (children 1)
+  ExpressionList (children 1)
+   SelectQuery (children 2)
+    ExpressionList (children 2)
+     Identifier number (alias id)
+     Literal '2000-01-01 10:00:00'
+    TablesInSelectQuery (children 1)
+     TablesInSelectQueryElement (children 1)
+      TableExpression (children 1)
+       Function numbers (children 1)
+        ExpressionList (children 1)
+         Literal UInt64_50000
+
+Set
+
+InsertQuery   (children 2)
+ Identifier logins
+ SelectWithUnionQuery (children 1)
+  ExpressionList (children 1)
+   SelectQuery (children 2)
+    ExpressionList (children 2)
+     Identifier number (alias id)
+     Literal '2000-01-01 11:00:00'
+    TablesInSelectQuery (children 1)
+     TablesInSelectQueryElement (children 1)
+      TableExpression (children 1)
+       Function numbers (children 1)
+        ExpressionList (children 1)
+         Literal UInt64_1000
+
+InsertQuery   (children 2)
+ Identifier checkouts
+ SelectWithUnionQuery (children 1)
+  ExpressionList (children 1)
+   SelectQuery (children 2)
+    ExpressionList (children 2)
+     Identifier number (alias id)
+     Literal '2000-01-01 11:10:00'
+    TablesInSelectQuery (children 1)
+     TablesInSelectQueryElement (children 1)
+      TableExpression (children 1)
+       Function numbers (children 1)
+        ExpressionList (children 1)
+         Literal UInt64_1000
+
+Set
+
+InsertQuery   (children 2)
+ Identifier logins
+ SelectWithUnionQuery (children 1)
+  ExpressionList (children 1)
+   SelectQuery (children 2)
+    ExpressionList (children 2)
+     Function plus (alias id) (children 1)
+      ExpressionList (children 2)
+       Identifier number
+       Literal UInt64_2
+     Literal '2001-01-01 11:10:01'
+    TablesInSelectQuery (children 1)
+     TablesInSelectQueryElement (children 1)
+      TableExpression (children 1)
+       Function numbers (children 1)
+        ExpressionList (children 1)
+         Literal UInt64_1
+
+InsertQuery   (children 2)
+ Identifier checkouts
+ SelectWithUnionQuery (children 1)
+  ExpressionList (children 1)
+   SelectQuery (children 2)
+    ExpressionList (children 2)
+     Function plus (alias id) (children 1)
+      ExpressionList (children 2)
+       Identifier number
+       Literal UInt64_2
+     Literal '2001-01-01 11:10:02'
+    TablesInSelectQuery (children 1)
+     TablesInSelectQueryElement (children 1)
+      TableExpression (children 1)
+       Function numbers (children 1)
+        ExpressionList (children 1)
+         Literal UInt64_1
+
+Set
+
 SelectWithUnionQuery (children 1)
  ExpressionList (children 1)
   SelectQuery (children 1)
@@ -67,3 +443,6 @@ SelectWithUnionQuery (children 1)
    ExpressionList (children 1)
     OrderByElement (children 1)
      Identifier id
+
+DropQuery  target_table (children 1)
+ Identifier target_table

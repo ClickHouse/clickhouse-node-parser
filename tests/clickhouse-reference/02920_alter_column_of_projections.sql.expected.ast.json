@@ -1,5 +1,262 @@
 [
   {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "t"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "t"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "uid",
+        "type": {
+          "name": "Int16"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "name",
+        "type": {
+          "name": "String"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "age",
+        "type": {
+          "name": "Nullable",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "Int8"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "i",
+        "type": {
+          "name": "Int16"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "j",
+        "type": {
+          "name": "Int16"
+        }
+      },
+      {
+        "kind": "projectionDef",
+        "name": "p1",
+        "query": {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "name"
+              ]
+            },
+            {
+              "kind": "columnRef",
+              "parts": [
+                "age"
+              ]
+            },
+            {
+              "kind": "functionCall",
+              "name": "uniq",
+              "args": [
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "i"
+                  ]
+                }
+              ]
+            },
+            {
+              "kind": "functionCall",
+              "name": "count",
+              "args": [
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "j"
+                  ]
+                }
+              ]
+            }
+          ],
+          "groupBy": {
+            "kind": "expressions",
+            "items": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "name"
+                ]
+              },
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "age"
+                ]
+              }
+            ]
+          }
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "uid"
+          ]
+        }
+      }
+    ],
+    "settings": [
+      {
+        "name": "index_granularity",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ],
+    "settingsAfterOrderBy": true
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "t"
+      }
+    }
+  },
+  {
+    "kind": "alter",
+    "table": {
+      "kind": "tableRef",
+      "table": "t"
+    },
+    "commands": [
+      {
+        "kind": "alterCommand",
+        "commandType": "MODIFY_COLUMN",
+        "column": {
+          "kind": "columnDef",
+          "name": "age",
+          "type": {
+            "name": "Nullable",
+            "args": [
+              {
+                "kind": "type",
+                "type": {
+                  "name": "Int32"
+                }
+              }
+            ]
+          }
+        }
+      }
+    ],
+    "leadingComments": [
+      "-- Cannot ALTER, which breaks key column of projection."
+    ],
+    "trailingComments": [
+      "-- { serverError ALTER_OF_COLUMN_IS_FORBIDDEN }"
+    ]
+  },
+  {
+    "kind": "alter",
+    "table": {
+      "kind": "tableRef",
+      "table": "t"
+    },
+    "commands": [
+      {
+        "kind": "alterCommand",
+        "commandType": "MODIFY_COLUMN",
+        "column": {
+          "kind": "columnDef",
+          "name": "i",
+          "type": {
+            "name": "Int32"
+          }
+        }
+      }
+    ],
+    "leadingComments": [
+      "-- Cannot ALTER, uniq(Int16) is not compatible with uniq(Int32)."
+    ],
+    "trailingComments": [
+      "-- { serverError CANNOT_CONVERT_TYPE }"
+    ]
+  },
+  {
+    "kind": "system",
+    "body": "SYSTEM STOP MERGES t"
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "alter_sync",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "alter",
+    "table": {
+      "kind": "tableRef",
+      "table": "t"
+    },
+    "commands": [
+      {
+        "kind": "alterCommand",
+        "commandType": "MODIFY_COLUMN",
+        "column": {
+          "kind": "columnDef",
+          "name": "j",
+          "type": {
+            "name": "Int32"
+          }
+        }
+      }
+    ],
+    "leadingComments": [
+      "-- Can ALTER, count(Int16) is compatible with count(Int32)."
+    ]
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -35,6 +292,67 @@
           ]
         }
       ]
+    },
+    "leadingComments": [
+      "-- Projection query works without mutation applied."
+    ]
+  },
+  {
+    "kind": "system",
+    "body": "SYSTEM START MERGES t"
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "alter_sync",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "alter",
+    "table": {
+      "kind": "tableRef",
+      "table": "t"
+    },
+    "commands": [
+      {
+        "kind": "alterCommand",
+        "commandType": "MODIFY_COLUMN",
+        "column": {
+          "kind": "columnDef",
+          "name": "j",
+          "type": {
+            "name": "Int64"
+          }
+        }
+      }
+    ],
+    "settings": [
+      {
+        "name": "mutations_sync",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "2"
+        }
+      }
+    ],
+    "leadingComments": [
+      "-- Another ALTER to wait for."
+    ]
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "t"
     }
   }
 ]

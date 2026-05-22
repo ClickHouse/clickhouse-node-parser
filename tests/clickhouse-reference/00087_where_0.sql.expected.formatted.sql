@@ -1,3 +1,6 @@
+-- Tags: stateful
+SET max_rows_to_read = 1000;
+
 SELECT
     CounterID,
     uniq(UserID)

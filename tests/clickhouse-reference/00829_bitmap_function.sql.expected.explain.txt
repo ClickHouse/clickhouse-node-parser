@@ -164,6 +164,73 @@ SelectWithUnionQuery (children 1)
             Literal Array_[UInt64_100, UInt64_200]
             Literal 'Array(UInt16)'
 
+DropQuery  bitmap_test (children 1)
+ Identifier bitmap_test
+
+CreateQuery bitmap_test (children 3)
+ Identifier bitmap_test
+ Columns definition (children 1)
+  ExpressionList (children 3)
+   ColumnDeclaration pickup_date (children 1)
+    DataType Date
+   ColumnDeclaration city_id (children 1)
+    DataType UInt32
+   ColumnDeclaration uid (children 1)
+    DataType UInt32
+ Storage definition (children 1)
+  Function Memory
+
+InsertQuery   (children 2)
+ Identifier bitmap_test
+ SelectWithUnionQuery (children 1)
+  ExpressionList (children 1)
+   SelectQuery (children 2)
+    ExpressionList (children 3)
+     Literal '2019-01-01'
+     Literal UInt64_1
+     Identifier number
+    TablesInSelectQuery (children 1)
+     TablesInSelectQueryElement (children 1)
+      TableExpression (children 1)
+       Function numbers (children 1)
+        ExpressionList (children 2)
+         Literal UInt64_1
+         Literal UInt64_50
+
+InsertQuery   (children 2)
+ Identifier bitmap_test
+ SelectWithUnionQuery (children 1)
+  ExpressionList (children 1)
+   SelectQuery (children 2)
+    ExpressionList (children 3)
+     Literal '2019-01-02'
+     Literal UInt64_1
+     Identifier number
+    TablesInSelectQuery (children 1)
+     TablesInSelectQueryElement (children 1)
+      TableExpression (children 1)
+       Function numbers (children 1)
+        ExpressionList (children 2)
+         Literal UInt64_11
+         Literal UInt64_60
+
+InsertQuery   (children 2)
+ Identifier bitmap_test
+ SelectWithUnionQuery (children 1)
+  ExpressionList (children 1)
+   SelectQuery (children 2)
+    ExpressionList (children 3)
+     Literal '2019-01-03'
+     Literal UInt64_2
+     Identifier number
+    TablesInSelectQuery (children 1)
+     TablesInSelectQueryElement (children 1)
+      TableExpression (children 1)
+       Function numbers (children 1)
+        ExpressionList (children 2)
+         Literal UInt64_1
+         Literal UInt64_10
+
 SelectWithUnionQuery (children 1)
  ExpressionList (children 1)
   SelectQuery (children 2)
@@ -565,6 +632,53 @@ SelectWithUnionQuery (children 1)
     OrderByElement (children 1)
      Identifier city_id
 
+DropQuery  bitmap_state_test (children 1)
+ Identifier bitmap_state_test
+
+Set
+
+CreateQuery bitmap_state_test (children 3)
+ Identifier bitmap_state_test
+ Columns definition (children 1)
+  ExpressionList (children 3)
+   ColumnDeclaration pickup_date (children 1)
+    DataType Date
+   ColumnDeclaration city_id (children 1)
+    DataType UInt32
+   ColumnDeclaration uv (children 1)
+    DataType AggregateFunction (children 1)
+     ExpressionList (children 2)
+      Identifier groupBitmap
+      DataType UInt32
+ Storage definition (children 1)
+  Function AggregatingMergeTree (children 1)
+   ExpressionList (children 3)
+    Identifier pickup_date
+    Function tuple (children 1)
+     ExpressionList (children 2)
+      Identifier pickup_date
+      Identifier city_id
+    Literal UInt64_8192
+
+InsertQuery   (children 2)
+ Identifier bitmap_state_test
+ SelectWithUnionQuery (children 1)
+  ExpressionList (children 1)
+   SelectQuery (children 3)
+    ExpressionList (children 3)
+     Identifier pickup_date
+     Identifier city_id
+     Function groupBitmapState (alias uv) (children 1)
+      ExpressionList (children 1)
+       Identifier uid
+    TablesInSelectQuery (children 1)
+     TablesInSelectQueryElement (children 1)
+      TableExpression (children 1)
+       TableIdentifier bitmap_test
+    ExpressionList (children 2)
+     Identifier pickup_date
+     Identifier city_id
+
 SelectWithUnionQuery (children 1)
  ExpressionList (children 1)
   SelectQuery (children 4)
@@ -583,6 +697,30 @@ SelectWithUnionQuery (children 1)
     OrderByElement (children 1)
      Identifier pickup_date
 
+DropQuery  bitmap_column_expr_test (children 1)
+ Identifier bitmap_column_expr_test
+
+CreateQuery bitmap_column_expr_test (children 3)
+ Identifier bitmap_column_expr_test
+ Columns definition (children 1)
+  ExpressionList (children 2)
+   ColumnDeclaration t (children 1)
+    DataType DateTime
+   ColumnDeclaration z (children 1)
+    DataType AggregateFunction (children 1)
+     ExpressionList (children 2)
+      Identifier groupBitmap
+      DataType UInt32
+ Storage definition (children 3)
+  Function MergeTree
+  Function toYYYYMMDD (children 1)
+   ExpressionList (children 1)
+    Identifier t
+  Identifier t
+
+InsertQuery   (children 1)
+ Identifier bitmap_column_expr_test
+
 SelectWithUnionQuery (children 1)
  ExpressionList (children 1)
   SelectQuery (children 2)
@@ -658,6 +796,33 @@ SelectWithUnionQuery (children 1)
     TablesInSelectQueryElement (children 1)
      TableExpression (children 1)
       TableIdentifier bitmap_column_expr_test
+
+DropQuery  bitmap_column_expr_test2 (children 1)
+ Identifier bitmap_column_expr_test2
+
+CreateQuery bitmap_column_expr_test2 (children 3)
+ Identifier bitmap_column_expr_test2
+ Columns definition (children 1)
+  ExpressionList (children 2)
+   ColumnDeclaration tag_id (children 1)
+    DataType String
+   ColumnDeclaration z (children 1)
+    DataType AggregateFunction (children 1)
+     ExpressionList (children 2)
+      Identifier groupBitmap
+      DataType UInt32
+ Storage definition (children 2)
+  Function MergeTree
+  Identifier tag_id
+
+InsertQuery   (children 1)
+ Identifier bitmap_column_expr_test2
+
+InsertQuery   (children 1)
+ Identifier bitmap_column_expr_test2
+
+InsertQuery   (children 1)
+ Identifier bitmap_column_expr_test2
 
 SelectWithUnionQuery (children 1)
  ExpressionList (children 1)
@@ -802,6 +967,169 @@ SelectWithUnionQuery (children 1)
     ExpressionList (children 2)
      Identifier tag_id
      Literal 'tag%'
+
+DropQuery  bitmap_column_expr_test3 (children 1)
+ Identifier bitmap_column_expr_test3
+
+CreateQuery bitmap_column_expr_test3 (children 3)
+ Identifier bitmap_column_expr_test3
+ Columns definition (children 1)
+  ExpressionList (children 3)
+   ColumnDeclaration tag_id (children 1)
+    DataType String
+   ColumnDeclaration z (children 1)
+    DataType AggregateFunction (children 1)
+     ExpressionList (children 2)
+      Identifier groupBitmap
+      DataType UInt64
+   ColumnDeclaration replace (children 1)
+    DataType Nested (children 1)
+     ExpressionList (children 2)
+      NameTypePair from (children 1)
+       DataType UInt16
+      NameTypePair to (children 1)
+       DataType UInt64
+ Storage definition (children 2)
+  Function MergeTree
+  Identifier tag_id
+
+DropQuery  numbers10 (children 1)
+ Identifier numbers10
+
+CreateQuery numbers10 (children 2)
+ Identifier numbers10
+ SelectWithUnionQuery (children 1)
+  ExpressionList (children 1)
+   SelectQuery (children 3)
+    ExpressionList (children 1)
+     Identifier number
+    TablesInSelectQuery (children 1)
+     TablesInSelectQueryElement (children 1)
+      TableExpression (children 1)
+       TableIdentifier system.numbers
+    Literal UInt64_10
+
+InsertQuery   (children 3)
+ Identifier bitmap_column_expr_test3
+ ExpressionList (children 4)
+  Identifier tag_id
+  Identifier z
+  Identifier replace.from
+  Identifier replace.to
+ SelectWithUnionQuery (children 1)
+  ExpressionList (children 1)
+   SelectQuery (children 2)
+    ExpressionList (children 4)
+     Literal 'tag1'
+     Function groupBitmapState (children 1)
+      ExpressionList (children 1)
+       Function toUInt64 (children 1)
+        ExpressionList (children 1)
+         Identifier number
+     Function CAST (children 1)
+      ExpressionList (children 2)
+       Function array (children 1)
+        ExpressionList
+       Literal 'Array(UInt16)'
+     Function CAST (children 1)
+      ExpressionList (children 2)
+       Function array (children 1)
+        ExpressionList
+       Literal 'Array(UInt64)'
+    TablesInSelectQuery (children 1)
+     TablesInSelectQueryElement (children 1)
+      TableExpression (children 1)
+       TableIdentifier numbers10
+
+InsertQuery   (children 3)
+ Identifier bitmap_column_expr_test3
+ ExpressionList (children 4)
+  Identifier tag_id
+  Identifier z
+  Identifier replace.from
+  Identifier replace.to
+ SelectWithUnionQuery (children 1)
+  ExpressionList (children 1)
+   SelectQuery (children 2)
+    ExpressionList (children 4)
+     Literal 'tag2'
+     Function groupBitmapState (children 1)
+      ExpressionList (children 1)
+       Function toUInt64 (children 1)
+        ExpressionList (children 1)
+         Identifier number
+     Function CAST (children 1)
+      ExpressionList (children 2)
+       Literal Array_[UInt64_0]
+       Literal 'Array(UInt16)'
+     Function CAST (children 1)
+      ExpressionList (children 2)
+       Literal Array_[UInt64_2]
+       Literal 'Array(UInt64)'
+    TablesInSelectQuery (children 1)
+     TablesInSelectQueryElement (children 1)
+      TableExpression (children 1)
+       TableIdentifier numbers10
+
+InsertQuery   (children 3)
+ Identifier bitmap_column_expr_test3
+ ExpressionList (children 4)
+  Identifier tag_id
+  Identifier z
+  Identifier replace.from
+  Identifier replace.to
+ SelectWithUnionQuery (children 1)
+  ExpressionList (children 1)
+   SelectQuery (children 2)
+    ExpressionList (children 4)
+     Literal 'tag3'
+     Function groupBitmapState (children 1)
+      ExpressionList (children 1)
+       Function toUInt64 (children 1)
+        ExpressionList (children 1)
+         Identifier number
+     Function CAST (children 1)
+      ExpressionList (children 2)
+       Literal Array_[UInt64_0, UInt64_7]
+       Literal 'Array(UInt16)'
+     Function CAST (children 1)
+      ExpressionList (children 2)
+       Literal Array_[UInt64_3, UInt64_101]
+       Literal 'Array(UInt64)'
+    TablesInSelectQuery (children 1)
+     TablesInSelectQueryElement (children 1)
+      TableExpression (children 1)
+       TableIdentifier numbers10
+
+InsertQuery   (children 3)
+ Identifier bitmap_column_expr_test3
+ ExpressionList (children 4)
+  Identifier tag_id
+  Identifier z
+  Identifier replace.from
+  Identifier replace.to
+ SelectWithUnionQuery (children 1)
+  ExpressionList (children 1)
+   SelectQuery (children 2)
+    ExpressionList (children 4)
+     Literal 'tag4'
+     Function groupBitmapState (children 1)
+      ExpressionList (children 1)
+       Function toUInt64 (children 1)
+        ExpressionList (children 1)
+         Identifier number
+     Function CAST (children 1)
+      ExpressionList (children 2)
+       Literal Array_[UInt64_5, UInt64_999, UInt64_2]
+       Literal 'Array(UInt16)'
+     Function CAST (children 1)
+      ExpressionList (children 2)
+       Literal Array_[UInt64_2, UInt64_888, UInt64_20]
+       Literal 'Array(UInt64)'
+    TablesInSelectQuery (children 1)
+     TablesInSelectQueryElement (children 1)
+      TableExpression (children 1)
+       TableIdentifier numbers10
 
 SelectWithUnionQuery (children 1)
  ExpressionList (children 1)
@@ -1936,3 +2264,6 @@ SelectWithUnionQuery (children 2)
       ExpressionList (children 1)
        Identifier city_id
  Identifier Null
+
+DropQuery  bitmap_test (children 1)
+ Identifier bitmap_test

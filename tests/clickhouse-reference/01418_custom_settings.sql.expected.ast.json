@@ -1,5 +1,71 @@
 [
   {
+    "kind": "system",
+    "body": "DROP SETTINGS PROFILE IF EXISTS s1_01418, s2_01418"
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "literal",
+        "type": "String",
+        "value": "--- assigning ---"
+      }
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "custom_a",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "5"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "custom_b",
+        "value": {
+          "kind": "literal",
+          "type": "Int64",
+          "value": "-177"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "custom_c",
+        "value": {
+          "kind": "literal",
+          "type": "Float64",
+          "value": "98.11"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "custom_d",
+        "value": {
+          "kind": "literal",
+          "type": "String",
+          "value": "abc def"
+        }
+      }
+    ]
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -12,6 +78,102 @@
               "kind": "literal",
               "type": "String",
               "value": "custom_a"
+            }
+          ]
+        },
+        "alias": "v"
+      },
+      {
+        "kind": "functionCall",
+        "name": "toTypeName",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "v"
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "getSetting",
+          "args": [
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "custom_b"
+            }
+          ]
+        },
+        "alias": "v"
+      },
+      {
+        "kind": "functionCall",
+        "name": "toTypeName",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "v"
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "getSetting",
+          "args": [
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "custom_c"
+            }
+          ]
+        },
+        "alias": "v"
+      },
+      {
+        "kind": "functionCall",
+        "name": "toTypeName",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "v"
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "getSetting",
+          "args": [
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "custom_d"
             }
           ]
         },
@@ -83,6 +245,58 @@
     ]
   },
   {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "custom_a",
+        "value": {
+          "kind": "literal",
+          "type": "String",
+          "value": "changed"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "custom_b",
+        "value": {
+          "kind": "literal",
+          "type": "NULL",
+          "value": "NULL"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "custom_c",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "50000"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "custom_d",
+        "value": {
+          "kind": "literal",
+          "type": "Float64",
+          "value": "1.11"
+        }
+      }
+    ]
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -111,6 +325,127 @@
             ]
           }
         ]
+      }
+    ],
+    "trailingComments": [
+      "-- { serverError UNKNOWN_SETTING } -- Setting not found."
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "custom_e",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "404"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "invalid_custom",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "8"
+        }
+      }
+    ],
+    "trailingComments": [
+      "-- { serverError UNKNOWN_SETTING } -- Setting is neither a builtin nor started with one of the registered prefixes for user-defined settings."
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "getSetting",
+          "args": [
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "custom_e"
+            }
+          ]
+        },
+        "alias": "v"
+      },
+      {
+        "kind": "functionCall",
+        "name": "toTypeName",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "v"
+            ]
+          }
+        ]
+      }
+    ],
+    "settings": [
+      {
+        "name": "custom_e",
+        "value": {
+          "kind": "literal",
+          "type": "Float64",
+          "value": "-0.333"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "name"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "value"
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "database": "system",
+      "table": "settings"
+    },
+    "where": {
+      "kind": "binaryExpr",
+      "op": "=",
+      "left": {
+        "kind": "columnRef",
+        "parts": [
+          "name"
+        ]
+      },
+      "right": {
+        "kind": "literal",
+        "type": "String",
+        "value": "custom_e"
+      }
+    },
+    "settings": [
+      {
+        "name": "custom_e",
+        "value": {
+          "kind": "literal",
+          "type": "Float64",
+          "value": "-0.333"
+        }
       }
     ]
   },
@@ -181,6 +516,98 @@
           }
         ]
       }
+    ],
+    "settings": [
+      {
+        "name": "custom_f",
+        "value": {
+          "kind": "literal",
+          "type": "String",
+          "value": "word"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "name"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "value"
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "database": "system",
+      "table": "settings"
+    },
+    "where": {
+      "kind": "binaryExpr",
+      "op": "=",
+      "left": {
+        "kind": "columnRef",
+        "parts": [
+          "name"
+        ]
+      },
+      "right": {
+        "kind": "literal",
+        "type": "String",
+        "value": "custom_f"
+      }
+    },
+    "settings": [
+      {
+        "name": "custom_f",
+        "value": {
+          "kind": "literal",
+          "type": "String",
+          "value": "word"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "getSetting",
+          "args": [
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "custom_f"
+            }
+          ]
+        },
+        "alias": "v"
+      },
+      {
+        "kind": "functionCall",
+        "name": "toTypeName",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "v"
+            ]
+          }
+        ]
+      }
+    ],
+    "trailingComments": [
+      "-- { serverError UNKNOWN_SETTING } -- Setting not found."
     ]
   },
   {
@@ -212,6 +639,19 @@
         "value": "custom_f"
       }
     }
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "custom_compound.identifier.v1",
+        "value": {
+          "kind": "literal",
+          "type": "String",
+          "value": "test"
+        }
+      }
+    ]
   },
   {
     "kind": "select",
@@ -283,6 +723,134 @@
     }
   },
   {
+    "kind": "createSettingsProfile",
+    "names": [
+      "s1_01418"
+    ],
+    "hasSettingsKeyword": true,
+    "settings": [
+      {
+        "kind": "setting",
+        "name": "custom_compound.identifier.v2",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "100"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "system",
+    "body": "SHOW CREATE SETTINGS PROFILE s1_01418"
+  },
+  {
+    "kind": "system",
+    "body": "DROP SETTINGS PROFILE s1_01418"
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "getSetting",
+          "args": [
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "custom_null"
+            }
+          ]
+        },
+        "alias": "v"
+      },
+      {
+        "kind": "functionCall",
+        "name": "toTypeName",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "v"
+            ]
+          }
+        ]
+      }
+    ],
+    "settings": [
+      {
+        "name": "custom_null",
+        "value": {
+          "kind": "literal",
+          "type": "NULL",
+          "value": "NULL"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "name"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "value"
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "database": "system",
+      "table": "settings"
+    },
+    "where": {
+      "kind": "binaryExpr",
+      "op": "=",
+      "left": {
+        "kind": "columnRef",
+        "parts": [
+          "name"
+        ]
+      },
+      "right": {
+        "kind": "literal",
+        "type": "String",
+        "value": "custom_null"
+      }
+    },
+    "settings": [
+      {
+        "name": "custom_null",
+        "value": {
+          "kind": "literal",
+          "type": "NULL",
+          "value": "NULL"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "custom_null",
+        "value": {
+          "kind": "literal",
+          "type": "NULL",
+          "value": "NULL"
+        }
+      }
+    ]
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -350,5 +918,31 @@
         "value": "custom_null"
       }
     }
+  },
+  {
+    "kind": "createSettingsProfile",
+    "names": [
+      "s2_01418"
+    ],
+    "hasSettingsKeyword": true,
+    "settings": [
+      {
+        "kind": "setting",
+        "name": "custom_null",
+        "value": {
+          "kind": "literal",
+          "type": "NULL",
+          "value": "NULL"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "system",
+    "body": "SHOW CREATE SETTINGS PROFILE s2_01418"
+  },
+  {
+    "kind": "system",
+    "body": "DROP SETTINGS PROFILE s2_01418"
   }
 ]

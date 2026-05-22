@@ -1,5 +1,39 @@
 [
   {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "t0_03765"
+    },
+    "ifExists": true,
+    "leadingComments": [
+      "-- Tags: no-fasttest",
+      "-- Regression test for https://github.com/ClickHouse/ClickHouse/issues/77030",
+      "-- remote() wrapping loop() used to fail because TableFunctionLoop::getActualTableStructure",
+      "-- returned empty ColumnsDescription, causing EMPTY_LIST_OF_COLUMNS_PASSED or a logical error."
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "t0_03765"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "c0",
+        "type": {
+          "name": "Int"
+        }
+      }
+    ],
+    "engine": {
+      "name": "Memory"
+    }
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -9,7 +43,7 @@
       }
     ],
     "from": {
-      "kind": "tableFunction",
+      "kind": "tableFunctionRef",
       "name": "remote",
       "args": [
         {
@@ -35,6 +69,22 @@
         }
       ],
       "alias": "tx"
+    },
+    "leadingComments": [
+      "-- Empty table: should get TOO_MANY_RETRIES_TO_FETCH_PARTS (same as loop() alone with empty tables)"
+    ],
+    "trailingComments": [
+      "-- { serverError TOO_MANY_RETRIES_TO_FETCH_PARTS }"
+    ]
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "t0_03765"
+      }
     }
   },
   {
@@ -47,7 +97,7 @@
       }
     ],
     "from": {
-      "kind": "tableFunction",
+      "kind": "tableFunctionRef",
       "name": "remote",
       "args": [
         {
@@ -79,7 +129,10 @@
         "type": "UInt64",
         "value": "3"
       }
-    }
+    },
+    "leadingComments": [
+      "-- With data: selecting a constant should work"
+    ]
   },
   {
     "kind": "select",
@@ -89,7 +142,7 @@
       }
     ],
     "from": {
-      "kind": "tableFunction",
+      "kind": "tableFunctionRef",
       "name": "remote",
       "args": [
         {
@@ -121,6 +174,17 @@
         "type": "UInt64",
         "value": "5"
       }
+    },
+    "leadingComments": [
+      "-- With data: selecting actual columns should work"
+    ]
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "t0_03765"
     }
   }
 ]

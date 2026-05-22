@@ -1,3 +1,7 @@
+SET enable_analyzer = 1;
+
+SET correlated_subqueries_substitute_equivalent_expressions = 0;
+
 SELECT 1
 FROM (
         SELECT 1
@@ -5,6 +9,24 @@ FROM (
 WHERE (
         SELECT tx.c0
     ) = 1;
+
+CREATE TABLE t0
+(
+    c0 String
+)
+ENGINE = Log();
+
+CREATE TABLE t2
+(
+    c0 String,
+    c1 String,
+    c2 String
+)
+ENGINE = Log();
+
+INSERT INTO t0;
+
+INSERT INTO t2;
 
 SELECT *
 FROM

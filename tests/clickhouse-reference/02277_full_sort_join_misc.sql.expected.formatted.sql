@@ -1,3 +1,5 @@
+SET join_algorithm = 'full_sorting_merge';
+
 SELECT *
 FROM
     (

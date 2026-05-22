@@ -1,3 +1,58 @@
+Set
+
+Set
+
+DropQuery  t_mt_source (children 1)
+ Identifier t_mt_source
+
+DropQuery  t_rmt_target (children 1)
+ Identifier t_rmt_target
+
+CreateQuery t_mt_source (children 3)
+ Identifier t_mt_source
+ Columns definition (children 1)
+  ExpressionList (children 2)
+   ColumnDeclaration k (children 1)
+    DataType UInt64
+   ColumnDeclaration v (children 1)
+    DataType String
+ Storage definition (children 2)
+  Function MergeTree (children 1)
+   ExpressionList
+  Identifier k
+
+CreateQuery t_rmt_target (children 3)
+ Identifier t_rmt_target
+ Columns definition (children 1)
+  ExpressionList (children 2)
+   ColumnDeclaration k (children 1)
+    DataType UInt64
+   ColumnDeclaration v (children 1)
+    DataType String
+ Storage definition (children 2)
+  Function ReplicatedMergeTree (children 1)
+   ExpressionList (children 2)
+    Literal '/clickhouse/tables/{database}/t_rmt_target'
+    Literal 'r1'
+  Function tuple (children 1)
+   ExpressionList
+
+InsertQuery   (children 2)
+ Identifier t_mt_source
+ SelectWithUnionQuery (children 1)
+  ExpressionList (children 1)
+   SelectQuery (children 3)
+    ExpressionList (children 2)
+     Identifier number (alias k)
+     Function toString (alias v) (children 1)
+      ExpressionList (children 1)
+       Identifier number
+    TablesInSelectQuery (children 1)
+     TablesInSelectQueryElement (children 1)
+      TableExpression (children 1)
+       TableIdentifier system.numbers
+    Literal Float64_1000000
+
 SelectWithUnionQuery (children 1)
  ExpressionList (children 1)
   SelectQuery (children 2)
@@ -10,11 +65,29 @@ SelectWithUnionQuery (children 1)
      TableExpression (children 1)
       TableIdentifier t_mt_source
 
+Set
+
 SelectWithUnionQuery (children 1)
  ExpressionList (children 1)
   SelectQuery (children 1)
    ExpressionList (children 1)
     Literal '-- check result without local pipeline'
+
+InsertQuery   (children 3)
+ Identifier t_rmt_target
+ SelectWithUnionQuery (children 1)
+  ExpressionList (children 1)
+   SelectQuery (children 3)
+    ExpressionList (children 1)
+     Asterisk
+    TablesInSelectQuery (children 1)
+     TablesInSelectQueryElement (children 1)
+      TableExpression (children 1)
+       TableIdentifier t_mt_source
+    Set
+ Set
+
+SYSTEM query
 
 SelectWithUnionQuery (children 1)
  ExpressionList (children 1)
@@ -94,3 +167,9 @@ SelectWithUnionQuery (children 1)
     ExpressionList (children 1)
      OrderByElement (children 1)
       Identifier k
+
+DropQuery  t_mt_source (children 1)
+ Identifier t_mt_source
+
+DropQuery  t_rmt_target (children 1)
+ Identifier t_rmt_target

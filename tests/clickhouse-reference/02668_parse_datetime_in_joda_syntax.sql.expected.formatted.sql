@@ -1,28 +1,32 @@
+-- { echoOn }
+-- empty
 SELECT parseDateTimeInJodaSyntax(' ', ' ', 'UTC') = toDateTime('1970-01-01', 'UTC');
 
+-- era
 SELECT parseDateTimeInJodaSyntax('AD 1999', 'G YYYY', 'UTC') = toDateTime('1999-01-01', 'UTC');
 
 SELECT parseDateTimeInJodaSyntax('AD 1999 2000', 'G YYYY yyyy', 'UTC') = toDateTime('2000-01-01', 'UTC');
 
-SELECT parseDateTimeInJodaSyntax('AD 1999', 'G Y');
+SELECT parseDateTimeInJodaSyntax('AD 1999', 'G Y'); -- { serverError CANNOT_PARSE_DATETIME }
 
-SELECT parseDateTimeInJodaSyntax('AD 1999', 'G YY');
+SELECT parseDateTimeInJodaSyntax('AD 1999', 'G YY'); -- { serverError CANNOT_PARSE_DATETIME }
 
 SELECT parseDateTimeInJodaSyntax('AD 1999', 'G YYY', 'UTC');
 
-SELECT parseDateTimeInJodaSyntax('BC', 'G');
+SELECT parseDateTimeInJodaSyntax('BC', 'G'); -- { serverError CANNOT_PARSE_DATETIME }
 
-SELECT parseDateTimeInJodaSyntax('AB', 'G');
+SELECT parseDateTimeInJodaSyntax('AB', 'G'); -- { serverError CANNOT_PARSE_DATETIME }
 
+-- year of era
 SELECT parseDateTimeInJodaSyntax('2106', 'YYYY', 'UTC') = toDateTime('2106-01-01', 'UTC');
 
 SELECT parseDateTimeInJodaSyntax('1970', 'YYYY', 'UTC') = toDateTime('1970-01-01', 'UTC');
 
-SELECT parseDateTimeInJodaSyntax('1969', 'YYYY', 'UTC');
+SELECT parseDateTimeInJodaSyntax('1969', 'YYYY', 'UTC'); -- { serverError CANNOT_PARSE_DATETIME }
 
-SELECT parseDateTimeInJodaSyntax('2107', 'YYYY', 'UTC');
+SELECT parseDateTimeInJodaSyntax('2107', 'YYYY', 'UTC'); -- { serverError CANNOT_PARSE_DATETIME }
 
-SELECT parseDateTimeInJodaSyntax('+1999', 'YYYY', 'UTC');
+SELECT parseDateTimeInJodaSyntax('+1999', 'YYYY', 'UTC'); -- { serverError CANNOT_PARSE_DATETIME }
 
 SELECT parseDateTimeInJodaSyntax('12', 'YY', 'UTC') = toDateTime('2012-01-01', 'UTC');
 
@@ -34,7 +38,7 @@ SELECT parseDateTimeInJodaSyntax('99', 'YY', 'UTC') = toDateTime('1999-01-01', '
 
 SELECT parseDateTimeInJodaSyntax('01', 'YY', 'UTC') = toDateTime('2001-01-01', 'UTC');
 
-SELECT parseDateTimeInJodaSyntax('1', 'YY', 'UTC');
+SELECT parseDateTimeInJodaSyntax('1', 'YY', 'UTC'); -- { serverError CANNOT_PARSE_DATETIME }
 
 SELECT parseDateTimeInJodaSyntax('99 98 97', 'YY YY YY', 'UTC') = toDateTime('1997-01-01', 'UTC');
 
@@ -48,6 +52,7 @@ SELECT parseDateTimeInJodaSyntax('10+2001', 'MMyyyy', 'UTC') = toDateTime('2001-
 
 SELECT parseDateTimeInJodaSyntax('+200110', 'yyyyMM', 'UTC') = toDateTime('2001-10-01', 'UTC');
 
+-- week year
 SELECT parseDateTimeInJodaSyntax('2106', 'xxxx', 'UTC') = toDateTime('2106-01-04', 'UTC');
 
 SELECT parseDateTimeInJodaSyntax('1971', 'xxxx', 'UTC') = toDateTime('1971-01-04', 'UTC');
@@ -76,20 +81,22 @@ SELECT parseDateTimeInJodaSyntax('+102', 'xxM', 'UTC') = toDateTime('2010-02-01'
 
 SELECT parseDateTimeInJodaSyntax('+20102', 'xxxxM', 'UTC') = toDateTime('2010-02-01', 'UTC');
 
-SELECT parseDateTimeInJodaSyntax('1970', 'xxxx', 'UTC');
+SELECT parseDateTimeInJodaSyntax('1970', 'xxxx', 'UTC'); -- { serverError VALUE_IS_OUT_OF_RANGE_OF_DATA_TYPE }
 
-SELECT parseDateTimeInJodaSyntax('1969', 'xxxx', 'UTC');
+SELECT parseDateTimeInJodaSyntax('1969', 'xxxx', 'UTC'); -- { serverError CANNOT_PARSE_DATETIME }
 
-SELECT parseDateTimeInJodaSyntax('2107', 'xxxx', 'UTC');
+SELECT parseDateTimeInJodaSyntax('2107', 'xxxx', 'UTC'); -- { serverError CANNOT_PARSE_DATETIME }
 
+-- century of era
 SELECT parseDateTimeInJodaSyntax('20', 'CC', 'UTC') = toDateTime('2000-01-01', 'UTC');
 
 SELECT parseDateTimeInJodaSyntax('21', 'CC', 'UTC') = toDateTime('2100-01-01', 'UTC');
 
-SELECT parseDateTimeInJodaSyntax('19', 'CC', 'UTC');
+SELECT parseDateTimeInJodaSyntax('19', 'CC', 'UTC'); -- { serverError CANNOT_PARSE_DATETIME }
 
-SELECT parseDateTimeInJodaSyntax('22', 'CC', 'UTC');
+SELECT parseDateTimeInJodaSyntax('22', 'CC', 'UTC'); -- { serverError CANNOT_PARSE_DATETIME }
 
+-- month
 SELECT parseDateTimeInJodaSyntax('1', 'M', 'UTC') = toDateTime('2000-01-01', 'UTC');
 
 SELECT parseDateTimeInJodaSyntax(' 7', ' MM', 'UTC') = toDateTime('2000-07-01', 'UTC');
@@ -100,12 +107,13 @@ SELECT parseDateTimeInJodaSyntax('10-', 'M-', 'UTC') = toDateTime('2000-10-01', 
 
 SELECT parseDateTimeInJodaSyntax('-12-', '-M-', 'UTC') = toDateTime('2000-12-01', 'UTC');
 
-SELECT parseDateTimeInJodaSyntax('0', 'M', 'UTC');
+SELECT parseDateTimeInJodaSyntax('0', 'M', 'UTC'); -- { serverError CANNOT_PARSE_DATETIME }
 
-SELECT parseDateTimeInJodaSyntax('13', 'M', 'UTC');
+SELECT parseDateTimeInJodaSyntax('13', 'M', 'UTC'); -- { serverError CANNOT_PARSE_DATETIME }
 
-SELECT parseDateTimeInJodaSyntax('12345', 'M', 'UTC');
+SELECT parseDateTimeInJodaSyntax('12345', 'M', 'UTC'); -- { serverError CANNOT_PARSE_DATETIME }
 
+--- Ensure MMM and MMMM specifiers consume both short- and long-form month names
 SELECT parseDateTimeInJodaSyntax('Aug', 'MMM', 'UTC') = toDateTime('2000-08-01', 'UTC');
 
 SELECT parseDateTimeInJodaSyntax('august', 'MMM', 'UTC') = toDateTime('2000-08-01', 'UTC');
@@ -114,18 +122,20 @@ SELECT parseDateTimeInJodaSyntax('Aug', 'MMMM', 'UTC') = toDateTime('2000-08-01'
 
 SELECT parseDateTimeInJodaSyntax('august', 'MMMM', 'UTC') = toDateTime('2000-08-01', 'UTC');
 
-SELECT parseDateTimeInJodaSyntax('Decembr', 'MMM', 'UTC');
+--- invalid month names
+SELECT parseDateTimeInJodaSyntax('Decembr', 'MMM', 'UTC'); -- { serverError CANNOT_PARSE_DATETIME }
 
-SELECT parseDateTimeInJodaSyntax('Decembr', 'MMMM', 'UTC');
+SELECT parseDateTimeInJodaSyntax('Decembr', 'MMMM', 'UTC'); -- { serverError CANNOT_PARSE_DATETIME }
 
-SELECT parseDateTimeInJodaSyntax('Decemberary', 'MMM', 'UTC');
+SELECT parseDateTimeInJodaSyntax('Decemberary', 'MMM', 'UTC'); -- { serverError CANNOT_PARSE_DATETIME }
 
-SELECT parseDateTimeInJodaSyntax('Decemberary', 'MMMM', 'UTC');
+SELECT parseDateTimeInJodaSyntax('Decemberary', 'MMMM', 'UTC'); -- { serverError CANNOT_PARSE_DATETIME }
 
-SELECT parseDateTimeInJodaSyntax('asdf', 'MMM', 'UTC');
+SELECT parseDateTimeInJodaSyntax('asdf', 'MMM', 'UTC'); -- { serverError CANNOT_PARSE_DATETIME }
 
-SELECT parseDateTimeInJodaSyntax('asdf', 'MMMM', 'UTC');
+SELECT parseDateTimeInJodaSyntax('asdf', 'MMMM', 'UTC'); -- { serverError CANNOT_PARSE_DATETIME }
 
+-- day of month
 SELECT parseDateTimeInJodaSyntax('1', 'd', 'UTC') = toDateTime('2000-01-01', 'UTC');
 
 SELECT parseDateTimeInJodaSyntax('7 ', 'dd ', 'UTC') = toDateTime('2000-01-07', 'UTC');
@@ -134,25 +144,27 @@ SELECT parseDateTimeInJodaSyntax('/11', '/dd', 'UTC') = toDateTime('2000-01-11',
 
 SELECT parseDateTimeInJodaSyntax('/31/', '/d/', 'UTC') = toDateTime('2000-01-31', 'UTC');
 
-SELECT parseDateTimeInJodaSyntax('0', 'd', 'UTC');
+SELECT parseDateTimeInJodaSyntax('0', 'd', 'UTC'); -- { serverError CANNOT_PARSE_DATETIME }
 
-SELECT parseDateTimeInJodaSyntax('32', 'd', 'UTC');
+SELECT parseDateTimeInJodaSyntax('32', 'd', 'UTC'); -- { serverError CANNOT_PARSE_DATETIME }
 
-SELECT parseDateTimeInJodaSyntax('12345', 'd', 'UTC');
+SELECT parseDateTimeInJodaSyntax('12345', 'd', 'UTC'); -- { serverError CANNOT_PARSE_DATETIME }
 
-SELECT parseDateTimeInJodaSyntax('02-31', 'M-d', 'UTC');
+SELECT parseDateTimeInJodaSyntax('02-31', 'M-d', 'UTC'); -- { serverError CANNOT_PARSE_DATETIME }
 
-SELECT parseDateTimeInJodaSyntax('04-31', 'M-d', 'UTC');
+SELECT parseDateTimeInJodaSyntax('04-31', 'M-d', 'UTC'); -- { serverError CANNOT_PARSE_DATETIME }
 
+-- The last one is chosen if multiple day of months are supplied.
 SELECT parseDateTimeInJodaSyntax('2 31 1', 'M d M', 'UTC') = toDateTime('2000-01-31', 'UTC');
 
 SELECT parseDateTimeInJodaSyntax('1 31 20 2', 'M d d M', 'UTC') = toDateTime('2000-02-20', 'UTC');
 
 SELECT parseDateTimeInJodaSyntax('2 31 20 4', 'M d d M', 'UTC') = toDateTime('2000-04-20', 'UTC');
 
+--- Leap year
 SELECT parseDateTimeInJodaSyntax('2020-02-29', 'YYYY-M-d', 'UTC') = toDateTime('2020-02-29', 'UTC');
 
-SELECT parseDateTimeInJodaSyntax('2001-02-29', 'YYYY-M-d', 'UTC');
+SELECT parseDateTimeInJodaSyntax('2001-02-29', 'YYYY-M-d', 'UTC'); -- { serverError CANNOT_PARSE_DATETIME }
 
 SELECT parseDateTimeInJodaSyntax('/31/', '/DDD/', 'UTC') = toDateTime('2000-01-31', 'UTC');
 
@@ -178,14 +190,16 @@ SELECT parseDateTimeInJodaSyntax('1999 60', 'yyyy D', 'UTC') = toDateTime('1999-
 
 SELECT parseDateTimeInJodaSyntax('1999 365', 'yyyy D', 'UTC') = toDateTime('1999-12-31', 'UTC');
 
-SELECT parseDateTimeInJodaSyntax('1999 366', 'yyyy D', 'UTC');
+SELECT parseDateTimeInJodaSyntax('1999 366', 'yyyy D', 'UTC'); -- { serverError CANNOT_PARSE_DATETIME }
 
+--- Ensure all days of year are checked against final selected year
 SELECT parseDateTimeInJodaSyntax('2001 366 2000', 'yyyy D yyyy', 'UTC') = toDateTime('2000-12-31', 'UTC');
 
-SELECT parseDateTimeInJodaSyntax('2000 366 2001', 'yyyy D yyyy', 'UTC');
+SELECT parseDateTimeInJodaSyntax('2000 366 2001', 'yyyy D yyyy', 'UTC'); -- { serverError CANNOT_PARSE_DATETIME }
 
-SELECT parseDateTimeInJodaSyntax('367', 'D', 'UTC');
+SELECT parseDateTimeInJodaSyntax('367', 'D', 'UTC'); -- { serverError CANNOT_PARSE_DATETIME }
 
+-- hour of day
 SELECT parseDateTimeInJodaSyntax('7', 'H', 'UTC') = toDateTime('1970-01-01 07:00:00', 'UTC');
 
 SELECT parseDateTimeInJodaSyntax('23', 'HH', 'UTC') = toDateTime('1970-01-01 23:00:00', 'UTC');
@@ -194,12 +208,14 @@ SELECT parseDateTimeInJodaSyntax('0', 'HHH', 'UTC') = toDateTime('1970-01-01 00:
 
 SELECT parseDateTimeInJodaSyntax('10', 'HHHHHHHH', 'UTC') = toDateTime('1970-01-01 10:00:00', 'UTC');
 
-SELECT parseDateTimeInJodaSyntax('24', 'H', 'UTC');
+--- invalid hour od day
+SELECT parseDateTimeInJodaSyntax('24', 'H', 'UTC'); -- { serverError CANNOT_PARSE_DATETIME }
 
-SELECT parseDateTimeInJodaSyntax('-1', 'H', 'UTC');
+SELECT parseDateTimeInJodaSyntax('-1', 'H', 'UTC'); -- { serverError CANNOT_PARSE_DATETIME }
 
-SELECT parseDateTimeInJodaSyntax('123456789', 'H', 'UTC');
+SELECT parseDateTimeInJodaSyntax('123456789', 'H', 'UTC'); -- { serverError CANNOT_PARSE_DATETIME }
 
+-- clock hour of day
 SELECT parseDateTimeInJodaSyntax('7', 'k', 'UTC') = toDateTime('1970-01-01 07:00:00', 'UTC');
 
 SELECT parseDateTimeInJodaSyntax('24', 'kk', 'UTC') = toDateTime('1970-01-01 00:00:00', 'UTC');
@@ -208,28 +224,33 @@ SELECT parseDateTimeInJodaSyntax('1', 'kkk', 'UTC') = toDateTime('1970-01-01 01:
 
 SELECT parseDateTimeInJodaSyntax('10', 'kkkkkkkk', 'UTC') = toDateTime('1970-01-01 10:00:00', 'UTC');
 
-SELECT parseDateTimeInJodaSyntax('25', 'k', 'UTC');
+-- invalid clock hour of day
+SELECT parseDateTimeInJodaSyntax('25', 'k', 'UTC'); -- { serverError CANNOT_PARSE_DATETIME }
 
-SELECT parseDateTimeInJodaSyntax('0', 'k', 'UTC');
+SELECT parseDateTimeInJodaSyntax('0', 'k', 'UTC'); -- { serverError CANNOT_PARSE_DATETIME }
 
-SELECT parseDateTimeInJodaSyntax('123456789', 'k', 'UTC');
+SELECT parseDateTimeInJodaSyntax('123456789', 'k', 'UTC'); -- { serverError CANNOT_PARSE_DATETIME }
 
 SELECT parseDateTimeInJodaSyntax('11', 'KK', 'UTC') = toDateTime('1970-01-01 11:00:00', 'UTC');
 
 SELECT parseDateTimeInJodaSyntax('0', 'KKK', 'UTC') = toDateTime('1970-01-01 00:00:00', 'UTC');
 
-SELECT parseDateTimeInJodaSyntax('12', 'K', 'UTC');
+-- invalid hour of half day
+SELECT parseDateTimeInJodaSyntax('12', 'K', 'UTC'); -- { serverError CANNOT_PARSE_DATETIME }
 
-SELECT parseDateTimeInJodaSyntax('-1', 'K', 'UTC');
+SELECT parseDateTimeInJodaSyntax('-1', 'K', 'UTC'); -- { serverError CANNOT_PARSE_DATETIME }
 
 SELECT parseDateTimeInJodaSyntax('12', 'hh', 'UTC') = toDateTime('1970-01-01 00:00:00', 'UTC');
 
 SELECT parseDateTimeInJodaSyntax('1', 'hhh', 'UTC') = toDateTime('1970-01-01 01:00:00', 'UTC');
 
-SELECT parseDateTimeInJodaSyntax('13', 'h', 'UTC');
+-- invalid clock hour of half day
+SELECT parseDateTimeInJodaSyntax('13', 'h', 'UTC'); -- { serverError CANNOT_PARSE_DATETIME }
 
-SELECT parseDateTimeInJodaSyntax('0', 'h', 'UTC');
+SELECT parseDateTimeInJodaSyntax('0', 'h', 'UTC'); -- { serverError CANNOT_PARSE_DATETIME }
 
+-- half of day
+--- Half of day has no effect if hour or clockhour of day is provided hour of day tests
 SELECT parseDateTimeInJodaSyntax('7 PM', 'H a', 'UTC') = toDateTime('1970-01-01 07:00:00', 'UTC');
 
 SELECT parseDateTimeInJodaSyntax('7 AM', 'H a', 'UTC') = toDateTime('1970-01-01 07:00:00', 'UTC');
@@ -246,6 +267,7 @@ SELECT parseDateTimeInJodaSyntax('24 PM', 'k a', 'UTC') = toDateTime('1970-01-01
 
 SELECT parseDateTimeInJodaSyntax('24 AM', 'k a', 'UTC') = toDateTime('1970-01-01 00:00:00', 'UTC');
 
+-- Half of day has effect if hour or clockhour of halfday is provided
 SELECT parseDateTimeInJodaSyntax('0 PM', 'K a', 'UTC') = toDateTime('1970-01-01 12:00:00', 'UTC');
 
 SELECT parseDateTimeInJodaSyntax('0 AM', 'K a', 'UTC') = toDateTime('1970-01-01 00:00:00', 'UTC');
@@ -270,6 +292,7 @@ SELECT parseDateTimeInJodaSyntax('12 PM', 'h a', 'UTC') = toDateTime('1970-01-01
 
 SELECT parseDateTimeInJodaSyntax('12 AM', 'h a', 'UTC') = toDateTime('1970-01-01 00:00:00', 'UTC');
 
+-- time gives precendent to most recent time specifier
 SELECT parseDateTimeInJodaSyntax('0 1 AM', 'H h a', 'UTC') = toDateTime('1970-01-01 01:00:00', 'UTC');
 
 SELECT parseDateTimeInJodaSyntax('12 1 PM', 'H h a', 'UTC') = toDateTime('1970-01-01 13:00:00', 'UTC');
@@ -278,32 +301,36 @@ SELECT parseDateTimeInJodaSyntax('1 AM 0', 'h a H', 'UTC') = toDateTime('1970-01
 
 SELECT parseDateTimeInJodaSyntax('1 AM 12', 'h a H', 'UTC') = toDateTime('1970-01-01 12:00:00', 'UTC');
 
+-- minute
 SELECT parseDateTimeInJodaSyntax('8', 'm', 'UTC') = toDateTime('1970-01-01 00:08:00', 'UTC');
 
 SELECT parseDateTimeInJodaSyntax('59', 'mm', 'UTC') = toDateTime('1970-01-01 00:59:00', 'UTC');
 
 SELECT parseDateTimeInJodaSyntax('0/', 'mmm/', 'UTC') = toDateTime('1970-01-01 00:00:00', 'UTC');
 
-SELECT parseDateTimeInJodaSyntax('60', 'm', 'UTC');
+SELECT parseDateTimeInJodaSyntax('60', 'm', 'UTC'); -- { serverError CANNOT_PARSE_DATETIME }
 
-SELECT parseDateTimeInJodaSyntax('-1', 'm', 'UTC');
+SELECT parseDateTimeInJodaSyntax('-1', 'm', 'UTC'); -- { serverError CANNOT_PARSE_DATETIME }
 
-SELECT parseDateTimeInJodaSyntax('123456789', 'm', 'UTC');
+SELECT parseDateTimeInJodaSyntax('123456789', 'm', 'UTC'); -- { serverError CANNOT_PARSE_DATETIME }
 
+-- second
 SELECT parseDateTimeInJodaSyntax('9', 's', 'UTC') = toDateTime('1970-01-01 00:00:09', 'UTC');
 
 SELECT parseDateTimeInJodaSyntax('58', 'ss', 'UTC') = toDateTime('1970-01-01 00:00:58', 'UTC');
 
 SELECT parseDateTimeInJodaSyntax('0/', 's/', 'UTC') = toDateTime('1970-01-01 00:00:00', 'UTC');
 
-SELECT parseDateTimeInJodaSyntax('60', 's', 'UTC');
+SELECT parseDateTimeInJodaSyntax('60', 's', 'UTC'); -- { serverError CANNOT_PARSE_DATETIME }
 
-SELECT parseDateTimeInJodaSyntax('-1', 's', 'UTC');
+SELECT parseDateTimeInJodaSyntax('-1', 's', 'UTC'); -- { serverError CANNOT_PARSE_DATETIME }
 
-SELECT parseDateTimeInJodaSyntax('123456789', 's', 'UTC');
+SELECT parseDateTimeInJodaSyntax('123456789', 's', 'UTC'); -- { serverError CANNOT_PARSE_DATETIME }
 
-SELECT parseDateTimeInJodaSyntax('19191919191919191919191919191919', 'CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC', 'UTC');
+-- integer overflow in AST Fuzzer
+SELECT parseDateTimeInJodaSyntax('19191919191919191919191919191919', 'CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC', 'UTC'); -- { serverError CANNOT_PARSE_DATETIME }
 
+-- *OrZero, *OrNull
 SELECT parseDateTimeInJodaSyntaxOrZero('2001 366 2000', 'yyyy D yyyy', 'UTC') = toDateTime('2000-12-31', 'UTC');
 
 SELECT parseDateTimeInJodaSyntaxOrZero('2001 invalid 366 2000', 'yyyy D yyyy', 'UTC') = toDateTime('1970-01-01', 'UTC');
@@ -312,26 +339,34 @@ SELECT parseDateTimeInJodaSyntaxOrNull('2001 366 2000', 'yyyy D yyyy', 'UTC') = 
 
 SELECT isNull(parseDateTimeInJodaSyntaxOrNull('2001 invalid 366 2000', 'yyyy D yyyy', 'UTC'));
 
-SELECT parseDateTimeInJodaSyntax();
+-- Error handling
+SELECT parseDateTimeInJodaSyntax(); -- { serverError NUMBER_OF_ARGUMENTS_DOESNT_MATCH }
 
-SELECT parseDateTimeInJodaSyntax('12 AM', 'h a', 'UTC', 'a fourth argument');
+SELECT parseDateTimeInJodaSyntax('12 AM', 'h a', 'UTC', 'a fourth argument'); -- { serverError NUMBER_OF_ARGUMENTS_DOESNT_MATCH }
+
+-- The format string argument is optional
+SET session_timezone = 'UTC'; -- don't randomize the session timezone
 
 SELECT parseDateTimeInJodaSyntax('2021-01-04 23:12:34') = toDateTime('2021-01-04 23:12:34');
 
-SELECT parseDateTimeInJodaSyntax('2024-10-09 10:30:10-0812');
+SELECT parseDateTimeInJodaSyntax('2024-10-09 10:30:10-0812'); -- { serverError CANNOT_PARSE_DATETIME }
 
+-- timezone and timezone offset
 SELECT parseDateTimeInJodaSyntax('2024-10-09 10:30:10-0812', 'yyyy-MM-dd HH:mm:ssZ') = toDateTime64('2024-10-09 18:42:10', 6);
 
-SELECT parseDateTimeInJodaSyntax('2024-10-09 10:30:10-08123', 'yyyy-MM-dd HH:mm:ssZZZ');
+SELECT parseDateTimeInJodaSyntax('2024-10-09 10:30:10-08123', 'yyyy-MM-dd HH:mm:ssZZZ'); -- {serverError CANNOT_PARSE_DATETIME}
 
 SELECT parseDateTimeInJodaSyntax('2024-10-09 10:30:10EST', 'yyyy-MM-dd HH:mm:ssz') = toDateTime64('2024-10-09 15:30:10', 6);
 
 SELECT parseDateTimeInJodaSyntax('2024-10-09 10:30:10EST', 'yyyy-MM-dd HH:mm:sszzz') = toDateTime64('2024-10-09 15:30:10', 6);
 
-SELECT parseDateTimeInJodaSyntax('2024-10-09 10:30:10-8000', 'yyyy-MM-dd HH:mm:ssZ');
+-- incorrect timezone offset and timezone
+SELECT parseDateTimeInJodaSyntax('2024-10-09 10:30:10-8000', 'yyyy-MM-dd HH:mm:ssZ'); -- { serverError CANNOT_PARSE_DATETIME }
 
-SELECT parseDateTimeInJodaSyntax('2024-10-09 10:30:10ABCD', 'yyyy-MM-dd HH:mm:ssz');
+SELECT parseDateTimeInJodaSyntax('2024-10-09 10:30:10ABCD', 'yyyy-MM-dd HH:mm:ssz'); -- { serverError BAD_ARGUMENTS }
 
+-- -------------------------------------------------------------------------------------------------------------------------
+-- Tests for parseDateTime64InJodaSyntax, these are not systematic
 SELECT parseDateTime64InJodaSyntax('', '') = toDateTime64('1970-01-01 00:00:00', 0);
 
 SELECT parseDateTime64InJodaSyntax('2177-10-09 10:30:10.123', 'yyyy-MM-dd HH:mm:ss.SSS');
@@ -354,17 +389,18 @@ SELECT parseDateTime64InJodaSyntax('2021-01-04 23:12:34.331', 'yyyy-MM-dd HH:mm:
 
 SELECT parseDateTime64InJodaSyntax('2021/01/04 23:12:34.331', 'yyyy/MM/dd HH:mm:ss.SSS') = toDateTime64('2021-01-04 23:12:34.331', 3);
 
-SELECT parseDateTime64InJodaSyntax('2021-01-04 23:12:34.331');
+SELECT parseDateTime64InJodaSyntax('2021-01-04 23:12:34.331'); -- { serverError CANNOT_PARSE_DATETIME }
 
 SELECT parseDateTime64InJodaSyntax('2021-01-04 23:12:34.331', 'yyyy-MM-dd HH:mm:ss.SSSS') = toDateTime64('2021-01-04 23:12:34.0331', 4);
 
-SELECT parseDateTime64InJodaSyntax('2021-01-04 23:12:34.331', 'yyyy-MM-dd HH:mm:ss.SS');
+SELECT parseDateTime64InJodaSyntax('2021-01-04 23:12:34.331', 'yyyy-MM-dd HH:mm:ss.SS'); -- { serverError CANNOT_PARSE_DATETIME }
 
-SELECT parseDateTime64InJodaSyntax('2024-10-09 10:30:10-0812');
+-- Timezone and timezone offset
+SELECT parseDateTime64InJodaSyntax('2024-10-09 10:30:10-0812'); -- { serverError CANNOT_PARSE_DATETIME }
 
 SELECT parseDateTime64InJodaSyntax('2024-10-09 10:30:10.123456-0812', 'yyyy-MM-dd HH:mm:ss.SSSSSSZ') = toDateTime64('2024-10-09 18:42:10.123456', 6);
 
-SELECT parseDateTime64InJodaSyntax('2024-10-09 10:30:10.123456-08123', 'yyyy-MM-dd HH:mm:ss.SSSSSSZZZ');
+SELECT parseDateTime64InJodaSyntax('2024-10-09 10:30:10.123456-08123', 'yyyy-MM-dd HH:mm:ss.SSSSSSZZZ'); -- {serverError CANNOT_PARSE_DATETIME}
 
 SELECT parseDateTime64InJodaSyntax('2024-10-09 10:30:10.123456EST', 'yyyy-MM-dd HH:mm:ss.SSSSSSz') = toDateTime64('2024-10-09 15:30:10.123456', 6);
 
@@ -378,33 +414,36 @@ SELECT parseDateTime64InJodaSyntax('2024-10-09 10:30:10.123456Australia/Adelaide
 
 SELECT parseDateTime64InJodaSyntax('2024-10-09 10:30:10.123', 'yyyy-dd-MM HH:mm:ss.SSS') = toDateTime64('2024-09-10 10:30:10.123', 3);
 
-SELECT parseDateTime64InJodaSyntax('999999 10-09-202410:30:10', 'SSSSSSSSS dd-MM-yyyyHH:mm:ss');
+SELECT parseDateTime64InJodaSyntax('999999 10-09-202410:30:10', 'SSSSSSSSS dd-MM-yyyyHH:mm:ss'); -- {serverError CANNOT_PARSE_DATETIME }
 
 SELECT parseDateTime64InJodaSyntax('2024-10-09 10:30:10.123456-0845', 'yyyy-MM-dd HH:mm:ss.SSSSSSZ') = toDateTime64('2024-10-09 19:15:10.123456', 6);
 
-SELECT parseDateTime64InJodaSyntax('2024-10-09 10:30:10.123456-8000', 'yyyy-MM-dd HH:mm:ss.SSSSSSZ');
+-- incorrect timezone offset and timezone
+SELECT parseDateTime64InJodaSyntax('2024-10-09 10:30:10.123456-8000', 'yyyy-MM-dd HH:mm:ss.SSSSSSZ'); -- { serverError CANNOT_PARSE_DATETIME }
 
-SELECT parseDateTime64InJodaSyntax('2024-10-09 10:30:10.123456ABCD', 'yyyy-MM-dd HH:mm:ss.SSSSSSz');
+SELECT parseDateTime64InJodaSyntax('2024-10-09 10:30:10.123456ABCD', 'yyyy-MM-dd HH:mm:ss.SSSSSSz'); -- { serverError BAD_ARGUMENTS }
 
-SELECT parseDateTime64InJodaSyntax('2023-02-29 11:22:33Not/Timezone', 'yyyy-MM-dd HH:mm:ssz');
+SELECT parseDateTime64InJodaSyntax('2023-02-29 11:22:33Not/Timezone', 'yyyy-MM-dd HH:mm:ssz'); -- { serverError BAD_ARGUMENTS }
 
+-- leap vs non-leap years
 SELECT parseDateTime64InJodaSyntax('2024-02-29 11:23:34America/Los_Angeles', 'yyyy-MM-dd HH:mm:ssz') = toDateTime64('2024-02-29 19:23:34', 0);
 
-SELECT parseDateTime64InJodaSyntax('2023-02-29 11:22:33America/Los_Angeles', 'yyyy-MM-dd HH:mm:ssz');
+SELECT parseDateTime64InJodaSyntax('2023-02-29 11:22:33America/Los_Angeles', 'yyyy-MM-dd HH:mm:ssz'); -- { serverError CANNOT_PARSE_DATETIME }
 
 SELECT parseDateTime64InJodaSyntax('2024-02-28 23:22:33America/Los_Angeles', 'yyyy-MM-dd HH:mm:ssz') = toDateTime64('2024-02-29 07:22:33', 0);
 
 SELECT parseDateTime64InJodaSyntax('2023-02-28 23:22:33America/Los_Angeles', 'yyyy-MM-dd HH:mm:ssz') = toDateTime64('2023-03-01 07:22:33', 0);
 
-SELECT parseDateTime64InJodaSyntax('2024-03-01 00:22:33-8000', 'yyyy-MM-dd HH:mm:ssZ');
+SELECT parseDateTime64InJodaSyntax('2024-03-01 00:22:33-8000', 'yyyy-MM-dd HH:mm:ssZ'); -- { serverError CANNOT_PARSE_DATETIME }
 
-SELECT parseDateTime64InJodaSyntax('2023-03-01 00:22:33-8000', 'yyyy-MM-dd HH:mm:ssZ');
+SELECT parseDateTime64InJodaSyntax('2023-03-01 00:22:33-8000', 'yyyy-MM-dd HH:mm:ssZ'); -- { serverError CANNOT_PARSE_DATETIME }
 
+-- parseDateTime64InJodaSyntaxOrNull
 SELECT parseDateTime64InJodaSyntaxOrNull('2024-10-09 10:30:10.123', 'yyyy-MM-dd HH:mm:ss.SSS') = toDateTime64('2024-10-09 10:30:10.123', 3);
 
 SELECT parseDateTime64InJodaSyntaxOrNull('2024-10-09 10:30:10.123456', 'yyyy-MM-dd HH:mm:ss.SSSSSS') = toDateTime64('2024-10-09 10:30:10.123456', 6);
 
-SELECT parseDateTime64InJodaSyntaxOrNull('2024-10-09 10:30:10.123456789', 'yyyy-MM-dd HH:mm:ss.SSSSSSSSS');
+SELECT parseDateTime64InJodaSyntaxOrNull('2024-10-09 10:30:10.123456789', 'yyyy-MM-dd HH:mm:ss.SSSSSSSSS'); -- { serverError CANNOT_PARSE_DATETIME }
 
 SELECT parseDateTime64InJodaSyntaxOrNull('2024-10-09 10:30:10.123456-0800', 'yyyy-MM-dd HH:mm:ss.SSSSSSZ') = toDateTime64('2024-10-09 18:30:10.123456', 6);
 
@@ -418,11 +457,12 @@ SELECT parseDateTime64InJodaSyntaxOrNull('', '') = toDateTime64('1970-01-01 00:0
 
 SELECT parseDateTime64InJodaSyntaxOrNull('2177-10-09 10:30:10.123', 'yyyy-MM-dd HH:mm:ss.SSS');
 
+-- parseDateTime64InJodaSyntaxOrZero
 SELECT parseDateTime64InJodaSyntaxOrZero('2024-10-09 10:30:10.123', 'yyyy-MM-dd HH:mm:ss.SSS') = toDateTime64('2024-10-09 10:30:10.123', 3);
 
 SELECT parseDateTime64InJodaSyntaxOrZero('2024-10-09 10:30:10.123456', 'yyyy-MM-dd HH:mm:ss.SSSSSS') = toDateTime64('2024-10-09 10:30:10.123456', 6);
 
-SELECT parseDateTime64InJodaSyntaxOrZero('2024-10-09 10:30:10.123456789', 'yyyy-MM-dd HH:mm:ss.SSSSSSSSS');
+SELECT parseDateTime64InJodaSyntaxOrZero('2024-10-09 10:30:10.123456789', 'yyyy-MM-dd HH:mm:ss.SSSSSSSSS'); -- { serverError CANNOT_PARSE_DATETIME }
 
 SELECT parseDateTime64InJodaSyntaxOrZero('2024-10-09 10:30:10.123456-0800', 'yyyy-MM-dd HH:mm:ss.SSSSSSZ') = toDateTime64('2024-10-09 18:30:10.123456', 6);
 
@@ -438,7 +478,8 @@ SELECT parseDateTime64InJodaSyntaxOrZero('', '') = toDateTime64('1970-01-01 00:0
 
 SELECT parseDateTime64InJodaSyntaxOrZero('2177-10-09 10:30:10.123', 'yyyy-MM-dd HH:mm:ss.SSS') = toDateTime64('2177-10-09 10:30:10.123', 3);
 
-SELECT parseDateTime64InJodaSyntax('1899-12-31 23:59:59', 'yyyy-MM-dd HH:mm:ss');
+-- Test parseDataTime64InJodaSyntax supports range between 1900 - 2299
+SELECT parseDateTime64InJodaSyntax('1899-12-31 23:59:59', 'yyyy-MM-dd HH:mm:ss'); -- { serverError CANNOT_PARSE_DATETIME }
 
 SELECT parseDateTime64InJodaSyntax('1900-01-01 00:00:00', 'yyyy-MM-dd HH:mm:ss') = toDateTime64('1900-01-01 00:00:00', 0);
 
@@ -456,8 +497,10 @@ SELECT parseDateTime64InJodaSyntax('2106-02-07 16:28:15', 'yyyy-MM-dd HH:mm:ss')
 
 SELECT parseDateTime64InJodaSyntax('2299-12-31 23:59:59', 'yyyy-MM-dd HH:mm:ss') = toDateTime64('2299-12-31 23:59:59', 0);
 
-SELECT parseDateTime64InJodaSyntax('2300-01-01 00:00:00', 'yyyy-MM-dd HH:mm:ss');
+SELECT parseDateTime64InJodaSyntax('2300-01-01 00:00:00', 'yyyy-MM-dd HH:mm:ss'); -- { serverError CANNOT_PARSE_DATETIME }
 
+-- Test parseDateTimeInJodaSyntax with 3 repetitions in format and 4 digits year
 SELECT parseDateTimeInJodaSyntax('2025', 'YYY', 'UTC') = toDateTime('2025-01-01', 'UTC');
 
-SELECT parseDateTimeInJodaSyntax('2025', 'xxx', 'UTC') = toDateTime('2024-12-30', 'UTC');
+SELECT parseDateTimeInJodaSyntax('2025', 'xxx', 'UTC') = toDateTime('2024-12-30', 'UTC'); -- -------------------------------------------------------------------------------------------------------------------------
+-- { echoOff }

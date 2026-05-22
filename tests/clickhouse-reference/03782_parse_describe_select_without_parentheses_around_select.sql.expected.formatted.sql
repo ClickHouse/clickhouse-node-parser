@@ -1,0 +1,14 @@
+DESCRIBE TABLE (SELECT 1) FORMAT TSV;
+
+DESCRIBE TABLE (SELECT 1) FORMAT TSV;
+
+CREATE TABLE test_table
+(
+    number UInt64,
+    example String
+)
+ENGINE = Memory;
+
+DESCRIBE TABLE test_table FORMAT TSV;
+
+DROP TABLE test_table;

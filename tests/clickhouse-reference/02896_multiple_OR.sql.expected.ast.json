@@ -1,5 +1,56 @@
 [
   {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "or_bug"
+    },
+    "ifExists": true,
+    "leadingComments": [
+      "-- https://github.com/ClickHouse/ClickHouse/pull/52653"
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "or_bug"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "key",
+        "type": {
+          "name": "UInt8"
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "key"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "or_bug"
+      }
+    }
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -41,7 +92,10 @@
           "value": "0"
         }
       ]
-    }
+    },
+    "leadingComments": [
+      "-- { echoOn }"
+    ]
   },
   {
     "kind": "select",
@@ -111,6 +165,79 @@
     }
   },
   {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "forms"
+    },
+    "ifExists": true,
+    "leadingComments": [
+      "-- { echoOff }",
+      "-- https://github.com/ClickHouse/ClickHouse/issues/55288"
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "forms"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "form_id",
+        "type": {
+          "name": "FixedString",
+          "args": [
+            {
+              "kind": "literal",
+              "value": "24"
+            }
+          ]
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "text_field",
+        "type": {
+          "name": "String"
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "primaryKey": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "form_id"
+        ]
+      }
+    ],
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "form_id"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "forms"
+      }
+    }
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -171,7 +298,10 @@
           }
         }
       ]
-    }
+    },
+    "leadingComments": [
+      "-- { echoOn }"
+    ]
   },
   {
     "kind": "select",
@@ -249,6 +379,9 @@
           "value": "%this%"
         }
       ]
-    }
+    },
+    "trailingComments": [
+      "-- { echoOff }"
+    ]
   }
 ]

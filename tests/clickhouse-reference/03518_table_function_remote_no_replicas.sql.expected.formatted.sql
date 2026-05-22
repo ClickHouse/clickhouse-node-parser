@@ -1,2 +1,2 @@
 SELECT *
-FROM remote('|');
+FROM remote('|'); -- { serverError BAD_ARGUMENTS }

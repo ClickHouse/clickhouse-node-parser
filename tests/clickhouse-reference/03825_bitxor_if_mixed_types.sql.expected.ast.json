@@ -1,5 +1,66 @@
 [
   {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "test_bitxor_if"
+    },
+    "ifExists": true,
+    "leadingComments": [
+      "-- Test for issue #70016",
+      "-- bitXor with IF expression mixing Int32 and Int64",
+      "-- This used to cause LOGICAL_ERROR: Arguments of 'bitXor' have incorrect data types"
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "test_bitxor_if"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "c_int32",
+        "type": {
+          "name": "Int32"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "c_str",
+        "type": {
+          "name": "String"
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree",
+      "args": []
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "c_int32"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "test_bitxor_if"
+      }
+    }
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -80,6 +141,9 @@
         },
         "direction": "ASC"
       }
+    ],
+    "leadingComments": [
+      "-- Simple case: bitXor with IF returning Int64 (from Int32 and Int64)"
     ]
   },
   {
@@ -189,6 +253,9 @@
         },
         "direction": "ASC"
       }
+    ],
+    "leadingComments": [
+      "-- With CASE WHEN wrapping"
     ]
   },
   {
@@ -329,6 +396,17 @@
         "type": "UInt64",
         "value": "1"
       }
+    },
+    "leadingComments": [
+      "-- Verify types"
+    ]
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "test_bitxor_if"
     }
   }
 ]

@@ -1,3 +1,39 @@
+DROP TABLE IF EXISTS t1;
+
+DROP TABLE IF EXISTS t2;
+
+CREATE TABLE t1
+(
+    time DateTime,
+    foo String,
+    dimension_1 String,
+    dt Date MATERIALIZED toDate(time),
+    dt1 Date MATERIALIZED toDayOfYear(time),
+    aliascol1 ALIAS concat(foo, dimension_1),
+    time_alias DateTime ALIAS time
+)
+ENGINE = MergeTree()
+ORDER BY (dt, foo)
+PARTITION BY toYYYYMM(dt);
+
+CREATE TABLE t2
+(
+    time DateTime,
+    bar String,
+    dimension_2 String,
+    dt Date MATERIALIZED toDate(time),
+    dt2 Date MATERIALIZED toDayOfYear(time),
+    aliascol2 ALIAS concat(bar, dimension_2),
+    time_alias DateTime ALIAS time
+)
+ENGINE = MergeTree()
+ORDER BY (dt, bar)
+PARTITION BY toYYYYMM(dt);
+
+INSERT INTO t1;
+
+INSERT INTO t2;
+
 SELECT *
 FROM
     t1
@@ -147,7 +183,7 @@ FROM
     t1
 INNER JOIN t2
     ON talias = t2.time
-SETTINGS enable_analyzer = 0;
+SETTINGS enable_analyzer = 0; -- { serverError AMBIGUOUS_COLUMN_NAME }
 
 SELECT time AS talias
 FROM

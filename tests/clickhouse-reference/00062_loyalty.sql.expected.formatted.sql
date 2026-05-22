@@ -1,3 +1,4 @@
+-- Tags: stateful
 SELECT
     loyalty,
     count() AS c,

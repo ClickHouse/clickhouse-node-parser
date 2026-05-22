@@ -1,5 +1,105 @@
 [
   {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "t_tuple_numeric"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "t_tuple_numeric"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "t",
+        "type": {
+          "name": "Tuple",
+          "args": [
+            {
+              "kind": "namedField",
+              "name": "1",
+              "type": {
+                "name": "Tuple",
+                "args": [
+                  {
+                    "kind": "namedField",
+                    "name": "2",
+                    "type": {
+                      "name": "Int"
+                    }
+                  },
+                  {
+                    "kind": "namedField",
+                    "name": "3",
+                    "type": {
+                      "name": "Int"
+                    }
+                  }
+                ]
+              }
+            },
+            {
+              "kind": "namedField",
+              "name": "4",
+              "type": {
+                "name": "Int"
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "functionCall",
+          "name": "tuple",
+          "args": []
+        }
+      }
+    ]
+  },
+  {
+    "kind": "showCreate",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "t_tuple_numeric"
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "t_tuple_numeric"
+      }
+    }
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "output_format_json_named_tuples_as_objects",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -161,7 +261,10 @@
     "from": {
       "kind": "tableRef",
       "table": "t_tuple_numeric"
-    }
+    },
+    "trailingComments": [
+      "-- {serverError NOT_FOUND_COLUMN_IN_BLOCK, ARGUMENT_OUT_OF_BOUND}"
+    ]
   },
   {
     "kind": "select",
@@ -187,7 +290,10 @@
     "from": {
       "kind": "tableRef",
       "table": "t_tuple_numeric"
-    }
+    },
+    "trailingComments": [
+      "-- {serverError NOT_FOUND_COLUMN_IN_BLOCK, ARGUMENT_OUT_OF_BOUND}"
+    ]
   },
   {
     "kind": "select",
@@ -219,6 +325,120 @@
     "from": {
       "kind": "tableRef",
       "table": "t_tuple_numeric"
+    },
+    "trailingComments": [
+      "-- {serverError UNKNOWN_IDENTIFIER, ARGUMENT_OUT_OF_BOUND}"
+    ]
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "t_tuple_numeric"
     }
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "t_tuple_numeric"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "t",
+        "type": {
+          "name": "Tuple",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "Tuple",
+                "args": [
+                  {
+                    "kind": "type",
+                    "type": {
+                      "name": "Int"
+                    }
+                  },
+                  {
+                    "kind": "type",
+                    "type": {
+                      "name": "Int"
+                    }
+                  }
+                ]
+              }
+            },
+            {
+              "kind": "type",
+              "type": {
+                "name": "Int"
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "functionCall",
+          "name": "tuple",
+          "args": []
+        }
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "with": [
+      {
+        "kind": "cteExpr",
+        "name": "data",
+        "expr": {
+          "kind": "literal",
+          "type": "String",
+          "value": "{\"1\":{\"key\":\"value\"}}"
+        }
+      },
+      {
+        "kind": "cteExpr",
+        "name": "parsed_json",
+        "expr": {
+          "kind": "functionCall",
+          "name": "JSONExtract",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "data"
+              ]
+            },
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "Tuple(\"1\" Tuple(key String))"
+            }
+          ]
+        }
+      }
+    ],
+    "select": [
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "parsed_json"
+          ]
+        },
+        "alias": "ssid"
+      }
+    ]
   }
 ]

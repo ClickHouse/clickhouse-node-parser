@@ -1,7 +1,20 @@
+-- Tags: shard
+DROP TABLE IF EXISTS nested;
+
+CREATE TABLE nested
+(
+    n Nested(x UInt8)
+)
+ENGINE = Memory;
+
+INSERT INTO nested;
+
 SELECT 1 AS x
 FROM
     remote('127.0.0.2', currentDatabase(), nested)
 ARRAY JOIN n.x;
+
+DROP TABLE nested;
 
 SELECT
     dummy AS dummy,

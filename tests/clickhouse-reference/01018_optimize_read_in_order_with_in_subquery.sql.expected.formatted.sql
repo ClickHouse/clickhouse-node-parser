@@ -1,3 +1,21 @@
+SET max_threads = 2;
+
+SET optimize_read_in_order = 1;
+
+DROP TABLE IF EXISTS TESTTABLE4;
+
+CREATE TABLE TESTTABLE4
+(
+    _id UInt64,
+    pt String,
+    l String
+)
+ENGINE = MergeTree()
+ORDER BY (_id)
+PARTITION BY (pt);
+
+INSERT INTO TESTTABLE4;
+
 SELECT _id
 FROM TESTTABLE4
 PREWHERE l IN (
@@ -5,3 +23,5 @@ PREWHERE l IN (
     )
 ORDER BY _id DESC
 LIMIT 10;
+
+DROP TABLE TESTTABLE4;

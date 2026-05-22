@@ -1,3 +1,23 @@
+DROP TABLE IF EXISTS table_map;
+
+CREATE TABLE table_map
+(
+    id UInt32,
+    col Map(String, UInt64)
+)
+ENGINE = MergeTree()
+ORDER BY tuple();
+
+INSERT INTO table_map SELECT
+    number,
+    map('key1', number, 'key2', number * 2)
+FROM numbers(1111, 3);
+
+INSERT INTO table_map SELECT
+    number,
+    map('key3', number, 'key2', number + 1, 'key4', number + 2)
+FROM numbers(100, 4);
+
 SELECT mapFilter((k, v) -> like(k, '%3')
     AND v > 102, col)
 FROM table_map
@@ -17,7 +37,7 @@ SELECT mapFilter((k, v) -> 0, col)
 FROM table_map;
 
 SELECT mapApply((k, v) -> tuple(v + 9223372036854775806), col)
-FROM table_map;
+FROM table_map; -- { serverError BAD_ARGUMENTS }
 
 SELECT mapFilter((k, v) -> k = 0.1::Float32, map(0.1::Float32, 4, 0.2::Float32, 5));
 
@@ -149,42 +169,51 @@ SELECT mapUpdate(map('k1', 1, 'k2', 2), materialize(map('k3', 33, 'k4', 44)));
 
 SELECT mapUpdate(materialize(map('k1', 1, 'k2', 2)), materialize(map('k3', 33, 'k4', 44)));
 
-SELECT mapApply();
+WITH (range(0, number % 10), range(0, number % 10))::Map(UInt64, UInt64) AS m1,
 
-SELECT mapApply((x, y) -> (x), map(1, 0, 2, 0));
+(range(0, number % 10, 2), arrayMap(x -> x * x, range(0, number % 10, 2)))::Map(UInt64, UInt64) AS m2
 
-SELECT mapApply((x, y) -> ('x'), map(1, 0, 2, 0));
+SELECT DISTINCT mapUpdate(m1, m2)
+FROM numbers(100000);
+
+SELECT mapApply(); -- { serverError NUMBER_OF_ARGUMENTS_DOESNT_MATCH }
+
+SELECT mapApply((x, y) -> (x), map(1, 0, 2, 0)); -- { serverError BAD_ARGUMENTS }
+
+SELECT mapApply((x, y) -> ('x'), map(1, 0, 2, 0)); -- { serverError BAD_ARGUMENTS }
 
 SELECT mapApply(x -> (x, x), map(1, 0, 2, 0));
 
-SELECT mapApply((x, y) -> (x, 1, 2), map(1, 0, 2, 0));
+SELECT mapApply((x, y) -> (x, 1, 2), map(1, 0, 2, 0)); -- { serverError BAD_ARGUMENTS }
 
-SELECT mapApply((x, y) -> (x, x + 1));
+SELECT mapApply((x, y) -> (x, x + 1)); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
-SELECT mapApply(map(1, 0, 2, 0), (x, y) -> (x, x + 1));
+SELECT mapApply(map(1, 0, 2, 0), (x, y) -> (x, x + 1)); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
-SELECT mapApply((x, y) -> (x, x+1), map(1, 0, 2, 0), map(1, 0, 2, 0));
+SELECT mapApply((x, y) -> (x, x+1), map(1, 0, 2, 0), map(1, 0, 2, 0)); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
-SELECT mapFilter();
+SELECT mapFilter(); -- { serverError NUMBER_OF_ARGUMENTS_DOESNT_MATCH }
 
-SELECT mapFilter((x, y) -> (toInt32(x)), map(1, 0, 2, 0));
+SELECT mapFilter((x, y) -> (toInt32(x)), map(1, 0, 2, 0)); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
-SELECT mapFilter((x, y) -> ('x'), map(1, 0, 2, 0));
+SELECT mapFilter((x, y) -> ('x'), map(1, 0, 2, 0)); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
-SELECT mapFilter(x -> (x, x), map(1, 0, 2, 0));
+SELECT mapFilter(x -> (x, x), map(1, 0, 2, 0)); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
-SELECT mapFilter((x, y) -> (x, 1, 2), map(1, 0, 2, 0));
+SELECT mapFilter((x, y) -> (x, 1, 2), map(1, 0, 2, 0)); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
-SELECT mapFilter((x, y) -> (x, x + 1));
+SELECT mapFilter((x, y) -> (x, x + 1)); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
-SELECT mapFilter(map(1, 0, 2, 0), (x, y) -> (x > 0));
+SELECT mapFilter(map(1, 0, 2, 0), (x, y) -> (x > 0)); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
-SELECT mapFilter((x, y) -> (x, x + 1), map(1, 0, 2, 0), map(1, 0, 2, 0));
+SELECT mapFilter((x, y) -> (x, x + 1), map(1, 0, 2, 0), map(1, 0, 2, 0)); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
-SELECT mapConcat([1, 2], map(1, 2));
+SELECT mapConcat([1, 2], map(1, 2)); -- { serverError NO_COMMON_TYPE }
 
-SELECT mapSort(map(1, 2), map(3, 4));
+SELECT mapSort(map(1, 2), map(3, 4)); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
-SELECT mapUpdate();
+SELECT mapUpdate(); -- { serverError NUMBER_OF_ARGUMENTS_DOESNT_MATCH }
 
-SELECT mapUpdate(map(1, 3, 3, 2), map(1, 0, 2, 0), map(1, 0, 2, 0));
+SELECT mapUpdate(map(1, 3, 3, 2), map(1, 0, 2, 0), map(1, 0, 2, 0)); -- { serverError NUMBER_OF_ARGUMENTS_DOESNT_MATCH }
+
+DROP TABLE table_map;

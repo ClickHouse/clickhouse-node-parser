@@ -34,6 +34,18 @@ FROM (
     )
 GROUP BY x;
 
+DROP TABLE IF EXISTS decimal;
+
+CREATE TABLE IF NOT EXISTS decimal
+(
+    A UInt64,
+    B Decimal128(18),
+    C Decimal128(18)
+)
+ENGINE = Memory;
+
+INSERT INTO decimal;
+
 SELECT
     A,
     toString(B) AS B_str,
@@ -57,3 +69,5 @@ FROM (
             A,
             B_str
     );
+
+DROP TABLE decimal;

@@ -1,3 +1,65 @@
+Set
+
+DropQuery  byte_identical_r1 (children 1)
+ Identifier byte_identical_r1
+
+DropQuery  byte_identical_r2 (children 1)
+ Identifier byte_identical_r2
+
+CreateQuery byte_identical_r1 (children 3)
+ Identifier byte_identical_r1
+ Columns definition (children 1)
+  ExpressionList (children 1)
+   ColumnDeclaration x (children 1)
+    DataType UInt32
+ Storage definition (children 2)
+  Function ReplicatedMergeTree (children 1)
+   ExpressionList (children 2)
+    Literal '/clickhouse/tables/{database}/test_00721/byte_identical'
+    Literal 'r1'
+  Identifier x
+
+CreateQuery byte_identical_r2 (children 3)
+ Identifier byte_identical_r2
+ Columns definition (children 1)
+  ExpressionList (children 1)
+   ColumnDeclaration x (children 1)
+    DataType UInt32
+ Storage definition (children 2)
+  Function ReplicatedMergeTree (children 1)
+   ExpressionList (children 2)
+    Literal '/clickhouse/tables/{database}/test_00721/byte_identical'
+    Literal 'r2'
+  Identifier x
+
+InsertQuery   (children 2)
+ Identifier byte_identical_r1
+ ExpressionList (children 1)
+  Identifier x
+
+SYSTEM query (children 1)
+ Identifier byte_identical_r2
+
+AlterQuery  byte_identical_r1 (children 2)
+ ExpressionList (children 1)
+  AlterCommand ADD_COLUMN (children 1)
+   ColumnDeclaration y (children 2)
+    DataType UInt64
+    Function rand (children 1)
+     ExpressionList
+ Identifier byte_identical_r1
+
+SYSTEM query (children 1)
+ Identifier byte_identical_r1
+
+Set
+
+OptimizeQuery  byte_identical_r1_final (children 2)
+ Partition (children 1)
+  Function tuple (children 1)
+   ExpressionList
+ Identifier byte_identical_r1
+
 SelectWithUnionQuery (children 1)
  ExpressionList (children 1)
   SelectQuery (children 3)
@@ -20,3 +82,9 @@ SelectWithUnionQuery (children 1)
    ExpressionList (children 1)
     OrderByElement (children 1)
      Identifier x
+
+DropQuery  byte_identical_r1 (children 1)
+ Identifier byte_identical_r1
+
+DropQuery  byte_identical_r2 (children 1)
+ Identifier byte_identical_r2

@@ -1,3 +1,4 @@
+SET enable_analyzer=0;
 SELECT number FROM numbers(10) ORDER BY number LIMIT -1;
 SELECT number FROM numbers(10) ORDER BY number LIMIT -3;
 SELECT number FROM numbers(10) ORDER BY number LIMIT -100;
@@ -31,6 +32,18 @@ SELECT * FROM system.numbers_mt WHERE number = 1000000 LIMIT -1 OFFSET -1;
 SELECT DISTINCT number FROM numbers(1000000) ORDER BY number LIMIT -1 OFFSET -999999;
 SELECT number FROM numbers(1000000) ORDER BY number LIMIT -1 OFFSET -999999;
 SELECT DISTINCT number FROM numbers(20) LIMIT 18446744073709551615 OFFSET -446744073709551615;
+DROP TABLE IF EXISTS num_tab;
+CREATE TABLE num_tab
+(
+    `id` UInt8,
+    `val` UInt32
+)
+ENGINE = MergeTree
+ORDER BY (id, val)
+AS SELECT
+    number % 2 AS id,
+    number AS val
+FROM numbers(20);
 SELECT if((count() = 5) AND (min(val) = 15) AND (max(val) = 19) AND (sum(val) = 85) AND (uniqExact(id) = 2), 'OK', 'FAIL')
 FROM
 (
@@ -39,8 +52,22 @@ FROM
         val
     FROM num_tab ORDER BY val ASC LIMIT -5
 );
+CREATE TABLE num_tab
+ENGINE = MergeTree
+ORDER BY number
+AS SELECT number FROM numbers(1000000);
+DROP TABLE IF EXISTS modified_tab;
+CREATE TABLE modified_tab ENGINE=MergeTree()
+ORDER BY number 
+AS SELECT number FROM
+(SELECT number FROM num_tab ORDER BY number OFFSET -10);
 SELECT count(number), sum(number) FROM modified_tab;
+CREATE TABLE modified_tab ENGINE=MergeTree()
+ORDER BY number 
+AS SELECT number FROM
+(SELECT number FROM num_tab ORDER BY number LIMIT -10 OFFSET -100000);
 SELECT number FROM modified_tab;
+SET enable_analyzer=1;
 SELECT DISTINCT number
 FROM (SELECT number FROM numbers_mt(1000000) LIMIT -214748)
 WHERE 0;

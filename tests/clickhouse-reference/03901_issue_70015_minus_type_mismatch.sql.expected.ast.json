@@ -1,5 +1,88 @@
 [
   {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "compile_expressions",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      }
+    ],
+    "leadingComments": [
+      "-- An attempt to reproduce https://github.com/ClickHouse/ClickHouse/issues/70015",
+      "-- The issue was that binary arithmetic operations like minus would throw",
+      "-- \"Arguments of 'minus' have incorrect data types\" logical error when",
+      "-- the arguments had different numeric types (e.g., Int64 - Int32).",
+      "-- However, this test didn't reproduce the issue in any previous ClickHouse versions,",
+      "-- and the actual issue was already fixed a long time ago."
+    ],
+    "trailingComments": [
+      "-- Disable JIT to avoid unrelated issues"
+    ]
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "t_70015"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "t_70015"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "c_izfnu",
+        "type": {
+          "name": "Int64"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "c_l8d2_b",
+        "type": {
+          "name": "Int64"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "c_hmbcdw",
+        "type": {
+          "name": "Int64"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "c_zjw",
+        "type": {
+          "name": "Int32"
+        }
+      }
+    ],
+    "engine": {
+      "name": "Memory"
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "t_70015"
+      }
+    }
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -83,6 +166,10 @@
         },
         "direction": "ASC"
       }
+    ],
+    "leadingComments": [
+      "-- The problematic query pattern from the issue:",
+      "-- if(CAST(equals(), 'Nullable(Bool)'), sign(Int64), Int64) - Int32"
     ]
   },
   {
@@ -114,6 +201,9 @@
           ]
         }
       }
+    ],
+    "leadingComments": [
+      "-- Additional test cases for type promotion in minus"
     ]
   },
   {
@@ -208,5 +298,13 @@
         }
       }
     ]
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "t_70015"
+    }
   }
 ]

@@ -19,7 +19,12 @@
         ]
       }
     ],
-    "format": "Values"
+    "format": "Values",
+    "leadingComments": [
+      "-- Test that FixedString respects the output_format_values_escape_quote_with_quote setting",
+      "-- This was broken: https://github.com/ClickHouse/ClickHouse/issues/73519",
+      "-- Default behavior (backslash escaping)"
+    ]
   },
   {
     "kind": "select",
@@ -55,6 +60,19 @@
     "format": "LineAsString"
   },
   {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "output_format_values_escape_quote_with_quote",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -63,6 +81,9 @@
         "value": ""
       }
     ],
-    "format": "LineAsString"
+    "format": "LineAsString",
+    "leadingComments": [
+      "-- Ensure no newline issues at end of file"
+    ]
   }
 ]

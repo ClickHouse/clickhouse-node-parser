@@ -1,5 +1,57 @@
 [
   {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "data_02176"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "data_02176"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "key",
+        "type": {
+          "name": "Int"
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree",
+      "args": []
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "key"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "optimize_aggregation_in_order",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -9,7 +61,7 @@
       }
     ],
     "from": {
-      "kind": "tableFunction",
+      "kind": "tableFunctionRef",
       "name": "remote",
       "args": [
         {
@@ -55,7 +107,15 @@
           ]
         }
       ]
-    }
+    },
+    "leadingComments": [
+      "-- { echoOn }",
+      "-- regression for optimize_aggregation_in_order with empty result set",
+      "-- that cause at first",
+      "--   \"Chunk should have AggregatedChunkInfo in GroupingAggregatedTransform\"",
+      "-- at first and after",
+      "--   \"Chunk should have AggregatedChunkInfo in GroupingAggregatedTransform\""
+    ]
   },
   {
     "kind": "select",
@@ -67,7 +127,7 @@
       }
     ],
     "from": {
-      "kind": "tableFunction",
+      "kind": "tableFunctionRef",
       "name": "remote",
       "args": [
         {
@@ -123,6 +183,17 @@
           "value": "0"
         }
       }
+    ]
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "data_02176"
+    },
+    "leadingComments": [
+      "-- { echoOff }"
     ]
   }
 ]

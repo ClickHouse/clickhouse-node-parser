@@ -1,4 +1,4 @@
-
+-- { echoOn }
 -- Tuples with NaN
 SELECT min((c1, c2)), max((c1, c2)) FROM values((nan, 0.), (0., 0.), (5., 5.));
 SELECT minIf((c1, c2), c2 >= 0.0), maxIf((c1, c2), c2 >= 0.0) FROM values((nan, 0.), (0., 0.), (5., 5.));

@@ -1,3 +1,5 @@
+SET cast_ipv4_ipv6_default_on_conversion_error = 1;
+
 SELECT IPv4StringToNum('') == 0;
 
 SELECT IPv4StringToNum(materialize('')) == 0;
@@ -42,12 +44,26 @@ SELECT IPv6StringToNum('not an ip string') == toFixedString(materialize(''), 16)
 
 SELECT IPv6StringToNum(materialize('not an ip string')) == toFixedString(materialize(''), 16);
 
+/* IPv4ToIPv6 */
 SELECT hex(IPv4ToIPv6(1297626935));
+
+/* Тест с таблицей */
+DROP TABLE IF EXISTS addresses;
+
+CREATE TABLE addresses
+(
+    addr UInt32
+)
+ENGINE = Memory;
+
+INSERT INTO addresses (addr);
 
 SELECT hex(IPv4ToIPv6(addr))
 FROM addresses
 ORDER BY addr ASC;
 
+/* cutIPv6 */
+/*  Реальный IPv6-адрес */
 SELECT cutIPv6(IPv6StringToNum('2001:0DB8:AC10:FE01:FEED:BABE:CAFE:F00D'), 0, 0);
 
 SELECT cutIPv6(IPv6StringToNum('2001:0DB8:AC10:FE01:FEED:BABE:CAFE:F00D'), 1, 0);
@@ -114,6 +130,7 @@ SELECT cutIPv6(IPv6StringToNum('2001:0DB8:AC10:FE01:FEED:BABE:CAFE:F00D'), 0, 15
 
 SELECT cutIPv6(IPv6StringToNum('2001:0DB8:AC10:FE01:FEED:BABE:CAFE:F00D'), 0, 16);
 
+/*  IPv4-mapped IPv6-адрес */
 SELECT cutIPv6(toFixedString(unhex('00000000000000000000FFFFC1FC110A'), 16), 0, 0);
 
 SELECT cutIPv6(toFixedString(unhex('00000000000000000000FFFFC1FC110A'), 16), 1, 0);
@@ -180,10 +197,22 @@ SELECT cutIPv6(toFixedString(unhex('00000000000000000000FFFFC1FC110A'), 16), 0, 
 
 SELECT cutIPv6(toFixedString(unhex('00000000000000000000FFFFC1FC110A'), 16), 0, 16);
 
+CREATE TABLE addresses
+(
+    addr String
+)
+ENGINE = Memory;
+
+INSERT INTO addresses (addr);
+
 SELECT cutIPv6(toFixedString(unhex(addr), 16), 3, 0)
 FROM addresses
 ORDER BY addr ASC;
 
+INSERT INTO addresses (addr);
+
 SELECT cutIPv6(toFixedString(unhex(addr), 16), 0, 3)
 FROM addresses
 ORDER BY addr ASC;
+
+DROP TABLE addresses;

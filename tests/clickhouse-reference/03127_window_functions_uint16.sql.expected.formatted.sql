@@ -1,3 +1,4 @@
+-- { echo }
 SELECT tumbleStart(toDateTime('2020-01-09 12:00:01', 'US/Samoa'), toIntervalWeek('1'), 'US/Samoa');
 
 SELECT toDateTime(tumbleStart(toDateTime('2020-01-09 12:00:01', 'US/Samoa'), toIntervalWeek('1'), 'US/Samoa'), 'US/Samoa');

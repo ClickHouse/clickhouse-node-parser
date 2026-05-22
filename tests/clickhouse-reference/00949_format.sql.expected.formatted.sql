@@ -1,3 +1,5 @@
+SET send_logs_level = 'fatal';
+
 SELECT format('Hello {1} World {0}', materialize('first'), materialize('second'))
 FROM `system`.numbers
 LIMIT 1;
@@ -38,47 +40,47 @@ SELECT format('', 'first');
 
 SELECT concat('third', 'first', 'second') = format('{2}{0}{1}', 'first', 'second', 'third');
 
-SELECT format('{', '');
+SELECT format('{', ''); -- { serverError BAD_ARGUMENTS }
 
-SELECT format('{{}', '');
+SELECT format('{{}', ''); -- { serverError BAD_ARGUMENTS }
 
-SELECT format('{ {}', '');
+SELECT format('{ {}', ''); -- { serverError BAD_ARGUMENTS }
 
-SELECT format('}', '');
+SELECT format('}', ''); -- { serverError BAD_ARGUMENTS }
 
 SELECT format('{{', '');
 
-SELECT format('{}}', '');
+SELECT format('{}}', ''); -- { serverError BAD_ARGUMENTS }
 
 SELECT format('}}', '');
 
-SELECT format('{2 }', '');
+SELECT format('{2 }', ''); -- { serverError BAD_ARGUMENTS }
 
-SELECT format('{}{}{}{}{}{} }{}', '', '', '', '', '', '', '');
+SELECT format('{}{}{}{}{}{} }{}', '', '', '', '', '', '', ''); -- { serverError BAD_ARGUMENTS }
 
-SELECT format('{sometext}', '');
+SELECT format('{sometext}', ''); -- { serverError BAD_ARGUMENTS }
 
-SELECT format('{\0sometext}', '');
+SELECT format('{\0sometext}', ''); -- { serverError BAD_ARGUMENTS }
 
-SELECT format('{1023}', '');
+SELECT format('{1023}', ''); -- { serverError BAD_ARGUMENTS }
 
-SELECT format('{10000000000000000000000000000000000000000000000000}', '');
+SELECT format('{10000000000000000000000000000000000000000000000000}', ''); -- { serverError BAD_ARGUMENTS }
 
-SELECT format('{} {0}', '', '');
+SELECT format('{} {0}', '', ''); -- { serverError BAD_ARGUMENTS }
 
-SELECT format('{0} {}', '', '');
+SELECT format('{0} {}', '', ''); -- { serverError BAD_ARGUMENTS }
 
 SELECT format('Hello {} World {} {}{}', 'first', 'second', 'third')
 FROM `system`.numbers
-LIMIT 2;
+LIMIT 2; -- { serverError BAD_ARGUMENTS }
 
 SELECT format('Hello {0} World {1} {2}{3}', 'first', 'second', 'third')
 FROM `system`.numbers
-LIMIT 2;
+LIMIT 2; -- { serverError BAD_ARGUMENTS }
 
 SELECT 50 = length(format((
         SELECT arrayStringConcat(arrayMap(x -> '{', range(101)))
-    ), ''));
+    ), '')); -- { serverError BAD_ARGUMENTS }
 
 SELECT format('{}{}{}', materialize(toFixedString('a', 1)), materialize(toFixedString('b', 1)), materialize(toFixedString('c', 1))) == 'abc';
 

@@ -1,3 +1,5 @@
+SET enable_analyzer = 1;
+
 SELECT ((NULL IN (
         SELECT
             9223372036854775806 IN (

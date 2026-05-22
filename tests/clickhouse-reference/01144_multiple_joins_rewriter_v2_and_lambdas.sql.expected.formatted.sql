@@ -40,6 +40,18 @@ CROSS JOIN (
         SELECT 1 AS A
     ) AS check_single_query;
 
+DROP TABLE IF EXISTS table;
+
+CREATE TABLE table
+(
+    query String,
+    test String,
+    run UInt32,
+    metrics Array(UInt32),
+    version UInt32
+)
+ENGINE = Memory;
+
 SELECT
     arrayMap(x -> floor(x, 4), original_medians_array.medians_by_version[1] AS l) AS l_rounded,
     arrayMap(x -> floor(x, 4), original_medians_array.medians_by_version[2] AS r) AS r_rounded,
@@ -108,3 +120,5 @@ CROSS JOIN (
         SELECT throwIf(uniq((test, query)))
         FROM table
     ) AS check_single_query;
+
+DROP TABLE table;

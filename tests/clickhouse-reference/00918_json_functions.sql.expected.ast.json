@@ -7,6 +7,23 @@
         "type": "String",
         "value": "--allow_simdjson=1--"
       }
+    ],
+    "leadingComments": [
+      "-- Tags: no-fasttest",
+      "-- Tag: no-fasttest due to only SIMD JSON is available in fasttest"
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "allow_simdjson",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
     ]
   },
   {
@@ -3916,7 +3933,7 @@
               "name": "arrayJoin",
               "args": [
                 {
-                  "kind": "array",
+                  "kind": "arrayLiteral",
                   "elements": [
                     {
                       "kind": "literal",
@@ -3987,7 +4004,7 @@
               "name": "arrayJoin",
               "args": [
                 {
-                  "kind": "array",
+                  "kind": "arrayLiteral",
                   "elements": [
                     {
                       "kind": "literal",
@@ -4018,7 +4035,7 @@
         "name": "JSONExtractKeysAndValues",
         "args": [
           {
-            "kind": "array",
+            "kind": "arrayLiteral",
             "elements": [],
             "source": "[]"
           },
@@ -4035,6 +4052,62 @@
           }
         ]
       }
+    ],
+    "trailingComments": [
+      "-- { serverError ILLEGAL_COLUMN }"
+    ]
+  },
+  {
+    "kind": "select",
+    "with": [
+      {
+        "kind": "cteExpr",
+        "name": "json",
+        "expr": {
+          "kind": "literal",
+          "type": "String",
+          "value": "{\"i\": 1, \"f\": 1.2}"
+        }
+      }
+    ],
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "JSONExtract",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "json"
+            ]
+          },
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": "i"
+          },
+          {
+            "kind": "functionCall",
+            "name": "JSONType",
+            "args": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "json"
+                ]
+              },
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "i"
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "trailingComments": [
+      "-- { serverError ILLEGAL_COLUMN }"
     ]
   },
   {
@@ -4055,6 +4128,22 @@
             "value": "Map(Int64, Array(Float64))"
           }
         ]
+      }
+    ],
+    "trailingComments": [
+      "-- { serverError ILLEGAL_TYPE_OF_ARGUMENT }"
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "allow_simdjson",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
       }
     ]
   },
@@ -4172,6 +4261,9 @@
           }
         ]
       }
+    ],
+    "trailingComments": [
+      "-- { serverError ILLEGAL_TYPE_OF_ARGUMENT }"
     ]
   },
   {

@@ -7,7 +7,7 @@
       }
     ],
     "from": {
-      "kind": "tableFunction",
+      "kind": "tableFunctionRef",
       "name": "format",
       "args": [
         {
@@ -22,7 +22,23 @@
           "value": "\n{\"a\": \"Hello\", \"b\": 111}\n{\"a\": \"World\", \"b\": 123}\n{\"a\": \"Hello\", \"b\": 111}\n{\"a\": \"World\", \"b\": 123}\n{\"a\": \"Hello\", \"b\": 111}\n{\"a\": \"World\", \"b\": 123}\n{\"a\": \"Hello\", \"b\": 111}\n{\"a\": \"World\", \"b\": 123}\n{\"a\": \"Hello\", \"b\": 111}\n{\"a\": \"World\", \"b\": 123}\n{\"a\": \"Hello\", \"b\": 111}\n{\"a\": \"World\", \"b\": 123}\n{\"a\": \"Hello\", \"b\": 111}\n{\"a\": \"World\", \"b\": 123}\n{\"a\": \"Hello\", \"b\": 111}\n{\"a\": \"World\", \"b\": 123}\n{\"a\": \"Hello\", \"b\": 111}\n{\"a\": \"World\", \"b\": 123}\n{\"a\": \"Hello\", \"b\": 111}\n{\"a\": \"World\", \"b\": 123}\n"
         }
       ]
-    }
+    },
+    "leadingComments": [
+      "-- Tags: no-fasttest"
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "max_block_size",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "5"
+        }
+      }
+    ]
   },
   {
     "kind": "select",
@@ -32,7 +48,7 @@
       }
     ],
     "from": {
-      "kind": "tableFunction",
+      "kind": "tableFunctionRef",
       "name": "format",
       "args": [
         {
@@ -50,6 +66,61 @@
     }
   },
   {
+    "kind": "describe",
+    "target": {
+      "kind": "function",
+      "func": {
+        "kind": "tableFunctionRef",
+        "name": "format",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "CSV"
+            ]
+          },
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": "1,2,\"[1,2,3]\",\"[['abc'], [], ['d', 'e']]\""
+          }
+        ]
+      }
+    }
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "test"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "test"
+    },
+    "asTableFunction": {
+      "name": "format",
+      "args": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "JSONEachRow"
+          ]
+        },
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "\n{\"a\": \"Hello\", \"b\": 111}\n{\"a\": \"World\", \"b\": 123}\n{\"a\": \"Hello\", \"b\": 111}\n{\"a\": \"Hello\", \"b\": 131}\n{\"a\": \"World\", \"b\": 123}\n"
+        }
+      ]
+    }
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -57,6 +128,24 @@
       }
     ],
     "from": {
+      "kind": "tableRef",
+      "table": "test"
+    }
+  },
+  {
+    "kind": "describe",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "test"
+      }
+    }
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
       "kind": "tableRef",
       "table": "test"
     }

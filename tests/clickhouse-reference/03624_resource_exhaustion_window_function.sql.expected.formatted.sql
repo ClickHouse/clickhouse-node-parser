@@ -1,3 +1,19 @@
+CREATE TABLE table_test
+(
+    c1 Int32,
+    c2 Nullable(Int32),
+    c3 Nullable(String),
+    c4 Nullable(Date32),
+    c5 Nullable(String)
+)
+ENGINE = ReplacingMergeTree
+ORDER BY c1
+SETTINGS index_granularity = 8192;
+
+INSERT INTO table_test SELECT *
+FROM generateRandom()
+LIMIT 1000;
+
 SELECT
     *,
     ROW_NUMBER() OVER (PARTITION BY c2, c4 ORDER BY c5 DESC, c3 DESC) AS row_n
@@ -28,3 +44,5 @@ ORDER BY
     c5 ASC,
     c3 ASC
 FORMAT Null;
+
+DROP TABLE table_test;

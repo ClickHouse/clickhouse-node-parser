@@ -1,3 +1,3 @@
-SELECT toIntervalSecond(now64());
+SELECT toIntervalSecond(now64()); -- { serverError CANNOT_CONVERT_TYPE }
 
-SELECT CAST(now64() AS IntervalSecond);
+SELECT CAST(now64() AS IntervalSecond); -- { serverError CANNOT_CONVERT_TYPE }

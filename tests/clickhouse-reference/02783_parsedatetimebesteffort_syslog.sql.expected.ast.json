@@ -1,0 +1,928 @@
+[
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "session_timezone",
+        "value": {
+          "kind": "literal",
+          "type": "String",
+          "value": "UTC"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "formatdatetime_e_with_space_padding",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "with": [
+      {
+        "kind": "cteExpr",
+        "name": "dt_ref",
+        "expr": {
+          "kind": "functionCall",
+          "name": "toDateTime",
+          "args": [
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "2023-06-30 23:59:30"
+            }
+          ]
+        }
+      },
+      {
+        "kind": "cteExpr",
+        "name": "dt_now",
+        "expr": {
+          "kind": "functionCall",
+          "name": "now",
+          "args": []
+        }
+      },
+      {
+        "kind": "cteExpr",
+        "name": "dt_before",
+        "expr": {
+          "kind": "functionCall",
+          "name": "minus",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "dt_now"
+              ]
+            },
+            {
+              "kind": "functionCall",
+              "name": "toIntervalDay",
+              "args": [
+                {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "1"
+                }
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "kind": "cteExpr",
+        "name": "time_shift",
+        "expr": {
+          "kind": "functionCall",
+          "name": "dateDiff",
+          "args": [
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "second"
+            },
+            {
+              "kind": "columnRef",
+              "parts": [
+                "dt_ref"
+              ]
+            },
+            {
+              "kind": "columnRef",
+              "parts": [
+                "dt_now"
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "kind": "cteExpr",
+        "name": "syslog_before",
+        "expr": {
+          "kind": "functionCall",
+          "name": "formatDateTime",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "dt_before"
+              ]
+            },
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "%b %e %T"
+            }
+          ]
+        }
+      }
+    ],
+    "select": [
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "formatDateTime",
+          "args": [
+            {
+              "kind": "binaryExpr",
+              "op": "-",
+              "left": {
+                "kind": "columnRef",
+                "parts": [
+                  "dt_before"
+                ]
+              },
+              "right": {
+                "kind": "columnRef",
+                "parts": [
+                  "time_shift"
+                ]
+              }
+            },
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "%b %e %T"
+            }
+          ]
+        },
+        "alias": "syslog_arg"
+      },
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "binaryExpr",
+          "op": "-",
+          "left": {
+            "kind": "functionCall",
+            "name": "parseDateTimeBestEffort",
+            "args": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "syslog_before"
+                ]
+              }
+            ]
+          },
+          "right": {
+            "kind": "columnRef",
+            "parts": [
+              "time_shift"
+            ]
+          }
+        },
+        "alias": "res"
+      },
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "binaryExpr",
+          "op": "-",
+          "left": {
+            "kind": "functionCall",
+            "name": "parseDateTimeBestEffortOrNull",
+            "args": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "syslog_before"
+                ]
+              }
+            ]
+          },
+          "right": {
+            "kind": "columnRef",
+            "parts": [
+              "time_shift"
+            ]
+          }
+        },
+        "alias": "res_null"
+      },
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "binaryExpr",
+          "op": "-",
+          "left": {
+            "kind": "functionCall",
+            "name": "parseDateTimeBestEffortOrZero",
+            "args": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "syslog_before"
+                ]
+              }
+            ]
+          },
+          "right": {
+            "kind": "columnRef",
+            "parts": [
+              "time_shift"
+            ]
+          }
+        },
+        "alias": "res_zero"
+      },
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "binaryExpr",
+          "op": "-",
+          "left": {
+            "kind": "functionCall",
+            "name": "parseDateTimeBestEffortUS",
+            "args": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "syslog_before"
+                ]
+              }
+            ]
+          },
+          "right": {
+            "kind": "columnRef",
+            "parts": [
+              "time_shift"
+            ]
+          }
+        },
+        "alias": "res_us"
+      },
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "binaryExpr",
+          "op": "-",
+          "left": {
+            "kind": "functionCall",
+            "name": "parseDateTimeBestEffortUSOrNull",
+            "args": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "syslog_before"
+                ]
+              }
+            ]
+          },
+          "right": {
+            "kind": "columnRef",
+            "parts": [
+              "time_shift"
+            ]
+          }
+        },
+        "alias": "res_us_null"
+      },
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "binaryExpr",
+          "op": "-",
+          "left": {
+            "kind": "functionCall",
+            "name": "parseDateTimeBestEffortUSOrZero",
+            "args": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "syslog_before"
+                ]
+              }
+            ]
+          },
+          "right": {
+            "kind": "columnRef",
+            "parts": [
+              "time_shift"
+            ]
+          }
+        },
+        "alias": "res_us_zero"
+      },
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "binaryExpr",
+          "op": "-",
+          "left": {
+            "kind": "functionCall",
+            "name": "parseDateTime64BestEffort",
+            "args": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "syslog_before"
+                ]
+              }
+            ]
+          },
+          "right": {
+            "kind": "columnRef",
+            "parts": [
+              "time_shift"
+            ]
+          }
+        },
+        "alias": "res64"
+      },
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "binaryExpr",
+          "op": "-",
+          "left": {
+            "kind": "functionCall",
+            "name": "parseDateTime64BestEffortOrNull",
+            "args": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "syslog_before"
+                ]
+              }
+            ]
+          },
+          "right": {
+            "kind": "columnRef",
+            "parts": [
+              "time_shift"
+            ]
+          }
+        },
+        "alias": "res64_null"
+      },
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "binaryExpr",
+          "op": "-",
+          "left": {
+            "kind": "functionCall",
+            "name": "parseDateTime64BestEffortOrZero",
+            "args": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "syslog_before"
+                ]
+              }
+            ]
+          },
+          "right": {
+            "kind": "columnRef",
+            "parts": [
+              "time_shift"
+            ]
+          }
+        },
+        "alias": "res64_zero"
+      },
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "binaryExpr",
+          "op": "-",
+          "left": {
+            "kind": "functionCall",
+            "name": "parseDateTime64BestEffortUS",
+            "args": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "syslog_before"
+                ]
+              }
+            ]
+          },
+          "right": {
+            "kind": "columnRef",
+            "parts": [
+              "time_shift"
+            ]
+          }
+        },
+        "alias": "res64_us"
+      },
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "binaryExpr",
+          "op": "-",
+          "left": {
+            "kind": "functionCall",
+            "name": "parseDateTime64BestEffortUSOrNull",
+            "args": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "syslog_before"
+                ]
+              }
+            ]
+          },
+          "right": {
+            "kind": "columnRef",
+            "parts": [
+              "time_shift"
+            ]
+          }
+        },
+        "alias": "res64_us_null"
+      },
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "binaryExpr",
+          "op": "-",
+          "left": {
+            "kind": "functionCall",
+            "name": "parseDateTime64BestEffortUSOrZero",
+            "args": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "syslog_before"
+                ]
+              }
+            ]
+          },
+          "right": {
+            "kind": "columnRef",
+            "parts": [
+              "time_shift"
+            ]
+          }
+        },
+        "alias": "res64_us_zero"
+      }
+    ],
+    "format": "Vertical"
+  },
+  {
+    "kind": "select",
+    "with": [
+      {
+        "kind": "cteExpr",
+        "name": "dt_ref",
+        "expr": {
+          "kind": "functionCall",
+          "name": "toDateTime",
+          "args": [
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "2023-06-30 23:59:30"
+            }
+          ]
+        }
+      },
+      {
+        "kind": "cteExpr",
+        "name": "dt_now",
+        "expr": {
+          "kind": "functionCall",
+          "name": "now",
+          "args": []
+        }
+      },
+      {
+        "kind": "cteExpr",
+        "name": "dt_after",
+        "expr": {
+          "kind": "functionCall",
+          "name": "plus",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "dt_now"
+              ]
+            },
+            {
+              "kind": "functionCall",
+              "name": "toIntervalDay",
+              "args": [
+                {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "1"
+                }
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "kind": "cteExpr",
+        "name": "time_shift",
+        "expr": {
+          "kind": "functionCall",
+          "name": "dateDiff",
+          "args": [
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "second"
+            },
+            {
+              "kind": "columnRef",
+              "parts": [
+                "dt_ref"
+              ]
+            },
+            {
+              "kind": "columnRef",
+              "parts": [
+                "dt_now"
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "kind": "cteExpr",
+        "name": "syslog_after",
+        "expr": {
+          "kind": "functionCall",
+          "name": "formatDateTime",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "dt_after"
+              ]
+            },
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "%b %e %T"
+            }
+          ]
+        }
+      }
+    ],
+    "select": [
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "formatDateTime",
+          "args": [
+            {
+              "kind": "binaryExpr",
+              "op": "-",
+              "left": {
+                "kind": "columnRef",
+                "parts": [
+                  "dt_after"
+                ]
+              },
+              "right": {
+                "kind": "columnRef",
+                "parts": [
+                  "time_shift"
+                ]
+              }
+            },
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "%b %e %T"
+            }
+          ]
+        },
+        "alias": "syslog_arg"
+      },
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "binaryExpr",
+          "op": "-",
+          "left": {
+            "kind": "functionCall",
+            "name": "parseDateTimeBestEffort",
+            "args": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "syslog_after"
+                ]
+              }
+            ]
+          },
+          "right": {
+            "kind": "columnRef",
+            "parts": [
+              "time_shift"
+            ]
+          }
+        },
+        "alias": "res"
+      },
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "binaryExpr",
+          "op": "-",
+          "left": {
+            "kind": "functionCall",
+            "name": "parseDateTimeBestEffortOrNull",
+            "args": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "syslog_after"
+                ]
+              }
+            ]
+          },
+          "right": {
+            "kind": "columnRef",
+            "parts": [
+              "time_shift"
+            ]
+          }
+        },
+        "alias": "res_null"
+      },
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "binaryExpr",
+          "op": "-",
+          "left": {
+            "kind": "functionCall",
+            "name": "parseDateTimeBestEffortOrZero",
+            "args": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "syslog_after"
+                ]
+              }
+            ]
+          },
+          "right": {
+            "kind": "columnRef",
+            "parts": [
+              "time_shift"
+            ]
+          }
+        },
+        "alias": "res_zero"
+      },
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "binaryExpr",
+          "op": "-",
+          "left": {
+            "kind": "functionCall",
+            "name": "parseDateTimeBestEffortUS",
+            "args": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "syslog_after"
+                ]
+              }
+            ]
+          },
+          "right": {
+            "kind": "columnRef",
+            "parts": [
+              "time_shift"
+            ]
+          }
+        },
+        "alias": "res_us"
+      },
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "binaryExpr",
+          "op": "-",
+          "left": {
+            "kind": "functionCall",
+            "name": "parseDateTimeBestEffortUSOrNull",
+            "args": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "syslog_after"
+                ]
+              }
+            ]
+          },
+          "right": {
+            "kind": "columnRef",
+            "parts": [
+              "time_shift"
+            ]
+          }
+        },
+        "alias": "res_us_null"
+      },
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "binaryExpr",
+          "op": "-",
+          "left": {
+            "kind": "functionCall",
+            "name": "parseDateTimeBestEffortUSOrZero",
+            "args": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "syslog_after"
+                ]
+              }
+            ]
+          },
+          "right": {
+            "kind": "columnRef",
+            "parts": [
+              "time_shift"
+            ]
+          }
+        },
+        "alias": "res_us_zero"
+      },
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "binaryExpr",
+          "op": "-",
+          "left": {
+            "kind": "functionCall",
+            "name": "parseDateTime64BestEffort",
+            "args": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "syslog_after"
+                ]
+              }
+            ]
+          },
+          "right": {
+            "kind": "columnRef",
+            "parts": [
+              "time_shift"
+            ]
+          }
+        },
+        "alias": "res64"
+      },
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "binaryExpr",
+          "op": "-",
+          "left": {
+            "kind": "functionCall",
+            "name": "parseDateTime64BestEffortOrNull",
+            "args": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "syslog_after"
+                ]
+              }
+            ]
+          },
+          "right": {
+            "kind": "columnRef",
+            "parts": [
+              "time_shift"
+            ]
+          }
+        },
+        "alias": "res64_null"
+      },
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "binaryExpr",
+          "op": "-",
+          "left": {
+            "kind": "functionCall",
+            "name": "parseDateTime64BestEffortOrZero",
+            "args": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "syslog_after"
+                ]
+              }
+            ]
+          },
+          "right": {
+            "kind": "columnRef",
+            "parts": [
+              "time_shift"
+            ]
+          }
+        },
+        "alias": "res64_zero"
+      },
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "binaryExpr",
+          "op": "-",
+          "left": {
+            "kind": "functionCall",
+            "name": "parseDateTime64BestEffortUS",
+            "args": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "syslog_after"
+                ]
+              }
+            ]
+          },
+          "right": {
+            "kind": "columnRef",
+            "parts": [
+              "time_shift"
+            ]
+          }
+        },
+        "alias": "res64_us"
+      },
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "binaryExpr",
+          "op": "-",
+          "left": {
+            "kind": "functionCall",
+            "name": "parseDateTime64BestEffortUSOrNull",
+            "args": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "syslog_after"
+                ]
+              }
+            ]
+          },
+          "right": {
+            "kind": "columnRef",
+            "parts": [
+              "time_shift"
+            ]
+          }
+        },
+        "alias": "res64_us_null"
+      },
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "binaryExpr",
+          "op": "-",
+          "left": {
+            "kind": "functionCall",
+            "name": "parseDateTime64BestEffortUSOrZero",
+            "args": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "syslog_after"
+                ]
+              }
+            ]
+          },
+          "right": {
+            "kind": "columnRef",
+            "parts": [
+              "time_shift"
+            ]
+          }
+        },
+        "alias": "res64_us_zero"
+      }
+    ],
+    "format": "Vertical"
+  }
+]

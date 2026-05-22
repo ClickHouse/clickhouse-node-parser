@@ -1,3 +1,5 @@
+SET transform_null_in = 1;
+
 SELECT NULL::Nullable(String) IN (
         SELECT 'abc'
     );

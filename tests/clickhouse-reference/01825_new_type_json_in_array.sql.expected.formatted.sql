@@ -1,3 +1,26 @@
+-- Tags: no-fasttest
+SET enable_json_type = 1;
+
+SET enable_analyzer = 1;
+
+SET allow_suspicious_types_in_order_by = 1;
+
+SET allow_suspicious_types_in_group_by = 1;
+
+SET output_format_native_write_json_as_string = 0;
+
+DROP TABLE IF EXISTS t_json_array;
+
+CREATE TABLE t_json_array
+(
+    id UInt32,
+    arr Array(JSON)
+)
+ENGINE = MergeTree
+ORDER BY id;
+
+INSERT INTO t_json_array;
+
 SELECT
     id,
     arr.k1,
@@ -17,6 +40,10 @@ FORMAT JSONEachRow;
 SELECT DISTINCT arrayJoin(JSONAllPathsWithTypes(arrayJoin(arr))) AS path
 FROM t_json_array
 ORDER BY path ASC;
+
+TRUNCATE TABLE t_json_array;
+
+INSERT INTO t_json_array;
 
 SELECT
     id,
@@ -40,6 +67,8 @@ SELECT arr.k1
 FROM t_json_array
 GROUP BY arr.k1
 ORDER BY toString(arr.k1) ASC;
+
+DROP TABLE t_json_array;
 
 SELECT *
 FROM values('arr Array(JSON)', '[''{"x" : 1}'']')

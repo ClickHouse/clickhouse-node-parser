@@ -16,30 +16,33 @@ SELECT parseTimeDelta('1s1ms1us1ns');
 
 SELECT parseTimeDelta('1s1ms1μs1ns');
 
+// μs U+03BC
 SELECT parseTimeDelta('1s1ms1µs1ns');
 
+// µs U+00B5
 SELECT parseTimeDelta('1s - 1ms : 1μs ; 1ns');
 
 SELECT parseTimeDelta('1.11s1.11ms1.11us1.11ns');
 
-SELECT parseTimeDelta();
+-- invalid expressions
+SELECT parseTimeDelta(); -- {serverError TOO_FEW_ARGUMENTS_FOR_FUNCTION}
 
-SELECT parseTimeDelta('1yr', 1);
+SELECT parseTimeDelta('1yr', 1); -- {serverError TOO_MANY_ARGUMENTS_FOR_FUNCTION}
 
-SELECT parseTimeDelta(1);
+SELECT parseTimeDelta(1); -- {serverError ILLEGAL_TYPE_OF_ARGUMENT}
 
-SELECT parseTimeDelta(' ');
+SELECT parseTimeDelta(' '); -- {serverError BAD_ARGUMENTS}
 
-SELECT parseTimeDelta('-1yr');
+SELECT parseTimeDelta('-1yr'); -- {serverError BAD_ARGUMENTS}
 
-SELECT parseTimeDelta('1yr-');
+SELECT parseTimeDelta('1yr-'); -- {serverError BAD_ARGUMENTS}
 
-SELECT parseTimeDelta('yr2mo');
+SELECT parseTimeDelta('yr2mo'); -- {serverError BAD_ARGUMENTS}
 
-SELECT parseTimeDelta('1.yr2mo');
+SELECT parseTimeDelta('1.yr2mo'); -- {serverError BAD_ARGUMENTS}
 
-SELECT parseTimeDelta('1-yr');
+SELECT parseTimeDelta('1-yr'); -- {serverError BAD_ARGUMENTS}
 
-SELECT parseTimeDelta('1 1yr');
+SELECT parseTimeDelta('1 1yr'); -- {serverError BAD_ARGUMENTS}
 
-SELECT parseTimeDelta('1yyr');
+SELECT parseTimeDelta('1yyr'); -- {serverError BAD_ARGUMENTS}

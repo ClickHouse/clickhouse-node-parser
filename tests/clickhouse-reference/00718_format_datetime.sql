@@ -1,3 +1,4 @@
+SET send_logs_level = 'fatal';
 SELECT formatDateTime(); -- { serverError NUMBER_OF_ARGUMENTS_DOESNT_MATCH }
 SELECT formatDateTime('not a datetime', 'IGNORED'); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 SELECT formatDateTime(now(), now()); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }

@@ -1,3 +1,19 @@
+DROP TABLE IF EXISTS t_func_to_subcolumns_map;
+
+CREATE TABLE t_func_to_subcolumns_map
+(
+    id UInt64,
+    m Map(String, UInt64)
+)
+ENGINE = MergeTree
+ORDER BY id;
+
+INSERT INTO t_func_to_subcolumns_map;
+
+SET optimize_functions_to_subcolumns = 1;
+
+SET enable_analyzer = 1;
+
 SELECT length(m)
 FROM t_func_to_subcolumns_map;
 
@@ -6,3 +22,5 @@ FROM t_func_to_subcolumns_map;
 
 SELECT notEmpty(m)
 FROM t_func_to_subcolumns_map;
+
+DROP TABLE t_func_to_subcolumns_map;

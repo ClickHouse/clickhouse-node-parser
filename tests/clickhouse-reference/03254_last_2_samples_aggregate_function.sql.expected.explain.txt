@@ -1,3 +1,387 @@
+Set
+
+CreateQuery t_raw_timeseries (children 3)
+ Identifier t_raw_timeseries
+ Columns definition (children 1)
+  ExpressionList (children 3)
+   ColumnDeclaration metric_id (children 1)
+    DataType UInt64
+   ColumnDeclaration timestamp (children 2)
+    DataType DateTime64 (children 1)
+     ExpressionList (children 2)
+      Literal UInt64_3
+      Literal 'UTC'
+    Function CODEC (children 1)
+     ExpressionList (children 2)
+      Function DoubleDelta
+      Function ZSTD
+   ColumnDeclaration value (children 2)
+    DataType Float64
+    Function CODEC (children 1)
+     ExpressionList (children 1)
+      Function DoubleDelta
+ Storage definition (children 2)
+  Function MergeTree (children 1)
+   ExpressionList
+  Function tuple (children 1)
+   ExpressionList (children 2)
+    Identifier metric_id
+    Identifier timestamp
+
+CreateQuery t_resampled_timeseries (children 3)
+ Identifier t_resampled_timeseries
+ Columns definition (children 1)
+  ExpressionList (children 4)
+   ColumnDeclaration step (children 1)
+    DataType UInt32
+   ColumnDeclaration metric_id (children 1)
+    DataType UInt64
+   ColumnDeclaration grid_timestamp (children 2)
+    DataType DateTime (children 1)
+     ExpressionList (children 1)
+      Literal 'UTC'
+    Function CODEC (children 1)
+     ExpressionList (children 2)
+      Function DoubleDelta
+      Function ZSTD
+   ColumnDeclaration samples (children 1)
+    DataType AggregateFunction (children 1)
+     ExpressionList (children 3)
+      Identifier timeSeriesLastTwoSamples
+      DataType DateTime64 (children 1)
+       ExpressionList (children 2)
+        Literal UInt64_3
+        Literal 'UTC'
+      DataType Float64
+ Storage definition (children 2)
+  Function AggregatingMergeTree (children 1)
+   ExpressionList
+  Function tuple (children 1)
+   ExpressionList (children 3)
+    Identifier step
+    Identifier metric_id
+    Identifier grid_timestamp
+
+CreateQuery mv_resampled_timeseries (children 4)
+ Identifier mv_resampled_timeseries
+ Columns definition (children 1)
+  ExpressionList (children 4)
+   ColumnDeclaration step (children 1)
+    DataType UInt32
+   ColumnDeclaration metric_id (children 1)
+    DataType UInt64
+   ColumnDeclaration grid_timestamp (children 2)
+    DataType DateTime (children 1)
+     ExpressionList (children 1)
+      Literal 'UTC'
+    Function CODEC (children 1)
+     ExpressionList (children 2)
+      Function DoubleDelta
+      Function ZSTD
+   ColumnDeclaration samples (children 1)
+    DataType AggregateFunction (children 1)
+     ExpressionList (children 3)
+      Identifier timeSeriesLastTwoSamples
+      DataType DateTime64 (children 1)
+       ExpressionList (children 2)
+        Literal UInt64_3
+        Literal 'UTC'
+      DataType Float64
+ SelectWithUnionQuery (children 1)
+  ExpressionList (children 1)
+   SelectQuery (children 4)
+    ExpressionList (children 1)
+     Asterisk
+    TablesInSelectQuery (children 1)
+     TablesInSelectQueryElement (children 1)
+      TableExpression (children 1)
+       Subquery (children 1)
+        SelectWithUnionQuery (children 1)
+         ExpressionList (children 2)
+          SelectQuery (children 3)
+           ExpressionList (children 4)
+            Literal UInt64_10 (alias step)
+            Identifier metric_id
+            Function multiply (alias grid_timestamp) (children 1)
+             ExpressionList (children 2)
+              Function ceil (children 1)
+               ExpressionList (children 2)
+                Function divide (children 1)
+                 ExpressionList (children 2)
+                  Function toUnixTimestamp (children 1)
+                   ExpressionList (children 1)
+                    Function plus (children 1)
+                     ExpressionList (children 2)
+                      Identifier timestamp
+                      Function toIntervalMillisecond (children 1)
+                       ExpressionList (children 1)
+                        Literal UInt64_999
+                  Identifier step
+                Literal UInt64_0
+              Identifier step
+            Function initializeAggregation (alias samples) (children 1)
+             ExpressionList (children 3)
+              Literal 'timeSeriesLastTwoSamplesState'
+              Identifier timestamp
+              Identifier value
+           TablesInSelectQuery (children 1)
+            TablesInSelectQueryElement (children 1)
+             TableExpression (children 1)
+              TableIdentifier t_raw_timeseries
+           ExpressionList (children 2)
+            OrderByElement (children 1)
+             Identifier metric_id
+            OrderByElement (children 1)
+             Identifier grid_timestamp
+          SelectQuery (children 3)
+           ExpressionList (children 4)
+            Literal UInt64_30 (alias step)
+            Identifier metric_id
+            Function multiply (alias grid_timestamp) (children 1)
+             ExpressionList (children 2)
+              Function ceil (children 1)
+               ExpressionList (children 2)
+                Function divide (children 1)
+                 ExpressionList (children 2)
+                  Function toUnixTimestamp (children 1)
+                   ExpressionList (children 1)
+                    Function plus (children 1)
+                     ExpressionList (children 2)
+                      Identifier timestamp
+                      Function toIntervalMillisecond (children 1)
+                       ExpressionList (children 1)
+                        Literal UInt64_999
+                  Identifier step
+                Literal UInt64_0
+              Identifier step
+            Function initializeAggregation (alias samples) (children 1)
+             ExpressionList (children 3)
+              Literal 'timeSeriesLastTwoSamplesState'
+              Identifier timestamp
+              Identifier value
+           TablesInSelectQuery (children 1)
+            TablesInSelectQueryElement (children 1)
+             TableExpression (children 1)
+              TableIdentifier t_raw_timeseries
+           ExpressionList (children 2)
+            OrderByElement (children 1)
+             Identifier metric_id
+            OrderByElement (children 1)
+             Identifier grid_timestamp
+    ExpressionList (children 3)
+     OrderByElement (children 1)
+      Identifier step
+     OrderByElement (children 1)
+      Identifier metric_id
+     OrderByElement (children 1)
+      Identifier grid_timestamp
+    Set
+ ViewTargets
+
+CreateQuery t_resampled_timeseries_delta (children 3)
+ Identifier t_resampled_timeseries_delta
+ Columns definition (children 1)
+  ExpressionList (children 4)
+   ColumnDeclaration step (children 1)
+    DataType UInt32
+   ColumnDeclaration metric_id (children 1)
+    DataType UInt64
+   ColumnDeclaration grid_timestamp (children 2)
+    DataType DateTime (children 1)
+     ExpressionList (children 1)
+      Literal 'UTC'
+    Function CODEC (children 1)
+     ExpressionList (children 2)
+      Function DoubleDelta
+      Function ZSTD
+   ColumnDeclaration samples (children 1)
+    DataType AggregateFunction (children 1)
+     ExpressionList (children 3)
+      Identifier timeSeriesLastTwoSamples
+      DataType Int16
+      DataType Float64
+ Storage definition (children 2)
+  Function AggregatingMergeTree (children 1)
+   ExpressionList
+  Function tuple (children 1)
+   ExpressionList (children 3)
+    Identifier step
+    Identifier metric_id
+    Identifier grid_timestamp
+
+CreateQuery mv_resampled_timeseries_delta (children 4)
+ Identifier mv_resampled_timeseries_delta
+ Columns definition (children 1)
+  ExpressionList (children 4)
+   ColumnDeclaration step (children 1)
+    DataType UInt32
+   ColumnDeclaration metric_id (children 1)
+    DataType UInt64
+   ColumnDeclaration grid_timestamp (children 2)
+    DataType DateTime (children 1)
+     ExpressionList (children 1)
+      Literal 'UTC'
+    Function CODEC (children 1)
+     ExpressionList (children 2)
+      Function DoubleDelta
+      Function ZSTD
+   ColumnDeclaration samples (children 1)
+    DataType AggregateFunction (children 1)
+     ExpressionList (children 3)
+      Identifier timeSeriesLastTwoSamples
+      DataType Int16
+      DataType Float64
+ SelectWithUnionQuery (children 1)
+  ExpressionList (children 1)
+   SelectQuery (children 4)
+    ExpressionList (children 1)
+     Asterisk
+    TablesInSelectQuery (children 1)
+     TablesInSelectQueryElement (children 1)
+      TableExpression (children 1)
+       Subquery (children 1)
+        SelectWithUnionQuery (children 1)
+         ExpressionList (children 2)
+          SelectQuery (children 3)
+           ExpressionList (children 4)
+            Literal UInt64_10 (alias step)
+            Identifier metric_id
+            Function multiply (alias grid_timestamp) (children 1)
+             ExpressionList (children 2)
+              Function ceil (children 1)
+               ExpressionList (children 2)
+                Function divide (children 1)
+                 ExpressionList (children 2)
+                  Function toUnixTimestamp (children 1)
+                   ExpressionList (children 1)
+                    Function plus (children 1)
+                     ExpressionList (children 2)
+                      Identifier timestamp
+                      Function toIntervalMillisecond (children 1)
+                       ExpressionList (children 1)
+                        Literal UInt64_999
+                  Identifier step
+                Literal UInt64_0
+              Identifier step
+            Function initializeAggregation (alias samples) (children 1)
+             ExpressionList (children 3)
+              Literal 'timeSeriesLastTwoSamplesState'
+              Function CAST (children 1)
+               ExpressionList (children 2)
+                Function dateDiff (children 1)
+                 ExpressionList (children 3)
+                  Literal 'ms'
+                  Function CAST (children 1)
+                   ExpressionList (children 2)
+                    Identifier grid_timestamp
+                    Literal 'DateTime64(3, \'UTC\')'
+                  Identifier timestamp
+                Literal 'Int16'
+              Identifier value
+           TablesInSelectQuery (children 1)
+            TablesInSelectQueryElement (children 1)
+             TableExpression (children 1)
+              TableIdentifier t_raw_timeseries
+           ExpressionList (children 2)
+            OrderByElement (children 1)
+             Identifier metric_id
+            OrderByElement (children 1)
+             Identifier grid_timestamp
+          SelectQuery (children 3)
+           ExpressionList (children 4)
+            Literal UInt64_30 (alias step)
+            Identifier metric_id
+            Function multiply (alias grid_timestamp) (children 1)
+             ExpressionList (children 2)
+              Function ceil (children 1)
+               ExpressionList (children 2)
+                Function divide (children 1)
+                 ExpressionList (children 2)
+                  Function toUnixTimestamp (children 1)
+                   ExpressionList (children 1)
+                    Function plus (children 1)
+                     ExpressionList (children 2)
+                      Identifier timestamp
+                      Function toIntervalMillisecond (children 1)
+                       ExpressionList (children 1)
+                        Literal UInt64_999
+                  Identifier step
+                Literal UInt64_0
+              Identifier step
+            Function initializeAggregation (alias samples) (children 1)
+             ExpressionList (children 3)
+              Literal 'timeSeriesLastTwoSamplesState'
+              Function CAST (children 1)
+               ExpressionList (children 2)
+                Function dateDiff (children 1)
+                 ExpressionList (children 3)
+                  Literal 'ms'
+                  Function CAST (children 1)
+                   ExpressionList (children 2)
+                    Identifier grid_timestamp
+                    Literal 'DateTime64(3, \'UTC\')'
+                  Identifier timestamp
+                Literal 'Int16'
+              Identifier value
+           TablesInSelectQuery (children 1)
+            TablesInSelectQueryElement (children 1)
+             TableExpression (children 1)
+              TableIdentifier t_raw_timeseries
+           ExpressionList (children 2)
+            OrderByElement (children 1)
+             Identifier metric_id
+            OrderByElement (children 1)
+             Identifier grid_timestamp
+    ExpressionList (children 3)
+     OrderByElement (children 1)
+      Identifier step
+     OrderByElement (children 1)
+      Identifier metric_id
+     OrderByElement (children 1)
+      Identifier grid_timestamp
+    Set
+ ViewTargets
+
+InsertQuery   (children 3)
+ Identifier t_raw_timeseries
+ ExpressionList (children 3)
+  Identifier metric_id
+  Identifier timestamp
+  Identifier value
+ SelectWithUnionQuery (children 1)
+  ExpressionList (children 1)
+   SelectQuery (children 2)
+    ExpressionList (children 3)
+     Function modulo (alias metric_id) (children 1)
+      ExpressionList (children 2)
+       Identifier number
+       Literal UInt64_10
+     Function plus (alias timestamp) (children 1)
+      ExpressionList (children 2)
+       Function CAST (children 1)
+        ExpressionList (children 2)
+         Literal '2024-12-12 12:00:00'
+         Literal 'DateTime64(3, \'UTC\')'
+       Function toIntervalMillisecond (children 1)
+        ExpressionList (children 1)
+         Function multiply (children 1)
+          ExpressionList (children 2)
+           Function modulo (children 1)
+            ExpressionList (children 2)
+             Function divide (children 1)
+              ExpressionList (children 2)
+               Identifier number
+               Literal UInt64_10
+             Literal UInt64_100
+           Literal UInt64_900
+     Identifier number (alias value)
+    TablesInSelectQuery (children 1)
+     TablesInSelectQueryElement (children 1)
+      TableExpression (children 1)
+       Function numbers (children 1)
+        ExpressionList (children 1)
+         Literal UInt64_1000
+
 SelectWithUnionQuery (children 1)
  ExpressionList (children 1)
   SelectQuery (children 4)
@@ -28,6 +412,12 @@ SelectWithUnionQuery (children 1)
      Identifier metric_id
     OrderByElement (children 1)
      Identifier timestamp
+
+DetachQuery  t_resampled_timeseries (children 1)
+ Identifier t_resampled_timeseries
+
+AttachQuery t_resampled_timeseries (children 1)
+ Identifier t_resampled_timeseries
 
 SelectWithUnionQuery (children 1)
  ExpressionList (children 1)
@@ -148,6 +538,12 @@ SelectWithUnionQuery (children 1)
     OrderByElement (children 1)
      Identifier grid_timestamp
    Set
+
+DetachQuery  t_resampled_timeseries_delta (children 1)
+ Identifier t_resampled_timeseries_delta
+
+AttachQuery t_resampled_timeseries_delta (children 1)
+ Identifier t_resampled_timeseries_delta
 
 SelectWithUnionQuery (children 1)
  ExpressionList (children 1)

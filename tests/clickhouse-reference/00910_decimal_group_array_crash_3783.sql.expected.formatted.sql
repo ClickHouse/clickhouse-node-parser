@@ -49,6 +49,25 @@ FROM (
             )
     );
 
+DROP TABLE IF EXISTS sensor_value;
+
+CREATE TABLE sensor_value
+(
+    received_at DateTime('Asia/Istanbul'),
+    device_id UUID,
+    sensor_id UUID,
+    value Nullable(Decimal(18, 4)),
+    low_warning Nullable(Decimal(18, 4)),
+    low_critical Nullable(Decimal(18, 4)),
+    high_warning Nullable(Decimal(18, 4)),
+    high_critical Nullable(Decimal(18, 4))
+)
+ENGINE = MergeTree
+ORDER BY (device_id, sensor_id)
+PARTITION BY toDate(received_at);
+
+INSERT INTO sensor_value (received_at, device_id, sensor_id, value, low_warning, low_critical, high_warning, high_critical);
+
 SELECT
     time,
     groupArray((sensor_id, volume)) AS groupArr
@@ -66,6 +85,8 @@ FROM (
     )
 GROUP BY time
 ORDER BY time ASC;
+
+DROP TABLE sensor_value;
 
 SELECT
     s.a,

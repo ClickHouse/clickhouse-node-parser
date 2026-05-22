@@ -1,3 +1,4 @@
+-- Tags: stateful
 SELECT
     UserID,
     arrayEnumerateUniq(groupArray(SearchPhrase)) AS arr

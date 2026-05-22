@@ -1,3 +1,5 @@
+SET max_expanded_ast_elements = 10000;
+
 SELECT
     1 AS a,
     a + a AS b,
@@ -24,4 +26,4 @@ SELECT
     v + v AS w,
     w + w AS x,
     x + x AS y,
-    y + y AS z;
+    y + y AS z; -- { serverError BAD_ARGUMENTS, 168 }

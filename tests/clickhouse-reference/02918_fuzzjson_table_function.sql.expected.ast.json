@@ -1,5 +1,27 @@
 [
   {
+    "kind": "system",
+    "body": "DROP NAMED COLLECTION IF EXISTS 02918_json_fuzzer",
+    "leadingComments": [
+      "-- Tags: no-parallel, no-replicated-database: Named collection is used",
+      "--"
+    ]
+  },
+  {
+    "kind": "createNamedCollection",
+    "name": "02918_json_fuzzer",
+    "items": [
+      {
+        "key": "json_str",
+        "value": {
+          "kind": "literal",
+          "type": "String",
+          "value": "{}"
+        }
+      }
+    ]
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -7,7 +29,7 @@
       }
     ],
     "from": {
-      "kind": "tableFunction",
+      "kind": "tableFunctionRef",
       "name": "fuzzJSON",
       "args": [
         {
@@ -49,7 +71,7 @@
       }
     ],
     "from": {
-      "kind": "tableFunction",
+      "kind": "tableFunctionRef",
       "name": "fuzzJSON",
       "args": [
         {
@@ -106,7 +128,7 @@
       }
     ],
     "from": {
-      "kind": "tableFunction",
+      "kind": "tableFunctionRef",
       "name": "fuzzJSON",
       "args": [
         {
@@ -163,7 +185,7 @@
       }
     ],
     "from": {
-      "kind": "tableFunction",
+      "kind": "tableFunctionRef",
       "name": "fuzzJSON",
       "args": [
         {
@@ -235,7 +257,7 @@
       }
     ],
     "from": {
-      "kind": "tableFunction",
+      "kind": "tableFunctionRef",
       "name": "fuzzJSON",
       "args": [
         {
@@ -307,7 +329,7 @@
       }
     ],
     "from": {
-      "kind": "tableFunction",
+      "kind": "tableFunctionRef",
       "name": "fuzzJSON",
       "args": [
         {
@@ -394,7 +416,7 @@
       }
     ],
     "from": {
-      "kind": "tableFunction",
+      "kind": "tableFunctionRef",
       "name": "fuzzJSON",
       "args": [
         {
@@ -511,7 +533,7 @@
       }
     ],
     "from": {
-      "kind": "tableFunction",
+      "kind": "tableFunctionRef",
       "name": "fuzzJSON",
       "args": [
         {
@@ -568,7 +590,7 @@
       }
     ],
     "from": {
-      "kind": "tableFunction",
+      "kind": "tableFunctionRef",
       "name": "fuzzJSON",
       "args": [
         {
@@ -633,6 +655,619 @@
     }
   },
   {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "02918_table_str"
+    },
+    "ifExists": true,
+    "leadingComments": [
+      "--"
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "02918_table_str"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "json_str",
+        "type": {
+          "name": "String"
+        }
+      }
+    ],
+    "engine": {
+      "name": "Memory"
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "02918_table_str"
+      }
+    },
+    "selectQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "asterisk"
+        }
+      ],
+      "from": {
+        "kind": "tableFunctionRef",
+        "name": "fuzzJSON",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "02918_json_fuzzer"
+            ]
+          }
+        ]
+      },
+      "limit": {
+        "count": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "10"
+        }
+      }
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "02918_table_str"
+      }
+    },
+    "selectQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "asterisk"
+        }
+      ],
+      "from": {
+        "kind": "tableFunctionRef",
+        "name": "fuzzJSON",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "02918_json_fuzzer"
+            ]
+          },
+          {
+            "kind": "binaryExpr",
+            "op": "=",
+            "left": {
+              "kind": "columnRef",
+              "parts": [
+                "random_seed"
+              ]
+            },
+            "right": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "123"
+            }
+          },
+          {
+            "kind": "binaryExpr",
+            "op": "=",
+            "left": {
+              "kind": "columnRef",
+              "parts": [
+                "reuse_output"
+              ]
+            },
+            "right": {
+              "kind": "literal",
+              "type": "Bool",
+              "value": "1"
+            }
+          }
+        ]
+      },
+      "limit": {
+        "count": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "10"
+        }
+      }
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "02918_table_str"
+      }
+    },
+    "selectQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "asterisk"
+        }
+      ],
+      "from": {
+        "kind": "tableFunctionRef",
+        "name": "fuzzJSON",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "02918_json_fuzzer"
+            ]
+          },
+          {
+            "kind": "binaryExpr",
+            "op": "=",
+            "left": {
+              "kind": "columnRef",
+              "parts": [
+                "json_str"
+              ]
+            },
+            "right": {
+              "kind": "literal",
+              "type": "String",
+              "value": "{\"name\": \"John Doe\", \"age\": 30, \"address\": {\"city\": \"Citiville\", \"zip\": \"12345\"}, \"hobbies\": [\"reading\", \"traveling\", \"coding\"]}"
+            }
+          },
+          {
+            "kind": "binaryExpr",
+            "op": "=",
+            "left": {
+              "kind": "columnRef",
+              "parts": [
+                "random_seed"
+              ]
+            },
+            "right": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "6666"
+            }
+          }
+        ]
+      },
+      "limit": {
+        "count": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "200"
+        }
+      }
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "02918_table_str"
+      }
+    },
+    "selectQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "asterisk"
+        }
+      ],
+      "from": {
+        "kind": "tableFunctionRef",
+        "name": "fuzzJSON",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "02918_json_fuzzer"
+            ]
+          },
+          {
+            "kind": "binaryExpr",
+            "op": "=",
+            "left": {
+              "kind": "columnRef",
+              "parts": [
+                "json_str"
+              ]
+            },
+            "right": {
+              "kind": "literal",
+              "type": "String",
+              "value": "{\"name\": \"John Doe\", \"age\": 30, \"address\": {\"city\": \"Citiville\", \"zip\": \"12345\"}, \"hobbies\": [\"reading\", \"traveling\", \"coding\"]}"
+            }
+          },
+          {
+            "kind": "binaryExpr",
+            "op": "=",
+            "left": {
+              "kind": "columnRef",
+              "parts": [
+                "random_seed"
+              ]
+            },
+            "right": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "6666"
+            }
+          },
+          {
+            "kind": "binaryExpr",
+            "op": "=",
+            "left": {
+              "kind": "columnRef",
+              "parts": [
+                "min_key_length"
+              ]
+            },
+            "right": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "1"
+            }
+          },
+          {
+            "kind": "binaryExpr",
+            "op": "=",
+            "left": {
+              "kind": "columnRef",
+              "parts": [
+                "max_key_length"
+              ]
+            },
+            "right": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "5"
+            }
+          }
+        ]
+      },
+      "limit": {
+        "count": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "200"
+        }
+      }
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "02918_table_str"
+      }
+    },
+    "selectQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "asterisk"
+        }
+      ],
+      "from": {
+        "kind": "tableFunctionRef",
+        "name": "fuzzJSON",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "02918_json_fuzzer"
+            ]
+          },
+          {
+            "kind": "binaryExpr",
+            "op": "=",
+            "left": {
+              "kind": "columnRef",
+              "parts": [
+                "json_str"
+              ]
+            },
+            "right": {
+              "kind": "literal",
+              "type": "String",
+              "value": "{\"name\": \"John Doe\", \"age\": 30, \"address\": {\"city\": \"Citiville\", \"zip\": \"12345\"}, \"hobbies\": [\"reading\", \"traveling\", \"coding\"]}"
+            }
+          },
+          {
+            "kind": "binaryExpr",
+            "op": "=",
+            "left": {
+              "kind": "columnRef",
+              "parts": [
+                "max_nesting_level"
+              ]
+            },
+            "right": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "128"
+            }
+          },
+          {
+            "kind": "binaryExpr",
+            "op": "=",
+            "left": {
+              "kind": "columnRef",
+              "parts": [
+                "reuse_output"
+              ]
+            },
+            "right": {
+              "kind": "literal",
+              "type": "Bool",
+              "value": "1"
+            }
+          },
+          {
+            "kind": "binaryExpr",
+            "op": "=",
+            "left": {
+              "kind": "columnRef",
+              "parts": [
+                "random_seed"
+              ]
+            },
+            "right": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "6666"
+            }
+          },
+          {
+            "kind": "binaryExpr",
+            "op": "=",
+            "left": {
+              "kind": "columnRef",
+              "parts": [
+                "min_key_length"
+              ]
+            },
+            "right": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "5"
+            }
+          },
+          {
+            "kind": "binaryExpr",
+            "op": "=",
+            "left": {
+              "kind": "columnRef",
+              "parts": [
+                "max_key_length"
+              ]
+            },
+            "right": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "5"
+            }
+          }
+        ]
+      },
+      "limit": {
+        "count": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "200"
+        }
+      }
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "02918_table_str"
+      }
+    },
+    "selectQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "asterisk"
+        }
+      ],
+      "from": {
+        "kind": "tableFunctionRef",
+        "name": "fuzzJSON",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "02918_json_fuzzer"
+            ]
+          },
+          {
+            "kind": "binaryExpr",
+            "op": "=",
+            "left": {
+              "kind": "columnRef",
+              "parts": [
+                "json_str"
+              ]
+            },
+            "right": {
+              "kind": "literal",
+              "type": "String",
+              "value": "{\"name\": \"John Doe\", \"age\": 30, \"address\": {\"city\": \"Citiville\", \"zip\": \"12345\"}, \"hobbies\": [\"reading\", \"traveling\", \"coding\"]}"
+            }
+          },
+          {
+            "kind": "binaryExpr",
+            "op": "=",
+            "left": {
+              "kind": "columnRef",
+              "parts": [
+                "random_seed"
+              ]
+            },
+            "right": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "6666"
+            }
+          },
+          {
+            "kind": "binaryExpr",
+            "op": "=",
+            "left": {
+              "kind": "columnRef",
+              "parts": [
+                "reuse_output"
+              ]
+            },
+            "right": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "1"
+            }
+          },
+          {
+            "kind": "binaryExpr",
+            "op": "=",
+            "left": {
+              "kind": "columnRef",
+              "parts": [
+                "probability"
+              ]
+            },
+            "right": {
+              "kind": "literal",
+              "type": "Float64",
+              "value": "0.5"
+            }
+          },
+          {
+            "kind": "binaryExpr",
+            "op": "=",
+            "left": {
+              "kind": "columnRef",
+              "parts": [
+                "max_output_length"
+              ]
+            },
+            "right": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "65536"
+            }
+          },
+          {
+            "kind": "binaryExpr",
+            "op": "=",
+            "left": {
+              "kind": "columnRef",
+              "parts": [
+                "max_nesting_level"
+              ]
+            },
+            "right": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "18446744073709551615"
+            }
+          },
+          {
+            "kind": "binaryExpr",
+            "op": "=",
+            "left": {
+              "kind": "columnRef",
+              "parts": [
+                "max_array_size"
+              ]
+            },
+            "right": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "18446744073709551615"
+            }
+          },
+          {
+            "kind": "binaryExpr",
+            "op": "=",
+            "left": {
+              "kind": "columnRef",
+              "parts": [
+                "max_object_size"
+              ]
+            },
+            "right": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "18446744073709551615"
+            }
+          },
+          {
+            "kind": "binaryExpr",
+            "op": "=",
+            "left": {
+              "kind": "columnRef",
+              "parts": [
+                "max_key_length"
+              ]
+            },
+            "right": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "65536"
+            }
+          },
+          {
+            "kind": "binaryExpr",
+            "op": "=",
+            "left": {
+              "kind": "columnRef",
+              "parts": [
+                "max_string_value_length"
+              ]
+            },
+            "right": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "65536"
+            }
+          }
+        ]
+      },
+      "limit": {
+        "count": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "100"
+        }
+      }
+    }
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -654,7 +1289,7 @@
       }
     ],
     "from": {
-      "kind": "tableFunction",
+      "kind": "tableFunctionRef",
       "name": "fuzzJSON",
       "args": [
         {
@@ -687,7 +1322,13 @@
         "type": "UInt64",
         "value": "10"
       }
-    }
+    },
+    "leadingComments": [
+      "--"
+    ],
+    "trailingComments": [
+      "-- { serverError BAD_ARGUMENTS }"
+    ]
   },
   {
     "kind": "select",
@@ -697,7 +1338,7 @@
       }
     ],
     "from": {
-      "kind": "tableFunction",
+      "kind": "tableFunctionRef",
       "name": "fuzzJSON",
       "args": [
         {
@@ -729,7 +1370,10 @@
         "type": "UInt64",
         "value": "10"
       }
-    }
+    },
+    "trailingComments": [
+      "-- { serverError BAD_ARGUMENTS }"
+    ]
   },
   {
     "kind": "select",
@@ -739,7 +1383,7 @@
       }
     ],
     "from": {
-      "kind": "tableFunction",
+      "kind": "tableFunctionRef",
       "name": "fuzzJSON",
       "args": [
         {
@@ -771,7 +1415,10 @@
         "type": "UInt64",
         "value": "10"
       }
-    }
+    },
+    "trailingComments": [
+      "-- { serverError BAD_ARGUMENTS }"
+    ]
   },
   {
     "kind": "select",
@@ -781,7 +1428,7 @@
       }
     ],
     "from": {
-      "kind": "tableFunction",
+      "kind": "tableFunctionRef",
       "name": "fuzzJSON",
       "args": [
         {
@@ -813,7 +1460,10 @@
         "type": "UInt64",
         "value": "10"
       }
-    }
+    },
+    "trailingComments": [
+      "-- { serverError BAD_ARGUMENTS }"
+    ]
   },
   {
     "kind": "select",
@@ -823,7 +1473,7 @@
       }
     ],
     "from": {
-      "kind": "tableFunction",
+      "kind": "tableFunctionRef",
       "name": "fuzzJSON",
       "args": [
         {
@@ -855,7 +1505,10 @@
         "type": "UInt64",
         "value": "10"
       }
-    }
+    },
+    "trailingComments": [
+      "-- { serverError BAD_ARGUMENTS }"
+    ]
   },
   {
     "kind": "select",
@@ -865,7 +1518,7 @@
       }
     ],
     "from": {
-      "kind": "tableFunction",
+      "kind": "tableFunctionRef",
       "name": "fuzzJSON",
       "args": [
         {
@@ -897,7 +1550,10 @@
         "type": "UInt64",
         "value": "10"
       }
-    }
+    },
+    "trailingComments": [
+      "-- { serverError BAD_ARGUMENTS }"
+    ]
   },
   {
     "kind": "select",
@@ -907,7 +1563,7 @@
       }
     ],
     "from": {
-      "kind": "tableFunction",
+      "kind": "tableFunctionRef",
       "name": "fuzzJSON",
       "args": [
         {
@@ -939,7 +1595,10 @@
         "type": "UInt64",
         "value": "10"
       }
-    }
+    },
+    "trailingComments": [
+      "-- { serverError BAD_ARGUMENTS }"
+    ]
   },
   {
     "kind": "select",
@@ -949,7 +1608,7 @@
       }
     ],
     "from": {
-      "kind": "tableFunction",
+      "kind": "tableFunctionRef",
       "name": "fuzzJSON",
       "args": [
         {
@@ -996,7 +1655,10 @@
         "type": "UInt64",
         "value": "10"
       }
-    }
+    },
+    "trailingComments": [
+      "-- { serverError BAD_ARGUMENTS }"
+    ]
   },
   {
     "kind": "select",
@@ -1006,7 +1668,7 @@
       }
     ],
     "from": {
-      "kind": "tableFunction",
+      "kind": "tableFunctionRef",
       "name": "fuzzJSON",
       "args": [
         {
@@ -1053,7 +1715,10 @@
         "type": "UInt64",
         "value": "10"
       }
-    }
+    },
+    "trailingComments": [
+      "-- { serverError BAD_ARGUMENTS }"
+    ]
   },
   {
     "kind": "select",
@@ -1063,7 +1728,7 @@
       }
     ],
     "from": {
-      "kind": "tableFunction",
+      "kind": "tableFunctionRef",
       "name": "fuzzJSON",
       "args": [
         {
@@ -1112,7 +1777,7 @@
                       }
                     ],
                     "from": {
-                      "kind": "tableFunction",
+                      "kind": "tableFunctionRef",
                       "name": "numbers",
                       "args": [
                         {
@@ -1141,6 +1806,9 @@
         "type": "UInt64",
         "value": "10"
       }
-    }
+    },
+    "trailingComments": [
+      "-- { serverError BAD_ARGUMENTS }"
+    ]
   }
 ]

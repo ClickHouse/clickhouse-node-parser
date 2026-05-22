@@ -1,3 +1,18 @@
+DROP TABLE IF EXISTS `02898_parallel_replicas_final`;
+
+CREATE TABLE `02898_parallel_replicas_final`
+(
+    x String,
+    y Int32
+)
+ENGINE = ReplacingMergeTree
+ORDER BY cityHash64(x);
+
+INSERT INTO `02898_parallel_replicas_final` SELECT
+    toString(number),
+    number % 3
+FROM numbers(1000);
+
 SELECT
     y,
     count()
@@ -21,3 +36,5 @@ SETTINGS
     enable_parallel_replicas = 1,
     parallel_replicas_custom_key = 'cityHash64(y)',
     parallel_replicas_mode = 'custom_key_range';
+
+DROP TABLE `02898_parallel_replicas_final`;

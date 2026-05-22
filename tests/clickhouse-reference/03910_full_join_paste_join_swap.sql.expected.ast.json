@@ -1,5 +1,109 @@
 [
   {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "query_plan_join_swap_table",
+        "value": {
+          "kind": "literal",
+          "type": "String",
+          "value": "true"
+        }
+      },
+      {
+        "name": "join_algorithm",
+        "value": {
+          "kind": "literal",
+          "type": "String",
+          "value": "hash"
+        }
+      },
+      {
+        "name": "query_plan_use_new_logical_join_step",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      },
+      {
+        "name": "enable_analyzer",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ],
+    "leadingComments": [
+      "-- Test for exception in PasteJoinTransform when FULL JOIN is combined with PASTE JOIN",
+      "-- and query_plan_join_swap_table = 'true'. The join swap changes column ordering in the",
+      "-- FULL JOIN output, which can cause wrong number of columns reaching the PASTE JOIN.",
+      "--",
+      "-- We need join_algorithm = 'hash' (not 'concurrent_hash_join') because optimizeJoinLegacy",
+      "-- only swaps when the join is a HashJoin (typeid_cast<const HashJoin *> check).",
+      "-- We need query_plan_use_new_logical_join_step = 0 because the new logical join step path",
+      "-- marks JoinStep as optimized, causing optimizeJoinLegacy to skip it.",
+      "--",
+      "-- https://s3.amazonaws.com/clickhouse-test-reports/json.html?REF=master&sha=b373b658edd0a03cb8daacf2c6d77aedd250e7f1&name_0=MasterCI&name_1=Stress%20test%20%28arm_asan%29"
+    ]
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "t0"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "t0"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "c0",
+        "type": {
+          "name": "Int32"
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "functionCall",
+          "name": "tuple",
+          "args": []
+        }
+      }
+    ]
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "t0"
+      }
+    },
+    "columns": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "c0"
+        ]
+      }
+    ]
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -14,7 +118,7 @@
           "kind": "tableRef",
           "table": "t0"
         },
-        "kind": "join",
+        "kind": "joinExpr",
         "joinType": "FULL",
         "right": {
           "kind": "subqueryFrom",
@@ -56,7 +160,7 @@
           }
         }
       },
-      "kind": "join",
+      "kind": "joinExpr",
       "joinType": "PASTE",
       "right": {
         "kind": "subqueryFrom",
@@ -109,6 +213,9 @@
         },
         "direction": "ASC"
       }
+    ],
+    "leadingComments": [
+      "-- Original failing query from the stress test"
     ]
   },
   {
@@ -124,7 +231,7 @@
           "kind": "tableRef",
           "table": "t0"
         },
-        "kind": "join",
+        "kind": "joinExpr",
         "joinType": "FULL",
         "right": {
           "kind": "subqueryFrom",
@@ -166,7 +273,7 @@
           }
         }
       },
-      "kind": "join",
+      "kind": "joinExpr",
       "joinType": "PASTE",
       "right": {
         "kind": "subqueryFrom",
@@ -219,6 +326,9 @@
         },
         "direction": "ASC"
       }
+    ],
+    "leadingComments": [
+      "-- SELECT * variant to force all columns through the pipeline"
     ]
   },
   {
@@ -234,7 +344,7 @@
           "kind": "tableRef",
           "table": "t0"
         },
-        "kind": "join",
+        "kind": "joinExpr",
         "joinType": "FULL",
         "right": {
           "kind": "subqueryFrom",
@@ -276,7 +386,7 @@
           }
         }
       },
-      "kind": "join",
+      "kind": "joinExpr",
       "joinType": "PASTE",
       "right": {
         "kind": "subqueryFrom",
@@ -339,6 +449,52 @@
           "value": "1"
         }
       }
+    ],
+    "leadingComments": [
+      "-- With join_use_nulls (always set in some stress test threads)"
+    ]
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "t0"
+      }
+    },
+    "columns": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "c0"
+        ]
+      }
+    ],
+    "selectQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "number"
+          ]
+        }
+      ],
+      "from": {
+        "kind": "tableFunctionRef",
+        "name": "numbers",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "10"
+          }
+        ]
+      }
+    },
+    "leadingComments": [
+      "-- Multiple rows to exercise non-joined rows from both sides of the FULL JOIN"
     ]
   },
   {
@@ -454,7 +610,7 @@
               "kind": "tableRef",
               "table": "t0"
             },
-            "kind": "join",
+            "kind": "joinExpr",
             "joinType": "FULL",
             "right": {
               "kind": "subqueryFrom",
@@ -478,7 +634,7 @@
                   }
                 ],
                 "from": {
-                  "kind": "tableFunction",
+                  "kind": "tableFunctionRef",
                   "name": "numbers",
                   "args": [
                     {
@@ -513,7 +669,7 @@
               }
             }
           },
-          "kind": "join",
+          "kind": "joinExpr",
           "joinType": "PASTE",
           "right": {
             "kind": "subqueryFrom",
@@ -562,7 +718,7 @@
                 }
               ],
               "from": {
-                "kind": "tableFunction",
+                "kind": "tableFunctionRef",
                 "name": "numbers",
                 "args": [
                   {
@@ -716,7 +872,7 @@
               "kind": "tableRef",
               "table": "t0"
             },
-            "kind": "join",
+            "kind": "joinExpr",
             "joinType": "FULL",
             "right": {
               "kind": "subqueryFrom",
@@ -740,7 +896,7 @@
                   }
                 ],
                 "from": {
-                  "kind": "tableFunction",
+                  "kind": "tableFunctionRef",
                   "name": "numbers",
                   "args": [
                     {
@@ -775,7 +931,7 @@
               }
             }
           },
-          "kind": "join",
+          "kind": "joinExpr",
           "joinType": "PASTE",
           "right": {
             "kind": "subqueryFrom",
@@ -824,7 +980,7 @@
                 }
               ],
               "from": {
-                "kind": "tableFunction",
+                "kind": "tableFunctionRef",
                 "name": "numbers",
                 "args": [
                   {
@@ -873,6 +1029,17 @@
           "value": "false"
         }
       }
+    ],
+    "leadingComments": [
+      "-- Without swap for comparison"
     ]
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "t0"
+    }
   }
 ]

@@ -1,3 +1,26 @@
+DROP TABLE IF EXISTS table1__fuzz_19;
+
+SET allow_suspicious_low_cardinality_types = 1;
+
+CREATE TABLE table1__fuzz_19
+(
+    id LowCardinality(UInt16),
+    v DateTime64(3, 'UTC')
+)
+ENGINE = ReplacingMergeTree(v)
+ORDER BY id
+PARTITION BY id % 200;
+
+INSERT INTO table1__fuzz_19 SELECT
+    number - 205,
+    number
+FROM numbers(10);
+
+INSERT INTO table1__fuzz_19 SELECT
+    number - 205,
+    number
+FROM numbers(400, 10);
+
 SELECT
     1023,
     ((((id % -9223372036854775807) = NULL)
@@ -12,3 +35,5 @@ ORDER BY
     id % 2147483646 ASC,
     ((id % 1) = 9223372036854775807)
     OR ((id % NULL) = 257) DESC;
+
+DROP TABLE table1__fuzz_19;

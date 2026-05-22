@@ -1,5 +1,58 @@
 [
   {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "alter_bug"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "alter_bug"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "epoch",
+        "type": {
+          "name": "UInt64"
+        },
+        "codec": [
+          {
+            "name": "Delta"
+          },
+          {
+            "name": "LZ4"
+          }
+        ]
+      },
+      {
+        "kind": "columnDef",
+        "name": "_time_dec",
+        "type": {
+          "name": "Float64"
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "epoch"
+          ]
+        }
+      }
+    ]
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -62,6 +115,44 @@
         }
       ]
     }
+  },
+  {
+    "kind": "alter",
+    "table": {
+      "kind": "tableRef",
+      "table": "alter_bug"
+    },
+    "commands": [
+      {
+        "kind": "alterCommand",
+        "commandType": "MODIFY_COLUMN",
+        "column": {
+          "kind": "columnDef",
+          "name": "epoch",
+          "defaultKind": "DEFAULT",
+          "defaultExpr": {
+            "kind": "functionCall",
+            "name": "toUInt64",
+            "args": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "_time_dec"
+                ]
+              }
+            ]
+          },
+          "codec": [
+            {
+              "name": "Delta"
+            },
+            {
+              "name": "LZ4"
+            }
+          ]
+        }
+      }
+    ]
   },
   {
     "kind": "select",
@@ -132,6 +223,24 @@
         }
       ]
     }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "alter_bug"
+      }
+    },
+    "columns": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "_time_dec"
+        ]
+      }
+    ]
   },
   {
     "kind": "select",

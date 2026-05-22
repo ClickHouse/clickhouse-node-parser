@@ -1,3 +1,4 @@
+-- https://github.com/ClickHouse/ClickHouse/issues/41470
 SELECT
     roundBankers(100),
     -9223372036854775808,

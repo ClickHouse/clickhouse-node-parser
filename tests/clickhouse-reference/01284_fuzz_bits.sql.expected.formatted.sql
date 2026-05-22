@@ -1,6 +1,6 @@
-SELECT fuzzBits(toString('string'), 1);
+SELECT fuzzBits(toString('string'), 1); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
-SELECT fuzzBits('string', -1.0);
+SELECT fuzzBits('string', -1.0); -- { serverError ARGUMENT_OUT_OF_BOUND }
 
 SELECT fuzzBits('', 0.3);
 

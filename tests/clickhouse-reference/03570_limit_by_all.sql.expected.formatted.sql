@@ -1,3 +1,25 @@
+SET max_threads = 1;
+
+SET max_insert_threads = 1;
+
+SET max_block_size = 65536;
+
+SET allow_experimental_analyzer = 1;
+
+DROP TABLE IF EXISTS test_limit_by_all;
+
+CREATE TABLE test_limit_by_all
+(
+    id Int32,
+    category String,
+    value Int32,
+    name String
+)
+ENGINE = Memory;
+
+INSERT INTO test_limit_by_all;
+
+-- Test 1: Basic LIMIT BY ALL usage
 SELECT
     id,
     category,
@@ -9,6 +31,7 @@ ORDER BY
     value ASC
 LIMIT 1 BY ALL;
 
+-- Test 2: LIMIT BY ALL with aggregate functions (should ignore aggregates)
 SELECT
     id,
     category,
@@ -22,6 +45,7 @@ ORDER BY
     category ASC
 LIMIT 1 BY ALL;
 
+-- Test 3: LIMIT BY ALL with computed column - make deterministic by ordering by value
 SELECT
     id,
     category,
@@ -33,6 +57,7 @@ ORDER BY
     value ASC
 LIMIT 2 BY ALL;
 
+-- Test 5: Explicit column list (should be equivalent to test 4)
 SELECT
     id,
     category,
@@ -44,6 +69,7 @@ ORDER BY
     value ASC
 LIMIT 1 BY id, category, value;
 
+-- Test 8: LIMIT BY ALL with window function - make deterministic
 SELECT
     id,
     category,
@@ -58,6 +84,7 @@ ORDER BY
 LIMIT 1 BY ALL
 LIMIT 3;
 
+-- Test 9: LIMIT BY ALL with WHERE clause - make deterministic
 SELECT
     id,
     category,
@@ -165,9 +192,22 @@ ORDER BY value DESC
 LIMIT 1 BY ALL
 LIMIT 2;
 
+-- Only-aggregate SELECT -> expect syntax error 62
 SELECT count()
 FROM test_limit_by_all
-LIMIT 1 BY ALL;
+LIMIT 1 BY ALL; -- { serverError 62 }
+
+-- JOIN + ARRAY JOIN
+DROP TABLE IF EXISTS test_limit_by_all_tags;
+
+CREATE TABLE test_limit_by_all_tags
+(
+    id Int32,
+    tags Array(String)
+)
+ENGINE = Memory;
+
+INSERT INTO test_limit_by_all_tags;
 
 SELECT
     t.id,
@@ -182,6 +222,21 @@ ORDER BY
     tag ASC,
     value ASC
 LIMIT 1 BY ALL;
+
+DROP TABLE test_limit_by_all_tags;
+
+WITH toStartOfHour(toDateTime('2025-01-01 12:00:00')) AS h
+
+SELECT
+    h,
+    category
+FROM test_limit_by_all
+ORDER BY
+    h ASC,
+    category ASC,
+    value ASC
+LIMIT 1 BY ALL
+SETTINGS enable_positional_arguments = 0;
 
 SELECT
     id,
@@ -237,8 +292,9 @@ ORDER BY
     id ASC,
     category ASC,
     value ASC
-LIMIT -1 BY id;
+LIMIT -1 BY id; -- { serverError NOT_IMPLEMENTED }
 
+-- Should give no result
 SELECT
     id,
     category,
@@ -264,6 +320,9 @@ ORDER BY
     category ASC
 LIMIT 1 BY ALL;
 
+-- NULL key handling
+INSERT INTO test_limit_by_all;
+
 SELECT
     id,
     category
@@ -273,3 +332,5 @@ ORDER BY
     category ASC,
     value ASC
 LIMIT 1 BY ALL;
+
+DROP TABLE test_limit_by_all;

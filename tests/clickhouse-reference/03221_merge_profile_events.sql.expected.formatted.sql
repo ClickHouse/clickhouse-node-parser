@@ -1,3 +1,26 @@
+-- Tags: no-random-settings, no-random-merge-tree-settings
+DROP TABLE IF EXISTS t_merge_profile_events_1;
+
+CREATE TABLE t_merge_profile_events_1
+(
+    id UInt64,
+    v1 UInt64,
+    v2 UInt64
+)
+ENGINE = MergeTree
+ORDER BY id
+SETTINGS min_bytes_for_wide_part = 0;
+
+INSERT INTO t_merge_profile_events_1 SELECT
+    number,
+    number,
+    number
+FROM numbers(10000);
+
+OPTIMIZE TABLE t_merge_profile_events_1 FINAL;
+
+SYSTEM FLUSH LOGS part_log;
+
 SELECT
     merge_algorithm,
     ProfileEvents['Merge'],
@@ -16,6 +39,26 @@ WHERE database = currentDatabase()
     AND table = 't_merge_profile_events_1'
     AND event_type = 'MergeParts'
     AND part_name = 'all_1_2_1';
+
+DROP TABLE IF EXISTS t_merge_profile_events_2;
+
+CREATE TABLE t_merge_profile_events_2
+(
+    id UInt64,
+    v1 UInt64,
+    v2 UInt64
+)
+ENGINE = MergeTree
+ORDER BY id
+SETTINGS min_bytes_for_wide_part = 0, vertical_merge_algorithm_min_rows_to_activate = 1, vertical_merge_algorithm_min_columns_to_activate = 1;
+
+INSERT INTO t_merge_profile_events_2 SELECT
+    number,
+    number,
+    number
+FROM numbers(10000);
+
+OPTIMIZE TABLE t_merge_profile_events_2 FINAL;
 
 SELECT
     merge_algorithm,
@@ -37,6 +80,33 @@ WHERE database = currentDatabase()
     AND table = 't_merge_profile_events_2'
     AND event_type = 'MergeParts'
     AND part_name = 'all_1_2_1';
+
+DROP TABLE IF EXISTS t_merge_profile_events_3;
+
+CREATE TABLE t_merge_profile_events_3
+(
+    id UInt64,
+    v1 UInt64,
+    v2 UInt64,
+    PROJECTION p (    SELECT
+        v2,
+        v2 * v2,
+        v2 * 2,
+        v2 * 10,
+        v1
+    ORDER BY v1 ASC)
+)
+ENGINE = MergeTree
+ORDER BY id
+SETTINGS min_bytes_for_wide_part = 0, vertical_merge_algorithm_min_rows_to_activate = 1, vertical_merge_algorithm_min_columns_to_activate = 1;
+
+INSERT INTO t_merge_profile_events_3 SELECT
+    number,
+    number,
+    number
+FROM numbers(100000);
+
+OPTIMIZE TABLE t_merge_profile_events_3 FINAL;
 
 SELECT
     merge_algorithm,

@@ -1,3 +1,56 @@
+SET enable_analyzer = 1;
+
+DROP TABLE IF EXISTS test1;
+
+DROP TABLE IF EXISTS test2;
+
+DROP TABLE IF EXISTS test3;
+
+DROP TABLE IF EXISTS test_merge;
+
+CREATE TABLE test1
+(
+    a UInt64,
+    b UInt64
+)
+ENGINE = Memory;
+
+CREATE TABLE test2
+(
+    a UInt64,
+    c UInt64
+)
+ENGINE = Memory;
+
+CREATE TABLE test3
+(
+    a UInt64,
+    d UInt64
+)
+ENGINE = Memory;
+
+CREATE TABLE test_merge
+(
+    a UInt64,
+    b UInt64,
+    c UInt64,
+    d UInt64,
+    e UInt64
+)
+ENGINE = Merge(database(), 'test');
+
+INSERT INTO test1 SELECT
+    1,
+    2;
+
+INSERT INTO test2 SELECT
+    3,
+    4;
+
+INSERT INTO test3 SELECT
+    5,
+    6;
+
 SELECT a
 FROM test_merge
 ORDER BY `all` ASC;
@@ -193,3 +246,11 @@ SELECT
     _table
 FROM test_merge
 ORDER BY `all` ASC;
+
+DROP TABLE test1;
+
+DROP TABLE test2;
+
+DROP TABLE test3;
+
+DROP TABLE test_merge;

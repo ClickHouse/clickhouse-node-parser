@@ -1,5 +1,14 @@
 [
   {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "to_uuid_test"
+    },
+    "ifExists": true
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -29,6 +38,9 @@
           }
         ]
       }
+    ],
+    "trailingComments": [
+      "--{serverError CANNOT_PARSE_TEXT}"
     ]
   },
   {
@@ -64,6 +76,36 @@
     ]
   },
   {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "to_uuid_test"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "value",
+        "type": {
+          "name": "String"
+        }
+      }
+    ],
+    "engine": {
+      "name": "TinyLog",
+      "args": []
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "to_uuid_test"
+      }
+    }
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -82,6 +124,16 @@
     "from": {
       "kind": "tableRef",
       "table": "to_uuid_test"
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "to_uuid_test"
+      }
     }
   },
   {
@@ -115,6 +167,14 @@
         },
         "direction": "ASC"
       }
+    ],
+    "leadingComments": [
+      "-- If the Memory engine is replaced by MergeTree, this query returns a result for the first row",
+      "-- but throws an error while processing the second row.",
+      "-- ORDER BY ALL ensures consistent results between engines."
+    ],
+    "trailingComments": [
+      "-- {serverError CANNOT_PARSE_TEXT}"
     ]
   },
   {
@@ -182,5 +242,13 @@
         "direction": "ASC"
       }
     ]
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "to_uuid_test"
+    }
   }
 ]

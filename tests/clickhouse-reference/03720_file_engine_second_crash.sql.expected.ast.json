@@ -1,0 +1,91 @@
+[
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "t141"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "c0",
+        "type": {
+          "name": "Date"
+        }
+      }
+    ],
+    "engine": {
+      "name": "File",
+      "args": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "c0"
+          ]
+        },
+        {
+          "kind": "binaryExpr",
+          "op": ">=",
+          "left": {
+            "kind": "functionCall",
+            "name": "tupleElement",
+            "args": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "c0"
+                ]
+              },
+              {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "2"
+              }
+            ],
+            "parenthesized": true
+          },
+          "right": {
+            "kind": "functionCall",
+            "name": "ANY",
+            "args": [
+              {
+                "kind": "subqueryExpr",
+                "query": {
+                  "kind": "select",
+                  "select": [
+                    {
+                      "kind": "castExpr",
+                      "expr": {
+                        "kind": "castExpr",
+                        "expr": {
+                          "kind": "literal",
+                          "type": "String",
+                          "value": "307:21:40.753024937"
+                        },
+                        "type": "Time64(3)",
+                        "operator": true
+                      },
+                      "type": "Time64(3)",
+                      "operator": true
+                    }
+                  ],
+                  "offset": {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "0"
+                  }
+                }
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "leadingComments": [
+      "-- Fuzzer. Second argument is some complex expression."
+    ],
+    "trailingComments": [
+      "-- {serverError BAD_ARGUMENTS}"
+    ]
+  }
+]

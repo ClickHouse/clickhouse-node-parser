@@ -1,3 +1,78 @@
+DropQuery  test_dictionary_source_table (children 1)
+ Identifier test_dictionary_source_table
+
+CreateQuery test_dictionary_source_table (children 3)
+ Identifier test_dictionary_source_table
+ Columns definition (children 1)
+  ExpressionList (children 2)
+   ColumnDeclaration id (children 1)
+    DataType UInt64
+   ColumnDeclaration value (children 1)
+    DataType String
+ Storage definition (children 1)
+  Function TinyLog
+
+DropQuery  test_dictionary_view (children 1)
+ Identifier test_dictionary_view
+
+CreateQuery test_dictionary_view (children 3)
+ Identifier test_dictionary_view
+ Columns definition (children 1)
+  ExpressionList (children 2)
+   ColumnDeclaration id (children 1)
+    DataType UInt64
+   ColumnDeclaration value (children 1)
+    DataType String
+ SelectWithUnionQuery (children 1)
+  ExpressionList (children 1)
+   SelectQuery (children 3)
+    ExpressionList (children 2)
+     Identifier id
+     Identifier value
+    TablesInSelectQuery (children 1)
+     TablesInSelectQueryElement (children 1)
+      TableExpression (children 1)
+       TableIdentifier test_dictionary_source_table
+    Function equals (children 1)
+     ExpressionList (children 2)
+      Identifier id
+      Subquery (children 1)
+       SelectWithUnionQuery (children 1)
+        ExpressionList (children 1)
+         SelectQuery (children 2)
+          ExpressionList (children 1)
+           Function max (children 1)
+            ExpressionList (children 1)
+             Identifier id
+          TablesInSelectQuery (children 1)
+           TablesInSelectQueryElement (children 1)
+            TableExpression (children 1)
+             TableIdentifier test_dictionary_source_table
+
+InsertQuery   (children 1)
+ Identifier test_dictionary_source_table
+
+DropQuery  test_dictionary (children 1)
+ Identifier test_dictionary
+
+CreateQuery test_dictionary (children 3)
+ Identifier test_dictionary
+ ExpressionList (children 2)
+  DictionaryAttributeDeclaration id (children 1)
+   DataType UInt64
+  DictionaryAttributeDeclaration value (children 1)
+   DataType String
+ Dictionary definition (children 4)
+  ExpressionList (children 1)
+   Identifier id
+  FunctionWithKeyValueArguments  clickhouse (children 1)
+   ExpressionList (children 1)
+    pair (children 1)
+     Literal 'test_dictionary_view'
+  Dictionary lifetime
+  Dictionary layout (children 1)
+   ExpressionList
+
 SelectWithUnionQuery (children 1)
  ExpressionList (children 1)
   SelectQuery (children 2)
@@ -7,3 +82,19 @@ SelectWithUnionQuery (children 1)
     TablesInSelectQueryElement (children 1)
      TableExpression (children 1)
       TableIdentifier test_dictionary
+
+InsertQuery   (children 1)
+ Identifier test_dictionary_source_table
+
+SYSTEM query (children 2)
+ Identifier test_dictionary
+ Identifier test_dictionary
+
+DropQuery  test_dictionary (children 1)
+ Identifier test_dictionary
+
+DropQuery  test_dictionary_view (children 1)
+ Identifier test_dictionary_view
+
+DropQuery  test_dictionary_source_table (children 1)
+ Identifier test_dictionary_source_table

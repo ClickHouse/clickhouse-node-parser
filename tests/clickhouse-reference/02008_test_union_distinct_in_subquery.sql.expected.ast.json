@@ -1,5 +1,166 @@
 [
   {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "test"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "test"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "name",
+        "type": {
+          "name": "String"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "uuid",
+        "type": {
+          "name": "UUID"
+        }
+      }
+    ],
+    "engine": {
+      "name": "Memory",
+      "args": []
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "test"
+      }
+    },
+    "selectQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "1"
+        },
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "00000000-0000-0000-0000-000000000000"
+        }
+      ]
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "test"
+      }
+    },
+    "selectQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "2"
+        },
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "00000000-0000-0000-0000-000000000000"
+        }
+      ]
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "test"
+      }
+    },
+    "selectQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "3"
+        },
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "00000000-0000-0000-0000-000000000000"
+        }
+      ]
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "test"
+      }
+    },
+    "selectQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "4"
+        },
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "00000000-0000-0000-0000-000000000000"
+        }
+      ]
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "test"
+      }
+    },
+    "selectQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "5"
+        },
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "00000000-0000-0000-0000-000000000000"
+        }
+      ]
+    }
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -40,7 +201,10 @@
         ],
         "unionMode": "DISTINCT"
       }
-    }
+    },
+    "leadingComments": [
+      "-- { echo }"
+    ]
   },
   {
     "kind": "select",
@@ -319,6 +483,311 @@
               "kind": "literal",
               "type": "String",
               "value": "3"
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "kind": "select",
+    "with": [
+      {
+        "kind": "cteExpr",
+        "name": "max",
+        "expr": {
+          "kind": "subqueryExpr",
+          "query": {
+            "kind": "select",
+            "select": [
+              {
+                "kind": "functionCall",
+                "name": "count",
+                "args": []
+              }
+            ],
+            "from": {
+              "kind": "subqueryFrom",
+              "query": {
+                "kind": "intersect",
+                "op": "EXCEPT",
+                "left": {
+                  "kind": "union",
+                  "queries": [
+                    {
+                      "kind": "select",
+                      "select": [
+                        {
+                          "kind": "asterisk"
+                        }
+                      ],
+                      "from": {
+                        "kind": "tableRef",
+                        "table": "test"
+                      }
+                    },
+                    {
+                      "kind": "select",
+                      "select": [
+                        {
+                          "kind": "asterisk"
+                        }
+                      ],
+                      "from": {
+                        "kind": "tableRef",
+                        "table": "test"
+                      }
+                    }
+                  ],
+                  "unionMode": "DISTINCT"
+                },
+                "right": {
+                  "kind": "select",
+                  "select": [
+                    {
+                      "kind": "asterisk"
+                    }
+                  ],
+                  "from": {
+                    "kind": "tableRef",
+                    "table": "test"
+                  },
+                  "where": {
+                    "kind": "binaryExpr",
+                    "op": ">",
+                    "left": {
+                      "kind": "functionCall",
+                      "name": "toUInt8",
+                      "args": [
+                        {
+                          "kind": "columnRef",
+                          "parts": [
+                            "name"
+                          ]
+                        }
+                      ]
+                    },
+                    "right": {
+                      "kind": "literal",
+                      "type": "UInt64",
+                      "value": "3"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    ],
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "count",
+        "args": []
+      }
+    ],
+    "from": {
+      "kind": "subqueryFrom",
+      "query": {
+        "kind": "union",
+        "queries": [
+          {
+            "kind": "select",
+            "select": [
+              {
+                "kind": "asterisk"
+              }
+            ],
+            "from": {
+              "kind": "tableRef",
+              "table": "test"
+            }
+          },
+          {
+            "kind": "select",
+            "select": [
+              {
+                "kind": "asterisk"
+              }
+            ],
+            "from": {
+              "kind": "tableRef",
+              "table": "test"
+            },
+            "where": {
+              "kind": "binaryExpr",
+              "op": "<",
+              "left": {
+                "kind": "functionCall",
+                "name": "toUInt8",
+                "args": [
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "name"
+                    ]
+                  }
+                ]
+              },
+              "right": {
+                "kind": "columnRef",
+                "parts": [
+                  "max"
+                ]
+              }
+            }
+          }
+        ]
+      }
+    }
+  },
+  {
+    "kind": "select",
+    "with": [
+      {
+        "kind": "cteExpr",
+        "name": "max",
+        "expr": {
+          "kind": "subqueryExpr",
+          "query": {
+            "kind": "select",
+            "select": [
+              {
+                "kind": "functionCall",
+                "name": "count",
+                "args": []
+              }
+            ],
+            "from": {
+              "kind": "subqueryFrom",
+              "query": {
+                "kind": "intersect",
+                "op": "EXCEPT",
+                "left": {
+                  "kind": "union",
+                  "queries": [
+                    {
+                      "kind": "select",
+                      "select": [
+                        {
+                          "kind": "asterisk"
+                        }
+                      ],
+                      "from": {
+                        "kind": "tableRef",
+                        "table": "test"
+                      }
+                    },
+                    {
+                      "kind": "select",
+                      "select": [
+                        {
+                          "kind": "asterisk"
+                        }
+                      ],
+                      "from": {
+                        "kind": "tableRef",
+                        "table": "test"
+                      }
+                    }
+                  ],
+                  "unionMode": "DISTINCT"
+                },
+                "right": {
+                  "kind": "select",
+                  "select": [
+                    {
+                      "kind": "asterisk"
+                    }
+                  ],
+                  "from": {
+                    "kind": "tableRef",
+                    "table": "test"
+                  },
+                  "where": {
+                    "kind": "binaryExpr",
+                    "op": ">",
+                    "left": {
+                      "kind": "functionCall",
+                      "name": "toUInt8",
+                      "args": [
+                        {
+                          "kind": "columnRef",
+                          "parts": [
+                            "name"
+                          ]
+                        }
+                      ]
+                    },
+                    "right": {
+                      "kind": "literal",
+                      "type": "UInt64",
+                      "value": "3"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    ],
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "count",
+        "args": []
+      }
+    ],
+    "from": {
+      "kind": "subqueryFrom",
+      "query": {
+        "kind": "intersect",
+        "op": "EXCEPT",
+        "left": {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "asterisk"
+            }
+          ],
+          "from": {
+            "kind": "tableRef",
+            "table": "test"
+          }
+        },
+        "right": {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "asterisk"
+            }
+          ],
+          "from": {
+            "kind": "tableRef",
+            "table": "test"
+          },
+          "where": {
+            "kind": "binaryExpr",
+            "op": "<",
+            "left": {
+              "kind": "functionCall",
+              "name": "toUInt8",
+              "args": [
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "name"
+                  ]
+                }
+              ]
+            },
+            "right": {
+              "kind": "columnRef",
+              "parts": [
+                "max"
+              ]
             }
           }
         }

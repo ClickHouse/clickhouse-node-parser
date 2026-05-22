@@ -1,3 +1,58 @@
+SET enable_analyzer = 1;
+
+DROP TABLE IF EXISTS t0;
+
+DROP TABLE IF EXISTS t1;
+
+DROP TABLE IF EXISTS t2;
+
+DROP TABLE IF EXISTS t3;
+
+DROP TABLE IF EXISTS t4;
+
+CREATE TABLE t0
+(
+    c0 String
+)
+ENGINE = Memory();
+
+CREATE TABLE IF NOT EXISTS t1
+(
+    c0 Int32,
+    c1 Int32,
+    c2 ALIAS c1
+)
+ENGINE = Log();
+
+CREATE TABLE t2
+(
+    c0 Int32
+)
+ENGINE = MergeTree()
+ORDER BY tuple();
+
+CREATE TABLE t3
+(
+    c0 String
+)
+ENGINE = Memory();
+
+CREATE TABLE t4
+(
+    c0 Int32
+)
+ENGINE = Memory();
+
+INSERT INTO t4 (c0);
+
+INSERT INTO t1 (c1, c0);
+
+INSERT INTO t4 (c0);
+
+INSERT INTO t3 (c0);
+
+INSERT INTO t2 (c0);
+
 SELECT t1.c1
 FROM
     t3

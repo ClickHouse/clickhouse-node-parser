@@ -1,3 +1,4 @@
+-- Test for case-insensitive prefix and suffix matching functions, (starts|endswith)(UTF8)?CaseInsensitive
 SELECT '-- Test startsWithCaseInsensitive ASCII';
 
 SELECT
@@ -55,6 +56,18 @@ SELECT
 SELECT
     endsWithCaseInsensitive('中国', '�'),
     endsWithCaseInsensitiveUTF8('中国', '�');
+
+DROP TABLE IF EXISTS tab;
+
+CREATE TABLE tab
+(
+    S1 String,
+    S2 String,
+    S3 FixedString(4)
+)
+ENGINE = Memory;
+
+INSERT INTO tab;
 
 SELECT COUNT()
 FROM tab
@@ -135,3 +148,6 @@ WHERE endsWithCaseInsensitiveUTF8(S1, S1);
 SELECT COUNT()
 FROM tab
 WHERE endsWithCaseInsensitiveUTF8(S1, S2);
+
+-- endsWithCaseCaseInsensitiveUTF8 does not support FixedString
+DROP TABLE tab;

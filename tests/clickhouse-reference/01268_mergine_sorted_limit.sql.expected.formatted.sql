@@ -1,3 +1,17 @@
+DROP TABLE IF EXISTS tab;
+
+CREATE TABLE tab
+(
+    x UInt32,
+    y UInt32
+)
+ENGINE = MergeTree()
+ORDER BY x;
+
+INSERT INTO tab;
+
+INSERT INTO tab;
+
 SELECT *
 FROM tab
 ORDER BY x ASC

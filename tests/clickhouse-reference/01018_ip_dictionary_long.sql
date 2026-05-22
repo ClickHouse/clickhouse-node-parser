@@ -1,3 +1,36 @@
+-- Tags: long
+
+SET send_logs_level = 'fatal';
+CREATE TABLE {CLICKHOUSE_DATABASE:Identifier}.table_ipv4_trie
+(
+    prefix String,
+    asn UInt32,
+    cca2 String
+)
+engine = TinyLog;
+-- numbers reordered to test sorting criteria too
+INSERT INTO {CLICKHOUSE_DATABASE:Identifier}.table_ipv4_trie
+SELECT
+  '255.255.255.255/' || toString((number + 1) * 13 % 33) AS prefix,
+  toUInt32((number + 1) * 13 % 33) AS asn,
+  'NA' as cca2
+FROM system.numbers LIMIT 33;
+INSERT INTO {CLICKHOUSE_DATABASE:Identifier}.table_ipv4_trie VALUES ('127.0.0.2', 1272, 'RU');
+INSERT INTO {CLICKHOUSE_DATABASE:Identifier}.table_ipv4_trie VALUES ('127.0.0.0/8', 1270, 'RU');
+INSERT INTO {CLICKHOUSE_DATABASE:Identifier}.table_ipv4_trie VALUES ('202.79.32.2', 11211, 'NP');
+INSERT INTO {CLICKHOUSE_DATABASE:Identifier}.table_ipv4_trie VALUES ('101.79.55.22', 11212, 'UK');
+CREATE DICTIONARY {CLICKHOUSE_DATABASE:Identifier}.dict_ipv4_trie
+(
+  prefix String,
+  asn UInt32,
+  cca2 String
+)
+PRIMARY KEY prefix
+SOURCE(CLICKHOUSE(host 'localhost' port tcpPort() user 'default' db currentDatabase() table 'table_ipv4_trie'))
+LAYOUT(IP_TRIE())
+LIFETIME(MIN 10 MAX 100)
+SETTINGS(dictionary_use_async_executor=1, max_threads=8)
+;
 -- fuzzer
 SELECT '127.0.0.0/24' = dictGetString({CLICKHOUSE_DATABASE:String} || '.dict_ipv4_trie', 'prefixprefixprefixprefix', tuple(IPv4StringToNumOrDefault('127.0.0.0127.0.0.0'))); -- { serverError BAD_ARGUMENTS }
 SELECT 0 == dictGetUInt32({CLICKHOUSE_DATABASE:String} || '.dict_ipv4_trie', 'asn', tuple(IPv4StringToNum('0.0.0.0')));
@@ -51,10 +84,39 @@ SELECT 11211 == dictGetUInt32({CLICKHOUSE_DATABASE:String} || '.dict_ipv4_trie',
 -- check that dictionary works with aliased types `IPv4` and `IPv6`
 SELECT 11211 == dictGetUInt32({CLICKHOUSE_DATABASE:String} || '.dict_ipv4_trie', 'asn', tuple(toIPv4('202.79.32.2')));
 SELECT 11212 == dictGetUInt32({CLICKHOUSE_DATABASE:String} || '.dict_ipv4_trie', 'asn', tuple(toIPv6('::ffff:101.79.55.22')));
+CREATE TABLE {CLICKHOUSE_DATABASE:Identifier}.table_from_ipv4_trie_dict
+(
+  prefix String,
+  asn UInt32,
+  cca2 String
+) ENGINE = Dictionary({CLICKHOUSE_DATABASE:Identifier}.dict_ipv4_trie);
 SELECT 1272 == asn AND 'RU' == cca2 FROM {CLICKHOUSE_DATABASE:Identifier}.table_from_ipv4_trie_dict
 WHERE prefix == '127.0.0.2/32';
 SELECT 37 == COUNT(*) FROM {CLICKHOUSE_DATABASE:Identifier}.table_from_ipv4_trie_dict;
 SELECT 37 == COUNT(DISTINCT prefix) FROM {CLICKHOUSE_DATABASE:Identifier}.table_from_ipv4_trie_dict;
+DROP TABLE IF EXISTS {CLICKHOUSE_DATABASE:Identifier}.table_from_ipv4_trie_dict;
+DROP DICTIONARY IF EXISTS {CLICKHOUSE_DATABASE:Identifier}.dict_ipv4_trie;
+DROP TABLE IF EXISTS {CLICKHOUSE_DATABASE:Identifier}.table_ipv4_trie;
+CREATE TABLE {CLICKHOUSE_DATABASE:Identifier}.table_ipv4_trie
+(
+  prefix String,
+  val UInt32
+)
+engine = TinyLog;
+INSERT INTO {CLICKHOUSE_DATABASE:Identifier}.table_ipv4_trie
+SELECT
+  '255.255.255.255/' || toString(number) AS prefix,
+  toUInt32(number) AS val
+FROM VALUES ('number UInt32', 5, 13, 24, 30);
+CREATE DICTIONARY {CLICKHOUSE_DATABASE:Identifier}.dict_ipv4_trie
+(
+  prefix String,
+  val UInt32
+)
+PRIMARY KEY prefix
+SOURCE(CLICKHOUSE(host 'localhost' port tcpPort() user 'default' db currentDatabase() table 'table_ipv4_trie'))
+LAYOUT(IP_TRIE())
+LIFETIME(MIN 10 MAX 100);
 SELECT 0 == dictGetUInt32({CLICKHOUSE_DATABASE:String} || '.dict_ipv4_trie', 'val', tuple(IPv4StringToNum('0.0.0.0')));
 SELECT 0 == dictGetUInt32({CLICKHOUSE_DATABASE:String} || '.dict_ipv4_trie', 'val', tuple(IPv4StringToNum('128.0.0.0')));
 SELECT 0 == dictGetUInt32({CLICKHOUSE_DATABASE:String} || '.dict_ipv4_trie', 'val', tuple(IPv4StringToNum('192.0.0.0')));
@@ -88,6 +150,32 @@ SELECT 24 == dictGetUInt32({CLICKHOUSE_DATABASE:String} || '.dict_ipv4_trie', 'v
 SELECT 30 == dictGetUInt32({CLICKHOUSE_DATABASE:String} || '.dict_ipv4_trie', 'val', tuple(IPv4StringToNum('255.255.255.252')));
 SELECT 30 == dictGetUInt32({CLICKHOUSE_DATABASE:String} || '.dict_ipv4_trie', 'val', tuple(IPv4StringToNum('255.255.255.254')));
 SELECT 30 == dictGetUInt32({CLICKHOUSE_DATABASE:String} || '.dict_ipv4_trie', 'val', tuple(IPv4StringToNum('255.255.255.255')));
+INSERT INTO {CLICKHOUSE_DATABASE:Identifier}.table_ipv4_trie VALUES ('127.0.0.0/8', 1);
+INSERT INTO {CLICKHOUSE_DATABASE:Identifier}.table_ipv4_trie VALUES ('127.0.0.0/16', 2);
+INSERT INTO {CLICKHOUSE_DATABASE:Identifier}.table_ipv4_trie VALUES ('127.0.0.0/24', 3);
+INSERT INTO {CLICKHOUSE_DATABASE:Identifier}.table_ipv4_trie VALUES ('127.0.0.1/32', 4);
+INSERT INTO {CLICKHOUSE_DATABASE:Identifier}.table_ipv4_trie VALUES ('127.0.127.0/32', 5);
+INSERT INTO {CLICKHOUSE_DATABASE:Identifier}.table_ipv4_trie VALUES ('127.0.128.1/32', 6);
+INSERT INTO {CLICKHOUSE_DATABASE:Identifier}.table_ipv4_trie VALUES ('127.0.255.0/32', 7);
+INSERT INTO {CLICKHOUSE_DATABASE:Identifier}.table_ipv4_trie VALUES ('127.0.255.1/32', 8);
+INSERT INTO {CLICKHOUSE_DATABASE:Identifier}.table_ipv4_trie VALUES ('127.0.255.255/32', 9);
+INSERT INTO {CLICKHOUSE_DATABASE:Identifier}.table_ipv4_trie VALUES ('127.1.0.0/16', 10);
+INSERT INTO {CLICKHOUSE_DATABASE:Identifier}.table_ipv4_trie VALUES ('127.1.1.0', 11);
+INSERT INTO {CLICKHOUSE_DATABASE:Identifier}.table_ipv4_trie VALUES ('127.1.255.0/24', 12);
+INSERT INTO {CLICKHOUSE_DATABASE:Identifier}.table_ipv4_trie VALUES ('127.254.0.0/15', 13);
+INSERT INTO {CLICKHOUSE_DATABASE:Identifier}.table_ipv4_trie VALUES ('127.254.0.127', 14);
+INSERT INTO {CLICKHOUSE_DATABASE:Identifier}.table_ipv4_trie VALUES ('127.255.0.0/16', 15);
+INSERT INTO {CLICKHOUSE_DATABASE:Identifier}.table_ipv4_trie VALUES ('127.255.128.0/24', 16);
+INSERT INTO {CLICKHOUSE_DATABASE:Identifier}.table_ipv4_trie VALUES ('127.255.128.1/32', 17);
+INSERT INTO {CLICKHOUSE_DATABASE:Identifier}.table_ipv4_trie VALUES ('127.255.128.10/32', 18);
+INSERT INTO {CLICKHOUSE_DATABASE:Identifier}.table_ipv4_trie VALUES ('127.255.128.128/25', 19);
+INSERT INTO {CLICKHOUSE_DATABASE:Identifier}.table_ipv4_trie VALUES ('127.255.255.128/32', 20);
+INSERT INTO {CLICKHOUSE_DATABASE:Identifier}.table_ipv4_trie VALUES ('127.255.255.255/32', 21);
+CREATE DICTIONARY {CLICKHOUSE_DATABASE:Identifier}.dict_ipv4_trie ( prefix String, val UInt32 )
+PRIMARY KEY prefix
+SOURCE(CLICKHOUSE(host 'localhost' port tcpPort() user 'default' db currentDatabase() table 'table_ipv4_trie'))
+LAYOUT(IP_TRIE(ACCESS_TO_KEY_FROM_ATTRIBUTES 1))
+LIFETIME(MIN 10 MAX 100);
 SELECT '127.0.0.0/24' == dictGetString({CLICKHOUSE_DATABASE:String} || '.dict_ipv4_trie', 'prefix', tuple(IPv4StringToNum('127.0.0.0')));
 SELECT '127.0.0.1/32' == dictGetString({CLICKHOUSE_DATABASE:String} || '.dict_ipv4_trie', 'prefix', tuple(IPv4StringToNum('127.0.0.1')));
 SELECT '127.0.0.0/24' == dictGetString({CLICKHOUSE_DATABASE:String} || '.dict_ipv4_trie', 'prefix', tuple(IPv4StringToNum('127.0.0.127')));
@@ -132,6 +220,27 @@ SELECT 0 == dictHas({CLICKHOUSE_DATABASE:String} || '.dict_ipv4_trie', tuple(IPv
 SELECT 0 == dictHas({CLICKHOUSE_DATABASE:String} || '.dict_ipv4_trie', tuple(IPv4StringToNum('255.0.0.0')));
 SELECT 0 == dictHas({CLICKHOUSE_DATABASE:String} || '.dict_ipv4_trie', tuple(IPv4StringToNum('0.0.0.0')));
 SELECT 0 == dictHas({CLICKHOUSE_DATABASE:String} || '.dict_ipv4_trie', tuple(IPv4StringToNum('1.1.1.1')));
+CREATE TABLE {CLICKHOUSE_DATABASE:Identifier}.table_ip_trie
+(
+    prefix String,
+    val String
+)
+engine = TinyLog;
+INSERT INTO {CLICKHOUSE_DATABASE:Identifier}.table_ip_trie VALUES ('101.79.55.22', 'JA'), ('127.0.0.1', 'RU'), ('2620:0:870::/48', 'US'), ('2a02:6b8:1::/48', 'UK'), ('2001:db8::/32', 'ZZ');
+INSERT INTO {CLICKHOUSE_DATABASE:Identifier}.table_ip_trie
+SELECT
+  'ffff:ffff:ffff:ffff:ffff:ffff:ffff:ffff/' || toString((number + 1) * 13 % 129) AS prefix,
+  toString((number + 1) * 13 % 129) AS val
+FROM system.numbers LIMIT 129;
+CREATE DICTIONARY {CLICKHOUSE_DATABASE:Identifier}.dict_ip_trie
+(
+  prefix String,
+  val String
+)
+PRIMARY KEY prefix
+SOURCE(CLICKHOUSE(host 'localhost' port tcpPort() user 'default' db currentDatabase() table 'table_ip_trie'))
+LAYOUT(IP_TRIE(ACCESS_TO_KEY_FROM_ATTRIBUTES 1))
+LIFETIME(MIN 10 MAX 100);
 SELECT 'US' == dictGetString({CLICKHOUSE_DATABASE:String} || '.dict_ip_trie', 'val', tuple(IPv6StringToNum('2620:0:870::')));
 SELECT 'UK' == dictGetString({CLICKHOUSE_DATABASE:String} || '.dict_ip_trie', 'val', tuple(IPv6StringToNum('2a02:6b8:1::')));
 SELECT 'ZZ' == dictGetString({CLICKHOUSE_DATABASE:String} || '.dict_ip_trie', 'val', tuple(IPv6StringToNum('2001:db8::')));
@@ -279,9 +388,37 @@ SELECT '125' == dictGetString({CLICKHOUSE_DATABASE:String} || '.dict_ip_trie', '
 SELECT '126' == dictGetString({CLICKHOUSE_DATABASE:String} || '.dict_ip_trie', 'val', tuple(IPv6StringToNum('ffff:ffff:ffff:ffff:ffff:ffff:ffff:fffc')));
 SELECT '127' == dictGetString({CLICKHOUSE_DATABASE:String} || '.dict_ip_trie', 'val', tuple(IPv6StringToNum('ffff:ffff:ffff:ffff:ffff:ffff:ffff:fffe')));
 SELECT '128' == dictGetString({CLICKHOUSE_DATABASE:String} || '.dict_ip_trie', 'val', tuple(IPv6StringToNum('ffff:ffff:ffff:ffff:ffff:ffff:ffff:ffff')));
+CREATE TABLE {CLICKHOUSE_DATABASE:Identifier}.table_from_ip_trie_dict
+(
+  prefix String,
+  val String
+) ENGINE = Dictionary({CLICKHOUSE_DATABASE:Identifier}.dict_ip_trie);
 SELECT MIN(val == 'US') FROM {CLICKHOUSE_DATABASE:Identifier}.table_from_ip_trie_dict
 WHERE prefix == '2620:0:870::/48';
 SELECT 134 == COUNT(*) FROM {CLICKHOUSE_DATABASE:Identifier}.table_from_ip_trie_dict;
+DROP TABLE IF EXISTS {CLICKHOUSE_DATABASE:Identifier}.table_from_ip_trie_dict;
+DROP DICTIONARY IF EXISTS {CLICKHOUSE_DATABASE:Identifier}.dict_ip_trie;
+DROP TABLE IF EXISTS {CLICKHOUSE_DATABASE:Identifier}.table_ip_trie;
+INSERT INTO {CLICKHOUSE_DATABASE:Identifier}.table_ip_trie
+SELECT
+  'ffff:ffff:ffff:ffff:ffff:ffff:ffff:ffff/' || toString(number) AS prefix,
+  toString(number) AS val
+FROM VALUES ('number UInt32', 5, 13, 24, 48, 49, 99, 127);
+INSERT INTO {CLICKHOUSE_DATABASE:Identifier}.table_ip_trie VALUES ('101.79.55.22', 'JA');
+INSERT INTO {CLICKHOUSE_DATABASE:Identifier}.table_ip_trie
+SELECT
+  '255.255.255.255/' || toString(number) AS prefix,
+  toString(number) AS val
+FROM VALUES ('number UInt32', 5, 13, 24, 30);
+CREATE DICTIONARY {CLICKHOUSE_DATABASE:Identifier}.dict_ip_trie
+(
+  prefix String,
+  val String
+)
+PRIMARY KEY prefix
+SOURCE(CLICKHOUSE(host 'localhost' port tcpPort() user 'default' db currentDatabase() table 'table_ip_trie'))
+LAYOUT(IP_TRIE())
+LIFETIME(MIN 10 MAX 100);
 SELECT 0 == dictHas({CLICKHOUSE_DATABASE:String} || '.dict_ip_trie', tuple(IPv6StringToNum('::ffff:1:1')));
 SELECT '' == dictGetString({CLICKHOUSE_DATABASE:String} || '.dict_ip_trie', 'val', tuple(IPv6StringToNum('654f:3716::')));
 SELECT 0 == dictHas({CLICKHOUSE_DATABASE:String} || '.dict_ip_trie', tuple(IPv6StringToNum('654f:3716::')));
@@ -423,3 +560,4 @@ SELECT '24' == dictGetString({CLICKHOUSE_DATABASE:String} || '.dict_ip_trie', 'v
 SELECT '30' == dictGetString({CLICKHOUSE_DATABASE:String} || '.dict_ip_trie', 'val', tuple(IPv4StringToNum('255.255.255.252')));
 SELECT '30' == dictGetString({CLICKHOUSE_DATABASE:String} || '.dict_ip_trie', 'val', tuple(IPv4StringToNum('255.255.255.254')));
 SELECT '30' == dictGetString({CLICKHOUSE_DATABASE:String} || '.dict_ip_trie', 'val', tuple(IPv4StringToNum('255.255.255.255')));
+DROP DATABASE IF EXISTS {CLICKHOUSE_DATABASE:Identifier};

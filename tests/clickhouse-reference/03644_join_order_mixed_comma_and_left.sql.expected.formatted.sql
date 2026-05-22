@@ -1,3 +1,41 @@
+DROP TABLE IF EXISTS n1;
+
+DROP TABLE IF EXISTS n2;
+
+DROP TABLE IF EXISTS n3;
+
+SET query_plan_optimize_join_order_limit = 16;
+
+CREATE TABLE n1
+(
+    number UInt64
+)
+ENGINE = MergeTree
+ORDER BY number;
+
+INSERT INTO n1 SELECT number
+FROM numbers(3);
+
+CREATE TABLE n2
+(
+    number UInt64
+)
+ENGINE = MergeTree
+ORDER BY number;
+
+INSERT INTO n2 SELECT number
+FROM numbers(2);
+
+CREATE TABLE n3
+(
+    number UInt64
+)
+ENGINE = MergeTree
+ORDER BY number;
+
+INSERT INTO n3 SELECT number
+FROM numbers(2);
+
 SELECT *
 FROM
     n1
@@ -8,3 +46,9 @@ ORDER BY
     n1.number ASC,
     n2.number ASC,
     n3.number ASC;
+
+INSERT INTO n2 SELECT number
+FROM numbers(4);
+
+INSERT INTO n3 SELECT number
+FROM numbers(4);

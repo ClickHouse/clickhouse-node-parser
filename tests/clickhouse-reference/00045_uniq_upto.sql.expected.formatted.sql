@@ -1,3 +1,4 @@
+-- Tags: stateful
 SELECT
     RegionID,
     uniqExact(UserID) AS u1,

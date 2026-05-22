@@ -1,5 +1,205 @@
 [
   {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "enable_analyzer",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ],
+    "leadingComments": [
+      "-- https://github.com/ClickHouse/ClickHouse/issues/55803"
+    ]
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "broken_table"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "broken_view"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "broken_table"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "start",
+        "type": {
+          "name": "DateTime64",
+          "args": [
+            {
+              "kind": "literal",
+              "value": "6"
+            }
+          ]
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "end",
+        "type": {
+          "name": "DateTime64",
+          "args": [
+            {
+              "kind": "literal",
+              "value": "6"
+            }
+          ]
+        }
+      }
+    ],
+    "engine": {
+      "name": "ReplacingMergeTree",
+      "args": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "start"
+          ]
+        }
+      ]
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "start"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createView",
+    "table": {
+      "kind": "tableRef",
+      "table": "broken_view"
+    },
+    "asQuery": {
+      "kind": "union",
+      "queries": [
+        {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "alias",
+              "expr": {
+                "kind": "columnRef",
+                "parts": [
+                  "t",
+                  "start"
+                ]
+              },
+              "alias": "start"
+            },
+            {
+              "kind": "alias",
+              "expr": {
+                "kind": "columnRef",
+                "parts": [
+                  "t",
+                  "end"
+                ]
+              },
+              "alias": "end"
+            },
+            {
+              "kind": "alias",
+              "expr": {
+                "kind": "castExpr",
+                "expr": {
+                  "kind": "functionCall",
+                  "name": "dateDiff",
+                  "args": [
+                    {
+                      "kind": "literal",
+                      "type": "String",
+                      "value": "second"
+                    },
+                    {
+                      "kind": "columnRef",
+                      "parts": [
+                        "t",
+                        "start"
+                      ]
+                    },
+                    {
+                      "kind": "columnRef",
+                      "parts": [
+                        "t",
+                        "end"
+                      ]
+                    }
+                  ]
+                },
+                "type": "float"
+              },
+              "alias": "total_sec"
+            }
+          ],
+          "from": {
+            "kind": "tableRef",
+            "table": "broken_table",
+            "final": true,
+            "alias": "t"
+          }
+        },
+        {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "alias",
+              "expr": {
+                "kind": "literal",
+                "type": "NULL",
+                "value": "NULL"
+              },
+              "alias": "start"
+            },
+            {
+              "kind": "alias",
+              "expr": {
+                "kind": "literal",
+                "type": "NULL",
+                "value": "NULL"
+              },
+              "alias": "end"
+            },
+            {
+              "kind": "alias",
+              "expr": {
+                "kind": "literal",
+                "type": "NULL",
+                "value": "NULL"
+              },
+              "alias": "total_sec"
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
     "kind": "select",
     "select": [
       {

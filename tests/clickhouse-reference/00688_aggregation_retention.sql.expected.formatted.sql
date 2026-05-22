@@ -1,3 +1,27 @@
+DROP TABLE IF EXISTS retention_test;
+
+CREATE TABLE retention_test
+(
+    date Date,
+    uid Int32
+)
+ENGINE = Memory;
+
+INSERT INTO retention_test SELECT
+    '2018-08-06',
+    number
+FROM numbers(80);
+
+INSERT INTO retention_test SELECT
+    '2018-08-07',
+    number
+FROM numbers(50);
+
+INSERT INTO retention_test SELECT
+    '2018-08-08',
+    number
+FROM numbers(60);
+
 SELECT
     sum(r[1]) AS r1,
     sum(r[2]) AS r2
@@ -34,3 +58,5 @@ FROM (
         WHERE date IN ('2018-08-06', '2018-08-07', '2018-08-08')
         GROUP BY uid
     );
+
+DROP TABLE retention_test;

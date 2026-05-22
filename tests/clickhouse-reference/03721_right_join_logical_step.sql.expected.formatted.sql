@@ -1,3 +1,14 @@
+DROP TABLE IF EXISTS t0;
+
+CREATE TABLE t0
+(
+    c0 UInt32,
+    c1 UInt64
+)
+ENGINE = Memory;
+
+INSERT INTO t0 (c0, c1);
+
 SELECT ty.c0
 FROM
     t0
@@ -8,3 +19,5 @@ CROSS JOIN t0 AS ty
 SETTINGS
     query_plan_join_swap_table = true,
     query_plan_use_new_logical_join_step = false;
+
+DROP TABLE t0;

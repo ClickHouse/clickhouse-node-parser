@@ -1,5 +1,106 @@
 [
   {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "03720_table"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "03720_table"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "id",
+        "type": {
+          "name": "UInt32"
+        }
+      }
+    ],
+    "engine": {
+      "name": "Memory",
+      "args": []
+    }
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "async_insert",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      },
+      {
+        "name": "async_insert_deduplicate",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      },
+      {
+        "name": "wait_for_async_insert",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "async_insert_use_adaptive_busy_timeout",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      },
+      {
+        "name": "async_insert_busy_timeout_min_ms",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1000"
+        }
+      },
+      {
+        "name": "async_insert_busy_timeout_max_ms",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "5000"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "03720_table"
+      }
+    }
+  },
+  {
+    "kind": "system",
+    "body": "SYSTEM FLUSH ASYNC INSERT QUEUE 03720_table"
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -11,6 +112,9 @@
     "from": {
       "kind": "tableRef",
       "table": "03720_table"
-    }
+    },
+    "leadingComments": [
+      "-- excpect 2 rows, because Memory engine does not support deduplication"
+    ]
   }
 ]

@@ -1,3 +1,63 @@
+Set
+
+DropQuery  tab_compact_full (children 1)
+ Identifier tab_compact_full
+
+DropQuery  tab_wide_full (children 1)
+ Identifier tab_wide_full
+
+CreateQuery tab_compact_full (children 3)
+ Identifier tab_compact_full
+ Columns definition (children 2)
+  ExpressionList (children 2)
+   ColumnDeclaration id (children 1)
+    DataType Int32
+   ColumnDeclaration vec (children 1)
+    DataType Array (children 1)
+     ExpressionList (children 1)
+      DataType Float32
+  ExpressionList (children 1)
+   Index (children 2)
+    Identifier vec
+    Function vector_similarity (children 1)
+     ExpressionList (children 3)
+      Literal 'hnsw'
+      Literal 'L2Distance'
+      Literal UInt64_2
+ Storage definition (children 3)
+  Function MergeTree
+  Identifier id
+  Set
+
+CreateQuery tab_wide_full (children 3)
+ Identifier tab_wide_full
+ Columns definition (children 2)
+  ExpressionList (children 2)
+   ColumnDeclaration id (children 1)
+    DataType Int32
+   ColumnDeclaration vec (children 1)
+    DataType Array (children 1)
+     ExpressionList (children 1)
+      DataType Float32
+  ExpressionList (children 1)
+   Index (children 2)
+    Identifier vec
+    Function vector_similarity (children 1)
+     ExpressionList (children 3)
+      Literal 'hnsw'
+      Literal 'L2Distance'
+      Literal UInt64_2
+ Storage definition (children 3)
+  Function MergeTree
+  Identifier id
+  Set
+
+InsertQuery   (children 1)
+ Identifier tab_compact_full
+
+InsertQuery   (children 1)
+ Identifier tab_wide_full
+
 SelectWithUnionQuery (children 1)
  ExpressionList (children 1)
   SelectQuery (children 4)
@@ -22,6 +82,30 @@ SelectWithUnionQuery (children 1)
    ExpressionList (children 1)
     OrderByElement (children 1)
      Identifier table
+
+SelectWithUnionQuery (children 1)
+ ExpressionList (children 1)
+  SelectQuery (children 5)
+   ExpressionList (children 1)
+    Literal Array_[Float64_0, Float64_2] (alias reference_vec)
+   ExpressionList (children 3)
+    Identifier id
+    Identifier vec
+    Function L2Distance (children 1)
+     ExpressionList (children 2)
+      Identifier vec
+      Identifier reference_vec
+   TablesInSelectQuery (children 1)
+    TablesInSelectQueryElement (children 1)
+     TableExpression (children 1)
+      TableIdentifier tab_compact_full
+   ExpressionList (children 1)
+    OrderByElement (children 1)
+     Function L2Distance (children 1)
+      ExpressionList (children 2)
+       Identifier vec
+       Identifier reference_vec
+   Literal UInt64_3
 
 SelectWithUnionQuery (children 1)
  ExpressionList (children 1)
@@ -78,6 +162,30 @@ SelectWithUnionQuery (children 1)
 
 SelectWithUnionQuery (children 1)
  ExpressionList (children 1)
+  SelectQuery (children 5)
+   ExpressionList (children 1)
+    Literal Array_[Float64_0, Float64_2] (alias reference_vec)
+   ExpressionList (children 3)
+    Identifier id
+    Identifier vec
+    Function L2Distance (children 1)
+     ExpressionList (children 2)
+      Identifier vec
+      Identifier reference_vec
+   TablesInSelectQuery (children 1)
+    TablesInSelectQueryElement (children 1)
+     TableExpression (children 1)
+      TableIdentifier tab_wide_full
+   ExpressionList (children 1)
+    OrderByElement (children 1)
+     Function L2Distance (children 1)
+      ExpressionList (children 2)
+       Identifier vec
+       Identifier reference_vec
+   Literal UInt64_3
+
+SelectWithUnionQuery (children 1)
+ ExpressionList (children 1)
   SelectQuery (children 3)
    ExpressionList (children 1)
     Function trimLeft (alias explain) (children 1)
@@ -128,3 +236,9 @@ SelectWithUnionQuery (children 1)
       ExpressionList (children 2)
        Identifier explain
        Literal '%Granules:%'
+
+DropQuery  tab_compact_full (children 1)
+ Identifier tab_compact_full
+
+DropQuery  tab_wide_full (children 1)
+ Identifier tab_wide_full

@@ -1,3 +1,10 @@
+SET optimize_group_by_function_keys = 1;
+
+SET optimize_syntax_fuse_functions = 0;
+
+SET enable_analyzer = 1;
+
+-- { echoOn }
 SELECT round(avg(log(2) * number), 6) AS k
 FROM numbers(10000000)
 GROUP BY
@@ -50,3 +57,5 @@ GROUP BY
 HAVING ((number % 5) * ((number % 5))) < 5
 ORDER BY k ASC
 SETTINGS enable_analyzer = 1;
+
+SET optimize_group_by_function_keys = 0;

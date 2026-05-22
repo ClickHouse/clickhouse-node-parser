@@ -1,5 +1,164 @@
 [
   {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "test"
+    },
+    "temporary": true,
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "id",
+        "type": {
+          "name": "String"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "products",
+        "type": {
+          "name": "Nested",
+          "args": [
+            {
+              "kind": "namedField",
+              "name": "产品",
+              "type": {
+                "name": "Array",
+                "args": [
+                  {
+                    "kind": "type",
+                    "type": {
+                      "name": "String"
+                    }
+                  }
+                ]
+              }
+            },
+            {
+              "kind": "namedField",
+              "name": "销量",
+              "type": {
+                "name": "Array",
+                "args": [
+                  {
+                    "kind": "type",
+                    "type": {
+                      "name": "Int32"
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "kind": "describe",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "test"
+      }
+    }
+  },
+  {
+    "kind": "describe",
+    "target": {
+      "kind": "subquery",
+      "query": {
+        "kind": "select",
+        "select": [
+          {
+            "kind": "asterisk"
+          }
+        ],
+        "from": {
+          "kind": "tableRef",
+          "table": "test"
+        }
+      }
+    }
+  },
+  {
+    "kind": "describe",
+    "target": {
+      "kind": "subquery",
+      "query": {
+        "kind": "select",
+        "select": [
+          {
+            "kind": "asterisk"
+          }
+        ],
+        "from": {
+          "left": {
+            "kind": "tableRef",
+            "table": "test"
+          },
+          "kind": "arrayJoinExpr",
+          "joinType": "ARRAY",
+          "expressions": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "products"
+              ]
+            }
+          ]
+        }
+      }
+    }
+  },
+  {
+    "kind": "describe",
+    "target": {
+      "kind": "subquery",
+      "query": {
+        "kind": "select",
+        "select": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "p",
+              "产品"
+            ]
+          },
+          {
+            "kind": "columnRef",
+            "parts": [
+              "p",
+              "销量"
+            ]
+          }
+        ],
+        "from": {
+          "left": {
+            "kind": "tableRef",
+            "table": "test"
+          },
+          "kind": "arrayJoinExpr",
+          "joinType": "ARRAY",
+          "expressions": [
+            {
+              "kind": "alias",
+              "expr": {
+                "kind": "columnRef",
+                "parts": [
+                  "products"
+                ]
+              },
+              "alias": "p"
+            }
+          ]
+        }
+      }
+    }
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -11,7 +170,7 @@
         "kind": "tableRef",
         "table": "test"
       },
-      "kind": "arrayJoin",
+      "kind": "arrayJoinExpr",
       "joinType": "ARRAY",
       "expressions": [
         {
@@ -46,7 +205,7 @@
             "kind": "tableRef",
             "table": "test"
           },
-          "kind": "arrayJoin",
+          "kind": "arrayJoinExpr",
           "joinType": "ARRAY",
           "expressions": [
             {

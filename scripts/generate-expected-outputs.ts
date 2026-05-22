@@ -18,12 +18,13 @@ import { join } from 'path';
 import { parse, format, Statement } from '../src/index.js';
 
 const PARSE_ERROR = '<Parse Error>';
+const EXPLAIN_ERROR = '<Explain Error>';
 const QUERY_PARAMS = '<Query Parameters>';
 
 const dir = new URL('../tests/clickhouse-reference', import.meta.url).pathname;
 
 // ClickHouse HTTP endpoint.
-const CLICKHOUSE_URL = 'http://localhost:8123';
+const CLICKHOUSE_URL = 'http://localhost:8125';
 
 // Maximum number of concurrent HTTP requests to the ClickHouse server.
 const CONCURRENCY = 20;
@@ -35,12 +36,25 @@ function splitStatements(content: string): string[] {
   let current = '';
   let inSingleQuote = false;
   let inDoubleQuote = false;
+  let inBacktick = false;
+  let dollarTag: string | null = null; // non-null when inside $tag$...$tag$
   let inLineComment = false;
   let inBlockComment = false;
 
   for (let i = 0; i < content.length; i++) {
     const ch = content[i];
     const next = content[i + 1];
+
+    // Dollar-quoted strings: $tag$...$tag$ (tag may be empty, e.g. $$...$$)
+    if (dollarTag !== null) {
+      current += ch;
+      if (ch === '$' && content.substring(i, i + dollarTag.length) === dollarTag) {
+        current += content.substring(i + 1, i + dollarTag.length);
+        i += dollarTag.length - 1;
+        dollarTag = null;
+      }
+      continue;
+    }
 
     if (inLineComment) {
       current += ch;
@@ -58,7 +72,17 @@ function splitStatements(content: string): string[] {
       continue;
     }
 
-    if (!inSingleQuote && !inDoubleQuote) {
+    if (!inSingleQuote && !inDoubleQuote && !inBacktick) {
+      if (ch === '$') {
+        // Match $tag$ where tag is [a-zA-Z0-9_]* (may be empty for $$)
+        const tagMatch = content.substring(i).match(/^\$([a-zA-Z0-9_]*)\$/);
+        if (tagMatch) {
+          dollarTag = tagMatch[0];
+          current += dollarTag;
+          i += dollarTag.length - 1;
+          continue;
+        }
+      }
       if (ch === '-' && next === '-') {
         inLineComment = true;
         current += ch;
@@ -76,7 +100,15 @@ function splitStatements(content: string): string[] {
       current += ch;
       if (i + 1 < content.length) current += content[++i];
       continue;
-    } else if (ch === "'" && !inDoubleQuote) {
+    } else if (ch === '`' && !inSingleQuote && !inDoubleQuote) {
+      // Backtick-quoted identifiers: `` is an escaped backtick inside backticks.
+      if (inBacktick && next === '`') {
+        current += ch + next;
+        i++;
+        continue;
+      }
+      inBacktick = !inBacktick;
+    } else if (ch === "'" && !inDoubleQuote && !inBacktick) {
       // SQL-style '' escaped quote: stay inside the string.
       if (inSingleQuote && next === "'") {
         current += ch + next;
@@ -84,19 +116,37 @@ function splitStatements(content: string): string[] {
         continue;
       }
       inSingleQuote = !inSingleQuote;
-    } else if (ch === '"' && !inSingleQuote) {
+    } else if (ch === '"' && !inSingleQuote && !inBacktick) {
+      if (inDoubleQuote && next === '"') {
+        current += ch + next;
+        i++;
+        continue;
+      }
       inDoubleQuote = !inDoubleQuote;
     }
 
-    if (ch === ';' && !inSingleQuote && !inDoubleQuote) {
-      // Consume the rest of the line so trailing inline comments stay with
-      // this statement rather than being prepended to the next one.
+    if (ch === ';' && !inSingleQuote && !inDoubleQuote && !inBacktick) {
+      // Consume trailing whitespace and an optional inline comment so they
+      // stay with this statement rather than being prepended to the next one.
+      // Stop if we hit a non-whitespace, non-comment character (i.e. another
+      // statement on the same line).
       let tail = ';';
-      i++;
-      while (i < content.length && content[i] !== '\n') {
-        tail += content[i];
-        i++;
+      let j = i + 1;
+      while (j < content.length && content[j] !== '\n') {
+        if (content[j] === '-' && content[j + 1] === '-') {
+          while (j < content.length && content[j] !== '\n') {
+            tail += content[j];
+            j++;
+          }
+          break;
+        } else if (content[j] === ' ' || content[j] === '\t') {
+          tail += content[j];
+          j++;
+        } else {
+          break;
+        }
       }
+      i = j - 1;
       statements.push(current + tail);
       current = '';
     } else {
@@ -173,12 +223,12 @@ function runExplain(sql: string): Promise<string> {
       const text = await response.text();
       if (!response.ok) {
         console.log(`  Explain failed with status ${response.status}:`, text, query);
-        return PARSE_ERROR;
+        return EXPLAIN_ERROR;
       }
       return text;
     } catch (e) {
       console.log(`  Explain error:`, e);
-      return PARSE_ERROR;
+      return EXPLAIN_ERROR;
     }
   });
 }
@@ -211,7 +261,7 @@ async function processFile(file: string): Promise<void> {
 
   try {
     ast = parse(content);
-    astOutput = JSON.stringify(ast, null, 2);
+    astOutput = JSON.stringify(ast, (key, value) => (key === 'location' || key === 'parent' ? undefined : value), 2);
     try {
       formattedOutput = format(ast);
     } catch (e) {

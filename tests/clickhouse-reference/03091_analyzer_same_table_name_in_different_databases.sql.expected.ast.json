@@ -1,5 +1,150 @@
 [
   {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "enable_analyzer",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ],
+    "leadingComments": [
+      "-- https://github.com/ClickHouse/ClickHouse/issues/61947"
+    ]
+  },
+  {
+    "kind": "drop",
+    "targetType": "DATABASE",
+    "table": {
+      "kind": "tableRef",
+      "table": {
+        "kind": "queryParam",
+        "name": "CLICKHOUSE_DATABASE",
+        "type": "Identifier"
+      }
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "drop",
+    "targetType": "DATABASE",
+    "table": {
+      "kind": "tableRef",
+      "table": {
+        "kind": "queryParam",
+        "name": "CLICKHOUSE_DATABASE_1",
+        "type": "Identifier"
+      }
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "createDatabase",
+    "name": {
+      "kind": "queryParam",
+      "name": "CLICKHOUSE_DATABASE",
+      "type": "Identifier"
+    }
+  },
+  {
+    "kind": "createDatabase",
+    "name": {
+      "kind": "queryParam",
+      "name": "CLICKHOUSE_DATABASE_1",
+      "type": "Identifier"
+    }
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "database": {
+        "kind": "queryParam",
+        "name": "CLICKHOUSE_DATABASE",
+        "type": "Identifier"
+      },
+      "table": "1-1"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "field",
+        "type": {
+          "name": "Int8"
+        }
+      }
+    ],
+    "engine": {
+      "name": "Memory"
+    }
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "database": {
+        "kind": "queryParam",
+        "name": "CLICKHOUSE_DATABASE_1",
+        "type": "Identifier"
+      },
+      "table": "1-1"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "field",
+        "type": {
+          "name": "Int8"
+        }
+      }
+    ],
+    "engine": {
+      "name": "Memory"
+    }
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "database": {
+        "kind": "queryParam",
+        "name": "CLICKHOUSE_DATABASE_1",
+        "type": "Identifier"
+      },
+      "table": "2-1"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "field",
+        "type": {
+          "name": "Int8"
+        }
+      }
+    ],
+    "engine": {
+      "name": "Memory"
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "database": {
+          "kind": "queryParam",
+          "name": "CLICKHOUSE_DATABASE",
+          "type": "Identifier"
+        },
+        "table": "1-1"
+      }
+    }
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -9,14 +154,22 @@
     "from": {
       "left": {
         "kind": "tableRef",
-        "database": "{CLICKHOUSE_DATABASE:Identifier}",
+        "database": {
+          "kind": "queryParam",
+          "name": "CLICKHOUSE_DATABASE",
+          "type": "Identifier"
+        },
         "table": "1-1"
       },
-      "kind": "join",
+      "kind": "joinExpr",
       "joinType": "LEFT",
       "right": {
         "kind": "tableRef",
-        "database": "{CLICKHOUSE_DATABASE_1:Identifier}",
+        "database": {
+          "kind": "queryParam",
+          "name": "CLICKHOUSE_DATABASE_1",
+          "type": "Identifier"
+        },
         "table": "1-1"
       },
       "constraint": {
@@ -27,7 +180,11 @@
           "left": {
             "kind": "columnRef",
             "parts": [
-              "{CLICKHOUSE_DATABASE:Identifier}",
+              {
+                "kind": "queryParam",
+                "name": "CLICKHOUSE_DATABASE",
+                "type": "Identifier"
+              },
               "1-1",
               "field"
             ]
@@ -35,7 +192,11 @@
           "right": {
             "kind": "columnRef",
             "parts": [
-              "{CLICKHOUSE_DATABASE_1:Identifier}",
+              {
+                "kind": "queryParam",
+                "name": "CLICKHOUSE_DATABASE_1",
+                "type": "Identifier"
+              },
               "1-1",
               "field"
             ]
@@ -69,7 +230,11 @@
                 "expr": {
                   "kind": "columnRef",
                   "parts": [
-                    "{CLICKHOUSE_DATABASE:Identifier}",
+                    {
+                      "kind": "queryParam",
+                      "name": "CLICKHOUSE_DATABASE",
+                      "type": "Identifier"
+                    },
                     "1-1"
                   ]
                 }
@@ -79,7 +244,11 @@
                 "expr": {
                   "kind": "columnRef",
                   "parts": [
-                    "{CLICKHOUSE_DATABASE_1:Identifier}",
+                    {
+                      "kind": "queryParam",
+                      "name": "CLICKHOUSE_DATABASE_1",
+                      "type": "Identifier"
+                    },
                     "1-1"
                   ]
                 }
@@ -88,14 +257,22 @@
             "from": {
               "left": {
                 "kind": "tableRef",
-                "database": "{CLICKHOUSE_DATABASE:Identifier}",
+                "database": {
+                  "kind": "queryParam",
+                  "name": "CLICKHOUSE_DATABASE",
+                  "type": "Identifier"
+                },
                 "table": "1-1"
               },
-              "kind": "join",
+              "kind": "joinExpr",
               "joinType": "LEFT",
               "right": {
                 "kind": "tableRef",
-                "database": "{CLICKHOUSE_DATABASE_1:Identifier}",
+                "database": {
+                  "kind": "queryParam",
+                  "name": "CLICKHOUSE_DATABASE_1",
+                  "type": "Identifier"
+                },
                 "table": "1-1"
               },
               "constraint": {
@@ -117,7 +294,11 @@
               {
                 "kind": "columnRef",
                 "parts": [
-                  "{CLICKHOUSE_DATABASE:Identifier}",
+                  {
+                    "kind": "queryParam",
+                    "name": "CLICKHOUSE_DATABASE",
+                    "type": "Identifier"
+                  },
                   "1-1",
                   "field"
                 ]
@@ -125,7 +306,11 @@
               {
                 "kind": "columnRef",
                 "parts": [
-                  "{CLICKHOUSE_DATABASE_1:Identifier}",
+                  {
+                    "kind": "queryParam",
+                    "name": "CLICKHOUSE_DATABASE_1",
+                    "type": "Identifier"
+                  },
                   "1-1",
                   "field"
                 ]
@@ -134,14 +319,22 @@
             "from": {
               "left": {
                 "kind": "tableRef",
-                "database": "{CLICKHOUSE_DATABASE:Identifier}",
+                "database": {
+                  "kind": "queryParam",
+                  "name": "CLICKHOUSE_DATABASE",
+                  "type": "Identifier"
+                },
                 "table": "1-1"
               },
-              "kind": "join",
+              "kind": "joinExpr",
               "joinType": "LEFT",
               "right": {
                 "kind": "tableRef",
-                "database": "{CLICKHOUSE_DATABASE_1:Identifier}",
+                "database": {
+                  "kind": "queryParam",
+                  "name": "CLICKHOUSE_DATABASE_1",
+                  "type": "Identifier"
+                },
                 "table": "1-1"
               },
               "constraint": {

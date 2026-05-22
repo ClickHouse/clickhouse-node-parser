@@ -1,3 +1,19 @@
+DROP TABLE IF EXISTS t2;
+
+CREATE TABLE t2
+(
+    s String,
+    x Array(UInt8),
+    k UInt64
+)
+ENGINE = Join(`ANY`, `LEFT`, k);
+
+INSERT INTO t2;
+
+INSERT INTO t2 (k, s);
+
+INSERT INTO t2 (x, k);
+
 SELECT
     k,
     s
@@ -68,3 +84,5 @@ FROM
     ) AS t1
 LEFT JOIN t2 AS t2
     USING (k);
+
+DROP TABLE t2;

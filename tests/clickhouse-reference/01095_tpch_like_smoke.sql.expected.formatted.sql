@@ -1,3 +1,147 @@
+DROP TABLE IF EXISTS part;
+
+DROP TABLE IF EXISTS supplier;
+
+DROP TABLE IF EXISTS partsupp;
+
+DROP TABLE IF EXISTS customer;
+
+DROP TABLE IF EXISTS orders;
+
+DROP TABLE IF EXISTS lineitem;
+
+DROP TABLE IF EXISTS nation;
+
+DROP TABLE IF EXISTS region;
+
+SET enable_analyzer = 1;
+
+SET cross_to_inner_join_rewrite = 1;
+
+CREATE TABLE part
+(
+    p_partkey Int32,
+    p_name String,
+    p_mfgr FixedString(25),
+    p_brand FixedString(10),
+    p_type String,
+    p_size Int32,
+    p_container FixedString(10),
+    p_retailprice Decimal(18, 2),
+    p_comment String,
+    CONSTRAINT pk CHECK p_partkey >= 0,
+    CONSTRAINT positive CHECK (p_size >= 0
+    AND p_retailprice >= 0)
+)
+ENGINE = MergeTree
+ORDER BY (p_partkey);
+
+CREATE TABLE supplier
+(
+    s_suppkey Int32,
+    s_name FixedString(25),
+    s_address String,
+    s_nationkey Int32,
+    s_phone FixedString(15),
+    s_acctbal Decimal(18, 2),
+    s_comment String,
+    CONSTRAINT pk CHECK s_suppkey >= 0
+)
+ENGINE = MergeTree
+ORDER BY (s_suppkey);
+
+CREATE TABLE partsupp
+(
+    ps_partkey Int32,
+    ps_suppkey Int32,
+    ps_availqty Int32,
+    ps_supplycost Decimal(18, 2),
+    ps_comment String,
+    CONSTRAINT pk CHECK ps_partkey >= 0,
+    CONSTRAINT c1 CHECK (ps_availqty >= 0
+    AND ps_supplycost >= 0)
+)
+ENGINE = MergeTree
+ORDER BY (ps_partkey, ps_suppkey);
+
+CREATE TABLE customer
+(
+    c_custkey Int32,
+    c_name String,
+    c_address String,
+    c_nationkey Int32,
+    c_phone FixedString(15),
+    c_acctbal Decimal(18, 2),
+    c_mktsegment FixedString(10),
+    c_comment String,
+    CONSTRAINT pk CHECK c_custkey >= 0
+)
+ENGINE = MergeTree
+ORDER BY (c_custkey);
+
+CREATE TABLE orders
+(
+    o_orderkey Int32,
+    o_custkey Int32,
+    o_orderstatus FixedString(1),
+    o_totalprice Decimal(18, 2),
+    o_orderdate Date,
+    o_orderpriority FixedString(15),
+    o_clerk FixedString(15),
+    o_shippriority Int32,
+    o_comment String,
+    CONSTRAINT c1 CHECK o_totalprice >= 0
+)
+ENGINE = MergeTree
+ORDER BY (o_orderdate, o_orderkey);
+
+CREATE TABLE lineitem
+(
+    l_orderkey Int32,
+    l_partkey Int32,
+    l_suppkey Int32,
+    l_linenumber Int32,
+    l_quantity Decimal(18, 2),
+    l_extendedprice Decimal(18, 2),
+    l_discount Decimal(18, 2),
+    l_tax Decimal(18, 2),
+    l_returnflag FixedString(1),
+    l_linestatus FixedString(1),
+    l_shipdate Date,
+    l_commitdate Date,
+    l_receiptdate Date,
+    l_shipinstruct FixedString(25),
+    l_shipmode FixedString(10),
+    l_comment String,
+    CONSTRAINT c1 CHECK (l_quantity >= 0
+    AND l_extendedprice >= 0
+    AND l_tax >= 0
+    AND l_shipdate <= l_receiptdate)
+)
+ENGINE = MergeTree
+ORDER BY (l_shipdate, l_receiptdate, l_orderkey, l_linenumber);
+
+CREATE TABLE nation
+(
+    n_nationkey Int32,
+    n_name FixedString(25),
+    n_regionkey Int32,
+    n_comment String,
+    CONSTRAINT pk CHECK n_nationkey >= 0
+)
+ENGINE = MergeTree
+ORDER BY (n_nationkey);
+
+CREATE TABLE region
+(
+    r_regionkey Int32,
+    r_name FixedString(25),
+    r_comment String,
+    CONSTRAINT pk CHECK r_regionkey >= 0
+)
+ENGINE = MergeTree
+ORDER BY (r_regionkey);
+
 SELECT 1;
 
 SELECT
@@ -278,7 +422,7 @@ GROUP BY
 ORDER BY revenue DESC
 LIMIT 20;
 
-SELECT 11;
+SELECT 11; -- TODO: remove toDecimal()
 
 SELECT
     ps_partkey,
@@ -293,6 +437,9 @@ WHERE ps_suppkey = s_suppkey
 GROUP BY ps_partkey
 HAVING sum(ps_supplycost * ps_availqty) > (
         SELECT sum(ps_supplycost * ps_availqty) * toDecimal64('0.0100000000', 2)
+        --                                                  ^^^^^^^^^^^^
+        -- The above constant needs to be adjusted according
+        -- to the scale factor (SF): constant = 0.0001 / SF.
         FROM
             partsupp
         CROSS JOIN supplier
@@ -355,6 +502,32 @@ WHERE l_partkey = p_partkey
     AND l_shipdate < toDate('1995-09-01') + toIntervalMonth('1');
 
 SELECT 15;
+
+WITH revenue_view AS (
+    SELECT
+        l_suppkey AS supplier_no,
+        sum(l_extendedprice * ((1 - l_discount))) AS total_revenue
+    FROM lineitem
+    WHERE l_shipdate >= '1996-01-01'
+        AND l_shipdate < '1996-04-01'
+    GROUP BY l_suppkey
+)
+
+SELECT
+    s_suppkey,
+    s_name,
+    s_address,
+    s_phone,
+    total_revenue
+FROM
+    supplier
+CROSS JOIN revenue_view
+WHERE s_suppkey = supplier_no
+    AND total_revenue = (
+        SELECT max(total_revenue)
+        FROM revenue_view
+    )
+ORDER BY s_suppkey ASC;
 
 SELECT 16;
 
@@ -553,3 +726,19 @@ FROM (
     ) AS custsale
 GROUP BY cntrycode
 ORDER BY cntrycode ASC;
+
+DROP TABLE part;
+
+DROP TABLE supplier;
+
+DROP TABLE partsupp;
+
+DROP TABLE customer;
+
+DROP TABLE orders;
+
+DROP TABLE lineitem;
+
+DROP TABLE nation;
+
+DROP TABLE region;

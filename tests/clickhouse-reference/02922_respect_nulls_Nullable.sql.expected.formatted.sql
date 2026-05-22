@@ -31,6 +31,7 @@ WHERE any_ignore != any_respect
     OR last_nullable_ignore != last_nullable_respect
     OR toTypeName(last_nullable_ignore) != toTypeName(last_nullable_respect);
 
+-- { echoOn }
 SELECT anyOrNull(tp)
 FROM (
         SELECT (number, number) AS tp
@@ -76,13 +77,13 @@ SELECT first_value_respect_nullsMerge(t)
 FROM (
         SELECT first_value_respect_nullsOrNullState(number) AS t
         FROM numbers(0)
-    );
+    ); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
 SELECT first_value_respect_nullsOrNullMerge(t)
 FROM (
         SELECT first_value_respect_nullsState(number) AS t
         FROM numbers(0)
-    );
+    ); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
 SELECT first_value_respect_nullsMerge(t)
 FROM (
@@ -108,6 +109,7 @@ FROM (
         FROM `system`.one
     );
 
+-- Assert sanitizer: passing NULL (not Nullable() with different values is accepted and ignored)
 SELECT
     anyLastIf(n, cond),
     anyLastIf(nullable_n, cond)

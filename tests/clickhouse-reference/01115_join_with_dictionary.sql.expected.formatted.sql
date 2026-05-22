@@ -1,3 +1,68 @@
+DROP TABLE IF EXISTS t1;
+
+DROP DICTIONARY IF EXISTS dict_flat;
+
+DROP DICTIONARY IF EXISTS dict_hashed;
+
+DROP DICTIONARY IF EXISTS dict_complex_cache;
+
+CREATE TABLE t1
+(
+    key UInt64,
+    a UInt8,
+    b String,
+    c Float64
+)
+ENGINE = MergeTree()
+ORDER BY key;
+
+INSERT INTO t1 SELECT
+    number,
+    number,
+    toString(number),
+    number
+FROM numbers(4);
+
+CREATE DICTIONARY dict_flat
+(
+    key UInt64 DEFAULT 0,
+    a UInt8 DEFAULT 42,
+    b String DEFAULT 'x',
+    c Float64 DEFAULT 42.0
+)
+PRIMARY KEY key
+SOURCE(clickhouse(TABLE 't1'))
+LIFETIME(MIN 1 MAX 10)
+LAYOUT(FLAT());
+
+CREATE DICTIONARY dict_hashed
+(
+    key UInt64 DEFAULT 0,
+    a UInt8 DEFAULT 42,
+    b String DEFAULT 'x',
+    c Float64 DEFAULT 42.0
+)
+PRIMARY KEY key
+SOURCE(clickhouse(TABLE 't1'))
+LIFETIME(MIN 1 MAX 10)
+LAYOUT(HASHED());
+
+CREATE DICTIONARY dict_complex_cache
+(
+    key UInt64 DEFAULT 0,
+    a UInt8 DEFAULT 42,
+    b String DEFAULT 'x',
+    c Float64 DEFAULT 42.0
+)
+PRIMARY KEY key, b
+SOURCE(clickhouse(TABLE 't1'))
+LIFETIME(MIN 1 MAX 10)
+LAYOUT(COMPLEX_KEY_CACHE(SIZE_IN_CELLS 1));
+
+SET join_use_nulls = 0;
+
+SET join_algorithm = 'direct';
+
 SELECT *
 FROM
     (
@@ -67,6 +132,8 @@ INNER JOIN dict_flat AS d
     ON k = key
 ORDER BY k ASC;
 
+SET join_use_nulls = 1;
+
 SELECT *
 FROM
     (
@@ -135,6 +202,9 @@ FROM
 INNER JOIN dict_hashed AS d
     ON k = key
 ORDER BY k ASC;
+
+-- unsupported cases for dictionary join, falls back to regular join
+SET join_algorithm = 'default';
 
 SELECT *
 FROM
@@ -239,3 +309,15 @@ FROM
 RIGHT JOIN dict_flat AS d
     USING (key)
 ORDER BY key ASC;
+
+SET join_algorithm = 'auto';
+
+SET join_algorithm = 'partial_merge';
+
+DROP DICTIONARY dict_flat;
+
+DROP DICTIONARY dict_hashed;
+
+DROP DICTIONARY dict_complex_cache;
+
+DROP TABLE t1;

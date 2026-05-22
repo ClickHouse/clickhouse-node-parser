@@ -1,3 +1,9 @@
+DropQuery  02713_seqt (children 1)
+ Identifier 02713_seqt
+
+DropQuery  02713_seqt_distr (children 1)
+ Identifier 02713_seqt_distr
+
 SelectWithUnionQuery (children 1)
  ExpressionList (children 1)
   SelectQuery (children 2)
@@ -36,6 +42,49 @@ SelectWithUnionQuery (children 1)
               ExpressionList (children 1)
                Literal UInt64_100
 
+CreateQuery 02713_seqt (children 3)
+ Identifier 02713_seqt
+ Storage definition (children 2)
+  Function MergeTree
+  Identifier n
+ SelectWithUnionQuery (children 1)
+  ExpressionList (children 1)
+   SelectQuery (children 2)
+    ExpressionList (children 2)
+     Function sequenceMatchState (alias seq) (children 2)
+      ExpressionList (children 3)
+       Identifier time
+       Function equals (children 1)
+        ExpressionList (children 2)
+         Identifier number_
+         Literal UInt64_1
+       Function equals (children 1)
+        ExpressionList (children 2)
+         Identifier number_
+         Literal UInt64_0
+      ExpressionList (children 1)
+       Literal '(?1)(?2)'
+     Literal UInt64_1 (alias n)
+    TablesInSelectQuery (children 1)
+     TablesInSelectQueryElement (children 1)
+      TableExpression (children 1)
+       Subquery (children 1)
+        SelectWithUnionQuery (children 1)
+         ExpressionList (children 1)
+          SelectQuery (children 2)
+           ExpressionList (children 2)
+            Identifier number (alias time)
+            Function modulo (alias number_) (children 1)
+             ExpressionList (children 2)
+              Identifier number
+              Literal UInt64_2
+           TablesInSelectQuery (children 1)
+            TablesInSelectQueryElement (children 1)
+             TableExpression (children 1)
+              Function numbers_mt (children 1)
+               ExpressionList (children 1)
+                Literal UInt64_100
+
 SelectWithUnionQuery (children 1)
  ExpressionList (children 1)
   SelectQuery (children 2)
@@ -50,6 +99,29 @@ SelectWithUnionQuery (children 1)
     TablesInSelectQueryElement (children 1)
      TableExpression (children 1)
       TableIdentifier 02713_seqt
+
+CreateQuery 02713_seqt_distr (children 3)
+ Identifier 02713_seqt_distr
+ Columns definition (children 1)
+  ExpressionList (children 2)
+   ColumnDeclaration seq (children 1)
+    DataType AggregateFunction (children 1)
+     ExpressionList (children 4)
+      Function sequenceMatch (children 1)
+       ExpressionList (children 1)
+        Literal '(?1)(?2)'
+      DataType UInt64
+      DataType UInt8
+      DataType UInt8
+   ColumnDeclaration n (children 1)
+    DataType UInt8
+ Storage definition (children 1)
+  Function Distributed (children 1)
+   ExpressionList (children 3)
+    Identifier test_shard_localhost
+    Function currentDatabase (children 1)
+     ExpressionList
+    Literal '02713_seqt'
 
 SelectWithUnionQuery (children 1)
  ExpressionList (children 1)

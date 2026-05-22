@@ -1,5 +1,156 @@
 [
   {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "test"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "test"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "ad",
+        "type": {
+          "name": "Array",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "Array",
+                "args": [
+                  {
+                    "kind": "type",
+                    "type": {
+                      "name": "Dynamic"
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "jd",
+        "type": {
+          "name": "Array",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "Array",
+                "args": [
+                  {
+                    "kind": "type",
+                    "type": {
+                      "name": "JSON"
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "functionCall",
+          "name": "tuple",
+          "args": []
+        }
+      }
+    ]
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "test"
+      }
+    },
+    "selectQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "arrayLiteral",
+          "elements": [
+            {
+              "kind": "arrayLiteral",
+              "elements": [
+                {
+                  "kind": "castExpr",
+                  "expr": {
+                    "kind": "castExpr",
+                    "expr": {
+                      "kind": "arrayLiteral",
+                      "elements": [
+                        {
+                          "kind": "literal",
+                          "type": "UInt64",
+                          "value": "1"
+                        },
+                        {
+                          "kind": "literal",
+                          "type": "UInt64",
+                          "value": "2"
+                        },
+                        {
+                          "kind": "literal",
+                          "type": "UInt64",
+                          "value": "3"
+                        }
+                      ],
+                      "source": "[1, 2, 3]"
+                    },
+                    "type": "Array(UInt64)",
+                    "operator": true
+                  },
+                  "type": "Dynamic",
+                  "operator": true
+                }
+              ],
+              "source": "[[1, 2, 3]::Array(UInt64)::Dynamic]"
+            }
+          ],
+          "source": "[[[1, 2, 3]::Array(UInt64)::Dynamic]]"
+        },
+        {
+          "kind": "arrayLiteral",
+          "elements": [
+            {
+              "kind": "arrayLiteral",
+              "elements": [
+                {
+                  "kind": "literal",
+                  "type": "String",
+                  "value": "{\"a\" : [1, 2, 3], \"b\" : [{\"c\" : [[1, 2, 3]]}]}"
+                }
+              ],
+              "source": "['{\"a\" : [1, 2, 3], \"b\" : [{\"c\" : [[1, 2, 3]]}]}']"
+            }
+          ],
+          "source": "[['{\"a\" : [1, 2, 3], \"b\" : [{\"c\" : [[1, 2, 3]]}]}']]"
+        }
+      ]
+    }
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -117,6 +268,17 @@
       }
     ],
     "from": {
+      "kind": "tableRef",
+      "table": "test"
+    },
+    "trailingComments": [
+      "-- {serverError UNKNOWN_IDENTIFIER}"
+    ]
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
       "kind": "tableRef",
       "table": "test"
     }

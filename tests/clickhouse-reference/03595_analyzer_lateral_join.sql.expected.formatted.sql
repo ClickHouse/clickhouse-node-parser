@@ -1,3 +1,7 @@
+SET enable_analyzer = 1;
+
+SET allow_experimental_correlated_subqueries = 1;
+
 SELECT
     t.a,
     u.a
@@ -8,7 +12,7 @@ FROM
 CROSS JOIN (
         SELECT 1 AS a
         QUALIFY 0 = ((t.a AS alias668))
-    ) AS u;
+    ) AS u; -- { serverError NOT_IMPLEMENTED }
 
 SELECT
     t.a,
@@ -54,7 +58,7 @@ CROSS JOIN (
                     (27 IS NOT NULL),
                     * IS NOT NULL
                 ))) = ((t.a AS alias668))
-    ) AS u;
+    ) AS u; -- { serverError NOT_IMPLEMENTED }
 
 SELECT
     c,
@@ -69,4 +73,4 @@ CROSS JOIN (
     ) AS Y
 CROSS JOIN (
         SELECT 1 AS c
-    ) AS Z;
+    ) AS Z; -- { serverError NOT_IMPLEMENTED }

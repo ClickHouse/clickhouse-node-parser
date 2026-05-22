@@ -1,7 +1,25 @@
+-- Tags: no-fasttest, no-distributed-cache
+-- Test blob_storage_log for LocalObjectStorage
+DROP TABLE IF EXISTS test_local_blob_log;
+
+CREATE TABLE test_local_blob_log
+(
+    a Int32,
+    b String
+)
+ENGINE = MergeTree()
+ORDER BY a
+SETTINGS disk = disk(type = 'local_blob_storage', path = '03776_test_local_blob_log/');
+
+INSERT INTO test_local_blob_log;
+
 SELECT *
 FROM test_local_blob_log
 ORDER BY a ASC;
 
+SYSTEM FLUSH LOGS blob_storage_log;
+
+-- Check that upload events were logged
 SELECT
     'Upload events:',
     count() > 0
@@ -13,6 +31,10 @@ WHERE event_type = 'Upload'
     AND event_date >= yesterday()
     AND event_time > now() - toIntervalMinute(5);
 
+-- Drop table to trigger delete events
+DROP TABLE test_local_blob_log;
+
+-- Check that delete events were logged
 SELECT
     'Delete events:',
     count() > 0

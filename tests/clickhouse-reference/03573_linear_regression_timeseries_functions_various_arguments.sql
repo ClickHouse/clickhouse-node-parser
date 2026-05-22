@@ -1,3 +1,8 @@
+CREATE TABLE ts_data(id UInt64, timestamps Array(DateTime), values Array(Float64)) ENGINE = MergeTree() ORDER BY id;
+CREATE TABLE ts_data_nullable(id UInt64, timestamp UInt32, value Nullable(Float64)) ENGINE = MergeTree() ORDER BY id;
+INSERT INTO ts_data VALUES (1, [10,20], [1,2]), (2, [30,40,50], [3,4]), (3, [60], [6]), (4, [], []), (5, [80], [8,9]), (6, [100], [10]);
+INSERT INTO ts_data_nullable SELECT id, timestamp, value FROM ts_data ARRAY JOIN timestamps as timestamp, arrayResize(values, length(timestamps), NULL) AS value;
+SET allow_experimental_time_series_aggregate_functions = 1;
 -- Fail because of rows with non-matching lengths of timestamps and values
 SELECT timeSeriesDerivToGrid(10, 120, 10, 10)(timestamps, values) FROM ts_data; -- {serverError BAD_ARGUMENTS}
 SELECT timeSeriesPredictLinearToGrid(10, 120, 10, 10, 60)(timestamps, values) FROM ts_data; -- {serverError BAD_ARGUMENTS}
@@ -29,3 +34,5 @@ SELECT timeSeriesDerivToGrid(100, 120, 15, 20)([89, 101, 109]::Array(UInt32), [8
 SELECT timeSeriesPredictLinearToGrid(100, 120, 15, 20, 60)([89, 101, 109]::Array(UInt32), [89, 101, 109]::Array(Float32));
 SELECT timeSeriesDerivToGrid(100, 150, 10, 30)([1, 2, 3]::Array(UInt32), 1.); --{serverError ILLEGAL_TYPE_OF_ARGUMENT}
 SELECT timeSeriesPredictLinearToGrid(100, 150, 10, 30, 60)([1, 2, 3]::Array(UInt32), 1.); --{serverError ILLEGAL_TYPE_OF_ARGUMENT}
+DROP TABLE ts_data;
+DROP TABLE ts_data_nullable;

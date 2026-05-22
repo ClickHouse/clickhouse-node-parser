@@ -1,3 +1,15 @@
+DROP TABLE IF EXISTS ontime;
+
+CREATE TABLE ontime
+(
+    FlightDate Date,
+    Carrier String,
+    FlightNum String
+)
+ENGINE = Memory;
+
+INSERT INTO ontime;
+
 SELECT ignore(finalizeAggregation(Users))
 FROM (
         SELECT
@@ -10,3 +22,5 @@ FROM (
             Carrier
         LIMIT 1
     );
+
+DROP TABLE ontime;

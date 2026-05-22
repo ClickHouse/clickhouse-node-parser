@@ -1,3 +1,5 @@
+SET query_plan_join_swap_table = 0;
+
 SELECT *
 FROM (
         SELECT
@@ -24,4 +26,4 @@ FROM (
         LIMIT 10
     )
 ORDER BY n ASC
-SETTINGS join_algorithm = 'hash';
+SETTINGS join_algorithm = 'hash'; -- the query does not finish with merge join

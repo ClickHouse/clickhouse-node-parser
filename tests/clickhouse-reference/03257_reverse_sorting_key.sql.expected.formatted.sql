@@ -1,3 +1,25 @@
+-- Tags: no-random-merge-tree-settings
+SET optimize_read_in_order = 1;
+
+SET read_in_order_two_level_merge_threshold = 100;
+
+DROP TABLE IF EXISTS x1;
+
+DROP TABLE IF EXISTS x2;
+
+CREATE TABLE x1
+(
+    i Nullable(int)
+)
+ENGINE = MergeTree
+ORDER BY i DESC
+SETTINGS allow_nullable_key = 1, index_granularity = 2, allow_experimental_reverse_key = 1;
+
+INSERT INTO x1 SELECT *
+FROM numbers(100);
+
+OPTIMIZE TABLE x1 FINAL;
+
 SELECT *
 FROM x1
 WHERE i = 3;
@@ -41,6 +63,22 @@ SELECT *
 FROM x1
 ORDER BY i ASC
 LIMIT 5;
+
+CREATE TABLE x2
+(
+    i Nullable(int),
+    j Nullable(int)
+)
+ENGINE = MergeTree
+ORDER BY (i, j DESC)
+SETTINGS allow_nullable_key = 1, index_granularity = 2, allow_experimental_reverse_key = 1;
+
+INSERT INTO x2 SELECT
+    number % 10,
+    number + 1000
+FROM numbers(100);
+
+OPTIMIZE TABLE x2 FINAL;
 
 SELECT *
 FROM x2
@@ -94,3 +132,7 @@ ORDER BY
     i ASC,
     j ASC
 LIMIT 5;
+
+DROP TABLE x1;
+
+DROP TABLE x2;

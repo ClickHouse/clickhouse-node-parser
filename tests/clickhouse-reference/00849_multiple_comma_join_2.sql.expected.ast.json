@@ -1,126 +1,227 @@
 [
   {
-    "kind": "select",
-    "select": [
+    "kind": "set",
+    "settings": [
       {
-        "kind": "functionCall",
-        "name": "countIf",
-        "args": [
-          {
-            "kind": "naryExpr",
-            "op": "OR",
-            "operands": [
-              {
-                "kind": "functionCall",
-                "name": "like",
-                "args": [
-                  {
-                    "kind": "columnRef",
-                    "parts": [
-                      "explain"
-                    ]
-                  },
-                  {
-                    "kind": "literal",
-                    "type": "String",
-                    "value": "%COMMA%"
-                  }
-                ]
-              },
-              {
-                "kind": "functionCall",
-                "name": "like",
-                "args": [
-                  {
-                    "kind": "columnRef",
-                    "parts": [
-                      "explain"
-                    ]
-                  },
-                  {
-                    "kind": "literal",
-                    "type": "String",
-                    "value": "%CROSS%"
-                  }
-                ]
-              }
-            ]
-          }
-        ]
-      },
-      {
-        "kind": "functionCall",
-        "name": "countIf",
-        "args": [
-          {
-            "kind": "functionCall",
-            "name": "like",
-            "args": [
-              {
-                "kind": "columnRef",
-                "parts": [
-                  "explain"
-                ]
-              },
-              {
-                "kind": "literal",
-                "type": "String",
-                "value": "%INNER%"
-              }
-            ]
-          }
-        ]
-      }
-    ],
-    "from": {
-      "kind": "subqueryFrom",
-      "query": {
-        "kind": "explain",
-        "explainType": "SYNTAX",
-        "query": {
-          "kind": "select",
-          "select": [
-            {
-              "kind": "columnRef",
-              "parts": [
-                "t1",
-                "a"
-              ]
-            }
-          ],
-          "from": {
-            "left": {
-              "kind": "tableRef",
-              "table": "t1"
-            },
-            "kind": "join",
-            "joinType": "CROSS",
-            "right": {
-              "kind": "tableRef",
-              "table": "t2"
-            }
-          },
-          "where": {
-            "kind": "binaryExpr",
-            "op": "=",
-            "left": {
-              "kind": "columnRef",
-              "parts": [
-                "t1",
-                "a"
-              ]
-            },
-            "right": {
-              "kind": "columnRef",
-              "parts": [
-                "t2",
-                "a"
-              ]
-            }
-          }
+        "name": "enable_optimize_predicate_expression",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
         }
       }
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "convert_query_to_cnf",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "cross_to_inner_join_rewrite",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "t1"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "t2"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "t3"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "t4"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "t1"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "a",
+        "type": {
+          "name": "UInt32"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "b",
+        "type": {
+          "name": "Nullable",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "Int32"
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "engine": {
+      "name": "Memory"
     }
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "t2"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "a",
+        "type": {
+          "name": "UInt32"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "b",
+        "type": {
+          "name": "Nullable",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "Int32"
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "engine": {
+      "name": "Memory"
+    }
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "t3"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "a",
+        "type": {
+          "name": "UInt32"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "b",
+        "type": {
+          "name": "Nullable",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "Int32"
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "engine": {
+      "name": "Memory"
+    }
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "t4"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "a",
+        "type": {
+          "name": "UInt32"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "b",
+        "type": {
+          "name": "Nullable",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "Int32"
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "engine": {
+      "name": "Memory"
+    }
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "enable_analyzer",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      }
+    ]
   },
   {
     "kind": "select",
@@ -216,7 +317,133 @@
               "kind": "tableRef",
               "table": "t1"
             },
-            "kind": "join",
+            "kind": "joinExpr",
+            "joinType": "CROSS",
+            "right": {
+              "kind": "tableRef",
+              "table": "t2"
+            }
+          },
+          "where": {
+            "kind": "binaryExpr",
+            "op": "=",
+            "left": {
+              "kind": "columnRef",
+              "parts": [
+                "t1",
+                "a"
+              ]
+            },
+            "right": {
+              "kind": "columnRef",
+              "parts": [
+                "t2",
+                "a"
+              ]
+            }
+          }
+        }
+      }
+    },
+    "leadingComments": [
+      "--- EXPLAIN SYNTAX (old AST based optimization)"
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "countIf",
+        "args": [
+          {
+            "kind": "naryExpr",
+            "op": "OR",
+            "operands": [
+              {
+                "kind": "functionCall",
+                "name": "like",
+                "args": [
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "explain"
+                    ]
+                  },
+                  {
+                    "kind": "literal",
+                    "type": "String",
+                    "value": "%COMMA%"
+                  }
+                ]
+              },
+              {
+                "kind": "functionCall",
+                "name": "like",
+                "args": [
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "explain"
+                    ]
+                  },
+                  {
+                    "kind": "literal",
+                    "type": "String",
+                    "value": "%CROSS%"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "kind": "functionCall",
+        "name": "countIf",
+        "args": [
+          {
+            "kind": "functionCall",
+            "name": "like",
+            "args": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "explain"
+                ]
+              },
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "%INNER%"
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "from": {
+      "kind": "subqueryFrom",
+      "query": {
+        "kind": "explain",
+        "explainType": "SYNTAX",
+        "query": {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "t1",
+                "a"
+              ]
+            }
+          ],
+          "from": {
+            "left": {
+              "kind": "tableRef",
+              "table": "t1"
+            },
+            "kind": "joinExpr",
             "joinType": "CROSS",
             "right": {
               "kind": "tableRef",
@@ -340,14 +567,14 @@
                 "kind": "tableRef",
                 "table": "t1"
               },
-              "kind": "join",
+              "kind": "joinExpr",
               "joinType": "CROSS",
               "right": {
                 "kind": "tableRef",
                 "table": "t2"
               }
             },
-            "kind": "join",
+            "kind": "joinExpr",
             "joinType": "CROSS",
             "right": {
               "kind": "tableRef",
@@ -495,14 +722,14 @@
                 "kind": "tableRef",
                 "table": "t1"
               },
-              "kind": "join",
+              "kind": "joinExpr",
               "joinType": "CROSS",
               "right": {
                 "kind": "tableRef",
                 "table": "t2"
               }
             },
-            "kind": "join",
+            "kind": "joinExpr",
             "joinType": "CROSS",
             "right": {
               "kind": "tableRef",
@@ -651,21 +878,21 @@
                   "kind": "tableRef",
                   "table": "t1"
                 },
-                "kind": "join",
+                "kind": "joinExpr",
                 "joinType": "CROSS",
                 "right": {
                   "kind": "tableRef",
                   "table": "t2"
                 }
               },
-              "kind": "join",
+              "kind": "joinExpr",
               "joinType": "CROSS",
               "right": {
                 "kind": "tableRef",
                 "table": "t3"
               }
             },
-            "kind": "join",
+            "kind": "joinExpr",
             "joinType": "CROSS",
             "right": {
               "kind": "tableRef",
@@ -832,21 +1059,21 @@
                   "kind": "tableRef",
                   "table": "t1"
                 },
-                "kind": "join",
+                "kind": "joinExpr",
                 "joinType": "CROSS",
                 "right": {
                   "kind": "tableRef",
                   "table": "t2"
                 }
               },
-              "kind": "join",
+              "kind": "joinExpr",
               "joinType": "CROSS",
               "right": {
                 "kind": "tableRef",
                 "table": "t3"
               }
             },
-            "kind": "join",
+            "kind": "joinExpr",
             "joinType": "CROSS",
             "right": {
               "kind": "tableRef",
@@ -1013,21 +1240,21 @@
                   "kind": "tableRef",
                   "table": "t1"
                 },
-                "kind": "join",
+                "kind": "joinExpr",
                 "joinType": "CROSS",
                 "right": {
                   "kind": "tableRef",
                   "table": "t2"
                 }
               },
-              "kind": "join",
+              "kind": "joinExpr",
               "joinType": "CROSS",
               "right": {
                 "kind": "tableRef",
                 "table": "t3"
               }
             },
-            "kind": "join",
+            "kind": "joinExpr",
             "joinType": "CROSS",
             "right": {
               "kind": "tableRef",
@@ -1194,21 +1421,21 @@
                   "kind": "tableRef",
                   "table": "t1"
                 },
-                "kind": "join",
+                "kind": "joinExpr",
                 "joinType": "CROSS",
                 "right": {
                   "kind": "tableRef",
                   "table": "t2"
                 }
               },
-              "kind": "join",
+              "kind": "joinExpr",
               "joinType": "CROSS",
               "right": {
                 "kind": "tableRef",
                 "table": "t3"
               }
             },
-            "kind": "join",
+            "kind": "joinExpr",
             "joinType": "CROSS",
             "right": {
               "kind": "tableRef",
@@ -1375,21 +1602,21 @@
                   "kind": "tableRef",
                   "table": "t1"
                 },
-                "kind": "join",
+                "kind": "joinExpr",
                 "joinType": "CROSS",
                 "right": {
                   "kind": "tableRef",
                   "table": "t2"
                 }
               },
-              "kind": "join",
+              "kind": "joinExpr",
               "joinType": "CROSS",
               "right": {
                 "kind": "tableRef",
                 "table": "t3"
               }
             },
-            "kind": "join",
+            "kind": "joinExpr",
             "joinType": "CROSS",
             "right": {
               "kind": "tableRef",
@@ -1556,21 +1783,21 @@
                   "kind": "tableRef",
                   "table": "t1"
                 },
-                "kind": "join",
+                "kind": "joinExpr",
                 "joinType": "CROSS",
                 "right": {
                   "kind": "tableRef",
                   "table": "t2"
                 }
               },
-              "kind": "join",
+              "kind": "joinExpr",
               "joinType": "CROSS",
               "right": {
                 "kind": "tableRef",
                 "table": "t3"
               }
             },
-            "kind": "join",
+            "kind": "joinExpr",
             "joinType": "CROSS",
             "right": {
               "kind": "tableRef",
@@ -1737,21 +1964,21 @@
                   "kind": "tableRef",
                   "table": "t1"
                 },
-                "kind": "join",
+                "kind": "joinExpr",
                 "joinType": "CROSS",
                 "right": {
                   "kind": "tableRef",
                   "table": "t2"
                 }
               },
-              "kind": "join",
+              "kind": "joinExpr",
               "joinType": "CROSS",
               "right": {
                 "kind": "tableRef",
                 "table": "t3"
               }
             },
-            "kind": "join",
+            "kind": "joinExpr",
             "joinType": "CROSS",
             "right": {
               "kind": "tableRef",
@@ -1858,21 +2085,21 @@
                   "kind": "tableRef",
                   "table": "t1"
                 },
-                "kind": "join",
+                "kind": "joinExpr",
                 "joinType": "CROSS",
                 "right": {
                   "kind": "tableRef",
                   "table": "t2"
                 }
               },
-              "kind": "join",
+              "kind": "joinExpr",
               "joinType": "CROSS",
               "right": {
                 "kind": "tableRef",
                 "table": "t3"
               }
             },
-            "kind": "join",
+            "kind": "joinExpr",
             "joinType": "CROSS",
             "right": {
               "kind": "tableRef",
@@ -1978,14 +2205,14 @@
                 "kind": "tableRef",
                 "table": "t1"
               },
-              "kind": "join",
+              "kind": "joinExpr",
               "joinType": "CROSS",
               "right": {
                 "kind": "tableRef",
                 "table": "t2"
               }
             },
-            "kind": "join",
+            "kind": "joinExpr",
             "joinType": "CROSS",
             "right": {
               "kind": "tableRef",
@@ -2091,7 +2318,7 @@
                 "kind": "tableRef",
                 "table": "t1"
               },
-              "kind": "join",
+              "kind": "joinExpr",
               "joinType": "INNER",
               "right": {
                 "kind": "tableRef",
@@ -2104,7 +2331,7 @@
                 ]
               }
             },
-            "kind": "join",
+            "kind": "joinExpr",
             "joinType": "CROSS",
             "right": {
               "kind": "tableRef",
@@ -2210,7 +2437,7 @@
                 "kind": "tableRef",
                 "table": "t1"
               },
-              "kind": "join",
+              "kind": "joinExpr",
               "joinType": "INNER",
               "right": {
                 "kind": "tableRef",
@@ -2238,7 +2465,7 @@
                 }
               }
             },
-            "kind": "join",
+            "kind": "joinExpr",
             "joinType": "CROSS",
             "right": {
               "kind": "tableRef",
@@ -2343,7 +2570,7 @@
               "kind": "tableRef",
               "table": "t1"
             },
-            "kind": "join",
+            "kind": "joinExpr",
             "joinType": "CROSS",
             "right": {
               "kind": "tableRef",
@@ -2380,6 +2607,10 @@
           "value": "1"
         }
       }
+    ],
+    "leadingComments": [
+      "-- {echoOn}",
+      "--- EXPLAIN QUERY TREE"
     ]
   },
   {
@@ -2476,7 +2707,7 @@
               "kind": "tableRef",
               "table": "t1"
             },
-            "kind": "join",
+            "kind": "joinExpr",
             "joinType": "CROSS",
             "right": {
               "kind": "tableRef",
@@ -2610,14 +2841,14 @@
                 "kind": "tableRef",
                 "table": "t1"
               },
-              "kind": "join",
+              "kind": "joinExpr",
               "joinType": "CROSS",
               "right": {
                 "kind": "tableRef",
                 "table": "t2"
               }
             },
-            "kind": "join",
+            "kind": "joinExpr",
             "joinType": "CROSS",
             "right": {
               "kind": "tableRef",
@@ -2775,14 +3006,14 @@
                 "kind": "tableRef",
                 "table": "t1"
               },
-              "kind": "join",
+              "kind": "joinExpr",
               "joinType": "CROSS",
               "right": {
                 "kind": "tableRef",
                 "table": "t2"
               }
             },
-            "kind": "join",
+            "kind": "joinExpr",
             "joinType": "CROSS",
             "right": {
               "kind": "tableRef",
@@ -2941,21 +3172,21 @@
                   "kind": "tableRef",
                   "table": "t1"
                 },
-                "kind": "join",
+                "kind": "joinExpr",
                 "joinType": "CROSS",
                 "right": {
                   "kind": "tableRef",
                   "table": "t2"
                 }
               },
-              "kind": "join",
+              "kind": "joinExpr",
               "joinType": "CROSS",
               "right": {
                 "kind": "tableRef",
                 "table": "t3"
               }
             },
-            "kind": "join",
+            "kind": "joinExpr",
             "joinType": "CROSS",
             "right": {
               "kind": "tableRef",
@@ -3132,21 +3363,21 @@
                   "kind": "tableRef",
                   "table": "t1"
                 },
-                "kind": "join",
+                "kind": "joinExpr",
                 "joinType": "CROSS",
                 "right": {
                   "kind": "tableRef",
                   "table": "t2"
                 }
               },
-              "kind": "join",
+              "kind": "joinExpr",
               "joinType": "CROSS",
               "right": {
                 "kind": "tableRef",
                 "table": "t3"
               }
             },
-            "kind": "join",
+            "kind": "joinExpr",
             "joinType": "CROSS",
             "right": {
               "kind": "tableRef",
@@ -3323,21 +3554,21 @@
                   "kind": "tableRef",
                   "table": "t1"
                 },
-                "kind": "join",
+                "kind": "joinExpr",
                 "joinType": "CROSS",
                 "right": {
                   "kind": "tableRef",
                   "table": "t2"
                 }
               },
-              "kind": "join",
+              "kind": "joinExpr",
               "joinType": "CROSS",
               "right": {
                 "kind": "tableRef",
                 "table": "t3"
               }
             },
-            "kind": "join",
+            "kind": "joinExpr",
             "joinType": "CROSS",
             "right": {
               "kind": "tableRef",
@@ -3514,21 +3745,21 @@
                   "kind": "tableRef",
                   "table": "t1"
                 },
-                "kind": "join",
+                "kind": "joinExpr",
                 "joinType": "CROSS",
                 "right": {
                   "kind": "tableRef",
                   "table": "t2"
                 }
               },
-              "kind": "join",
+              "kind": "joinExpr",
               "joinType": "CROSS",
               "right": {
                 "kind": "tableRef",
                 "table": "t3"
               }
             },
-            "kind": "join",
+            "kind": "joinExpr",
             "joinType": "CROSS",
             "right": {
               "kind": "tableRef",
@@ -3705,21 +3936,21 @@
                   "kind": "tableRef",
                   "table": "t1"
                 },
-                "kind": "join",
+                "kind": "joinExpr",
                 "joinType": "CROSS",
                 "right": {
                   "kind": "tableRef",
                   "table": "t2"
                 }
               },
-              "kind": "join",
+              "kind": "joinExpr",
               "joinType": "CROSS",
               "right": {
                 "kind": "tableRef",
                 "table": "t3"
               }
             },
-            "kind": "join",
+            "kind": "joinExpr",
             "joinType": "CROSS",
             "right": {
               "kind": "tableRef",
@@ -3896,21 +4127,21 @@
                   "kind": "tableRef",
                   "table": "t1"
                 },
-                "kind": "join",
+                "kind": "joinExpr",
                 "joinType": "CROSS",
                 "right": {
                   "kind": "tableRef",
                   "table": "t2"
                 }
               },
-              "kind": "join",
+              "kind": "joinExpr",
               "joinType": "CROSS",
               "right": {
                 "kind": "tableRef",
                 "table": "t3"
               }
             },
-            "kind": "join",
+            "kind": "joinExpr",
             "joinType": "CROSS",
             "right": {
               "kind": "tableRef",
@@ -4087,21 +4318,21 @@
                   "kind": "tableRef",
                   "table": "t1"
                 },
-                "kind": "join",
+                "kind": "joinExpr",
                 "joinType": "CROSS",
                 "right": {
                   "kind": "tableRef",
                   "table": "t2"
                 }
               },
-              "kind": "join",
+              "kind": "joinExpr",
               "joinType": "CROSS",
               "right": {
                 "kind": "tableRef",
                 "table": "t3"
               }
             },
-            "kind": "join",
+            "kind": "joinExpr",
             "joinType": "CROSS",
             "right": {
               "kind": "tableRef",
@@ -4218,21 +4449,21 @@
                   "kind": "tableRef",
                   "table": "t1"
                 },
-                "kind": "join",
+                "kind": "joinExpr",
                 "joinType": "CROSS",
                 "right": {
                   "kind": "tableRef",
                   "table": "t2"
                 }
               },
-              "kind": "join",
+              "kind": "joinExpr",
               "joinType": "CROSS",
               "right": {
                 "kind": "tableRef",
                 "table": "t3"
               }
             },
-            "kind": "join",
+            "kind": "joinExpr",
             "joinType": "CROSS",
             "right": {
               "kind": "tableRef",
@@ -4348,14 +4579,14 @@
                 "kind": "tableRef",
                 "table": "t1"
               },
-              "kind": "join",
+              "kind": "joinExpr",
               "joinType": "CROSS",
               "right": {
                 "kind": "tableRef",
                 "table": "t2"
               }
             },
-            "kind": "join",
+            "kind": "joinExpr",
             "joinType": "CROSS",
             "right": {
               "kind": "tableRef",
@@ -4471,7 +4702,7 @@
                 "kind": "tableRef",
                 "table": "t1"
               },
-              "kind": "join",
+              "kind": "joinExpr",
               "joinType": "INNER",
               "right": {
                 "kind": "tableRef",
@@ -4484,7 +4715,7 @@
                 ]
               }
             },
-            "kind": "join",
+            "kind": "joinExpr",
             "joinType": "CROSS",
             "right": {
               "kind": "tableRef",
@@ -4600,7 +4831,7 @@
                 "kind": "tableRef",
                 "table": "t1"
               },
-              "kind": "join",
+              "kind": "joinExpr",
               "joinType": "INNER",
               "right": {
                 "kind": "tableRef",
@@ -4628,7 +4859,7 @@
                 }
               }
             },
-            "kind": "join",
+            "kind": "joinExpr",
             "joinType": "CROSS",
             "right": {
               "kind": "tableRef",
@@ -4638,6 +4869,62 @@
         }
       }
     },
+    "settings": [
+      {
+        "name": "enable_analyzer",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "t1"
+      }
+    },
+    "leadingComments": [
+      "-- {echoOff}"
+    ]
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "t2"
+      }
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "t3"
+      }
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "t4"
+      }
+    }
+  },
+  {
+    "kind": "set",
     "settings": [
       {
         "name": "enable_analyzer",
@@ -4661,7 +4948,7 @@
         "kind": "tableRef",
         "table": "t1"
       },
-      "kind": "join",
+      "kind": "joinExpr",
       "joinType": "CROSS",
       "right": {
         "kind": "tableRef",
@@ -4705,7 +4992,7 @@
         "kind": "tableRef",
         "table": "t1"
       },
-      "kind": "join",
+      "kind": "joinExpr",
       "joinType": "CROSS",
       "right": {
         "kind": "tableRef",
@@ -4778,7 +5065,7 @@
         "kind": "tableRef",
         "table": "t1"
       },
-      "kind": "join",
+      "kind": "joinExpr",
       "joinType": "CROSS",
       "right": {
         "kind": "tableRef",
@@ -4835,14 +5122,14 @@
           "kind": "tableRef",
           "table": "t1"
         },
-        "kind": "join",
+        "kind": "joinExpr",
         "joinType": "CROSS",
         "right": {
           "kind": "tableRef",
           "table": "t2"
         }
       },
-      "kind": "join",
+      "kind": "joinExpr",
       "joinType": "CROSS",
       "right": {
         "kind": "tableRef",
@@ -4947,14 +5234,14 @@
           "kind": "tableRef",
           "table": "t1"
         },
-        "kind": "join",
+        "kind": "joinExpr",
         "joinType": "CROSS",
         "right": {
           "kind": "tableRef",
           "table": "t2"
         }
       },
-      "kind": "join",
+      "kind": "joinExpr",
       "joinType": "CROSS",
       "right": {
         "kind": "tableRef",
@@ -5043,21 +5330,21 @@
             "kind": "tableRef",
             "table": "t1"
           },
-          "kind": "join",
+          "kind": "joinExpr",
           "joinType": "CROSS",
           "right": {
             "kind": "tableRef",
             "table": "t2"
           }
         },
-        "kind": "join",
+        "kind": "joinExpr",
         "joinType": "CROSS",
         "right": {
           "kind": "tableRef",
           "table": "t3"
         }
       },
-      "kind": "join",
+      "kind": "joinExpr",
       "joinType": "CROSS",
       "right": {
         "kind": "tableRef",
@@ -5199,21 +5486,21 @@
             "kind": "tableRef",
             "table": "t1"
           },
-          "kind": "join",
+          "kind": "joinExpr",
           "joinType": "CROSS",
           "right": {
             "kind": "tableRef",
             "table": "t2"
           }
         },
-        "kind": "join",
+        "kind": "joinExpr",
         "joinType": "CROSS",
         "right": {
           "kind": "tableRef",
           "table": "t3"
         }
       },
-      "kind": "join",
+      "kind": "joinExpr",
       "joinType": "CROSS",
       "right": {
         "kind": "tableRef",
@@ -5320,21 +5607,21 @@
             "kind": "tableRef",
             "table": "t1"
           },
-          "kind": "join",
+          "kind": "joinExpr",
           "joinType": "CROSS",
           "right": {
             "kind": "tableRef",
             "table": "t2"
           }
         },
-        "kind": "join",
+        "kind": "joinExpr",
         "joinType": "CROSS",
         "right": {
           "kind": "tableRef",
           "table": "t3"
         }
       },
-      "kind": "join",
+      "kind": "joinExpr",
       "joinType": "CROSS",
       "right": {
         "kind": "tableRef",
@@ -5436,5 +5723,37 @@
         "direction": "ASC"
       }
     ]
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "t1"
+    }
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "t2"
+    }
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "t3"
+    }
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "t4"
+    }
   }
 ]

@@ -1,3 +1,4 @@
+-- Tags: stateful
 SELECT
     transform(SearchEngineID, [2, 3], ['Яндекс', 'Google'], PageCharset) AS title,
     count() AS c

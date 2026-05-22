@@ -1,3 +1,45 @@
+Set
+
+Set
+
+DropQuery  not_partitioned_replica1_00502 (children 1)
+ Identifier not_partitioned_replica1_00502
+
+DropQuery  not_partitioned_replica2_00502 (children 1)
+ Identifier not_partitioned_replica2_00502
+
+CreateQuery not_partitioned_replica1_00502 (children 3)
+ Identifier not_partitioned_replica1_00502
+ Columns definition (children 1)
+  ExpressionList (children 1)
+   ColumnDeclaration x (children 1)
+    DataType UInt8
+ Storage definition (children 2)
+  Function ReplicatedMergeTree (children 1)
+   ExpressionList (children 2)
+    Literal '/clickhouse/tables/{database}/test/not_partitioned_00502'
+    Literal '1'
+  Identifier x
+
+CreateQuery not_partitioned_replica2_00502 (children 3)
+ Identifier not_partitioned_replica2_00502
+ Columns definition (children 1)
+  ExpressionList (children 1)
+   ColumnDeclaration x (children 1)
+    DataType UInt8
+ Storage definition (children 2)
+  Function ReplicatedMergeTree (children 1)
+   ExpressionList (children 2)
+    Literal '/clickhouse/tables/{database}/test/not_partitioned_00502'
+    Literal '2'
+  Identifier x
+
+InsertQuery   (children 1)
+ Identifier not_partitioned_replica1_00502
+
+InsertQuery   (children 1)
+ Identifier not_partitioned_replica1_00502
+
 SelectWithUnionQuery (children 1)
  ExpressionList (children 1)
   SelectQuery (children 4)
@@ -23,6 +65,18 @@ SelectWithUnionQuery (children 1)
    ExpressionList (children 1)
     OrderByElement (children 1)
      Identifier name
+
+SYSTEM query (children 1)
+ Identifier not_partitioned_replica1_00502
+
+SYSTEM query (children 1)
+ Identifier not_partitioned_replica2_00502
+
+OptimizeQuery  not_partitioned_replica1_00502_final (children 2)
+ Partition (children 1)
+  Function tuple (children 1)
+   ExpressionList
+ Identifier not_partitioned_replica1_00502
 
 SelectWithUnionQuery (children 1)
  ExpressionList (children 1)
@@ -62,6 +116,67 @@ SelectWithUnionQuery (children 1)
      TableExpression (children 1)
       TableIdentifier not_partitioned_replica2_00502
 
+AlterQuery  not_partitioned_replica1_00502 (children 2)
+ ExpressionList (children 1)
+  AlterCommand DROP_PARTITION (children 1)
+   Partition_ID Literal_'all' (children 1)
+    Literal 'all'
+ Identifier not_partitioned_replica1_00502
+
+DropQuery  not_partitioned_replica1_00502 (children 1)
+ Identifier not_partitioned_replica1_00502
+
+DropQuery  not_partitioned_replica2_00502 (children 1)
+ Identifier not_partitioned_replica2_00502
+
+DropQuery  partitioned_by_week_replica1 (children 1)
+ Identifier partitioned_by_week_replica1
+
+DropQuery  partitioned_by_week_replica2 (children 1)
+ Identifier partitioned_by_week_replica2
+
+CreateQuery partitioned_by_week_replica1 (children 3)
+ Identifier partitioned_by_week_replica1
+ Columns definition (children 1)
+  ExpressionList (children 2)
+   ColumnDeclaration d (children 1)
+    DataType Date
+   ColumnDeclaration x (children 1)
+    DataType UInt8
+ Storage definition (children 3)
+  Function ReplicatedMergeTree (children 1)
+   ExpressionList (children 2)
+    Literal '/clickhouse/tables/{database}/test/partitioned_by_week_00502'
+    Literal '1'
+  Function toMonday (children 1)
+   ExpressionList (children 1)
+    Identifier d
+  Identifier x
+
+CreateQuery partitioned_by_week_replica2 (children 3)
+ Identifier partitioned_by_week_replica2
+ Columns definition (children 1)
+  ExpressionList (children 2)
+   ColumnDeclaration d (children 1)
+    DataType Date
+   ColumnDeclaration x (children 1)
+    DataType UInt8
+ Storage definition (children 3)
+  Function ReplicatedMergeTree (children 1)
+   ExpressionList (children 2)
+    Literal '/clickhouse/tables/{database}/test/partitioned_by_week_00502'
+    Literal '2'
+  Function toMonday (children 1)
+   ExpressionList (children 1)
+    Identifier d
+  Identifier x
+
+InsertQuery   (children 1)
+ Identifier partitioned_by_week_replica1
+
+InsertQuery   (children 1)
+ Identifier partitioned_by_week_replica1
+
 SelectWithUnionQuery (children 1)
  ExpressionList (children 1)
   SelectQuery (children 4)
@@ -87,6 +202,17 @@ SelectWithUnionQuery (children 1)
    ExpressionList (children 1)
     OrderByElement (children 1)
      Identifier name
+
+SYSTEM query (children 1)
+ Identifier partitioned_by_week_replica1
+
+SYSTEM query (children 1)
+ Identifier partitioned_by_week_replica2
+
+OptimizeQuery  partitioned_by_week_replica1_final (children 2)
+ Partition (children 1)
+  Literal '2000-01-03'
+ Identifier partitioned_by_week_replica1
 
 SelectWithUnionQuery (children 1)
  ExpressionList (children 1)
@@ -126,6 +252,73 @@ SelectWithUnionQuery (children 1)
      TableExpression (children 1)
       TableIdentifier partitioned_by_week_replica2
 
+AlterQuery  partitioned_by_week_replica1 (children 2)
+ ExpressionList (children 1)
+  AlterCommand DROP_PARTITION (children 1)
+   Partition (children 1)
+    Literal '1999-12-27'
+ Identifier partitioned_by_week_replica1
+
+DropQuery  partitioned_by_week_replica1 (children 1)
+ Identifier partitioned_by_week_replica1
+
+DropQuery  partitioned_by_week_replica2 (children 1)
+ Identifier partitioned_by_week_replica2
+
+DropQuery  partitioned_by_tuple_replica1_00502 (children 1)
+ Identifier partitioned_by_tuple_replica1_00502
+
+DropQuery  partitioned_by_tuple_replica2_00502 (children 1)
+ Identifier partitioned_by_tuple_replica2_00502
+
+CreateQuery partitioned_by_tuple_replica1_00502 (children 3)
+ Identifier partitioned_by_tuple_replica1_00502
+ Columns definition (children 1)
+  ExpressionList (children 3)
+   ColumnDeclaration d (children 1)
+    DataType Date
+   ColumnDeclaration x (children 1)
+    DataType UInt8
+   ColumnDeclaration y (children 1)
+    DataType UInt8
+ Storage definition (children 3)
+  Function ReplicatedMergeTree (children 1)
+   ExpressionList (children 2)
+    Literal '/clickhouse/tables/{database}/test/partitioned_by_tuple_00502'
+    Literal '1'
+  Function tuple (children 1)
+   ExpressionList (children 2)
+    Identifier d
+    Identifier x
+  Identifier x
+
+CreateQuery partitioned_by_tuple_replica2_00502 (children 3)
+ Identifier partitioned_by_tuple_replica2_00502
+ Columns definition (children 1)
+  ExpressionList (children 3)
+   ColumnDeclaration d (children 1)
+    DataType Date
+   ColumnDeclaration x (children 1)
+    DataType UInt8
+   ColumnDeclaration y (children 1)
+    DataType UInt8
+ Storage definition (children 3)
+  Function ReplicatedMergeTree (children 1)
+   ExpressionList (children 2)
+    Literal '/clickhouse/tables/{database}/test/partitioned_by_tuple_00502'
+    Literal '2'
+  Function tuple (children 1)
+   ExpressionList (children 2)
+    Identifier d
+    Identifier x
+  Identifier x
+
+InsertQuery   (children 1)
+ Identifier partitioned_by_tuple_replica1_00502
+
+InsertQuery   (children 1)
+ Identifier partitioned_by_tuple_replica1_00502
+
 SelectWithUnionQuery (children 1)
  ExpressionList (children 1)
   SelectQuery (children 4)
@@ -151,6 +344,22 @@ SelectWithUnionQuery (children 1)
    ExpressionList (children 1)
     OrderByElement (children 1)
      Identifier name
+
+SYSTEM query (children 1)
+ Identifier partitioned_by_tuple_replica1_00502
+
+SYSTEM query (children 1)
+ Identifier partitioned_by_tuple_replica2_00502
+
+OptimizeQuery  partitioned_by_tuple_replica1_00502_final (children 2)
+ Partition (children 1)
+  Literal Tuple_('2000-01-01', UInt64_1)
+ Identifier partitioned_by_tuple_replica1_00502
+
+OptimizeQuery  partitioned_by_tuple_replica1_00502_final (children 2)
+ Partition (children 1)
+  Literal Tuple_('2000-01-02', UInt64_1)
+ Identifier partitioned_by_tuple_replica1_00502
 
 SelectWithUnionQuery (children 1)
  ExpressionList (children 1)
@@ -190,6 +399,63 @@ SelectWithUnionQuery (children 1)
      TableExpression (children 1)
       TableIdentifier partitioned_by_tuple_replica2_00502
 
+AlterQuery  partitioned_by_tuple_replica1_00502 (children 2)
+ ExpressionList (children 1)
+  AlterCommand DROP_PARTITION (children 1)
+   Partition_ID Literal_'20000101-1' (children 1)
+    Literal '20000101-1'
+ Identifier partitioned_by_tuple_replica1_00502
+
+DropQuery  partitioned_by_tuple_replica1_00502 (children 1)
+ Identifier partitioned_by_tuple_replica1_00502
+
+DropQuery  partitioned_by_tuple_replica2_00502 (children 1)
+ Identifier partitioned_by_tuple_replica2_00502
+
+DropQuery  partitioned_by_string_replica1 (children 1)
+ Identifier partitioned_by_string_replica1
+
+DropQuery  partitioned_by_string_replica2 (children 1)
+ Identifier partitioned_by_string_replica2
+
+CreateQuery partitioned_by_string_replica1 (children 3)
+ Identifier partitioned_by_string_replica1
+ Columns definition (children 1)
+  ExpressionList (children 2)
+   ColumnDeclaration s (children 1)
+    DataType String
+   ColumnDeclaration x (children 1)
+    DataType UInt8
+ Storage definition (children 3)
+  Function ReplicatedMergeTree (children 1)
+   ExpressionList (children 2)
+    Literal '/clickhouse/tables/{database}/test/partitioned_by_string_00502'
+    Literal '1'
+  Identifier s
+  Identifier x
+
+CreateQuery partitioned_by_string_replica2 (children 3)
+ Identifier partitioned_by_string_replica2
+ Columns definition (children 1)
+  ExpressionList (children 2)
+   ColumnDeclaration s (children 1)
+    DataType String
+   ColumnDeclaration x (children 1)
+    DataType UInt8
+ Storage definition (children 3)
+  Function ReplicatedMergeTree (children 1)
+   ExpressionList (children 2)
+    Literal '/clickhouse/tables/{database}/test/partitioned_by_string_00502'
+    Literal '2'
+  Identifier s
+  Identifier x
+
+InsertQuery   (children 1)
+ Identifier partitioned_by_string_replica1
+
+InsertQuery   (children 1)
+ Identifier partitioned_by_string_replica1
+
 SelectWithUnionQuery (children 1)
  ExpressionList (children 1)
   SelectQuery (children 4)
@@ -215,6 +481,17 @@ SelectWithUnionQuery (children 1)
    ExpressionList (children 1)
     OrderByElement (children 1)
      Identifier name
+
+SYSTEM query (children 1)
+ Identifier partitioned_by_string_replica1
+
+SYSTEM query (children 1)
+ Identifier partitioned_by_string_replica2
+
+OptimizeQuery  partitioned_by_string_replica2_final (children 2)
+ Partition (children 1)
+  Literal 'aaa'
+ Identifier partitioned_by_string_replica2
 
 SelectWithUnionQuery (children 1)
  ExpressionList (children 1)
@@ -253,6 +530,71 @@ SelectWithUnionQuery (children 1)
     TablesInSelectQueryElement (children 1)
      TableExpression (children 1)
       TableIdentifier partitioned_by_string_replica2
+
+AlterQuery  partitioned_by_string_replica1 (children 2)
+ ExpressionList (children 1)
+  AlterCommand DROP_PARTITION (children 1)
+   Partition (children 1)
+    Literal 'bbb'
+ Identifier partitioned_by_string_replica1
+
+DropQuery  partitioned_by_string_replica1 (children 1)
+ Identifier partitioned_by_string_replica1
+
+DropQuery  partitioned_by_string_replica2 (children 1)
+ Identifier partitioned_by_string_replica2
+
+DropQuery  without_fixed_size_columns_replica1 (children 1)
+ Identifier without_fixed_size_columns_replica1
+
+DropQuery  without_fixed_size_columns_replica2 (children 1)
+ Identifier without_fixed_size_columns_replica2
+
+CreateQuery without_fixed_size_columns_replica1 (children 3)
+ Identifier without_fixed_size_columns_replica1
+ Columns definition (children 1)
+  ExpressionList (children 1)
+   ColumnDeclaration s (children 1)
+    DataType String
+ Storage definition (children 3)
+  Function ReplicatedMergeTree (children 1)
+   ExpressionList (children 2)
+    Literal '/clickhouse/tables/{database}/test/without_fixed_size_columns_00502'
+    Literal '1'
+  Function length (children 1)
+   ExpressionList (children 1)
+    Identifier s
+  Identifier s
+
+CreateQuery without_fixed_size_columns_replica2 (children 3)
+ Identifier without_fixed_size_columns_replica2
+ Columns definition (children 1)
+  ExpressionList (children 1)
+   ColumnDeclaration s (children 1)
+    DataType String
+ Storage definition (children 3)
+  Function ReplicatedMergeTree (children 1)
+   ExpressionList (children 2)
+    Literal '/clickhouse/tables/{database}/test/without_fixed_size_columns_00502'
+    Literal '2'
+  Function length (children 1)
+   ExpressionList (children 1)
+    Identifier s
+  Identifier s
+
+InsertQuery   (children 1)
+ Identifier without_fixed_size_columns_replica1
+
+SYSTEM query (children 1)
+ Identifier without_fixed_size_columns_replica1
+
+SYSTEM query (children 1)
+ Identifier without_fixed_size_columns_replica2
+
+OptimizeQuery  without_fixed_size_columns_replica2_final (children 2)
+ Partition (children 1)
+  Literal UInt64_1
+ Identifier without_fixed_size_columns_replica2
 
 SelectWithUnionQuery (children 1)
  ExpressionList (children 1)
@@ -293,3 +635,16 @@ SelectWithUnionQuery (children 1)
    ExpressionList (children 1)
     OrderByElement (children 1)
      Identifier s
+
+AlterQuery  without_fixed_size_columns_replica1 (children 2)
+ ExpressionList (children 1)
+  AlterCommand DROP_PARTITION (children 1)
+   Partition (children 1)
+    Literal UInt64_1
+ Identifier without_fixed_size_columns_replica1
+
+DropQuery  without_fixed_size_columns_replica1 (children 1)
+ Identifier without_fixed_size_columns_replica1
+
+DropQuery  without_fixed_size_columns_replica2 (children 1)
+ Identifier without_fixed_size_columns_replica2

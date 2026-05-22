@@ -1,5 +1,51 @@
 [
   {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "min_count_to_compile_aggregate_expression",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      }
+    ],
+    "leadingComments": [
+      "-- Tags: stateful"
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "max_bytes_before_external_group_by",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      }
+    ],
+    "leadingComments": [
+      "-- The test uses many aggregations. A low max_bytes_before_external_group_by value will lead to high disk usage",
+      "-- which in CI leads to timeouts"
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "max_bytes_ratio_before_external_group_by",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      }
+    ]
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -295,6 +341,250 @@
             "kind": "columnRef",
             "parts": [
               "WatchID"
+            ]
+          }
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "database": "test",
+      "table": "hits"
+    },
+    "groupBy": {
+      "kind": "expressions",
+      "items": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "CounterID"
+          ]
+        }
+      ]
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "functionCall",
+          "name": "count",
+          "args": []
+        },
+        "direction": "DESC"
+      }
+    ],
+    "limit": {
+      "count": {
+        "kind": "literal",
+        "type": "UInt64",
+        "value": "20"
+      }
+    }
+  },
+  {
+    "kind": "select",
+    "with": [
+      {
+        "kind": "cteExpr",
+        "name": "predicate",
+        "expr": {
+          "kind": "binaryExpr",
+          "op": "==",
+          "left": {
+            "kind": "binaryExpr",
+            "op": "%",
+            "left": {
+              "kind": "columnRef",
+              "parts": [
+                "WatchID"
+              ]
+            },
+            "right": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "2"
+            }
+          },
+          "right": {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "0"
+          },
+          "parenthesized": true
+        }
+      }
+    ],
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "CounterID"
+        ]
+      },
+      {
+        "kind": "functionCall",
+        "name": "minIf",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "WatchID"
+            ]
+          },
+          {
+            "kind": "columnRef",
+            "parts": [
+              "predicate"
+            ]
+          }
+        ]
+      },
+      {
+        "kind": "functionCall",
+        "name": "maxIf",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "WatchID"
+            ]
+          },
+          {
+            "kind": "columnRef",
+            "parts": [
+              "predicate"
+            ]
+          }
+        ]
+      },
+      {
+        "kind": "functionCall",
+        "name": "sumIf",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "WatchID"
+            ]
+          },
+          {
+            "kind": "columnRef",
+            "parts": [
+              "predicate"
+            ]
+          }
+        ]
+      },
+      {
+        "kind": "functionCall",
+        "name": "avgIf",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "WatchID"
+            ]
+          },
+          {
+            "kind": "columnRef",
+            "parts": [
+              "predicate"
+            ]
+          }
+        ]
+      },
+      {
+        "kind": "functionCall",
+        "name": "avgWeightedIf",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "WatchID"
+            ]
+          },
+          {
+            "kind": "columnRef",
+            "parts": [
+              "CounterID"
+            ]
+          },
+          {
+            "kind": "columnRef",
+            "parts": [
+              "predicate"
+            ]
+          }
+        ]
+      },
+      {
+        "kind": "functionCall",
+        "name": "countIf",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "WatchID"
+            ]
+          },
+          {
+            "kind": "columnRef",
+            "parts": [
+              "predicate"
+            ]
+          }
+        ]
+      },
+      {
+        "kind": "functionCall",
+        "name": "groupBitOrIf",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "WatchID"
+            ]
+          },
+          {
+            "kind": "columnRef",
+            "parts": [
+              "predicate"
+            ]
+          }
+        ]
+      },
+      {
+        "kind": "functionCall",
+        "name": "groupBitAndIf",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "WatchID"
+            ]
+          },
+          {
+            "kind": "columnRef",
+            "parts": [
+              "predicate"
+            ]
+          }
+        ]
+      },
+      {
+        "kind": "functionCall",
+        "name": "groupBitXorIf",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "WatchID"
+            ]
+          },
+          {
+            "kind": "columnRef",
+            "parts": [
+              "predicate"
             ]
           }
         ]
@@ -617,6 +907,238 @@
             "kind": "columnRef",
             "parts": [
               "WatchID"
+            ]
+          }
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "database": "test",
+      "table": "hits"
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "min_watch_id"
+          ]
+        },
+        "direction": "DESC"
+      }
+    ],
+    "limit": {
+      "count": {
+        "kind": "literal",
+        "type": "UInt64",
+        "value": "20"
+      }
+    }
+  },
+  {
+    "kind": "select",
+    "with": [
+      {
+        "kind": "cteExpr",
+        "name": "predicate",
+        "expr": {
+          "kind": "binaryExpr",
+          "op": "==",
+          "left": {
+            "kind": "binaryExpr",
+            "op": "%",
+            "left": {
+              "kind": "columnRef",
+              "parts": [
+                "WatchID"
+              ]
+            },
+            "right": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "2"
+            }
+          },
+          "right": {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "0"
+          },
+          "parenthesized": true
+        }
+      }
+    ],
+    "select": [
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "minIf",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "WatchID"
+              ]
+            },
+            {
+              "kind": "columnRef",
+              "parts": [
+                "predicate"
+              ]
+            }
+          ]
+        },
+        "alias": "min_watch_id"
+      },
+      {
+        "kind": "functionCall",
+        "name": "maxIf",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "WatchID"
+            ]
+          },
+          {
+            "kind": "columnRef",
+            "parts": [
+              "predicate"
+            ]
+          }
+        ]
+      },
+      {
+        "kind": "functionCall",
+        "name": "sumIf",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "WatchID"
+            ]
+          },
+          {
+            "kind": "columnRef",
+            "parts": [
+              "predicate"
+            ]
+          }
+        ]
+      },
+      {
+        "kind": "functionCall",
+        "name": "avgIf",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "WatchID"
+            ]
+          },
+          {
+            "kind": "columnRef",
+            "parts": [
+              "predicate"
+            ]
+          }
+        ]
+      },
+      {
+        "kind": "functionCall",
+        "name": "avgWeightedIf",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "WatchID"
+            ]
+          },
+          {
+            "kind": "columnRef",
+            "parts": [
+              "CounterID"
+            ]
+          },
+          {
+            "kind": "columnRef",
+            "parts": [
+              "predicate"
+            ]
+          }
+        ]
+      },
+      {
+        "kind": "functionCall",
+        "name": "countIf",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "WatchID"
+            ]
+          },
+          {
+            "kind": "columnRef",
+            "parts": [
+              "predicate"
+            ]
+          }
+        ]
+      },
+      {
+        "kind": "functionCall",
+        "name": "groupBitOrIf",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "WatchID"
+            ]
+          },
+          {
+            "kind": "columnRef",
+            "parts": [
+              "predicate"
+            ]
+          }
+        ]
+      },
+      {
+        "kind": "functionCall",
+        "name": "groupBitAndIf",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "WatchID"
+            ]
+          },
+          {
+            "kind": "columnRef",
+            "parts": [
+              "predicate"
+            ]
+          }
+        ]
+      },
+      {
+        "kind": "functionCall",
+        "name": "groupBitXorIf",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "WatchID"
+            ]
+          },
+          {
+            "kind": "columnRef",
+            "parts": [
+              "predicate"
             ]
           }
         ]

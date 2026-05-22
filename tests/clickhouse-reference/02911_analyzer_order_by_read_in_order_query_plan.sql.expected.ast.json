@@ -1,5 +1,224 @@
 [
   {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "optimize_read_in_order",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      },
+      {
+        "name": "query_plan_read_in_order",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      },
+      {
+        "name": "enable_analyzer",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "tab"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "tab2"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "tab3"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "tab4"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "tab5"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "tab"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "a",
+        "type": {
+          "name": "UInt32"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "b",
+        "type": {
+          "name": "UInt32"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "c",
+        "type": {
+          "name": "UInt32"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "d",
+        "type": {
+          "name": "UInt32"
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "binaryExpr",
+          "op": "*",
+          "left": {
+            "kind": "binaryExpr",
+            "op": "+",
+            "left": {
+              "kind": "columnRef",
+              "parts": [
+                "a"
+              ]
+            },
+            "right": {
+              "kind": "columnRef",
+              "parts": [
+                "b"
+              ]
+            },
+            "parenthesized": true
+          },
+          "right": {
+            "kind": "columnRef",
+            "parts": [
+              "c"
+            ]
+          }
+        }
+      },
+      {
+        "expr": {
+          "kind": "functionCall",
+          "name": "sin",
+          "args": [
+            {
+              "kind": "binaryExpr",
+              "op": "/",
+              "left": {
+                "kind": "columnRef",
+                "parts": [
+                  "a"
+                ]
+              },
+              "right": {
+                "kind": "columnRef",
+                "parts": [
+                  "b"
+                ]
+              }
+            }
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "tab"
+      }
+    },
+    "selectQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "number"
+          ]
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "number"
+          ]
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "number"
+          ]
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "number"
+          ]
+        }
+      ],
+      "from": {
+        "kind": "tableFunctionRef",
+        "name": "numbers",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "5"
+          }
+        ]
+      }
+    }
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -42,6 +261,10 @@
         },
         "direction": "ASC"
       }
+    ],
+    "leadingComments": [
+      "-- { echoOn }",
+      "-- Exact match, single key"
     ]
   },
   {
@@ -331,6 +554,564 @@
           ]
         },
         "direction": "ASC"
+      }
+    ],
+    "leadingComments": [
+      "-- Exact match, full key"
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "asterisk"
+      }
+    ],
+    "from": {
+      "kind": "subqueryFrom",
+      "query": {
+        "kind": "explain",
+        "explainType": "PLAN",
+        "settings": [
+          {
+            "name": "actions",
+            "value": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "1"
+            }
+          }
+        ],
+        "query": {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "asterisk"
+            }
+          ],
+          "from": {
+            "kind": "tableRef",
+            "table": "tab"
+          },
+          "orderBy": [
+            {
+              "kind": "orderByItem",
+              "expr": {
+                "kind": "binaryExpr",
+                "op": "*",
+                "left": {
+                  "kind": "binaryExpr",
+                  "op": "+",
+                  "left": {
+                    "kind": "columnRef",
+                    "parts": [
+                      "a"
+                    ]
+                  },
+                  "right": {
+                    "kind": "columnRef",
+                    "parts": [
+                      "b"
+                    ]
+                  },
+                  "parenthesized": true
+                },
+                "right": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "c"
+                  ]
+                }
+              },
+              "direction": "ASC"
+            },
+            {
+              "kind": "orderByItem",
+              "expr": {
+                "kind": "functionCall",
+                "name": "sin",
+                "args": [
+                  {
+                    "kind": "binaryExpr",
+                    "op": "/",
+                    "left": {
+                      "kind": "columnRef",
+                      "parts": [
+                        "a"
+                      ]
+                    },
+                    "right": {
+                      "kind": "columnRef",
+                      "parts": [
+                        "b"
+                      ]
+                    }
+                  }
+                ]
+              },
+              "direction": "ASC"
+            }
+          ]
+        }
+      }
+    },
+    "where": {
+      "kind": "functionCall",
+      "name": "like",
+      "args": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "explain"
+          ]
+        },
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "%sort description%"
+        }
+      ]
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "asterisk"
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "tab"
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "binaryExpr",
+          "op": "*",
+          "left": {
+            "kind": "binaryExpr",
+            "op": "+",
+            "left": {
+              "kind": "columnRef",
+              "parts": [
+                "a"
+              ]
+            },
+            "right": {
+              "kind": "columnRef",
+              "parts": [
+                "b"
+              ]
+            },
+            "parenthesized": true
+          },
+          "right": {
+            "kind": "columnRef",
+            "parts": [
+              "c"
+            ]
+          }
+        },
+        "direction": "DESC"
+      },
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "functionCall",
+          "name": "sin",
+          "args": [
+            {
+              "kind": "binaryExpr",
+              "op": "/",
+              "left": {
+                "kind": "columnRef",
+                "parts": [
+                  "a"
+                ]
+              },
+              "right": {
+                "kind": "columnRef",
+                "parts": [
+                  "b"
+                ]
+              }
+            }
+          ]
+        },
+        "direction": "DESC"
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "asterisk"
+      }
+    ],
+    "from": {
+      "kind": "subqueryFrom",
+      "query": {
+        "kind": "explain",
+        "explainType": "PLAN",
+        "settings": [
+          {
+            "name": "actions",
+            "value": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "1"
+            }
+          }
+        ],
+        "query": {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "asterisk"
+            }
+          ],
+          "from": {
+            "kind": "tableRef",
+            "table": "tab"
+          },
+          "orderBy": [
+            {
+              "kind": "orderByItem",
+              "expr": {
+                "kind": "binaryExpr",
+                "op": "*",
+                "left": {
+                  "kind": "binaryExpr",
+                  "op": "+",
+                  "left": {
+                    "kind": "columnRef",
+                    "parts": [
+                      "a"
+                    ]
+                  },
+                  "right": {
+                    "kind": "columnRef",
+                    "parts": [
+                      "b"
+                    ]
+                  },
+                  "parenthesized": true
+                },
+                "right": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "c"
+                  ]
+                }
+              },
+              "direction": "DESC"
+            },
+            {
+              "kind": "orderByItem",
+              "expr": {
+                "kind": "functionCall",
+                "name": "sin",
+                "args": [
+                  {
+                    "kind": "binaryExpr",
+                    "op": "/",
+                    "left": {
+                      "kind": "columnRef",
+                      "parts": [
+                        "a"
+                      ]
+                    },
+                    "right": {
+                      "kind": "columnRef",
+                      "parts": [
+                        "b"
+                      ]
+                    }
+                  }
+                ]
+              },
+              "direction": "DESC"
+            }
+          ]
+        }
+      }
+    },
+    "where": {
+      "kind": "functionCall",
+      "name": "like",
+      "args": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "explain"
+          ]
+        },
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "%sort description%"
+        }
+      ]
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "asterisk"
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "tab"
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "binaryExpr",
+          "op": "*",
+          "left": {
+            "kind": "binaryExpr",
+            "op": "+",
+            "left": {
+              "kind": "columnRef",
+              "parts": [
+                "a"
+              ]
+            },
+            "right": {
+              "kind": "columnRef",
+              "parts": [
+                "b"
+              ]
+            },
+            "parenthesized": true
+          },
+          "right": {
+            "kind": "columnRef",
+            "parts": [
+              "c"
+            ]
+          }
+        },
+        "direction": "DESC"
+      },
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "functionCall",
+          "name": "sin",
+          "args": [
+            {
+              "kind": "binaryExpr",
+              "op": "/",
+              "left": {
+                "kind": "columnRef",
+                "parts": [
+                  "a"
+                ]
+              },
+              "right": {
+                "kind": "columnRef",
+                "parts": [
+                  "b"
+                ]
+              }
+            }
+          ]
+        },
+        "direction": "ASC"
+      }
+    ],
+    "leadingComments": [
+      "-- Exact match, mixed direction"
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "asterisk"
+      }
+    ],
+    "from": {
+      "kind": "subqueryFrom",
+      "query": {
+        "kind": "explain",
+        "explainType": "PLAN",
+        "settings": [
+          {
+            "name": "actions",
+            "value": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "1"
+            }
+          }
+        ],
+        "query": {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "asterisk"
+            }
+          ],
+          "from": {
+            "kind": "tableRef",
+            "table": "tab"
+          },
+          "orderBy": [
+            {
+              "kind": "orderByItem",
+              "expr": {
+                "kind": "binaryExpr",
+                "op": "*",
+                "left": {
+                  "kind": "binaryExpr",
+                  "op": "+",
+                  "left": {
+                    "kind": "columnRef",
+                    "parts": [
+                      "a"
+                    ]
+                  },
+                  "right": {
+                    "kind": "columnRef",
+                    "parts": [
+                      "b"
+                    ]
+                  },
+                  "parenthesized": true
+                },
+                "right": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "c"
+                  ]
+                }
+              },
+              "direction": "DESC"
+            },
+            {
+              "kind": "orderByItem",
+              "expr": {
+                "kind": "functionCall",
+                "name": "sin",
+                "args": [
+                  {
+                    "kind": "binaryExpr",
+                    "op": "/",
+                    "left": {
+                      "kind": "columnRef",
+                      "parts": [
+                        "a"
+                      ]
+                    },
+                    "right": {
+                      "kind": "columnRef",
+                      "parts": [
+                        "b"
+                      ]
+                    }
+                  }
+                ]
+              },
+              "direction": "ASC"
+            }
+          ]
+        }
+      }
+    },
+    "where": {
+      "kind": "functionCall",
+      "name": "like",
+      "args": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "explain"
+          ]
+        },
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "%sort description%"
+        }
+      ]
+    }
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "asterisk"
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "tab"
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "binaryExpr",
+          "op": "*",
+          "left": {
+            "kind": "binaryExpr",
+            "op": "+",
+            "left": {
+              "kind": "columnRef",
+              "parts": [
+                "a"
+              ]
+            },
+            "right": {
+              "kind": "columnRef",
+              "parts": [
+                "b"
+              ]
+            },
+            "parenthesized": true
+          },
+          "right": {
+            "kind": "columnRef",
+            "parts": [
+              "c"
+            ]
+          }
+        },
+        "direction": "ASC"
+      },
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "functionCall",
+          "name": "sin",
+          "args": [
+            {
+              "kind": "binaryExpr",
+              "op": "/",
+              "left": {
+                "kind": "columnRef",
+                "parts": [
+                  "a"
+                ]
+              },
+              "right": {
+                "kind": "columnRef",
+                "parts": [
+                  "b"
+                ]
+              }
+            }
+          ]
+        },
+        "direction": "DESC"
       }
     ]
   },
@@ -423,558 +1204,6 @@
                   }
                 ]
               },
-              "direction": "ASC"
-            }
-          ]
-        }
-      }
-    },
-    "where": {
-      "kind": "functionCall",
-      "name": "like",
-      "args": [
-        {
-          "kind": "columnRef",
-          "parts": [
-            "explain"
-          ]
-        },
-        {
-          "kind": "literal",
-          "type": "String",
-          "value": "%sort description%"
-        }
-      ]
-    }
-  },
-  {
-    "kind": "select",
-    "select": [
-      {
-        "kind": "asterisk"
-      }
-    ],
-    "from": {
-      "kind": "tableRef",
-      "table": "tab"
-    },
-    "orderBy": [
-      {
-        "kind": "orderByItem",
-        "expr": {
-          "kind": "binaryExpr",
-          "op": "*",
-          "left": {
-            "kind": "binaryExpr",
-            "op": "+",
-            "left": {
-              "kind": "columnRef",
-              "parts": [
-                "a"
-              ]
-            },
-            "right": {
-              "kind": "columnRef",
-              "parts": [
-                "b"
-              ]
-            },
-            "parenthesized": true
-          },
-          "right": {
-            "kind": "columnRef",
-            "parts": [
-              "c"
-            ]
-          }
-        },
-        "direction": "DESC"
-      },
-      {
-        "kind": "orderByItem",
-        "expr": {
-          "kind": "functionCall",
-          "name": "sin",
-          "args": [
-            {
-              "kind": "binaryExpr",
-              "op": "/",
-              "left": {
-                "kind": "columnRef",
-                "parts": [
-                  "a"
-                ]
-              },
-              "right": {
-                "kind": "columnRef",
-                "parts": [
-                  "b"
-                ]
-              }
-            }
-          ]
-        },
-        "direction": "DESC"
-      }
-    ]
-  },
-  {
-    "kind": "select",
-    "select": [
-      {
-        "kind": "asterisk"
-      }
-    ],
-    "from": {
-      "kind": "subqueryFrom",
-      "query": {
-        "kind": "explain",
-        "explainType": "PLAN",
-        "settings": [
-          {
-            "name": "actions",
-            "value": {
-              "kind": "literal",
-              "type": "UInt64",
-              "value": "1"
-            }
-          }
-        ],
-        "query": {
-          "kind": "select",
-          "select": [
-            {
-              "kind": "asterisk"
-            }
-          ],
-          "from": {
-            "kind": "tableRef",
-            "table": "tab"
-          },
-          "orderBy": [
-            {
-              "kind": "orderByItem",
-              "expr": {
-                "kind": "binaryExpr",
-                "op": "*",
-                "left": {
-                  "kind": "binaryExpr",
-                  "op": "+",
-                  "left": {
-                    "kind": "columnRef",
-                    "parts": [
-                      "a"
-                    ]
-                  },
-                  "right": {
-                    "kind": "columnRef",
-                    "parts": [
-                      "b"
-                    ]
-                  },
-                  "parenthesized": true
-                },
-                "right": {
-                  "kind": "columnRef",
-                  "parts": [
-                    "c"
-                  ]
-                }
-              },
-              "direction": "DESC"
-            },
-            {
-              "kind": "orderByItem",
-              "expr": {
-                "kind": "functionCall",
-                "name": "sin",
-                "args": [
-                  {
-                    "kind": "binaryExpr",
-                    "op": "/",
-                    "left": {
-                      "kind": "columnRef",
-                      "parts": [
-                        "a"
-                      ]
-                    },
-                    "right": {
-                      "kind": "columnRef",
-                      "parts": [
-                        "b"
-                      ]
-                    }
-                  }
-                ]
-              },
-              "direction": "DESC"
-            }
-          ]
-        }
-      }
-    },
-    "where": {
-      "kind": "functionCall",
-      "name": "like",
-      "args": [
-        {
-          "kind": "columnRef",
-          "parts": [
-            "explain"
-          ]
-        },
-        {
-          "kind": "literal",
-          "type": "String",
-          "value": "%sort description%"
-        }
-      ]
-    }
-  },
-  {
-    "kind": "select",
-    "select": [
-      {
-        "kind": "asterisk"
-      }
-    ],
-    "from": {
-      "kind": "tableRef",
-      "table": "tab"
-    },
-    "orderBy": [
-      {
-        "kind": "orderByItem",
-        "expr": {
-          "kind": "binaryExpr",
-          "op": "*",
-          "left": {
-            "kind": "binaryExpr",
-            "op": "+",
-            "left": {
-              "kind": "columnRef",
-              "parts": [
-                "a"
-              ]
-            },
-            "right": {
-              "kind": "columnRef",
-              "parts": [
-                "b"
-              ]
-            },
-            "parenthesized": true
-          },
-          "right": {
-            "kind": "columnRef",
-            "parts": [
-              "c"
-            ]
-          }
-        },
-        "direction": "DESC"
-      },
-      {
-        "kind": "orderByItem",
-        "expr": {
-          "kind": "functionCall",
-          "name": "sin",
-          "args": [
-            {
-              "kind": "binaryExpr",
-              "op": "/",
-              "left": {
-                "kind": "columnRef",
-                "parts": [
-                  "a"
-                ]
-              },
-              "right": {
-                "kind": "columnRef",
-                "parts": [
-                  "b"
-                ]
-              }
-            }
-          ]
-        },
-        "direction": "ASC"
-      }
-    ]
-  },
-  {
-    "kind": "select",
-    "select": [
-      {
-        "kind": "asterisk"
-      }
-    ],
-    "from": {
-      "kind": "subqueryFrom",
-      "query": {
-        "kind": "explain",
-        "explainType": "PLAN",
-        "settings": [
-          {
-            "name": "actions",
-            "value": {
-              "kind": "literal",
-              "type": "UInt64",
-              "value": "1"
-            }
-          }
-        ],
-        "query": {
-          "kind": "select",
-          "select": [
-            {
-              "kind": "asterisk"
-            }
-          ],
-          "from": {
-            "kind": "tableRef",
-            "table": "tab"
-          },
-          "orderBy": [
-            {
-              "kind": "orderByItem",
-              "expr": {
-                "kind": "binaryExpr",
-                "op": "*",
-                "left": {
-                  "kind": "binaryExpr",
-                  "op": "+",
-                  "left": {
-                    "kind": "columnRef",
-                    "parts": [
-                      "a"
-                    ]
-                  },
-                  "right": {
-                    "kind": "columnRef",
-                    "parts": [
-                      "b"
-                    ]
-                  },
-                  "parenthesized": true
-                },
-                "right": {
-                  "kind": "columnRef",
-                  "parts": [
-                    "c"
-                  ]
-                }
-              },
-              "direction": "DESC"
-            },
-            {
-              "kind": "orderByItem",
-              "expr": {
-                "kind": "functionCall",
-                "name": "sin",
-                "args": [
-                  {
-                    "kind": "binaryExpr",
-                    "op": "/",
-                    "left": {
-                      "kind": "columnRef",
-                      "parts": [
-                        "a"
-                      ]
-                    },
-                    "right": {
-                      "kind": "columnRef",
-                      "parts": [
-                        "b"
-                      ]
-                    }
-                  }
-                ]
-              },
-              "direction": "ASC"
-            }
-          ]
-        }
-      }
-    },
-    "where": {
-      "kind": "functionCall",
-      "name": "like",
-      "args": [
-        {
-          "kind": "columnRef",
-          "parts": [
-            "explain"
-          ]
-        },
-        {
-          "kind": "literal",
-          "type": "String",
-          "value": "%sort description%"
-        }
-      ]
-    }
-  },
-  {
-    "kind": "select",
-    "select": [
-      {
-        "kind": "asterisk"
-      }
-    ],
-    "from": {
-      "kind": "tableRef",
-      "table": "tab"
-    },
-    "orderBy": [
-      {
-        "kind": "orderByItem",
-        "expr": {
-          "kind": "binaryExpr",
-          "op": "*",
-          "left": {
-            "kind": "binaryExpr",
-            "op": "+",
-            "left": {
-              "kind": "columnRef",
-              "parts": [
-                "a"
-              ]
-            },
-            "right": {
-              "kind": "columnRef",
-              "parts": [
-                "b"
-              ]
-            },
-            "parenthesized": true
-          },
-          "right": {
-            "kind": "columnRef",
-            "parts": [
-              "c"
-            ]
-          }
-        },
-        "direction": "ASC"
-      },
-      {
-        "kind": "orderByItem",
-        "expr": {
-          "kind": "functionCall",
-          "name": "sin",
-          "args": [
-            {
-              "kind": "binaryExpr",
-              "op": "/",
-              "left": {
-                "kind": "columnRef",
-                "parts": [
-                  "a"
-                ]
-              },
-              "right": {
-                "kind": "columnRef",
-                "parts": [
-                  "b"
-                ]
-              }
-            }
-          ]
-        },
-        "direction": "DESC"
-      }
-    ]
-  },
-  {
-    "kind": "select",
-    "select": [
-      {
-        "kind": "asterisk"
-      }
-    ],
-    "from": {
-      "kind": "subqueryFrom",
-      "query": {
-        "kind": "explain",
-        "explainType": "PLAN",
-        "settings": [
-          {
-            "name": "actions",
-            "value": {
-              "kind": "literal",
-              "type": "UInt64",
-              "value": "1"
-            }
-          }
-        ],
-        "query": {
-          "kind": "select",
-          "select": [
-            {
-              "kind": "asterisk"
-            }
-          ],
-          "from": {
-            "kind": "tableRef",
-            "table": "tab"
-          },
-          "orderBy": [
-            {
-              "kind": "orderByItem",
-              "expr": {
-                "kind": "binaryExpr",
-                "op": "*",
-                "left": {
-                  "kind": "binaryExpr",
-                  "op": "+",
-                  "left": {
-                    "kind": "columnRef",
-                    "parts": [
-                      "a"
-                    ]
-                  },
-                  "right": {
-                    "kind": "columnRef",
-                    "parts": [
-                      "b"
-                    ]
-                  },
-                  "parenthesized": true
-                },
-                "right": {
-                  "kind": "columnRef",
-                  "parts": [
-                    "c"
-                  ]
-                }
-              },
-              "direction": "ASC"
-            },
-            {
-              "kind": "orderByItem",
-              "expr": {
-                "kind": "functionCall",
-                "name": "sin",
-                "args": [
-                  {
-                    "kind": "binaryExpr",
-                    "op": "/",
-                    "left": {
-                      "kind": "columnRef",
-                      "parts": [
-                        "a"
-                      ]
-                    },
-                    "right": {
-                      "kind": "columnRef",
-                      "parts": [
-                        "b"
-                      ]
-                    }
-                  }
-                ]
-              },
               "direction": "DESC"
             }
           ]
@@ -1068,6 +1297,9 @@
         },
         "direction": "ASC"
       }
+    ],
+    "leadingComments": [
+      "-- Wrong order, full sort"
     ]
   },
   {
@@ -1257,6 +1489,9 @@
         },
         "direction": "ASC"
       }
+    ],
+    "leadingComments": [
+      "-- Fixed point"
     ]
   },
   {
@@ -2011,6 +2246,9 @@
         },
         "direction": "ASC"
       }
+    ],
+    "leadingComments": [
+      "-- Wrong order with fixed point"
     ]
   },
   {
@@ -2185,6 +2423,9 @@
         },
         "direction": "ASC"
       }
+    ],
+    "leadingComments": [
+      "-- Monotonicity"
     ]
   },
   {
@@ -2613,7 +2854,10 @@
           "value": "%sort description%"
         }
       ]
-    }
+    },
+    "leadingComments": [
+      "-- select * from tab order by (a + b) * c, intDiv(sin(a / b), 2);"
+    ]
   },
   {
     "kind": "select",
@@ -2737,7 +2981,10 @@
           "value": "%sort description%"
         }
       ]
-    }
+    },
+    "leadingComments": [
+      "-- select * from tab order by (a + b) * c desc , intDiv(sin(a / b), 2);"
+    ]
   },
   {
     "kind": "select",
@@ -2861,7 +3108,10 @@
           "value": "%sort description%"
         }
       ]
-    }
+    },
+    "leadingComments": [
+      "-- select * from tab order by (a + b) * c, intDiv(sin(a / b), 2) desc;"
+    ]
   },
   {
     "kind": "select",
@@ -2985,7 +3235,10 @@
           "value": "%sort description%"
         }
       ]
-    }
+    },
+    "leadingComments": [
+      "-- select * from tab order by (a + b) * c desc, intDiv(sin(a / b), 2) desc;"
+    ]
   },
   {
     "kind": "select",
@@ -3109,7 +3362,10 @@
           "value": "%sort description%"
         }
       ]
-    }
+    },
+    "leadingComments": [
+      "-- select * from tab order by (a + b) * c desc, intDiv(sin(a / b), -2);"
+    ]
   },
   {
     "kind": "select",
@@ -3244,7 +3500,10 @@
           "value": "%sort description%"
         }
       ]
-    }
+    },
+    "leadingComments": [
+      "-- select * from tab order by (a + b) * c desc, intDiv(intDiv(sin(a / b), -2), -3);"
+    ]
   },
   {
     "kind": "select",
@@ -3379,7 +3638,10 @@
           "value": "%sort description%"
         }
       ]
-    }
+    },
+    "leadingComments": [
+      "-- select * from tab order by (a + b) * c, intDiv(intDiv(sin(a / b), -2), -3);"
+    ]
   },
   {
     "kind": "select",
@@ -3444,6 +3706,9 @@
         },
         "direction": "ASC"
       }
+    ],
+    "leadingComments": [
+      "-- Aliases"
     ]
   },
   {
@@ -4064,6 +4329,119 @@
     }
   },
   {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "tab2"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "x",
+        "type": {
+          "name": "DateTime"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "y",
+        "type": {
+          "name": "UInt32"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "z",
+        "type": {
+          "name": "UInt32"
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "x"
+          ]
+        }
+      },
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "y"
+          ]
+        }
+      }
+    ],
+    "leadingComments": [
+      "-- { echoOff }"
+    ]
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "tab2"
+      }
+    },
+    "selectQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "binaryExpr",
+          "op": "+",
+          "left": {
+            "kind": "functionCall",
+            "name": "toDate",
+            "args": [
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "2020-02-02"
+              }
+            ]
+          },
+          "right": {
+            "kind": "columnRef",
+            "parts": [
+              "number"
+            ]
+          }
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "number"
+          ]
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "number"
+          ]
+        }
+      ],
+      "from": {
+        "kind": "tableFunctionRef",
+        "name": "numbers",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "4"
+          }
+        ]
+      }
+    }
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -4139,6 +4517,9 @@
         },
         "direction": "ASC"
       }
+    ],
+    "leadingComments": [
+      "-- { echoOn }"
     ]
   },
   {
@@ -4539,6 +4920,394 @@
           "value": "%sort description%"
         }
       ]
+    },
+    "leadingComments": [
+      "-- select * from tab2 where toTimezone(x, 'CET') = '2020-02-03 01:00:00' order by intDiv(intDiv(y, -2), -3);"
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "tab3"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "a",
+        "type": {
+          "name": "UInt32"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "b",
+        "type": {
+          "name": "UInt32"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "c",
+        "type": {
+          "name": "UInt32"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "d",
+        "type": {
+          "name": "UInt32"
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "binaryExpr",
+          "op": "*",
+          "left": {
+            "kind": "binaryExpr",
+            "op": "+",
+            "left": {
+              "kind": "columnRef",
+              "parts": [
+                "a"
+              ]
+            },
+            "right": {
+              "kind": "columnRef",
+              "parts": [
+                "b"
+              ]
+            },
+            "parenthesized": true
+          },
+          "right": {
+            "kind": "columnRef",
+            "parts": [
+              "c"
+            ]
+          }
+        }
+      },
+      {
+        "expr": {
+          "kind": "functionCall",
+          "name": "sin",
+          "args": [
+            {
+              "kind": "binaryExpr",
+              "op": "/",
+              "left": {
+                "kind": "columnRef",
+                "parts": [
+                  "a"
+                ]
+              },
+              "right": {
+                "kind": "columnRef",
+                "parts": [
+                  "b"
+                ]
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "leadingComments": [
+      "-- { echoOff }"
+    ]
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "tab3"
+      }
+    },
+    "selectQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "number"
+          ]
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "number"
+          ]
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "number"
+          ]
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "number"
+          ]
+        }
+      ],
+      "from": {
+        "kind": "tableFunctionRef",
+        "name": "numbers",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "5"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "tab4"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "a",
+        "type": {
+          "name": "UInt32"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "b",
+        "type": {
+          "name": "UInt32"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "c",
+        "type": {
+          "name": "UInt32"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "d",
+        "type": {
+          "name": "UInt32"
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "functionCall",
+          "name": "sin",
+          "args": [
+            {
+              "kind": "binaryExpr",
+              "op": "/",
+              "left": {
+                "kind": "columnRef",
+                "parts": [
+                  "a"
+                ]
+              },
+              "right": {
+                "kind": "columnRef",
+                "parts": [
+                  "b"
+                ]
+              }
+            }
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "tab4"
+      }
+    },
+    "selectQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "number"
+          ]
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "number"
+          ]
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "number"
+          ]
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "number"
+          ]
+        }
+      ],
+      "from": {
+        "kind": "tableFunctionRef",
+        "name": "numbers",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "5"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "tab5"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "a",
+        "type": {
+          "name": "UInt32"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "b",
+        "type": {
+          "name": "UInt32"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "c",
+        "type": {
+          "name": "UInt32"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "d",
+        "type": {
+          "name": "UInt32"
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "binaryExpr",
+          "op": "*",
+          "left": {
+            "kind": "binaryExpr",
+            "op": "+",
+            "left": {
+              "kind": "columnRef",
+              "parts": [
+                "a"
+              ]
+            },
+            "right": {
+              "kind": "columnRef",
+              "parts": [
+                "b"
+              ]
+            },
+            "parenthesized": true
+          },
+          "right": {
+            "kind": "columnRef",
+            "parts": [
+              "c"
+            ]
+          }
+        }
+      }
+    ]
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "tab5"
+      }
+    },
+    "selectQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "number"
+          ]
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "number"
+          ]
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "number"
+          ]
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "number"
+          ]
+        }
+      ],
+      "from": {
+        "kind": "tableFunctionRef",
+        "name": "numbers",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "5"
+          }
+        ]
+      }
     }
   },
   {
@@ -4638,6 +5407,10 @@
         },
         "direction": "ASC"
       }
+    ],
+    "leadingComments": [
+      "-- { echoOn }",
+      "-- Union (not fully supported)"
     ]
   },
   {
@@ -6000,7 +6773,10 @@
         "type": "UInt64",
         "value": "3"
       }
-    }
+    },
+    "leadingComments": [
+      "-- Union with limit"
+    ]
   },
   {
     "kind": "select",
@@ -6316,7 +7092,13 @@
         "type": "UInt64",
         "value": "3"
       }
-    }
+    },
+    "leadingComments": [
+      "-- In this example, we read-in-order from tab up to ((a + b) * c, sin(a / b)) and from tab5 up to ((a + b) * c).",
+      "-- In case of tab5, there would be two finish sorting transforms: ((a + b) * c) -> ((a + b) * c, sin(a / b)) -> ((a + b) * c, sin(a / b), d).",
+      "-- It's important that ((a + b) * c) -> ((a + b) * c does not have LIMIT. We can add LIMIT WITH TIES later, when sorting alog support it.",
+      "-- In case of tab4, we do full sorting by ((a + b) * c, sin(a / b), d) with LIMIT. We can replace it to sorting by ((a + b) * c, sin(a / b)) and LIMIT WITH TIES, when sorting alog support it."
+    ]
   },
   {
     "kind": "select",

@@ -1,5 +1,103 @@
 [
   {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "any_join_distinct_right_table_keys",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "joined_subquery_requires_alias",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "series"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "series"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "i",
+        "type": {
+          "name": "UInt32"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "x_value",
+        "type": {
+          "name": "Float64"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "y_value",
+        "type": {
+          "name": "Float64"
+        }
+      }
+    ],
+    "engine": {
+      "name": "Memory"
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "series"
+      }
+    },
+    "columns": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "i"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "x_value"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "y_value"
+        ]
+      }
+    ]
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -39,7 +137,10 @@
           }
         }
       }
-    }
+    },
+    "leadingComments": [
+      "/* varSampStable */"
+    ]
   },
   {
     "kind": "select",
@@ -278,7 +379,10 @@
           }
         }
       }
-    }
+    },
+    "leadingComments": [
+      "/* stddevSampStable */"
+    ]
   },
   {
     "kind": "select",
@@ -523,7 +627,10 @@
           }
         }
       }
-    }
+    },
+    "leadingComments": [
+      "/* varPopStable */"
+    ]
   },
   {
     "kind": "select",
@@ -752,7 +859,10 @@
           }
         }
       }
-    }
+    },
+    "leadingComments": [
+      "/* stddevPopStable */"
+    ]
   },
   {
     "kind": "select",
@@ -999,7 +1109,10 @@
           }
         }
       }
-    }
+    },
+    "leadingComments": [
+      "/* covarSampStable */"
+    ]
   },
   {
     "kind": "select",
@@ -1105,7 +1218,7 @@
                 "name": "arrayJoin",
                 "args": [
                   {
-                    "kind": "array",
+                    "kind": "arrayLiteral",
                     "elements": [
                       {
                         "kind": "literal",
@@ -1148,7 +1261,7 @@
           }
         }
       },
-      "kind": "join",
+      "kind": "joinExpr",
       "joinType": "INNER",
       "right": {
         "kind": "subqueryFrom",
@@ -1162,7 +1275,7 @@
                 "name": "arrayJoin",
                 "args": [
                   {
-                    "kind": "array",
+                    "kind": "arrayLiteral",
                     "elements": [
                       {
                         "kind": "literal",
@@ -1277,7 +1390,7 @@
                               "name": "arrayJoin",
                               "args": [
                                 {
-                                  "kind": "array",
+                                  "kind": "arrayLiteral",
                                   "elements": [
                                     {
                                       "kind": "literal",
@@ -1377,7 +1490,7 @@
                     }
                   }
                 },
-                "kind": "join",
+                "kind": "joinExpr",
                 "joinType": "INNER",
                 "right": {
                   "kind": "subqueryFrom",
@@ -1492,7 +1605,10 @@
           }
         }
       }
-    }
+    },
+    "leadingComments": [
+      "/* covarPopStable */"
+    ]
   },
   {
     "kind": "select",
@@ -1598,7 +1714,7 @@
                 "name": "arrayJoin",
                 "args": [
                   {
-                    "kind": "array",
+                    "kind": "arrayLiteral",
                     "elements": [
                       {
                         "kind": "literal",
@@ -1641,7 +1757,7 @@
           }
         }
       },
-      "kind": "join",
+      "kind": "joinExpr",
       "joinType": "INNER",
       "right": {
         "kind": "subqueryFrom",
@@ -1655,7 +1771,7 @@
                 "name": "arrayJoin",
                 "args": [
                   {
-                    "kind": "array",
+                    "kind": "arrayLiteral",
                     "elements": [
                       {
                         "kind": "literal",
@@ -1760,7 +1876,7 @@
                               "name": "arrayJoin",
                               "args": [
                                 {
-                                  "kind": "array",
+                                  "kind": "arrayLiteral",
                                   "elements": [
                                     {
                                       "kind": "literal",
@@ -1860,7 +1976,7 @@
                     }
                   }
                 },
-                "kind": "join",
+                "kind": "joinExpr",
                 "joinType": "INNER",
                 "right": {
                   "kind": "subqueryFrom",
@@ -1975,7 +2091,10 @@
           }
         }
       }
-    }
+    },
+    "leadingComments": [
+      "/* corr */"
+    ]
   },
   {
     "kind": "select",
@@ -2126,6 +2245,14 @@
       }
     ],
     "from": {
+      "kind": "tableRef",
+      "table": "series"
+    }
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
       "kind": "tableRef",
       "table": "series"
     }

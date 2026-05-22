@@ -1,3 +1,12 @@
+SET enable_analyzer = 1;
+
+SET allow_experimental_correlated_subqueries = 1;
+
+CREATE TABLE mem2
+ENGINE = Memory AS
+SELECT number
+FROM numbers(2);
+
 SELECT number
 FROM mem2 AS tbl
 WHERE exists((
@@ -33,4 +42,4 @@ INNER JOIN (
         FROM numbers(1)
         WHERE tbl.number >= number
     ) AS alias4
-    ON alias4.number = number;
+    ON alias4.number = number; -- { serverError NOT_IMPLEMENTED}

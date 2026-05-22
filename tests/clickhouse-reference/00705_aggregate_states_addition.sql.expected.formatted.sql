@@ -1,3 +1,18 @@
+SET send_logs_level = 'fatal';
+
+DROP TABLE IF EXISTS add_aggregate;
+
+CREATE TABLE add_aggregate
+(
+    a UInt32,
+    b UInt32
+)
+ENGINE = Memory;
+
+INSERT INTO add_aggregate;
+
+INSERT INTO add_aggregate;
+
 SELECT countMerge(x + y)
 FROM (
         SELECT
@@ -21,13 +36,13 @@ SELECT sumMerge(x)
 FROM (
         SELECT sumState(a) + countState(b) AS x
         FROM add_aggregate
-    );
+    ); -- { serverError CANNOT_ADD_DIFFERENT_AGGREGATE_STATES }
 
 SELECT sumMerge(x)
 FROM (
         SELECT sumState(a) + sumState(toInt32(b)) AS x
         FROM add_aggregate
-    );
+    ); -- { serverError CANNOT_ADD_DIFFERENT_AGGREGATE_STATES }
 
 SELECT minMerge(x)
 FROM (
@@ -65,4 +80,4 @@ FROM (
             uniqState(65536, a) AS x,
             uniqState(b) AS y
         FROM add_aggregate
-    );
+    ); -- { serverError CANNOT_ADD_DIFFERENT_AGGREGATE_STATES }

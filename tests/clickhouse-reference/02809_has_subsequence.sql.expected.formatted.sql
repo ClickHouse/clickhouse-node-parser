@@ -56,9 +56,9 @@ SELECT hasSubsequenceCaseInsensitive(materialize('GARGAGE'), materialize('arg'))
 
 SELECT hasSubsequence('ClickHouse - столбцовая система управления базами данных', '');
 
-SELECT hasSubsequence('ClickHouse - столбцовая система управления базами данных', 'C');
+SELECT hasSubsequence('ClickHouse - столбцовая система управления базами данных', 'C'); -- eng
 
-SELECT hasSubsequence('ClickHouse - столбцовая система управления базами данных', 'С');
+SELECT hasSubsequence('ClickHouse - столбцовая система управления базами данных', 'С'); -- cyrilic
 
 SELECT hasSubsequence('ClickHouse - столбцовая система управления базами данных', 'House');
 

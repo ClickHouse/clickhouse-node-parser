@@ -1,3 +1,25 @@
+SET enable_analyzer = 1;
+
+CREATE TABLE IF NOT EXISTS `first`
+ENGINE = MergeTree
+ORDER BY (inn, sessionId)
+PARTITION BY (inn, toYYYYMM(received)) AS
+SELECT
+    now() AS received,
+    '123456789' AS inn,
+    '42' AS sessionId;
+
+CREATE TABLE IF NOT EXISTS second
+ENGINE = MergeTree
+ORDER BY (inn, sessionId)
+PARTITION BY (inn, toYYYYMM(received)) AS
+SELECT
+    now() AS received,
+    '123456789' AS inn,
+    '42' AS sessionId,
+    '111' AS serial,
+    '222' AS reg;
+
 SELECT
     alias_first.inn,
     arrayFirst(t -> isNotNull(t), regInfo.1),

@@ -1,3 +1,54 @@
+-- Tags: no-fasttest, no-parallel
+SET output_format_orc_string_as_string = 1;
+
+SET output_format_orc_row_index_stride = 100;
+
+SET input_format_orc_row_batch_size = 100;
+
+SET input_format_orc_filter_push_down = 1;
+
+SET input_format_null_as_default = 1;
+
+SET engine_file_truncate_on_insert = 1;
+
+SET optimize_or_like_chain = 0;
+
+SET max_block_size = 100000;
+
+SET max_insert_threads = 1;
+
+SET max_execution_time = 300;
+
+SET session_timezone = 'UTC';
+
+-- Try all the types.
+INSERT INTO FUNCTION file('02892.orc') WITH 5000 - number AS n
+
+SELECT
+    number,
+    intDiv(n, 11)::Int8 AS i8,
+    n::Int16 AS i16,
+    n::Int32 AS i32,
+    n::Int64 AS i64,
+    toDate32(n * 500000) AS date32,
+    toDateTime64(n * 1e6, 3) AS dt64_ms,
+    toDateTime64(n * 1e6, 6) AS dt64_us,
+    toDateTime64(n * 1e6, 9) AS dt64_ns,
+    toDateTime64(n * 1e6, 0) AS dt64_s,
+    toDateTime64(n * 1e6, 2) AS dt64_cs,
+    ((n / 1000))::Float32 AS f32,
+    ((n / 1000))::Float64 AS f64,
+    n::String AS s,
+    n::String::FixedString(9) AS fs,
+    n::Decimal32(3) / 1234 AS d32,
+    n::Decimal64(10) / 12345678 AS d64,
+    n::Decimal128(20) / 123456789012345 AS d128
+FROM numbers(10000);
+
+DESCRIBE TABLE file('02892.orc');
+
+-- Go over all types individually
+-- { echoOn }
 SELECT
     count(),
     sum(number)
@@ -273,6 +324,7 @@ SELECT
 FROM file('02892.orc')
 WHERE (and(greaterOrEquals(d128, '-0.00000000000011'::Decimal128(20)), lessOrEquals(d128, 0.00000000000006::Decimal128(20))));
 
+-- Some random other cases.
 SELECT
     count(),
     sum(number)
@@ -342,6 +394,19 @@ SELECT
 FROM file('02892.orc')
 WHERE (i8 < 0);
 
+-- { echoOff }
+-- Nullable and LowCardinality.
+INSERT INTO FUNCTION file('02892.orc') SELECT
+    number,
+    if(number % 234 == 0, NULL, number) AS sometimes_null,
+    toNullable(number) AS never_null,
+    if(number % 345 == 0, number::String, NULL) AS mostly_null,
+    toLowCardinality(if(number % 234 == 0, NULL, number)) AS sometimes_null_lc,
+    toLowCardinality(toNullable(number)) AS never_null_lc,
+    toLowCardinality(if(number % 345 == 0, number::String, NULL)) AS mostly_null_lc
+FROM numbers(1000);
+
+-- { echoOn }
 SELECT
     count(),
     sum(number)
@@ -498,11 +563,21 @@ SELECT
 FROM file('02892.orc')
 WHERE (sometimes_null_lc < 150);
 
+-- { echoOff }
+-- Settings that affect the table schema or contents.
+INSERT INTO FUNCTION file('02892.orc') SELECT
+    number,
+    if(number % 234 == 0, NULL, number + 100) AS positive_or_null,
+    if(number % 234 == 0, NULL, negate(number) - 100) AS negative_or_null,
+    if(number % 234 == 0, NULL, 'I am a string') AS string_or_null
+FROM numbers(1000);
+
+-- { echoOn }
 SELECT
     count(),
     sum(number)
 FROM file('02892.orc')
-WHERE indexHint(positive_or_null < 50);
+WHERE indexHint(positive_or_null < 50); -- quirk with infinities
 
 SELECT
     count(),
@@ -554,7 +629,7 @@ SELECT
     count(),
     sum(number)
 FROM file('02892.orc')
-WHERE indexHint(string_or_null == '');
+WHERE indexHint(string_or_null == ''); -- quirk with infinities
 
 SELECT
     count(),
@@ -655,4 +730,4 @@ SELECT
     min(string_or_null),
     max(string_or_null)
 FROM file('02892.orc', ORC, 'number UInt64, string_or_null LowCardinality(Nullable(String))')
-WHERE (like(string_or_null, 'I am%'));
+WHERE (like(string_or_null, 'I am%')); -- { echoOff }

@@ -1,3 +1,14 @@
+-- Tags: long, no-tsan, no-asan, no-ubsan, no-msan, no-debug
+
+CREATE TABLE window_function_threading
+Engine = MergeTree
+ORDER BY (ac, nw)
+AS SELECT
+        toUInt64(toFloat32(number % 2) % 20000000) as ac,
+        toFloat32(1) as wg,
+        toUInt16(toFloat32(number % 3) % 400) as nw
+FROM numbers_mt(10000000);
+
 SELECT count() FROM (EXPLAIN PIPELINE SELECT
     nw,
     sum(WR) AS R,
@@ -16,6 +27,7 @@ GROUP BY nw
 ORDER BY nw ASC, R DESC
 LIMIT 10) where explain ilike '%ScatterByPartitionTransform%' SETTINGS max_threads = 4;
 
+-- { echoOn }
 
 SELECT
     nw,
@@ -34,6 +46,7 @@ FROM
 GROUP BY nw
 ORDER BY nw ASC, R DESC
 LIMIT 10;
+
 SELECT
     nw,
     sum(WR) AS R,
@@ -52,6 +65,9 @@ GROUP BY nw
 ORDER BY nw ASC, R DESC
 LIMIT 10
 SETTINGS max_threads = 1;
+
+SET max_rows_to_read = 40000000;
+
 SELECT
     nw,
     sum(WR) AS R,

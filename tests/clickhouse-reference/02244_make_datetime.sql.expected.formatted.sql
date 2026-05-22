@@ -34,7 +34,7 @@ SELECT makeDateTime(1984, 1, 1, 0, 70, 0, 'UTC');
 
 SELECT makeDateTime(1984, 1, 1, 0, 0, 70, 'UTC');
 
-SELECT makeDateTime(1984, 1, 1, 0, 0, 0, 'not a timezone');
+SELECT makeDateTime(1984, 1, 1, 0, 0, 0, 'not a timezone'); -- { serverError BAD_ARGUMENTS }
 
 SELECT makeDateTime(1984, 1, 1, 0, 0, 0, 'UTC');
 

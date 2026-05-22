@@ -1,3 +1,28 @@
+-- https://github.com/ClickHouse/ClickHouse/issues/50271
+DROP TABLE IF EXISTS t1;
+
+DROP TABLE IF EXISTS t2;
+
+SET enable_analyzer = 1;
+
+CREATE TABLE t1
+(
+    c3 String,
+    PRIMARY KEY(c3)
+)
+ENGINE = MergeTree;
+
+CREATE TABLE t2
+(
+    c11 String,
+    PRIMARY KEY(c11)
+)
+ENGINE = MergeTree;
+
+INSERT INTO t1;
+
+INSERT INTO t2;
+
 SELECT ref_0.c11 AS c_2_c30_0
 FROM
     t2 AS ref_0

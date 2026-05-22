@@ -1,3 +1,36 @@
+DROP TABLE IF EXISTS test_low_cardinality_string;
+
+DROP TABLE IF EXISTS test_low_cardinality_uuid;
+
+DROP TABLE IF EXISTS test_low_cardinality_int;
+
+CREATE TABLE test_low_cardinality_string
+(
+    data String
+)
+ENGINE = MergeTree
+ORDER BY data;
+
+CREATE TABLE test_low_cardinality_uuid
+(
+    data String
+)
+ENGINE = MergeTree
+ORDER BY data;
+
+CREATE TABLE test_low_cardinality_int
+(
+    data String
+)
+ENGINE = MergeTree
+ORDER BY data;
+
+INSERT INTO test_low_cardinality_string (data);
+
+INSERT INTO test_low_cardinality_int (data);
+
+INSERT INTO test_low_cardinality_uuid (data);
+
 SELECT JSONExtract(data, 'Tuple(
                             a LowCardinality(String),
                             b LowCardinality(String),
@@ -53,3 +86,9 @@ SELECT JSONExtract(data, 'Tuple(
                             d LowCardinality(UUID)
                             )') AS json
 FROM test_low_cardinality_uuid;
+
+DROP TABLE test_low_cardinality_string;
+
+DROP TABLE test_low_cardinality_uuid;
+
+DROP TABLE test_low_cardinality_int;

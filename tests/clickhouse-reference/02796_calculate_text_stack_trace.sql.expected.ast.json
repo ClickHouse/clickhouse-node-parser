@@ -1,5 +1,24 @@
 [
   {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "max_rows_to_read",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      }
+    ],
+    "leadingComments": [
+      "-- Tags: no-parallel"
+    ],
+    "trailingComments": [
+      "-- system.text_log can be really big"
+    ]
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -18,7 +37,14 @@
           }
         ]
       }
+    ],
+    "trailingComments": [
+      "-- { serverError FUNCTION_THROW_IF_VALUE_IS_NON_ZERO }"
     ]
+  },
+  {
+    "kind": "system",
+    "body": "SYSTEM FLUSH LOGS query_log, text_log"
   },
   {
     "kind": "select",
@@ -313,6 +339,19 @@
     }
   },
   {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "calculate_text_stack_trace",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      }
+    ]
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -331,6 +370,9 @@
           }
         ]
       }
+    ],
+    "trailingComments": [
+      "-- { serverError FUNCTION_THROW_IF_VALUE_IS_NON_ZERO }"
     ]
   },
   {

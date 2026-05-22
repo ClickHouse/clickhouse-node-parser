@@ -1,0 +1,256 @@
+[
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "table1"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "table1"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "col1",
+        "type": {
+          "name": "Int32"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "col2",
+        "type": {
+          "name": "Int32"
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "partitionBy": {
+      "kind": "functionCall",
+      "name": "tuple",
+      "args": []
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "col1"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "table1"
+      }
+    }
+  },
+  {
+    "kind": "select",
+    "with": [
+      {
+        "kind": "cteExpr",
+        "name": "pid",
+        "expr": {
+          "kind": "literal",
+          "type": "NULL",
+          "value": "NULL"
+        }
+      }
+    ],
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "a",
+          "col1"
+        ]
+      },
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "sum",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "a",
+                "col2"
+              ]
+            }
+          ]
+        },
+        "alias": "summ"
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "table1",
+      "alias": "a"
+    },
+    "prewhere": {
+      "kind": "naryExpr",
+      "op": "OR",
+      "operands": [
+        {
+          "kind": "functionCall",
+          "name": "isNull",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "pid"
+              ]
+            }
+          ]
+        },
+        {
+          "kind": "binaryExpr",
+          "op": "=",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "a",
+              "col2"
+            ]
+          },
+          "right": {
+            "kind": "columnRef",
+            "parts": [
+              "pid"
+            ]
+          }
+        }
+      ],
+      "parenthesized": true
+    },
+    "groupBy": {
+      "kind": "expressions",
+      "items": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "a",
+            "col1"
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "kind": "select",
+    "with": [
+      {
+        "kind": "cteExpr",
+        "name": "pid",
+        "expr": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "123"
+        }
+      }
+    ],
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "a",
+          "col1"
+        ]
+      },
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "sum",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "a",
+                "col2"
+              ]
+            }
+          ]
+        },
+        "alias": "summ"
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "table1",
+      "alias": "a"
+    },
+    "prewhere": {
+      "kind": "naryExpr",
+      "op": "OR",
+      "operands": [
+        {
+          "kind": "functionCall",
+          "name": "isNull",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "pid"
+              ]
+            }
+          ]
+        },
+        {
+          "kind": "binaryExpr",
+          "op": "=",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "a",
+              "col2"
+            ]
+          },
+          "right": {
+            "kind": "columnRef",
+            "parts": [
+              "pid"
+            ]
+          }
+        }
+      ],
+      "parenthesized": true
+    },
+    "groupBy": {
+      "kind": "expressions",
+      "items": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "a",
+            "col1"
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "table1"
+    }
+  }
+]

@@ -1,3 +1,90 @@
+DropQuery  outer (children 1)
+ Identifier outer
+
+DropQuery  inner (children 1)
+ Identifier inner
+
+DropQuery  outer_distributed (children 1)
+ Identifier outer_distributed
+
+DropQuery  inner_distributed (children 1)
+ Identifier inner_distributed
+
+CreateQuery outer (children 3)
+ Identifier outer
+ Columns definition (children 1)
+  ExpressionList (children 3)
+   ColumnDeclaration id (children 1)
+    DataType UInt64
+   ColumnDeclaration organization_id (children 1)
+    DataType UInt64
+   ColumnDeclaration version (children 1)
+    DataType UInt64
+ Storage definition (children 3)
+  Function ReplacingMergeTree (children 1)
+   ExpressionList (children 1)
+    Identifier version
+  Function modulo (children 1)
+   ExpressionList (children 2)
+    Identifier organization_id
+    Literal UInt64_8
+  Function tuple (children 1)
+   ExpressionList (children 2)
+    Identifier organization_id
+    Identifier id
+
+CreateQuery inner (children 3)
+ Identifier inner
+ Columns definition (children 1)
+  ExpressionList (children 5)
+   ColumnDeclaration id (children 1)
+    DataType UInt64
+   ColumnDeclaration outer_id (children 1)
+    DataType UInt64
+   ColumnDeclaration organization_id (children 1)
+    DataType UInt64
+   ColumnDeclaration version (children 1)
+    DataType UInt64
+   ColumnDeclaration date (children 1)
+    DataType Date
+ Storage definition (children 3)
+  Function ReplacingMergeTree (children 1)
+   ExpressionList (children 1)
+    Identifier version
+  Function toYYYYMM (children 1)
+   ExpressionList (children 1)
+    Identifier date
+  Function tuple (children 1)
+   ExpressionList (children 2)
+    Identifier organization_id
+    Identifier outer_id
+
+CreateQuery inner_distributed (children 2)
+ Identifier inner_distributed
+ Storage definition (children 1)
+  Function Distributed (children 1)
+   ExpressionList (children 4)
+    Literal 'test_cluster_two_shards'
+    Function currentDatabase (children 1)
+     ExpressionList
+    Literal 'inner'
+    Function intHash64 (children 1)
+     ExpressionList (children 1)
+      Identifier organization_id
+
+CreateQuery outer_distributed (children 2)
+ Identifier outer_distributed
+ Storage definition (children 1)
+  Function Distributed (children 1)
+   ExpressionList (children 4)
+    Literal 'test_cluster_two_shards'
+    Function currentDatabase (children 1)
+     ExpressionList
+    Literal 'outer'
+    Function intHash64 (children 1)
+     ExpressionList (children 1)
+      Identifier organization_id
+
 SelectWithUnionQuery (children 1)
  ExpressionList (children 1)
   SelectQuery (children 6)

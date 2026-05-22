@@ -1,3 +1,37 @@
+DROP TABLE IF EXISTS local_table;
+
+DROP TABLE IF EXISTS other_table;
+
+CREATE TABLE local_table
+(
+    id Int32,
+    name String,
+    ts DateTime,
+    oth_id Int32
+)
+ENGINE = MergeTree()
+ORDER BY (ts, id)
+PARTITION BY toMonday(ts);
+
+CREATE TABLE other_table
+(
+    id Int32,
+    name String,
+    ts DateTime,
+    trd_id Int32
+)
+ENGINE = MergeTree()
+ORDER BY (ts, id)
+PARTITION BY toMonday(ts);
+
+INSERT INTO local_table;
+
+INSERT INTO local_table;
+
+INSERT INTO other_table;
+
+INSERT INTO other_table;
+
 SELECT t2.name
 FROM
     remote('127.0.0.2', currentDatabase(), 'local_table') AS t1
@@ -32,3 +66,7 @@ FROM
 LEFT JOIN other_table AS t2
     ON t1.oth_id = other_table.id
 ORDER BY other_table.name ASC;
+
+DROP TABLE local_table;
+
+DROP TABLE other_table;

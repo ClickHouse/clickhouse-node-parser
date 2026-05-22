@@ -1,3 +1,5 @@
+SET enable_analyzer = 1;
+
 SELECT
     number,
     COUNT() OVER (PARTITION BY number % 3) AS partition_count
@@ -46,7 +48,7 @@ FROM numbers(10)
 GROUP BY key
 WITH CUBE
 WITH TOTALS
-QUALIFY key = toNullable(toNullable(0));
+QUALIFY key = toNullable(toNullable(0)); -- { serverError NOT_IMPLEMENTED }
 
 SELECT
     number % 2 AS key,
@@ -56,7 +58,7 @@ WHERE toLowCardinality(toLowCardinality(materialize(2)))
 GROUP BY key
 WITH CUBE
 WITH TOTALS
-QUALIFY key = 0;
+QUALIFY key = 0; -- { serverError NOT_IMPLEMENTED }
 
 SELECT
     4,
@@ -66,7 +68,7 @@ FROM numbers(10)
 GROUP BY key
 WITH ROLLUP
 WITH TOTALS
-QUALIFY key = materialize(0);
+QUALIFY key = materialize(0); -- { serverError NOT_IMPLEMENTED }
 
 SELECT
     3,
@@ -76,4 +78,4 @@ FROM numbers(10)
 GROUP BY key
 WITH ROLLUP
 WITH TOTALS
-QUALIFY key = 0;
+QUALIFY key = 0; -- { serverError NOT_IMPLEMENTED }

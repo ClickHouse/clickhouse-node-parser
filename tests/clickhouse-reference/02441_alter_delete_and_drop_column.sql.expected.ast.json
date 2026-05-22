@@ -1,5 +1,119 @@
 [
   {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "mut"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "n",
+        "type": {
+          "name": "int"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "m",
+        "type": {
+          "name": "int"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "k",
+        "type": {
+          "name": "int"
+        }
+      }
+    ],
+    "engine": {
+      "name": "ReplicatedMergeTree",
+      "args": [
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "/test/02441/{database}/mut"
+        },
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "1"
+        }
+      ]
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "n"
+          ]
+        }
+      }
+    ],
+    "leadingComments": [
+      "-- Tags: no-replicated-database, no-shared-merge-tree",
+      "-- no-shared-merge-tree: depend on system.replication_queue"
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "insert_keeper_fault_injection_probability",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "system",
+    "body": "SYSTEM stop merges mut"
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "mut"
+      }
+    }
+  },
+  {
+    "kind": "alter",
+    "table": {
+      "kind": "tableRef",
+      "table": "mut"
+    },
+    "commands": [
+      {
+        "kind": "alterCommand",
+        "commandType": "DELETE",
+        "where": {
+          "kind": "binaryExpr",
+          "op": "=",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "n"
+            ]
+          },
+          "right": {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "10"
+          }
+        }
+      }
+    ]
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -15,7 +129,7 @@
       }
     ],
     "from": {
-      "kind": "tableFunction",
+      "kind": "tableFunctionRef",
       "name": "url",
       "args": [
         {
@@ -86,7 +200,34 @@
         }
       }
     ],
-    "format": "Null"
+    "format": "Null",
+    "leadingComments": [
+      "-- a funny way to wait for a MUTATE_PART to be assigned"
+    ]
+  },
+  {
+    "kind": "alter",
+    "table": {
+      "kind": "tableRef",
+      "table": "mut"
+    },
+    "commands": [
+      {
+        "kind": "alterCommand",
+        "commandType": "DROP_COLUMN",
+        "columnName": "k"
+      }
+    ],
+    "settings": [
+      {
+        "name": "alter_sync",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      }
+    ]
   },
   {
     "kind": "select",
@@ -104,7 +245,7 @@
       }
     ],
     "from": {
-      "kind": "tableFunction",
+      "kind": "tableFunctionRef",
       "name": "url",
       "args": [
         {
@@ -175,7 +316,14 @@
         }
       }
     ],
-    "format": "Null"
+    "format": "Null",
+    "leadingComments": [
+      "-- a funny way to wait for ALTER_METADATA to disappear from the replication queue"
+    ]
+  },
+  {
+    "kind": "system",
+    "body": "SYSTEM sync replica mut pull"
   },
   {
     "kind": "select",
@@ -255,6 +403,27 @@
         }
       ]
     }
+  },
+  {
+    "kind": "system",
+    "body": "SYSTEM start merges mut"
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "receive_timeout",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "30"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "system",
+    "body": "SYSTEM sync replica mut"
   },
   {
     "kind": "select",

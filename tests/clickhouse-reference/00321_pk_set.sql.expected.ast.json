@@ -1,5 +1,134 @@
 [
   {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "pk_set"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "allow_deprecated_syntax_for_merge_tree",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "pk_set"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "d",
+        "type": {
+          "name": "Date"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "n",
+        "type": {
+          "name": "UInt64"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "host",
+        "type": {
+          "name": "String"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "code",
+        "type": {
+          "name": "UInt64"
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree",
+      "args": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "d"
+          ]
+        },
+        {
+          "kind": "tupleLiteral",
+          "elements": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "n"
+              ]
+            },
+            {
+              "kind": "columnRef",
+              "parts": [
+                "host"
+              ]
+            },
+            {
+              "kind": "columnRef",
+              "parts": [
+                "code"
+              ]
+            }
+          ],
+          "source": "(n, host, code)"
+        },
+        {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      ]
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "pk_set"
+      }
+    },
+    "columns": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "n"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "host"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "code"
+        ]
+      }
+    ]
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -542,5 +671,19 @@
         }
       ]
     }
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "pk_set"
+    },
+    "leadingComments": [
+      "-- that barely reproduces the problem",
+      "-- better way:",
+      "-- for i in {1..1000}; do echo \"SELECT count() FROM pk_set WHERE host IN ('a'\"$(seq 1 $i | sed -r \"s/.+/,'\\\\0'/\")\") AND code = 100 AND n = 11;\"; done > queries.tsv",
+      "-- clickhouse-benchmark < queries.tsv"
+    ]
   }
 ]

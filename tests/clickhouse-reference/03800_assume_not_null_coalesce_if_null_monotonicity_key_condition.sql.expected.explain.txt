@@ -1,3 +1,96 @@
+DropQuery  view_ifnull (children 1)
+ Identifier view_ifnull
+
+DropQuery  view_coalesce (children 1)
+ Identifier view_coalesce
+
+DropQuery  view_assume (children 1)
+ Identifier view_assume
+
+DropQuery  test (children 1)
+ Identifier test
+
+Set
+
+CreateQuery test (children 3)
+ Identifier test
+ Columns definition (children 2)
+  ExpressionList (children 2)
+   ColumnDeclaration id (children 1)
+    DataType UInt64
+   ColumnDeclaration ts (children 1)
+    DataType Nullable (children 1)
+     ExpressionList (children 1)
+      DataType DateTime64 (children 1)
+       ExpressionList (children 1)
+        Literal UInt64_3
+  ExpressionList (children 1)
+   Index (children 2)
+    Identifier ts
+    Function minmax (children 1)
+     ExpressionList
+ Storage definition (children 3)
+  Function MergeTree (children 1)
+   ExpressionList
+  Identifier id
+  Set
+
+InsertQuery   (children 1)
+ Identifier test
+
+CreateQuery view_assume (children 2)
+ Identifier view_assume
+ SelectWithUnionQuery (children 1)
+  ExpressionList (children 1)
+   SelectQuery (children 2)
+    ExpressionList (children 2)
+     Identifier id
+     Function assumeNotNull (alias ts) (children 1)
+      ExpressionList (children 1)
+       Identifier ts
+    TablesInSelectQuery (children 1)
+     TablesInSelectQueryElement (children 1)
+      TableExpression (children 1)
+       TableIdentifier test
+
+CreateQuery view_coalesce (children 2)
+ Identifier view_coalesce
+ SelectWithUnionQuery (children 1)
+  ExpressionList (children 1)
+   SelectQuery (children 2)
+    ExpressionList (children 2)
+     Identifier id
+     Function coalesce (alias ts) (children 1)
+      ExpressionList (children 2)
+       Identifier ts
+       Function toDateTime64 (children 1)
+        ExpressionList (children 2)
+         Literal '1970-01-01 00:00:00'
+         Literal UInt64_3
+    TablesInSelectQuery (children 1)
+     TablesInSelectQueryElement (children 1)
+      TableExpression (children 1)
+       TableIdentifier test
+
+CreateQuery view_ifnull (children 2)
+ Identifier view_ifnull
+ SelectWithUnionQuery (children 1)
+  ExpressionList (children 1)
+   SelectQuery (children 2)
+    ExpressionList (children 2)
+     Identifier id
+     Function ifNull (alias ts) (children 1)
+      ExpressionList (children 2)
+       Identifier ts
+       Function toDateTime64 (children 1)
+        ExpressionList (children 2)
+         Literal '1970-01-01 00:00:00'
+         Literal UInt64_3
+    TablesInSelectQuery (children 1)
+     TablesInSelectQueryElement (children 1)
+      TableExpression (children 1)
+       TableIdentifier test
+
 SelectWithUnionQuery (children 1)
  ExpressionList (children 1)
   SelectQuery (children 4)
@@ -78,6 +171,28 @@ SelectWithUnionQuery (children 1)
     OrderByElement (children 1)
      Identifier id
 
+DropQuery  test_non_null (children 1)
+ Identifier test_non_null
+
+CreateQuery test_non_null (children 3)
+ Identifier test_non_null
+ Columns definition (children 1)
+  ExpressionList (children 1)
+   ColumnDeclaration ts (children 1)
+    DataType Nullable (children 1)
+     ExpressionList (children 1)
+      DataType DateTime64 (children 1)
+       ExpressionList (children 1)
+        Literal UInt64_3
+ Storage definition (children 3)
+  Function MergeTree (children 1)
+   ExpressionList
+  Identifier ts
+  Set
+
+InsertQuery   (children 1)
+ Identifier test_non_null
+
 SelectWithUnionQuery (children 1)
  ExpressionList (children 1)
   SelectQuery (children 4)
@@ -151,6 +266,28 @@ SelectWithUnionQuery (children 1)
    ExpressionList (children 1)
     OrderByElement (children 1)
      Identifier ALL
+
+DropQuery  test_null (children 1)
+ Identifier test_null
+
+CreateQuery test_null (children 3)
+ Identifier test_null
+ Columns definition (children 1)
+  ExpressionList (children 1)
+   ColumnDeclaration ts (children 1)
+    DataType Nullable (children 1)
+     ExpressionList (children 1)
+      DataType DateTime64 (children 1)
+       ExpressionList (children 1)
+        Literal UInt64_3
+ Storage definition (children 3)
+  Function MergeTree (children 1)
+   ExpressionList
+  Identifier ts
+  Set
+
+InsertQuery   (children 1)
+ Identifier test_null
 
 SelectWithUnionQuery (children 1)
  ExpressionList (children 1)
@@ -226,6 +363,28 @@ SelectWithUnionQuery (children 1)
     OrderByElement (children 1)
      Identifier ALL
 
+DropQuery  test_null_rev (children 1)
+ Identifier test_null_rev
+
+CreateQuery test_null_rev (children 3)
+ Identifier test_null_rev
+ Columns definition (children 1)
+  ExpressionList (children 1)
+   ColumnDeclaration ts (children 1)
+    DataType Nullable (children 1)
+     ExpressionList (children 1)
+      DataType DateTime64 (children 1)
+       ExpressionList (children 1)
+        Literal UInt64_3
+ Storage definition (children 3)
+  Function MergeTree (children 1)
+   ExpressionList
+  Function tuple
+  Set
+
+InsertQuery   (children 1)
+ Identifier test_null_rev
+
 SelectWithUnionQuery (children 1)
  ExpressionList (children 1)
   SelectQuery (children 4)
@@ -299,6 +458,37 @@ SelectWithUnionQuery (children 1)
    ExpressionList (children 1)
     OrderByElement (children 1)
      Identifier ALL
+
+DropQuery  test_lc_left_inf (children 1)
+ Identifier test_lc_left_inf
+
+Set
+
+Set
+
+CreateQuery test_lc_left_inf (children 3)
+ Identifier test_lc_left_inf
+ Columns definition (children 1)
+  ExpressionList (children 2)
+   ColumnDeclaration a (children 1)
+    DataType UInt8
+   ColumnDeclaration ts (children 1)
+    DataType LowCardinality (children 1)
+     ExpressionList (children 1)
+      DataType Nullable (children 1)
+       ExpressionList (children 1)
+        DataType Int64
+ Storage definition (children 3)
+  Function MergeTree (children 1)
+   ExpressionList
+  Function tuple (children 1)
+   ExpressionList (children 2)
+    Identifier a
+    Identifier ts
+  Set
+
+InsertQuery   (children 1)
+ Identifier test_lc_left_inf
 
 SelectWithUnionQuery (children 1)
  ExpressionList (children 1)

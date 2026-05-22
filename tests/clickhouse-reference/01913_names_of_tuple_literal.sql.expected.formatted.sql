@@ -1,3 +1,5 @@
+SET enable_analyzer = 0;
+
 SELECT ((1, 2), (2, 3), (3, 4))
 FORMAT TSVWithNames;
 

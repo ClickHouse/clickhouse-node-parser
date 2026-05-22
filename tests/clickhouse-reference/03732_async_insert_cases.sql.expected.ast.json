@@ -1,5 +1,222 @@
 [
   {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "async_insert",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "wait_for_async_insert",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "async_insert_deduplicate",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "deduplicate_blocks_in_dependent_materialized_views",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "async_insert_use_adaptive_busy_timeout",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      },
+      {
+        "name": "async_insert_busy_timeout_min_ms",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1000"
+        }
+      },
+      {
+        "name": "async_insert_busy_timeout_max_ms",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "5000"
+        }
+      }
+    ],
+    "leadingComments": [
+      "-- turn off adaptive busy timeout to make test stable"
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "03732_table"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "id",
+        "type": {
+          "name": "UInt32"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "name",
+        "type": {
+          "name": "String"
+        }
+      }
+    ],
+    "engine": {
+      "name": "ReplicatedMergeTree",
+      "args": [
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "/clickhouse/tables/test/{database}/03732_table"
+        },
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "replica1"
+        }
+      ]
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "id"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "03732_table_mv_dst"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "id",
+        "type": {
+          "name": "UInt32"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "name",
+        "type": {
+          "name": "String"
+        }
+      }
+    ],
+    "engine": {
+      "name": "ReplicatedMergeTree",
+      "args": [
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "/clickhouse/tables/test/{database}/03732_table_mv_dst"
+        },
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "replica1"
+        }
+      ]
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "id"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createMaterializedView",
+    "table": {
+      "kind": "tableRef",
+      "table": "03732_table_mv"
+    },
+    "toTable": {
+      "kind": "tableRef",
+      "table": "03732_table_mv_dst"
+    },
+    "asQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "asterisk"
+        }
+      ],
+      "from": {
+        "kind": "tableRef",
+        "table": "03732_table"
+      }
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "03732_table"
+      }
+    }
+  },
+  {
+    "kind": "system",
+    "body": "SYSTEM flush async insert queue 03732_table"
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -15,7 +232,10 @@
     "from": {
       "kind": "tableRef",
       "table": "03732_table"
-    }
+    },
+    "trailingComments": [
+      "-- Expecting 3"
+    ]
   },
   {
     "kind": "select",
@@ -33,6 +253,291 @@
     "from": {
       "kind": "tableRef",
       "table": "03732_table_mv_dst"
+    },
+    "trailingComments": [
+      "-- Expecting 3"
+    ]
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "03732_table"
+      }
+    }
+  },
+  {
+    "kind": "truncate",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "03732_table"
+    }
+  },
+  {
+    "kind": "truncate",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "03732_table_mv_dst"
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "03732_table"
+      }
+    },
+    "insertSettings": [
+      {
+        "name": "insert_deduplication_token",
+        "value": {
+          "kind": "literal",
+          "type": "String",
+          "value": "token1"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "03732_table"
+      }
+    },
+    "insertSettings": [
+      {
+        "name": "insert_deduplication_token",
+        "value": {
+          "kind": "literal",
+          "type": "String",
+          "value": "token1"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "03732_table"
+      }
+    },
+    "insertSettings": [
+      {
+        "name": "insert_deduplication_token",
+        "value": {
+          "kind": "literal",
+          "type": "String",
+          "value": "token2"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "03732_table_join"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "id",
+        "type": {
+          "name": "UInt32"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "surname",
+        "type": {
+          "name": "String"
+        }
+      }
+    ],
+    "engine": {
+      "name": "ReplicatedMergeTree",
+      "args": [
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "/clickhouse/tables/test/{database}/03732_table_join"
+        },
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "replica1"
+        }
+      ]
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "id"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "03732_table_join"
+      }
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "03732_table_join"
+      }
+    }
+  },
+  {
+    "kind": "system",
+    "body": "SYSTEM flush async insert queue 03732_table_join"
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "03732_table_join_mv_dst"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "id",
+        "type": {
+          "name": "UInt32"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "name",
+        "type": {
+          "name": "String"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "surname",
+        "type": {
+          "name": "String"
+        }
+      }
+    ],
+    "engine": {
+      "name": "ReplicatedMergeTree",
+      "args": [
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "/clickhouse/tables/test/{database}/03732_table_join_mv_dst"
+        },
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "replica1"
+        }
+      ]
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "id"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createMaterializedView",
+    "table": {
+      "kind": "tableRef",
+      "table": "03732_table_join_mv"
+    },
+    "toTable": {
+      "kind": "tableRef",
+      "table": "03732_table_join_mv_dst"
+    },
+    "asQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "alias",
+          "expr": {
+            "kind": "columnRef",
+            "parts": [
+              "t1",
+              "id"
+            ]
+          },
+          "alias": "id"
+        },
+        {
+          "kind": "alias",
+          "expr": {
+            "kind": "columnRef",
+            "parts": [
+              "t1",
+              "name"
+            ]
+          },
+          "alias": "name"
+        },
+        {
+          "kind": "alias",
+          "expr": {
+            "kind": "columnRef",
+            "parts": [
+              "t2",
+              "surname"
+            ]
+          },
+          "alias": "surname"
+        }
+      ],
+      "from": {
+        "left": {
+          "kind": "tableRef",
+          "table": "03732_table",
+          "alias": "t1"
+        },
+        "kind": "joinExpr",
+        "joinType": "INNER",
+        "right": {
+          "kind": "tableRef",
+          "table": "03732_table_join",
+          "alias": "t2"
+        },
+        "constraint": {
+          "kind": "using",
+          "columns": [
+            "id"
+          ]
+        }
+      }
     }
   },
   {
@@ -51,7 +556,10 @@
     "from": {
       "kind": "tableRef",
       "table": "03732_table_join_mv"
-    }
+    },
+    "trailingComments": [
+      "-- Expecting 3"
+    ]
   },
   {
     "kind": "select",

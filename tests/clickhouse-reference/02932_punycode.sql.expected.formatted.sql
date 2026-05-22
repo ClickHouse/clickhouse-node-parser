@@ -1,29 +1,34 @@
+-- Tags: no-fasttest
+-- no-fasttest: requires idna library
+-- See also 02932_idna.sql
 SELECT '-- Negative tests';
 
-SELECT punycodeEncode();
+SELECT punycodeEncode(); -- { serverError NUMBER_OF_ARGUMENTS_DOESNT_MATCH }
 
-SELECT punycodeDecode();
+SELECT punycodeDecode(); -- { serverError NUMBER_OF_ARGUMENTS_DOESNT_MATCH }
 
-SELECT tryPunycodeDecode();
+SELECT tryPunycodeDecode(); -- { serverError NUMBER_OF_ARGUMENTS_DOESNT_MATCH }
 
-SELECT punycodeEncode(1);
+SELECT punycodeEncode(1); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
-SELECT punycodeDecode(1);
+SELECT punycodeDecode(1); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
-SELECT tryPunycodeDecode(1);
+SELECT tryPunycodeDecode(1); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
-SELECT punycodeEncode('two', 'strings');
+SELECT punycodeEncode('two', 'strings'); -- { serverError NUMBER_OF_ARGUMENTS_DOESNT_MATCH }
 
-SELECT punycodeDecode('two', 'strings');
+SELECT punycodeDecode('two', 'strings'); -- { serverError NUMBER_OF_ARGUMENTS_DOESNT_MATCH }
 
-SELECT tryPunycodeDecode('two', 'strings');
+SELECT tryPunycodeDecode('two', 'strings'); -- { serverError NUMBER_OF_ARGUMENTS_DOESNT_MATCH }
 
-SELECT punycodeEncode(toFixedString('two', 3));
+SELECT punycodeEncode(toFixedString('two', 3)); -- { serverError NOT_IMPLEMENTED }
 
-SELECT punycodeDecode(toFixedString('two', 3));
+SELECT punycodeDecode(toFixedString('two', 3)); -- { serverError NOT_IMPLEMENTED }
 
-SELECT tryPunycodeDecode(toFixedString('two', 3));
+SELECT tryPunycodeDecode(toFixedString('two', 3)); -- { serverError NOT_IMPLEMENTED }
 
+-- The test cases originate from the ada idna unit tests:
+-- - https://github.com/ada-url/idna/blob/8cd03ef867dbd06be87bd61df9cf69aa1182ea21/tests/fixtures/utf8_punycode_alternating.txt
 SELECT
     'a' AS str,
     punycodeEncode(str) AS puny,
@@ -168,7 +173,7 @@ SELECT punycodeDecode(NULL);
 
 SELECT tryPunycodeDecode(NULL);
 
-SELECT punycodeDecode('no punycode');
+SELECT punycodeDecode('no punycode'); -- { serverError BAD_ARGUMENTS }
 
 SELECT tryPunycodeDecode('no punycode');
 
@@ -179,6 +184,17 @@ SELECT
     tryPunycodeDecode(puny) AS original_try
 FORMAT Vertical;
 
+DROP TABLE IF EXISTS tab;
+
+CREATE TABLE tab
+(
+    str String
+)
+ENGINE = MergeTree
+ORDER BY str;
+
+INSERT INTO tab;
+
 SELECT
     str,
     punycodeEncode(str) AS puny,
@@ -186,10 +202,21 @@ SELECT
     tryPunycodeDecode(puny) AS original_try
 FROM tab;
 
+DROP TABLE tab;
+
+CREATE TABLE tab
+(
+    puny String
+)
+ENGINE = MergeTree
+ORDER BY puny;
+
+INSERT INTO tab;
+
 SELECT
     puny,
     punycodeDecode(puny) AS original
-FROM tab;
+FROM tab; -- { serverError BAD_ARGUMENTS }
 
 SELECT
     puny,

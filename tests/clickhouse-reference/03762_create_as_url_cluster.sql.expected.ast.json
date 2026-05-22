@@ -1,0 +1,104 @@
+[
+  {
+    "kind": "drop",
+    "targetType": "DATABASE",
+    "table": {
+      "kind": "tableRef",
+      "table": {
+        "kind": "queryParam",
+        "name": "CLICKHOUSE_DATABASE",
+        "type": "Identifier"
+      }
+    },
+    "leadingComments": [
+      "-- Tags: no-replicated-database",
+      "-- no-replicated-database: It messes up the output and this test explicitly checks the replicated database"
+    ]
+  },
+  {
+    "kind": "createDatabase",
+    "name": {
+      "kind": "queryParam",
+      "name": "CLICKHOUSE_DATABASE",
+      "type": "Identifier"
+    },
+    "engine": {
+      "name": "Replicated",
+      "args": [
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "/clickhouse/03762_create_as_url_cluster/{database}_replicated"
+        },
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "shard1"
+        },
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "replica1"
+        }
+      ]
+    },
+    "format": "Null"
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "database": {
+        "kind": "queryParam",
+        "name": "CLICKHOUSE_DATABASE",
+        "type": "Identifier"
+      },
+      "table": "test"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "c0",
+        "type": {
+          "name": "Int"
+        }
+      }
+    ],
+    "engine": {
+      "name": "Memory"
+    },
+    "asQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      ],
+      "from": {
+        "kind": "tableFunctionRef",
+        "name": "url",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": "http://localhost:8123/?query=SELECT+1+FORMAT+Values"
+          },
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": "Values"
+          },
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": "c0 Int"
+          }
+        ],
+        "alias": "tx"
+      },
+      "parenthesized": true
+    }
+  }
+]

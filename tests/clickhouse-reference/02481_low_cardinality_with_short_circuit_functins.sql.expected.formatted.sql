@@ -1,3 +1,5 @@
+SET short_circuit_function_evaluation = 'force_enable';
+
 SELECT if(0, toLowCardinality('a'), 'b');
 
 SELECT if(1, toLowCardinality('a'), 'b');

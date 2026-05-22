@@ -1,3 +1,6 @@
+SET enable_analyzer = 1;
+
+-- { echoOn }
 SELECT a
 FROM
     (

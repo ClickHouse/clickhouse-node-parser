@@ -1,3 +1,34 @@
+SET output_format_pretty_color = 1;
+
+SET enable_analyzer = 1;
+
+DROP TABLE IF EXISTS table1;
+
+DROP TABLE IF EXISTS table2;
+
+CREATE TABLE table1
+(
+    a String,
+    b Date
+)
+ENGINE = MergeTree
+ORDER BY a;
+
+CREATE TABLE table2
+(
+    c String,
+    a String,
+    d Date
+)
+ENGINE = MergeTree
+ORDER BY c;
+
+INSERT INTO table1;
+
+INSERT INTO table2;
+
+SET join_algorithm = 'partial_merge';
+
 SELECT *
 FROM
     table1 AS t1

@@ -51,6 +51,20 @@ SELECT
     trimRight(toFixedString('...hello...', 11), '.') = '...hello' AS right_fixed_special_ok,
     trimBoth(toFixedString('...hello...', 11), '.') = 'hello' AS both_fixed_special_ok;
 
+WITH repeat('x', 1000) AS long_str,
+
+toFixedString(long_str, 1000) AS long_fixed_str,
+
+repeat('#@', 50) AS trim_chars
+
+SELECT
+    length(trimLeft(concat(trim_chars, long_str, trim_chars), '#@')) = 1100 AS left_long_ok,
+    length(trimRight(concat(trim_chars, long_str, trim_chars), '#@')) = 1100 AS right_long_ok,
+    length(trimBoth(concat(trim_chars, long_str, trim_chars), '#@')) = 1000 AS both_long_ok,
+    length(trimLeft(concat(trim_chars, long_fixed_str, trim_chars), '#@')) = 1100 AS left_fixed_long_ok,
+    length(trimRight(concat(trim_chars, long_fixed_str, trim_chars), '#@')) = 1100 AS right_fixed_long_ok,
+    length(trimBoth(concat(trim_chars, long_fixed_str, trim_chars), '#@')) = 1000 AS both_fixed_long_ok;
+
 SELECT
     trimLeft('aabbccHELLOccbbaa', 'abc') = 'HELLOccbbaa' AS left_overlap_ok,
     trimRight('aabbccHELLOccbbaa', 'abc') = 'aabbccHELLO' AS right_overlap_ok,
@@ -67,13 +81,21 @@ SELECT
     trimRight(toFixedString('#@hello#@', 9), '#@#@') = '#@hello' AS right_fixed_custom_ok,
     trimBoth(toFixedString('#@hello#@', 9), '#@#@') = 'hello' AS both_fixed_custom_ok;
 
-SELECT trimLeft('hello', 'a', 'b');
+SELECT trimLeft('hello', 'a', 'b'); -- { serverError NUMBER_OF_ARGUMENTS_DOESNT_MATCH }
 
-SELECT trimRight(123, 'a');
+SELECT trimRight(123, 'a'); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
-SELECT trimBoth('hello', 123);
+SELECT trimBoth('hello', 123); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
-SELECT trimBoth('hello', materialize('a'));
+SELECT trimBoth('hello', materialize('a')); -- { serverError ILLEGAL_COLUMN }
+
+CREATE TABLE tab
+(
+    col FixedString(3)
+)
+ENGINE = Memory;
+
+INSERT INTO tab;
 
 SELECT trimRight(col, char(0))
 FROM tab;
@@ -81,4 +103,7 @@ FROM tab;
 SELECT trimBoth(col, 'ac')
 FROM tab;
 
+DROP TABLE tab;
+
+-- Bug 78796
 SELECT isConstant(trimBoth(''));

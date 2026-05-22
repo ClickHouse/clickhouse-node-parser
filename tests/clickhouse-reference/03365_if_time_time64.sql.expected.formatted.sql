@@ -1,3 +1,5 @@
+SET use_legacy_to_time = 0;
+
 SELECT if(number % 2, toTime('00:00:00'), toTime('04:05:06'))
 FROM numbers(2);
 

@@ -28,14 +28,14 @@ SELECT dateTrunc('mIllISecoNd', toDateTime64('1966-03-01 12:12:12.0123456', 6));
 
 SELECT dateTrunc('NANoSecoND', toDateTime64('1967-03-01 12:12:12.012345678', 8));
 
-SELECT dateTrunc('Nanosecond', toDateTime('2022-03-01'));
+SELECT dateTrunc('Nanosecond', toDateTime('2022-03-01')); -- {  serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
-SELECT dateTrunc('MicroSecond', toDateTime('2022-03-01'));
+SELECT dateTrunc('MicroSecond', toDateTime('2022-03-01')); -- {  serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
-SELECT dateTrunc('MILLISECOND', toDateTime('2022-03-01'));
+SELECT dateTrunc('MILLISECOND', toDateTime('2022-03-01')); -- {  serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
-SELECT dateTrunc('Nanosecond', toDate('2022-03-01'));
+SELECT dateTrunc('Nanosecond', toDate('2022-03-01')); -- {  serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
-SELECT dateTrunc('MicroSecond', toDate('2022-03-01'));
+SELECT dateTrunc('MicroSecond', toDate('2022-03-01')); -- {  serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
-SELECT dateTrunc('MILLISECOND', toDate('2022-03-01'));
+SELECT dateTrunc('MILLISECOND', toDate('2022-03-01')); -- {  serverError ILLEGAL_TYPE_OF_ARGUMENT }

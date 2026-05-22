@@ -1,3 +1,18 @@
+-- Specific value doesn't matter, we just need it to be fixed, because it is a part of `EXPLAIN PIPELINE` output.
+SET max_threads = 8;
+
+DROP TABLE IF EXISTS grouping_sets;
+
+CREATE TABLE grouping_sets
+(
+    fact_1_id Int32,
+    fact_2_id Int32,
+    fact_3_id Int32,
+    fact_4_id Int32,
+    sales_value Int32
+)
+ENGINE = Memory;
+
 SELECT
     fact_1_id,
     fact_3_id,
@@ -8,6 +23,15 @@ GROUP BY GROUPING SETS ((fact_1_id), (fact_3_id))
 ORDER BY
     fact_1_id ASC,
     fact_3_id ASC;
+
+INSERT INTO grouping_sets SELECT
+    number % 2 + 1 AS fact_1_id,
+    number % 5 + 1 AS fact_2_id,
+    number % 10 + 1 AS fact_3_id,
+    number % 10 + 1 AS fact_4_id,
+    number % 100 AS sales_value
+FROM `system`.numbers
+LIMIT 1000;
 
 SELECT
     fact_1_id,
@@ -56,7 +80,7 @@ GROUP BY GROUPING SETS ((fact_1_id), (fact_1_id, fact_3_id))
 WITH TOTALS
 ORDER BY
     fact_1_id ASC,
-    fact_3_id ASC;
+    fact_3_id ASC; -- { serverError NOT_IMPLEMENTED }
 
 SELECT
     fact_1_id,
@@ -67,7 +91,9 @@ GROUP BY GROUPING SETS ((fact_1_id), (fact_1_id, fact_3_id))
 WITH TOTALS
 ORDER BY
     fact_1_id ASC,
-    fact_3_id ASC;
+    fact_3_id ASC; -- { serverError NOT_IMPLEMENTED }
+
+DROP TABLE grouping_sets;
 
 SELECT
     SUM(number) AS sum_value,

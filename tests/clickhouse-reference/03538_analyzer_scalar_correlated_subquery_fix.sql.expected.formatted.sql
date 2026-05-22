@@ -1,3 +1,27 @@
+SET enable_analyzer = 1;
+
+SET allow_experimental_correlated_subqueries = 1;
+
+CREATE TABLE partsupp
+(
+    ps_partkey Int32,
+    ps_suppkey Int32,
+    ps_availqty Int32
+)
+ORDER BY (ps_partkey, ps_suppkey);
+
+INSERT INTO partsupp (ps_partkey, ps_suppkey, ps_availqty);
+
+CREATE TABLE lineitem
+(
+    l_partkey Int32,
+    l_suppkey Int32,
+    l_quantity Decimal(15, 2)
+)
+ORDER BY tuple();
+
+INSERT INTO lineitem (l_partkey, l_suppkey, l_quantity);
+
 SELECT
     ps_partkey,
     ps_suppkey,

@@ -1,3 +1,7 @@
+SET enable_analyzer = 0;
+
+SET join_algorithm = 'hash';
+
 SELECT *
 FROM
     (
@@ -100,3 +104,7 @@ RIGHT JOIN (
             NULL AS x
     ) AS t2
     ON t1.x = t2.x;
+
+SET join_algorithm = 'partial_merge';
+
+SET enable_analyzer = 1;

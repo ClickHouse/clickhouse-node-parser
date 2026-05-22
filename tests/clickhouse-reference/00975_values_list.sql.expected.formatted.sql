@@ -1,5 +1,9 @@
+DROP TABLE IF EXISTS values_list;
+
 SELECT *
 FROM VALUES('a UInt64, s String', (1, 'one'), (2, 'two'), (3, 'three'));
+
+CREATE TABLE values_list AS VALUES('a UInt64, s String', (1, 'one'), (2, 'two'), (3, 'three'));
 
 SELECT *
 FROM values_list;
@@ -19,10 +23,12 @@ SELECT *
 FROM VALUES('a Decimal(4, 4), b String, c String', (divide(toDecimal32(5, 3), 3), 'a', 'b'));
 
 SELECT *
-FROM VALUES('x Float64', toUInt64(-1));
+FROM VALUES('x Float64', toUInt64(-1)); -- { serverError ARGUMENT_OUT_OF_BOUND }
 
 SELECT *
-FROM VALUES('x Float64', NULL);
+FROM VALUES('x Float64', NULL); -- { serverError TYPE_MISMATCH }
 
 SELECT *
 FROM VALUES('x Nullable(Float64)', NULL);
+
+DROP TABLE values_list;

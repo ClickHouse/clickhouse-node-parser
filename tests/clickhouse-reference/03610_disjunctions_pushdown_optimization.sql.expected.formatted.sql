@@ -1,4 +1,41 @@
+-- Test: Disjunctions pushdown into JOIN branches
+-- This test exercises the optimizer controlled by the setting `use_join_disjunctions_push_down`.
+-- It checks that disjunctions (OR) over conjunctions can be split and pushed as per-side
+-- pre-join filters without changing query results, and that when the optimization is disabled
+-- such pre-join filters are not produced. It also validates join-order-dependent pushdown
+SET enable_analyzer = 1;
+
+SET enable_join_runtime_filters = 0;
+
+DROP TABLE IF EXISTS tp1;
+
+DROP TABLE IF EXISTS tp2;
+
+CREATE TABLE tp1
+(
+    k Int32,
+    a Int32
+)
+ENGINE = MergeTree()
+ORDER BY k;
+
+CREATE TABLE tp2
+(
+    k Int32,
+    x Int32
+)
+ENGINE = MergeTree()
+ORDER BY k;
+
+INSERT INTO tp1;
+
+INSERT INTO tp2;
+
+-- We need to make sure that query plan creates the JOIN filter only with the optimization enabled, and WHERE filter in both cases
+---------- CASE A ----------
 SELECT '--- CASE A: plan (enabled) ---';
+
+SET use_join_disjunctions_push_down = 1;
 
 SELECT REGEXP_REPLACE(trimLeft(`explain`), '__set_Int32_\\d+_\\d+', '__set_Int32_UNIQ_ID')
 FROM (
@@ -20,6 +57,8 @@ FROM (
 WHERE ilike(`explain`, '%Filter column: %')
 SETTINGS enable_parallel_replicas = 0
 FORMAT TSV;
+
+SET use_join_disjunctions_push_down = 0;
 
 SELECT
     t1.k,
@@ -97,6 +136,33 @@ WHERE (t1.k IN (1, 2))
     OR (t1.k IN (3, 4))
 ORDER BY t1.k ASC;
 
+DROP TABLE tp1;
+
+DROP TABLE tp2;
+
+---------- CASE D ----------
+DROP TABLE IF EXISTS table1;
+
+DROP TABLE IF EXISTS table2;
+
+CREATE TABLE table1
+(
+    a UInt32,
+    b String
+)
+ENGINE = Memory;
+
+CREATE TABLE table2
+(
+    c UInt32,
+    d String
+)
+ENGINE = Memory;
+
+INSERT INTO table1;
+
+INSERT INTO table2;
+
 SELECT REGEXP_REPLACE(trimLeft(`explain`), '__set_Int32_\\d+_\\d+', '__set_Int32_UNIQ_ID')
 FROM (
         EXPLAIN actions = 1
@@ -134,6 +200,10 @@ ORDER BY
     a ASC,
     c ASC
 FORMAT TSV;
+
+DROP TABLE table1;
+
+DROP TABLE table2;
 
 SELECT
     n1.number,

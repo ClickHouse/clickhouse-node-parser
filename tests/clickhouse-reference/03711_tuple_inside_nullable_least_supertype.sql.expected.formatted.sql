@@ -1,3 +1,7 @@
+SET allow_experimental_nullable_tuple_type = 1;
+
+SET use_variant_as_common_type = 0;
+
 SELECT toTypeName([CAST((8, 9), 'Tuple(Int32, Int32)'), CAST((2, 5), 'Nullable(Tuple(Int32, Int32))')]);
 
 SELECT toTypeName([(8, 9), CAST((2, 5), 'Nullable(Tuple(Int32, Int32))')]);
@@ -7,6 +11,18 @@ SELECT toTypeName([NULL, '3', CAST('3', 'Nullable(String)')]);
 SELECT toTypeName([NULL, (8, 9), CAST((2, 5), 'Nullable(Tuple(Int32, Int32))')]);
 
 SELECT toTypeName([NULL, (8, 9), CAST((2, 5), 'Tuple(Int32, Int32)')]);
+
+CREATE TABLE test_nullable_tuples
+(
+    id UInt32,
+    data Nullable(Tuple(val1 Int32, val2 String, val3 Float64))
+)
+ENGINE = Memory;
+
+INSERT INTO test_nullable_tuples SELECT
+    number AS id,
+    if(number % 5 = 0, NULL, (toInt32(number), toString(number), toFloat64(number) / 10)) AS data
+FROM numbers(7);
 
 SELECT *
 FROM test_nullable_tuples
@@ -64,13 +80,13 @@ SELECT toTypeName([
 SELECT toTypeName([
     CAST((1, 2), 'Tuple(Int32, Int32)'),
     CAST((3, 4, 5), 'Nullable(Tuple(Int32, Int32, Int32))')
-]);
+]); -- { serverError NO_COMMON_TYPE }
 
 SELECT toTypeName([
     NULL,
     CAST((1, 2), 'Tuple(Int32, Int32)'),
     CAST((3, 4, 5), 'Nullable(Tuple(Int32, Int32, Int32))')
-]);
+]); -- { serverError NO_COMMON_TYPE }
 
 SELECT toTypeName([
     CAST([(1, 2), (3, 4)], 'Array(Tuple(Int32, Int32))'),

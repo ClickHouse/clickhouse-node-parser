@@ -1,0 +1,210 @@
+[
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "cdp_segments"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "cdp_customers"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "cdp_segments"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "seg_id",
+        "type": {
+          "name": "String"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "mid_seqs",
+        "type": {
+          "name": "AggregateFunction",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "groupBitmap"
+              }
+            },
+            {
+              "kind": "type",
+              "type": {
+                "name": "UInt32"
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "engine": {
+      "name": "ReplacingMergeTree",
+      "args": []
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "seg_id"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "cdp_customers"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "mid",
+        "type": {
+          "name": "String"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "mid_seq",
+        "type": {
+          "name": "UInt32"
+        }
+      }
+    ],
+    "engine": {
+      "name": "ReplacingMergeTree",
+      "args": []
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "mid_seq"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "kind": "alter",
+    "table": {
+      "kind": "tableRef",
+      "table": "cdp_segments"
+    },
+    "commands": [
+      {
+        "kind": "alterCommand",
+        "commandType": "UPDATE",
+        "assignments": [
+          {
+            "column": "mid_seqs",
+            "expr": {
+              "kind": "functionCall",
+              "name": "bitmapOr",
+              "args": [
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "mid_seqs"
+                  ]
+                },
+                {
+                  "kind": "subqueryExpr",
+                  "query": {
+                    "kind": "select",
+                    "select": [
+                      {
+                        "kind": "functionCall",
+                        "name": "groupBitmapState",
+                        "args": [
+                          {
+                            "kind": "columnRef",
+                            "parts": [
+                              "mid_seq"
+                            ]
+                          }
+                        ]
+                      }
+                    ],
+                    "from": {
+                      "kind": "tableRef",
+                      "table": "cdp_customers"
+                    },
+                    "where": {
+                      "kind": "inExpr",
+                      "negated": false,
+                      "expr": {
+                        "kind": "columnRef",
+                        "parts": [
+                          "mid"
+                        ]
+                      },
+                      "values": [
+                        {
+                          "kind": "literal",
+                          "type": "String",
+                          "value": "6bf3c2ee-2b33-3030-9dc2-25c6c618d141"
+                        }
+                      ]
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        ],
+        "where": {
+          "kind": "binaryExpr",
+          "op": "=",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "seg_id"
+            ]
+          },
+          "right": {
+            "kind": "literal",
+            "type": "String",
+            "value": "1234567890"
+          }
+        }
+      }
+    ]
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "cdp_segments"
+    }
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "cdp_customers"
+    }
+  }
+]

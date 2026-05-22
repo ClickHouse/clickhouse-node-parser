@@ -1,18 +1,20 @@
-SELECT formatDateTime();
+SET send_logs_level = 'fatal';
 
-SELECT formatDateTime('not a datetime', 'IGNORED');
+SELECT formatDateTime(); -- { serverError NUMBER_OF_ARGUMENTS_DOESNT_MATCH }
 
-SELECT formatDateTime(now(), now());
+SELECT formatDateTime('not a datetime', 'IGNORED'); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
-SELECT formatDateTime(now(), 'good format pattern', now());
+SELECT formatDateTime(now(), now()); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
-SELECT formatDateTime(now(), 'unescaped %');
+SELECT formatDateTime(now(), 'good format pattern', now()); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
-SELECT formatDateTime(toDateTime('2018-01-02 22:33:44'), '%U');
+SELECT formatDateTime(now(), 'unescaped %'); -- { serverError BAD_ARGUMENTS }
 
-SELECT formatDateTime(toDateTime('2018-01-02 22:33:44'), '%v');
+SELECT formatDateTime(toDateTime('2018-01-02 22:33:44'), '%U'); -- { serverError NOT_IMPLEMENTED }
 
-SELECT formatDateTime(toDateTime('2018-01-02 22:33:44'), '%x');
+SELECT formatDateTime(toDateTime('2018-01-02 22:33:44'), '%v'); -- { serverError NOT_IMPLEMENTED }
+
+SELECT formatDateTime(toDateTime('2018-01-02 22:33:44'), '%x'); -- { serverError NOT_IMPLEMENTED }
 
 SELECT
     formatDateTime(toDateTime('2018-01-02 22:33:44'), '%a'),
@@ -156,6 +158,7 @@ SELECT formatDateTime(toDateTime('2020-01-01 01:00:00', 'Europe/Moscow'), '%z');
 
 SELECT formatDateTime(toDateTime('1970-01-01 00:00:00', 'Asia/Kolkata'), '%z');
 
+-- %f (default settings)
 SELECT formatDateTime(toDate('2010-01-04'), '%f')
 SETTINGS formatdatetime_f_prints_single_zero = 0;
 
@@ -177,6 +180,7 @@ SETTINGS formatdatetime_f_prints_single_zero = 0;
 SELECT formatDateTime(toDateTime64('2010-01-04 12:34:56.123456789', 9), '%f')
 SETTINGS formatdatetime_f_prints_single_zero = 0;
 
+-- %f (legacy settings)
 SELECT formatDateTime(toDate('2010-01-04'), '%f')
 SETTINGS formatdatetime_f_prints_single_zero = 1;
 
@@ -207,6 +211,7 @@ SELECT formatDateTime(toDate32('2022-12-08 18:11:29', 'UTC'), '%F %T.%f');
 
 SELECT formatDateTime(toDate('2022-12-08 18:11:29', 'UTC'), '%F %T.%f');
 
+-- %c %k %l with different formatdatetime_format_without_leading_zeros
 SELECT formatDateTime(toDateTime('2022-01-08 02:11:29', 'UTC'), '%c')
 SETTINGS formatdatetime_format_without_leading_zeros = 0;
 

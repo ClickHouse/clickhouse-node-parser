@@ -103,6 +103,40 @@ FROM (
             )
     );
 
+DROP TABLE IF EXISTS test1;
+
+CREATE TABLE test1
+(
+    year String,
+    uv AggregateFunction(uniqTheta, Int64)
+)
+ENGINE = AggregatingMergeTree()
+ORDER BY (year);
+
+INSERT INTO test1 (year, uv) SELECT
+    '2021',
+    uniqThetaState(toInt64(1));
+
+INSERT INTO test1 (year, uv) SELECT
+    '2021',
+    uniqThetaState(toInt64(2));
+
+INSERT INTO test1 (year, uv) SELECT
+    '2021',
+    uniqThetaState(toInt64(3));
+
+INSERT INTO test1 (year, uv) SELECT
+    '2021',
+    uniqThetaState(toInt64(4));
+
+INSERT INTO test1 (year, uv) SELECT
+    '2022',
+    uniqThetaState(toInt64(1));
+
+INSERT INTO test1 (year, uv) SELECT
+    '2022',
+    uniqThetaState(toInt64(3));
+
 SELECT
     finalizeAggregation(uniqThetaIntersect(uv2021, uv2022)) / finalizeAggregation(uv2021),
     finalizeAggregation(uniqThetaIntersect(uv2021, uv2022)),
@@ -113,6 +147,40 @@ FROM (
             uniqThetaMergeStateIf(uv, year = '2022') AS uv2022
         FROM test1
     );
+
+DROP TABLE IF EXISTS test2;
+
+CREATE TABLE test2
+(
+    year String,
+    uv Int64
+)
+ENGINE = MergeTree()
+ORDER BY (year);
+
+INSERT INTO test2 (year, uv) SELECT
+    '2021',
+    1;
+
+INSERT INTO test2 (year, uv) SELECT
+    '2021',
+    2;
+
+INSERT INTO test2 (year, uv) SELECT
+    '2021',
+    3;
+
+INSERT INTO test2 (year, uv) SELECT
+    '2021',
+    4;
+
+INSERT INTO test2 (year, uv) SELECT
+    '2022',
+    1;
+
+INSERT INTO test2 (year, uv) SELECT
+    '2022',
+    3;
 
 SELECT
     finalizeAggregation(uniqThetaIntersect(uv2021, uv2022)) / finalizeAggregation(uv2021),

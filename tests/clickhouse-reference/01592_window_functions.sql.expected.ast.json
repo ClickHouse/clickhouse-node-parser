@@ -1,5 +1,145 @@
 [
   {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "product_groups"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "products"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "product_groups"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "group_id",
+        "type": {
+          "name": "Int64"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "group_name",
+        "type": {
+          "name": "String"
+        }
+      }
+    ],
+    "engine": {
+      "name": "Memory"
+    }
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "products"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "product_id",
+        "type": {
+          "name": "Int64"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "product_name",
+        "type": {
+          "name": "String"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "price",
+        "type": {
+          "name": "DECIMAL",
+          "args": [
+            {
+              "kind": "literal",
+              "value": "11"
+            },
+            {
+              "kind": "literal",
+              "value": "2"
+            }
+          ]
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "group_id",
+        "type": {
+          "name": "Int64"
+        }
+      }
+    ],
+    "engine": {
+      "name": "Memory"
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "product_groups"
+      }
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "products"
+      }
+    },
+    "columns": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "product_id"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "product_name"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "group_id"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "price"
+        ]
+      }
+    ]
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -58,7 +198,7 @@
         "kind": "tableRef",
         "table": "products"
       },
-      "kind": "join",
+      "kind": "joinExpr",
       "joinType": "INNER",
       "right": {
         "kind": "tableRef",
@@ -162,7 +302,7 @@
         "kind": "tableRef",
         "table": "products"
       },
-      "kind": "join",
+      "kind": "joinExpr",
       "joinType": "INNER",
       "right": {
         "kind": "tableRef",
@@ -286,7 +426,7 @@
         "kind": "tableRef",
         "table": "products"
       },
-      "kind": "join",
+      "kind": "joinExpr",
       "joinType": "INNER",
       "right": {
         "kind": "tableRef",
@@ -415,7 +555,7 @@
             "kind": "tableRef",
             "table": "products"
           },
-          "kind": "join",
+          "kind": "joinExpr",
           "joinType": "INNER",
           "right": {
             "kind": "tableRef",
@@ -544,7 +684,7 @@
         "kind": "tableRef",
         "table": "products"
       },
-      "kind": "join",
+      "kind": "joinExpr",
       "joinType": "INNER",
       "right": {
         "kind": "tableRef",
@@ -654,7 +794,7 @@
         "kind": "tableRef",
         "table": "products"
       },
-      "kind": "join",
+      "kind": "joinExpr",
       "joinType": "INNER",
       "right": {
         "kind": "tableRef",
@@ -850,7 +990,7 @@
             "kind": "tableRef",
             "table": "products"
           },
-          "kind": "join",
+          "kind": "joinExpr",
           "joinType": "INNER",
           "right": {
             "kind": "tableRef",
@@ -898,5 +1038,21 @@
         "direction": "ASC"
       }
     ]
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "product_groups"
+    }
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "products"
+    }
   }
 ]

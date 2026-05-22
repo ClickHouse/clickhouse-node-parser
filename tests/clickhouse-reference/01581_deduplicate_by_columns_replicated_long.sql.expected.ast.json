@@ -1,5 +1,204 @@
 [
   {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "replicated_deduplicate_by_columns_r1"
+    },
+    "ifExists": true,
+    "leadingComments": [
+      "-- Tags: long, replica",
+      "--- See also tests/queries/0_stateless/01581_deduplicate_by_columns_local.sql",
+      "--- replicated case",
+      "-- Just in case if previous tests run left some stuff behind."
+    ]
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "replicated_deduplicate_by_columns_r2"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "replication_alter_partitions_sync",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "2"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "replicated_deduplicate_by_columns_r1"
+    },
+    "ifNotExists": true,
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "id",
+        "type": {
+          "name": "Int32"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "val",
+        "type": {
+          "name": "UInt32"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "unique_value",
+        "type": {
+          "name": "UInt64"
+        },
+        "defaultKind": "MATERIALIZED",
+        "defaultExpr": {
+          "kind": "functionCall",
+          "name": "rowNumberInBlock",
+          "args": []
+        }
+      }
+    ],
+    "engine": {
+      "name": "ReplicatedMergeTree",
+      "args": [
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "/clickhouse/tables/{database}/test_01581/replicated_deduplicate"
+        },
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "r1"
+        }
+      ]
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "id"
+          ]
+        }
+      }
+    ],
+    "leadingComments": [
+      "-- IRL insert_replica_id were filled from hostname"
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "replicated_deduplicate_by_columns_r2"
+    },
+    "ifNotExists": true,
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "id",
+        "type": {
+          "name": "Int32"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "val",
+        "type": {
+          "name": "UInt32"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "unique_value",
+        "type": {
+          "name": "UInt64"
+        },
+        "defaultKind": "MATERIALIZED",
+        "defaultExpr": {
+          "kind": "functionCall",
+          "name": "rowNumberInBlock",
+          "args": []
+        }
+      }
+    ],
+    "engine": {
+      "name": "ReplicatedMergeTree",
+      "args": [
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "/clickhouse/tables/{database}/test_01581/replicated_deduplicate"
+        },
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "r2"
+        }
+      ]
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "id"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "replicated_deduplicate_by_columns_r1"
+      }
+    },
+    "leadingComments": [
+      "-- insert some data, 2 records: (3, 1003), (4, 1004) are duplicated and have difference in unique_value / insert_replica_id",
+      "-- (1, 1001), (5, 2005) has full duplicates"
+    ]
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "replicated_deduplicate_by_columns_r2"
+      }
+    }
+  },
+  {
+    "kind": "system",
+    "body": "SYSTEM SYNC REPLICA replicated_deduplicate_by_columns_r2",
+    "leadingComments": [
+      "-- make sure that all data is present on all replicas"
+    ]
+  },
+  {
+    "kind": "system",
+    "body": "SYSTEM SYNC REPLICA replicated_deduplicate_by_columns_r1"
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -162,5 +361,111 @@
         "direction": "ASC"
       }
     ]
+  },
+  {
+    "kind": "optimize",
+    "table": {
+      "kind": "tableRef",
+      "table": "replicated_deduplicate_by_columns_r1"
+    },
+    "final": true,
+    "deduplicate": true,
+    "leadingComments": [
+      "-- NOTE: here and below we need FINAL to force deduplication in such a small set of data in only 1 part.",
+      "-- that should remove full duplicates"
+    ]
+  },
+  {
+    "kind": "optimize",
+    "table": {
+      "kind": "tableRef",
+      "table": "replicated_deduplicate_by_columns_r1"
+    },
+    "final": true,
+    "deduplicate": true,
+    "deduplicateBy": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "id"
+        ]
+      },
+      {
+        "kind": "columnRef",
+        "parts": [
+          "val"
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "optimize",
+    "table": {
+      "kind": "tableRef",
+      "table": "replicated_deduplicate_by_columns_r1"
+    },
+    "final": true,
+    "deduplicate": true,
+    "deduplicateBy": [
+      {
+        "kind": "functionCall",
+        "name": "COLUMNS",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": "[id, val]"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "optimize",
+    "table": {
+      "kind": "tableRef",
+      "table": "replicated_deduplicate_by_columns_r1"
+    },
+    "final": true,
+    "deduplicate": true,
+    "deduplicateBy": [
+      {
+        "kind": "columnsExpr",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": "[i]"
+          }
+        ],
+        "transformers": [
+          {
+            "kind": "except",
+            "columns": [
+              "unique_value"
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "replicated_deduplicate_by_columns_r1"
+    },
+    "leadingComments": [
+      "-- cleanup the mess"
+    ]
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "replicated_deduplicate_by_columns_r2"
+    }
   }
 ]

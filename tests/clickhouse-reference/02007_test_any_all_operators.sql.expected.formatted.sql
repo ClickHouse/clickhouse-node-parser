@@ -1,3 +1,4 @@
+-- { echo }
 SELECT 1 == any((
         SELECT number
         FROM numbers(10)

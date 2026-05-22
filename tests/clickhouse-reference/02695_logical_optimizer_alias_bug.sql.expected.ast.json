@@ -1,0 +1,210 @@
+[
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "test_local"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "id",
+        "type": {
+          "name": "UInt32"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "path",
+        "type": {
+          "name": "LowCardinality",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "String"
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "id"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "with": [
+      {
+        "kind": "cteExpr",
+        "name": "alias1",
+        "expr": {
+          "kind": "naryExpr",
+          "op": "OR",
+          "operands": [
+            {
+              "kind": "naryExpr",
+              "op": "AND",
+              "operands": [
+                {
+                  "kind": "binaryExpr",
+                  "op": ">",
+                  "left": {
+                    "kind": "functionCall",
+                    "name": "position",
+                    "args": [
+                      {
+                        "kind": "columnRef",
+                        "parts": [
+                          "path"
+                        ]
+                      },
+                      {
+                        "kind": "literal",
+                        "type": "String",
+                        "value": "/a"
+                      }
+                    ]
+                  },
+                  "right": {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "0"
+                  },
+                  "parenthesized": true
+                },
+                {
+                  "kind": "unaryExpr",
+                  "op": "NOT",
+                  "expr": {
+                    "kind": "binaryExpr",
+                    "op": ">",
+                    "left": {
+                      "kind": "functionCall",
+                      "name": "position",
+                      "args": [
+                        {
+                          "kind": "columnRef",
+                          "parts": [
+                            "path"
+                          ]
+                        },
+                        {
+                          "kind": "literal",
+                          "type": "String",
+                          "value": "a"
+                        }
+                      ]
+                    },
+                    "right": {
+                      "kind": "literal",
+                      "type": "UInt64",
+                      "value": "0"
+                    }
+                  },
+                  "parenthesized": true
+                }
+              ],
+              "parenthesized": true
+            },
+            {
+              "kind": "binaryExpr",
+              "op": "=",
+              "left": {
+                "kind": "columnRef",
+                "parts": [
+                  "path"
+                ]
+              },
+              "right": {
+                "kind": "literal",
+                "type": "String",
+                "value": "/b"
+              },
+              "parenthesized": true
+            },
+            {
+              "kind": "binaryExpr",
+              "op": "=",
+              "left": {
+                "kind": "columnRef",
+                "parts": [
+                  "path"
+                ]
+              },
+              "right": {
+                "kind": "literal",
+                "type": "String",
+                "value": "/b/"
+              },
+              "parenthesized": true
+            }
+          ]
+        }
+      }
+    ],
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "max",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "alias1"
+            ]
+          }
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableFunctionRef",
+      "name": "remote",
+      "args": [
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "127.0.0.{1,2}"
+        },
+        {
+          "kind": "functionCall",
+          "name": "currentDatabase",
+          "args": []
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "test_local"
+          ]
+        }
+      ]
+    },
+    "where": {
+      "kind": "binaryExpr",
+      "op": "=",
+      "left": {
+        "kind": "columnRef",
+        "parts": [
+          "id"
+        ]
+      },
+      "right": {
+        "kind": "literal",
+        "type": "UInt64",
+        "value": "299386662"
+      },
+      "parenthesized": true
+    }
+  }
+]

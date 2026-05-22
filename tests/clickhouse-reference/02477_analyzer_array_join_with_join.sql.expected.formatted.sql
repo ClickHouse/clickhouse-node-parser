@@ -1,3 +1,19 @@
+SET enable_analyzer = 1;
+
+DROP TABLE IF EXISTS test_table;
+
+CREATE TABLE test_table
+(
+    id UInt64,
+    value String,
+    value_array Array(UInt64)
+)
+ENGINE = MergeTree
+ORDER BY id;
+
+INSERT INTO test_table;
+
+-- { echoOn }
 SELECT *
 FROM
     test_table
@@ -307,3 +323,6 @@ ARRAY JOIN id AS id_nested_array
 ARRAY JOIN id_nested_array AS id
 INNER JOIN test_table
     USING (id);
+
+-- { echoOff }
+DROP TABLE test_table;

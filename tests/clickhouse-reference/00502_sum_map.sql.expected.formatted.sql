@@ -1,3 +1,19 @@
+SET send_logs_level = 'fatal';
+
+-- { echoOn }
+DROP TABLE IF EXISTS sum_map;
+
+CREATE TABLE sum_map
+(
+    date Date,
+    timeslot DateTime,
+    statusMap Nested(status UInt16, requests UInt64)
+)
+ENGINE = MergeTree
+ORDER BY tuple();
+
+INSERT INTO sum_map;
+
 SELECT *
 FROM sum_map
 ORDER BY
@@ -38,11 +54,27 @@ FROM sum_map;
 SELECT sumMapFiltered([1, 4, 8])(statusMap.status, statusMap.requests)
 FROM sum_map;
 
+DROP TABLE sum_map;
+
+DROP TABLE IF EXISTS sum_map_overflow;
+
+CREATE TABLE sum_map_overflow
+(
+    events Array(UInt8),
+    counts Array(UInt8)
+)
+ENGINE = MergeTree
+ORDER BY tuple();
+
+INSERT INTO sum_map_overflow;
+
 SELECT sumMap(events, counts)
 FROM sum_map_overflow;
 
 SELECT sumMapWithOverflow(events, counts)
 FROM sum_map_overflow;
+
+DROP TABLE sum_map_overflow;
 
 SELECT sumMap(val, cnt)
 FROM (
@@ -107,11 +139,35 @@ FROM (
             [1, 2, 3] AS cnt
     );
 
+DROP TABLE IF EXISTS sum_map_decimal;
+
+CREATE TABLE sum_map_decimal
+(
+    statusMap Nested(goal_id UInt16, revenue Decimal32(5))
+)
+ENGINE = MergeTree
+ORDER BY tuple();
+
+INSERT INTO sum_map_decimal;
+
 SELECT sumMap(statusMap.goal_id, statusMap.revenue)
 FROM sum_map_decimal;
 
 SELECT sumMapWithOverflow(statusMap.goal_id, statusMap.revenue)
 FROM sum_map_decimal;
 
+DROP TABLE sum_map_decimal;
+
+CREATE TABLE sum_map_decimal_nullable
+(
+    statusMap Nested(goal_id UInt16, revenue Nullable(Decimal(9, 5)))
+)
+ENGINE = MergeTree
+ORDER BY tuple();
+
+INSERT INTO sum_map_decimal_nullable;
+
 SELECT sumMap(statusMap.goal_id, statusMap.revenue)
 FROM sum_map_decimal_nullable;
+
+DROP TABLE sum_map_decimal_nullable;

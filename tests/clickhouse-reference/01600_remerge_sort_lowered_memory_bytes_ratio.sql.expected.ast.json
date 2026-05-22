@@ -1,113 +1,52 @@
 [
   {
-    "kind": "select",
-    "select": [
+    "kind": "set",
+    "settings": [
       {
-        "kind": "alias",
-        "expr": {
-          "kind": "columnRef",
-          "parts": [
-            "number"
-          ]
-        },
-        "alias": "k"
-      },
-      {
-        "kind": "alias",
-        "expr": {
-          "kind": "functionCall",
-          "name": "repeat",
-          "args": [
-            {
-              "kind": "functionCall",
-              "name": "toString",
-              "args": [
-                {
-                  "kind": "columnRef",
-                  "parts": [
-                    "number"
-                  ]
-                }
-              ]
-            },
-            {
-              "kind": "literal",
-              "type": "UInt64",
-              "value": "11"
-            }
-          ]
-        },
-        "alias": "v1"
-      },
-      {
-        "kind": "alias",
-        "expr": {
-          "kind": "functionCall",
-          "name": "repeat",
-          "args": [
-            {
-              "kind": "functionCall",
-              "name": "toString",
-              "args": [
-                {
-                  "kind": "columnRef",
-                  "parts": [
-                    "number"
-                  ]
-                }
-              ]
-            },
-            {
-              "kind": "literal",
-              "type": "UInt64",
-              "value": "12"
-            }
-          ]
-        },
-        "alias": "v2"
-      }
-    ],
-    "from": {
-      "kind": "tableFunction",
-      "name": "numbers",
-      "args": [
-        {
+        "name": "max_memory_usage",
+        "value": {
           "kind": "literal",
-          "type": "Float64",
-          "value": "3e6"
+          "type": "String",
+          "value": "200Mi"
         }
-      ]
-    },
-    "orderBy": [
-      {
-        "kind": "orderByItem",
-        "expr": {
-          "kind": "columnRef",
-          "parts": [
-            "v1"
-          ]
-        },
-        "direction": "ASC"
-      },
-      {
-        "kind": "orderByItem",
-        "expr": {
-          "kind": "columnRef",
-          "parts": [
-            "v2"
-          ]
-        },
-        "direction": "ASC"
       }
     ],
-    "limit": {
-      "count": {
-        "kind": "literal",
-        "type": "Float64",
-        "value": "400e3"
+    "leadingComments": [
+      "-- Tags: no-random-settings",
+      "-- Check remerge_sort_lowered_memory_bytes_ratio setting"
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "max_bytes_before_remerge_sort",
+        "value": {
+          "kind": "literal",
+          "type": "String",
+          "value": "10Mi"
+        }
       }
-    },
-    "format": "Null"
+    ],
+    "leadingComments": [
+      "-- enter remerge once limit*2 is reached"
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "max_block_size",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "40960"
+        }
+      }
+    ],
+    "leadingComments": [
+      "-- more blocks"
+    ]
   },
   {
     "kind": "select",
@@ -178,7 +117,126 @@
       }
     ],
     "from": {
-      "kind": "tableFunction",
+      "kind": "tableFunctionRef",
+      "name": "numbers",
+      "args": [
+        {
+          "kind": "literal",
+          "type": "Float64",
+          "value": "3e6"
+        }
+      ]
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "v1"
+          ]
+        },
+        "direction": "ASC"
+      },
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "v2"
+          ]
+        },
+        "direction": "ASC"
+      }
+    ],
+    "limit": {
+      "count": {
+        "kind": "literal",
+        "type": "Float64",
+        "value": "400e3"
+      }
+    },
+    "format": "Null",
+    "leadingComments": [
+      "-- remerge_sort_lowered_memory_bytes_ratio default 2, slightly not enough",
+      "--     MergeSortingTransform: Re-merging intermediate ORDER BY data (20 blocks with 819200 rows) to save memory consumption",
+      "--     MergeSortingTransform: Memory usage is lowered from 186.25 MiB to 95.00 MiB",
+      "--     MergeSortingTransform: Re-merging is not useful (memory usage was not lowered by remerge_sort_lowered_memory_bytes_ratio=2.0)"
+    ],
+    "trailingComments": [
+      "-- { serverError MEMORY_LIMIT_EXCEEDED }"
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "number"
+          ]
+        },
+        "alias": "k"
+      },
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "repeat",
+          "args": [
+            {
+              "kind": "functionCall",
+              "name": "toString",
+              "args": [
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "number"
+                  ]
+                }
+              ]
+            },
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "11"
+            }
+          ]
+        },
+        "alias": "v1"
+      },
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "repeat",
+          "args": [
+            {
+              "kind": "functionCall",
+              "name": "toString",
+              "args": [
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "number"
+                  ]
+                }
+              ]
+            },
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "12"
+            }
+          ]
+        },
+        "alias": "v2"
+      }
+    ],
+    "from": {
+      "kind": "tableFunctionRef",
       "name": "numbers",
       "args": [
         {
@@ -227,7 +285,10 @@
         }
       }
     ],
-    "format": "Null"
+    "format": "Null",
+    "trailingComments": [
+      "-- { serverError MEMORY_LIMIT_EXCEEDED }"
+    ]
   },
   {
     "kind": "select",
@@ -298,7 +359,7 @@
       }
     ],
     "from": {
-      "kind": "tableFunction",
+      "kind": "tableFunctionRef",
       "name": "numbers",
       "args": [
         {
@@ -337,6 +398,21 @@
         }
       }
     ],
-    "format": "Null"
+    "format": "Null",
+    "leadingComments": [
+      "-- remerge_sort_lowered_memory_bytes_ratio 1.9 is good (need at least 1.91/0.98=1.94)",
+      "--     MergeSortingTransform: Re-merging intermediate ORDER BY data (20 blocks with 819200 rows) to save memory consumption",
+      "--     MergeSortingTransform: Memory usage is lowered from 186.25 MiB to 95.00 MiB",
+      "--     MergeSortingTransform: Re-merging intermediate ORDER BY data (20 blocks with 809600 rows) to save memory consumption",
+      "--     MergeSortingTransform: Memory usage is lowered from 188.13 MiB to 95.00 MiB",
+      "--     MergeSortingTransform: Re-merging intermediate ORDER BY data (20 blocks with 809600 rows) to save memory consumption",
+      "--     MergeSortingTransform: Memory usage is lowered from 188.13 MiB to 95.00 MiB",
+      "--     MergeSortingTransform: Re-merging intermediate ORDER BY data (20 blocks with 809600 rows) to save memory consumption",
+      "--     MergeSortingTransform: Memory usage is lowered from 188.13 MiB to 95.00 MiB",
+      "--     MergeSortingTransform: Re-merging intermediate ORDER BY data (20 blocks with 809600 rows) to save memory consumption",
+      "--     MergeSortingTransform: Memory usage is lowered from 188.13 MiB to 95.00 MiB",
+      "--     MergeSortingTransform: Re-merging intermediate ORDER BY data (20 blocks with 809600 rows) to save memory consumption",
+      "--     MergeSortingTransform: Memory usage is lowered from 188.13 MiB to 95.00 MiB"
+    ]
   }
 ]

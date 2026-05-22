@@ -1,3 +1,7 @@
+SET enable_analyzer = 1;
+
+SET joined_subquery_requires_alias = 1;
+
 SELECT *
 FROM
     (
@@ -24,7 +28,7 @@ LEFT JOIN (
             3 AS A,
             2 AS B
     )
-    USING (B);
+    USING (B); -- { serverError ALIAS_REQUIRED }
 
 SELECT *
 FROM
@@ -38,4 +42,6 @@ LEFT JOIN (
             3 AS A,
             2 AS B
     ) AS Y
-    USING (B);
+    USING (B); -- { serverError ALIAS_REQUIRED }
+
+SET joined_subquery_requires_alias = 0;

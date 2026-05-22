@@ -1,5 +1,98 @@
 [
   {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "enable_analyzer",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ],
+    "leadingComments": [
+      "-- Tags: no-parallel",
+      "-- Looks like you cannot use the query parameter as a column name.",
+      "-- https://github.com/ClickHouse/ClickHouse/issues/23194"
+    ]
+  },
+  {
+    "kind": "drop",
+    "targetType": "DATABASE",
+    "table": {
+      "kind": "tableRef",
+      "table": "db1_03101"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "drop",
+    "targetType": "DATABASE",
+    "table": {
+      "kind": "tableRef",
+      "table": "db2_03101"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "createDatabase",
+    "name": "db1_03101"
+  },
+  {
+    "kind": "createDatabase",
+    "name": "db2_03101"
+  },
+  {
+    "kind": "use",
+    "database": "db1_03101"
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "database": "db1_03101",
+      "table": "tbl"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "col",
+        "type": {
+          "name": "String"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "db1_03101",
+        "type": {
+          "name": "Nested",
+          "args": [
+            {
+              "kind": "namedField",
+              "name": "tbl",
+              "type": {
+                "name": "Nested",
+                "args": [
+                  {
+                    "kind": "namedField",
+                    "name": "col",
+                    "type": {
+                      "name": "String"
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "engine": {
+      "name": "Memory"
+    }
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -92,7 +185,7 @@
       }
     ],
     "from": {
-      "kind": "tableFunction",
+      "kind": "tableFunctionRef",
       "name": "VALUES",
       "args": [
         {
@@ -154,6 +247,10 @@
         },
         "direction": "ASC"
       }
+    ],
+    "leadingComments": [
+      "-- not ok as every component of ORDER BY may contain ASC/DESC and COLLATE; though can be supported in some sense",
+      "-- but it works"
     ]
   },
   {
@@ -165,7 +262,10 @@
     ],
     "where": {
       "kind": "asterisk"
-    }
+    },
+    "trailingComments": [
+      "-- { serverError UNEXPECTED_EXPRESSION }"
+    ]
   },
   {
     "kind": "select",
@@ -193,7 +293,7 @@
         },
         "alias": "t"
       },
-      "kind": "join",
+      "kind": "joinExpr",
       "joinType": "CROSS",
       "right": {
         "kind": "subqueryFrom",
@@ -250,7 +350,7 @@
         },
         "alias": "t"
       },
-      "kind": "join",
+      "kind": "joinExpr",
       "joinType": "CROSS",
       "right": {
         "kind": "subqueryFrom",
@@ -270,7 +370,10 @@
         },
         "alias": "u"
       }
-    }
+    },
+    "leadingComments": [
+      "-- equivalent to:"
+    ]
   },
   {
     "kind": "select",
@@ -298,7 +401,7 @@
         },
         "alias": "t"
       },
-      "kind": "join",
+      "kind": "joinExpr",
       "joinType": "CROSS",
       "right": {
         "kind": "subqueryFrom",
@@ -357,7 +460,7 @@
         },
         "alias": "t"
       },
-      "kind": "join",
+      "kind": "joinExpr",
       "joinType": "CROSS",
       "right": {
         "kind": "subqueryFrom",
@@ -377,7 +480,70 @@
         },
         "alias": "u"
       }
-    }
+    },
+    "leadingComments": [
+      "-- equivalent to:"
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "t"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "x",
+        "type": {
+          "name": "String"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "nest",
+        "type": {
+          "name": "Nested",
+          "args": [
+            {
+              "kind": "namedField",
+              "name": "a",
+              "type": {
+                "name": "String"
+              }
+            },
+            {
+              "kind": "namedField",
+              "name": "b",
+              "type": {
+                "name": "String"
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "engine": {
+      "name": "Memory"
+    },
+    "leadingComments": [
+      "---- TODO: think about it",
+      "--CREATE TABLE db1_03101.t",
+      "--(",
+      "--    a UInt16",
+      "--)",
+      "--ENGINE = Memory;",
+      "--",
+      "--CREATE TABLE db2_03101.t",
+      "--(",
+      "--    a UInt16",
+      "--)",
+      "--ENGINE = Memory;",
+      "--",
+      "--SELECT * FROM (SELECT 1 AS a) AS db2_03101.t, (SELECT 1 AS a) AS db1_03101.t;",
+      "---- equivalent to:",
+      "--SELECT db2_03101.t.a, db1_03101.t.a FROM (SELECT 1 AS a) AS db2_03101.t, (SELECT 1 AS a) AS db1_03101.t;"
+    ]
   },
   {
     "kind": "select",
@@ -410,7 +576,10 @@
     "from": {
       "kind": "tableRef",
       "table": "t"
-    }
+    },
+    "leadingComments": [
+      "-- equivalent to:"
+    ]
   },
   {
     "kind": "select",
@@ -439,6 +608,9 @@
     "from": {
       "kind": "tableRef",
       "table": "t"
-    }
+    },
+    "leadingComments": [
+      "-- equivalent to:"
+    ]
   }
 ]

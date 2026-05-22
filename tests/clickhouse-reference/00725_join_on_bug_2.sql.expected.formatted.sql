@@ -1,3 +1,31 @@
+SET joined_subquery_requires_alias = 0;
+
+DROP TABLE IF EXISTS t_00725_2;
+
+DROP TABLE IF EXISTS s_00725_2;
+
+CREATE TABLE t_00725_2
+(
+    a Int64,
+    b Int64
+)
+ENGINE = MergeTree
+ORDER BY tuple();
+
+INSERT INTO t_00725_2;
+
+INSERT INTO t_00725_2;
+
+CREATE TABLE s_00725_2
+(
+    a Int64,
+    b Int64
+)
+ENGINE = MergeTree
+ORDER BY tuple();
+
+INSERT INTO s_00725_2;
+
 SELECT
     a,
     b,

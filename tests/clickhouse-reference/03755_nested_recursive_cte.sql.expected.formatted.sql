@@ -1,10 +1,26 @@
+DROP TABLE IF EXISTS t0;
+
+CREATE TABLE t0
+(
+    x Int32
+)
+ENGINE = Memory;
+
+INSERT INTO t0;
+
+-- The original problematic query pattern - inner CTE references outer CTE
+-- Using count() to get deterministic output regardless of how many rows are produced before hitting the limit
+SET max_recursive_cte_evaluation_depth = 5;
+
+SET enable_analyzer = 1;
+
 SELECT count() > 0
 FROM (
-        WITH q AS (
+        WITH RECURSIVE q AS (
             SELECT 1
             FROM t0
             UNION ALL
-(            WITH x AS (
+(            WITH RECURSIVE x AS (
                 SELECT 1
                 FROM t0
                 UNION ALL
@@ -23,4 +39,6 @@ FROM (
 
         SELECT 1
         FROM q
-    );
+    ); -- { serverError TOO_DEEP_RECURSION }
+
+DROP TABLE t0;

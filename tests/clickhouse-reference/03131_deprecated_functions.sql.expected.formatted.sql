@@ -2,11 +2,11 @@ SELECT
     number,
     neighbor(number, 2)
 FROM `system`.numbers
-LIMIT 10;
+LIMIT 10; -- { serverError DEPRECATED_FUNCTION }
 
 SELECT runningDifference(number)
 FROM `system`.numbers
-LIMIT 10;
+LIMIT 10; -- { serverError DEPRECATED_FUNCTION }
 
 SELECT
     k,
@@ -18,7 +18,9 @@ FROM (
         FROM numbers(10)
         GROUP BY k
         ORDER BY k ASC
-    );
+    ); -- { serverError DEPRECATED_FUNCTION }
+
+SET allow_deprecated_error_prone_window_functions = 1;
 
 SELECT
     number,

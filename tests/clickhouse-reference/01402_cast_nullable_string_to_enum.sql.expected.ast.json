@@ -1,5 +1,18 @@
 [
   {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "cast_keep_nullable",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      }
+    ]
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -15,6 +28,9 @@
         },
         "type": "Nullable(Enum8('Hello' = 1))"
       }
+    ],
+    "leadingComments": [
+      "-- https://github.com/ClickHouse/ClickHouse/issues/5818#issuecomment-619628445"
     ]
   },
   {
@@ -51,6 +67,12 @@
         },
         "type": "Nullable(Enum8('Hello' = 1))"
       }
+    ],
+    "leadingComments": [
+      "-- empty string still not acceptable"
+    ],
+    "trailingComments": [
+      "-- { serverError UNKNOWN_ELEMENT_OF_ENUM }"
     ]
   },
   {
@@ -69,6 +91,9 @@
         },
         "type": "Nullable(Enum8('Hello' = 1))"
       }
+    ],
+    "trailingComments": [
+      "-- { serverError UNKNOWN_ELEMENT_OF_ENUM }"
     ]
   },
   {
@@ -87,6 +112,12 @@
         },
         "type": "Enum8('Hello' = 1)"
       }
+    ],
+    "leadingComments": [
+      "-- non-Nullable Enum() still not acceptable"
+    ],
+    "trailingComments": [
+      "-- { serverError CANNOT_INSERT_NULL_IN_ORDINARY_COLUMN }"
     ]
   },
   {
@@ -105,6 +136,9 @@
         },
         "type": "Enum8('Hello' = 1)"
       }
+    ],
+    "trailingComments": [
+      "-- { serverError CANNOT_INSERT_NULL_IN_ORDINARY_COLUMN }"
     ]
   }
 ]

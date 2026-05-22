@@ -1,2 +1,8 @@
+DROP TABLE IF EXISTS log;
+CREATE TABLE log (s String) ENGINE = Log;
 SELECT * FROM log LIMIT 1;
 SELECT * FROM log;
+DETACH TABLE log;
+ATTACH TABLE log;
+INSERT INTO log VALUES ('Hello'), ('World');
+DROP TABLE log;

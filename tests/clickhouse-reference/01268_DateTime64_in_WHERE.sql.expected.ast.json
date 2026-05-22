@@ -1,6 +1,275 @@
 [
   {
     "kind": "select",
+    "with": [
+      {
+        "kind": "cteExpr",
+        "name": "S",
+        "expr": {
+          "kind": "literal",
+          "type": "String",
+          "value": "2020-02-05 14:34:12.333"
+        }
+      },
+      {
+        "kind": "cteExpr",
+        "name": "DT64",
+        "expr": {
+          "kind": "functionCall",
+          "name": "toDateTime64",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "S"
+              ]
+            },
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "3"
+            }
+          ]
+        }
+      }
+    ],
+    "select": [
+      {
+        "kind": "binaryExpr",
+        "op": "=",
+        "left": {
+          "kind": "columnRef",
+          "parts": [
+            "DT64"
+          ]
+        },
+        "right": {
+          "kind": "functionCall",
+          "name": "materialize",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "S"
+              ]
+            }
+          ]
+        }
+      }
+    ],
+    "leadingComments": [
+      "-- Error cases:",
+      "-- non-const string column"
+    ],
+    "trailingComments": [
+      "-- {serverError ILLEGAL_TYPE_OF_ARGUMENT}"
+    ]
+  },
+  {
+    "kind": "select",
+    "with": [
+      {
+        "kind": "cteExpr",
+        "name": "S",
+        "expr": {
+          "kind": "literal",
+          "type": "String",
+          "value": "2020-02-05 14:34:12.333"
+        }
+      },
+      {
+        "kind": "cteExpr",
+        "name": "DT64",
+        "expr": {
+          "kind": "functionCall",
+          "name": "toDateTime64",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "S"
+              ]
+            },
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "3"
+            }
+          ]
+        }
+      }
+    ],
+    "select": [
+      {
+        "kind": "binaryExpr",
+        "op": "=",
+        "left": {
+          "kind": "functionCall",
+          "name": "materialize",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "S"
+              ]
+            }
+          ]
+        },
+        "right": {
+          "kind": "functionCall",
+          "name": "toDateTime64",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "S"
+              ]
+            },
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "3"
+            }
+          ]
+        }
+      }
+    ],
+    "trailingComments": [
+      "-- {serverError ILLEGAL_TYPE_OF_ARGUMENT}"
+    ]
+  },
+  {
+    "kind": "select",
+    "with": [
+      {
+        "kind": "cteExpr",
+        "name": "S",
+        "expr": {
+          "kind": "literal",
+          "type": "String",
+          "value": "2020-02-05 14:34:12.333"
+        }
+      },
+      {
+        "kind": "cteExpr",
+        "name": "DT64",
+        "expr": {
+          "kind": "functionCall",
+          "name": "toDateTime64",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "S"
+              ]
+            },
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "3"
+            }
+          ]
+        }
+      }
+    ],
+    "select": [
+      {
+        "kind": "asterisk"
+      }
+    ],
+    "where": {
+      "kind": "binaryExpr",
+      "op": "=",
+      "left": {
+        "kind": "columnRef",
+        "parts": [
+          "DT64"
+        ]
+      },
+      "right": {
+        "kind": "functionCall",
+        "name": "materialize",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "S"
+            ]
+          }
+        ]
+      }
+    },
+    "trailingComments": [
+      "-- {serverError ILLEGAL_TYPE_OF_ARGUMENT}"
+    ]
+  },
+  {
+    "kind": "select",
+    "with": [
+      {
+        "kind": "cteExpr",
+        "name": "S",
+        "expr": {
+          "kind": "literal",
+          "type": "String",
+          "value": "2020-02-05 14:34:12.333"
+        }
+      },
+      {
+        "kind": "cteExpr",
+        "name": "DT64",
+        "expr": {
+          "kind": "functionCall",
+          "name": "toDateTime64",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "S"
+              ]
+            },
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "3"
+            }
+          ]
+        }
+      }
+    ],
+    "select": [
+      {
+        "kind": "asterisk"
+      }
+    ],
+    "where": {
+      "kind": "binaryExpr",
+      "op": "=",
+      "left": {
+        "kind": "functionCall",
+        "name": "materialize",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "S"
+            ]
+          }
+        ]
+      },
+      "right": {
+        "kind": "columnRef",
+        "parts": [
+          "DT64"
+        ]
+      }
+    },
+    "trailingComments": [
+      "-- {serverError ILLEGAL_TYPE_OF_ARGUMENT}"
+    ]
+  },
+  {
+    "kind": "select",
     "select": [
       {
         "kind": "asterisk"
@@ -30,7 +299,10 @@
         "type": "String",
         "value": "ABCD"
       }
-    }
+    },
+    "trailingComments": [
+      "-- {serverError CANNOT_PARSE_DATETIME} -- invalid DateTime64 string"
+    ]
   },
   {
     "kind": "select",
@@ -62,6 +334,1029 @@
         "kind": "literal",
         "type": "String",
         "value": "2020-02-05 14:34:12.33333333333333333333333333333333333333333333333333333333"
+      }
+    }
+  },
+  {
+    "kind": "select",
+    "with": [
+      {
+        "kind": "cteExpr",
+        "name": "S",
+        "expr": {
+          "kind": "literal",
+          "type": "String",
+          "value": "2020-02-05 14:34:12.333"
+        }
+      },
+      {
+        "kind": "cteExpr",
+        "name": "DT64",
+        "expr": {
+          "kind": "functionCall",
+          "name": "toDateTime64",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "S"
+              ]
+            },
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "3"
+            }
+          ]
+        }
+      }
+    ],
+    "select": [
+      {
+        "kind": "binaryExpr",
+        "op": "=",
+        "left": {
+          "kind": "columnRef",
+          "parts": [
+            "DT64"
+          ]
+        },
+        "right": {
+          "kind": "columnRef",
+          "parts": [
+            "S"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "with": [
+      {
+        "kind": "cteExpr",
+        "name": "S",
+        "expr": {
+          "kind": "literal",
+          "type": "String",
+          "value": "2020-02-05 14:34:12.333"
+        }
+      },
+      {
+        "kind": "cteExpr",
+        "name": "DT64",
+        "expr": {
+          "kind": "functionCall",
+          "name": "toDateTime64",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "S"
+              ]
+            },
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "3"
+            }
+          ]
+        }
+      }
+    ],
+    "select": [
+      {
+        "kind": "binaryExpr",
+        "op": "=",
+        "left": {
+          "kind": "columnRef",
+          "parts": [
+            "S"
+          ]
+        },
+        "right": {
+          "kind": "columnRef",
+          "parts": [
+            "DT64"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "with": [
+      {
+        "kind": "cteExpr",
+        "name": "S",
+        "expr": {
+          "kind": "literal",
+          "type": "String",
+          "value": "2020-02-05 14:34:12.333"
+        }
+      },
+      {
+        "kind": "cteExpr",
+        "name": "DT64",
+        "expr": {
+          "kind": "functionCall",
+          "name": "toDateTime64",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "S"
+              ]
+            },
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "3"
+            }
+          ]
+        }
+      }
+    ],
+    "select": [
+      {
+        "kind": "binaryExpr",
+        "op": "=",
+        "left": {
+          "kind": "functionCall",
+          "name": "materialize",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "DT64"
+              ]
+            }
+          ]
+        },
+        "right": {
+          "kind": "columnRef",
+          "parts": [
+            "S"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "with": [
+      {
+        "kind": "cteExpr",
+        "name": "S",
+        "expr": {
+          "kind": "literal",
+          "type": "String",
+          "value": "2020-02-05 14:34:12.333"
+        }
+      },
+      {
+        "kind": "cteExpr",
+        "name": "DT64",
+        "expr": {
+          "kind": "functionCall",
+          "name": "toDateTime64",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "S"
+              ]
+            },
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "3"
+            }
+          ]
+        }
+      }
+    ],
+    "select": [
+      {
+        "kind": "binaryExpr",
+        "op": "=",
+        "left": {
+          "kind": "columnRef",
+          "parts": [
+            "S"
+          ]
+        },
+        "right": {
+          "kind": "functionCall",
+          "name": "materialize",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "DT64"
+              ]
+            }
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "with": [
+      {
+        "kind": "cteExpr",
+        "name": "S",
+        "expr": {
+          "kind": "literal",
+          "type": "String",
+          "value": "2020-02-05 14:34:12.333"
+        }
+      },
+      {
+        "kind": "cteExpr",
+        "name": "DT64",
+        "expr": {
+          "kind": "functionCall",
+          "name": "toDateTime64",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "S"
+              ]
+            },
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "3"
+            }
+          ]
+        }
+      }
+    ],
+    "select": [
+      {
+        "kind": "asterisk"
+      }
+    ],
+    "where": {
+      "kind": "binaryExpr",
+      "op": "=",
+      "left": {
+        "kind": "columnRef",
+        "parts": [
+          "DT64"
+        ]
+      },
+      "right": {
+        "kind": "columnRef",
+        "parts": [
+          "S"
+        ]
+      }
+    }
+  },
+  {
+    "kind": "select",
+    "with": [
+      {
+        "kind": "cteExpr",
+        "name": "S",
+        "expr": {
+          "kind": "literal",
+          "type": "String",
+          "value": "2020-02-05 14:34:12.333"
+        }
+      },
+      {
+        "kind": "cteExpr",
+        "name": "DT64",
+        "expr": {
+          "kind": "functionCall",
+          "name": "toDateTime64",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "S"
+              ]
+            },
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "3"
+            }
+          ]
+        }
+      }
+    ],
+    "select": [
+      {
+        "kind": "asterisk"
+      }
+    ],
+    "where": {
+      "kind": "binaryExpr",
+      "op": "=",
+      "left": {
+        "kind": "columnRef",
+        "parts": [
+          "S"
+        ]
+      },
+      "right": {
+        "kind": "columnRef",
+        "parts": [
+          "DT64"
+        ]
+      }
+    }
+  },
+  {
+    "kind": "select",
+    "with": [
+      {
+        "kind": "cteExpr",
+        "name": "S",
+        "expr": {
+          "kind": "literal",
+          "type": "String",
+          "value": "2020-02-05 14:34:12.333"
+        }
+      },
+      {
+        "kind": "cteExpr",
+        "name": "DT64",
+        "expr": {
+          "kind": "functionCall",
+          "name": "toDateTime64",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "S"
+              ]
+            },
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "3"
+            }
+          ]
+        }
+      }
+    ],
+    "select": [
+      {
+        "kind": "asterisk"
+      }
+    ],
+    "where": {
+      "kind": "binaryExpr",
+      "op": "=",
+      "left": {
+        "kind": "functionCall",
+        "name": "materialize",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "DT64"
+            ]
+          }
+        ]
+      },
+      "right": {
+        "kind": "columnRef",
+        "parts": [
+          "S"
+        ]
+      }
+    }
+  },
+  {
+    "kind": "select",
+    "with": [
+      {
+        "kind": "cteExpr",
+        "name": "S",
+        "expr": {
+          "kind": "literal",
+          "type": "String",
+          "value": "2020-02-05 14:34:12.333"
+        }
+      },
+      {
+        "kind": "cteExpr",
+        "name": "DT64",
+        "expr": {
+          "kind": "functionCall",
+          "name": "toDateTime64",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "S"
+              ]
+            },
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "3"
+            }
+          ]
+        }
+      }
+    ],
+    "select": [
+      {
+        "kind": "asterisk"
+      }
+    ],
+    "where": {
+      "kind": "binaryExpr",
+      "op": "=",
+      "left": {
+        "kind": "columnRef",
+        "parts": [
+          "S"
+        ]
+      },
+      "right": {
+        "kind": "functionCall",
+        "name": "materialize",
+        "args": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "DT64"
+            ]
+          }
+        ]
+      }
+    }
+  },
+  {
+    "kind": "select",
+    "with": [
+      {
+        "kind": "cteExpr",
+        "name": "S",
+        "expr": {
+          "kind": "literal",
+          "type": "String",
+          "value": "2020-02-05 14:34:12.333"
+        }
+      },
+      {
+        "kind": "cteExpr",
+        "name": "DT64",
+        "expr": {
+          "kind": "functionCall",
+          "name": "toDateTime64",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "S"
+              ]
+            },
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "3"
+            }
+          ]
+        }
+      }
+    ],
+    "select": [
+      {
+        "kind": "asterisk"
+      }
+    ],
+    "where": {
+      "kind": "binaryExpr",
+      "op": "<=",
+      "left": {
+        "kind": "columnRef",
+        "parts": [
+          "DT64"
+        ]
+      },
+      "right": {
+        "kind": "columnRef",
+        "parts": [
+          "S"
+        ]
+      }
+    }
+  },
+  {
+    "kind": "select",
+    "with": [
+      {
+        "kind": "cteExpr",
+        "name": "S",
+        "expr": {
+          "kind": "literal",
+          "type": "String",
+          "value": "2020-02-05 14:34:12.333"
+        }
+      },
+      {
+        "kind": "cteExpr",
+        "name": "DT64",
+        "expr": {
+          "kind": "functionCall",
+          "name": "toDateTime64",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "S"
+              ]
+            },
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "3"
+            }
+          ]
+        }
+      }
+    ],
+    "select": [
+      {
+        "kind": "asterisk"
+      }
+    ],
+    "where": {
+      "kind": "binaryExpr",
+      "op": ">=",
+      "left": {
+        "kind": "columnRef",
+        "parts": [
+          "DT64"
+        ]
+      },
+      "right": {
+        "kind": "columnRef",
+        "parts": [
+          "S"
+        ]
+      }
+    }
+  },
+  {
+    "kind": "select",
+    "with": [
+      {
+        "kind": "cteExpr",
+        "name": "S",
+        "expr": {
+          "kind": "literal",
+          "type": "String",
+          "value": "2020-02-05 14:34:12.333"
+        }
+      },
+      {
+        "kind": "cteExpr",
+        "name": "DT64",
+        "expr": {
+          "kind": "functionCall",
+          "name": "toDateTime64",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "S"
+              ]
+            },
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "3"
+            }
+          ]
+        }
+      }
+    ],
+    "select": [
+      {
+        "kind": "asterisk"
+      }
+    ],
+    "where": {
+      "kind": "binaryExpr",
+      "op": "<=",
+      "left": {
+        "kind": "columnRef",
+        "parts": [
+          "S"
+        ]
+      },
+      "right": {
+        "kind": "columnRef",
+        "parts": [
+          "DT64"
+        ]
+      }
+    }
+  },
+  {
+    "kind": "select",
+    "with": [
+      {
+        "kind": "cteExpr",
+        "name": "S",
+        "expr": {
+          "kind": "literal",
+          "type": "String",
+          "value": "2020-02-05 14:34:12.333"
+        }
+      },
+      {
+        "kind": "cteExpr",
+        "name": "DT64",
+        "expr": {
+          "kind": "functionCall",
+          "name": "toDateTime64",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "S"
+              ]
+            },
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "3"
+            }
+          ]
+        }
+      }
+    ],
+    "select": [
+      {
+        "kind": "asterisk"
+      }
+    ],
+    "where": {
+      "kind": "binaryExpr",
+      "op": ">=",
+      "left": {
+        "kind": "columnRef",
+        "parts": [
+          "S"
+        ]
+      },
+      "right": {
+        "kind": "columnRef",
+        "parts": [
+          "DT64"
+        ]
+      }
+    }
+  },
+  {
+    "kind": "select",
+    "with": [
+      {
+        "kind": "cteExpr",
+        "name": "S",
+        "expr": {
+          "kind": "literal",
+          "type": "String",
+          "value": "2020-02-05 14:34:12.333"
+        }
+      },
+      {
+        "kind": "cteExpr",
+        "name": "DT64",
+        "expr": {
+          "kind": "functionCall",
+          "name": "toDateTime64",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "S"
+              ]
+            },
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "3"
+            }
+          ]
+        }
+      }
+    ],
+    "select": [
+      {
+        "kind": "asterisk"
+      }
+    ],
+    "where": {
+      "kind": "binaryExpr",
+      "op": "<",
+      "left": {
+        "kind": "columnRef",
+        "parts": [
+          "DT64"
+        ]
+      },
+      "right": {
+        "kind": "columnRef",
+        "parts": [
+          "S"
+        ]
+      }
+    },
+    "leadingComments": [
+      "-- empty results"
+    ]
+  },
+  {
+    "kind": "select",
+    "with": [
+      {
+        "kind": "cteExpr",
+        "name": "S",
+        "expr": {
+          "kind": "literal",
+          "type": "String",
+          "value": "2020-02-05 14:34:12.333"
+        }
+      },
+      {
+        "kind": "cteExpr",
+        "name": "DT64",
+        "expr": {
+          "kind": "functionCall",
+          "name": "toDateTime64",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "S"
+              ]
+            },
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "3"
+            }
+          ]
+        }
+      }
+    ],
+    "select": [
+      {
+        "kind": "asterisk"
+      }
+    ],
+    "where": {
+      "kind": "binaryExpr",
+      "op": ">",
+      "left": {
+        "kind": "columnRef",
+        "parts": [
+          "DT64"
+        ]
+      },
+      "right": {
+        "kind": "columnRef",
+        "parts": [
+          "S"
+        ]
+      }
+    }
+  },
+  {
+    "kind": "select",
+    "with": [
+      {
+        "kind": "cteExpr",
+        "name": "S",
+        "expr": {
+          "kind": "literal",
+          "type": "String",
+          "value": "2020-02-05 14:34:12.333"
+        }
+      },
+      {
+        "kind": "cteExpr",
+        "name": "DT64",
+        "expr": {
+          "kind": "functionCall",
+          "name": "toDateTime64",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "S"
+              ]
+            },
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "3"
+            }
+          ]
+        }
+      }
+    ],
+    "select": [
+      {
+        "kind": "asterisk"
+      }
+    ],
+    "where": {
+      "kind": "binaryExpr",
+      "op": "!=",
+      "left": {
+        "kind": "columnRef",
+        "parts": [
+          "DT64"
+        ]
+      },
+      "right": {
+        "kind": "columnRef",
+        "parts": [
+          "S"
+        ]
+      }
+    }
+  },
+  {
+    "kind": "select",
+    "with": [
+      {
+        "kind": "cteExpr",
+        "name": "S",
+        "expr": {
+          "kind": "literal",
+          "type": "String",
+          "value": "2020-02-05 14:34:12.333"
+        }
+      },
+      {
+        "kind": "cteExpr",
+        "name": "DT64",
+        "expr": {
+          "kind": "functionCall",
+          "name": "toDateTime64",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "S"
+              ]
+            },
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "3"
+            }
+          ]
+        }
+      }
+    ],
+    "select": [
+      {
+        "kind": "asterisk"
+      }
+    ],
+    "where": {
+      "kind": "binaryExpr",
+      "op": "<",
+      "left": {
+        "kind": "columnRef",
+        "parts": [
+          "S"
+        ]
+      },
+      "right": {
+        "kind": "columnRef",
+        "parts": [
+          "DT64"
+        ]
+      }
+    }
+  },
+  {
+    "kind": "select",
+    "with": [
+      {
+        "kind": "cteExpr",
+        "name": "S",
+        "expr": {
+          "kind": "literal",
+          "type": "String",
+          "value": "2020-02-05 14:34:12.333"
+        }
+      },
+      {
+        "kind": "cteExpr",
+        "name": "DT64",
+        "expr": {
+          "kind": "functionCall",
+          "name": "toDateTime64",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "S"
+              ]
+            },
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "3"
+            }
+          ]
+        }
+      }
+    ],
+    "select": [
+      {
+        "kind": "asterisk"
+      }
+    ],
+    "where": {
+      "kind": "binaryExpr",
+      "op": ">",
+      "left": {
+        "kind": "columnRef",
+        "parts": [
+          "S"
+        ]
+      },
+      "right": {
+        "kind": "columnRef",
+        "parts": [
+          "DT64"
+        ]
+      }
+    }
+  },
+  {
+    "kind": "select",
+    "with": [
+      {
+        "kind": "cteExpr",
+        "name": "S",
+        "expr": {
+          "kind": "literal",
+          "type": "String",
+          "value": "2020-02-05 14:34:12.333"
+        }
+      },
+      {
+        "kind": "cteExpr",
+        "name": "DT64",
+        "expr": {
+          "kind": "functionCall",
+          "name": "toDateTime64",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "S"
+              ]
+            },
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "3"
+            }
+          ]
+        }
+      }
+    ],
+    "select": [
+      {
+        "kind": "asterisk"
+      }
+    ],
+    "where": {
+      "kind": "binaryExpr",
+      "op": "!=",
+      "left": {
+        "kind": "columnRef",
+        "parts": [
+          "S"
+        ]
+      },
+      "right": {
+        "kind": "columnRef",
+        "parts": [
+          "DT64"
+        ]
       }
     }
   }

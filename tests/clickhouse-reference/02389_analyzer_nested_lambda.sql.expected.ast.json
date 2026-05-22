@@ -1,5 +1,31 @@
 [
   {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "enable_analyzer",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "max_execution_time",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "300"
+        }
+      }
+    ]
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -50,7 +76,7 @@
                         }
                       },
                       {
-                        "kind": "array",
+                        "kind": "arrayLiteral",
                         "elements": [
                           {
                             "kind": "literal",
@@ -72,7 +98,7 @@
             }
           },
           {
-            "kind": "array",
+            "kind": "arrayLiteral",
             "elements": [
               {
                 "kind": "literal",
@@ -94,6 +120,9 @@
           }
         ]
       }
+    ],
+    "leadingComments": [
+      "-- { echoOn }"
     ]
   },
   {
@@ -147,7 +176,7 @@
                         }
                       },
                       {
-                        "kind": "array",
+                        "kind": "arrayLiteral",
                         "elements": [
                           {
                             "kind": "literal",
@@ -169,7 +198,7 @@
             }
           },
           {
-            "kind": "array",
+            "kind": "arrayLiteral",
             "elements": [
               {
                 "kind": "literal",
@@ -244,7 +273,7 @@
                         }
                       },
                       {
-                        "kind": "array",
+                        "kind": "arrayLiteral",
                         "elements": [
                           {
                             "kind": "literal",
@@ -266,7 +295,7 @@
             }
           },
           {
-            "kind": "array",
+            "kind": "arrayLiteral",
             "elements": [
               {
                 "kind": "literal",
@@ -332,7 +361,7 @@
                         }
                       },
                       {
-                        "kind": "array",
+                        "kind": "arrayLiteral",
                         "elements": [
                           {
                             "kind": "literal",
@@ -354,7 +383,7 @@
             }
           },
           {
-            "kind": "array",
+            "kind": "arrayLiteral",
             "elements": [
               {
                 "kind": "literal",
@@ -430,7 +459,7 @@
                         }
                       },
                       {
-                        "kind": "array",
+                        "kind": "arrayLiteral",
                         "elements": [
                           {
                             "kind": "literal",
@@ -452,7 +481,7 @@
             }
           },
           {
-            "kind": "array",
+            "kind": "arrayLiteral",
             "elements": [
               {
                 "kind": "literal",
@@ -525,7 +554,7 @@
                         }
                       },
                       {
-                        "kind": "array",
+                        "kind": "arrayLiteral",
                         "elements": [
                           {
                             "kind": "literal",
@@ -547,7 +576,7 @@
             }
           },
           {
-            "kind": "array",
+            "kind": "arrayLiteral",
             "elements": [
               {
                 "kind": "literal",
@@ -630,7 +659,7 @@
                         }
                       },
                       {
-                        "kind": "array",
+                        "kind": "arrayLiteral",
                         "elements": [
                           {
                             "kind": "literal",
@@ -652,7 +681,7 @@
             }
           },
           {
-            "kind": "array",
+            "kind": "arrayLiteral",
             "elements": [
               {
                 "kind": "literal",
@@ -741,7 +770,7 @@
                         }
                       },
                       {
-                        "kind": "array",
+                        "kind": "arrayLiteral",
                         "elements": [
                           {
                             "kind": "literal",
@@ -763,7 +792,7 @@
             }
           },
           {
-            "kind": "array",
+            "kind": "arrayLiteral",
             "elements": [
               {
                 "kind": "literal",
@@ -862,7 +891,7 @@
                         }
                       },
                       {
-                        "kind": "array",
+                        "kind": "arrayLiteral",
                         "elements": [
                           {
                             "kind": "literal",
@@ -884,7 +913,7 @@
             }
           },
           {
-            "kind": "array",
+            "kind": "arrayLiteral",
             "elements": [
               {
                 "kind": "literal",
@@ -907,6 +936,255 @@
         ]
       }
     ]
+  },
+  {
+    "kind": "select",
+    "with": [
+      {
+        "kind": "cteExpr",
+        "name": "lambda",
+        "expr": {
+          "kind": "lambdaExpr",
+          "params": [
+            "x"
+          ],
+          "body": {
+            "kind": "functionCall",
+            "name": "toString",
+            "args": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "x"
+                ]
+              }
+            ]
+          }
+        }
+      }
+    ],
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "arrayMap",
+        "args": [
+          {
+            "kind": "lambdaExpr",
+            "params": [
+              "x"
+            ],
+            "body": {
+              "kind": "functionCall",
+              "name": "lambda",
+              "args": [
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "x"
+                  ]
+                }
+              ]
+            }
+          },
+          {
+            "kind": "arrayLiteral",
+            "elements": [
+              {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "1"
+              },
+              {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "2"
+              },
+              {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "3"
+              }
+            ],
+            "source": "[1,2,3]"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "with": [
+      {
+        "kind": "cteExpr",
+        "name": "lambda",
+        "expr": {
+          "kind": "lambdaExpr",
+          "params": [
+            "x"
+          ],
+          "body": {
+            "kind": "functionCall",
+            "name": "toString",
+            "args": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "x"
+                ]
+              }
+            ]
+          }
+        }
+      }
+    ],
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "arrayMap",
+        "args": [
+          {
+            "kind": "lambdaExpr",
+            "params": [
+              "x"
+            ],
+            "body": {
+              "kind": "functionCall",
+              "name": "arrayMap",
+              "args": [
+                {
+                  "kind": "lambdaExpr",
+                  "params": [
+                    "y"
+                  ],
+                  "body": {
+                    "kind": "functionCall",
+                    "name": "concat",
+                    "args": [
+                      {
+                        "kind": "functionCall",
+                        "name": "lambda",
+                        "args": [
+                          {
+                            "kind": "columnRef",
+                            "parts": [
+                              "x"
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "kind": "literal",
+                        "type": "String",
+                        "value": "_"
+                      },
+                      {
+                        "kind": "functionCall",
+                        "name": "lambda",
+                        "args": [
+                          {
+                            "kind": "columnRef",
+                            "parts": [
+                              "y"
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                },
+                {
+                  "kind": "arrayLiteral",
+                  "elements": [
+                    {
+                      "kind": "literal",
+                      "type": "UInt64",
+                      "value": "1"
+                    },
+                    {
+                      "kind": "literal",
+                      "type": "UInt64",
+                      "value": "2"
+                    },
+                    {
+                      "kind": "literal",
+                      "type": "UInt64",
+                      "value": "3"
+                    }
+                  ],
+                  "source": "[1,2,3]"
+                }
+              ]
+            }
+          },
+          {
+            "kind": "arrayLiteral",
+            "elements": [
+              {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "1"
+              },
+              {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "2"
+              },
+              {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "3"
+              }
+            ],
+            "source": "[1,2,3]"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "test_table"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "test_table"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "id",
+        "type": {
+          "name": "UInt64"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "value",
+        "type": {
+          "name": "String"
+        }
+      }
+    ],
+    "engine": {
+      "name": "TinyLog"
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "test_table"
+      }
+    }
   },
   {
     "kind": "select",
@@ -950,7 +1228,7 @@
                         }
                       },
                       {
-                        "kind": "array",
+                        "kind": "arrayLiteral",
                         "elements": [
                           {
                             "kind": "literal",
@@ -972,7 +1250,7 @@
             }
           },
           {
-            "kind": "array",
+            "kind": "arrayLiteral",
             "elements": [
               {
                 "kind": "literal",
@@ -1052,7 +1330,7 @@
                         }
                       },
                       {
-                        "kind": "array",
+                        "kind": "arrayLiteral",
                         "elements": [
                           {
                             "kind": "literal",
@@ -1074,7 +1352,7 @@
             }
           },
           {
-            "kind": "array",
+            "kind": "arrayLiteral",
             "elements": [
               {
                 "kind": "literal",
@@ -1164,7 +1442,7 @@
                         }
                       },
                       {
-                        "kind": "array",
+                        "kind": "arrayLiteral",
                         "elements": [
                           {
                             "kind": "literal",
@@ -1186,7 +1464,7 @@
             }
           },
           {
-            "kind": "array",
+            "kind": "arrayLiteral",
             "elements": [
               {
                 "kind": "literal",
@@ -1286,7 +1564,7 @@
                         }
                       },
                       {
-                        "kind": "array",
+                        "kind": "arrayLiteral",
                         "elements": [
                           {
                             "kind": "literal",
@@ -1308,7 +1586,7 @@
             }
           },
           {
-            "kind": "array",
+            "kind": "arrayLiteral",
             "elements": [
               {
                 "kind": "literal",
@@ -1377,7 +1655,7 @@
                         }
                       },
                       {
-                        "kind": "array",
+                        "kind": "arrayLiteral",
                         "elements": [
                           {
                             "kind": "literal",
@@ -1399,7 +1677,7 @@
             }
           },
           {
-            "kind": "array",
+            "kind": "arrayLiteral",
             "elements": [
               {
                 "kind": "literal",
@@ -1478,7 +1756,7 @@
                         }
                       },
                       {
-                        "kind": "array",
+                        "kind": "arrayLiteral",
                         "elements": [
                           {
                             "kind": "literal",
@@ -1500,7 +1778,7 @@
             }
           },
           {
-            "kind": "array",
+            "kind": "arrayLiteral",
             "elements": [
               {
                 "kind": "literal",
@@ -1589,7 +1867,7 @@
                         }
                       },
                       {
-                        "kind": "array",
+                        "kind": "arrayLiteral",
                         "elements": [
                           {
                             "kind": "literal",
@@ -1611,7 +1889,7 @@
             }
           },
           {
-            "kind": "array",
+            "kind": "arrayLiteral",
             "elements": [
               {
                 "kind": "literal",
@@ -1710,7 +1988,7 @@
                         }
                       },
                       {
-                        "kind": "array",
+                        "kind": "arrayLiteral",
                         "elements": [
                           {
                             "kind": "literal",
@@ -1732,7 +2010,7 @@
             }
           },
           {
-            "kind": "array",
+            "kind": "arrayLiteral",
             "elements": [
               {
                 "kind": "literal",
@@ -1841,7 +2119,7 @@
                         }
                       },
                       {
-                        "kind": "array",
+                        "kind": "arrayLiteral",
                         "elements": [
                           {
                             "kind": "literal",
@@ -1863,7 +2141,7 @@
             }
           },
           {
-            "kind": "array",
+            "kind": "arrayLiteral",
             "elements": [
               {
                 "kind": "literal",
@@ -1955,7 +2233,7 @@
                         }
                       },
                       {
-                        "kind": "array",
+                        "kind": "arrayLiteral",
                         "elements": [
                           {
                             "kind": "literal",
@@ -1977,7 +2255,7 @@
             }
           },
           {
-            "kind": "array",
+            "kind": "arrayLiteral",
             "elements": [
               {
                 "kind": "literal",
@@ -2069,7 +2347,7 @@
                         }
                       },
                       {
-                        "kind": "array",
+                        "kind": "arrayLiteral",
                         "elements": [
                           {
                             "kind": "literal",
@@ -2091,7 +2369,7 @@
             }
           },
           {
-            "kind": "array",
+            "kind": "arrayLiteral",
             "elements": [
               {
                 "kind": "literal",
@@ -2204,7 +2482,7 @@
                         }
                       },
                       {
-                        "kind": "array",
+                        "kind": "arrayLiteral",
                         "elements": [
                           {
                             "kind": "literal",
@@ -2226,7 +2504,330 @@
             }
           },
           {
-            "kind": "array",
+            "kind": "arrayLiteral",
+            "elements": [
+              {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "1"
+              },
+              {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "2"
+              },
+              {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "3"
+              }
+            ],
+            "source": "[1,2,3]"
+          }
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "test_table"
+    }
+  },
+  {
+    "kind": "select",
+    "with": [
+      {
+        "kind": "cteExpr",
+        "name": "lambda",
+        "expr": {
+          "kind": "lambdaExpr",
+          "params": [
+            "x"
+          ],
+          "body": {
+            "kind": "functionCall",
+            "name": "toString",
+            "args": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "id"
+                ]
+              }
+            ]
+          }
+        }
+      }
+    ],
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "arrayMap",
+        "args": [
+          {
+            "kind": "lambdaExpr",
+            "params": [
+              "x"
+            ],
+            "body": {
+              "kind": "functionCall",
+              "name": "lambda",
+              "args": [
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "x"
+                  ]
+                }
+              ]
+            }
+          },
+          {
+            "kind": "arrayLiteral",
+            "elements": [
+              {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "1"
+              },
+              {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "2"
+              },
+              {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "3"
+              }
+            ],
+            "source": "[1,2,3]"
+          }
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "test_table"
+    }
+  },
+  {
+    "kind": "select",
+    "with": [
+      {
+        "kind": "cteExpr",
+        "name": "lambda",
+        "expr": {
+          "kind": "lambdaExpr",
+          "params": [
+            "x"
+          ],
+          "body": {
+            "kind": "functionCall",
+            "name": "toString",
+            "args": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "id"
+                ]
+              }
+            ]
+          }
+        }
+      }
+    ],
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "arrayMap",
+        "args": [
+          {
+            "kind": "lambdaExpr",
+            "params": [
+              "x"
+            ],
+            "body": {
+              "kind": "functionCall",
+              "name": "arrayMap",
+              "args": [
+                {
+                  "kind": "lambdaExpr",
+                  "params": [
+                    "y"
+                  ],
+                  "body": {
+                    "kind": "functionCall",
+                    "name": "lambda",
+                    "args": [
+                      {
+                        "kind": "columnRef",
+                        "parts": [
+                          "y"
+                        ]
+                      }
+                    ]
+                  }
+                },
+                {
+                  "kind": "arrayLiteral",
+                  "elements": [
+                    {
+                      "kind": "literal",
+                      "type": "UInt64",
+                      "value": "1"
+                    },
+                    {
+                      "kind": "literal",
+                      "type": "UInt64",
+                      "value": "2"
+                    },
+                    {
+                      "kind": "literal",
+                      "type": "UInt64",
+                      "value": "3"
+                    }
+                  ],
+                  "source": "[1,2,3]"
+                }
+              ]
+            }
+          },
+          {
+            "kind": "arrayLiteral",
+            "elements": [
+              {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "1"
+              },
+              {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "2"
+              },
+              {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "3"
+              }
+            ],
+            "source": "[1,2,3]"
+          }
+        ]
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "test_table"
+    }
+  },
+  {
+    "kind": "select",
+    "with": [
+      {
+        "kind": "cteExpr",
+        "name": "lambda",
+        "expr": {
+          "kind": "lambdaExpr",
+          "params": [
+            "x"
+          ],
+          "body": {
+            "kind": "functionCall",
+            "name": "toString",
+            "args": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "id"
+                ]
+              }
+            ]
+          }
+        }
+      }
+    ],
+    "select": [
+      {
+        "kind": "functionCall",
+        "name": "arrayMap",
+        "args": [
+          {
+            "kind": "lambdaExpr",
+            "params": [
+              "x"
+            ],
+            "body": {
+              "kind": "functionCall",
+              "name": "arrayMap",
+              "args": [
+                {
+                  "kind": "lambdaExpr",
+                  "params": [
+                    "y"
+                  ],
+                  "body": {
+                    "kind": "functionCall",
+                    "name": "concat",
+                    "args": [
+                      {
+                        "kind": "functionCall",
+                        "name": "lambda",
+                        "args": [
+                          {
+                            "kind": "columnRef",
+                            "parts": [
+                              "x"
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "kind": "literal",
+                        "type": "String",
+                        "value": "_"
+                      },
+                      {
+                        "kind": "functionCall",
+                        "name": "lambda",
+                        "args": [
+                          {
+                            "kind": "columnRef",
+                            "parts": [
+                              "y"
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                },
+                {
+                  "kind": "arrayLiteral",
+                  "elements": [
+                    {
+                      "kind": "literal",
+                      "type": "UInt64",
+                      "value": "1"
+                    },
+                    {
+                      "kind": "literal",
+                      "type": "UInt64",
+                      "value": "2"
+                    },
+                    {
+                      "kind": "literal",
+                      "type": "UInt64",
+                      "value": "3"
+                    }
+                  ],
+                  "source": "[1,2,3]"
+                }
+              ]
+            }
+          },
+          {
+            "kind": "arrayLiteral",
             "elements": [
               {
                 "kind": "literal",
@@ -2471,7 +3072,7 @@
                                 }
                               },
                               {
-                                "kind": "array",
+                                "kind": "arrayLiteral",
                                 "elements": [
                                   {
                                     "kind": "literal",
@@ -2555,7 +3156,7 @@
             }
           },
           {
-            "kind": "array",
+            "kind": "arrayLiteral",
             "elements": [
               {
                 "kind": "literal",
@@ -2715,7 +3316,7 @@
                       }
                     },
                     {
-                      "kind": "array",
+                      "kind": "arrayLiteral",
                       "elements": [
                         {
                           "kind": "literal",
@@ -2731,7 +3332,7 @@
             }
           },
           {
-            "kind": "array",
+            "kind": "arrayLiteral",
             "elements": [
               {
                 "kind": "literal",
@@ -2745,6 +3346,17 @@
       }
     ],
     "from": {
+      "kind": "tableRef",
+      "table": "test_table"
+    },
+    "trailingComments": [
+      "-- { serverError ILLEGAL_COLUMN };"
+    ]
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
       "kind": "tableRef",
       "table": "test_table"
     }
@@ -2853,7 +3465,7 @@
       }
     ],
     "from": {
-      "kind": "tableFunction",
+      "kind": "tableFunctionRef",
       "name": "numbers",
       "args": [
         {
@@ -2863,7 +3475,10 @@
         }
       ]
     },
-    "format": "Null"
+    "format": "Null",
+    "leadingComments": [
+      "-- { echoOff }"
+    ]
   },
   {
     "kind": "select",

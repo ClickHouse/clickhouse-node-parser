@@ -1,3 +1,4 @@
+-- Tags: no-fasttest, use-vectorscan
 SELECT '-- With const pattern';
 
 SELECT 0 = multiMatchAny(materialize('mpnsguhwsitzvuleiwebwjfitmsg'), ['wbirxqoabpblrnvvmjizj', 'cfcxhuvrexyzyjsh', 'oldhtubemyuqlqbwvwwkwin', 'bumoozxdkjglzu', 'intxlfohlxmajjomw', 'dxkeghohv', 'arsvmwwkjeopnlwnan', 'ouugllgowpqtaxslcopkytbfhifaxbgt', 'hkedmjlbcrzvryaopjqdjjc', 'tbqkljywstuahzh', 'o', 'wowoclosyfcuwotmvjygzuzhrery', 'vpefjiffkhlggntcu', 'ytdixvasrorhripzfhjdmlhqksmctyycwp'])
@@ -268,6 +269,7 @@ SELECT multiMatchAny(materialize('/odezhda-dlya-bega/'), ['/odezhda-dlya-bega/',
 
 SELECT 1 = multiMatchAny('фабрикант', ['f[ae]b[ei]rl', 'ф[иаэе]б[еэи][рпл]', 'афиукд', 'a[ft],th', '^ф[аиеэ]?б?[еэи]?$', 'берлик', 'fab', 'фа[беьв]+е?[рлко]']);
 
+-- All indices tests
 SELECT [] = multiMatchAllIndices(materialize('Butterbrot!'), []::Array(String))
 FROM `system`.numbers
 LIMIT 5;
@@ -290,11 +292,7 @@ SELECT [1] = multiMatchAllIndices(materialize('/odezhda-dlya-bega/'), ['/odezhda
 
 SELECT [] = multiMatchAllIndices(materialize('aaaa'), ['.*aa.*aaa.*', 'aaaaaa{2}', '\(aa\){3}']);
 
-SELECT 'All tests above must return 1, all tests below return something.';
-
 SELECT arraySort(multiMatchAllIndices(arrayJoin(['aaaa', 'aaaaaa', 'bbbb', 'aaaaaaaaaaaaaa']), ['.*aa.*aaa.*', 'aaaaaa{2}', '(aa){3}']));
-
-SELECT '-- With non-const pattern';
 
 SELECT 0 = multiMatchAny(materialize('mpnsguhwsitzvuleiwebwjfitmsg'), materialize(['wbirxqoabpblrnvvmjizj', 'cfcxhuvrexyzyjsh', 'oldhtubemyuqlqbwvwwkwin', 'bumoozxdkjglzu', 'intxlfohlxmajjomw', 'dxkeghohv', 'arsvmwwkjeopnlwnan', 'ouugllgowpqtaxslcopkytbfhifaxbgt', 'hkedmjlbcrzvryaopjqdjjc', 'tbqkljywstuahzh', 'o', 'wowoclosyfcuwotmvjygzuzhrery', 'vpefjiffkhlggntcu', 'ytdixvasrorhripzfhjdmlhqksmctyycwp']))
 FROM `system`.numbers
@@ -564,6 +562,7 @@ SELECT multiMatchAny(materialize('/odezhda-dlya-bega/'), materialize(['/odezhda-
 
 SELECT 1 = multiMatchAny(materialize('фабрикант'), materialize(['f[ae]b[ei]rl', 'ф[иаэе]б[еэи][рпл]', 'афиукд', 'a[ft],th', '^ф[аиеэ]?б?[еэи]?$', 'берлик', 'fab', 'фа[беьв]+е?[рлко]']));
 
+-- All indices tests
 SELECT [] = multiMatchAllIndices(materialize('Butterbrot!'), materialize([]::Array(String)))
 FROM `system`.numbers
 LIMIT 5;

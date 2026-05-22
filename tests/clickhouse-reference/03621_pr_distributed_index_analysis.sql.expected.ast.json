@@ -1,5 +1,181 @@
 [
   {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "test_10m"
+    },
+    "ifExists": true,
+    "leadingComments": [
+      "-- Tags: no-replicated-database, long",
+      "-- - no-replicated-database - it uses cluster of multiple nodes, while we use different clusters",
+      "-- Make sure that distributed index analysis works with parallel replicas"
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "test_10m"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "key",
+        "type": {
+          "name": "Int"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "value",
+        "type": {
+          "name": "Int"
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree",
+      "args": []
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "key"
+          ]
+        }
+      }
+    ],
+    "settings": [
+      {
+        "name": "distributed_index_analysis_min_parts_to_activate",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      },
+      {
+        "name": "distributed_index_analysis_min_indexes_size_to_activate",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      }
+    ],
+    "settingsAfterOrderBy": true
+  },
+  {
+    "kind": "system",
+    "body": "SYSTEM stop merges test_10m"
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "test_10m"
+      }
+    },
+    "selectQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "number"
+          ]
+        },
+        {
+          "kind": "binaryExpr",
+          "op": "*",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "number"
+            ]
+          },
+          "right": {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "100"
+          }
+        }
+      ],
+      "from": {
+        "kind": "tableFunctionRef",
+        "name": "numbers",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "Float64",
+            "value": "10e6"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "parallel_replicas_for_non_replicated_merge_tree",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "parallel_replicas_index_analysis_only_on_coordinator",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "parallel_replicas_local_plan",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "send_logs_level",
+        "value": {
+          "kind": "literal",
+          "type": "String",
+          "value": "error"
+        }
+      }
+    ],
+    "leadingComments": [
+      "--- Ignore warnings when replica does not respond, and analysis is done on initiator"
+    ]
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -44,6 +220,9 @@
           "value": "parallel_replicas"
         }
       }
+    ],
+    "leadingComments": [
+      "-- { echo }"
     ]
   },
   {
@@ -141,6 +320,13 @@
     ]
   },
   {
+    "kind": "system",
+    "body": "SYSTEM flush logs query_log",
+    "leadingComments": [
+      "-- { echoOff }"
+    ]
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -207,7 +393,10 @@
                 "kind": "literal",
                 "type": "String",
                 "value": "1"
-              }
+              },
+              "leadingComments": [
+                "-- in case of parallel replicas, it is possible that there will be less subqueries then max, but should not exceed it"
+              ]
             },
             {
               "kind": "functionCall",
@@ -264,7 +453,10 @@
                     ]
                   },
                   "type": "UInt64",
-                  "operator": true
+                  "operator": true,
+                  "leadingComments": [
+                    "-- the max is hosts in parallel_replicas (10) * 2 (one for the query itself and one for mergeTreeAnalyzeIndexes()) - 1 * 2 (for local replica we do not issue a separate query) + 1 (query itself)"
+                  ]
                 },
                 {
                   "kind": "castExpr",
@@ -285,7 +477,10 @@
                     ]
                   },
                   "type": "UInt64",
-                  "operator": true
+                  "operator": true,
+                  "leadingComments": [
+                    "-- the max is hosts in test_cluster_one_shard_two_replicas (2) * 2 (one for the query itself and one for mergeTreeAnalyzeIndexes()) - 1 * 2 (for local replica we do not issue a separate query) + 1 (query itself)"
+                  ]
                 }
               ]
             },
@@ -367,6 +562,9 @@
                   "type": "UInt64",
                   "operator": true
                 }
+              ],
+              "leadingComments": [
+                "-- in case of distributed index analyss, it is possible that there will be less subqueries then max, due to failures on remote"
               ]
             }
           ]
@@ -564,6 +762,9 @@
                 }
               ]
             }
+          ],
+          "leadingComments": [
+            "-- SKIP: current_database = currentDatabase() (it will filter out non-initial queries)"
           ]
         }
       ]

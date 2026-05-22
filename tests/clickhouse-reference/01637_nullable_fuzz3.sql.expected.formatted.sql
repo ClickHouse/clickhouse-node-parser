@@ -1,3 +1,14 @@
+DROP TABLE IF EXISTS t;
+
+CREATE TABLE t
+(
+    item_id UInt64,
+    price_sold Float32,
+    date Date
+)
+ENGINE = MergeTree
+ORDER BY item_id;
+
 SELECT item_id
 FROM
     (
@@ -51,3 +62,5 @@ FULL JOIN (
     ) AS r
     USING (item_id)
 SETTINGS join_use_nulls = '1';
+
+DROP TABLE t;

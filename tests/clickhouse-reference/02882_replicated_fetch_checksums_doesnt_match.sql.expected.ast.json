@@ -1,5 +1,242 @@
 [
   {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "checksums_r3"
+    },
+    "ifExists": true,
+    "leadingComments": [
+      "-- Tags: no-shared-merge-tree"
+    ]
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "checksums_r2"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "checksums_r1"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "checksums_r1"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "column1",
+        "type": {
+          "name": "UInt32"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "column2",
+        "type": {
+          "name": "String"
+        }
+      }
+    ],
+    "engine": {
+      "name": "ReplicatedMergeTree",
+      "args": [
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "/tables/{database}/checksums_table"
+        },
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "r1"
+        }
+      ]
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "functionCall",
+          "name": "tuple",
+          "args": []
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "checksums_r2"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "column1",
+        "type": {
+          "name": "UInt32"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "column2",
+        "type": {
+          "name": "String"
+        }
+      }
+    ],
+    "engine": {
+      "name": "ReplicatedMergeTree",
+      "args": [
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "/tables/{database}/checksums_table"
+        },
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "r2"
+        }
+      ]
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "functionCall",
+          "name": "tuple",
+          "args": []
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "checksums_r3"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "column1",
+        "type": {
+          "name": "UInt32"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "column2",
+        "type": {
+          "name": "String"
+        }
+      }
+    ],
+    "engine": {
+      "name": "ReplicatedMergeTree",
+      "args": [
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "/tables/{database}/checksums_table"
+        },
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "r3"
+        }
+      ]
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "functionCall",
+          "name": "tuple",
+          "args": []
+        }
+      }
+    ]
+  },
+  {
+    "kind": "system",
+    "body": "SYSTEM STOP REPLICATION QUEUES checksums_r2"
+  },
+  {
+    "kind": "system",
+    "body": "SYSTEM STOP REPLICATION QUEUES checksums_r3"
+  },
+  {
+    "kind": "alter",
+    "table": {
+      "kind": "tableRef",
+      "table": "checksums_r1"
+    },
+    "commands": [
+      {
+        "kind": "alterCommand",
+        "commandType": "MODIFY_COLUMN",
+        "column": {
+          "kind": "columnDef",
+          "name": "column1",
+          "type": {
+            "name": "Int32"
+          }
+        }
+      }
+    ],
+    "settings": [
+      {
+        "name": "alter_sync",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "checksums_r1"
+      }
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "checksums_r3"
+      }
+    }
+  },
+  {
+    "kind": "system",
+    "body": "SYSTEM START REPLICATION QUEUES checksums_r2"
+  },
+  {
+    "kind": "system",
+    "body": "SYSTEM SYNC REPLICA checksums_r2"
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -40,6 +277,34 @@
       "kind": "tableRef",
       "table": "checksums_r3"
     }
+  },
+  {
+    "kind": "system",
+    "body": "SYSTEM START REPLICATION QUEUES checksums_r3"
+  },
+  {
+    "kind": "system",
+    "body": "SYSTEM SYNC REPLICA checksums_r3"
+  },
+  {
+    "kind": "system",
+    "body": "SYSTEM FLUSH LOGS text_log"
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "max_rows_to_read",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      }
+    ],
+    "trailingComments": [
+      "-- system.text_log can be really big"
+    ]
   },
   {
     "kind": "select",

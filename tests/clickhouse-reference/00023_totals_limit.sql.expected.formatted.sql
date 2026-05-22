@@ -1,3 +1,6 @@
+-- Tags: stateful
+SET output_format_write_statistics = 0;
+
 SELECT
     goals_alias.ID AS `ym:s:goalDimension`,
     uniqIf(UserID, (UserID != 0)

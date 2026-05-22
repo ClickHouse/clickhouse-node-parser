@@ -1,3 +1,29 @@
+DROP TABLE IF EXISTS t;
+
+DROP TABLE IF EXISTS nr;
+
+CREATE TABLE t
+(
+    x UInt32,
+    lc LowCardinality(String)
+)
+ENGINE = MergeTree
+ORDER BY tuple();
+
+CREATE TABLE nr
+(
+    x Nullable(UInt32),
+    lc Nullable(String)
+)
+ENGINE = MergeTree
+ORDER BY tuple();
+
+INSERT INTO t;
+
+INSERT INTO nr;
+
+SET join_use_nulls = 0;
+
 SELECT
     x,
     lc,
@@ -31,6 +57,7 @@ FULL JOIN nr AS r
     USING (x)
 ORDER BY x ASC;
 
+-- lc should be supertype for l.lc and r.lc, so expect Nullable(String)
 SELECT
     x,
     lc,
@@ -70,6 +97,7 @@ FULL JOIN nr AS r
 ORDER BY x ASC
 SETTINGS enable_analyzer = 1;
 
+-- old behavior is different
 SELECT
     x,
     lc,
@@ -198,6 +226,8 @@ FROM
 RIGHT JOIN nr AS r
     USING (lc)
 SETTINGS enable_analyzer = 0;
+
+SET join_use_nulls = 1;
 
 SELECT
     x,
@@ -272,3 +302,7 @@ FROM
     t AS l
 RIGHT JOIN nr AS r
     USING (lc);
+
+DROP TABLE t;
+
+DROP TABLE nr;

@@ -1,3 +1,59 @@
+Set
+
+CreateQuery LINEITEM_shard (children 3)
+ Identifier LINEITEM_shard
+ Columns definition (children 1)
+  ExpressionList (children 3)
+   ColumnDeclaration L_ORDERKEY (children 1)
+    DataType UInt64
+   ColumnDeclaration L_COMMITDATE (children 1)
+    DataType UInt32
+   ColumnDeclaration L_RECEIPTDATE (children 1)
+    DataType UInt32
+ Storage definition (children 2)
+  Function MergeTree (children 1)
+   ExpressionList
+  Identifier L_ORDERKEY
+
+CreateQuery LINEITEM (children 2)
+ Identifier LINEITEM
+ Storage definition (children 1)
+  Function Distributed (children 1)
+   ExpressionList (children 4)
+    Literal 'test_shard_localhost'
+    Function currentDatabase (children 1)
+     ExpressionList
+    Identifier LINEITEM_shard
+    Function rand (children 1)
+     ExpressionList
+
+CreateQuery ORDERS_shard (children 3)
+ Identifier ORDERS_shard
+ Columns definition (children 1)
+  ExpressionList (children 2)
+   ColumnDeclaration O_ORDERKEY (children 1)
+    DataType UInt64
+   ColumnDeclaration O_ORDERPRIORITY (children 1)
+    DataType UInt32
+ Storage definition (children 2)
+  Function MergeTree (children 1)
+   ExpressionList
+  Identifier O_ORDERKEY
+
+CreateQuery ORDERS (children 2)
+ Identifier ORDERS
+ Storage definition (children 1)
+  Function Distributed (children 1)
+   ExpressionList (children 4)
+    Literal 'test_shard_localhost'
+    Function currentDatabase (children 1)
+     ExpressionList
+    Identifier ORDERS_shard
+    Function rand (children 1)
+     ExpressionList
+
+Set
+
 SelectWithUnionQuery (children 1)
  ExpressionList (children 1)
   SelectQuery (children 5)
@@ -41,6 +97,8 @@ SelectWithUnionQuery (children 1)
     OrderByElement (children 1)
      Identifier O_ORDERPRIORITY
    Literal UInt64_1
+
+Set
 
 SelectWithUnionQuery (children 1)
  ExpressionList (children 1)

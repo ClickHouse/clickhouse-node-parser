@@ -1,3 +1,104 @@
+DropQuery  test_table (children 1)
+ Identifier test_table
+
+CreateQuery test_table (children 3)
+ Identifier test_table
+ Columns definition (children 1)
+  ExpressionList (children 6)
+   ColumnDeclaration timestamp (children 1)
+    DataType DateTime
+   ColumnDeclaration value (children 1)
+    DataType UInt64
+   ColumnDeclaration day (children 2)
+    DataType Date
+    Function toDate (children 1)
+     ExpressionList (children 1)
+      Identifier timestamp
+   ColumnDeclaration day1 (children 2)
+    DataType Date
+    Function plus (children 1)
+     ExpressionList (children 2)
+      Identifier day
+      Literal UInt64_1
+   ColumnDeclaration day2 (children 2)
+    DataType Date
+    Function plus (children 1)
+     ExpressionList (children 2)
+      Identifier day1
+      Literal UInt64_1
+   ColumnDeclaration time (children 2)
+    DataType DateTime
+    Identifier timestamp
+ Storage definition (children 4)
+  Function MergeTree
+  Function toYYYYMMDD (children 1)
+   ExpressionList (children 1)
+    Identifier timestamp
+  Identifier timestamp
+  Set
+
+InsertQuery   (children 3)
+ Identifier test_table
+ ExpressionList (children 2)
+  Identifier timestamp
+  Identifier value
+ SelectWithUnionQuery (children 1)
+  ExpressionList (children 1)
+   SelectQuery (children 2)
+    ExpressionList (children 2)
+     Function toDateTime (children 1)
+      ExpressionList (children 1)
+       Literal '2020-01-01 12:00:00'
+     Literal UInt64_1
+    TablesInSelectQuery (children 1)
+     TablesInSelectQueryElement (children 1)
+      TableExpression (children 1)
+       Function numbers (children 1)
+        ExpressionList (children 1)
+         Literal UInt64_10
+
+InsertQuery   (children 3)
+ Identifier test_table
+ ExpressionList (children 2)
+  Identifier timestamp
+  Identifier value
+ SelectWithUnionQuery (children 1)
+  ExpressionList (children 1)
+   SelectQuery (children 2)
+    ExpressionList (children 2)
+     Function toDateTime (children 1)
+      ExpressionList (children 1)
+       Literal '2020-01-02 12:00:00'
+     Literal UInt64_1
+    TablesInSelectQuery (children 1)
+     TablesInSelectQueryElement (children 1)
+      TableExpression (children 1)
+       Function numbers (children 1)
+        ExpressionList (children 1)
+         Literal UInt64_10
+
+InsertQuery   (children 3)
+ Identifier test_table
+ ExpressionList (children 2)
+  Identifier timestamp
+  Identifier value
+ SelectWithUnionQuery (children 1)
+  ExpressionList (children 1)
+   SelectQuery (children 2)
+    ExpressionList (children 2)
+     Function toDateTime (children 1)
+      ExpressionList (children 1)
+       Literal '2020-01-03 12:00:00'
+     Literal UInt64_1
+    TablesInSelectQuery (children 1)
+     TablesInSelectQueryElement (children 1)
+      TableExpression (children 1)
+       Function numbers (children 1)
+        ExpressionList (children 1)
+         Literal UInt64_10
+
+Set
+
 SelectWithUnionQuery (children 1)
  ExpressionList (children 1)
   SelectQuery (children 4)
@@ -375,6 +476,34 @@ SelectWithUnionQuery (children 1)
     Identifier day1
    Set
 
+AlterQuery  test_table (children 2)
+ ExpressionList (children 1)
+  AlterCommand ADD_COLUMN (children 1)
+   ColumnDeclaration array (children 2)
+    DataType Array (children 1)
+     ExpressionList (children 1)
+      DataType UInt8
+    Literal Array_[UInt64_1, UInt64_2, UInt64_3]
+ Identifier test_table
+
+AlterQuery  test_table (children 2)
+ ExpressionList (children 2)
+  AlterCommand ADD_COLUMN (children 1)
+   ColumnDeclaration struct.key (children 2)
+    DataType Array (children 1)
+     ExpressionList (children 1)
+      DataType UInt8
+    Literal Array_[UInt64_2, UInt64_4, UInt64_6]
+  AlterCommand ADD_COLUMN (children 1)
+   ColumnDeclaration struct.value (children 2)
+    DataType Array (children 1)
+     ExpressionList (children 1)
+      DataType UInt8
+    Identifier array
+ Identifier test_table
+
+Set
+
 SelectWithUnionQuery (children 1)
  ExpressionList (children 1)
   SelectQuery (children 3)
@@ -470,6 +599,57 @@ SelectWithUnionQuery (children 1)
        Identifier day
        Literal '2020-01-03'
 
+Set
+
+DropQuery  test_table (children 1)
+ Identifier test_table
+
+DropQuery  test_index (children 1)
+ Identifier test_index
+
+CreateQuery test_index (children 3)
+ Identifier test_index
+ Columns definition (children 2)
+  ExpressionList (children 2)
+   ColumnDeclaration key_string (children 1)
+    DataType String
+   ColumnDeclaration key_uint32 (children 1)
+    Function toUInt32 (children 1)
+     ExpressionList (children 1)
+      Identifier key_string
+  ExpressionList (children 1)
+   Index (children 2)
+    Function toUInt32 (children 1)
+     ExpressionList (children 1)
+      Identifier key_string
+    Function set (children 1)
+     ExpressionList (children 1)
+      Literal UInt64_0
+ Storage definition (children 5)
+  Function MergeTree
+  Function tuple (children 1)
+   ExpressionList
+  Function tuple (children 1)
+   ExpressionList
+  Identifier key_string
+  Set
+
+InsertQuery   (children 2)
+ Identifier test_index
+ SelectWithUnionQuery (children 1)
+  ExpressionList (children 1)
+   SelectQuery (children 2)
+    ExpressionList (children 1)
+     Asterisk
+    TablesInSelectQuery (children 1)
+     TablesInSelectQueryElement (children 1)
+      TableExpression (children 1)
+       Function numbers (children 1)
+        ExpressionList (children 1)
+         Literal UInt64_10
+
+Set
+
 SelectWithUnionQuery (children 1)
  ExpressionList (children 1)
   SelectQuery (children 3)
@@ -508,6 +688,61 @@ SelectWithUnionQuery (children 1)
        Identifier key_string
      Literal UInt64_1
 
+DropQuery  pd (children 1)
+ Identifier pd
+
+DropQuery  pl (children 1)
+ Identifier pl
+
+CreateQuery pd (children 3)
+ Identifier pd
+ Columns definition (children 1)
+  ExpressionList (children 3)
+   ColumnDeclaration dt (children 1)
+    DataType DateTime
+   ColumnDeclaration i (children 1)
+    DataType int
+   ColumnDeclaration dt_m (children 2)
+    DataType DateTime
+    Function toStartOfMinute (children 1)
+     ExpressionList (children 1)
+      Identifier dt
+ Storage definition (children 1)
+  Function Distributed (children 1)
+   ExpressionList (children 3)
+    Identifier test_shard_localhost
+    Function currentDatabase (children 1)
+     ExpressionList
+    Literal 'pl'
+
+CreateQuery pl (children 3)
+ Identifier pl
+ Columns definition (children 2)
+  ExpressionList (children 2)
+   ColumnDeclaration dt (children 1)
+    DataType DateTime
+   ColumnDeclaration i (children 1)
+    DataType int
+  ExpressionList (children 1)
+   Projection (children 1)
+    ProjectionSelectQuery (children 2)
+     ExpressionList (children 1)
+      Function sum (children 1)
+       ExpressionList (children 1)
+        Identifier i
+     ExpressionList (children 1)
+      Function toStartOfMinute (children 1)
+       ExpressionList (children 1)
+        Identifier dt
+ Storage definition (children 2)
+  Function MergeTree
+  Identifier dt
+
+InsertQuery   (children 1)
+ Identifier pl
+
+Set
+
 SelectWithUnionQuery (children 1)
  ExpressionList (children 1)
   SelectQuery (children 4)
@@ -523,6 +758,27 @@ SelectWithUnionQuery (children 1)
     Identifier dt_m
    Set
 
+DropQuery  pd (children 1)
+ Identifier pd
+
+DropQuery  pl (children 1)
+ Identifier pl
+
+DropQuery  t (children 1)
+ Identifier t
+
+CreateQuery t (children 2)
+ Identifier t
+ Columns definition (children 1)
+  ExpressionList (children 2)
+   ColumnDeclaration x (children 1)
+    DataType UInt64
+   ColumnDeclaration y (children 1)
+    Identifier x
+
+InsertQuery   (children 1)
+ Identifier t
+
 SelectWithUnionQuery (children 1)
  ExpressionList (children 1)
   SelectQuery (children 2)
@@ -537,3 +793,6 @@ SelectWithUnionQuery (children 1)
     TablesInSelectQueryElement (children 1)
      TableExpression (children 1)
       TableIdentifier t
+
+DropQuery  t (children 1)
+ Identifier t

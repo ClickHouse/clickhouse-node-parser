@@ -1,3 +1,20 @@
+DROP TABLE IF EXISTS decimal;
+
+CREATE TABLE decimal
+(
+    a Decimal32(4),
+    b Decimal64(8),
+    c Decimal128(8)
+)
+ENGINE = Memory;
+
+INSERT INTO decimal (a, b, c) SELECT
+    toDecimal32(number - 50, 4),
+    toDecimal64(number - 50, 8) / 3,
+    toDecimal128(number - 50, 8) / 5
+FROM `system`.numbers
+LIMIT 101;
+
 SELECT
     count(a),
     count(b),
@@ -517,19 +534,24 @@ SELECT
     covarPop(a, a),
     covarPop(b, b),
     covarPop(c, c)
-FROM decimal;
+FROM decimal; -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
 SELECT
     covarSamp(a, a),
     covarSamp(b, b),
     covarSamp(c, c)
-FROM decimal;
+FROM decimal; -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
 SELECT
     corr(a, a),
     corr(b, b),
     corr(c, c)
-FROM decimal;
+FROM decimal; -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
 SELECT 1
 LIMIT 0;
+
+DROP TABLE decimal; -- TODO: sumMap
+-- TODO: other quantile(s)
+-- TODO: groupArray, groupArrayInsertAt, groupUniqArray
+-- TODO: topK

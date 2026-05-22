@@ -1,3 +1,8 @@
+DROP TABLE IF EXISTS t_tuple_element;
+CREATE TABLE t_tuple_element(t1 Tuple(a UInt32, s String), t2 Tuple(UInt32, String)) ENGINE = Memory;
+INSERT INTO t_tuple_element VALUES ((1, 'a'), (2, 'b'));
+SET optimize_functions_to_subcolumns = 1;
+SET enable_analyzer = 1;
 SELECT t1.1 FROM t_tuple_element;
 SELECT tupleElement(t1, 2) FROM t_tuple_element;
 SELECT tupleElement(t1, 'a') FROM t_tuple_element;
@@ -14,3 +19,6 @@ SELECT tupleElement(t2, 'a') FROM t_tuple_element; -- { serverError NOT_FOUND_CO
 SELECT tupleElement(t2, 0) FROM t_tuple_element; -- { serverError ARGUMENT_OUT_OF_BOUND, NOT_FOUND_COLUMN_IN_BLOCK }
 SELECT tupleElement(t2, 3) FROM t_tuple_element; -- { serverError ARGUMENT_OUT_OF_BOUND, NOT_FOUND_COLUMN_IN_BLOCK }
 SELECT tupleElement(t2, materialize(1)) FROM t_tuple_element; -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
+DROP TABLE t_tuple_element;
+WITH (1, 2) AS t SELECT t.1, t.2;
+WITH (1, 2)::Tuple(a UInt32, b UInt32) AS t SELECT t.1, tupleElement(t, 'b');

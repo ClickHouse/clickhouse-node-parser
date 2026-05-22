@@ -1,3 +1,5 @@
+SET query_plan_optimize_join_order_limit = 4;
+
 SELECT 1
 FROM
     (

@@ -1,3 +1,19 @@
+DROP TABLE IF EXISTS subcolumns;
+
+CREATE TABLE subcolumns
+(
+    t Tuple(a Array(Nullable(UInt32)), u UInt32, s Nullable(String)),
+    arr Array(Nullable(String)),
+    arr2 Array(Array(Nullable(String))),
+    lc LowCardinality(String),
+    nested Nested(col1 String, col2 Nullable(UInt32))
+)
+ENGINE = MergeTree
+ORDER BY tuple()
+SETTINGS min_bytes_for_wide_part = '10M';
+
+INSERT INTO subcolumns;
+
 SELECT *
 FROM subcolumns;
 
@@ -29,3 +45,18 @@ SELECT
     arr2.size1,
     arr2.`null`
 FROM subcolumns;
+
+CREATE TABLE subcolumns
+(
+    t Tuple(a Array(Nullable(UInt32)), u UInt32, s Nullable(String)),
+    arr Array(Nullable(String)),
+    arr2 Array(Array(Nullable(String))),
+    lc LowCardinality(String),
+    nested Nested(col1 String, col2 Nullable(UInt32))
+)
+ENGINE = MergeTree
+ORDER BY tuple()
+SETTINGS min_bytes_for_wide_part = 0;
+
+-- SELECT nested.col1, nested.col2, nested.size0, nested.size0, nested.col2.null FROM subcolumns;
+DROP TABLE subcolumns;

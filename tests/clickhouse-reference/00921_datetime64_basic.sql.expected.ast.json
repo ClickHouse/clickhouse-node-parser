@@ -1,5 +1,14 @@
 [
   {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "A"
+    },
+    "ifExists": true
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -11,6 +20,9 @@
         },
         "type": "DateTime64('abc')"
       }
+    ],
+    "trailingComments": [
+      "-- { serverError ILLEGAL_TYPE_OF_ARGUMENT } # Invalid scale parameter type"
     ]
   },
   {
@@ -25,6 +37,9 @@
         },
         "type": "DateTime64(100)"
       }
+    ],
+    "trailingComments": [
+      "-- { serverError ARGUMENT_OUT_OF_BOUND } # too big scale"
     ]
   },
   {
@@ -39,6 +54,9 @@
         },
         "type": "DateTime64(-1)"
       }
+    ],
+    "trailingComments": [
+      "-- { serverError ILLEGAL_TYPE_OF_ARGUMENT } # signed scale parameter type"
     ]
   },
   {
@@ -53,6 +71,9 @@
         },
         "type": "DateTime64(3, 'qqq')"
       }
+    ],
+    "trailingComments": [
+      "-- { serverError BAD_ARGUMENTS } # invalid timezone"
     ]
   },
   {
@@ -74,6 +95,9 @@
           }
         ]
       }
+    ],
+    "trailingComments": [
+      "-- { serverError ILLEGAL_TYPE_OF_ARGUMENT } # invalid scale"
     ]
   },
   {
@@ -95,6 +119,9 @@
           }
         ]
       }
+    ],
+    "trailingComments": [
+      "-- { serverError ARGUMENT_OUT_OF_BOUND } # too big scale"
     ]
   },
   {
@@ -109,10 +136,10 @@
             "name": "CAST",
             "args": [
               {
-                "kind": "array",
+                "kind": "arrayLiteral",
                 "elements": [
                   {
-                    "kind": "array",
+                    "kind": "arrayLiteral",
                     "elements": [
                       {
                         "kind": "literal",
@@ -150,6 +177,9 @@
           }
         ]
       }
+    ],
+    "trailingComments": [
+      "-- { serverError ILLEGAL_COLUMN } # non-const string and non-const scale"
     ]
   },
   {
@@ -176,6 +206,9 @@
           }
         ]
       }
+    ],
+    "trailingComments": [
+      "-- { serverError BAD_ARGUMENTS } # invalid timezone"
     ]
   },
   {
@@ -198,6 +231,9 @@
           }
         ]
       }
+    ],
+    "trailingComments": [
+      "-- { serverError ILLEGAL_TYPE_OF_ARGUMENT } # Illegal argument type"
     ]
   },
   {
@@ -220,6 +256,9 @@
           }
         ]
       }
+    ],
+    "trailingComments": [
+      "-- { serverError ILLEGAL_TYPE_OF_ARGUMENT } # Illegal argument type"
     ]
   },
   {
@@ -255,7 +294,10 @@
         "type": "UInt64",
         "value": "10"
       }
-    }
+    },
+    "trailingComments": [
+      "-- { serverError ILLEGAL_TYPE_OF_ARGUMENT } # Illegal argument type"
+    ]
   },
   {
     "kind": "select",
@@ -282,6 +324,9 @@
           }
         ]
       }
+    ],
+    "trailingComments": [
+      "-- { serverError BAD_ARGUMENTS }"
     ]
   },
   {
@@ -309,6 +354,119 @@
           }
         ]
       }
+    ],
+    "trailingComments": [
+      "-- { serverError ILLEGAL_COLUMN } # invalid timezone parameter type"
+    ]
+  },
+  {
+    "kind": "select",
+    "with": [
+      {
+        "kind": "cteExpr",
+        "name": "timezone",
+        "expr": {
+          "kind": "literal",
+          "type": "String",
+          "value": "UTC"
+        }
+      }
+    ],
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "timezone"
+        ]
+      },
+      {
+        "kind": "binaryExpr",
+        "op": "==",
+        "left": {
+          "kind": "functionCall",
+          "name": "timeZoneOf",
+          "args": [
+            {
+              "kind": "functionCall",
+              "name": "now64",
+              "args": [
+                {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "3"
+                },
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "timezone"
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        "right": {
+          "kind": "columnRef",
+          "parts": [
+            "timezone"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "with": [
+      {
+        "kind": "cteExpr",
+        "name": "timezone",
+        "expr": {
+          "kind": "literal",
+          "type": "String",
+          "value": "Europe/Minsk"
+        }
+      }
+    ],
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "timezone"
+        ]
+      },
+      {
+        "kind": "binaryExpr",
+        "op": "==",
+        "left": {
+          "kind": "functionCall",
+          "name": "timeZoneOf",
+          "args": [
+            {
+              "kind": "functionCall",
+              "name": "now64",
+              "args": [
+                {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "3"
+                },
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "timezone"
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        "right": {
+          "kind": "columnRef",
+          "parts": [
+            "timezone"
+          ]
+        }
+      }
     ]
   },
   {
@@ -333,6 +491,67 @@
             "type": "String",
             "value": "UTC"
           }
+        ]
+      }
+    ],
+    "trailingComments": [
+      "-- this now works OK and produces timestamp with no subsecond part"
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "A"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "t",
+        "type": {
+          "name": "DateTime64",
+          "args": [
+            {
+              "kind": "literal",
+              "value": "3"
+            },
+            {
+              "kind": "literal",
+              "value": "'UTC'"
+            }
+          ]
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree",
+      "args": []
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "t"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "A"
+      }
+    },
+    "columns": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "t"
         ]
       }
     ]
@@ -460,5 +679,13 @@
         ]
       }
     ]
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "A"
+    }
   }
 ]

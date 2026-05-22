@@ -1,3 +1,113 @@
+DropQuery  replace_partition_source (children 1)
+ Identifier replace_partition_source
+
+DropQuery  replace_partition_dest1 (children 1)
+ Identifier replace_partition_dest1
+
+DropQuery  replace_partition_dest1_2 (children 1)
+ Identifier replace_partition_dest1_2
+
+DropQuery  replace_partition_dest2 (children 1)
+ Identifier replace_partition_dest2
+
+DropQuery  replace_partition_dest2_2 (children 1)
+ Identifier replace_partition_dest2_2
+
+CreateQuery replace_partition_source (children 3)
+ Identifier replace_partition_source
+ Columns definition (children 1)
+  ExpressionList (children 1)
+   ColumnDeclaration key (children 1)
+    DataType UInt64
+ Storage definition (children 3)
+  Function ReplicatedMergeTree (children 1)
+   ExpressionList (children 2)
+    Literal '/test/02271_replace_partition_many/{database}/source'
+    Literal '1'
+  Identifier key
+  Function tuple (children 1)
+   ExpressionList
+
+InsertQuery   (children 1)
+ Identifier replace_partition_source
+
+CreateQuery replace_partition_dest1 (children 3)
+ Identifier replace_partition_dest1
+ Columns definition (children 1)
+  ExpressionList (children 1)
+   ColumnDeclaration key (children 1)
+    DataType UInt64
+ Storage definition (children 3)
+  Function ReplicatedMergeTree (children 1)
+   ExpressionList (children 2)
+    Literal '/test/02271_replace_partition_many/{database}/dest1'
+    Literal '1'
+  Identifier key
+  Function tuple (children 1)
+   ExpressionList
+
+CreateQuery replace_partition_dest1_2 (children 3)
+ Identifier replace_partition_dest1_2
+ Columns definition (children 1)
+  ExpressionList (children 1)
+   ColumnDeclaration key (children 1)
+    DataType UInt64
+ Storage definition (children 3)
+  Function ReplicatedMergeTree (children 1)
+   ExpressionList (children 2)
+    Literal '/test/02271_replace_partition_many/{database}/dest1'
+    Literal '2'
+  Identifier key
+  Function tuple (children 1)
+   ExpressionList
+
+CreateQuery replace_partition_dest2 (children 3)
+ Identifier replace_partition_dest2
+ Columns definition (children 1)
+  ExpressionList (children 1)
+   ColumnDeclaration key (children 1)
+    DataType UInt64
+ Storage definition (children 3)
+  Function ReplicatedMergeTree (children 1)
+   ExpressionList (children 2)
+    Literal '/test/02271_replace_partition_many/{database}/dest2'
+    Literal '1'
+  Identifier key
+  Function tuple (children 1)
+   ExpressionList
+
+CreateQuery replace_partition_dest2_2 (children 3)
+ Identifier replace_partition_dest2_2
+ Columns definition (children 1)
+  ExpressionList (children 1)
+   ColumnDeclaration key (children 1)
+    DataType UInt64
+ Storage definition (children 3)
+  Function ReplicatedMergeTree (children 1)
+   ExpressionList (children 2)
+    Literal '/test/02271_replace_partition_many/{database}/dest2'
+    Literal '2'
+  Identifier key
+  Function tuple (children 1)
+   ExpressionList
+
+AlterQuery  replace_partition_dest1 (children 2)
+ ExpressionList (children 1)
+  AlterCommand REPLACE_PARTITION (children 1)
+   Partition (children 1)
+    Literal UInt64_1
+ Identifier replace_partition_dest1
+
+AlterQuery  replace_partition_dest2 (children 2)
+ ExpressionList (children 1)
+  AlterCommand REPLACE_PARTITION (children 1)
+   Partition (children 1)
+    Literal UInt64_1
+ Identifier replace_partition_dest2
+
+OptimizeQuery  replace_partition_source_final (children 1)
+ Identifier replace_partition_source
+
 SelectWithUnionQuery (children 2)
  ExpressionList (children 1)
   SelectQuery (children 1)
@@ -6,6 +116,12 @@ SelectWithUnionQuery (children 2)
      ExpressionList (children 1)
       Literal UInt64_3
  Identifier Null
+
+OptimizeQuery  replace_partition_dest1_2_final (children 1)
+ Identifier replace_partition_dest1_2
+
+OptimizeQuery  replace_partition_dest2_2_final (children 1)
+ Identifier replace_partition_dest2_2
 
 SelectWithUnionQuery (children 1)
  ExpressionList (children 1)
@@ -56,3 +172,5 @@ SelectWithUnionQuery (children 1)
     TablesInSelectQueryElement (children 1)
      TableExpression (children 1)
       TableIdentifier replace_partition_dest2_2
+
+<Explain Error>

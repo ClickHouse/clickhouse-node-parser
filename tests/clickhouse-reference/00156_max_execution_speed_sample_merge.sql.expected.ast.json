@@ -1,5 +1,148 @@
 [
   {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "max_execution_speed",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "10"
+        }
+      }
+    ],
+    "leadingComments": [
+      "-- Tags: stateful",
+      "-- This test validates that max_execution_speed & timeout_before_checking_execution_speed works with:",
+      "--      a) regular query",
+      "--      b) temp merge query",
+      "-- NOTE: This test uses simple synthetic data to validate the fact throttling was applied.",
+      "-- If throttling works as expected - each execution will take >= 1 second, as we allow not more than {max_execution_speed} records/seconds",
+      "-- If it doesn't - each select will finish immediately, and the test will fail",
+      "-- NOTE: Setting max_block_size=1 to ensure sleepEachRow(..) applies per each row guaranteed and the resulting timing is predictable [2-3] seconds"
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "timeout_before_checking_execution_speed",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "max_block_size",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "times"
+    },
+    "temporary": true,
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "t",
+        "type": {
+          "name": "DateTime"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "t00156_max_execution_speed_sample_merge"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "t00156_max_execution_speed_sample_merge"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "v",
+        "type": {
+          "name": "UInt64"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "t00156_max_execution_speed_sample_merge"
+      }
+    },
+    "selectQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "number"
+          ]
+        }
+      ],
+      "from": {
+        "kind": "tableFunctionRef",
+        "name": "numbers",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "28"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "times"
+      }
+    },
+    "selectQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "functionCall",
+          "name": "now",
+          "args": []
+        }
+      ]
+    }
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -74,6 +217,14 @@
       }
     ],
     "from": {
+      "kind": "tableRef",
+      "table": "times"
+    }
+  },
+  {
+    "kind": "truncate",
+    "targetType": "TABLE",
+    "table": {
       "kind": "tableRef",
       "table": "times"
     }

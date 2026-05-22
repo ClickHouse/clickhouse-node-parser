@@ -1,3 +1,10 @@
+SET enable_analyzer=1;
+CREATE TABLE IF NOT EXISTS first engine = MergeTree PARTITION BY (inn, toYYYYMM(received)) ORDER BY (inn, sessionId)
+AS SELECT now() AS received, '123456789' AS inn, '42' AS sessionId;
+
+CREATE TABLE IF NOT EXISTS second engine = MergeTree PARTITION BY (inn, toYYYYMM(received)) ORDER BY (inn, sessionId)
+AS SELECT now() AS received, '123456789' AS inn, '42' AS sessionId, '111' AS serial, '222' AS reg;
+
 SELECT alias_first.inn, arrayFirst(t -> isNotNull(t), regInfo.1), arrayFirst(t -> isNotNull(t), regInfo.2)
     FROM first AS alias_first
     INNER JOIN (

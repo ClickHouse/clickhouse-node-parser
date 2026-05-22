@@ -23,6 +23,8 @@ FROM numbers(2);
 SELECT CAST(if(number % 2, '0000:0000:0000:0000:0000:0000:0000:0000', NULL), 'Nullable(IPv6)')
 FROM numbers(2);
 
+SET cast_keep_nullable = 1;
+
 SELECT toBool(if(number % 2, 'true', NULL))
 FROM numbers(2);
 
@@ -51,10 +53,10 @@ SELECT IPv6StringToNum(if(number % 2, '0000:0000:0000:0000:0000:0000:0000:0000',
 FROM numbers(2);
 
 SELECT CAST(if(number % 2, 'truetrue', NULL), 'Nullable(Bool)')
-FROM numbers(2);
+FROM numbers(2); -- {serverError CANNOT_PARSE_BOOL}
 
 SELECT CAST(if(number % 2, 'falsefalse', NULL), 'Nullable(Bool)')
-FROM numbers(2);
+FROM numbers(2); -- {serverError CANNOT_PARSE_BOOL}
 
 SELECT accurateCastOrNull(if(number % 2, NULL, 'truex'), 'Bool')
 FROM numbers(4);

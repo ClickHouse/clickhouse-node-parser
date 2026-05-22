@@ -1,3 +1,18 @@
+-- Tags: no-fasttest
+-- Tag no-fasttest: Depends on S3
+
+SET s3_truncate_on_insert = 1,
+    s3_list_object_keys_size = 100;
+DROP TABLE IF EXISTS 03741_data, 03741_filter;
+INSERT INTO FUNCTION s3(s3_conn, url = 'http://localhost:11111/test/03741_data/file1.parquet', format = Parquet) SELECT number FROM numbers(10);
+INSERT INTO FUNCTION s3(s3_conn, url = 'http://localhost:11111/test/03741_data/file2.parquet', format = Parquet) SELECT number FROM numbers(10);
+INSERT INTO FUNCTION s3(s3_conn, url = 'http://localhost:11111/test/03741_data/nested/file3.parquet', format = Parquet) SELECT number FROM numbers(10);
+INSERT INTO FUNCTION s3(s3_conn, url = 'http://localhost:11111/test/03741_data/nested/file4.parquet', format = Parquet) SELECT number FROM numbers(10);
+CREATE TABLE 03741_data ( number UInt64 )
+ENGINE = S3(s3_conn, url = 'http://localhost:11111/test/03741_data/**', format = Parquet);
+CREATE TABLE 03741_filter ( path String ) ENGINE = MergeTree ORDER BY tuple()
+AS
+SELECT 'test/03741_data/file1.parquet' UNION ALL SELECT 'test/03741_data/nested/file3.parquet';
 SELECT _path, count() FROM 03741_data GROUP BY 1 ORDER BY 1;
 SELECT count() FROM 03741_data WHERE _path = 'test/03741_data/file1.parquet';
 SELECT count() FROM 03741_data WHERE _path != 'test/03741_data/file1.parquet';
@@ -25,6 +40,7 @@ SELECT count() FROM 03741_data WHERE _path IN ('test/03741_data/file1.parquet', 
 SETTINGS s3_path_filter_limit = 1;
 SELECT count() FROM 03741_data WHERE _path IN ('test/03741_data/file1.parquet', 'test/03741_data/file2.parquet')
 SETTINGS s3_path_filter_limit = 2;
+SYSTEM FLUSH LOGS query_log;
 SELECT ProfileEvents['S3ListObjects'], ProfileEvents['EngineFileLikeReadFiles']
 FROM system.query_log
 WHERE current_database = currentDatabase()
@@ -33,3 +49,4 @@ WHERE current_database = currentDatabase()
   AND type = 'QueryFinish'
 ORDER BY event_time_microseconds;
 SELECT count() FROM 03741_data WHERE _path = 'test/03741_data/file1.parquet' AND _path = 'test/03741_data/file2.parquet';
+DROP TABLE 03741_data, 03741_filter;

@@ -1,5 +1,400 @@
 [
   {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "insert_keeper_fault_injection_probability",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      }
+    ],
+    "leadingComments": [
+      "-- Tags: long, no-shared-merge-tree",
+      "-- no-shared-merge-tree: depend on replication queue/fetches"
+    ],
+    "trailingComments": [
+      "-- disable fault injection; part ids are non-deterministic in case of insert retries"
+    ]
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "rmt1"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "rmt2"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "rmt1"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "n",
+        "type": {
+          "name": "int"
+        }
+      }
+    ],
+    "engine": {
+      "name": "ReplicatedMergeTree",
+      "args": [
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "/test/02448/{database}/rmt"
+        },
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "1"
+        }
+      ]
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "functionCall",
+          "name": "tuple",
+          "args": []
+        }
+      }
+    ],
+    "settings": [
+      {
+        "name": "min_replicated_logs_to_keep",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      },
+      {
+        "name": "max_replicated_logs_to_keep",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "2"
+        }
+      },
+      {
+        "name": "max_cleanup_delay_period",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      },
+      {
+        "name": "cleanup_delay_period",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      },
+      {
+        "name": "cleanup_delay_period_random_add",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      },
+      {
+        "name": "cleanup_thread_preferred_points_per_iteration",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      },
+      {
+        "name": "old_parts_lifetime",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      },
+      {
+        "name": "max_parts_to_merge_at_once",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "4"
+        }
+      },
+      {
+        "name": "merge_selecting_sleep_ms",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1000"
+        }
+      },
+      {
+        "name": "max_merge_selecting_sleep_ms",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "2000"
+        }
+      }
+    ],
+    "settingsAfterOrderBy": true
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "rmt2"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "n",
+        "type": {
+          "name": "int"
+        }
+      }
+    ],
+    "engine": {
+      "name": "ReplicatedMergeTree",
+      "args": [
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "/test/02448/{database}/rmt"
+        },
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "2"
+        }
+      ]
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "functionCall",
+          "name": "tuple",
+          "args": []
+        }
+      }
+    ],
+    "settings": [
+      {
+        "name": "min_replicated_logs_to_keep",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      },
+      {
+        "name": "max_replicated_logs_to_keep",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "2"
+        }
+      },
+      {
+        "name": "max_cleanup_delay_period",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      },
+      {
+        "name": "cleanup_delay_period",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      },
+      {
+        "name": "cleanup_delay_period_random_add",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      },
+      {
+        "name": "cleanup_thread_preferred_points_per_iteration",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      },
+      {
+        "name": "old_parts_lifetime",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      },
+      {
+        "name": "max_parts_to_merge_at_once",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "4"
+        }
+      },
+      {
+        "name": "merge_selecting_sleep_ms",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1000"
+        }
+      },
+      {
+        "name": "max_merge_selecting_sleep_ms",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "2000"
+        }
+      }
+    ],
+    "settingsAfterOrderBy": true
+  },
+  {
+    "kind": "system",
+    "body": "SYSTEM stop replicated sends rmt1",
+    "leadingComments": [
+      "-- insert part only on one replica"
+    ]
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "rmt1"
+      }
+    }
+  },
+  {
+    "kind": "detach",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "rmt1"
+    },
+    "trailingComments": [
+      "-- make replica inactive"
+    ]
+  },
+  {
+    "kind": "system",
+    "body": "SYSTEM start replicated sends rmt1"
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "rmt2"
+      }
+    },
+    "leadingComments": [
+      "-- trigger log rotation, rmt1 will be lost"
+    ]
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "rmt2"
+      }
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "rmt2"
+      }
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "rmt2"
+      }
+    }
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "receive_timeout",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "5"
+        }
+      }
+    ],
+    "leadingComments": [
+      "-- check that entry was not removed from the queue (part is not lost)"
+    ]
+  },
+  {
+    "kind": "system",
+    "body": "SYSTEM sync replica rmt2",
+    "trailingComments": [
+      "-- {serverError TIMEOUT_EXCEEDED}"
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "receive_timeout",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "300"
+        }
+      }
+    ]
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -32,6 +427,21 @@
     }
   },
   {
+    "kind": "attach",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "rmt1"
+    },
+    "leadingComments": [
+      "-- rmt1 will mimic rmt2"
+    ]
+  },
+  {
+    "kind": "system",
+    "body": "SYSTEM sync replica rmt1"
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -61,7 +471,10 @@
     "from": {
       "kind": "tableRef",
       "table": "rmt1"
-    }
+    },
+    "leadingComments": [
+      "-- check that no parts are lost"
+    ]
   },
   {
     "kind": "select",
@@ -96,6 +509,47 @@
     }
   },
   {
+    "kind": "truncate",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "rmt1"
+    }
+  },
+  {
+    "kind": "truncate",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "rmt2"
+    }
+  },
+  {
+    "kind": "system",
+    "body": "SYSTEM stop replicated sends rmt2",
+    "leadingComments": [
+      "-- insert parts only on one replica and merge them"
+    ]
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "rmt2"
+      }
+    }
+  },
+  {
+    "kind": "optimize",
+    "table": {
+      "kind": "tableRef",
+      "table": "rmt2"
+    },
+    "final": true
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -110,7 +564,58 @@
         ]
       }
     ],
-    "format": "Null"
+    "format": "Null",
+    "leadingComments": [
+      "-- give it a chance to remove source parts"
+    ],
+    "trailingComments": [
+      "-- increases probability of reproducing the issue"
+    ]
+  },
+  {
+    "kind": "detach",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "rmt2"
+    }
+  },
+  {
+    "kind": "system",
+    "body": "SYSTEM start replicated sends rmt2"
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "rmt1"
+      }
+    },
+    "leadingComments": [
+      "-- trigger log rotation, rmt2 will be lost"
+    ]
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "rmt1"
+      }
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "rmt1"
+      }
+    }
   },
   {
     "kind": "select",
@@ -145,6 +650,25 @@
     }
   },
   {
+    "kind": "system",
+    "body": "SYSTEM stop fetches rmt1",
+    "leadingComments": [
+      "-- rmt1 will mimic rmt2"
+    ]
+  },
+  {
+    "kind": "attach",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "rmt2"
+    }
+  },
+  {
+    "kind": "system",
+    "body": "SYSTEM start fetches rmt1"
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -174,7 +698,10 @@
     "from": {
       "kind": "tableRef",
       "table": "rmt1"
-    }
+    },
+    "leadingComments": [
+      "-- check that no parts are lost"
+    ]
   },
   {
     "kind": "select",
@@ -206,6 +733,107 @@
     "from": {
       "kind": "tableRef",
       "table": "rmt2"
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "rmt1"
+      }
+    }
+  },
+  {
+    "kind": "alter",
+    "table": {
+      "kind": "tableRef",
+      "table": "rmt1"
+    },
+    "commands": [
+      {
+        "kind": "alterCommand",
+        "commandType": "UPDATE",
+        "assignments": [
+          {
+            "column": "n",
+            "expr": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "10"
+            }
+          }
+        ],
+        "where": {
+          "kind": "binaryExpr",
+          "op": "=",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "n"
+            ]
+          },
+          "right": {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "123"
+          }
+        }
+      }
+    ],
+    "settings": [
+      {
+        "name": "mutations_sync",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "rmt2"
+      }
+    },
+    "leadingComments": [
+      "-- trigger log rotation, rmt1 will be lost"
+    ]
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "rmt2"
+      }
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "rmt2"
+      }
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "rmt2"
+      }
     }
   },
   {
@@ -241,6 +869,17 @@
     }
   },
   {
+    "kind": "system",
+    "body": "SYSTEM stop fetches rmt2",
+    "leadingComments": [
+      "-- rmt1 will mimic rmt2"
+    ]
+  },
+  {
+    "kind": "system",
+    "body": "SYSTEM start fetches rmt2"
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -270,7 +909,10 @@
     "from": {
       "kind": "tableRef",
       "table": "rmt1"
-    }
+    },
+    "leadingComments": [
+      "-- check that no parts are lost"
+    ]
   },
   {
     "kind": "select",
@@ -305,6 +947,123 @@
     }
   },
   {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "rmt1"
+      }
+    },
+    "leadingComments": [
+      "-- insert parts (all_18_18_0, all_19_19_0) on both replicas (will be deduplicated, but it does not matter)"
+    ]
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "rmt2"
+      }
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "rmt1"
+      }
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "rmt2"
+      }
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "rmt2"
+      }
+    },
+    "leadingComments": [
+      "-- create a gap in block numbers by dropping part"
+    ]
+  },
+  {
+    "kind": "alter",
+    "table": {
+      "kind": "tableRef",
+      "table": "rmt2"
+    },
+    "commands": [
+      {
+        "kind": "alterCommand",
+        "commandType": "DROP_PARTITION",
+        "partName": {
+          "kind": "literal",
+          "type": "String",
+          "value": "all_19_19_0"
+        }
+      }
+    ],
+    "trailingComments": [
+      "-- remove 200"
+    ]
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "rmt2"
+      }
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "rmt2"
+      }
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "rmt2"
+      }
+    }
+  },
+  {
+    "kind": "optimize",
+    "table": {
+      "kind": "tableRef",
+      "table": "rmt2"
+    },
+    "leadingComments": [
+      "-- merge through gap"
+    ]
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -320,7 +1079,7 @@
       }
     ],
     "from": {
-      "kind": "tableFunction",
+      "kind": "tableFunctionRef",
       "name": "url",
       "args": [
         {
@@ -391,7 +1150,10 @@
         }
       }
     ],
-    "format": "Null"
+    "format": "Null",
+    "leadingComments": [
+      "-- give it a chance to cleanup log"
+    ]
   },
   {
     "kind": "select",
@@ -422,7 +1184,10 @@
       "kind": "tableRef",
       "table": "rmt1"
     },
-    "format": "Null"
+    "format": "Null",
+    "leadingComments": [
+      "-- rmt1 should not show the value (200) from dropped part"
+    ]
   },
   {
     "kind": "select",
@@ -486,6 +1251,22 @@
     "from": {
       "kind": "tableRef",
       "table": "rmt1"
+    }
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "rmt1"
+    }
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "rmt2"
     }
   }
 ]

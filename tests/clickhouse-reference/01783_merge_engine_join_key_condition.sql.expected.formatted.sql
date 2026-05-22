@@ -1,3 +1,38 @@
+DROP TABLE IF EXISTS foo;
+
+DROP TABLE IF EXISTS foo_merge;
+
+DROP TABLE IF EXISTS t2;
+
+CREATE TABLE foo
+(
+    Id Int32,
+    Val Int32
+)
+ENGINE = MergeTree
+ORDER BY Id
+PARTITION BY Val;
+
+INSERT INTO foo SELECT
+    number,
+    number % 5
+FROM numbers(100000);
+
+CREATE TABLE foo_merge AS foo
+ENGINE = Merge(currentDatabase(), '^foo');
+
+CREATE TABLE t2
+(
+    Id Int32,
+    Val Int32,
+    X Int32
+)
+ENGINE = Memory;
+
+INSERT INTO t2;
+
+SET force_primary_key = 1, force_index_by_date = 1;
+
 SELECT *
 FROM foo_merge
 WHERE Val = 3

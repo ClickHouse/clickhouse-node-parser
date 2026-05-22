@@ -1,5 +1,247 @@
 [
   {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "allow_suspicious_low_cardinality_types",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "t_nested_tuple"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "t_nested_tuple"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "endUserIDs",
+        "type": {
+          "name": "Tuple",
+          "args": [
+            {
+              "kind": "namedField",
+              "name": "_experience",
+              "type": {
+                "name": "Tuple",
+                "args": [
+                  {
+                    "kind": "namedField",
+                    "name": "aaid",
+                    "type": {
+                      "name": "Tuple",
+                      "args": [
+                        {
+                          "kind": "namedField",
+                          "name": "id",
+                          "type": {
+                            "name": "Nullable",
+                            "args": [
+                              {
+                                "kind": "type",
+                                "type": {
+                                  "name": "String"
+                                }
+                              }
+                            ]
+                          }
+                        },
+                        {
+                          "kind": "namedField",
+                          "name": "namespace",
+                          "type": {
+                            "name": "Tuple",
+                            "args": [
+                              {
+                                "kind": "namedField",
+                                "name": "code",
+                                "type": {
+                                  "name": "LowCardinality",
+                                  "args": [
+                                    {
+                                      "kind": "type",
+                                      "type": {
+                                        "name": "Nullable",
+                                        "args": [
+                                          {
+                                            "kind": "type",
+                                            "type": {
+                                              "name": "String"
+                                            }
+                                          }
+                                        ]
+                                      }
+                                    }
+                                  ]
+                                }
+                              }
+                            ]
+                          }
+                        },
+                        {
+                          "kind": "namedField",
+                          "name": "primary",
+                          "type": {
+                            "name": "LowCardinality",
+                            "args": [
+                              {
+                                "kind": "type",
+                                "type": {
+                                  "name": "Nullable",
+                                  "args": [
+                                    {
+                                      "kind": "type",
+                                      "type": {
+                                        "name": "UInt8"
+                                      }
+                                    }
+                                  ]
+                                }
+                              }
+                            ]
+                          }
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "kind": "namedField",
+                    "name": "mcid",
+                    "type": {
+                      "name": "Tuple",
+                      "args": [
+                        {
+                          "kind": "namedField",
+                          "name": "id",
+                          "type": {
+                            "name": "Nullable",
+                            "args": [
+                              {
+                                "kind": "type",
+                                "type": {
+                                  "name": "String"
+                                }
+                              }
+                            ]
+                          }
+                        },
+                        {
+                          "kind": "namedField",
+                          "name": "namespace",
+                          "type": {
+                            "name": "Tuple",
+                            "args": [
+                              {
+                                "kind": "namedField",
+                                "name": "code",
+                                "type": {
+                                  "name": "LowCardinality",
+                                  "args": [
+                                    {
+                                      "kind": "type",
+                                      "type": {
+                                        "name": "Nullable",
+                                        "args": [
+                                          {
+                                            "kind": "type",
+                                            "type": {
+                                              "name": "String"
+                                            }
+                                          }
+                                        ]
+                                      }
+                                    }
+                                  ]
+                                }
+                              }
+                            ]
+                          }
+                        },
+                        {
+                          "kind": "namedField",
+                          "name": "primary",
+                          "type": {
+                            "name": "LowCardinality",
+                            "args": [
+                              {
+                                "kind": "type",
+                                "type": {
+                                  "name": "Nullable",
+                                  "args": [
+                                    {
+                                      "kind": "type",
+                                      "type": {
+                                        "name": "UInt8"
+                                      }
+                                    }
+                                  ]
+                                }
+                              }
+                            ]
+                          }
+                        }
+                      ]
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "functionCall",
+          "name": "tuple",
+          "args": []
+        }
+      }
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "output_format_json_named_tuples_as_objects",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "t_nested_tuple"
+      }
+    }
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -123,5 +365,13 @@
       "table": "t_nested_tuple"
     },
     "format": "JSONEachRow"
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "t_nested_tuple"
+    }
   }
 ]

@@ -1,3 +1,6 @@
+-- Tags: no-fasttest
+-- - no-fasttest -- compiled w/o datasketches
+-- Regression for very high error in uniqTheta() due to optimization for u8 keys
 SELECT throwIf(stddevSampStable(theta) / avg(theta) > 0.1)
 FROM (
         SELECT

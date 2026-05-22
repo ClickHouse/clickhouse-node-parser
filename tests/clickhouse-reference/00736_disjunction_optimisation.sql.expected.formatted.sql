@@ -1,3 +1,16 @@
+DROP TABLE IF EXISTS bug;
+
+CREATE TABLE IF NOT EXISTS bug
+(
+    k UInt64,
+    s UInt64
+)
+ENGINE = Memory;
+
+INSERT INTO bug;
+
+SET optimize_min_equality_disjunction_chain_length = 2;
+
 SELECT *
 FROM bug;
 
@@ -19,6 +32,8 @@ WHERE ((k = 1
     OR s = 22
     OR s = 23))
 SETTINGS enable_analyzer = 1;
+
+;
 
 SELECT *
 FROM (
@@ -89,6 +104,8 @@ SELECT
 FROM bug
 SETTINGS enable_analyzer = 1;
 
+SET optimize_min_equality_disjunction_chain_length = 3;
+
 SELECT
     s,
     (s = 21
@@ -103,3 +120,5 @@ SELECT
     OR 23 = s)
 FROM bug
 SETTINGS enable_analyzer = 1;
+
+DROP TABLE bug;

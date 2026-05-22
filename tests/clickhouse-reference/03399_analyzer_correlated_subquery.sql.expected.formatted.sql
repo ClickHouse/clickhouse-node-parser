@@ -1,3 +1,36 @@
+SET enable_analyzer = 1;
+
+DROP TABLE IF EXISTS users;
+
+CREATE TABLE users
+(
+    uid Int16,
+    name String,
+    age Int16
+)
+ENGINE = Memory;
+
+INSERT INTO users;
+
+INSERT INTO users;
+
+INSERT INTO users;
+
+DROP TABLE IF EXISTS users2;
+
+CREATE TABLE users2
+(
+    uid Int16,
+    name String,
+    age Int16
+)
+ENGINE = Memory;
+
+INSERT INTO users2;
+
+-- { echoOn }
+SET allow_experimental_correlated_subqueries = 1;
+
 SELECT *
 FROM users AS u1
 WHERE EXISTS((

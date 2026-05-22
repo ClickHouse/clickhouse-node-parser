@@ -1,5 +1,74 @@
 [
   {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "tmp"
+    },
+    "ifExists": true,
+    "leadingComments": [
+      "-- Tags: shard"
+    ]
+  },
+  {
+    "kind": "createView",
+    "table": {
+      "kind": "tableRef",
+      "table": "tmp"
+    },
+    "orReplace": true,
+    "asQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "alias",
+          "expr": {
+            "kind": "functionCall",
+            "name": "initialQueryStartTime",
+            "args": []
+          },
+          "alias": "it"
+        },
+        {
+          "kind": "alias",
+          "expr": {
+            "kind": "functionCall",
+            "name": "now",
+            "args": []
+          },
+          "alias": "t"
+        }
+      ],
+      "from": {
+        "kind": "tableRef",
+        "database": "system",
+        "table": "one"
+      },
+      "where": {
+        "kind": "unaryExpr",
+        "op": "NOT",
+        "expr": {
+          "kind": "functionCall",
+          "name": "ignore",
+          "args": [
+            {
+              "kind": "functionCall",
+              "name": "sleep",
+              "args": [
+                {
+                  "kind": "literal",
+                  "type": "Float64",
+                  "value": "0.5"
+                }
+              ]
+            }
+          ]
+        }
+      }
+    }
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -108,7 +177,7 @@
           }
         ],
         "from": {
-          "kind": "tableFunction",
+          "kind": "tableFunctionRef",
           "name": "remote",
           "args": [
             {
@@ -149,5 +218,13 @@
         }
       }
     ]
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "tmp"
+    }
   }
 ]

@@ -1,4 +1,47 @@
+SET enable_analyzer = 1;
+
+DROP TABLE IF EXISTS `03611_nscmp_tbl`;
+
+CREATE TABLE `03611_nscmp_tbl`
+(
+    key Int64,
+    c_int8 Nullable(Int8),
+    c_int16 Nullable(Int16),
+    c_int32 Nullable(Int32),
+    c_int64 Nullable(Int64),
+    c_uint8 Nullable(UInt8),
+    c_uint16 Nullable(UInt16),
+    c_uint32 Nullable(UInt32),
+    c_uint64 Nullable(UInt64),
+    c_float32 Nullable(Float32),
+    c_float64 Nullable(Float64),
+    c_decimal Nullable(Decimal(18, 4)),
+    c_date Nullable(Date),
+    c_datetime Nullable(DateTime),
+    c_dt64 Nullable(DateTime64(3)),
+    c_string Nullable(String),
+    c_fstring Nullable(FixedString(4)),
+    c_enum8 Nullable(Enum8('a' = 1, 'b' = 2, '' = 0)),
+    c_enum16 Nullable(Enum16('x' = 100, 'y' = 200, '' = 0)),
+    c_array Array(Nullable(Int32)),
+    c_tuple Tuple(Nullable(Int32), Nullable(String)),
+    c_map Map(String, Nullable(Int32)),
+    c_nullable Nullable(Int32),
+    c_uuid Nullable(UUID),
+    c_ipv4 Nullable(IPv4),
+    c_ipv6 Nullable(IPv6),
+    c_json Nullable(JSON),
+    c_nested Nested(id Nullable(Int32), value Nullable(String)),
+    c_variant Variant(UInt64, String, Array(UInt64)),
+    c_dynamic Dynamic
+)
+ENGINE = MergeTree
+ORDER BY key;
+
+INSERT INTO `03611_nscmp_tbl`;
+
 SELECT
+    -- Integers
     c_int8 <=> c_int8 AS c_int8_self_eq,
     c_int8 IS DISTINCT FROM c_int8 AS c_int8_self_distinct,
     c_int16 <=> c_int16 AS c_int16_self_eq,
@@ -15,48 +58,62 @@ SELECT
     c_uint32 IS DISTINCT FROM c_uint32 AS c_uint32_self_distinct,
     c_uint64 <=> c_uint64 AS c_uint64_self_eq,
     c_uint64 IS DISTINCT FROM c_uint64 AS c_uint64_self_distinct,
+    -- Floating-point
     c_float32 <=> c_float32 AS c_float32_self_eq,
     c_float32 IS DISTINCT FROM c_float32 AS c_float32_self_distinct,
     c_float64 <=> c_float64 AS c_float64_self_eq,
     c_float64 IS DISTINCT FROM c_float64 AS c_float64_self_distinct,
+    -- Decimal
     c_decimal <=> c_decimal AS c_decimal_self_eq,
     c_decimal IS DISTINCT FROM c_decimal AS c_decimal_self_distinct,
+    -- Date / DateTime
     c_date <=> c_date AS c_date_self_eq,
     c_date IS DISTINCT FROM c_date AS c_date_self_distinct,
     c_datetime <=> c_datetime AS c_datetime_self_eq,
     c_datetime IS DISTINCT FROM c_datetime AS c_datetime_self_distinct,
     c_dt64 <=> c_dt64 AS c_dt64_self_eq,
     c_dt64 IS DISTINCT FROM c_dt64 AS c_dt64_self_distinct,
+    -- Strings
     c_string <=> c_string AS c_string_self_eq,
     c_string IS DISTINCT FROM c_string AS c_string_self_distinct,
     c_fstring <=> c_fstring AS c_fstring_self_eq,
     c_fstring IS DISTINCT FROM c_fstring AS c_fstring_self_distinct,
+    -- Enums
     c_enum8 <=> c_enum8 AS c_enum8_self_eq,
     c_enum8 IS DISTINCT FROM c_enum8 AS c_enum8_self_distinct,
     c_enum16 <=> c_enum16 AS c_enum16_self_eq,
     c_enum16 IS DISTINCT FROM c_enum16 AS c_enum16_self_distinct,
+    -- Arrays
     c_array <=> c_array AS c_array_self_eq,
     c_array IS DISTINCT FROM c_array AS c_array_self_distinct,
+    -- Tuple
     c_tuple <=> c_tuple AS c_tuple_self_eq,
     c_tuple IS DISTINCT FROM c_tuple AS c_tuple_self_distinct,
+    -- Map
     c_map <=> c_map AS c_map_self_eq,
     c_map IS DISTINCT FROM c_map AS c_map_self_distinct,
+    -- Nullable basic
     c_nullable <=> c_nullable AS c_nullable_self_eq,
     c_nullable IS DISTINCT FROM c_nullable AS c_nullable_self_distinct,
+    -- UUID / IP
     c_uuid <=> c_uuid AS c_uuid_self_eq,
     c_uuid IS DISTINCT FROM c_uuid AS c_uuid_self_distinct,
     c_ipv4 <=> c_ipv4 AS c_ipv4_self_eq,
     c_ipv4 IS DISTINCT FROM c_ipv4 AS c_ipv4_self_distinct,
     c_ipv6 <=> c_ipv6 AS c_ipv6_self_eq,
     c_ipv6 IS DISTINCT FROM c_ipv6 AS c_ipv6_self_distinct,
+    -- JSON
     c_json <=> c_json AS c_json_self_eq,
     c_json IS DISTINCT FROM c_json AS c_json_self_distinct,
+    -- Nested
     c_nested.id <=> c_nested.id AS c_nested_id_self_eq,
     c_nested.id IS DISTINCT FROM c_nested.id AS c_nested_id_self_distinct,
     c_nested.value <=> c_nested.value AS c_nested_value_self_eq,
     c_nested.value IS DISTINCT FROM c_nested.value AS c_nested_value_self_distinct,
+    -- Variant
     c_variant <=> c_variant AS c_variant_self_eq,
     c_variant IS DISTINCT FROM c_variant AS c_variant_self_distinct,
+    -- Dynamic
     c_dynamic <=> c_dynamic AS c_dynamic_self_eq,
     c_dynamic IS DISTINCT FROM c_dynamic AS c_dynamic_self_distinct
 FROM `03611_nscmp_tbl`
@@ -114,6 +171,9 @@ FROM `03611_nscmp_tbl`
 ORDER BY key ASC;
 
 SELECT
+    -- =====================
+    -- Array cmp
+    -- =====================
     c_array <=> [1, 2, 3] AS array_check,
     c_array IS DISTINCT FROM [1, 2, 3] AS array_check_distinct,
     c_array <=> [1, 2, NULL] AS array_check_with_null,
@@ -124,10 +184,16 @@ SELECT
     NULL <=> c_array AS null_vs_array,
     c_array IS DISTINCT FROM NULL AS array_vs_null_distinct,
     NULL IS DISTINCT FROM c_array AS null_vs_array_distinct,
+    -- =====================
+    -- Tuple cmp
+    -- =====================
     c_tuple <=> (1, 't') AS tuple_check,
     c_tuple IS DISTINCT FROM (1, 't') AS tuple_check_distinct,
     c_tuple <=> (NULL, NULL) AS tuple_null_check,
     c_tuple IS DISTINCT FROM (NULL, NULL) AS tuple_null_check_distinct,
+    -- =====================
+    -- Map cmp
+    -- =====================
     c_map <=> map('k1', 1) AS map_check,
     c_map IS DISTINCT FROM map('k1', 1) AS map_check_distinct,
     c_map <=> map('k1', NULL, 'k2', 2) AS map_check_with_null,
@@ -138,12 +204,18 @@ SELECT
     NULL <=> c_map AS null_vs_map,
     c_map IS DISTINCT FROM NULL AS map_vs_null_distinct,
     NULL IS DISTINCT FROM c_map AS null_vs_map_distinct,
+    -- =====================
+    -- Nullable cmp
+    -- =====================
     c_nullable <=> 100 AS nullable_vs_literal,
     c_nullable IS DISTINCT FROM 100 AS nullable_vs_literal_distinct,
     c_nullable <=> NULL AS nullable_vs_null,
     NULL <=> c_nullable AS null_vs_nullable,
     c_nullable IS DISTINCT FROM NULL AS nullable_vs_null_distinct,
     NULL IS DISTINCT FROM c_nullable AS null_vs_nullable_distinct,
+    -- =====================
+    -- JSON cmp
+    -- =====================
     c_json <=> CAST('{"k": "v"}' AS JSON) AS json_check,
     c_json IS DISTINCT FROM CAST('{"k": "v"}' AS JSON) AS json_check_distinct,
     c_json <=> CAST('{"k2": "v2"}' AS JSON) AS json_check2,
@@ -154,6 +226,9 @@ SELECT
     NULL <=> c_json AS null_vs_json,
     c_json IS DISTINCT FROM NULL AS json_vs_null_distinct,
     NULL IS DISTINCT FROM c_json AS null_vs_json_distinct,
+    -- =====================
+    -- Variant cmp
+    -- =====================
     c_variant <=> 1::UInt64::Variant(UInt64, String, Array(UInt64)) AS variant_check_int,
     c_variant IS DISTINCT FROM 1::UInt64::Variant(UInt64, String, Array(UInt64)) AS variant_check_int_distinct,
     c_variant <=> 'test variant'::String::Variant(UInt64, String, Array(UInt64)) AS variant_check_str,
@@ -164,6 +239,9 @@ SELECT
     NULL <=> c_variant AS null_vs_variant,
     c_variant IS DISTINCT FROM NULL AS variant_vs_null_distinct,
     NULL IS DISTINCT FROM c_variant AS null_vs_variant_distinct,
+    -- =====================
+    -- Dynamic cmp
+    -- =====================
     c_dynamic <=> 1::Dynamic AS dynamic_check_int,
     c_dynamic IS DISTINCT FROM 1::Dynamic AS dynamic_check_int_distinct,
     c_dynamic <=> 'test dynamic'::Dynamic AS dynamic_check_str,
@@ -200,12 +278,14 @@ SELECT
 FROM `03611_nscmp_tbl`
 ORDER BY key ASC;
 
+-- Variant vs Dynamic
 SELECT
     c_variant <=> c_dynamic,
     c_variant IS DISTINCT FROM c_dynamic
 FROM `03611_nscmp_tbl`
 ORDER BY key ASC;
 
+-- Dynamic vs IPv4/IPv6
 SELECT c_dynamic <=> c_ipv4
 FROM `03611_nscmp_tbl`
 ORDER BY key ASC;
@@ -222,6 +302,7 @@ SELECT c_dynamic IS DISTINCT FROM c_ipv6
 FROM `03611_nscmp_tbl`
 ORDER BY key ASC;
 
+-- Dynamic vs String
 SELECT
     c_dynamic <=> c_string,
     c_dynamic <=> c_fstring
@@ -234,24 +315,28 @@ SELECT
 FROM `03611_nscmp_tbl`
 ORDER BY key ASC;
 
+-- Array vs Dynamic
 SELECT
     c_array <=> c_dynamic,
     c_array IS DISTINCT FROM c_dynamic
 FROM `03611_nscmp_tbl`
 ORDER BY key ASC;
 
+-- Map vs Dynamic
 SELECT
     c_map <=> c_dynamic,
     c_map IS DISTINCT FROM c_dynamic
 FROM `03611_nscmp_tbl`
 ORDER BY key ASC;
 
+-- Nested vs Dynamic
 SELECT
     c_nested.id <=> c_dynamic,
     c_nested.value <=> c_dynamic
 FROM `03611_nscmp_tbl`
 ORDER BY key ASC;
 
+-- Tuple vs Dynamic
 SELECT
     c_tuple <=> c_dynamic,
     c_tuple IS DISTINCT FROM c_dynamic
@@ -271,54 +356,72 @@ SELECT NULL IS DISTINCT FROM c_tuple AS tuple_vs_null_distinct
 FROM `03611_nscmp_tbl`;
 
 SELECT c_variant = 1
-FROM `03611_nscmp_tbl`;
+FROM `03611_nscmp_tbl`; -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
 SELECT c_variant <=> c_ipv4
-FROM `03611_nscmp_tbl`;
+FROM `03611_nscmp_tbl`; -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
 SELECT c_variant IS DISTINCT FROM c_ipv4
-FROM `03611_nscmp_tbl`;
+FROM `03611_nscmp_tbl`; -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
 SELECT c_variant <=> c_ipv6
-FROM `03611_nscmp_tbl`;
+FROM `03611_nscmp_tbl`; -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
 SELECT c_variant IS DISTINCT FROM c_ipv6
-FROM `03611_nscmp_tbl`;
+FROM `03611_nscmp_tbl`; -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
 SELECT
     c_variant <=> c_string,
     c_variant <=> c_fstring
-FROM `03611_nscmp_tbl`;
+FROM `03611_nscmp_tbl`; -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
 SELECT
     c_variant IS DISTINCT FROM c_string,
     c_variant IS DISTINCT FROM c_fstring
-FROM `03611_nscmp_tbl`;
+FROM `03611_nscmp_tbl`; -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
+-- Array vs Map
 SELECT
     c_array <=> c_map,
     c_array IS DISTINCT FROM c_map
-FROM `03611_nscmp_tbl`;
+FROM `03611_nscmp_tbl`; -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
+-- Map vs Variant
 SELECT
     c_map <=> c_variant,
     c_map IS DISTINCT FROM c_variant
-FROM `03611_nscmp_tbl`;
+FROM `03611_nscmp_tbl`; -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
+-- Array vs Variant
 SELECT
     c_array <=> c_variant,
     c_array IS DISTINCT FROM c_variant
-FROM `03611_nscmp_tbl`;
+FROM `03611_nscmp_tbl`; -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
+-- Array vs Tuple
 SELECT
     c_array <=> c_tuple,
     c_array IS DISTINCT FROM c_tuple
-FROM `03611_nscmp_tbl`;
+FROM `03611_nscmp_tbl`; -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
+-- Map vs Tuple
 SELECT
     c_map <=> c_tuple,
     c_map IS DISTINCT FROM c_tuple
-FROM `03611_nscmp_tbl`;
+FROM `03611_nscmp_tbl`; -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
+
+DROP TABLE IF EXISTS `03611_t_nullsafe`;
+
+CREATE TABLE IF NOT EXISTS `03611_t_nullsafe`
+(
+    id Int32,
+    a Nullable(Int32),
+    b Nullable(Int32),
+    txt Nullable(String)
+)
+ENGINE = Memory;
+
+INSERT INTO `03611_t_nullsafe`;
 
 SELECT
     id,

@@ -1,3 +1,5 @@
+SET send_logs_level = 'fatal';
+
 SELECT [4, 1, 1, 2, 6, 1, 1, 0, 4, 1, 14, 0, 10, 0, 16, 6] = multiSearchAllPositions(materialize('jmdqwjbrxlbatqeixknricfk'), ['qwjbrxlba', 'jmd', '', 'mdqwjbrxlbatqe', 'jbrxlbatqeixknric', 'jmdqwjbrxlbatqeixknri', '', 'fdtmnwtts', 'qwjbrxlba', '', 'qeixknricfk', 'hzjjgrnoilfkvzxaemzhf', 'lb', 'kamz', 'ixknr', 'jbrxlbatq'])
 FROM `system`.numbers
 LIMIT 10;

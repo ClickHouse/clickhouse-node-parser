@@ -1,3 +1,13 @@
+CREATE TABLE t0
+(
+    c0 Array(Int),
+    c1 Tuple()
+)
+ENGINE = MergeTree()
+ORDER BY tuple();
+
+INSERT INTO t0 (c0, c1);
+
 SELECT *
 FROM
     t0

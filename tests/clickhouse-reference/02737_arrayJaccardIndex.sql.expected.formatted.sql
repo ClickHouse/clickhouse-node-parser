@@ -1,17 +1,17 @@
 SELECT
     'a' AS arr1,
     2 AS arr2,
-    round(arrayJaccardIndex(arr1, arr2), 2);
+    round(arrayJaccardIndex(arr1, arr2), 2); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
 SELECT
     [] AS arr1,
     [] AS arr2,
-    round(arrayJaccardIndex(arr1, arr2), 2);
+    round(arrayJaccardIndex(arr1, arr2), 2); -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 
 SELECT
     ['1', '2'] AS arr1,
     [1,2] AS arr2,
-    round(arrayJaccardIndex(arr1, arr2), 2);
+    round(arrayJaccardIndex(arr1, arr2), 2); -- { serverError NO_COMMON_TYPE }
 
 SELECT
     [1,2] AS arr1,
@@ -37,6 +37,21 @@ SELECT
     [[1,2], [3,4]] AS arr1,
     [[1,2], [3,5]] AS arr2,
     round(arrayJaccardIndex(arr1, arr2), 2);
+
+DROP TABLE IF EXISTS array_jaccard_index;
+
+CREATE TABLE array_jaccard_index
+(
+    arr Array(UInt8)
+)
+ENGINE = MergeTree
+ORDER BY arr;
+
+INSERT INTO array_jaccard_index;
+
+INSERT INTO array_jaccard_index;
+
+INSERT INTO array_jaccard_index;
 
 SELECT
     arr,
@@ -72,3 +87,5 @@ SELECT
     round(arrayJaccardIndex(arr, arr), 2)
 FROM array_jaccard_index
 ORDER BY arr ASC;
+
+DROP TABLE array_jaccard_index;

@@ -1,3 +1,10 @@
+CREATE TEMPORARY TABLE t
+(
+    x Float64
+);
+
+INSERT INTO t;
+
 SELECT *
 FROM t;
 

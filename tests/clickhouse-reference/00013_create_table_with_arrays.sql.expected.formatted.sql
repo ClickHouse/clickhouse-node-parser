@@ -1,3 +1,14 @@
+DROP TABLE IF EXISTS arrays_test;
+
+CREATE TABLE arrays_test
+(
+    s String,
+    arr Array(UInt8)
+)
+ENGINE = Memory;
+
+INSERT INTO arrays_test;
+
 SELECT *
 FROM arrays_test;
 
@@ -59,3 +70,5 @@ SELECT
     sumArrayIf(arr, like(s, '%l%')),
     sumArrayIf(arr, like(s, '%e%'))
 FROM arrays_test;
+
+DROP TABLE arrays_test;

@@ -1,0 +1,83 @@
+Set
+
+CreateQuery tab (children 3)
+ Identifier tab
+ Columns definition (children 1)
+  ExpressionList (children 2)
+   ColumnDeclaration id (children 1)
+    DataType Int32
+   ColumnDeclaration vec (children 1)
+    DataType Array (children 1)
+     ExpressionList (children 1)
+      DataType Float32
+ Storage definition (children 3)
+  Function MergeTree (children 1)
+   ExpressionList
+  Identifier id
+  Set
+
+InsertQuery   (children 2)
+ Identifier tab
+ SelectWithUnionQuery (children 1)
+  ExpressionList (children 1)
+   SelectQuery (children 2)
+    ExpressionList (children 2)
+     Identifier number
+     Function array (children 1)
+      ExpressionList (children 2)
+       Function randCanonical (children 1)
+        ExpressionList
+       Function randCanonical (children 1)
+        ExpressionList
+    TablesInSelectQuery (children 1)
+     TablesInSelectQueryElement (children 1)
+      TableExpression (children 1)
+       Function numbers (children 1)
+        ExpressionList (children 1)
+         Literal UInt64_10000
+
+AlterQuery  tab (children 2)
+ ExpressionList (children 1)
+  AlterCommand ADD_INDEX (children 1)
+   Index (children 2)
+    Identifier vec
+    Function vector_similarity (children 1)
+     ExpressionList (children 6)
+      Literal 'hnsw'
+      Literal 'cosineDistance'
+      Literal UInt64_2
+      Literal 'f32'
+      Literal UInt64_64
+      Literal UInt64_400
+ Identifier tab
+
+AlterQuery  tab (children 3)
+ ExpressionList (children 1)
+  AlterCommand MATERIALIZE_INDEX (children 1)
+   Identifier idx_vec
+ Identifier tab
+ Set
+
+SelectWithUnionQuery (children 2)
+ ExpressionList (children 1)
+  SelectQuery (children 6)
+   ExpressionList (children 1)
+    Literal Array_[Float64_1, Float64_2] (alias reference_vec)
+   ExpressionList (children 1)
+    Asterisk
+   TablesInSelectQuery (children 1)
+    TablesInSelectQueryElement (children 1)
+     TableExpression (children 1)
+      TableIdentifier tab
+   Function less (children 1)
+    ExpressionList (children 2)
+     Identifier id
+     Literal UInt64_5000
+   ExpressionList (children 1)
+    OrderByElement (children 1)
+     Function cosineDistance (children 1)
+      ExpressionList (children 2)
+       Identifier vec
+       Identifier reference_vec
+   Literal UInt64_10
+ Identifier Null

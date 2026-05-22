@@ -1,0 +1,137 @@
+[
+  {
+    "kind": "select",
+    "with": [
+      {
+        "kind": "cteExpr",
+        "name": "z",
+        "expr": {
+          "kind": "functionCall",
+          "name": "arrayJoin",
+          "args": [
+            {
+              "kind": "arrayLiteral",
+              "elements": [
+                {
+                  "kind": "literal",
+                  "type": "String",
+                  "value": "a"
+                },
+                {
+                  "kind": "literal",
+                  "type": "String",
+                  "value": "b"
+                }
+              ],
+              "source": "['a', 'b']"
+            }
+          ]
+        }
+      }
+    ],
+    "select": [
+      {
+        "kind": "columnRef",
+        "parts": [
+          "z"
+        ]
+      },
+      {
+        "kind": "alias",
+        "expr": {
+          "kind": "functionCall",
+          "name": "sumMergeForEach",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "x"
+              ]
+            }
+          ]
+        },
+        "alias": "x"
+      }
+    ],
+    "from": {
+      "kind": "subqueryFrom",
+      "query": {
+        "kind": "select",
+        "select": [
+          {
+            "kind": "alias",
+            "expr": {
+              "kind": "functionCall",
+              "name": "sumStateForEach",
+              "args": [
+                {
+                  "kind": "arrayLiteral",
+                  "elements": [
+                    {
+                      "kind": "literal",
+                      "type": "Float64",
+                      "value": "1."
+                    },
+                    {
+                      "kind": "literal",
+                      "type": "Float64",
+                      "value": "1.1"
+                    },
+                    {
+                      "kind": "literal",
+                      "type": "Float64",
+                      "value": "1.1300175"
+                    }
+                  ],
+                  "source": "[1., 1.1, 1.1300175]"
+                }
+              ]
+            },
+            "alias": "x"
+          }
+        ],
+        "from": {
+          "kind": "tableFunctionRef",
+          "name": "remote",
+          "args": [
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "127.0.0.{1,2}"
+            },
+            {
+              "kind": "columnRef",
+              "parts": [
+                "system",
+                "one"
+              ]
+            }
+          ]
+        }
+      }
+    },
+    "groupBy": {
+      "kind": "expressions",
+      "items": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "z"
+          ]
+        }
+      ]
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "z"
+          ]
+        },
+        "direction": "ASC"
+      }
+    ]
+  }
+]

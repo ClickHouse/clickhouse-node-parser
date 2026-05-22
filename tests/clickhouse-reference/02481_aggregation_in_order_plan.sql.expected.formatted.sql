@@ -1,3 +1,29 @@
+DROP TABLE IF EXISTS tab;
+
+CREATE TABLE tab
+(
+    a Int32,
+    b Int32,
+    c Int32,
+    d Int32
+)
+ENGINE = MergeTree
+ORDER BY (a, b, c);
+
+INSERT INTO tab SELECT
+    0,
+    number % 3,
+    2 - intDiv(number, 3),
+    ((number % 3 + 1)) * 10
+FROM numbers(6);
+
+INSERT INTO tab SELECT
+    0,
+    number % 3,
+    2 - intDiv(number, 3),
+    ((number % 3 + 1)) * 100
+FROM numbers(6);
+
 SELECT
     a,
     any(b),

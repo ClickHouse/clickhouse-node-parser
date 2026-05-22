@@ -1,3 +1,86 @@
+CreateQuery 03789_rmv_target (children 3)
+ Identifier 03789_rmv_target
+ Columns definition (children 1)
+  ExpressionList (children 1)
+   ColumnDeclaration message (children 1)
+    DataType String
+ Storage definition (children 2)
+  Function ReplicatedMergeTree (children 1)
+   ExpressionList (children 2)
+    Literal '/clickhouse/tables/{database}/test/03789_rmv_with_multiple_subqueries'
+    Literal 'r1'
+  Function tuple (children 1)
+   ExpressionList
+
+CreateQuery 03789_rmv_mv (children 4)
+ Identifier 03789_rmv_mv
+ Refresh strategy definition (children 1)
+  TimeInterval
+ SelectWithUnionQuery (children 1)
+  ExpressionList (children 1)
+   SelectQuery (children 3)
+    ExpressionList (children 3)
+     Subquery (alias lower_limit) (children 1)
+      SelectWithUnionQuery (children 1)
+       ExpressionList (children 1)
+        SelectQuery (children 1)
+         ExpressionList (children 1)
+          Literal UInt64_1
+     Subquery (alias upper_limit) (children 1)
+      SelectWithUnionQuery (children 1)
+       ExpressionList (children 1)
+        SelectQuery (children 3)
+         ExpressionList (children 1)
+          Identifier number
+         TablesInSelectQuery (children 1)
+          TablesInSelectQueryElement (children 1)
+           TableExpression (children 1)
+            Function numbers (children 1)
+             ExpressionList (children 1)
+              Literal UInt64_10
+         Function equals (children 1)
+          ExpressionList (children 2)
+           Identifier number
+           Identifier lower_limit
+     WithElement (children 1)
+      Subquery (children 1)
+       SelectWithUnionQuery (children 1)
+        ExpressionList (children 1)
+         SelectQuery (children 3)
+          ExpressionList (children 1)
+           Literal 'OH NO' (alias message)
+          TablesInSelectQuery (children 1)
+           TablesInSelectQueryElement (children 1)
+            TableExpression (children 1)
+             Function numbers (children 1)
+              ExpressionList (children 1)
+               Literal UInt64_10
+          Function and (children 1)
+           ExpressionList (children 2)
+            Function greaterOrEquals (children 1)
+             ExpressionList (children 2)
+              Identifier number
+              Identifier lower_limit
+            Function lessOrEquals (children 1)
+             ExpressionList (children 2)
+              Identifier number
+              Identifier upper_limit
+    ExpressionList (children 1)
+     Asterisk
+    TablesInSelectQuery (children 1)
+     TablesInSelectQueryElement (children 1)
+      TableExpression (children 1)
+       TableIdentifier result
+ ViewTargets
+
+SYSTEM query (children 1)
+ Identifier 03789_rmv_mv
+
+SYSTEM query (children 1)
+ Identifier 03789_rmv_mv
+
+SYSTEM query
+
 SelectWithUnionQuery (children 1)
  ExpressionList (children 1)
   SelectQuery (children 3)

@@ -1,30 +1,31 @@
 [
   {
-    "kind": "select",
-    "select": [
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "t0"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "t0"
+    },
+    "tableElements": [
       {
-        "kind": "literal",
-        "type": "UInt64",
-        "value": "1"
-      }
-    ],
-    "from": {
-      "left": {
-        "kind": "tableRef",
-        "table": "t0"
-      },
-      "kind": "join",
-      "joinType": "INNER",
-      "right": {
-        "kind": "tableRef",
-        "table": "t0"
-      },
-      "constraint": {
-        "kind": "on",
-        "expr": {
-          "kind": "asterisk"
+        "kind": "columnDef",
+        "name": "c0",
+        "type": {
+          "name": "Int"
         }
       }
+    ],
+    "engine": {
+      "name": "Memory",
+      "args": []
     }
   },
   {
@@ -41,7 +42,38 @@
         "kind": "tableRef",
         "table": "t0"
       },
-      "kind": "join",
+      "kind": "joinExpr",
+      "joinType": "INNER",
+      "right": {
+        "kind": "tableRef",
+        "table": "t0"
+      },
+      "constraint": {
+        "kind": "on",
+        "expr": {
+          "kind": "asterisk"
+        }
+      }
+    },
+    "trailingComments": [
+      "-- { serverError BAD_ARGUMENTS,INVALID_JOIN_ON_EXPRESSION }"
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "literal",
+        "type": "UInt64",
+        "value": "1"
+      }
+    ],
+    "from": {
+      "left": {
+        "kind": "tableRef",
+        "table": "t0"
+      },
+      "kind": "joinExpr",
       "joinType": "INNER",
       "right": {
         "kind": "tableRef",
@@ -59,7 +91,10 @@
           ]
         }
       }
-    }
+    },
+    "trailingComments": [
+      "-- { serverError AMBIGUOUS_COLUMN_NAME,ILLEGAL_TYPE_OF_ARGUMENT }"
+    ]
   },
   {
     "kind": "select",
@@ -75,7 +110,7 @@
         "kind": "tableRef",
         "table": "t0"
       },
-      "kind": "join",
+      "kind": "joinExpr",
       "joinType": "INNER",
       "right": {
         "kind": "tableRef",
@@ -87,6 +122,9 @@
           "*"
         ]
       }
-    }
+    },
+    "trailingComments": [
+      "-- { serverError BAD_ARGUMENTS,UNSUPPORTED_JOIN_KEYS }"
+    ]
   }
 ]

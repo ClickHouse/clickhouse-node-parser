@@ -1,3 +1,5 @@
+SET enable_analyzer = 1;
+
 SELECT
     v.x,
     r.a,
@@ -14,4 +16,4 @@ LEFT JOIN (
             2 AS a
     ) AS r
     ON v.x = r.x
-GROUP BY v.x;
+GROUP BY v.x; -- { serverError NOT_AN_AGGREGATE}

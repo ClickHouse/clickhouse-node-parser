@@ -24,11 +24,11 @@ SELECT clamp(toInt64(number), toInt64(number - 1), toInt64(number + 1))
 FROM numbers(3);
 
 SELECT clamp(number, number - 1, number + 1)
-FROM numbers(3);
+FROM numbers(3); -- { serverError NO_COMMON_TYPE }
 
-SELECT clamp(1, 3, 2);
+SELECT clamp(1, 3, 2); -- { serverError BAD_ARGUMENTS } 
 
 SELECT clamp(1, data[1], data[2])
 FROM (
         SELECT arrayJoin([[1, 2], [2,3], [3,2], [4, 4]]) AS data
-    );
+    ); -- { serverError BAD_ARGUMENTS } 

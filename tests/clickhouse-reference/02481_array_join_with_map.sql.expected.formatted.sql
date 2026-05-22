@@ -1,3 +1,16 @@
+DROP TABLE IF EXISTS arrays_test;
+
+CREATE TABLE arrays_test
+(
+    s String,
+    arr1 Array(UInt8),
+    map1 Map(UInt8, String),
+    map2 Map(UInt8, String)
+)
+ENGINE = Memory;
+
+INSERT INTO arrays_test;
+
 SELECT
     s,
     arr1,

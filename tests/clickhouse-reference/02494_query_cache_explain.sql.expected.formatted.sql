@@ -1,3 +1,12 @@
+-- Tags: no-parallel
+-- Tag no-parallel: Messes with internal cache
+SET enable_analyzer = 1;
+
+SET query_cache_system_table_handling = 'save';
+
+SYSTEM CLEAR QUERY CACHE;
+
+-- Run a silly query with a non-trivial plan and put the result into the query cache QC
 SELECT 1 + number
 FROM `system`.numbers
 LIMIT 1

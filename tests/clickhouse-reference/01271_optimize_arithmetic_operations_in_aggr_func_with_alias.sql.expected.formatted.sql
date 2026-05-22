@@ -1,3 +1,7 @@
+SET optimize_arithmetic_operations_in_aggregate_functions = 1;
+
+SET convert_query_to_cnf = 0;
+
 SELECT min(((n AS a)) + ((1 AS b))) AS c
 FROM (
         SELECT number AS n

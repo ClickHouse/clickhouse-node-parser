@@ -1,3 +1,22 @@
+DROP TABLE IF EXISTS test;
+
+CREATE TABLE test
+(
+    dim1 String,
+    dim2 String,
+    PROJECTION p1 (    SELECT
+        dim1,
+        dim2,
+        count()
+    GROUP BY
+        dim1,
+        dim2)
+)
+ENGINE = MergeTree
+ORDER BY dim1;
+
+INSERT INTO test;
+
 SELECT
     dim1,
     dim2,
@@ -50,3 +69,5 @@ ORDER BY
     dim1 ASC,
     dim2 ASC,
     count() ASC;
+
+DROP TABLE test;

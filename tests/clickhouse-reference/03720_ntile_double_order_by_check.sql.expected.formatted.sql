@@ -1,3 +1,4 @@
+-- { echoOn }
 SELECT
     ntile(1) OVER (ORDER BY id ASC) AS a,
     ntile(2) OVER (ORDER BY id ASC) AS b
@@ -18,6 +19,16 @@ SELECT
 FROM (
         SELECT 1 AS id
     ) AS t;
+
+DROP TABLE IF EXISTS test_ntile;
+
+CREATE TABLE test_ntile
+(
+    id Int32
+)
+ENGINE = Memory;
+
+INSERT INTO test_ntile;
 
 SELECT
     id,

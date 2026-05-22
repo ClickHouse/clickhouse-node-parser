@@ -1,3 +1,42 @@
+-- Tags: no-asan, no-tsan, no-msan, no-flaky-check
+-- too slow for sanitizers and flaky check
+SET enable_json_type = 1;
+
+SET allow_experimental_variant_type = 1;
+
+SET use_variant_as_common_type = 1;
+
+DROP TABLE IF EXISTS test;
+
+CREATE TABLE test
+(
+    id UInt64,
+    json JSON(max_dynamic_paths = 8, `a.b` Array(JSON))
+)
+ENGINE = MergeTree
+ORDER BY id
+SETTINGS min_rows_for_wide_part = 1000000000, min_bytes_for_wide_part = 10000000000;
+
+INSERT INTO test SELECT
+    number,
+    '{}'
+FROM numbers(10000);
+
+INSERT INTO test SELECT
+    number,
+    toJSONString(map('a.b', arrayMap(x -> map(concat('b.c.d_', toString(x)), number::UInt32, 'c.d.e', range(((number + x)) % 5 + 1)), range(number % 5 + 1))))
+FROM numbers(10000, 10000);
+
+INSERT INTO test SELECT
+    number,
+    toJSONString(map('a.r', arrayMap(x -> map(concat('b.c.d_', toString(x)), number::UInt32, 'c.d.e', range(((number + x)) % 5 + 1)), range(number % 5 + 1))))
+FROM numbers(20000, 10000);
+
+INSERT INTO test SELECT
+    number,
+    toJSONString(map('a.a1', number, 'a.a2', number, 'a.a3', number, 'a.a4', number, 'a.a5', number, 'a.a6', number, 'a.a7', number, 'a.a8', number, 'a.r', arrayMap(x -> map(concat('b.c.d_', toString(x)), number::UInt32, 'c.d.e', range(((number + x)) % 5 + 1)), range(number % 5 + 1))))
+FROM numbers(30000, 10000);
+
 SELECT DISTINCT arrayJoin(JSONAllPathsWithTypes(json)) AS paths_with_types
 FROM test
 ORDER BY paths_with_types ASC;
@@ -281,3 +320,5 @@ SELECT
 FROM test
 ORDER BY id ASC
 FORMAT Null;
+
+DROP TABLE test;

@@ -1,7 +1,16 @@
-SELECT f(`@`);
+CREATE TEMPORARY TABLE a
+(
+    b UInt8
+)
+ENGINE = MergeTree
+ORDER BY b;
 
-SELECT `@`(1);
+ALTER TABLE a MODIFY COLUMN b CODEC(`@`); -- { serverError UNKNOWN_CODEC }
 
-SELECT ` `(1);
+SELECT f(`@`); -- { serverError UNKNOWN_IDENTIFIER }
 
-SELECT `упячка`(1);
+SELECT `@`(1); -- { serverError UNKNOWN_FUNCTION }
+
+SELECT ` `(1); -- { serverError UNKNOWN_FUNCTION }
+
+SELECT `упячка`(1); -- { serverError UNKNOWN_FUNCTION }

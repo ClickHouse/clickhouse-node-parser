@@ -1,0 +1,1 @@
+CREATE FUNCTION foo AS x; -- { serverError BAD_ARGUMENTS }

@@ -1,3 +1,4 @@
+-- Tags: stateful
 SELECT
     UserID,
     EventTime::DateTime('Asia/Dubai'),

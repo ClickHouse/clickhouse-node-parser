@@ -1,3 +1,13 @@
+--https://github.com/ClickHouse/ClickHouse/issues/59999
+DROP TABLE IF EXISTS tags;
+
+CREATE TABLE tags
+(
+    dev_tag String
+)
+ENGINE = Memory AS
+SELECT '1';
+
 SELECT *
 FROM (
         SELECT countDistinct(dev_tag) AS total_devtags
@@ -25,6 +35,19 @@ FROM (
             ) AS t
     )
 SETTINGS optimize_uniq_to_count = 1;
+
+-- https://github.com/ClickHouse/ClickHouse/issues/62298
+DROP TABLE IF EXISTS users;
+
+CREATE TABLE users
+(
+    id Int64,
+    name String
+)
+ENGINE = ReplacingMergeTree
+ORDER BY (id, name);
+
+INSERT INTO users;
 
 SELECT uniqExact(id)
 FROM (

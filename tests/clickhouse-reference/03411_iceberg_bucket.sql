@@ -14,6 +14,10 @@ SELECT icebergHash(14.20 :: Decimal32(2));
 SELECT icebergHash(14.20 :: Decimal64(2));
 SELECT icebergHash(14.20 :: Decimal128(2));
 SELECT icebergHash('2017-11-16' :: Date);
+WITH
+    toDateTime64('1970-01-01 22:31:08', 6, 'UTC') AS ts,
+    toUnixTimestamp64Micro(ts) AS microseconds_since_day_start
+SELECT icebergHash(microseconds_since_day_start);
 SELECT icebergHash(toDateTime64('2017-11-16T22:31:08', 6, 'UTC'));
 SELECT icebergHash(toDateTime64('2017-11-16T22:31:08.000001', 6, 'UTC'));
 SELECT icebergHash(toDateTime64('2017-11-16T22:31:08', 9, 'UTC'));
@@ -41,6 +45,10 @@ SELECT icebergBucket(5, 14.20 :: Decimal32(2));
 SELECT icebergBucket(5, 14.20 :: Decimal64(2));
 SELECT icebergBucket(5, 14.20 :: Decimal128(2));
 SELECT icebergBucket(5, '2017-11-16' :: Date);
+WITH
+    toDateTime64('1970-01-01 22:31:08', 6, 'UTC') AS ts,
+    toUnixTimestamp64Micro(ts) AS microseconds_since_day_start
+SELECT icebergBucket(5, microseconds_since_day_start);
 SELECT icebergBucket(5, toDateTime64('2017-11-16T22:31:08', 6, 'UTC'));
 SELECT icebergBucket(5, toDateTime64('2017-11-16T22:31:08.000001', 6, 'UTC'));
 SELECT icebergBucket(5, toDateTime64('2017-11-16T22:31:08', 9, 'UTC'));
@@ -68,6 +76,10 @@ SELECT icebergBucket(13, 14.20 :: Decimal32(2));
 SELECT icebergBucket(13, 14.20 :: Decimal64(2));
 SELECT icebergBucket(13, 14.20 :: Decimal128(2));
 SELECT icebergBucket(13, '2017-11-16' :: Date);
+WITH
+    toDateTime64('1970-01-01 22:31:08', 6, 'UTC') AS ts,
+    toUnixTimestamp64Micro(ts) AS microseconds_since_day_start
+SELECT icebergBucket(13, microseconds_since_day_start);
 SELECT icebergBucket(13, toDateTime64('2017-11-16T22:31:08', 6, 'UTC'));
 SELECT icebergBucket(13, toDateTime64('2017-11-16T22:31:08.000001', 6, 'UTC'));
 SELECT icebergBucket(13, toDateTime64('2017-11-16T22:31:08', 9, 'UTC'));

@@ -1,5 +1,46 @@
 [
   {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "merge_hits"
+    },
+    "ifExists": true,
+    "leadingComments": [
+      "-- Tags: stateful"
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "merge_hits"
+    },
+    "ifNotExists": true,
+    "asTable": {
+      "kind": "tableRef",
+      "database": "test",
+      "table": "hits"
+    },
+    "engine": {
+      "name": "Merge",
+      "args": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "test"
+          ]
+        },
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "^hits$"
+        }
+      ]
+    }
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -55,6 +96,14 @@
         "type": "UInt64",
         "value": "2"
       }
+    }
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "merge_hits"
     }
   }
 ]

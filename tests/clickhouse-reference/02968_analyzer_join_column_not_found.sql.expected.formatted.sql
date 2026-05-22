@@ -1,3 +1,25 @@
+DROP TABLE IF EXISTS im;
+
+CREATE TABLE im
+(
+    id Int32,
+    dd Int32
+)
+ENGINE = Memory();
+
+INSERT INTO im;
+
+DROP TABLE IF EXISTS ts;
+
+CREATE TABLE ts
+(
+    tid Int32,
+    id Int32
+)
+ENGINE = Memory();
+
+INSERT INTO ts;
+
 SELECT *
 FROM
     im AS m

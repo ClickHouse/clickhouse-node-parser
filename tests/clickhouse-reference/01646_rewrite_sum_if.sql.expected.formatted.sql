@@ -1,3 +1,5 @@
+SET optimize_rewrite_sum_if_to_count_if = 0;
+
 SELECT sumIf(1, number % 2 > 2)
 FROM numbers(100);
 
@@ -46,3 +48,7 @@ FROM numbers(100);
 
 SELECT countIf(number % 2 != 0)
 FROM numbers(100);
+
+SET optimize_rewrite_sum_if_to_count_if = 1;
+
+SET enable_analyzer = true;

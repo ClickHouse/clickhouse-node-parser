@@ -1,0 +1,41 @@
+[
+  {
+    "kind": "system",
+    "body": "DROP USER IF EXISTS user_param_auth_03773",
+    "leadingComments": [
+      "-- Tags: no-fasttest, no-parallel, no-replicated-database",
+      "-- Tag no-replicated-database: ON CLUSTER is not allowed",
+      "-- Test for issue #92010: Query parameters in authentication methods with ON CLUSTER"
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "param_password",
+        "value": {
+          "kind": "literal",
+          "type": "String",
+          "value": "test_password_03773"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createUser",
+    "names": [
+      {
+        "name": "user_param_auth_03773"
+      }
+    ],
+    "onCluster": "test_shard_localhost",
+    "auth": [
+      {
+        "secret": "{password:String}"
+      }
+    ],
+    "leadingComments": [
+      "-- Before fix: This would fail with UNKNOWN_QUERY_PARAMETER on remote nodes"
+    ]
+  }
+]

@@ -1,5 +1,165 @@
 [
   {
+    "kind": "createNamedCollection",
+    "name": "cache_collection_sql",
+    "items": [
+      {
+        "key": "path",
+        "value": {
+          "kind": "literal",
+          "type": "String",
+          "value": "collection_sql"
+        }
+      },
+      {
+        "key": "max_size",
+        "value": {
+          "kind": "literal",
+          "type": "String",
+          "value": "1Mi"
+        }
+      }
+    ],
+    "ifNotExists": true,
+    "leadingComments": [
+      "-- Tags: no-fasttest, no-replicated-database"
+    ]
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "test"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "test"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "a",
+        "type": {
+          "name": "Int32"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "b",
+        "type": {
+          "name": "String"
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree",
+      "args": []
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "a"
+          ]
+        }
+      }
+    ],
+    "settings": [
+      {
+        "name": "disk",
+        "value": {
+          "kind": "functionCall",
+          "name": "disk",
+          "args": [
+            {
+              "kind": "binaryExpr",
+              "op": "=",
+              "left": {
+                "kind": "columnRef",
+                "parts": [
+                  "type"
+                ]
+              },
+              "right": {
+                "kind": "columnRef",
+                "parts": [
+                  "cache"
+                ]
+              }
+            },
+            {
+              "kind": "binaryExpr",
+              "op": "=",
+              "left": {
+                "kind": "columnRef",
+                "parts": [
+                  "disk"
+                ]
+              },
+              "right": {
+                "kind": "literal",
+                "type": "String",
+                "value": "local_disk"
+              }
+            },
+            {
+              "kind": "binaryExpr",
+              "op": "=",
+              "left": {
+                "kind": "columnRef",
+                "parts": [
+                  "name"
+                ]
+              },
+              "right": {
+                "kind": "literal",
+                "type": "String",
+                "value": "cache_with_sql_collection"
+              }
+            },
+            {
+              "kind": "binaryExpr",
+              "op": "=",
+              "left": {
+                "kind": "columnRef",
+                "parts": [
+                  "cache_name"
+                ]
+              },
+              "right": {
+                "kind": "literal",
+                "type": "String",
+                "value": "cache_collection_sql"
+              }
+            },
+            {
+              "kind": "binaryExpr",
+              "op": "=",
+              "left": {
+                "kind": "columnRef",
+                "parts": [
+                  "load_metadata_asynchronously"
+                ]
+              },
+              "right": {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "0"
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "settingsAfterOrderBy": true
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -29,6 +189,131 @@
         "value": "cache_with_sql_collection"
       }
     }
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "test2"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "a",
+        "type": {
+          "name": "Int32"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "b",
+        "type": {
+          "name": "String"
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree",
+      "args": []
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "a"
+          ]
+        }
+      }
+    ],
+    "settings": [
+      {
+        "name": "disk",
+        "value": {
+          "kind": "functionCall",
+          "name": "disk",
+          "args": [
+            {
+              "kind": "binaryExpr",
+              "op": "=",
+              "left": {
+                "kind": "columnRef",
+                "parts": [
+                  "type"
+                ]
+              },
+              "right": {
+                "kind": "columnRef",
+                "parts": [
+                  "cache"
+                ]
+              }
+            },
+            {
+              "kind": "binaryExpr",
+              "op": "=",
+              "left": {
+                "kind": "columnRef",
+                "parts": [
+                  "disk"
+                ]
+              },
+              "right": {
+                "kind": "literal",
+                "type": "String",
+                "value": "local_disk"
+              }
+            },
+            {
+              "kind": "binaryExpr",
+              "op": "=",
+              "left": {
+                "kind": "columnRef",
+                "parts": [
+                  "name"
+                ]
+              },
+              "right": {
+                "kind": "literal",
+                "type": "String",
+                "value": "cache_with_collection"
+              }
+            },
+            {
+              "kind": "binaryExpr",
+              "op": "=",
+              "left": {
+                "kind": "columnRef",
+                "parts": [
+                  "cache_name"
+                ]
+              },
+              "right": {
+                "kind": "literal",
+                "type": "String",
+                "value": "cache_collection"
+              }
+            },
+            {
+              "kind": "binaryExpr",
+              "op": "=",
+              "left": {
+                "kind": "columnRef",
+                "parts": [
+                  "load_metadata_asynchronously"
+                ]
+              },
+              "right": {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "0"
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "settingsAfterOrderBy": true
   },
   {
     "kind": "select",

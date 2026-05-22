@@ -1,3 +1,16 @@
+DROP TABLE IF EXISTS primary_key;
+
+SET allow_deprecated_syntax_for_merge_tree = 1;
+
+CREATE TABLE primary_key
+(
+    d Date DEFAULT today(),
+    x Int8
+)
+ENGINE = MergeTree(d, negate(x), 1);
+
+INSERT INTO primary_key (x);
+
 SELECT x
 FROM primary_key
 ORDER BY x ASC;
@@ -25,3 +38,5 @@ SELECT
     negate(x)
 FROM primary_key
 WHERE negate(x) < toInt8(0);
+
+DROP TABLE primary_key;

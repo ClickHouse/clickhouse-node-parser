@@ -1,3 +1,6 @@
+-- Tags: no-fasttest, no-parallel
+
+SET enable_analyzer = 1;
 SELECT * 
 FROM s3Cluster(test_shard_localhost, 'http://localhost:11111/test/03800_a.parquet', 'NOSIGN', 'Parquet', 'boolean_col Boolean, long_col Int64') AS t1 
 LEFT JOIN s3Cluster(test_shard_localhost, 'http://localhost:11111/test/03800_b.parquet', 'NOSIGN', 'Parquet', 'boolean_col Boolean, long_col Int64') AS t2 

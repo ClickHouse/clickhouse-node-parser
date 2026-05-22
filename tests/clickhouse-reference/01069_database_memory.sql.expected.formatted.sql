@@ -1,3 +1,27 @@
+DROP DATABASE IF EXISTS memory_01069;
+
+CREATE DATABASE memory_01069
+ENGINE = Memory;
+
+SHOW CREATE DATABASE memory_01069;
+
+CREATE TABLE memory_01069.mt
+(
+    n UInt8
+)
+ENGINE = MergeTree()
+ORDER BY n;
+
+CREATE TABLE memory_01069.file
+(
+    n UInt8
+)
+ENGINE = File(CSV);
+
+INSERT INTO memory_01069.mt;
+
+INSERT INTO memory_01069.file;
+
 SELECT *
 FROM memory_01069.mt
 ORDER BY n ASC;
@@ -5,3 +29,11 @@ ORDER BY n ASC;
 SELECT *
 FROM memory_01069.file
 ORDER BY n ASC;
+
+DROP TABLE memory_01069.mt;
+
+SHOW CREATE TABLE memory_01069.mt; -- { serverError UNKNOWN_TABLE }
+
+SHOW CREATE TABLE memory_01069.file;
+
+DROP DATABASE memory_01069;

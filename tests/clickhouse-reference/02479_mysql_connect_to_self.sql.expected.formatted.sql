@@ -1,3 +1,21 @@
+-- Tags: no-fasttest
+SET send_logs_level = 'fatal'; -- failed connection tries are ok, if it succeeded after retry.
+
+DROP TABLE IF EXISTS foo;
+
+CREATE TABLE foo
+(
+    key UInt32,
+    a String,
+    b Int64,
+    c String
+)
+ENGINE = TinyLog;
+
+INSERT INTO foo;
+
+SET enable_analyzer = 1;
+
 SELECT '---';
 
 SELECT *
@@ -39,7 +57,7 @@ SELECT count()
 FROM mysql('127.0.0.1:9004', currentDatabase(), foo, 'default', '' SETTINGS connection_pool_size = 1, connect_timeout = 100, connection_wait_timeout = 100);
 
 SELECT count()
-FROM mysql('127.0.0.1:9004', currentDatabase(), foo, 'default', '' SETTINGS connection_pool_size = 0);
+FROM mysql('127.0.0.1:9004', currentDatabase(), foo, 'default', '' SETTINGS connection_pool_size = 0); -- { serverError BAD_ARGUMENTS }
 
 SELECT *
 FROM mysql('[::1]:9004', currentDatabase(), foo, 'default', '' SETTINGS connect_timeout = 100, connection_wait_timeout = 100)
@@ -80,4 +98,6 @@ SELECT count()
 FROM mysql('[::1]:9004', currentDatabase(), foo, 'default', '' SETTINGS connection_pool_size = 1, connect_timeout = 100, connection_wait_timeout = 100);
 
 SELECT count()
-FROM mysql('[::1]:9004', currentDatabase(), foo, 'default', '' SETTINGS connection_pool_size = 0);
+FROM mysql('[::1]:9004', currentDatabase(), foo, 'default', '' SETTINGS connection_pool_size = 0); -- { serverError BAD_ARGUMENTS }
+
+DROP TABLE foo;

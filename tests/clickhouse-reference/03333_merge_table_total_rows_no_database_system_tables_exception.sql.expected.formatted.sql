@@ -1,3 +1,20 @@
+-- Tags: no-parallel, no-replicated-database
+-- ^ creates a database.
+DROP DATABASE IF EXISTS test_03333;
+
+CREATE DATABASE test_03333;
+
+CREATE TABLE test_03333.t
+(
+    x UInt8
+)
+ENGINE = Memory;
+
+DROP TABLE IF EXISTS merge;
+
+CREATE TABLE merge
+ENGINE = Merge(test_03333, 't');
+
 SELECT *
 FROM merge;
 
@@ -8,3 +25,7 @@ SELECT
 FROM `system`.tables
 WHERE database = currentDatabase()
     AND table = 'merge';
+
+DROP DATABASE test_03333;
+
+DROP TABLE merge;

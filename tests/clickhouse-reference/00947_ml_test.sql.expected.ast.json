@@ -1,5 +1,150 @@
 [
   {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "defaults"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "defaults"
+    },
+    "ifNotExists": true,
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "param1",
+        "type": {
+          "name": "Float64"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "param2",
+        "type": {
+          "name": "Float64"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "target",
+        "type": {
+          "name": "Float64"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "predict1",
+        "type": {
+          "name": "Float64"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "predict2",
+        "type": {
+          "name": "Float64"
+        }
+      }
+    ],
+    "engine": {
+      "name": "Memory"
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "defaults"
+      }
+    }
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "model"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "model"
+    },
+    "engine": {
+      "name": "Memory"
+    },
+    "asQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "alias",
+          "expr": {
+            "kind": "functionCall",
+            "name": "stochasticLinearRegressionState",
+            "params": [
+              {
+                "kind": "literal",
+                "type": "Float64",
+                "value": "0.03"
+              },
+              {
+                "kind": "literal",
+                "type": "Float64",
+                "value": "0.00001"
+              },
+              {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "2"
+              },
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "Nesterov"
+              }
+            ],
+            "args": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "target"
+                ]
+              },
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "param1"
+                ]
+              },
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "param2"
+                ]
+              }
+            ]
+          },
+          "alias": "state"
+        }
+      ],
+      "from": {
+        "kind": "tableRef",
+        "table": "defaults"
+      }
+    }
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -45,7 +190,7 @@
         "kind": "select",
         "with": [
           {
-            "kind": "expr",
+            "kind": "cteExpr",
             "name": "model",
             "expr": {
               "kind": "subqueryExpr",
@@ -223,7 +368,10 @@
           "table": "defaults"
         }
       }
-    }
+    },
+    "leadingComments": [
+      "-- Check that returned weights are close to real"
+    ]
   },
   {
     "kind": "select",
@@ -450,6 +598,69 @@
           "kind": "tableRef",
           "table": "defaults"
         }
+      }
+    }
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "grouptest"
+    },
+    "ifExists": true,
+    "leadingComments": [
+      "-- Check GROUP BY"
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "grouptest"
+    },
+    "ifNotExists": true,
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "user_id",
+        "type": {
+          "name": "UInt32"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "p1",
+        "type": {
+          "name": "Float64"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "p2",
+        "type": {
+          "name": "Float64"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "target",
+        "type": {
+          "name": "Float64"
+        }
+      }
+    ],
+    "engine": {
+      "name": "Memory"
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "grouptest"
       }
     }
   },
@@ -981,6 +1192,30 @@
           "commaSyntax": true
         }
       }
+    }
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "defaults"
+    }
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "model"
+    }
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "grouptest"
     }
   }
 ]

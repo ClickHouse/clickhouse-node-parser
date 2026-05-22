@@ -1,1 +1,13 @@
+CREATE TABLE test
+(
+    `x` Tuple(UInt64, UInt64)
+)
+ENGINE = MergeTree
+ORDER BY x;
+INSERT INTO test SELECT (number, number) FROM numbers(1000000);
 SELECT COUNT() FROM test;
+ALTER TABLE test DETACH PARTITION tuple();
+ALTER TABLE test ATTACH PARTITION tuple();
+DETACH TABLE test;
+ATTACH TABLE test;
+DROP TABLE test;

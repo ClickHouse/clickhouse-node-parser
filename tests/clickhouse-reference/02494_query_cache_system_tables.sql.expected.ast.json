@@ -1,5 +1,13 @@
 [
   {
+    "kind": "system",
+    "body": "SYSTEM CLEAR QUERY CACHE",
+    "leadingComments": [
+      "-- Tags: no-parallel",
+      "-- Tag no-parallel: Messes with internal cache"
+    ]
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -20,6 +28,12 @@
           "value": "1"
         }
       }
+    ],
+    "leadingComments": [
+      "-- Test that the query cache rejects queries that involve system tables."
+    ],
+    "trailingComments": [
+      "-- { serverError QUERY_CACHE_USED_WITH_SYSTEM_TABLE }"
     ]
   },
   {
@@ -70,6 +84,12 @@
           "value": "throw"
         }
       }
+    ],
+    "leadingComments": [
+      "-- Test that the query cache rejects queries that involve system tables."
+    ],
+    "trailingComments": [
+      "-- { serverError QUERY_CACHE_USED_WITH_SYSTEM_TABLE }"
     ]
   },
   {
@@ -101,6 +121,9 @@
           "value": "save"
         }
       }
+    ],
+    "leadingComments": [
+      "-- Test that the query cache saves the result of queries that involve system tables."
     ]
   },
   {
@@ -132,6 +155,16 @@
           "value": "ignore"
         }
       }
+    ],
+    "leadingComments": [
+      "-- Test that the query cache ignores the result of queries that involve system tables."
+    ]
+  },
+  {
+    "kind": "use",
+    "database": "system",
+    "leadingComments": [
+      "-- Edge case which doesn't work well due to conceptual reasons (QueryCache is AST-based), test it anyways to have it documented."
     ]
   },
   {
@@ -154,6 +187,9 @@
           "value": "1"
         }
       }
+    ],
+    "trailingComments": [
+      "-- doesn't throw but should"
     ]
   },
   {
@@ -172,6 +208,9 @@
           "value": "1"
         }
       }
+    ],
+    "leadingComments": [
+      "-- This query uses system.zero internally. Since the query cache works at AST level it does not \"see' system.zero and must not complain."
     ]
   },
   {
@@ -195,7 +234,51 @@
           "value": "1"
         }
       }
+    ],
+    "leadingComments": [
+      "-- information_schema is also treated as a system table"
+    ],
+    "trailingComments": [
+      "-- { serverError QUERY_CACHE_USED_WITH_SYSTEM_TABLE }"
     ]
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "tab"
+    },
+    "ifExists": true,
+    "leadingComments": [
+      "-- Issue #69010: A system table name appears as a literal. That's okay and must not throw."
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "tab"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "uid",
+        "type": {
+          "name": "Int16"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "name",
+        "type": {
+          "name": "String"
+        }
+      }
+    ],
+    "engine": {
+      "name": "Memory"
+    }
   },
   {
     "kind": "select",
@@ -235,6 +318,14 @@
     ]
   },
   {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "tab"
+    }
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -242,7 +333,7 @@
       }
     ],
     "from": {
-      "kind": "tableFunction",
+      "kind": "tableFunctionRef",
       "name": "clusterAllReplicas",
       "args": [
         {
@@ -268,6 +359,12 @@
           "value": "1"
         }
       }
+    ],
+    "leadingComments": [
+      "-- System tables can be \"hidden\" inside e.g. table functions"
+    ],
+    "trailingComments": [
+      "-- {serverError QUERY_CACHE_USED_WITH_SYSTEM_TABLE }"
     ]
   },
   {
@@ -278,7 +375,7 @@
       }
     ],
     "from": {
-      "kind": "tableFunction",
+      "kind": "tableFunctionRef",
       "name": "clusterAllReplicas",
       "args": [
         {
@@ -302,7 +399,42 @@
           "value": "1"
         }
       }
+    ],
+    "trailingComments": [
+      "-- {serverError QUERY_CACHE_USED_WITH_SYSTEM_TABLE }"
     ]
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "system"
+    },
+    "ifExists": true,
+    "leadingComments": [
+      "-- Note how in the previous query ^^ 'system.one' is also a literal. ClusterAllReplicas gets special handling.",
+      "-- Criminal edge case that a user creates a table named \"system\". The query cache must not reject queries against it."
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "system"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "c",
+        "type": {
+          "name": "UInt64"
+        }
+      }
+    ],
+    "engine": {
+      "name": "Memory"
+    }
   },
   {
     "kind": "select",
@@ -325,6 +457,47 @@
         }
       }
     ]
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "system"
+    }
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "database": "system",
+      "table": "system"
+    },
+    "ifExists": true,
+    "leadingComments": [
+      "-- But queries against system.system are rejected."
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "database": "system",
+      "table": "system"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "c",
+        "type": {
+          "name": "UInt64"
+        }
+      }
+    ],
+    "engine": {
+      "name": "Memory"
+    }
   },
   {
     "kind": "select",
@@ -347,6 +520,18 @@
           "value": "1"
         }
       }
+    ],
+    "trailingComments": [
+      "-- { serverError QUERY_CACHE_USED_WITH_SYSTEM_TABLE }"
     ]
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "database": "system",
+      "table": "system"
+    }
   }
 ]

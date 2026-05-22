@@ -11,6 +11,20 @@ ORDER BY
     number ASC,
     value ASC;
 
+DROP TABLE IF EXISTS wt;
+
+CREATE TABLE wt
+(
+    a Int,
+    b Int
+)
+ENGINE = Memory;
+
+INSERT INTO wt SELECT
+    0,
+    number
+FROM numbers(5);
+
 SELECT 1
 FROM wt
 ORDER BY a ASC

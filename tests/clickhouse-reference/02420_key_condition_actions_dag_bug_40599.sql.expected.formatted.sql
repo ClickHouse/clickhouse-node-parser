@@ -1,3 +1,16 @@
+CREATE TABLE tba
+(
+    event_id Int64,
+    event_dt Int64
+)
+ENGINE = MergeTree
+ORDER BY event_id;
+
+INSERT INTO tba SELECT
+    number % 500,
+    20220822
+FROM numbers(1e6);
+
 SELECT count()
 FROM (
         SELECT event_dt

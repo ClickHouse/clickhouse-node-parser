@@ -1,5 +1,186 @@
 [
   {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "send_logs_level",
+        "value": {
+          "kind": "literal",
+          "type": "String",
+          "value": "fatal"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "allow_suspicious_codecs",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "compression_codec_log"
+    },
+    "ifExists": true,
+    "leadingComments": [
+      "-- copy-paste for storage log"
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "compression_codec_log"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "id",
+        "type": {
+          "name": "UInt64"
+        },
+        "codec": [
+          {
+            "name": "LZ4"
+          }
+        ]
+      },
+      {
+        "kind": "columnDef",
+        "name": "data",
+        "type": {
+          "name": "String"
+        },
+        "codec": [
+          {
+            "name": "ZSTD"
+          }
+        ]
+      },
+      {
+        "kind": "columnDef",
+        "name": "ddd",
+        "type": {
+          "name": "Date"
+        },
+        "codec": [
+          {
+            "name": "NONE"
+          }
+        ]
+      },
+      {
+        "kind": "columnDef",
+        "name": "somenum",
+        "type": {
+          "name": "Float64"
+        },
+        "codec": [
+          {
+            "name": "ZSTD",
+            "args": [
+              {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "2"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "kind": "columnDef",
+        "name": "somestr",
+        "type": {
+          "name": "FixedString",
+          "args": [
+            {
+              "kind": "literal",
+              "value": "3"
+            }
+          ]
+        },
+        "codec": [
+          {
+            "name": "LZ4HC",
+            "args": [
+              {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "7"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "kind": "columnDef",
+        "name": "othernum",
+        "type": {
+          "name": "Int64"
+        },
+        "codec": [
+          {
+            "name": "Delta"
+          }
+        ]
+      }
+    ],
+    "engine": {
+      "name": "Log",
+      "args": []
+    }
+  },
+  {
+    "kind": "showCreate",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "compression_codec_log"
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "compression_codec_log"
+      }
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "compression_codec_log"
+      }
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "compression_codec_log"
+      }
+    }
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -22,6 +203,32 @@
         "direction": "ASC"
       }
     ]
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "compression_codec_log"
+      }
+    }
+  },
+  {
+    "kind": "detach",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "compression_codec_log"
+    }
+  },
+  {
+    "kind": "attach",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "compression_codec_log"
+    }
   },
   {
     "kind": "select",
@@ -68,6 +275,226 @@
     }
   },
   {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "compression_codec_multiple_log"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "compression_codec_multiple_log"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "id",
+        "type": {
+          "name": "UInt64"
+        },
+        "codec": [
+          {
+            "name": "LZ4"
+          },
+          {
+            "name": "ZSTD"
+          },
+          {
+            "name": "NONE"
+          },
+          {
+            "name": "LZ4HC"
+          },
+          {
+            "name": "Delta",
+            "args": [
+              {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "4"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "kind": "columnDef",
+        "name": "data",
+        "type": {
+          "name": "String"
+        },
+        "codec": [
+          {
+            "name": "ZSTD",
+            "args": [
+              {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "2"
+              }
+            ]
+          },
+          {
+            "name": "NONE"
+          },
+          {
+            "name": "Delta",
+            "args": [
+              {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "2"
+              }
+            ]
+          },
+          {
+            "name": "LZ4HC"
+          },
+          {
+            "name": "LZ4"
+          },
+          {
+            "name": "LZ4"
+          },
+          {
+            "name": "Delta",
+            "args": [
+              {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "8"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "kind": "columnDef",
+        "name": "ddd",
+        "type": {
+          "name": "Date"
+        },
+        "codec": [
+          {
+            "name": "NONE"
+          },
+          {
+            "name": "NONE"
+          },
+          {
+            "name": "NONE"
+          },
+          {
+            "name": "Delta",
+            "args": [
+              {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "1"
+              }
+            ]
+          },
+          {
+            "name": "LZ4"
+          },
+          {
+            "name": "ZSTD"
+          },
+          {
+            "name": "LZ4HC"
+          },
+          {
+            "name": "LZ4HC"
+          }
+        ]
+      },
+      {
+        "kind": "columnDef",
+        "name": "somenum",
+        "type": {
+          "name": "Float64"
+        },
+        "codec": [
+          {
+            "name": "Delta",
+            "args": [
+              {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "4"
+              }
+            ]
+          },
+          {
+            "name": "LZ4"
+          },
+          {
+            "name": "LZ4"
+          },
+          {
+            "name": "ZSTD",
+            "args": [
+              {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "2"
+              }
+            ]
+          },
+          {
+            "name": "LZ4HC",
+            "args": [
+              {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "5"
+              }
+            ]
+          },
+          {
+            "name": "ZSTD",
+            "args": [
+              {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "3"
+              }
+            ]
+          },
+          {
+            "name": "ZSTD"
+          }
+        ]
+      }
+    ],
+    "engine": {
+      "name": "Log",
+      "args": []
+    }
+  },
+  {
+    "kind": "showCreate",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "compression_codec_multiple_log"
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "compression_codec_multiple_log"
+      }
+    }
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -90,6 +517,88 @@
         "direction": "ASC"
       }
     ]
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "compression_codec_multiple_log"
+      }
+    },
+    "selectQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "functionCall",
+          "name": "modulo",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "number"
+              ]
+            },
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "100"
+            }
+          ]
+        },
+        {
+          "kind": "functionCall",
+          "name": "toString",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "number"
+              ]
+            }
+          ]
+        },
+        {
+          "kind": "functionCall",
+          "name": "toDate",
+          "args": [
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "2018-12-01"
+            }
+          ]
+        },
+        {
+          "kind": "binaryExpr",
+          "op": "*",
+          "left": {
+            "kind": "literal",
+            "type": "Float64",
+            "value": "5.5"
+          },
+          "right": {
+            "kind": "columnRef",
+            "parts": [
+              "number"
+            ]
+          }
+        }
+      ],
+      "from": {
+        "kind": "tableRef",
+        "database": "system",
+        "table": "numbers"
+      },
+      "limit": {
+        "count": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "10000"
+        }
+      }
+    }
   },
   {
     "kind": "select",
@@ -163,6 +672,14 @@
     }
   },
   {
+    "kind": "truncate",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "compression_codec_multiple_log"
+    }
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -184,6 +701,161 @@
     "from": {
       "kind": "tableRef",
       "table": "compression_codec_multiple_log"
+    }
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "compression_codec_tiny_log"
+    },
+    "ifExists": true,
+    "leadingComments": [
+      "-- copy-paste for storage tiny log"
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "compression_codec_tiny_log"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "id",
+        "type": {
+          "name": "UInt64"
+        },
+        "codec": [
+          {
+            "name": "LZ4"
+          }
+        ]
+      },
+      {
+        "kind": "columnDef",
+        "name": "data",
+        "type": {
+          "name": "String"
+        },
+        "codec": [
+          {
+            "name": "ZSTD"
+          }
+        ]
+      },
+      {
+        "kind": "columnDef",
+        "name": "ddd",
+        "type": {
+          "name": "Date"
+        },
+        "codec": [
+          {
+            "name": "NONE"
+          }
+        ]
+      },
+      {
+        "kind": "columnDef",
+        "name": "somenum",
+        "type": {
+          "name": "Float64"
+        },
+        "codec": [
+          {
+            "name": "ZSTD",
+            "args": [
+              {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "2"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "kind": "columnDef",
+        "name": "somestr",
+        "type": {
+          "name": "FixedString",
+          "args": [
+            {
+              "kind": "literal",
+              "value": "3"
+            }
+          ]
+        },
+        "codec": [
+          {
+            "name": "LZ4HC",
+            "args": [
+              {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "7"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "kind": "columnDef",
+        "name": "othernum",
+        "type": {
+          "name": "Int64"
+        },
+        "codec": [
+          {
+            "name": "Delta"
+          }
+        ]
+      }
+    ],
+    "engine": {
+      "name": "TinyLog",
+      "args": []
+    }
+  },
+  {
+    "kind": "showCreate",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "compression_codec_tiny_log"
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "compression_codec_tiny_log"
+      }
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "compression_codec_tiny_log"
+      }
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "compression_codec_tiny_log"
+      }
     }
   },
   {
@@ -209,6 +881,32 @@
         "direction": "ASC"
       }
     ]
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "compression_codec_tiny_log"
+      }
+    }
+  },
+  {
+    "kind": "detach",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "compression_codec_tiny_log"
+    }
+  },
+  {
+    "kind": "attach",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "compression_codec_tiny_log"
+    }
   },
   {
     "kind": "select",
@@ -255,6 +953,226 @@
     }
   },
   {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "compression_codec_multiple_tiny_log"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "compression_codec_multiple_tiny_log"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "id",
+        "type": {
+          "name": "UInt64"
+        },
+        "codec": [
+          {
+            "name": "LZ4"
+          },
+          {
+            "name": "ZSTD"
+          },
+          {
+            "name": "NONE"
+          },
+          {
+            "name": "LZ4HC"
+          },
+          {
+            "name": "Delta",
+            "args": [
+              {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "4"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "kind": "columnDef",
+        "name": "data",
+        "type": {
+          "name": "String"
+        },
+        "codec": [
+          {
+            "name": "ZSTD",
+            "args": [
+              {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "2"
+              }
+            ]
+          },
+          {
+            "name": "NONE"
+          },
+          {
+            "name": "Delta",
+            "args": [
+              {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "2"
+              }
+            ]
+          },
+          {
+            "name": "LZ4HC"
+          },
+          {
+            "name": "LZ4"
+          },
+          {
+            "name": "LZ4"
+          },
+          {
+            "name": "Delta",
+            "args": [
+              {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "8"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "kind": "columnDef",
+        "name": "ddd",
+        "type": {
+          "name": "Date"
+        },
+        "codec": [
+          {
+            "name": "NONE"
+          },
+          {
+            "name": "NONE"
+          },
+          {
+            "name": "NONE"
+          },
+          {
+            "name": "Delta",
+            "args": [
+              {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "1"
+              }
+            ]
+          },
+          {
+            "name": "LZ4"
+          },
+          {
+            "name": "ZSTD"
+          },
+          {
+            "name": "LZ4HC"
+          },
+          {
+            "name": "LZ4HC"
+          }
+        ]
+      },
+      {
+        "kind": "columnDef",
+        "name": "somenum",
+        "type": {
+          "name": "Float64"
+        },
+        "codec": [
+          {
+            "name": "Delta",
+            "args": [
+              {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "4"
+              }
+            ]
+          },
+          {
+            "name": "LZ4"
+          },
+          {
+            "name": "LZ4"
+          },
+          {
+            "name": "ZSTD",
+            "args": [
+              {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "2"
+              }
+            ]
+          },
+          {
+            "name": "LZ4HC",
+            "args": [
+              {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "5"
+              }
+            ]
+          },
+          {
+            "name": "ZSTD",
+            "args": [
+              {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "3"
+              }
+            ]
+          },
+          {
+            "name": "ZSTD"
+          }
+        ]
+      }
+    ],
+    "engine": {
+      "name": "TinyLog",
+      "args": []
+    }
+  },
+  {
+    "kind": "showCreate",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "compression_codec_multiple_tiny_log"
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "compression_codec_multiple_tiny_log"
+      }
+    }
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -277,6 +1195,88 @@
         "direction": "ASC"
       }
     ]
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "compression_codec_multiple_tiny_log"
+      }
+    },
+    "selectQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "functionCall",
+          "name": "modulo",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "number"
+              ]
+            },
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "100"
+            }
+          ]
+        },
+        {
+          "kind": "functionCall",
+          "name": "toString",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "number"
+              ]
+            }
+          ]
+        },
+        {
+          "kind": "functionCall",
+          "name": "toDate",
+          "args": [
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "2018-12-01"
+            }
+          ]
+        },
+        {
+          "kind": "binaryExpr",
+          "op": "*",
+          "left": {
+            "kind": "literal",
+            "type": "Float64",
+            "value": "5.5"
+          },
+          "right": {
+            "kind": "columnRef",
+            "parts": [
+              "number"
+            ]
+          }
+        }
+      ],
+      "from": {
+        "kind": "tableRef",
+        "database": "system",
+        "table": "numbers"
+      },
+      "limit": {
+        "count": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "10000"
+        }
+      }
+    }
   },
   {
     "kind": "select",
@@ -350,6 +1350,14 @@
     }
   },
   {
+    "kind": "truncate",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "compression_codec_multiple_tiny_log"
+    }
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -369,6 +1377,22 @@
       }
     ],
     "from": {
+      "kind": "tableRef",
+      "table": "compression_codec_multiple_tiny_log"
+    }
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "compression_codec_multiple_log"
+    }
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
       "kind": "tableRef",
       "table": "compression_codec_multiple_tiny_log"
     }

@@ -1,5 +1,18 @@
 [
   {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "enable_analyzer",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -63,7 +76,7 @@
           }
         ],
         "from": {
-          "kind": "tableFunction",
+          "kind": "tableFunctionRef",
           "name": "numbers",
           "args": [
             {
@@ -93,6 +106,512 @@
         "type": "UInt64",
         "value": "100"
       }
+    }
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "test"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "idx",
+        "type": {
+          "name": "UInt64"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "coverage",
+        "type": {
+          "name": "Array",
+          "args": [
+            {
+              "kind": "type",
+              "type": {
+                "name": "UInt64"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "test_name",
+        "type": {
+          "name": "String"
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "functionCall",
+          "name": "tuple",
+          "args": []
+        }
+      }
+    ]
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "test"
+      }
+    }
+  },
+  {
+    "kind": "select",
+    "with": [
+      {
+        "kind": "cteExpr",
+        "name": "w",
+        "expr": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "4096"
+        }
+      },
+      {
+        "kind": "cteExpr",
+        "name": "h",
+        "expr": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "4096"
+        }
+      },
+      {
+        "kind": "cteExpr",
+        "name": "pixels",
+        "expr": {
+          "kind": "binaryExpr",
+          "op": "*",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "w"
+            ]
+          },
+          "right": {
+            "kind": "columnRef",
+            "parts": [
+              "h"
+            ]
+          }
+        }
+      },
+      {
+        "kind": "cteExpr",
+        "name": "num",
+        "expr": {
+          "kind": "functionCall",
+          "name": "arrayJoin",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "coverage"
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "kind": "cteExpr",
+        "name": "idx",
+        "expr": {
+          "kind": "binaryExpr",
+          "op": "DIV",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "num"
+            ]
+          },
+          "right": {
+            "kind": "binaryExpr",
+            "op": "DIV",
+            "left": {
+              "kind": "binaryExpr",
+              "op": "*",
+              "left": {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "32768"
+              },
+              "right": {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "32768"
+              }
+            },
+            "right": {
+              "kind": "columnRef",
+              "parts": [
+                "pixels"
+              ]
+            },
+            "parenthesized": true
+          }
+        }
+      },
+      {
+        "kind": "cteExpr",
+        "name": "coord",
+        "expr": {
+          "kind": "functionCall",
+          "name": "mortonDecode",
+          "args": [
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "2"
+            },
+            {
+              "kind": "columnRef",
+              "parts": [
+                "idx"
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "kind": "cteExpr",
+        "name": "b",
+        "expr": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "255"
+        }
+      },
+      {
+        "kind": "cteExpr",
+        "name": "r",
+        "expr": {
+          "kind": "functionCall",
+          "name": "least",
+          "args": [
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "255"
+            },
+            {
+              "kind": "functionCall",
+              "name": "uniq",
+              "args": [
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "test_name"
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "kind": "cteExpr",
+        "name": "g",
+        "expr": {
+          "kind": "binaryExpr",
+          "op": "/",
+          "left": {
+            "kind": "binaryExpr",
+            "op": "*",
+            "left": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "255"
+            },
+            "right": {
+              "kind": "functionCall",
+              "name": "uniq",
+              "args": [
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "test_name"
+                  ]
+                }
+              ]
+            }
+          },
+          "right": {
+            "kind": "functionCall",
+            "name": "max",
+            "args": [
+              {
+                "kind": "functionCall",
+                "name": "uniq",
+                "args": [
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "test_name"
+                    ]
+                  }
+                ]
+              }
+            ],
+            "window": {},
+            "parenthesized": true
+          }
+        }
+      }
+    ],
+    "select": [
+      {
+        "kind": "castExpr",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "r"
+          ]
+        },
+        "type": "UInt8",
+        "operator": true
+      },
+      {
+        "kind": "castExpr",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "g"
+          ]
+        },
+        "type": "UInt8",
+        "operator": true
+      },
+      {
+        "kind": "castExpr",
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "b"
+          ]
+        },
+        "type": "UInt8",
+        "operator": true
+      }
+    ],
+    "from": {
+      "kind": "tableRef",
+      "table": "test"
+    },
+    "groupBy": {
+      "kind": "expressions",
+      "items": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "coord"
+          ]
+        }
+      ]
+    },
+    "orderBy": [
+      {
+        "kind": "orderByItem",
+        "expr": {
+          "kind": "binaryExpr",
+          "op": "+",
+          "left": {
+            "kind": "binaryExpr",
+            "op": "*",
+            "left": {
+              "kind": "functionCall",
+              "name": "tupleElement",
+              "args": [
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "coord"
+                  ]
+                },
+                {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "2"
+                }
+              ]
+            },
+            "right": {
+              "kind": "columnRef",
+              "parts": [
+                "w"
+              ]
+            }
+          },
+          "right": {
+            "kind": "functionCall",
+            "name": "tupleElement",
+            "args": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "coord"
+                ]
+              },
+              {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "1"
+              }
+            ]
+          }
+        },
+        "direction": "ASC",
+        "fillFrom": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        },
+        "fillTo": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "10"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "seq"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "number",
+        "type": {
+          "name": "UInt64"
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "functionCall",
+          "name": "tuple",
+          "args": []
+        }
+      }
+    ]
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "seq"
+      }
+    }
+  },
+  {
+    "kind": "select",
+    "with": [
+      {
+        "kind": "cteExpr",
+        "name": "range",
+        "expr": {
+          "kind": "subqueryExpr",
+          "query": {
+            "kind": "select",
+            "select": [
+              {
+                "kind": "functionCall",
+                "name": "min",
+                "args": [
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "number"
+                    ]
+                  }
+                ]
+              },
+              {
+                "kind": "functionCall",
+                "name": "max",
+                "args": [
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "number"
+                    ]
+                  }
+                ]
+              }
+            ],
+            "from": {
+              "kind": "tableRef",
+              "table": "seq"
+            }
+          }
+        }
+      }
+    ],
+    "select": [
+      {
+        "kind": "asterisk"
+      }
+    ],
+    "from": {
+      "kind": "tableFunctionRef",
+      "name": "numbers",
+      "args": [
+        {
+          "kind": "functionCall",
+          "name": "tupleElement",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "range"
+              ]
+            },
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "1"
+            }
+          ]
+        },
+        {
+          "kind": "functionCall",
+          "name": "tupleElement",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "range"
+              ]
+            },
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "2"
+            }
+          ]
+        }
+      ]
     }
   }
 ]

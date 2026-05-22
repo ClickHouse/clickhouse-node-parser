@@ -1,3 +1,14 @@
+-- Tags: zookeeper, no-shared-merge-tree
+-- no-shared-merge-tree: depend on replicated merge tree zookeeper structure
+DROP TABLE IF EXISTS sample_table;
+
+CREATE TABLE sample_table
+(
+    key UInt64
+)
+ENGINE = ReplicatedMergeTree('/clickhouse/{database}/01700_system_zookeeper_path_in/{shard}', '{replica}')
+ORDER BY tuple();
+
 SELECT name
 FROM `system`.zookeeper
 WHERE path = concat('/clickhouse/', currentDatabase(), '/01700_system_zookeeper_path_in/', getMacro('shard'))

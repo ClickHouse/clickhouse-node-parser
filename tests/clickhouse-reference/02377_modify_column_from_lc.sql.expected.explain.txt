@@ -1,0 +1,146 @@
+DropQuery  t_modify_from_lc_1 (children 1)
+ Identifier t_modify_from_lc_1
+
+DropQuery  t_modify_from_lc_2 (children 1)
+ Identifier t_modify_from_lc_2
+
+Set
+
+CreateQuery t_modify_from_lc_1 (children 3)
+ Identifier t_modify_from_lc_1
+ Columns definition (children 1)
+  ExpressionList (children 2)
+   ColumnDeclaration id (children 1)
+    DataType UInt64
+   ColumnDeclaration a (children 2)
+    DataType LowCardinality (children 1)
+     ExpressionList (children 1)
+      DataType UInt32
+    Function CODEC (children 1)
+     ExpressionList (children 1)
+      Function NONE
+ Storage definition (children 3)
+  Function MergeTree
+  Function tuple (children 1)
+   ExpressionList
+  Set
+
+CreateQuery t_modify_from_lc_2 (children 3)
+ Identifier t_modify_from_lc_2
+ Columns definition (children 1)
+  ExpressionList (children 2)
+   ColumnDeclaration id (children 1)
+    DataType UInt64
+   ColumnDeclaration a (children 2)
+    DataType LowCardinality (children 1)
+     ExpressionList (children 1)
+      DataType UInt32
+    Function CODEC (children 1)
+     ExpressionList (children 1)
+      Function NONE
+ Storage definition (children 3)
+  Function MergeTree
+  Function tuple (children 1)
+   ExpressionList
+  Set
+
+InsertQuery   (children 2)
+ Identifier t_modify_from_lc_1
+ SelectWithUnionQuery (children 1)
+  ExpressionList (children 1)
+   SelectQuery (children 2)
+    ExpressionList (children 2)
+     Identifier number
+     Identifier number
+    TablesInSelectQuery (children 1)
+     TablesInSelectQueryElement (children 1)
+      TableExpression (children 1)
+       Function numbers (children 1)
+        ExpressionList (children 1)
+         Literal UInt64_100000
+
+InsertQuery   (children 2)
+ Identifier t_modify_from_lc_2
+ SelectWithUnionQuery (children 1)
+  ExpressionList (children 1)
+   SelectQuery (children 2)
+    ExpressionList (children 2)
+     Identifier number
+     Identifier number
+    TablesInSelectQuery (children 1)
+     TablesInSelectQueryElement (children 1)
+      TableExpression (children 1)
+       Function numbers (children 1)
+        ExpressionList (children 1)
+         Literal UInt64_100000
+
+OptimizeQuery  t_modify_from_lc_1_final (children 1)
+ Identifier t_modify_from_lc_1
+
+OptimizeQuery  t_modify_from_lc_2_final (children 1)
+ Identifier t_modify_from_lc_2
+
+AlterQuery  t_modify_from_lc_1 (children 2)
+ ExpressionList (children 1)
+  AlterCommand MODIFY_COLUMN (children 1)
+   ColumnDeclaration a (children 1)
+    DataType UInt32
+ Identifier t_modify_from_lc_1
+
+SelectWithUnionQuery (children 1)
+ ExpressionList (children 1)
+  SelectQuery (children 3)
+   ExpressionList (children 1)
+    Function CAST (alias stats) (children 1)
+     ExpressionList (children 2)
+      Function groupArray (children 1)
+       ExpressionList (children 1)
+        Function tuple (children 1)
+         ExpressionList (children 2)
+          Identifier table
+          Identifier bytes
+      Literal 'Map(String, UInt64)'
+   ExpressionList (children 2)
+    Function length (children 1)
+     ExpressionList (children 1)
+      Identifier stats
+    Function less (children 1)
+     ExpressionList (children 2)
+      Function arrayElement (children 1)
+       ExpressionList (children 2)
+        Identifier stats
+        Literal 't_modify_from_lc_1'
+      Function arrayElement (children 1)
+       ExpressionList (children 2)
+        Identifier stats
+        Literal 't_modify_from_lc_2'
+   TablesInSelectQuery (children 1)
+    TablesInSelectQueryElement (children 1)
+     TableExpression (children 1)
+      Subquery (children 1)
+       SelectWithUnionQuery (children 1)
+        ExpressionList (children 1)
+         SelectQuery (children 4)
+          ExpressionList (children 2)
+           Identifier table
+           Function sum (alias bytes) (children 1)
+            ExpressionList (children 1)
+             Identifier bytes_on_disk
+          TablesInSelectQuery (children 1)
+           TablesInSelectQueryElement (children 1)
+            TableExpression (children 1)
+             TableIdentifier system.parts
+          Function and (children 1)
+           ExpressionList (children 3)
+            Function equals (children 1)
+             ExpressionList (children 2)
+              Identifier database
+              Function currentDatabase (children 1)
+               ExpressionList
+            Function like (children 1)
+             ExpressionList (children 2)
+              Identifier table
+              Literal 't_modify_from_lc%'
+            Identifier active
+          ExpressionList (children 1)
+           Identifier table

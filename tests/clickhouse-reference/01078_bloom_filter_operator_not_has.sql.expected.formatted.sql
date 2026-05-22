@@ -1,3 +1,19 @@
+DROP TABLE IF EXISTS bloom_filter_not_has;
+
+CREATE TABLE bloom_filter_not_has
+(
+    ary Array(LowCardinality(Nullable(String))),
+    d Date,
+    INDEX idx_ary ary TYPE bloom_filter(0.01) GRANULARITY 1024
+)
+ENGINE = MergeTree()
+ORDER BY d
+PARTITION BY d;
+
+INSERT INTO bloom_filter_not_has;
+
+INSERT INTO bloom_filter_not_has;
+
 SELECT count()
 FROM bloom_filter_not_has
 WHERE has(ary, 'a');

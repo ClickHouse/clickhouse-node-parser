@@ -1,5 +1,59 @@
 [
   {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "raw_data"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "raw_temporary_data"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "parameterized_view_one_param"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "parameterized_view_multiple_params"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "parameterized_view_one_param_temporary"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "parameterized_view_multiple_params_temporary"
+    },
+    "ifExists": true
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -8,6 +62,76 @@
         "value": "-----------------------------------------"
       }
     ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "raw_data"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "id",
+        "type": {
+          "name": "UInt32"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "data",
+        "type": {
+          "name": "String"
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "id"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createView",
+    "table": {
+      "kind": "tableRef",
+      "table": "parameterized_view_one_param"
+    },
+    "asQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "asterisk"
+        }
+      ],
+      "from": {
+        "kind": "tableRef",
+        "table": "raw_data"
+      },
+      "where": {
+        "kind": "binaryExpr",
+        "op": "=",
+        "left": {
+          "kind": "columnRef",
+          "parts": [
+            "id"
+          ]
+        },
+        "right": {
+          "kind": "queryParam",
+          "name": "id",
+          "type": "UInt32"
+        }
+      }
+    }
   },
   {
     "kind": "select",
@@ -71,6 +195,65 @@
           }
         }
       ]
+    }
+  },
+  {
+    "kind": "createView",
+    "table": {
+      "kind": "tableRef",
+      "table": "parameterized_view_multiple_params"
+    },
+    "asQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "asterisk"
+        }
+      ],
+      "from": {
+        "kind": "tableRef",
+        "table": "raw_data"
+      },
+      "where": {
+        "kind": "functionCall",
+        "name": "and",
+        "args": [
+          {
+            "kind": "functionCall",
+            "name": "greaterOrEquals",
+            "args": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "id"
+                ]
+              },
+              {
+                "kind": "queryParam",
+                "name": "id_from",
+                "type": "UInt32"
+              }
+            ]
+          },
+          {
+            "kind": "functionCall",
+            "name": "lessOrEquals",
+            "args": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "id"
+                ]
+              },
+              {
+                "kind": "queryParam",
+                "name": "id_to",
+                "type": "UInt32"
+              }
+            ]
+          }
+        ]
+      }
     }
   },
   {
@@ -138,6 +321,102 @@
     }
   },
   {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "raw_temporary_data"
+    },
+    "temporary": true,
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "id",
+        "type": {
+          "name": "UInt32"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "data",
+        "type": {
+          "name": "String"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "alter_test"
+    },
+    "temporary": true,
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "CounterID",
+        "type": {
+          "name": "UInt32"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "StartDate",
+        "type": {
+          "name": "Date"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "UserID",
+        "type": {
+          "name": "UInt32"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "VisitID",
+        "type": {
+          "name": "UInt32"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createView",
+    "table": {
+      "kind": "tableRef",
+      "table": "parameterized_view_one_param_temporary"
+    },
+    "asQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "asterisk"
+        }
+      ],
+      "from": {
+        "kind": "tableRef",
+        "table": "raw_data"
+      },
+      "where": {
+        "kind": "binaryExpr",
+        "op": "=",
+        "left": {
+          "kind": "columnRef",
+          "parts": [
+            "id"
+          ]
+        },
+        "right": {
+          "kind": "queryParam",
+          "name": "id",
+          "type": "UInt32"
+        }
+      }
+    }
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -202,6 +481,126 @@
     }
   },
   {
+    "kind": "createView",
+    "table": {
+      "kind": "tableRef",
+      "table": "parameterized_view_multiple_params_temporary"
+    },
+    "asQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "asterisk"
+        }
+      ],
+      "from": {
+        "kind": "tableRef",
+        "table": "raw_data"
+      },
+      "where": {
+        "kind": "naryExpr",
+        "op": "AND",
+        "operands": [
+          {
+            "kind": "functionCall",
+            "name": "and",
+            "args": [
+              {
+                "kind": "functionCall",
+                "name": "greaterOrEquals",
+                "args": [
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "CounterID"
+                    ]
+                  },
+                  {
+                    "kind": "queryParam",
+                    "name": "counter_id_from",
+                    "type": "UInt32"
+                  }
+                ]
+              },
+              {
+                "kind": "functionCall",
+                "name": "lessOrEquals",
+                "args": [
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "CounterID"
+                    ]
+                  },
+                  {
+                    "kind": "queryParam",
+                    "name": "counter_id_to",
+                    "type": "UInt32"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "kind": "functionCall",
+            "name": "and",
+            "args": [
+              {
+                "kind": "functionCall",
+                "name": "greaterOrEquals",
+                "args": [
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "StartDate"
+                    ]
+                  },
+                  {
+                    "kind": "queryParam",
+                    "name": "date_from",
+                    "type": "Date"
+                  }
+                ]
+              },
+              {
+                "kind": "functionCall",
+                "name": "lessOrEquals",
+                "args": [
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "StartDate"
+                    ]
+                  },
+                  {
+                    "kind": "queryParam",
+                    "name": "date_to",
+                    "type": "UInt32"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "kind": "binaryExpr",
+            "op": "=",
+            "left": {
+              "kind": "columnRef",
+              "parts": [
+                "UserId"
+              ]
+            },
+            "right": {
+              "kind": "queryParam",
+              "name": "UserId",
+              "type": "UInt32"
+            }
+          }
+        ]
+      }
+    }
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -263,6 +662,54 @@
           }
         }
       ]
+    }
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "parameterized_view_one_param"
+    }
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "parameterized_view_multiple_params"
+    }
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "parameterized_view_one_param_temporary"
+    }
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "parameterized_view_multiple_params_temporary"
+    }
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "raw_temporary_data"
+    }
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "raw_data"
     }
   }
 ]

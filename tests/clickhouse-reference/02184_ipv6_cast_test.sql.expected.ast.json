@@ -1,5 +1,149 @@
 [
   {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "ipv6_test26473"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "ipv6_test26473"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "ip",
+        "type": {
+          "name": "String"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "ipv6",
+        "type": {
+          "name": "IPv6"
+        },
+        "defaultKind": "MATERIALIZED",
+        "defaultExpr": {
+          "kind": "functionCall",
+          "name": "toIPv6",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "ip"
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "is_ipv6",
+        "type": {
+          "name": "Boolean"
+        },
+        "defaultKind": "MATERIALIZED",
+        "defaultExpr": {
+          "kind": "functionCall",
+          "name": "isIPv6String",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "ip"
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "cblock",
+        "type": {
+          "name": "IPv6"
+        },
+        "defaultKind": "MATERIALIZED",
+        "defaultExpr": {
+          "kind": "functionCall",
+          "name": "cutIPv6",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "ipv6"
+              ]
+            },
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "10"
+            },
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "1"
+            }
+          ]
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "cblock1",
+        "type": {
+          "name": "IPv6"
+        },
+        "defaultKind": "MATERIALIZED",
+        "defaultExpr": {
+          "kind": "functionCall",
+          "name": "toIPv6",
+          "args": [
+            {
+              "kind": "functionCall",
+              "name": "cutIPv6",
+              "args": [
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "ipv6"
+                  ]
+                },
+                {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "10"
+                },
+                {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "1"
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ],
+    "engine": {
+      "name": "Memory"
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "ipv6_test26473"
+      }
+    }
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -56,6 +200,14 @@
       }
     ],
     "from": {
+      "kind": "tableRef",
+      "table": "ipv6_test26473"
+    }
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
       "kind": "tableRef",
       "table": "ipv6_test26473"
     }

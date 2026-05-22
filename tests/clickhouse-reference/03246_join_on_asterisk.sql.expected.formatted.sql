@@ -1,17 +1,25 @@
-SELECT 1
-FROM
-    t0
-INNER JOIN t0
-    ON *;
+DROP TABLE IF EXISTS t0;
+
+CREATE TABLE t0
+(
+    c0 Int
+)
+ENGINE = Memory();
 
 SELECT 1
 FROM
     t0
 INNER JOIN t0
-    ON tuple(*);
+    ON *; -- { serverError BAD_ARGUMENTS,INVALID_JOIN_ON_EXPRESSION }
 
 SELECT 1
 FROM
     t0
 INNER JOIN t0
-    USING *;
+    ON tuple(*); -- { serverError AMBIGUOUS_COLUMN_NAME,ILLEGAL_TYPE_OF_ARGUMENT }
+
+SELECT 1
+FROM
+    t0
+INNER JOIN t0
+    USING *; -- { serverError BAD_ARGUMENTS,UNSUPPORTED_JOIN_KEYS }

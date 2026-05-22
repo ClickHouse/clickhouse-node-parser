@@ -1,5 +1,94 @@
 [
   {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "tables": [
+      {
+        "kind": "tableRef",
+        "table": "point_test"
+      },
+      {
+        "kind": "tableRef",
+        "table": "point_test_parameterized"
+      },
+      {
+        "kind": "tableRef",
+        "table": "point_test_parameterized2"
+      }
+    ],
+    "ifExists": true
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "point_test"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "name",
+        "type": {
+          "name": "String"
+        }
+      },
+      {
+        "kind": "columnDef",
+        "name": "coord",
+        "type": {
+          "name": "Point"
+        }
+      }
+    ],
+    "engine": {
+      "name": "Memory"
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "point_test"
+      }
+    }
+  },
+  {
+    "kind": "createView",
+    "table": {
+      "kind": "tableRef",
+      "table": "point_test_parameterized"
+    },
+    "asQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "asterisk"
+        }
+      ],
+      "from": {
+        "kind": "tableRef",
+        "table": "point_test"
+      },
+      "where": {
+        "kind": "binaryExpr",
+        "op": "=",
+        "left": {
+          "kind": "columnRef",
+          "parts": [
+            "coord"
+          ]
+        },
+        "right": {
+          "kind": "queryParam",
+          "name": "point",
+          "type": "Point"
+        }
+      }
+    }
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -7,7 +96,7 @@
       }
     ],
     "from": {
-      "kind": "tableFunction",
+      "kind": "tableFunctionRef",
       "name": "point_test_parameterized",
       "args": [
         {
@@ -20,7 +109,7 @@
             ]
           },
           "right": {
-            "kind": "tuple",
+            "kind": "tupleLiteral",
             "elements": [
               {
                 "kind": "literal",
@@ -40,6 +129,42 @@
     }
   },
   {
+    "kind": "createView",
+    "table": {
+      "kind": "tableRef",
+      "table": "point_test_parameterized2"
+    },
+    "asQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "asterisk"
+        }
+      ],
+      "from": {
+        "kind": "tableRef",
+        "table": "point_test"
+      },
+      "where": {
+        "kind": "inExpr",
+        "negated": false,
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "coord"
+          ]
+        },
+        "values": [
+          {
+            "kind": "queryParam",
+            "name": "point",
+            "type": "Array(Point)"
+          }
+        ]
+      }
+    }
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -47,7 +172,7 @@
       }
     ],
     "from": {
-      "kind": "tableFunction",
+      "kind": "tableFunctionRef",
       "name": "point_test_parameterized2",
       "args": [
         {
@@ -60,10 +185,10 @@
             ]
           },
           "right": {
-            "kind": "array",
+            "kind": "arrayLiteral",
             "elements": [
               {
-                "kind": "tuple",
+                "kind": "tupleLiteral",
                 "elements": [
                   {
                     "kind": "literal",
@@ -84,5 +209,23 @@
         }
       ]
     }
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "tables": [
+      {
+        "kind": "tableRef",
+        "table": "point_test"
+      },
+      {
+        "kind": "tableRef",
+        "table": "point_test_parameterized"
+      },
+      {
+        "kind": "tableRef",
+        "table": "point_test_parameterized2"
+      }
+    ]
   }
 ]

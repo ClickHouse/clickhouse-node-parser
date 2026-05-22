@@ -1,3 +1,5 @@
+SET enable_named_columns_in_function_tuple = 0;
+
 SELECT arrayMap(x -> 2 * x, []);
 
 SELECT toTypeName(arrayMap(x -> 2 * x, []));

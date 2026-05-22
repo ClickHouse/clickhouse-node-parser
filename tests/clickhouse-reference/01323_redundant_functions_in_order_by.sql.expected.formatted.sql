@@ -1,3 +1,26 @@
+SET single_join_prefer_left_table = 0;
+
+DROP TABLE IF EXISTS test;
+
+CREATE TABLE test
+(
+    key UInt64,
+    a UInt8,
+    b String,
+    c Float64
+)
+ENGINE = MergeTree()
+ORDER BY key;
+
+INSERT INTO test SELECT
+    number,
+    number,
+    toString(number),
+    number
+FROM numbers(4);
+
+SET optimize_redundant_functions_in_order_by = 1;
+
 SELECT groupArray(x)
 FROM (
         SELECT number AS x
@@ -115,3 +138,29 @@ ORDER BY
     key ASC,
     exp(key + a) ASC
 SETTINGS enable_analyzer = 1;
+
+DROP TABLE IF EXISTS t1;
+
+DROP TABLE IF EXISTS t2;
+
+CREATE TABLE t1
+(
+    id UInt64
+)
+ENGINE = MergeTree()
+ORDER BY id;
+
+CREATE TABLE t2
+(
+    id UInt64
+)
+ENGINE = MergeTree()
+ORDER BY id;
+
+SET optimize_redundant_functions_in_order_by = 0;
+
+DROP TABLE t1;
+
+DROP TABLE t2;
+
+DROP TABLE test;

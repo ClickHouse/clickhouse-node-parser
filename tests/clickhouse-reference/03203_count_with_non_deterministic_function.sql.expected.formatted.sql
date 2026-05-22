@@ -1,3 +1,18 @@
+CREATE TABLE t
+(
+    p UInt8,
+    x UInt64
+)
+ENGINE = MergeTree
+ORDER BY x
+PARTITION BY p;
+
+INSERT INTO t SELECT
+    0,
+    number
+FROM numbers(10)
+SETTINGS max_block_size = 100;
+
 SELECT count()
 FROM t
 WHERE p = 0

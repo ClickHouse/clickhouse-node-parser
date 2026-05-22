@@ -1,3 +1,7 @@
+SET send_logs_level = 'fatal';
+
+SET join_default_strictness = '';
+
 SELECT *
 FROM
     `system`.one
@@ -5,4 +9,4 @@ INNER JOIN (
         SELECT number AS k
         FROM `system`.numbers
     ) AS js2
-    ON dummy = k;
+    ON dummy = k; -- { serverError EXPECTED_ALL_OR_ANY }

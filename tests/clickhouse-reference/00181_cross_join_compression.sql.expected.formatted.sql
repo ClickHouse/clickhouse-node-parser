@@ -1,3 +1,8 @@
+-- Tags: stateful
+CREATE VIEW unit
+AS
+(SELECT 1);
+
 SELECT
     CounterID,
     StartURL

@@ -1,3 +1,63 @@
+-- Tags: no-fasttest, long, no-debug, no-tsan, no-asan, no-msan, no-ubsan
+SET enable_json_type = 1;
+
+SET allow_experimental_variant_type = 1;
+
+SET use_variant_as_common_type = 1;
+
+SET session_timezone = 'UTC';
+
+DROP TABLE IF EXISTS test;
+
+CREATE TABLE test
+(
+    id UInt64,
+    json JSON(max_dynamic_paths = 2, `a.b.c` UInt32)
+)
+ENGINE = Memory;
+
+TRUNCATE TABLE test;
+
+INSERT INTO test SELECT
+    number,
+    '{}'
+FROM numbers(100000);
+
+INSERT INTO test SELECT
+    number,
+    toJSONString(map('a.b.c', number))
+FROM numbers(100000, 100000);
+
+INSERT INTO test SELECT
+    number,
+    toJSONString(map('a.b.d', number::UInt32, 'a.b.e', concat('str_', toString(number))))
+FROM numbers(200000, 100000);
+
+INSERT INTO test SELECT
+    number,
+    toJSONString(map('b.b.d', number::UInt32, 'b.b.e', concat('str_', toString(number))))
+FROM numbers(300000, 100000);
+
+INSERT INTO test SELECT
+    number,
+    toJSONString(map('a.b.c', number, 'a.b.d', number::UInt32, 'a.b.e', concat('str_', toString(number))))
+FROM numbers(400000, 100000);
+
+INSERT INTO test SELECT
+    number,
+    toJSONString(map('a.b.c', number, 'a.b.d', number::UInt32, 'a.b.e', concat('str_', toString(number)), concat('b.b._', toString(number % 5)), number::UInt32))
+FROM numbers(500000, 100000);
+
+INSERT INTO test SELECT
+    number,
+    toJSONString(map('a.b.c', number, 'a.b.d', range(number % 1)::Array(UInt32), 'a.b.e', concat('str_', toString(number)), 'd.a', number::UInt32, 'd.c', toDate(number)))
+FROM numbers(600000, 100000);
+
+INSERT INTO test SELECT
+    number,
+    toJSONString(map('a.b.c', number, 'a.b.d', toDateTime(number), 'a.b.e', concat('str_', toString(number)), 'd.a', range(number % 5 + 1)::Array(UInt32), 'd.b', number::UInt32))
+FROM numbers(700000, 100000);
+
 SELECT DISTINCT arrayJoin(JSONAllPathsWithTypes(json)) AS paths_with_types
 FROM test
 ORDER BY paths_with_types ASC;
@@ -862,3 +922,5 @@ SELECT
 FROM test
 ORDER BY id ASC
 FORMAT Null;
+
+DROP TABLE test;

@@ -1,3 +1,6 @@
+DROP TABLE IF EXISTS columns_transformers;
+CREATE TABLE columns_transformers (i Int64, j Int16, k Int64) Engine=TinyLog;
+INSERT INTO columns_transformers VALUES (100, 10, 324), (120, 8, 23);
 SELECT * APPLY(sum) from columns_transformers;
 SELECT * APPLY sum from columns_transformers;
 SELECT columns_transformers.* APPLY(avg) from columns_transformers;
@@ -25,3 +28,4 @@ SELECT COLUMNS(i, j, k) APPLY(sum) from columns_transformers;
 SELECT i, j, COLUMNS(i, j, k) APPLY(toFloat64), COLUMNS(i, j) EXCEPT (i) from columns_transformers;
 -- APPLY with parameterized function
 SELECT COLUMNS(i, j, k) APPLY(quantiles(0.5)) from columns_transformers;
+DROP TABLE columns_transformers;

@@ -1,3 +1,4 @@
+-- { echo }
 SELECT toUInt32OrDefault(toNullable(toUInt32(1)))
 SETTINGS cast_keep_nullable = 1;
 

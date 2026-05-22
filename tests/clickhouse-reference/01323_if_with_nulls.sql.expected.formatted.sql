@@ -109,6 +109,8 @@ FROM (
         SELECT materialize(if(1 = 0, toNullable(toUInt8(0)), NULL)) AS x
     );
 
+SET join_use_nulls = 1;
+
 SELECT
     b_num,
     isNull(b_num),
@@ -128,12 +130,36 @@ LEFT JOIN (
     ) AS y
     USING (k);
 
+-- test case from https://github.com/ClickHouse/ClickHouse/issues/7347
+DROP TABLE IF EXISTS test_nullable_float_issue7347;
+
+CREATE TABLE test_nullable_float_issue7347
+(
+    ne UInt64,
+    test Nullable(Float64)
+)
+ENGINE = MergeTree()
+PRIMARY KEY ne
+ORDER BY (ne);
+
+INSERT INTO test_nullable_float_issue7347;
+
 SELECT
     test,
     toTypeName(test),
     IF(test = 0, 1, 0)
 FROM test_nullable_float_issue7347;
 
+WITH materialize(CAST(NULL, 'Nullable(Float64)')) AS test
+
+SELECT
+    test,
+    toTypeName(test),
+    IF(test = 0, 1, 0);
+
+DROP TABLE test_nullable_float_issue7347;
+
+-- test case from https://github.com/ClickHouse/ClickHouse/issues/10846
 SELECT if(isFinite(toUInt64OrZero(toNullable('123'))), 1, 0);
 
 SELECT if(materialize(isFinite(toUInt64OrZero(toNullable('123')))), 1, 0);

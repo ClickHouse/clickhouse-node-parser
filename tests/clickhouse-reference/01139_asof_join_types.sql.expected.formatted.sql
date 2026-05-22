@@ -192,4 +192,4 @@ INNER JOIN (
             0 AS k,
             'x' AS v
     ) AS t2
-    USING (k, v);
+    USING (k, v); -- { serverError BAD_TYPE_OF_FIELD }

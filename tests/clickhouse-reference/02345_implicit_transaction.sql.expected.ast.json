@@ -1,5 +1,192 @@
 [
   {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "landing_to_target"
+    },
+    "ifExists": true,
+    "leadingComments": [
+      "-- Tags: no-ordinary-database, no-fasttest, no-encrypted-storage"
+    ]
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "target"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "drop",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "landing"
+    },
+    "ifExists": true
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "landing"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "n",
+        "type": {
+          "name": "Int64"
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "n"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "target"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "n",
+        "type": {
+          "name": "Int64"
+        }
+      }
+    ],
+    "engine": {
+      "name": "MergeTree"
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "n"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createMaterializedView",
+    "table": {
+      "kind": "tableRef",
+      "table": "landing_to_target"
+    },
+    "toTable": {
+      "kind": "tableRef",
+      "table": "target"
+    },
+    "asQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "alias",
+          "expr": {
+            "kind": "binaryExpr",
+            "op": "+",
+            "left": {
+              "kind": "columnRef",
+              "parts": [
+                "n"
+              ]
+            },
+            "right": {
+              "kind": "functionCall",
+              "name": "throwIf",
+              "args": [
+                {
+                  "kind": "binaryExpr",
+                  "op": "==",
+                  "left": {
+                    "kind": "columnRef",
+                    "parts": [
+                      "n"
+                    ]
+                  },
+                  "right": {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "3333"
+                  }
+                }
+              ]
+            }
+          },
+          "alias": "n"
+        }
+      ],
+      "from": {
+        "kind": "tableRef",
+        "table": "landing"
+      }
+    }
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "landing"
+      }
+    },
+    "selectQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "asterisk"
+        }
+      ],
+      "from": {
+        "kind": "tableFunctionRef",
+        "name": "numbers",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "10000"
+          }
+        ]
+      },
+      "settings": [
+        {
+          "name": "materialized_views_ignore_errors",
+          "value": {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "1"
+          }
+        }
+      ]
+    },
+    "leadingComments": [
+      "-- There is no gurantee what is inserted in case if exception",
+      "-- That initial check is meaninglessness",
+      "-- We only sure that if the internal mv's exception is ignored then all the data is inserted to the table landing"
+    ]
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -54,6 +241,62 @@
       "kind": "tableRef",
       "table": "target"
     }
+  },
+  {
+    "kind": "truncate",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "landing"
+    }
+  },
+  {
+    "kind": "truncate",
+    "targetType": "TABLE",
+    "table": {
+      "kind": "tableRef",
+      "table": "target"
+    }
+  },
+  {
+    "kind": "system",
+    "body": "BEGIN TRANSACTION"
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "landing"
+      }
+    },
+    "selectQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "asterisk"
+        }
+      ],
+      "from": {
+        "kind": "tableFunctionRef",
+        "name": "numbers",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "10000"
+          }
+        ]
+      }
+    },
+    "trailingComments": [
+      "-- { serverError FUNCTION_THROW_IF_VALUE_IS_NON_ZERO }"
+    ]
+  },
+  {
+    "kind": "system",
+    "body": "ROLLBACK"
   },
   {
     "kind": "select",
@@ -195,7 +438,7 @@
       }
     ],
     "from": {
-      "kind": "tableFunction",
+      "kind": "tableFunctionRef",
       "name": "numbers",
       "args": [
         {
@@ -204,6 +447,38 @@
           "value": "100"
         }
       ]
+    },
+    "trailingComments": [
+      "-- { serverError FUNCTION_THROW_IF_VALUE_IS_NON_ZERO }"
+    ]
+  },
+  {
+    "kind": "insert",
+    "target": {
+      "kind": "table",
+      "table": {
+        "kind": "tableRef",
+        "table": "target"
+      }
+    },
+    "selectQuery": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "asterisk"
+        }
+      ],
+      "from": {
+        "kind": "tableFunctionRef",
+        "name": "numbers",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "10000"
+          }
+        ]
+      }
     }
   },
   {
@@ -245,6 +520,10 @@
     }
   },
   {
+    "kind": "system",
+    "body": "SYSTEM FLUSH LOGS query_log"
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -273,7 +552,7 @@
             ]
           },
           "right": {
-            "kind": "tuple",
+            "kind": "tupleLiteral",
             "elements": [
               {
                 "kind": "literal",
@@ -397,7 +676,7 @@
             ]
           },
           "right": {
-            "kind": "tuple",
+            "kind": "tupleLiteral",
             "elements": [
               {
                 "kind": "literal",
@@ -493,6 +772,19 @@
     "format": "JSONEachRow"
   },
   {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "throw_on_unsupported_query_inside_transaction",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ]
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -513,69 +805,7 @@
       }
     ],
     "from": {
-      "kind": "tableFunction",
-      "name": "cluster",
-      "args": [
-        {
-          "kind": "literal",
-          "type": "String",
-          "value": "test_cluster_interserver_secret"
-        },
-        {
-          "kind": "columnRef",
-          "parts": [
-            "system"
-          ]
-        },
-        {
-          "kind": "columnRef",
-          "parts": [
-            "one"
-          ]
-        }
-      ]
-    }
-  },
-  {
-    "kind": "select",
-    "select": [
-      {
-        "kind": "asterisk"
-      }
-    ],
-    "from": {
-      "kind": "tableFunction",
-      "name": "cluster",
-      "args": [
-        {
-          "kind": "literal",
-          "type": "String",
-          "value": "test_cluster_two_shards"
-        },
-        {
-          "kind": "columnRef",
-          "parts": [
-            "system"
-          ]
-        },
-        {
-          "kind": "columnRef",
-          "parts": [
-            "one"
-          ]
-        }
-      ]
-    }
-  },
-  {
-    "kind": "select",
-    "select": [
-      {
-        "kind": "asterisk"
-      }
-    ],
-    "from": {
-      "kind": "tableFunction",
+      "kind": "tableFunctionRef",
       "name": "cluster",
       "args": [
         {
@@ -597,6 +827,93 @@
         }
       ]
     },
-    "format": "Null"
+    "trailingComments": [
+      "-- { serverError NOT_IMPLEMENTED }"
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "asterisk"
+      }
+    ],
+    "from": {
+      "kind": "tableFunctionRef",
+      "name": "cluster",
+      "args": [
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "test_cluster_two_shards"
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "system"
+          ]
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "one"
+          ]
+        }
+      ]
+    },
+    "trailingComments": [
+      "-- { serverError NOT_IMPLEMENTED }"
+    ]
+  },
+  {
+    "kind": "set",
+    "settings": [
+      {
+        "name": "throw_on_unsupported_query_inside_transaction",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      }
+    ]
+  },
+  {
+    "kind": "select",
+    "select": [
+      {
+        "kind": "asterisk"
+      }
+    ],
+    "from": {
+      "kind": "tableFunctionRef",
+      "name": "cluster",
+      "args": [
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "test_cluster_interserver_secret"
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "system"
+          ]
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "one"
+          ]
+        }
+      ]
+    },
+    "format": "Null",
+    "leadingComments": [
+      "-- there's not session in the interserver mode"
+    ],
+    "trailingComments": [
+      "-- { serverError INVALID_TRANSACTION }"
+    ]
   }
 ]

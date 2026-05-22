@@ -55,7 +55,92 @@
           }
         }
       ]
-    }
+    },
+    "leadingComments": [
+      "-- If filtering is not done correctly on databases, then this query report to read 3 rows, which are: `system.tables`, `information_schema.tables` and `INFORMATION_SCHEMA.tables`"
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "test_03217_system_tables_replica_1"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "x",
+        "type": {
+          "name": "UInt32"
+        }
+      }
+    ],
+    "engine": {
+      "name": "ReplicatedMergeTree",
+      "args": [
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "/clickhouse/tables/{database}/test_03217_system_tables_replica"
+        },
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "r1"
+        }
+      ]
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "x"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "kind": "createTable",
+    "table": {
+      "kind": "tableRef",
+      "table": "test_03217_system_tables_replica_2"
+    },
+    "tableElements": [
+      {
+        "kind": "columnDef",
+        "name": "x",
+        "type": {
+          "name": "UInt32"
+        }
+      }
+    ],
+    "engine": {
+      "name": "ReplicatedMergeTree",
+      "args": [
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "/clickhouse/tables/{database}/test_03217_system_tables_replica"
+        },
+        {
+          "kind": "literal",
+          "type": "String",
+          "value": "r2"
+        }
+      ]
+    },
+    "orderBy": [
+      {
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "x"
+          ]
+        }
+      }
+    ]
   },
   {
     "kind": "select",
@@ -114,7 +199,12 @@
         "name": "currentDatabase",
         "args": []
       }
-    }
+    },
+    "leadingComments": [
+      "-- Make sure we can read both replicas",
+      "-- The replica name might be altered because of `_functional_tests_helper_database_replicated_replace_args_macros`,",
+      "-- thus we need to use `left`"
+    ]
   },
   {
     "kind": "select",
@@ -206,7 +296,14 @@
           ]
         }
       ]
-    }
+    },
+    "leadingComments": [
+      "-- If filtering is not done correctly on database-table column, then this query report to read 2 rows, which are the above tables"
+    ]
+  },
+  {
+    "kind": "system",
+    "body": "SYSTEM FLUSH LOGS query_log"
   },
   {
     "kind": "select",
@@ -292,7 +389,11 @@
           }
         }
       ]
-    }
+    },
+    "leadingComments": [
+      "-- argMax is necessary to make the test repeatable",
+      "-- StorageSystemTables"
+    ]
   },
   {
     "kind": "select",
@@ -378,6 +479,9 @@
           }
         }
       ]
-    }
+    },
+    "leadingComments": [
+      "-- StorageSystemReplicas"
+    ]
   }
 ]

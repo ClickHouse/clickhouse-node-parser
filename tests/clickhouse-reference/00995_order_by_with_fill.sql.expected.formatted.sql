@@ -1,9 +1,24 @@
+--{ echoOn }
+DROP TABLE IF EXISTS `fill`;
+
+CREATE TABLE `fill`
+(
+    date Date,
+    val Int,
+    str String
+)
+ENGINE = Memory;
+
+INSERT INTO `fill`;
+
+-- *** table without fill to compare ***
 SELECT *
 FROM `fill`
 ORDER BY
     date ASC,
     val ASC;
 
+-- Some useful cases
 SELECT *
 FROM `fill`
 ORDER BY
@@ -22,6 +37,7 @@ ORDER BY
     date DESC,
     val ASC WITH FILL FROM 1 TO 6;
 
+-- Some weird cases
 SELECT *
 FROM `fill`
 ORDER BY
@@ -34,6 +50,18 @@ ORDER BY
     date ASC WITH FILL TO toDate('2019-06-23') STEP 3,
     val ASC WITH FILL FROM -10 STEP 2;
 
+DROP TABLE `fill`;
+
+CREATE TABLE `fill`
+(
+    a UInt32,
+    b Int32
+)
+ENGINE = Memory;
+
+INSERT INTO `fill`;
+
+-- *** table without fill to compare ***
 SELECT *
 FROM `fill`
 ORDER BY
@@ -54,16 +82,16 @@ ORDER BY
 
 SELECT *
 FROM `fill`
-ORDER BY a ASC WITH FILL STEP -1;
+ORDER BY a ASC WITH FILL STEP -1; -- { serverError INVALID_WITH_FILL_EXPRESSION }
 
 SELECT *
 FROM `fill`
-ORDER BY a ASC WITH FILL FROM 10 TO 1;
+ORDER BY a ASC WITH FILL FROM 10 TO 1; -- { serverError INVALID_WITH_FILL_EXPRESSION }
 
 SELECT *
 FROM `fill`
-ORDER BY a DESC WITH FILL FROM 1 TO 10;
+ORDER BY a DESC WITH FILL FROM 1 TO 10; -- { serverError INVALID_WITH_FILL_EXPRESSION }
 
 SELECT *
 FROM `fill`
-ORDER BY a ASC WITH FILL FROM -10 TO 10;
+ORDER BY a ASC WITH FILL FROM -10 TO 10; -- { serverError INVALID_WITH_FILL_EXPRESSION }

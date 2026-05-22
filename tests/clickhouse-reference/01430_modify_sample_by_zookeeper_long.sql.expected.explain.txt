@@ -1,3 +1,41 @@
+DropQuery  modify_sample (children 1)
+ Identifier modify_sample
+
+Set
+
+Set
+
+CreateQuery modify_sample (children 3)
+ Identifier modify_sample
+ Columns definition (children 1)
+  ExpressionList (children 2)
+   ColumnDeclaration d (children 2)
+    DataType Date
+    Literal '2000-01-01'
+   ColumnDeclaration x (children 1)
+    DataType UInt8
+ Storage definition (children 3)
+  Function MergeTree
+  Identifier d
+  Identifier x
+
+InsertQuery   (children 3)
+ Identifier modify_sample
+ ExpressionList (children 1)
+  Identifier x
+ SelectWithUnionQuery (children 1)
+  ExpressionList (children 1)
+   SelectQuery (children 3)
+    ExpressionList (children 1)
+     Function toUInt8 (alias x) (children 1)
+      ExpressionList (children 1)
+       Identifier number
+    TablesInSelectQuery (children 1)
+     TablesInSelectQueryElement (children 1)
+      TableExpression (children 1)
+       TableIdentifier system.numbers
+    Literal UInt64_256
+
 SelectWithUnionQuery (children 1)
  ExpressionList (children 1)
   SelectQuery (children 2)
@@ -22,6 +60,55 @@ SelectWithUnionQuery (children 1)
       TableIdentifier modify_sample
       SampleRatio 1 / 10
 
+AlterQuery  modify_sample (children 2)
+ ExpressionList (children 1)
+  AlterCommand MODIFY_SAMPLE_BY (children 1)
+   Identifier x
+ Identifier modify_sample
+
+CreateQuery modify_sample_replicated (children 3)
+ Identifier modify_sample_replicated
+ Columns definition (children 1)
+  ExpressionList (children 3)
+   ColumnDeclaration d (children 2)
+    DataType Date
+    Literal '2000-01-01'
+   ColumnDeclaration x (children 1)
+    DataType UInt8
+   ColumnDeclaration y (children 1)
+    DataType UInt64
+ Storage definition (children 3)
+  Function ReplicatedMergeTree (children 1)
+   ExpressionList (children 2)
+    Literal '/clickhouse/tables/{database}/test_01430'
+    Literal 'modify_sample'
+  Identifier d
+  Function tuple (children 1)
+   ExpressionList (children 2)
+    Identifier x
+    Identifier y
+
+InsertQuery   (children 3)
+ Identifier modify_sample_replicated
+ ExpressionList (children 2)
+  Identifier x
+  Identifier y
+ SelectWithUnionQuery (children 1)
+  ExpressionList (children 1)
+   SelectQuery (children 3)
+    ExpressionList (children 2)
+     Function toUInt8 (alias x) (children 1)
+      ExpressionList (children 1)
+       Identifier number
+     Function toUInt64 (alias y) (children 1)
+      ExpressionList (children 1)
+       Identifier number
+    TablesInSelectQuery (children 1)
+     TablesInSelectQueryElement (children 1)
+      TableExpression (children 1)
+       TableIdentifier system.numbers
+    Literal UInt64_256
+
 SelectWithUnionQuery (children 1)
  ExpressionList (children 1)
   SelectQuery (children 2)
@@ -46,6 +133,30 @@ SelectWithUnionQuery (children 1)
       TableIdentifier modify_sample_replicated
       SampleRatio 1 / 10
 
+AlterQuery  modify_sample_replicated (children 2)
+ ExpressionList (children 1)
+  AlterCommand MODIFY_SAMPLE_BY (children 1)
+   Identifier x
+ Identifier modify_sample_replicated
+
+DetachQuery  modify_sample_replicated (children 1)
+ Identifier modify_sample_replicated
+
+AttachQuery modify_sample_replicated (children 1)
+ Identifier modify_sample_replicated
+
+AlterQuery  modify_sample_replicated (children 2)
+ ExpressionList (children 1)
+  AlterCommand MODIFY_SAMPLE_BY (children 1)
+   Identifier d
+ Identifier modify_sample_replicated
+
+AlterQuery  modify_sample_replicated (children 2)
+ ExpressionList (children 1)
+  AlterCommand MODIFY_SAMPLE_BY (children 1)
+   Identifier y
+ Identifier modify_sample_replicated
+
 SelectWithUnionQuery (children 1)
  ExpressionList (children 1)
   SelectQuery (children 2)
@@ -69,3 +180,41 @@ SelectWithUnionQuery (children 1)
      TableExpression (children 2)
       TableIdentifier modify_sample_replicated
       SampleRatio 1 / 10
+
+Set
+
+CreateQuery modify_sample_old (children 3)
+ Identifier modify_sample_old
+ Columns definition (children 1)
+  ExpressionList (children 3)
+   ColumnDeclaration d (children 2)
+    DataType Date
+    Literal '2000-01-01'
+   ColumnDeclaration x (children 1)
+    DataType UInt8
+   ColumnDeclaration y (children 1)
+    DataType UInt64
+ Storage definition (children 1)
+  Function MergeTree (children 1)
+   ExpressionList (children 3)
+    Identifier d
+    Function tuple (children 1)
+     ExpressionList (children 2)
+      Identifier x
+      Identifier y
+    Literal UInt64_8192
+
+AlterQuery  modify_sample_old (children 2)
+ ExpressionList (children 1)
+  AlterCommand MODIFY_SAMPLE_BY (children 1)
+   Identifier x
+ Identifier modify_sample_old
+
+DropQuery  modify_sample (children 1)
+ Identifier modify_sample
+
+DropQuery  modify_sample_replicated (children 1)
+ Identifier modify_sample_replicated
+
+DropQuery  modify_sample_old (children 1)
+ Identifier modify_sample_old

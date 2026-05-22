@@ -1,3 +1,5 @@
+SET enable_analyzer = 1;
+
 select so,
        r
 from
@@ -5,6 +7,7 @@ from
              if( arrayMap( x -> x.1, cg ) != ['y', 'n'], 'y', 'n')  as so,
              arrayFilter( x -> x.1 = so , cg) as r
     );
+
 select
        r
 from

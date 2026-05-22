@@ -1,4 +1,27 @@
+-- Tags: no-ordinary-database, no-encrypted-storage
+DROP TABLE IF EXISTS txn_counters;
+
+CREATE TABLE txn_counters
+(
+    n Int64,
+    creation_tid DEFAULT transactionID()
+)
+ENGINE = MergeTree
+ORDER BY n
+SETTINGS old_parts_lifetime = 3600;
+
+INSERT INTO txn_counters (n);
+
 SELECT transactionID();
+
+-- stop background cleanup
+SYSTEM stop merges txn_counters;
+
+SET throw_on_unsupported_query_inside_transaction = 0;
+
+begin transaction;
+
+INSERT INTO txn_counters (n);
 
 SELECT
     1,
@@ -22,6 +45,10 @@ FROM `system`.parts
 WHERE database = currentDatabase()
     AND table = 'txn_counters'
 ORDER BY `system`.parts.name ASC;
+
+rollback;
+
+INSERT INTO txn_counters (n);
 
 SELECT
     3,
@@ -50,6 +77,14 @@ SELECT
     5,
     transactionID().3 == serverUUID();
 
+commit;
+
+DETACH TABLE txn_counters;
+
+ATTACH TABLE txn_counters;
+
+INSERT INTO txn_counters (n);
+
 SELECT
     6,
     `system`.parts.name,
@@ -77,6 +112,12 @@ SELECT
     8,
     transactionID().3 == serverUUID();
 
+INSERT INTO txn_counters (n);
+
+ALTER TABLE txn_counters DROP PARTITION ID 'all';
+
+SYSTEM flush logs transactions_info_log;
+
 SELECT
     indexOf((
         SELECT arraySort(groupUniqArray(tid))
@@ -88,7 +129,7 @@ SELECT
     thread_id != 0,
     length(query_id) = length(queryID())
     OR type = 'Commit'
-    AND query_id = '',
+    AND query_id = '', -- ignore fault injection after commit
     tid_hash != 0,
     csn = 0,
     part
@@ -104,3 +145,5 @@ WHERE tid IN (
     OR (database = currentDatabase()
     AND table = 'txn_counters')
 ORDER BY event_time ASC;
+
+DROP TABLE txn_counters;
