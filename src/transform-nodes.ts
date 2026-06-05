@@ -121,7 +121,7 @@ export interface NodePositionMap {
  *
  * @example
  * ```ts
- * import { parse, transformNodes } from 'clickhouse-node-parser';
+ * import { parse, transformNodes } from '@clickhouse/parser';
  *
  * const ast = parse('SELECT * FROM t WHERE id = {id:UInt64}');
  *

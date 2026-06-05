@@ -6,7 +6,7 @@ import type { Statement, ASTNodeKind, ASTNodeKindMap } from './ast';
  *
  * @example
  * ```ts
- * import { parse, findNodes } from 'clickhouse-node-parser';
+ * import { parse, findNodes } from '@clickhouse/parser';
  *
  * const ast = parse('SELECT * FROM t WHERE id = {id:UInt64}');
  *
