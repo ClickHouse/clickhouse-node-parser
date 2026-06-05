@@ -79,3 +79,11 @@ ENGINE = MergeTree
 ORDER BY id
 PARTITION BY id
 SETTINGS min_rows_for_wide_part = 10000, min_bytes_for_wide_part = 100000000;
+
+EXPLAIN SYNTAX
+SELECT count()
+FROM t_move_to_prewhere
+WHERE a
+    AND b
+    AND c
+    AND NOT ignore(fat_string);

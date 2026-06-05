@@ -1,0 +1,5 @@
+EXPLAIN AST
+ALTER TABLE t1 DELETE WHERE date = today();
+
+EXPLAIN AST
+CREATE FUNCTION double AS n -> 2 * n;

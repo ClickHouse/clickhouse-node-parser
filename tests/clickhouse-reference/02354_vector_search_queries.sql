@@ -12,6 +12,12 @@ SELECT id, vec, L2Distance(vec, reference_vec)
 FROM tab
 ORDER BY L2Distance(vec, reference_vec)
 LIMIT 3;
+EXPLAIN indexes = 1
+WITH [0.0, 2.0] AS reference_vec
+SELECT id, vec, L2Distance(vec, reference_vec)
+FROM tab
+ORDER BY L2Distance(vec, reference_vec)
+LIMIT 3;
 DROP TABLE tab;
 SELECT '12 rows, index_granularity = 3, GRANULARITY = 2 --> 4 granules, 2 indexed block';
 CREATE TABLE tab(id Int32, vec Array(Float32), INDEX idx vec TYPE vector_similarity('hnsw', 'L2Distance', 2) GRANULARITY 2) ENGINE = MergeTree ORDER BY id SETTINGS index_granularity = 3;
@@ -24,6 +30,19 @@ SELECT id, vec, cosineDistance(vec, reference_vec)
 FROM tab
 ORDER BY cosineDistance(vec, reference_vec)
 LIMIT 3;
+EXPLAIN indexes = 1
+WITH [0.0, 2.0] AS reference_vec
+SELECT id, vec, cosineDistance(vec, reference_vec)
+FROM tab
+ORDER BY cosineDistance(vec, reference_vec)
+LIMIT 3;
+EXPLAIN indexes=1
+WITH [0.0, 2.0] as reference_vec
+SELECT id, vec, cosineDistance(vec, reference_vec)
+FROM tab
+ORDER BY cosineDistance(vec, reference_vec)
+LIMIT 3
+SETTINGS max_limit_for_vector_search_queries = 2; -- LIMIT 3 > 2 --> don't use the ann index
 DROP TABLE IF EXISTS tab_l2_f64;
 DROP TABLE IF EXISTS tab_l2_f32;
 DROP TABLE IF EXISTS tab_l2_f16;
@@ -59,6 +78,18 @@ SELECT id, vec, L2Distance(vec, reference_vec)
 FROM tab_l2_f64
 ORDER BY L2Distance(vec, reference_vec)
 LIMIT 3;
+EXPLAIN indexes = 1
+WITH [0.0, 2.0] AS reference_vec
+SELECT id, vec, L2Distance(vec, reference_vec)
+FROM tab_l2_f64
+ORDER BY L2Distance(vec, reference_vec)
+LIMIT 3;
+WITH [0.0, 2.0] AS reference_vec
+SELECT id, vec, L2Distance(vec, reference_vec)
+FROM tab_l2_f32
+ORDER BY L2Distance(vec, reference_vec)
+LIMIT 3;
+EXPLAIN indexes = 1
 WITH [0.0, 2.0] AS reference_vec
 SELECT id, vec, L2Distance(vec, reference_vec)
 FROM tab_l2_f32
@@ -69,6 +100,18 @@ SELECT id, vec, L2Distance(vec, reference_vec)
 FROM tab_l2_f16
 ORDER BY L2Distance(vec, reference_vec)
 LIMIT 3;
+EXPLAIN indexes = 1
+WITH [0.0, 2.0] AS reference_vec
+SELECT id, vec, L2Distance(vec, reference_vec)
+FROM tab_l2_f16
+ORDER BY L2Distance(vec, reference_vec)
+LIMIT 3;
+WITH [0.0, 2.0] AS reference_vec
+SELECT id, vec, L2Distance(vec, reference_vec)
+FROM tab_l2_bf16
+ORDER BY L2Distance(vec, reference_vec)
+LIMIT 3;
+EXPLAIN indexes = 1
 WITH [0.0, 2.0] AS reference_vec
 SELECT id, vec, L2Distance(vec, reference_vec)
 FROM tab_l2_bf16
@@ -79,6 +122,18 @@ SELECT id, vec, L2Distance(vec, reference_vec)
 FROM tab_l2_i8
 ORDER BY L2Distance(vec, reference_vec)
 LIMIT 3;
+EXPLAIN indexes = 1
+WITH [0.0, 2.0] AS reference_vec
+SELECT id, vec, L2Distance(vec, reference_vec)
+FROM tab_l2_i8
+ORDER BY L2Distance(vec, reference_vec)
+LIMIT 3;
+WITH [0.0, 2.0] AS reference_vec
+SELECT id, vec, cosineDistance(vec, reference_vec)
+FROM tab_cos_f64
+ORDER BY cosineDistance(vec, reference_vec)
+LIMIT 3;
+EXPLAIN indexes = 1
 WITH [0.0, 2.0] AS reference_vec
 SELECT id, vec, cosineDistance(vec, reference_vec)
 FROM tab_cos_f64
@@ -89,6 +144,18 @@ SELECT id, vec, cosineDistance(vec, reference_vec)
 FROM tab_cos_f32
 ORDER BY cosineDistance(vec, reference_vec)
 LIMIT 3;
+EXPLAIN indexes = 1
+WITH [0.0, 2.0] AS reference_vec
+SELECT id, vec, cosineDistance(vec, reference_vec)
+FROM tab_cos_f32
+ORDER BY cosineDistance(vec, reference_vec)
+LIMIT 3;
+WITH [0.0, 2.0] AS reference_vec
+SELECT id, vec, cosineDistance(vec, reference_vec)
+FROM tab_cos_f16
+ORDER BY cosineDistance(vec, reference_vec)
+LIMIT 3;
+EXPLAIN indexes = 1
 WITH [0.0, 2.0] AS reference_vec
 SELECT id, vec, cosineDistance(vec, reference_vec)
 FROM tab_cos_f16
@@ -99,6 +166,18 @@ SELECT id, vec, cosineDistance(vec, reference_vec)
 FROM tab_cos_bf16
 ORDER BY cosineDistance(vec, reference_vec)
 LIMIT 3;
+EXPLAIN indexes = 1
+WITH [0.0, 2.0] AS reference_vec
+SELECT id, vec, cosineDistance(vec, reference_vec)
+FROM tab_cos_bf16
+ORDER BY cosineDistance(vec, reference_vec)
+LIMIT 3;
+WITH [0.0, 2.0] AS reference_vec
+SELECT id, vec, cosineDistance(vec, reference_vec)
+FROM tab_cos_i8
+ORDER BY cosineDistance(vec, reference_vec)
+LIMIT 3;
+EXPLAIN indexes = 1
 WITH [0.0, 2.0] AS reference_vec
 SELECT id, vec, cosineDistance(vec, reference_vec)
 FROM tab_cos_i8

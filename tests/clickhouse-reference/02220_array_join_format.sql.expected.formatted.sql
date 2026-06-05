@@ -1,0 +1,10 @@
+EXPLAIN SYNTAX
+SELECT *
+FROM (
+        SELECT
+            range(0, 10) AS range_,
+            point_
+        FROM
+            `system`.one
+        ARRAY JOIN range_ AS point_
+    );

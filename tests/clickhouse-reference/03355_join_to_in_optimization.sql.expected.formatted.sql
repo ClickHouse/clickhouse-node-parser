@@ -30,6 +30,16 @@ INSERT INTO t1;
 
 INSERT INTO t2;
 
+EXPLAIN actions = 1, optimize = 1, header = 1
+SELECT t1.id
+FROM
+    t1
+CROSS JOIN t2
+WHERE t1.id = t2.id
+SETTINGS
+    query_plan_use_new_logical_join_step = true,
+    query_plan_convert_join_to_in = true;
+
 SELECT
     t1.key,
     t1.key2
@@ -46,6 +56,18 @@ SETTINGS
     query_plan_convert_join_to_in = true;
 
 SYSTEM FLUSH LOGS system.query_log;
+
+EXPLAIN
+SELECT hostName() AS hostName
+FROM
+    `system`.query_log AS a
+INNER JOIN `system`.processes AS b
+    ON (a.query_id = b.query_id)
+    AND (type = 'QueryStart')
+WHERE current_database = currentDatabase()
+SETTINGS
+    query_plan_use_new_logical_join_step = true,
+    query_plan_convert_join_to_in = true;
 
 SELECT dummy
 FROM

@@ -30,6 +30,17 @@ FROM tab
 ORDER BY L2Distance(vec, reference_vec) ASC
 LIMIT 3;
 
+EXPLAIN indexes = 1
+WITH [0.0, 2.0] AS reference_vec
+
+SELECT
+    id,
+    vec,
+    L2Distance(vec, reference_vec)
+FROM tab
+ORDER BY L2Distance(vec, reference_vec) ASC
+LIMIT 3;
+
 -- Make sure vector index cache is utilized.
 SELECT
     name,

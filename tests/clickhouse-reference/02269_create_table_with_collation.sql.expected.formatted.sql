@@ -1,3 +1,11 @@
+-- Tags: memory-engine
+EXPLAIN SYNTAX
+CREATE TABLE t
+(
+    x varchar(255) COLLATE binary NOT NULL
+)
+ENGINE = Memory;
+
 SET compatibility_ignore_collation_in_create_table = false;
 
 CREATE TABLE t_02267_collation

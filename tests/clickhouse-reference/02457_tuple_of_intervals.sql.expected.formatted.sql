@@ -1,3 +1,6 @@
+EXPLAIN SYNTAX
+SELECT tuple(toIntervalSecond(-1), toIntervalMinute(2), toIntervalMonth(-3), toIntervalYear(1));
+
 SELECT '---';
 
 SELECT negate(toIntervalSecond(1));

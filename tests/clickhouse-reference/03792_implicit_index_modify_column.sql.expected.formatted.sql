@@ -30,3 +30,8 @@ WHERE database = current_database()
 ORDER BY name ASC;
 
 ALTER TABLE test_alter MODIFY COLUMN b String;
+
+EXPLAIN indexes = 1
+SELECT *
+FROM test_alter
+WHERE b = '2';

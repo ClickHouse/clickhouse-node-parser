@@ -27,6 +27,7 @@ INSERT INTO x SELECT
     cityHash64(number + 6) % 2 AS F
 FROM numbers(2000);
 
+EXPLAIN QUERY TREE dump_ast = 1
 SELECT count()
 FROM x
 WHERE A
@@ -41,8 +42,26 @@ WHERE A
     OR B
     OR (B
     AND C)
+SETTINGS optimize_extract_common_expressions = 0;
+
+EXPLAIN QUERY TREE dump_ast = 1
+SELECT count()
+FROM x
+WHERE A
+    OR B
+    OR (B
+    AND C)
 SETTINGS optimize_extract_common_expressions = 1;
 
+SELECT count()
+FROM x
+WHERE A
+    OR B
+    OR (B
+    AND C)
+SETTINGS optimize_extract_common_expressions = 1;
+
+EXPLAIN QUERY TREE dump_ast = 1
 SELECT count()
 FROM x
 WHERE (A
@@ -63,8 +82,32 @@ WHERE (A
     OR (B
     AND D
     AND A)
+SETTINGS optimize_extract_common_expressions = 1;
+
+EXPLAIN QUERY TREE dump_ast = 1
+SELECT count()
+FROM x
+WHERE (A
+    AND B)
+    OR (B
+    AND C)
+    OR (B
+    AND D
+    AND A)
 SETTINGS optimize_extract_common_expressions = 0;
 
+SELECT count()
+FROM x
+WHERE (A
+    AND B)
+    OR (B
+    AND C)
+    OR (B
+    AND D
+    AND A)
+SETTINGS optimize_extract_common_expressions = 0;
+
+EXPLAIN QUERY TREE dump_ast = 1
 SELECT count()
 FROM x
 WHERE (A
@@ -85,7 +128,42 @@ WHERE (A
     AND C)
     OR (D
     AND E)
+SETTINGS optimize_extract_common_expressions = 1;
+
+EXPLAIN QUERY TREE dump_ast = 1
+SELECT count()
+FROM x
+WHERE (A
+    AND B)
+    OR (A
+    AND B
+    AND C)
+    OR (D
+    AND E)
 SETTINGS optimize_extract_common_expressions = 0;
+
+SELECT count()
+FROM x
+WHERE (A
+    AND B)
+    OR (A
+    AND B
+    AND C)
+    OR (D
+    AND E)
+SETTINGS optimize_extract_common_expressions = 0;
+
+EXPLAIN QUERY TREE dump_ast = 1
+SELECT count()
+FROM x
+WHERE (A
+    AND B)
+    OR (A
+    AND B
+    AND C)
+    OR (B
+    AND C)
+SETTINGS optimize_extract_common_expressions = 1;
 
 SELECT count()
 FROM x
@@ -97,6 +175,18 @@ WHERE (A
     OR (B
     AND C)
 SETTINGS optimize_extract_common_expressions = 1;
+
+EXPLAIN QUERY TREE dump_ast = 1
+SELECT count()
+FROM x
+WHERE (A
+    AND B)
+    OR (A
+    AND B
+    AND C)
+    OR (B
+    AND C)
+SETTINGS optimize_extract_common_expressions = 0;
 
 SELECT count()
 FROM x

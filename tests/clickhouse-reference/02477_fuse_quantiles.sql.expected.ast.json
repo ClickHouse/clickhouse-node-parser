@@ -713,6 +713,155 @@
     }
   },
   {
+    "kind": "explain",
+    "explainType": "QUERY TREE",
+    "settings": [
+      {
+        "name": "run_passes",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ],
+    "query": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "functionCall",
+          "name": "quantile",
+          "params": [
+            {
+              "kind": "literal",
+              "type": "Float64",
+              "value": "0.5"
+            }
+          ],
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "b"
+              ]
+            }
+          ]
+        },
+        {
+          "kind": "functionCall",
+          "name": "quantile",
+          "params": [
+            {
+              "kind": "literal",
+              "type": "Float64",
+              "value": "0.9"
+            }
+          ],
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "b"
+              ]
+            }
+          ]
+        }
+      ],
+      "from": {
+        "kind": "subqueryFrom",
+        "query": {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "alias",
+              "expr": {
+                "kind": "binaryExpr",
+                "op": "+",
+                "left": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "x"
+                  ]
+                },
+                "right": {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "1"
+                }
+              },
+              "alias": "b"
+            }
+          ],
+          "from": {
+            "kind": "subqueryFrom",
+            "query": {
+              "kind": "select",
+              "select": [
+                {
+                  "kind": "alias",
+                  "expr": {
+                    "kind": "functionCall",
+                    "name": "quantile",
+                    "params": [
+                      {
+                        "kind": "literal",
+                        "type": "Float64",
+                        "value": "0.5"
+                      }
+                    ],
+                    "args": [
+                      {
+                        "kind": "columnRef",
+                        "parts": [
+                          "b"
+                        ]
+                      }
+                    ]
+                  },
+                  "alias": "x"
+                },
+                {
+                  "kind": "functionCall",
+                  "name": "quantile",
+                  "params": [
+                    {
+                      "kind": "literal",
+                      "type": "Float64",
+                      "value": "0.9"
+                    }
+                  ],
+                  "args": [
+                    {
+                      "kind": "columnRef",
+                      "parts": [
+                        "b"
+                      ]
+                    }
+                  ]
+                }
+              ],
+              "from": {
+                "kind": "tableRef",
+                "table": "fuse_tbl"
+              }
+            }
+          },
+          "groupBy": {
+            "kind": "expressions",
+            "items": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "x"
+                ]
+              }
+            ]
+          }
+        }
+      }
+    }
+  },
+  {
     "kind": "drop",
     "targetType": "TABLE",
     "table": {

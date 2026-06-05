@@ -33,3 +33,32 @@ ORDER BY tuple();
 INSERT INTO a;
 
 INSERT INTO b;
+
+-- {echoOn}
+-- All columns in subquery condition belong to the same equivalence class
+EXPLAIN
+SELECT
+    c1,
+    (
+        SELECT max(c3)
+        FROM a
+        WHERE a.c1 = b.c2
+            AND b.c1 = b.c3
+            AND b.c1 = b.c2
+            AND b.c2 = b.c4
+    )
+FROM b;
+
+-- Same query but with slightly different order of conditions in subquery
+EXPLAIN
+SELECT
+    c1,
+    (
+        SELECT max(c3)
+        FROM a
+        WHERE a.c1 = b.c2
+            AND b.c1 = b.c2
+            AND b.c1 = b.c3
+            AND b.c2 = b.c4
+    )
+FROM b;

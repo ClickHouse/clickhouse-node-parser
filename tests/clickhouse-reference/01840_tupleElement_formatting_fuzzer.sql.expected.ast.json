@@ -1,5 +1,66 @@
 [
   {
+    "kind": "explain",
+    "explainType": "AST",
+    "query": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "functionCall",
+          "name": "tupleElement",
+          "args": [
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "255"
+            },
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "100"
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "kind": "explain",
+    "explainType": "AST",
+    "query": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "functionCall",
+          "name": "tupleElement",
+          "args": [
+            {
+              "kind": "tupleLiteral",
+              "elements": [
+                {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "255"
+                },
+                {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "1"
+                }
+              ],
+              "source": "(255, 1)"
+            },
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "1"
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -30,6 +91,86 @@
         ]
       }
     ]
+  },
+  {
+    "kind": "explain",
+    "explainType": "AST",
+    "query": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "functionCall",
+          "name": "tupleElement",
+          "args": [
+            {
+              "kind": "asterisk"
+            },
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "2"
+            }
+          ]
+        },
+        {
+          "kind": "functionCall",
+          "name": "tupleElement",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "x"
+              ]
+            },
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "1"
+            }
+          ]
+        }
+      ],
+      "from": {
+        "kind": "subqueryFrom",
+        "query": {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "alias",
+              "expr": {
+                "kind": "functionCall",
+                "name": "arrayJoin",
+                "args": [
+                  {
+                    "kind": "arrayLiteral",
+                    "elements": [
+                      {
+                        "kind": "tupleLiteral",
+                        "elements": [
+                          {
+                            "kind": "literal",
+                            "type": "UInt64",
+                            "value": "0"
+                          },
+                          {
+                            "kind": "literal",
+                            "type": "UInt64",
+                            "value": "1"
+                          }
+                        ],
+                        "source": "(0,1)"
+                      }
+                    ],
+                    "source": "[(0,1)]"
+                  }
+                ]
+              },
+              "alias": "x"
+            }
+          ]
+        }
+      }
+    }
   },
   {
     "kind": "select",

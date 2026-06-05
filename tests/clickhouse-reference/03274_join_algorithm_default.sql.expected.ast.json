@@ -108,6 +108,86 @@
     ]
   },
   {
+    "kind": "explain",
+    "explainType": "PIPELINE",
+    "query": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "asterisk"
+        }
+      ],
+      "from": {
+        "left": {
+          "kind": "subqueryFrom",
+          "query": {
+            "kind": "select",
+            "select": [
+              {
+                "kind": "asterisk"
+              }
+            ],
+            "from": {
+              "kind": "tableRef",
+              "database": "system",
+              "table": "numbers"
+            },
+            "limit": {
+              "count": {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "100000"
+              }
+            }
+          },
+          "alias": "t1"
+        },
+        "kind": "joinExpr",
+        "joinType": "INNER",
+        "right": {
+          "kind": "subqueryFrom",
+          "query": {
+            "kind": "select",
+            "select": [
+              {
+                "kind": "asterisk"
+              }
+            ],
+            "from": {
+              "kind": "tableRef",
+              "database": "system",
+              "table": "numbers"
+            },
+            "limit": {
+              "count": {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "100000"
+              }
+            }
+          },
+          "alias": "t2"
+        },
+        "constraint": {
+          "kind": "using",
+          "columns": [
+            "number"
+          ]
+        }
+      },
+      "settings": [
+        {
+          "name": "max_threads",
+          "value": {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "16"
+          }
+        }
+      ]
+    }
+  },
+  {
     "kind": "set",
     "settings": [
       {

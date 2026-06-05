@@ -552,6 +552,129 @@
     }
   },
   {
+    "kind": "explain",
+    "explainType": "SYNTAX",
+    "query": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "functionCall",
+          "name": "count",
+          "args": []
+        }
+      ],
+      "from": {
+        "left": {
+          "kind": "subqueryFrom",
+          "query": {
+            "kind": "select",
+            "select": [
+              {
+                "kind": "alias",
+                "expr": {
+                  "kind": "arrayLiteral",
+                  "elements": [
+                    {
+                      "kind": "columnRef",
+                      "parts": [
+                        "number"
+                      ]
+                    }
+                  ],
+                  "source": "[number]"
+                },
+                "alias": "a"
+              },
+              {
+                "kind": "alias",
+                "expr": {
+                  "kind": "arrayLiteral",
+                  "elements": [
+                    {
+                      "kind": "binaryExpr",
+                      "op": "*",
+                      "left": {
+                        "kind": "columnRef",
+                        "parts": [
+                          "number"
+                        ]
+                      },
+                      "right": {
+                        "kind": "literal",
+                        "type": "UInt64",
+                        "value": "2"
+                      }
+                    }
+                  ],
+                  "source": "[number * 2]"
+                },
+                "alias": "b"
+              }
+            ],
+            "from": {
+              "kind": "tableRef",
+              "database": "system",
+              "table": "numbers"
+            },
+            "limit": {
+              "count": {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "1"
+              }
+            }
+          },
+          "alias": "t"
+        },
+        "kind": "arrayJoinExpr",
+        "joinType": "ARRAY",
+        "expressions": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "a"
+            ]
+          },
+          {
+            "kind": "columnRef",
+            "parts": [
+              "b"
+            ]
+          }
+        ]
+      },
+      "where": {
+        "kind": "unaryExpr",
+        "op": "NOT",
+        "expr": {
+          "kind": "functionCall",
+          "name": "ignore",
+          "args": [
+            {
+              "kind": "binaryExpr",
+              "op": "+",
+              "left": {
+                "kind": "columnRef",
+                "parts": [
+                  "a"
+                ]
+              },
+              "right": {
+                "kind": "columnRef",
+                "parts": [
+                  "b"
+                ]
+              }
+            }
+          ]
+        }
+      }
+    },
+    "leadingComments": [
+      "-- ARRAY JOIN"
+    ]
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -668,6 +791,98 @@
     }
   },
   {
+    "kind": "explain",
+    "explainType": "SYNTAX",
+    "query": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "a"
+          ]
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "b"
+          ]
+        }
+      ],
+      "from": {
+        "left": {
+          "kind": "subqueryFrom",
+          "query": {
+            "kind": "select",
+            "select": [
+              {
+                "kind": "alias",
+                "expr": {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "1"
+                },
+                "alias": "a"
+              }
+            ]
+          }
+        },
+        "kind": "joinExpr",
+        "joinType": "LEFT",
+        "right": {
+          "kind": "subqueryFrom",
+          "query": {
+            "kind": "select",
+            "select": [
+              {
+                "kind": "alias",
+                "expr": {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "1"
+                },
+                "alias": "a"
+              },
+              {
+                "kind": "alias",
+                "expr": {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "1"
+                },
+                "alias": "b"
+              }
+            ]
+          }
+        },
+        "constraint": {
+          "kind": "using",
+          "columns": [
+            "a"
+          ]
+        }
+      },
+      "where": {
+        "kind": "binaryExpr",
+        "op": "=",
+        "left": {
+          "kind": "columnRef",
+          "parts": [
+            "b"
+          ]
+        },
+        "right": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      }
+    },
+    "leadingComments": [
+      "-- LEFT JOIN"
+    ]
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -751,6 +966,98 @@
         "value": "0"
       }
     }
+  },
+  {
+    "kind": "explain",
+    "explainType": "SYNTAX",
+    "query": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "a"
+          ]
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "b"
+          ]
+        }
+      ],
+      "from": {
+        "left": {
+          "kind": "subqueryFrom",
+          "query": {
+            "kind": "select",
+            "select": [
+              {
+                "kind": "alias",
+                "expr": {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "1"
+                },
+                "alias": "a"
+              },
+              {
+                "kind": "alias",
+                "expr": {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "1"
+                },
+                "alias": "b"
+              }
+            ]
+          }
+        },
+        "kind": "joinExpr",
+        "joinType": "RIGHT",
+        "right": {
+          "kind": "subqueryFrom",
+          "query": {
+            "kind": "select",
+            "select": [
+              {
+                "kind": "alias",
+                "expr": {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "1"
+                },
+                "alias": "a"
+              }
+            ]
+          }
+        },
+        "constraint": {
+          "kind": "using",
+          "columns": [
+            "a"
+          ]
+        }
+      },
+      "where": {
+        "kind": "binaryExpr",
+        "op": "=",
+        "left": {
+          "kind": "columnRef",
+          "parts": [
+            "b"
+          ]
+        },
+        "right": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      }
+    },
+    "leadingComments": [
+      "-- RIGHT JOIN"
+    ]
   },
   {
     "kind": "select",
@@ -838,6 +1145,98 @@
     }
   },
   {
+    "kind": "explain",
+    "explainType": "SYNTAX",
+    "query": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "a"
+          ]
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "b"
+          ]
+        }
+      ],
+      "from": {
+        "left": {
+          "kind": "subqueryFrom",
+          "query": {
+            "kind": "select",
+            "select": [
+              {
+                "kind": "alias",
+                "expr": {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "1"
+                },
+                "alias": "a"
+              }
+            ]
+          }
+        },
+        "kind": "joinExpr",
+        "joinType": "FULL",
+        "right": {
+          "kind": "subqueryFrom",
+          "query": {
+            "kind": "select",
+            "select": [
+              {
+                "kind": "alias",
+                "expr": {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "1"
+                },
+                "alias": "a"
+              },
+              {
+                "kind": "alias",
+                "expr": {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "1"
+                },
+                "alias": "b"
+              }
+            ]
+          }
+        },
+        "constraint": {
+          "kind": "using",
+          "columns": [
+            "a"
+          ]
+        }
+      },
+      "where": {
+        "kind": "binaryExpr",
+        "op": "=",
+        "left": {
+          "kind": "columnRef",
+          "parts": [
+            "b"
+          ]
+        },
+        "right": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      }
+    },
+    "leadingComments": [
+      "-- FULL JOIN"
+    ]
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -923,6 +1322,152 @@
     }
   },
   {
+    "kind": "explain",
+    "explainType": "SYNTAX",
+    "query": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "a"
+          ]
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "b"
+          ]
+        }
+      ],
+      "from": {
+        "left": {
+          "kind": "subqueryFrom",
+          "query": {
+            "kind": "select",
+            "select": [
+              {
+                "kind": "alias",
+                "expr": {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "1"
+                },
+                "alias": "a"
+              },
+              {
+                "kind": "alias",
+                "expr": {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "1"
+                },
+                "alias": "b"
+              }
+            ]
+          }
+        },
+        "kind": "joinExpr",
+        "joinType": "FULL",
+        "right": {
+          "kind": "subqueryFrom",
+          "query": {
+            "kind": "select",
+            "select": [
+              {
+                "kind": "alias",
+                "expr": {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "1"
+                },
+                "alias": "a"
+              }
+            ]
+          }
+        },
+        "constraint": {
+          "kind": "using",
+          "columns": [
+            "a"
+          ]
+        }
+      },
+      "where": {
+        "kind": "binaryExpr",
+        "op": "=",
+        "left": {
+          "kind": "columnRef",
+          "parts": [
+            "b"
+          ]
+        },
+        "right": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      }
+    }
+  },
+  {
+    "kind": "explain",
+    "explainType": "SYNTAX",
+    "query": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "alias",
+          "expr": {
+            "kind": "functionCall",
+            "name": "toString",
+            "args": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "value"
+                ]
+              }
+            ]
+          },
+          "alias": "value"
+        }
+      ],
+      "from": {
+        "kind": "subqueryFrom",
+        "query": {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "alias",
+              "expr": {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "1"
+              },
+              "alias": "value"
+            }
+          ]
+        }
+      },
+      "where": {
+        "kind": "binaryExpr",
+        "op": "=",
+        "left": {
+          "kind": "columnRef",
+          "parts": [
+            "value"
+          ]
+        },
+        "right": {
+          "kind": "literal",
+          "type": "String",
+          "value": "1"
+        }
+      }
+    }
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -972,6 +1517,65 @@
         "kind": "literal",
         "type": "String",
         "value": "1"
+      }
+    }
+  },
+  {
+    "kind": "explain",
+    "explainType": "SYNTAX",
+    "query": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "asterisk"
+        }
+      ],
+      "from": {
+        "kind": "subqueryFrom",
+        "query": {
+          "kind": "union",
+          "queries": [
+            {
+              "kind": "select",
+              "select": [
+                {
+                  "kind": "alias",
+                  "expr": {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "1"
+                  },
+                  "alias": "id"
+                }
+              ]
+            },
+            {
+              "kind": "select",
+              "select": [
+                {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "2"
+                }
+              ]
+            }
+          ]
+        }
+      },
+      "where": {
+        "kind": "binaryExpr",
+        "op": "=",
+        "left": {
+          "kind": "columnRef",
+          "parts": [
+            "id"
+          ]
+        },
+        "right": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
       }
     }
   },
@@ -1031,6 +1635,72 @@
     }
   },
   {
+    "kind": "explain",
+    "explainType": "SYNTAX",
+    "query": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "asterisk"
+        }
+      ],
+      "from": {
+        "kind": "subqueryFrom",
+        "query": {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "alias",
+              "expr": {
+                "kind": "functionCall",
+                "name": "arrayJoin",
+                "args": [
+                  {
+                    "kind": "arrayLiteral",
+                    "elements": [
+                      {
+                        "kind": "literal",
+                        "type": "UInt64",
+                        "value": "1"
+                      },
+                      {
+                        "kind": "literal",
+                        "type": "UInt64",
+                        "value": "2"
+                      },
+                      {
+                        "kind": "literal",
+                        "type": "UInt64",
+                        "value": "3"
+                      }
+                    ],
+                    "source": "[1, 2, 3]"
+                  }
+                ]
+              },
+              "alias": "id"
+            }
+          ]
+        }
+      },
+      "where": {
+        "kind": "binaryExpr",
+        "op": "=",
+        "left": {
+          "kind": "columnRef",
+          "parts": [
+            "id"
+          ]
+        },
+        "right": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    }
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -1089,6 +1759,75 @@
         "kind": "literal",
         "type": "UInt64",
         "value": "1"
+      }
+    }
+  },
+  {
+    "kind": "explain",
+    "explainType": "SYNTAX",
+    "query": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "id"
+          ]
+        }
+      ],
+      "from": {
+        "kind": "subqueryFrom",
+        "query": {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "alias",
+              "expr": {
+                "kind": "functionCall",
+                "name": "arrayJoin",
+                "args": [
+                  {
+                    "kind": "arrayLiteral",
+                    "elements": [
+                      {
+                        "kind": "literal",
+                        "type": "UInt64",
+                        "value": "1"
+                      },
+                      {
+                        "kind": "literal",
+                        "type": "UInt64",
+                        "value": "2"
+                      },
+                      {
+                        "kind": "literal",
+                        "type": "UInt64",
+                        "value": "3"
+                      }
+                    ],
+                    "source": "[1, 2, 3]"
+                  }
+                ]
+              },
+              "alias": "id"
+            }
+          ]
+        }
+      },
+      "where": {
+        "kind": "binaryExpr",
+        "op": "=",
+        "left": {
+          "kind": "columnRef",
+          "parts": [
+            "id"
+          ]
+        },
+        "right": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
       }
     }
   },
@@ -1154,6 +1893,67 @@
         "kind": "literal",
         "type": "UInt64",
         "value": "1"
+      }
+    }
+  },
+  {
+    "kind": "explain",
+    "explainType": "SYNTAX",
+    "query": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "asterisk"
+        }
+      ],
+      "from": {
+        "kind": "subqueryFrom",
+        "query": {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "alias",
+              "expr": {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "1"
+              },
+              "alias": "id"
+            },
+            {
+              "kind": "alias",
+              "expr": {
+                "kind": "subqueryExpr",
+                "query": {
+                  "kind": "select",
+                  "select": [
+                    {
+                      "kind": "literal",
+                      "type": "UInt64",
+                      "value": "1"
+                    }
+                  ]
+                }
+              },
+              "alias": "subquery"
+            }
+          ]
+        }
+      },
+      "where": {
+        "kind": "binaryExpr",
+        "op": "=",
+        "left": {
+          "kind": "columnRef",
+          "parts": [
+            "subquery"
+          ]
+        },
+        "right": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
       }
     }
   },
@@ -1213,6 +2013,80 @@
         "value": "1"
       }
     }
+  },
+  {
+    "kind": "explain",
+    "explainType": "SYNTAX",
+    "query": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "asterisk"
+        }
+      ],
+      "from": {
+        "kind": "subqueryFrom",
+        "query": {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "alias",
+              "expr": {
+                "kind": "functionCall",
+                "name": "toUInt64",
+                "args": [
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "b"
+                    ]
+                  }
+                ]
+              },
+              "alias": "a"
+            },
+            {
+              "kind": "alias",
+              "expr": {
+                "kind": "functionCall",
+                "name": "sum",
+                "args": [
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "id"
+                    ]
+                  }
+                ]
+              },
+              "alias": "b"
+            }
+          ],
+          "from": {
+            "kind": "tableRef",
+            "table": "test_00597"
+          }
+        }
+      },
+      "where": {
+        "kind": "binaryExpr",
+        "op": "=",
+        "left": {
+          "kind": "columnRef",
+          "parts": [
+            "a"
+          ]
+        },
+        "right": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "3"
+        }
+      }
+    },
+    "leadingComments": [
+      "-- Optimize predicate expressions using tables"
+    ]
   },
   {
     "kind": "select",
@@ -1278,6 +2152,123 @@
         "kind": "literal",
         "type": "UInt64",
         "value": "3"
+      }
+    }
+  },
+  {
+    "kind": "explain",
+    "explainType": "SYNTAX",
+    "query": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "date"
+          ]
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "id"
+          ]
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "name"
+          ]
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "value"
+          ]
+        }
+      ],
+      "from": {
+        "kind": "subqueryFrom",
+        "query": {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "date"
+              ]
+            },
+            {
+              "kind": "columnRef",
+              "parts": [
+                "name"
+              ]
+            },
+            {
+              "kind": "columnRef",
+              "parts": [
+                "value"
+              ]
+            },
+            {
+              "kind": "alias",
+              "expr": {
+                "kind": "functionCall",
+                "name": "min",
+                "args": [
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "id"
+                    ]
+                  }
+                ]
+              },
+              "alias": "id"
+            }
+          ],
+          "from": {
+            "kind": "tableRef",
+            "table": "test_00597"
+          },
+          "groupBy": {
+            "kind": "expressions",
+            "items": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "date"
+                ]
+              },
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "name"
+                ]
+              },
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "value"
+                ]
+              }
+            ]
+          }
+        }
+      },
+      "where": {
+        "kind": "binaryExpr",
+        "op": "=",
+        "left": {
+          "kind": "columnRef",
+          "parts": [
+            "id"
+          ]
+        },
+        "right": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
       }
     }
   },
@@ -1395,6 +2386,80 @@
     }
   },
   {
+    "kind": "explain",
+    "explainType": "SYNTAX",
+    "query": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "asterisk"
+        }
+      ],
+      "from": {
+        "kind": "subqueryFrom",
+        "query": {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "alias",
+              "expr": {
+                "kind": "functionCall",
+                "name": "toUInt64",
+                "args": [
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "b"
+                    ]
+                  }
+                ]
+              },
+              "alias": "a"
+            },
+            {
+              "kind": "alias",
+              "expr": {
+                "kind": "functionCall",
+                "name": "sum",
+                "args": [
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "id"
+                    ]
+                  }
+                ]
+              },
+              "alias": "b"
+            }
+          ],
+          "from": {
+            "kind": "tableRef",
+            "table": "test_00597",
+            "alias": "table_alias"
+          }
+        },
+        "alias": "outer_table_alias"
+      },
+      "where": {
+        "kind": "binaryExpr",
+        "op": "=",
+        "left": {
+          "kind": "columnRef",
+          "parts": [
+            "outer_table_alias",
+            "b"
+          ]
+        },
+        "right": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "3"
+        }
+      }
+    }
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -1465,6 +2530,51 @@
     }
   },
   {
+    "kind": "explain",
+    "explainType": "SYNTAX",
+    "query": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "asterisk"
+        }
+      ],
+      "from": {
+        "kind": "subqueryFrom",
+        "query": {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "asterisk"
+            }
+          ],
+          "from": {
+            "kind": "tableRef",
+            "table": "test_00597"
+          }
+        }
+      },
+      "where": {
+        "kind": "binaryExpr",
+        "op": "=",
+        "left": {
+          "kind": "columnRef",
+          "parts": [
+            "id"
+          ]
+        },
+        "right": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    },
+    "leadingComments": [
+      "-- Optimize predicate expression with asterisk"
+    ]
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -1501,6 +2611,62 @@
         "value": "1"
       }
     }
+  },
+  {
+    "kind": "explain",
+    "explainType": "SYNTAX",
+    "query": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "asterisk"
+        }
+      ],
+      "from": {
+        "kind": "subqueryFrom",
+        "query": {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "asterisk"
+            }
+          ],
+          "from": {
+            "kind": "subqueryFrom",
+            "query": {
+              "kind": "select",
+              "select": [
+                {
+                  "kind": "asterisk"
+                }
+              ],
+              "from": {
+                "kind": "tableRef",
+                "table": "test_00597"
+              }
+            }
+          }
+        }
+      },
+      "where": {
+        "kind": "binaryExpr",
+        "op": "=",
+        "left": {
+          "kind": "columnRef",
+          "parts": [
+            "id"
+          ]
+        },
+        "right": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    },
+    "leadingComments": [
+      "-- Optimize predicate expression with asterisk and nested subquery"
+    ]
   },
   {
     "kind": "select",
@@ -1550,6 +2716,66 @@
         "value": "1"
       }
     }
+  },
+  {
+    "kind": "explain",
+    "explainType": "SYNTAX",
+    "query": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "asterisk"
+        }
+      ],
+      "from": {
+        "kind": "subqueryFrom",
+        "query": {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "qualifiedAsterisk",
+              "parts": [
+                "b"
+              ]
+            }
+          ],
+          "from": {
+            "kind": "subqueryFrom",
+            "query": {
+              "kind": "select",
+              "select": [
+                {
+                  "kind": "asterisk"
+                }
+              ],
+              "from": {
+                "kind": "tableRef",
+                "table": "test_00597"
+              }
+            },
+            "alias": "b"
+          }
+        }
+      },
+      "where": {
+        "kind": "binaryExpr",
+        "op": "=",
+        "left": {
+          "kind": "columnRef",
+          "parts": [
+            "id"
+          ]
+        },
+        "right": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    },
+    "leadingComments": [
+      "-- Optimize predicate expression with qualified asterisk"
+    ]
   },
   {
     "kind": "select",
@@ -1603,6 +2829,72 @@
         "value": "1"
       }
     }
+  },
+  {
+    "kind": "explain",
+    "explainType": "SYNTAX",
+    "query": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "asterisk"
+        }
+      ],
+      "from": {
+        "kind": "subqueryFrom",
+        "query": {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "date"
+              ]
+            },
+            {
+              "kind": "columnRef",
+              "parts": [
+                "id"
+              ]
+            },
+            {
+              "kind": "columnRef",
+              "parts": [
+                "name"
+              ]
+            },
+            {
+              "kind": "columnRef",
+              "parts": [
+                "value"
+              ]
+            }
+          ],
+          "from": {
+            "kind": "tableRef",
+            "table": "test_00597"
+          }
+        }
+      },
+      "where": {
+        "kind": "binaryExpr",
+        "op": "=",
+        "left": {
+          "kind": "columnRef",
+          "parts": [
+            "id"
+          ]
+        },
+        "right": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    },
+    "leadingComments": [
+      "-- Optimize predicate expression without asterisk"
+    ]
   },
   {
     "kind": "select",
@@ -1662,6 +2954,104 @@
         "value": "1"
       }
     }
+  },
+  {
+    "kind": "explain",
+    "explainType": "SYNTAX",
+    "query": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "asterisk"
+        }
+      ],
+      "from": {
+        "kind": "subqueryFrom",
+        "query": {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "date"
+              ]
+            },
+            {
+              "kind": "columnRef",
+              "parts": [
+                "id"
+              ]
+            },
+            {
+              "kind": "columnRef",
+              "parts": [
+                "name"
+              ]
+            },
+            {
+              "kind": "columnRef",
+              "parts": [
+                "value"
+              ]
+            }
+          ],
+          "from": {
+            "kind": "subqueryFrom",
+            "query": {
+              "kind": "select",
+              "select": [
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "date"
+                  ]
+                },
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "id"
+                  ]
+                },
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "name"
+                  ]
+                },
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "value"
+                  ]
+                }
+              ],
+              "from": {
+                "kind": "tableRef",
+                "table": "test_00597"
+              }
+            }
+          }
+        }
+      },
+      "where": {
+        "kind": "binaryExpr",
+        "op": "=",
+        "left": {
+          "kind": "columnRef",
+          "parts": [
+            "id"
+          ]
+        },
+        "right": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    },
+    "leadingComments": [
+      "-- Optimize predicate expression without asterisk and contains nested subquery"
+    ]
   },
   {
     "kind": "select",
@@ -1755,6 +3145,53 @@
     }
   },
   {
+    "kind": "explain",
+    "explainType": "SYNTAX",
+    "query": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "asterisk"
+        }
+      ],
+      "from": {
+        "kind": "subqueryFrom",
+        "query": {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "asterisk"
+            }
+          ],
+          "from": {
+            "kind": "tableRef",
+            "table": "test_00597"
+          }
+        },
+        "alias": "b"
+      },
+      "where": {
+        "kind": "binaryExpr",
+        "op": "=",
+        "left": {
+          "kind": "columnRef",
+          "parts": [
+            "b",
+            "id"
+          ]
+        },
+        "right": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    },
+    "leadingComments": [
+      "-- Optimize predicate expression with qualified"
+    ]
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -1793,6 +3230,65 @@
         "value": "1"
       }
     }
+  },
+  {
+    "kind": "explain",
+    "explainType": "SYNTAX",
+    "query": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "asterisk"
+        }
+      ],
+      "from": {
+        "kind": "subqueryFrom",
+        "query": {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "asterisk"
+            }
+          ],
+          "from": {
+            "kind": "subqueryFrom",
+            "query": {
+              "kind": "select",
+              "select": [
+                {
+                  "kind": "asterisk"
+                }
+              ],
+              "from": {
+                "kind": "tableRef",
+                "table": "test_00597"
+              }
+            },
+            "alias": "a"
+          }
+        },
+        "alias": "b"
+      },
+      "where": {
+        "kind": "binaryExpr",
+        "op": "=",
+        "left": {
+          "kind": "columnRef",
+          "parts": [
+            "b",
+            "id"
+          ]
+        },
+        "right": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    },
+    "leadingComments": [
+      "-- Optimize predicate expression with qualified and nested subquery"
+    ]
   },
   {
     "kind": "select",
@@ -1845,6 +3341,93 @@
         "value": "1"
       }
     }
+  },
+  {
+    "kind": "explain",
+    "explainType": "SYNTAX",
+    "query": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "asterisk"
+        }
+      ],
+      "from": {
+        "kind": "subqueryFrom",
+        "query": {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "id"
+              ]
+            },
+            {
+              "kind": "columnRef",
+              "parts": [
+                "date"
+              ]
+            },
+            {
+              "kind": "alias",
+              "expr": {
+                "kind": "functionCall",
+                "name": "min",
+                "args": [
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "value"
+                    ]
+                  }
+                ]
+              },
+              "alias": "value"
+            }
+          ],
+          "from": {
+            "kind": "tableRef",
+            "table": "test_00597"
+          },
+          "groupBy": {
+            "kind": "expressions",
+            "items": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "id"
+                ]
+              },
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "date"
+                ]
+              }
+            ]
+          }
+        }
+      },
+      "where": {
+        "kind": "binaryExpr",
+        "op": "=",
+        "left": {
+          "kind": "columnRef",
+          "parts": [
+            "id"
+          ]
+        },
+        "right": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    },
+    "leadingComments": [
+      "-- Optimize predicate expression with aggregate function"
+    ]
   },
   {
     "kind": "select",
@@ -1927,6 +3510,68 @@
     }
   },
   {
+    "kind": "explain",
+    "explainType": "SYNTAX",
+    "query": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "asterisk"
+        }
+      ],
+      "from": {
+        "kind": "subqueryFrom",
+        "query": {
+          "kind": "union",
+          "queries": [
+            {
+              "kind": "select",
+              "select": [
+                {
+                  "kind": "asterisk"
+                }
+              ],
+              "from": {
+                "kind": "tableRef",
+                "table": "test_00597"
+              }
+            },
+            {
+              "kind": "select",
+              "select": [
+                {
+                  "kind": "asterisk"
+                }
+              ],
+              "from": {
+                "kind": "tableRef",
+                "table": "test_00597"
+              }
+            }
+          ]
+        }
+      },
+      "where": {
+        "kind": "binaryExpr",
+        "op": "=",
+        "left": {
+          "kind": "columnRef",
+          "parts": [
+            "id"
+          ]
+        },
+        "right": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    },
+    "leadingComments": [
+      "-- Optimize predicate expression with union all query"
+    ]
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -1980,6 +3625,76 @@
         "value": "1"
       }
     }
+  },
+  {
+    "kind": "explain",
+    "explainType": "SYNTAX",
+    "query": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "asterisk"
+        }
+      ],
+      "from": {
+        "left": {
+          "kind": "subqueryFrom",
+          "query": {
+            "kind": "select",
+            "select": [
+              {
+                "kind": "asterisk"
+              }
+            ],
+            "from": {
+              "kind": "tableRef",
+              "table": "test_00597"
+            }
+          }
+        },
+        "kind": "joinExpr",
+        "joinType": "LEFT",
+        "right": {
+          "kind": "subqueryFrom",
+          "query": {
+            "kind": "select",
+            "select": [
+              {
+                "kind": "asterisk"
+              }
+            ],
+            "from": {
+              "kind": "tableRef",
+              "table": "test_00597"
+            }
+          }
+        },
+        "constraint": {
+          "kind": "using",
+          "columns": [
+            "id"
+          ]
+        }
+      },
+      "where": {
+        "kind": "binaryExpr",
+        "op": "=",
+        "left": {
+          "kind": "columnRef",
+          "parts": [
+            "id"
+          ]
+        },
+        "right": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    },
+    "leadingComments": [
+      "-- Optimize predicate expression with join query"
+    ]
   },
   {
     "kind": "select",
@@ -2128,6 +3843,70 @@
     ]
   },
   {
+    "kind": "explain",
+    "explainType": "SYNTAX",
+    "query": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "asterisk"
+        }
+      ],
+      "from": {
+        "left": {
+          "kind": "subqueryFrom",
+          "query": {
+            "kind": "select",
+            "select": [
+              {
+                "kind": "alias",
+                "expr": {
+                  "kind": "functionCall",
+                  "name": "toInt8",
+                  "args": [
+                    {
+                      "kind": "literal",
+                      "type": "UInt64",
+                      "value": "1"
+                    }
+                  ]
+                },
+                "alias": "id"
+              }
+            ]
+          }
+        },
+        "kind": "joinExpr",
+        "joinType": "LEFT",
+        "right": {
+          "kind": "tableRef",
+          "table": "test_00597"
+        },
+        "constraint": {
+          "kind": "using",
+          "columns": [
+            "id"
+          ]
+        }
+      },
+      "where": {
+        "kind": "binaryExpr",
+        "op": "=",
+        "left": {
+          "kind": "columnRef",
+          "parts": [
+            "value"
+          ]
+        },
+        "right": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    }
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -2186,6 +3965,78 @@
         "value": "1"
       }
     }
+  },
+  {
+    "kind": "explain",
+    "explainType": "SYNTAX",
+    "query": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "b",
+            "value"
+          ]
+        }
+      ],
+      "from": {
+        "left": {
+          "kind": "subqueryFrom",
+          "query": {
+            "kind": "select",
+            "select": [
+              {
+                "kind": "alias",
+                "expr": {
+                  "kind": "functionCall",
+                  "name": "toInt8",
+                  "args": [
+                    {
+                      "kind": "literal",
+                      "type": "UInt64",
+                      "value": "1"
+                    }
+                  ]
+                },
+                "alias": "id"
+              }
+            ]
+          }
+        },
+        "kind": "joinExpr",
+        "joinType": "LEFT",
+        "right": {
+          "kind": "tableRef",
+          "table": "test_00597",
+          "alias": "b"
+        },
+        "constraint": {
+          "kind": "using",
+          "columns": [
+            "id"
+          ]
+        }
+      },
+      "where": {
+        "kind": "binaryExpr",
+        "op": "=",
+        "left": {
+          "kind": "columnRef",
+          "parts": [
+            "value"
+          ]
+        },
+        "right": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    },
+    "leadingComments": [
+      "-- FIXME: no support for aliased tables for now."
+    ]
   },
   {
     "kind": "select",
@@ -2253,6 +4104,87 @@
     }
   },
   {
+    "kind": "explain",
+    "explainType": "SYNTAX",
+    "query": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "asterisk"
+        }
+      ],
+      "from": {
+        "kind": "subqueryFrom",
+        "query": {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "asterisk"
+            }
+          ],
+          "from": {
+            "left": {
+              "kind": "subqueryFrom",
+              "query": {
+                "kind": "select",
+                "select": [
+                  {
+                    "kind": "asterisk"
+                  }
+                ],
+                "from": {
+                  "kind": "tableRef",
+                  "table": "test_00597"
+                }
+              }
+            },
+            "kind": "joinExpr",
+            "joinType": "LEFT",
+            "right": {
+              "kind": "subqueryFrom",
+              "query": {
+                "kind": "select",
+                "select": [
+                  {
+                    "kind": "asterisk"
+                  }
+                ],
+                "from": {
+                  "kind": "tableRef",
+                  "table": "test_00597"
+                }
+              }
+            },
+            "constraint": {
+              "kind": "using",
+              "columns": [
+                "id"
+              ]
+            }
+          }
+        }
+      },
+      "where": {
+        "kind": "binaryExpr",
+        "op": "=",
+        "left": {
+          "kind": "columnRef",
+          "parts": [
+            "id"
+          ]
+        },
+        "right": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    },
+    "leadingComments": [
+      "-- Optimize predicate expression with join and nested subquery"
+    ]
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -2421,6 +4353,78 @@
     ]
   },
   {
+    "kind": "explain",
+    "explainType": "SYNTAX",
+    "query": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "asterisk"
+        }
+      ],
+      "from": {
+        "left": {
+          "kind": "subqueryFrom",
+          "query": {
+            "kind": "select",
+            "select": [
+              {
+                "kind": "asterisk"
+              }
+            ],
+            "from": {
+              "kind": "tableRef",
+              "table": "test_00597"
+            }
+          }
+        },
+        "kind": "joinExpr",
+        "joinType": "LEFT",
+        "right": {
+          "kind": "subqueryFrom",
+          "query": {
+            "kind": "select",
+            "select": [
+              {
+                "kind": "asterisk"
+              }
+            ],
+            "from": {
+              "kind": "tableRef",
+              "table": "test_00597"
+            }
+          },
+          "alias": "b"
+        },
+        "constraint": {
+          "kind": "using",
+          "columns": [
+            "id"
+          ]
+        }
+      },
+      "where": {
+        "kind": "binaryExpr",
+        "op": "=",
+        "left": {
+          "kind": "columnRef",
+          "parts": [
+            "b",
+            "id"
+          ]
+        },
+        "right": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    },
+    "leadingComments": [
+      "-- Optimize predicate expression with join query and qualified"
+    ]
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -2568,6 +4572,120 @@
           "value": "1"
         }
       }
+    ]
+  },
+  {
+    "kind": "explain",
+    "explainType": "SYNTAX",
+    "query": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "asterisk"
+        }
+      ],
+      "from": {
+        "left": {
+          "kind": "subqueryFrom",
+          "query": {
+            "kind": "select",
+            "select": [
+              {
+                "kind": "alias",
+                "expr": {
+                  "kind": "functionCall",
+                  "name": "toInt8",
+                  "args": [
+                    {
+                      "kind": "literal",
+                      "type": "UInt64",
+                      "value": "1"
+                    }
+                  ]
+                },
+                "alias": "id"
+              },
+              {
+                "kind": "alias",
+                "expr": {
+                  "kind": "functionCall",
+                  "name": "toDate",
+                  "args": [
+                    {
+                      "kind": "literal",
+                      "type": "String",
+                      "value": "2000-01-01"
+                    }
+                  ]
+                },
+                "alias": "date"
+              }
+            ],
+            "from": {
+              "kind": "tableRef",
+              "database": "system",
+              "table": "numbers"
+            },
+            "limit": {
+              "count": {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "1"
+              }
+            }
+          }
+        },
+        "kind": "joinExpr",
+        "joinType": "LEFT",
+        "right": {
+          "kind": "subqueryFrom",
+          "query": {
+            "kind": "select",
+            "select": [
+              {
+                "kind": "asterisk"
+              }
+            ],
+            "from": {
+              "kind": "tableRef",
+              "table": "test_00597"
+            }
+          },
+          "alias": "b"
+        },
+        "constraint": {
+          "kind": "using",
+          "columns": [
+            "date",
+            "id"
+          ]
+        }
+      },
+      "where": {
+        "kind": "binaryExpr",
+        "op": "=",
+        "left": {
+          "kind": "columnRef",
+          "parts": [
+            "b",
+            "date"
+          ]
+        },
+        "right": {
+          "kind": "functionCall",
+          "name": "toDate",
+          "args": [
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "2000-01-01"
+            }
+          ]
+        }
+      }
+    },
+    "leadingComments": [
+      "-- Compatibility test"
     ]
   },
   {
@@ -2803,6 +4921,101 @@
         }
       }
     ]
+  },
+  {
+    "kind": "explain",
+    "explainType": "SYNTAX",
+    "query": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "asterisk"
+        }
+      ],
+      "from": {
+        "kind": "subqueryFrom",
+        "query": {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "asterisk"
+            }
+          ],
+          "from": {
+            "left": {
+              "kind": "subqueryFrom",
+              "query": {
+                "kind": "select",
+                "select": [
+                  {
+                    "kind": "asterisk"
+                  }
+                ],
+                "from": {
+                  "kind": "tableRef",
+                  "table": "test_00597"
+                }
+              },
+              "alias": "a"
+            },
+            "kind": "joinExpr",
+            "joinType": "LEFT",
+            "right": {
+              "kind": "subqueryFrom",
+              "query": {
+                "kind": "select",
+                "select": [
+                  {
+                    "kind": "asterisk"
+                  }
+                ],
+                "from": {
+                  "kind": "tableRef",
+                  "table": "test_00597"
+                }
+              },
+              "alias": "b"
+            },
+            "constraint": {
+              "kind": "on",
+              "expr": {
+                "kind": "binaryExpr",
+                "op": "=",
+                "left": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "a",
+                    "id"
+                  ]
+                },
+                "right": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "b",
+                    "id"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      },
+      "where": {
+        "kind": "binaryExpr",
+        "op": "=",
+        "left": {
+          "kind": "columnRef",
+          "parts": [
+            "id"
+          ]
+        },
+        "right": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    }
   },
   {
     "kind": "select",
@@ -2896,6 +5109,89 @@
     }
   },
   {
+    "kind": "explain",
+    "explainType": "SYNTAX",
+    "query": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "asterisk"
+        }
+      ],
+      "from": {
+        "left": {
+          "kind": "subqueryFrom",
+          "query": {
+            "kind": "select",
+            "select": [
+              {
+                "kind": "asterisk"
+              }
+            ],
+            "from": {
+              "kind": "tableRef",
+              "table": "test_00597"
+            }
+          }
+        },
+        "kind": "joinExpr",
+        "joinType": "INNER",
+        "right": {
+          "kind": "subqueryFrom",
+          "query": {
+            "kind": "select",
+            "select": [
+              {
+                "kind": "asterisk"
+              }
+            ],
+            "from": {
+              "kind": "subqueryFrom",
+              "query": {
+                "kind": "select",
+                "select": [
+                  {
+                    "kind": "asterisk"
+                  }
+                ],
+                "from": {
+                  "kind": "tableRef",
+                  "table": "test_00597"
+                }
+              }
+            }
+          },
+          "alias": "r"
+        },
+        "constraint": {
+          "kind": "using",
+          "columns": [
+            "id"
+          ]
+        }
+      },
+      "where": {
+        "kind": "binaryExpr",
+        "op": "=",
+        "left": {
+          "kind": "columnRef",
+          "parts": [
+            "r",
+            "id"
+          ]
+        },
+        "right": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    },
+    "leadingComments": [
+      "-- Explain with join subquery"
+    ]
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -3065,6 +5361,96 @@
           "value": "1"
         }
       }
+    ]
+  },
+  {
+    "kind": "explain",
+    "explainType": "SYNTAX",
+    "query": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "alias",
+          "expr": {
+            "kind": "binaryExpr",
+            "op": "+",
+            "left": {
+              "kind": "columnRef",
+              "parts": [
+                "value"
+              ]
+            },
+            "right": {
+              "kind": "columnRef",
+              "parts": [
+                "t1",
+                "value"
+              ]
+            }
+          },
+          "alias": "expr"
+        }
+      ],
+      "from": {
+        "kind": "subqueryFrom",
+        "query": {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "t0",
+                "value"
+              ]
+            },
+            {
+              "kind": "columnRef",
+              "parts": [
+                "t1",
+                "value"
+              ]
+            }
+          ],
+          "from": {
+            "left": {
+              "kind": "tableRef",
+              "table": "test_00597",
+              "alias": "t0"
+            },
+            "kind": "joinExpr",
+            "joinType": "FULL",
+            "right": {
+              "kind": "tableRef",
+              "table": "test_00597",
+              "alias": "t1"
+            },
+            "constraint": {
+              "kind": "using",
+              "columns": [
+                "date"
+              ]
+            }
+          }
+        }
+      },
+      "where": {
+        "kind": "binaryExpr",
+        "op": "<",
+        "left": {
+          "kind": "columnRef",
+          "parts": [
+            "expr"
+          ]
+        },
+        "right": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "3"
+        }
+      }
+    },
+    "leadingComments": [
+      "-- issue 20497"
     ]
   },
   {

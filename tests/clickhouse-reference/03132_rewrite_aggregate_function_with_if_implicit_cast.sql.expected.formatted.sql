@@ -8,7 +8,19 @@ SELECT
     toTypeName(a)
 FROM numbers(100) AS a;
 
+EXPLAIN QUERY TREE
+SELECT
+    any(if((number % 10) = 5, number, CAST(NULL, 'Nullable(Int128)'))) AS a,
+    toTypeName(a)
+FROM numbers(100);
+
 SELECT
     any(if((number % 10) = 5, CAST(NULL, 'Nullable(Int128)'), number)) AS a,
     toTypeName(a)
 FROM numbers(100) AS a;
+
+EXPLAIN QUERY TREE
+SELECT
+    any(if((number % 10) = 5, CAST(NULL, 'Nullable(Int128)'), number)) AS a,
+    toTypeName(a)
+FROM numbers(100);

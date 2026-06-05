@@ -16,6 +16,11 @@ SETTINGS index_granularity = 1, add_minmax_index_for_numeric_columns = 0;
 INSERT INTO test SELECT number
 FROM numbers(1000);
 
+EXPLAIN indexes = 1
+SELECT *
+FROM test
+WHERE CAST(x, 'String') = '100';
+
 DROP TABLE test;
 
 CREATE TABLE test

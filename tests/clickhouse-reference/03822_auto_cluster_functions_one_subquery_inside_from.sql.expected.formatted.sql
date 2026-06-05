@@ -14,6 +14,13 @@ SET enable_join_runtime_filters = 0;
 
 SET parallel_replicas_for_cluster_engines = true;
 
+EXPLAIN
+SELECT *
+FROM (
+        SELECT *
+        FROM s3('http://localhost:11111/test/a.tsv', 'TSV')
+    );
+
 SELECT count()
 FROM s3('http://localhost:11111/test/a.tsv', 'TSV');
 

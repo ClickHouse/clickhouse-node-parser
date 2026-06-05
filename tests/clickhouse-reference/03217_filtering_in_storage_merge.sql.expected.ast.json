@@ -151,5 +151,88 @@
   {
     "kind": "system",
     "body": "SYSTEM SYNC REPLICA test_03217_merge_replica_2"
+  },
+  {
+    "kind": "explain",
+    "query": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "_table"
+          ]
+        },
+        {
+          "kind": "functionCall",
+          "name": "count",
+          "args": []
+        }
+      ],
+      "from": {
+        "kind": "tableRef",
+        "table": "test_03217_all_replicas"
+      },
+      "where": {
+        "kind": "naryExpr",
+        "op": "AND",
+        "operands": [
+          {
+            "kind": "binaryExpr",
+            "op": "=",
+            "left": {
+              "kind": "columnRef",
+              "parts": [
+                "_table"
+              ]
+            },
+            "right": {
+              "kind": "literal",
+              "type": "String",
+              "value": "test_03217_merge_replica_1"
+            }
+          },
+          {
+            "kind": "binaryExpr",
+            "op": ">=",
+            "left": {
+              "kind": "columnRef",
+              "parts": [
+                "x"
+              ]
+            },
+            "right": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "0"
+            }
+          }
+        ]
+      },
+      "groupBy": {
+        "kind": "expressions",
+        "items": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "_table"
+            ]
+          }
+        ]
+      },
+      "settings": [
+        {
+          "name": "enable_analyzer",
+          "value": {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "1"
+          }
+        }
+      ]
+    },
+    "leadingComments": [
+      "-- If the filter on _table is not applied, then the plan will show both replicas"
+    ]
   }
 ]

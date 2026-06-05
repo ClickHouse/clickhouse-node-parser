@@ -33,6 +33,122 @@ INSERT INTO column_swap_test_test SELECT
 FROM `system`.numbers
 LIMIT 1000000;
 
+EXPLAIN SYNTAX
+SELECT
+    cityHash64(a) + 10,
+    b + 3
+FROM column_swap_test_test
+WHERE cityHash64(a) = 1;
+
+EXPLAIN QUERY TREE
+SELECT
+    cityHash64(a) + 10,
+    b + 3
+FROM column_swap_test_test
+WHERE cityHash64(a) = 1
+SETTINGS enable_analyzer = 1;
+
+EXPLAIN SYNTAX
+SELECT
+    cityHash64(a) + 10,
+    b + 3
+FROM column_swap_test_test
+PREWHERE cityHash64(a) = 1;
+
+EXPLAIN QUERY TREE
+SELECT
+    cityHash64(a) + 10,
+    b + 3
+FROM column_swap_test_test
+PREWHERE cityHash64(a) = 1
+SETTINGS enable_analyzer = 1;
+
+EXPLAIN SYNTAX
+SELECT
+    cityHash64(a) + 10,
+    b + 3
+FROM column_swap_test_test
+WHERE cityHash64(a) = 0;
+
+EXPLAIN QUERY TREE
+SELECT
+    cityHash64(a) + 10,
+    b + 3
+FROM column_swap_test_test
+WHERE cityHash64(a) = 0
+SETTINGS enable_analyzer = 1;
+
+EXPLAIN SYNTAX
+SELECT
+    cityHash64(a) + 10,
+    b + 3
+FROM column_swap_test_test
+WHERE b = 0;
+
+EXPLAIN QUERY TREE
+SELECT
+    cityHash64(a) + 10,
+    b + 3
+FROM column_swap_test_test
+WHERE b = 0
+SETTINGS enable_analyzer = 1;
+
+EXPLAIN SYNTAX
+SELECT
+    cityHash64(a) + 10,
+    b + 3
+FROM column_swap_test_test
+WHERE b = 1;
+
+EXPLAIN QUERY TREE
+SELECT
+    cityHash64(a) + 10,
+    b + 3
+FROM column_swap_test_test
+WHERE b = 1
+SETTINGS enable_analyzer = 1;
+
+EXPLAIN SYNTAX
+SELECT cityHash64(a) + 10
+FROM column_swap_test_test
+WHERE cityHash64(a) = 0;
+
+EXPLAIN QUERY TREE
+SELECT cityHash64(a) + 10
+FROM column_swap_test_test
+WHERE cityHash64(a) = 0
+SETTINGS enable_analyzer = 1;
+
+EXPLAIN SYNTAX
+SELECT
+    cityHash64(a) + 10,
+    a
+FROM column_swap_test_test
+WHERE cityHash64(a) = 0;
+
+EXPLAIN QUERY TREE
+SELECT
+    cityHash64(a) + 10,
+    a
+FROM column_swap_test_test
+WHERE cityHash64(a) = 0
+SETTINGS enable_analyzer = 1;
+
+EXPLAIN SYNTAX
+SELECT
+    b + 10,
+    a
+FROM column_swap_test_test
+WHERE b = 0;
+
+EXPLAIN QUERY TREE
+SELECT
+    b + 10,
+    a
+FROM column_swap_test_test
+WHERE b = 0
+SETTINGS enable_analyzer = 1;
+
 DROP TABLE column_swap_test_test;
 
 CREATE TABLE column_swap_test_test
@@ -53,6 +169,62 @@ INSERT INTO column_swap_test_test SELECT
 FROM `system`.numbers
 LIMIT 1000000;
 
+EXPLAIN SYNTAX
+SELECT
+    substring(reverse(b), 1, 1),
+    a
+FROM column_swap_test_test
+WHERE a = 'c';
+
+EXPLAIN QUERY TREE
+SELECT
+    substring(reverse(b), 1, 1),
+    a
+FROM column_swap_test_test
+WHERE a = 'c'
+SETTINGS enable_analyzer = 1;
+
+EXPLAIN SYNTAX
+SELECT
+    substring(reverse(b), 1, 1),
+    a
+FROM column_swap_test_test
+WHERE substring(reverse(b), 1, 1) = 'c';
+
+EXPLAIN QUERY TREE
+SELECT
+    substring(reverse(b), 1, 1),
+    a
+FROM column_swap_test_test
+WHERE substring(reverse(b), 1, 1) = 'c'
+SETTINGS enable_analyzer = 1;
+
+EXPLAIN SYNTAX
+SELECT
+    substring(reverse(b), 1, 1) AS t1,
+    a AS t2
+FROM column_swap_test_test
+WHERE substring(reverse(b), 1, 1) = 'c';
+
+EXPLAIN QUERY TREE
+SELECT
+    substring(reverse(b), 1, 1) AS t1,
+    a AS t2
+FROM column_swap_test_test
+WHERE substring(reverse(b), 1, 1) = 'c'
+SETTINGS enable_analyzer = 1;
+
+EXPLAIN SYNTAX
+SELECT substring(reverse(b), 1, 1)
+FROM column_swap_test_test
+WHERE substring(reverse(b), 1, 1) = 'c';
+
+EXPLAIN QUERY TREE
+SELECT substring(reverse(b), 1, 1)
+FROM column_swap_test_test
+WHERE substring(reverse(b), 1, 1) = 'c'
+SETTINGS enable_analyzer = 1;
+
 DROP TABLE IF EXISTS t_bad_constraint;
 
 CREATE TABLE t_bad_constraint
@@ -68,5 +240,14 @@ INSERT INTO t_bad_constraint SELECT
     number,
     randomPrintableASCII(100)
 FROM numbers(10000);
+
+EXPLAIN SYNTAX
+SELECT a
+FROM t_bad_constraint;
+
+EXPLAIN QUERY TREE
+SELECT a
+FROM t_bad_constraint
+SETTINGS enable_analyzer = 1;
 
 DROP TABLE t_bad_constraint;

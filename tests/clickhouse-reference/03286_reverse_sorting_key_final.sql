@@ -10,6 +10,7 @@ CREATE TABLE t0(a Int, b Int) Engine=ReplacingMergeTree order by (a desc, b desc
 INSERT INTO t0 select number, number from numbers(5);
 INSERT INTO t0 select number, number from numbers(5, 2);
 set max_threads = 2;
+explain pipeline select * from t0 final SETTINGS enable_vertical_final = 0;
 -- PartsSplitter is disabled when some keys are in ascending order while others are in descending order.
 CREATE TABLE t0(a Int, b Int) Engine=ReplacingMergeTree order by (a desc, b) SETTINGS allow_experimental_reverse_key = 1, index_granularity = 8192, index_granularity_bytes = '10Mi';
 INSERT INTO t0 select number, number from numbers(5,2);

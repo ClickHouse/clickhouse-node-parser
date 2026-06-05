@@ -218,3 +218,7 @@ SELECT LpNorm((1, 2, 3), -1); -- { serverError ILLEGAL_COLUMN }
 SELECT LpNorm((1, 2, 3), 0.); -- { serverError ARGUMENT_OUT_OF_BOUND }
 
 SELECT cosineDistance(materialize((NULL, -2147483648)), (1048577, 1048575));
+
+-- not extra parentheses
+EXPLAIN SYNTAX
+SELECT negate(((3, 7, 3), 100));

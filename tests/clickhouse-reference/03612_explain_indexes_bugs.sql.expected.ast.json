@@ -83,6 +83,393 @@
     }
   },
   {
+    "kind": "explain",
+    "settings": [
+      {
+        "name": "indexes",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ],
+    "query": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "asterisk"
+        }
+      ],
+      "from": {
+        "kind": "tableRef",
+        "table": "points"
+      },
+      "where": {
+        "kind": "functionCall",
+        "name": "pointInPolygon",
+        "args": [
+          {
+            "kind": "tupleLiteral",
+            "elements": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "x"
+                ]
+              },
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "y"
+                ]
+              }
+            ],
+            "source": "(x, y)"
+          },
+          {
+            "kind": "arrayLiteral",
+            "elements": [
+              {
+                "kind": "tupleLiteral",
+                "elements": [
+                  {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "0"
+                  },
+                  {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "0"
+                  }
+                ],
+                "source": "(0,0)"
+              },
+              {
+                "kind": "tupleLiteral",
+                "elements": [
+                  {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "0"
+                  },
+                  {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "150"
+                  }
+                ],
+                "source": "(0,150)"
+              },
+              {
+                "kind": "tupleLiteral",
+                "elements": [
+                  {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "150"
+                  },
+                  {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "150"
+                  }
+                ],
+                "source": "(150,150)"
+              },
+              {
+                "kind": "tupleLiteral",
+                "elements": [
+                  {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "150"
+                  },
+                  {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "0"
+                  }
+                ],
+                "source": "(150,0)"
+              }
+            ],
+            "source": "[(0,0),(0,150),(150,150),(150,0)]"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "kind": "explain",
+    "settings": [
+      {
+        "name": "indexes",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ],
+    "query": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "asterisk"
+        }
+      ],
+      "from": {
+        "kind": "tableRef",
+        "table": "points"
+      },
+      "where": {
+        "kind": "binaryExpr",
+        "op": "<",
+        "left": {
+          "kind": "functionCall",
+          "name": "plus",
+          "args": [
+            {
+              "kind": "functionCall",
+              "name": "minus",
+              "args": [
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "x"
+                  ]
+                },
+                {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "1"
+                }
+              ]
+            },
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "10"
+            }
+          ]
+        },
+        "right": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "10"
+        }
+      }
+    }
+  },
+  {
+    "kind": "explain",
+    "settings": [
+      {
+        "name": "indexes",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ],
+    "query": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "asterisk"
+        }
+      ],
+      "from": {
+        "kind": "tableRef",
+        "table": "points"
+      },
+      "where": {
+        "kind": "inExpr",
+        "negated": false,
+        "expr": {
+          "kind": "tupleLiteral",
+          "elements": [
+            {
+              "kind": "functionCall",
+              "name": "plus",
+              "args": [
+                {
+                  "kind": "functionCall",
+                  "name": "minus",
+                  "args": [
+                    {
+                      "kind": "columnRef",
+                      "parts": [
+                        "x"
+                      ]
+                    },
+                    {
+                      "kind": "literal",
+                      "type": "UInt64",
+                      "value": "1"
+                    }
+                  ]
+                },
+                {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "10"
+                }
+              ]
+            },
+            {
+              "kind": "functionCall",
+              "name": "minus",
+              "args": [
+                {
+                  "kind": "functionCall",
+                  "name": "plus",
+                  "args": [
+                    {
+                      "kind": "columnRef",
+                      "parts": [
+                        "y"
+                      ]
+                    },
+                    {
+                      "kind": "literal",
+                      "type": "UInt64",
+                      "value": "2"
+                    }
+                  ]
+                },
+                {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "20"
+                }
+              ]
+            }
+          ],
+          "source": "(plus(minus(x, 1), 10), minus(plus(y, 2), 20))"
+        },
+        "values": [
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "10"
+          },
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "20"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "kind": "explain",
+    "settings": [
+      {
+        "name": "indexes",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ],
+    "query": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "asterisk"
+        }
+      ],
+      "from": {
+        "kind": "tableRef",
+        "table": "points"
+      },
+      "where": {
+        "kind": "inExpr",
+        "negated": false,
+        "expr": {
+          "kind": "tupleLiteral",
+          "elements": [
+            {
+              "kind": "functionCall",
+              "name": "plus",
+              "args": [
+                {
+                  "kind": "functionCall",
+                  "name": "minus",
+                  "args": [
+                    {
+                      "kind": "columnRef",
+                      "parts": [
+                        "x"
+                      ]
+                    },
+                    {
+                      "kind": "literal",
+                      "type": "UInt64",
+                      "value": "1"
+                    }
+                  ]
+                },
+                {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "10"
+                }
+              ]
+            },
+            {
+              "kind": "functionCall",
+              "name": "minus",
+              "args": [
+                {
+                  "kind": "functionCall",
+                  "name": "plus",
+                  "args": [
+                    {
+                      "kind": "columnRef",
+                      "parts": [
+                        "x"
+                      ]
+                    },
+                    {
+                      "kind": "literal",
+                      "type": "UInt64",
+                      "value": "2"
+                    }
+                  ]
+                },
+                {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "20"
+                }
+              ]
+            }
+          ],
+          "source": "(plus(minus(x, 1), 10), minus(plus(x, 2), 20))"
+        },
+        "values": [
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "10"
+          },
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "20"
+          }
+        ]
+      }
+    }
+  },
+  {
     "kind": "createTable",
     "table": {
       "kind": "tableRef",
@@ -148,6 +535,108 @@
       "table": {
         "kind": "tableRef",
         "table": "morton"
+      }
+    }
+  },
+  {
+    "kind": "explain",
+    "settings": [
+      {
+        "name": "indexes",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ],
+    "query": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "asterisk"
+        }
+      ],
+      "from": {
+        "kind": "tableRef",
+        "table": "morton"
+      },
+      "where": {
+        "kind": "binaryExpr",
+        "op": ">",
+        "left": {
+          "kind": "columnRef",
+          "parts": [
+            "x"
+          ]
+        },
+        "right": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "100"
+        }
+      }
+    }
+  },
+  {
+    "kind": "explain",
+    "settings": [
+      {
+        "name": "indexes",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ],
+    "query": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "binaryExpr",
+          "op": "+",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "x"
+            ]
+          },
+          "right": {
+            "kind": "columnRef",
+            "parts": [
+              "y"
+            ]
+          }
+        }
+      ],
+      "from": {
+        "kind": "tableRef",
+        "table": "morton"
+      },
+      "where": {
+        "kind": "binaryExpr",
+        "op": "=",
+        "left": {
+          "kind": "binaryExpr",
+          "op": "+",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "x"
+            ]
+          },
+          "right": {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "1"
+          }
+        },
+        "right": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "101"
+        }
       }
     }
   },

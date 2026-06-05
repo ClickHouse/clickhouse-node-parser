@@ -23,6 +23,20 @@ SET enable_parallel_replicas = 0; -- Optimization requires LogicalJoinStep
 
 SET parallel_hash_join_threshold = 0;
 
+-- { echoOn }
+EXPLAIN PLAN actions = 1
+SELECT *
+FROM (
+        SELECT *
+        FROM
+            users AS u1
+        INNER JOIN users AS u2
+            ON 1
+    )
+WHERE age = u2.age
+ORDER BY `ALL` ASC
+SETTINGS enable_join_runtime_filters = 0;
+
 SELECT *
 FROM (
         SELECT *
@@ -34,6 +48,18 @@ FROM (
 WHERE age = u2.age
 ORDER BY `ALL` ASC;
 
+EXPLAIN PLAN actions = 1
+SELECT *
+FROM (
+        SELECT *
+        FROM
+            users AS u1
+        CROSS JOIN users AS u2
+    )
+WHERE age = u2.age
+ORDER BY `ALL` ASC
+SETTINGS enable_join_runtime_filters = 0;
+
 SELECT *
 FROM (
         SELECT *
@@ -43,3 +69,42 @@ FROM (
     )
 WHERE age = u2.age
 ORDER BY `ALL` ASC;
+
+EXPLAIN PLAN actions = 1
+SELECT *
+FROM (
+        SELECT *
+        FROM
+            users AS u1
+        INNER JOIN users AS u2
+            ON 1
+    )
+WHERE age = u2.age
+ORDER BY `ALL` ASC
+SETTINGS enable_join_runtime_filters = 0;
+
+EXPLAIN PLAN actions = 1
+SELECT *
+FROM (
+        SELECT *
+        FROM
+            users AS u1
+        FULL JOIN users AS u2
+            ON 1
+    )
+WHERE age = u2.age
+ORDER BY `ALL` ASC
+SETTINGS enable_join_runtime_filters = 0;
+
+EXPLAIN PLAN actions = 1
+SELECT *
+FROM (
+        SELECT *
+        FROM
+            users AS u1
+        INNER JOIN users AS u2
+            ON 1
+    )
+WHERE age = u2.age
+ORDER BY `ALL` ASC
+SETTINGS enable_join_runtime_filters = 0;

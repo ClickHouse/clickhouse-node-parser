@@ -59,6 +59,12 @@ SELECT sum(struct.key) == 30, sum(struct.value) == 30 FROM (SELECT struct.key, s
 -- lambda parameters in filter should not be rewrite
 SELECT count() == 10 FROM test_table WHERE  arrayMap((day) -> day + 1, [1,2,3]) [1] = 2 AND day = '2020-01-03';
 set max_rows_to_read = 0;
+EXPLAIN description = 0 SELECT day AS s FROM test_table ORDER BY s LIMIT 1 SETTINGS optimize_read_in_order = 0;
+EXPLAIN description = 0 SELECT day AS s FROM test_table ORDER BY s LIMIT 1 SETTINGS optimize_read_in_order = 1;
+EXPLAIN description = 0 SELECT toDate(timestamp) AS s FROM test_table ORDER BY toDate(timestamp) LIMIT 1 SETTINGS optimize_read_in_order = 1;
+EXPLAIN description = 0 SELECT day, count() AS s FROM test_table GROUP BY day SETTINGS optimize_aggregation_in_order = 0;
+EXPLAIN description = 0 SELECT day, count() AS s FROM test_table GROUP BY day SETTINGS optimize_aggregation_in_order = 1;
+EXPLAIN description = 0 SELECT toDate(timestamp), count() AS s FROM test_table GROUP BY toDate(timestamp) SETTINGS optimize_aggregation_in_order = 1;
 DROP TABLE test_table;
 DROP TABLE IF EXISTS test_index;
 CREATE TABLE test_index

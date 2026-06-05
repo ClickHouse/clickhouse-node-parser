@@ -37,6 +37,12 @@ SET apply_patch_parts = 0;
 SELECT count()
 FROM merge;
 
+-- can use the trivial count optimization
+EXPLAIN
+SELECT count()
+FROM merge
+SETTINGS enable_analyzer = 0;
+
 CREATE TABLE mt3
 (
     id UInt64

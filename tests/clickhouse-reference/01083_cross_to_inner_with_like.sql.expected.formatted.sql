@@ -19,6 +19,30 @@ ENGINE = Memory;
 
 SET enable_optimize_predicate_expression = 0;
 
+EXPLAIN SYNTAX
+SELECT *
+FROM
+    n
+CROSS JOIN r
+WHERE n.k = r.k
+    AND r.name = 'A';
+
+EXPLAIN SYNTAX
+SELECT *
+FROM
+    n
+CROSS JOIN r
+WHERE n.k = r.k
+    AND like(r.name, 'A%');
+
+EXPLAIN SYNTAX
+SELECT *
+FROM
+    n
+CROSS JOIN r
+WHERE n.k = r.k
+    AND notLike(r.name, 'A%');
+
 DROP TABLE n;
 
 DROP TABLE r;

@@ -36,6 +36,10 @@ SET deduplicate_blocks_in_dependent_materialized_views = 0;
 
 SET materialized_views_squash_parallel_inserts = 1;
 
+EXPLAIN PIPELINE
+INSERT INTO `03633_mv_src` SELECT *
+FROM `system`.one;
+
 SET materialized_views_squash_parallel_inserts = 0;
 
 SET deduplicate_blocks_in_dependent_materialized_views = 1;

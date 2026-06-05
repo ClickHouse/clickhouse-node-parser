@@ -41,6 +41,26 @@ ORDER BY
     i ASC
 LIMIT 5;
 
+EXPLAIN PIPELINE
+SELECT
+    toStartOfMonth(date) AS d,
+    i
+FROM t_read_in_order
+ORDER BY
+    d ASC,
+    i ASC
+LIMIT 5;
+
+SELECT
+    toStartOfMonth(date) AS d,
+    i
+FROM t_read_in_order
+ORDER BY
+    d DESC,
+    negate(i) ASC
+LIMIT 5;
+
+EXPLAIN PIPELINE
 SELECT
     toStartOfMonth(date) AS d,
     i
@@ -60,6 +80,16 @@ ORDER BY
     negate(i) ASC
 LIMIT 5;
 
+EXPLAIN PIPELINE
+SELECT
+    toStartOfMonth(date) AS d,
+    i
+FROM t_read_in_order
+ORDER BY
+    d ASC,
+    negate(i) ASC
+LIMIT 5;
+
 SELECT
     date,
     i
@@ -68,6 +98,26 @@ WHERE date = '2020-10-11'
 ORDER BY i ASC
 LIMIT 5;
 
+EXPLAIN PIPELINE
+SELECT
+    date,
+    i
+FROM t_read_in_order
+WHERE date = '2020-10-11'
+ORDER BY i ASC
+LIMIT 5
+SETTINGS enable_analyzer = 0;
+
+EXPLAIN PIPELINE
+SELECT
+    date,
+    i
+FROM t_read_in_order
+WHERE date = '2020-10-11'
+ORDER BY i ASC
+LIMIT 5
+SETTINGS enable_analyzer = 1;
+
 SELECT *
 FROM t_read_in_order
 WHERE date = '2020-10-11'
@@ -75,6 +125,26 @@ ORDER BY
     i ASC,
     v ASC
 LIMIT 5;
+
+EXPLAIN PIPELINE
+SELECT *
+FROM t_read_in_order
+WHERE date = '2020-10-11'
+ORDER BY
+    i ASC,
+    v ASC
+LIMIT 5
+SETTINGS enable_analyzer = 0;
+
+EXPLAIN PIPELINE
+SELECT *
+FROM t_read_in_order
+WHERE date = '2020-10-11'
+ORDER BY
+    i ASC,
+    v ASC
+LIMIT 5
+SETTINGS enable_analyzer = 1;
 
 INSERT INTO t_read_in_order SELECT
     '2020-10-12',
@@ -89,6 +159,35 @@ FROM t_read_in_order
 WHERE date = '2020-10-12'
 ORDER BY i ASC
 LIMIT 5;
+
+EXPLAIN SYNTAX
+SELECT
+    date,
+    i
+FROM t_read_in_order
+WHERE date = '2020-10-12'
+ORDER BY i DESC
+LIMIT 5;
+
+EXPLAIN PIPELINE
+SELECT
+    date,
+    i
+FROM t_read_in_order
+WHERE date = '2020-10-12'
+ORDER BY i DESC
+LIMIT 5
+SETTINGS enable_analyzer = 0;
+
+EXPLAIN PIPELINE
+SELECT
+    date,
+    i
+FROM t_read_in_order
+WHERE date = '2020-10-12'
+ORDER BY i DESC
+LIMIT 5
+SETTINGS enable_analyzer = 1;
 
 SELECT
     date,
@@ -144,6 +243,16 @@ INSERT INTO t_read_in_order SELECT
     1 / ((number % 100 + 1)),
     number
 FROM numbers(1000);
+
+EXPLAIN PIPELINE
+SELECT
+    toStartOfDay(dt) AS date,
+    d
+FROM t_read_in_order
+ORDER BY
+    date ASC,
+    round(d) ASC
+LIMIT 5;
 
 SELECT *
 FROM (

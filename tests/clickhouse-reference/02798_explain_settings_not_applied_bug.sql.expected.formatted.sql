@@ -19,4 +19,11 @@ FROM numbers_mt(1e3);
 
 OPTIMIZE TABLE t FINAL;
 
+EXPLAIN PIPELINE
+SELECT a
+FROM t
+GROUP BY a
+FORMAT PrettySpace
+SETTINGS optimize_aggregation_in_order = 1;
+
 DROP TABLE t;

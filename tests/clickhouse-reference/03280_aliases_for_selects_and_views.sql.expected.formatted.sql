@@ -81,6 +81,16 @@ WITH t (a) AS (
 SELECT a
 FROM t;
 
+EXPLAIN QUERY TREE dump_ast = 1
+WITH t (a, b) AS (
+    SELECT
+        1,
+        2
+)
+
+SELECT b
+FROM t;
+
 WITH t (a) AS (
     SELECT
         1,

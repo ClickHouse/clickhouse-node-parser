@@ -4,6 +4,7 @@ set optimize_on_insert = 0;
 INSERT INTO test select number, number from numbers(5);
 INSERT INTO test select number, number from numbers(5,2);
 set max_threads =1;
+explain pipeline select * from test final SETTINGS enable_vertical_final = 0;
 select * from test final;
 set max_threads =2;
 DROP TABLE test;

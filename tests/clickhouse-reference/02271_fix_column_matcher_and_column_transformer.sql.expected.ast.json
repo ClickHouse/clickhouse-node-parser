@@ -2786,6 +2786,996 @@
     "settingsAfterOrderBy": true
   },
   {
+    "kind": "explain",
+    "explainType": "PIPELINE",
+    "settings": [
+      {
+        "name": "header",
+        "value": {
+          "kind": "literal",
+          "type": "Bool",
+          "value": "1"
+        }
+      },
+      {
+        "name": "compact",
+        "value": {
+          "kind": "literal",
+          "type": "Bool",
+          "value": "1"
+        }
+      }
+    ],
+    "query": {
+      "kind": "select",
+      "with": [
+        {
+          "kind": "cteSubquery",
+          "name": "top_repos",
+          "query": {
+            "kind": "union",
+            "queries": [
+              {
+                "kind": "union",
+                "queries": [
+                  {
+                    "kind": "union",
+                    "queries": [
+                      {
+                        "kind": "select",
+                        "select": [
+                          {
+                            "kind": "columnRef",
+                            "parts": [
+                              "repo_name"
+                            ]
+                          }
+                        ],
+                        "from": {
+                          "kind": "tableRef",
+                          "table": "github_events__fuzz_0"
+                        },
+                        "where": {
+                          "kind": "naryExpr",
+                          "op": "AND",
+                          "operands": [
+                            {
+                              "kind": "binaryExpr",
+                              "op": "=",
+                              "left": {
+                                "kind": "columnRef",
+                                "parts": [
+                                  "event_type"
+                                ]
+                              },
+                              "right": {
+                                "kind": "literal",
+                                "type": "String",
+                                "value": "WatchEvent"
+                              },
+                              "parenthesized": true
+                            },
+                            {
+                              "kind": "binaryExpr",
+                              "op": "=",
+                              "left": {
+                                "kind": "functionCall",
+                                "name": "toDate",
+                                "args": [
+                                  {
+                                    "kind": "columnRef",
+                                    "parts": [
+                                      "created_at"
+                                    ]
+                                  }
+                                ]
+                              },
+                              "right": {
+                                "kind": "binaryExpr",
+                                "op": "-",
+                                "left": {
+                                  "kind": "functionCall",
+                                  "name": "today",
+                                  "args": []
+                                },
+                                "right": {
+                                  "kind": "literal",
+                                  "type": "UInt64",
+                                  "value": "1"
+                                },
+                                "parenthesized": true
+                              },
+                              "parenthesized": true
+                            }
+                          ]
+                        },
+                        "groupBy": {
+                          "kind": "expressions",
+                          "items": [
+                            {
+                              "kind": "columnRef",
+                              "parts": [
+                                "repo_name"
+                              ]
+                            }
+                          ]
+                        },
+                        "orderBy": [
+                          {
+                            "kind": "orderByItem",
+                            "expr": {
+                              "kind": "functionCall",
+                              "name": "count",
+                              "args": []
+                            },
+                            "direction": "DESC"
+                          }
+                        ],
+                        "limit": {
+                          "count": {
+                            "kind": "literal",
+                            "type": "UInt64",
+                            "value": "100"
+                          }
+                        }
+                      },
+                      {
+                        "kind": "select",
+                        "select": [
+                          {
+                            "kind": "columnRef",
+                            "parts": [
+                              "repo_name"
+                            ]
+                          }
+                        ],
+                        "from": {
+                          "kind": "tableRef",
+                          "table": "github_events__fuzz_0"
+                        },
+                        "where": {
+                          "kind": "naryExpr",
+                          "op": "AND",
+                          "operands": [
+                            {
+                              "kind": "binaryExpr",
+                              "op": "=",
+                              "left": {
+                                "kind": "columnRef",
+                                "parts": [
+                                  "event_type"
+                                ]
+                              },
+                              "right": {
+                                "kind": "literal",
+                                "type": "String",
+                                "value": "WatchEvent"
+                              },
+                              "parenthesized": true
+                            },
+                            {
+                              "kind": "binaryExpr",
+                              "op": "=",
+                              "left": {
+                                "kind": "functionCall",
+                                "name": "toMonday",
+                                "args": [
+                                  {
+                                    "kind": "columnRef",
+                                    "parts": [
+                                      "created_at"
+                                    ]
+                                  }
+                                ]
+                              },
+                              "right": {
+                                "kind": "functionCall",
+                                "name": "toMonday",
+                                "args": [
+                                  {
+                                    "kind": "binaryExpr",
+                                    "op": "-",
+                                    "left": {
+                                      "kind": "functionCall",
+                                      "name": "today",
+                                      "args": []
+                                    },
+                                    "right": {
+                                      "kind": "functionCall",
+                                      "name": "toIntervalWeek",
+                                      "args": [
+                                        {
+                                          "kind": "literal",
+                                          "type": "UInt64",
+                                          "value": "1"
+                                        }
+                                      ]
+                                    }
+                                  }
+                                ]
+                              },
+                              "parenthesized": true
+                            }
+                          ]
+                        },
+                        "groupBy": {
+                          "kind": "expressions",
+                          "items": [
+                            {
+                              "kind": "columnRef",
+                              "parts": [
+                                "repo_name"
+                              ]
+                            }
+                          ]
+                        },
+                        "orderBy": [
+                          {
+                            "kind": "orderByItem",
+                            "expr": {
+                              "kind": "functionCall",
+                              "name": "count",
+                              "args": []
+                            },
+                            "direction": "DESC"
+                          }
+                        ],
+                        "limit": {
+                          "count": {
+                            "kind": "literal",
+                            "type": "UInt64",
+                            "value": "100"
+                          }
+                        }
+                      }
+                    ],
+                    "unionMode": "DISTINCT"
+                  },
+                  {
+                    "kind": "select",
+                    "select": [
+                      {
+                        "kind": "columnRef",
+                        "parts": [
+                          "repo_name"
+                        ]
+                      }
+                    ],
+                    "from": {
+                      "kind": "tableRef",
+                      "table": "github_events__fuzz_0"
+                    },
+                    "prewhere": {
+                      "kind": "naryExpr",
+                      "op": "AND",
+                      "operands": [
+                        {
+                          "kind": "binaryExpr",
+                          "op": "=",
+                          "left": {
+                            "kind": "columnRef",
+                            "parts": [
+                              "event_type"
+                            ]
+                          },
+                          "right": {
+                            "kind": "literal",
+                            "type": "String",
+                            "value": "WatchEvent"
+                          },
+                          "parenthesized": true
+                        },
+                        {
+                          "kind": "binaryExpr",
+                          "op": "=",
+                          "left": {
+                            "kind": "functionCall",
+                            "name": "toStartOfMonth",
+                            "args": [
+                              {
+                                "kind": "columnRef",
+                                "parts": [
+                                  "created_at"
+                                ]
+                              }
+                            ]
+                          },
+                          "right": {
+                            "kind": "binaryExpr",
+                            "op": "-",
+                            "left": {
+                              "kind": "functionCall",
+                              "name": "toStartOfMonth",
+                              "args": [
+                                {
+                                  "kind": "functionCall",
+                                  "name": "today",
+                                  "args": []
+                                }
+                              ]
+                            },
+                            "right": {
+                              "kind": "functionCall",
+                              "name": "toIntervalMonth",
+                              "args": [
+                                {
+                                  "kind": "literal",
+                                  "type": "UInt64",
+                                  "value": "1"
+                                }
+                              ]
+                            },
+                            "parenthesized": true
+                          },
+                          "parenthesized": true
+                        }
+                      ]
+                    },
+                    "groupBy": {
+                      "kind": "expressions",
+                      "items": [
+                        {
+                          "kind": "columnRef",
+                          "parts": [
+                            "repo_name"
+                          ]
+                        }
+                      ]
+                    },
+                    "orderBy": [
+                      {
+                        "kind": "orderByItem",
+                        "expr": {
+                          "kind": "functionCall",
+                          "name": "count",
+                          "args": []
+                        },
+                        "direction": "DESC"
+                      }
+                    ],
+                    "limit": {
+                      "count": {
+                        "kind": "literal",
+                        "type": "UInt64",
+                        "value": "100"
+                      }
+                    }
+                  }
+                ],
+                "unionMode": "DISTINCT"
+              },
+              {
+                "kind": "select",
+                "select": [
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "repo_name"
+                    ]
+                  }
+                ],
+                "from": {
+                  "kind": "tableRef",
+                  "table": "github_events"
+                },
+                "where": {
+                  "kind": "naryExpr",
+                  "op": "AND",
+                  "operands": [
+                    {
+                      "kind": "binaryExpr",
+                      "op": "=",
+                      "left": {
+                        "kind": "columnRef",
+                        "parts": [
+                          "event_type"
+                        ]
+                      },
+                      "right": {
+                        "kind": "literal",
+                        "type": "String",
+                        "value": "WatchEvent"
+                      },
+                      "parenthesized": true
+                    },
+                    {
+                      "kind": "binaryExpr",
+                      "op": "=",
+                      "left": {
+                        "kind": "functionCall",
+                        "name": "toYear",
+                        "args": [
+                          {
+                            "kind": "columnRef",
+                            "parts": [
+                              "created_at"
+                            ]
+                          }
+                        ]
+                      },
+                      "right": {
+                        "kind": "binaryExpr",
+                        "op": "-",
+                        "left": {
+                          "kind": "functionCall",
+                          "name": "toYear",
+                          "args": [
+                            {
+                              "kind": "functionCall",
+                              "name": "today",
+                              "args": []
+                            }
+                          ]
+                        },
+                        "right": {
+                          "kind": "literal",
+                          "type": "UInt64",
+                          "value": "1"
+                        },
+                        "parenthesized": true
+                      },
+                      "parenthesized": true
+                    }
+                  ]
+                },
+                "groupBy": {
+                  "kind": "expressions",
+                  "items": [
+                    {
+                      "kind": "columnRef",
+                      "parts": [
+                        "repo_name"
+                      ]
+                    }
+                  ]
+                },
+                "orderBy": [
+                  {
+                    "kind": "orderByItem",
+                    "expr": {
+                      "kind": "functionCall",
+                      "name": "count",
+                      "args": []
+                    },
+                    "direction": "DESC"
+                  }
+                ],
+                "limit": {
+                  "count": {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "100"
+                  }
+                }
+              }
+            ],
+            "unionMode": "DISTINCT"
+          }
+        },
+        {
+          "kind": "cteSubquery",
+          "name": "last_day",
+          "query": {
+            "kind": "select",
+            "select": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "repo_name"
+                ]
+              },
+              {
+                "kind": "alias",
+                "expr": {
+                  "kind": "functionCall",
+                  "name": "count",
+                  "args": []
+                },
+                "alias": "count_last_day"
+              },
+              {
+                "kind": "alias",
+                "expr": {
+                  "kind": "binaryExpr",
+                  "op": "+",
+                  "left": {
+                    "kind": "functionCall",
+                    "name": "rowNumberInAllBlocks",
+                    "args": []
+                  },
+                  "right": {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "1"
+                  }
+                },
+                "alias": "position_last_day"
+              }
+            ],
+            "from": {
+              "kind": "tableRef",
+              "table": "github_events"
+            },
+            "where": {
+              "kind": "naryExpr",
+              "op": "AND",
+              "operands": [
+                {
+                  "kind": "inExpr",
+                  "negated": false,
+                  "expr": {
+                    "kind": "columnRef",
+                    "parts": [
+                      "repo_name"
+                    ]
+                  },
+                  "values": {
+                    "kind": "subqueryExpr",
+                    "query": {
+                      "kind": "select",
+                      "select": [
+                        {
+                          "kind": "columnRef",
+                          "parts": [
+                            "repo_name"
+                          ]
+                        }
+                      ],
+                      "from": {
+                        "kind": "tableRef",
+                        "table": "top_repos"
+                      }
+                    }
+                  },
+                  "parenthesized": true
+                },
+                {
+                  "kind": "binaryExpr",
+                  "op": "=",
+                  "left": {
+                    "kind": "functionCall",
+                    "name": "toDate",
+                    "args": [
+                      {
+                        "kind": "columnRef",
+                        "parts": [
+                          "created_at"
+                        ]
+                      }
+                    ]
+                  },
+                  "right": {
+                    "kind": "binaryExpr",
+                    "op": "-",
+                    "left": {
+                      "kind": "functionCall",
+                      "name": "today",
+                      "args": []
+                    },
+                    "right": {
+                      "kind": "literal",
+                      "type": "UInt64",
+                      "value": "1"
+                    },
+                    "parenthesized": true
+                  },
+                  "parenthesized": true
+                }
+              ]
+            },
+            "groupBy": {
+              "kind": "expressions",
+              "items": [
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "repo_name"
+                  ]
+                }
+              ]
+            },
+            "orderBy": [
+              {
+                "kind": "orderByItem",
+                "expr": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "count_last_day"
+                  ]
+                },
+                "direction": "DESC"
+              }
+            ]
+          }
+        },
+        {
+          "kind": "cteSubquery",
+          "name": "last_week",
+          "query": {
+            "kind": "select",
+            "select": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "repo_name"
+                ]
+              },
+              {
+                "kind": "alias",
+                "expr": {
+                  "kind": "functionCall",
+                  "name": "count",
+                  "args": []
+                },
+                "alias": "count_last_week"
+              },
+              {
+                "kind": "alias",
+                "expr": {
+                  "kind": "binaryExpr",
+                  "op": "+",
+                  "left": {
+                    "kind": "functionCall",
+                    "name": "rowNumberInAllBlocks",
+                    "args": []
+                  },
+                  "right": {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "1"
+                  }
+                },
+                "alias": "position_last_week"
+              }
+            ],
+            "from": {
+              "kind": "tableRef",
+              "table": "github_events"
+            },
+            "where": {
+              "kind": "naryExpr",
+              "op": "AND",
+              "operands": [
+                {
+                  "kind": "inExpr",
+                  "negated": false,
+                  "expr": {
+                    "kind": "columnRef",
+                    "parts": [
+                      "repo_name"
+                    ]
+                  },
+                  "values": {
+                    "kind": "subqueryExpr",
+                    "query": {
+                      "kind": "select",
+                      "select": [
+                        {
+                          "kind": "columnRef",
+                          "parts": [
+                            "repo_name"
+                          ]
+                        }
+                      ],
+                      "from": {
+                        "kind": "tableRef",
+                        "table": "top_repos"
+                      }
+                    }
+                  },
+                  "parenthesized": true
+                },
+                {
+                  "kind": "binaryExpr",
+                  "op": "=",
+                  "left": {
+                    "kind": "functionCall",
+                    "name": "toMonday",
+                    "args": [
+                      {
+                        "kind": "columnRef",
+                        "parts": [
+                          "created_at"
+                        ]
+                      }
+                    ]
+                  },
+                  "right": {
+                    "kind": "binaryExpr",
+                    "op": "-",
+                    "left": {
+                      "kind": "functionCall",
+                      "name": "toMonday",
+                      "args": [
+                        {
+                          "kind": "functionCall",
+                          "name": "today",
+                          "args": []
+                        }
+                      ]
+                    },
+                    "right": {
+                      "kind": "functionCall",
+                      "name": "toIntervalWeek",
+                      "args": [
+                        {
+                          "kind": "literal",
+                          "type": "UInt64",
+                          "value": "2"
+                        }
+                      ]
+                    },
+                    "parenthesized": true
+                  },
+                  "parenthesized": true
+                }
+              ]
+            },
+            "groupBy": {
+              "kind": "expressions",
+              "items": [
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "repo_name"
+                  ]
+                }
+              ]
+            },
+            "orderBy": [
+              {
+                "kind": "orderByItem",
+                "expr": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "count_last_week"
+                  ]
+                },
+                "direction": "DESC"
+              }
+            ]
+          }
+        },
+        {
+          "kind": "cteSubquery",
+          "name": "last_month",
+          "query": {
+            "kind": "select",
+            "select": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "repo_name"
+                ]
+              },
+              {
+                "kind": "alias",
+                "expr": {
+                  "kind": "functionCall",
+                  "name": "count",
+                  "args": []
+                },
+                "alias": "count_last_month"
+              },
+              {
+                "kind": "alias",
+                "expr": {
+                  "kind": "binaryExpr",
+                  "op": "+",
+                  "left": {
+                    "kind": "functionCall",
+                    "name": "rowNumberInAllBlocks",
+                    "args": []
+                  },
+                  "right": {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "1"
+                  }
+                },
+                "alias": "position_last_month"
+              }
+            ],
+            "from": {
+              "kind": "tableRef",
+              "table": "github_events__fuzz_0"
+            },
+            "where": {
+              "kind": "naryExpr",
+              "op": "AND",
+              "operands": [
+                {
+                  "kind": "binaryExpr",
+                  "op": "=",
+                  "left": {
+                    "kind": "literal",
+                    "type": "String",
+                    "value": "deleted"
+                  },
+                  "right": {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "4"
+                  },
+                  "parenthesized": true
+                },
+                {
+                  "kind": "functionCall",
+                  "name": "in",
+                  "args": [
+                    {
+                      "kind": "columnRef",
+                      "parts": [
+                        "repo_name"
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "kind": "binaryExpr",
+                  "op": "=",
+                  "left": {
+                    "kind": "functionCall",
+                    "name": "toStartOfMonth",
+                    "args": [
+                      {
+                        "kind": "columnRef",
+                        "parts": [
+                          "created_at"
+                        ]
+                      }
+                    ]
+                  },
+                  "right": {
+                    "kind": "binaryExpr",
+                    "op": "-",
+                    "left": {
+                      "kind": "functionCall",
+                      "name": "toStartOfMonth",
+                      "args": [
+                        {
+                          "kind": "functionCall",
+                          "name": "today",
+                          "args": []
+                        }
+                      ]
+                    },
+                    "right": {
+                      "kind": "functionCall",
+                      "name": "toIntervalMonth",
+                      "args": [
+                        {
+                          "kind": "literal",
+                          "type": "UInt64",
+                          "value": "1"
+                        }
+                      ]
+                    },
+                    "parenthesized": true
+                  },
+                  "parenthesized": true
+                }
+              ]
+            },
+            "groupBy": {
+              "kind": "expressions",
+              "items": [
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "repo_name"
+                  ]
+                }
+              ]
+            },
+            "orderBy": [
+              {
+                "kind": "orderByItem",
+                "expr": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "count_last_month"
+                  ]
+                },
+                "direction": "DESC"
+              }
+            ]
+          }
+        }
+      ],
+      "select": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "d",
+            "repo_name"
+          ]
+        },
+        {
+          "kind": "functionCall",
+          "name": "COLUMNS",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "count"
+              ]
+            }
+          ]
+        }
+      ],
+      "from": {
+        "left": {
+          "left": {
+            "kind": "tableRef",
+            "table": "last_day",
+            "alias": "d"
+          },
+          "kind": "joinExpr",
+          "joinType": "INNER",
+          "right": {
+            "kind": "tableRef",
+            "table": "last_week",
+            "alias": "w"
+          },
+          "constraint": {
+            "kind": "on",
+            "expr": {
+              "kind": "binaryExpr",
+              "op": "=",
+              "left": {
+                "kind": "columnRef",
+                "parts": [
+                  "d",
+                  "repo_name"
+                ]
+              },
+              "right": {
+                "kind": "columnRef",
+                "parts": [
+                  "w",
+                  "repo_name"
+                ]
+              }
+            }
+          }
+        },
+        "kind": "joinExpr",
+        "joinType": "INNER",
+        "right": {
+          "kind": "tableRef",
+          "table": "last_month",
+          "alias": "m"
+        },
+        "constraint": {
+          "kind": "on",
+          "expr": {
+            "kind": "binaryExpr",
+            "op": "=",
+            "left": {
+              "kind": "columnRef",
+              "parts": [
+                "d",
+                "repo_name"
+              ]
+            },
+            "right": {
+              "kind": "columnRef",
+              "parts": [
+                "m",
+                "repo_name"
+              ]
+            }
+          }
+        }
+      }
+    },
+    "format": "Null",
+    "trailingComments": [
+      "-- { serverError INVALID_SETTING_VALUE }"
+    ]
+  },
+  {
     "kind": "drop",
     "targetType": "TABLE",
     "table": {

@@ -39,5 +39,13 @@ ORDER BY x ASC;
 SELECT countIfDistinct(number % 10, number % 5 = 2)
 FROM numbers(10000);
 
+EXPLAIN SYNTAX
+SELECT countIfDistinct(number % 10, number % 5 = 2)
+FROM numbers(10000);
+
+SELECT sumIfDistinct(number % 10, number % 5 = 2)
+FROM numbers(10000);
+
+EXPLAIN SYNTAX
 SELECT sumIfDistinct(number % 10, number % 5 = 2)
 FROM numbers(10000);

@@ -23,5 +23,6 @@ INSERT INTO test_table SELECT 'a', 'b';
 SELECT mat_a FROM test_table;
 SELECT mat_b FROM test_table;
 CREATE FUNCTION IF NOT EXISTS test_03274 AS ( x ) -> ((x + 1 as y, y + 2));
+EXPLAIN SYNTAX SELECT test_03274(4 + 2);
 DROP FUNCTION 03274_test_function;
 DROP FUNCTION test_03274;

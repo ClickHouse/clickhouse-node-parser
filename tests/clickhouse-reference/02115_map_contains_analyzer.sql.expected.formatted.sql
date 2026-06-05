@@ -12,6 +12,10 @@ SET optimize_functions_to_subcolumns = 1;
 
 SET enable_analyzer = 1;
 
+EXPLAIN QUERY TREE dump_tree = 0, dump_ast = 1
+SELECT mapContains(m, 'a')
+FROM t_map_contains;
+
 SELECT mapContains(m, 'a')
 FROM t_map_contains;
 

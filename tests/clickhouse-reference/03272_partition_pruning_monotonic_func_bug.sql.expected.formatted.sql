@@ -17,4 +17,9 @@ SELECT id
 FROM tt
 PREWHERE and(greaterOrEquals(ts, toDateTime(1731506400)), lessOrEquals(ts, toDateTime(1731594420)));
 
+EXPLAIN indexes = 1, description = 0
+SELECT id
+FROM tt
+PREWHERE and(greaterOrEquals(ts, toDateTime(1731506400)), lessOrEquals(ts, toDateTime(1731594420)));
+
 DROP TABLE tt;

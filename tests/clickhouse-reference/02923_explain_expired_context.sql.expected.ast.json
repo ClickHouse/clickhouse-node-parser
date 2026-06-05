@@ -1,0 +1,253 @@
+[
+  {
+    "kind": "explain",
+    "explainType": "ESTIMATE",
+    "query": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "functionCall",
+          "name": "any",
+          "args": [
+            {
+              "kind": "functionCall",
+              "name": "toTypeName",
+              "args": [
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "s"
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "from": {
+        "left": {
+          "kind": "subqueryFrom",
+          "query": {
+            "kind": "select",
+            "select": [
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "bbbbbbbb"
+              },
+              {
+                "kind": "functionCall",
+                "name": "toTypeName",
+                "args": [
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "s"
+                    ]
+                  }
+                ]
+              },
+              {
+                "kind": "functionCall",
+                "name": "CAST",
+                "args": [
+                  {
+                    "kind": "literal",
+                    "type": "String",
+                    "value": ""
+                  },
+                  {
+                    "kind": "literal",
+                    "type": "String",
+                    "value": "LowCardinality(String)"
+                  }
+                ]
+              },
+              {
+                "kind": "literal",
+                "type": "NULL",
+                "value": "NULL"
+              },
+              {
+                "kind": "alias",
+                "expr": {
+                  "kind": "functionCall",
+                  "name": "CAST",
+                  "args": [
+                    {
+                      "kind": "literal",
+                      "type": "String",
+                      "value": "\\0\\0\\0\\0\\0\\0\\0\\0\\0\\0\\0\\0\\0\\0\\0\\0\\0\\0\\0\\0\\0\\0\\0\\0\\0\\0\\0\\0\\0\\0\\0\\0"
+                    },
+                    {
+                      "kind": "literal",
+                      "type": "String",
+                      "value": "String"
+                    }
+                  ]
+                },
+                "alias": "s"
+              }
+            ]
+          },
+          "alias": "t1"
+        },
+        "kind": "joinExpr",
+        "joinType": "FULL",
+        "right": {
+          "kind": "subqueryFrom",
+          "query": {
+            "kind": "select",
+            "select": [
+              {
+                "kind": "functionCall",
+                "name": "CAST",
+                "args": [
+                  {
+                    "kind": "literal",
+                    "type": "String",
+                    "value": "bbbbb\\0\\0bbb\\0bb\\0bb"
+                  },
+                  {
+                    "kind": "literal",
+                    "type": "String",
+                    "value": "LowCardinality(String)"
+                  }
+                ]
+              },
+              {
+                "kind": "alias",
+                "expr": {
+                  "kind": "functionCall",
+                  "name": "CAST",
+                  "args": [
+                    {
+                      "kind": "functionCall",
+                      "name": "CAST",
+                      "args": [
+                        {
+                          "kind": "literal",
+                          "type": "String",
+                          "value": "a"
+                        },
+                        {
+                          "kind": "literal",
+                          "type": "String",
+                          "value": "String"
+                        }
+                      ]
+                    },
+                    {
+                      "kind": "literal",
+                      "type": "String",
+                      "value": "LowCardinality(String)"
+                    }
+                  ]
+                },
+                "alias": "s"
+              }
+            ],
+            "groupBy": {
+              "kind": "expressions",
+              "items": [
+                {
+                  "kind": "functionCall",
+                  "name": "CoNnEcTiOn_Id",
+                  "args": []
+                }
+              ]
+            }
+          },
+          "alias": "t2"
+        },
+        "constraint": {
+          "kind": "using",
+          "columns": [
+            "s"
+          ]
+        }
+      },
+      "withTotals": true
+    },
+    "leadingComments": [
+      "-- https://github.com/ClickHouse/ClickHouse/issues/51321"
+    ]
+  },
+  {
+    "kind": "explain",
+    "explainType": "ESTIMATE",
+    "query": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "functionCall",
+          "name": "any",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "s"
+              ]
+            }
+          ]
+        }
+      ],
+      "from": {
+        "left": {
+          "kind": "subqueryFrom",
+          "query": {
+            "kind": "select",
+            "select": [
+              {
+                "kind": "alias",
+                "expr": {
+                  "kind": "literal",
+                  "type": "String",
+                  "value": ""
+                },
+                "alias": "s"
+              }
+            ]
+          },
+          "alias": "t1"
+        },
+        "kind": "joinExpr",
+        "joinType": "INNER",
+        "right": {
+          "kind": "subqueryFrom",
+          "query": {
+            "kind": "select",
+            "select": [
+              {
+                "kind": "alias",
+                "expr": {
+                  "kind": "literal",
+                  "type": "String",
+                  "value": ""
+                },
+                "alias": "s"
+              }
+            ],
+            "groupBy": {
+              "kind": "expressions",
+              "items": [
+                {
+                  "kind": "functionCall",
+                  "name": "connection_id",
+                  "args": []
+                }
+              ]
+            }
+          },
+          "alias": "t2"
+        },
+        "constraint": {
+          "kind": "using",
+          "columns": [
+            "s"
+          ]
+        }
+      }
+    }
+  }
+]

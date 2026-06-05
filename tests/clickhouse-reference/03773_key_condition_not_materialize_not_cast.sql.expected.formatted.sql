@@ -24,6 +24,12 @@ FROM t_cast_bug
 WHERE NOT CAST(val = 0, 'UInt8')
 ORDER BY val ASC;
 
+EXPLAIN indexes = 1
+SELECT val
+FROM t_cast_bug
+WHERE NOT CAST(val = 0, 'UInt8')
+ORDER BY val ASC;
+
 DROP TABLE IF EXISTS t_materialize_bug;
 
 CREATE TABLE t_materialize_bug
@@ -48,6 +54,12 @@ INSERT INTO t_materialize_bug;
 
 INSERT INTO t_materialize_bug;
 
+SELECT val
+FROM v
+WHERE NOT is_zero
+ORDER BY val ASC;
+
+EXPLAIN indexes = 1
 SELECT val
 FROM v
 WHERE NOT is_zero

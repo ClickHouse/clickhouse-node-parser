@@ -21,3 +21,13 @@ FROM numbers(10000);
 
 INSERT INTO tab SELECT toDateTime('2024-01-20') + number
 FROM numbers(10000);
+
+EXPLAIN PIPELINE
+SELECT *
+FROM tab
+ORDER BY t ASC
+SETTINGS
+    read_in_order_two_level_merge_threshold = 0,
+    max_threads = 4,
+    read_in_order_use_buffering = 0
+FORMAT tsv;

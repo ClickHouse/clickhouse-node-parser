@@ -24,6 +24,11 @@ AS
 (SELECT *
 FROM test_table);
 
+-- Expect the single insert chain
+EXPLAIN PIPELINE
+INSERT INTO test_table SELECT 1
+FROM numbers(10);
+
 -- Fuzzed
 CREATE TABLE t0
 (

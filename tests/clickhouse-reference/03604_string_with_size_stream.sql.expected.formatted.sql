@@ -309,6 +309,10 @@ ENGINE = Memory;
 
 INSERT INTO t_column_names;
 
+EXPLAIN QUERY TREE dump_tree = 0, dump_ast = 1
+SELECT s != ''
+FROM t_column_names;
+
 SELECT s != ''
 FROM t_column_names;
 

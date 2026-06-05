@@ -37,3 +37,21 @@ INSERT INTO users2 SELECT
     'Alice2' AS name,
     30 AS age
 FROM numbers(1000);
+
+EXPLAIN actions = 1
+SELECT count()
+FROM users1 AS u1
+WHERE EXISTS((
+        SELECT *
+        FROM users2 AS u2
+        WHERE u1.uid != u2.uid
+    ));
+
+EXPLAIN actions = 1
+SELECT count()
+FROM users1 AS u1
+WHERE NOT EXISTS((
+        SELECT *
+        FROM users2 AS u2
+        WHERE u1.uid != u2.uid
+    ));

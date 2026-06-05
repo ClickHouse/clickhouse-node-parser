@@ -125,6 +125,27 @@ SELECT number IN (
     )
 FROM numbers(3);
 
+EXPLAIN keep_logical_steps = 1, description = 0
+SELECT *
+FROM numbers(8)
+WHERE number IN (
+        SELECT number
+        FROM numbers(5)
+    )
+SETTINGS enable_join_runtime_filters = 0;
+
+-- Same subquery as CTE
+EXPLAIN keep_logical_steps = 1, description = 0
+WITH t AS (
+    SELECT number
+    FROM numbers(5)
+)
+
+SELECT *
+FROM numbers(8)
+WHERE number IN (t)
+SETTINGS enable_join_runtime_filters = 0;
+
 WITH t AS (
     SELECT number
     FROM numbers(5)

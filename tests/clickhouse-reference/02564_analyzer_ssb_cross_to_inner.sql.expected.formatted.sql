@@ -100,3 +100,32 @@ ENGINE = MergeTree
 ORDER BY D_DATEKEY;
 
 SET cross_to_inner_join_rewrite = 2;
+
+EXPLAIN QUERY TREE dump_ast = 1
+SELECT
+    D_YEARMONTHNUM,
+    S_CITY,
+    P_BRAND,
+    sum(LO_REVENUE - LO_SUPPLYCOST) AS profit
+FROM
+    date
+CROSS JOIN customer
+CROSS JOIN supplier
+CROSS JOIN part
+CROSS JOIN lineorder
+WHERE LO_CUSTKEY = C_CUSTKEY
+    AND LO_SUPPKEY = S_SUPPKEY
+    AND LO_PARTKEY = P_PARTKEY
+    AND LO_ORDERDATE = D_DATEKEY
+    AND S_NATION = 'UNITED KINGDOM'
+    AND P_CATEGORY = 'MFGR#21'
+    AND (and(greaterOrEquals(LO_QUANTITY, 34), lessOrEquals(LO_QUANTITY, 44)))
+    AND (and(greaterOrEquals(LO_ORDERDATE, toDate('1996-01-01')), lessOrEquals(LO_ORDERDATE, toDate('1996-12-31'))))
+GROUP BY
+    D_YEARMONTHNUM,
+    S_CITY,
+    P_BRAND
+ORDER BY
+    D_YEARMONTHNUM ASC,
+    S_CITY ASC,
+    P_BRAND ASC;

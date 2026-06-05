@@ -254,6 +254,25 @@ PREWHERE a > 2
 ORDER BY `ALL` ASC
 SETTINGS enable_analyzer = 1;
 
+EXPLAIN PIPELINE
+SELECT (
+        SELECT 1
+    ) AS c0
+FROM
+    (
+        SELECT
+            1 AS c0,
+            1 AS c1
+    ) AS tx
+INNER JOIN (
+        SELECT
+            0 AS c0,
+            1 AS c1
+    ) AS ty
+    USING (c0, c1)
+FORMAT Null
+SETTINGS enable_analyzer = 1;
+
 -- It's a default behavior for old analyzer and new with analyzer_compatibility_join_using_top_level_identifier
 -- Column `b` actually exists in left table, but `b` from USING is resoled to `a + 2` and `a` is not in left table
 -- so we get UNKNOWN_IDENTIFIER error.

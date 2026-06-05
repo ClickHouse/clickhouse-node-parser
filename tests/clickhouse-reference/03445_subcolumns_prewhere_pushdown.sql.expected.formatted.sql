@@ -21,6 +21,7 @@ INSERT INTO test SELECT
     toJSONString(map('a', number, 'b', number))
 FROM numbers(12);
 
+EXPLAIN actions = 1
 SELECT *
 FROM test
 WHERE n.`null`
@@ -29,8 +30,20 @@ SETTINGS optimize_move_to_prewhere = 1;
 SELECT *
 FROM test
 WHERE n.`null`
+SETTINGS optimize_move_to_prewhere = 1;
+
+EXPLAIN actions = 1
+SELECT *
+FROM test
+WHERE n.`null`
 SETTINGS optimize_move_to_prewhere = 0;
 
+SELECT *
+FROM test
+WHERE n.`null`
+SETTINGS optimize_move_to_prewhere = 0;
+
+EXPLAIN actions = 1
 SELECT *
 FROM test
 WHERE t.a < 4
@@ -39,12 +52,35 @@ SETTINGS optimize_move_to_prewhere = 1;
 SELECT *
 FROM test
 WHERE t.a < 4
+SETTINGS optimize_move_to_prewhere = 1;
+
+EXPLAIN actions = 1
+SELECT *
+FROM test
+WHERE t.a < 4
 SETTINGS optimize_move_to_prewhere = 0;
+
+SELECT *
+FROM test
+WHERE t.a < 4
+SETTINGS optimize_move_to_prewhere = 0;
+
+EXPLAIN actions = 1
+SELECT *
+FROM test
+WHERE json.a::Int64 < 4
+SETTINGS optimize_move_to_prewhere = 1;
 
 SELECT *
 FROM test
 WHERE json.a::Int64 < 4
 SETTINGS optimize_move_to_prewhere = 1;
+
+EXPLAIN actions = 1
+SELECT *
+FROM test
+WHERE json.a::Int64 < 4
+SETTINGS optimize_move_to_prewhere = 0;
 
 SELECT *
 FROM test

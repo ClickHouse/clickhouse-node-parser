@@ -39,6 +39,13 @@ WHERE t1.a IN (
         FROM t2_all AS t2
     );
 
+EXPLAIN SYNTAX
+SELECT t1.*
+FROM
+    t1_all AS t1
+INNER JOIN t2_all AS t2
+    ON t1.a = t2.a;
+
 SELECT t1.*
 FROM
     t1_all AS t1

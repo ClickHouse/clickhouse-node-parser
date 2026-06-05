@@ -1,4 +1,4 @@
-#!/usr/bin/env node
+#!/usr/bin/env tsx
 
 /**
  * Filters each .sql file in clickhouse-tests/, keeping only SELECT statements.
@@ -9,6 +9,7 @@
 
 import { readFileSync, writeFileSync, readdirSync, unlinkSync } from 'fs';
 import { join } from 'path';
+import { splitStatements } from './split-statements.js';
 
 const dir = new URL('../tests/clickhouse-reference', import.meta.url).pathname;
 
@@ -23,165 +24,10 @@ for (const file of allFiles) {
 }
 
 /**
- * Splits SQL content into individual statements by semicolon.
- * After each semicolon, the rest of that line (e.g. trailing inline comments)
- * is included with the current statement rather than the next one.
- */
-function splitStatements(content) {
-  const statements = [];
-  let current = '';
-  let inSingleQuote = false;
-  let inDoubleQuote = false;
-  let inBacktick = false;
-  let dollarTag = null; // non-null string when inside a dollar-quoted string (e.g. '$$' or '$doc$')
-  let inLineComment = false;
-  let inBlockComment = false;
-
-  for (let i = 0; i < content.length; i++) {
-    const ch = content[i];
-    const next = content[i + 1];
-
-    // Dollar-quoted strings: $tag$...$tag$ (tag may be empty, e.g. $$...$$)
-    if (dollarTag !== null) {
-      current += ch;
-      if (ch === '$' && content.substring(i, i + dollarTag.length) === dollarTag) {
-        current += content.substring(i + 1, i + dollarTag.length);
-        i += dollarTag.length - 1;
-        dollarTag = null;
-      }
-      continue;
-    }
-
-    if (inLineComment) {
-      current += ch;
-      if (ch === '\n') inLineComment = false;
-      continue;
-    }
-
-    if (inBlockComment) {
-      current += ch;
-      if (ch === '*' && next === '/') {
-        current += next;
-        i++;
-        inBlockComment = false;
-      }
-      continue;
-    }
-
-    if (!inSingleQuote && !inDoubleQuote && !inBacktick) {
-      if (ch === '$') {
-        // Match $tag$ where tag is [a-zA-Z0-9_]* (may be empty for $$)
-        const tagMatch = content.substring(i).match(/^\$([a-zA-Z0-9_]*)\$/);
-        if (tagMatch) {
-          dollarTag = tagMatch[0];
-          current += dollarTag;
-          i += dollarTag.length - 1;
-          continue;
-        }
-      }
-      if (ch === '-' && next === '-') {
-        inLineComment = true;
-        current += ch;
-        continue;
-      }
-      if (ch === '/' && next === '*') {
-        inBlockComment = true;
-        current += ch;
-        continue;
-      }
-    }
-
-    if (ch === '\\' && (inSingleQuote || inDoubleQuote)) {
-      // Backslash escape: consume the next character as-is.
-      current += ch;
-      if (i + 1 < content.length) current += content[++i];
-      continue;
-    } else if (ch === '`' && !inSingleQuote && !inDoubleQuote) {
-      // Backtick-quoted identifiers: `` is an escaped backtick inside backticks.
-      if (inBacktick && next === '`') {
-        current += ch + next;
-        i++;
-        continue;
-      }
-      inBacktick = !inBacktick;
-    } else if (ch === "'" && !inDoubleQuote && !inBacktick) {
-      // SQL-style '' escaped quote: stay inside the string.
-      if (inSingleQuote && next === "'") {
-        current += ch + next;
-        i++;
-        continue;
-      }
-      inSingleQuote = !inSingleQuote;
-    } else if (ch === '"' && !inSingleQuote && !inBacktick) {
-      if (inDoubleQuote && next === '"') {
-        current += ch + next;
-        i++;
-        continue;
-      }
-      inDoubleQuote = !inDoubleQuote;
-    }
-
-    if (ch === ';' && !inSingleQuote && !inDoubleQuote && !inBacktick) {
-      // Consume trailing whitespace and an optional inline comment so they
-      // stay with this statement rather than being prepended to the next one.
-      // Stop if we hit a non-whitespace, non-comment character (i.e. another
-      // statement on the same line).
-      let tail = ';';
-      let j = i + 1;
-      while (j < content.length && content[j] !== '\n') {
-        if (content[j] === '-' && content[j + 1] === '-') {
-          while (j < content.length && content[j] !== '\n') {
-            tail += content[j];
-            j++;
-          }
-          break;
-        } else if (content[j] === ' ' || content[j] === '\t') {
-          tail += content[j];
-          j++;
-        } else {
-          break;
-        }
-      }
-      i = j - 1;
-      statements.push(current + tail);
-      current = '';
-    } else {
-      current += ch;
-    }
-  }
-
-  if (current.trim()) {
-    statements.push(current);
-  }
-
-  return statements;
-}
-
-
-/**
- * Returns the SQL keyword at the start of a statement, ignoring leading
- * whitespace, line comments, and block comments.
- */
-function getLeadingKeyword(statement) {
-  // Remove block comments
-  let s = statement.replace(/\/\*[\s\S]*?\*\//g, '');
-  // Remove line comments
-  s = s.replace(/--[^\n]*/g, '');
-  // Trim and get first word
-  s = s.trim();
-  const match = s.match(/^(\w+)/);
-  return match ? match[1].toUpperCase() : '';
-}
-
-function isSupportedStatement(statement) {
-  return !['EXPLAIN'].includes(getLeadingKeyword(statement));
-}
-
-/**
  * Returns a normalized key for deduplication: strips trailing inline comments,
  * collapses whitespace, and lowercases.
  */
-function normalizeStatement(statement) {
+function normalizeStatement(statement: string): string {
   // Strip the trailing inline comment (everything after the semicolon on the last line)
   let s = statement.replace(/;[^\n]*$/, '');
   // Remove block comments
@@ -193,23 +39,23 @@ function normalizeStatement(statement) {
 }
 
 /** Returns true if the statement is just SELECT '<string>' with nothing else. */
-function isStringOnlySelect(statement) {
+function isStringOnlySelect(statement: string): boolean {
   return /^select\s+('[^']*'|"[^"]*")$/.test(normalizeStatement(statement));
 }
 
 /** Returns true if the statement's trailing inline comment contains "clientError". */
-function hasClientError(statement) {
+function hasClientError(statement: string): boolean {
   return /;\s*--[^\n]*(clientError)/.test(statement);
 }
 
 /** Returns true if the statement uses a disallowed setting. */
-function hasDisallowedSetting(statement) {
+function hasDisallowedSetting(statement: string): boolean {
   return /implicit_transaction/.test(statement) ||
     /output_format_tsv_crlf_end_of_line/.test(statement);
 }
 
 /** Returns true if the statement uses a disallowed setting. */
-function hasKql(statement) {
+function hasKql(statement: string): boolean {
   return /kql\(/.test(statement);
 }
 
@@ -238,7 +84,7 @@ const SQL_LEADING_KEYWORDS = new Set([
  * Statements that begin with anything else (parens, unicode whitespace, etc.)
  * are left alone — we'd rather under-filter than mis-flag a real query.
  */
-function isImplicitSelectExpression(statement) {
+function isImplicitSelectExpression(statement: string): boolean {
   // Strip block, --, #/#! and // line comments before inspecting the leading
   // token. (ClickHouse supports `--`, `#`, `#!`, and `//` line comments.)
   let s = statement
@@ -258,7 +104,7 @@ function isImplicitSelectExpression(statement) {
   return false;
 }
 
-const blocklist = [
+const blocklist: string[] = [
   // Ridiculous inputs
   '03775_too_large_temporary_files_buffer_size.sql',
   '02686_bson3.sql',
@@ -321,26 +167,25 @@ for (const file of sqlFiles) {
   const content = readFileSync(filePath, 'utf8');
   const statements = splitStatements(content);
 
-  const selectStatements = statements.filter(
+  const supportedStatements = statements.filter(
     (s) =>
-      isSupportedStatement(s) &&
       !isStringOnlySelect(s) &&
       !hasClientError(s) &&
       !hasDisallowedSetting(s) &&
       !hasKql(s) &&
       !isImplicitSelectExpression(s),
   );
-  const removed = statements.length - selectStatements.length;
+  const removed = statements.length - supportedStatements.length;
 
   // Deduplicate: keep only the first occurrence of each normalized statement
-  const seen = new Set();
-  const dedupedStatements = selectStatements.filter((s) => {
+  const seen = new Set<string>();
+  const dedupedStatements = supportedStatements.filter((s) => {
     const key = normalizeStatement(s);
     if (seen.has(key)) return false;
     seen.add(key);
     return true;
   });
-  const duplicates = selectStatements.length - dedupedStatements.length;
+  const duplicates = supportedStatements.length - dedupedStatements.length;
 
   if (removed > 0 || duplicates > 0) {
     totalRemoved += removed;

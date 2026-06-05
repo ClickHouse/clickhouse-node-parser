@@ -311,6 +311,118 @@
     }
   },
   {
+    "kind": "explain",
+    "explainType": "PIPELINE",
+    "query": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "fact_1_id"
+          ]
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "fact_2_id"
+          ]
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "fact_3_id"
+          ]
+        },
+        {
+          "kind": "alias",
+          "expr": {
+            "kind": "functionCall",
+            "name": "SUM",
+            "args": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "sales_value"
+                ]
+              }
+            ]
+          },
+          "alias": "sales_value"
+        }
+      ],
+      "from": {
+        "kind": "tableRef",
+        "table": "grouping_sets"
+      },
+      "groupBy": {
+        "kind": "groupingSets",
+        "sets": [
+          [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "fact_1_id"
+              ]
+            },
+            {
+              "kind": "columnRef",
+              "parts": [
+                "fact_2_id"
+              ]
+            }
+          ],
+          [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "fact_1_id"
+              ]
+            },
+            {
+              "kind": "columnRef",
+              "parts": [
+                "fact_3_id"
+              ]
+            }
+          ]
+        ]
+      },
+      "orderBy": [
+        {
+          "kind": "orderByItem",
+          "expr": {
+            "kind": "columnRef",
+            "parts": [
+              "fact_1_id"
+            ]
+          },
+          "direction": "ASC"
+        },
+        {
+          "kind": "orderByItem",
+          "expr": {
+            "kind": "columnRef",
+            "parts": [
+              "fact_2_id"
+            ]
+          },
+          "direction": "ASC"
+        },
+        {
+          "kind": "orderByItem",
+          "expr": {
+            "kind": "columnRef",
+            "parts": [
+              "fact_3_id"
+            ]
+          },
+          "direction": "ASC"
+        }
+      ]
+    }
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -736,6 +848,97 @@
     ]
   },
   {
+    "kind": "explain",
+    "explainType": "SYNTAX",
+    "query": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "fact_1_id"
+          ]
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "fact_3_id"
+          ]
+        },
+        {
+          "kind": "alias",
+          "expr": {
+            "kind": "functionCall",
+            "name": "SUM",
+            "args": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "sales_value"
+                ]
+              }
+            ]
+          },
+          "alias": "sales_value"
+        }
+      ],
+      "from": {
+        "kind": "tableRef",
+        "table": "grouping_sets"
+      },
+      "groupBy": {
+        "kind": "groupingSets",
+        "sets": [
+          [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "fact_1_id"
+              ]
+            }
+          ],
+          [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "fact_1_id"
+              ]
+            },
+            {
+              "kind": "columnRef",
+              "parts": [
+                "fact_3_id"
+              ]
+            }
+          ]
+        ]
+      },
+      "withTotals": true,
+      "orderBy": [
+        {
+          "kind": "orderByItem",
+          "expr": {
+            "kind": "columnRef",
+            "parts": [
+              "fact_1_id"
+            ]
+          },
+          "direction": "ASC"
+        },
+        {
+          "kind": "orderByItem",
+          "expr": {
+            "kind": "columnRef",
+            "parts": [
+              "fact_3_id"
+            ]
+          },
+          "direction": "ASC"
+        }
+      ]
+    }
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -831,6 +1034,122 @@
     "table": {
       "kind": "tableRef",
       "table": "grouping_sets"
+    }
+  },
+  {
+    "kind": "explain",
+    "explainType": "PIPELINE",
+    "query": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "alias",
+          "expr": {
+            "kind": "functionCall",
+            "name": "SUM",
+            "args": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "number"
+                ]
+              }
+            ]
+          },
+          "alias": "sum_value"
+        },
+        {
+          "kind": "alias",
+          "expr": {
+            "kind": "functionCall",
+            "name": "count",
+            "args": []
+          },
+          "alias": "count_value"
+        }
+      ],
+      "from": {
+        "kind": "tableFunctionRef",
+        "name": "numbers_mt",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "1000000"
+          }
+        ]
+      },
+      "groupBy": {
+        "kind": "groupingSets",
+        "sets": [
+          [
+            {
+              "kind": "binaryExpr",
+              "op": "%",
+              "left": {
+                "kind": "columnRef",
+                "parts": [
+                  "number"
+                ]
+              },
+              "right": {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "10"
+              }
+            }
+          ],
+          [
+            {
+              "kind": "binaryExpr",
+              "op": "%",
+              "left": {
+                "kind": "columnRef",
+                "parts": [
+                  "number"
+                ]
+              },
+              "right": {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "100"
+              }
+            }
+          ]
+        ]
+      },
+      "orderBy": [
+        {
+          "kind": "orderByItem",
+          "expr": {
+            "kind": "columnRef",
+            "parts": [
+              "sum_value"
+            ]
+          },
+          "direction": "ASC"
+        },
+        {
+          "kind": "orderByItem",
+          "expr": {
+            "kind": "columnRef",
+            "parts": [
+              "count_value"
+            ]
+          },
+          "direction": "ASC"
+        }
+      ],
+      "settings": [
+        {
+          "name": "max_threads",
+          "value": {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "3"
+          }
+        }
+      ]
     }
   },
   {

@@ -49,4 +49,9 @@ FROM test;
 SELECT tupleElement(json.c[1], 'd')
 FROM test;
 
+EXPLAIN SYNTAX run_query_tree_passes = 1
+SELECT tupleElement(json, 'a')
+FROM test
+SETTINGS optimize_functions_to_subcolumns = 1;
+
 DROP TABLE test;

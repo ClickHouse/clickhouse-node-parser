@@ -761,5 +761,353 @@
         }
       }
     ]
+  },
+  {
+    "kind": "explain",
+    "explainType": "QUERY TREE",
+    "settings": [
+      {
+        "name": "dump_ast",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ],
+    "query": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "D_YEARMONTHNUM"
+          ]
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "S_CITY"
+          ]
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "P_BRAND"
+          ]
+        },
+        {
+          "kind": "alias",
+          "expr": {
+            "kind": "functionCall",
+            "name": "sum",
+            "args": [
+              {
+                "kind": "binaryExpr",
+                "op": "-",
+                "left": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "LO_REVENUE"
+                  ]
+                },
+                "right": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "LO_SUPPLYCOST"
+                  ]
+                }
+              }
+            ]
+          },
+          "alias": "profit"
+        }
+      ],
+      "from": {
+        "left": {
+          "left": {
+            "left": {
+              "left": {
+                "kind": "tableRef",
+                "table": "date"
+              },
+              "kind": "joinExpr",
+              "joinType": "CROSS",
+              "right": {
+                "kind": "tableRef",
+                "table": "customer"
+              }
+            },
+            "kind": "joinExpr",
+            "joinType": "CROSS",
+            "right": {
+              "kind": "tableRef",
+              "table": "supplier"
+            }
+          },
+          "kind": "joinExpr",
+          "joinType": "CROSS",
+          "right": {
+            "kind": "tableRef",
+            "table": "part"
+          }
+        },
+        "kind": "joinExpr",
+        "joinType": "CROSS",
+        "right": {
+          "kind": "tableRef",
+          "table": "lineorder"
+        }
+      },
+      "where": {
+        "kind": "naryExpr",
+        "op": "AND",
+        "operands": [
+          {
+            "kind": "binaryExpr",
+            "op": "=",
+            "left": {
+              "kind": "columnRef",
+              "parts": [
+                "LO_CUSTKEY"
+              ]
+            },
+            "right": {
+              "kind": "columnRef",
+              "parts": [
+                "C_CUSTKEY"
+              ]
+            }
+          },
+          {
+            "kind": "binaryExpr",
+            "op": "=",
+            "left": {
+              "kind": "columnRef",
+              "parts": [
+                "LO_SUPPKEY"
+              ]
+            },
+            "right": {
+              "kind": "columnRef",
+              "parts": [
+                "S_SUPPKEY"
+              ]
+            }
+          },
+          {
+            "kind": "binaryExpr",
+            "op": "=",
+            "left": {
+              "kind": "columnRef",
+              "parts": [
+                "LO_PARTKEY"
+              ]
+            },
+            "right": {
+              "kind": "columnRef",
+              "parts": [
+                "P_PARTKEY"
+              ]
+            }
+          },
+          {
+            "kind": "binaryExpr",
+            "op": "=",
+            "left": {
+              "kind": "columnRef",
+              "parts": [
+                "LO_ORDERDATE"
+              ]
+            },
+            "right": {
+              "kind": "columnRef",
+              "parts": [
+                "D_DATEKEY"
+              ]
+            }
+          },
+          {
+            "kind": "binaryExpr",
+            "op": "=",
+            "left": {
+              "kind": "columnRef",
+              "parts": [
+                "S_NATION"
+              ]
+            },
+            "right": {
+              "kind": "literal",
+              "type": "String",
+              "value": "UNITED KINGDOM"
+            }
+          },
+          {
+            "kind": "binaryExpr",
+            "op": "=",
+            "left": {
+              "kind": "columnRef",
+              "parts": [
+                "P_CATEGORY"
+              ]
+            },
+            "right": {
+              "kind": "literal",
+              "type": "String",
+              "value": "MFGR#21"
+            }
+          },
+          {
+            "kind": "functionCall",
+            "name": "and",
+            "args": [
+              {
+                "kind": "functionCall",
+                "name": "greaterOrEquals",
+                "args": [
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "LO_QUANTITY"
+                    ]
+                  },
+                  {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "34"
+                  }
+                ]
+              },
+              {
+                "kind": "functionCall",
+                "name": "lessOrEquals",
+                "args": [
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "LO_QUANTITY"
+                    ]
+                  },
+                  {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "44"
+                  }
+                ]
+              }
+            ],
+            "parenthesized": true
+          },
+          {
+            "kind": "functionCall",
+            "name": "and",
+            "args": [
+              {
+                "kind": "functionCall",
+                "name": "greaterOrEquals",
+                "args": [
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "LO_ORDERDATE"
+                    ]
+                  },
+                  {
+                    "kind": "functionCall",
+                    "name": "toDate",
+                    "args": [
+                      {
+                        "kind": "literal",
+                        "type": "String",
+                        "value": "1996-01-01"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "kind": "functionCall",
+                "name": "lessOrEquals",
+                "args": [
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "LO_ORDERDATE"
+                    ]
+                  },
+                  {
+                    "kind": "functionCall",
+                    "name": "toDate",
+                    "args": [
+                      {
+                        "kind": "literal",
+                        "type": "String",
+                        "value": "1996-12-31"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ],
+            "parenthesized": true
+          }
+        ]
+      },
+      "groupBy": {
+        "kind": "expressions",
+        "items": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "D_YEARMONTHNUM"
+            ]
+          },
+          {
+            "kind": "columnRef",
+            "parts": [
+              "S_CITY"
+            ]
+          },
+          {
+            "kind": "columnRef",
+            "parts": [
+              "P_BRAND"
+            ]
+          }
+        ]
+      },
+      "orderBy": [
+        {
+          "kind": "orderByItem",
+          "expr": {
+            "kind": "columnRef",
+            "parts": [
+              "D_YEARMONTHNUM"
+            ]
+          },
+          "direction": "ASC"
+        },
+        {
+          "kind": "orderByItem",
+          "expr": {
+            "kind": "columnRef",
+            "parts": [
+              "S_CITY"
+            ]
+          },
+          "direction": "ASC"
+        },
+        {
+          "kind": "orderByItem",
+          "expr": {
+            "kind": "columnRef",
+            "parts": [
+              "P_BRAND"
+            ]
+          },
+          "direction": "ASC"
+        }
+      ]
+    }
   }
 ]

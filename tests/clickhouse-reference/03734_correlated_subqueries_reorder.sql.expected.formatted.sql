@@ -43,6 +43,18 @@ SETTINGS auto_statistics_types = 'uniq';
 INSERT INTO part SELECT *
 FROM numbers(10000);
 
+EXPLAIN actions = 1, keep_logical_steps = 1
+SELECT sum(l_extendedprice) / 7.0 AS avg_yearly
+FROM
+    lineitem
+CROSS JOIN part
+WHERE p_partkey = l_partkey
+    AND l_quantity < (
+        SELECT 0.2 * avg(l_quantity)
+        FROM lineitem
+        WHERE l_partkey = p_partkey
+    );
+
 SELECT `explain`
 FROM (
         EXPLAIN actions = 1, keep_logical_steps = 1

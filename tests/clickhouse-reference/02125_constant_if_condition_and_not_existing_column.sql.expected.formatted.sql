@@ -28,4 +28,12 @@ FROM test;
 SELECT if(cast(cast(0, 'UInt8'), 'UInt8'), y, 42)
 FROM test;
 
+EXPLAIN SYNTAX
+SELECT
+    x,
+    if((
+        SELECT hasColumnInTable(currentDatabase(), 'test', 'y')
+    ), y, concat(x, '_'))
+FROM test;
+
 DROP TABLE IF EXISTS t;

@@ -96,5 +96,181 @@
       "database": "system",
       "table": "query_cache"
     }
+  },
+  {
+    "kind": "explain",
+    "explainType": "PLAN",
+    "query": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "binaryExpr",
+          "op": "+",
+          "left": {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "1"
+          },
+          "right": {
+            "kind": "columnRef",
+            "parts": [
+              "number"
+            ]
+          }
+        }
+      ],
+      "from": {
+        "kind": "tableRef",
+        "database": "system",
+        "table": "numbers"
+      },
+      "limit": {
+        "count": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    },
+    "leadingComments": [
+      "-- EXPLAIN PLAN should show the same regardless if the result is calculated or read from the QC"
+    ]
+  },
+  {
+    "kind": "explain",
+    "explainType": "PLAN",
+    "query": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "binaryExpr",
+          "op": "+",
+          "left": {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "1"
+          },
+          "right": {
+            "kind": "columnRef",
+            "parts": [
+              "number"
+            ]
+          }
+        }
+      ],
+      "from": {
+        "kind": "tableRef",
+        "database": "system",
+        "table": "numbers"
+      },
+      "limit": {
+        "count": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      },
+      "settings": [
+        {
+          "name": "use_query_cache",
+          "value": {
+            "kind": "literal",
+            "type": "Bool",
+            "value": "1"
+          }
+        }
+      ]
+    },
+    "trailingComments": [
+      "-- (*)"
+    ]
+  },
+  {
+    "kind": "explain",
+    "explainType": "PIPELINE",
+    "query": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "binaryExpr",
+          "op": "+",
+          "left": {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "1"
+          },
+          "right": {
+            "kind": "columnRef",
+            "parts": [
+              "number"
+            ]
+          }
+        }
+      ],
+      "from": {
+        "kind": "tableRef",
+        "database": "system",
+        "table": "numbers"
+      },
+      "limit": {
+        "count": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    },
+    "leadingComments": [
+      "-- EXPLAIN PIPELINE should show the same regardless if the result is calculated or read from the QC"
+    ]
+  },
+  {
+    "kind": "explain",
+    "explainType": "PIPELINE",
+    "query": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "binaryExpr",
+          "op": "+",
+          "left": {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "1"
+          },
+          "right": {
+            "kind": "columnRef",
+            "parts": [
+              "number"
+            ]
+          }
+        }
+      ],
+      "from": {
+        "kind": "tableRef",
+        "database": "system",
+        "table": "numbers"
+      },
+      "limit": {
+        "count": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      },
+      "settings": [
+        {
+          "name": "use_query_cache",
+          "value": {
+            "kind": "literal",
+            "type": "Bool",
+            "value": "1"
+          }
+        }
+      ]
+    },
+    "trailingComments": [
+      "-- (*)"
+    ]
   }
 ]

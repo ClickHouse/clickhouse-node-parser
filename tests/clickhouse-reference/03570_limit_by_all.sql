@@ -38,6 +38,18 @@ SELECT id, category, value
 FROM test_limit_by_all 
 ORDER BY id, category, value 
 LIMIT 1 BY id, category, value;
+-- Test 6: EXPLAIN SYNTAX test
+EXPLAIN SYNTAX 
+SELECT id, category, value, rand() AS r
+FROM test_limit_by_all 
+ORDER BY id, category, value 
+LIMIT 1 BY ALL;
+-- Test 7: EXPLAIN QUERY TREE test
+EXPLAIN QUERY TREE
+SELECT id, category, value 
+FROM test_limit_by_all 
+ORDER BY id, category, value 
+LIMIT 1 BY ALL;
 -- Test 8: LIMIT BY ALL with window function - make deterministic
 SELECT id, category, value, row_number() OVER (PARTITION BY category ORDER BY value) AS rn
 FROM test_limit_by_all
@@ -99,6 +111,14 @@ LIMIT 1 BY ALL; -- { serverError 62 }
 DROP TABLE IF EXISTS test_limit_by_all_tags;
 CREATE TABLE test_limit_by_all_tags (id Int32, tags Array(String)) ENGINE = Memory;
 INSERT INTO test_limit_by_all_tags VALUES (1, ['x','y']), (2, ['y']), (3, ['z']);
+EXPLAIN SYNTAX
+SELECT t.id, tag, sum(value) AS s
+FROM test_limit_by_all AS t
+LEFT JOIN test_limit_by_all_tags AS g USING (id)
+ARRAY JOIN g.tags AS tag
+GROUP BY t.id, tag
+ORDER BY t.id, tag
+LIMIT 1 BY ALL;
 SELECT t.id, tag
 FROM test_limit_by_all AS t
 LEFT JOIN test_limit_by_all_tags AS g USING (id)
@@ -120,6 +140,12 @@ SELECT id, category, value
 FROM test_limit_by_all
 ORDER BY id, category, value
 LIMIT 2 OFFSET 1 BY id;
+EXPLAIN SYNTAX
+SELECT id, category, value
+FROM test_limit_by_all
+ORDER BY 1, 2, 3
+LIMIT 2 BY 1, 2
+SETTINGS enable_positional_arguments=1;
 SELECT id, category, value
 FROM test_limit_by_all
 ORDER BY id, category, value

@@ -41,6 +41,14 @@ FROM numbers(10)
 ORDER BY number ASC
 QUALIFY COUNT() OVER (PARTITION BY number % 3) = 4;
 
+EXPLAIN header = 1, actions = 1
+SELECT
+    number,
+    COUNT() OVER (PARTITION BY number % 3) AS partition_count
+FROM numbers(10)
+ORDER BY number ASC
+QUALIFY COUNT() OVER (PARTITION BY number % 3) = 4;
+
 SELECT
     number % toUInt256(2) AS key,
     count()

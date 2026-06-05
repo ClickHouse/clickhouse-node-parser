@@ -12,6 +12,19 @@ SELECT
     ['a', 'b'],
     [1,2];
 
+-- { echoOn }
+EXPLAIN QUERY TREE dump_ast = 1
+SELECT `metric.names`
+FROM
+    hourly
+ARRAY JOIN metric;
+
+EXPLAIN QUERY TREE dump_ast = 1
+SELECT metric.names
+FROM
+    hourly
+ARRAY JOIN metric;
+
 -- { echoOff }
 CREATE TABLE tab
 (

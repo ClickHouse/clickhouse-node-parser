@@ -11,8 +11,10 @@ set deduplicate_blocks_in_dependent_materialized_views=0;
 
 -- Log does not support sparse columns - RemovingSparseTransform added
 create table t_log (key Int) engine=Log;
+explain pipeline insert into t_log select * from system.one;
 -- MergeTree support sparse columns - no RemovingSparseTransform
 create table t_mt (key Int) engine=MergeTree order by ();
+explain pipeline insert into t_mt select * from system.one;
 -- MergeTree pushes to Log, which does not support sparse columns - RemovingSparseTransform added
 create materialized view mv to t_log as select * from t_mt;
 drop table mv;

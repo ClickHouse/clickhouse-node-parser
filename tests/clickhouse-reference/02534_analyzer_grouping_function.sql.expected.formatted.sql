@@ -12,6 +12,16 @@ ORDER BY id;
 
 INSERT INTO test_table;
 
+-- { echoOn }
+EXPLAIN QUERY TREE
+SELECT
+    grouping(id),
+    grouping(value)
+FROM test_table
+GROUP BY
+    id,
+    value;
+
 SELECT
     grouping(id) AS grouping_id,
     grouping(value) AS grouping_value,
@@ -25,6 +35,13 @@ ORDER BY
     grouping_id ASC,
     grouping_value ASC;
 
+EXPLAIN QUERY TREE
+SELECT
+    grouping(id),
+    grouping(value)
+FROM test_table
+GROUP BY ROLLUP(id, value);
+
 SELECT
     grouping(id) AS grouping_id,
     grouping(value) AS grouping_value,
@@ -35,6 +52,13 @@ GROUP BY ROLLUP(id, value)
 ORDER BY
     grouping_id ASC,
     grouping_value ASC;
+
+EXPLAIN QUERY TREE
+SELECT
+    grouping(id),
+    grouping(value)
+FROM test_table
+GROUP BY CUBE(id, value);
 
 SELECT
     grouping(id) AS grouping_id,
@@ -47,6 +71,13 @@ ORDER BY
     grouping_id ASC,
     grouping_value ASC;
 
+EXPLAIN QUERY TREE
+SELECT
+    grouping(id),
+    grouping(value)
+FROM test_table
+GROUP BY GROUPING SETS ((id), (value));
+
 SELECT
     grouping(id) AS grouping_id,
     grouping(value) AS grouping_value,
@@ -57,6 +88,13 @@ GROUP BY GROUPING SETS ((id), (value))
 ORDER BY
     grouping_id ASC,
     grouping_value ASC;
+
+EXPLAIN QUERY TREE
+SELECT
+    grouping(id),
+    grouping(value)
+FROM test_table
+GROUP BY GROUPING SETS ((id), (value));
 
 SELECT
     grouping(id) AS grouping_id,

@@ -3,9 +3,17 @@ SELECT
     avg(number + 2)
 FROM numbers(10);
 
+EXPLAIN SYNTAX
+SELECT avg(number + 2)
+FROM numbers(10);
+
 SELECT
     'value: ',
     avg(number - 2)
+FROM numbers(10);
+
+EXPLAIN SYNTAX
+SELECT avg(number - 2)
 FROM numbers(10);
 
 SELECT
@@ -13,7 +21,15 @@ SELECT
     avg(number * 2)
 FROM numbers(10);
 
+EXPLAIN SYNTAX
+SELECT avg(number * 2)
+FROM numbers(10);
+
 SELECT
     'value: ',
     avg(number / 2)
+FROM numbers(10);
+
+EXPLAIN SYNTAX
+SELECT avg(number / 2)
 FROM numbers(10);

@@ -1,0 +1,69 @@
+[
+  {
+    "kind": "explain",
+    "explainType": "SYNTAX",
+    "query": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "asterisk"
+        }
+      ],
+      "from": {
+        "kind": "subqueryFrom",
+        "query": {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "alias",
+              "expr": {
+                "kind": "functionCall",
+                "name": "range",
+                "args": [
+                  {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "0"
+                  },
+                  {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "10"
+                  }
+                ]
+              },
+              "alias": "range_"
+            },
+            {
+              "kind": "columnRef",
+              "parts": [
+                "point_"
+              ]
+            }
+          ],
+          "from": {
+            "left": {
+              "kind": "tableRef",
+              "database": "system",
+              "table": "one"
+            },
+            "kind": "arrayJoinExpr",
+            "joinType": "ARRAY",
+            "expressions": [
+              {
+                "kind": "alias",
+                "expr": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "range_"
+                  ]
+                },
+                "alias": "point_"
+              }
+            ]
+          }
+        }
+      }
+    }
+  }
+]

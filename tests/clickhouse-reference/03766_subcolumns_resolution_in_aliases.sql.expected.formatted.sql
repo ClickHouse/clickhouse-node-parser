@@ -21,4 +21,10 @@ SELECT
     bcd
 FROM test;
 
+EXPLAIN QUERY TREE
+SELECT
+    ab,
+    bcd
+FROM test;
+
 DROP TABLE test;

@@ -1,0 +1,6 @@
+EXPLAIN SYNTAX
+INSERT INTO test FROM INFILE 'data.file' SELECT x
+FROM input('x UInt32');
+
+EXPLAIN SYNTAX
+INSERT INTO test FROM INFILE 'data.file';

@@ -159,6 +159,34 @@ INSERT INTO t1;
 
 INSERT INTO t2;
 
+EXPLAIN indexes = 1
+SELECT
+    id,
+    delete_time
+FROM
+    t1
+CROSS JOIN (
+        SELECT delete_time
+        FROM t2
+    ) AS d
+WHERE create_time < delete_time
+    AND id = 101
+SETTINGS enable_analyzer = 0;
+
+EXPLAIN indexes = 1
+SELECT
+    id,
+    delete_time
+FROM
+    t1
+CROSS JOIN (
+        SELECT delete_time
+        FROM t2
+    ) AS d
+WHERE create_time < delete_time
+    AND id = 101
+SETTINGS enable_analyzer = 1;
+
 -- expected to get row (1, 3, 1, 4) from JOIN and empty result from the query
 SELECT *
 FROM

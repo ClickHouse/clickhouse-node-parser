@@ -25,3 +25,59 @@ ENGINE = Distributed(test_cluster_two_shard_three_replicas_localhost, currentDat
 
 INSERT INTO local_table SELECT number
 FROM numbers(100);
+
+EXPLAIN
+SELECT count()
+FROM distributed_table
+GROUP BY id;
+
+EXPLAIN
+SELECT count()
+FROM distributed_table2
+GROUP BY id;
+
+EXPLAIN
+SELECT count()
+FROM distributed_table
+GROUP BY toString(id);
+
+EXPLAIN
+SELECT count()
+FROM distributed_table2
+GROUP BY toString(id);
+
+EXPLAIN
+SELECT DISTINCT id
+FROM distributed_table;
+
+EXPLAIN
+SELECT DISTINCT id
+FROM distributed_table2;
+
+EXPLAIN
+SELECT DISTINCT toString(id)
+FROM distributed_table;
+
+EXPLAIN
+SELECT DISTINCT toString(id)
+FROM distributed_table2;
+
+EXPLAIN
+SELECT *
+FROM distributed_table
+LIMIT 1 BY id;
+
+EXPLAIN
+SELECT *
+FROM distributed_table2
+LIMIT 1 BY id;
+
+EXPLAIN
+SELECT *
+FROM distributed_table
+LIMIT 1 BY toString(id);
+
+EXPLAIN
+SELECT *
+FROM distributed_table2
+LIMIT 1 BY toString(id);

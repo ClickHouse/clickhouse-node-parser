@@ -69,6 +69,20 @@ WITH CUBE
 WITH TOTALS
 SETTINGS group_by_use_nulls = 1;
 
+EXPLAIN QUERY TREE
+SELECT
+    a,
+    b
+FROM numbers(3)
+GROUP BY
+    number AS a,
+    (number + number) AS b
+WITH CUBE
+ORDER BY
+    a ASC,
+    b ASC
+FORMAT Null;
+
 SELECT
     a,
     b

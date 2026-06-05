@@ -11,6 +11,7 @@ INSERT INTO `03161_table`;
 
 SELECT '-- Expected plan with analyzer:';
 
+EXPLAIN SYNTAX
 SELECT id
 FROM `03161_table`
 WHERE f
@@ -20,6 +21,27 @@ SETTINGS
     convert_query_to_cnf = 1,
     optimize_using_constraints = 1,
     enable_analyzer = 1;
+
+SELECT id
+FROM `03161_table`
+WHERE f
+    AND ((NOT f
+    OR f))
+SETTINGS
+    convert_query_to_cnf = 1,
+    optimize_using_constraints = 1,
+    enable_analyzer = 1;
+
+EXPLAIN SYNTAX
+SELECT id
+FROM `03161_table`
+WHERE f
+    AND ((NOT f
+    OR f))
+SETTINGS
+    convert_query_to_cnf = 1,
+    optimize_using_constraints = 1,
+    enable_analyzer = 0;
 
 SELECT id
 FROM `03161_table`

@@ -30,6 +30,7 @@ SELECT b + 1 AS a, * FROM (SELECT b FROM tb) t1 LEFT JOIN (SELECT a, b FROM tabc
 SELECT b + 1 AS a, * FROM (SELECT b FROM tb) t1 RIGHT JOIN (SELECT a, b FROM tabc) t2 USING (a) ORDER BY ALL SETTINGS enable_analyzer = 1;
 SELECT b + 1 AS a, * FROM (SELECT b FROM tb) t1 FULL JOIN (SELECT a, b FROM tabc) t2 USING (a) ORDER BY ALL SETTINGS enable_analyzer = 1;
 SELECT b + 1 AS a, s FROM tb FULL OUTER JOIN tabc USING (a) PREWHERE a > 2 ORDER BY ALL SETTINGS enable_analyzer = 1;
+EXPLAIN PIPELINE SELECT (SELECT 1) AS c0 FROM (SELECT 1 AS c0, 1 AS c1) tx JOIN (SELECT 0 AS c0, 1 AS c1) ty USING (c0, c1) FORMAT Null SETTINGS enable_analyzer = 1;
 -- It's a default behavior for old analyzer and new with analyzer_compatibility_join_using_top_level_identifier
 -- Column `b` actually exists in left table, but `b` from USING is resoled to `a + 2` and `a` is not in left table
 -- so we get UNKNOWN_IDENTIFIER error.

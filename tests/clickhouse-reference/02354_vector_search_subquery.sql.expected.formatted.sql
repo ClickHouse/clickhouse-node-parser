@@ -16,4 +16,46 @@ SETTINGS index_granularity = 3;
 
 INSERT INTO tab;
 
+-- this works
+EXPLAIN indexes = 1
+WITH [0., 2.] AS reference_vec
+
+SELECT
+    id,
+    vec,
+    cosineDistance(vec, reference_vec) AS distance
+FROM tab
+ORDER BY distance ASC
+LIMIT 1;
+
+-- this also work
+EXPLAIN indexes = 1
+WITH (
+        SELECT vec
+        FROM tab
+        LIMIT 1
+    ) AS reference_vec
+
+SELECT
+    id,
+    vec,
+    cosineDistance(vec, reference_vec) AS distance
+FROM tab
+ORDER BY distance ASC
+LIMIT 1;
+
+-- and this works as well
+EXPLAIN indexes = 1
+WITH (
+        SELECT [0., 2.]
+    ) AS reference_vec
+
+SELECT
+    id,
+    vec,
+    cosineDistance(vec, reference_vec) AS distance
+FROM tab
+ORDER BY distance ASC
+LIMIT 1;
+
 DROP TABLE tab;

@@ -498,6 +498,33 @@ FROM (
     ) AS t
 ORDER BY number ASC;
 
+-- The EXPLAIN for the above query would be difficult to understand, so check some
+-- simple cases instead.
+EXPLAIN
+SELECT
+    count(*) OVER (PARTITION BY p),
+    count(*) OVER (),
+    count(*) OVER (PARTITION BY p ORDER BY o ASC)
+FROM (
+        SELECT
+            number,
+            intDiv(number, 3) AS p,
+            mod(number, 5) AS o
+        FROM numbers(16)
+    ) AS t;
+
+EXPLAIN
+SELECT
+    count(*) OVER (ORDER BY o ASC, number ASC),
+    count(*) OVER (ORDER BY number ASC)
+FROM (
+        SELECT
+            number,
+            intDiv(number, 3) AS p,
+            mod(number, 5) AS o
+        FROM numbers(16)
+    ) AS t;
+
 -- A test case for the sort comparator found by fuzzer.
 SELECT
     max(number) OVER (ORDER BY number DESC),

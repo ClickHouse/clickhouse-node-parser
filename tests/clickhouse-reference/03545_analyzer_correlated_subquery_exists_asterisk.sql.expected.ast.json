@@ -205,6 +205,84 @@
     ]
   },
   {
+    "kind": "explain",
+    "settings": [
+      {
+        "name": "actions",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ],
+    "query": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      ],
+      "from": {
+        "kind": "tableRef",
+        "table": "test",
+        "alias": "t1"
+      },
+      "where": {
+        "kind": "functionCall",
+        "name": "EXISTS",
+        "args": [
+          {
+            "kind": "subqueryExpr",
+            "query": {
+              "kind": "select",
+              "select": [
+                {
+                  "kind": "asterisk"
+                }
+              ],
+              "from": {
+                "kind": "tableRef",
+                "table": "test",
+                "alias": "t2"
+              },
+              "where": {
+                "kind": "binaryExpr",
+                "op": "=",
+                "left": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "t1",
+                    "i1"
+                  ]
+                },
+                "right": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "t2",
+                    "i2"
+                  ]
+                }
+              }
+            }
+          }
+        ]
+      },
+      "settings": [
+        {
+          "name": "enable_join_runtime_filters",
+          "value": {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "0"
+          }
+        }
+      ]
+    }
+  },
+  {
     "kind": "select",
     "select": [
       {

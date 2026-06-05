@@ -4033,5 +4033,1559 @@
       "-- `parallel_hash` uses two-level hash tables (that have 256 tables internally).",
       "-- it preallocates too much data as the result and memory exception occurs."
     ]
+  },
+  {
+    "kind": "explain",
+    "explainType": "SYNTAX",
+    "query": {
+      "kind": "select",
+      "with": [
+        {
+          "kind": "cteSubquery",
+          "name": "cs_ui",
+          "query": {
+            "kind": "select",
+            "select": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "cs_item_sk"
+                ]
+              },
+              {
+                "kind": "alias",
+                "expr": {
+                  "kind": "functionCall",
+                  "name": "sum",
+                  "args": [
+                    {
+                      "kind": "columnRef",
+                      "parts": [
+                        "cs_ext_list_price"
+                      ]
+                    }
+                  ]
+                },
+                "alias": "sale"
+              },
+              {
+                "kind": "alias",
+                "expr": {
+                  "kind": "functionCall",
+                  "name": "sum",
+                  "args": [
+                    {
+                      "kind": "binaryExpr",
+                      "op": "+",
+                      "left": {
+                        "kind": "binaryExpr",
+                        "op": "+",
+                        "left": {
+                          "kind": "columnRef",
+                          "parts": [
+                            "cr_refunded_cash"
+                          ]
+                        },
+                        "right": {
+                          "kind": "columnRef",
+                          "parts": [
+                            "cr_reversed_charge"
+                          ]
+                        },
+                        "parenthesized": true
+                      },
+                      "right": {
+                        "kind": "columnRef",
+                        "parts": [
+                          "cr_store_credit"
+                        ]
+                      }
+                    }
+                  ]
+                },
+                "alias": "refund"
+              }
+            ],
+            "from": {
+              "left": {
+                "kind": "tableRef",
+                "table": "catalog_sales"
+              },
+              "kind": "joinExpr",
+              "joinType": "CROSS",
+              "right": {
+                "kind": "tableRef",
+                "table": "catalog_returns"
+              }
+            },
+            "where": {
+              "kind": "naryExpr",
+              "op": "AND",
+              "operands": [
+                {
+                  "kind": "binaryExpr",
+                  "op": "=",
+                  "left": {
+                    "kind": "columnRef",
+                    "parts": [
+                      "cs_item_sk"
+                    ]
+                  },
+                  "right": {
+                    "kind": "columnRef",
+                    "parts": [
+                      "cr_item_sk"
+                    ]
+                  },
+                  "parenthesized": true
+                },
+                {
+                  "kind": "binaryExpr",
+                  "op": "=",
+                  "left": {
+                    "kind": "columnRef",
+                    "parts": [
+                      "cs_order_number"
+                    ]
+                  },
+                  "right": {
+                    "kind": "columnRef",
+                    "parts": [
+                      "cr_order_number"
+                    ]
+                  },
+                  "parenthesized": true
+                }
+              ]
+            },
+            "groupBy": {
+              "kind": "expressions",
+              "items": [
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "cs_item_sk"
+                  ]
+                }
+              ]
+            },
+            "having": {
+              "kind": "binaryExpr",
+              "op": ">",
+              "left": {
+                "kind": "functionCall",
+                "name": "sum",
+                "args": [
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "cs_ext_list_price"
+                    ]
+                  }
+                ]
+              },
+              "right": {
+                "kind": "binaryExpr",
+                "op": "*",
+                "left": {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "2"
+                },
+                "right": {
+                  "kind": "functionCall",
+                  "name": "sum",
+                  "args": [
+                    {
+                      "kind": "binaryExpr",
+                      "op": "+",
+                      "left": {
+                        "kind": "binaryExpr",
+                        "op": "+",
+                        "left": {
+                          "kind": "columnRef",
+                          "parts": [
+                            "cr_refunded_cash"
+                          ]
+                        },
+                        "right": {
+                          "kind": "columnRef",
+                          "parts": [
+                            "cr_reversed_charge"
+                          ]
+                        },
+                        "parenthesized": true
+                      },
+                      "right": {
+                        "kind": "columnRef",
+                        "parts": [
+                          "cr_store_credit"
+                        ]
+                      }
+                    }
+                  ]
+                },
+                "parenthesized": true
+              }
+            }
+          }
+        },
+        {
+          "kind": "cteSubquery",
+          "name": "cross_sales",
+          "query": {
+            "kind": "select",
+            "select": [
+              {
+                "kind": "alias",
+                "expr": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "i_product_name"
+                  ]
+                },
+                "alias": "product_name"
+              },
+              {
+                "kind": "alias",
+                "expr": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "i_item_sk"
+                  ]
+                },
+                "alias": "item_sk"
+              },
+              {
+                "kind": "alias",
+                "expr": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "s_store_name"
+                  ]
+                },
+                "alias": "store_name"
+              },
+              {
+                "kind": "alias",
+                "expr": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "s_zip"
+                  ]
+                },
+                "alias": "store_zip"
+              },
+              {
+                "kind": "alias",
+                "expr": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "ad1",
+                    "ca_street_number"
+                  ]
+                },
+                "alias": "b_street_number"
+              },
+              {
+                "kind": "alias",
+                "expr": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "ad1",
+                    "ca_street_name"
+                  ]
+                },
+                "alias": "b_street_name"
+              },
+              {
+                "kind": "alias",
+                "expr": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "ad1",
+                    "ca_city"
+                  ]
+                },
+                "alias": "b_city"
+              },
+              {
+                "kind": "alias",
+                "expr": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "ad1",
+                    "ca_zip"
+                  ]
+                },
+                "alias": "b_zip"
+              },
+              {
+                "kind": "alias",
+                "expr": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "ad2",
+                    "ca_street_number"
+                  ]
+                },
+                "alias": "c_street_number"
+              },
+              {
+                "kind": "alias",
+                "expr": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "ad2",
+                    "ca_street_name"
+                  ]
+                },
+                "alias": "c_street_name"
+              },
+              {
+                "kind": "alias",
+                "expr": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "ad2",
+                    "ca_city"
+                  ]
+                },
+                "alias": "c_city"
+              },
+              {
+                "kind": "alias",
+                "expr": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "ad2",
+                    "ca_zip"
+                  ]
+                },
+                "alias": "c_zip"
+              },
+              {
+                "kind": "alias",
+                "expr": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "d1",
+                    "d_year"
+                  ]
+                },
+                "alias": "syear"
+              },
+              {
+                "kind": "alias",
+                "expr": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "d2",
+                    "d_year"
+                  ]
+                },
+                "alias": "fsyear"
+              },
+              {
+                "kind": "alias",
+                "expr": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "d3",
+                    "d_year"
+                  ]
+                },
+                "alias": "s2year"
+              },
+              {
+                "kind": "alias",
+                "expr": {
+                  "kind": "functionCall",
+                  "name": "count",
+                  "args": [
+                    {
+                      "kind": "asterisk"
+                    }
+                  ]
+                },
+                "alias": "cnt"
+              },
+              {
+                "kind": "alias",
+                "expr": {
+                  "kind": "functionCall",
+                  "name": "sum",
+                  "args": [
+                    {
+                      "kind": "columnRef",
+                      "parts": [
+                        "ss_wholesale_cost"
+                      ]
+                    }
+                  ]
+                },
+                "alias": "s1"
+              },
+              {
+                "kind": "alias",
+                "expr": {
+                  "kind": "functionCall",
+                  "name": "sum",
+                  "args": [
+                    {
+                      "kind": "columnRef",
+                      "parts": [
+                        "ss_list_price"
+                      ]
+                    }
+                  ]
+                },
+                "alias": "s2"
+              },
+              {
+                "kind": "alias",
+                "expr": {
+                  "kind": "functionCall",
+                  "name": "sum",
+                  "args": [
+                    {
+                      "kind": "columnRef",
+                      "parts": [
+                        "ss_coupon_amt"
+                      ]
+                    }
+                  ]
+                },
+                "alias": "s3"
+              }
+            ],
+            "from": {
+              "left": {
+                "left": {
+                  "left": {
+                    "left": {
+                      "left": {
+                        "left": {
+                          "left": {
+                            "left": {
+                              "left": {
+                                "left": {
+                                  "left": {
+                                    "left": {
+                                      "left": {
+                                        "left": {
+                                          "left": {
+                                            "left": {
+                                              "left": {
+                                                "kind": "tableRef",
+                                                "table": "store_sales"
+                                              },
+                                              "kind": "joinExpr",
+                                              "joinType": "CROSS",
+                                              "right": {
+                                                "kind": "tableRef",
+                                                "table": "store_returns"
+                                              }
+                                            },
+                                            "kind": "joinExpr",
+                                            "joinType": "CROSS",
+                                            "right": {
+                                              "kind": "tableRef",
+                                              "table": "cs_ui"
+                                            }
+                                          },
+                                          "kind": "joinExpr",
+                                          "joinType": "CROSS",
+                                          "right": {
+                                            "kind": "tableRef",
+                                            "table": "date_dim",
+                                            "alias": "d1"
+                                          }
+                                        },
+                                        "kind": "joinExpr",
+                                        "joinType": "CROSS",
+                                        "right": {
+                                          "kind": "tableRef",
+                                          "table": "date_dim",
+                                          "alias": "d2"
+                                        }
+                                      },
+                                      "kind": "joinExpr",
+                                      "joinType": "CROSS",
+                                      "right": {
+                                        "kind": "tableRef",
+                                        "table": "date_dim",
+                                        "alias": "d3"
+                                      }
+                                    },
+                                    "kind": "joinExpr",
+                                    "joinType": "CROSS",
+                                    "right": {
+                                      "kind": "tableRef",
+                                      "table": "store"
+                                    }
+                                  },
+                                  "kind": "joinExpr",
+                                  "joinType": "CROSS",
+                                  "right": {
+                                    "kind": "tableRef",
+                                    "table": "customer"
+                                  }
+                                },
+                                "kind": "joinExpr",
+                                "joinType": "CROSS",
+                                "right": {
+                                  "kind": "tableRef",
+                                  "table": "customer_demographics",
+                                  "alias": "cd1"
+                                }
+                              },
+                              "kind": "joinExpr",
+                              "joinType": "CROSS",
+                              "right": {
+                                "kind": "tableRef",
+                                "table": "customer_demographics",
+                                "alias": "cd2"
+                              }
+                            },
+                            "kind": "joinExpr",
+                            "joinType": "CROSS",
+                            "right": {
+                              "kind": "tableRef",
+                              "table": "promotion"
+                            }
+                          },
+                          "kind": "joinExpr",
+                          "joinType": "CROSS",
+                          "right": {
+                            "kind": "tableRef",
+                            "table": "household_demographics",
+                            "alias": "hd1"
+                          }
+                        },
+                        "kind": "joinExpr",
+                        "joinType": "CROSS",
+                        "right": {
+                          "kind": "tableRef",
+                          "table": "household_demographics",
+                          "alias": "hd2"
+                        }
+                      },
+                      "kind": "joinExpr",
+                      "joinType": "CROSS",
+                      "right": {
+                        "kind": "tableRef",
+                        "table": "customer_address",
+                        "alias": "ad1"
+                      }
+                    },
+                    "kind": "joinExpr",
+                    "joinType": "CROSS",
+                    "right": {
+                      "kind": "tableRef",
+                      "table": "customer_address",
+                      "alias": "ad2"
+                    }
+                  },
+                  "kind": "joinExpr",
+                  "joinType": "CROSS",
+                  "right": {
+                    "kind": "tableRef",
+                    "table": "income_band",
+                    "alias": "ib1"
+                  }
+                },
+                "kind": "joinExpr",
+                "joinType": "CROSS",
+                "right": {
+                  "kind": "tableRef",
+                  "table": "income_band",
+                  "alias": "ib2"
+                }
+              },
+              "kind": "joinExpr",
+              "joinType": "CROSS",
+              "right": {
+                "kind": "tableRef",
+                "table": "item"
+              }
+            },
+            "where": {
+              "kind": "naryExpr",
+              "op": "AND",
+              "operands": [
+                {
+                  "kind": "binaryExpr",
+                  "op": "=",
+                  "left": {
+                    "kind": "columnRef",
+                    "parts": [
+                      "ss_store_sk"
+                    ]
+                  },
+                  "right": {
+                    "kind": "columnRef",
+                    "parts": [
+                      "s_store_sk"
+                    ]
+                  },
+                  "parenthesized": true
+                },
+                {
+                  "kind": "binaryExpr",
+                  "op": "=",
+                  "left": {
+                    "kind": "columnRef",
+                    "parts": [
+                      "ss_sold_date_sk"
+                    ]
+                  },
+                  "right": {
+                    "kind": "columnRef",
+                    "parts": [
+                      "d1",
+                      "d_date_sk"
+                    ]
+                  },
+                  "parenthesized": true
+                },
+                {
+                  "kind": "binaryExpr",
+                  "op": "=",
+                  "left": {
+                    "kind": "columnRef",
+                    "parts": [
+                      "ss_customer_sk"
+                    ]
+                  },
+                  "right": {
+                    "kind": "columnRef",
+                    "parts": [
+                      "c_customer_sk"
+                    ]
+                  },
+                  "parenthesized": true
+                },
+                {
+                  "kind": "binaryExpr",
+                  "op": "=",
+                  "left": {
+                    "kind": "columnRef",
+                    "parts": [
+                      "ss_cdemo_sk"
+                    ]
+                  },
+                  "right": {
+                    "kind": "columnRef",
+                    "parts": [
+                      "cd1",
+                      "cd_demo_sk"
+                    ]
+                  },
+                  "parenthesized": true
+                },
+                {
+                  "kind": "binaryExpr",
+                  "op": "=",
+                  "left": {
+                    "kind": "columnRef",
+                    "parts": [
+                      "ss_hdemo_sk"
+                    ]
+                  },
+                  "right": {
+                    "kind": "columnRef",
+                    "parts": [
+                      "hd1",
+                      "hd_demo_sk"
+                    ]
+                  },
+                  "parenthesized": true
+                },
+                {
+                  "kind": "binaryExpr",
+                  "op": "=",
+                  "left": {
+                    "kind": "columnRef",
+                    "parts": [
+                      "ss_addr_sk"
+                    ]
+                  },
+                  "right": {
+                    "kind": "columnRef",
+                    "parts": [
+                      "ad1",
+                      "ca_address_sk"
+                    ]
+                  },
+                  "parenthesized": true
+                },
+                {
+                  "kind": "binaryExpr",
+                  "op": "=",
+                  "left": {
+                    "kind": "columnRef",
+                    "parts": [
+                      "ss_item_sk"
+                    ]
+                  },
+                  "right": {
+                    "kind": "columnRef",
+                    "parts": [
+                      "i_item_sk"
+                    ]
+                  },
+                  "parenthesized": true
+                },
+                {
+                  "kind": "binaryExpr",
+                  "op": "=",
+                  "left": {
+                    "kind": "columnRef",
+                    "parts": [
+                      "ss_item_sk"
+                    ]
+                  },
+                  "right": {
+                    "kind": "columnRef",
+                    "parts": [
+                      "sr_item_sk"
+                    ]
+                  },
+                  "parenthesized": true
+                },
+                {
+                  "kind": "binaryExpr",
+                  "op": "=",
+                  "left": {
+                    "kind": "columnRef",
+                    "parts": [
+                      "ss_ticket_number"
+                    ]
+                  },
+                  "right": {
+                    "kind": "columnRef",
+                    "parts": [
+                      "sr_ticket_number"
+                    ]
+                  },
+                  "parenthesized": true
+                },
+                {
+                  "kind": "binaryExpr",
+                  "op": "=",
+                  "left": {
+                    "kind": "columnRef",
+                    "parts": [
+                      "ss_item_sk"
+                    ]
+                  },
+                  "right": {
+                    "kind": "columnRef",
+                    "parts": [
+                      "cs_ui",
+                      "cs_item_sk"
+                    ]
+                  },
+                  "parenthesized": true
+                },
+                {
+                  "kind": "binaryExpr",
+                  "op": "=",
+                  "left": {
+                    "kind": "columnRef",
+                    "parts": [
+                      "c_current_cdemo_sk"
+                    ]
+                  },
+                  "right": {
+                    "kind": "columnRef",
+                    "parts": [
+                      "cd2",
+                      "cd_demo_sk"
+                    ]
+                  },
+                  "parenthesized": true
+                },
+                {
+                  "kind": "binaryExpr",
+                  "op": "=",
+                  "left": {
+                    "kind": "columnRef",
+                    "parts": [
+                      "c_current_hdemo_sk"
+                    ]
+                  },
+                  "right": {
+                    "kind": "columnRef",
+                    "parts": [
+                      "hd2",
+                      "hd_demo_sk"
+                    ]
+                  },
+                  "parenthesized": true
+                },
+                {
+                  "kind": "binaryExpr",
+                  "op": "=",
+                  "left": {
+                    "kind": "columnRef",
+                    "parts": [
+                      "c_current_addr_sk"
+                    ]
+                  },
+                  "right": {
+                    "kind": "columnRef",
+                    "parts": [
+                      "ad2",
+                      "ca_address_sk"
+                    ]
+                  },
+                  "parenthesized": true
+                },
+                {
+                  "kind": "binaryExpr",
+                  "op": "=",
+                  "left": {
+                    "kind": "columnRef",
+                    "parts": [
+                      "c_first_sales_date_sk"
+                    ]
+                  },
+                  "right": {
+                    "kind": "columnRef",
+                    "parts": [
+                      "d2",
+                      "d_date_sk"
+                    ]
+                  },
+                  "parenthesized": true
+                },
+                {
+                  "kind": "binaryExpr",
+                  "op": "=",
+                  "left": {
+                    "kind": "columnRef",
+                    "parts": [
+                      "c_first_shipto_date_sk"
+                    ]
+                  },
+                  "right": {
+                    "kind": "columnRef",
+                    "parts": [
+                      "d3",
+                      "d_date_sk"
+                    ]
+                  },
+                  "parenthesized": true
+                },
+                {
+                  "kind": "binaryExpr",
+                  "op": "=",
+                  "left": {
+                    "kind": "columnRef",
+                    "parts": [
+                      "ss_promo_sk"
+                    ]
+                  },
+                  "right": {
+                    "kind": "columnRef",
+                    "parts": [
+                      "p_promo_sk"
+                    ]
+                  },
+                  "parenthesized": true
+                },
+                {
+                  "kind": "binaryExpr",
+                  "op": "=",
+                  "left": {
+                    "kind": "columnRef",
+                    "parts": [
+                      "hd1",
+                      "hd_income_band_sk"
+                    ]
+                  },
+                  "right": {
+                    "kind": "columnRef",
+                    "parts": [
+                      "ib1",
+                      "ib_income_band_sk"
+                    ]
+                  },
+                  "parenthesized": true
+                },
+                {
+                  "kind": "binaryExpr",
+                  "op": "=",
+                  "left": {
+                    "kind": "columnRef",
+                    "parts": [
+                      "hd2",
+                      "hd_income_band_sk"
+                    ]
+                  },
+                  "right": {
+                    "kind": "columnRef",
+                    "parts": [
+                      "ib2",
+                      "ib_income_band_sk"
+                    ]
+                  },
+                  "parenthesized": true
+                },
+                {
+                  "kind": "binaryExpr",
+                  "op": "!=",
+                  "left": {
+                    "kind": "columnRef",
+                    "parts": [
+                      "cd1",
+                      "cd_marital_status"
+                    ]
+                  },
+                  "right": {
+                    "kind": "columnRef",
+                    "parts": [
+                      "cd2",
+                      "cd_marital_status"
+                    ]
+                  },
+                  "parenthesized": true
+                },
+                {
+                  "kind": "inExpr",
+                  "negated": false,
+                  "expr": {
+                    "kind": "columnRef",
+                    "parts": [
+                      "i_color"
+                    ]
+                  },
+                  "values": [
+                    {
+                      "kind": "literal",
+                      "type": "String",
+                      "value": "maroon"
+                    },
+                    {
+                      "kind": "literal",
+                      "type": "String",
+                      "value": "burnished"
+                    },
+                    {
+                      "kind": "literal",
+                      "type": "String",
+                      "value": "dim"
+                    },
+                    {
+                      "kind": "literal",
+                      "type": "String",
+                      "value": "steel"
+                    },
+                    {
+                      "kind": "literal",
+                      "type": "String",
+                      "value": "navajo"
+                    },
+                    {
+                      "kind": "literal",
+                      "type": "String",
+                      "value": "chocolate"
+                    }
+                  ],
+                  "parenthesized": true
+                },
+                {
+                  "kind": "naryExpr",
+                  "op": "AND",
+                  "operands": [
+                    {
+                      "kind": "binaryExpr",
+                      "op": ">=",
+                      "left": {
+                        "kind": "columnRef",
+                        "parts": [
+                          "i_current_price"
+                        ]
+                      },
+                      "right": {
+                        "kind": "literal",
+                        "type": "UInt64",
+                        "value": "35"
+                      },
+                      "parenthesized": true
+                    },
+                    {
+                      "kind": "binaryExpr",
+                      "op": "<=",
+                      "left": {
+                        "kind": "columnRef",
+                        "parts": [
+                          "i_current_price"
+                        ]
+                      },
+                      "right": {
+                        "kind": "binaryExpr",
+                        "op": "+",
+                        "left": {
+                          "kind": "literal",
+                          "type": "UInt64",
+                          "value": "35"
+                        },
+                        "right": {
+                          "kind": "literal",
+                          "type": "UInt64",
+                          "value": "10"
+                        },
+                        "parenthesized": true
+                      },
+                      "parenthesized": true
+                    }
+                  ],
+                  "parenthesized": true
+                },
+                {
+                  "kind": "naryExpr",
+                  "op": "AND",
+                  "operands": [
+                    {
+                      "kind": "binaryExpr",
+                      "op": ">=",
+                      "left": {
+                        "kind": "columnRef",
+                        "parts": [
+                          "i_current_price"
+                        ]
+                      },
+                      "right": {
+                        "kind": "binaryExpr",
+                        "op": "+",
+                        "left": {
+                          "kind": "literal",
+                          "type": "UInt64",
+                          "value": "35"
+                        },
+                        "right": {
+                          "kind": "literal",
+                          "type": "UInt64",
+                          "value": "1"
+                        },
+                        "parenthesized": true
+                      },
+                      "parenthesized": true
+                    },
+                    {
+                      "kind": "binaryExpr",
+                      "op": "<=",
+                      "left": {
+                        "kind": "columnRef",
+                        "parts": [
+                          "i_current_price"
+                        ]
+                      },
+                      "right": {
+                        "kind": "binaryExpr",
+                        "op": "+",
+                        "left": {
+                          "kind": "literal",
+                          "type": "UInt64",
+                          "value": "35"
+                        },
+                        "right": {
+                          "kind": "literal",
+                          "type": "UInt64",
+                          "value": "15"
+                        },
+                        "parenthesized": true
+                      },
+                      "parenthesized": true
+                    }
+                  ],
+                  "parenthesized": true
+                }
+              ]
+            },
+            "groupBy": {
+              "kind": "expressions",
+              "items": [
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "i_product_name"
+                  ]
+                },
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "i_item_sk"
+                  ]
+                },
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "s_store_name"
+                  ]
+                },
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "s_zip"
+                  ]
+                },
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "ad1",
+                    "ca_street_number"
+                  ]
+                },
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "ad1",
+                    "ca_street_name"
+                  ]
+                },
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "ad1",
+                    "ca_city"
+                  ]
+                },
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "ad1",
+                    "ca_zip"
+                  ]
+                },
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "ad2",
+                    "ca_street_number"
+                  ]
+                },
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "ad2",
+                    "ca_street_name"
+                  ]
+                },
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "ad2",
+                    "ca_city"
+                  ]
+                },
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "ad2",
+                    "ca_zip"
+                  ]
+                },
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "d1",
+                    "d_year"
+                  ]
+                },
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "d2",
+                    "d_year"
+                  ]
+                },
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "d3",
+                    "d_year"
+                  ]
+                }
+              ]
+            }
+          }
+        }
+      ],
+      "select": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "cs1",
+            "product_name"
+          ]
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "cs1",
+            "store_name"
+          ]
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "cs1",
+            "store_zip"
+          ]
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "cs1",
+            "b_street_number"
+          ]
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "cs1",
+            "b_street_name"
+          ]
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "cs1",
+            "b_city"
+          ]
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "cs1",
+            "b_zip"
+          ]
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "cs1",
+            "c_street_number"
+          ]
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "cs1",
+            "c_street_name"
+          ]
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "cs1",
+            "c_city"
+          ]
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "cs1",
+            "c_zip"
+          ]
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "cs1",
+            "syear"
+          ]
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "cs1",
+            "cnt"
+          ]
+        },
+        {
+          "kind": "alias",
+          "expr": {
+            "kind": "columnRef",
+            "parts": [
+              "cs1",
+              "s1"
+            ]
+          },
+          "alias": "s11"
+        },
+        {
+          "kind": "alias",
+          "expr": {
+            "kind": "columnRef",
+            "parts": [
+              "cs1",
+              "s2"
+            ]
+          },
+          "alias": "s21"
+        },
+        {
+          "kind": "alias",
+          "expr": {
+            "kind": "columnRef",
+            "parts": [
+              "cs1",
+              "s3"
+            ]
+          },
+          "alias": "s31"
+        },
+        {
+          "kind": "alias",
+          "expr": {
+            "kind": "columnRef",
+            "parts": [
+              "cs2",
+              "s1"
+            ]
+          },
+          "alias": "s12"
+        },
+        {
+          "kind": "alias",
+          "expr": {
+            "kind": "columnRef",
+            "parts": [
+              "cs2",
+              "s2"
+            ]
+          },
+          "alias": "s22"
+        },
+        {
+          "kind": "alias",
+          "expr": {
+            "kind": "columnRef",
+            "parts": [
+              "cs2",
+              "s3"
+            ]
+          },
+          "alias": "s32"
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "cs2",
+            "syear"
+          ]
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "cs2",
+            "cnt"
+          ]
+        }
+      ],
+      "from": {
+        "left": {
+          "kind": "tableRef",
+          "table": "cross_sales",
+          "alias": "cs1"
+        },
+        "kind": "joinExpr",
+        "joinType": "CROSS",
+        "right": {
+          "kind": "tableRef",
+          "table": "cross_sales",
+          "alias": "cs2"
+        }
+      },
+      "where": {
+        "kind": "naryExpr",
+        "op": "AND",
+        "operands": [
+          {
+            "kind": "binaryExpr",
+            "op": "=",
+            "left": {
+              "kind": "columnRef",
+              "parts": [
+                "cs1",
+                "item_sk"
+              ]
+            },
+            "right": {
+              "kind": "columnRef",
+              "parts": [
+                "cs2",
+                "item_sk"
+              ]
+            },
+            "parenthesized": true
+          },
+          {
+            "kind": "binaryExpr",
+            "op": "=",
+            "left": {
+              "kind": "columnRef",
+              "parts": [
+                "cs1",
+                "syear"
+              ]
+            },
+            "right": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "2000"
+            },
+            "parenthesized": true
+          },
+          {
+            "kind": "binaryExpr",
+            "op": "=",
+            "left": {
+              "kind": "columnRef",
+              "parts": [
+                "cs2",
+                "syear"
+              ]
+            },
+            "right": {
+              "kind": "binaryExpr",
+              "op": "+",
+              "left": {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "2000"
+              },
+              "right": {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "1"
+              },
+              "parenthesized": true
+            },
+            "parenthesized": true
+          },
+          {
+            "kind": "binaryExpr",
+            "op": "<=",
+            "left": {
+              "kind": "columnRef",
+              "parts": [
+                "cs2",
+                "cnt"
+              ]
+            },
+            "right": {
+              "kind": "columnRef",
+              "parts": [
+                "cs1",
+                "cnt"
+              ]
+            },
+            "parenthesized": true
+          },
+          {
+            "kind": "binaryExpr",
+            "op": "=",
+            "left": {
+              "kind": "columnRef",
+              "parts": [
+                "cs1",
+                "store_name"
+              ]
+            },
+            "right": {
+              "kind": "columnRef",
+              "parts": [
+                "cs2",
+                "store_name"
+              ]
+            },
+            "parenthesized": true
+          },
+          {
+            "kind": "binaryExpr",
+            "op": "=",
+            "left": {
+              "kind": "columnRef",
+              "parts": [
+                "cs1",
+                "store_zip"
+              ]
+            },
+            "right": {
+              "kind": "columnRef",
+              "parts": [
+                "cs2",
+                "store_zip"
+              ]
+            },
+            "parenthesized": true
+          }
+        ]
+      },
+      "orderBy": [
+        {
+          "kind": "orderByItem",
+          "expr": {
+            "kind": "columnRef",
+            "parts": [
+              "cs1",
+              "product_name"
+            ]
+          },
+          "direction": "ASC"
+        },
+        {
+          "kind": "orderByItem",
+          "expr": {
+            "kind": "columnRef",
+            "parts": [
+              "cs1",
+              "store_name"
+            ]
+          },
+          "direction": "ASC"
+        },
+        {
+          "kind": "orderByItem",
+          "expr": {
+            "kind": "columnRef",
+            "parts": [
+              "cs2",
+              "cnt"
+            ]
+          },
+          "direction": "ASC"
+        },
+        {
+          "kind": "orderByItem",
+          "expr": {
+            "kind": "columnRef",
+            "parts": [
+              "cs1",
+              "s1"
+            ]
+          },
+          "direction": "ASC"
+        },
+        {
+          "kind": "orderByItem",
+          "expr": {
+            "kind": "columnRef",
+            "parts": [
+              "cs2",
+              "s1"
+            ]
+          },
+          "direction": "ASC"
+        }
+      ]
+    },
+    "format": "Null"
   }
 ]

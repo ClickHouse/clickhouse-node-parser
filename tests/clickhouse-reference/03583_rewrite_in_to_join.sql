@@ -22,6 +22,19 @@ SELECT number NOT IN (SELECT number IN (SELECT * FROM numbers(1)) FROM numbers(2
 SELECT number IN (SELECT number NOT IN (SELECT * FROM numbers(1)) FROM numbers(2)) FROM numbers(3);
 SELECT number NOT IN (SELECT number NOT IN (SELECT * FROM numbers(1)) FROM numbers(2)) FROM numbers(3);
 SELECT number IN (SELECT number FROM numbers(2) WHERE number NOT IN (SELECT * FROM numbers(1))) FROM numbers(3);
+EXPLAIN keep_logical_steps=1, description=0
+SELECT *
+FROM numbers(8)
+WHERE number IN (select number from numbers(5))
+SETTINGS enable_join_runtime_filters = 0;
+-- Same subquery as CTE
+EXPLAIN keep_logical_steps=1, description=0
+WITH
+    t as (select number from numbers(5))
+SELECT *
+FROM numbers(8)
+WHERE number IN t
+SETTINGS enable_join_runtime_filters = 0;
 WITH
     t as (select number from numbers(5))
 SELECT *

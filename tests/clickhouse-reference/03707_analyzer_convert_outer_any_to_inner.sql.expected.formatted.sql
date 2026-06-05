@@ -20,6 +20,16 @@ INSERT INTO users;
 
 INSERT INTO users;
 
+EXPLAIN actions = 1, keep_logical_steps = 1
+SELECT *
+FROM users AS u1
+WHERE uid = (
+        SELECT sum(age)
+        FROM users AS u2
+        WHERE u1.name = u2.name
+    )
+SETTINGS enable_join_runtime_filters = 0;
+
 SELECT *
 FROM users AS u1
 WHERE uid = (

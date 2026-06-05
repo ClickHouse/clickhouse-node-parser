@@ -923,6 +923,8 @@ function orderByNode(item: OrderByItem): ExplainNode {
 
 function cteNode(cte: CTE): ExplainNode {
   if (cte.kind === 'cteExpr') {
+    // Anonymous WITH expression (e.g. `WITH 1 SELECT 1`) renders as just the expression.
+    if (cte.name === undefined) return exprNode(cte.expr);
     return exprNode({ kind: 'alias', expr: cte.expr, alias: cte.name });
   }
   if (cte.kind === 'cteTuple') {
@@ -1051,12 +1053,30 @@ function selectQueryNode(stmt: SelectStatement): ExplainNode {
   return n('SelectQuery', children);
 }
 
-// Build the ExplainQuery node for an EXPLAIN statement (used when EXPLAIN is at top level)
+// Build the Explain EXPLAIN node for an EXPLAIN statement (used when EXPLAIN is at top level).
+// Label is `Explain EXPLAIN [<TYPE>]` where TYPE is omitted for default-PLAN explains.
+// Children, in order: optional Set node (when explain-level settings are present), the
+// inner query node, optional Identifier <format> node (when a FORMAT clause is present).
 function explainStmtNode(stmt: ExplainStatement): ExplainNode {
-  const type = stmt.explainType ? stmt.explainType.toLowerCase().replace(' ', '_') : 'ast';
+  // PLAN is the implicit default and never appears in the label, even when the user
+  // wrote `EXPLAIN PLAN ...` explicitly.
+  const typeStr = stmt.explainType && stmt.explainType !== 'PLAN' ? ` ${stmt.explainType}` : '';
+  const label = `Explain EXPLAIN${typeStr}`;
   const children: ExplainNode[] = [];
+  // Explain-level settings (e.g. `EXPLAIN PIPELINE graph=1 ...`) become a leading Set child.
+  if (stmt.settings && stmt.settings.length > 0) {
+    children.push(n('Set'));
+  }
   if (stmt.query) children.push(stmtNode(stmt.query));
-  return n(`ExplainQuery ${type}`, children);
+  // FORMAT clause renders as `Identifier <name>` after the query.
+  if (stmt.format) {
+    children.push(n(`Identifier ${stmt.format}`));
+  }
+  // SETTINGS after the FORMAT clause add a trailing Set child.
+  if (stmt.postFormatSettings && stmt.postFormatSettings.length > 0) {
+    children.push(n('Set'));
+  }
+  return n(label, children);
 }
 
 // Format the EXPLAIN type as the first literal argument to viewExplain.
@@ -1903,7 +1923,11 @@ function createTableQueryNode(stmt: CreateTableStatement): ExplainNode {
           if (projQuery.with && projQuery.with.length > 0) {
             const cteItems = projQuery.with
               .filter((cte): cte is typeof cte & { kind: 'cteExpr' } => cte.kind === 'cteExpr')
-              .map((cte) => exprNode({ kind: 'alias', expr: cte.expr, alias: cte.name }));
+              .map((cte) =>
+                cte.name === undefined
+                  ? exprNode(cte.expr)
+                  : exprNode({ kind: 'alias', expr: cte.expr, alias: cte.name }),
+              );
             if (cteItems.length > 0) {
               pqChildren.push(n('ExpressionList', cteItems));
             }
@@ -2061,6 +2085,14 @@ function hasSelectSettings(query?: Statement): boolean {
 
 function insertQueryNode(stmt: InsertStatement): ExplainNode {
   const children: ExplainNode[] = [];
+
+  // FROM INFILE 'path' [COMPRESSION 'name'] precedes the target identifier
+  if (stmt.fromInfile) {
+    children.push(exprNode(stmt.fromInfile.path));
+    if (stmt.fromInfile.compression) {
+      children.push(exprNode(stmt.fromInfile.compression));
+    }
+  }
 
   // First child: table identifier or function
   if (stmt.target.kind === 'table') {

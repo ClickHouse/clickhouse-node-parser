@@ -44,12 +44,23 @@ SET read_in_order_two_level_merge_threshold = 1000;
 CREATE TABLE dist_t AS t
 ENGINE = Distributed(test_cluster_two_shards, currentDatabase(), t, a % 2);
 
+-- { echoOn } --
+EXPLAIN PIPELINE
+SELECT a
+FROM remote(test_cluster_two_shards, currentDatabase(), t)
+GROUP BY a;
+
 SELECT a
 FROM remote(test_cluster_two_shards, currentDatabase(), t)
 GROUP BY a
 ORDER BY a ASC
 LIMIT 5
 OFFSET 100500;
+
+EXPLAIN PIPELINE
+SELECT a
+FROM remote(test_cluster_two_shards, currentDatabase(), dist_t)
+GROUP BY a;
 
 SELECT a
 FROM remote(test_cluster_two_shards, currentDatabase(), dist_t)
@@ -105,6 +116,17 @@ FROM numbers_mt(1e6);
 CREATE TABLE dist_t_different_dbs AS t
 ENGINE = Distributed(test_cluster_two_shards_different_databases_with_local, '', t_different_dbs);
 
+-- { echoOn } --
+EXPLAIN PIPELINE
+SELECT
+    a,
+    count()
+FROM dist_t_different_dbs
+GROUP BY a
+ORDER BY a ASC
+LIMIT 5
+OFFSET 500;
+
 SELECT
     a,
     count()
@@ -152,6 +174,27 @@ SET parallel_replicas_only_with_analyzer = 0; -- necessary for CI run with disab
 
 SELECT count()
 FROM pr_t;
+
+-- { echoOn } --
+EXPLAIN PIPELINE
+SELECT a
+FROM pr_t
+GROUP BY a
+ORDER BY a ASC
+LIMIT 5
+OFFSET 500
+SETTINGS parallel_replicas_local_plan = 0;
+
+EXPLAIN PIPELINE
+SELECT a
+FROM pr_t
+GROUP BY a
+ORDER BY a ASC
+LIMIT 5
+OFFSET 500
+SETTINGS
+    enable_analyzer = 1,
+    parallel_replicas_local_plan = 1;
 
 SELECT
     a,

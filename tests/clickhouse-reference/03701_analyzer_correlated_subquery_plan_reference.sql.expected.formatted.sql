@@ -20,3 +20,13 @@ SELECT
     number AS x,
     number % 2 AS y
 FROM numbers(100);
+
+EXPLAIN actions = 1
+SELECT count()
+FROM t AS n
+WHERE EXISTS((
+        SELECT *
+        FROM numbers(10)
+        WHERE number != n.x
+    ))
+    AND n.y = 1;

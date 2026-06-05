@@ -54,3 +54,10 @@ FROM (
         SELECT *
         FROM test_1m
     );
+
+EXPLAIN indexes = 1
+SELECT key
+FROM (
+        SELECT *
+        FROM test_1m
+    );

@@ -12,4 +12,5 @@ set read_in_order_two_level_merge_threshold = 1000;
 set optimize_aggregation_in_order = 0;
 SELECT trimLeft(*) FROM (explain select sum(b) from pr_t group by a order by a limit 5 offset 500) WHERE explain LIKE '%ReadFromMergeTree%';
 set optimize_aggregation_in_order = 1;
+explain pipeline select sum(b) from pr_t group by a order by a limit 5 offset 500;
 select sum(b) from pr_t group by a order by a limit 5 offset 500;

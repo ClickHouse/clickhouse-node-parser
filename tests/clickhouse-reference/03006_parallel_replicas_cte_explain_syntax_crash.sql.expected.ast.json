@@ -172,6 +172,82 @@
     ]
   },
   {
+    "kind": "explain",
+    "explainType": "SYNTAX",
+    "query": {
+      "kind": "select",
+      "with": [
+        {
+          "kind": "cteSubquery",
+          "name": "cte1",
+          "query": {
+            "kind": "select",
+            "select": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "n"
+                ]
+              }
+            ],
+            "from": {
+              "kind": "tableRef",
+              "table": "numbers_1e6__fuzz_34"
+            }
+          }
+        },
+        {
+          "kind": "cteSubquery",
+          "name": "cte2",
+          "query": {
+            "kind": "select",
+            "select": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "n"
+                ]
+              }
+            ],
+            "from": {
+              "kind": "tableRef",
+              "table": "numbers_1e6__fuzz_33"
+            },
+            "prewhere": {
+              "kind": "inExpr",
+              "negated": false,
+              "expr": {
+                "kind": "columnRef",
+                "parts": [
+                  "n"
+                ]
+              },
+              "values": [
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "cte1"
+                  ]
+                }
+              ]
+            }
+          }
+        }
+      ],
+      "select": [
+        {
+          "kind": "functionCall",
+          "name": "count",
+          "args": []
+        }
+      ],
+      "from": {
+        "kind": "tableRef",
+        "table": "cte2"
+      }
+    }
+  },
+  {
     "kind": "drop",
     "targetType": "TABLE",
     "table": {

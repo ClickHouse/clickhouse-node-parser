@@ -32,6 +32,12 @@ SETTINGS
     use_variant_as_common_type = 1,
     output_format_json_quote_64bit_integers = 0;
 
+EXPLAIN indexes = 1
+SELECT json
+FROM test
+WHERE json.a = 1
+SETTINGS enable_parallel_replicas = 0;
+
 SELECT trimLeft(*)
 FROM (
         EXPLAIN indexes = 1
@@ -45,6 +51,12 @@ SELECT json
 FROM test
 WHERE json.a = 1;
 
+EXPLAIN indexes = 1
+SELECT t
+FROM test
+WHERE t.a = 1
+SETTINGS enable_parallel_replicas = 0;
+
 SELECT trimLeft(*)
 FROM (
         EXPLAIN indexes = 1
@@ -57,6 +69,12 @@ WHERE like(`explain`, '%ReadFromMergeTree%');
 SELECT t
 FROM test
 WHERE t.a = 1;
+
+EXPLAIN indexes = 1
+SELECT json
+FROM test
+WHERE json.`c[]`.d.:Int64 = [1]
+SETTINGS enable_parallel_replicas = 0;
 
 SELECT trimLeft(*)
 FROM (

@@ -18,6 +18,21 @@ INSERT INTO users;
 
 INSERT INTO users;
 
+EXPLAIN actions = 1, keep_logical_steps = 1
+SELECT *
+FROM
+    users AS u1
+LEFT JOIN (
+        SELECT
+            sum(age)::Nullable(Int64) AS age_sum,
+            name
+        FROM users
+        GROUP BY name
+    ) AS u2
+    ON u1.name = u2.name
+WHERE uid < age_sum
+SETTINGS enable_join_runtime_filters = 0;
+
 SELECT *
 FROM
     users AS u1
@@ -30,3 +45,53 @@ LEFT JOIN (
     ) AS u2
     ON u1.name = u2.name
 WHERE uid < age_sum;
+
+-- Do not convert to INNER JOIN
+EXPLAIN actions = 1, keep_logical_steps = 1
+SELECT *
+FROM
+    users AS u1
+LEFT JOIN (
+        SELECT
+            sum(age)::Nullable(Int64) AS age_sum,
+            name
+        FROM users
+        GROUP BY name
+        WITH ROLLUP
+    ) AS u2
+    ON u1.name = u2.name
+WHERE uid < age_sum
+SETTINGS enable_join_runtime_filters = 0;
+
+-- Do not convert to INNER JOIN
+EXPLAIN actions = 1, keep_logical_steps = 1
+SELECT *
+FROM
+    users AS u1
+LEFT JOIN (
+        SELECT
+            sum(age)::Nullable(Int64) AS age_sum,
+            name
+        FROM users
+        GROUP BY name
+        WITH CUBE
+    ) AS u2
+    ON u1.name = u2.name
+WHERE uid < age_sum
+SETTINGS enable_join_runtime_filters = 0;
+
+-- Do not convert to INNER JOIN
+EXPLAIN actions = 1, keep_logical_steps = 1
+SELECT *
+FROM
+    users AS u1
+LEFT JOIN (
+        SELECT
+            sum(age)::Nullable(Int64) AS age_sum,
+            name
+        FROM users
+        GROUP BY GROUPING SETS ((name), ())
+    ) AS u2
+    ON u1.name = u2.name
+WHERE uid < age_sum
+SETTINGS enable_join_runtime_filters = 0;
