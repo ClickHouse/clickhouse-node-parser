@@ -149,9 +149,37 @@ try {
 ```bash
 npm run build           # Regenerate parser from grammar + build dist/
 npm test                # Run test suite
-npm run parse "SQL"     # Parse SQL and print AST as JSON
-npm run format "SQL"    # Parse and format SQL
-npm run explain "SQL"   # Parse and print EXPLAIN output
 ```
+
+### Inspecting output
+
+`parse`, `format`, and `explain` print this library's output. Each takes a raw SQL
+string via `--sql`, or one or more reference cases from `tests/clickhouse-reference/`
+(a `.sql` filename — the suffix is optional — a comma-separated list, or a glob):
+
+```bash
+npm run parse   -- --sql "SELECT 1"   # AST as JSON
+npm run format  -- --sql "SELECT 1"   # re-formatted SQL
+npm run explain -- --sql "SELECT 1"   # EXPLAIN AST output
+
+npm run format  -- 00001_select_1     # output for a reference case
+npm run explain -- '00001_*'          # output for every matching case
+```
+
+### Diffing against expected output
+
+`diff:ast`, `diff:format`, and `diff:explain` show this library's output, the expected
+output committed in `tests/clickhouse-reference/`, and a diff between them — useful for
+debugging reference test failures. They take the same reference selector (filename,
+comma-separated list, or glob):
+
+```bash
+npm run diff:format  -- 00001_select_1            # actual, expected, and diff
+npm run diff:ast     -- '0001*' --diff-only       # just the diff
+npm run diff:explain -- 00001_select_1,00002_count_visits --only-diffs
+```
+
+Flags: `--diff-only`, `--actual-only`, `--expected-only`, `--only-diffs`, `--no-color`.
+Pass `-h` to any script for full usage.
 
 The parser is built with [Peggy](https://peggyjs.org/) (PEG grammar) and produces ASTs validated by [Zod](https://zod.dev/) schemas. All AST types are exported for use in downstream tooling.
