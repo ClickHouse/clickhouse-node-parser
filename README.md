@@ -1,4 +1,4 @@
-# clickhouse-node-parser
+# @clickhouse/parser
 
 A TypeScript parser for ClickHouse SQL. Parses ClickHouse SQL into a typed AST, with support for formatting back to SQL.
 
@@ -7,7 +7,7 @@ A TypeScript parser for ClickHouse SQL. Parses ClickHouse SQL into a typed AST, 
 ## Installation
 
 ```bash
-npm install clickhouse-node-parser
+npm install @clickhouse/parser
 ```
 
 ## Usage
@@ -15,7 +15,7 @@ npm install clickhouse-node-parser
 ### Parsing SQL to AST
 
 ```typescript
-import { parse } from 'clickhouse-node-parser';
+import { parse } from '@clickhouse/parser';
 
 const ast = parse('SELECT id, name FROM users WHERE active = 1 ORDER BY name');
 ```
@@ -58,7 +58,7 @@ Each node has a `kind` discriminator field. See [ast.ts](src/ast.ts) for all nod
 ### Formatting AST back to SQL
 
 ```typescript
-import { parse, format } from 'clickhouse-node-parser';
+import { parse, format } from '@clickhouse/parser';
 
 const ast = parse('SELECT id, name FROM users WHERE active = 1 ORDER BY name');
 const sql = format(ast);
@@ -80,7 +80,7 @@ ORDER BY name ASC;
 ### EXPLAIN output
 
 ```typescript
-import { parse, formatExplain } from 'clickhouse-node-parser';
+import { parse, formatExplain } from '@clickhouse/parser';
 
 const ast = parse('SELECT a + b FROM t WHERE x = 1');
 const explain = formatExplain(ast);
@@ -112,7 +112,7 @@ SelectWithUnionQuery (children 1)
 When parsing fails, `parse()` throws a `ParseError` with structured information about where and why the parse failed.
 
 ```typescript
-import { parse, ParseError } from 'clickhouse-node-parser';
+import { parse, ParseError } from '@clickhouse/parser';
 
 try {
   parse('SELECT ???');

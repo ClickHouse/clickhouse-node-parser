@@ -6,7 +6,7 @@ import type { ASTNode, ASTNodeKind, ASTNodeKindMap } from './ast';
  *
  * @example
  * ```ts
- * import { isNodeKind } from 'clickhouse-node-parser';
+ * import { isNodeKind } from '@clickhouse/parser';
  *
  * const node: ASTNode = ...;
  * if (isNodeKind(node, 'literal')) {
