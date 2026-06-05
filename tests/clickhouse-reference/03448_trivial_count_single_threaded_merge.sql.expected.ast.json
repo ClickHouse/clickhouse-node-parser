@@ -77,5 +77,168 @@
         }
       }
     ]
+  },
+  {
+    "kind": "explain",
+    "explainType": "PIPELINE",
+    "query": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "functionCall",
+          "name": "count",
+          "args": []
+        }
+      ],
+      "from": {
+        "kind": "tableRef",
+        "table": "trivial_count"
+      }
+    },
+    "leadingComments": [
+      "-- { echo On }",
+      "-- We should use just a single thread to merge the state of trivial count"
+    ]
+  },
+  {
+    "kind": "explain",
+    "explainType": "PIPELINE",
+    "query": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "functionCall",
+          "name": "count",
+          "args": []
+        }
+      ],
+      "from": {
+        "kind": "tableRef",
+        "table": "trivial_count"
+      },
+      "where": {
+        "kind": "binaryExpr",
+        "op": "=",
+        "left": {
+          "kind": "binaryExpr",
+          "op": "%",
+          "left": {
+            "kind": "columnRef",
+            "parts": [
+              "number"
+            ]
+          },
+          "right": {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "3"
+          }
+        },
+        "right": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "2"
+        }
+      }
+    },
+    "leadingComments": [
+      "-- But not if we are filtering or doing other operations (no trivial count)"
+    ]
+  },
+  {
+    "kind": "explain",
+    "explainType": "PIPELINE",
+    "query": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "functionCall",
+          "name": "count",
+          "args": []
+        }
+      ],
+      "from": {
+        "kind": "tableRef",
+        "table": "trivial_count"
+      },
+      "groupBy": {
+        "kind": "expressions",
+        "items": [
+          {
+            "kind": "binaryExpr",
+            "op": "%",
+            "left": {
+              "kind": "columnRef",
+              "parts": [
+                "number"
+              ]
+            },
+            "right": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "10"
+            }
+          }
+        ]
+      }
+    }
+  },
+  {
+    "kind": "explain",
+    "explainType": "PIPELINE",
+    "query": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "functionCall",
+          "name": "sum",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "number"
+              ]
+            }
+          ]
+        }
+      ],
+      "from": {
+        "kind": "tableRef",
+        "table": "trivial_count"
+      }
+    },
+    "leadingComments": [
+      "-- Other aggregations should still use as many threads as necessary"
+    ]
+  },
+  {
+    "kind": "explain",
+    "explainType": "PIPELINE",
+    "query": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "functionCall",
+          "name": "count",
+          "args": []
+        },
+        {
+          "kind": "functionCall",
+          "name": "sum",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "number"
+              ]
+            }
+          ]
+        }
+      ],
+      "from": {
+        "kind": "tableRef",
+        "table": "trivial_count"
+      }
+    }
   }
 ]

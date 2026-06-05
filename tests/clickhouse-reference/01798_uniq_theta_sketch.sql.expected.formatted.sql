@@ -141,6 +141,50 @@ DROP TABLE decimal;
 
 SET optimize_injective_functions_inside_uniq = 1;
 
+EXPLAIN SYNTAX
+SELECT uniqTheta(x)
+FROM (
+        SELECT number % 2 AS x
+        FROM numbers(10)
+    );
+
+EXPLAIN SYNTAX
+SELECT uniqTheta(x + y)
+FROM (
+        SELECT
+            number % 2 AS x,
+            number % 3 AS y
+        FROM numbers(10)
+    );
+
+EXPLAIN SYNTAX
+SELECT uniqTheta(negate(x))
+FROM (
+        SELECT number % 2 AS x
+        FROM numbers(10)
+    );
+
+EXPLAIN SYNTAX
+SELECT uniqTheta(bitNot(x))
+FROM (
+        SELECT number % 2 AS x
+        FROM numbers(10)
+    );
+
+EXPLAIN SYNTAX
+SELECT uniqTheta(bitNot(negate(x)))
+FROM (
+        SELECT number % 2 AS x
+        FROM numbers(10)
+    );
+
+EXPLAIN SYNTAX
+SELECT uniqTheta(negate(bitNot(negate(x))))
+FROM (
+        SELECT number % 2 AS x
+        FROM numbers(10)
+    );
+
 SET optimize_injective_functions_inside_uniq = 0;
 
 DROP TABLE IF EXISTS stored_aggregates;

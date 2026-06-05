@@ -40,6 +40,11 @@ FROM numbers(5, 2);
 
 SET max_threads = 2;
 
+EXPLAIN PIPELINE
+SELECT *
+FROM t0 FINAL
+SETTINGS enable_vertical_final = 0;
+
 -- PartsSplitter is disabled when some keys are in ascending order while others are in descending order.
 CREATE TABLE t0
 (

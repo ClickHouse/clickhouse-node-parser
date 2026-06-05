@@ -172,6 +172,95 @@
     }
   },
   {
+    "kind": "explain",
+    "settings": [
+      {
+        "name": "actions",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      },
+      {
+        "name": "optimize",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      },
+      {
+        "name": "header",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ],
+    "query": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "t1",
+            "id"
+          ]
+        }
+      ],
+      "from": {
+        "left": {
+          "kind": "tableRef",
+          "table": "t1"
+        },
+        "kind": "joinExpr",
+        "joinType": "CROSS",
+        "right": {
+          "kind": "tableRef",
+          "table": "t2"
+        }
+      },
+      "where": {
+        "kind": "binaryExpr",
+        "op": "=",
+        "left": {
+          "kind": "columnRef",
+          "parts": [
+            "t1",
+            "id"
+          ]
+        },
+        "right": {
+          "kind": "columnRef",
+          "parts": [
+            "t2",
+            "id"
+          ]
+        }
+      },
+      "settings": [
+        {
+          "name": "query_plan_use_new_logical_join_step",
+          "value": {
+            "kind": "literal",
+            "type": "Bool",
+            "value": "1"
+          }
+        },
+        {
+          "name": "query_plan_convert_join_to_in",
+          "value": {
+            "kind": "literal",
+            "type": "Bool",
+            "value": "1"
+          }
+        }
+      ]
+    }
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -294,6 +383,116 @@
   {
     "kind": "system",
     "body": "SYSTEM FLUSH LOGS system.query_log"
+  },
+  {
+    "kind": "explain",
+    "query": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "alias",
+          "expr": {
+            "kind": "functionCall",
+            "name": "hostName",
+            "args": []
+          },
+          "alias": "hostName"
+        }
+      ],
+      "from": {
+        "left": {
+          "kind": "tableRef",
+          "database": "system",
+          "table": "query_log",
+          "alias": "a"
+        },
+        "kind": "joinExpr",
+        "joinType": "INNER",
+        "right": {
+          "kind": "tableRef",
+          "database": "system",
+          "table": "processes",
+          "alias": "b"
+        },
+        "constraint": {
+          "kind": "on",
+          "expr": {
+            "kind": "naryExpr",
+            "op": "AND",
+            "operands": [
+              {
+                "kind": "binaryExpr",
+                "op": "=",
+                "left": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "a",
+                    "query_id"
+                  ]
+                },
+                "right": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "b",
+                    "query_id"
+                  ]
+                },
+                "parenthesized": true
+              },
+              {
+                "kind": "binaryExpr",
+                "op": "=",
+                "left": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "type"
+                  ]
+                },
+                "right": {
+                  "kind": "literal",
+                  "type": "String",
+                  "value": "QueryStart"
+                },
+                "parenthesized": true
+              }
+            ]
+          }
+        }
+      },
+      "where": {
+        "kind": "binaryExpr",
+        "op": "=",
+        "left": {
+          "kind": "columnRef",
+          "parts": [
+            "current_database"
+          ]
+        },
+        "right": {
+          "kind": "functionCall",
+          "name": "currentDatabase",
+          "args": []
+        }
+      },
+      "settings": [
+        {
+          "name": "query_plan_use_new_logical_join_step",
+          "value": {
+            "kind": "literal",
+            "type": "Bool",
+            "value": "1"
+          }
+        },
+        {
+          "name": "query_plan_convert_join_to_in",
+          "value": {
+            "kind": "literal",
+            "type": "Bool",
+            "value": "1"
+          }
+        }
+      ]
+    }
   },
   {
     "kind": "select",

@@ -41,6 +41,13 @@ SETTINGS
     max_threads = 1,
     enable_analyzer = 1;
 
+EXPLAIN PIPELINE
+SELECT *
+FROM x1
+ORDER BY i DESC
+LIMIT 5
+SETTINGS max_threads = 1;
+
 SELECT *
 FROM x1
 ORDER BY i DESC
@@ -58,6 +65,13 @@ WHERE ilike(`explain`, '%sort%')
 SETTINGS
     max_threads = 1,
     enable_analyzer = 1;
+
+EXPLAIN PIPELINE
+SELECT *
+FROM x1
+ORDER BY i ASC
+LIMIT 5
+SETTINGS max_threads = 1;
 
 SELECT *
 FROM x1
@@ -104,6 +118,15 @@ SETTINGS
     max_threads = 1,
     enable_analyzer = 1;
 
+EXPLAIN PIPELINE
+SELECT *
+FROM x2
+ORDER BY
+    i ASC,
+    j DESC
+LIMIT 5
+SETTINGS max_threads = 1;
+
 SELECT *
 FROM x2
 ORDER BY
@@ -125,6 +148,15 @@ WHERE ilike(`explain`, '%sort%')
 SETTINGS
     max_threads = 1,
     enable_analyzer = 1;
+
+EXPLAIN PIPELINE
+SELECT *
+FROM x2
+ORDER BY
+    i ASC,
+    j ASC
+LIMIT 5
+SETTINGS max_threads = 1;
 
 SELECT *
 FROM x2

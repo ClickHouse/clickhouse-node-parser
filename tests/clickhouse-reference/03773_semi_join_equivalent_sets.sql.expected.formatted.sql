@@ -38,6 +38,17 @@ WHERE ilike(`explain`, '%Type:%')
     OR ilike(`explain`, '%Strictness%')
     OR ilike(`explain`, '%filter column%');
 
+EXPLAIN actions = 1
+SELECT *
+FROM
+    users
+LEFT JOIN (
+        SELECT number
+        FROM numbers(10)
+    ) AS t2
+    ON users.uid = t2.number
+WHERE t2.number = 1;
+
 SELECT `explain`
 FROM (
         EXPLAIN actions = 1

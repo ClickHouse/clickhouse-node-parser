@@ -27,6 +27,15 @@ SETTINGS
     max_rows_to_read = 20,
     read_overflow_mode = 'break';
 
+EXPLAIN PIPELINE
+SELECT zero + 1 AS x
+FROM `system`.zeros
+LIMIT 10
+SETTINGS
+    max_block_size = 9223372036854775806,
+    max_rows_to_read = 20,
+    read_overflow_mode = 'break';
+
 -- Verify that we clamp odd values to something slightly saner
 SET max_block_size = 9223372036854775806;
 

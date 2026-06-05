@@ -60,4 +60,8 @@ CREATE TABLE test
 )
 ENGINE = Memory;
 
+EXPLAIN SYNTAX run_query_tree_passes = 1
+SELECT tupleElement(tuple, -1)
+FROM test;
+
 DROP TABLE test;

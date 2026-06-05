@@ -21,6 +21,10 @@ SELECT number AS n
 FROM numbers({upper_bound:UInt64});
 SELECT *
 FROM 03271_parametrized_v_expl_mismatch(upper_bound = 3); -- { serverError TYPE_MISMATCH }
+EXPLAIN AST SELECT *
+FROM 03271_parametrized_v_expl_mismatch(upper_bound = 3);
+EXPLAIN QUERY TREE SELECT *
+FROM 03271_parametrized_v_expl_mismatch(upper_bound = 3); -- { serverError TYPE_MISMATCH }
 SELECT *
 FROM 03271_parametrized_v_expl(upper_bound = 3);
 DROP VIEW 03271_parametrized_v;

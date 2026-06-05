@@ -50,20 +50,40 @@ FROM test
 WHERE ts >= toDateTime64('2025-01-01 00:00:00', 3)
 ORDER BY id ASC;
 
+EXPLAIN indexes = 1
+SELECT count()
+FROM test
+WHERE ts >= toDateTime64('2025-01-01 00:00:00', 3);
+
 SELECT *
 FROM view_assume
 WHERE ts >= toDateTime64('2025-01-01 00:00:00', 3)
 ORDER BY id ASC;
+
+EXPLAIN indexes = 1
+SELECT count()
+FROM view_assume
+WHERE ts >= toDateTime64('2025-01-01 00:00:00', 3);
 
 SELECT *
 FROM view_coalesce
 WHERE ts >= toDateTime64('2025-01-01 00:00:00', 3)
 ORDER BY id ASC;
 
+EXPLAIN indexes = 1
+SELECT count()
+FROM view_coalesce
+WHERE ts >= toDateTime64('2025-01-01 00:00:00', 3);
+
 SELECT *
 FROM view_ifnull
 WHERE ts >= toDateTime64('2025-01-01 00:00:00', 3)
 ORDER BY id ASC;
+
+EXPLAIN indexes = 1
+SELECT count()
+FROM view_ifnull
+WHERE ts >= toDateTime64('2025-01-01 00:00:00', 3);
 
 -- Nullable type, bounded max (right is not NULL/+Inf) => monotonicity is allowed.
 DROP TABLE IF EXISTS test_non_null;
@@ -83,15 +103,30 @@ FROM test_non_null
 WHERE assumeNotNull(ts) <= toDateTime64('2025-01-01 00:00:00', 3)
 ORDER BY `ALL` ASC;
 
+EXPLAIN indexes = 1
+SELECT count()
+FROM test_non_null
+WHERE assumeNotNull(ts) <= toDateTime64('2025-01-01 00:00:00', 3);
+
 SELECT *
 FROM test_non_null
 WHERE coalesce(ts, toDateTime64('1970-01-01 00:00:00', 3)) <= toDateTime64('2025-01-01 00:00:00', 3)
 ORDER BY `ALL` ASC;
 
+EXPLAIN indexes = 1
+SELECT count()
+FROM test_non_null
+WHERE coalesce(ts, toDateTime64('1970-01-01 00:00:00', 3)) <= toDateTime64('2025-01-01 00:00:00', 3);
+
 SELECT *
 FROM test_non_null
 WHERE ifNull(ts, toDateTime64('1970-01-01 00:00:00', 3)) <= toDateTime64('2025-01-01 00:00:00', 3)
 ORDER BY `ALL` ASC;
+
+EXPLAIN indexes = 1
+SELECT count()
+FROM test_non_null
+WHERE ifNull(ts, toDateTime64('1970-01-01 00:00:00', 3)) <= toDateTime64('2025-01-01 00:00:00', 3);
 
 -- Nullable type, +Inf max due to NULLs (right is NULL/+Inf) => monotonicity is disabled.
 DROP TABLE IF EXISTS test_null;
@@ -111,15 +146,30 @@ FROM test_null
 WHERE assumeNotNull(ts) <= toDateTime64('2025-01-01 00:00:00', 3)
 ORDER BY `ALL` ASC;
 
+EXPLAIN indexes = 1
+SELECT count()
+FROM test_null
+WHERE assumeNotNull(ts) <= toDateTime64('2025-01-01 00:00:00', 3);
+
 SELECT *
 FROM test_null
 WHERE coalesce(ts, toDateTime64('1970-01-01 00:00:00', 3)) <= toDateTime64('2025-01-01 00:00:00', 3)
 ORDER BY `ALL` ASC;
 
+EXPLAIN indexes = 1
+SELECT count()
+FROM test_null
+WHERE coalesce(ts, toDateTime64('1970-01-01 00:00:00', 3)) <= toDateTime64('2025-01-01 00:00:00', 3);
+
 SELECT *
 FROM test_null
 WHERE ifNull(ts, toDateTime64('1970-01-01 00:00:00', 3)) <= toDateTime64('2025-01-01 00:00:00', 3)
 ORDER BY `ALL` ASC;
+
+EXPLAIN indexes = 1
+SELECT count()
+FROM test_null
+WHERE ifNull(ts, toDateTime64('1970-01-01 00:00:00', 3)) <= toDateTime64('2025-01-01 00:00:00', 3);
 
 DROP TABLE IF EXISTS test_null_rev;
 
@@ -138,15 +188,30 @@ FROM test_null_rev
 WHERE assumeNotNull(ts) <= toDateTime64('2025-01-01 00:00:00', 3)
 ORDER BY `ALL` ASC;
 
+EXPLAIN indexes = 1
+SELECT count()
+FROM test_null_rev
+WHERE assumeNotNull(ts) <= toDateTime64('2025-01-01 00:00:00', 3);
+
 SELECT *
 FROM test_null_rev
 WHERE coalesce(ts, toDateTime64('1970-01-01 00:00:00', 3)) <= toDateTime64('2025-01-01 00:00:00', 3)
 ORDER BY `ALL` ASC;
 
+EXPLAIN indexes = 1
+SELECT count()
+FROM test_null_rev
+WHERE coalesce(ts, toDateTime64('1970-01-01 00:00:00', 3)) <= toDateTime64('2025-01-01 00:00:00', 3);
+
 SELECT *
 FROM test_null_rev
 WHERE ifNull(ts, toDateTime64('1970-01-01 00:00:00', 3)) <= toDateTime64('2025-01-01 00:00:00', 3)
 ORDER BY `ALL` ASC;
+
+EXPLAIN indexes = 1
+SELECT count()
+FROM test_null_rev
+WHERE ifNull(ts, toDateTime64('1970-01-01 00:00:00', 3)) <= toDateTime64('2025-01-01 00:00:00', 3);
 
 DROP TABLE IF EXISTS test_lc_left_inf;
 
@@ -169,3 +234,8 @@ SELECT *
 FROM test_lc_left_inf
 WHERE assumeNotNull(ts) >= 1000
 ORDER BY `ALL` ASC;
+
+EXPLAIN indexes = 1
+SELECT count()
+FROM test_lc_left_inf
+WHERE assumeNotNull(ts) >= 1000;

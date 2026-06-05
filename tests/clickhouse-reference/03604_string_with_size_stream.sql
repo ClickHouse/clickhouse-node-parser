@@ -60,6 +60,7 @@ set optimize_functions_to_subcolumns = 0;
 drop table if exists t_column_names;
 create table t_column_names (s String) engine Memory;
 insert into t_column_names values ('foo');
+explain query tree dump_tree = 0, dump_ast = 1 select s != '' from t_column_names;
 select s != '' from t_column_names;
 set optimize_functions_to_subcolumns = 1;
 drop table t_column_names;

@@ -59,4 +59,19 @@ FROM (
         GROUP BY x
     );
 
+EXPLAIN QUERY TREE run_passes = 1
+SELECT
+    quantile(0.5)(b),
+    quantile(0.9)(b)
+FROM (
+        SELECT x + 1 AS b
+        FROM (
+                SELECT
+                    quantile(0.5)(b) AS x,
+                    quantile(0.9)(b)
+                FROM fuse_tbl
+            )
+        GROUP BY x
+    );
+
 DROP TABLE fuse_tbl;

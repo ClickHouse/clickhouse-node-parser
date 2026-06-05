@@ -12,6 +12,8 @@ INSERT INTO mt2 VALUES (1);
 SET apply_mutations_on_fly = 0;
 SET apply_patch_parts = 0;
 SELECT count() FROM merge;
+-- can use the trivial count optimization
+EXPLAIN SELECT count() FROM merge settings enable_analyzer=0;
 CREATE TABLE mt3 (id UInt64) ENGINE = TinyLog;
 INSERT INTO mt2 VALUES (2);
 DROP TABLE IF EXISTS mt3;

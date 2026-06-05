@@ -16,9 +16,21 @@ SET enable_analyzer = 1;
 SELECT t1.1
 FROM t_tuple_element;
 
+EXPLAIN QUERY TREE dump_tree = 0, dump_ast = 1
+SELECT t1.1
+FROM t_tuple_element;
+
 SELECT t1.2
 FROM t_tuple_element;
 
+EXPLAIN QUERY TREE dump_tree = 0, dump_ast = 1
+SELECT t1.2
+FROM t_tuple_element;
+
+SELECT tupleElement(t1, 'a')
+FROM t_tuple_element;
+
+EXPLAIN QUERY TREE dump_tree = 0, dump_ast = 1
 SELECT tupleElement(t1, 'a')
 FROM t_tuple_element;
 
@@ -43,6 +55,14 @@ FROM t_tuple_element; -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 SELECT t2.1
 FROM t_tuple_element;
 
+EXPLAIN QUERY TREE dump_tree = 0, dump_ast = 1
+SELECT t2.1
+FROM t_tuple_element;
+
+SELECT t2.1
+FROM t_tuple_element;
+
+EXPLAIN QUERY TREE dump_tree = 0, dump_ast = 1
 SELECT t2.1
 FROM t_tuple_element;
 
@@ -69,6 +89,20 @@ SELECT
     t.1,
     t.2;
 
+EXPLAIN QUERY TREE dump_tree = 0, dump_ast = 1
+WITH (1, 2) AS t
+
+SELECT
+    t.1,
+    t.2;
+
+WITH (1, 2)::Tuple(a UInt32, b UInt32) AS t
+
+SELECT
+    t.1,
+    tupleElement(t, 'b');
+
+EXPLAIN QUERY TREE dump_tree = 0, dump_ast = 1
 WITH (1, 2)::Tuple(a UInt32, b UInt32) AS t
 
 SELECT

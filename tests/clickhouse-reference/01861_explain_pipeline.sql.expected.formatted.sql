@@ -23,6 +23,11 @@ FROM numbers(5, 2);
 
 SET max_threads = 1;
 
+EXPLAIN PIPELINE
+SELECT *
+FROM test FINAL
+SETTINGS enable_vertical_final = 0;
+
 SELECT *
 FROM test FINAL;
 

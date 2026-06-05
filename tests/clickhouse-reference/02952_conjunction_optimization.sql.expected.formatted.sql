@@ -19,6 +19,21 @@ WHERE a <> 1
     AND a <> 2
     AND a <> 4;
 
+EXPLAIN QUERY TREE
+SELECT *
+FROM `02952_disjunction_optimization`
+WHERE a <> 1
+    AND a <> 2
+    AND a <> 4;
+
+SELECT *
+FROM `02952_disjunction_optimization`
+WHERE a <> 1
+    AND a <> 2
+    AND a <> 4
+    AND true;
+
+EXPLAIN QUERY TREE
 SELECT *
 FROM `02952_disjunction_optimization`
 WHERE a <> 1
@@ -33,6 +48,14 @@ WHERE a <> 1
     AND a <> 4
     AND b <> '';
 
+EXPLAIN QUERY TREE
+SELECT *
+FROM `02952_disjunction_optimization`
+WHERE a <> 1
+    AND a <> 2
+    AND a <> 4
+    AND b <> '';
+
 SELECT *
 FROM `02952_disjunction_optimization`
 WHERE a <> 1
@@ -40,6 +63,22 @@ WHERE a <> 1
     AND b = ''
     AND a <> 4;
 
+EXPLAIN QUERY TREE
+SELECT *
+FROM `02952_disjunction_optimization`
+WHERE a <> 1
+    AND a <> 2
+    AND b = ''
+    AND a <> 4;
+
+SELECT *
+FROM `02952_disjunction_optimization`
+WHERE (a <> 1
+    AND a <> 2
+    AND a <> 4)
+    OR b = '';
+
+EXPLAIN QUERY TREE
 SELECT *
 FROM `02952_disjunction_optimization`
 WHERE (a <> 1

@@ -138,6 +138,43 @@ ORDER BY
     val_middle ASC,
     val_right ASC;
 
+EXPLAIN SYNTAX
+SELECT
+    left_table.id,
+    val_left,
+    val_middle,
+    val_right
+FROM
+    left_table
+INNER JOIN middle_table
+    ON left_table.id = middle_table.id
+INNER JOIN right_table
+    ON middle_table.id = right_table.id
+ORDER BY
+    left_table.id ASC,
+    val_left ASC,
+    val_middle ASC,
+    val_right ASC;
+
+EXPLAIN SYNTAX
+SELECT
+    left_table.id,
+    val_left,
+    val_middle,
+    val_right
+FROM
+    left_table
+INNER JOIN middle_table
+    ON left_table.id = middle_table.id
+INNER JOIN right_table
+    ON middle_table.id = right_table.id
+ORDER BY
+    left_table.id ASC,
+    val_left ASC,
+    val_middle ASC,
+    val_right ASC
+SETTINGS enable_analyzer = 0;
+
 -- extra: same with subquery
 SELECT
     left_table.id,

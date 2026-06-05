@@ -7,4 +7,93 @@ SET prefer_localhost_replica = 1;
 
 SET enable_analyzer = 0;
 
+-- { echo }
+EXPLAIN
+SELECT DISTINCT k1
+FROM remote('127.{1,2}', view((
+        SELECT
+            1 AS k1,
+            2 AS k2,
+            3 AS v
+        FROM numbers(2)
+    )), cityHash64(k1, k2)); -- not optimized
+
+EXPLAIN
+SELECT DISTINCT
+    k1,
+    k2
+FROM remote('127.{1,2}', view((
+        SELECT
+            1 AS k1,
+            2 AS k2,
+            3 AS v
+        FROM numbers(2)
+    )), cityHash64(k1, k2)); -- optimized
+
+EXPLAIN
+SELECT DISTINCT ON (k1) k2
+FROM remote('127.{1,2}', view((
+        SELECT
+            1 AS k1,
+            2 AS k2,
+            3 AS v
+        FROM numbers(2)
+    )), cityHash64(k1, k2)); -- not optimized
+
+EXPLAIN
+SELECT DISTINCT ON (k1, k2) v
+FROM remote('127.{1,2}', view((
+        SELECT
+            1 AS k1,
+            2 AS k2,
+            3 AS v
+        FROM numbers(2)
+    )), cityHash64(k1, k2)); -- optimized
+
+EXPLAIN
+SELECT DISTINCT k1
+FROM remote('127.{1,2}', view((
+        SELECT
+            1 AS k1,
+            2 AS k2,
+            3 AS v
+        FROM numbers(2)
+    )), cityHash64(k1, k2))
+ORDER BY v ASC; -- not optimized
+
+EXPLAIN
+SELECT DISTINCT
+    k1,
+    k2
+FROM remote('127.{1,2}', view((
+        SELECT
+            1 AS k1,
+            2 AS k2,
+            3 AS v
+        FROM numbers(2)
+    )), cityHash64(k1, k2))
+ORDER BY v ASC; -- optimized
+
+EXPLAIN
+SELECT DISTINCT ON (k1) k2
+FROM remote('127.{1,2}', view((
+        SELECT
+            1 AS k1,
+            2 AS k2,
+            3 AS v
+        FROM numbers(2)
+    )), cityHash64(k1, k2))
+ORDER BY v ASC; -- not optimized
+
+EXPLAIN
+SELECT DISTINCT ON (k1, k2) v
+FROM remote('127.{1,2}', view((
+        SELECT
+            1 AS k1,
+            2 AS k2,
+            3 AS v
+        FROM numbers(2)
+    )), cityHash64(k1, k2))
+ORDER BY v ASC; -- optimized
+
 SET enable_analyzer = 1;

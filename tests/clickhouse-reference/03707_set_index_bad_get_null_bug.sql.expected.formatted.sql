@@ -12,3 +12,11 @@ ENGINE = MergeTree
 ORDER BY (ts);
 
 INSERT INTO test (v);
+
+EXPLAIN indexes = 1, description = 0
+SELECT
+    CAST(NULL, 'Nullable(String)') AS source,
+    v AS v
+FROM test
+WHERE (source = 'VALUE1')
+    OR (ilike(v, 'VALUE1'));

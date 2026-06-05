@@ -14,3 +14,4 @@ INSERT INTO test_alter VALUES (1, 1);
 INSERT INTO test_alter VALUES (2, 2);
 SELECT name, type_full, expr, creation, data_compressed_bytes > 0 FROM system.data_skipping_indices where database = current_database() and table = 'test_alter' ORDER BY name;
 ALTER TABLE test_alter MODIFY COLUMN b String;
+EXPLAIN indexes=1 SELECT * FROM test_alter WHERE b = '2';

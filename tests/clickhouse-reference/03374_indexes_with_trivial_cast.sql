@@ -10,6 +10,7 @@ ENGINE = MergeTree
 ORDER BY tuple()
 SETTINGS index_granularity=1;
 INSERT INTO test SELECT number FROM numbers(1000);
+EXPLAIN indexes = 1 SELECT * FROM test WHERE CAST(x, 'String') = '100';
 DROP TABLE test;
 CREATE TABLE test
 (

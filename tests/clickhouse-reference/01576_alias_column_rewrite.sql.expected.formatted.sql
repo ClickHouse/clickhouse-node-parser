@@ -174,6 +174,51 @@ WHERE arrayMap(day -> day + 1, [1,2,3])[1] = 2
 
 SET max_rows_to_read = 0;
 
+EXPLAIN description = 0
+SELECT day AS s
+FROM test_table
+ORDER BY s ASC
+LIMIT 1
+SETTINGS optimize_read_in_order = 0;
+
+EXPLAIN description = 0
+SELECT day AS s
+FROM test_table
+ORDER BY s ASC
+LIMIT 1
+SETTINGS optimize_read_in_order = 1;
+
+EXPLAIN description = 0
+SELECT toDate(timestamp) AS s
+FROM test_table
+ORDER BY toDate(timestamp) ASC
+LIMIT 1
+SETTINGS optimize_read_in_order = 1;
+
+EXPLAIN description = 0
+SELECT
+    day,
+    count() AS s
+FROM test_table
+GROUP BY day
+SETTINGS optimize_aggregation_in_order = 0;
+
+EXPLAIN description = 0
+SELECT
+    day,
+    count() AS s
+FROM test_table
+GROUP BY day
+SETTINGS optimize_aggregation_in_order = 1;
+
+EXPLAIN description = 0
+SELECT
+    toDate(timestamp),
+    count() AS s
+FROM test_table
+GROUP BY toDate(timestamp)
+SETTINGS optimize_aggregation_in_order = 1;
+
 DROP TABLE test_table;
 
 DROP TABLE IF EXISTS test_index;

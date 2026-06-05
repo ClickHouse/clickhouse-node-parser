@@ -19,4 +19,16 @@ INSERT INTO data_03812;
 
 SET max_rows_to_read = 0;
 
+EXPLAIN PLAN
+SELECT 1
+FROM
+    data_03812 AS t1
+INNER JOIN (
+        SELECT number
+        FROM `system`.numbers
+        LIMIT 9223372036854775806
+    ) AS t2
+    ON 1
+FORMAT Null;
+
 DROP TABLE data_03812;

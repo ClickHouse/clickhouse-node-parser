@@ -22,4 +22,9 @@ SELECT count()
 FROM tab
 WHERE id = 5;
 
+EXPLAIN indexes = 1
+SELECT count()
+FROM tab
+WHERE id = 5;
+
 SET use_primary_key = 1;

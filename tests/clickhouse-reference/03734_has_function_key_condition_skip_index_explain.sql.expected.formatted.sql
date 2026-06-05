@@ -21,6 +21,11 @@ INSERT INTO test_has_skip_minmax SELECT
     toString(number)
 FROM numbers(100000);
 
+EXPLAIN indexes = 1
+SELECT count()
+FROM test_has_skip_minmax
+WHERE has([5432, 7432, 9999], key_col);
+
 DROP TABLE IF EXISTS test_has_skip_set;
 
 CREATE TABLE test_has_skip_set
@@ -37,6 +42,11 @@ INSERT INTO test_has_skip_set SELECT
     toUInt32(intDiv(number, 1000)) AS user_id,
     now() - toIntervalMinute(number) AS event_time
 FROM numbers(100000);
+
+EXPLAIN indexes = 1
+SELECT count()
+FROM test_has_skip_set
+WHERE has([10, 20, 30], user_id);
 
 DROP TABLE IF EXISTS test_has_skip_bloom;
 
@@ -56,3 +66,8 @@ INSERT INTO test_has_skip_bloom SELECT
     concat('v_', toString(number % 100000)),
     toString(number)
 FROM numbers(100000);
+
+EXPLAIN indexes = 1
+SELECT count()
+FROM test_has_skip_bloom
+WHERE has(['v_12345', 'v_54321', 'v_99999'], key_str);

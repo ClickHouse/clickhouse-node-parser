@@ -1,9 +1,11 @@
 SET enable_analyzer = 1;
+
 DROP TABLE IF EXISTS customer;
 DROP TABLE IF EXISTS part;
 DROP TABLE IF EXISTS supplier;
 DROP TABLE IF EXISTS lineorder;
 DROP TABLE IF EXISTS date;
+
 CREATE TABLE customer
 (
         C_CUSTKEY       UInt32,
@@ -16,6 +18,7 @@ CREATE TABLE customer
         C_MKTSEGMENT    LowCardinality(String)
 )
 ENGINE = MergeTree ORDER BY (C_CUSTKEY);
+
 CREATE TABLE lineorder
 (
     LO_ORDERKEY             UInt32,
@@ -37,6 +40,7 @@ CREATE TABLE lineorder
     LO_SHIPMODE             LowCardinality(String)
 )
 ENGINE = MergeTree PARTITION BY toYear(LO_ORDERDATE) ORDER BY (LO_ORDERDATE, LO_ORDERKEY);
+
 CREATE TABLE part
 (
         P_PARTKEY       UInt32,
@@ -50,6 +54,7 @@ CREATE TABLE part
         P_CONTAINER     LowCardinality(String)
 )
 ENGINE = MergeTree ORDER BY P_PARTKEY;
+
 CREATE TABLE supplier
 (
         S_SUPPKEY       UInt32,
@@ -61,6 +66,7 @@ CREATE TABLE supplier
         S_PHONE         String
 )
 ENGINE = MergeTree ORDER BY S_SUPPKEY;
+
 CREATE TABLE date
 (
         D_DATEKEY            Date,
@@ -82,4 +88,19 @@ CREATE TABLE date
         D_WEEKDAYFL          UInt8
 )
 ENGINE = MergeTree ORDER BY D_DATEKEY;
+
 set cross_to_inner_join_rewrite = 2;
+
+EXPLAIN QUERY TREE dump_ast=1
+select D_YEARMONTHNUM, S_CITY, P_BRAND, sum(LO_REVENUE - LO_SUPPLYCOST) as profit
+from date, customer, supplier, part, lineorder
+where LO_CUSTKEY = C_CUSTKEY
+  and LO_SUPPKEY = S_SUPPKEY
+  and LO_PARTKEY = P_PARTKEY
+  and LO_ORDERDATE = D_DATEKEY
+  and S_NATION = 'UNITED KINGDOM'
+  and P_CATEGORY = 'MFGR#21'
+  and (LO_QUANTITY between 34 and 44)
+  and (LO_ORDERDATE between toDate('1996-01-01') and toDate('1996-12-31'))
+group by D_YEARMONTHNUM, S_CITY, P_BRAND
+order by D_YEARMONTHNUM, S_CITY, P_BRAND;

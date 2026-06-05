@@ -14,5 +14,67 @@
     "leadingComments": [
       "-- To prevent old analyzer type checks"
     ]
+  },
+  {
+    "kind": "explain",
+    "explainType": "SYNTAX",
+    "query": {
+      "kind": "select",
+      "with": [
+        {
+          "kind": "cteExpr",
+          "name": "a",
+          "expr": {
+            "kind": "functionCall",
+            "name": "foo",
+            "args": [
+              {
+                "kind": "alias",
+                "expr": {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "1"
+                },
+                "alias": "a0"
+              }
+            ]
+          }
+        }
+      ],
+      "select": [
+        {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      ],
+      "from": {
+        "left": {
+          "kind": "tableFunctionRef",
+          "name": "numbers",
+          "args": []
+        },
+        "kind": "joinExpr",
+        "joinType": "INNER",
+        "right": {
+          "kind": "tableFunctionRef",
+          "name": "numbers",
+          "args": []
+        },
+        "constraint": {
+          "kind": "on",
+          "expr": {
+            "kind": "alias",
+            "expr": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "1"
+            },
+            "alias": "a0",
+            "parenthesized": true
+          }
+        }
+      }
+    }
   }
 ]

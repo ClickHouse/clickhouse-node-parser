@@ -18,6 +18,8 @@ INSERT INTO index_test SELECT
     arrayMap(x -> concat('A_', toString(x)), range(number))
 FROM numbers(16);
 
+-- { echo On }
+EXPLAIN indexes = 1, description = 0
 SELECT arr
 FROM index_test
 WHERE has(arrayMap(x -> lower(x), arr), lower('a_12'))
@@ -25,7 +27,24 @@ SETTINGS enable_analyzer = 1;
 
 SELECT arr
 FROM index_test
+WHERE has(arrayMap(x -> lower(x), arr), lower('a_12'))
+SETTINGS enable_analyzer = 1;
+
+EXPLAIN indexes = 1, description = 0
+SELECT arr
+FROM index_test
 WHERE has(arrayMap((x, y) -> concat(lower(x), y), arr, arr), 'a_12A_12')
+SETTINGS enable_analyzer = 1;
+
+SELECT arr
+FROM index_test
+WHERE has(arrayMap((x, y) -> concat(lower(x), y), arr, arr), 'a_12A_12')
+SETTINGS enable_analyzer = 1;
+
+EXPLAIN indexes = 1, description = 0
+SELECT arr
+FROM index_test
+WHERE has(arrayMap((x, y) -> concat(lower(x), y, '_', toString(id)), arr, arr), 'a_12A_12_13')
 SETTINGS enable_analyzer = 1;
 
 SELECT arr

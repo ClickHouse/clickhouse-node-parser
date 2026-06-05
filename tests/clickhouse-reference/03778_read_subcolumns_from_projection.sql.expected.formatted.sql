@@ -22,6 +22,12 @@ INSERT INTO test SELECT
     concat('z_', number)
 FROM numbers(5);
 
+EXPLAIN indexes = 1
+SELECT count()
+FROM test
+WHERE x = 'x_1'
+    AND y.s = 'y_1';
+
 SELECT count()
 FROM test
 WHERE x = 'x_1'

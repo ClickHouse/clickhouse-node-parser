@@ -717,5 +717,63 @@
       "-- because we don't know sizes and we can use only number of columns in conditions.",
       "-- Sometimes moving a lot of columns to prewhere may be harmful."
     ]
+  },
+  {
+    "kind": "explain",
+    "explainType": "SYNTAX",
+    "query": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "functionCall",
+          "name": "count",
+          "args": []
+        }
+      ],
+      "from": {
+        "kind": "tableRef",
+        "table": "t_move_to_prewhere"
+      },
+      "where": {
+        "kind": "naryExpr",
+        "op": "AND",
+        "operands": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "a"
+            ]
+          },
+          {
+            "kind": "columnRef",
+            "parts": [
+              "b"
+            ]
+          },
+          {
+            "kind": "columnRef",
+            "parts": [
+              "c"
+            ]
+          },
+          {
+            "kind": "unaryExpr",
+            "op": "NOT",
+            "expr": {
+              "kind": "functionCall",
+              "name": "ignore",
+              "args": [
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "fat_string"
+                  ]
+                }
+              ]
+            }
+          }
+        ]
+      }
+    }
   }
 ]

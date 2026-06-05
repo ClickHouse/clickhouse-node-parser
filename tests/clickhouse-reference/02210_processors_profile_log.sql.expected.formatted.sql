@@ -1,3 +1,6 @@
+EXPLAIN PIPELINE
+SELECT sleep(1);
+
 SELECT sleep(1)
 SETTINGS
     log_processors_profiles = true,

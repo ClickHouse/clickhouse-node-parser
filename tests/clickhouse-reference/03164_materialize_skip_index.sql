@@ -14,6 +14,7 @@ SYSTEM STOP MERGES t_skip_index_insert;
 INSERT INTO t_skip_index_insert SELECT number, number / 50 FROM numbers(100);
 INSERT INTO t_skip_index_insert SELECT number, number / 50 FROM numbers(100, 100);
 SELECT count() FROM t_skip_index_insert WHERE a >= 110 AND a < 130 AND b = 2;
+EXPLAIN indexes = 1 SELECT count() FROM t_skip_index_insert WHERE a >= 110 AND a < 130 AND b = 2;
 SYSTEM START MERGES t_skip_index_insert;
 OPTIMIZE TABLE t_skip_index_insert FINAL;
 TRUNCATE TABLE t_skip_index_insert;

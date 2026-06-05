@@ -55,6 +55,52 @@
     ]
   },
   {
+    "kind": "explain",
+    "explainType": "SYNTAX",
+    "query": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "castExpr",
+          "expr": {
+            "kind": "functionCall",
+            "name": "arrayElement",
+            "args": [
+              {
+                "kind": "arrayLiteral",
+                "elements": [
+                  {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "3"
+                  },
+                  {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "4"
+                  },
+                  {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "5"
+                  }
+                ],
+                "source": "[3,4,5]"
+              },
+              {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "1"
+              }
+            ]
+          },
+          "type": "Int32",
+          "operator": true
+        }
+      ]
+    }
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -100,6 +146,57 @@
         "operator": true
       }
     ]
+  },
+  {
+    "kind": "explain",
+    "explainType": "SYNTAX",
+    "query": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "castExpr",
+          "expr": {
+            "kind": "functionCall",
+            "name": "arrayElement",
+            "args": [
+              {
+                "kind": "castExpr",
+                "expr": {
+                  "kind": "arrayLiteral",
+                  "elements": [
+                    {
+                      "kind": "literal",
+                      "type": "UInt64",
+                      "value": "3"
+                    },
+                    {
+                      "kind": "literal",
+                      "type": "UInt64",
+                      "value": "4"
+                    },
+                    {
+                      "kind": "literal",
+                      "type": "UInt64",
+                      "value": "5"
+                    }
+                  ],
+                  "source": "[3,4,5]"
+                },
+                "type": "Array(Int64)",
+                "operator": true
+              },
+              {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "2"
+              }
+            ]
+          },
+          "type": "Int8",
+          "operator": true
+        }
+      ]
+    }
   },
   {
     "kind": "select",
@@ -195,6 +292,103 @@
     }
   },
   {
+    "kind": "explain",
+    "explainType": "SYNTAX",
+    "query": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "castExpr",
+          "expr": {
+            "kind": "functionCall",
+            "name": "arrayElement",
+            "args": [
+              {
+                "kind": "castExpr",
+                "expr": {
+                  "kind": "arrayLiteral",
+                  "elements": [
+                    {
+                      "kind": "literal",
+                      "type": "UInt64",
+                      "value": "1"
+                    },
+                    {
+                      "kind": "literal",
+                      "type": "UInt64",
+                      "value": "2"
+                    },
+                    {
+                      "kind": "literal",
+                      "type": "UInt64",
+                      "value": "3"
+                    }
+                  ],
+                  "source": "[1,2,3]"
+                },
+                "type": "Array(UInt64)",
+                "operator": true
+              },
+              {
+                "kind": "castExpr",
+                "expr": {
+                  "kind": "functionCall",
+                  "name": "arrayElement",
+                  "args": [
+                    {
+                      "kind": "castExpr",
+                      "expr": {
+                        "kind": "arrayLiteral",
+                        "elements": [
+                          {
+                            "kind": "columnRef",
+                            "parts": [
+                              "number"
+                            ]
+                          },
+                          {
+                            "kind": "columnRef",
+                            "parts": [
+                              "number"
+                            ]
+                          }
+                        ],
+                        "source": "[number, number]"
+                      },
+                      "type": "Array(UInt8)",
+                      "operator": true
+                    },
+                    {
+                      "kind": "columnRef",
+                      "parts": [
+                        "number"
+                      ]
+                    }
+                  ]
+                },
+                "type": "UInt64",
+                "operator": true
+              }
+            ]
+          },
+          "type": "UInt8",
+          "operator": true
+        }
+      ],
+      "from": {
+        "kind": "tableFunctionRef",
+        "name": "numbers",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "3"
+          }
+        ]
+      }
+    }
+  },
+  {
     "kind": "select",
     "with": [
       {
@@ -249,6 +443,64 @@
     ]
   },
   {
+    "kind": "explain",
+    "explainType": "SYNTAX",
+    "query": {
+      "kind": "select",
+      "with": [
+        {
+          "kind": "cteExpr",
+          "name": "x",
+          "expr": {
+            "kind": "arrayLiteral",
+            "elements": [
+              {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "3"
+              },
+              {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "4"
+              },
+              {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "5"
+              }
+            ],
+            "source": "[3,4,5]"
+          }
+        }
+      ],
+      "select": [
+        {
+          "kind": "castExpr",
+          "expr": {
+            "kind": "functionCall",
+            "name": "arrayElement",
+            "args": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "x"
+                ]
+              },
+              {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "1"
+              }
+            ]
+          },
+          "type": "Int32",
+          "operator": true
+        }
+      ]
+    }
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -289,6 +541,52 @@
         "operator": true
       }
     ]
+  },
+  {
+    "kind": "explain",
+    "explainType": "SYNTAX",
+    "query": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "castExpr",
+          "expr": {
+            "kind": "functionCall",
+            "name": "tupleElement",
+            "args": [
+              {
+                "kind": "functionCall",
+                "name": "tuple",
+                "args": [
+                  {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "3"
+                  },
+                  {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "4"
+                  },
+                  {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "5"
+                  }
+                ]
+              },
+              {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "1"
+              }
+            ]
+          },
+          "type": "Int32",
+          "operator": true
+        }
+      ]
+    }
   },
   {
     "kind": "select",
@@ -336,6 +634,57 @@
         "operator": true
       }
     ]
+  },
+  {
+    "kind": "explain",
+    "explainType": "SYNTAX",
+    "query": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "castExpr",
+          "expr": {
+            "kind": "functionCall",
+            "name": "tupleElement",
+            "args": [
+              {
+                "kind": "castExpr",
+                "expr": {
+                  "kind": "functionCall",
+                  "name": "tuple",
+                  "args": [
+                    {
+                      "kind": "literal",
+                      "type": "UInt64",
+                      "value": "3"
+                    },
+                    {
+                      "kind": "literal",
+                      "type": "UInt64",
+                      "value": "4"
+                    },
+                    {
+                      "kind": "literal",
+                      "type": "UInt64",
+                      "value": "5"
+                    }
+                  ]
+                },
+                "type": "Tuple(UInt64, UInt64, UInt64)",
+                "operator": true
+              },
+              {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "1"
+              }
+            ]
+          },
+          "type": "Int32",
+          "operator": true
+        }
+      ]
+    }
   },
   {
     "kind": "select",
@@ -390,5 +739,63 @@
         "operator": true
       }
     ]
+  },
+  {
+    "kind": "explain",
+    "explainType": "SYNTAX",
+    "query": {
+      "kind": "select",
+      "with": [
+        {
+          "kind": "cteExpr",
+          "name": "x",
+          "expr": {
+            "kind": "functionCall",
+            "name": "tuple",
+            "args": [
+              {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "3"
+              },
+              {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "4"
+              },
+              {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "5"
+              }
+            ]
+          }
+        }
+      ],
+      "select": [
+        {
+          "kind": "castExpr",
+          "expr": {
+            "kind": "functionCall",
+            "name": "tupleElement",
+            "args": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "x"
+                ]
+              },
+              {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "1"
+              }
+            ]
+          },
+          "type": "Int32",
+          "operator": true
+        }
+      ]
+    }
   }
 ]

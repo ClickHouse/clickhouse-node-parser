@@ -10,4 +10,13 @@ ENGINE = Memory();
 
 BEGIN TRANSACTION;
 
+EXPLAIN PLAN
+SELECT 1
+FROM
+    (
+        SELECT 1
+    ) AS tx
+INNER JOIN t0
+    ON true; -- { serverError NOT_IMPLEMENTED }
+
 ROLLBACK;

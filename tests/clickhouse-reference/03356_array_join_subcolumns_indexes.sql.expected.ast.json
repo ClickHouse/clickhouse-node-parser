@@ -343,6 +343,88 @@
     }
   },
   {
+    "kind": "explain",
+    "settings": [
+      {
+        "name": "indexes",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ],
+    "query": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "json",
+            "a"
+          ]
+        }
+      ],
+      "from": {
+        "left": {
+          "kind": "tableRef",
+          "table": "test"
+        },
+        "kind": "arrayJoinExpr",
+        "joinType": "ARRAY",
+        "expressions": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "json",
+              "b"
+            ]
+          }
+        ]
+      },
+      "where": {
+        "kind": "naryExpr",
+        "op": "AND",
+        "operands": [
+          {
+            "kind": "functionCall",
+            "name": "has",
+            "args": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "json",
+                  "a"
+                ]
+              },
+              {
+                "kind": "literal",
+                "type": "UInt64",
+                "value": "2"
+              }
+            ]
+          },
+          {
+            "kind": "binaryExpr",
+            "op": "<",
+            "left": {
+              "kind": "columnRef",
+              "parts": [
+                "json",
+                "c"
+              ]
+            },
+            "right": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "5"
+            }
+          }
+        ]
+      }
+    }
+  },
+  {
     "kind": "drop",
     "targetType": "TABLE",
     "table": {

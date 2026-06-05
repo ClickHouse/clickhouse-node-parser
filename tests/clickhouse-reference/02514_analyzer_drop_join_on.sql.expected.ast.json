@@ -320,5 +320,422 @@
         }
       }
     ]
+  },
+  {
+    "kind": "explain",
+    "explainType": "PLAN",
+    "settings": [
+      {
+        "name": "header",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ],
+    "query": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "functionCall",
+          "name": "count",
+          "args": []
+        }
+      ],
+      "from": {
+        "left": {
+          "left": {
+            "left": {
+              "kind": "tableRef",
+              "table": "a"
+            },
+            "kind": "joinExpr",
+            "joinType": "INNER",
+            "right": {
+              "kind": "tableRef",
+              "table": "b"
+            },
+            "constraint": {
+              "kind": "on",
+              "expr": {
+                "kind": "binaryExpr",
+                "op": "=",
+                "left": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "b",
+                    "b1"
+                  ]
+                },
+                "right": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "a",
+                    "a1"
+                  ]
+                }
+              }
+            }
+          },
+          "kind": "joinExpr",
+          "joinType": "INNER",
+          "right": {
+            "kind": "tableRef",
+            "table": "c"
+          },
+          "constraint": {
+            "kind": "on",
+            "expr": {
+              "kind": "binaryExpr",
+              "op": "=",
+              "left": {
+                "kind": "columnRef",
+                "parts": [
+                  "c",
+                  "c1"
+                ]
+              },
+              "right": {
+                "kind": "columnRef",
+                "parts": [
+                  "b",
+                  "b1"
+                ]
+              }
+            }
+          }
+        },
+        "kind": "joinExpr",
+        "joinType": "INNER",
+        "right": {
+          "kind": "tableRef",
+          "table": "d"
+        },
+        "constraint": {
+          "kind": "on",
+          "expr": {
+            "kind": "binaryExpr",
+            "op": "=",
+            "left": {
+              "kind": "columnRef",
+              "parts": [
+                "d",
+                "d1"
+              ]
+            },
+            "right": {
+              "kind": "columnRef",
+              "parts": [
+                "c",
+                "c1"
+              ]
+            }
+          }
+        }
+      },
+      "groupBy": {
+        "kind": "expressions",
+        "items": [
+          {
+            "kind": "columnRef",
+            "parts": [
+              "a",
+              "a2"
+            ]
+          }
+        ]
+      }
+    },
+    "leadingComments": [
+      "-- { echoOn }"
+    ]
+  },
+  {
+    "kind": "explain",
+    "explainType": "PLAN",
+    "settings": [
+      {
+        "name": "header",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ],
+    "query": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "a",
+            "a2"
+          ]
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "d",
+            "d2"
+          ]
+        }
+      ],
+      "from": {
+        "left": {
+          "left": {
+            "left": {
+              "kind": "tableRef",
+              "table": "a"
+            },
+            "kind": "joinExpr",
+            "joinType": "INNER",
+            "right": {
+              "kind": "tableRef",
+              "table": "b"
+            },
+            "constraint": {
+              "kind": "using",
+              "columns": [
+                "k"
+              ]
+            }
+          },
+          "kind": "joinExpr",
+          "joinType": "INNER",
+          "right": {
+            "kind": "tableRef",
+            "table": "c"
+          },
+          "constraint": {
+            "kind": "using",
+            "columns": [
+              "k"
+            ]
+          }
+        },
+        "kind": "joinExpr",
+        "joinType": "INNER",
+        "right": {
+          "kind": "tableRef",
+          "table": "d"
+        },
+        "constraint": {
+          "kind": "using",
+          "columns": [
+            "k"
+          ]
+        }
+      }
+    }
+  },
+  {
+    "kind": "explain",
+    "explainType": "PLAN",
+    "settings": [
+      {
+        "name": "header",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ],
+    "query": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "b",
+            "bx"
+          ]
+        }
+      ],
+      "from": {
+        "left": {
+          "left": {
+            "left": {
+              "kind": "tableRef",
+              "table": "a"
+            },
+            "kind": "joinExpr",
+            "joinType": "INNER",
+            "right": {
+              "kind": "subqueryFrom",
+              "query": {
+                "kind": "select",
+                "select": [
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "b1"
+                    ]
+                  },
+                  {
+                    "kind": "alias",
+                    "expr": {
+                      "kind": "functionCall",
+                      "name": "concat",
+                      "args": [
+                        {
+                          "kind": "columnRef",
+                          "parts": [
+                            "b2"
+                          ]
+                        },
+                        {
+                          "kind": "literal",
+                          "type": "String",
+                          "value": "x"
+                        }
+                      ]
+                    },
+                    "alias": "bx"
+                  }
+                ],
+                "from": {
+                  "kind": "tableRef",
+                  "table": "b"
+                }
+              },
+              "alias": "b"
+            },
+            "constraint": {
+              "kind": "on",
+              "expr": {
+                "kind": "binaryExpr",
+                "op": "=",
+                "left": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "b",
+                    "b1"
+                  ]
+                },
+                "right": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "a",
+                    "a1"
+                  ]
+                }
+              }
+            }
+          },
+          "kind": "joinExpr",
+          "joinType": "INNER",
+          "right": {
+            "kind": "tableRef",
+            "table": "c"
+          },
+          "constraint": {
+            "kind": "on",
+            "expr": {
+              "kind": "binaryExpr",
+              "op": "=",
+              "left": {
+                "kind": "columnRef",
+                "parts": [
+                  "c",
+                  "c1"
+                ]
+              },
+              "right": {
+                "kind": "columnRef",
+                "parts": [
+                  "b",
+                  "b1"
+                ]
+              }
+            }
+          }
+        },
+        "kind": "joinExpr",
+        "joinType": "INNER",
+        "right": {
+          "kind": "subqueryFrom",
+          "query": {
+            "kind": "select",
+            "select": [
+              {
+                "kind": "alias",
+                "expr": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "number"
+                  ]
+                },
+                "alias": "d1"
+              }
+            ],
+            "from": {
+              "kind": "tableFunctionRef",
+              "name": "numbers",
+              "args": [
+                {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "10"
+                }
+              ]
+            }
+          },
+          "alias": "d"
+        },
+        "constraint": {
+          "kind": "on",
+          "expr": {
+            "kind": "binaryExpr",
+            "op": "=",
+            "left": {
+              "kind": "columnRef",
+              "parts": [
+                "d",
+                "d1"
+              ]
+            },
+            "right": {
+              "kind": "columnRef",
+              "parts": [
+                "c",
+                "c1"
+              ]
+            }
+          }
+        }
+      },
+      "where": {
+        "kind": "binaryExpr",
+        "op": "!=",
+        "left": {
+          "kind": "columnRef",
+          "parts": [
+            "c",
+            "c2"
+          ]
+        },
+        "right": {
+          "kind": "literal",
+          "type": "String",
+          "value": ""
+        }
+      },
+      "orderBy": [
+        {
+          "kind": "orderByItem",
+          "expr": {
+            "kind": "columnRef",
+            "parts": [
+              "a",
+              "a2"
+            ]
+          },
+          "direction": "ASC"
+        }
+      ]
+    }
   }
 ]

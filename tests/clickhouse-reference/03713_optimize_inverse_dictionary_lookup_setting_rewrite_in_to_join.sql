@@ -46,6 +46,11 @@ INSERT INTO t VALUES
     (3, 'c'),
     (4, 'd'),
     (5, 'R');
+EXPLAIN SYNTAX run_query_tree_passes=1
+SELECT color_id, payload
+FROM t
+WHERE dictGetString('colors', 'name', color_id) = 'red'
+ORDER BY color_id, payload;
 SELECT color_id, payload
 FROM t
 WHERE dictGetString('colors', 'name', color_id) = 'red'

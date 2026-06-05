@@ -13,6 +13,7 @@ ORDER BY a SETTINGS
     enable_block_offset_column = 0;
 INSERT INTO t_ind_merge_1 SELECT number, number, rand(), rand() FROM numbers(1000);
 SELECT count() FROM t_ind_merge_1 WHERE b < 100 SETTINGS force_data_skipping_indices = 'idx_b';
+EXPLAIN indexes = 1 SELECT count() FROM t_ind_merge_1 WHERE b < 100;
 OPTIMIZE TABLE t_ind_merge_1 FINAL;
 SYSTEM FLUSH LOGS text_log;
 SET max_rows_to_read = 0; -- system.text_log can be really big

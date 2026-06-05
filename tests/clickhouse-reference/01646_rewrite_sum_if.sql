@@ -12,3 +12,6 @@ SELECT sum(if(number % 2 == 0 as cond_expr, 0 as zero_expr, 1 as one_expr) as if
 SELECT countIf(number % 2 != 0) FROM numbers(100);
 SET optimize_rewrite_sum_if_to_count_if = 1;
 set enable_analyzer = true;
+EXPLAIN QUERY TREE run_passes=1 SELECT sumIf(123, number % 2 == 0) FROM numbers(100);
+EXPLAIN QUERY TREE run_passes=1 SELECT sum(if(number % 2 == 0, 123, 0)) FROM numbers(100);
+EXPLAIN QUERY TREE run_passes=1 SELECT sum(if(number % 2 == 0, 0, 123)) FROM numbers(100);

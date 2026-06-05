@@ -36,6 +36,22 @@ INSERT INTO test_table_2 SELECT
     number
 FROM numbers(10);
 
+-- { echoOn }
+EXPLAIN header = 1, actions = 1
+SELECT
+    lhs.id,
+    rhs.id,
+    lhs.value,
+    rhs.value
+FROM
+    test_table_1 AS lhs
+INNER JOIN test_table_2 AS rhs
+    ON lhs.id = rhs.id
+WHERE lhs.id = 5
+SETTINGS
+    query_plan_join_swap_table = 'false',
+    enable_join_runtime_filters = 0;
+
 SELECT '--';
 
 SELECT
@@ -49,6 +65,21 @@ INNER JOIN test_table_2 AS rhs
     ON lhs.id = rhs.id
 WHERE lhs.id = 5;
 
+EXPLAIN header = 1, actions = 1
+SELECT
+    lhs.id,
+    rhs.id,
+    lhs.value,
+    rhs.value
+FROM
+    test_table_1 AS lhs
+INNER JOIN test_table_2 AS rhs
+    ON lhs.id = rhs.id
+WHERE rhs.id = 5
+SETTINGS
+    query_plan_join_swap_table = 'false',
+    enable_join_runtime_filters = 0;
+
 SELECT
     lhs.id,
     rhs.id,
@@ -59,6 +90,22 @@ FROM
 INNER JOIN test_table_2 AS rhs
     ON lhs.id = rhs.id
 WHERE rhs.id = 5;
+
+EXPLAIN header = 1, actions = 1
+SELECT
+    lhs.id,
+    rhs.id,
+    lhs.value,
+    rhs.value
+FROM
+    test_table_1 AS lhs
+INNER JOIN test_table_2 AS rhs
+    ON lhs.id = rhs.id
+WHERE lhs.id = 5
+    AND rhs.id = 6
+SETTINGS
+    query_plan_join_swap_table = 'false',
+    enable_join_runtime_filters = 0;
 
 SELECT
     lhs.id,
@@ -72,6 +119,21 @@ INNER JOIN test_table_2 AS rhs
 WHERE lhs.id = 5
     AND rhs.id = 6;
 
+EXPLAIN header = 1, actions = 1
+SELECT
+    lhs.id,
+    rhs.id,
+    lhs.value,
+    rhs.value
+FROM
+    test_table_1 AS lhs
+LEFT JOIN test_table_2 AS rhs
+    ON lhs.id = rhs.id
+WHERE lhs.id = 5
+SETTINGS
+    query_plan_join_swap_table = 'false',
+    enable_join_runtime_filters = 0;
+
 SELECT
     lhs.id,
     rhs.id,
@@ -83,6 +145,21 @@ LEFT JOIN test_table_2 AS rhs
     ON lhs.id = rhs.id
 WHERE lhs.id = 5;
 
+EXPLAIN header = 1, actions = 1
+SELECT
+    lhs.id,
+    rhs.id,
+    lhs.value,
+    rhs.value
+FROM
+    test_table_1 AS lhs
+LEFT JOIN test_table_2 AS rhs
+    ON lhs.id = rhs.id
+WHERE rhs.id = 5
+SETTINGS
+    query_plan_join_swap_table = 'false',
+    enable_join_runtime_filters = 0;
+
 SELECT
     lhs.id,
     rhs.id,
@@ -93,6 +170,21 @@ FROM
 LEFT JOIN test_table_2 AS rhs
     ON lhs.id = rhs.id
 WHERE rhs.id = 5;
+
+EXPLAIN header = 1, actions = 1
+SELECT
+    lhs.id,
+    rhs.id,
+    lhs.value,
+    rhs.value
+FROM
+    test_table_1 AS lhs
+RIGHT JOIN test_table_2 AS rhs
+    ON lhs.id = rhs.id
+WHERE lhs.id = 5
+SETTINGS
+    query_plan_join_swap_table = 'false',
+    enable_join_runtime_filters = 0;
 
 SELECT
     lhs.id,
@@ -105,6 +197,21 @@ RIGHT JOIN test_table_2 AS rhs
     ON lhs.id = rhs.id
 WHERE lhs.id = 5;
 
+EXPLAIN header = 1, actions = 1
+SELECT
+    lhs.id,
+    rhs.id,
+    lhs.value,
+    rhs.value
+FROM
+    test_table_1 AS lhs
+RIGHT JOIN test_table_2 AS rhs
+    ON lhs.id = rhs.id
+WHERE rhs.id = 5
+SETTINGS
+    query_plan_join_swap_table = 'false',
+    enable_join_runtime_filters = 0;
+
 SELECT
     lhs.id,
     rhs.id,
@@ -115,6 +222,21 @@ FROM
 RIGHT JOIN test_table_2 AS rhs
     ON lhs.id = rhs.id
 WHERE rhs.id = 5;
+
+EXPLAIN header = 1, actions = 1
+SELECT
+    lhs.id,
+    rhs.id,
+    lhs.value,
+    rhs.value
+FROM
+    test_table_1 AS lhs
+FULL JOIN test_table_2 AS rhs
+    ON lhs.id = rhs.id
+WHERE lhs.id = 5
+SETTINGS
+    query_plan_join_swap_table = 'false',
+    enable_join_runtime_filters = 0;
 
 SELECT
     lhs.id,
@@ -127,6 +249,21 @@ FULL JOIN test_table_2 AS rhs
     ON lhs.id = rhs.id
 WHERE lhs.id = 5;
 
+EXPLAIN header = 1, actions = 1
+SELECT
+    lhs.id,
+    rhs.id,
+    lhs.value,
+    rhs.value
+FROM
+    test_table_1 AS lhs
+FULL JOIN test_table_2 AS rhs
+    ON lhs.id = rhs.id
+WHERE rhs.id = 5
+SETTINGS
+    query_plan_join_swap_table = 'false',
+    enable_join_runtime_filters = 0;
+
 SELECT
     lhs.id,
     rhs.id,
@@ -137,6 +274,22 @@ FROM
 FULL JOIN test_table_2 AS rhs
     ON lhs.id = rhs.id
 WHERE rhs.id = 5;
+
+EXPLAIN header = 1, actions = 1
+SELECT
+    lhs.id,
+    rhs.id,
+    lhs.value,
+    rhs.value
+FROM
+    test_table_1 AS lhs
+FULL JOIN test_table_2 AS rhs
+    ON lhs.id = rhs.id
+WHERE lhs.id = 5
+    AND rhs.id = 6
+SETTINGS
+    query_plan_join_swap_table = 'false',
+    enable_join_runtime_filters = 0;
 
 SELECT
     lhs.id,

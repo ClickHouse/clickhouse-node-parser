@@ -24,6 +24,11 @@ SELECT *
 FROM test
 ORDER BY json.d ASC;
 
+EXPLAIN indexes = 1
+SELECT *
+FROM test
+WHERE json.d = '2020-01-01';
+
 DROP TABLE test;
 
 CREATE TABLE test

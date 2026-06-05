@@ -14,3 +14,27 @@ SETTINGS use_query_cache = true;
 
 SELECT count(*)
 FROM `system`.query_cache;
+
+-- EXPLAIN PLAN should show the same regardless if the result is calculated or read from the QC
+EXPLAIN PLAN
+SELECT 1 + number
+FROM `system`.numbers
+LIMIT 1;
+
+EXPLAIN PLAN
+SELECT 1 + number
+FROM `system`.numbers
+LIMIT 1
+SETTINGS use_query_cache = true; -- (*)
+
+-- EXPLAIN PIPELINE should show the same regardless if the result is calculated or read from the QC
+EXPLAIN PIPELINE
+SELECT 1 + number
+FROM `system`.numbers
+LIMIT 1;
+
+EXPLAIN PIPELINE
+SELECT 1 + number
+FROM `system`.numbers
+LIMIT 1
+SETTINGS use_query_cache = true; -- (*)

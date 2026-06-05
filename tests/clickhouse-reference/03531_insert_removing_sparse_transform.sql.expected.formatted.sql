@@ -20,6 +20,10 @@ CREATE TABLE t_log
 )
 ENGINE = Log;
 
+EXPLAIN PIPELINE
+INSERT INTO t_log SELECT *
+FROM `system`.one;
+
 -- MergeTree support sparse columns - no RemovingSparseTransform
 CREATE TABLE t_mt
 (
@@ -27,6 +31,10 @@ CREATE TABLE t_mt
 )
 ENGINE = MergeTree
 ORDER BY tuple();
+
+EXPLAIN PIPELINE
+INSERT INTO t_mt SELECT *
+FROM `system`.one;
 
 -- MergeTree pushes to Log, which does not support sparse columns - RemovingSparseTransform added
 CREATE MATERIALIZED VIEW mv

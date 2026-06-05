@@ -214,4 +214,93 @@ ENGINE = MergeTree
 ORDER BY (event_type, repo_name, created_at)
 SETTINGS allow_nullable_key = 1;
 
+EXPLAIN PIPELINE header = true, compact = true
+WITH top_repos AS (
+    SELECT repo_name
+    FROM github_events__fuzz_0
+    WHERE (event_type = 'WatchEvent')
+        AND (toDate(created_at) = (today() - 1))
+    GROUP BY repo_name
+    ORDER BY count() DESC
+    LIMIT 100
+    UNION DISTINCT
+    SELECT repo_name
+    FROM github_events__fuzz_0
+    WHERE (event_type = 'WatchEvent')
+        AND (toMonday(created_at) = toMonday(today() - toIntervalWeek(1)))
+    GROUP BY repo_name
+    ORDER BY count() DESC
+    LIMIT 100
+    UNION DISTINCT
+    SELECT repo_name
+    FROM github_events__fuzz_0
+    PREWHERE (event_type = 'WatchEvent')
+        AND (toStartOfMonth(created_at) = (toStartOfMonth(today()) - toIntervalMonth(1)))
+    GROUP BY repo_name
+    ORDER BY count() DESC
+    LIMIT 100
+    UNION DISTINCT
+    SELECT repo_name
+    FROM github_events
+    WHERE (event_type = 'WatchEvent')
+        AND (toYear(created_at) = (toYear(today()) - 1))
+    GROUP BY repo_name
+    ORDER BY count() DESC
+    LIMIT 100
+),
+
+last_day AS (
+    SELECT
+        repo_name,
+        count() AS count_last_day,
+        rowNumberInAllBlocks() + 1 AS position_last_day
+    FROM github_events
+    WHERE (repo_name IN (
+            SELECT repo_name
+            FROM top_repos
+        ))
+        AND (toDate(created_at) = (today() - 1))
+    GROUP BY repo_name
+    ORDER BY count_last_day DESC
+),
+
+last_week AS (
+    SELECT
+        repo_name,
+        count() AS count_last_week,
+        rowNumberInAllBlocks() + 1 AS position_last_week
+    FROM github_events
+    WHERE (repo_name IN (
+            SELECT repo_name
+            FROM top_repos
+        ))
+        AND (toMonday(created_at) = (toMonday(today()) - toIntervalWeek(2)))
+    GROUP BY repo_name
+    ORDER BY count_last_week DESC
+),
+
+last_month AS (
+    SELECT
+        repo_name,
+        count() AS count_last_month,
+        rowNumberInAllBlocks() + 1 AS position_last_month
+    FROM github_events__fuzz_0
+    WHERE ('deleted' = 4)
+        AND in(repo_name)
+        AND (toStartOfMonth(created_at) = (toStartOfMonth(today()) - toIntervalMonth(1)))
+    GROUP BY repo_name
+    ORDER BY count_last_month DESC
+)
+
+SELECT
+    d.repo_name,
+    COLUMNS(count)
+FROM
+    last_day AS d
+INNER JOIN last_week AS w
+    ON d.repo_name = w.repo_name
+INNER JOIN last_month AS m
+    ON d.repo_name = m.repo_name
+FORMAT Null; -- { serverError INVALID_SETTING_VALUE }
+
 DROP TABLE github_events;

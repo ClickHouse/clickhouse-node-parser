@@ -26,3 +26,26 @@ INSERT INTO data SELECT
     number + 1e6,
     if(number / 8192 % 2 == 0, now(), now() - toIntervalDay(200))
 FROM numbers(1e6);
+
+-- { echoOn }
+EXPLAIN PIPELINE
+SELECT *
+FROM data FINAL
+WHERE v1 >= now() - toIntervalDay(180)
+SETTINGS
+    max_threads = 2,
+    max_final_threads = 2,
+    force_data_skipping_indices = 'v1_index',
+    use_skip_indexes_if_final = 1
+FORMAT LineAsString;
+
+EXPLAIN PIPELINE
+SELECT *
+FROM data FINAL
+WHERE v1 >= now() - toIntervalDay(180)
+SETTINGS
+    max_threads = 2,
+    max_final_threads = 2,
+    force_data_skipping_indices = 'v1_index',
+    use_skip_indexes_if_final = 0
+FORMAT LineAsString;

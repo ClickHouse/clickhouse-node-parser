@@ -20,6 +20,26 @@ WHERE database = currentDatabase()
     AND table = 't_03176'
     AND active;
 
+-- This query is fast without failpoint: should take < 1 sec
+EXPLAIN indexes = 1
+SELECT *
+FROM t_03176
+ORDER BY k ASC
+LIMIT 5
+SETTINGS log_comment = '03176_q1'
+FORMAT Null;
+
+-- Now the query should be cancelled
+EXPLAIN indexes = 1
+SELECT *
+FROM t_03176
+ORDER BY k ASC
+LIMIT 5
+SETTINGS
+    log_comment = '03176_q3',
+    max_execution_time = 0.00001
+FORMAT Null; -- { serverError TIMEOUT_EXCEEDED }
+
 SYSTEM FLUSH LOGS query_log;
 
 -- Check that q1 was fast, q2 was slow and q3 had timeout

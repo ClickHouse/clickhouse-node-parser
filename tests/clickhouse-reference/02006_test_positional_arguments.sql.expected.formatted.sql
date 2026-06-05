@@ -153,6 +153,110 @@ FROM test
 ORDER BY 3 ASC
 LIMIT 1 BY 1;
 
+EXPLAIN SYNTAX
+SELECT
+    x3,
+    x2,
+    x1
+FROM test
+ORDER BY 1 ASC;
+
+EXPLAIN SYNTAX
+SELECT
+    x3 + 1,
+    x2,
+    x1
+FROM test
+ORDER BY 1 ASC;
+
+EXPLAIN SYNTAX
+SELECT
+    x3,
+    x2,
+    x1
+FROM test
+ORDER BY -1 ASC;
+
+EXPLAIN SYNTAX
+SELECT
+    x3 + 1,
+    x2,
+    x1
+FROM test
+ORDER BY -1 ASC;
+
+EXPLAIN SYNTAX
+SELECT
+    x3,
+    x3 - x2,
+    x2,
+    x1
+FROM test
+ORDER BY 2 ASC;
+
+EXPLAIN SYNTAX
+SELECT
+    x3,
+    x3 - x2,
+    x2,
+    x1
+FROM test
+ORDER BY -2 ASC;
+
+EXPLAIN SYNTAX
+SELECT
+    x3,
+    if(x3 > 10, x3, plus(x1, x2)),
+    x1 + x2
+FROM test
+ORDER BY 2 ASC;
+
+EXPLAIN SYNTAX
+SELECT
+    x3,
+    if(x3 > 10, x3, plus(x1, x2)),
+    x1 + x2
+FROM test
+ORDER BY -2 ASC;
+
+EXPLAIN SYNTAX
+SELECT
+    max(x1),
+    x2
+FROM test
+GROUP BY 2
+ORDER BY
+    1 ASC,
+    2 ASC;
+
+EXPLAIN SYNTAX
+SELECT
+    max(x1),
+    x2
+FROM test
+GROUP BY -1
+ORDER BY
+    -2 ASC,
+    -1 ASC;
+
+EXPLAIN SYNTAX
+SELECT
+    1 + greatest(x1, 1),
+    x2
+FROM test
+GROUP BY
+    1,
+    2;
+
+EXPLAIN SYNTAX
+SELECT
+    1 + greatest(x1, 1),
+    x2
+FROM test
+GROUP BY
+    -2,
+    -1;
+
 SELECT
     max(x1),
     x2
@@ -184,6 +288,24 @@ FROM test
 GROUP BY
     -2,
     -1; -- { serverError ILLEGAL_TYPE_OF_ARGUMENT, 184 }
+
+EXPLAIN SYNTAX
+SELECT
+    x1 + x3,
+    x3
+FROM test
+GROUP BY
+    1,
+    2;
+
+EXPLAIN SYNTAX
+SELECT
+    x1 + x3,
+    x3
+FROM test
+GROUP BY
+    -2,
+    -1;
 
 CREATE TABLE test2
 (
@@ -276,6 +398,10 @@ GROUP BY
     -2,
     -1
 ORDER BY a ASC;
+
+EXPLAIN SYNTAX
+SELECT plus(1, 1) AS a
+GROUP BY a;
 
 SELECT substr('aaaaaaaaaaaaaa', 8) AS a
 GROUP BY a

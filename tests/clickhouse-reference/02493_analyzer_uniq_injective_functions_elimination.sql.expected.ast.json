@@ -21,6 +21,46 @@
     ]
   },
   {
+    "kind": "explain",
+    "explainType": "QUERY TREE",
+    "query": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "functionCall",
+          "name": "uniqCombined",
+          "args": [
+            {
+              "kind": "functionCall",
+              "name": "tuple",
+              "args": [
+                {
+                  "kind": "literal",
+                  "type": "String",
+                  "value": ""
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "from": {
+        "kind": "tableFunctionRef",
+        "name": "numbers",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "1"
+          }
+        ]
+      }
+    },
+    "leadingComments": [
+      "-- Simple test"
+    ]
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -52,6 +92,59 @@
         }
       ]
     }
+  },
+  {
+    "kind": "explain",
+    "explainType": "QUERY TREE",
+    "query": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "functionCall",
+          "name": "uniqCombined",
+          "args": [
+            {
+              "kind": "functionCall",
+              "name": "tuple",
+              "args": [
+                {
+                  "kind": "functionCall",
+                  "name": "materialize",
+                  "args": [
+                    {
+                      "kind": "functionCall",
+                      "name": "tuple",
+                      "args": [
+                        {
+                          "kind": "columnRef",
+                          "parts": [
+                            "number"
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "from": {
+        "kind": "tableFunctionRef",
+        "name": "numbers",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "10"
+          }
+        ]
+      }
+    },
+    "leadingComments": [
+      "-- Test with chain of injective functions"
+    ]
   },
   {
     "kind": "select",
@@ -98,5 +191,148 @@
         }
       ]
     }
+  },
+  {
+    "kind": "explain",
+    "explainType": "QUERY TREE",
+    "query": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "functionCall",
+          "name": "uniq",
+          "args": [
+            {
+              "kind": "functionCall",
+              "name": "abs",
+              "args": [
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "number"
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "from": {
+        "kind": "tableFunctionRef",
+        "name": "numbers",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "10"
+          }
+        ]
+      }
+    },
+    "leadingComments": [
+      "-- No or partial optimization cases"
+    ],
+    "trailingComments": [
+      "-- no elimination as `abs` is not injective"
+    ]
+  },
+  {
+    "kind": "explain",
+    "explainType": "QUERY TREE",
+    "query": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "functionCall",
+          "name": "uniq",
+          "args": [
+            {
+              "kind": "functionCall",
+              "name": "toString",
+              "args": [
+                {
+                  "kind": "functionCall",
+                  "name": "abs",
+                  "args": [
+                    {
+                      "kind": "functionCall",
+                      "name": "materialize",
+                      "args": [
+                        {
+                          "kind": "columnRef",
+                          "parts": [
+                            "number"
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "from": {
+        "kind": "tableFunctionRef",
+        "name": "numbers",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "10"
+          }
+        ]
+      }
+    },
+    "trailingComments": [
+      "-- only eliminate `toString`"
+    ]
+  },
+  {
+    "kind": "explain",
+    "explainType": "QUERY TREE",
+    "query": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "functionCall",
+          "name": "uniq",
+          "args": [
+            {
+              "kind": "functionCall",
+              "name": "tuple",
+              "args": [
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "number"
+                  ]
+                },
+                {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "1"
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "from": {
+        "kind": "tableFunctionRef",
+        "name": "numbers",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "10"
+          }
+        ]
+      }
+    },
+    "trailingComments": [
+      "-- no elimination as `tuple` has multiple arguments"
+    ]
   }
 ]

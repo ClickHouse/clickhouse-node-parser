@@ -16,6 +16,10 @@ SET optimize_functions_to_subcolumns = 1;
 
 SET enable_analyzer = 1;
 
+EXPLAIN QUERY TREE dump_tree = 0, dump_ast = 1
+SELECT variantElement(v, 'String')
+FROM t_func_to_subcolumns_variant;
+
 SELECT variantElement(v, 'String')
 FROM t_func_to_subcolumns_variant;
 

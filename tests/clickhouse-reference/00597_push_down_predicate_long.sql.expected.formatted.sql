@@ -61,6 +61,8 @@ SELECT *
 FROM test_00597
 WHERE id = 1;
 
+-- ARRAY JOIN
+EXPLAIN SYNTAX
 SELECT count()
 FROM
     (
@@ -73,6 +75,20 @@ FROM
 ARRAY JOIN a, b
 WHERE NOT ignore(a + b);
 
+SELECT count()
+FROM
+    (
+        SELECT
+            [number] AS a,
+            [number * 2] AS b
+        FROM `system`.numbers
+        LIMIT 1
+    ) AS t
+ARRAY JOIN a, b
+WHERE NOT ignore(a + b);
+
+-- LEFT JOIN
+EXPLAIN SYNTAX
 SELECT
     a,
     b
@@ -93,12 +109,61 @@ SELECT
     b
 FROM
     (
+        SELECT 1 AS a
+    )
+LEFT JOIN (
+        SELECT
+            1 AS a,
+            1 AS b
+    )
+    USING (a)
+WHERE b = 0;
+
+-- RIGHT JOIN
+EXPLAIN SYNTAX
+SELECT
+    a,
+    b
+FROM
+    (
         SELECT
             1 AS a,
             1 AS b
     )
 RIGHT JOIN (
         SELECT 1 AS a
+    )
+    USING (a)
+WHERE b = 0;
+
+SELECT
+    a,
+    b
+FROM
+    (
+        SELECT
+            1 AS a,
+            1 AS b
+    )
+RIGHT JOIN (
+        SELECT 1 AS a
+    )
+    USING (a)
+WHERE b = 0;
+
+-- FULL JOIN
+EXPLAIN SYNTAX
+SELECT
+    a,
+    b
+FROM
+    (
+        SELECT 1 AS a
+    )
+FULL JOIN (
+        SELECT
+            1 AS a,
+            1 AS b
     )
     USING (a)
 WHERE b = 0;
@@ -118,12 +183,36 @@ FULL JOIN (
     USING (a)
 WHERE b = 0;
 
+EXPLAIN SYNTAX
+SELECT
+    a,
+    b
+FROM
+    (
+        SELECT
+            1 AS a,
+            1 AS b
+    )
+FULL JOIN (
+        SELECT 1 AS a
+    )
+    USING (a)
+WHERE b = 0;
+
+EXPLAIN SYNTAX
 SELECT toString(value) AS value
 FROM (
         SELECT 1 AS value
     )
 WHERE value = '1';
 
+SELECT toString(value) AS value
+FROM (
+        SELECT 1 AS value
+    )
+WHERE value = '1';
+
+EXPLAIN SYNTAX
 SELECT *
 FROM (
         SELECT 1 AS id
@@ -133,6 +222,28 @@ FROM (
 WHERE id = 1;
 
 SELECT *
+FROM (
+        SELECT 1 AS id
+        UNION ALL
+        SELECT 2
+    )
+WHERE id = 1;
+
+EXPLAIN SYNTAX
+SELECT *
+FROM (
+        SELECT arrayJoin([1, 2, 3]) AS id
+    )
+WHERE id = 1;
+
+SELECT *
+FROM (
+        SELECT arrayJoin([1, 2, 3]) AS id
+    )
+WHERE id = 1;
+
+EXPLAIN SYNTAX
+SELECT id
 FROM (
         SELECT arrayJoin([1, 2, 3]) AS id
     )
@@ -144,6 +255,7 @@ FROM (
     )
 WHERE id = 1;
 
+EXPLAIN SYNTAX
 SELECT *
 FROM (
         SELECT
@@ -157,11 +269,52 @@ WHERE subquery = 1;
 SELECT *
 FROM (
         SELECT
+            1 AS id,
+            (
+                SELECT 1
+            ) AS subquery
+    )
+WHERE subquery = 1;
+
+-- Optimize predicate expressions using tables
+EXPLAIN SYNTAX
+SELECT *
+FROM (
+        SELECT
             toUInt64(b) AS a,
             sum(id) AS b
         FROM test_00597
     )
 WHERE a = 3;
+
+SELECT *
+FROM (
+        SELECT
+            toUInt64(b) AS a,
+            sum(id) AS b
+        FROM test_00597
+    )
+WHERE a = 3;
+
+EXPLAIN SYNTAX
+SELECT
+    date,
+    id,
+    name,
+    value
+FROM (
+        SELECT
+            date,
+            name,
+            value,
+            min(id) AS id
+        FROM test_00597
+        GROUP BY
+            date,
+            name,
+            value
+    )
+WHERE id = 1;
 
 SELECT
     date,
@@ -182,6 +335,7 @@ FROM (
     )
 WHERE id = 1;
 
+EXPLAIN SYNTAX
 SELECT *
 FROM (
         SELECT
@@ -193,8 +347,38 @@ WHERE outer_table_alias.b = 3;
 
 SELECT *
 FROM (
+        SELECT
+            toUInt64(b) AS a,
+            sum(id) AS b
+        FROM test_00597 AS table_alias
+    ) AS outer_table_alias
+WHERE outer_table_alias.b = 3;
+
+-- Optimize predicate expression with asterisk
+EXPLAIN SYNTAX
+SELECT *
+FROM (
         SELECT *
         FROM test_00597
+    )
+WHERE id = 1;
+
+SELECT *
+FROM (
+        SELECT *
+        FROM test_00597
+    )
+WHERE id = 1;
+
+-- Optimize predicate expression with asterisk and nested subquery
+EXPLAIN SYNTAX
+SELECT *
+FROM (
+        SELECT *
+        FROM (
+                SELECT *
+                FROM test_00597
+            )
     )
 WHERE id = 1;
 
@@ -208,6 +392,8 @@ FROM (
     )
 WHERE id = 1;
 
+-- Optimize predicate expression with qualified asterisk
+EXPLAIN SYNTAX
 SELECT *
 FROM (
         SELECT b.*
@@ -220,12 +406,55 @@ WHERE id = 1;
 
 SELECT *
 FROM (
+        SELECT b.*
+        FROM (
+                SELECT *
+                FROM test_00597
+            ) AS b
+    )
+WHERE id = 1;
+
+-- Optimize predicate expression without asterisk
+EXPLAIN SYNTAX
+SELECT *
+FROM (
         SELECT
             date,
             id,
             name,
             value
         FROM test_00597
+    )
+WHERE id = 1;
+
+SELECT *
+FROM (
+        SELECT
+            date,
+            id,
+            name,
+            value
+        FROM test_00597
+    )
+WHERE id = 1;
+
+-- Optimize predicate expression without asterisk and contains nested subquery
+EXPLAIN SYNTAX
+SELECT *
+FROM (
+        SELECT
+            date,
+            id,
+            name,
+            value
+        FROM (
+                SELECT
+                    date,
+                    id,
+                    name,
+                    value
+                FROM test_00597
+            )
     )
 WHERE id = 1;
 
@@ -247,10 +476,31 @@ FROM (
     )
 WHERE id = 1;
 
+-- Optimize predicate expression with qualified
+EXPLAIN SYNTAX
 SELECT *
 FROM (
         SELECT *
         FROM test_00597
+    ) AS b
+WHERE b.id = 1;
+
+SELECT *
+FROM (
+        SELECT *
+        FROM test_00597
+    ) AS b
+WHERE b.id = 1;
+
+-- Optimize predicate expression with qualified and nested subquery
+EXPLAIN SYNTAX
+SELECT *
+FROM (
+        SELECT *
+        FROM (
+                SELECT *
+                FROM test_00597
+            ) AS a
     ) AS b
 WHERE b.id = 1;
 
@@ -264,6 +514,8 @@ FROM (
     ) AS b
 WHERE b.id = 1;
 
+-- Optimize predicate expression with aggregate function
+EXPLAIN SYNTAX
 SELECT *
 FROM (
         SELECT
@@ -279,12 +531,52 @@ WHERE id = 1;
 
 SELECT *
 FROM (
+        SELECT
+            id,
+            date,
+            min(value) AS value
+        FROM test_00597
+        GROUP BY
+            id,
+            date
+    )
+WHERE id = 1;
+
+-- Optimize predicate expression with union all query
+EXPLAIN SYNTAX
+SELECT *
+FROM (
         SELECT *
         FROM test_00597
         UNION ALL
         SELECT *
         FROM test_00597
     )
+WHERE id = 1;
+
+SELECT *
+FROM (
+        SELECT *
+        FROM test_00597
+        UNION ALL
+        SELECT *
+        FROM test_00597
+    )
+WHERE id = 1;
+
+-- Optimize predicate expression with join query
+EXPLAIN SYNTAX
+SELECT *
+FROM
+    (
+        SELECT *
+        FROM test_00597
+    )
+LEFT JOIN (
+        SELECT *
+        FROM test_00597
+    )
+    USING (id)
 WHERE id = 1;
 
 SELECT *
@@ -315,12 +607,33 @@ LEFT JOIN (
 WHERE id = 1
 SETTINGS enable_analyzer = 1;
 
+EXPLAIN SYNTAX
 SELECT *
 FROM
     (
         SELECT toInt8(1) AS id
     )
 LEFT JOIN test_00597
+    USING (id)
+WHERE value = 1;
+
+SELECT *
+FROM
+    (
+        SELECT toInt8(1) AS id
+    )
+LEFT JOIN test_00597
+    USING (id)
+WHERE value = 1;
+
+-- FIXME: no support for aliased tables for now.
+EXPLAIN SYNTAX
+SELECT b.value
+FROM
+    (
+        SELECT toInt8(1) AS id
+    )
+LEFT JOIN test_00597 AS b
     USING (id)
 WHERE value = 1;
 
@@ -333,6 +646,24 @@ LEFT JOIN test_00597 AS b
     USING (id)
 WHERE value = 1;
 
+-- Optimize predicate expression with join and nested subquery
+EXPLAIN SYNTAX
+SELECT *
+FROM (
+        SELECT *
+        FROM
+            (
+                SELECT *
+                FROM test_00597
+            )
+        LEFT JOIN (
+                SELECT *
+                FROM test_00597
+            )
+            USING (id)
+    )
+WHERE id = 1;
+
 SELECT *
 FROM (
         SELECT *
@@ -367,6 +698,21 @@ FROM (
 WHERE id = 1
 SETTINGS enable_analyzer = 1;
 
+-- Optimize predicate expression with join query and qualified
+EXPLAIN SYNTAX
+SELECT *
+FROM
+    (
+        SELECT *
+        FROM test_00597
+    )
+LEFT JOIN (
+        SELECT *
+        FROM test_00597
+    ) AS b
+    USING (id)
+WHERE b.id = 1;
+
 SELECT *
 FROM
     (
@@ -394,6 +740,24 @@ LEFT JOIN (
     USING (id)
 WHERE b.id = 1
 SETTINGS enable_analyzer = 1;
+
+-- Compatibility test
+EXPLAIN SYNTAX
+SELECT *
+FROM
+    (
+        SELECT
+            toInt8(1) AS id,
+            toDate('2000-01-01') AS date
+        FROM `system`.numbers
+        LIMIT 1
+    )
+LEFT JOIN (
+        SELECT *
+        FROM test_00597
+    ) AS b
+    USING (date, id)
+WHERE b.date = toDate('2000-01-01');
 
 SELECT *
 FROM
@@ -429,6 +793,7 @@ LEFT JOIN (
 WHERE b.date = toDate('2000-01-01')
 SETTINGS enable_analyzer = 1;
 
+EXPLAIN SYNTAX
 SELECT *
 FROM (
         SELECT *
@@ -446,6 +811,40 @@ FROM (
 WHERE id = 1;
 
 SELECT *
+FROM (
+        SELECT *
+        FROM
+            (
+                SELECT *
+                FROM test_00597
+            ) AS a
+        LEFT JOIN (
+                SELECT *
+                FROM test_00597
+            ) AS b
+            ON a.id = b.id
+    )
+WHERE id = 1;
+
+-- Explain with join subquery
+EXPLAIN SYNTAX
+SELECT *
+FROM
+    (
+        SELECT *
+        FROM test_00597
+    )
+INNER JOIN (
+        SELECT *
+        FROM (
+                SELECT *
+                FROM test_00597
+            )
+    ) AS r
+    USING (id)
+WHERE r.id = 1;
+
+SELECT *
 FROM
     (
         SELECT *
@@ -478,6 +877,20 @@ INNER JOIN (
     USING (id)
 WHERE r.id = 1
 SETTINGS enable_analyzer = 1;
+
+-- issue 20497
+EXPLAIN SYNTAX
+SELECT value + t1.value AS expr
+FROM (
+        SELECT
+            t0.value,
+            t1.value
+        FROM
+            test_00597 AS t0
+        FULL JOIN test_00597 AS t1
+            USING (date)
+    )
+WHERE expr < 3;
 
 SELECT value + t1.value AS expr
 FROM (

@@ -370,6 +370,140 @@
     }
   },
   {
+    "kind": "explain",
+    "explainType": "QUERY TREE",
+    "query": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "alias",
+          "expr": {
+            "kind": "binaryExpr",
+            "op": "/",
+            "left": {
+              "kind": "functionCall",
+              "name": "sum",
+              "args": [
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "l_extendedprice"
+                  ]
+                }
+              ]
+            },
+            "right": {
+              "kind": "literal",
+              "type": "Float64",
+              "value": "7.0"
+            }
+          },
+          "alias": "avg_yearly"
+        }
+      ],
+      "from": {
+        "kind": "subqueryFrom",
+        "query": {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "asterisk"
+            }
+          ],
+          "from": {
+            "left": {
+              "kind": "tableRef",
+              "table": "lineitem"
+            },
+            "kind": "joinExpr",
+            "joinType": "CROSS",
+            "right": {
+              "kind": "tableRef",
+              "table": "part"
+            }
+          },
+          "where": {
+            "kind": "binaryExpr",
+            "op": "=",
+            "left": {
+              "kind": "columnRef",
+              "parts": [
+                "p_partkey"
+              ]
+            },
+            "right": {
+              "kind": "columnRef",
+              "parts": [
+                "l_partkey"
+              ]
+            }
+          }
+        },
+        "alias": "lp"
+      },
+      "where": {
+        "kind": "binaryExpr",
+        "op": "<",
+        "left": {
+          "kind": "columnRef",
+          "parts": [
+            "l_quantity"
+          ]
+        },
+        "right": {
+          "kind": "subqueryExpr",
+          "query": {
+            "kind": "select",
+            "select": [
+              {
+                "kind": "binaryExpr",
+                "op": "*",
+                "left": {
+                  "kind": "literal",
+                  "type": "Float64",
+                  "value": "0.2"
+                },
+                "right": {
+                  "kind": "functionCall",
+                  "name": "avg",
+                  "args": [
+                    {
+                      "kind": "columnRef",
+                      "parts": [
+                        "l_quantity"
+                      ]
+                    }
+                  ]
+                }
+              }
+            ],
+            "from": {
+              "kind": "tableRef",
+              "table": "lineitem"
+            },
+            "where": {
+              "kind": "binaryExpr",
+              "op": "=",
+              "left": {
+                "kind": "columnRef",
+                "parts": [
+                  "l_partkey"
+                ]
+              },
+              "right": {
+                "kind": "columnRef",
+                "parts": [
+                  "lp",
+                  "p_partkey"
+                ]
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  {
     "kind": "select",
     "select": [
       {

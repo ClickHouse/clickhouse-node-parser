@@ -898,12 +898,14 @@ InsertStatement
   = withClause:CTEClause _ "INSERT"i ![a-zA-Z0-9_] _ "INTO"i ![a-zA-Z0-9_] _ target:InsertTarget
     partitionBy:( _ "PARTITION"i ![a-zA-Z0-9_] _ "BY"i ![a-zA-Z0-9_] _ Expression )?
     columns:( _ InsertColumnList )?
+    fromInfile:( _ InsertFromInfileClause )?
     insertSettings:( _ SettingsClause )?
     data:InsertDataClause {
       const result = { kind: 'insert', target: target };
       if (withClause && withClause.items) result.with = withClause.items;
       if (partitionBy !== null) result.partitionBy = partitionBy[7];
       if (columns !== null) result.columns = columns[1];
+      if (fromInfile !== null) result.fromInfile = fromInfile[1];
       if (insertSettings !== null) result.insertSettings = insertSettings[1];
       if (data !== null) {
         result.selectQuery = data.query;
@@ -914,17 +916,28 @@ InsertStatement
   / "INSERT"i ![a-zA-Z0-9_] _ "INTO"i ![a-zA-Z0-9_] _ target:InsertTarget
     partitionBy:( _ "PARTITION"i ![a-zA-Z0-9_] _ "BY"i ![a-zA-Z0-9_] _ Expression )?
     columns:( _ InsertColumnList )?
+    fromInfile:( _ InsertFromInfileClause )?
     insertSettings:( _ SettingsClause )?
     data:InsertDataClause {
       const result = { kind: 'insert', target: target };
       if (partitionBy !== null) result.partitionBy = partitionBy[7];
       if (columns !== null) result.columns = columns[1];
+      if (fromInfile !== null) result.fromInfile = fromInfile[1];
       if (insertSettings !== null) result.insertSettings = insertSettings[1];
       if (data !== null) {
         result.selectQuery = data.query;
         if (data.querySettings) result.querySettings = data.querySettings;
       }
       return loc(result);
+    }
+
+// InsertFromInfileClause: FROM INFILE 'path' [COMPRESSION 'name']
+InsertFromInfileClause
+  = "FROM"i ![a-zA-Z0-9_] _ "INFILE"i ![a-zA-Z0-9_] _ path:StringLiteral
+    compression:( _ "COMPRESSION"i ![a-zA-Z0-9_] _ comp:StringLiteral { return comp; } )? {
+      const result = { path };
+      if (compression !== null) result.compression = compression;
+      return result;
     }
 
 // InsertTarget: identifies what to insert into (table or table function)
@@ -2526,11 +2539,12 @@ CreateCommentClause
 
 // ExplainStatement: EXPLAIN [AST|SYNTAX|QUERY TREE|PLAN|PIPELINE|ESTIMATE|TABLE OVERRIDE] [settings] [query] [FORMAT ...]
 // Settings are key=value pairs without the SETTINGS keyword (e.g. EXPLAIN actions=1 SELECT ...).
+// The inner query can be any explainable statement (SELECT, INSERT, CREATE, ALTER, SYSTEM, etc.).
 ExplainStatement
   = "EXPLAIN"i ![a-zA-Z0-9_] _
     type:ExplainType? _
     settings:ExplainSettingsList? _
-    query:UnionQuery?
+    query:ExplainInnerStatement?
     format:( _ FormatClause )?
     postSettings:( _ SettingsClause )? {
       const result = loc({ kind: 'explain' });
@@ -2541,6 +2555,21 @@ ExplainStatement
       if (postSettings !== null) result.postFormatSettings = postSettings[1];
       return result;
     }
+
+// ExplainInnerStatement: any statement that can appear as the body of an EXPLAIN.
+// The order mirrors TopLevelStatement (non-SELECT statements first, then SELECT/UNION).
+ExplainInnerStatement
+  = CreateStatement
+  / AlterStatement
+  / SystemStatement
+  / InsertStatement
+  / DropStatement
+  / TruncateStatement
+  / OptimizeStatement
+  / DescribeStatement
+  / DeleteStatement
+  / UpdateStatement
+  / UnionQuery
 
 // ExplainType: the keyword identifying the EXPLAIN output type
 ExplainType
@@ -2881,6 +2910,11 @@ CTEItem
   // Expression CTE: expr AS name (ClickHouse extension — name can be a keyword like 'from')
   / expr:TernaryExpr afterExpr:_ KW_AS _ name:AliasName {
       return { kind: 'cteExpr', name, expr: addTrailing(expr, flattenWs(afterExpr)) };
+    }
+  // Anonymous expression CTE: just `expr` with no alias (e.g. `WITH 1 SELECT 1`).
+  // ClickHouse accepts this as a no-op WITH clause that still appears in the AST.
+  / expr:TernaryExpr {
+      return { kind: 'cteExpr', expr };
     }
 
 // SelectItemList: supports optional trailing comma (ClickHouse extension).
@@ -3358,24 +3392,28 @@ NotExpr
 // CompareExpr: left-associative chain of comparison operators.
 // Uses CompareRightExpr (not NotExpr) to avoid right-associativity — the right operand must not
 // start a new comparison chain. E.g. k = (100) = 1 → equals(equals(k,100), 1).
+// ExtendedCompareOp also matches `IS [NOT] DISTINCT FROM` as a comparison-level operator so
+// `x IS NOT DISTINCT FROM y IN (...)` parses as `<=>(x, in(y, [...]))`.
 CompareExpr
-  = base:CompareBase rest:(_ op:CompareOp _ CompareRightExpr)* {
+  = base:CompareBase rest:(_ op:ExtendedCompareOp _ CompareRightExpr)* {
       return rest.reduce((acc, t) => (loc({
         kind: 'binaryExpr', op: t[1], left: acc,
         right: addLeading(t[3], [...flattenWs(t[0]), ...flattenWs(t[2])])
       })), base);
     }
 
-// CompareBase: parse AddExpr once, then branch on comparison/IN/LIKE/BETWEEN suffix.
-// Left-factored to avoid re-entering AddExpr for each alternative.
+// CompareBase: parse AddExpr once, then apply zero or more chainable suffixes
+// (IN, LIKE, BETWEEN, IS [NOT] NULL, :: cast). Chained suffixes let us parse:
+//   `x IS NULL :: Int32`        → cast(isNull(x), Int32)
+//   `x IS NULL + 1 IS NOT NULL` → isNotNull(plus(isNull(x), 1))
+//   `x IN (1, 2) IN (...)`      → in(in(x, [1, 2]), [...])
 CompareBase
-  = left:AddExpr suffix:CompareBaseSuffix? {
-      if (suffix === null) return left;
-      return suffix(left);
+  = left:AddExpr suffixes:CompareBaseSuffix* {
+      return suffixes.reduce((acc, s) => s(acc), left);
     }
 
-// CompareBaseSuffix: the operator part after AddExpr in a comparison expression.
-// Returns a function that takes the left AddExpr and produces the full expression.
+// CompareBaseSuffix: a chainable suffix that takes the left expression and produces a new expression.
+// Returns a function that takes the left expression and produces the full expression.
 CompareBaseSuffix
   // IN variants: [GLOBAL] [NOT] IN (array / parens / bare)
   = _ global:(KW_GLOBAL _)? negated:(KW_NOT _)? KW_IN _ target:InTarget {
@@ -3415,12 +3453,10 @@ CompareBaseSuffix
         ]
       }));
     }
-  // IS [NOT] DISTINCT FROM / IS [NOT] NULL
-  / _ "IS"i ![a-zA-Z0-9_] _ "NOT"i ![a-zA-Z0-9_] _ "DISTINCT"i ![a-zA-Z0-9_] _ "FROM"i ![a-zA-Z0-9_] _ right:AddExpr {
-      return (left) => (loc({ kind: 'binaryExpr', op: '<=>', left, right }));
-    }
-  / _ "IS"i ![a-zA-Z0-9_] _ "DISTINCT"i ![a-zA-Z0-9_] _ "FROM"i ![a-zA-Z0-9_] _ right:AddExpr {
-      return (left) => (loc({ kind: 'binaryExpr', op: 'IS DISTINCT FROM', left, right }));
+  // :: cast operator at comparison level so `x IS NULL :: Type` works as cast(isNull(x), Type).
+  // (At PrimaryExpr level, `x::Type` is also handled for tighter-binding casts on bare values.)
+  / _ "::" _ type:TypeCastIdentifier {
+      return (left) => (loc({ kind: 'castExpr', expr: left, type: type, operator: true }));
     }
   // IS [NOT] NULL with optional arithmetic continuation: "x IS NOT NULL + 1" parses as plus(isNotNull(x), 1).
   // The arith tail allows arithmetic ops to bind tighter than comparison, matching ClickHouse precedence.
@@ -3436,6 +3472,16 @@ CompareBaseSuffix
         return arith.reduce((acc, t) => (loc({ kind: 'binaryExpr', op: t[1], left: acc, right: t[3] })), base);
       };
     }
+
+// ExtendedCompareOp: a comparison-level binary operator.
+// Includes the simple symbolic operators plus `IS [NOT] DISTINCT FROM`, which behave
+// the same as `<=>` / `IS DISTINCT FROM` but use multi-word syntax. Putting these at
+// the chained operator level lets the right operand consume a full CompareRightExpr
+// (so `x IS NOT DISTINCT FROM y IN (...)` parses as `<=>(x, in(y, [...]))`).
+ExtendedCompareOp
+  = "IS"i ![a-zA-Z0-9_] _ "NOT"i ![a-zA-Z0-9_] _ "DISTINCT"i ![a-zA-Z0-9_] _ "FROM"i ![a-zA-Z0-9_] { return '<=>'; }
+  / "IS"i ![a-zA-Z0-9_] _ "DISTINCT"i ![a-zA-Z0-9_] _ "FROM"i ![a-zA-Z0-9_] { return 'IS DISTINCT FROM'; }
+  / op:CompareOp { return op; }
 
 // InTarget: the target expression for IN — array literal, parenthesized list, or bare expression
 InTarget
@@ -3465,9 +3511,8 @@ CompareOp = "<=>" / ">=" / "<=" / "<>" / "!=" / "==" / ">" / "<" / "="
 // Allows: 1 != NOT 1, k = x + y, k > -5. Does not allow: k = (a = b) unless in parens.
 CompareRightExpr
   = KW_NOT _ expr:CompareRightExpr { return loc({ kind: 'unaryExpr', op: 'NOT', expr: expr }); }
-  / left:AddExpr suffix:CompareBaseSuffix? {
-      if (suffix === null) return left;
-      return suffix(left);
+  / left:AddExpr suffixes:CompareBaseSuffix* {
+      return suffixes.reduce((acc, s) => s(acc), left);
     }
 
 InValues
@@ -3528,6 +3573,12 @@ MulOp
 UnaryExpr
   = "+" _ expr:UnaryExpr { return expr; }
   / ("-" / "\u2212") _ expr:UnaryExpr {
+      // Don't fold across explicit parentheses: -(1) must produce negate(1), not Int64_-1.
+      // (-1) without an outer minus stays as a UInt64 literal — only `-` immediately before a
+      // bare literal folds. A parenthesized inner expression always wraps in negate().
+      if (expr.parenthesized) {
+        return loc({ kind: 'functionCall', name: 'negate', args: [expr] });
+      }
       if (expr.kind === 'literal' && expr.type === 'UInt64') {
         // Negate a non-negative integer literal: compute decimal value using BigInt for precision
         const val = expr.value;

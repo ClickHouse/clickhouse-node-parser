@@ -35,6 +35,104 @@
     }
   },
   {
+    "kind": "explain",
+    "explainType": "SYNTAX",
+    "settings": [
+      {
+        "name": "run_query_tree_passes",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ],
+    "query": {
+      "kind": "select",
+      "with": [
+        {
+          "kind": "cteExpr",
+          "name": "compound_value",
+          "expr": {
+            "kind": "literal",
+            "type": "UInt64",
+            "value": "1"
+          }
+        }
+      ],
+      "select": [
+        {
+          "kind": "asterisk",
+          "transformers": [
+            {
+              "kind": "apply",
+              "func": {
+                "kind": "lambdaExpr",
+                "params": [
+                  "x"
+                ],
+                "body": {
+                  "kind": "qualifiedAsterisk",
+                  "parts": [
+                    "compound_value"
+                  ]
+                }
+              }
+            }
+          ]
+        }
+      ],
+      "from": {
+        "kind": "tableRef",
+        "table": "test_table"
+      },
+      "where": {
+        "kind": "binaryExpr",
+        "op": ">",
+        "left": {
+          "kind": "columnRef",
+          "parts": [
+            "x"
+          ]
+        },
+        "right": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      },
+      "settings": [
+        {
+          "name": "convert_query_to_cnf",
+          "value": {
+            "kind": "literal",
+            "type": "Bool",
+            "value": "1"
+          }
+        },
+        {
+          "name": "optimize_using_constraints",
+          "value": {
+            "kind": "literal",
+            "type": "Bool",
+            "value": "1"
+          }
+        },
+        {
+          "name": "optimize_substitute_columns",
+          "value": {
+            "kind": "literal",
+            "type": "Bool",
+            "value": "1"
+          }
+        }
+      ]
+    },
+    "trailingComments": [
+      "-- { serverError UNKNOWN_IDENTIFIER,UNSUPPORTED_METHOD }"
+    ]
+  },
+  {
     "kind": "drop",
     "targetType": "TABLE",
     "table": {

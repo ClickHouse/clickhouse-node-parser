@@ -95,6 +95,330 @@
     ]
   },
   {
+    "kind": "explain",
+    "query": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "asterisk"
+        }
+      ],
+      "from": {
+        "kind": "tableFunctionRef",
+        "name": "url",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": "http://localhost:8123"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "kind": "explain",
+    "query": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "asterisk"
+        }
+      ],
+      "from": {
+        "kind": "tableFunctionRef",
+        "name": "s3",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": "http://localhost:11111/test/a.tsv"
+          },
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": "TSV"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "kind": "explain",
+    "query": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "asterisk"
+        }
+      ],
+      "from": {
+        "kind": "tableFunctionRef",
+        "name": "s3",
+        "args": [
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": "http://localhost:11111/test/a.tsv"
+          },
+          {
+            "kind": "literal",
+            "type": "String",
+            "value": "TSV"
+          }
+        ]
+      },
+      "where": {
+        "kind": "inExpr",
+        "negated": false,
+        "expr": {
+          "kind": "columnRef",
+          "parts": [
+            "c1"
+          ]
+        },
+        "values": {
+          "kind": "subqueryExpr",
+          "query": {
+            "kind": "select",
+            "select": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "c1"
+                ]
+              }
+            ],
+            "from": {
+              "kind": "tableFunctionRef",
+              "name": "s3",
+              "args": [
+                {
+                  "kind": "literal",
+                  "type": "String",
+                  "value": "http://localhost:11111/test/a.tsv"
+                },
+                {
+                  "kind": "literal",
+                  "type": "String",
+                  "value": "TSV"
+                }
+              ]
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "kind": "explain",
+    "query": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "functionCall",
+          "name": "sum",
+          "args": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "c1"
+              ]
+            }
+          ]
+        }
+      ],
+      "from": {
+        "kind": "subqueryFrom",
+        "query": {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "asterisk"
+            }
+          ],
+          "from": {
+            "kind": "tableFunctionRef",
+            "name": "s3",
+            "args": [
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "http://localhost:11111/test/a.tsv"
+              },
+              {
+                "kind": "literal",
+                "type": "String",
+                "value": "TSV"
+              }
+            ]
+          }
+        }
+      }
+    }
+  },
+  {
+    "kind": "explain",
+    "query": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "number"
+          ]
+        }
+      ],
+      "from": {
+        "left": {
+          "kind": "tableRef",
+          "database": "system",
+          "table": "numbers",
+          "alias": "n"
+        },
+        "kind": "joinExpr",
+        "joinType": "INNER",
+        "right": {
+          "kind": "tableFunctionRef",
+          "name": "s3",
+          "args": [
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "http://localhost:11111/test/a.tsv"
+            },
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "TSV"
+            }
+          ],
+          "alias": "s"
+        },
+        "constraint": {
+          "kind": "on",
+          "expr": {
+            "kind": "binaryExpr",
+            "op": "=",
+            "left": {
+              "kind": "functionCall",
+              "name": "toInt64",
+              "args": [
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "n",
+                    "number"
+                  ]
+                }
+              ]
+            },
+            "right": {
+              "kind": "functionCall",
+              "name": "toInt64",
+              "args": [
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "s",
+                    "c1"
+                  ]
+                }
+              ]
+            },
+            "parenthesized": true
+          }
+        }
+      }
+    }
+  },
+  {
+    "kind": "explain",
+    "query": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "number"
+          ]
+        }
+      ],
+      "from": {
+        "left": {
+          "kind": "tableRef",
+          "database": "system",
+          "table": "numbers",
+          "alias": "n"
+        },
+        "kind": "joinExpr",
+        "joinType": "INNER",
+        "right": {
+          "kind": "subqueryFrom",
+          "query": {
+            "kind": "select",
+            "select": [
+              {
+                "kind": "asterisk"
+              }
+            ],
+            "from": {
+              "kind": "tableFunctionRef",
+              "name": "s3",
+              "args": [
+                {
+                  "kind": "literal",
+                  "type": "String",
+                  "value": "http://localhost:11111/test/a.tsv"
+                },
+                {
+                  "kind": "literal",
+                  "type": "String",
+                  "value": "TSV"
+                }
+              ]
+            }
+          },
+          "alias": "s"
+        },
+        "constraint": {
+          "kind": "on",
+          "expr": {
+            "kind": "binaryExpr",
+            "op": "=",
+            "left": {
+              "kind": "functionCall",
+              "name": "toInt64",
+              "args": [
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "n",
+                    "number"
+                  ]
+                }
+              ]
+            },
+            "right": {
+              "kind": "functionCall",
+              "name": "toInt64",
+              "args": [
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "s",
+                    "c1"
+                  ]
+                }
+              ]
+            },
+            "parenthesized": true
+          }
+        }
+      }
+    }
+  },
+  {
     "kind": "select",
     "select": [
       {

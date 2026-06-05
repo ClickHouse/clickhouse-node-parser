@@ -43,6 +43,16 @@ CREATE TABLE t1 (id Int64, create_time DateTime) ENGINE = MergeTree ORDER BY id 
 CREATE TABLE t2 (delete_time DateTime) ENGINE = MergeTree ORDER BY delete_time SETTINGS index_granularity = 8192, index_granularity_bytes = '10Mi', add_minmax_index_for_numeric_columns=0;
 insert into t1 values (101, '2023-05-28 00:00:00'), (102, '2023-05-28 00:00:00');
 insert into t2 values ('2023-05-31 00:00:00');
+EXPLAIN indexes=1 SELECT id, delete_time FROM t1
+ CROSS JOIN (
+    SELECT delete_time
+    FROM t2
+) AS d WHERE create_time < delete_time AND id = 101 SETTINGS enable_analyzer=0;
+EXPLAIN indexes=1 SELECT id, delete_time FROM t1
+ CROSS JOIN (
+    SELECT delete_time
+    FROM t2
+) AS d WHERE create_time < delete_time AND id = 101 SETTINGS enable_analyzer=1;
 -- expected to get row (1, 3, 1, 4) from JOIN and empty result from the query
 SELECT *
 FROM

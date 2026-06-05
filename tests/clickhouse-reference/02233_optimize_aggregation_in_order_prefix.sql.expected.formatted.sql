@@ -49,6 +49,42 @@ INSERT INTO data_02233 SELECT
     number
 FROM numbers(100);
 
+EXPLAIN PIPELINE
+SELECT
+    parent_key,
+    child_key,
+    count()
+FROM data_02233
+GROUP BY
+    parent_key,
+    child_key
+WITH TOTALS
+ORDER BY
+    parent_key ASC,
+    child_key ASC
+SETTINGS
+    max_threads = 1,
+    optimize_aggregation_in_order = 1,
+    read_in_order_two_level_merge_threshold = 1;
+
+EXPLAIN PIPELINE
+SELECT
+    parent_key,
+    child_key,
+    count()
+FROM data_02233
+GROUP BY
+    parent_key,
+    child_key
+WITH TOTALS
+ORDER BY
+    parent_key ASC,
+    child_key ASC
+SETTINGS
+    max_threads = 1,
+    optimize_aggregation_in_order = 0,
+    read_in_order_two_level_merge_threshold = 1;
+
 SELECT
     parent_key,
     child_key,

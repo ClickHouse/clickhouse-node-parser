@@ -15,6 +15,18 @@ FROM numbers(10);
 INSERT INTO test1 SELECT *
 FROM numbers(11, 20);
 
+EXPLAIN indexes = 1
+SELECT *
+FROM test1
+WHERE a > 10
+SETTINGS enable_analyzer = 0;
+
+EXPLAIN indexes = 1
+SELECT *
+FROM test1
+WHERE a > 10
+SETTINGS enable_analyzer = 1;
+
 CREATE TABLE test2
 (
     c UInt32,
@@ -31,3 +43,15 @@ FROM numbers(10);
 
 INSERT INTO test2 SELECT *
 FROM numbers(11, 20);
+
+EXPLAIN indexes = 1
+SELECT *
+FROM test2
+WHERE a2 > 15
+SETTINGS enable_analyzer = 0;
+
+EXPLAIN indexes = 1
+SELECT *
+FROM test2
+WHERE a2 > 15
+SETTINGS enable_analyzer = 1;

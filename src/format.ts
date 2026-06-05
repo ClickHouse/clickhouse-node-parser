@@ -347,7 +347,9 @@ export function formatNode(node: ASTNode, indent: string = ''): string {
       return `${quoteIdent(node.name)}${colAliases} AS (\n${formatStatement(node.query, indent + '  ')}\n${indent})`;
     }
     case 'cteExpr':
-      return `${formatExprCore(node.expr, indent)} AS ${quoteIdent(node.name)}`;
+      return node.name
+        ? `${formatExprCore(node.expr, indent)} AS ${quoteIdent(node.name)}`
+        : formatExprCore(node.expr, indent);
     case 'cteTuple':
       return `(${node.elements.map((e: Expression) => formatExpr(e, indent)).join(',\n' + indent + '  ')})`;
     // Expression types — use formatExpr (with comments)
@@ -855,6 +857,12 @@ function formatInsertStatement(stmt: InsertStatement, indent: string): string {
   }
   if (stmt.columns && stmt.columns.length > 0) {
     parts.push(`(${stmt.columns.map((c) => formatExpr(c, indent)).join(', ')})`);
+  }
+  if (stmt.fromInfile) {
+    parts.push(`FROM INFILE ${formatExpr(stmt.fromInfile.path, indent)}`);
+    if (stmt.fromInfile.compression) {
+      parts.push(`COMPRESSION ${formatExpr(stmt.fromInfile.compression, indent)}`);
+    }
   }
   if (stmt.insertSettings && stmt.insertSettings.length > 0) {
     parts.push(`SETTINGS ${formatSettingsList(stmt.insertSettings, indent)}`);
@@ -1775,7 +1783,19 @@ function formatExplainStatement(stmt: ExplainStatement, indent: string): string 
   const header = parts.join(' ');
   let result = header;
   if (stmt.query) {
-    result += '\n' + formatStatement(stmt.query, indent);
+    const inner = stmt.query;
+    // Preserve explicit parens around a parenthesized SELECT/UNION/INTERSECT body so
+    // round-tripping `EXPLAIN (SELECT 1 UNION ALL SELECT 1) UNION ALL SELECT 1` keeps
+    // its associativity. Other statement kinds (CREATE, ALTER, INSERT, …) never set
+    // `parenthesized` and are emitted as-is.
+    const wrapParens =
+      (inner.kind === 'select' || inner.kind === 'union' || inner.kind === 'intersect') &&
+      (inner as { parenthesized?: boolean }).parenthesized === true;
+    if (wrapParens) {
+      result += '\n' + indent + '(' + formatStatement(inner, indent) + ')';
+    } else {
+      result += '\n' + formatStatement(inner, indent);
+    }
   }
   result += formatTrailingClauses(stmt, indent);
   return result;
@@ -2349,6 +2369,15 @@ function formatTupleElement(base: Expression, index: Expression, indent: string)
   if (base.kind === 'alias') {
     return `tupleElement(${formatExpr(base, indent)}, ${formatExpr(index, indent)})`;
   }
+  // A numeric-literal base also can't take the dot form: `255.100` would re-parse as a
+  // Float64 literal rather than `tupleElement(255, 100)`. Same problem for negative or
+  // float literals where `<num>.<num>` is genuinely ambiguous.
+  if (
+    base.kind === 'literal' &&
+    (base.type === 'UInt64' || base.type === 'Int64' || base.type === 'Float64')
+  ) {
+    return `tupleElement(${formatExpr(base, indent)}, ${formatExpr(index, indent)})`;
+  }
   const baseStr = formatExpr(base, indent);
   if (index.kind === 'literal' && index.type === 'UInt64') {
     // expr.N (numeric index)
@@ -2634,9 +2663,8 @@ function formatCTEBlock(ctes: CTE[], indent: string, recursive?: boolean): strin
       const prefix = i === 0 ? `${indent}${withKw}` : `${indent}`;
       if (cte.kind === 'cteExpr') {
         const suffix = i < ctes.length - 1 ? ',' : '';
-        parts.push(
-          `${prefix}${formatExprCore(cte.expr, innerIndent)} AS ${quoteIdent(cte.name)}${suffix}`,
-        );
+        const aliasPart = cte.name ? ` AS ${quoteIdent(cte.name)}` : '';
+        parts.push(`${prefix}${formatExprCore(cte.expr, innerIndent)}${aliasPart}${suffix}`);
       } else if (cte.kind === 'cteTuple') {
         const suffix = i < ctes.length - 1 ? ',' : '';
         const inner = cte.elements
@@ -2740,12 +2768,12 @@ function formatCTEBlock(ctes: CTE[], indent: string, recursive?: boolean): strin
       const withKw3 = recursive ? 'WITH RECURSIVE ' : 'WITH ';
       const exprPrefix = isFirst ? `${indent}${withKw3}` : `${cteIndent}`;
       const hasExprTrailing = cte.expr.trailingComments && cte.expr.trailingComments.length > 0;
+      const aliasPartCmt = cte.name ? ` AS ${quoteIdent(cte.name)}` : '';
       if (hasExprTrailing) {
-        lines.push(
-          `${exprPrefix}${exprStr}\n${cteIndent}AS ${quoteIdent(cte.name)}${suffix}${trailingStr}`,
-        );
+        const aliasPartLine = cte.name ? `\n${cteIndent}AS ${quoteIdent(cte.name)}` : '';
+        lines.push(`${exprPrefix}${exprStr}${aliasPartLine}${suffix}${trailingStr}`);
       } else {
-        lines.push(`${exprPrefix}${exprStr} AS ${quoteIdent(cte.name)}${suffix}${trailingStr}`);
+        lines.push(`${exprPrefix}${exprStr}${aliasPartCmt}${suffix}${trailingStr}`);
       }
     }
 

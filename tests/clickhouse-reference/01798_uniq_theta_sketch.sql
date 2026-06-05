@@ -55,6 +55,12 @@ SELECT toDecimal32(number - 50, 4), toDecimal64(number - 50, 8) / 3, toDecimal12
 FROM system.numbers LIMIT 101;
 DROP TABLE decimal;
 set optimize_injective_functions_inside_uniq = 1;
+EXPLAIN SYNTAX select uniqTheta(x) from (select number % 2 as x from numbers(10));
+EXPLAIN SYNTAX select uniqTheta(x + y) from (select number % 2 as x, number % 3 y from numbers(10));
+EXPLAIN SYNTAX select uniqTheta(-x) from (select number % 2 as x from numbers(10));
+EXPLAIN SYNTAX select uniqTheta(bitNot(x)) from (select number % 2 as x from numbers(10));
+EXPLAIN SYNTAX select uniqTheta(bitNot(-x)) from (select number % 2 as x from numbers(10));
+EXPLAIN SYNTAX select uniqTheta(-bitNot(-x)) from (select number % 2 as x from numbers(10));
 set optimize_injective_functions_inside_uniq = 0;
 DROP TABLE IF EXISTS stored_aggregates;
 -- simple

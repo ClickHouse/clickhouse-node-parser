@@ -91,6 +91,53 @@ SELECT
     count(a)
 FROM fuse_tbl;
 
+EXPLAIN QUERY TREE run_passes = 1
+SELECT
+    sum(a),
+    avg(a)
+FROM fuse_tbl;
+
+EXPLAIN QUERY TREE run_passes = 1
+SELECT
+    sum(b),
+    avg(b)
+FROM fuse_tbl;
+
+EXPLAIN QUERY TREE run_passes = 1
+SELECT
+    sum(a + 1),
+    sum(b),
+    count(b),
+    avg(b),
+    count(a + 1),
+    sum(a + 2),
+    count(a)
+FROM fuse_tbl;
+
+EXPLAIN QUERY TREE run_passes = 1
+SELECT
+    avg(b) * 3,
+    sum(b) + 1 + count(b),
+    count(b) * count(b)
+FROM (
+        SELECT b
+        FROM fuse_tbl
+    );
+
+EXPLAIN QUERY TREE run_passes = 1
+SELECT
+    sum(b),
+    count(b)
+FROM (
+        SELECT x AS b
+        FROM (
+                SELECT
+                    sum(b) AS x,
+                    count(b)
+                FROM fuse_tbl
+            )
+    );
+
 SELECT
     sum(x),
     count(x),

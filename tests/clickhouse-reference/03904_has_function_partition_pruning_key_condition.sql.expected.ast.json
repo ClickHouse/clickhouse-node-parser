@@ -173,6 +173,62 @@
     }
   },
   {
+    "kind": "explain",
+    "settings": [
+      {
+        "name": "indexes",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ],
+    "query": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "functionCall",
+          "name": "count",
+          "args": []
+        }
+      ],
+      "from": {
+        "kind": "tableRef",
+        "table": "test"
+      },
+      "where": {
+        "kind": "functionCall",
+        "name": "has",
+        "args": [
+          {
+            "kind": "arrayLiteral",
+            "elements": [
+              {
+                "kind": "functionCall",
+                "name": "toDateTime",
+                "args": [
+                  {
+                    "kind": "literal",
+                    "type": "String",
+                    "value": "2026-01-10 00:00:00"
+                  }
+                ]
+              }
+            ],
+            "source": "[toDateTime('2026-01-10 00:00:00')]"
+          },
+          {
+            "kind": "columnRef",
+            "parts": [
+              "dt"
+            ]
+          }
+        ]
+      }
+    }
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -216,6 +272,66 @@
             ]
           }
         ]
+      }
+    }
+  },
+  {
+    "kind": "explain",
+    "settings": [
+      {
+        "name": "indexes",
+        "value": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    ],
+    "query": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "functionCall",
+          "name": "count",
+          "args": []
+        }
+      ],
+      "from": {
+        "kind": "tableRef",
+        "table": "test"
+      },
+      "where": {
+        "kind": "unaryExpr",
+        "op": "NOT",
+        "expr": {
+          "kind": "functionCall",
+          "name": "has",
+          "args": [
+            {
+              "kind": "arrayLiteral",
+              "elements": [
+                {
+                  "kind": "functionCall",
+                  "name": "toDateTime",
+                  "args": [
+                    {
+                      "kind": "literal",
+                      "type": "String",
+                      "value": "2026-01-10 00:00:00"
+                    }
+                  ]
+                }
+              ],
+              "source": "[toDateTime('2026-01-10 00:00:00')]"
+            },
+            {
+              "kind": "columnRef",
+              "parts": [
+                "dt"
+              ]
+            }
+          ]
+        }
       }
     }
   }

@@ -18,6 +18,26 @@ INSERT INTO test_has_idx_simple SELECT
     toString(number)
 FROM numbers(100000);
 
+EXPLAIN indexes = 1
+SELECT count()
+FROM test_has_idx_simple
+WHERE has([10, 50000, 90000], id);
+
+EXPLAIN indexes = 1
+SELECT count()
+FROM test_has_idx_simple
+WHERE has([10, 50000, 90000], toUInt64(id + 2));
+
+EXPLAIN indexes = 1
+SELECT count()
+FROM test_has_idx_simple
+WHERE has([10, 50000, 90000, NULL, NULL], toUInt64(id + 2));
+
+EXPLAIN indexes = 1
+SELECT count()
+FROM test_has_idx_simple
+WHERE toUInt64(id + 2) IN (10, 50000, 90000, NULL, NULL);
+
 DROP TABLE IF EXISTS test_has_idx_tuple_col;
 
 CREATE TABLE test_has_idx_tuple_col
@@ -35,6 +55,11 @@ INSERT INTO test_has_idx_tuple_col SELECT
     (number, number % 10),
     toString(number)
 FROM numbers(100000);
+
+EXPLAIN indexes = 1
+SELECT count()
+FROM test_has_idx_tuple_col
+WHERE has([(10, 0), (50000, 0)], key_tuple);
 
 DROP TABLE IF EXISTS test_has_idx_tuple_col_nullable_elements;
 
@@ -54,6 +79,11 @@ INSERT INTO test_has_idx_tuple_col_nullable_elements SELECT
     toString(number)
 FROM numbers(100000);
 
+EXPLAIN indexes = 1
+SELECT count()
+FROM test_has_idx_tuple_col_nullable_elements
+WHERE has([(10, 0), (50000, 0), (0, NULL), (NULL, 10), (NULL, 20)], key_tuple);
+
 DROP TABLE IF EXISTS test_has_idx_array_col;
 
 CREATE TABLE test_has_idx_array_col
@@ -71,6 +101,11 @@ INSERT INTO test_has_idx_array_col SELECT
     [number, number + 1],
     toString(number)
 FROM numbers(100000);
+
+EXPLAIN indexes = 1
+SELECT count()
+FROM test_has_idx_array_col
+WHERE has([[10, 11], [50000, 50001]], arr_key);
 
 DROP TABLE IF EXISTS test_has_idx_tuple_two_cols;
 
@@ -90,6 +125,16 @@ INSERT INTO test_has_idx_tuple_two_cols SELECT
     toString(number)
 FROM numbers(100000);
 
+EXPLAIN indexes = 1
+SELECT count()
+FROM test_has_idx_tuple_two_cols
+WHERE has([(10, 0), (50000, 0)], (k1, k2));
+
+EXPLAIN indexes = 1
+SELECT count()
+FROM test_has_idx_tuple_two_cols
+WHERE has([(10, 0), (50000, 0), (NULL, NULL)], (k1, k2));
+
 DROP TABLE IF EXISTS test_has_idx_lowcard;
 
 CREATE TABLE test_has_idx_lowcard
@@ -105,6 +150,11 @@ INSERT INTO test_has_idx_lowcard SELECT
     number,
     toString((number % 100) + 1000000)
 FROM numbers(100000);
+
+EXPLAIN indexes = 1
+SELECT count()
+FROM test_has_idx_lowcard
+WHERE has(['1000010', '1000042', '1000077'], key_lc);
 
 DROP TABLE IF EXISTS test_has_idx_nullable;
 
@@ -122,6 +172,16 @@ INSERT INTO test_has_idx_nullable SELECT
     if(number % 10 = 0, NULL, number)
 FROM numbers(100000);
 
+EXPLAIN indexes = 1
+SELECT count()
+FROM test_has_idx_nullable
+WHERE has([11, 50000, 90000], key_nullable);
+
+EXPLAIN indexes = 1
+SELECT count()
+FROM test_has_idx_nullable
+WHERE has([11, 50000, 90000, NULL], key_nullable);
+
 DROP TABLE IF EXISTS test_has_idx_func_key;
 
 CREATE TABLE test_has_idx_func_key
@@ -138,6 +198,11 @@ INSERT INTO test_has_idx_func_key SELECT
     toString(number)
 FROM numbers(100000);
 
+EXPLAIN indexes = 1
+SELECT count()
+FROM test_has_idx_func_key
+WHERE has([toDate('2020-01-01'), toDate('2020-01-02'), toDate('2020-01-03')], toDate(ts));
+
 DROP TABLE IF EXISTS t1;
 
 CREATE TABLE t1
@@ -148,3 +213,8 @@ ENGINE = MergeTree()
 ORDER BY (c1);
 
 INSERT INTO t1;
+
+EXPLAIN indexes = 1
+SELECT count()
+FROM t1
+WHERE has([], c1);

@@ -1314,7 +1314,9 @@ export type CTESubquery = {
 
 export type CTEExpr = {
   kind: 'cteExpr';
-  name: string;
+  /** Optional alias for the expression. Absent for anonymous WITH clauses
+   * such as `WITH 1 SELECT 1` (a no-op WITH that ClickHouse still preserves). */
+  name?: string;
   expr: Expression;
 } & NodeMetadata;
 
@@ -2235,6 +2237,8 @@ export type InsertStatement = {
   columns?: Expression[];
   /** Optional PARTITION BY expression. */
   partitionBy?: Expression;
+  /** Optional `FROM INFILE 'path' [COMPRESSION 'name']` clause. */
+  fromInfile?: { path: Literal; compression?: Literal };
   /** Optional INSERT-level SETTINGS (before SELECT/VALUES). */
   insertSettings?: SettingItem[];
   /** Optional SELECT query (for INSERT ... SELECT). */
@@ -2702,7 +2706,7 @@ export const CTESchema: z.ZodType<CTE> = z.lazy(() =>
     }),
     z.object({
       kind: z.literal('cteExpr'),
-      name: z.string(),
+      name: z.string().optional(),
       expr: ExpressionSchema,
       ...ExprMetadataFields,
     }),
@@ -3580,6 +3584,12 @@ export const InsertStatementSchema: z.ZodType<InsertStatement> = z.lazy(() =>
     with: z.array(CTESchema).optional(),
     columns: z.array(ExpressionSchema).optional(),
     partitionBy: ExpressionSchema.optional(),
+    fromInfile: z
+      .object({
+        path: LiteralSchema,
+        compression: LiteralSchema.optional(),
+      })
+      .optional(),
     insertSettings: z.array(SettingItemSchema).optional(),
     selectQuery: QueryStatementSchema.optional(),
     querySettings: z.array(SettingItemSchema).optional(),

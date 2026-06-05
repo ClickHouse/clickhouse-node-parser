@@ -58,6 +58,20 @@ SELECT
     (number % 10) + 101 AS R4_D_ID,   -- Links to R4.D_ID 101-110
     (number * 10) AS C_Value
 FROM numbers(1000);
+EXPLAIN
+SELECT
+    T1.A_Description,
+    T2.B_Data,
+    T3.C_Value,
+    T4.D_LookupCode
+FROM R1 AS T1, R2 AS T2, R3 AS T3, R4 AS T4
+WHERE
+    T1.A_ID = T2.R1_A_ID
+    AND T1.A_ID = T3.R1_A_ID
+    AND T3.R4_D_ID = T4.D_ID
+    AND T1.A_Description = 'Type H'
+    AND T4.D_LookupCode = 'Lookup S'
+SETTINGS query_plan_optimize_join_order_algorithm = 'greedy', enable_parallel_replicas = 0;
 SELECT sum(sipHash64(
     T1.A_Description,
     T2.B_Data,
@@ -71,6 +85,20 @@ WHERE
     AND T1.A_Description = 'Type H'
     AND T4.D_LookupCode = 'Lookup S'
 SETTINGS query_plan_optimize_join_order_algorithm = 'greedy';
+EXPLAIN
+SELECT
+    T1.A_Description,
+    T2.B_Data,
+    T3.C_Value,
+    T4.D_LookupCode
+FROM R1 AS T1, R2 AS T2, R3 AS T3, R4 AS T4
+WHERE
+    T1.A_ID = T2.R1_A_ID
+    AND T1.A_ID = T3.R1_A_ID
+    AND T3.R4_D_ID = T4.D_ID
+    AND T1.A_Description = 'Type H'
+    AND T4.D_LookupCode = 'Lookup S'
+SETTINGS query_plan_optimize_join_order_algorithm = 'dpsize', enable_parallel_replicas = 0;
 SELECT sum(sipHash64(
     T1.A_Description,
     T2.B_Data,

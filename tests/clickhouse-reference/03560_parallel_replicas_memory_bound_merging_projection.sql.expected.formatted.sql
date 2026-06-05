@@ -47,6 +47,14 @@ WHERE like(`explain`, '%ReadFromMergeTree%');
 
 SET optimize_aggregation_in_order = 1;
 
+EXPLAIN PIPELINE
+SELECT sum(b)
+FROM pr_t
+GROUP BY a
+ORDER BY a ASC
+LIMIT 5
+OFFSET 500;
+
 SELECT sum(b)
 FROM pr_t
 GROUP BY a

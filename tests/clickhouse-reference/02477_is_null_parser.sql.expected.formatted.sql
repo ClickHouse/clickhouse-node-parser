@@ -1,0 +1,8 @@
+EXPLAIN SYNTAX
+SELECT isNotNull(isNull(1) + 1);
+
+EXPLAIN SYNTAX
+SELECT isNull(1) = 0;
+
+EXPLAIN SYNTAX
+SELECT isNull(1)::Int32;

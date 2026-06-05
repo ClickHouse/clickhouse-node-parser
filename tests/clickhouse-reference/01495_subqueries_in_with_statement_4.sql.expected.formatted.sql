@@ -7,3 +7,14 @@ SELECT
     it.number,
     i.number
 FROM it AS i;
+
+EXPLAIN SYNTAX
+WITH it AS (
+    SELECT *
+    FROM numbers(1)
+)
+
+SELECT
+    it.number,
+    i.number
+FROM it AS i;

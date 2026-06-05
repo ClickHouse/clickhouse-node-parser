@@ -9,157 +9,47 @@
  * If the library parser fails, writes "<Parse Error>" to the ast and formatted files.
  * If ClickHouse fails for a statement, writes "<Parse Error>" to the explain file.
  *
- * Requires a ClickHouse server reachable at CLICKHOUSE_URL (default http://localhost:8123).
- * Start one with: docker compose up -d
+ * When explain outputs need to be (re)generated, this script will start a
+ * ClickHouse container via `docker compose up -d`, wait for it to be ready,
+ * and stop it again (`docker compose down`) on exit. If a ClickHouse server is
+ * already running at CLICKHOUSE_URL, it is reused and left running.
+ *
+ * Usage:
+ *   tsx scripts/generate-expected-outputs.ts [<file>] [--regenerate-explains | --regenerate-changed-explains]
+ *
+ *   <file>                          Optional .sql filename to limit processing to a single input.
+ *   --regenerate-explains           Regenerate the explain output for every input, overwriting
+ *                                   any existing .expected.explain.txt files. By default, inputs
+ *                                   that already have an explain file are skipped (since the
+ *                                   explain output is a reference from ClickHouse itself and
+ *                                   does not change with library changes).
+ *   --regenerate-changed-explains   Regenerate the explain output only for input .sql files
+ *                                   that have uncommitted changes (staged, working-tree, or
+ *                                   untracked) according to `git status`. Useful when adding
+ *                                   or editing a handful of test cases.
  */
 
+import { spawnSync } from 'child_process';
 import { readFileSync, writeFileSync, readdirSync, existsSync } from 'fs';
 import { join } from 'path';
 import { parse, format, Statement } from '../src/index.js';
+import { splitStatements } from './split-statements.js';
 
 const PARSE_ERROR = '<Parse Error>';
 const EXPLAIN_ERROR = '<Explain Error>';
 const QUERY_PARAMS = '<Query Parameters>';
 
 const dir = new URL('../tests/clickhouse-reference', import.meta.url).pathname;
+const projectRoot = new URL('..', import.meta.url).pathname;
 
-// ClickHouse HTTP endpoint.
+// ClickHouse HTTP endpoint (matches the port mapping in docker-compose.yml).
 const CLICKHOUSE_URL = 'http://localhost:8125';
 
 // Maximum number of concurrent HTTP requests to the ClickHouse server.
 const CONCURRENCY = 20;
 
-// ── Statement splitter (mirrors the logic in filter-select-queries.js) ─────────
-
-function splitStatements(content: string): string[] {
-  const statements: string[] = [];
-  let current = '';
-  let inSingleQuote = false;
-  let inDoubleQuote = false;
-  let inBacktick = false;
-  let dollarTag: string | null = null; // non-null when inside $tag$...$tag$
-  let inLineComment = false;
-  let inBlockComment = false;
-
-  for (let i = 0; i < content.length; i++) {
-    const ch = content[i];
-    const next = content[i + 1];
-
-    // Dollar-quoted strings: $tag$...$tag$ (tag may be empty, e.g. $$...$$)
-    if (dollarTag !== null) {
-      current += ch;
-      if (ch === '$' && content.substring(i, i + dollarTag.length) === dollarTag) {
-        current += content.substring(i + 1, i + dollarTag.length);
-        i += dollarTag.length - 1;
-        dollarTag = null;
-      }
-      continue;
-    }
-
-    if (inLineComment) {
-      current += ch;
-      if (ch === '\n') inLineComment = false;
-      continue;
-    }
-
-    if (inBlockComment) {
-      current += ch;
-      if (ch === '*' && next === '/') {
-        current += next;
-        i++;
-        inBlockComment = false;
-      }
-      continue;
-    }
-
-    if (!inSingleQuote && !inDoubleQuote && !inBacktick) {
-      if (ch === '$') {
-        // Match $tag$ where tag is [a-zA-Z0-9_]* (may be empty for $$)
-        const tagMatch = content.substring(i).match(/^\$([a-zA-Z0-9_]*)\$/);
-        if (tagMatch) {
-          dollarTag = tagMatch[0];
-          current += dollarTag;
-          i += dollarTag.length - 1;
-          continue;
-        }
-      }
-      if (ch === '-' && next === '-') {
-        inLineComment = true;
-        current += ch;
-        continue;
-      }
-      if (ch === '/' && next === '*') {
-        inBlockComment = true;
-        current += ch;
-        continue;
-      }
-    }
-
-    if (ch === '\\' && (inSingleQuote || inDoubleQuote)) {
-      // Backslash escape: consume the next character as-is.
-      current += ch;
-      if (i + 1 < content.length) current += content[++i];
-      continue;
-    } else if (ch === '`' && !inSingleQuote && !inDoubleQuote) {
-      // Backtick-quoted identifiers: `` is an escaped backtick inside backticks.
-      if (inBacktick && next === '`') {
-        current += ch + next;
-        i++;
-        continue;
-      }
-      inBacktick = !inBacktick;
-    } else if (ch === "'" && !inDoubleQuote && !inBacktick) {
-      // SQL-style '' escaped quote: stay inside the string.
-      if (inSingleQuote && next === "'") {
-        current += ch + next;
-        i++;
-        continue;
-      }
-      inSingleQuote = !inSingleQuote;
-    } else if (ch === '"' && !inSingleQuote && !inBacktick) {
-      if (inDoubleQuote && next === '"') {
-        current += ch + next;
-        i++;
-        continue;
-      }
-      inDoubleQuote = !inDoubleQuote;
-    }
-
-    if (ch === ';' && !inSingleQuote && !inDoubleQuote && !inBacktick) {
-      // Consume trailing whitespace and an optional inline comment so they
-      // stay with this statement rather than being prepended to the next one.
-      // Stop if we hit a non-whitespace, non-comment character (i.e. another
-      // statement on the same line).
-      let tail = ';';
-      let j = i + 1;
-      while (j < content.length && content[j] !== '\n') {
-        if (content[j] === '-' && content[j + 1] === '-') {
-          while (j < content.length && content[j] !== '\n') {
-            tail += content[j];
-            j++;
-          }
-          break;
-        } else if (content[j] === ' ' || content[j] === '\t') {
-          tail += content[j];
-          j++;
-        } else {
-          break;
-        }
-      }
-      i = j - 1;
-      statements.push(current + tail);
-      current = '';
-    } else {
-      current += ch;
-    }
-  }
-
-  if (current.trim()) {
-    statements.push(current);
-  }
-
-  return statements;
-}
+// How long to wait for the ClickHouse container to start accepting connections.
+const CLICKHOUSE_READY_TIMEOUT_MS = 120_000;
 
 // ── Concurrency pool ───────────────────────────────────────────────────────────
 
@@ -193,6 +83,79 @@ class Pool {
       }
     });
   }
+}
+
+// ── Docker compose lifecycle ──────────────────────────────────────────────────
+
+function runDocker(args: string[]): void {
+  const result = spawnSync('docker', args, { stdio: 'inherit', cwd: projectRoot });
+  if (result.error) {
+    throw new Error(`Failed to run \`docker ${args.join(' ')}\`: ${result.error.message}`);
+  }
+  if (result.status !== 0) {
+    throw new Error(`\`docker ${args.join(' ')}\` exited with status ${result.status}`);
+  }
+}
+
+async function isClickHouseUp(): Promise<boolean> {
+  try {
+    const r = await fetch(`${CLICKHOUSE_URL}/ping`, { signal: AbortSignal.timeout(2_000) });
+    return r.ok;
+  } catch {
+    return false;
+  }
+}
+
+async function waitForClickHouse(timeoutMs: number): Promise<void> {
+  const start = Date.now();
+  while (Date.now() - start < timeoutMs) {
+    if (await isClickHouseUp()) return;
+    await new Promise((r) => setTimeout(r, 500));
+  }
+  throw new Error(`ClickHouse not reachable at ${CLICKHOUSE_URL} after ${timeoutMs}ms`);
+}
+
+// ── Git: changed input files ──────────────────────────────────────────────────
+
+const REF_PATH_PREFIX = 'tests/clickhouse-reference/';
+
+/**
+ * Returns the set of input `.sql` filenames (basenames, not paths) in the
+ * reference directory that have uncommitted changes — staged, working-tree,
+ * or untracked. `.expected.*` files and non-`.sql` files are ignored, since
+ * we only care about whether the input itself changed.
+ */
+function getChangedInputFiles(): Set<string> {
+  const result = spawnSync('git', ['status', '--porcelain', '--', REF_PATH_PREFIX], {
+    cwd: projectRoot,
+    encoding: 'utf8',
+  });
+  if (result.error) {
+    throw new Error(`Failed to run \`git status\`: ${result.error.message}`);
+  }
+  if (result.status !== 0) {
+    throw new Error(`\`git status\` exited with status ${result.status}: ${result.stderr}`);
+  }
+
+  const changed = new Set<string>();
+  for (const line of result.stdout.split('\n')) {
+    if (!line) continue;
+    // Porcelain format: "XY path" (2 status chars + space). For renames the
+    // path is "old -> new"; we want the new path.
+    let path = line.slice(3);
+    const arrow = path.lastIndexOf(' -> ');
+    if (arrow >= 0) path = path.slice(arrow + 4);
+    // Git quotes paths containing special characters; strip the surrounding
+    // quotes if present. (We don't bother decoding the inner escapes since
+    // none of the reference filenames contain special characters.)
+    if (path.startsWith('"') && path.endsWith('"')) path = path.slice(1, -1);
+
+    if (!path.startsWith(REF_PATH_PREFIX)) continue;
+    const file = path.slice(REF_PATH_PREFIX.length);
+    if (!file.endsWith('.sql') || file.includes('.expected.')) continue;
+    changed.add(file);
+  }
+  return changed;
 }
 
 // ── Explain via ClickHouse HTTP interface ──────────────────────────────────────
@@ -235,7 +198,39 @@ function runExplain(sql: string): Promise<string> {
 
 // ── Main ───────────────────────────────────────────────────────────────────────
 
-const filterArg = process.argv[2];
+const KNOWN_FLAGS = new Set(['--regenerate-explains', '--regenerate-changed-explains']);
+
+const args = process.argv.slice(2);
+const regenerateExplains = args.includes('--regenerate-explains');
+const regenerateChangedExplains = args.includes('--regenerate-changed-explains');
+const filterArg = args.find((a) => !a.startsWith('--'));
+
+const unknownFlags = args.filter((a) => a.startsWith('--') && !KNOWN_FLAGS.has(a));
+if (unknownFlags.length > 0) {
+  console.error(`Unknown flag(s): ${unknownFlags.join(', ')}`);
+  process.exit(1);
+}
+
+if (regenerateExplains && regenerateChangedExplains) {
+  console.error(`--regenerate-explains and --regenerate-changed-explains are mutually exclusive.`);
+  process.exit(1);
+}
+
+// Compute the set of input files with uncommitted changes once up front.
+// Empty if --regenerate-changed-explains was not passed.
+const changedInputs = regenerateChangedExplains ? getChangedInputFiles() : new Set<string>();
+if (regenerateChangedExplains) {
+  console.log(
+    `--regenerate-changed-explains: ${changedInputs.size} input file(s) changed per \`git status\`.`,
+  );
+}
+
+/** True when the explain file for this input should be (re)generated. */
+function shouldRegenerateExplain(file: string, explainPath: string): boolean {
+  if (regenerateExplains) return true;
+  if (regenerateChangedExplains && changedInputs.has(file)) return true;
+  return !existsSync(explainPath);
+}
 
 const sqlFiles = readdirSync(dir)
   .filter((f) => f.endsWith('.sql') && !f.includes('.expected.'))
@@ -245,6 +240,7 @@ const sqlFiles = readdirSync(dir)
 let processed = 0;
 let parseErrors = 0;
 let explainErrors = 0;
+let explainsWritten = 0;
 
 async function processFile(file: string): Promise<void> {
   const filePath = join(dir, file);
@@ -278,10 +274,13 @@ async function processFile(file: string): Promise<void> {
   writeFileSync(`${filePath}.expected.formatted.sql`, formattedOutput, 'utf8');
 
   // ── Explain AST via clickhouse local ─────────────────────────────────────────
-  // Skip if the explain file already exists.
+  // By default, skip if the explain file already exists. Pass
+  // --regenerate-explains to overwrite every existing explain file, or
+  // --regenerate-changed-explains to overwrite only those whose input has
+  // uncommitted git changes.
 
   const explainPath = `${filePath}.expected.explain.txt`;
-  if (!existsSync(explainPath)) {
+  if (shouldRegenerateExplain(file, explainPath)) {
     // Run all statements for this file concurrently (throttled by the pool).
     const explainParts = await Promise.all(statements.map(runExplain));
 
@@ -298,6 +297,7 @@ async function processFile(file: string): Promise<void> {
 
     const explainOutput = trimmedParts.join('\n\n') + (trimmedParts.length > 0 ? '\n' : '');
     writeFileSync(explainPath, explainOutput, 'utf8');
+    explainsWritten++;
   }
 
   processed++;
@@ -307,9 +307,56 @@ async function processFile(file: string): Promise<void> {
 }
 
 void (async () => {
-  await Promise.all(sqlFiles.map(processFile));
+  // Decide whether we need ClickHouse at all. If every input already has an
+  // explain file and nothing forces a regeneration, we can skip docker entirely.
+  const needsClickHouse = sqlFiles.some((f) =>
+    shouldRegenerateExplain(f, `${join(dir, f)}.expected.explain.txt`),
+  );
+
+  let weStartedDocker = false;
+  const stopDocker = (): void => {
+    if (!weStartedDocker) return;
+    weStartedDocker = false;
+    console.log('Stopping ClickHouse via `docker compose down`...');
+    try {
+      runDocker(['compose', 'down']);
+    } catch (e) {
+      console.error(`  Failed to stop ClickHouse:`, e);
+    }
+  };
+
+  if (needsClickHouse) {
+    if (await isClickHouseUp()) {
+      console.log(`Reusing existing ClickHouse server at ${CLICKHOUSE_URL}.`);
+    } else {
+      console.log('Starting ClickHouse via `docker compose up -d`...');
+      runDocker(['compose', 'up', '-d']);
+      weStartedDocker = true;
+
+      // Make sure we tear the container down on Ctrl+C or kill so we don't
+      // leave it running after an interrupted run.
+      const onSignal = (signal: NodeJS.Signals, exitCode: number) => {
+        console.log(`\nCaught ${signal}, stopping ClickHouse...`);
+        stopDocker();
+        process.exit(exitCode);
+      };
+      process.once('SIGINT', () => onSignal('SIGINT', 130));
+      process.once('SIGTERM', () => onSignal('SIGTERM', 143));
+
+      console.log(`Waiting for ClickHouse to be ready at ${CLICKHOUSE_URL}...`);
+      await waitForClickHouse(CLICKHOUSE_READY_TIMEOUT_MS);
+      console.log('ClickHouse is ready.');
+    }
+  }
+
+  try {
+    await Promise.all(sqlFiles.map(processFile));
+  } finally {
+    stopDocker();
+  }
 
   console.log(`Done. Processed ${processed} files.`);
+  console.log(`  Explain files written: ${explainsWritten}`);
   console.log(`  Parse errors: ${parseErrors}`);
   console.log(`  Explain errors: ${explainErrors}`);
 })();

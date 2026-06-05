@@ -128,29 +128,64 @@ INSERT INTO f VALUES
     (2, 'a', 3, 'z'),
     (2, 'b', 2, 'w'),
     (3, 'c', 1, 'u');
+EXPLAIN SYNTAX run_query_tree_passes=1
 SELECT k1, k2, payload
 FROM f
 WHERE dictGet('dict_prices_ckh', 'tag', (k1, k2)) = 'pro'
 ORDER BY k1, k2, payload;
 SELECT k1, k2, payload
 FROM f
+WHERE dictGet('dict_prices_ckh', 'tag', (k1, k2)) = 'pro'
+ORDER BY k1, k2, payload;
+EXPLAIN SYNTAX run_query_tree_passes=1
+SELECT k1, k2, payload
+FROM f
 WHERE dictGet('dict_prices_ch_array', 'tag', (k1, k2)) = 'pro'
+ORDER BY k1, k2, payload;
+SELECT k1, k2, payload
+FROM f
+WHERE dictGet('dict_prices_ch_array', 'tag', (k1, k2)) = 'pro'
+ORDER BY k1, k2, payload;
+EXPLAIN SYNTAX run_query_tree_passes=1
+SELECT k1, k2, payload
+FROM f
+WHERE dictGet('dict_prices_ck_sparse_hashed', 'tag', (k1, k2)) = 'pro'
 ORDER BY k1, k2, payload;
 SELECT k1, k2, payload
 FROM f
 WHERE dictGet('dict_prices_ck_sparse_hashed', 'tag', (k1, k2)) = 'pro'
 ORDER BY k1, k2, payload;
+EXPLAIN SYNTAX run_query_tree_passes=1
 SELECT id, payload
 FROM f
 WHERE dictGet('dict_items_flat', 'name', id) = 'alpha'
 ORDER BY id, payload;
 SELECT id, payload
 FROM f
+WHERE dictGet('dict_items_flat', 'name', id) = 'alpha'
+ORDER BY id, payload;
+EXPLAIN SYNTAX run_query_tree_passes=1
+SELECT id, payload
+FROM f
 WHERE dictGet('dict_items_hashed', 'name', id) = 'alpha'
 ORDER BY id, payload;
 SELECT id, payload
 FROM f
+WHERE dictGet('dict_items_hashed', 'name', id) = 'alpha'
+ORDER BY id, payload;
+EXPLAIN SYNTAX run_query_tree_passes=1
+SELECT id, payload
+FROM f
 WHERE dictGet('dict_items_hashed_array', 'name', id) = 'alpha'
+ORDER BY id, payload;
+SELECT id, payload
+FROM f
+WHERE dictGet('dict_items_hashed_array', 'name', id) = 'alpha'
+ORDER BY id, payload;
+EXPLAIN SYNTAX run_query_tree_passes=1
+SELECT id, payload
+FROM f
+WHERE dictGet('dict_items_sparse_hashed', 'name', id) = 'alpha'
 ORDER BY id, payload;
 SELECT id, payload
 FROM f

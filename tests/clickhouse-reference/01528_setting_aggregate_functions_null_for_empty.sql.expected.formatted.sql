@@ -25,4 +25,9 @@ FROM numbers(10);
 
 SET aggregate_functions_null_for_empty = 0;
 
+EXPLAIN SYNTAX
+SELECT sumIf(1, number > 0)
+FROM numbers(10)
+WHERE 0;
+
 DROP TABLE defaults;

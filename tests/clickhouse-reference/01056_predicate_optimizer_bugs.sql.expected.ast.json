@@ -65,6 +65,277 @@
     ]
   },
   {
+    "kind": "explain",
+    "explainType": "SYNTAX",
+    "query": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "k"
+          ]
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "v"
+          ]
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "d"
+          ]
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "i"
+          ]
+        }
+      ],
+      "from": {
+        "kind": "subqueryFrom",
+        "query": {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "alias",
+              "expr": {
+                "kind": "functionCall",
+                "name": "tupleElement",
+                "args": [
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "t"
+                    ]
+                  },
+                  {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "1"
+                  }
+                ]
+              },
+              "alias": "k"
+            },
+            {
+              "kind": "alias",
+              "expr": {
+                "kind": "functionCall",
+                "name": "tupleElement",
+                "args": [
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "t"
+                    ]
+                  },
+                  {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "2"
+                  }
+                ]
+              },
+              "alias": "v"
+            },
+            {
+              "kind": "alias",
+              "expr": {
+                "kind": "functionCall",
+                "name": "runningDifference",
+                "args": [
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "v"
+                    ]
+                  }
+                ]
+              },
+              "alias": "d"
+            },
+            {
+              "kind": "alias",
+              "expr": {
+                "kind": "functionCall",
+                "name": "runningDifference",
+                "args": [
+                  {
+                    "kind": "functionCall",
+                    "name": "cityHash64",
+                    "args": [
+                      {
+                        "kind": "functionCall",
+                        "name": "tupleElement",
+                        "args": [
+                          {
+                            "kind": "columnRef",
+                            "parts": [
+                              "t"
+                            ]
+                          },
+                          {
+                            "kind": "literal",
+                            "type": "UInt64",
+                            "value": "1"
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              "alias": "i"
+            }
+          ],
+          "from": {
+            "kind": "subqueryFrom",
+            "query": {
+              "kind": "select",
+              "select": [
+                {
+                  "kind": "alias",
+                  "expr": {
+                    "kind": "functionCall",
+                    "name": "arrayJoin",
+                    "args": [
+                      {
+                        "kind": "arrayLiteral",
+                        "elements": [
+                          {
+                            "kind": "tupleLiteral",
+                            "elements": [
+                              {
+                                "kind": "literal",
+                                "type": "String",
+                                "value": "a"
+                              },
+                              {
+                                "kind": "literal",
+                                "type": "UInt64",
+                                "value": "1"
+                              }
+                            ],
+                            "source": "('a', 1)"
+                          },
+                          {
+                            "kind": "tupleLiteral",
+                            "elements": [
+                              {
+                                "kind": "literal",
+                                "type": "String",
+                                "value": "a"
+                              },
+                              {
+                                "kind": "literal",
+                                "type": "UInt64",
+                                "value": "2"
+                              }
+                            ],
+                            "source": "('a', 2)"
+                          },
+                          {
+                            "kind": "tupleLiteral",
+                            "elements": [
+                              {
+                                "kind": "literal",
+                                "type": "String",
+                                "value": "a"
+                              },
+                              {
+                                "kind": "literal",
+                                "type": "UInt64",
+                                "value": "3"
+                              }
+                            ],
+                            "source": "('a', 3)"
+                          },
+                          {
+                            "kind": "tupleLiteral",
+                            "elements": [
+                              {
+                                "kind": "literal",
+                                "type": "String",
+                                "value": "b"
+                              },
+                              {
+                                "kind": "literal",
+                                "type": "UInt64",
+                                "value": "11"
+                              }
+                            ],
+                            "source": "('b', 11)"
+                          },
+                          {
+                            "kind": "tupleLiteral",
+                            "elements": [
+                              {
+                                "kind": "literal",
+                                "type": "String",
+                                "value": "b"
+                              },
+                              {
+                                "kind": "literal",
+                                "type": "UInt64",
+                                "value": "13"
+                              }
+                            ],
+                            "source": "('b', 13)"
+                          },
+                          {
+                            "kind": "tupleLiteral",
+                            "elements": [
+                              {
+                                "kind": "literal",
+                                "type": "String",
+                                "value": "b"
+                              },
+                              {
+                                "kind": "literal",
+                                "type": "UInt64",
+                                "value": "15"
+                              }
+                            ],
+                            "source": "('b', 15)"
+                          }
+                        ],
+                        "source": "[('a', 1), ('a', 2), ('a', 3), ('b', 11), ('b', 13), ('b', 15)]"
+                      }
+                    ]
+                  },
+                  "alias": "t"
+                }
+              ]
+            }
+          }
+        }
+      },
+      "where": {
+        "kind": "binaryExpr",
+        "op": "=",
+        "left": {
+          "kind": "columnRef",
+          "parts": [
+            "i"
+          ]
+        },
+        "right": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "0"
+        }
+      }
+    },
+    "leadingComments": [
+      "-- https://github.com/ClickHouse/ClickHouse/issues/3885",
+      "-- https://github.com/ClickHouse/ClickHouse/issues/5485"
+    ]
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -328,6 +599,207 @@
     }
   },
   {
+    "kind": "explain",
+    "explainType": "SYNTAX",
+    "query": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "co"
+          ]
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "co2"
+          ]
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "co3"
+          ]
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "num"
+          ]
+        }
+      ],
+      "from": {
+        "kind": "subqueryFrom",
+        "query": {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "columnRef",
+              "parts": [
+                "co"
+              ]
+            },
+            {
+              "kind": "columnRef",
+              "parts": [
+                "co2"
+              ]
+            },
+            {
+              "kind": "columnRef",
+              "parts": [
+                "co3"
+              ]
+            },
+            {
+              "kind": "alias",
+              "expr": {
+                "kind": "functionCall",
+                "name": "count",
+                "args": []
+              },
+              "alias": "num"
+            }
+          ],
+          "from": {
+            "kind": "subqueryFrom",
+            "query": {
+              "kind": "select",
+              "select": [
+                {
+                  "kind": "alias",
+                  "expr": {
+                    "kind": "binaryExpr",
+                    "op": "+",
+                    "left": {
+                      "kind": "columnRef",
+                      "parts": [
+                        "dummy"
+                      ]
+                    },
+                    "right": {
+                      "kind": "literal",
+                      "type": "UInt64",
+                      "value": "1"
+                    }
+                  },
+                  "alias": "co"
+                },
+                {
+                  "kind": "alias",
+                  "expr": {
+                    "kind": "binaryExpr",
+                    "op": "+",
+                    "left": {
+                      "kind": "columnRef",
+                      "parts": [
+                        "dummy"
+                      ]
+                    },
+                    "right": {
+                      "kind": "literal",
+                      "type": "UInt64",
+                      "value": "2"
+                    }
+                  },
+                  "alias": "co2"
+                },
+                {
+                  "kind": "alias",
+                  "expr": {
+                    "kind": "binaryExpr",
+                    "op": "+",
+                    "left": {
+                      "kind": "columnRef",
+                      "parts": [
+                        "dummy"
+                      ]
+                    },
+                    "right": {
+                      "kind": "literal",
+                      "type": "UInt64",
+                      "value": "3"
+                    }
+                  },
+                  "alias": "co3"
+                }
+              ]
+            }
+          },
+          "groupBy": {
+            "kind": "expressions",
+            "items": [
+              {
+                "kind": "functionCall",
+                "name": "cube",
+                "args": [
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "co"
+                    ]
+                  },
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "co2"
+                    ]
+                  },
+                  {
+                    "kind": "columnRef",
+                    "parts": [
+                      "co3"
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      },
+      "where": {
+        "kind": "naryExpr",
+        "op": "AND",
+        "operands": [
+          {
+            "kind": "binaryExpr",
+            "op": "!=",
+            "left": {
+              "kind": "columnRef",
+              "parts": [
+                "co"
+              ]
+            },
+            "right": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "0"
+            }
+          },
+          {
+            "kind": "binaryExpr",
+            "op": "!=",
+            "left": {
+              "kind": "columnRef",
+              "parts": [
+                "co2"
+              ]
+            },
+            "right": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "2"
+            }
+          }
+        ]
+      }
+    },
+    "leadingComments": [
+      "-- https://github.com/ClickHouse/ClickHouse/issues/5682"
+    ]
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -520,6 +992,87 @@
         }
       ]
     }
+  },
+  {
+    "kind": "explain",
+    "explainType": "SYNTAX",
+    "query": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "name"
+          ]
+        }
+      ],
+      "from": {
+        "left": {
+          "kind": "subqueryFrom",
+          "query": {
+            "kind": "select",
+            "select": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "name"
+                ]
+              }
+            ],
+            "from": {
+              "kind": "tableRef",
+              "database": "system",
+              "table": "settings"
+            }
+          }
+        },
+        "kind": "joinExpr",
+        "joinType": "INNER",
+        "right": {
+          "kind": "subqueryFrom",
+          "query": {
+            "kind": "select",
+            "select": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "name"
+                ]
+              }
+            ],
+            "from": {
+              "kind": "tableRef",
+              "database": "system",
+              "table": "settings"
+            }
+          }
+        },
+        "constraint": {
+          "kind": "using",
+          "columns": [
+            "name"
+          ]
+        }
+      },
+      "where": {
+        "kind": "binaryExpr",
+        "op": "=",
+        "left": {
+          "kind": "columnRef",
+          "parts": [
+            "name"
+          ]
+        },
+        "right": {
+          "kind": "literal",
+          "type": "String",
+          "value": "enable_optimize_predicate_expression"
+        }
+      }
+    },
+    "leadingComments": [
+      "-- https://github.com/ClickHouse/ClickHouse/issues/6734"
+    ]
   },
   {
     "kind": "select",
@@ -980,6 +1533,113 @@
     }
   },
   {
+    "kind": "explain",
+    "explainType": "SYNTAX",
+    "query": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "ccc"
+          ]
+        }
+      ],
+      "from": {
+        "kind": "subqueryFrom",
+        "query": {
+          "kind": "union",
+          "queries": [
+            {
+              "kind": "select",
+              "select": [
+                {
+                  "kind": "alias",
+                  "expr": {
+                    "kind": "literal",
+                    "type": "UInt64",
+                    "value": "1"
+                  },
+                  "alias": "ccc"
+                }
+              ]
+            },
+            {
+              "kind": "select",
+              "select": [
+                {
+                  "kind": "asterisk"
+                }
+              ],
+              "from": {
+                "left": {
+                  "kind": "subqueryFrom",
+                  "query": {
+                    "kind": "select",
+                    "select": [
+                      {
+                        "kind": "alias",
+                        "expr": {
+                          "kind": "literal",
+                          "type": "UInt64",
+                          "value": "2"
+                        },
+                        "alias": "ccc"
+                      }
+                    ]
+                  }
+                },
+                "kind": "joinExpr",
+                "joinType": "INNER",
+                "right": {
+                  "kind": "subqueryFrom",
+                  "query": {
+                    "kind": "select",
+                    "select": [
+                      {
+                        "kind": "alias",
+                        "expr": {
+                          "kind": "literal",
+                          "type": "UInt64",
+                          "value": "2"
+                        },
+                        "alias": "ccc"
+                      }
+                    ]
+                  }
+                },
+                "constraint": {
+                  "kind": "using",
+                  "columns": [
+                    "ccc"
+                  ]
+                }
+              }
+            }
+          ]
+        }
+      },
+      "where": {
+        "kind": "binaryExpr",
+        "op": ">",
+        "left": {
+          "kind": "columnRef",
+          "parts": [
+            "ccc"
+          ]
+        },
+        "right": {
+          "kind": "literal",
+          "type": "UInt64",
+          "value": "1"
+        }
+      }
+    },
+    "leadingComments": [
+      "-- https://github.com/ClickHouse/ClickHouse/issues/7136"
+    ]
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -1227,6 +1887,287 @@
         }
       }
     ]
+  },
+  {
+    "kind": "explain",
+    "explainType": "SYNTAX",
+    "query": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "columnRef",
+          "parts": [
+            "ts"
+          ]
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "id"
+          ]
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "id_b"
+          ]
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "b",
+            "ts"
+          ]
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "b",
+            "id"
+          ]
+        },
+        {
+          "kind": "columnRef",
+          "parts": [
+            "id_c"
+          ]
+        }
+      ],
+      "from": {
+        "left": {
+          "kind": "subqueryFrom",
+          "query": {
+            "kind": "select",
+            "select": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "ts"
+                ]
+              },
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "id"
+                ]
+              },
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "id_b"
+                ]
+              }
+            ],
+            "from": {
+              "kind": "tableRef",
+              "table": "A"
+            }
+          },
+          "alias": "a"
+        },
+        "kind": "joinExpr",
+        "joinType": "LEFT",
+        "right": {
+          "kind": "tableRef",
+          "table": "B",
+          "alias": "b"
+        },
+        "constraint": {
+          "kind": "on",
+          "expr": {
+            "kind": "binaryExpr",
+            "op": "=",
+            "left": {
+              "kind": "columnRef",
+              "parts": [
+                "b",
+                "id"
+              ]
+            },
+            "right": {
+              "kind": "columnRef",
+              "parts": [
+                "a",
+                "id_b"
+              ]
+            }
+          }
+        }
+      },
+      "where": {
+        "kind": "binaryExpr",
+        "op": "<=",
+        "left": {
+          "kind": "columnRef",
+          "parts": [
+            "a",
+            "ts"
+          ]
+        },
+        "right": {
+          "kind": "functionCall",
+          "name": "toDateTime",
+          "args": [
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "1970-01-01 03:00:00"
+            }
+          ]
+        }
+      }
+    }
+  },
+  {
+    "kind": "explain",
+    "explainType": "SYNTAX",
+    "query": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "alias",
+          "expr": {
+            "kind": "columnRef",
+            "parts": [
+              "ts"
+            ]
+          },
+          "alias": "--a.ts"
+        },
+        {
+          "kind": "alias",
+          "expr": {
+            "kind": "columnRef",
+            "parts": [
+              "id"
+            ]
+          },
+          "alias": "--a.id"
+        },
+        {
+          "kind": "alias",
+          "expr": {
+            "kind": "columnRef",
+            "parts": [
+              "id_b"
+            ]
+          },
+          "alias": "--a.id_b"
+        },
+        {
+          "kind": "alias",
+          "expr": {
+            "kind": "columnRef",
+            "parts": [
+              "b",
+              "ts"
+            ]
+          },
+          "alias": "--b.ts"
+        },
+        {
+          "kind": "alias",
+          "expr": {
+            "kind": "columnRef",
+            "parts": [
+              "b",
+              "id"
+            ]
+          },
+          "alias": "--b.id"
+        },
+        {
+          "kind": "alias",
+          "expr": {
+            "kind": "columnRef",
+            "parts": [
+              "id_c"
+            ]
+          },
+          "alias": "--b.id_c"
+        }
+      ],
+      "from": {
+        "left": {
+          "kind": "subqueryFrom",
+          "query": {
+            "kind": "select",
+            "select": [
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "ts"
+                ]
+              },
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "id"
+                ]
+              },
+              {
+                "kind": "columnRef",
+                "parts": [
+                  "id_b"
+                ]
+              }
+            ],
+            "from": {
+              "kind": "tableRef",
+              "table": "A"
+            }
+          },
+          "alias": "a"
+        },
+        "kind": "joinExpr",
+        "joinType": "LEFT",
+        "right": {
+          "kind": "tableRef",
+          "table": "B",
+          "alias": "b"
+        },
+        "constraint": {
+          "kind": "on",
+          "expr": {
+            "kind": "binaryExpr",
+            "op": "=",
+            "left": {
+              "kind": "columnRef",
+              "parts": [
+                "--b.id"
+              ]
+            },
+            "right": {
+              "kind": "columnRef",
+              "parts": [
+                "--a.id_b"
+              ]
+            }
+          }
+        }
+      },
+      "where": {
+        "kind": "binaryExpr",
+        "op": "<=",
+        "left": {
+          "kind": "columnRef",
+          "parts": [
+            "--a.ts"
+          ]
+        },
+        "right": {
+          "kind": "functionCall",
+          "name": "toDateTime",
+          "args": [
+            {
+              "kind": "literal",
+              "type": "String",
+              "value": "1970-01-01 03:00:00"
+            }
+          ]
+        }
+      }
+    }
   },
   {
     "kind": "drop",
@@ -1511,6 +2452,88 @@
     }
   },
   {
+    "kind": "explain",
+    "explainType": "SYNTAX",
+    "query": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "asterisk"
+        }
+      ],
+      "from": {
+        "kind": "subqueryFrom",
+        "query": {
+          "kind": "select",
+          "select": [
+            {
+              "kind": "asterisk"
+            }
+          ],
+          "from": {
+            "kind": "tableRef",
+            "database": "system",
+            "table": "one"
+          }
+        }
+      },
+      "where": {
+        "kind": "binaryExpr",
+        "op": "=",
+        "left": {
+          "kind": "functionCall",
+          "name": "arrayMap",
+          "args": [
+            {
+              "kind": "lambdaExpr",
+              "params": [
+                "x"
+              ],
+              "body": {
+                "kind": "binaryExpr",
+                "op": "+",
+                "left": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "x"
+                  ]
+                },
+                "right": {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "1"
+                }
+              }
+            },
+            {
+              "kind": "arrayLiteral",
+              "elements": [
+                {
+                  "kind": "columnRef",
+                  "parts": [
+                    "dummy"
+                  ]
+                }
+              ],
+              "source": "[dummy]"
+            }
+          ]
+        },
+        "right": {
+          "kind": "arrayLiteral",
+          "elements": [
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "1"
+            }
+          ],
+          "source": "[1]"
+        }
+      }
+    }
+  },
+  {
     "kind": "select",
     "select": [
       {
@@ -1585,6 +2608,144 @@
           }
         ],
         "source": "[1]"
+      }
+    }
+  },
+  {
+    "kind": "explain",
+    "explainType": "SYNTAX",
+    "query": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "asterisk"
+        }
+      ],
+      "from": {
+        "left": {
+          "kind": "subqueryFrom",
+          "query": {
+            "kind": "select",
+            "select": [
+              {
+                "kind": "alias",
+                "expr": {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "1"
+                },
+                "alias": "id"
+              },
+              {
+                "kind": "alias",
+                "expr": {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "2"
+                },
+                "alias": "value"
+              }
+            ]
+          }
+        },
+        "kind": "joinExpr",
+        "joinType": "INNER",
+        "right": {
+          "kind": "subqueryFrom",
+          "query": {
+            "kind": "select",
+            "select": [
+              {
+                "kind": "alias",
+                "expr": {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "1"
+                },
+                "alias": "id"
+              },
+              {
+                "kind": "alias",
+                "expr": {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "3"
+                },
+                "alias": "value_1"
+              }
+            ]
+          }
+        },
+        "constraint": {
+          "kind": "using",
+          "columns": [
+            "id"
+          ]
+        }
+      },
+      "where": {
+        "kind": "binaryExpr",
+        "op": "=",
+        "left": {
+          "kind": "functionCall",
+          "name": "arrayMap",
+          "args": [
+            {
+              "kind": "lambdaExpr",
+              "params": [
+                "x"
+              ],
+              "body": {
+                "kind": "binaryExpr",
+                "op": "+",
+                "left": {
+                  "kind": "binaryExpr",
+                  "op": "+",
+                  "left": {
+                    "kind": "columnRef",
+                    "parts": [
+                      "x"
+                    ]
+                  },
+                  "right": {
+                    "kind": "columnRef",
+                    "parts": [
+                      "value"
+                    ]
+                  }
+                },
+                "right": {
+                  "kind": "columnRef",
+                  "parts": [
+                    "value_1"
+                  ]
+                }
+              }
+            },
+            {
+              "kind": "arrayLiteral",
+              "elements": [
+                {
+                  "kind": "literal",
+                  "type": "UInt64",
+                  "value": "1"
+                }
+              ],
+              "source": "[1]"
+            }
+          ]
+        },
+        "right": {
+          "kind": "arrayLiteral",
+          "elements": [
+            {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "6"
+            }
+          ],
+          "source": "[6]"
+        }
       }
     }
   },
@@ -1721,6 +2882,62 @@
         "source": "[6]"
       }
     }
+  },
+  {
+    "kind": "explain",
+    "explainType": "SYNTAX",
+    "query": {
+      "kind": "select",
+      "select": [
+        {
+          "kind": "asterisk"
+        }
+      ],
+      "from": {
+        "kind": "tableRef",
+        "database": "system",
+        "table": "one"
+      },
+      "having": {
+        "kind": "naryExpr",
+        "op": "AND",
+        "operands": [
+          {
+            "kind": "binaryExpr",
+            "op": ">",
+            "left": {
+              "kind": "columnRef",
+              "parts": [
+                "dummy"
+              ]
+            },
+            "right": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "0"
+            }
+          },
+          {
+            "kind": "binaryExpr",
+            "op": "<",
+            "left": {
+              "kind": "columnRef",
+              "parts": [
+                "dummy"
+              ]
+            },
+            "right": {
+              "kind": "literal",
+              "type": "UInt64",
+              "value": "0"
+            }
+          }
+        ]
+      }
+    },
+    "leadingComments": [
+      "-- check order is preserved"
+    ]
   },
   {
     "kind": "select",

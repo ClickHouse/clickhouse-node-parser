@@ -63,6 +63,12 @@ WHERE d >= '2021-12-31 00:00:00'
     AND d < '2022-01-01 00:00:00'
 ORDER BY _partition_id ASC;
 
+EXPLAIN ESTIMATE
+SELECT DISTINCT _partition_id
+FROM weird_partitions_02245
+WHERE d >= '2021-12-31 00:00:00'
+    AND d < '2022-01-01 00:00:00';
+
 SELECT DISTINCT _partition_id
 FROM weird_partitions_02245
 WHERE d >= '2022-01-01 00:00:00'
@@ -72,11 +78,24 @@ ORDER BY _partition_id ASC;
 
 ;
 
+EXPLAIN ESTIMATE
+SELECT DISTINCT _partition_id
+FROM weird_partitions_02245
+WHERE d >= '2022-01-01 00:00:00'
+    AND d1 >= '2021-12-31 00:00:00'
+    AND d1 < '2022-01-01 00:00:00';
+
 SELECT DISTINCT _partition_id
 FROM weird_partitions_02245
 WHERE d1 >= '2021-12-31 00:00:00'
     AND d1 < '2022-01-01 00:00:00'
 ORDER BY _partition_id ASC;
+
+EXPLAIN ESTIMATE
+SELECT DISTINCT _partition_id
+FROM weird_partitions_02245
+WHERE d1 >= '2021-12-31 00:00:00'
+    AND d1 < '2022-01-01 00:00:00';
 
 SELECT DISTINCT _partition_id
 FROM weird_partitions_02245
@@ -84,5 +103,12 @@ WHERE d >= '2022-01-01 00:00:00'
     AND d1 >= '2021-12-31 00:00:00'
     AND d1 < '2020-01-01 00:00:00'
 ORDER BY _partition_id ASC;
+
+EXPLAIN ESTIMATE
+SELECT DISTINCT _partition_id
+FROM weird_partitions_02245
+WHERE d >= '2022-01-01 00:00:00'
+    AND d1 >= '2021-12-31 00:00:00'
+    AND d1 < '2020-01-01 00:00:00';
 
 DROP TABLE weird_partitions_02245;

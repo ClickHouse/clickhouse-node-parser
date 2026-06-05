@@ -33,3 +33,29 @@ INSERT INTO users2 SELECT
     'Alice2' AS name,
     30 AS age
 FROM numbers(1000);
+
+EXPLAIN actions = 1, keep_logical_steps = 1
+SELECT count()
+FROM
+    (
+        SELECT
+            1 AS x,
+            *
+        FROM users1
+    ) AS u1
+LEFT JOIN users2 AS u2
+    ON u1.uid = u2.uid
+WHERE 1 / u2.age > 1;
+
+EXPLAIN actions = 1, keep_logical_steps = 1
+SELECT count()
+FROM
+    (
+        SELECT
+            1 AS x,
+            *
+        FROM users1
+    ) AS u1
+LEFT JOIN users2 AS u2
+    ON u1.uid = u2.uid
+WHERE u2.age > 1;

@@ -18,6 +18,22 @@ INSERT INTO t SELECT
     toString(number)
 FROM numbers(65536);
 
+EXPLAIN indexes = 1
+SELECT
+    tenant,
+    recordTimestamp
+FROM t
+WHERE like(colAlias, '%abcd%')
+SETTINGS enable_analyzer = 0;
+
+EXPLAIN indexes = 1
+SELECT
+    tenant,
+    recordTimestamp
+FROM t
+WHERE like(colAlias, '%abcd%')
+SETTINGS enable_analyzer = 1;
+
 DROP TABLE IF EXISTS tab_v1;
 
 CREATE TABLE tab_v1

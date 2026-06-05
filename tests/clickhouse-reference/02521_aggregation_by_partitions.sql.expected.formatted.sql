@@ -29,6 +29,12 @@ SYSTEM stop merges t1;
 INSERT INTO t1 SELECT number
 FROM numbers_mt(1e6);
 
+-- { echoOn }
+EXPLAIN PIPELINE
+SELECT a
+FROM t1
+GROUP BY a;
+
 -- { echoOff }
 SELECT count()
 FROM (
@@ -53,6 +59,12 @@ SYSTEM stop merges t2;
 INSERT INTO t2 SELECT number
 FROM numbers_mt(1e6);
 
+-- { echoOn }
+EXPLAIN PIPELINE
+SELECT a
+FROM t2
+GROUP BY a;
+
 -- { echoOff }
 SELECT count()
 FROM (
@@ -76,6 +88,12 @@ SYSTEM stop merges t3;
 
 INSERT INTO t3 SELECT number
 FROM numbers_mt(1e6);
+
+-- { echoOn }
+EXPLAIN PIPELINE
+SELECT a
+FROM t3
+GROUP BY a;
 
 -- { echoOff }
 SELECT count()
@@ -120,6 +138,13 @@ SYSTEM stop merges t4;
 INSERT INTO t4 SELECT number
 FROM numbers_mt(1e6);
 
+-- { echoOn }
+EXPLAIN PIPELINE
+SELECT a
+FROM t4
+GROUP BY a
+SETTINGS read_in_order_two_level_merge_threshold = 1e12;
+
 -- { echoOff }
 SELECT count()
 FROM (
@@ -144,6 +169,13 @@ SYSTEM stop merges t5;
 INSERT INTO t5 SELECT number
 FROM numbers_mt(1e6);
 
+-- { echoOn }
+EXPLAIN PIPELINE
+SELECT a
+FROM t5
+GROUP BY a
+SETTINGS read_in_order_two_level_merge_threshold = 1e12;
+
 -- { echoOff }
 SELECT count()
 FROM (
@@ -167,6 +199,13 @@ SYSTEM stop merges t6;
 
 INSERT INTO t6 SELECT number
 FROM numbers_mt(1e6);
+
+-- { echoOn }
+EXPLAIN PIPELINE
+SELECT a
+FROM t6
+GROUP BY a
+SETTINGS read_in_order_two_level_merge_threshold = 1e12;
 
 -- { echoOff }
 SELECT count()

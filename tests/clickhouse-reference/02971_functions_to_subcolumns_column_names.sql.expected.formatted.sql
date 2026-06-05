@@ -13,6 +13,12 @@ SET optimize_functions_to_subcolumns = 1;
 
 SET enable_analyzer = 1;
 
+EXPLAIN QUERY TREE dump_tree = 0, dump_ast = 1
+SELECT
+    length(arr),
+    isNull(n)
+FROM t_column_names;
+
 SELECT
     length(arr),
     isNull(n)

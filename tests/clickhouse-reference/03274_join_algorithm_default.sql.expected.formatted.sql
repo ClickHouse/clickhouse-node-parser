@@ -13,6 +13,22 @@ SELECT value == 'direct,parallel_hash,hash'
 FROM `system`.`settings`
 WHERE name = 'join_algorithm';
 
+EXPLAIN PIPELINE
+SELECT *
+FROM
+    (
+        SELECT *
+        FROM `system`.numbers
+        LIMIT 100000
+    ) AS t1
+INNER JOIN (
+        SELECT *
+        FROM `system`.numbers
+        LIMIT 100000
+    ) AS t2
+    USING (number)
+SETTINGS max_threads = 16;
+
 -- Test that join_algorithm = default does a hash join
 SET join_algorithm = 'default';
 

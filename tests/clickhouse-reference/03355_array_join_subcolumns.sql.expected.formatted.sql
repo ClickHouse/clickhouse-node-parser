@@ -19,6 +19,18 @@ FROM
     test
 ARRAY JOIN arr;
 
+EXPLAIN QUERY TREE
+SELECT t.a
+FROM
+    test
+ARRAY JOIN arr;
+
+SELECT t.a
+FROM
+    test
+ARRAY JOIN t.b;
+
+EXPLAIN QUERY TREE
 SELECT t.a
 FROM
     test

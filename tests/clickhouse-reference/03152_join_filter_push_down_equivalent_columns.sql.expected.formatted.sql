@@ -38,7 +38,32 @@ INSERT INTO users2;
 
 INSERT INTO users2;
 
+-- { echoOn }
+EXPLAIN header = 1, indexes = 1
+SELECT name
+FROM
+    users
+INNER JOIN users2
+    USING (name)
+WHERE users.name = 'Alice';
+
 SELECT '--';
+
+EXPLAIN header = 1, indexes = 1
+SELECT name
+FROM
+    users
+LEFT JOIN users2
+    USING (name)
+WHERE users.name = 'Alice';
+
+EXPLAIN header = 1, indexes = 1
+SELECT name
+FROM
+    users
+RIGHT JOIN users2
+    USING (name)
+WHERE users2.name = 'Alice';
 
 -- { echoOff }
 DROP TABLE users;

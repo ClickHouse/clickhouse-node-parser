@@ -10,6 +10,8 @@ SELECT explain FROM (
     EXPLAIN actions = 1
     SELECT * FROM users LEFT ANY JOIN (SELECT number FROM numbers(10)) as t2 ON users.uid = t2.number WHERE t2.number = 0
 ) WHERE explain ilike '%Type:%' OR explain ilike '%Strictness%' OR explain ilike '%filter column%';
+EXPLAIN actions = 1
+SELECT * FROM users LEFT SEMI JOIN (SELECT number FROM numbers(10)) as t2 ON users.uid = t2.number WHERE t2.number = 1;
 SELECT explain FROM (
   EXPLAIN actions = 1 SELECT * FROM users LEFT ANY JOIN (SELECT number FROM numbers(10)) as t2 ON users.uid = t2.number WHERE t2.number = 1
 ) WHERE explain ilike '%Type:%' OR explain ilike '%Strictness%' OR explain ilike '%filter column%';

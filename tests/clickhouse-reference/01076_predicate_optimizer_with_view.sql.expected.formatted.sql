@@ -20,6 +20,27 @@ FROM test;
 
 SET enable_optimize_predicate_expression = 1;
 
+-- Optimize predicate expression with view
+EXPLAIN SYNTAX
+SELECT *
+FROM test_view
+WHERE id = 1;
+
+EXPLAIN SYNTAX
+SELECT *
+FROM test_view
+WHERE id = 2;
+
+EXPLAIN SYNTAX
+SELECT id
+FROM test_view
+WHERE id = 1;
+
+EXPLAIN SYNTAX
+SELECT s.id
+FROM test_view AS s
+WHERE s.id = 1;
+
 SELECT *
 FROM (
         SELECT

@@ -28,4 +28,12 @@ FROM
 ARRAY JOIN json.b
 WHERE has(json.a, 2);
 
+EXPLAIN indexes = 1
+SELECT json.a
+FROM
+    test
+ARRAY JOIN json.b
+WHERE has(json.a, 2)
+    AND json.c < 5;
+
 DROP TABLE test;

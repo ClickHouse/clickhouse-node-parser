@@ -16,6 +16,11 @@ SETTINGS min_bytes_for_wide_part = 0;
 
 INSERT INTO test_dynamic;
 
+EXPLAIN QUERY TREE
+SELECT d.String
+FROM test_dynamic
+SETTINGS enable_analyzer = 1;
+
 SYSTEM CLEAR MARK CACHE;
 
 SELECT d.String
