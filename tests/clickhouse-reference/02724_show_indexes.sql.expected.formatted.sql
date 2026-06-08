@@ -33,7 +33,7 @@ SHOW KEYS FROM tbl;
 
 SHOW EXTENDED INDEX FROM tbl;
 
-SHOW INDEX FROM tbl WHERE index_type LIKE '%minmax%';
+SHOW INDEX FROM tbl WHERE like(index_type, '%minmax%');
 
 DROP TABLE IF EXISTS `$4@^7`;
 
@@ -59,7 +59,7 @@ ENGINE = MergeTree
 ORDER BY c
 SETTINGS add_minmax_index_for_numeric_columns = 0;
 
-SHOW INDEX FROM NULL;
+SHOW INDEX FROM `NULL`;
 
 DROP TABLE `NULL`;
 

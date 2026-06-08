@@ -135,16 +135,22 @@ TopLevelStatement
   = ExplainStatement
   / ParallelWithStatement
   / CreateStatement
+  / AlterAccessStatement
   / AlterStatement
   / SetStatement
+  / TransactionControlStatement
   / UseStatement
   / SystemStatement
   / InsertStatement
   / DropStatement
+  / UndropStatement
+  / BackupStatement
+  / GrantStatement
   / TruncateStatement
   / OptimizeStatement
   / DescribeStatement
   / ShowCreateStatement
+  / ShowStatement
   / DetachStatement
   / DeleteStatement
   / UpdateStatement
@@ -154,7 +160,6 @@ TopLevelStatement
   / ExistsStatement
   / KillStatement
   / ExecuteAsStatement
-  / OpaqueStatement
   / query:UnionQuery intoOutfile:( _ IntoOutfileClause )? preSettings:( _ SettingsClause )? format:( _ FormatClause )? postSettings:( _ SettingsClause )* {
       let result = query;
       if (intoOutfile !== null) {
@@ -187,7 +192,7 @@ ExecuteAsStatement
          / DetachStatement / AttachStatement / DeleteStatement / UpdateStatement
          / CheckStatement / RenameStatement / ExistsStatement / KillStatement
          / TruncateStatement / DropStatement / InsertStatement / CreateStatement
-         / UnionQuery / OpaqueStatement ) {
+         / UnionQuery ) {
       return loc({ kind: 'executeAs', user, statement: stmt });
     }
 
@@ -200,7 +205,7 @@ ImplicitSelectStatement
 
 // SetStatement: SET key = value [, key = value ...] — changes session-level settings
 SetStatement
-  = "SET"i ![a-zA-Z0-9_] _ "TRANSACTION"i ![a-zA-Z0-9_] _ "SNAPSHOT"i ![a-zA-Z0-9_] _ snapshot:$[0-9]+ { return loc({ kind: 'transactionControl', snapshot }); }
+  = "SET"i ![a-zA-Z0-9_] _ "TRANSACTION"i ![a-zA-Z0-9_] _ "SNAPSHOT"i ![a-zA-Z0-9_] _ snapshot:$[0-9]+ { return loc({ kind: 'transactionControl', action: 'snapshot', snapshot }); }
   / "SET"i ![a-zA-Z0-9_] _ "DEFAULT"i ![a-zA-Z0-9_] _ "ROLE"i ![a-zA-Z0-9_] _ roles:SetRoleList _ "TO"i ![a-zA-Z0-9_] _ users:SetRoleUserList { return loc({ kind: 'setRole', roles, users }); }
   / "SET"i ![a-zA-Z0-9_] _ items:SettingsList { return loc({ kind: 'set', settings: items }); }
 
@@ -209,11 +214,18 @@ SetRoleList
   / "NONE"i ![a-zA-Z0-9_] { return { kind: 'none' }; }
   / names:SetRoleNameList { return { kind: 'names', names }; }
 
+// A comma-separated list of identifiers (see AliasNameList).
 SetRoleNameList
-  = head:AliasName tail:( _ "," _ AliasName )* { return [head, ...tail.map(t => t[3])]; }
+  = AliasNameList
 
 SetRoleUserList
-  = head:AliasName tail:( _ "," _ AliasName )* { return [head, ...tail.map(t => t[3])]; }
+  = AliasNameList
+
+// TransactionControlStatement: BEGIN [TRANSACTION], START TRANSACTION, COMMIT, ROLLBACK
+TransactionControlStatement
+  = ("BEGIN"i / "START"i) ![a-zA-Z0-9_] ( _ "TRANSACTION"i ![a-zA-Z0-9_] )? { return loc({ kind: 'transactionControl', action: 'begin' }); }
+  / "COMMIT"i ![a-zA-Z0-9_] { return loc({ kind: 'transactionControl', action: 'commit' }); }
+  / "ROLLBACK"i ![a-zA-Z0-9_] { return loc({ kind: 'transactionControl', action: 'rollback' }); }
 
 // UseStatement: USE database — selects the current database
 UseStatement
@@ -264,6 +276,7 @@ AlterCommandInner
   / AlterCommandModifySetting
   / AlterCommandResetSetting
   / AlterCommandModifyQuery
+  / AlterCommandModifyRefresh
   / AlterCommandModifyComment
   / AlterCommandAddIndex
   / AlterCommandDropIndex
@@ -631,7 +644,7 @@ AlterCommandMaterializeStatistics
     }
 
 AlterStatisticsColumns
-  = head:AliasName tail:( _ "," _ AliasName )* { return [head, ...tail.map(t => t[3])]; }
+  = AliasNameList
 
 AlterStatisticsTypes
   = head:IndexTypeSpec tail:( _ "," _ IndexTypeSpec )* { return [head, ...tail.map(t => t[3])]; }
@@ -678,7 +691,7 @@ AlterCommandDelete
 // ── Partition commands ──────────────────────────────────────────────────────
 
 AlterCommandDropPartition
-  = ("DROP"i / "DETACH"i) ![a-zA-Z0-9_] _ "PART"i ![a-zA-Z0-9_] _ partName:StringLiteral {
+  = ("DROP"i / "DETACH"i) ![a-zA-Z0-9_] _ "PART"i ![a-zA-Z0-9_] _ partName:( StringLiteral / QueryParam ) {
       return loc({ kind: 'alterCommand', commandType: 'DROP_PARTITION', partName: partName });
     }
   / ("DROP"i / "DETACH"i) ![a-zA-Z0-9_] _ "PARTITION"i ![a-zA-Z0-9_] _ part:AlterPartitionExpr {
@@ -686,12 +699,15 @@ AlterCommandDropPartition
     }
 
 AlterCommandDropDetachedPartition
-  = "DROP"i ![a-zA-Z0-9_] _ "DETACHED"i ![a-zA-Z0-9_] _ "PARTITION"i ![a-zA-Z0-9_] _ part:AlterPartitionExpr {
+  = "DROP"i ![a-zA-Z0-9_] _ "DETACHED"i ![a-zA-Z0-9_] _ "PART"i ![a-zA-Z0-9_] _ partName:( StringLiteral / QueryParam ) {
+      return loc({ kind: 'alterCommand', commandType: 'DROP_DETACHED_PARTITION', partName: partName });
+    }
+  / "DROP"i ![a-zA-Z0-9_] _ "DETACHED"i ![a-zA-Z0-9_] _ "PARTITION"i ![a-zA-Z0-9_] _ part:AlterPartitionExpr {
       return loc({ kind: 'alterCommand', commandType: 'DROP_DETACHED_PARTITION', partition: part });
     }
 
 AlterCommandAttachPartition
-  = "ATTACH"i ![a-zA-Z0-9_] _ "PART"i ![a-zA-Z0-9_] _ partName:StringLiteral {
+  = "ATTACH"i ![a-zA-Z0-9_] _ "PART"i ![a-zA-Z0-9_] _ partName:( StringLiteral / QueryParam ) {
       return loc({ kind: 'alterCommand', commandType: 'ATTACH_PARTITION', partName: partName });
     }
   / "ATTACH"i ![a-zA-Z0-9_] _ "PARTITION"i ![a-zA-Z0-9_] _ part:AlterPartitionExpr _ "FROM"i ![a-zA-Z0-9_] _ fromTable:TableRef {
@@ -789,7 +805,7 @@ AlterCommandResetSetting
     }
 
 AlterResetSettingNames
-  = head:AliasName tail:( _ "," _ AliasName )* { return [head, ...tail.map(t => t[3])]; }
+  = AliasNameList
 
 AlterCommandModifyQuery
   = "MODIFY"i ![a-zA-Z0-9_] _ "QUERY"i ![a-zA-Z0-9_] _ query:UnionQuery {
@@ -799,6 +815,11 @@ AlterCommandModifyQuery
 AlterCommandModifyComment
   = "MODIFY"i ![a-zA-Z0-9_] _ "COMMENT"i ![a-zA-Z0-9_] _ comment:StringLiteral {
       return loc({ kind: 'alterCommand', commandType: 'MODIFY_COMMENT', comment });
+    }
+
+AlterCommandModifyRefresh
+  = "MODIFY"i ![a-zA-Z0-9_] _ refresh:RefreshClause {
+      return loc({ kind: 'alterCommand', commandType: 'MODIFY_REFRESH', refresh });
     }
 
 // ── Other commands ──────────────────────────────────────────────────────────
@@ -840,11 +861,6 @@ AlterInPartitionClause
   = "IN"i ![a-zA-Z0-9_] _ "PARTITION"i ![a-zA-Z0-9_] _ part:AlterPartitionExpr { return part; }
   / "IN"i ![a-zA-Z0-9_] _ "PART"i ![a-zA-Z0-9_] _ id:StringLiteral { return { partitionKind: 'id', id }; }
 
-// OpaqueStatement: access-control and other DDL we don't yet parse structurally.
-// TRUNCATE is intentionally excluded — it's handled by TruncateStatement above.
-OpaqueStatement
-  = keyword:( "ALTER"i / "ATTACH"i / "DETACH"i / "RENAME"i / "EXCHANGE"i / "CHECK"i / "EXISTS"i / "SHOW"i / "GRANT"i / "REVOKE"i / "KILL"i / "UNDO"i / "BACKUP"i / "RESTORE"i / "BEGIN"i / "COMMIT"i / "ROLLBACK"i / "WATCH"i / "UNDROP"i / "MOVE"i ) ![a-zA-Z0-9_] _ body:$( ![\n;] . )* { return loc({ kind: 'system', body: (keyword + ' ' + body).trim() }); }
-
 // ── DROP statements ─────────────────────────────────────────────────────────
 
 // DropIndexStatement: DROP INDEX [IF EXISTS] name ON [db.]table
@@ -882,6 +898,455 @@ DropStatement
       return loc(result);
     }
   / body:$( "DROP"i ![a-zA-Z0-9_] ( "'" ( "''" / "\\'" / "\\\\" / !"'" ( [\n\r] / . ) )* "'" / !";" ( [\n\r] / . ) )* ) { return loc({ kind: 'system', body: body.trim() }); }
+
+// UndropStatement: UNDROP TABLE [IF NOT EXISTS] [db.]name [UUID 'x'] [ON CLUSTER c] [FORMAT f]
+UndropStatement
+  = "UNDROP"i ![a-zA-Z0-9_] _ "TABLE"i ![a-zA-Z0-9_]
+    ifne:( _ "IF"i ![a-zA-Z0-9_] _ "NOT"i ![a-zA-Z0-9_] _ "EXISTS"i ![a-zA-Z0-9_] )?
+    _ table:TableRef
+    uuid:( _ "UUID"i ![a-zA-Z0-9_] _ StringLiteral )?
+    cluster:( _ OnClusterClause )?
+    format:( _ FormatClause )? {
+      const result = { kind: 'undrop', table };
+      if (ifne !== null) result.ifNotExists = true;
+      if (uuid !== null) result.uuid = uuid[3].value;
+      if (cluster !== null) result.onCluster = cluster[1];
+      if (format !== null) result.format = format[1];
+      return loc(result);
+    }
+
+// BackupStatement: BACKUP/RESTORE target_list TO/FROM destination [ON CLUSTER] [SETTINGS] [SYNC|ASYNC] [FORMAT]
+BackupStatement
+  = op:( "BACKUP"i / "RESTORE"i ) ![a-zA-Z0-9_] _ elements:BackupElementList
+    _ ( "TO"i / "FROM"i ) ![a-zA-Z0-9_] _ destination:BackupDestination
+    cluster:( _ OnClusterClause )?
+    settings:( _ SettingsClause )?
+    wait:( _ ( "SYNC"i / "ASYNC"i ) ![a-zA-Z0-9_] )?
+    format:( _ FormatClause )? {
+      const result = { kind: 'backup', operation: op.toUpperCase(), elements, destination };
+      if (cluster !== null) result.onCluster = cluster[1];
+      if (settings !== null) result.settings = settings[1];
+      if (wait !== null) result.wait = wait[1].toUpperCase();
+      if (format !== null) result.format = format[1];
+      return loc(result);
+    }
+
+BackupElementList
+  = "ALL"i ![a-zA-Z0-9_] ( _ "DATABASES"i ![a-zA-Z0-9_] )?
+    exceptDbs:( _ "EXCEPT"i ![a-zA-Z0-9_] _ "DATABASES"i ![a-zA-Z0-9_] _ AliasNameList )?
+    exceptTbls:( _ "EXCEPT"i ![a-zA-Z0-9_] _ "TABLES"i ![a-zA-Z0-9_] _ BackupTableRefList )? {
+      const result = { kind: 'all' };
+      if (exceptDbs !== null) result.exceptDatabases = exceptDbs[6];
+      if (exceptTbls !== null) result.exceptTables = exceptTbls[6];
+      return [result];
+    }
+  / head:BackupElement tail:( _ "," _ BackupElement )* { return [head, ...tail.map(t => t[3])]; }
+
+BackupElement
+  = "TEMPORARY"i ![a-zA-Z0-9_] _ "TABLE"i ![a-zA-Z0-9_] _ table:TableRef as:BackupAsTable? {
+      const result = { kind: 'temporaryTable', table };
+      if (as !== null) result.as = as;
+      return result;
+    }
+  / "TABLE"i ![a-zA-Z0-9_] _ table:TableRef as:BackupAsTable? parts:( _ BackupPartitions )? except:( _ BackupExceptColumns )? {
+      const result = { kind: 'table', table };
+      if (as !== null) result.as = as;
+      if (parts !== null) result.partitions = parts[1];
+      if (except !== null) result.exceptColumns = except[1];
+      return result;
+    }
+  / "DICTIONARY"i ![a-zA-Z0-9_] _ table:TableRef as:BackupAsTable? {
+      const result = { kind: 'dictionary', table };
+      if (as !== null) result.as = as;
+      return result;
+    }
+  / "VIEW"i ![a-zA-Z0-9_] _ table:TableRef as:BackupAsTable? {
+      const result = { kind: 'view', table };
+      if (as !== null) result.as = as;
+      return result;
+    }
+  / "DATABASE"i ![a-zA-Z0-9_] _ name:AliasName as:( _ KW_AS _ AliasName )? except:( _ "EXCEPT"i ![a-zA-Z0-9_] _ "TABLES"i ![a-zA-Z0-9_] _ AliasNameList )? {
+      const result = { kind: 'database', name };
+      if (as !== null) result.as = as[3];
+      if (except !== null) result.exceptTables = except[6];
+      return result;
+    }
+  / "FUNCTION"i ![a-zA-Z0-9_] _ name:AliasName { return { kind: 'function', name }; }
+  / "NAMED"i ![a-zA-Z0-9_] _ "COLLECTION"i ![a-zA-Z0-9_] _ name:AliasName { return { kind: 'namedCollection', name }; }
+
+BackupAsTable
+  = _ KW_AS _ table:TableRef { return table; }
+
+BackupPartitions
+  = ( "PARTITIONS"i / "PARTITION"i ) ![a-zA-Z0-9_] _ list:ExpressionList { return list; }
+
+BackupExceptColumns
+  = "EXCEPT"i ![a-zA-Z0-9_] _ "COLUMNS"i ![a-zA-Z0-9_] _ "(" _ list:AliasNameList _ ")" { return list; }
+  / "EXCEPT"i ![a-zA-Z0-9_] _ "COLUMNS"i ![a-zA-Z0-9_] _ list:AliasNameList { return list; }
+
+BackupTableRefList
+  = head:TableRef tail:( _ "," _ TableRef )* { return [head, ...tail.map(t => t[3])]; }
+
+BackupDestination
+  = name:AliasName args:( _ "(" _ ExpressionList? _ ")" )? {
+      const result = { name };
+      if (args !== null) result.args = args[3] || [];
+      return result;
+    }
+
+AliasNameList
+  = head:AliasName tail:( _ "," _ AliasName )* { return [head, ...tail.map(t => t[3])]; }
+
+// GrantStatement: GRANT/REVOKE (priv ON target){,...}|roles TO/FROM grantees [WITH ... OPTION]
+GrantStatement
+  = op:( "GRANT"i / "REVOKE"i ) ![a-zA-Z0-9_]
+    optionFor:( _ ( "GRANT"i / "ADMIN"i ) ![a-zA-Z0-9_] _ "OPTION"i ![a-zA-Z0-9_] _ "FOR"i ![a-zA-Z0-9_] )?
+    cluster:( _ OnClusterClause )?
+    _ body:( elements:GrantElementList { return { elements }; } / roles:GrantRoleList { return { roles }; } )
+    _ ( "TO"i / "FROM"i ) ![a-zA-Z0-9_] _ grantees:GranteeList
+    withOpts:( _ "WITH"i ![a-zA-Z0-9_] _ ( "GRANT"i / "ADMIN"i / "REPLACE"i ) ![a-zA-Z0-9_] _ "OPTION"i ![a-zA-Z0-9_] )* {
+      const result = { kind: 'grant', operation: op.toUpperCase() };
+      if (body.elements !== undefined) result.elements = body.elements;
+      else result.roles = body.roles;
+      result.grantees = grantees;
+      if (optionFor !== null) result.optionFor = optionFor[1].toUpperCase();
+      if (cluster !== null) result.onCluster = cluster[1];
+      if (withOpts.length > 0) result.withOptions = withOpts.map(w => w[4].toUpperCase());
+      return loc(result);
+    }
+
+GrantElementList
+  = head:GrantElement tail:( _ "," _ GrantElement )* { return [head, ...tail.map(t => t[3])]; }
+
+GrantElement
+  = privileges:GrantPrivilegeList _ "ON"i ![a-zA-Z0-9_] _ target:GrantTarget { return { privileges, target }; }
+
+GrantRoleList
+  = head:GrantPrivilege tail:( _ "," _ GrantPrivilege )* { return [head, ...tail.map(t => t[3])].map(p => p.name); }
+
+GrantPrivilegeList
+  = head:GrantPrivilege tail:( _ "," _ GrantPrivilege )* { return [head, ...tail.map(t => t[3])]; }
+
+GrantPrivilege
+  = words:GrantPrivilegeWords columns:( _ "(" _ AliasNameList _ ")" )? {
+      const result = { name: words.join(' ') };
+      if (columns !== null) result.columns = columns[3];
+      return result;
+    }
+
+GrantPrivilegeWords
+  = head:GrantPrivilegeWord tail:( _ GrantPrivilegeWord )* { return [head, ...tail.map(t => t[1])]; }
+
+GrantPrivilegeWord
+  = !( ( "ON"i / "TO"i / "FROM"i / "WITH"i ) ![a-zA-Z0-9_] ) w:$( [a-zA-Z_] [a-zA-Z0-9_]* ) { return w; }
+
+// privilege_target: '*' | '*.*' | db.* | db.table | identifier (with optional '*' suffix on parts)
+GrantTarget
+  = db:GrantTargetPart _ "." _ tbl:GrantTargetPart { return { database: db, table: tbl }; }
+  / tbl:GrantTargetPart { return { table: tbl }; }
+
+GrantTargetPart
+  = "*" { return '*'; }
+  / name:$( [a-zA-Z_$] [a-zA-Z0-9_$]* "*"? ) { return name; }
+  / "`" chars:BacktickChar* "`" { return chars.join(""); }
+
+GranteeList
+  = head:GranteeName tail:( _ "," _ GranteeName )* { return [head, ...tail.map(t => t[3])]; }
+
+GranteeName
+  = "CURRENT_USER"i ![a-zA-Z0-9_] { return 'CURRENT_USER'; }
+  / name:CreateUserNameItem {
+      return name.host !== undefined ? name.name + '@' + name.host : name.name;
+    }
+
+// ── ALTER access-control statements ──────────────────────────────────────────
+AlterAccessStatement
+  = AlterUserStatement
+  / AlterRoleStatement
+  / AlterQuotaStatement
+  / AlterRowPolicyStatement
+  / AlterSettingsProfileStatement
+
+AlterUserStatement
+  = "ALTER"i ![a-zA-Z0-9_] _ "USER"i ![a-zA-Z0-9_]
+    ifExists:( _ "IF"i ![a-zA-Z0-9_] _ "EXISTS"i ![a-zA-Z0-9_] )?
+    _ names:CreateUserNameList
+    cluster:( _ OnClusterClause )?
+    clauses:( _ AlterUserClause )* {
+      const result = { kind: 'alterUser', names, clauses: clauses.map(c => c[1]) };
+      if (ifExists !== null) result.ifExists = true;
+      if (cluster !== null) result.onCluster = cluster[1];
+      return loc(result);
+    }
+
+AlterUserClause
+  = "RENAME"i ![a-zA-Z0-9_] _ "TO"i ![a-zA-Z0-9_] _ to:CreateUserNameItem { return { kind: 'rename', to }; }
+  / "NOT"i ![a-zA-Z0-9_] _ "IDENTIFIED"i ![a-zA-Z0-9_] { return { kind: 'notIdentified' }; }
+  / "IDENTIFIED"i ![a-zA-Z0-9_] _ auth:CreateUserAuthMethods { return { kind: 'identified', auth }; }
+  / mode:( "ADD"i / "DROP"i ) ![a-zA-Z0-9_] _ "HOST"i ![a-zA-Z0-9_] _ hosts:HostItemList { return { kind: 'host', mode: mode.toUpperCase(), hosts }; }
+  / "HOST"i ![a-zA-Z0-9_] _ hosts:HostItemList { return { kind: 'host', hosts }; }
+  / "SETTINGS"i ![a-zA-Z0-9_] _ "NONE"i ![a-zA-Z0-9_] { return { kind: 'settings', settings: 'NONE' }; }
+  / "SETTINGS"i ![a-zA-Z0-9_] _ items:AccessControlSettingsList { return { kind: 'settings', settings: items }; }
+  / "DEFAULT"i ![a-zA-Z0-9_] _ "ROLE"i ![a-zA-Z0-9_] _ roles:SetRoleList { return { kind: 'defaultRole', roles }; }
+  / "DEFAULT"i ![a-zA-Z0-9_] _ "DATABASE"i ![a-zA-Z0-9_] _ db:AliasName { return { kind: 'defaultDatabase', database: db }; }
+  / "GRANTEES"i ![a-zA-Z0-9_] _ g:SetRoleList { return { kind: 'grantees', grantees: g }; }
+  / "VALID"i ![a-zA-Z0-9_] _ "UNTIL"i ![a-zA-Z0-9_] _ str:StringLiteral { return { kind: 'validUntil', value: str.value }; }
+
+AlterRoleStatement
+  = "ALTER"i ![a-zA-Z0-9_] _ "ROLE"i ![a-zA-Z0-9_]
+    ifExists:( _ "IF"i ![a-zA-Z0-9_] _ "EXISTS"i ![a-zA-Z0-9_] )?
+    _ names:CreateUserNameList
+    cluster:( _ OnClusterClause )?
+    rename:( _ "RENAME"i ![a-zA-Z0-9_] _ "TO"i ![a-zA-Z0-9_] _ CreateUserNameItem )?
+    settings:( _ CreateRoleSettingsClause )? {
+      const result = { kind: 'alterRole', names };
+      if (ifExists !== null) result.ifExists = true;
+      if (cluster !== null) result.onCluster = cluster[1];
+      if (rename !== null) result.renameTo = rename[7];
+      if (settings !== null) result.settings = settings[1];
+      return loc(result);
+    }
+
+AlterQuotaStatement
+  = "ALTER"i ![a-zA-Z0-9_] _ "QUOTA"i ![a-zA-Z0-9_]
+    ifExists:( _ "IF"i ![a-zA-Z0-9_] _ "EXISTS"i ![a-zA-Z0-9_] )?
+    _ names:QuotaNameList
+    cluster:( _ OnClusterClause )?
+    rename:( _ "RENAME"i ![a-zA-Z0-9_] _ "TO"i ![a-zA-Z0-9_] _ AccessControlNameValue )?
+    clauses:( _ ","? _ QuotaClause )* {
+      const result = { kind: 'alterQuota', names };
+      if (ifExists !== null) result.ifExists = true;
+      if (cluster !== null) result.onCluster = cluster[1];
+      if (rename !== null) result.renameTo = rename[7];
+      const intervals = [];
+      for (const c of clauses) {
+        const clause = c[3];
+        if (clause.keyed !== undefined) result.keyed = clause.keyed;
+        if (clause.interval !== undefined) intervals.push(clause.interval);
+        if (clause.to !== undefined) result.to = clause.to;
+      }
+      if (intervals.length > 0) result.intervals = intervals;
+      return loc(result);
+    }
+
+AlterRowPolicyStatement
+  = "ALTER"i ![a-zA-Z0-9_] _ hasRow:( "ROW"i ![a-zA-Z0-9_] _ )? "POLICY"i ![a-zA-Z0-9_]
+    ifExists:( _ "IF"i ![a-zA-Z0-9_] _ "EXISTS"i ![a-zA-Z0-9_] )?
+    _ targetsResult:RowPolicyTargets
+    clauses:( _ AlterRowPolicyClause )* {
+      const result = { kind: 'alterRowPolicy', targets: targetsResult.targets };
+      if (hasRow !== null) result.hasRowKeyword = true;
+      if (ifExists !== null) result.ifExists = true;
+      if (targetsResult.onCluster) result.onCluster = targetsResult.onCluster;
+      for (const c of clauses) {
+        const clause = c[1];
+        if (clause.renameTo !== undefined) result.renameTo = clause.renameTo;
+        if (clause.forSelect !== undefined) result.forSelect = clause.forSelect;
+        if (clause.using !== undefined) result.using = clause.using;
+        if (clause.restrictive !== undefined) result.restrictive = clause.restrictive;
+        if (clause.to !== undefined) result.to = clause.to;
+        if (clause.onCluster !== undefined) result.onCluster = clause.onCluster;
+      }
+      return loc(result);
+    }
+
+AlterRowPolicyClause
+  = "RENAME"i ![a-zA-Z0-9_] _ "TO"i ![a-zA-Z0-9_] _ name:AccessControlNameValue { return { renameTo: name }; }
+  / "FOR"i ![a-zA-Z0-9_] _ "SELECT"i ![a-zA-Z0-9_] { return { forSelect: true }; }
+  / "USING"i ![a-zA-Z0-9_] _ expr:Expression { return { using: expr }; }
+  / "AS"i ![a-zA-Z0-9_] _ mode:( "RESTRICTIVE"i / "PERMISSIVE"i ) ![a-zA-Z0-9_] { return { restrictive: mode.toUpperCase() }; }
+  / "TO"i ![a-zA-Z0-9_] _ target:SetRoleList { return { to: target }; }
+  / "ON"i ![a-zA-Z0-9_] _ "CLUSTER"i ![a-zA-Z0-9_] _ name:( StringLiteral { return text(); } / AliasName ) { return { onCluster: name }; }
+
+AlterSettingsProfileStatement
+  = "ALTER"i ![a-zA-Z0-9_] _ hasSK:( "SETTINGS"i ![a-zA-Z0-9_] _ )? "PROFILE"i ![a-zA-Z0-9_]
+    ifExists:( _ "IF"i ![a-zA-Z0-9_] _ "EXISTS"i ![a-zA-Z0-9_] )?
+    _ names:QuotaNameList
+    cluster:( _ OnClusterClause )?
+    rename:( _ "RENAME"i ![a-zA-Z0-9_] _ "TO"i ![a-zA-Z0-9_] _ AccessControlNameValue )?
+    settings:( _ CreateRoleSettingsClause )?
+    to:( _ "TO"i ![a-zA-Z0-9_] _ SetRoleList )? {
+      const result = { kind: 'alterSettingsProfile', names };
+      if (hasSK !== null) result.hasSettingsKeyword = true;
+      if (ifExists !== null) result.ifExists = true;
+      if (cluster !== null) result.onCluster = cluster[1];
+      if (rename !== null) result.renameTo = rename[7];
+      if (settings !== null) result.settings = settings[1];
+      if (to !== null) result.to = to[4];
+      return loc(result);
+    }
+
+// ── SHOW statements ──────────────────────────────────────────────────────────
+// SHOW CREATE TABLE/VIEW/DICTIONARY/DATABASE is handled by ShowCreateStatement;
+// this rule handles all other SHOW forms (including SHOW CREATE access entities).
+ShowStatement
+  = "SHOW"i ![a-zA-Z0-9_] _ show:ShowBody format:( _ FormatClause )? {
+      const result = { kind: 'show', show };
+      if (format !== null) result.format = format[1];
+      return loc(result);
+    }
+
+ShowBody
+  = ShowCreateAccessBody
+  / ShowColumnsBody
+  / ShowIndexesBody
+  / ShowGrantsBody
+  / ShowListingBody
+  / ShowAccessEntitiesBody
+  / ShowSettingBody
+  / ShowSimpleBody
+  / ShowClusterBody
+  / ShowObjectShorthandBody
+
+ShowCreateAccessBody
+  = "CREATE"i ![a-zA-Z0-9_] _ ShowRowPolicyKeyword _ targets:RowPolicyTargets {
+      return { type: 'createRowPolicy', policies: targets.targets };
+    }
+  / "CREATE"i ![a-zA-Z0-9_] _ ShowRowPolicyKeyword _ names:RowPolicyNameList {
+      return { type: 'createRowPolicy', policies: names.map(name => ({ names: [name] })) };
+    }
+  / "CREATE"i ![a-zA-Z0-9_] _ entity:ShowCreateAccessKeyword _ names:CreateUserNameList {
+      return { type: 'createAccess', entity, names };
+    }
+
+ShowRowPolicyKeyword
+  = "ROW"i ![a-zA-Z0-9_] _ ( "POLICIES"i / "POLICY"i ) ![a-zA-Z0-9_]
+  / ( "POLICIES"i / "POLICY"i ) ![a-zA-Z0-9_]
+
+ShowCreateAccessKeyword
+  = ( "USERS"i / "USER"i ) ![a-zA-Z0-9_] { return 'USER'; }
+  / ( "ROLES"i / "ROLE"i ) ![a-zA-Z0-9_] { return 'ROLE'; }
+  / ( "QUOTAS"i / "QUOTA"i ) ![a-zA-Z0-9_] { return 'QUOTA'; }
+  / ( "SETTINGS"i ![a-zA-Z0-9_] _ )? ( "PROFILES"i / "PROFILE"i ) ![a-zA-Z0-9_] { return 'SETTINGS PROFILE'; }
+  / "NAMED"i ![a-zA-Z0-9_] _ ( "COLLECTIONS"i / "COLLECTION"i ) ![a-zA-Z0-9_] { return 'NAMED COLLECTION'; }
+
+ShowColumnsBody
+  = extended:( "EXTENDED"i ![a-zA-Z0-9_] _ )? full:( "FULL"i ![a-zA-Z0-9_] _ )?
+    kw:( "COLUMNS"i { return 'COLUMNS'; } / "FIELDS"i { return 'FIELDS'; } ) ![a-zA-Z0-9_]
+    _ ( "FROM"i / "IN"i ) ![a-zA-Z0-9_] _ table:TableRef
+    from:( _ ( "FROM"i / "IN"i ) ![a-zA-Z0-9_] _ ( QueryParamIdentifier / AliasName ) )?
+    like:( _ ShowLikeClause )?
+    where:( _ "WHERE"i ![a-zA-Z0-9_] _ Expression )?
+    limit:( _ "LIMIT"i ![a-zA-Z0-9_] _ Expression )? {
+      const result = { type: 'columns', keyword: kw, table };
+      if (extended !== null) result.extended = true;
+      if (full !== null) result.full = true;
+      if (from !== null) result.from = from[4];
+      if (like !== null) result.like = like[1];
+      if (where !== null) result.where = where[4];
+      if (limit !== null) result.limit = limit[4];
+      return result;
+    }
+
+ShowIndexesBody
+  = extended:( "EXTENDED"i ![a-zA-Z0-9_] _ )?
+    kw:( "INDEXES"i { return 'INDEXES'; } / "INDICES"i { return 'INDICES'; } / "INDEX"i { return 'INDEX'; } / "KEYS"i { return 'KEYS'; } ) ![a-zA-Z0-9_]
+    _ ( "FROM"i / "IN"i ) ![a-zA-Z0-9_] _ table:TableRef
+    from:( _ ( "FROM"i / "IN"i ) ![a-zA-Z0-9_] _ ( QueryParamIdentifier / AliasName ) )?
+    where:( _ "WHERE"i ![a-zA-Z0-9_] _ Expression )? {
+      const result = { type: 'indexes', keyword: kw, table };
+      if (extended !== null) result.extended = true;
+      if (from !== null) result.from = from[4];
+      if (where !== null) result.where = where[4];
+      return result;
+    }
+
+ShowGrantsBody
+  = "GRANTS"i ![a-zA-Z0-9_]
+    forClause:( _ "FOR"i ![a-zA-Z0-9_] _ GranteeList )?
+    impl:( _ "WITH"i ![a-zA-Z0-9_] _ "IMPLICIT"i ![a-zA-Z0-9_] )?
+    final:( _ "FINAL"i ![a-zA-Z0-9_] )? {
+      const result = { type: 'grants' };
+      if (forClause !== null) result.for = forClause[4];
+      if (impl !== null) result.withImplicit = true;
+      if (final !== null) result.final = true;
+      return result;
+    }
+
+ShowListingBody
+  = temp:( "TEMPORARY"i ![a-zA-Z0-9_] _ )?
+    objectType:( "TABLES"i { return 'TABLES'; } / "DATABASES"i { return 'DATABASES'; } / "DICTIONARIES"i { return 'DICTIONARIES'; } ) ![a-zA-Z0-9_]
+    from:( _ ( "FROM"i / "IN"i ) ![a-zA-Z0-9_] _ ( QueryParamIdentifier / AliasName ) )?
+    like:( _ ShowLikeClause )?
+    where:( _ "WHERE"i ![a-zA-Z0-9_] _ Expression )?
+    limit:( _ "LIMIT"i ![a-zA-Z0-9_] _ Expression )?
+    settings:( _ SettingsClause )? {
+      const result = { type: 'listing', objectType };
+      if (temp !== null) result.temporary = true;
+      if (from !== null) result.from = from[4];
+      if (like !== null) result.like = like[1];
+      if (where !== null) result.where = where[4];
+      if (limit !== null) result.limit = limit[4];
+      if (settings !== null) result.settings = settings[1];
+      return result;
+    }
+
+ShowAccessEntitiesBody
+  = changedPre:( "CHANGED"i ![a-zA-Z0-9_] _ )? "SETTINGS"i ![a-zA-Z0-9_] _ "PROFILES"i ![a-zA-Z0-9_] {
+      return { type: 'accessEntities', objectType: 'SETTINGS PROFILES' };
+    }
+  / changedPre:( "CHANGED"i ![a-zA-Z0-9_] _ )? "SETTINGS"i ![a-zA-Z0-9_] like:( _ ShowLikeClause )? changedPost:( _ "CHANGED"i ![a-zA-Z0-9_] )? {
+      const result = { type: 'accessEntities', objectType: 'SETTINGS' };
+      if (changedPre !== null || changedPost !== null) result.modifier = 'CHANGED';
+      if (like !== null) result.like = like[1];
+      return result;
+    }
+  / "ROW"i ![a-zA-Z0-9_] _ "POLICIES"i ![a-zA-Z0-9_] { return { type: 'accessEntities', objectType: 'ROW POLICIES' }; }
+  / "POLICIES"i ![a-zA-Z0-9_] { return { type: 'accessEntities', objectType: 'ROW POLICIES' }; }
+  / "NAMED"i ![a-zA-Z0-9_] _ "COLLECTIONS"i ![a-zA-Z0-9_] { return { type: 'accessEntities', objectType: 'NAMED COLLECTIONS' }; }
+  / "PROFILES"i ![a-zA-Z0-9_] { return { type: 'accessEntities', objectType: 'SETTINGS PROFILES' }; }
+  / "CLUSTERS"i ![a-zA-Z0-9_] like:( _ ShowLikeClause )? limit:( _ "LIMIT"i ![a-zA-Z0-9_] _ Expression )? {
+      const result = { type: 'accessEntities', objectType: 'CLUSTERS' };
+      if (like !== null) result.like = like[1];
+      if (limit !== null) result.limit = limit[4];
+      return result;
+    }
+  / mod:( ( "CURRENT"i / "ENABLED"i ) ![a-zA-Z0-9_] _ )? "ROLES"i ![a-zA-Z0-9_] {
+      const result = { type: 'accessEntities', objectType: 'ROLES' };
+      if (mod !== null) result.modifier = mod[0].toUpperCase();
+      return result;
+    }
+  / "USERS"i ![a-zA-Z0-9_] { return { type: 'accessEntities', objectType: 'USERS' }; }
+  / "QUOTAS"i ![a-zA-Z0-9_] { return { type: 'accessEntities', objectType: 'QUOTAS' }; }
+  / "WARNINGS"i ![a-zA-Z0-9_] { return { type: 'accessEntities', objectType: 'WARNINGS' }; }
+
+ShowSettingBody
+  = "SETTING"i ![a-zA-Z0-9_] _ name:( QueryParamIdentifier / AliasName ) { return { type: 'setting', name }; }
+
+ShowSimpleBody
+  = "PRIVILEGES"i ![a-zA-Z0-9_] { return { type: 'privileges' }; }
+  / "ENGINES"i ![a-zA-Z0-9_] { return { type: 'engines' }; }
+  / "MERGES"i ![a-zA-Z0-9_] { return { type: 'merges' }; }
+  / "ACCESS"i ![a-zA-Z0-9_] { return { type: 'access' }; }
+  / full:( "FULL"i ![a-zA-Z0-9_] _ )? "PROCESSLIST"i ![a-zA-Z0-9_] {
+      const result = { type: 'processlist' };
+      if (full !== null) result.full = true;
+      return result;
+    }
+  / "FUNCTIONS"i ![a-zA-Z0-9_] like:( _ ShowLikeClause )? {
+      const result = { type: 'functions' };
+      if (like !== null) result.like = like[1];
+      return result;
+    }
+
+ShowClusterBody
+  = "CLUSTER"i ![a-zA-Z0-9_] _ name:( QueryParamIdentifier / AliasName ) { return { type: 'cluster', name }; }
+
+ShowObjectShorthandBody
+  = temp:( "TEMPORARY"i ![a-zA-Z0-9_] _ )? kw:( "TABLE"i { return 'TABLE'; } / "VIEW"i { return 'VIEW'; } ) ![a-zA-Z0-9_] _ table:TableRef {
+      const result = { type: 'objectShorthand', objectType: kw, table };
+      if (temp !== null) result.temporary = true;
+      return result;
+    }
+  / "DATABASE"i ![a-zA-Z0-9_] _ db:( QueryParamIdentifier / AliasName ) { return { type: 'databaseShorthand', database: db }; }
+
+ShowLikeClause
+  = not:( "NOT"i ![a-zA-Z0-9_] _ )? kw:( "ILIKE"i { return true; } / "LIKE"i { return false; } ) ![a-zA-Z0-9_] _ pat:StringLiteral {
+      const result = { pattern: pat.value };
+      if (not !== null) result.not = true;
+      if (kw) result.ilike = true;
+      return result;
+    }
 
 DropTargetType
   = "TABLE"i ![a-zA-Z0-9_] { return 'TABLE'; }
@@ -988,6 +1453,8 @@ ParallelWithStatement
 ParallelWithItem
   = InsertStatement
   / DropStatement
+  / UndropStatement
+  / BackupStatement
   / TruncateStatement
   / OptimizeStatement
   / AlterStatement
@@ -1145,8 +1612,9 @@ ShowCreateTarget
       return { kind: 'showCreate', targetType: 'TABLE', table };
     }
 
-// Keywords that indicate SHOW CREATE targeting an access-control or other
-// object we don't yet parse structurally; these fall through to OpaqueStatement.
+// Keywords that indicate SHOW CREATE targeting an access-control object; these
+// are excluded here so ShowStatement (which handles SHOW CREATE USER/ROLE/etc.)
+// can parse them structurally instead.
 ShowCreateAccessControlKeyword
   = "USER"i ![a-zA-Z0-9_]
   / "ROLE"i ![a-zA-Z0-9_]
@@ -1291,8 +1759,8 @@ CheckPartitionClause
 // ── ATTACH ───────────────────────────────────────────────────────────────────
 // ATTACH [TABLE|VIEW|DICTIONARY] [IF NOT EXISTS] [db.]name [UUID '...'] [ON CLUSTER ...]
 // ATTACH DATABASE [IF NOT EXISTS] name [ON CLUSTER ...]
-// Only matches SIMPLE ATTACH forms. Complex ATTACHes (ATTACH MATERIALIZED VIEW
-// with columns/ENGINE/AS SELECT) fall through to OpaqueStatement.
+// Only matches SIMPLE ATTACH forms. ATTACH MATERIALIZED VIEW (with columns/
+// ENGINE/AS SELECT) is handled by CreateMaterializedViewStatement.
 AttachStatement
   = "ATTACH"i ![a-zA-Z0-9_] _ "DATABASE"i ![a-zA-Z0-9_]
     ifne:( _ "IF"i ![a-zA-Z0-9_] _ "NOT"i ![a-zA-Z0-9_] _ "EXISTS"i ![a-zA-Z0-9_] )?
@@ -1794,10 +2262,12 @@ CreateUserAuthSecretValue
   / "{" body:$[^}]* "}" { return '{' + body + '}'; }
 
 CreateUserSSHKeyList
-  = head:CreateUserSSHKey tail:( _ "," _ CreateUserSSHKey )* { return 1 + tail.length; }
+  = head:CreateUserSSHKey tail:( _ "," _ CreateUserSSHKey )* { return [head, ...tail.map(t => t[3])]; }
 
 CreateUserSSHKey
-  = "KEY"i ![a-zA-Z0-9_] _ StringLiteral _ "TYPE"i ![a-zA-Z0-9_] _ StringLiteral
+  = "KEY"i ![a-zA-Z0-9_] _ key:StringLiteral _ "TYPE"i ![a-zA-Z0-9_] _ type:StringLiteral {
+      return { key: key.value, type: type.value };
+    }
 
 // ── HOST items ───────────────────────────────────────────────────────────────
 HostItemList
@@ -1814,8 +2284,8 @@ HostItems
   = "ANY"i ![a-zA-Z0-9_] { return { kind: 'any' }; }
   / "NONE"i ![a-zA-Z0-9_] { return { kind: 'none' }; }
   / "LOCAL"i ![a-zA-Z0-9_] { return { kind: 'local' }; }
-  / "NAME"i ![a-zA-Z0-9_] _ str:StringLiteral { return { kind: 'name', value: str.value }; }
-  / "REGEXP"i ![a-zA-Z0-9_] _ str:StringLiteral { return { kind: 'regexp', value: str.value }; }
+  / "NAME"i ![a-zA-Z0-9_] _ strs:HostStringList { return strs.map(s => ({ kind: 'name', value: s })); }
+  / "REGEXP"i ![a-zA-Z0-9_] _ strs:HostStringList { return strs.map(s => ({ kind: 'regexp', value: s })); }
   / "LIKE"i ![a-zA-Z0-9_] _ strs:HostStringList { return strs.map(s => ({ kind: 'like', value: s })); }
   / "IP"i ![a-zA-Z0-9_] _ strs:HostStringList { return strs.map(s => ({ kind: 'ip', value: s })); }
 
@@ -2142,7 +2612,7 @@ OnClusterClause
 
 // RefreshClause: REFRESH AFTER|EVERY N unit [APPEND]
 RefreshClause
-  = "REFRESH"i ![a-zA-Z0-9_] body:$( _ !("TO"i ![a-zA-Z0-9_] / "ENGINE"i ![a-zA-Z0-9_] / "(" / KW_AS / "EMPTY"i ![a-zA-Z0-9_] / "POPULATE"i ![a-zA-Z0-9_] / "ORDER"i ![a-zA-Z0-9_] / "PARTITION"i ![a-zA-Z0-9_] / "PRIMARY"i ![a-zA-Z0-9_] / "SAMPLE"i ![a-zA-Z0-9_] / "TTL"i ![a-zA-Z0-9_] / KW_SETTINGS / "COMMENT"i ![a-zA-Z0-9_]) . )+ {
+  = "REFRESH"i ![a-zA-Z0-9_] body:$( _ !(";" / "TO"i ![a-zA-Z0-9_] / "ENGINE"i ![a-zA-Z0-9_] / "(" / KW_AS / "EMPTY"i ![a-zA-Z0-9_] / "POPULATE"i ![a-zA-Z0-9_] / "ORDER"i ![a-zA-Z0-9_] / "PARTITION"i ![a-zA-Z0-9_] / "PRIMARY"i ![a-zA-Z0-9_] / "SAMPLE"i ![a-zA-Z0-9_] / "TTL"i ![a-zA-Z0-9_] / KW_SETTINGS / "COMMENT"i ![a-zA-Z0-9_] / "FORMAT"i ![a-zA-Z0-9_]) . )+ {
       return body.trim();
     }
 
@@ -2564,6 +3034,8 @@ ExplainInnerStatement
   / SystemStatement
   / InsertStatement
   / DropStatement
+  / UndropStatement
+  / BackupStatement
   / TruncateStatement
   / OptimizeStatement
   / DescribeStatement

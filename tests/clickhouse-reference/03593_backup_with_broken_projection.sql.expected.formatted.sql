@@ -24,4 +24,4 @@ LIMIT 5000000;
 
 ALTER TABLE `03593_backup_with_broken_projection` (UPDATE _row_exists = 0 WHERE id = 0) SETTINGS mutations_sync = 1;
 
-BACKUP TABLE 03593_backup_with_broken_projection TO Null SETTINGS allow_backup_broken_projections = true, check_projection_parts = false FORMAT Null;
+BACKUP TABLE `03593_backup_with_broken_projection` TO Null SETTINGS allow_backup_broken_projections = true, check_projection_parts = false FORMAT Null;

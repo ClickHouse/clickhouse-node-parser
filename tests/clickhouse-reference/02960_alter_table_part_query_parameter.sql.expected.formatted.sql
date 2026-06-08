@@ -11,16 +11,16 @@ INSERT INTO data;
 
 SET param_part = 'all_1_1_0';
 
-alter table data detach part {part:String};
+ALTER TABLE data DROP PART {part:String};
 
-alter table data attach part {part:String};
+ALTER TABLE data ATTACH PART {part:String};
 
 SET param_part = 'all_2_2_0';
 
-alter table data drop detached part {part:String} settings allow_drop_detached=1;
+ALTER TABLE data DROP DETACHED PART {part:String} SETTINGS allow_drop_detached = 1;
 
 INSERT INTO data;
 
 SET param_part = 'all_3_3_0';
 
-alter table data drop part {part:String};
+ALTER TABLE data DROP PART {part:String};

@@ -9,7 +9,7 @@ REPLACE TABLE t1
 ENGINE = MergeTree
 ORDER BY n; -- { serverError UNKNOWN_TABLE }
 
-show tables;
+SHOW TABLES;
 
 CREATE OR REPLACE TABLE t1
 (

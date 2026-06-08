@@ -25,9 +25,9 @@ CREATE USER ` INTERSERVER SECRET `; -- { serverError BAD_ARGUMENTS }
 
 CREATE USER 'test 01119';
 
-alter user `test 01119` rename to " spaces ";
+ALTER USER `test 01119` RENAME TO ` spaces `;
 
-alter user " spaces " rename to " INTERSERVER SECRET "; -- { serverError BAD_ARGUMENTS }
+ALTER USER ` spaces ` RENAME TO ` INTERSERVER SECRET `; -- { serverError BAD_ARGUMENTS }
 
 CREATE USER `Вася Пупкин`;
 

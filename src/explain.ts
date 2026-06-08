@@ -2,7 +2,15 @@ import {
   AlterStatement,
   AlterCommand,
   AlterPartitionExpr,
+  AuthenticationData,
   BinaryExpr,
+  CodecItem,
+  DataType,
+  DataTypeArg,
+  Identifier,
+  IndexType,
+  Literal,
+  ShowStatement,
   CTE,
   ColumnDef,
   ColumnTransformer,
@@ -63,7 +71,7 @@ function n(label: string, children: ExplainNode[] = []): ExplainNode {
 }
 
 // Canonical string rendering for an Identifier (plain name or query-param).
-function id(x: import('./ast').Identifier): string {
+function id(x: Identifier): string {
   return typeof x === 'string' ? x : `{${x.name}:${x.type}}`;
 }
 
@@ -1152,7 +1160,7 @@ function viewExplainNode(stmt: ExplainStatement, aliasStr: string): ExplainNode 
 // ── CREATE TABLE explain helpers ──────────────────────────────────────────────
 
 // Convert a structured DataType to an EXPLAIN node tree
-function dataTypeToExplainNode(dt: import('./ast').DataType): ExplainNode {
+function dataTypeToExplainNode(dt: DataType): ExplainNode {
   const baseName = dt.name;
 
   // Enum types with parsed values
@@ -1246,7 +1254,7 @@ function dataTypeToExplainNode(dt: import('./ast').DataType): ExplainNode {
 
 // Convert a single DataTypeArg to an EXPLAIN node
 function dataTypeArgToExplainNode(
-  arg: import('./ast').DataTypeArg,
+  arg: DataTypeArg,
   parentName: string,
   index: number,
 ): ExplainNode {
@@ -1286,7 +1294,7 @@ function dataTypeArgToExplainNode(
 }
 
 // Convert a JSON type argument to an ASTObjectTypeArgument explain node
-function jsonTypeArgToExplainNode(arg: import('./ast').DataTypeArg): ExplainNode {
+function jsonTypeArgToExplainNode(arg: DataTypeArg): ExplainNode {
   switch (arg.kind) {
     case 'namedField':
       // JSON(a String) → ASTObjectTypeArgument / ObjectTypedPath a / DataType String
@@ -1322,7 +1330,7 @@ function jsonTypeArgToExplainNode(arg: import('./ast').DataTypeArg): ExplainNode
 }
 
 // Convert structured CodecItem[] to EXPLAIN nodes
-function codecToExplainNodes(items: import('./ast').CodecItem[]): ExplainNode {
+function codecToExplainNodes(items: CodecItem[]): ExplainNode {
   const children = items.map((item) => {
     if (item.args !== undefined && item.args.length > 0) {
       return n(`Function ${item.name}`, [n('ExpressionList', item.args.map(exprNode))]);
@@ -1336,7 +1344,7 @@ function codecToExplainNodes(items: import('./ast').CodecItem[]): ExplainNode {
 }
 
 // Convert structured IndexType to EXPLAIN node
-function indexTypeToExplainNode(it: import('./ast').IndexType): ExplainNode {
+function indexTypeToExplainNode(it: IndexType): ExplainNode {
   if (it.args !== undefined && it.args.length > 0) {
     return n(`Function ${it.name}`, [n('ExpressionList', it.args.map(exprNode))]);
   }
@@ -1605,16 +1613,14 @@ function createDictionaryQueryNode(stmt: CreateDictionaryStatement): ExplainNode
       const pairNodes = dd.source.pairs.map((p) => {
         if (Array.isArray(p.value)) {
           // Structure pairs: render type as Identifier (simple) or Function (parameterized)
-          const structPairs = p.value.map(
-            (sp: { name: string; type: import('./ast').DataType }) => {
-              const dt = sp.type;
-              if (dt.args && dt.args.length > 0) {
-                const argNodes = dt.args.map((a, i) => dataTypeArgToExplainNode(a, dt.name, i));
-                return n('pair', [n(`Function ${dt.name}`, [n('ExpressionList', argNodes)])]);
-              }
-              return n('pair', [n(`Identifier ${dt.name}`)]);
-            },
-          );
+          const structPairs = p.value.map((sp: { name: string; type: DataType }) => {
+            const dt = sp.type;
+            if (dt.args && dt.args.length > 0) {
+              const argNodes = dt.args.map((a, i) => dataTypeArgToExplainNode(a, dt.name, i));
+              return n('pair', [n(`Function ${dt.name}`, [n('ExpressionList', argNodes)])]);
+            }
+            return n('pair', [n(`Identifier ${dt.name}`)]);
+          });
           return n('pair', [n('ExpressionList', structPairs)]);
         }
         return n('pair', [exprNode(p.value)]);
@@ -2174,7 +2180,7 @@ function partitionNode(part: AlterPartitionExpr): ExplainNode {
     if (part.id.kind === 'queryParam') {
       return n('Partition_ID', [exprNode(part.id)]);
     }
-    const lit = part.id as import('./ast').Literal;
+    const lit = part.id as Literal;
     const label = `Partition_ID Literal_'${escapeStringValue(lit.value)}'`;
     return n(label, [n(`Literal '${escapeStringValue(lit.value)}'`)]);
   }
@@ -2380,14 +2386,18 @@ function alterCommandNode(cmd: AlterCommand): ExplainNode {
 
     case 'DROP_PARTITION':
     case 'ATTACH_PARTITION':
+    case 'DROP_DETACHED_PARTITION':
       if (cmd.partName) {
-        // DETACH/DROP PART 'name' → direct Literal child
-        children.push(n(`Literal '${escapeStringValue(cmd.partName.value)}'`));
+        // DETACH/DROP PART 'name' → direct Literal child (query-param parts are query-param queries)
+        if (cmd.partName.kind === 'literal') {
+          children.push(n(`Literal '${escapeStringValue(cmd.partName.value)}'`));
+        } else {
+          children.push(exprNode(cmd.partName));
+        }
       } else if (cmd.partition) {
         children.push(partitionNode(cmd.partition));
       }
       break;
-    case 'DROP_DETACHED_PARTITION':
     case 'REPLACE_PARTITION':
     case 'MOVE_PARTITION':
     case 'FETCH_PARTITION':
@@ -2491,6 +2501,82 @@ function alterQueryNode(stmt: AlterStatement): ExplainNode {
   return n(label, children);
 }
 
+// Build the explain node for a SHOW statement.
+function showQueryNode(stmt: ShowStatement): ExplainNode {
+  const s = stmt.show;
+  const formatChild = (): ExplainNode[] => (stmt.format ? [n(`Identifier ${stmt.format}`)] : []);
+  switch (s.type) {
+    case 'listing': {
+      const children: ExplainNode[] = [];
+      if (s.from !== undefined) children.push(n(`Identifier ${id(s.from)}`));
+      if (s.settings && s.settings.length > 0) children.push(n('Set'));
+      children.push(...formatChild());
+      return n('ShowTables', children);
+    }
+    case 'accessEntities':
+    case 'cluster':
+      return n('ShowTables');
+    case 'columns':
+    case 'indexes':
+      return n('ShowColumns');
+    case 'setting':
+      return n('ShowSetting');
+    case 'privileges':
+      return n('ShowPrivilegesQuery');
+    case 'engines':
+      return n('ShowEngines');
+    case 'merges':
+      return n('ShowMerges');
+    case 'access':
+      return n('ShowAccessQuery');
+    case 'processlist':
+      return n('ShowProcesslist');
+    case 'functions':
+      return n('ShowFunctions');
+    case 'grants':
+      return n('ShowGrantsQuery', formatChild());
+    case 'createAccess': {
+      const hasFormat = stmt.format !== undefined;
+      const isMulti = s.names.length > 1;
+      const labels: Record<string, [string, string]> = {
+        USER: ['SHOW CREATE USER query', 'SHOW CREATE USERS query'],
+        ROLE: ['SHOW CREATE ROLE query', 'SHOW CREATE ROLES query'],
+        QUOTA: ['SHOW CREATE QUOTA query', 'SHOW CREATE QUOTAS query'],
+        'SETTINGS PROFILE': [
+          'SHOW CREATE SETTINGS PROFILE query',
+          'SHOW CREATE SETTINGS PROFILES query',
+        ],
+        'NAMED COLLECTION': ['ShowCreateNamedCollectionQuery', 'ShowCreateNamedCollectionQuery'],
+      };
+      const pair = labels[s.entity];
+      const usePlural = isMulti && !hasFormat;
+      return n(pair[usePlural ? 1 : 0], formatChild());
+    }
+    case 'createRowPolicy': {
+      const hasFormat = stmt.format !== undefined;
+      const label = hasFormat ? 'SHOW CREATE ROW POLICIES query' : 'SHOW CREATE ROW POLICY query';
+      return n(label, formatChild());
+    }
+    case 'objectShorthand': {
+      const t = s.table;
+      const prefix = s.objectType === 'VIEW' ? 'ShowCreateViewQuery' : 'ShowCreateTableQuery';
+      const children: ExplainNode[] = [];
+      if (t.database) children.push(n(`Identifier ${id(t.database)}`));
+      children.push(n(`Identifier ${id(t.table)}`));
+      children.push(...formatChild());
+      const label = t.database
+        ? `${prefix} ${id(t.database)} ${id(t.table)}`
+        : `${prefix}  ${id(t.table)}`;
+      return n(label, children);
+    }
+    case 'databaseShorthand': {
+      const children: ExplainNode[] = [n(`Identifier ${id(s.database)}`)];
+      children.push(...formatChild());
+      return n(`ShowCreateDatabaseQuery ${id(s.database)} `, children);
+    }
+  }
+}
+
 // Build the top-level SelectWithUnionQuery node for a statement (SelectStatement or UnionStatement)
 function stmtNode(stmt: Statement): ExplainNode {
   if (stmt.kind === 'parallelWith') return parallelWithQueryNode(stmt);
@@ -2502,40 +2588,11 @@ function stmtNode(stmt: Statement): ExplainNode {
     return n('Set');
   }
   if (stmt.kind === 'system') {
-    // Opaque ALTER statements for access control objects (ALTER USER, ALTER ROLE, etc.)
-    if (/^ALTER\s/i.test(stmt.body)) {
-      const alterAliases: Record<string, string> = {
-        USER: 'CreateUserQuery',
-        ROLE: 'CreateRoleQuery',
-        'ROW POLICY': 'CREATE ROW POLICY or ALTER ROW POLICY query',
-        POLICY: 'CREATE ROW POLICY or ALTER ROW POLICY query',
-        'SETTINGS PROFILE': 'CreateSettingsProfileQuery',
-        PROFILE: 'CreateSettingsProfileQuery',
-        QUOTA: 'CreateQuotaQuery',
-        'NAMED COLLECTION': 'AlterNamedCollectionQuery',
-      };
-      const m = stmt.body.match(
-        /^ALTER\s+(USER|ROLE|ROW\s+POLICY|POLICY|SETTINGS\s+PROFILE|PROFILE|QUOTA|NAMED\s+COLLECTION)\b/i,
-      );
-      if (m) {
-        const key = m[1].toUpperCase().replace(/\s+/g, ' ');
-        const label = alterAliases[key] || 'SYSTEM query';
-        // For ALTER USER, extract auth data
-        if (key === 'USER') {
-          const authByMatch = stmt.body.match(/IDENTIFIED\s+(?:WITH\s+\w+\s+)?BY\s+'([^']*)'/i);
-          if (authByMatch) {
-            return n(label, [n('AuthenticationData', [n(`Literal '${authByMatch[1]}'`)])]);
-          }
-          // NOT IDENTIFIED or IDENTIFIED WITH <type> (no password)
-          if (/(?:NOT\s+)?IDENTIFIED/i.test(stmt.body) && !/RENAME/i.test(stmt.body)) {
-            return n(label, [n('AuthenticationData')]);
-          }
-        }
-        return n(label);
-      }
-      return n('SYSTEM query');
-    }
-    // Opaque DROP statements produce specific labels based on the DROP target type
+    // The `system` kind is produced by SYSTEM statements and by the DROP fallback
+    // for access-control objects (DROP USER, DROP ROLE, etc.) that are not yet
+    // structurally parsed.
+    //
+    // DROP fallback statements produce specific labels based on the DROP target type.
     if (/^DROP\s/i.test(stmt.body)) {
       const dropAliases: Record<string, string> = {
         USER: 'DROP USER query',
@@ -2555,131 +2612,6 @@ function stmtNode(stmt: Statement): ExplainNode {
       if (m) {
         const key = m[1].toUpperCase().replace(/\s+/g, ' ');
         return n(dropAliases[key] || 'SYSTEM query');
-      }
-      return n('SYSTEM query');
-    }
-    // SHOW variants
-    if (/^SHOW\s/i.test(stmt.body)) {
-      // SHOW CREATE USER/ROLE/QUOTA/etc. → "<DDL> QUOTA query" labels
-      const showCreateACMatch = stmt.body.match(
-        /^SHOW\s+CREATE\s+(USERS|USER|ROLES|ROLE|QUOTAS|QUOTA|ROW\s+POLICIES|ROW\s+POLICY|POLICIES|POLICY|SETTINGS\s+PROFILES|SETTINGS\s+PROFILE|PROFILES|PROFILE|NAMED\s+COLLECTIONS|NAMED\s+COLLECTION)\b/i,
-      );
-      if (showCreateACMatch) {
-        const rawKey = showCreateACMatch[1].toUpperCase().replace(/\s+/g, ' ');
-        // Normalize aliases: POLICY → ROW POLICY, PROFILE → SETTINGS PROFILE.
-        const keyAliases: Record<string, string> = {
-          POLICY: 'ROW POLICY',
-          POLICIES: 'ROW POLICIES',
-          PROFILE: 'SETTINGS PROFILE',
-          PROFILES: 'SETTINGS PROFILES',
-        };
-        const key = keyAliases[rawKey] || rawKey;
-        // The body after the keyword is the name list (and optional FORMAT clause).
-        const afterKeyword = stmt.body.slice(showCreateACMatch[0].length);
-        const formatMatch = afterKeyword.match(/\bFORMAT\s+([A-Za-z_][A-Za-z0-9_]*)\s*$/i);
-        const hasFormat = formatMatch !== null;
-        const nameList = hasFormat
-          ? afterKeyword.slice(0, formatMatch.index).trim()
-          : afterKeyword.trim();
-        const isMulti = /,/.test(nameList);
-        // ROW POLICY: PLURAL with FORMAT, SINGULAR without (regardless of name count).
-        // Others: PLURAL when multi-name and no FORMAT; SINGULAR otherwise.
-        let usePlural: boolean;
-        if (key === 'ROW POLICY' || key === 'ROW POLICIES') {
-          usePlural = hasFormat;
-        } else {
-          usePlural = isMulti && !hasFormat;
-        }
-        const labels: Record<string, [string, string]> = {
-          USER: ['SHOW CREATE USER query', 'SHOW CREATE USERS query'],
-          USERS: ['SHOW CREATE USER query', 'SHOW CREATE USERS query'],
-          ROLE: ['SHOW CREATE ROLE query', 'SHOW CREATE ROLES query'],
-          ROLES: ['SHOW CREATE ROLE query', 'SHOW CREATE ROLES query'],
-          QUOTA: ['SHOW CREATE QUOTA query', 'SHOW CREATE QUOTAS query'],
-          QUOTAS: ['SHOW CREATE QUOTA query', 'SHOW CREATE QUOTAS query'],
-          'ROW POLICY': ['SHOW CREATE ROW POLICY query', 'SHOW CREATE ROW POLICIES query'],
-          'ROW POLICIES': ['SHOW CREATE ROW POLICY query', 'SHOW CREATE ROW POLICIES query'],
-          'SETTINGS PROFILE': [
-            'SHOW CREATE SETTINGS PROFILE query',
-            'SHOW CREATE SETTINGS PROFILES query',
-          ],
-          'SETTINGS PROFILES': [
-            'SHOW CREATE SETTINGS PROFILE query',
-            'SHOW CREATE SETTINGS PROFILES query',
-          ],
-          'NAMED COLLECTION': ['ShowCreateNamedCollectionQuery', 'ShowCreateNamedCollectionQuery'],
-          'NAMED COLLECTIONS': ['ShowCreateNamedCollectionQuery', 'ShowCreateNamedCollectionQuery'],
-        };
-        const pair = labels[key];
-        const label = pair ? pair[usePlural ? 1 : 0] : 'SYSTEM query';
-        if (hasFormat && formatMatch) {
-          return n(label, [n(`Identifier ${formatMatch[1]}`)]);
-        }
-        return n(label);
-      }
-      if (/^SHOW\s+GRANTS\b/i.test(stmt.body)) {
-        const formatMatch = stmt.body.match(/\bFORMAT\s+([A-Za-z_][A-Za-z0-9_]*)\s*$/i);
-        if (formatMatch) return n('ShowGrantsQuery', [n(`Identifier ${formatMatch[1]}`)]);
-        return n('ShowGrantsQuery');
-      }
-      if (/^SHOW\s+FUNCTIONS\b/i.test(stmt.body)) return n('ShowFunctions');
-      if (/^SHOW\s+(?:EXTENDED\s+|FULL\s+)?(?:COLUMNS|FIELDS)\b/i.test(stmt.body))
-        return n('ShowColumns');
-      if (/^SHOW\s+(?:EXTENDED\s+)?(?:INDEX|INDEXES|INDICES|KEYS)\b/i.test(stmt.body))
-        return n('ShowColumns');
-      if (/^SHOW\s+PRIVILEGES\b/i.test(stmt.body)) return n('ShowPrivilegesQuery');
-      if (/^SHOW\s+SETTING\b/i.test(stmt.body)) return n('ShowSetting');
-      // SHOW [CHANGED] SETTINGS → ShowTables
-      if (/^SHOW\s+(?:CHANGED\s+)?SETTINGS\b/i.test(stmt.body)) return n('ShowTables');
-      if (/^SHOW\s+ENGINES\b/i.test(stmt.body)) return n('ShowEngines');
-      if (/^SHOW\s+PROCESSLIST\b/i.test(stmt.body)) return n('ShowProcesslist');
-      if (/^SHOW\s+MERGES\b/i.test(stmt.body)) return n('ShowMerges');
-      if (/^SHOW\s+CLUSTERS?\b/i.test(stmt.body)) return n('ShowTables');
-      if (/^SHOW\s+ACCESS\b/i.test(stmt.body)) return n('ShowAccessQuery');
-      if (/^SHOW\s+(?:CURRENT\s+)?ROLES?\b/i.test(stmt.body)) return n('ShowTables');
-      if (/^SHOW\s+USERS?\b/i.test(stmt.body)) return n('ShowTables');
-      if (/^SHOW\s+QUOTAS?\b/i.test(stmt.body)) return n('ShowTables');
-      if (/^SHOW\s+(?:ROW\s+)?POLIC(?:Y|IES)\b/i.test(stmt.body)) return n('ShowTables');
-      if (/^SHOW\s+(?:SETTINGS\s+)?PROFILES?\b/i.test(stmt.body)) return n('ShowTables');
-      if (/^SHOW\s+(?:NAMED\s+)?COLLECTIONS?\b/i.test(stmt.body)) return n('ShowTables');
-      if (/^SHOW\s+WARNINGS?\b/i.test(stmt.body)) return n('ShowTables');
-      // SHOW TABLES/DATABASES/DICTIONARIES [FROM db [LIKE/NOT LIKE 'x']] [SETTINGS ...] [FORMAT fmt]
-      if (/^SHOW\s+(?:TEMPORARY\s+)?(TABLES|DATABASES|DICTIONARIES)\b/i.test(stmt.body)) {
-        const fromMatch = stmt.body.match(/\b(?:FROM|IN)\s+([A-Za-z_][A-Za-z0-9_]*)\b/i);
-        const formatMatch = stmt.body.match(/\bFORMAT\s+([A-Za-z_][A-Za-z0-9_]*)\s*$/i);
-        const hasSettings = /\bSETTINGS\b/i.test(stmt.body);
-        const children: ExplainNode[] = [];
-        if (fromMatch) children.push(n(`Identifier ${fromMatch[1]}`));
-        if (hasSettings) children.push(n('Set'));
-        if (formatMatch) children.push(n(`Identifier ${formatMatch[1]}`));
-        if (children.length > 0) return n('ShowTables', children);
-        return n('ShowTables');
-      }
-      // SHOW TABLE name / SHOW TEMPORARY VIEW name → equivalent to SHOW CREATE TABLE/VIEW
-      const showTableMatch = stmt.body.match(
-        /^SHOW\s+(TABLE|TEMPORARY\s+VIEW|VIEW)\s+(?:([A-Za-z_][A-Za-z0-9_]*)\.)?([A-Za-z_][A-Za-z0-9_]*)\b/i,
-      );
-      if (showTableMatch) {
-        const kw = showTableMatch[1].toUpperCase().replace(/\s+/g, ' ');
-        const db = showTableMatch[2];
-        const tbl = showTableMatch[3];
-        const children: ExplainNode[] = [];
-        if (db) children.push(n(`Identifier ${db}`));
-        children.push(n(`Identifier ${tbl}`));
-        const formatMatch = stmt.body.match(/\bFORMAT\s+([A-Za-z_][A-Za-z0-9_]*)\s*$/i);
-        if (formatMatch) children.push(n(`Identifier ${formatMatch[1]}`));
-        const prefix = kw === 'TABLE' ? 'ShowCreateTableQuery' : 'ShowCreateViewQuery';
-        const label = db ? `${prefix} ${db} ${tbl}` : `${prefix}  ${tbl}`;
-        return n(label, children);
-      }
-      // SHOW DATABASE name → equivalent to SHOW CREATE DATABASE
-      const showDbMatch = stmt.body.match(/^SHOW\s+DATABASE\s+([A-Za-z_][A-Za-z0-9_]*)\b/i);
-      if (showDbMatch) {
-        const db = showDbMatch[1];
-        const children: ExplainNode[] = [n(`Identifier ${db}`)];
-        const formatMatch = stmt.body.match(/\bFORMAT\s+([A-Za-z_][A-Za-z0-9_]*)\s*$/i);
-        if (formatMatch) children.push(n(`Identifier ${formatMatch[1]}`));
-        return n(`ShowCreateDatabaseQuery ${db} `, children);
       }
       return n('SYSTEM query');
     }
@@ -2737,67 +2669,6 @@ function stmtNode(stmt: Statement): ExplainNode {
       }
       return n('SYSTEM query');
     }
-    // KILL QUERY / KILL MUTATION (fallback when not structurally parsed)
-    if (/^KILL\s/i.test(stmt.body)) {
-      return n('KillQueryQuery');
-    }
-    // BACKUP / RESTORE — extract the TO/FROM destination function and FORMAT.
-    if (/^BACKUP\s/i.test(stmt.body) || /^RESTORE\s/i.test(stmt.body)) {
-      const isRestore = /^RESTORE\s/i.test(stmt.body);
-      const label = isRestore ? 'RestoreQuery' : 'BackupQuery';
-      // Strip trailing FORMAT clause from body so it doesn't bleed into destination match.
-      const formatMatch = stmt.body.match(/\bFORMAT\s+([A-Za-z_][A-Za-z0-9_]*)\s*$/i);
-      let bodyNoFormat = formatMatch ? stmt.body.slice(0, formatMatch.index).trimEnd() : stmt.body;
-      // Strip trailing SETTINGS clause too.
-      const settingsIdx = bodyNoFormat.search(/\bSETTINGS\b/i);
-      if (settingsIdx > 0) bodyNoFormat = bodyNoFormat.slice(0, settingsIdx).trimEnd();
-      // Destination: ` TO|FROM <Name>[('<arg>'[, ...])]` at the end of body.
-      const destMatch = bodyNoFormat.match(
-        /\b(?:TO|FROM)\s+([A-Za-z_][A-Za-z0-9_]*)(\s*\([^)]*\))?\s*$/i,
-      );
-      const children: ExplainNode[] = [];
-      if (destMatch) {
-        const fnName = destMatch[1];
-        const argsPart = destMatch[2] || '';
-        const args: ExplainNode[] = [];
-        const argsRegex = /'([^']*)'/g;
-        let m;
-        while ((m = argsRegex.exec(argsPart)) !== null) {
-          args.push(n(`Literal '${m[1]}'`));
-        }
-        const fnChildren =
-          args.length > 0 ? [n('ExpressionList', args)] : argsPart ? [n('ExpressionList')] : [];
-        children.push(n(`Function ${fnName}`, fnChildren));
-      }
-      if (formatMatch) children.push(n(`Identifier ${formatMatch[1]}`));
-      if (children.length > 0) return n(label, children);
-      return n(label);
-    }
-    // GRANT / REVOKE
-    if (/^GRANT\s/i.test(stmt.body)) return n('GrantQuery');
-    if (/^REVOKE\s/i.test(stmt.body)) return n('GrantQuery');
-    // Transaction control (BEGIN / COMMIT / ROLLBACK)
-    if (/^(BEGIN|COMMIT|ROLLBACK)\b/i.test(stmt.body)) return n('ASTTransactionControl');
-    // UNDROP TABLE [db.]name [UUID '...'] [ON CLUSTER ...] [FORMAT name]
-    if (/^UNDROP\s/i.test(stmt.body)) {
-      const m = stmt.body.match(
-        /^UNDROP\s+TABLE\s+(?:([A-Za-z_0-9][A-Za-z0-9_]*)\.)?([A-Za-z_0-9][A-Za-z0-9_]*)/i,
-      );
-      if (m) {
-        const db = m[1];
-        const tbl = m[2];
-        const children: ExplainNode[] = [];
-        if (db) children.push(n(`Identifier ${db}`));
-        children.push(n(`Identifier ${tbl}`));
-        const formatMatch = stmt.body.match(/\bFORMAT\s+([A-Za-z_][A-Za-z0-9_]*)\s*$/i);
-        if (formatMatch) children.push(n(`Identifier ${formatMatch[1]}`));
-        const label = db ? `UndropQuery ${db}.${tbl}` : `UndropQuery  ${tbl}`;
-        return n(label, children);
-      }
-      return n('UndropQuery');
-    }
-    // EXCHANGE TABLES/DICTIONARIES as system fallback
-    if (/^EXCHANGE\s/i.test(stmt.body)) return n('Rename');
     return n('SYSTEM query');
   }
   if (stmt.kind === 'use')
@@ -2814,7 +2685,7 @@ function stmtNode(stmt: Statement): ExplainNode {
     if (!stmt.auth || stmt.auth.length === 0) return n('CreateUserQuery');
     const authChildren = stmt.auth.map((a) => {
       if (a.sshKeys !== undefined) {
-        const keys = Array.from({ length: a.sshKeys }, () => n('PublicSSHKey'));
+        const keys = a.sshKeys.map(() => n('PublicSSHKey'));
         return n('AuthenticationData', keys);
       }
       if (a.secret !== undefined) {
@@ -3136,6 +3007,49 @@ function stmtNode(stmt: Statement): ExplainNode {
     }
 
     return n(label, children);
+  }
+  if (stmt.kind === 'undrop') {
+    const t = stmt.table;
+    const children: ExplainNode[] = [];
+    if (t.database) children.push(n(`Identifier ${id(t.database)}`));
+    children.push(n(`Identifier ${id(t.table)}`));
+    if (stmt.format) children.push(n(`Identifier ${stmt.format}`));
+    const label = t.database
+      ? `UndropQuery ${id(t.database)}.${id(t.table)}`
+      : `UndropQuery  ${id(t.table)}`;
+    return n(label, children);
+  }
+  if (stmt.kind === 'backup') {
+    const label = stmt.operation === 'RESTORE' ? 'RestoreQuery' : 'BackupQuery';
+    const children: ExplainNode[] = [];
+    const d = stmt.destination;
+    const fnChildren: ExplainNode[] =
+      d.args === undefined ? [] : [n('ExpressionList', d.args.map(exprNode))];
+    children.push(n(`Function ${d.name}`, fnChildren));
+    if (stmt.format) children.push(n(`Identifier ${stmt.format}`));
+    return n(label, children);
+  }
+  if (stmt.kind === 'grant') return n('GrantQuery');
+  if (stmt.kind === 'show') return showQueryNode(stmt);
+  if (stmt.kind === 'alterRole') return n('CreateRoleQuery');
+  if (stmt.kind === 'alterQuota') return n('CreateQuotaQuery');
+  if (stmt.kind === 'alterRowPolicy') return n('CREATE ROW POLICY or ALTER ROW POLICY query');
+  if (stmt.kind === 'alterSettingsProfile') return n('CreateSettingsProfileQuery');
+  if (stmt.kind === 'alterUser') {
+    // Mirror CreateUserQuery: emit AuthenticationData children when the statement
+    // (re)sets authentication.
+    let auth: AuthenticationData[] | undefined;
+    for (const c of stmt.clauses) {
+      if (c.kind === 'identified') auth = c.auth;
+      else if (c.kind === 'notIdentified') auth = [{}];
+    }
+    if (!auth || auth.length === 0) return n('CreateUserQuery');
+    const authChildren = auth.map((a) =>
+      a.secret !== undefined
+        ? n('AuthenticationData', [n(`Literal '${a.secret}'`)])
+        : n('AuthenticationData'),
+    );
+    return n('CreateUserQuery', authChildren);
   }
   if (stmt.kind === 'alter') return alterQueryNode(stmt);
 

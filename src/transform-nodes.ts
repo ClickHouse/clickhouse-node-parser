@@ -84,6 +84,15 @@ export interface NodePositionMap {
   insert: Statement;
   truncate: Statement;
   drop: Statement;
+  undrop: Statement;
+  backup: Statement;
+  grant: Statement;
+  show: Statement;
+  alterUser: Statement;
+  alterRole: Statement;
+  alterQuota: Statement;
+  alterRowPolicy: Statement;
+  alterSettingsProfile: Statement;
   optimize: Statement;
   describe: Statement;
   showCreate: Statement;

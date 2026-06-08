@@ -23,13 +23,13 @@ ALTER USER test_user_01075 DROP HOST NAME 'localhost';
 
 ALTER USER test_user_01075 HOST LIKE '@.somesite.com';
 
-ALTER USER test_user_01075 HOST REGEXP '.*\.anothersite\.com';
+ALTER USER test_user_01075 HOST REGEXP '.*\\.anothersite\\.com';
 
-ALTER USER test_user_01075 HOST REGEXP '.*\.anothersite\.com', '.*\.anothersite\.org';
+ALTER USER test_user_01075 HOST REGEXP '.*\\.anothersite\\.com', REGEXP '.*\\.anothersite\\.org';
 
-ALTER USER test_user_01075 HOST REGEXP '.*\.anothersite2\.com', REGEXP '.*\.anothersite2\.org';
+ALTER USER test_user_01075 HOST REGEXP '.*\\.anothersite2\\.com', REGEXP '.*\\.anothersite2\\.org';
 
-ALTER USER test_user_01075 HOST REGEXP '.*\.anothersite3\.com' HOST REGEXP '.*\.anothersite3\.org';
+ALTER USER test_user_01075 HOST REGEXP '.*\\.anothersite3\\.com' HOST REGEXP '.*\\.anothersite3\\.org';
 
 DROP USER test_user_01075;
 

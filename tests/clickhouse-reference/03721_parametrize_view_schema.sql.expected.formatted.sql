@@ -11,10 +11,10 @@ SELECT number AS n
 FROM numbers({upper_bound:UInt64});
 
 -- Should return no columns
-SHOW COLUMNS IN 03271_parametrized_v;
+SHOW COLUMNS FROM `03271_parametrized_v`;
 
 -- Should return one column 'n' of type 'UInt64'
-SHOW COLUMNS IN 03271_parametrized_v_expl;
+SHOW COLUMNS FROM `03271_parametrized_v_expl`;
 
 SELECT *
 FROM `system`.`columns`

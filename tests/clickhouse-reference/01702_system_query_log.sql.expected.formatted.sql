@@ -120,7 +120,7 @@ SHOW CREATE USER sqllt_user FORMAT Null;
 
 SHOW CREATE ROLE sqllt_role FORMAT Null;
 
-SHOW CREATE POLICY sqllt_policy FORMAT Null;
+SHOW CREATE ROW POLICY sqllt_policy FORMAT Null;
 
 SHOW CREATE ROW POLICY sqllt_row_policy FORMAT Null;
 
