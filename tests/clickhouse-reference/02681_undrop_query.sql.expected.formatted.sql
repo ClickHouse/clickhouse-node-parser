@@ -19,7 +19,7 @@ FROM `system`.dropped_tables
 WHERE table = '02681_undrop_mergetree'
 LIMIT 1;
 
-undrop table 02681_undrop_mergetree;
+UNDROP TABLE `02681_undrop_mergetree`;
 
 SELECT *
 FROM `02681_undrop_mergetree`
@@ -41,7 +41,7 @@ INSERT INTO `02681_undrop_detach`;
 
 DETACH TABLE `02681_undrop_detach` SYNC;
 
-undrop table 02681_undrop_detach; -- { serverError TABLE_ALREADY_EXISTS }
+UNDROP TABLE `02681_undrop_detach`; -- { serverError TABLE_ALREADY_EXISTS }
 
 ATTACH TABLE `02681_undrop_detach`;
 
@@ -74,7 +74,7 @@ FROM `system`.dropped_tables
 WHERE table = '02681_undrop_uuid_on_cluster'
 LIMIT 1;
 
-undrop table 02681_undrop_uuid_on_cluster on cluster test_shard_localhost format Null;
+UNDROP TABLE `02681_undrop_uuid_on_cluster` ON CLUSTER test_shard_localhost FORMAT Null;
 
 SELECT *
 FROM `02681_undrop_uuid_on_cluster`
@@ -101,7 +101,7 @@ FROM `system`.dropped_tables
 WHERE table = '02681_undrop_no_uuid_on_cluster'
 LIMIT 1;
 
-undrop table 02681_undrop_no_uuid_on_cluster on cluster test_shard_localhost format Null;
+UNDROP TABLE `02681_undrop_no_uuid_on_cluster` ON CLUSTER test_shard_localhost FORMAT Null;
 
 SELECT *
 FROM `02681_undrop_no_uuid_on_cluster`
@@ -127,7 +127,7 @@ FROM `system`.dropped_tables
 WHERE table = '02681_undrop_replicatedmergetree'
 LIMIT 1;
 
-undrop table 02681_undrop_replicatedmergetree;
+UNDROP TABLE `02681_undrop_replicatedmergetree`;
 
 SELECT *
 FROM `02681_undrop_replicatedmergetree`
@@ -152,7 +152,7 @@ FROM `system`.dropped_tables
 WHERE table = '02681_undrop_log'
 LIMIT 1;
 
-undrop table 02681_undrop_log;
+UNDROP TABLE `02681_undrop_log`;
 
 SELECT *
 FROM `02681_undrop_log`
@@ -175,7 +175,7 @@ FROM `system`.dropped_tables
 WHERE table = '02681_undrop_distributed'
 LIMIT 1;
 
-undrop table 02681_undrop_distributed;
+UNDROP TABLE `02681_undrop_distributed`;
 
 DROP TABLE `02681_undrop_distributed`;
 
@@ -201,7 +201,7 @@ FROM `system`.dropped_tables
 WHERE table = '02681_undrop_multiple'
 LIMIT 1;
 
-undrop table 02681_undrop_multiple;
+UNDROP TABLE `02681_undrop_multiple`;
 
 SELECT *
 FROM `02681_undrop_multiple`

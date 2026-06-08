@@ -1,8 +1,42 @@
 import {
   AccessControlName,
   AccessControlSettingsItem,
+  AlterCommand,
+  AlterPartitionExpr,
+  AlterQuotaStatement,
+  AlterRoleStatement,
+  AlterRowPolicyStatement,
+  AlterSettingsProfileStatement,
   AlterStatement,
+  AlterUserStatement,
   ASTNode,
+  AttachStatement,
+  AuthenticationData,
+  BackupElement,
+  BackupStatement,
+  CheckStatement,
+  CodecItem,
+  CreateStatement,
+  DataType,
+  DeleteStatement,
+  DescribeStatement,
+  DetachStatement,
+  ExecuteAsStatement,
+  ExistsStatement,
+  GrantPrivilege,
+  GrantStatement,
+  GrantTarget,
+  Identifier,
+  IndexType,
+  KillStatement,
+  OptimizeStatement,
+  RenameStatement,
+  ShowCreateStatement,
+  ShowLike,
+  ShowStatement,
+  TableElement,
+  TruncateStatement,
+  UpdateStatement,
   CTE,
   ColumnTransformer,
   CreateNamedCollectionStatement,
@@ -155,7 +189,7 @@ const KEYWORDS = new Set([
 
 // Quote an identifier with backticks if it needs quoting. Accepts either a
 // plain string or a {@link QueryParam} node (identifier-position query param).
-function quoteIdent(s: import('./ast').Identifier): string {
+function quoteIdent(s: Identifier): string {
   if (typeof s !== 'string') return `{${s.name}:${s.type}}`;
   // Valid bare identifier: starts with letter/underscore, contains only alphanum/underscore/$
   if (/^[a-zA-Z_][a-zA-Z0-9_$]*$/.test(s) && !KEYWORDS.has(s.toUpperCase())) {
@@ -282,6 +316,12 @@ export function formatNode(node: ASTNode, indent: string = ''): string {
     case 'createWindowView':
     case 'createLiveView':
       return formatCreateStatement(node, indent);
+    case 'alterUser':
+    case 'alterRole':
+    case 'alterQuota':
+    case 'alterRowPolicy':
+    case 'alterSettingsProfile':
+      return formatStatement(node, indent);
     case 'columnDef':
     case 'constraintDef':
     case 'indexDef':
@@ -334,6 +374,14 @@ export function formatNode(node: ASTNode, indent: string = ''): string {
     case 'empty':
       return '';
     case 'drop':
+      return formatStatement(node, indent);
+    case 'undrop':
+      return formatStatement(node, indent);
+    case 'backup':
+      return formatStatement(node, indent);
+    case 'grant':
+      return formatStatement(node, indent);
+    case 'show':
       return formatStatement(node, indent);
     case 'alter':
       return formatAlterStatement(node, indent);
@@ -467,7 +515,7 @@ function formatStatement(stmt: Statement, indent: string): string {
   if (stmt.kind === 'executeAs') return formatExecuteAsStatement(stmt, indent);
   if (stmt.kind === 'empty') return '';
   if (stmt.kind === 'drop') {
-    const fmtRef = (t: import('./ast').TableRef) =>
+    const fmtRef = (t: TableRef) =>
       t.database ? `${quoteIdent(t.database)}.${quoteIdent(t.table)}` : quoteIdent(t.table);
     // DROP INDEX has special syntax: DROP INDEX [IF EXISTS] name ON table
     if (stmt.targetType === 'INDEX' && stmt.indexName && stmt.table) {
@@ -491,6 +539,37 @@ function formatStatement(stmt: Statement, indent: string): string {
     }
     if (stmt.format) result += ` FORMAT ${stmt.format}`;
     return result;
+  }
+  if (stmt.kind === 'undrop') {
+    const t = stmt.table;
+    const ref = t.database
+      ? `${quoteIdent(t.database)}.${quoteIdent(t.table)}`
+      : quoteIdent(t.table);
+    let result = `${indent}UNDROP TABLE`;
+    if (stmt.ifNotExists) result += ' IF NOT EXISTS';
+    result += ` ${ref}`;
+    if (stmt.uuid !== undefined) result += ` UUID ${formatStringLiteral(stmt.uuid)}`;
+    if (stmt.onCluster) result += ` ON CLUSTER ${quoteIdent(stmt.onCluster)}`;
+    if (stmt.format) result += ` FORMAT ${stmt.format}`;
+    return result;
+  }
+  if (stmt.kind === 'backup') {
+    return formatBackupStatement(stmt, indent);
+  }
+  if (stmt.kind === 'grant') {
+    return formatGrantStatement(stmt, indent);
+  }
+  if (stmt.kind === 'show') {
+    return formatShowStatement(stmt, indent);
+  }
+  if (
+    stmt.kind === 'alterUser' ||
+    stmt.kind === 'alterRole' ||
+    stmt.kind === 'alterQuota' ||
+    stmt.kind === 'alterRowPolicy' ||
+    stmt.kind === 'alterSettingsProfile'
+  ) {
+    return formatAlterAccessStatement(stmt, indent);
   }
   if (stmt.kind === 'alter') {
     return formatAlterStatement(stmt, indent);
@@ -535,7 +614,16 @@ function formatTransactionControlStatement(
   stmt: TransactionControlStatement,
   indent: string,
 ): string {
-  return `${indent}SET TRANSACTION snapshot ${stmt.snapshot}`;
+  switch (stmt.action) {
+    case 'begin':
+      return `${indent}BEGIN TRANSACTION`;
+    case 'commit':
+      return `${indent}COMMIT`;
+    case 'rollback':
+      return `${indent}ROLLBACK`;
+    case 'snapshot':
+      return `${indent}SET TRANSACTION snapshot ${stmt.snapshot}`;
+  }
 }
 
 function formatSetRoleStatement(stmt: SetRoleStatement, indent: string): string {
@@ -624,17 +712,13 @@ function formatUseStatement(stmt: UseStatement, indent: string): string {
   return `${indent}USE ${quoteIdent(stmt.database)}`;
 }
 
-function formatAlterPartitionExpr(
-  part: import('./ast').AlterPartitionExpr,
-  indent: string,
-): string {
+function formatAlterPartitionExpr(part: AlterPartitionExpr, indent: string): string {
   if (part.partitionKind === 'all') return 'ALL';
-  if (part.partitionKind === 'id')
-    return `ID ${formatExpr(part.id as import('./ast').Expression, indent)}`;
+  if (part.partitionKind === 'id') return `ID ${formatExpr(part.id as Expression, indent)}`;
   return formatExpr(part.expr, indent);
 }
 
-function formatAlterCommand(cmd: import('./ast').AlterCommand, indent: string): string {
+function formatAlterCommand(cmd: AlterCommand, indent: string): string {
   switch (cmd.commandType) {
     case 'ADD_COLUMN': {
       let s = `ADD COLUMN ${formatTableElement(cmd.column, '')}`;
@@ -744,7 +828,10 @@ function formatAlterCommand(cmd: import('./ast').AlterCommand, indent: string): 
         return `ATTACH PARTITION ${formatAlterPartitionExpr(cmd.partition, indent)}`;
       return 'ATTACH PARTITION';
     case 'DROP_DETACHED_PARTITION':
-      return `DROP DETACHED PARTITION ${formatAlterPartitionExpr(cmd.partition, indent)}`;
+      if (cmd.partName) return `DROP DETACHED PART ${formatExpr(cmd.partName, indent)}`;
+      return `DROP DETACHED PARTITION ${formatAlterPartitionExpr(cmd.partition!, indent)}`;
+    case 'MODIFY_REFRESH':
+      return `MODIFY REFRESH ${cmd.refresh}`;
     case 'REPLACE_PARTITION':
       return `REPLACE PARTITION ${formatAlterPartitionExpr(cmd.partition, indent)} FROM ${formatTableRef(cmd.fromTable)}`;
     case 'MOVE_PARTITION': {
@@ -831,7 +918,8 @@ function formatAlterStatement(stmt: AlterStatement, indent: string): string {
 }
 
 function formatSystemStatement(stmt: SystemStatement, indent: string): string {
-  // Body always includes the leading keyword (SYSTEM, ALTER, DROP, etc.).
+  // Body always includes the leading keyword (SYSTEM, or DROP for the
+  // access-control DROP fallback).
   return `${indent}${stmt.body}`;
 }
 
@@ -884,7 +972,338 @@ function formatInsertStatement(stmt: InsertStatement, indent: string): string {
   return prefixLines.length > 0 ? `${prefixLines.join('\n')}\n${insertLine}` : insertLine;
 }
 
-function formatTruncateStatement(stmt: import('./ast').TruncateStatement, indent: string): string {
+function formatShowStatement(stmt: ShowStatement, indent: string): string {
+  const fmtRef = (t: TableRef) =>
+    t.database ? `${quoteIdent(t.database)}.${quoteIdent(t.table)}` : quoteIdent(t.table);
+  const fmtLike = (l: ShowLike) => {
+    let s = '';
+    if (l.not) s += 'NOT ';
+    s += l.ilike ? 'ILIKE' : 'LIKE';
+    return `${s} ${formatStringLiteral(l.pattern)}`;
+  };
+  const s = stmt.show;
+  const parts: string[] = ['SHOW'];
+  switch (s.type) {
+    case 'listing': {
+      if (s.temporary) parts.push('TEMPORARY');
+      parts.push(s.objectType);
+      if (s.from !== undefined) parts.push(`FROM ${quoteIdent(s.from)}`);
+      if (s.like) parts.push(fmtLike(s.like));
+      if (s.where) parts.push(`WHERE ${formatExpr(s.where, indent)}`);
+      if (s.limit) parts.push(`LIMIT ${formatExpr(s.limit, indent)}`);
+      if (s.settings && s.settings.length > 0)
+        parts.push(`SETTINGS ${formatSettingsList(s.settings, indent)}`);
+      break;
+    }
+    case 'accessEntities': {
+      if (s.modifier) parts.push(s.modifier);
+      parts.push(s.objectType);
+      if (s.like) parts.push(fmtLike(s.like));
+      if (s.limit) parts.push(`LIMIT ${formatExpr(s.limit, indent)}`);
+      break;
+    }
+    case 'cluster':
+      parts.push('CLUSTER', quoteIdent(s.name));
+      break;
+    case 'columns': {
+      if (s.extended) parts.push('EXTENDED');
+      if (s.full) parts.push('FULL');
+      parts.push(s.keyword, `FROM ${fmtRef(s.table)}`);
+      if (s.from !== undefined) parts.push(`FROM ${quoteIdent(s.from)}`);
+      if (s.like) parts.push(fmtLike(s.like));
+      if (s.where) parts.push(`WHERE ${formatExpr(s.where, indent)}`);
+      if (s.limit) parts.push(`LIMIT ${formatExpr(s.limit, indent)}`);
+      break;
+    }
+    case 'indexes': {
+      if (s.extended) parts.push('EXTENDED');
+      parts.push(s.keyword, `FROM ${fmtRef(s.table)}`);
+      if (s.from !== undefined) parts.push(`FROM ${quoteIdent(s.from)}`);
+      if (s.where) parts.push(`WHERE ${formatExpr(s.where, indent)}`);
+      break;
+    }
+    case 'setting':
+      parts.push('SETTING', quoteIdent(s.name));
+      break;
+    case 'privileges':
+      parts.push('PRIVILEGES');
+      break;
+    case 'engines':
+      parts.push('ENGINES');
+      break;
+    case 'merges':
+      parts.push('MERGES');
+      break;
+    case 'access':
+      parts.push('ACCESS');
+      break;
+    case 'processlist':
+      if (s.full) parts.push('FULL');
+      parts.push('PROCESSLIST');
+      break;
+    case 'functions':
+      parts.push('FUNCTIONS');
+      if (s.like) parts.push(fmtLike(s.like));
+      break;
+    case 'grants':
+      parts.push('GRANTS');
+      if (s.for) parts.push(`FOR ${s.for.join(', ')}`);
+      if (s.withImplicit) parts.push('WITH IMPLICIT');
+      if (s.final) parts.push('FINAL');
+      break;
+    case 'createAccess':
+      parts.push('CREATE', s.entity, s.names.map(formatAccessControlName).join(', '));
+      break;
+    case 'createRowPolicy':
+      parts.push(
+        'CREATE ROW POLICY',
+        s.policies
+          .map((p) =>
+            p.table ? `${p.names.join(', ')} ON ${fmtRef(p.table)}` : p.names.join(', '),
+          )
+          .join(', '),
+      );
+      break;
+    case 'objectShorthand':
+      if (s.temporary) parts.push('TEMPORARY');
+      parts.push(s.objectType, fmtRef(s.table));
+      break;
+    case 'databaseShorthand':
+      parts.push('DATABASE', quoteIdent(s.database));
+      break;
+  }
+  let result = indent + parts.join(' ');
+  if (stmt.format) result += ` FORMAT ${stmt.format}`;
+  return result;
+}
+
+// Formats the text after the IDENTIFIED keyword from an auth-method array.
+// Shared by CREATE USER and ALTER USER (the caller supplies the IDENTIFIED keyword).
+//
+// Note: for password methods the auth-method *type* (e.g. `WITH sha256_password`)
+// is not preserved in the AST — only the secret is stored — so it is not echoed
+// here. SSH keys, by contrast, are reproduced verbatim.
+function formatAuthMethods(auth: AuthenticationData[]): string {
+  const parts = auth
+    .map((a) => {
+      if (a.sshKeys !== undefined) {
+        const keys = a.sshKeys.map(
+          (k) => `KEY '${escapeString(k.key)}' TYPE '${escapeString(k.type)}'`,
+        );
+        return `WITH ssh_key BY ${keys.join(', ')}`;
+      }
+      if (a.secret) return `BY '${escapeString(a.secret)}'`;
+      return '';
+    })
+    .filter(Boolean);
+  return parts.join(', ');
+}
+
+function formatAlterAccessStatement(
+  stmt:
+    | AlterUserStatement
+    | AlterRoleStatement
+    | AlterQuotaStatement
+    | AlterRowPolicyStatement
+    | AlterSettingsProfileStatement,
+  indent: string,
+): string {
+  if (stmt.kind === 'alterUser') {
+    let result = `${indent}ALTER USER`;
+    if (stmt.ifExists) result += ' IF EXISTS';
+    result += ` ${formatAccessControlNames(stmt.names)}`;
+    if (stmt.onCluster) result += ` ON CLUSTER ${quoteIdent(stmt.onCluster)}`;
+    for (const c of stmt.clauses) {
+      switch (c.kind) {
+        case 'rename':
+          result += ` RENAME TO ${formatAccessControlName(c.to)}`;
+          break;
+        case 'identified':
+          result += ` IDENTIFIED ${formatAuthMethods(c.auth)}`;
+          break;
+        case 'notIdentified':
+          result += ' NOT IDENTIFIED';
+          break;
+        case 'host':
+          result += c.mode ? ` ${c.mode} HOST` : ' HOST';
+          result += ` ${formatHostItems(c.hosts)}`;
+          break;
+        case 'settings':
+          result +=
+            c.settings === 'NONE'
+              ? ' SETTINGS NONE'
+              : ` SETTINGS ${formatAccessControlSettings(c.settings, indent)}`;
+          break;
+        case 'defaultRole':
+          result += ` DEFAULT ROLE ${formatRoleTarget(c.roles)}`;
+          break;
+        case 'defaultDatabase':
+          result += ` DEFAULT DATABASE ${quoteIdent(c.database)}`;
+          break;
+        case 'grantees':
+          result += ` GRANTEES ${formatRoleTarget(c.grantees)}`;
+          break;
+        case 'validUntil':
+          result += ` VALID UNTIL ${formatStringLiteral(c.value)}`;
+          break;
+      }
+    }
+    return result;
+  }
+  if (stmt.kind === 'alterRole') {
+    let result = `${indent}ALTER ROLE`;
+    if (stmt.ifExists) result += ' IF EXISTS';
+    result += ` ${formatAccessControlNames(stmt.names)}`;
+    if (stmt.onCluster) result += ` ON CLUSTER ${quoteIdent(stmt.onCluster)}`;
+    if (stmt.renameTo) result += ` RENAME TO ${formatAccessControlName(stmt.renameTo)}`;
+    if (stmt.settings !== undefined)
+      result += ` SETTINGS ${formatAccessControlSettings(stmt.settings, indent)}`;
+    return result;
+  }
+  if (stmt.kind === 'alterQuota') {
+    let result = `${indent}ALTER QUOTA`;
+    if (stmt.ifExists) result += ' IF EXISTS';
+    result += ` ${stmt.names.join(', ')}`;
+    if (stmt.onCluster) result += ` ON CLUSTER ${quoteIdent(stmt.onCluster)}`;
+    if (stmt.renameTo) result += ` RENAME TO ${stmt.renameTo}`;
+    if (stmt.keyed) {
+      result += 'notKeyed' in stmt.keyed ? ' NOT KEYED' : ` KEYED BY ${stmt.keyed.keys.join(', ')}`;
+    }
+    if (stmt.intervals) {
+      for (const interval of stmt.intervals) {
+        result += ' FOR';
+        if (interval.randomized) result += ' RANDOMIZED';
+        result += ` ${interval.duration} ${interval.unit}`;
+        if (interval.trackingOnly) result += ' TRACKING ONLY';
+        else if (interval.noLimits) result += ' NO LIMITS';
+        else if (interval.limits)
+          result +=
+            ' ' +
+            interval.limits.map((l) => `MAX ${l.name} = ${formatExpr(l.value, indent)}`).join(', ');
+      }
+    }
+    if (stmt.to) result += ` TO ${formatRoleTarget(stmt.to)}`;
+    return result;
+  }
+  if (stmt.kind === 'alterRowPolicy') {
+    let result = `${indent}ALTER ${stmt.hasRowKeyword ? 'ROW POLICY' : 'POLICY'}`;
+    if (stmt.ifExists) result += ' IF EXISTS';
+    const targets = stmt.targets
+      .map((t) => `${t.names.join(', ')} ON ${formatTableRef(t.table)}`)
+      .join(', ');
+    result += ` ${targets}`;
+    if (stmt.onCluster) result += ` ON CLUSTER ${quoteIdent(stmt.onCluster)}`;
+    if (stmt.renameTo) result += ` RENAME TO ${stmt.renameTo}`;
+    if (stmt.forSelect) result += ' FOR SELECT';
+    if (stmt.using) result += ` USING ${formatExpr(stmt.using, indent)}`;
+    if (stmt.restrictive) result += ` AS ${stmt.restrictive}`;
+    if (stmt.to) result += ` TO ${formatRoleTarget(stmt.to)}`;
+    return result;
+  }
+  // alterSettingsProfile
+  let result = `${indent}ALTER ${stmt.hasSettingsKeyword ? 'SETTINGS PROFILE' : 'PROFILE'}`;
+  if (stmt.ifExists) result += ' IF EXISTS';
+  result += ` ${stmt.names.join(', ')}`;
+  if (stmt.onCluster) result += ` ON CLUSTER ${quoteIdent(stmt.onCluster)}`;
+  if (stmt.renameTo) result += ` RENAME TO ${stmt.renameTo}`;
+  if (stmt.settings !== undefined)
+    result += ` SETTINGS ${formatAccessControlSettings(stmt.settings, indent)}`;
+  if (stmt.to) result += ` TO ${formatRoleTarget(stmt.to)}`;
+  return result;
+}
+
+function formatGrantStatement(stmt: GrantStatement, indent: string): string {
+  const fmtPriv = (p: GrantPrivilege) =>
+    p.columns && p.columns.length > 0
+      ? `${p.name}(${p.columns.map(quoteIdent).join(', ')})`
+      : p.name;
+  const fmtTarget = (t: GrantTarget) =>
+    t.database !== undefined ? `${t.database}.${t.table}` : t.table;
+  let result = `${indent}${stmt.operation}`;
+  if (stmt.optionFor) result += ` ${stmt.optionFor} OPTION FOR`;
+  if (stmt.onCluster) result += ` ON CLUSTER ${quoteIdent(stmt.onCluster)}`;
+  if (stmt.elements) {
+    result += ` ${stmt.elements
+      .map((el) => `${el.privileges.map(fmtPriv).join(', ')} ON ${fmtTarget(el.target)}`)
+      .join(', ')}`;
+  } else if (stmt.roles) {
+    result += ` ${stmt.roles.join(', ')}`;
+  }
+  result += ` ${stmt.operation === 'REVOKE' ? 'FROM' : 'TO'} ${stmt.grantees.join(', ')}`;
+  if (stmt.withOptions) {
+    for (const opt of stmt.withOptions) result += ` WITH ${opt} OPTION`;
+  }
+  return result;
+}
+
+function formatBackupStatement(stmt: BackupStatement, indent: string): string {
+  const fmtRef = (t: TableRef) =>
+    t.database ? `${quoteIdent(t.database)}.${quoteIdent(t.table)}` : quoteIdent(t.table);
+  const fmtElement = (el: BackupElement): string => {
+    switch (el.kind) {
+      case 'table':
+      case 'dictionary':
+      case 'view':
+      case 'temporaryTable': {
+        const keyword =
+          el.kind === 'temporaryTable'
+            ? 'TEMPORARY TABLE'
+            : el.kind === 'dictionary'
+              ? 'DICTIONARY'
+              : el.kind === 'view'
+                ? 'VIEW'
+                : 'TABLE';
+        let s = `${keyword} ${fmtRef(el.table)}`;
+        if (el.as) s += ` AS ${fmtRef(el.as)}`;
+        if (el.partitions && el.partitions.length > 0) {
+          s += ` PARTITION ${el.partitions.map((p) => formatExpr(p, indent)).join(', ')}`;
+        }
+        if (el.exceptColumns && el.exceptColumns.length > 0) {
+          s += ` EXCEPT COLUMNS (${el.exceptColumns.map(quoteIdent).join(', ')})`;
+        }
+        return s;
+      }
+      case 'database': {
+        let s = `DATABASE ${quoteIdent(el.name)}`;
+        if (el.as) s += ` AS ${quoteIdent(el.as)}`;
+        if (el.exceptTables && el.exceptTables.length > 0) {
+          s += ` EXCEPT TABLES ${el.exceptTables.map(quoteIdent).join(', ')}`;
+        }
+        return s;
+      }
+      case 'function':
+        return `FUNCTION ${quoteIdent(el.name)}`;
+      case 'namedCollection':
+        return `NAMED COLLECTION ${quoteIdent(el.name)}`;
+      case 'all': {
+        let s = 'ALL';
+        if (el.exceptDatabases && el.exceptDatabases.length > 0) {
+          s += ` EXCEPT DATABASES ${el.exceptDatabases.map(quoteIdent).join(', ')}`;
+        }
+        if (el.exceptTables && el.exceptTables.length > 0) {
+          s += ` EXCEPT TABLES ${el.exceptTables.map(fmtRef).join(', ')}`;
+        }
+        return s;
+      }
+    }
+  };
+  const d = stmt.destination;
+  let dest = d.name;
+  if (d.args !== undefined) {
+    dest += `(${d.args.map((a) => formatExpr(a, indent)).join(', ')})`;
+  }
+  let result = `${indent}${stmt.operation} ${stmt.elements.map(fmtElement).join(', ')}`;
+  result += ` ${stmt.operation === 'RESTORE' ? 'FROM' : 'TO'} ${dest}`;
+  if (stmt.onCluster) result += ` ON CLUSTER ${quoteIdent(stmt.onCluster)}`;
+  if (stmt.settings && stmt.settings.length > 0) {
+    result += ` SETTINGS ${formatSettingsList(stmt.settings, indent)}`;
+  }
+  if (stmt.wait) result += ` ${stmt.wait}`;
+  if (stmt.format) result += ` FORMAT ${stmt.format}`;
+  return result;
+}
+
+function formatTruncateStatement(stmt: TruncateStatement, indent: string): string {
   const parts: string[] = [`${indent}TRUNCATE`];
   if (stmt.targetType === 'TABLES') {
     if (stmt.allTables) parts.push('ALL');
@@ -917,7 +1336,7 @@ function formatTruncateStatement(stmt: import('./ast').TruncateStatement, indent
   return parts.join(' ');
 }
 
-function formatOptimizeStatement(stmt: import('./ast').OptimizeStatement, indent: string): string {
+function formatOptimizeStatement(stmt: OptimizeStatement, indent: string): string {
   let result = `${indent}OPTIMIZE TABLE ${formatTableRef(stmt.table)}`;
   if (stmt.onCluster) result += ` ON CLUSTER ${quoteIdent(stmt.onCluster)}`;
   if (stmt.partition) {
@@ -943,7 +1362,7 @@ function formatOptimizeStatement(stmt: import('./ast').OptimizeStatement, indent
   return result;
 }
 
-function formatDescribeStatement(stmt: import('./ast').DescribeStatement, indent: string): string {
+function formatDescribeStatement(stmt: DescribeStatement, indent: string): string {
   let target: string;
   if (stmt.target.kind === 'table') {
     target = formatTableRef(stmt.target.table);
@@ -966,10 +1385,7 @@ function formatDescribeStatement(stmt: import('./ast').DescribeStatement, indent
   return result;
 }
 
-function formatShowCreateStatement(
-  stmt: import('./ast').ShowCreateStatement,
-  indent: string,
-): string {
+function formatShowCreateStatement(stmt: ShowCreateStatement, indent: string): string {
   let result: string;
   if (stmt.targetType === 'DATABASE') {
     result = `${indent}SHOW CREATE DATABASE ${quoteIdent(stmt.database!)}`;
@@ -983,7 +1399,7 @@ function formatShowCreateStatement(
   return result;
 }
 
-function formatDetachStatement(stmt: import('./ast').DetachStatement, indent: string): string {
+function formatDetachStatement(stmt: DetachStatement, indent: string): string {
   const parts: string[] = [`${indent}DETACH`, stmt.targetType];
   if (stmt.ifExists) parts.push('IF EXISTS');
   if (stmt.targetType === 'DATABASE') {
@@ -997,7 +1413,7 @@ function formatDetachStatement(stmt: import('./ast').DetachStatement, indent: st
   return parts.join(' ');
 }
 
-function formatDeleteStatement(stmt: import('./ast').DeleteStatement, indent: string): string {
+function formatDeleteStatement(stmt: DeleteStatement, indent: string): string {
   let result = `${indent}DELETE FROM ${formatTableRef(stmt.table)}`;
   if (stmt.onCluster) result += ` ON CLUSTER ${quoteIdent(stmt.onCluster)}`;
   if (stmt.partition) {
@@ -1014,7 +1430,7 @@ function formatDeleteStatement(stmt: import('./ast').DeleteStatement, indent: st
   return result;
 }
 
-function formatUpdateStatement(stmt: import('./ast').UpdateStatement, indent: string): string {
+function formatUpdateStatement(stmt: UpdateStatement, indent: string): string {
   let result = `${indent}UPDATE ${formatTableRef(stmt.table)}`;
   if (stmt.onCluster) result += ` ON CLUSTER ${quoteIdent(stmt.onCluster)}`;
   const sets = stmt.assignments
@@ -1027,7 +1443,7 @@ function formatUpdateStatement(stmt: import('./ast').UpdateStatement, indent: st
   return result;
 }
 
-function formatCheckStatement(stmt: import('./ast').CheckStatement, indent: string): string {
+function formatCheckStatement(stmt: CheckStatement, indent: string): string {
   let result: string;
   if (stmt.targetType === 'ALL') {
     result = `${indent}CHECK ALL TABLES`;
@@ -1050,7 +1466,7 @@ function formatCheckStatement(stmt: import('./ast').CheckStatement, indent: stri
   return result;
 }
 
-function formatAttachStatement(stmt: import('./ast').AttachStatement, indent: string): string {
+function formatAttachStatement(stmt: AttachStatement, indent: string): string {
   const parts: string[] = [`${indent}ATTACH`, stmt.targetType];
   if (stmt.ifNotExists) parts.push('IF NOT EXISTS');
   if (stmt.targetType === 'DATABASE') {
@@ -1063,7 +1479,7 @@ function formatAttachStatement(stmt: import('./ast').AttachStatement, indent: st
   return parts.join(' ');
 }
 
-function formatRenameStatement(stmt: import('./ast').RenameStatement, indent: string): string {
+function formatRenameStatement(stmt: RenameStatement, indent: string): string {
   const keyword = stmt.exchange ? 'EXCHANGE' : 'RENAME';
   const pairs = stmt.pairs
     .map((p) => `${formatTableRef(p.from)} ${stmt.exchange ? 'AND' : 'TO'} ${formatTableRef(p.to)}`)
@@ -1078,7 +1494,7 @@ function formatRenameStatement(stmt: import('./ast').RenameStatement, indent: st
   return result;
 }
 
-function formatExistsStatement(stmt: import('./ast').ExistsStatement, indent: string): string {
+function formatExistsStatement(stmt: ExistsStatement, indent: string): string {
   const target =
     stmt.targetType === 'DATABASE' ? quoteIdent(stmt.database!) : formatTableRef(stmt.table!);
   let result = `${indent}EXISTS ${stmt.targetType} ${target}`;
@@ -1088,14 +1504,11 @@ function formatExistsStatement(stmt: import('./ast').ExistsStatement, indent: st
   return result;
 }
 
-function formatExecuteAsStatement(
-  stmt: import('./ast').ExecuteAsStatement,
-  indent: string,
-): string {
+function formatExecuteAsStatement(stmt: ExecuteAsStatement, indent: string): string {
   return `${indent}EXECUTE AS ${quoteIdent(stmt.user)} ${formatStatement(stmt.statement, indent)}`;
 }
 
-function formatKillStatement(stmt: import('./ast').KillStatement, indent: string): string {
+function formatKillStatement(stmt: KillStatement, indent: string): string {
   let result = `${indent}KILL ${stmt.target}`;
   if (stmt.onCluster) result += ` ON CLUSTER ${quoteIdent(stmt.onCluster)}`;
   result += ` WHERE ${formatExpr(stmt.where, indent)}`;
@@ -1108,7 +1521,7 @@ function formatKillStatement(stmt: import('./ast').KillStatement, indent: string
 }
 
 function formatCreateStatement(
-  stmt: Exclude<import('./ast').CreateStatement, CreateTableStatement>,
+  stmt: Exclude<CreateStatement, CreateTableStatement>,
   indent: string,
 ): string {
   switch (stmt.kind) {
@@ -1186,7 +1599,7 @@ function formatCreateMaterializedViewStatement(
   }
   if (stmt.toTable) result += `\nTO ${formatTableRef(stmt.toTable)}`;
   const mvPkInSchema = (stmt as Record<string, unknown>).primaryKeyInSchema as
-    | import('./ast').Expression[]
+    | Expression[]
     | undefined;
   if (stmt.tableElements || mvPkInSchema) {
     const innerIndent = indent + '    ';
@@ -1272,12 +1685,12 @@ function formatCreateDictionaryStatement(stmt: CreateDictionaryStatement, indent
       .map((p) => {
         // STRUCTURE value is an array of {name, type} column defs
         if (Array.isArray(p.value)) {
-          const cols = (p.value as { name: string; type: import('./ast').DataType }[])
+          const cols = (p.value as { name: string; type: DataType }[])
             .map((c) => `${quoteIdent(c.name)} ${formatDataType(c.type)}`)
             .join(' ');
           return `${p.name} (${cols})`;
         }
-        return `${p.name} ${formatExpr(p.value as import('./ast').Expression, indent)}`;
+        return `${p.name} ${formatExpr(p.value as Expression, indent)}`;
       })
       .join(' ');
     result += `\nSOURCE(${def.source.name}(${pairs}))`;
@@ -1330,25 +1743,8 @@ function formatCreateUserStatement(stmt: CreateUserStatement, indent: string): s
     if (allEmpty && Object.keys(stmt.auth[0]).length === 0) {
       result += ' NOT IDENTIFIED';
     } else {
-      const authParts = stmt.auth
-        .map((a) => {
-          if (a.sshKeys !== undefined) {
-            // SSH keys: emit placeholder keys
-            const keys = Array.from(
-              { length: a.sshKeys },
-              (_, i) => `KEY 'key${i}' TYPE 'ssh-rsa'`,
-            );
-            return `WITH ssh_key BY ${keys.join(', ')}`;
-          }
-          if (a.secret) {
-            return `BY '${escapeString(a.secret)}'`;
-          }
-          return '';
-        })
-        .filter(Boolean);
-      if (authParts.length > 0) {
-        result += ` IDENTIFIED ${authParts.join(', ')}`;
-      }
+      const auth = formatAuthMethods(stmt.auth);
+      if (auth) result += ` IDENTIFIED ${auth}`;
     }
   }
   if (stmt.onCluster) result += ` ON CLUSTER ${stmt.onCluster}`;
@@ -1654,7 +2050,7 @@ function formatEngine(engine: CreateTableStatement['engine'] & {}, indent: strin
   return result;
 }
 
-function formatDataType(dt: import('./ast').DataType): string {
+function formatDataType(dt: DataType): string {
   if (!dt.args) return dt.name;
   if (dt.args.length === 0) return `${dt.name}()`;
   const args = dt.args.map((a) => {
@@ -1680,7 +2076,7 @@ function formatDataType(dt: import('./ast').DataType): string {
   return `${dt.name}(${args.join(', ')})`;
 }
 
-function formatCodecItems(items: import('./ast').CodecItem[]): string {
+function formatCodecItems(items: CodecItem[]): string {
   const fmtCodecName = (name: string) =>
     /^[a-zA-Z_][a-zA-Z0-9_]*$/.test(name) ? name : quoteIdent(name);
   const parts = items.map((c) => {
@@ -1693,7 +2089,7 @@ function formatCodecItems(items: import('./ast').CodecItem[]): string {
   return parts.join(', ');
 }
 
-function formatIndexType(it: import('./ast').IndexType): string {
+function formatIndexType(it: IndexType): string {
   if (it.args !== undefined && it.args.length > 0) {
     return `${it.name}(${it.args.map((a) => formatExpr(a, '')).join(', ')})`;
   }
@@ -1701,7 +2097,7 @@ function formatIndexType(it: import('./ast').IndexType): string {
   return it.name;
 }
 
-function formatTableElement(el: import('./ast').TableElement, indent: string): string {
+function formatTableElement(el: TableElement, indent: string): string {
   switch (el.kind) {
     case 'columnDef': {
       const parts = [`${indent}${quoteIdent(el.name)}`];

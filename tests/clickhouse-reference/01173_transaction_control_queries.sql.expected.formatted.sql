@@ -17,11 +17,11 @@ CREATE TABLE mt2
 ENGINE = MergeTree
 ORDER BY n;
 
-commit; -- { serverError INVALID_TRANSACTION } -- no transaction
+COMMIT; -- { serverError INVALID_TRANSACTION } -- no transaction
 
-rollback; -- { serverError INVALID_TRANSACTION }
+ROLLBACK; -- { serverError INVALID_TRANSACTION }
 
-begin transaction;
+BEGIN TRANSACTION;
 
 INSERT INTO mt1;
 

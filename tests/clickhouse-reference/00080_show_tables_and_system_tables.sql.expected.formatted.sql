@@ -17,7 +17,9 @@ ENGINE = TinyLog;
 
 SHOW TABLES FROM {CLICKHOUSE_DATABASE:Identifier};
 
-SHOW TABLES IN system WHERE engine LIKE '%System%' AND name IN ('numbers', 'one') AND database = 'system';
+SHOW TABLES FROM `system` WHERE like(engine, '%System%')
+AND name IN ('numbers', 'one')
+AND database = 'system';
 
 SELECT
     name,

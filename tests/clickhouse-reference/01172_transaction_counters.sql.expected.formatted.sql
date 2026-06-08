@@ -19,7 +19,7 @@ SYSTEM stop merges txn_counters;
 
 SET throw_on_unsupported_query_inside_transaction = 0;
 
-begin transaction;
+BEGIN TRANSACTION;
 
 INSERT INTO txn_counters (n);
 
@@ -46,7 +46,7 @@ WHERE database = currentDatabase()
     AND table = 'txn_counters'
 ORDER BY `system`.parts.name ASC;
 
-rollback;
+ROLLBACK;
 
 INSERT INTO txn_counters (n);
 
@@ -77,7 +77,7 @@ SELECT
     5,
     transactionID().3 == serverUUID();
 
-commit;
+COMMIT;
 
 DETACH TABLE txn_counters;
 

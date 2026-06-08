@@ -25,7 +25,7 @@ DROP ROLE IF EXISTS test_role_01999;
 
 CREATE ROLE test_role_01999;
 
-GRANT test_role_01999 to test_user_01999;
+GRANT test_role_01999 TO test_user_01999;
 
 GRANT SELECT ON db1.tb1 TO test_user_01999;
 
@@ -35,7 +35,7 @@ GRANT SHOW ON db8.* TO test_user_01999;
 
 GRANT NONE TO test_user_01999 WITH REPLACE OPTION;
 
-GRANT NONE ON *.*, SELECT on db9.tb3 TO test_user_01999 WITH REPLACE OPTION;
+GRANT NONE ON *.*, SELECT ON db9.tb3 TO test_user_01999 WITH REPLACE OPTION;
 
 DROP ROLE IF EXISTS test_role_01999_1;
 

@@ -27,7 +27,7 @@ DROP TABLE db_01517_atomic.mv;
 -- ensure that the inner had been removed after sync drop
 DROP TABLE db_01517_atomic.source;
 
-show tables from db_01517_atomic;
+SHOW TABLES FROM db_01517_atomic;
 
 --
 -- Atomic
@@ -52,7 +52,7 @@ FROM db_01517_atomic_sync.source;
 -- drops it and hangs with Atomic engine, due to recursive DROP
 DROP TABLE db_01517_atomic_sync.mv;
 
-show tables from db_01517_atomic_sync;
+SHOW TABLES FROM db_01517_atomic_sync;
 
 --
 -- Ordinary
@@ -80,7 +80,7 @@ FROM db_01517_ordinary.source;
 -- drops it and hangs with Atomic engine, due to recursive DROP
 DROP TABLE db_01517_ordinary.mv;
 
-show tables from db_01517_ordinary;
+SHOW TABLES FROM db_01517_ordinary;
 
 DROP TABLE db_01517_atomic_sync.source;
 

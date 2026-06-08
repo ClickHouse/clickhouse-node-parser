@@ -1,1 +1,1 @@
-show functions like 'a\' or 1=1; --'
+SHOW FUNCTIONS LIKE 'a\' or 1=1;--';

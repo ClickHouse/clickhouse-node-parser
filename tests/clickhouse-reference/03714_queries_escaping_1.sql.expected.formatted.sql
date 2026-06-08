@@ -1,1 +1,1 @@
-show columns from a.b like 'a\' or 1=1; --'
+SHOW COLUMNS FROM a.b LIKE 'a\' or 1=1;--';

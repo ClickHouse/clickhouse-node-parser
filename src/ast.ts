@@ -1382,14 +1382,19 @@ export type RoleTarget =
 export type DefaultRoleClause = RoleTarget;
 
 /**
- * A SET TRANSACTION SNAPSHOT statement.
+ * A transaction control statement: `BEGIN [TRANSACTION]`, `COMMIT`, `ROLLBACK`,
+ * or `SET TRANSACTION SNAPSHOT n`.
  *
- * @example `SET TRANSACTION SNAPSHOT 1` → `{ kind: 'transactionControl', snapshot: '1' }`
+ * @example `BEGIN TRANSACTION` → `{ kind: 'transactionControl', action: 'begin' }`
+ * @example `COMMIT` → `{ kind: 'transactionControl', action: 'commit' }`
+ * @example `SET TRANSACTION SNAPSHOT 1` → `{ kind: 'transactionControl', action: 'snapshot', snapshot: '1' }`
  */
 export type TransactionControlStatement = {
   kind: 'transactionControl';
-  /** The snapshot number. */
-  snapshot: string;
+  /** Which transaction control action this statement performs. */
+  action: 'begin' | 'commit' | 'rollback' | 'snapshot';
+  /** The snapshot number (only present when `action` is `'snapshot'`). */
+  snapshot?: string;
 } & NodeMetadata;
 
 /**
@@ -1753,8 +1758,8 @@ export type CreateWorkloadStatement = {
 export type AuthenticationData = {
   /** Secret value (password, hash, realm, server name). */
   secret?: string;
-  /** Number of SSH keys (for ssh_key type). */
-  sshKeys?: number;
+  /** SSH public keys (for the `ssh_key` auth type): `KEY '<key>' TYPE '<type>'`. */
+  sshKeys?: { key: string; type: string }[];
 };
 
 /** `CREATE USER`. */
@@ -2045,13 +2050,21 @@ type AlterDelete = AlterCommandBase & {
 type AlterDropOrAttachPartition = AlterCommandBase & {
   commandType: 'DROP_PARTITION' | 'ATTACH_PARTITION';
   partition?: AlterPartitionExpr;
-  partName?: Literal;
+  partName?: Literal | QueryParam;
 };
 
-/** ALTER TABLE ... DROP DETACHED PARTITION expr */
+/** ALTER TABLE ... DROP DETACHED PARTITION expr (or DETACHED PART 'name') */
 type AlterDropDetachedPartition = AlterCommandBase & {
   commandType: 'DROP_DETACHED_PARTITION';
-  partition: AlterPartitionExpr;
+  partition?: AlterPartitionExpr;
+  partName?: Literal | QueryParam;
+};
+
+/** ALTER TABLE ... MODIFY REFRESH ... — refresh schedule for a refreshable materialized view */
+type AlterModifyRefresh = AlterCommandBase & {
+  commandType: 'MODIFY_REFRESH';
+  /** The refresh schedule text following the REFRESH keyword. */
+  refresh: string;
 };
 
 /** ALTER TABLE ... REPLACE PARTITION expr FROM table */
@@ -2180,6 +2193,7 @@ export type AlterCommand =
   | AlterResetSetting
   | AlterModifyQuery
   | AlterModifyComment
+  | AlterModifyRefresh
   | AlterApplyOrRewrite;
 
 /**
@@ -2303,6 +2317,325 @@ export type DropStatement = {
   settings?: SettingItem[];
   /** Optional FORMAT clause. */
   format?: string;
+} & NodeMetadata;
+
+/**
+ * An UNDROP TABLE statement: restores a recently dropped table.
+ *
+ * @example `UNDROP TABLE t` → `{ kind: 'undrop', table: { kind: 'tableRef', table: 't' } }`
+ */
+export type UndropStatement = {
+  kind: 'undrop';
+  /** The table being restored. */
+  table: TableRef;
+  /** Whether IF NOT EXISTS was specified. */
+  ifNotExists?: boolean;
+  /** Optional UUID literal value (without quotes). */
+  uuid?: string;
+  /** Optional ON CLUSTER clause. */
+  onCluster?: string;
+  /** Optional FORMAT clause. */
+  format?: string;
+} & NodeMetadata;
+
+/**
+ * A BACKUP/RESTORE destination, e.g. `Disk('backups', 'b.tar')`, `Memory('b1')`, `Null`.
+ */
+export type BackupDestination = {
+  /** The destination engine/function name (`Disk`, `S3`, `Memory`, `Null`, ...). */
+  name: string;
+  /** Arguments inside parentheses; `undefined` when no parentheses were present. */
+  args?: Expression[];
+};
+
+/** A single element in a BACKUP/RESTORE target list. */
+export type BackupElement =
+  | {
+      kind: 'table' | 'dictionary' | 'view' | 'temporaryTable';
+      /** The table being backed up/restored. */
+      table: TableRef;
+      /** Optional `AS [db.]name` rename target. */
+      as?: TableRef;
+      /** Optional `PARTITION(S) ...` expressions. */
+      partitions?: Expression[];
+      /** Optional `EXCEPT COLUMNS (...)` column names. */
+      exceptColumns?: string[];
+    }
+  | { kind: 'database'; name: Identifier; as?: Identifier; exceptTables?: Identifier[] }
+  | { kind: 'function'; name: Identifier }
+  | { kind: 'namedCollection'; name: Identifier }
+  | { kind: 'all'; exceptDatabases?: Identifier[]; exceptTables?: TableRef[] };
+
+/**
+ * A BACKUP or RESTORE statement.
+ *
+ * @example `BACKUP TABLE t TO Disk('d', 'b.zip')` →
+ *   `{ kind: 'backup', operation: 'BACKUP', elements: [{ kind: 'table', table: ... }], destination: { name: 'Disk', args: [...] } }`
+ */
+export type BackupStatement = {
+  kind: 'backup';
+  /** Whether this is a BACKUP or a RESTORE. */
+  operation: 'BACKUP' | 'RESTORE';
+  /** The list of backup targets. */
+  elements: BackupElement[];
+  /** The TO (BACKUP) / FROM (RESTORE) destination. */
+  destination: BackupDestination;
+  /** Optional ON CLUSTER clause. */
+  onCluster?: string;
+  /** Optional SETTINGS clause. */
+  settings?: SettingItem[];
+  /** Optional SYNC / ASYNC modifier. */
+  wait?: 'SYNC' | 'ASYNC';
+  /** Optional FORMAT clause. */
+  format?: string;
+} & NodeMetadata;
+
+/** A `[NOT] LIKE|ILIKE 'pattern'` filter used by several SHOW statements. */
+export type ShowLike = {
+  /** Whether the `NOT` keyword was present. */
+  not?: boolean;
+  /** True for `ILIKE`, false/absent for `LIKE`. */
+  ilike?: boolean;
+  /** The pattern string (without quotes). */
+  pattern: string;
+};
+
+/** A name with an optional `ON table` (used by SHOW CREATE ROW POLICY). */
+export type ShowRowPolicyName = { names: string[]; table?: TableRef };
+
+/**
+ * What a {@link ShowStatement} displays. Discriminated by `type`.
+ */
+export type ShowTarget =
+  // SHOW [TEMPORARY] TABLES|DATABASES|DICTIONARIES [FROM db] [[NOT] LIKE|ILIKE p] [WHERE e] [LIMIT e] [SETTINGS ...]
+  | {
+      type: 'listing';
+      objectType: 'TABLES' | 'DATABASES' | 'DICTIONARIES';
+      temporary?: boolean;
+      from?: Identifier;
+      like?: ShowLike;
+      where?: Expression;
+      limit?: Expression;
+      settings?: SettingItem[];
+    }
+  // SHOW [CURRENT|ENABLED|CHANGED] CLUSTERS|ROLES|USERS|QUOTAS|POLICIES|PROFILES|COLLECTIONS|WARNINGS|SETTINGS
+  | {
+      type: 'accessEntities';
+      objectType:
+        | 'CLUSTERS'
+        | 'ROLES'
+        | 'USERS'
+        | 'QUOTAS'
+        | 'ROW POLICIES'
+        | 'SETTINGS PROFILES'
+        | 'NAMED COLLECTIONS'
+        | 'WARNINGS'
+        | 'SETTINGS';
+      modifier?: 'CURRENT' | 'ENABLED' | 'CHANGED';
+      like?: ShowLike;
+      limit?: Expression;
+    }
+  // SHOW CLUSTER name
+  | { type: 'cluster'; name: Identifier }
+  // SHOW [EXTENDED] [FULL] COLUMNS|FIELDS FROM table [FROM db] [[NOT] LIKE|ILIKE p] [WHERE e] [LIMIT e]
+  | {
+      type: 'columns';
+      keyword: 'COLUMNS' | 'FIELDS';
+      extended?: boolean;
+      full?: boolean;
+      table: TableRef;
+      from?: Identifier;
+      like?: ShowLike;
+      where?: Expression;
+      limit?: Expression;
+    }
+  // SHOW [EXTENDED] INDEX|INDEXES|INDICES|KEYS FROM table [FROM db] [WHERE e]
+  | {
+      type: 'indexes';
+      keyword: 'INDEX' | 'INDEXES' | 'INDICES' | 'KEYS';
+      extended?: boolean;
+      table: TableRef;
+      from?: Identifier;
+      where?: Expression;
+    }
+  // SHOW [SETTING] name
+  | { type: 'setting'; name: Identifier }
+  // Keyword-only forms with no arguments.
+  | { type: 'privileges' }
+  | { type: 'engines' }
+  | { type: 'merges' }
+  | { type: 'access' }
+  | { type: 'processlist'; full?: boolean }
+  // SHOW FUNCTIONS [[LIKE|ILIKE] p]
+  | { type: 'functions'; like?: ShowLike }
+  // SHOW GRANTS [FOR users] [WITH IMPLICIT] [FINAL]
+  | { type: 'grants'; for?: string[]; withImplicit?: boolean; final?: boolean }
+  // SHOW CREATE USER|ROLE|QUOTA|SETTINGS PROFILE|NAMED COLLECTION name {, name}
+  | {
+      type: 'createAccess';
+      entity: 'USER' | 'ROLE' | 'QUOTA' | 'SETTINGS PROFILE' | 'NAMED COLLECTION';
+      names: AccessControlName[];
+    }
+  // SHOW CREATE [ROW] POLICY name ON table {, ...}
+  | { type: 'createRowPolicy'; policies: ShowRowPolicyName[] }
+  // SHOW TABLE|VIEW name  (shorthand for SHOW CREATE TABLE/VIEW)
+  | { type: 'objectShorthand'; objectType: 'TABLE' | 'VIEW'; temporary?: boolean; table: TableRef }
+  // SHOW DATABASE name  (shorthand for SHOW CREATE DATABASE)
+  | { type: 'databaseShorthand'; database: Identifier };
+
+/**
+ * A SHOW statement.
+ *
+ * @example `SHOW TABLES FROM db` →
+ *   `{ kind: 'show', show: { type: 'listing', objectType: 'TABLES', from: 'db' } }`
+ */
+export type ShowStatement = {
+  kind: 'show';
+  /** The structured description of what is being shown. */
+  show: ShowTarget;
+  /** Optional trailing FORMAT clause. */
+  format?: string;
+} & NodeMetadata;
+
+/** A single privilege in a GRANT/REVOKE statement, e.g. `SELECT(col1, col2)`. */
+export type GrantPrivilege = {
+  /** The privilege name (may be multi-word, e.g. `CREATE TEMPORARY TABLE`). */
+  name: string;
+  /** Optional column list for column-level privileges. */
+  columns?: string[];
+};
+
+/**
+ * The `ON` target of a privilege grant.
+ *
+ * Parts may be `*` (wildcard) or wildcard-suffixed identifiers like `test*`.
+ *
+ * @example `db1.*` → `{ database: 'db1', table: '*' }`
+ * @example `*.*` → `{ database: '*', table: '*' }`
+ * @example `S3` → `{ table: 'S3' }`
+ */
+export type GrantTarget = {
+  /** Database part (absent for single-part targets). */
+  database?: string;
+  /** Table/object part. */
+  table: string;
+};
+
+/**
+ * One `privileges ON target` element of a privilege grant.
+ *
+ * A single GRANT may grant several privileges on several targets, e.g.
+ * `GRANT SELECT ON a.*, INSERT ON b.* TO u`.
+ */
+export type GrantElement = {
+  /** Privileges granted/revoked on this target. */
+  privileges: GrantPrivilege[];
+  /** The `ON` target. */
+  target: GrantTarget;
+};
+
+/**
+ * A GRANT or REVOKE statement.
+ *
+ * Either `elements` (privilege grant) or `roles` (role grant) is set.
+ *
+ * @example `GRANT SELECT ON db.* TO u` →
+ *   `{ kind: 'grant', operation: 'GRANT', elements: [{ privileges: [{ name: 'SELECT' }], target: { database: 'db', table: '*' } }], grantees: ['u'] }`
+ */
+export type GrantStatement = {
+  kind: 'grant';
+  /** Whether this grants or revokes. */
+  operation: 'GRANT' | 'REVOKE';
+  /** Privilege-on-target elements (privilege grant). */
+  elements?: GrantElement[];
+  /** Role names being granted/revoked (role grant). */
+  roles?: string[];
+  /** The users/roles receiving (GRANT) or losing (REVOKE) the grant. */
+  grantees: string[];
+  /** Optional ON CLUSTER clause. */
+  onCluster?: string;
+  /** REVOKE `GRANT OPTION FOR` / `ADMIN OPTION FOR` prefix. */
+  optionFor?: 'GRANT' | 'ADMIN';
+  /** Trailing `WITH ... OPTION` modifiers. */
+  withOptions?: ('GRANT' | 'ADMIN' | 'REPLACE')[];
+} & NodeMetadata;
+
+/** A single clause of an ALTER USER statement. */
+export type AlterUserClause =
+  | { kind: 'rename'; to: AccessControlName }
+  | { kind: 'identified'; auth: AuthenticationData[] }
+  | { kind: 'notIdentified' }
+  | { kind: 'host'; mode?: 'ADD' | 'DROP'; hosts: HostItem[] }
+  | { kind: 'settings'; settings: AccessControlSettingsItem[] | 'NONE' }
+  | { kind: 'defaultRole'; roles: RoleTarget }
+  | { kind: 'defaultDatabase'; database: string }
+  | { kind: 'grantees'; grantees: RoleTarget }
+  | { kind: 'validUntil'; value: string };
+
+/** `ALTER USER`. */
+export type AlterUserStatement = {
+  kind: 'alterUser';
+  names: AccessControlName[];
+  ifExists?: boolean;
+  onCluster?: string;
+  /** Ordered clauses applied to the user(s). */
+  clauses: AlterUserClause[];
+} & NodeMetadata;
+
+/** `ALTER ROLE`. */
+export type AlterRoleStatement = {
+  kind: 'alterRole';
+  names: AccessControlName[];
+  ifExists?: boolean;
+  onCluster?: string;
+  renameTo?: AccessControlName;
+  settings?: AccessControlSettingsItem[] | 'NONE';
+} & NodeMetadata;
+
+/** `ALTER QUOTA`. */
+export type AlterQuotaStatement = {
+  kind: 'alterQuota';
+  names: string[];
+  ifExists?: boolean;
+  onCluster?: string;
+  renameTo?: string;
+  keyed?: { notKeyed: true } | { keys: string[] };
+  intervals?: {
+    randomized?: boolean;
+    duration: string;
+    unit: string;
+    trackingOnly?: boolean;
+    noLimits?: boolean;
+    limits?: { name: string; value: Expression }[];
+  }[];
+  to?: RoleTarget;
+} & NodeMetadata;
+
+/** `ALTER ROW POLICY` (or `ALTER POLICY`). */
+export type AlterRowPolicyStatement = {
+  kind: 'alterRowPolicy';
+  hasRowKeyword?: boolean;
+  targets: { names: string[]; table: TableRef }[];
+  ifExists?: boolean;
+  onCluster?: string;
+  renameTo?: string;
+  /** Whether a `FOR SELECT` clause was present. */
+  forSelect?: boolean;
+  using?: Expression;
+  restrictive?: 'RESTRICTIVE' | 'PERMISSIVE';
+  to?: RoleTarget;
+} & NodeMetadata;
+
+/** `ALTER SETTINGS PROFILE` (or `ALTER PROFILE`). */
+export type AlterSettingsProfileStatement = {
+  kind: 'alterSettingsProfile';
+  hasSettingsKeyword?: boolean;
+  names: string[];
+  ifExists?: boolean;
+  onCluster?: string;
+  renameTo?: string;
+  settings?: AccessControlSettingsItem[] | 'NONE';
+  to?: RoleTarget;
 } & NodeMetadata;
 
 /**
@@ -2519,6 +2852,15 @@ export type Statement =
   | InsertStatement
   | TruncateStatement
   | DropStatement
+  | UndropStatement
+  | BackupStatement
+  | GrantStatement
+  | ShowStatement
+  | AlterUserStatement
+  | AlterRoleStatement
+  | AlterQuotaStatement
+  | AlterRowPolicyStatement
+  | AlterSettingsProfileStatement
   | OptimizeStatement
   | DescribeStatement
   | ShowCreateStatement
@@ -2601,6 +2943,15 @@ export interface ASTNodeKindMap {
   insert: InsertStatement;
   truncate: TruncateStatement;
   drop: DropStatement;
+  undrop: UndropStatement;
+  backup: BackupStatement;
+  grant: GrantStatement;
+  show: ShowStatement;
+  alterUser: AlterUserStatement;
+  alterRole: AlterRoleStatement;
+  alterQuota: AlterQuotaStatement;
+  alterRowPolicy: AlterRowPolicyStatement;
+  alterSettingsProfile: AlterSettingsProfileStatement;
   optimize: OptimizeStatement;
   describe: DescribeStatement;
   showCreate: ShowCreateStatement;
@@ -2839,7 +3190,8 @@ export const TransactionControlStatementSchema: z.ZodType<TransactionControlStat
   () =>
     z.object({
       kind: z.literal('transactionControl'),
-      snapshot: z.string(),
+      action: z.enum(['begin', 'commit', 'rollback', 'snapshot']),
+      snapshot: z.string().optional(),
       ...ExprMetadataFields,
     }),
 );
@@ -3168,7 +3520,7 @@ export const CreateUserStatementSchema: z.ZodType<CreateUserStatement> = z.lazy(
       .array(
         z.object({
           secret: z.string().optional(),
-          sshKeys: z.number().optional(),
+          sshKeys: z.array(z.object({ key: z.string(), type: z.string() })).optional(),
         }),
       )
       .optional(),
@@ -3445,18 +3797,24 @@ export const AlterCommandSchema: z.ZodType<AlterCommand> = z.lazy(() =>
       ...AlterCommandBaseFields,
       commandType: z.literal('DROP_PARTITION'),
       partition: AlterPartitionExprSchema.optional(),
-      partName: LiteralSchema.optional(),
+      partName: z.union([LiteralSchema, QueryParamSchema]).optional(),
     }),
     z.object({
       ...AlterCommandBaseFields,
       commandType: z.literal('ATTACH_PARTITION'),
       partition: AlterPartitionExprSchema.optional(),
-      partName: LiteralSchema.optional(),
+      partName: z.union([LiteralSchema, QueryParamSchema]).optional(),
     }),
     z.object({
       ...AlterCommandBaseFields,
       commandType: z.literal('DROP_DETACHED_PARTITION'),
-      partition: AlterPartitionExprSchema,
+      partition: AlterPartitionExprSchema.optional(),
+      partName: z.union([LiteralSchema, QueryParamSchema]).optional(),
+    }),
+    z.object({
+      ...AlterCommandBaseFields,
+      commandType: z.literal('MODIFY_REFRESH'),
+      refresh: z.string(),
     }),
     z.object({
       ...AlterCommandBaseFields,
@@ -3633,6 +3991,299 @@ export const DropStatementSchema: z.ZodType<DropStatement> = z.lazy(() =>
     format: z.string().optional(),
     ...ExprMetadataFields,
   }),
+);
+
+/** Zod schema for {@link UndropStatement}. */
+export const UndropStatementSchema: z.ZodType<UndropStatement> = z.lazy(() =>
+  z.object({
+    kind: z.literal('undrop'),
+    table: TableRefSchema,
+    ifNotExists: z.boolean().optional(),
+    uuid: z.string().optional(),
+    onCluster: z.string().optional(),
+    format: z.string().optional(),
+    ...ExprMetadataFields,
+  }),
+);
+
+/** Zod schema for {@link BackupDestination}. */
+export const BackupDestinationSchema: z.ZodType<BackupDestination> = z.lazy(() =>
+  z.object({
+    name: z.string(),
+    args: z.array(ExpressionSchema).optional(),
+  }),
+);
+
+/** Zod schema for {@link BackupElement}. */
+export const BackupElementSchema: z.ZodType<BackupElement> = z.lazy(() =>
+  z.union([
+    z.object({
+      kind: z.enum(['table', 'dictionary', 'view', 'temporaryTable']),
+      table: TableRefSchema,
+      as: TableRefSchema.optional(),
+      partitions: z.array(ExpressionSchema).optional(),
+      exceptColumns: z.array(z.string()).optional(),
+    }),
+    z.object({
+      kind: z.literal('database'),
+      name: IdentifierSchema,
+      as: IdentifierSchema.optional(),
+      exceptTables: z.array(IdentifierSchema).optional(),
+    }),
+    z.object({ kind: z.literal('function'), name: IdentifierSchema }),
+    z.object({ kind: z.literal('namedCollection'), name: IdentifierSchema }),
+    z.object({
+      kind: z.literal('all'),
+      exceptDatabases: z.array(IdentifierSchema).optional(),
+      exceptTables: z.array(TableRefSchema).optional(),
+    }),
+  ]),
+);
+
+/** Zod schema for {@link BackupStatement}. */
+export const BackupStatementSchema: z.ZodType<BackupStatement> = z.lazy(() =>
+  z.object({
+    kind: z.literal('backup'),
+    operation: z.enum(['BACKUP', 'RESTORE']),
+    elements: z.array(BackupElementSchema),
+    destination: BackupDestinationSchema,
+    onCluster: z.string().optional(),
+    settings: z.array(SettingItemSchema).optional(),
+    wait: z.enum(['SYNC', 'ASYNC']).optional(),
+    format: z.string().optional(),
+    ...ExprMetadataFields,
+  }),
+);
+
+/** Zod schema for {@link GrantStatement}. */
+export const GrantStatementSchema: z.ZodType<GrantStatement> = z.lazy(() =>
+  z.object({
+    kind: z.literal('grant'),
+    operation: z.enum(['GRANT', 'REVOKE']),
+    elements: z
+      .array(
+        z.object({
+          privileges: z.array(
+            z.object({ name: z.string(), columns: z.array(z.string()).optional() }),
+          ),
+          target: z.object({ database: z.string().optional(), table: z.string() }),
+        }),
+      )
+      .optional(),
+    roles: z.array(z.string()).optional(),
+    grantees: z.array(z.string()),
+    onCluster: z.string().optional(),
+    optionFor: z.enum(['GRANT', 'ADMIN']).optional(),
+    withOptions: z.array(z.enum(['GRANT', 'ADMIN', 'REPLACE'])).optional(),
+    ...ExprMetadataFields,
+  }),
+);
+
+const ShowLikeSchema: z.ZodType<ShowLike> = z.object({
+  not: z.boolean().optional(),
+  ilike: z.boolean().optional(),
+  pattern: z.string(),
+});
+
+/** Zod schema for {@link ShowStatement}. */
+export const ShowStatementSchema: z.ZodType<ShowStatement> = z.lazy(() =>
+  z.object({
+    kind: z.literal('show'),
+    show: z.union([
+      z.object({
+        type: z.literal('listing'),
+        objectType: z.enum(['TABLES', 'DATABASES', 'DICTIONARIES']),
+        temporary: z.boolean().optional(),
+        from: IdentifierSchema.optional(),
+        like: ShowLikeSchema.optional(),
+        where: ExpressionSchema.optional(),
+        limit: ExpressionSchema.optional(),
+        settings: z.array(SettingItemSchema).optional(),
+      }),
+      z.object({
+        type: z.literal('accessEntities'),
+        objectType: z.enum([
+          'CLUSTERS',
+          'ROLES',
+          'USERS',
+          'QUOTAS',
+          'ROW POLICIES',
+          'SETTINGS PROFILES',
+          'NAMED COLLECTIONS',
+          'WARNINGS',
+          'SETTINGS',
+        ]),
+        modifier: z.enum(['CURRENT', 'ENABLED', 'CHANGED']).optional(),
+        like: ShowLikeSchema.optional(),
+        limit: ExpressionSchema.optional(),
+      }),
+      z.object({ type: z.literal('cluster'), name: IdentifierSchema }),
+      z.object({
+        type: z.literal('columns'),
+        keyword: z.enum(['COLUMNS', 'FIELDS']),
+        extended: z.boolean().optional(),
+        full: z.boolean().optional(),
+        table: TableRefSchema,
+        from: IdentifierSchema.optional(),
+        like: ShowLikeSchema.optional(),
+        where: ExpressionSchema.optional(),
+        limit: ExpressionSchema.optional(),
+      }),
+      z.object({
+        type: z.literal('indexes'),
+        keyword: z.enum(['INDEX', 'INDEXES', 'INDICES', 'KEYS']),
+        extended: z.boolean().optional(),
+        table: TableRefSchema,
+        from: IdentifierSchema.optional(),
+        where: ExpressionSchema.optional(),
+      }),
+      z.object({ type: z.literal('setting'), name: IdentifierSchema }),
+      z.object({ type: z.literal('privileges') }),
+      z.object({ type: z.literal('engines') }),
+      z.object({ type: z.literal('merges') }),
+      z.object({ type: z.literal('access') }),
+      z.object({ type: z.literal('processlist'), full: z.boolean().optional() }),
+      z.object({ type: z.literal('functions'), like: ShowLikeSchema.optional() }),
+      z.object({
+        type: z.literal('grants'),
+        for: z.array(z.string()).optional(),
+        withImplicit: z.boolean().optional(),
+        final: z.boolean().optional(),
+      }),
+      z.object({
+        type: z.literal('createAccess'),
+        entity: z.enum(['USER', 'ROLE', 'QUOTA', 'SETTINGS PROFILE', 'NAMED COLLECTION']),
+        names: z.array(AccessControlNameSchema),
+      }),
+      z.object({
+        type: z.literal('createRowPolicy'),
+        policies: z.array(
+          z.object({ names: z.array(z.string()), table: TableRefSchema.optional() }),
+        ),
+      }),
+      z.object({
+        type: z.literal('objectShorthand'),
+        objectType: z.enum(['TABLE', 'VIEW']),
+        temporary: z.boolean().optional(),
+        table: TableRefSchema,
+      }),
+      z.object({ type: z.literal('databaseShorthand'), database: IdentifierSchema }),
+    ]),
+    format: z.string().optional(),
+    ...ExprMetadataFields,
+  }),
+);
+
+const AuthDataArraySchema = z.array(
+  z.object({
+    secret: z.string().optional(),
+    sshKeys: z.array(z.object({ key: z.string(), type: z.string() })).optional(),
+  }),
+);
+
+/** Zod schema for {@link AlterUserStatement}. */
+export const AlterUserStatementSchema: z.ZodType<AlterUserStatement> = z.lazy(() =>
+  z.object({
+    kind: z.literal('alterUser'),
+    names: z.array(AccessControlNameSchema),
+    ifExists: z.boolean().optional(),
+    onCluster: z.string().optional(),
+    clauses: z.array(
+      z.union([
+        z.object({ kind: z.literal('rename'), to: AccessControlNameSchema }),
+        z.object({ kind: z.literal('identified'), auth: AuthDataArraySchema }),
+        z.object({ kind: z.literal('notIdentified') }),
+        z.object({
+          kind: z.literal('host'),
+          mode: z.enum(['ADD', 'DROP']).optional(),
+          hosts: z.array(HostItemSchema),
+        }),
+        z.object({
+          kind: z.literal('settings'),
+          settings: z.union([z.array(AccessControlSettingsItemSchema), z.literal('NONE' as const)]),
+        }),
+        z.object({ kind: z.literal('defaultRole'), roles: RoleTargetSchema }),
+        z.object({ kind: z.literal('defaultDatabase'), database: z.string() }),
+        z.object({ kind: z.literal('grantees'), grantees: RoleTargetSchema }),
+        z.object({ kind: z.literal('validUntil'), value: z.string() }),
+      ]),
+    ),
+    ...ExprMetadataFields,
+  }),
+);
+
+/** Zod schema for {@link AlterRoleStatement}. */
+export const AlterRoleStatementSchema: z.ZodType<AlterRoleStatement> = z.lazy(() =>
+  z.object({
+    kind: z.literal('alterRole'),
+    names: z.array(AccessControlNameSchema),
+    ifExists: z.boolean().optional(),
+    onCluster: z.string().optional(),
+    renameTo: AccessControlNameSchema.optional(),
+    settings: AccessControlSettingsField,
+    ...ExprMetadataFields,
+  }),
+);
+
+/** Zod schema for {@link AlterQuotaStatement}. */
+export const AlterQuotaStatementSchema: z.ZodType<AlterQuotaStatement> = z.lazy(() =>
+  z.object({
+    kind: z.literal('alterQuota'),
+    names: z.array(z.string()),
+    ifExists: z.boolean().optional(),
+    onCluster: z.string().optional(),
+    renameTo: z.string().optional(),
+    keyed: z
+      .union([z.object({ notKeyed: z.literal(true) }), z.object({ keys: z.array(z.string()) })])
+      .optional(),
+    intervals: z
+      .array(
+        z.object({
+          randomized: z.boolean().optional(),
+          duration: z.string(),
+          unit: z.string(),
+          trackingOnly: z.boolean().optional(),
+          noLimits: z.boolean().optional(),
+          limits: z.array(z.object({ name: z.string(), value: ExpressionSchema })).optional(),
+        }),
+      )
+      .optional(),
+    to: RoleTargetSchema.optional(),
+    ...ExprMetadataFields,
+  }),
+);
+
+/** Zod schema for {@link AlterRowPolicyStatement}. */
+export const AlterRowPolicyStatementSchema: z.ZodType<AlterRowPolicyStatement> = z.lazy(() =>
+  z.object({
+    kind: z.literal('alterRowPolicy'),
+    hasRowKeyword: z.boolean().optional(),
+    targets: z.array(z.object({ names: z.array(z.string()), table: TableRefSchema })),
+    ifExists: z.boolean().optional(),
+    onCluster: z.string().optional(),
+    renameTo: z.string().optional(),
+    forSelect: z.boolean().optional(),
+    using: ExpressionSchema.optional(),
+    restrictive: z.enum(['RESTRICTIVE', 'PERMISSIVE']).optional(),
+    to: RoleTargetSchema.optional(),
+    ...ExprMetadataFields,
+  }),
+);
+
+/** Zod schema for {@link AlterSettingsProfileStatement}. */
+export const AlterSettingsProfileStatementSchema: z.ZodType<AlterSettingsProfileStatement> = z.lazy(
+  () =>
+    z.object({
+      kind: z.literal('alterSettingsProfile'),
+      hasSettingsKeyword: z.boolean().optional(),
+      names: z.array(z.string()),
+      ifExists: z.boolean().optional(),
+      onCluster: z.string().optional(),
+      renameTo: z.string().optional(),
+      settings: AccessControlSettingsField,
+      to: RoleTargetSchema.optional(),
+      ...ExprMetadataFields,
+    }),
 );
 
 /** Zod schema for {@link OptimizeStatement}. */
@@ -3842,6 +4493,15 @@ export const StatementSchema: z.ZodType<Statement> = z.lazy(() =>
     InsertStatementSchema,
     TruncateStatementSchema,
     DropStatementSchema,
+    UndropStatementSchema,
+    BackupStatementSchema,
+    GrantStatementSchema,
+    ShowStatementSchema,
+    AlterUserStatementSchema,
+    AlterRoleStatementSchema,
+    AlterQuotaStatementSchema,
+    AlterRowPolicyStatementSchema,
+    AlterSettingsProfileStatementSchema,
     OptimizeStatementSchema,
     DescribeStatementSchema,
     ShowCreateStatementSchema,
