@@ -2242,7 +2242,7 @@ function formatIntersectStatement(stmt: IntersectStatement, indent: string): str
     }
     return str;
   };
-  let result = `${wrapLeft(stmt.left, leftStr)}\n${stmt.op}\n${wrapRight(stmt.right, rightStr)}`;
+  let result = `${wrapLeft(stmt.left, leftStr)}\n${stmt.op}${stmt.distinct ? ' DISTINCT' : ''}\n${wrapRight(stmt.right, rightStr)}`;
   result += formatTrailingClauses(stmt, indent);
   return result;
 }
@@ -2751,8 +2751,13 @@ function formatFunctionCall(expr: FunctionCall, indent: string): string {
   } else {
     call = `${funcName}(${formatArgList(expr.args, indent)}${settingsStr})`;
   }
+  if (expr.nullsAction) {
+    call += ` ${expr.nullsAction}`;
+  }
   if (expr.window) {
     call += ` OVER (${formatWindowSpec(expr.window, indent)})`;
+  } else if (expr.windowName !== undefined) {
+    call += ` OVER ${quoteIdent(expr.windowName)}`;
   }
   return call;
 }
@@ -2980,7 +2985,11 @@ function formatFromExpr(from: FromExpr, outerIndent: string): string[] {
   if (from.kind === 'joinExpr') {
     const leftLines = formatFromExpr(from.left, outerIndent);
     const rightStr = formatFromAtom(from.right, innerIndent);
-    const lines = [...leftLines, `${outerIndent}${from.joinType} JOIN ${rightStr}`];
+    if (from.comma) {
+      return [...leftLines, `${outerIndent}, ${rightStr}`];
+    }
+    const qualifiers = `${from.global ? 'GLOBAL ' : ''}${from.strictness ? `${from.strictness} ` : ''}`;
+    const lines = [...leftLines, `${outerIndent}${qualifiers}${from.joinType} JOIN ${rightStr}`];
     if (from.constraint) lines.push(formatJoinConstraint(from.constraint, innerIndent));
     return lines;
   }
@@ -2992,6 +3001,7 @@ function formatFromExpr(from: FromExpr, outerIndent: string): string[] {
 
 function formatOrderByItemInline(item: OrderByItem, indent: string): string {
   let result = `${formatExpr(item.expr, indent)} ${item.direction}`;
+  if (item.nullsFirst !== undefined) result += item.nullsFirst ? ' NULLS FIRST' : ' NULLS LAST';
   if (item.collate !== undefined) result += ` COLLATE '${escapeString(item.collate)}'`;
   if (
     item.fillFrom !== undefined ||
@@ -3015,6 +3025,7 @@ function formatOrderByItemInline(item: OrderByItem, indent: string): string {
 
 function formatOrderByItem(item: OrderByItem, indent: string): string {
   let result = `${indent}${formatExpr(item.expr, indent)} ${item.direction}`;
+  if (item.nullsFirst !== undefined) result += item.nullsFirst ? ' NULLS FIRST' : ' NULLS LAST';
   if (item.collate !== undefined) result += ` COLLATE '${escapeString(item.collate)}'`;
   if (
     item.fillFrom !== undefined ||

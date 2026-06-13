@@ -4,7 +4,7 @@ FROM
         SELECT CAST('[(1, ''a'')]', 'String') AS t
         GROUP BY GROUPING SETS ((1), (printf(printf(NULL, 7, printf(isNullable(7), 7, '%%d: %d', 7, 7, 7, NULL), 7, materialize(toUInt256(7)), '%%d: %d', isNull(toNullable(7)), 7), materialize(toNullable(NULL)))), (isNull(isZeroOrNull(isNullable(7)))))
     ) AS na
-CROSS JOIN (
+, (
         SELECT CAST(toNullable('[(1, ''a'')]'), 'String') AS t
         GROUP BY
             1,

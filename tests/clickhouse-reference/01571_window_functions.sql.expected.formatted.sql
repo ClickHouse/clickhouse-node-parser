@@ -42,8 +42,8 @@ FROM numbers(10); -- { serverError BAD_ARGUMENTS }
 -- default arguments of lagInFrame can be a subtype of the argument
 SELECT
     number,
-    lagInFrame(toNullable(number), 2, NULL),
-    lagInFrame(number, 2, 1)
+    lagInFrame(toNullable(number), 2, NULL) OVER w,
+    lagInFrame(number, 2, 1) OVER w
 FROM numbers(10)
 WINDOW w AS (ORDER BY number ASC);
 

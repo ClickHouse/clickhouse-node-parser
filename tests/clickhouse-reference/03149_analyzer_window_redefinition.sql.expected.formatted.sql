@@ -13,7 +13,7 @@ INSERT INTO users;
 
 INSERT INTO users;
 
-SELECT count(*)
+SELECT count(*) OVER w
 FROM users
 WINDOW
     w AS (ORDER BY uid ASC),

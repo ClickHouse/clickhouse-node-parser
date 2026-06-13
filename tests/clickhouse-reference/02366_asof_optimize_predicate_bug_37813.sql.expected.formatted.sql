@@ -32,7 +32,7 @@ WITH v1 AS (
         t2.c3
     FROM
         t1
-    INNER JOIN t2
+    ASOF INNER JOIN t2
         USING (c1, c2)
 )
 

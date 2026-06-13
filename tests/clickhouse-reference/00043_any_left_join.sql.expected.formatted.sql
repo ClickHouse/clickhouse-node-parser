@@ -5,7 +5,7 @@ SELECT
     any(visits)
 FROM
     test.hits
-LEFT JOIN (
+ANY LEFT JOIN (
         SELECT
             StartDate AS EventDate,
             sum(Sign) AS visits

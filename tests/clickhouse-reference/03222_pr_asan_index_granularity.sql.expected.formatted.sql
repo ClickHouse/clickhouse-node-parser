@@ -23,7 +23,7 @@ SELECT
 FROM test
 PREWHERE toNullable(toNullable(11))
 WHERE toNullable(11)
-ORDER BY k DESC
+ORDER BY k DESC NULLS LAST
 LIMIT 100, 100
 SETTINGS
     optimize_read_in_order = 1,

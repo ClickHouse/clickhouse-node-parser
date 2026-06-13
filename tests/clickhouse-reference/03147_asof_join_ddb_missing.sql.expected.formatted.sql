@@ -16,7 +16,7 @@ WITH build AS (
         number AS v
     FROM
         numbers(10)
-    CROSS JOIN (
+    , (
             SELECT number AS k
             FROM numbers(5)
         )
@@ -33,7 +33,7 @@ probe AS (
 SELECT SUM(v)
 FROM
     probe
-INNER JOIN build
+ASOF INNER JOIN build
     USING (k, t);
 
 -- # Coverage: Missing right side bin
@@ -44,7 +44,7 @@ WITH build AS (
         number AS v
     FROM
         numbers(10)
-    CROSS JOIN (
+    , (
             SELECT number AS k
             FROM numbers(5)
         )
@@ -63,7 +63,7 @@ SELECT
     COUNT(*)
 FROM
     probe
-INNER JOIN build
+ASOF INNER JOIN build
     USING (k, t);
 
 -- # 20 dates, 5 keys
@@ -74,7 +74,7 @@ WITH build AS (
         number AS v
     FROM
         numbers(20)
-    CROSS JOIN (
+    , (
             SELECT number AS k
             FROM numbers(5)
         )
@@ -91,7 +91,7 @@ probe AS (
 SELECT SUM(v)
 FROM
     probe
-INNER JOIN build
+ASOF INNER JOIN build
     USING (k, t);
 
 -- # 30 dates, 5 keys
@@ -102,7 +102,7 @@ WITH build AS (
         number AS v
     FROM
         numbers(30)
-    CROSS JOIN (
+    , (
             SELECT number AS k
             FROM numbers(5)
         )
@@ -119,7 +119,7 @@ probe AS (
 SELECT SUM(v)
 FROM
     probe
-INNER JOIN build
+ASOF INNER JOIN build
     USING (k, t);
 
 -- # 50 dates, 5 keys
@@ -130,7 +130,7 @@ WITH build AS (
         number AS v
     FROM
         numbers(50)
-    CROSS JOIN (
+    , (
             SELECT number AS k
             FROM numbers(5)
         )
@@ -147,7 +147,7 @@ probe AS (
 SELECT SUM(v)
 FROM
     probe
-INNER JOIN build
+ASOF INNER JOIN build
     USING (k, t);
 
 -- # 100 dates, 5 keys
@@ -158,7 +158,7 @@ WITH build AS (
         number AS v
     FROM
         numbers(100)
-    CROSS JOIN (
+    , (
             SELECT number AS k
             FROM numbers(5)
         )
@@ -175,7 +175,7 @@ probe AS (
 SELECT SUM(v)
 FROM
     probe
-INNER JOIN build
+ASOF INNER JOIN build
     USING (k, t);
 
 -- # 100 dates, 50 keys
@@ -186,7 +186,7 @@ WITH build AS (
         number AS v
     FROM
         numbers(100)
-    CROSS JOIN (
+    , (
             SELECT number AS k
             FROM numbers(50)
         )
@@ -203,7 +203,7 @@ probe AS (
 SELECT SUM(v)
 FROM
     probe
-INNER JOIN build
+ASOF INNER JOIN build
     USING (k, t);
 
 -- # 1000 dates, 5 keys
@@ -214,7 +214,7 @@ WITH build AS (
         number AS v
     FROM
         numbers(1000)
-    CROSS JOIN (
+    , (
             SELECT number AS k
             FROM numbers(5)
         )
@@ -231,7 +231,7 @@ probe AS (
 SELECT SUM(v)
 FROM
     probe
-INNER JOIN build
+ASOF INNER JOIN build
     USING (k, t);
 
 -- # 1000 dates, 50 keys
@@ -242,7 +242,7 @@ WITH build AS (
         number AS v
     FROM
         numbers(1000)
-    CROSS JOIN (
+    , (
             SELECT number AS k
             FROM numbers(50)
         )
@@ -259,7 +259,7 @@ probe AS (
 SELECT SUM(v)
 FROM
     probe
-INNER JOIN build
+ASOF INNER JOIN build
     USING (k, t);
 
 -- # 10000 dates, 50 keys
@@ -270,7 +270,7 @@ WITH build AS (
         number AS v
     FROM
         numbers(10000)
-    CROSS JOIN (
+    , (
             SELECT number AS k
             FROM numbers(50)
         )
@@ -287,5 +287,5 @@ probe AS (
 SELECT SUM(v)
 FROM
     probe
-INNER JOIN build
+ASOF INNER JOIN build
     USING (k, t);

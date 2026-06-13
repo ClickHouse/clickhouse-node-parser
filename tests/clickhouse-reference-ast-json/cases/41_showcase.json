@@ -1,0 +1,673 @@
+{
+  "type": "SelectWithUnionQuery",
+  "selects": [
+    {
+      "type": "SelectQuery",
+      "distinct": true,
+      "group_by_with_rollup": true,
+      "with": [
+        {
+          "type": "WithElement",
+          "name": "recent",
+          "subquery": {
+            "type": "Subquery",
+            "query": {
+              "type": "SelectWithUnionQuery",
+              "selects": [
+                {
+                  "type": "SelectQuery",
+                  "select": [
+                    {
+                      "type": "Identifier",
+                      "alias": "n",
+                      "name": "number"
+                    },
+                    {
+                      "type": "Function",
+                      "alias": "g",
+                      "name": "modulo",
+                      "is_operator": true,
+                      "arguments": [
+                        {
+                          "type": "Identifier",
+                          "name": "number"
+                        },
+                        {
+                          "type": "Literal",
+                          "value_type": "UInt64",
+                          "value": 3
+                        }
+                      ]
+                    }
+                  ],
+                  "tables": {
+                    "type": "TablesInSelectQuery",
+                    "children": [
+                      {
+                        "type": "TablesInSelectQueryElement",
+                        "table_expression": {
+                          "type": "TableExpression",
+                          "table_function": {
+                            "type": "Function",
+                            "name": "numbers",
+                            "arguments": [
+                              {
+                                "type": "Literal",
+                                "value_type": "UInt64",
+                                "value": 100
+                              }
+                            ]
+                          }
+                        }
+                      }
+                    ]
+                  },
+                  "where": {
+                    "type": "Function",
+                    "name": "greater",
+                    "is_operator": true,
+                    "arguments": [
+                      {
+                        "type": "Identifier",
+                        "name": "number"
+                      },
+                      {
+                        "type": "Literal",
+                        "value_type": "UInt64",
+                        "value": 1
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          }
+        },
+        {
+          "type": "Subquery",
+          "alias": "max_n",
+          "query": {
+            "type": "SelectWithUnionQuery",
+            "selects": [
+              {
+                "type": "SelectQuery",
+                "select": [
+                  {
+                    "type": "Function",
+                    "name": "max",
+                    "arguments": [
+                      {
+                        "type": "Identifier",
+                        "name": "n"
+                      }
+                    ]
+                  }
+                ],
+                "tables": {
+                  "type": "TablesInSelectQuery",
+                  "children": [
+                    {
+                      "type": "TablesInSelectQueryElement",
+                      "table_expression": {
+                        "type": "TableExpression",
+                        "database_and_table_name": {
+                          "type": "TableIdentifier",
+                          "name": "recent"
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        }
+      ],
+      "select": [
+        {
+          "type": "Identifier",
+          "alias": "grp",
+          "name": "a.g",
+          "name_parts": ["a", "g"]
+        },
+        {
+          "type": "Function",
+          "alias": "total",
+          "name": "plus",
+          "is_operator": true,
+          "arguments": [
+            {
+              "type": "Identifier",
+              "name": "a.n",
+              "name_parts": ["a", "n"]
+            },
+            {
+              "type": "Identifier",
+              "name": "b.v",
+              "name_parts": ["b", "v"]
+            }
+          ]
+        },
+        {
+          "type": "Function",
+          "alias": "scaled",
+          "name": "arrayMap",
+          "arguments": [
+            {
+              "type": "Function",
+              "name": "lambda",
+              "is_operator": true,
+              "is_lambda_function": true,
+              "kind": "LAMBDA_FUNCTION",
+              "arguments": [
+                {
+                  "type": "Function",
+                  "name": "tuple",
+                  "is_operator": true,
+                  "arguments": [
+                    {
+                      "type": "Identifier",
+                      "name": "e"
+                    }
+                  ]
+                },
+                {
+                  "type": "Function",
+                  "name": "multiply",
+                  "is_operator": true,
+                  "arguments": [
+                    {
+                      "type": "Identifier",
+                      "name": "e"
+                    },
+                    {
+                      "type": "Identifier",
+                      "name": "max_n"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "Function",
+              "name": "groupArray",
+              "arguments": [
+                {
+                  "type": "Identifier",
+                  "name": "a.n",
+                  "name_parts": ["a", "n"]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "Function",
+          "alias": "running",
+          "name": "sum",
+          "is_window_function": true,
+          "kind": "WINDOW_FUNCTION",
+          "arguments": [
+            {
+              "type": "Identifier",
+              "name": "b.v",
+              "name_parts": ["b", "v"]
+            }
+          ],
+          "window_definition": {
+            "type": "WindowDefinition",
+            "partition_by": [
+              {
+                "type": "Identifier",
+                "name": "a.g",
+                "name_parts": ["a", "g"]
+              }
+            ],
+            "order_by": [
+              {
+                "type": "OrderByElement",
+                "expression": {
+                  "type": "Identifier",
+                  "name": "a.n",
+                  "name_parts": ["a", "n"]
+                },
+                "direction": "ASC"
+              }
+            ],
+            "frame_type": "ROWS",
+            "frame_begin_type": "Offset",
+            "frame_begin_offset": {
+              "type": "Literal",
+              "value_type": "UInt64",
+              "value": 1
+            },
+            "frame_begin_preceding": true,
+            "frame_end_type": "Current",
+            "frame_end_preceding": false
+          }
+        },
+        {
+          "type": "Function",
+          "alias": "cnt",
+          "name": "count",
+          "is_window_function": true,
+          "kind": "WINDOW_FUNCTION",
+          "arguments": [
+            {
+              "type": "Asterisk"
+            }
+          ],
+          "window_name": "w"
+        },
+        {
+          "type": "Function",
+          "alias": "bucket",
+          "name": "multiIf",
+          "arguments": [
+            {
+              "type": "Function",
+              "name": "greater",
+              "is_operator": true,
+              "arguments": [
+                {
+                  "type": "Identifier",
+                  "name": "a.n",
+                  "name_parts": ["a", "n"]
+                },
+                {
+                  "type": "Literal",
+                  "value_type": "UInt64",
+                  "value": 10
+                }
+              ]
+            },
+            {
+              "type": "Literal",
+              "value_type": "String",
+              "value": "hi"
+            },
+            {
+              "type": "Literal",
+              "value_type": "String",
+              "value": "lo"
+            }
+          ]
+        },
+        {
+          "type": "Function",
+          "alias": "nf",
+          "name": "CAST",
+          "arguments": [
+            {
+              "type": "Identifier",
+              "name": "a.n",
+              "name_parts": ["a", "n"]
+            },
+            {
+              "type": "Literal",
+              "value_type": "String",
+              "value": "Float64"
+            }
+          ]
+        }
+      ],
+      "tables": {
+        "type": "TablesInSelectQuery",
+        "children": [
+          {
+            "type": "TablesInSelectQueryElement",
+            "table_expression": {
+              "type": "TableExpression",
+              "database_and_table_name": {
+                "type": "TableIdentifier",
+                "alias": "a",
+                "name": "recent"
+              }
+            }
+          },
+          {
+            "type": "TablesInSelectQueryElement",
+            "table_join": {
+              "type": "TableJoin",
+              "kind": "INNER",
+              "on": {
+                "type": "Function",
+                "name": "equals",
+                "is_operator": true,
+                "arguments": [
+                  {
+                    "type": "Identifier",
+                    "name": "a.n",
+                    "name_parts": ["a", "n"]
+                  },
+                  {
+                    "type": "Identifier",
+                    "name": "b.n",
+                    "name_parts": ["b", "n"]
+                  }
+                ]
+              }
+            },
+            "table_expression": {
+              "type": "TableExpression",
+              "subquery": {
+                "type": "Subquery",
+                "alias": "b",
+                "query": {
+                  "type": "SelectWithUnionQuery",
+                  "selects": [
+                    {
+                      "type": "SelectQuery",
+                      "select": [
+                        {
+                          "type": "Identifier",
+                          "name": "n"
+                        },
+                        {
+                          "type": "Function",
+                          "alias": "v",
+                          "name": "multiply",
+                          "is_operator": true,
+                          "arguments": [
+                            {
+                              "type": "Identifier",
+                              "name": "n"
+                            },
+                            {
+                              "type": "Literal",
+                              "value_type": "UInt64",
+                              "value": 2
+                            }
+                          ]
+                        }
+                      ],
+                      "tables": {
+                        "type": "TablesInSelectQuery",
+                        "children": [
+                          {
+                            "type": "TablesInSelectQueryElement",
+                            "table_expression": {
+                              "type": "TableExpression",
+                              "database_and_table_name": {
+                                "type": "TableIdentifier",
+                                "name": "recent"
+                              }
+                            }
+                          }
+                        ]
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        ]
+      },
+      "prewhere": {
+        "type": "Function",
+        "name": "notEquals",
+        "is_operator": true,
+        "arguments": [
+          {
+            "type": "Identifier",
+            "name": "a.n",
+            "name_parts": ["a", "n"]
+          },
+          {
+            "type": "Literal",
+            "value_type": "UInt64",
+            "value": 0
+          }
+        ]
+      },
+      "where": {
+        "type": "Function",
+        "name": "and",
+        "is_operator": true,
+        "arguments": [
+          {
+            "type": "Function",
+            "name": "in",
+            "is_operator": true,
+            "arguments": [
+              {
+                "type": "Identifier",
+                "name": "a.n",
+                "name_parts": ["a", "n"]
+              },
+              {
+                "type": "Subquery",
+                "query": {
+                  "type": "SelectWithUnionQuery",
+                  "selects": [
+                    {
+                      "type": "SelectQuery",
+                      "select": [
+                        {
+                          "type": "Identifier",
+                          "name": "n"
+                        }
+                      ],
+                      "tables": {
+                        "type": "TablesInSelectQuery",
+                        "children": [
+                          {
+                            "type": "TablesInSelectQueryElement",
+                            "table_expression": {
+                              "type": "TableExpression",
+                              "database_and_table_name": {
+                                "type": "TableIdentifier",
+                                "name": "recent"
+                              }
+                            }
+                          }
+                        ]
+                      }
+                    }
+                  ]
+                }
+              }
+            ]
+          },
+          {
+            "type": "Function",
+            "name": "and",
+            "is_operator": true,
+            "arguments": [
+              {
+                "type": "Function",
+                "name": "greaterOrEquals",
+                "is_operator": true,
+                "arguments": [
+                  {
+                    "type": "Identifier",
+                    "name": "b.v",
+                    "name_parts": ["b", "v"]
+                  },
+                  {
+                    "type": "Literal",
+                    "value_type": "UInt64",
+                    "value": 1
+                  }
+                ]
+              },
+              {
+                "type": "Function",
+                "name": "lessOrEquals",
+                "is_operator": true,
+                "arguments": [
+                  {
+                    "type": "Identifier",
+                    "name": "b.v",
+                    "name_parts": ["b", "v"]
+                  },
+                  {
+                    "type": "Literal",
+                    "value_type": "UInt64",
+                    "value": 1000
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      "group_by": [
+        {
+          "type": "Identifier",
+          "name": "a.g",
+          "name_parts": ["a", "g"]
+        },
+        {
+          "type": "Identifier",
+          "name": "a.n",
+          "name_parts": ["a", "n"]
+        }
+      ],
+      "having": {
+        "type": "Function",
+        "name": "greater",
+        "is_operator": true,
+        "arguments": [
+          {
+            "type": "Function",
+            "name": "sum",
+            "arguments": [
+              {
+                "type": "Identifier",
+                "name": "b.v",
+                "name_parts": ["b", "v"]
+              }
+            ]
+          },
+          {
+            "type": "Literal",
+            "value_type": "UInt64",
+            "value": 10
+          }
+        ]
+      },
+      "window": [
+        {
+          "type": "WindowListElement",
+          "name": "w",
+          "definition": {
+            "type": "WindowDefinition",
+            "partition_by": [
+              {
+                "type": "Identifier",
+                "name": "a.g",
+                "name_parts": ["a", "g"]
+              }
+            ],
+            "order_by": [
+              {
+                "type": "OrderByElement",
+                "expression": {
+                  "type": "Identifier",
+                  "name": "a.n",
+                  "name_parts": ["a", "n"]
+                },
+                "direction": "DESC"
+              }
+            ]
+          }
+        }
+      ],
+      "qualify": {
+        "type": "Function",
+        "name": "greaterOrEquals",
+        "is_operator": true,
+        "arguments": [
+          {
+            "type": "Identifier",
+            "name": "running"
+          },
+          {
+            "type": "Literal",
+            "value_type": "UInt64",
+            "value": 0
+          }
+        ]
+      },
+      "order_by": [
+        {
+          "type": "OrderByElement",
+          "expression": {
+            "type": "Identifier",
+            "name": "total"
+          },
+          "direction": "DESC",
+          "nulls_first": false,
+          "with_fill": true,
+          "fill_from": {
+            "type": "Literal",
+            "value_type": "UInt64",
+            "value": 0
+          },
+          "fill_to": {
+            "type": "Literal",
+            "value_type": "UInt64",
+            "value": 100
+          },
+          "fill_step": {
+            "type": "Literal",
+            "value_type": "UInt64",
+            "value": 10
+          }
+        }
+      ],
+      "limit_by_length": {
+        "type": "Literal",
+        "value_type": "UInt64",
+        "value": 5
+      },
+      "limit_by": [
+        {
+          "type": "Identifier",
+          "name": "a.g",
+          "name_parts": ["a", "g"]
+        }
+      ],
+      "limit_offset": {
+        "type": "Literal",
+        "value_type": "UInt64",
+        "value": 10
+      },
+      "limit_length": {
+        "type": "Literal",
+        "value_type": "UInt64",
+        "value": 100
+      },
+      "settings": {
+        "type": "Set",
+        "changes": {
+          "max_threads": 4
+        }
+      },
+      "interpolate": [
+        {
+          "type": "InterpolateElement",
+          "column": "nf",
+          "expr": {
+            "type": "Function",
+            "name": "plus",
+            "is_operator": true,
+            "arguments": [
+              {
+                "type": "Identifier",
+                "name": "nf"
+              },
+              {
+                "type": "Literal",
+                "value_type": "UInt64",
+                "value": 1
+              }
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}

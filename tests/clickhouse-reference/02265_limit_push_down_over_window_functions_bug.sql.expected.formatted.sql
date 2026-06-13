@@ -1,6 +1,6 @@
 SELECT
     number,
-    leadInFrame(number) AS W
+    leadInFrame(number) OVER w AS W
 FROM numbers(10)
 LIMIT 3
 WINDOW w AS (ORDER BY number ASC ROWS BETWEEN UNBOUNDED PRECEDING AND UNBOUNDED PRECEDING);

@@ -76,7 +76,7 @@ FROM (
         SELECT *
         FROM
             users AS u1
-        INNER JOIN users AS u2
+        SEMI INNER JOIN users AS u2
             ON 1
     )
 WHERE age = u2.age
@@ -102,7 +102,7 @@ FROM (
         SELECT *
         FROM
             users AS u1
-        INNER JOIN users AS u2
+        ANTI INNER JOIN users AS u2
             ON 1
     )
 WHERE age = u2.age

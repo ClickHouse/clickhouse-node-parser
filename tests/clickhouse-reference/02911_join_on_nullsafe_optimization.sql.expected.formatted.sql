@@ -52,7 +52,7 @@ INNER JOIN t2
     ON (t1.x <=> t2.x
     OR (isNull(t1.x)
     AND isNull(t2.x)))
-ORDER BY t1.x ASC;
+ORDER BY t1.x ASC NULLS LAST;
 
 SELECT *
 FROM
@@ -62,7 +62,7 @@ INNER JOIN t2
     OR isNull(t1.x)
     AND isNull(t2.x)))
     OR t1.y <=> t2.y
-ORDER BY t1.x ASC;
+ORDER BY t1.x ASC NULLS LAST;
 
 SELECT *
 FROM
@@ -91,7 +91,7 @@ INNER JOIN t2
     OR isNull(t1.x)
     AND isNull(t2.x)))
     AND t1.y <=> t2.y
-ORDER BY t1.x ASC;
+ORDER BY t1.x ASC NULLS LAST;
 
 SELECT *
 FROM
@@ -103,7 +103,7 @@ INNER JOIN t2
     AND isNull(t2.x))
     OR (isNull(t1.y)
     AND isNull(t2.y)))
-ORDER BY t1.x ASC;
+ORDER BY t1.x ASC NULLS LAST;
 
 SELECT *
 FROM
@@ -116,13 +116,13 @@ INNER JOIN t2
     OR (isNull(t1.y)
     AND isNull(t2.y))))
     AND COALESCE(t1.x, 0) != 2
-ORDER BY t1.x ASC;
+ORDER BY t1.x ASC NULLS LAST;
 
 SELECT x = y
     OR (isNull(x)
     AND isNull(y))
 FROM t1
-ORDER BY x ASC;
+ORDER BY x ASC NULLS LAST;
 
 SELECT *
 FROM
@@ -133,7 +133,7 @@ INNER JOIN t2
     AND (isNotNull(t1.x)))))
     OR ((isNull(t2.x))
     AND (isNull(t1.x)))
-ORDER BY t1.x ASC;
+ORDER BY t1.x ASC NULLS LAST;
 
 SELECT *
 FROM
@@ -145,7 +145,7 @@ INNER JOIN t2
     OR (t2.x <> t1.x
     AND (isNull(t2.x))
     AND (isNull(t1.x)))
-ORDER BY t1.x ASC;
+ORDER BY t1.x ASC NULLS LAST;
 
 SELECT *
 FROM
@@ -156,7 +156,7 @@ INNER JOIN t2
     AND (isNotNull(t1.x)))))
     OR (t2.x <> t1.x
     AND t2.x <> t1.x)
-ORDER BY `ALL` ASC
+ORDER BY `ALL` ASC NULLS LAST
 SETTINGS query_plan_use_new_logical_join_step = 0;
 
 SELECT *
@@ -169,7 +169,7 @@ INNER JOIN t2
     OR (t2.x <> t1.x
     AND (isNull(t2.x))
     AND (isNull(t2.x)))
-ORDER BY t1.x ASC
+ORDER BY t1.x ASC NULLS LAST
 SETTINGS
     query_plan_use_new_logical_join_step = 0,
     use_join_disjunctions_push_down = 0;
@@ -188,8 +188,8 @@ FULL JOIN t2
     OR ((isNull(t2.x))
     AND (isNull(t1.x))) AS e2)
 ORDER BY
-    t1.x ASC,
-    t2.x ASC;
+    t1.x ASC NULLS LAST,
+    t2.x ASC NULLS LAST;
 
 SELECT
     *,
@@ -202,8 +202,8 @@ FULL JOIN t2
     AND (((isNotNull(t2.x))
     AND (isNotNull(t1.x))))) AS e2)
 ORDER BY
-    t1.x ASC,
-    t2.x ASC;
+    t1.x ASC NULLS LAST,
+    t2.x ASC NULLS LAST;
 
 -- check for non-nullable columns for which `is null` is replaced with constant
 SELECT *
@@ -215,7 +215,7 @@ INNER JOIN t2n AS t2
     AND (isNotNull(t1.x)))))
     OR ((isNull(t2.x))
     AND (isNull(t1.x)))
-ORDER BY t1.x ASC;
+ORDER BY t1.x ASC NULLS LAST;
 
 -- { echoOff }
 SELECT '--';

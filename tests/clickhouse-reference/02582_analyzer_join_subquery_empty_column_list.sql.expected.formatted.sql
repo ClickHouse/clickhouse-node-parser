@@ -6,7 +6,7 @@ FROM
     (
         SELECT 1 AS a
     ) AS t1
-CROSS JOIN (
+, (
         SELECT
             2 AS b,
             3 AS c
@@ -19,7 +19,7 @@ FROM
         UNION ALL
         SELECT 1 AS a
     ) AS t1
-CROSS JOIN (
+, (
         SELECT
             2 AS b,
             3 AS c
@@ -30,7 +30,7 @@ FROM
     (
         SELECT 1 AS a
     ) AS t1
-CROSS JOIN (
+, (
         SELECT
             2 AS b,
             3 AS c
@@ -47,7 +47,7 @@ FROM
         UNION ALL
         SELECT 1 AS a
     ) AS t1
-CROSS JOIN (
+, (
         SELECT
             2 AS b,
             3 AS c
@@ -67,7 +67,7 @@ FROM
                 SELECT 1 AS a
             )
     ) AS t1
-CROSS JOIN (
+, (
         SELECT *
         FROM (
                 SELECT
@@ -87,7 +87,7 @@ FROM
         UNION ALL
         SELECT 1 AS a
     ) AS t1
-CROSS JOIN (
+, (
         SELECT
             2 AS b,
             3 AS c
@@ -104,7 +104,7 @@ FROM
         UNION ALL
         SELECT 1 AS a
     ) AS t1
-CROSS JOIN (
+, (
         SELECT
             2 AS b,
             3 AS c
@@ -121,7 +121,7 @@ FROM
         UNION ALL
         SELECT 1 AS a
     ) AS t1
-CROSS JOIN (
+, (
         SELECT
             2 AS b,
             3 AS c
@@ -138,7 +138,7 @@ FROM
         UNION ALL
         SELECT 1 AS a
     ) AS t1
-CROSS JOIN (
+, (
         SELECT
             2 AS b,
             3 AS c

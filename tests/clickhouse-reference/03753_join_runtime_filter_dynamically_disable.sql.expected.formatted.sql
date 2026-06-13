@@ -65,7 +65,7 @@ SET enable_multiple_prewhere_read_steps = 1;
 SELECT count()
 FROM
     customer
-CROSS JOIN nation
+, nation
 WHERE c_nationkey = n_nationkey
     AND n_name = 'FRANCE'
     AND c_nationkey_copy = 6
@@ -92,7 +92,7 @@ WHERE type = 'QueryFinish'
 SELECT count()
 FROM
     customer
-CROSS JOIN nation
+, nation
 WHERE c_nationkey = n_nationkey
     AND n_name IN ('FRANCE', 'GERMANY')
     AND c_nationkey_copy IN (6, 7)
@@ -116,7 +116,7 @@ WHERE type = 'QueryFinish'
 SELECT count()
 FROM
     customer
-CROSS JOIN nation
+, nation
 WHERE c_nationkey = n_nationkey
     AND n_name IN ('FRANCE', 'GERMANY', 'ETHIOPIA')
     AND c_nationkey_copy IN (6, 7, 5)
@@ -140,7 +140,7 @@ WHERE type = 'QueryFinish'
 SELECT count()
 FROM
     customer
-CROSS JOIN numbers(2000) AS n
+, numbers(2000) AS n
 WHERE c_nationkey = n.number::Int32
 SETTINGS
     join_runtime_filter_exact_values_limit = 1,
@@ -168,7 +168,7 @@ FROM
         FROM customer
         WHERE c_nationkey_copy != 6
     ) AS c
-LEFT JOIN (
+ANTI LEFT JOIN (
         SELECT *
         FROM nation
         WHERE n_name = 'FRANCE'
@@ -198,7 +198,7 @@ FROM
         FROM customer
         WHERE c_nationkey_copy NOT IN (6, 7)
     ) AS c
-LEFT JOIN (
+ANTI LEFT JOIN (
         SELECT *
         FROM nation
         WHERE n_name IN ('FRANCE', 'GERMANY')
@@ -224,7 +224,7 @@ WHERE type = 'QueryFinish'
 SELECT count()
 FROM
     customer
-CROSS JOIN nation
+, nation
 WHERE c_nationkey = n_nationkey
     AND n_name = 'FRANCE'
     AND c_nationkey_copy = 6

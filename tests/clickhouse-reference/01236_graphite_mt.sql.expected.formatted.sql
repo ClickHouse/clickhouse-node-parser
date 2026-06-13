@@ -32,7 +32,7 @@ SELECT
     number
 FROM
     dates
-CROSS JOIN numbers(300)
+, numbers(300)
 UNION ALL
 SELECT
     2,
@@ -43,7 +43,7 @@ SELECT
     number
 FROM
     dates
-CROSS JOIN numbers(300)
+, numbers(300)
 UNION ALL
 SELECT
     1,
@@ -54,7 +54,7 @@ SELECT
     number
 FROM
     dates
-CROSS JOIN numbers(300)
+, numbers(300)
 UNION ALL
 SELECT
     2,
@@ -65,7 +65,7 @@ SELECT
     number
 FROM
     dates
-CROSS JOIN numbers(300)
+, numbers(300)
 UNION ALL
 SELECT
     1,
@@ -76,7 +76,7 @@ SELECT
     number
 FROM
     dates
-CROSS JOIN numbers(300)
+, numbers(300)
 UNION ALL
 SELECT
     2,
@@ -87,7 +87,7 @@ SELECT
     number
 FROM
     dates
-CROSS JOIN numbers(300)
+, numbers(300)
 UNION ALL
 SELECT
     1,
@@ -98,7 +98,7 @@ SELECT
     number
 FROM
     dates
-CROSS JOIN numbers(300)
+, numbers(300)
 UNION ALL
 SELECT
     2,
@@ -109,7 +109,7 @@ SELECT
     number
 FROM
     dates
-CROSS JOIN numbers(300)
+, numbers(300)
 UNION ALL
 -- Older than 2 days use 6000 second windows
 SELECT
@@ -121,7 +121,7 @@ SELECT
     number
 FROM
     dates
-CROSS JOIN numbers(1200)
+, numbers(1200)
 UNION ALL
 SELECT
     2,
@@ -132,7 +132,7 @@ SELECT
     number
 FROM
     dates
-CROSS JOIN numbers(1200)
+, numbers(1200)
 UNION ALL
 SELECT
     1,
@@ -143,7 +143,7 @@ SELECT
     number
 FROM
     dates
-CROSS JOIN numbers(1200)
+, numbers(1200)
 UNION ALL
 SELECT
     2,
@@ -154,7 +154,7 @@ SELECT
     number
 FROM
     dates
-CROSS JOIN numbers(1200)
+, numbers(1200)
 UNION ALL
 SELECT
     1,
@@ -165,7 +165,7 @@ SELECT
     number
 FROM
     dates
-CROSS JOIN numbers(1200)
+, numbers(1200)
 UNION ALL
 SELECT
     2,
@@ -176,7 +176,7 @@ SELECT
     number
 FROM
     dates
-CROSS JOIN numbers(1200)
+, numbers(1200)
 UNION ALL
 SELECT
     1,
@@ -187,7 +187,7 @@ SELECT
     number
 FROM
     dates
-CROSS JOIN numbers(1200)
+, numbers(1200)
 UNION ALL
 SELECT
     2,
@@ -198,7 +198,7 @@ SELECT
     number
 FROM
     dates
-CROSS JOIN numbers(1200);
+, numbers(1200);
 
 SELECT
     key,

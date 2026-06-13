@@ -6,7 +6,7 @@ WITH ws_wh AS (
                 1 AS ws_order_number,
                 1 AS ws_warehouse_sk
         ) AS ws1
-    CROSS JOIN (
+    , (
             SELECT
                 1 AS ws_order_number,
                 2 AS ws_warehouse_sk

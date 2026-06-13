@@ -28,7 +28,7 @@ WITH RECURSIVE search_tree AS (
         t.data
     FROM
         tree AS t
-    CROSS JOIN search_tree AS st
+    , search_tree AS st
     WHERE t.link = st.id
 )
 
@@ -53,7 +53,7 @@ WITH RECURSIVE search_tree AS (
         arrayConcat(path, [t.id])
     FROM
         tree AS t
-    CROSS JOIN search_tree AS st
+    , search_tree AS st
     WHERE t.link = st.id
 )
 
@@ -143,7 +143,7 @@ WITH RECURSIVE subdepartment AS (
         d.*
     FROM
         department AS d
-    CROSS JOIN subdepartment AS sd
+    , subdepartment AS sd
     WHERE d.parent_department = sd.id
 )
 
@@ -166,7 +166,7 @@ WITH RECURSIVE subdepartment AS (
         d.*
     FROM
         department AS d
-    CROSS JOIN subdepartment AS sd
+    , subdepartment AS sd
     WHERE d.parent_department = sd.id
 )
 
@@ -190,7 +190,7 @@ WITH RECURSIVE subdepartment AS (
         d.*
     FROM
         department AS d
-    CROSS JOIN subdepartment AS sd
+    , subdepartment AS sd
     WHERE d.parent_department = sd.id
 )
 

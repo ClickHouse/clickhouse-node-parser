@@ -35,14 +35,14 @@ SET join_algorithm = 'partial_merge';
 SELECT *
 FROM
     t1
-RIGHT JOIN t0
+ANY RIGHT JOIN t0
     USING (x)
 ORDER BY x ASC; -- { serverError NOT_IMPLEMENTED }
 
 SELECT *
 FROM
     t1
-FULL JOIN t0
+ANY FULL JOIN t0
     USING (x)
 ORDER BY x ASC; -- { serverError NOT_IMPLEMENTED }
 
@@ -63,14 +63,14 @@ ORDER BY x ASC;
 SELECT *
 FROM
     t1
-RIGHT JOIN t0
+ANY RIGHT JOIN t0
     ON t1.x = t0.x
 ORDER BY x ASC; -- { serverError NOT_IMPLEMENTED }
 
 SELECT *
 FROM
     t1
-FULL JOIN t0
+ANY FULL JOIN t0
     ON t1.x = t0.x
 ORDER BY x ASC; -- { serverError NOT_IMPLEMENTED }
 
@@ -91,13 +91,13 @@ ORDER BY x ASC;
 SELECT *
 FROM
     t0
-RIGHT JOIN t1
+ANY RIGHT JOIN t1
     USING (x); -- { serverError NOT_IMPLEMENTED }
 
 SELECT *
 FROM
     t0
-FULL JOIN t1
+ANY FULL JOIN t1
     USING (x); -- { serverError NOT_IMPLEMENTED }
 
 SELECT *
@@ -115,13 +115,13 @@ FULL JOIN t1
 SELECT *
 FROM
     t0
-RIGHT JOIN t1
+ANY RIGHT JOIN t1
     ON t1.x = t0.x; -- { serverError NOT_IMPLEMENTED }
 
 SELECT *
 FROM
     t0
-FULL JOIN t1
+ANY FULL JOIN t1
     ON t1.x = t0.x; -- { serverError NOT_IMPLEMENTED }
 
 SELECT *

@@ -62,4 +62,4 @@ FROM (
         FROM numbers(10)
     )
 GROUP BY t
-ORDER BY t ASC;
+ORDER BY t ASC NULLS FIRST;

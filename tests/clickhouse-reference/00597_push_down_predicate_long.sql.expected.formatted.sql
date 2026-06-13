@@ -96,7 +96,7 @@ FROM
     (
         SELECT 1 AS a
     )
-LEFT JOIN (
+ANY LEFT JOIN (
         SELECT
             1 AS a,
             1 AS b
@@ -111,7 +111,7 @@ FROM
     (
         SELECT 1 AS a
     )
-LEFT JOIN (
+ANY LEFT JOIN (
         SELECT
             1 AS a,
             1 AS b
@@ -130,7 +130,7 @@ FROM
             1 AS a,
             1 AS b
     )
-RIGHT JOIN (
+ANY RIGHT JOIN (
         SELECT 1 AS a
     )
     USING (a)
@@ -145,7 +145,7 @@ FROM
             1 AS a,
             1 AS b
     )
-RIGHT JOIN (
+ANY RIGHT JOIN (
         SELECT 1 AS a
     )
     USING (a)
@@ -160,7 +160,7 @@ FROM
     (
         SELECT 1 AS a
     )
-FULL JOIN (
+ANY FULL JOIN (
         SELECT
             1 AS a,
             1 AS b
@@ -175,7 +175,7 @@ FROM
     (
         SELECT 1 AS a
     )
-FULL JOIN (
+ANY FULL JOIN (
         SELECT
             1 AS a,
             1 AS b
@@ -193,7 +193,7 @@ FROM
             1 AS a,
             1 AS b
     )
-FULL JOIN (
+ANY FULL JOIN (
         SELECT 1 AS a
     )
     USING (a)
@@ -572,7 +572,7 @@ FROM
         SELECT *
         FROM test_00597
     )
-LEFT JOIN (
+ANY LEFT JOIN (
         SELECT *
         FROM test_00597
     )
@@ -585,7 +585,7 @@ FROM
         SELECT *
         FROM test_00597
     )
-LEFT JOIN (
+ANY LEFT JOIN (
         SELECT *
         FROM test_00597
     )
@@ -599,7 +599,7 @@ FROM
         SELECT *
         FROM test_00597
     )
-LEFT JOIN (
+ANY LEFT JOIN (
         SELECT *
         FROM test_00597
     )
@@ -613,7 +613,7 @@ FROM
     (
         SELECT toInt8(1) AS id
     )
-LEFT JOIN test_00597
+ANY LEFT JOIN test_00597
     USING (id)
 WHERE value = 1;
 
@@ -622,7 +622,7 @@ FROM
     (
         SELECT toInt8(1) AS id
     )
-LEFT JOIN test_00597
+ANY LEFT JOIN test_00597
     USING (id)
 WHERE value = 1;
 
@@ -633,7 +633,7 @@ FROM
     (
         SELECT toInt8(1) AS id
     )
-LEFT JOIN test_00597 AS b
+ANY LEFT JOIN test_00597 AS b
     USING (id)
 WHERE value = 1;
 
@@ -642,7 +642,7 @@ FROM
     (
         SELECT toInt8(1) AS id
     )
-LEFT JOIN test_00597 AS b
+ANY LEFT JOIN test_00597 AS b
     USING (id)
 WHERE value = 1;
 
@@ -656,7 +656,7 @@ FROM (
                 SELECT *
                 FROM test_00597
             )
-        LEFT JOIN (
+        ANY LEFT JOIN (
                 SELECT *
                 FROM test_00597
             )
@@ -672,7 +672,7 @@ FROM (
                 SELECT *
                 FROM test_00597
             )
-        LEFT JOIN (
+        ANY LEFT JOIN (
                 SELECT *
                 FROM test_00597
             )
@@ -689,7 +689,7 @@ FROM (
                 SELECT *
                 FROM test_00597
             )
-        LEFT JOIN (
+        ANY LEFT JOIN (
                 SELECT *
                 FROM test_00597
             )
@@ -706,7 +706,7 @@ FROM
         SELECT *
         FROM test_00597
     )
-LEFT JOIN (
+ANY LEFT JOIN (
         SELECT *
         FROM test_00597
     ) AS b
@@ -719,7 +719,7 @@ FROM
         SELECT *
         FROM test_00597
     )
-LEFT JOIN (
+ANY LEFT JOIN (
         SELECT *
         FROM test_00597
     ) AS b
@@ -733,7 +733,7 @@ FROM
         SELECT *
         FROM test_00597
     )
-LEFT JOIN (
+ANY LEFT JOIN (
         SELECT *
         FROM test_00597
     ) AS b
@@ -752,7 +752,7 @@ FROM
         FROM `system`.numbers
         LIMIT 1
     )
-LEFT JOIN (
+ANY LEFT JOIN (
         SELECT *
         FROM test_00597
     ) AS b
@@ -768,7 +768,7 @@ FROM
         FROM `system`.numbers
         LIMIT 1
     )
-LEFT JOIN (
+ANY LEFT JOIN (
         SELECT *
         FROM test_00597
     ) AS b
@@ -785,7 +785,7 @@ FROM
         FROM `system`.numbers
         LIMIT 1
     )
-LEFT JOIN (
+ANY LEFT JOIN (
         SELECT *
         FROM test_00597
     ) AS b
@@ -802,7 +802,7 @@ FROM (
                 SELECT *
                 FROM test_00597
             ) AS a
-        LEFT JOIN (
+        ANY LEFT JOIN (
                 SELECT *
                 FROM test_00597
             ) AS b
@@ -818,7 +818,7 @@ FROM (
                 SELECT *
                 FROM test_00597
             ) AS a
-        LEFT JOIN (
+        ANY LEFT JOIN (
                 SELECT *
                 FROM test_00597
             ) AS b
@@ -834,7 +834,7 @@ FROM
         SELECT *
         FROM test_00597
     )
-INNER JOIN (
+ANY INNER JOIN (
         SELECT *
         FROM (
                 SELECT *
@@ -850,7 +850,7 @@ FROM
         SELECT *
         FROM test_00597
     )
-INNER JOIN (
+ANY INNER JOIN (
         SELECT *
         FROM (
                 SELECT *
@@ -867,7 +867,7 @@ FROM
         SELECT *
         FROM test_00597
     )
-INNER JOIN (
+ANY INNER JOIN (
         SELECT *
         FROM (
                 SELECT *

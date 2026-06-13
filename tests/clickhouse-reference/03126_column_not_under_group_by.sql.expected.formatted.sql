@@ -10,7 +10,7 @@ FROM
             1 AS x,
             2 AS c
     ) AS v
-LEFT JOIN (
+ANY LEFT JOIN (
         SELECT
             1 AS x,
             2 AS a

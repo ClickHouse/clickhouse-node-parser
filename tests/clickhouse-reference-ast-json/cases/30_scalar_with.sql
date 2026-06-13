@@ -1,0 +1,1 @@
+WITH (SELECT max(n) FROM t) AS m SELECT m

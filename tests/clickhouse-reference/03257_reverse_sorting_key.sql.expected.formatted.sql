@@ -33,7 +33,7 @@ FROM (
         EXPLAIN actions = 1
         SELECT *
         FROM x1
-        ORDER BY i DESC
+        ORDER BY i DESC NULLS FIRST
         LIMIT 5
     )
 WHERE ilike(`explain`, '%sort%')
@@ -44,7 +44,7 @@ SETTINGS
 EXPLAIN PIPELINE
 SELECT *
 FROM x1
-ORDER BY i DESC
+ORDER BY i DESC NULLS FIRST
 LIMIT 5
 SETTINGS max_threads = 1;
 
@@ -110,7 +110,7 @@ FROM (
         FROM x2
         ORDER BY
             i ASC,
-            j DESC
+            j DESC NULLS FIRST
         LIMIT 5
     )
 WHERE ilike(`explain`, '%sort%')
@@ -123,7 +123,7 @@ SELECT *
 FROM x2
 ORDER BY
     i ASC,
-    j DESC
+    j DESC NULLS FIRST
 LIMIT 5
 SETTINGS max_threads = 1;
 

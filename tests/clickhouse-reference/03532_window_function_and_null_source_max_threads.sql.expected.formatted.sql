@@ -58,7 +58,7 @@ FROM (
                 n2.n AS b
             FROM
                 empty AS n1
-            CROSS JOIN empty AS n2
+            , empty AS n2
             WHERE (n1.n % 7) = (n2.n % 5)
         ),
 
@@ -95,7 +95,7 @@ FROM (
                 n2.n AS b
             FROM
                 empty AS n1
-            CROSS JOIN empty AS n2
+            , empty AS n2
             WHERE (n1.n % 7) = (n2.n % 5)
         ),
 
@@ -131,7 +131,7 @@ FROM (
                 n2.n AS b
             FROM
                 empty AS n1
-            CROSS JOIN empty AS n2
+            , empty AS n2
             WHERE (n1.n % 7) = (n2.n % 5)
         ),
 

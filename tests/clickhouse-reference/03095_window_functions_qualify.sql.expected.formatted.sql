@@ -60,7 +60,7 @@ QUALIFY key = toNullable(toNullable(0)); -- { serverError NOT_IMPLEMENTED }
 
 SELECT
     number % 2 AS key,
-    count(materialize(5))
+    count(materialize(5)) IGNORE NULLS
 FROM numbers(10)
 WHERE toLowCardinality(toLowCardinality(materialize(2)))
 GROUP BY key
@@ -70,7 +70,7 @@ QUALIFY key = 0; -- { serverError NOT_IMPLEMENTED }
 
 SELECT
     4,
-    count(4),
+    count(4) IGNORE NULLS,
     number % 2 AS key
 FROM numbers(10)
 GROUP BY key
@@ -81,7 +81,7 @@ QUALIFY key = materialize(0); -- { serverError NOT_IMPLEMENTED }
 SELECT
     3,
     number % toLowCardinality(2) AS key,
-    count()
+    count() IGNORE NULLS
 FROM numbers(10)
 GROUP BY key
 WITH ROLLUP

@@ -57,7 +57,7 @@ SELECT
     test_table_join_2.value
 FROM
     test_table_join_1
-CROSS JOIN test_table_join_2
+, test_table_join_2
 ORDER BY `ALL` ASC;
 
 SELECT '--';
@@ -69,7 +69,7 @@ SELECT
     t2.value
 FROM
     test_table_join_1 AS t1
-CROSS JOIN test_table_join_2 AS t2
+, test_table_join_2 AS t2
 ORDER BY `ALL` ASC;
 
 SELECT
@@ -83,7 +83,7 @@ SELECT
     test_table_join_2.value
 FROM
     test_table_join_1 AS t1
-CROSS JOIN test_table_join_2 AS t2
+, test_table_join_2 AS t2
 ORDER BY `ALL` ASC;
 
 SELECT
@@ -95,8 +95,8 @@ SELECT
     test_table_join_3.value
 FROM
     test_table_join_1
-CROSS JOIN test_table_join_2
-CROSS JOIN test_table_join_3
+, test_table_join_2
+, test_table_join_3
 ORDER BY `ALL` ASC;
 
 SELECT
@@ -108,8 +108,8 @@ SELECT
     t3.value
 FROM
     test_table_join_1 AS t1
-CROSS JOIN test_table_join_2 AS t2
-CROSS JOIN test_table_join_3 AS t3
+, test_table_join_2 AS t2
+, test_table_join_3 AS t3
 ORDER BY `ALL` ASC;
 
 SELECT
@@ -127,19 +127,19 @@ SELECT
     test_table_join_3.value
 FROM
     test_table_join_1 AS t1
-CROSS JOIN test_table_join_2 AS t2
-CROSS JOIN test_table_join_3 AS t3
+, test_table_join_2 AS t2
+, test_table_join_3 AS t3
 ORDER BY `ALL` ASC;
 
 SELECT id
 FROM
     test_table_join_1
-CROSS JOIN test_table_join_2; -- { serverError AMBIGUOUS_IDENTIFIER }
+, test_table_join_2; -- { serverError AMBIGUOUS_IDENTIFIER }
 
 SELECT value
 FROM
     test_table_join_1
-CROSS JOIN test_table_join_2; -- { serverError AMBIGUOUS_IDENTIFIER }
+, test_table_join_2; -- { serverError AMBIGUOUS_IDENTIFIER }
 
 DROP TABLE test_table_join_1;
 

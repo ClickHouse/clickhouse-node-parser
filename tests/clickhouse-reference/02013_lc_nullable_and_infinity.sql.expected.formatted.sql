@@ -6,7 +6,7 @@ FROM
         SELECT dummy AS val
         FROM `system`.one
     ) AS s1
-LEFT JOIN (
+ANY LEFT JOIN (
         SELECT toLowCardinality(dummy) AS rval
         FROM `system`.one
     ) AS s2

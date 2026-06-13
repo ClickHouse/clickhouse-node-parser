@@ -16,5 +16,5 @@ INSERT INTO t;
 
 INSERT INTO t;
 
-SELECT DISTINCT minDistinct(toDecimalString(isNotNull(77), isZeroOrNull(isNotNull(toNullable(1)))))
+SELECT DISTINCT minDistinct(toDecimalString(isNotNull(77), isZeroOrNull(isNotNull(toNullable(1))))) IGNORE NULLS
 FROM t;

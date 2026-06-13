@@ -53,7 +53,7 @@ FROM
             1 AS id,
             1 AS value
     ) AS t1
-LEFT JOIN (
+ASOF LEFT JOIN (
         SELECT
             1 AS id,
             1 AS value
@@ -69,7 +69,7 @@ FROM
             1 AS id,
             1 AS value
     ) AS t1
-LEFT JOIN (
+ASOF LEFT JOIN (
         SELECT
             1 AS id,
             1 AS value
@@ -86,7 +86,7 @@ FROM
             1 AS dt
         FROM numbers(5)
     ) AS a
-LEFT JOIN (
+ASOF LEFT JOIN (
         SELECT
             NULL AS pk,
             1 AS dt
@@ -104,7 +104,7 @@ FROM
             1 AS dt
         FROM numbers(5)
     ) AS a
-LEFT JOIN (
+ASOF LEFT JOIN (
         SELECT
             NULL AS pk,
             1 AS dt
@@ -122,7 +122,7 @@ FROM
             1 AS id,
             1 AS value
     ) AS t1
-LEFT JOIN (
+ASOF LEFT JOIN (
         SELECT
             1 AS id,
             1 AS value

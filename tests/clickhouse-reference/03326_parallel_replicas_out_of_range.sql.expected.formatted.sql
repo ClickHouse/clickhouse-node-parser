@@ -5,7 +5,7 @@ SET enable_analyzer = 1;
 SYSTEM FLUSH LOGS query_log;
 
 SELECT
-    count(materialize(toLowCardinality(1))) AS num,
+    count(materialize(toLowCardinality(1))) IGNORE NULLS AS num,
     hostName() AS hostName
 FROM
     `system`.query_log AS a

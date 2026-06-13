@@ -27,7 +27,7 @@ FROM (
         SELECT *
         FROM
             users
-        LEFT JOIN (
+        ANY LEFT JOIN (
                 SELECT number
                 FROM numbers(10)
             ) AS t2
@@ -42,7 +42,7 @@ EXPLAIN actions = 1
 SELECT *
 FROM
     users
-LEFT JOIN (
+SEMI LEFT JOIN (
         SELECT number
         FROM numbers(10)
     ) AS t2
@@ -55,7 +55,7 @@ FROM (
         SELECT *
         FROM
             users
-        LEFT JOIN (
+        ANY LEFT JOIN (
                 SELECT number
                 FROM numbers(10)
             ) AS t2
@@ -74,7 +74,7 @@ FROM (
         SELECT *
         FROM
             users
-        LEFT JOIN (
+        SEMI LEFT JOIN (
                 SELECT number
                 FROM numbers(10)
             ) AS t2
@@ -91,7 +91,7 @@ FROM (
         SELECT *
         FROM
             users
-        RIGHT JOIN (
+        ANY RIGHT JOIN (
                 SELECT number
                 FROM numbers(10)
             ) AS t2
@@ -108,7 +108,7 @@ FROM (
         SELECT *
         FROM
             users
-        RIGHT JOIN (
+        SEMI RIGHT JOIN (
                 SELECT number
                 FROM numbers(10)
             ) AS t2

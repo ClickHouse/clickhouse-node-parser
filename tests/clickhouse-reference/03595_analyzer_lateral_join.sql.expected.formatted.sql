@@ -9,7 +9,7 @@ FROM
     (
         SELECT 1 AS a
     ) AS t
-CROSS JOIN (
+, (
         SELECT 1 AS a
         QUALIFY 0 = ((t.a AS alias668))
     ) AS u; -- { serverError NOT_IMPLEMENTED }
@@ -21,7 +21,7 @@ FROM
     (
         SELECT 1 AS a
     ) AS t
-CROSS JOIN (
+, (
         SELECT DISTINCT
             *,
             *,

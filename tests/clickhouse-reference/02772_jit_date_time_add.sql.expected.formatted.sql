@@ -8,7 +8,7 @@ FROM (
         FROM `system`.numbers
         LIMIT 1048576
     )
-ORDER BY result DESC
+ORDER BY result DESC NULLS FIRST
 FORMAT Null; -- { serverError DECIMAL_OVERFLOW }
 
 SELECT DISTINCT result
@@ -17,7 +17,7 @@ FROM (
         FROM `system`.numbers
         LIMIT 1048576
     )
-ORDER BY result DESC
+ORDER BY result DESC NULLS FIRST
 FORMAT Null;
 
 SELECT round(round(round(round(round(100)), round(round(round(round(NULL), round(65535)), like(toTypeName(now() + 9223372036854775807), 'DateTime%DateTime%DateTime%DateTime%'), round(-2)), 255), round(NULL))));

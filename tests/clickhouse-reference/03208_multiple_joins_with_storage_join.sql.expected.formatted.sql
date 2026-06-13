@@ -66,18 +66,18 @@ SELECT '-----';
 SELECT *
 FROM
     tab
-LEFT JOIN mem
+ANY LEFT JOIN mem
     ON k1 = mem.k
-LEFT JOIN mem AS t
+ANY LEFT JOIN mem AS t
     ON k2 = t.k
 ORDER BY tab.v ASC;
 
 SELECT *
 FROM
     tab
-LEFT JOIN mem
+ANY LEFT JOIN mem
     ON k1 = mem.k
-RIGHT JOIN mem2
+ANY RIGHT JOIN mem2
     ON k2 = mem2.k
 ORDER BY tab.v ASC;
 
@@ -117,19 +117,19 @@ FROM (
         SELECT *
         FROM
             tab
-        LEFT JOIN mem AS t1
+        ANY LEFT JOIN mem AS t1
             ON tab.k = t1.k
-        LEFT JOIN mem AS t2
+        ANY LEFT JOIN mem AS t2
             ON tab.k = t2.k
-        LEFT JOIN mem AS t3
+        ANY LEFT JOIN mem AS t3
             ON tab.k = t3.k
-        LEFT JOIN mem AS t4
+        ANY LEFT JOIN mem AS t4
             ON tab.k = t4.k
-        RIGHT JOIN mem2 AS t5
+        ANY RIGHT JOIN mem2 AS t5
             ON tab.k = t5.k
-        LEFT JOIN mem AS t6
+        ANY LEFT JOIN mem AS t6
             ON tab.k = t6.k
-        LEFT JOIN mem AS t7
+        ANY LEFT JOIN mem AS t7
             ON tab.k = t7.k
     )
 WHERE like(`explain`, '%FilledJoin%');

@@ -12,20 +12,20 @@ FROM (
                 UNION ALL
                 SELECT
                     3,
-                    deltaSumState(arrayJoin([4, 6])) AS `rows`
+                    deltaSumState(arrayJoin([4, 6])) IGNORE NULLS AS `rows`
                 WITH TOTALS
                 UNION ALL
                 SELECT DISTINCT
                     2,
-                    deltaSumState(*) AS `rows`
+                    deltaSumState(*) IGNORE NULLS AS `rows`
                 QUALIFY delta_sum = ignore(ignore(materialize(1023), *, *, toUInt256(10), *, *, 10, *, toUInt256(toUInt128(10)), isNotNull(10), 10, 10, 10, 10, materialize(toNullable(toUInt128(10))), *, isNullable(NULL), 10))
             )
         ORDER BY
             1 DESC,
-            ignore(*, *, 10, *, 10, 10, 10, 10, 10, *, toUInt128(10), 10, *, 10, isNull(NULL), 10, 10) ASC,
+            ignore(*, *, 10, *, 10, 10, 10, 10, 10, *, toUInt128(10), 10, *, 10, isNull(NULL), 10, 10) ASC NULLS FIRST,
             x ASC
     )
-ORDER BY `ALL` DESC; -- { serverError ILLEGAL_AGGREGATION }
+ORDER BY `ALL` DESC NULLS FIRST; -- { serverError ILLEGAL_AGGREGATION }
 
 CREATE TABLE t
 (

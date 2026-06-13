@@ -9,7 +9,7 @@ FROM
             1 AS A,
             2 AS B
     ) AS X
-LEFT JOIN (
+ALL LEFT JOIN (
         SELECT
             3 AS A,
             2 AS B
@@ -23,7 +23,7 @@ FROM
             1 AS A,
             2 AS B
     ) AS X
-LEFT JOIN (
+ALL LEFT JOIN (
         SELECT
             3 AS A,
             2 AS B
@@ -37,7 +37,7 @@ FROM
             1 AS A,
             2 AS B
     )
-LEFT JOIN (
+ALL LEFT JOIN (
         SELECT
             3 AS A,
             2 AS B

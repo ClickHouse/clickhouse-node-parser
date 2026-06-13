@@ -17,7 +17,7 @@ FROM
             3,
             4
     ) AS js1
-INNER JOIN (
+ANY INNER JOIN (
         SELECT
             1 AS a,
             2 AS b,
@@ -52,7 +52,7 @@ FROM
             3,
             4
     ) AS js1
-LEFT JOIN (
+ALL LEFT JOIN (
         SELECT
             1 AS a,
             2 AS b,
@@ -87,7 +87,7 @@ FROM
             3,
             4
     ) AS js1
-LEFT JOIN (
+ALL LEFT JOIN (
         SELECT
             1 AS a,
             2 AS b,

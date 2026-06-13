@@ -103,7 +103,7 @@ SELECT
     cosineDistance(v1.v, v2.v)
 FROM
     vec2 AS v1
-CROSS JOIN vec2 AS v2
+, vec2 AS v2
 WHERE length(v1.v) == length(v2.v)
 ORDER BY `ALL` ASC;
 
@@ -120,7 +120,7 @@ SELECT
     cosineDistance(v1.v, v2.v)
 FROM
     vec2f AS v1
-CROSS JOIN vec2f AS v2
+, vec2f AS v2
 WHERE length(v1.v) == length(v2.v)
 ORDER BY `ALL` ASC;
 
@@ -137,7 +137,7 @@ SELECT
     cosineDistance(v1.v, v2.v)
 FROM
     vec2d AS v1
-CROSS JOIN vec2d AS v2
+, vec2d AS v2
 WHERE length(v1.v) == length(v2.v)
 ORDER BY `ALL` ASC;
 
@@ -152,7 +152,7 @@ SELECT
     cosineDistance(v1.v, v2.v)
 FROM
     vec2f AS v1
-CROSS JOIN vec2d AS v2
+, vec2d AS v2
 WHERE length(v1.v) == length(v2.v)
 ORDER BY `ALL` ASC;
 

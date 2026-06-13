@@ -151,7 +151,7 @@ FROM
 INNER JOIN t2
     ON NULL
 ORDER BY
-    t1.id ASC,
+    t1.id ASC NULLS FIRST,
     t2.id ASC
 SETTINGS join_use_nulls = 1;
 
@@ -161,7 +161,7 @@ FROM
 LEFT JOIN t2
     ON NULL
 ORDER BY
-    t1.id ASC,
+    t1.id ASC NULLS FIRST,
     t2.id ASC
 SETTINGS join_use_nulls = 1;
 
@@ -171,7 +171,7 @@ FROM
 RIGHT JOIN t2
     ON NULL
 ORDER BY
-    t1.id ASC,
+    t1.id ASC NULLS FIRST,
     t2.id ASC
 SETTINGS join_use_nulls = 1;
 
@@ -181,7 +181,7 @@ FROM
 FULL JOIN t2
     ON NULL
 ORDER BY
-    t1.id ASC,
+    t1.id ASC NULLS FIRST,
     t2.id ASC
 SETTINGS join_use_nulls = 1;
 
@@ -444,7 +444,7 @@ FROM
     (
         SELECT 1 AS a
     ) AS t1
-INNER JOIN (
+SEMI INNER JOIN (
         SELECT ('b', 256) AS b
     ) AS t2
     ON NULL;
@@ -454,7 +454,7 @@ FROM
     (
         SELECT 1 AS a
     ) AS t1
-INNER JOIN (
+ANTI INNER JOIN (
         SELECT ('b', 256) AS b
     ) AS t2
     ON NULL

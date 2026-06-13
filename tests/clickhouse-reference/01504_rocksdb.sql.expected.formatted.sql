@@ -117,7 +117,7 @@ FROM
             SUM(dummy.1) AS e
         FROM `01504_test`
     ) AS A
-LEFT JOIN (
+ANY LEFT JOIN (
         SELECT
             0 AS a,
             groupBitmapMerge(bm) AS b,

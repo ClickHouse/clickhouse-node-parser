@@ -167,7 +167,7 @@ FROM
         FROM `system`.numbers
         LIMIT 5
     ) AS f
-LEFT JOIN (
+ANY LEFT JOIN (
         SELECT
             x,
             y

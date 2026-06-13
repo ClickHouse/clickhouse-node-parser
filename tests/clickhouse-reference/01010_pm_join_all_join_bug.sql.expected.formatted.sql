@@ -39,7 +39,7 @@ FROM
             [1],
             count(1)
     ) AS t1
-RIGHT JOIN (
+ALL RIGHT JOIN (
         SELECT number AS s
         FROM numbers(2)
     ) AS t2

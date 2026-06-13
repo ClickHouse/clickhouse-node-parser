@@ -29,7 +29,7 @@ SELECT
     b + 1 AS a
 FROM
     tb__fuzz_0
-INNER JOIN tabc__fuzz_21
+GLOBAL ALL INNER JOIN tabc__fuzz_21
     USING (a)
 ORDER BY `ALL` DESC
 SETTINGS

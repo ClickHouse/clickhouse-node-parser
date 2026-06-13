@@ -4,4 +4,4 @@ FROM (
         FROM `system`.numbers
         LIMIT 3
     )
-ORDER BY x DESC;
+ORDER BY x DESC NULLS LAST;

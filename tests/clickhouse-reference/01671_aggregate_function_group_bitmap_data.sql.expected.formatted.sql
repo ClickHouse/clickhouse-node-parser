@@ -44,7 +44,7 @@ FROM
             uid,
             city_id
     ) AS js1
-LEFT JOIN (
+ALL LEFT JOIN (
         SELECT
             city_id,
             groupBitmapState(uid) AS day_before

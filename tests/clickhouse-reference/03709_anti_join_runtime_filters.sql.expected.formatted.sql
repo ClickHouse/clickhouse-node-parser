@@ -36,7 +36,7 @@ FROM (
         SELECT count()
         FROM
             customer
-        LEFT JOIN nation
+        ANTI LEFT JOIN nation
             ON c_nationkey = n_nationkey
     )
 WHERE (ilike(`explain`, '%Filter column%'))
@@ -47,14 +47,14 @@ WHERE (ilike(`explain`, '%Filter column%'))
 SELECT count()
 FROM
     customer
-LEFT JOIN nation
+ANTI LEFT JOIN nation
     ON c_nationkey = n_nationkey
 SETTINGS enable_join_runtime_filters = 0;
 
 SELECT count()
 FROM
     customer
-LEFT JOIN nation
+ANTI LEFT JOIN nation
     ON c_nationkey = n_nationkey
 SETTINGS enable_join_runtime_filters = 1;
 
@@ -65,7 +65,7 @@ FROM (
         SELECT count()
         FROM
             customer
-        RIGHT JOIN nation
+        ANTI RIGHT JOIN nation
             ON c_nationkey = n_nationkey
     )
 WHERE (ilike(`explain`, '%Filter column%'))

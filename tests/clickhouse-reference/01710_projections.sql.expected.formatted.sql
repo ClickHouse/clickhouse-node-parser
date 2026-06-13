@@ -183,8 +183,8 @@ PREWHERE domain_alias = 1.
 WHERE domain = NULL
 GROUP BY -9223372036854775808
 ORDER BY
-    countIf(first_time = 0) / count(-2147483649) DESC,
-    1048576 DESC;
+    countIf(first_time = 0) / count(-2147483649) DESC NULLS LAST,
+    1048576 DESC NULLS LAST;
 
 DROP TABLE IF EXISTS projection_without_key;
 

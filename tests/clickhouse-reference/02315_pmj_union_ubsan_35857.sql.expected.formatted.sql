@@ -13,7 +13,7 @@ FROM
             65536,
             NULL
     ) AS js1
-LEFT JOIN (
+ALL LEFT JOIN (
         SELECT 2::Nullable(UInt8) AS a
     ) AS js2
     USING (a)

@@ -30,7 +30,7 @@ SELECT
     N AS x
 FROM
     test_00740
-LEFT JOIN test_00740
+ANY LEFT JOIN test_00740
     USING (N);
 
 SELECT *

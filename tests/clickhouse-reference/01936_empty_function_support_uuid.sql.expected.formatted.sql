@@ -44,7 +44,7 @@ FROM
         SELECT *
         FROM users
     ) AS t1
-LEFT JOIN (
+ALL LEFT JOIN (
         SELECT *
         FROM orders
     ) AS t2

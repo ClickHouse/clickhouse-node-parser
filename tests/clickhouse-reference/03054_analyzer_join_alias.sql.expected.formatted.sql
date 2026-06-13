@@ -7,7 +7,7 @@ FROM
         SELECT number AS key_1
         FROM numbers(15)
     ) AS x
-INNER JOIN (
+ALL INNER JOIN (
         SELECT number AS key_1
         FROM numbers(10)
     ) AS z

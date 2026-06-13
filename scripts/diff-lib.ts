@@ -24,13 +24,13 @@ const EXPLAIN_ERROR = '<Explain Error>';
 
 // ── Output computation (shared by the plain and diff scripts) ───────────────────
 
-/** Recursively removes `location` and `parent` keys, matching tests/helpers.ts. */
+/** Recursively removes `location`, `parent`, and `isOperator` keys, matching tests/helpers.ts. */
 export function stripMeta(value: unknown): unknown {
   if (value === null || value === undefined || typeof value !== 'object') return value;
   if (Array.isArray(value)) return value.map(stripMeta);
   const result: Record<string, unknown> = {};
   for (const [k, v] of Object.entries(value as Record<string, unknown>)) {
-    if (k === 'location' || k === 'parent') continue;
+    if (k === 'location' || k === 'parent' || k === 'isOperator') continue;
     result[k] = stripMeta(v);
   }
   return result;

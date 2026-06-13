@@ -1,0 +1,1 @@
+SELECT * REPLACE (x + 1 AS y) FROM t

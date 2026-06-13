@@ -45,7 +45,7 @@ FROM
             ) AS trade_times
         SETTINGS join_algorithm = 'hash'
     ) AS trades
-LEFT JOIN tvs
+ASOF LEFT JOIN tvs
     USING (k, t);
 
 SELECT SUM(trades.price - tvs.tv)
@@ -66,7 +66,7 @@ FROM
             ) AS trade_times
         SETTINGS join_algorithm = 'hash'
     ) AS trades
-LEFT JOIN tvs
+ASOF LEFT JOIN tvs
     USING (k, t)
 SETTINGS join_algorithm = 'full_sorting_merge';
 

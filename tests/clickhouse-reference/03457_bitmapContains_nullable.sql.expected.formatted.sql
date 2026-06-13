@@ -35,7 +35,7 @@ t2 AS (
         AND (age <= hi), id, NULL)) AS bit_state
     FROM
         men
-    CROSS JOIN t
+    , t
     GROUP BY n
 )
 
@@ -44,5 +44,5 @@ SELECT
     sumIf(sal, bitmapContains(bit_state, id))
 FROM
     men
-CROSS JOIN t2
+, t2
 GROUP BY name; -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }

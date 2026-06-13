@@ -54,12 +54,12 @@ FROM t;
 SELECT t.COLUMNS('^c')
 FROM
     t
-CROSS JOIN u;
+, u;
 
 SELECT t.COLUMNS('^c') EXCEPT (test_hello, test_world)
 FROM
     t
-CROSS JOIN u;
+, u;
 
 SELECT *
 FROM (

@@ -25,7 +25,7 @@ SET enable_analyzer = 0;
 SELECT *
 FROM
     t1
-RIGHT JOIN t2
+ALL RIGHT JOIN t2
     USING (key)
 ORDER BY key ASC;
 

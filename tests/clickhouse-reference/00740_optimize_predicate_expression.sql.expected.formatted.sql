@@ -29,7 +29,7 @@ FROM (
                         FROM perf AS perf_1
                         WHERE user_id = 0
                     ) AS jss1
-                INNER JOIN (
+                ALL INNER JOIN (
                         SELECT
                             perf_2.site,
                             perf_2.z AS z_2
@@ -51,7 +51,7 @@ FROM (
                 FROM perf AS perf_1
                 WHERE user_id = 0
             ) AS js1
-        INNER JOIN (
+        ALL INNER JOIN (
                 SELECT
                     perf_2.site,
                     perf_2.z AS z_2

@@ -49,7 +49,7 @@ SELECT
     t4.c0
 FROM
     t3
-CROSS JOIN t0
-CROSS JOIN t1
-CROSS JOIN t2
-CROSS JOIN t4;
+, t0
+, t1
+, t2
+, t4;

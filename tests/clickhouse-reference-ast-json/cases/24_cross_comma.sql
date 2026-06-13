@@ -1,0 +1,1 @@
+SELECT * FROM a CROSS JOIN b, c

@@ -46,7 +46,7 @@ FROM (
         SELECT count()
         FROM
             partsupp
-        CROSS JOIN part
+        , part
         WHERE ps_partkey = p_partkey
             AND ps_availqty >= 10
     )

@@ -5,7 +5,7 @@ FROM
         FROM `system`.server_settings
         WHERE name = 'allow_use_jemalloc_memory'
     ) AS t1
-CROSS JOIN (
+, (
         SELECT getServerSetting('allow_use_jemalloc_memory') AS val
     ) AS t2;
 
@@ -16,7 +16,7 @@ FROM
         FROM `system`.server_settings
         WHERE name = 'mark_cache_policy'
     ) AS t1
-CROSS JOIN (
+, (
         SELECT getServerSetting('mark_cache_policy') AS val
     ) AS t2;
 

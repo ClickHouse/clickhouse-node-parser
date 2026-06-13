@@ -16,7 +16,7 @@ FROM
         FROM `system`.numbers
         LIMIT 10
     )
-INNER JOIN (
+ANY INNER JOIN (
         SELECT
             number AS k,
             toString(number) AS b
@@ -38,7 +38,7 @@ FROM
         FROM `system`.numbers
         LIMIT 10
     )
-LEFT JOIN (
+ANY LEFT JOIN (
         SELECT
             number AS k,
             toString(number) AS b
@@ -60,7 +60,7 @@ FROM
         FROM `system`.numbers
         LIMIT 10
     )
-RIGHT JOIN (
+ANY RIGHT JOIN (
         SELECT
             number AS k,
             toString(number) AS b
@@ -82,7 +82,7 @@ FROM
         FROM `system`.numbers
         LIMIT 10
     )
-FULL JOIN (
+ANY FULL JOIN (
         SELECT
             number AS k,
             toString(number) AS b

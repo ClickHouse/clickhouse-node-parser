@@ -29,7 +29,7 @@ SELECT
     t2.*
 FROM
     t1
-LEFT JOIN t2
+SEMI LEFT JOIN t2
     USING (x)
 ORDER BY
     t1.x ASC,
@@ -42,7 +42,7 @@ SELECT
     t2.*
 FROM
     t1
-RIGHT JOIN t2
+SEMI RIGHT JOIN t2
     USING (x)
 ORDER BY
     t1.x ASC,
@@ -55,7 +55,7 @@ SELECT
     t2.*
 FROM
     t1
-LEFT JOIN t2
+ANTI LEFT JOIN t2
     USING (x)
 ORDER BY
     t1.x ASC,
@@ -68,7 +68,7 @@ SELECT
     t2.*
 FROM
     t1
-RIGHT JOIN t2
+ANTI RIGHT JOIN t2
     USING (x)
 ORDER BY
     t1.x ASC,

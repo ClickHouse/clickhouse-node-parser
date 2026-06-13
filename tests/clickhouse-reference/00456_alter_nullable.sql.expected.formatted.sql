@@ -21,7 +21,7 @@ INSERT INTO nullable_alter (x);
 
 SELECT x
 FROM nullable_alter
-ORDER BY x ASC;
+ORDER BY x ASC NULLS FIRST;
 
 ALTER TABLE nullable_alter MODIFY COLUMN x Nullable(FixedString(5));
 

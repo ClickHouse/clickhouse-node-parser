@@ -38,7 +38,7 @@ FROM
     (
         SELECT arrayJoin([1, 2]) AS k
     ) AS js1
-LEFT JOIN `join`
+ANY LEFT JOIN `join`
     USING (k)
 ORDER BY `ALL` ASC;
 

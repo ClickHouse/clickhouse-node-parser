@@ -1,0 +1,1 @@
+SELECT * EXCEPT (a, b) FROM t

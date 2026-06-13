@@ -53,7 +53,7 @@ SELECT
     rhs.value_1
 FROM
     test_table_1 AS lhs
-INNER JOIN test_table_2 AS rhs
+ASOF INNER JOIN test_table_2 AS rhs
     ON lhs.id = rhs.id
     AND lhs.value_2 < rhs.value_2;
 

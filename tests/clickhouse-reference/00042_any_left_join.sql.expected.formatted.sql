@@ -11,7 +11,7 @@ FROM
         FROM test.hits
         GROUP BY EventDate
     )
-LEFT JOIN (
+ANY LEFT JOIN (
         SELECT
             StartDate AS EventDate,
             sum(Sign) AS visits

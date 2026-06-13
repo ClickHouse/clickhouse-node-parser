@@ -127,7 +127,7 @@ FROM (
     )
 GROUP BY GROUPING SETS ((toLowCardinality(0)), (toLowCardinality(toNullable(28))), (1))
 HAVING nullIf(c, 10) < 50
-ORDER BY c ASC
+ORDER BY c ASC NULLS FIRST
 SETTINGS group_by_use_nulls = 1; -- { serverError ILLEGAL_AGGREGATION }
 
 SELECT arraySplit(x -> 0, [])

@@ -12,7 +12,7 @@ FROM
             arrayJoin([1, 2, 3]) AS k,
             'Hello' AS x
     )
-FULL JOIN (
+ANY FULL JOIN (
         SELECT
             range(k) AS y,
             arrayJoin([3, 4, 5]) AS k
@@ -30,7 +30,7 @@ FROM
             arrayJoin([1, 2, 3]) AS k,
             'Hello' AS x
     )
-FULL JOIN (
+ANY FULL JOIN (
         SELECT
             range(k) AS y,
             arrayJoin([3, 4, 5]) AS k
@@ -48,7 +48,7 @@ FROM
             arrayJoin([1, 2, 3]) AS k,
             'Hello' AS x
     )
-FULL JOIN (
+ANY FULL JOIN (
         SELECT
             range(k) AS y,
             arrayJoin([3, 4, 5]) AS k
@@ -66,7 +66,7 @@ FROM
             arrayJoin([1, 2, 3]) AS k,
             'Hello' AS x
     )
-FULL JOIN (
+ANY FULL JOIN (
         SELECT
             range(k) AS y,
             arrayJoin([3, 4, 5]) AS k
@@ -82,7 +82,7 @@ FROM
             arrayJoin([1, 2, 3]) AS k,
             'Hello' AS x
     )
-FULL JOIN (
+ANY FULL JOIN (
         SELECT
             range(k) AS y,
             arrayJoin([3, 4, 5]) AS k
@@ -101,7 +101,7 @@ FROM
             arrayJoin([1, 2, 3]) AS k,
             'Hello' AS x
     )
-RIGHT JOIN (
+ANY RIGHT JOIN (
         SELECT
             range(k) AS y,
             arrayJoin([3, 4, 5]) AS k
@@ -119,7 +119,7 @@ FROM
             arrayJoin([1, 2, 3]) AS k,
             'Hello' AS x
     )
-RIGHT JOIN (
+ANY RIGHT JOIN (
         SELECT
             range(k) AS y,
             arrayJoin([3, 4, 5]) AS k
@@ -137,7 +137,7 @@ FROM
             arrayJoin([1, 2, 3]) AS k,
             'Hello' AS x
     )
-RIGHT JOIN (
+ANY RIGHT JOIN (
         SELECT
             range(k) AS y,
             arrayJoin([3, 4, 5]) AS k
@@ -155,7 +155,7 @@ FROM
             arrayJoin([1, 2, 3]) AS k,
             'Hello' AS x
     )
-RIGHT JOIN (
+ANY RIGHT JOIN (
         SELECT
             range(k) AS y,
             arrayJoin([3, 4, 5]) AS k
@@ -171,7 +171,7 @@ FROM
             arrayJoin([1, 2, 3]) AS k,
             'Hello' AS x
     )
-RIGHT JOIN (
+ANY RIGHT JOIN (
         SELECT
             range(k) AS y,
             arrayJoin([3, 4, 5]) AS k
@@ -214,7 +214,7 @@ SELECT
     val_t2
 FROM
     t1_00203
-FULL JOIN t2_00203
+ANY FULL JOIN t2_00203
     USING (k3, k1, k2)
 ORDER BY
     k1 ASC,
@@ -229,7 +229,7 @@ SELECT
     val_t2
 FROM
     t1_00203
-RIGHT JOIN t2_00203
+ANY RIGHT JOIN t2_00203
     USING (k3, k1, k2)
 ORDER BY
     k1 ASC,

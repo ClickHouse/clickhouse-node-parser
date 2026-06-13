@@ -21,7 +21,7 @@ FROM (
                     1
                 FROM test_00744
             )
-        INNER JOIN (
+        ALL INNER JOIN (
                 SELECT
                     count(),
                     1
@@ -41,7 +41,7 @@ FROM
             1
         FROM test_00744
     )
-INNER JOIN (
+ALL INNER JOIN (
         SELECT
             count(),
             1

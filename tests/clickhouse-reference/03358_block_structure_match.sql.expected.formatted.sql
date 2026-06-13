@@ -33,7 +33,7 @@ FROM (
         GROUP BY 2
     )
 WHERE materialize(4)
-ORDER BY materialize(4) ASC;
+ORDER BY materialize(4) ASC NULLS LAST;
 
 SELECT *
 FROM (

@@ -17,7 +17,7 @@ FORMAT PrettyMonoBlock;
 SELECT `left`.c2
 FROM
     t0 AS `left`
-LEFT JOIN t0 AS right_0
+ANTI LEFT JOIN t0 AS right_0
     ON ((`left`.c0) = (right_0.c1))
 WHERE (abs((negate((sign(right_0.c1))))));
 
@@ -26,20 +26,20 @@ FROM (
         SELECT (abs((negate((sign(right_0.c1)))))) AS check
         FROM
             t0 AS `left`
-        LEFT JOIN t0 AS right_0
+        ANTI LEFT JOIN t0 AS right_0
             ON ((`left`.c0) = (right_0.c1))
     );
 
 SELECT (abs((negate((sign(right_0.c1)))))) AS check
 FROM
     t0 AS `left`
-LEFT JOIN t0 AS right_0
+ANTI LEFT JOIN t0 AS right_0
     ON ((`left`.c0) = (right_0.c1));
 
 SELECT (abs((negate((sign(right_0.c1)))))) AS check
 FROM
     t0 AS `left`
-LEFT JOIN t0 AS right_0
+ANTI LEFT JOIN t0 AS right_0
     ON ((`left`.c0) = (right_0.c1))
 WHERE check <> 0;
 

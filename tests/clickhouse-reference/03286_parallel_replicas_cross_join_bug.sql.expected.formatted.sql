@@ -15,7 +15,7 @@ SET enable_parallel_replicas = 1, max_parallel_replicas = 3, cluster_for_paralle
 SELECT *
 FROM
     tab AS l
-CROSS JOIN tab AS r
+, tab AS r
 WHERE l.x < r.x
     AND r.x < 2;
 
@@ -26,7 +26,7 @@ FROM (
         SELECT *
         FROM
             tab AS l
-        CROSS JOIN tab AS r
+        , tab AS r
         WHERE r.x < 2
             AND l.x < 3
     );

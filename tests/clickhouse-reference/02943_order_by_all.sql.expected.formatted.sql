@@ -44,13 +44,13 @@ SELECT
     b,
     a
 FROM order_by_all
-ORDER BY `ALL` ASC;
+ORDER BY `ALL` ASC NULLS FIRST;
 
 SELECT
     b,
     a
 FROM order_by_all
-ORDER BY `ALL` ASC;
+ORDER BY `ALL` ASC NULLS LAST;
 
 SELECT *
 FROM order_by_all

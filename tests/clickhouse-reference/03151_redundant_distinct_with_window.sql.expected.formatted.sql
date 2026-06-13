@@ -20,7 +20,7 @@ SELECT
     t1.type AS type,
     sum(t1.val) AS sval,
     toStartOfDay(t1.dt) AS sday,
-    anyLast(sval) AS lval
+    anyLast(sval) OVER w AS lval
 FROM tab AS t1
 GROUP BY
     type,

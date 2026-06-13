@@ -6,15 +6,15 @@ FROM
     (
         SELECT [1] AS l
     ) AS s1
-CROSS JOIN (
+, (
         SELECT [2] AS r
     ) AS s2
-CROSS JOIN (
+, (
         SELECT
             'test' AS test,
             'query' AS query
     ) AS any_query
-CROSS JOIN (
+, (
         SELECT 1
     ) AS check_single_query;
 
@@ -28,15 +28,15 @@ FROM
     (
         SELECT 1
     ) AS rd
-CROSS JOIN (
+, (
         SELECT [[1,2], [3,4]] AS medians_by_version
     ) AS original_medians_array
-CROSS JOIN (
+, (
         SELECT
             'test' AS test,
             'query' AS query
     ) AS any_query
-CROSS JOIN (
+, (
         SELECT 1 AS A
     ) AS check_single_query;
 
@@ -87,7 +87,7 @@ FROM
                                                     version
                                                 FROM table
                                             ) AS no_query
-                                        CROSS JOIN numbers(1, 100000) AS nn
+                                        , numbers(1, 100000) AS nn
                                         ORDER BY
                                             virtual_run ASC,
                                             rand() ASC
@@ -100,7 +100,7 @@ FROM
                 GROUP BY virtual_run
             ) AS virtual_medians_array
     ) AS rd
-CROSS JOIN (
+, (
         SELECT groupArrayInsertAt(median_metrics, version) AS medians_by_version
         FROM (
                 SELECT
@@ -110,13 +110,13 @@ CROSS JOIN (
                 GROUP BY version
             ) AS original_medians
     ) AS original_medians_array
-CROSS JOIN (
+, (
         SELECT
             any(test) AS test,
             any(query) AS query
         FROM table
     ) AS any_query
-CROSS JOIN (
+, (
         SELECT throwIf(uniq((test, query)))
         FROM table
     ) AS check_single_query;

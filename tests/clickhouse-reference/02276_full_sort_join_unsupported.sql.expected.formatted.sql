@@ -32,19 +32,19 @@ INNER JOIN t2
 SELECT *
 FROM
     t1
-INNER JOIN t2
+ANTI INNER JOIN t2
     ON t1.key = t2.key; -- { serverError NOT_IMPLEMENTED }
 
 SELECT *
 FROM
     t1
-INNER JOIN t2
+SEMI INNER JOIN t2
     ON t1.key = t2.key; -- { serverError NOT_IMPLEMENTED }
 
 SELECT *
 FROM
     t1
-INNER JOIN t2
+ANY INNER JOIN t2
     ON t1.key = t2.key
 SETTINGS any_join_distinct_right_table_keys = 1; -- { serverError NOT_IMPLEMENTED }
 

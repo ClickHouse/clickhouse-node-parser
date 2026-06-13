@@ -14,7 +14,7 @@ FROM (
                     number / 2 AS n
                 FROM `system`.numbers
             ) AS js1
-        LEFT JOIN (
+        ANY LEFT JOIN (
                 SELECT
                     number / 3 AS n,
                     number AS j1,

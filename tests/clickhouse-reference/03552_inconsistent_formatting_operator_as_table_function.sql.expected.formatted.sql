@@ -28,7 +28,7 @@ PREWHERE *.1
 WHERE (notLike('SELECT * FROM t_prewarm_add_column%', query))
     AND (type = 'QueryFinish')
     AND (current_database = currentDatabase())
-ORDER BY `ALL` DESC; -- { serverError UNKNOWN_TABLE }
+ORDER BY `ALL` DESC NULLS FIRST; -- { serverError UNKNOWN_TABLE }
 
 SELECT (((1), (2)));
 

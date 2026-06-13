@@ -8,8 +8,8 @@ SELECT
     rank() OVER (PARTITION BY grouping(c.number) + grouping(b.number), multiIf(grouping(c.number) = 0, b.number, NULL) ORDER BY sum(a.number) DESC) AS r
 FROM
     numbers(10) AS a
-CROSS JOIN numbers(10) AS b
-CROSS JOIN numbers(10) AS c
+, numbers(10) AS b
+, numbers(10) AS c
 GROUP BY
     cn,
     bn

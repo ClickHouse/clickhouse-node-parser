@@ -33,7 +33,7 @@ SELECT
     s_b
 FROM
     t_00725_2
-LEFT JOIN (
+ALL LEFT JOIN (
         SELECT
             a,
             b,
@@ -49,7 +49,7 @@ SELECT
     s_00725_2.*
 FROM
     t_00725_2
-LEFT JOIN s_00725_2
+ALL LEFT JOIN s_00725_2
     USING (a, b)
 ORDER BY `ALL` ASC;
 
@@ -60,7 +60,7 @@ SELECT
     s_b
 FROM
     t_00725_2
-LEFT JOIN (
+ALL LEFT JOIN (
         SELECT
             a,
             b,
@@ -75,7 +75,7 @@ ORDER BY `ALL` ASC;
 SELECT *
 FROM
     t_00725_2
-LEFT JOIN (
+ALL LEFT JOIN (
         SELECT
             a AS s_a,
             b AS s_b
@@ -92,7 +92,7 @@ SELECT
     s_b
 FROM
     t_00725_2
-LEFT JOIN (
+ALL LEFT JOIN (
         SELECT
             a,
             b,
@@ -109,7 +109,7 @@ SELECT
     s_00725_2.*
 FROM
     t_00725_2
-LEFT JOIN s_00725_2
+ALL LEFT JOIN s_00725_2
     ON (s_00725_2.a = t_00725_2.a
     AND s_00725_2.b = t_00725_2.b)
 ORDER BY `ALL` ASC;

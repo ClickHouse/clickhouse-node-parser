@@ -7,10 +7,10 @@ FROM
     (
         SELECT 1
     )
-CROSS JOIN (
+, (
         SELECT 1
     )
-CROSS JOIN (
+, (
         SELECT 1
     );
 
@@ -19,10 +19,10 @@ FROM
     (
         SELECT 2
     )
-CROSS JOIN (
+, (
         SELECT 1
     ) AS a
-CROSS JOIN (
+, (
         SELECT 1
     ) AS b;
 
@@ -31,10 +31,10 @@ FROM
     (
         SELECT 1
     ) AS a
-CROSS JOIN (
+, (
         SELECT 2
     )
-CROSS JOIN (
+, (
         SELECT 1
     ) AS b;
 
@@ -43,9 +43,9 @@ FROM
     (
         SELECT 1
     ) AS a
-CROSS JOIN (
+, (
         SELECT 1
     ) AS b
-CROSS JOIN (
+, (
         SELECT 2
     );

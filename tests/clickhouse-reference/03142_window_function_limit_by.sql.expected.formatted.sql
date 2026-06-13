@@ -15,7 +15,7 @@ FROM VALUES(('a', 2, 4), ('a', 4, 2), ('a', 6, 3), ('a', 8, 4));
 SELECT
     k,
     `in` / out AS ratio,
-    count(*) AS count_rows_w
+    count(*) OVER w AS count_rows_w
 FROM error_win_func
 ORDER BY `ALL` ASC
 LIMIT 1 BY k

@@ -52,7 +52,7 @@ FROM (
         SELECT t1.a
         FROM
             t1
-        CROSS JOIN t2
+        , t2
         WHERE t1.a = t2.a
     );
 
@@ -65,7 +65,7 @@ FROM (
         SELECT t1.a
         FROM
             t1
-        CROSS JOIN t2
+        , t2
         WHERE t1.b = t2.b
     );
 
@@ -78,8 +78,8 @@ FROM (
         SELECT t1.a
         FROM
             t1
-        CROSS JOIN t2
-        CROSS JOIN t3
+        , t2
+        , t3
         WHERE t1.a = t2.a
             AND t1.a = t3.a
     );
@@ -93,8 +93,8 @@ FROM (
         SELECT t1.a
         FROM
             t1
-        CROSS JOIN t2
-        CROSS JOIN t3
+        , t2
+        , t3
         WHERE t1.b = t2.b
             AND t1.b = t3.b
     );
@@ -108,9 +108,9 @@ FROM (
         SELECT t1.a
         FROM
             t1
-        CROSS JOIN t2
-        CROSS JOIN t3
-        CROSS JOIN t4
+        , t2
+        , t3
+        , t4
         WHERE t1.a = t2.a
             AND t1.a = t3.a
             AND t1.a = t4.a
@@ -125,9 +125,9 @@ FROM (
         SELECT t1.a
         FROM
             t1
-        CROSS JOIN t2
-        CROSS JOIN t3
-        CROSS JOIN t4
+        , t2
+        , t3
+        , t4
         WHERE t1.b = t2.b
             AND t1.b = t3.b
             AND t1.b = t4.b
@@ -142,9 +142,9 @@ FROM (
         SELECT t1.a
         FROM
             t1
-        CROSS JOIN t2
-        CROSS JOIN t3
-        CROSS JOIN t4
+        , t2
+        , t3
+        , t4
         WHERE t2.a = t1.a
             AND t2.a = t3.a
             AND t2.a = t4.a
@@ -159,9 +159,9 @@ FROM (
         SELECT t1.a
         FROM
             t1
-        CROSS JOIN t2
-        CROSS JOIN t3
-        CROSS JOIN t4
+        , t2
+        , t3
+        , t4
         WHERE t3.a = t1.a
             AND t3.a = t2.a
             AND t3.a = t4.a
@@ -176,9 +176,9 @@ FROM (
         SELECT t1.a
         FROM
             t1
-        CROSS JOIN t2
-        CROSS JOIN t3
-        CROSS JOIN t4
+        , t2
+        , t3
+        , t4
         WHERE t4.a = t1.a
             AND t4.a = t2.a
             AND t4.a = t3.a
@@ -193,9 +193,9 @@ FROM (
         SELECT t1.a
         FROM
             t1
-        CROSS JOIN t2
-        CROSS JOIN t3
-        CROSS JOIN t4
+        , t2
+        , t3
+        , t4
         WHERE t1.a = t2.a
             AND t2.a = t3.a
             AND t3.a = t4.a
@@ -210,9 +210,9 @@ FROM (
         SELECT t1.a
         FROM
             t1
-        CROSS JOIN t2
-        CROSS JOIN t3
-        CROSS JOIN t4
+        , t2
+        , t3
+        , t4
     );
 
 SELECT
@@ -238,7 +238,7 @@ FROM (
         SELECT t1.a
         FROM
             t1
-        CROSS JOIN t2
+        , t2
         CROSS JOIN t3
     );
 
@@ -281,7 +281,7 @@ FROM (
         SELECT t1.a
         FROM
             t1
-        CROSS JOIN t2
+        , t2
         WHERE t1.a = t2.a
     )
 SETTINGS enable_analyzer = 1;
@@ -295,7 +295,7 @@ FROM (
         SELECT t1.a
         FROM
             t1
-        CROSS JOIN t2
+        , t2
         WHERE t1.b = t2.b
     )
 SETTINGS enable_analyzer = 1;
@@ -309,8 +309,8 @@ FROM (
         SELECT t1.a
         FROM
             t1
-        CROSS JOIN t2
-        CROSS JOIN t3
+        , t2
+        , t3
         WHERE t1.a = t2.a
             AND t1.a = t3.a
     )
@@ -325,8 +325,8 @@ FROM (
         SELECT t1.a
         FROM
             t1
-        CROSS JOIN t2
-        CROSS JOIN t3
+        , t2
+        , t3
         WHERE t1.b = t2.b
             AND t1.b = t3.b
     )
@@ -341,9 +341,9 @@ FROM (
         SELECT t1.a
         FROM
             t1
-        CROSS JOIN t2
-        CROSS JOIN t3
-        CROSS JOIN t4
+        , t2
+        , t3
+        , t4
         WHERE t1.a = t2.a
             AND t1.a = t3.a
             AND t1.a = t4.a
@@ -359,9 +359,9 @@ FROM (
         SELECT t1.a
         FROM
             t1
-        CROSS JOIN t2
-        CROSS JOIN t3
-        CROSS JOIN t4
+        , t2
+        , t3
+        , t4
         WHERE t1.b = t2.b
             AND t1.b = t3.b
             AND t1.b = t4.b
@@ -377,9 +377,9 @@ FROM (
         SELECT t1.a
         FROM
             t1
-        CROSS JOIN t2
-        CROSS JOIN t3
-        CROSS JOIN t4
+        , t2
+        , t3
+        , t4
         WHERE t2.a = t1.a
             AND t2.a = t3.a
             AND t2.a = t4.a
@@ -395,9 +395,9 @@ FROM (
         SELECT t1.a
         FROM
             t1
-        CROSS JOIN t2
-        CROSS JOIN t3
-        CROSS JOIN t4
+        , t2
+        , t3
+        , t4
         WHERE t3.a = t1.a
             AND t3.a = t2.a
             AND t3.a = t4.a
@@ -413,9 +413,9 @@ FROM (
         SELECT t1.a
         FROM
             t1
-        CROSS JOIN t2
-        CROSS JOIN t3
-        CROSS JOIN t4
+        , t2
+        , t3
+        , t4
         WHERE t4.a = t1.a
             AND t4.a = t2.a
             AND t4.a = t3.a
@@ -431,9 +431,9 @@ FROM (
         SELECT t1.a
         FROM
             t1
-        CROSS JOIN t2
-        CROSS JOIN t3
-        CROSS JOIN t4
+        , t2
+        , t3
+        , t4
         WHERE t1.a = t2.a
             AND t2.a = t3.a
             AND t3.a = t4.a
@@ -449,9 +449,9 @@ FROM (
         SELECT t1.a
         FROM
             t1
-        CROSS JOIN t2
-        CROSS JOIN t3
-        CROSS JOIN t4
+        , t2
+        , t3
+        , t4
     )
 SETTINGS enable_analyzer = 1;
 
@@ -479,7 +479,7 @@ FROM (
         SELECT t1.a
         FROM
             t1
-        CROSS JOIN t2
+        , t2
         CROSS JOIN t3
     )
 SETTINGS enable_analyzer = 1;
@@ -528,7 +528,7 @@ SET enable_analyzer = 1;
 SELECT *
 FROM
     t1
-CROSS JOIN t2
+, t2
 ORDER BY
     t1.a ASC,
     t2.b ASC;
@@ -536,7 +536,7 @@ ORDER BY
 SELECT *
 FROM
     t1
-CROSS JOIN t2
+, t2
 WHERE t1.a = t2.a
 ORDER BY
     t1.a ASC,
@@ -547,7 +547,7 @@ SELECT
     t2.b
 FROM
     t1
-CROSS JOIN t2
+, t2
 WHERE t1.b = t2.b;
 
 SELECT
@@ -556,8 +556,8 @@ SELECT
     t3.b
 FROM
     t1
-CROSS JOIN t2
-CROSS JOIN t3
+, t2
+, t3
 WHERE t1.a = t2.a
     AND t1.a = t3.a
 ORDER BY
@@ -570,8 +570,8 @@ SELECT
     t3.b
 FROM
     t1
-CROSS JOIN t2
-CROSS JOIN t3
+, t2
+, t3
 WHERE t1.b = t2.b
     AND t1.b = t3.b;
 
@@ -582,9 +582,9 @@ SELECT
     t4.b
 FROM
     t1
-CROSS JOIN t2
-CROSS JOIN t3
-CROSS JOIN t4
+, t2
+, t3
+, t4
 WHERE t1.a = t2.a
     AND t1.a = t3.a
     AND t1.a = t4.a
@@ -600,9 +600,9 @@ SELECT
     t4.b
 FROM
     t1
-CROSS JOIN t2
-CROSS JOIN t3
-CROSS JOIN t4
+, t2
+, t3
+, t4
 WHERE t1.b = t2.b
     AND t1.b = t3.b
     AND t1.b = t4.b;
@@ -614,9 +614,9 @@ SELECT
     t4.b
 FROM
     t1
-CROSS JOIN t2
-CROSS JOIN t3
-CROSS JOIN t4
+, t2
+, t3
+, t4
 WHERE t1.a = t2.a
     AND t2.a = t3.a
     AND t3.a = t4.a

@@ -43,7 +43,7 @@ FROM
             *
         FROM users1
     ) AS u1
-LEFT JOIN users2 AS u2
+ANY LEFT JOIN users2 AS u2
     ON u1.uid = u2.uid
 WHERE 1 / u2.age > 1;
 
@@ -56,6 +56,6 @@ FROM
             *
         FROM users1
     ) AS u1
-LEFT JOIN users2 AS u2
+ANY LEFT JOIN users2 AS u2
     ON u1.uid = u2.uid
 WHERE u2.age > 1;

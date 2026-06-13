@@ -61,7 +61,7 @@ WITH RECURSIVE search_graph AS (
         arrayConcat(sg.path, [tuple(g.f, g.t)])
     FROM
         graph AS g
-    CROSS JOIN search_graph AS sg
+    , search_graph AS sg
     WHERE g.f = sg.t
         AND NOT is_cycle
 )
@@ -84,7 +84,7 @@ WITH RECURSIVE search_graph AS (
         arrayConcat(sg.path, [tuple(g.f, g.t)])
     FROM
         graph AS g
-    CROSS JOIN search_graph AS sg
+    , search_graph AS sg
     WHERE g.f = sg.t
         AND NOT is_cycle
 )

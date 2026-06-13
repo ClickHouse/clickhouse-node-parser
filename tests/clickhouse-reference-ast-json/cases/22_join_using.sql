@@ -1,0 +1,1 @@
+SELECT * FROM a LEFT JOIN b USING (x, y)

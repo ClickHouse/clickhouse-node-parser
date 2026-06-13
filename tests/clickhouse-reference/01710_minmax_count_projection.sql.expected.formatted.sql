@@ -75,7 +75,7 @@ WHERE (_partition_value.1) = 0
 GROUP BY
     ignore(bitTest(ignore(NULL), 0), NULL, (_partition_value.1) = 7, '10.25', bitTest(NULL, 0), NULL, ignore(ignore(-2147483647, NULL)), 1024),
     _partition_id
-ORDER BY _partition_id ASC;
+ORDER BY _partition_id ASC NULLS FIRST;
 
 DROP TABLE d;
 

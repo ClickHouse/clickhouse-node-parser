@@ -31,7 +31,7 @@ SELECT
     c0,
     isNull(c0) AS is_null
 FROM t_join_nullable_string
-ORDER BY c0 ASC;
+ORDER BY c0 ASC NULLS LAST;
 
 -- Case 3: ANY strictness
 CREATE TABLE t_join_nullable_string

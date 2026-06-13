@@ -27,7 +27,7 @@ GROUP BY
     child_key
 ORDER BY
     child_key ASC,
-    parent_key ASC
+    parent_key ASC NULLS LAST
 SETTINGS
     max_threads = 1,
     optimize_aggregation_in_order = 1;
@@ -44,7 +44,7 @@ GROUP BY
 WITH TOTALS
 ORDER BY
     child_key ASC,
-    parent_key ASC
+    parent_key ASC NULLS LAST
 SETTINGS
     max_threads = 1,
     optimize_aggregation_in_order = 1;

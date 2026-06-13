@@ -17,7 +17,7 @@ FROM
             dummy AS d2
         FROM `system`.one
     ))) AS lhs
-INNER JOIN rhs
+GLOBAL INNER JOIN rhs
     USING (d1)
 ORDER BY rhs.d2 ASC
 SETTINGS enable_analyzer = 0; -- { serverError ALIAS_REQUIRED }
@@ -40,7 +40,7 @@ FROM
             dummy AS d2
         FROM `system`.one
     ))) AS lhs
-INNER JOIN rhs
+GLOBAL INNER JOIN rhs
     USING (d1)
 ORDER BY rhs.d2 ASC
 SETTINGS enable_analyzer = 1; -- It works with analyzer; rhs is an alias itself.
@@ -63,7 +63,7 @@ FROM
             dummy AS d2
         FROM `system`.one
     ))) AS lhs
-INNER JOIN rhs
+GLOBAL INNER JOIN rhs
     USING (d1)
 ORDER BY rhs.d2 ASC
 SETTINGS joined_subquery_requires_alias = 0;
@@ -86,7 +86,7 @@ FROM
             dummy AS d2
         FROM `system`.one
     ))) AS lhs
-INNER JOIN rhs_ AS rhs
+GLOBAL INNER JOIN rhs_ AS rhs
     USING (d1)
 ORDER BY rhs.d2 ASC
 SETTINGS joined_subquery_requires_alias = 0;

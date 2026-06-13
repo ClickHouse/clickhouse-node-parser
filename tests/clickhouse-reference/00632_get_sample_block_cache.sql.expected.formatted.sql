@@ -259,7 +259,7 @@ FROM (
                                                                                                                                 SELECT entityIri
                                                                                                                                 FROM dict_string
                                                                                                                             )
-                                                                                                                        LEFT JOIN (
+                                                                                                                        ANY LEFT JOIN (
                                                                                                                                 SELECT
                                                                                                                                     uniq(learnerId) AS `watchers-count`,
                                                                                                                                     entityIri
@@ -273,7 +273,7 @@ FROM (
                                                                                                                             )
                                                                                                                             USING (entityIri)
                                                                                                                     )
-                                                                                                                LEFT JOIN (
+                                                                                                                ANY LEFT JOIN (
                                                                                                                         SELECT
                                                                                                                             avg(viewDurationSum) AS `time-repeating-average`,
                                                                                                                             entityIri
@@ -297,7 +297,7 @@ FROM (
                                                                                                                     )
                                                                                                                     USING (entityIri)
                                                                                                             )
-                                                                                                        LEFT JOIN (
+                                                                                                        ANY LEFT JOIN (
                                                                                                                 SELECT
                                                                                                                     avg(views.viewDuration) AS `reject-views-duration-average`,
                                                                                                                     entityIri
@@ -312,7 +312,7 @@ FROM (
                                                                                                             )
                                                                                                             USING (entityIri)
                                                                                                     )
-                                                                                                LEFT JOIN (
+                                                                                                ANY LEFT JOIN (
                                                                                                         SELECT
                                                                                                             avg(viewsCount) AS `repeating-views-count-average`,
                                                                                                             entityIri
@@ -336,7 +336,7 @@ FROM (
                                                                                                     )
                                                                                                     USING (entityIri)
                                                                                             )
-                                                                                        LEFT JOIN (
+                                                                                        ANY LEFT JOIN (
                                                                                                 SELECT
                                                                                                     avg(views.viewDuration) AS `views-duration-average`,
                                                                                                     entityIri
@@ -350,7 +350,7 @@ FROM (
                                                                                             )
                                                                                             USING (entityIri)
                                                                                     )
-                                                                                LEFT JOIN (
+                                                                                ANY LEFT JOIN (
                                                                                         SELECT
                                                                                             avg(views.watchedPart) AS `watched-part-average`,
                                                                                             entityIri
@@ -364,7 +364,7 @@ FROM (
                                                                                     )
                                                                                     USING (entityIri)
                                                                             )
-                                                                        LEFT JOIN (
+                                                                        ANY LEFT JOIN (
                                                                                 SELECT
                                                                                     count() AS `rejects-count`,
                                                                                     entityIri
@@ -379,7 +379,7 @@ FROM (
                                                                             )
                                                                             USING (entityIri)
                                                                     )
-                                                                LEFT JOIN (
+                                                                ANY LEFT JOIN (
                                                                         SELECT
                                                                             avg(progressMax) AS `progress-average`,
                                                                             entityIri
@@ -402,7 +402,7 @@ FROM (
                                                                     )
                                                                     USING (entityIri)
                                                             )
-                                                        LEFT JOIN (
+                                                        ANY LEFT JOIN (
                                                                 SELECT
                                                                     avg(fullWatchedViews) AS `views-count-before-full-watched-average`,
                                                                     entityIri
@@ -414,7 +414,7 @@ FROM (
                                                             )
                                                             USING (entityIri)
                                                     )
-                                                LEFT JOIN (
+                                                ANY LEFT JOIN (
                                                         SELECT
                                                             any(duration) AS duration,
                                                             entityIri
@@ -426,7 +426,7 @@ FROM (
                                                     )
                                                     USING (entityIri)
                                             )
-                                        LEFT JOIN (
+                                        ANY LEFT JOIN (
                                                 SELECT
                                                     uniq(learnerId) AS `full-watched-learners-count`,
                                                     entityIri
@@ -439,7 +439,7 @@ FROM (
                                             )
                                             USING (entityIri)
                                     )
-                                LEFT JOIN (
+                                ANY LEFT JOIN (
                                         SELECT
                                             uniq(learnerId) AS `overall-watchers-count`,
                                             entityIri
@@ -453,7 +453,7 @@ FROM (
                                     )
                                     USING (entityIri)
                             )
-                        LEFT JOIN (
+                        ANY LEFT JOIN (
                                 SELECT
                                     uniq(learnerId) AS `overall-full-watched-learners-count`,
                                     entityIri
@@ -466,7 +466,7 @@ FROM (
                             )
                             USING (entityIri)
                     )
-                LEFT JOIN (
+                ANY LEFT JOIN (
                         SELECT
                             count() AS `views-count`,
                             entityIri
@@ -480,7 +480,7 @@ FROM (
                     )
                     USING (entityIri)
             )
-        LEFT JOIN (
+        ANY LEFT JOIN (
                 SELECT
                     avg(fullWatchedTime) AS `time-before-full-watched-average`,
                     entityIri

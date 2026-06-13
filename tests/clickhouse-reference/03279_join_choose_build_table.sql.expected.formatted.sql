@@ -46,7 +46,7 @@ SET enable_join_runtime_filters = 0;
 SELECT *
 FROM
     products
-CROSS JOIN sales
+, sales
 WHERE sales.product_id = products.id
     AND date = '2024-05-07'
 SETTINGS log_comment = '03279_join_choose_build_table_no_idx'
@@ -55,7 +55,7 @@ FORMAT Null;
 SELECT *
 FROM
     sales
-CROSS JOIN products
+, products
 WHERE sales.product_id = products.id
     AND date = '2024-05-07'
 SETTINGS log_comment = '03279_join_choose_build_table_no_idx'
@@ -70,7 +70,7 @@ ALTER TABLE sales MATERIALIZE INDEX date_idx;
 SELECT *
 FROM
     products
-CROSS JOIN sales
+, sales
 WHERE sales.product_id = products.id
     AND date = '2024-05-07'
 SETTINGS log_comment = '03279_join_choose_build_table_idx'
@@ -79,7 +79,7 @@ FORMAT Null;
 SELECT *
 FROM
     sales
-CROSS JOIN products
+, products
 WHERE sales.product_id = products.id
     AND date = '2024-05-07'
 SETTINGS log_comment = '03279_join_choose_build_table_idx'

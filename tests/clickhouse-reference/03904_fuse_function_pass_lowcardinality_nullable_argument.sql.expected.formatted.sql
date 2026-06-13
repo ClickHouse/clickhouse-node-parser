@@ -12,7 +12,7 @@ CREATE TABLE test
 )
 ENGINE = Log;
 
-SELECT count(b) * count(b)
+SELECT count(b) * count(b) IGNORE NULLS
 FROM (
         SELECT b
         FROM test
@@ -22,7 +22,7 @@ SELECT
     avg(b) * 3,
     (sum(b) + 1) + count(b),
     count(b) * count(b),
-    count()
+    count() IGNORE NULLS
 FROM (
         SELECT b
         FROM test
@@ -52,7 +52,7 @@ FROM (
 SET enable_analyzer = 1;
 
 EXPLAIN SYNTAX run_query_tree_passes = 1
-SELECT count(b) * count(b)
+SELECT count(b) * count(b) IGNORE NULLS
 FROM (
         SELECT b
         FROM test
@@ -63,7 +63,7 @@ SELECT
     avg(b) * 3,
     (sum(b) + 1) + count(b),
     count(b) * count(b),
-    count()
+    count() IGNORE NULLS
 FROM (
         SELECT b
         FROM test

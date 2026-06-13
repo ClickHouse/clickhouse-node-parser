@@ -15,7 +15,7 @@ SELECT
     traf
 FROM order_by_nulls_first
 ORDER BY
-    diff DESC,
+    diff DESC NULLS FIRST,
     traf ASC
 LIMIT 1, 4;
 
@@ -26,7 +26,7 @@ SELECT
     traf
 FROM order_by_nulls_first
 ORDER BY
-    diff DESC,
+    diff DESC NULLS FIRST,
     traf ASC;
 
 SELECT
@@ -34,7 +34,7 @@ SELECT
     traf
 FROM order_by_nulls_first
 ORDER BY
-    diff DESC,
+    diff DESC NULLS LAST,
     traf ASC;
 
 SELECT
@@ -42,7 +42,7 @@ SELECT
     traf
 FROM order_by_nulls_first
 ORDER BY
-    diff ASC,
+    diff ASC NULLS FIRST,
     traf ASC;
 
 SELECT
@@ -50,7 +50,7 @@ SELECT
     traf
 FROM order_by_nulls_first
 ORDER BY
-    diff ASC,
+    diff ASC NULLS LAST,
     traf ASC;
 
 SELECT
@@ -58,7 +58,7 @@ SELECT
     traf
 FROM order_by_nulls_first
 ORDER BY
-    diff DESC,
+    diff DESC NULLS FIRST,
     traf DESC;
 
 SELECT
@@ -66,7 +66,7 @@ SELECT
     traf
 FROM order_by_nulls_first
 ORDER BY
-    diff DESC,
+    diff DESC NULLS LAST,
     traf DESC;
 
 SELECT
@@ -74,7 +74,7 @@ SELECT
     traf
 FROM order_by_nulls_first
 ORDER BY
-    diff ASC,
+    diff ASC NULLS FIRST,
     traf DESC;
 
 SELECT
@@ -82,5 +82,5 @@ SELECT
     traf
 FROM order_by_nulls_first
 ORDER BY
-    diff ASC,
+    diff ASC NULLS LAST,
     traf DESC;

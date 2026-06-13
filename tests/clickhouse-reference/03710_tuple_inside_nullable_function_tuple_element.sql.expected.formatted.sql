@@ -324,8 +324,8 @@ ORDER BY id ASC;
 SELECT
     id,
     value,
-    row_number() OVER (ORDER BY value ASC, id ASC) AS rank,
-    dense_rank() OVER (ORDER BY value ASC) AS dense_rank
+    row_number() OVER (ORDER BY value ASC NULLS LAST, id ASC) AS rank,
+    dense_rank() OVER (ORDER BY value ASC NULLS LAST) AS dense_rank
 FROM (
         SELECT
             id,
@@ -349,7 +349,7 @@ FROM (
         FROM test_nullable_tuples
         WHERE id >= 4
     )
-ORDER BY value ASC;
+ORDER BY value ASC NULLS LAST;
 
 SELECT
     id,
@@ -364,5 +364,5 @@ SELECT
     data.2 AS name
 FROM test_nullable_tuples
 ORDER BY
-    data.1 ASC,
+    data.1 ASC NULLS LAST,
     id ASC;

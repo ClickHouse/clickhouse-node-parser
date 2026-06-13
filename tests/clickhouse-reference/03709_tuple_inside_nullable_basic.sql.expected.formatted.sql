@@ -126,7 +126,7 @@ SELECT
     tup
 FROM tuple_test
 ORDER BY
-    tup ASC,
+    tup ASC NULLS FIRST,
     id ASC;
 
 SELECT
@@ -134,7 +134,7 @@ SELECT
     tup
 FROM tuple_test
 ORDER BY
-    tup ASC,
+    tup ASC NULLS LAST,
     id ASC;
 
 SELECT
@@ -158,7 +158,7 @@ SELECT
     tup.u
 FROM tuple_test
 ORDER BY
-    tup.u ASC,
+    tup.u ASC NULLS FIRST,
     id ASC;
 
 SELECT
@@ -166,7 +166,7 @@ SELECT
     tup.u
 FROM tuple_test
 ORDER BY
-    tup.u ASC,
+    tup.u ASC NULLS LAST,
     id ASC;
 
 SELECT
@@ -174,7 +174,7 @@ SELECT
     tup.s
 FROM tuple_test
 ORDER BY
-    tup.s ASC,
+    tup.s ASC NULLS LAST,
     id ASC;
 
 SELECT
@@ -183,7 +183,7 @@ SELECT
     tup.s
 FROM tuple_test
 ORDER BY
-    tup.u ASC,
+    tup.u ASC NULLS LAST,
     tup.s ASC,
     id ASC;
 
@@ -193,7 +193,7 @@ SELECT
     n
 FROM tuple_test
 ORDER BY
-    n ASC,
+    n ASC NULLS LAST,
     tup.u ASC;
 
 SELECT
@@ -201,7 +201,7 @@ SELECT
     count() AS cnt
 FROM tuple_test
 GROUP BY tup
-ORDER BY tup ASC;
+ORDER BY tup ASC NULLS LAST;
 
 SELECT
     tup.u,
@@ -209,14 +209,14 @@ SELECT
     sum(n) AS sum_n
 FROM tuple_test
 GROUP BY tup.u
-ORDER BY tup.u ASC;
+ORDER BY tup.u ASC NULLS LAST;
 
 SELECT
     tup.s,
     count() AS cnt
 FROM tuple_test
 GROUP BY tup.s
-ORDER BY tup.s ASC;
+ORDER BY tup.s ASC NULLS LAST;
 
 SELECT
     tup.u,
@@ -227,7 +227,7 @@ GROUP BY
     tup.u,
     tup.s
 ORDER BY
-    tup.u ASC,
+    tup.u ASC NULLS LAST,
     tup.s ASC;
 
 SELECT
@@ -250,7 +250,7 @@ SELECT
 FROM tuple_test
 GROUP BY tup.u
 HAVING cnt > 1
-ORDER BY tup.u ASC;
+ORDER BY tup.u ASC NULLS LAST;
 
 SELECT
     tup.u,
@@ -258,7 +258,7 @@ SELECT
 FROM tuple_test
 GROUP BY tup.u
 HAVING sum_n > 400
-ORDER BY tup.u ASC;
+ORDER BY tup.u ASC NULLS LAST;
 
 SELECT
     tup.u,
@@ -344,7 +344,7 @@ LEFT JOIN tuple_test AS t2
     AND t1.id != t2.id
 ORDER BY
     t1.id ASC,
-    t2.id ASC
+    t2.id ASC NULLS LAST
 SETTINGS enable_analyzer = 1; -- t1.tup.u notation is not recognized in old analyzer
 
 SELECT
@@ -361,18 +361,18 @@ ORDER BY
 
 SELECT DISTINCT tup
 FROM tuple_test
-ORDER BY tup ASC;
+ORDER BY tup ASC NULLS LAST;
 
 SELECT DISTINCT tup.u
 FROM tuple_test
-ORDER BY tup.u ASC;
+ORDER BY tup.u ASC NULLS LAST;
 
 SELECT DISTINCT
     tup.u,
     tup.s
 FROM tuple_test
 ORDER BY
-    tup.u ASC,
+    tup.u ASC NULLS LAST,
     tup.s ASC;
 
 SELECT tup
@@ -385,7 +385,7 @@ FROM (
         FROM tuple_test
         WHERE id >= 3
     )
-ORDER BY tup ASC;
+ORDER BY tup ASC NULLS LAST;
 
 SELECT value
 FROM (
@@ -395,7 +395,7 @@ FROM (
         SELECT n AS value
         FROM tuple_test
     )
-ORDER BY value ASC;
+ORDER BY value ASC NULLS LAST;
 
 SELECT tup.u
 FROM tuple_test
@@ -489,7 +489,7 @@ ORDER BY id ASC;
 SELECT
     id,
     tup.u,
-    row_number() OVER (ORDER BY tup.u ASC, id ASC) AS rn
+    row_number() OVER (ORDER BY tup.u ASC, id ASC NULLS LAST) AS rn
 FROM tuple_test
 ORDER BY
     rn ASC,
@@ -498,8 +498,8 @@ ORDER BY
 SELECT
     id,
     tup.u,
-    rank() OVER (ORDER BY tup.u ASC) AS rnk,
-    dense_rank() OVER (ORDER BY tup.u ASC) AS dense_rnk
+    rank() OVER (ORDER BY tup.u ASC NULLS LAST) AS rnk,
+    dense_rank() OVER (ORDER BY tup.u ASC NULLS LAST) AS dense_rnk
 FROM tuple_test
 ORDER BY id ASC;
 
@@ -507,7 +507,7 @@ SELECT
     id,
     tup.u,
     isNull(tup),
-    row_number() OVER (PARTITION BY isNull(tup) ORDER BY tup.u ASC, id ASC) AS rn_in_partition
+    row_number() OVER (PARTITION BY isNull(tup) ORDER BY tup.u ASC, id ASC NULLS LAST) AS rn_in_partition
 FROM tuple_test
 ORDER BY
     isNull(tup) ASC,
@@ -529,7 +529,7 @@ SELECT
     t1.tup != t2.tup AS is_not_equal
 FROM
     tuple_test AS t1
-CROSS JOIN tuple_test AS t2
+, tuple_test AS t2
 WHERE t1.id = 1
     AND t2.id IN (1, 2, 3)
 ORDER BY

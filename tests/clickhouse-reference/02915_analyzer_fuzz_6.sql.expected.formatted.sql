@@ -41,9 +41,9 @@ FROM t__fuzz_307 FINAL
 ORDER BY
     (toNullable('655.36'), 2, toNullable
 ('0.2147483648'), k2) ASC,
-    toNullable('102.3') DESC,
+    toNullable('102.3') DESC NULLS FIRST,
     '10.25' DESC,
-    k ASC
+    k ASC NULLS FIRST
 FORMAT Null;
 
 CREATE TABLE t__fuzz_282
@@ -67,7 +67,7 @@ SELECT
 FROM t__fuzz_282 FINAL
 ORDER BY
     (toNullable('655.36'), 2, toNullable('0.2147483648'), k2) ASC,
-    toNullable('102.3') DESC,
+    toNullable('102.3') DESC NULLS FIRST,
     '10.25' DESC,
-    k ASC
+    k ASC NULLS FIRST
 FORMAT Null;

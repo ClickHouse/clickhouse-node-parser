@@ -64,14 +64,14 @@ ORDER BY a ASC;
 SELECT
     a,
     b,
-    cume_dist() OVER (ORDER BY b ASC)
+    cume_dist() OVER (ORDER BY b ASC NULLS FIRST)
 FROM test_cume_dist
 ORDER BY a ASC;
 
 SELECT
     a,
     b,
-    cume_dist() OVER (ORDER BY b ASC)
+    cume_dist() OVER (ORDER BY b ASC NULLS LAST)
 FROM test_cume_dist
 ORDER BY a ASC;
 

@@ -31,9 +31,9 @@ SELECT
     2147483646
 FROM table1__fuzz_19
 ORDER BY
-    ((((id % 1048577) = 1024)) % id) = 1023 DESC,
-    id % 2147483646 ASC,
+    ((((id % 1048577) = 1024)) % id) = 1023 DESC NULLS FIRST,
+    id % 2147483646 ASC NULLS FIRST,
     ((id % 1) = 9223372036854775807)
-    OR ((id % NULL) = 257) DESC;
+    OR ((id % NULL) = 257) DESC NULLS FIRST;
 
 DROP TABLE table1__fuzz_19;

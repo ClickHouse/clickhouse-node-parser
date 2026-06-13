@@ -32,7 +32,7 @@ SELECT
     A._job_requisition_id
 FROM
     appointment_events AS A
-LEFT JOIN (
+ANY LEFT JOIN (
         SELECT
             _appointment_id,
             MAX(_set_at) AS max_set_at

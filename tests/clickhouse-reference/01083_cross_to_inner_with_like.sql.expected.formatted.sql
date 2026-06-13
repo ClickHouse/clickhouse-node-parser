@@ -23,7 +23,7 @@ EXPLAIN SYNTAX
 SELECT *
 FROM
     n
-CROSS JOIN r
+, r
 WHERE n.k = r.k
     AND r.name = 'A';
 
@@ -31,7 +31,7 @@ EXPLAIN SYNTAX
 SELECT *
 FROM
     n
-CROSS JOIN r
+, r
 WHERE n.k = r.k
     AND like(r.name, 'A%');
 
@@ -39,7 +39,7 @@ EXPLAIN SYNTAX
 SELECT *
 FROM
     n
-CROSS JOIN r
+, r
 WHERE n.k = r.k
     AND notLike(r.name, 'A%');
 

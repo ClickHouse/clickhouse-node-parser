@@ -60,8 +60,8 @@ SET cross_to_inner_join_rewrite = 1;
 SELECT *
 FROM
     t1
-CROSS JOIN t2
-CROSS JOIN (
+, t2
+, (
         SELECT a AS x
         FROM t3
         WHERE a + 1 = b
@@ -73,8 +73,8 @@ WHERE t1.a = if(t2.b > 0, t2.a, 0)
 SELECT *
 FROM
     t1
-CROSS JOIN t2
-CROSS JOIN (
+, t2
+, (
         SELECT a AS x
         FROM t3
         WHERE a + 1 = b
@@ -88,20 +88,20 @@ ORDER BY
 SELECT *
 FROM
     t1
-CROSS JOIN t2
-CROSS JOIN t3
-CROSS JOIN t4
-CROSS JOIN t5
+, t2
+, t3
+, t4
+, t5
 WHERE t2.a = t3.a
     AND t1.b = t5.b;
 
 SELECT *
 FROM
     t1
-CROSS JOIN t2
-CROSS JOIN t3
-CROSS JOIN t4
-CROSS JOIN t5
+, t2
+, t3
+, t4
+, t5
 WHERE t2.a = t3.a
     AND t1.b = t5.b
     AND t4.a = t5.a;
@@ -109,10 +109,10 @@ WHERE t2.a = t3.a
 SELECT *
 FROM
     t1
-CROSS JOIN t2
-CROSS JOIN t3
-CROSS JOIN t4
-CROSS JOIN t5
+, t2
+, t3
+, t4
+, t5
 WHERE t1.a = t3.a
     AND t3.b = t4.b
     AND t1.a = t4.a
@@ -121,10 +121,10 @@ WHERE t1.a = t3.a
 SELECT *
 FROM
     t1
-CROSS JOIN t2
-CROSS JOIN t3
-CROSS JOIN t4
-CROSS JOIN t5
+, t2
+, t3
+, t4
+, t5
 WHERE t1.a = t2.a
     AND t1.a = t3.a
     AND t1.a = t4.a
@@ -141,8 +141,8 @@ EXPLAIN QUERY TREE
 SELECT *
 FROM
     t1
-CROSS JOIN t2
-CROSS JOIN (
+, t2
+, (
         SELECT a AS x
         FROM t3
         WHERE a + 1 = b
@@ -155,8 +155,8 @@ EXPLAIN QUERY TREE
 SELECT *
 FROM
     t1
-CROSS JOIN t2
-CROSS JOIN (
+, t2
+, (
         SELECT a AS x
         FROM t3
         WHERE a + 1 = b
@@ -170,8 +170,8 @@ EXPLAIN QUERY TREE
 SELECT *
 FROM
     t1
-CROSS JOIN t2
-CROSS JOIN (
+, t2
+, (
         SELECT a AS x
         FROM t3
         WHERE a + 1 = b
@@ -182,10 +182,10 @@ EXPLAIN QUERY TREE dump_ast = 1
 SELECT *
 FROM
     t1
-CROSS JOIN t2
-CROSS JOIN t3
-CROSS JOIN t4
-CROSS JOIN t5
+, t2
+, t3
+, t4
+, t5
 WHERE t2.a = t3.a
     AND t1.b = t5.b;
 
@@ -193,10 +193,10 @@ EXPLAIN QUERY TREE dump_ast = 1
 SELECT *
 FROM
     t1
-CROSS JOIN t2
-CROSS JOIN t3
-CROSS JOIN t4
-CROSS JOIN t5
+, t2
+, t3
+, t4
+, t5
 WHERE t2.a = t3.a
     AND t1.b = t5.b
     AND t4.a = t5.a;
@@ -205,10 +205,10 @@ EXPLAIN QUERY TREE dump_ast = 1
 SELECT *
 FROM
     t1
-CROSS JOIN t2
-CROSS JOIN t3
-CROSS JOIN t4
-CROSS JOIN t5
+, t2
+, t3
+, t4
+, t5
 WHERE t1.a = t3.a
     AND t3.b = t4.b
     AND t1.a = t4.a
@@ -218,10 +218,10 @@ EXPLAIN QUERY TREE dump_ast = 1
 SELECT *
 FROM
     t1
-CROSS JOIN t2
-CROSS JOIN t3
-CROSS JOIN t4
-CROSS JOIN t5
+, t2
+, t3
+, t4
+, t5
 WHERE t1.a = t2.a
     AND t1.a = t3.a
     AND t1.a = t4.a
@@ -237,8 +237,8 @@ WHERE t1.a = t2.a
 SELECT *
 FROM
     t1
-CROSS JOIN t2
-CROSS JOIN (
+, t2
+, (
         SELECT a AS x
         FROM t3
         WHERE a + 1 = b

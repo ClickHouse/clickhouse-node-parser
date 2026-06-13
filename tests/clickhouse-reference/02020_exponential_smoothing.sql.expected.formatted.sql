@@ -324,10 +324,10 @@ FROM (
         SELECT
             d[1] AS x,
             d[2] AS t,
-            exponentialTimeDecayedSum(100)(x, t) AS sum,
-            exponentialTimeDecayedMax(100)(x, t) AS max,
-            exponentialTimeDecayedCount(100)(t) AS count,
-            exponentialTimeDecayedAvg(100)(x, t) AS avg
+            exponentialTimeDecayedSum(100)(x, t) OVER w AS sum,
+            exponentialTimeDecayedMax(100)(x, t) OVER w AS max,
+            exponentialTimeDecayedCount(100)(t) OVER w AS count,
+            exponentialTimeDecayedAvg(100)(x, t) OVER w AS avg
         FROM
             (
                 SELECT [[2, 1], [1, 2], [0, 3], [4, 4], [5, 5], [1, 6], [0, 7], [10, 8]] AS d
@@ -347,10 +347,10 @@ FROM (
         SELECT
             sin(number) AS x,
             number AS t,
-            exponentialTimeDecayedSum(100)(x, t) AS sum,
-            exponentialTimeDecayedMax(100)(x, t) AS max,
-            exponentialTimeDecayedCount(100)(t) AS count,
-            exponentialTimeDecayedAvg(100)(x, t) AS avg
+            exponentialTimeDecayedSum(100)(x, t) OVER w AS sum,
+            exponentialTimeDecayedMax(100)(x, t) OVER w AS max,
+            exponentialTimeDecayedCount(100)(t) OVER w AS count,
+            exponentialTimeDecayedAvg(100)(x, t) OVER w AS avg
         FROM numbers(1000000)
         WINDOW w AS (ORDER BY 1 ASC ROWS BETWEEN 2 PRECEDING AND 2 FOLLOWING)
     )
@@ -364,7 +364,7 @@ FROM (
         SELECT
             d[1] AS x,
             d[2] AS t,
-            exponentialTimeDecayedMax(100)(negate(x), t) AS max
+            exponentialTimeDecayedMax(100)(negate(x), t) OVER w AS max
         FROM
             (
                 SELECT [[2, 1], [1, 2], [10, 3], [4, 4], [5, 5], [1, 6], [10, 7], [10, 8], [10, 9], [9.81, 10], [9.9, 11]] AS d

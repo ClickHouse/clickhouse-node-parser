@@ -29,7 +29,7 @@ INSERT INTO user_transactions (user_id, transaction_id);
 SELECT *
 FROM
     user_transactions
-LEFT JOIN user_country
+ANY LEFT JOIN user_country
     USING (user_id)
 WHERE user_id = 1
     AND country = 'US'

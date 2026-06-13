@@ -47,7 +47,7 @@ FROM
         GROUP BY dimension_1
         WITH TOTALS
     ) AS subquery_1
-FULL JOIN (
+ALL FULL JOIN (
         SELECT
             dimension_1,
             sum(metric_2) AS sum_metric_2

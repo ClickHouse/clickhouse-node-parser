@@ -177,10 +177,10 @@ SELECT
     s_comment
 FROM
     part
-CROSS JOIN supplier
-CROSS JOIN partsupp
-CROSS JOIN nation
-CROSS JOIN region
+, supplier
+, partsupp
+, nation
+, region
 WHERE p_partkey = ps_partkey
     AND s_suppkey = ps_suppkey
     AND p_size = 15
@@ -192,9 +192,9 @@ WHERE p_partkey = ps_partkey
         SELECT min(ps_supplycost)
         FROM
             partsupp
-        CROSS JOIN supplier
-        CROSS JOIN nation
-        CROSS JOIN region
+        , supplier
+        , nation
+        , region
         WHERE p_partkey = ps_partkey
             AND s_suppkey = ps_suppkey
             AND s_nationkey = n_nationkey
@@ -217,8 +217,8 @@ SELECT
     o_shippriority
 FROM
     customer
-CROSS JOIN orders
-CROSS JOIN lineitem
+, orders
+, lineitem
 WHERE c_mktsegment = 'BUILDING'
     AND c_custkey = o_custkey
     AND l_orderkey = o_orderkey
@@ -257,11 +257,11 @@ SELECT
     sum(l_extendedprice * ((1 - l_discount))) AS revenue
 FROM
     customer
-CROSS JOIN orders
-CROSS JOIN lineitem
-CROSS JOIN supplier
-CROSS JOIN nation
-CROSS JOIN region
+, orders
+, lineitem
+, supplier
+, nation
+, region
 WHERE c_custkey = o_custkey
     AND l_orderkey = o_orderkey
     AND l_suppkey = s_suppkey
@@ -298,11 +298,11 @@ FROM (
             l_extendedprice * ((1 - l_discount)) AS volume
         FROM
             supplier
-        CROSS JOIN lineitem
-        CROSS JOIN orders
-        CROSS JOIN customer
-        CROSS JOIN nation AS n1
-        CROSS JOIN nation AS n2
+        , lineitem
+        , orders
+        , customer
+        , nation AS n1
+        , nation AS n2
         WHERE s_suppkey = l_suppkey
             AND o_orderkey = l_orderkey
             AND c_custkey = o_custkey
@@ -335,13 +335,13 @@ FROM (
             n2.n_name AS nation
         FROM
             part
-        CROSS JOIN supplier
-        CROSS JOIN lineitem
-        CROSS JOIN orders
-        CROSS JOIN customer
-        CROSS JOIN nation AS n1
-        CROSS JOIN nation AS n2
-        CROSS JOIN region
+        , supplier
+        , lineitem
+        , orders
+        , customer
+        , nation AS n1
+        , nation AS n2
+        , region
         WHERE p_partkey = l_partkey
             AND s_suppkey = l_suppkey
             AND l_orderkey = o_orderkey
@@ -369,11 +369,11 @@ FROM (
             l_extendedprice * ((1 - l_discount)) - ps_supplycost * l_quantity AS amount
         FROM
             part
-        CROSS JOIN supplier
-        CROSS JOIN lineitem
-        CROSS JOIN partsupp
-        CROSS JOIN orders
-        CROSS JOIN nation
+        , supplier
+        , lineitem
+        , partsupp
+        , orders
+        , nation
         WHERE s_suppkey = l_suppkey
             AND ps_suppkey = l_suppkey
             AND ps_partkey = l_partkey
@@ -402,9 +402,9 @@ SELECT
     c_comment
 FROM
     customer
-CROSS JOIN orders
-CROSS JOIN lineitem
-CROSS JOIN nation
+, orders
+, lineitem
+, nation
 WHERE c_custkey = o_custkey
     AND l_orderkey = o_orderkey
     AND o_orderdate >= toDate('1993-10-01')
@@ -429,8 +429,8 @@ SELECT
     sum(ps_supplycost * ps_availqty) AS value
 FROM
     partsupp
-CROSS JOIN supplier
-CROSS JOIN nation
+, supplier
+, nation
 WHERE ps_suppkey = s_suppkey
     AND s_nationkey = n_nationkey
     AND n_name = 'GERMANY'
@@ -442,8 +442,8 @@ HAVING sum(ps_supplycost * ps_availqty) > (
         -- to the scale factor (SF): constant = 0.0001 / SF.
         FROM
             partsupp
-        CROSS JOIN supplier
-        CROSS JOIN nation
+        , supplier
+        , nation
         WHERE ps_suppkey = s_suppkey
             AND s_nationkey = n_nationkey
             AND n_name = 'GERMANY'
@@ -460,7 +460,7 @@ SELECT
     AND o_orderpriority <> '2-HIGH', 1, 0)) AS low_line_count
 FROM
     orders
-CROSS JOIN lineitem
+, lineitem
 WHERE o_orderkey = l_orderkey
     AND l_shipmode IN ('MAIL', 'SHIP')
     AND l_commitdate < l_receiptdate
@@ -496,7 +496,7 @@ SELECT 14;
 SELECT toDecimal32(100.00, 2) * sum(multiIf(like(p_type, 'PROMO%'), l_extendedprice * ((1 - l_discount)), 0)) / ((1 + sum(l_extendedprice * ((1 - l_discount))))) AS promo_revenue
 FROM
     lineitem
-CROSS JOIN part
+, part
 WHERE l_partkey = p_partkey
     AND l_shipdate >= toDate('1995-09-01')
     AND l_shipdate < toDate('1995-09-01') + toIntervalMonth('1');
@@ -521,7 +521,7 @@ SELECT
     total_revenue
 FROM
     supplier
-CROSS JOIN revenue_view
+, revenue_view
 WHERE s_suppkey = supplier_no
     AND total_revenue = (
         SELECT max(total_revenue)
@@ -538,7 +538,7 @@ SELECT
     countDistinct(ps_suppkey) AS supplier_cnt
 FROM
     partsupp
-CROSS JOIN part
+, part
 WHERE p_partkey = ps_partkey
     AND p_brand <> 'Brand#45'
     AND notLike(p_type, 'MEDIUM POLISHED%')
@@ -563,7 +563,7 @@ SELECT 17;
 SELECT sum(l_extendedprice) / 7.0 AS avg_yearly
 FROM
     lineitem
-CROSS JOIN part
+, part
 WHERE p_partkey = l_partkey
     AND p_brand = 'Brand#23'
     AND p_container = 'MED BOX'
@@ -584,8 +584,8 @@ SELECT
     sum(l_quantity)
 FROM
     customer
-CROSS JOIN orders
-CROSS JOIN lineitem
+, orders
+, lineitem
 WHERE o_orderkey IN (
         SELECT l_orderkey
         FROM lineitem
@@ -610,7 +610,7 @@ SELECT 19;
 SELECT sum(l_extendedprice * ((1 - l_discount))) AS revenue
 FROM
     lineitem
-CROSS JOIN part
+, part
 WHERE (p_partkey = l_partkey
     AND p_brand = 'Brand#12'
     AND p_container IN ('SM CASE', 'SM BOX', 'SM PACK', 'SM PKG')
@@ -643,7 +643,7 @@ SELECT
     s_address
 FROM
     supplier
-CROSS JOIN nation
+, nation
 WHERE s_suppkey IN (
         SELECT ps_suppkey
         FROM partsupp
@@ -672,9 +672,9 @@ SELECT
     count(*) AS numwait
 FROM
     supplier
-CROSS JOIN lineitem AS l1
-CROSS JOIN orders
-CROSS JOIN nation
+, lineitem AS l1
+, orders
+, nation
 WHERE s_suppkey = l1.l_suppkey
     AND o_orderkey = l1.l_orderkey
     AND o_orderstatus = 'F'

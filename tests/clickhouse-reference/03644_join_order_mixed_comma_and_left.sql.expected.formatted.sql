@@ -39,7 +39,7 @@ FROM numbers(2);
 SELECT *
 FROM
     n1
-CROSS JOIN n2
+, n2
 LEFT JOIN n3
     ON n1.number = n3.number
 ORDER BY

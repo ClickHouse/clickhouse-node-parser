@@ -94,7 +94,7 @@ SELECT
     countIf(isNull(l.value))
 FROM
     t_l_any AS l
-RIGHT JOIN t_r_any AS r
+ANY RIGHT JOIN t_r_any AS r
     ON l.id = r.id;
 
 -- 4) RIGHT OUTER with additional ON filter

@@ -26,8 +26,8 @@ SELECT
 FROM numbers(9);
 
 SELECT
-    sum(number) AS x,
-    max(number) AS y
+    sum(number) OVER w AS x,
+    max(number) OVER w AS y
 FROM t_01568
 ORDER BY
     x ASC,
@@ -35,15 +35,15 @@ ORDER BY
 WINDOW w AS (PARTITION BY p);
 
 SELECT
-    sum(number),
-    max(number)
+    sum(number) OVER w,
+    max(number) OVER w
 FROM t_01568
 ORDER BY p ASC
 WINDOW w AS (PARTITION BY p);
 
 SELECT
-    sum(number) AS x,
-    max(number) AS y
+    sum(number) OVER w AS x,
+    max(number) OVER w AS y
 FROM remote('127.0.0.{1,2}', '', t_01568)
 ORDER BY
     x ASC,
@@ -51,8 +51,8 @@ ORDER BY
 WINDOW w AS (PARTITION BY p);
 
 SELECT
-    sum(number) AS x,
-    max(number) AS y
+    sum(number) OVER w AS x,
+    max(number) OVER w AS y
 FROM remote('127.0.0.{1,2}', '', t_01568)
 ORDER BY
     x ASC,
@@ -61,8 +61,8 @@ WINDOW w AS (PARTITION BY p)
 SETTINGS max_threads = 1;
 
 SELECT DISTINCT
-    sum(number) AS x,
-    max(number) AS y
+    sum(number) OVER w AS x,
+    max(number) OVER w AS y
 FROM remote('127.0.0.{1,2}', '', t_01568)
 ORDER BY
     x ASC,

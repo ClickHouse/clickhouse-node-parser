@@ -16,7 +16,7 @@ FROM
         FROM `system`.numbers
         LIMIT 10
     ) AS js1
-INNER JOIN (
+ANY INNER JOIN (
         SELECT
             number AS k,
             toString(number) AS b
@@ -38,7 +38,7 @@ FROM
         FROM `system`.numbers
         LIMIT 10
     ) AS js1
-LEFT JOIN (
+ANY LEFT JOIN (
         SELECT
             nullIf(number, 8) AS k,
             toString(number) AS b
@@ -60,7 +60,7 @@ FROM
         FROM `system`.numbers
         LIMIT 10
     ) AS js1
-RIGHT JOIN (
+ANY RIGHT JOIN (
         SELECT
             nullIf(number, 8) AS k,
             toString(number) AS b

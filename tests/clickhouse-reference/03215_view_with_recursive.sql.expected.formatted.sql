@@ -37,7 +37,7 @@ rtq AS (
         t.parent_id
     FROM
         task AS t
-    CROSS JOIN rtq AS r
+    , rtq AS r
     WHERE t.parent_id = r.task_id
 )
 

@@ -104,7 +104,7 @@ FROM
         FROM test_insert_t1
         WHERE dt = '2019-09-01'
     ) AS t1
-LEFT JOIN (
+GLOBAL SEMI LEFT JOIN (
         SELECT uid
         FROM test_insert_t2
         WHERE dt = '2019-09-01'

@@ -74,7 +74,7 @@ FROM (
             ntile(20) OVER (PARTITION BY page_id ORDER BY clicks ASC ROWS BETWEEN UNBOUNDED PRECEDING AND UNBOUNDED PRECEDING) AS rank
         FROM
             as_of_posts
-        LEFT JOIN as_of_post_metrics
+        GLOBAL LEFT JOIN as_of_post_metrics
             USING (page_id, post_id, row_num)
         WHERE (row_num = 1)
             AND (impressions > 0)

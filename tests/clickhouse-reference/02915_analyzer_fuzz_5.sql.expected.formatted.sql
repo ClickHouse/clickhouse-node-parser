@@ -18,5 +18,5 @@ GROUP BY number
 WITH ROLLUP
 ORDER BY
     count() ASC,
-    number DESC
+    number DESC NULLS LAST
 SETTINGS limit = 2;

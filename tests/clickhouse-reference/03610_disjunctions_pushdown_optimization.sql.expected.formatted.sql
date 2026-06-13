@@ -210,7 +210,7 @@ SELECT
     n2.number
 FROM
     numbers(6) AS n1
-CROSS JOIN numbers(6) AS n2
+, numbers(6) AS n2
 WHERE ((n1.number = 1
     AND n2.number = 2)
     OR (n1.number = 3
@@ -232,8 +232,8 @@ FROM (
                     n3.number
                 FROM
                     numbers(3) AS n2
-                CROSS JOIN numbers(3) AS n3
-                CROSS JOIN numbers(3) AS n1
+                , numbers(3) AS n3
+                , numbers(3) AS n1
                 WHERE ((n1.number = 1)
                     AND ((n2.number + n3.number) = 3))
                     OR ((n1.number = 2)

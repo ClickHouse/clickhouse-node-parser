@@ -7,7 +7,7 @@ FROM
         FROM `system`.numbers
         LIMIT 10
     ) AS s1
-LEFT JOIN (
+ANY LEFT JOIN (
         SELECT toLowCardinality(toNullable(number)) AS r
         FROM `system`.numbers
         LIMIT 7

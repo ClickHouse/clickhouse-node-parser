@@ -40,7 +40,7 @@ RIGHT JOIN (
                 WHERE dim > 2
                 GROUP BY dim
             ) AS A
-        RIGHT JOIN (
+        ALL RIGHT JOIN (
                 SELECT
                     dim,
                     groupBitmapState(toUInt64(id)) AS ids2

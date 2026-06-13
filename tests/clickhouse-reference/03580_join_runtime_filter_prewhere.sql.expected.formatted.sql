@@ -42,7 +42,7 @@ FROM (
                     max(c_custkey)
                 FROM
                     customer
-                CROSS JOIN nation
+                , nation
                 WHERE (c_nationkey = n_nationkey)
                     AND (n_name = 'FRANCE')
                 SETTINGS
@@ -64,7 +64,7 @@ FROM (
                     max(c_custkey)
                 FROM
                     nation
-                CROSS JOIN customer
+                , customer
                 WHERE (c_nationkey = n_nationkey)
                     AND (n_name = 'FRANCE')
                 SETTINGS
@@ -83,7 +83,7 @@ FROM (
         SELECT count()
         FROM
             nation
-        CROSS JOIN customer
+        , customer
         WHERE (c_nationkey = n_nationkey)
             AND (n_name = 'FRANCE')
             AND (c_custkey % 4 = 0)

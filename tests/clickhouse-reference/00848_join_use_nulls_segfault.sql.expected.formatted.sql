@@ -37,7 +37,7 @@ SELECT
     toTypeName(t3.id)
 FROM
     t1_00848 AS t1
-LEFT JOIN t3_00848 AS t3
+ANY LEFT JOIN t3_00848 AS t3
     ON t1.id = t3.id
 ORDER BY
     t1.id ASC,
@@ -49,7 +49,7 @@ SELECT
     toTypeName(t3.id)
 FROM
     t1_00848 AS t1
-FULL JOIN t3_00848 AS t3
+ANY FULL JOIN t3_00848 AS t3
     ON t1.id = t3.id
 ORDER BY
     t1.id ASC,
@@ -61,7 +61,7 @@ SELECT
     toTypeName(t3.id)
 FROM
     t2_00848 AS t2
-FULL JOIN t3_00848 AS t3
+ANY FULL JOIN t3_00848 AS t3
     ON t2.id = t3.id
 ORDER BY
     t2.id ASC,
@@ -108,7 +108,7 @@ SELECT
     t3.not_id = 'l'
 FROM
     t1_00848 AS t1
-LEFT JOIN t3_00848 AS t3
+ANY LEFT JOIN t3_00848 AS t3
     ON t1.id = t3.id
 ORDER BY
     t1.id ASC,
@@ -131,7 +131,7 @@ SELECT
     toTypeName(t3.id)
 FROM
     t1_00848 AS t1
-LEFT JOIN t3_00848 AS t3
+ANY LEFT JOIN t3_00848 AS t3
     USING (id)
 ORDER BY
     t1.id ASC,
@@ -143,7 +143,7 @@ SELECT
     toTypeName(t3.id)
 FROM
     t1_00848 AS t1
-FULL JOIN t3_00848 AS t3
+ANY FULL JOIN t3_00848 AS t3
     USING (id)
 ORDER BY
     t1.id ASC,
@@ -155,7 +155,7 @@ SELECT
     toTypeName(t3.id)
 FROM
     t2_00848 AS t2
-FULL JOIN t3_00848 AS t3
+ANY FULL JOIN t3_00848 AS t3
     USING (id)
 ORDER BY
     t2.id ASC,
@@ -202,7 +202,7 @@ SELECT
     t3.not_id = 'l'
 FROM
     t1_00848 AS t1
-LEFT JOIN t3_00848 AS t3
+ANY LEFT JOIN t3_00848 AS t3
     USING (id)
 ORDER BY
     t1.id ASC,
@@ -227,7 +227,7 @@ SELECT
     toTypeName(t3.id)
 FROM
     t1_00848 AS t1
-LEFT JOIN t3_00848 AS t3
+ANY LEFT JOIN t3_00848 AS t3
     USING (id)
 ORDER BY id ASC;
 
@@ -237,7 +237,7 @@ SELECT
     toTypeName(t3.id)
 FROM
     t1_00848 AS t1
-FULL JOIN t3_00848 AS t3
+ANY FULL JOIN t3_00848 AS t3
     USING (id)
 ORDER BY id ASC;
 
@@ -247,7 +247,7 @@ SELECT
     toTypeName(t3.id)
 FROM
     t2_00848 AS t2
-FULL JOIN t3_00848 AS t3
+ANY FULL JOIN t3_00848 AS t3
     USING (id)
 ORDER BY id ASC;
 
@@ -286,7 +286,7 @@ SELECT
     t3.not_id = 'l'
 FROM
     t1_00848 AS t1
-LEFT JOIN t3_00848 AS t3
+ANY LEFT JOIN t3_00848 AS t3
     USING (id)
 ORDER BY id ASC;
 

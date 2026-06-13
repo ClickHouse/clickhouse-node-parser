@@ -53,7 +53,7 @@ SET join_algorithm = 'hash,parallel_hash';
 SELECT count()
 FROM
     customer
-LEFT JOIN nation
+ANTI LEFT JOIN nation
     ON c_nationkey = n_nationkey
     AND n_name = 'FRANCE'
 SETTINGS enable_join_runtime_filters = 0;
@@ -61,7 +61,7 @@ SETTINGS enable_join_runtime_filters = 0;
 SELECT count()
 FROM
     customer
-LEFT JOIN (
+ANTI LEFT JOIN (
         SELECT *
         FROM nation
         WHERE n_name = 'FRANCE'
@@ -72,7 +72,7 @@ SETTINGS enable_join_runtime_filters = 0;
 SELECT count()
 FROM
     customer
-LEFT JOIN nation
+ANTI LEFT JOIN nation
     ON c_nationkey = n_nationkey
     AND n_name = 'FRANCE'
 SETTINGS enable_join_runtime_filters = 1;
@@ -80,7 +80,7 @@ SETTINGS enable_join_runtime_filters = 1;
 SELECT count()
 FROM
     customer
-LEFT JOIN (
+ANTI LEFT JOIN (
         SELECT *
         FROM nation
         WHERE n_name = 'FRANCE'

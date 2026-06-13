@@ -17,7 +17,7 @@ FROM
         SELECT (number, number+1) AS a
         FROM numbers(1000 - 3, 3)
     ) AS t1
-CROSS JOIN (
+, (
         SELECT (number, number+1) AS b
         FROM numbers(1000)
     ) AS t2
@@ -44,7 +44,7 @@ FROM
         SELECT (number, number+1) AS a
         FROM numbers(1000 - 3, 3)
     ) AS t1
-CROSS JOIN (
+, (
         SELECT (number, number+1) AS b
         FROM numbers(1000)
     ) AS t2

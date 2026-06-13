@@ -53,7 +53,7 @@ SET query_plan_join_swap_table = 0;
 SELECT count()
 FROM
     customer
-LEFT JOIN (
+ANTI LEFT JOIN (
         SELECT n_nationkey
         FROM nation
         WHERE n_name = 'FRANCE'
@@ -67,14 +67,14 @@ FROM
         FROM nation
         WHERE n_name = 'FRANCE'
     ) AS n
-RIGHT JOIN customer
+ANTI RIGHT JOIN customer
     ON c_nationkey = n.n_nationkey;
 
 -- 0 elements in filter ('WAKANDA' is not present in `nations` table)
 SELECT count()
 FROM
     customer
-LEFT JOIN (
+ANTI LEFT JOIN (
         SELECT n_nationkey
         FROM nation
         WHERE n_name = 'WAKANDA'
@@ -88,14 +88,14 @@ FROM
         FROM nation
         WHERE n_name = 'WAKANDA'
     ) AS n
-RIGHT JOIN customer
+ANTI RIGHT JOIN customer
     ON c_nationkey = n.n_nationkey;
 
 -- again 1 element in filter
 SELECT count()
 FROM
     customer
-LEFT JOIN (
+ANTI LEFT JOIN (
         SELECT n_nationkey
         FROM nation
         WHERE n_name IN ('WAKANDA', 'GERMANY')
@@ -109,14 +109,14 @@ FROM
         FROM nation
         WHERE n_name IN ('WAKANDA', 'GERMANY')
     ) AS n
-RIGHT JOIN customer
+ANTI RIGHT JOIN customer
     ON c_nationkey = n.n_nationkey;
 
 -- 2 elements in filter
 SELECT count()
 FROM
     customer
-LEFT JOIN (
+ANTI LEFT JOIN (
         SELECT n_nationkey
         FROM nation
         WHERE n_name IN ('FRANCE', 'GERMANY')
@@ -130,7 +130,7 @@ FROM
         FROM nation
         WHERE n_name IN ('FRANCE', 'GERMANY')
     ) AS n
-RIGHT JOIN customer
+ANTI RIGHT JOIN customer
     ON c_nationkey = n.n_nationkey;
 
 -- 2 elements in filter store in a bloom filter

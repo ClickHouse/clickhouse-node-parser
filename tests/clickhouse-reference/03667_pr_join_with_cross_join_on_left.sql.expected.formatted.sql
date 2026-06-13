@@ -42,7 +42,7 @@ SET enable_parallel_replicas = 1, max_parallel_replicas = 3, cluster_for_paralle
 SELECT *
 FROM
     n1
-CROSS JOIN n2
+, n2
 INNER JOIN n3
     ON n1.number = n3.number
 ORDER BY

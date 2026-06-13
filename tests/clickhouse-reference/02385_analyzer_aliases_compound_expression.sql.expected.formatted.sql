@@ -20,12 +20,12 @@ FROM
     (
         SELECT 1
     ) AS t1
-CROSS JOIN t1 AS t2;
+, t1 AS t2;
 
 SELECT *
 FROM
     t1 AS t2
-CROSS JOIN (
+, (
         SELECT 1
     ) AS t1;
 
@@ -34,11 +34,11 @@ FROM
     (
         SELECT 1
     ) AS t1
-CROSS JOIN t1.nested AS t2; -- { serverError UNKNOWN_IDENTIFIER }
+, t1.nested AS t2; -- { serverError UNKNOWN_IDENTIFIER }
 
 SELECT *
 FROM
     t1.nested AS t2
-CROSS JOIN (
+, (
         SELECT 1
     ) AS t1; -- { serverError UNKNOWN_IDENTIFIER }
