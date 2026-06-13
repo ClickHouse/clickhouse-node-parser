@@ -941,6 +941,8 @@ export type OrderByItem = {
   direction: 'ASC' | 'DESC';
   /** `true` for `NULLS FIRST`, `false` for `NULLS LAST`; absent when not specified. */
   nullsFirst?: boolean;
+  /** `true` when a `WITH FILL` modifier is present (even without FROM/TO/STEP arguments). */
+  withFill?: boolean;
   /** Collation name for string sorting. */
   collate?: string;
   /** WITH FILL start value. */
@@ -969,6 +971,7 @@ export const OrderByItemSchema = z.object({
   expr: ExpressionSchema,
   direction: z.union([z.literal('ASC'), z.literal('DESC')]),
   nullsFirst: z.boolean().optional(),
+  withFill: z.boolean().optional(),
   collate: z.string().optional(),
   fillFrom: ExpressionSchema.optional(),
   fillTo: ExpressionSchema.optional(),

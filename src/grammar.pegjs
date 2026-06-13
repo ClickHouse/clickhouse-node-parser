@@ -3777,6 +3777,7 @@ OrderByItem
       if (nulls !== null) result.nullsFirst = /^first$/i.test(nulls[4]);
       if (collate !== null) result.collate = collate[4].value;
       if (fill !== null) {
+        result.withFill = true;
         const fillArgs = fill[6];
         if (fillArgs !== null) {
           if (fillArgs.fillFrom !== undefined) result.fillFrom = fillArgs.fillFrom;

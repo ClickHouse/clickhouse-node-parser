@@ -3004,6 +3004,7 @@ function formatOrderByItemInline(item: OrderByItem, indent: string): string {
   if (item.nullsFirst !== undefined) result += item.nullsFirst ? ' NULLS FIRST' : ' NULLS LAST';
   if (item.collate !== undefined) result += ` COLLATE '${escapeString(item.collate)}'`;
   if (
+    item.withFill ||
     item.fillFrom !== undefined ||
     item.fillTo !== undefined ||
     item.fillStep !== undefined ||
@@ -3028,6 +3029,7 @@ function formatOrderByItem(item: OrderByItem, indent: string): string {
   if (item.nullsFirst !== undefined) result += item.nullsFirst ? ' NULLS FIRST' : ' NULLS LAST';
   if (item.collate !== undefined) result += ` COLLATE '${escapeString(item.collate)}'`;
   if (
+    item.withFill ||
     item.fillFrom !== undefined ||
     item.fillTo !== undefined ||
     item.fillStep !== undefined ||
