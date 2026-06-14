@@ -340,6 +340,14 @@ export type TupleExpansion = {
 export type JoinType = 'INNER' | 'LEFT' | 'RIGHT' | 'FULL' | 'CROSS' | 'PASTE';
 
 /**
+ * Join strictness qualifier: `ANY`, `ALL`, `ASOF`, `SEMI`, or `ANTI`.
+ *
+ * @example `LEFT ANY JOIN` → `'ANY'`
+ * @example `ASOF JOIN` → `'ASOF'`
+ */
+export type JoinStrictness = 'ANY' | 'ALL' | 'ASOF' | 'SEMI' | 'ANTI';
+
+/**
  * The type of ARRAY JOIN operation.
  *
  * - `'ARRAY'` — unfolds array columns into rows (removes rows with empty arrays)
@@ -420,8 +428,19 @@ export type FunctionCall = {
   args: Expression[];
   /** Function-level SETTINGS, e.g. `func(x SETTINGS y=1)`. */
   funcSettings?: SettingItem[];
-  /** Window specification when used as a window function. */
+  /** `true` when the call was written with operator syntax that the parser
+   * desugars into a function call (e.g. `arr[1]` → `arrayElement`,
+   * `a BETWEEN x AND y` → `and(greaterOrEquals(...), lessOrEquals(...))`,
+   * `c ? a : b` → `if`, `-x` → `negate`, `a LIKE b` → `like`). Absent for
+   * explicit function-call syntax. */
+  isOperator?: boolean;
+  /** NULLS handling modifier on aggregate/window functions:
+   * `RESPECT NULLS` or `IGNORE NULLS`. */
+  nullsAction?: 'RESPECT NULLS' | 'IGNORE NULLS';
+  /** Window specification when used as a window function: `OVER (spec)`. */
   window?: WindowSpec;
+  /** Named-window reference: `w` in `OVER w` (without parentheses). */
+  windowName?: string;
   /** Whether the entire function call was wrapped in parentheses in the source. */
   parenthesized?: boolean;
 } & NodeMetadata;
@@ -760,7 +779,10 @@ export const FunctionCallSchema: z.ZodType<FunctionCall> = z.lazy(() =>
     params: z.array(ExpressionSchema).optional(),
     args: z.array(ExpressionSchema),
     funcSettings: z.array(SettingItemSchema).optional(),
+    isOperator: z.boolean().optional(),
+    nullsAction: z.union([z.literal('RESPECT NULLS'), z.literal('IGNORE NULLS')]).optional(),
     window: WindowSpecSchema.optional(),
+    windowName: z.string().optional(),
     parenthesized: z.boolean().optional(),
     ...ExprMetadataFields,
   }),
@@ -917,6 +939,10 @@ export type OrderByItem = {
   expr: Expression;
   /** Sort direction. */
   direction: 'ASC' | 'DESC';
+  /** `true` for `NULLS FIRST`, `false` for `NULLS LAST`; absent when not specified. */
+  nullsFirst?: boolean;
+  /** `true` when a `WITH FILL` modifier is present (even without FROM/TO/STEP arguments). */
+  withFill?: boolean;
   /** Collation name for string sorting. */
   collate?: string;
   /** WITH FILL start value. */
@@ -944,6 +970,8 @@ export const OrderByItemSchema = z.object({
   kind: z.literal('orderByItem'),
   expr: ExpressionSchema,
   direction: z.union([z.literal('ASC'), z.literal('DESC')]),
+  nullsFirst: z.boolean().optional(),
+  withFill: z.boolean().optional(),
   collate: z.string().optional(),
   fillFrom: ExpressionSchema.optional(),
   fillTo: ExpressionSchema.optional(),
@@ -1174,6 +1202,12 @@ export type JoinExpr = {
   kind: 'joinExpr';
   /** The type of join. */
   joinType: JoinType;
+  /** Join strictness qualifier: `ANY`, `ALL`, `ASOF`, `SEMI`, or `ANTI`. */
+  strictness?: JoinStrictness;
+  /** `true` when the GLOBAL locality keyword was used (distributed JOIN/IN). */
+  global?: boolean;
+  /** `true` when the join was written with comma syntax (`FROM a, b`), an implicit cross join. */
+  comma?: boolean;
   /** The left side of the join. */
   left: FromExpr;
   /** The right side of the join. */
@@ -1286,6 +1320,8 @@ export type IntersectStatement = {
   kind: 'intersect';
   /** The set operation: `'INTERSECT'` or `'EXCEPT'`. */
   op: 'INTERSECT' | 'EXCEPT';
+  /** `true` for `INTERSECT DISTINCT` / `EXCEPT DISTINCT`; absent for the default ALL semantics. */
+  distinct?: boolean;
   /** The left query. */
   left: QueryStatement;
   /** The right query. */
@@ -3038,6 +3074,7 @@ export const IntersectStatementSchema: z.ZodType<IntersectStatement> = z.lazy(()
   z.object({
     kind: z.literal('intersect'),
     op: z.union([z.literal('INTERSECT'), z.literal('EXCEPT')]),
+    distinct: z.boolean().optional(),
     left: QueryStatementSchema,
     right: QueryStatementSchema,
     parenthesized: z.boolean().optional(),
@@ -3106,6 +3143,15 @@ export const JoinTypeSchema = z.union([
   z.literal('PASTE'),
 ]);
 
+/** Zod schema for {@link JoinStrictness}. */
+export const JoinStrictnessSchema = z.union([
+  z.literal('ANY'),
+  z.literal('ALL'),
+  z.literal('ASOF'),
+  z.literal('SEMI'),
+  z.literal('ANTI'),
+]);
+
 /** Zod schema for {@link ArrayJoinType}. */
 export const ArrayJoinTypeSchema = z.union([z.literal('ARRAY'), z.literal('LEFT ARRAY')]);
 
@@ -3139,6 +3185,9 @@ export const JoinExprSchema: z.ZodType<JoinExpr> = z.lazy(() =>
   z.object({
     kind: z.literal('joinExpr'),
     joinType: JoinTypeSchema,
+    strictness: JoinStrictnessSchema.optional(),
+    global: z.boolean().optional(),
+    comma: z.boolean().optional(),
     left: FromExprSchema,
     right: z.union([TableRefSchema, SubqueryFromSchema, TableFunctionRefSchema]),
     constraint: JoinConstraintSchema.optional(),

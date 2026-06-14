@@ -20,13 +20,13 @@ SELECT
     y.digit AS Y
 FROM
     digits AS s
-CROSS JOIN digits AS e
-CROSS JOIN digits AS n
-CROSS JOIN digits AS d
-CROSS JOIN digits AS m
-CROSS JOIN digits AS o
-CROSS JOIN digits AS r
-CROSS JOIN digits AS y
+, digits AS e
+, digits AS n
+, digits AS d
+, digits AS m
+, digits AS o
+, digits AS r
+, digits AS y
 WHERE s.digit <> e.digit
     AND s.digit <> n.digit
     AND s.digit <> d.digit

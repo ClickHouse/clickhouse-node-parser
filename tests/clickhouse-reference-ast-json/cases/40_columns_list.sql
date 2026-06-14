@@ -1,0 +1,1 @@
+SELECT COLUMNS(a, b) FROM t

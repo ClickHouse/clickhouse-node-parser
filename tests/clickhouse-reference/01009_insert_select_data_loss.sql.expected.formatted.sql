@@ -13,7 +13,7 @@ FROM
         SELECT number AS n
         FROM numbers(20)
     ) AS nums
-LEFT JOIN (
+SEMI LEFT JOIN (
         SELECT number * 10 AS n
         FROM numbers(2)
     ) AS js2

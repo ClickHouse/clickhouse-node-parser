@@ -2,15 +2,20 @@
 'use strict';
 
 // Run EXPLAIN AST against a local ClickHouse server (default http://localhost:8125).
-// Usage: npm run explain:ch "<SQL>"
+// Usage: npm run explain:ch -- [--json] "<SQL>"
+//
+// With --json, runs `EXPLAIN AST json = 1` (requires a ClickHouse build that
+// contains the JSON AST PR — see tests/clickhouse-reference-ast-json/README.md).
 
 const CLICKHOUSE_URL = process.env.CLICKHOUSE_URL || 'http://localhost:8125';
 const USER = process.env.CLICKHOUSE_USER || 'default';
 const PASSWORD = process.env.CLICKHOUSE_PASSWORD || 'clickhouse';
 
-const sql = process.argv.slice(2).join(' ');
+const args = process.argv.slice(2);
+const jsonMode = args.includes('--json');
+const sql = args.filter((a) => a !== '--json').join(' ');
 if (!sql) {
-  process.stderr.write('Usage: npm run explain:ch "<SQL>"\n');
+  process.stderr.write('Usage: npm run explain:ch -- [--json] "<SQL>"\n');
   process.exit(1);
 }
 
@@ -18,7 +23,7 @@ const url = `${CLICKHOUSE_URL}/?user=${encodeURIComponent(USER)}&password=${enco
 
 fetch(url, {
   method: 'POST',
-  body: `EXPLAIN AST ${sql}`,
+  body: `EXPLAIN AST ${jsonMode ? 'json = 1 ' : ''}${sql}`,
   signal: AbortSignal.timeout(30_000),
 })
   .then(async (res) => {

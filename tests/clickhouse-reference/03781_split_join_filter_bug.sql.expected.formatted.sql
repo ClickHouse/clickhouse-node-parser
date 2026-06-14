@@ -54,7 +54,7 @@ SET query_plan_join_swap_table = 0;
 SELECT count()
 FROM
     customer
-LEFT JOIN nation
+ANTI LEFT JOIN nation
     ON c_nationkey = n_nationkey
     AND n_name = 'FRANCE'
     AND c_custkey = 1;
@@ -62,7 +62,7 @@ LEFT JOIN nation
 SELECT count()
 FROM
     customer
-RIGHT JOIN nation
+ANTI RIGHT JOIN nation
     ON c_nationkey = n_nationkey
     AND n_name = 'FRANCE'
     AND c_custkey = 1;
@@ -70,7 +70,7 @@ RIGHT JOIN nation
 SELECT count()
 FROM
     customer
-LEFT JOIN nation
+SEMI LEFT JOIN nation
     ON c_nationkey = n_nationkey
     AND n_name = 'FRANCE'
     AND c_custkey = 1;
@@ -78,7 +78,7 @@ LEFT JOIN nation
 SELECT count()
 FROM
     customer
-RIGHT JOIN nation
+SEMI RIGHT JOIN nation
     ON c_nationkey = n_nationkey
     AND n_name = 'FRANCE'
     AND c_custkey = 1;
@@ -86,7 +86,7 @@ RIGHT JOIN nation
 SELECT count()
 FROM
     customer
-LEFT JOIN nation
+ANY LEFT JOIN nation
     ON c_nationkey = n_nationkey
     AND n_name = 'FRANCE'
     AND c_custkey = 1;
@@ -94,7 +94,7 @@ LEFT JOIN nation
 SELECT count()
 FROM
     customer
-RIGHT JOIN nation
+ANY RIGHT JOIN nation
     ON c_nationkey = n_nationkey
     AND n_name = 'FRANCE'
     AND c_custkey = 1;

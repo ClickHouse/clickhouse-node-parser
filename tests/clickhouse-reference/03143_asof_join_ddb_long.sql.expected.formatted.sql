@@ -45,7 +45,7 @@ SELECT
     COUNT(*)
 FROM
     skewed_probe
-INNER JOIN build
+ASOF INNER JOIN build
     USING (key, begin);
 
 SELECT
@@ -53,6 +53,6 @@ SELECT
     COUNT(*)
 FROM
     skewed_probe
-INNER JOIN build
+ASOF INNER JOIN build
     USING (key, begin)
 SETTINGS join_algorithm = 'full_sorting_merge';

@@ -77,7 +77,7 @@ SELECT *
 FROM tab
 ORDER BY
     ((a + b)) * c DESC,
-    sin(a / b) DESC;
+    sin(a / b) DESC NULLS FIRST;
 
 SELECT *
 FROM (
@@ -86,7 +86,7 @@ FROM (
         FROM tab
         ORDER BY
             ((a + b)) * c DESC,
-            sin(a / b) DESC
+            sin(a / b) DESC NULLS FIRST
     )
 WHERE like(`explain`, '%sort description%');
 
@@ -292,7 +292,7 @@ FROM (
         FROM tab
         ORDER BY
             ((a + b)) * c DESC,
-            intDiv(sin(a / b), 2) DESC
+            intDiv(sin(a / b), 2) DESC NULLS FIRST
     )
 WHERE like(`explain`, '%sort description%');
 

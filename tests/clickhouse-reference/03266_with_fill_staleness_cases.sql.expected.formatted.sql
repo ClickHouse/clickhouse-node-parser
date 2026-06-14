@@ -38,7 +38,7 @@ SELECT
 FROM test2
 ORDER BY
     a ASC,
-    b ASC;
+    b ASC WITH FILL;
 
 SELECT
     *,

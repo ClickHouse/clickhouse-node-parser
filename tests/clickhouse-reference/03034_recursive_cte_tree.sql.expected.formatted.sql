@@ -26,7 +26,7 @@ WITH RECURSIVE search_tree AS (
         t.data
     FROM
         tree AS t
-    CROSS JOIN search_tree AS st
+    , search_tree AS st
     WHERE t.link = st.id
 )
 
@@ -51,7 +51,7 @@ WITH RECURSIVE search_tree AS (
         arrayConcat(path, [t.id])
     FROM
         tree AS t
-    CROSS JOIN search_tree AS st
+    , search_tree AS st
     WHERE t.link = st.id
 )
 

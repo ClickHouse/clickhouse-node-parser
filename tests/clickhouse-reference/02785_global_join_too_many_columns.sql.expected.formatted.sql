@@ -26,5 +26,5 @@ SET max_columns_to_read = 1;
 SELECT count()
 FROM
     distr AS l
-LEFT JOIN distr AS r
+GLOBAL ALL LEFT JOIN distr AS r
     ON l.a = r.a;

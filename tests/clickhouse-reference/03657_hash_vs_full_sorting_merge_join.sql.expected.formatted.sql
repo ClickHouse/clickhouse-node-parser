@@ -54,7 +54,7 @@ SELECT
     length(t2.s)
 FROM
     t1 AS t1
-FULL JOIN tn2 AS t2
+ALL FULL JOIN tn2 AS t2
     USING (key)
 ORDER BY
     key ASC,

@@ -21,7 +21,7 @@ SELECT
     isNull(table2.parent_id)
 FROM
     table1
-LEFT JOIN table2
+ANY LEFT JOIN table2
     ON table1.id = table2.parent_id;
 
 SET join_use_nulls = 1;

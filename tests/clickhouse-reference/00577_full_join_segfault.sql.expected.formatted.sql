@@ -16,7 +16,7 @@ FROM
             123 AS b1,
             a1
     )
-FULL JOIN (
+ANY FULL JOIN (
         SELECT
             1 AS k,
             'hello' AS a2,
@@ -38,7 +38,7 @@ FROM
             123 AS b,
             a
     )
-FULL JOIN (
+ANY FULL JOIN (
         SELECT 1 AS k
     )
     USING (k)

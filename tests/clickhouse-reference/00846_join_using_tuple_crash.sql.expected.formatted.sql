@@ -24,7 +24,7 @@ FROM
             (toUInt8(0), toUInt8(0)) AS tup
         FROM `system`.one
     ) AS js1
-FULL JOIN (
+GLOBAL ANY FULL JOIN (
         SELECT
             dummy AS a,
             (toUInt8(0), toUInt8(0)) AS tup

@@ -15,7 +15,7 @@ FROM
         FROM test.hits
         GROUP BY CounterID
     )
-FULL JOIN (
+ANY FULL JOIN (
         SELECT
             (CounterID % 100000) AS CounterID,
             sum(Sign) AS visits
@@ -43,7 +43,7 @@ FROM
         FROM test.hits
         GROUP BY CounterID
     )
-LEFT JOIN (
+ANY LEFT JOIN (
         SELECT
             (CounterID % 100000) AS CounterID,
             sum(Sign) AS visits
@@ -71,7 +71,7 @@ FROM
         FROM test.hits
         GROUP BY CounterID
     )
-RIGHT JOIN (
+ANY RIGHT JOIN (
         SELECT
             (CounterID % 100000) AS CounterID,
             sum(Sign) AS visits
@@ -99,7 +99,7 @@ FROM
         FROM test.hits
         GROUP BY CounterID
     )
-INNER JOIN (
+ANY INNER JOIN (
         SELECT
             (CounterID % 100000) AS CounterID,
             sum(Sign) AS visits

@@ -2,6 +2,7 @@ import {
   AlterStatement,
   AlterCommand,
   AlterPartitionExpr,
+  ArrayJoinType,
   AuthenticationData,
   BinaryExpr,
   CodecItem,
@@ -25,6 +26,7 @@ import {
   ExplainStatement,
   Expression,
   FromExpr,
+  JoinExpr,
   InsertStatement,
   ParallelWithStatement,
   JoinConstraint,
@@ -41,7 +43,7 @@ import {
 } from './ast';
 import { isCreateTableStatement } from './guards';
 
-const OP_TO_FUNCTION: Record<string, string> = {
+export const OP_TO_FUNCTION: Record<string, string> = {
   AND: 'and',
   OR: 'or',
   '>': 'greater',
@@ -85,7 +87,7 @@ function render(node: ExplainNode, depth = 0): string {
   return lines.join('\n');
 }
 
-function normalizeTypeName(type: string): string {
+export function normalizeTypeName(type: string): string {
   // Normalize type name for ClickHouse EXPLAIN output:
   // - Collapse whitespace to single space
   // - Strip spaces adjacent to ( and ) outside quoted strings
@@ -196,7 +198,7 @@ function quoteJsonInner(inner: string): string {
   return processed.join(', ');
 }
 
-function normalizeFloat(value: string): string {
+export function normalizeFloat(value: string): string {
   // Handle special ClickHouse float literals that parseFloat doesn't understand
   if (value === 'inf' || value === '-inf') return value;
   if (value === 'nan' || value === '-nan') return 'nan';
@@ -207,7 +209,7 @@ function normalizeFloat(value: string): string {
   return f.toString().replace('e+', 'e');
 }
 
-function normalizeUInt(value: string): string {
+export function normalizeUInt(value: string): string {
   if (value.startsWith('0x') || value.startsWith('0X')) {
     // Use BigInt to avoid precision loss for large 64-bit hex values
     return BigInt(value).toString();
@@ -239,7 +241,7 @@ function transformerListNode(transformers: ColumnTransformer[]): ExplainNode {
   return n('ColumnsTransformerList', transformers.map(columnTransformerNode));
 }
 
-function escapeStringValue(value: string): string {
+export function escapeStringValue(value: string): string {
   // The grammar stores strings in pre-escaped form:
   // - \b, \f, \n, \r, \t, \0, \\ are stored as their two-char sequences (backslash + letter)
   //   and should be output as-is (no additional escaping).
@@ -837,12 +839,17 @@ function joinConstraintNode(constraint: JoinConstraint): ExplainNode {
   ]);
 }
 
-type JoinElement =
+export type JoinElement =
   | { tag: 'base'; from: TableRef | SubqueryFrom | TableFunctionRef }
-  | { tag: 'join'; from: TableRef | SubqueryFrom | TableFunctionRef; constraint?: JoinConstraint }
-  | { tag: 'arrayJoin'; expressions: Expression[] };
+  | {
+      tag: 'join';
+      from: TableRef | SubqueryFrom | TableFunctionRef;
+      constraint?: JoinConstraint;
+      join: JoinExpr;
+    }
+  | { tag: 'arrayJoin'; joinType: ArrayJoinType; expressions: Expression[] };
 
-function flattenFromExpr(from: FromExpr): JoinElement[] {
+export function flattenFromExpr(from: FromExpr): JoinElement[] {
   if (
     from.kind === 'tableRef' ||
     from.kind === 'subqueryFrom' ||
@@ -853,11 +860,14 @@ function flattenFromExpr(from: FromExpr): JoinElement[] {
   if (from.kind === 'joinExpr') {
     return [
       ...flattenFromExpr(from.left),
-      { tag: 'join', from: from.right, constraint: from.constraint },
+      { tag: 'join', from: from.right, constraint: from.constraint, join: from },
     ];
   }
   // arrayJoin
-  return [...flattenFromExpr(from.left), { tag: 'arrayJoin', expressions: from.expressions }];
+  return [
+    ...flattenFromExpr(from.left),
+    { tag: 'arrayJoin', joinType: from.joinType, expressions: from.expressions },
+  ];
 }
 
 // ClickHouse renders CTEs distributed to sibling UNION branches with their

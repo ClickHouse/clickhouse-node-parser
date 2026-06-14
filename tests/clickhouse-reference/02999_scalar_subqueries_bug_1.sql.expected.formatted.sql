@@ -20,7 +20,7 @@ SELECT
     b.id
 FROM
     remote('127.0.0.{1,2}', currentDatabase(), t_table_select) AS a
-LEFT JOIN (
+GLOBAL LEFT JOIN (
         SELECT id
         FROM remote('127.0.0.{1,2}', currentDatabase(), t_table_select) AS b
         WHERE (b.id % 10) = 0

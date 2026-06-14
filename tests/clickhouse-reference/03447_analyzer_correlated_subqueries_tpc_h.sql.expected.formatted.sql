@@ -155,10 +155,10 @@ SELECT
     s_comment
 FROM
     part
-CROSS JOIN supplier
-CROSS JOIN partsupp
-CROSS JOIN nation
-CROSS JOIN region
+, supplier
+, partsupp
+, nation
+, region
 WHERE p_partkey = ps_partkey
     AND s_suppkey = ps_suppkey
     AND p_size = 15
@@ -170,9 +170,9 @@ WHERE p_partkey = ps_partkey
         SELECT min(ps_supplycost)
         FROM
             partsupp
-        CROSS JOIN supplier
-        CROSS JOIN nation
-        CROSS JOIN region
+        , supplier
+        , nation
+        , region
         WHERE p_partkey = ps_partkey
             AND s_suppkey = ps_suppkey
             AND s_nationkey = n_nationkey
@@ -207,7 +207,7 @@ FORMAT Null;
 SELECT sum(l_extendedprice) / 7.0 AS avg_yearly
 FROM
     lineitem
-CROSS JOIN part
+, part
 WHERE p_partkey = l_partkey
     AND p_brand = 'Brand#23'
     AND p_container = 'MED BOX'
@@ -224,7 +224,7 @@ SELECT
     s_address
 FROM
     supplier
-CROSS JOIN nation
+, nation
 WHERE s_suppkey IN (
         SELECT ps_suppkey
         FROM partsupp
@@ -253,9 +253,9 @@ SELECT
     count(*) AS numwait
 FROM
     supplier
-CROSS JOIN lineitem AS l1
-CROSS JOIN orders
-CROSS JOIN nation
+, lineitem AS l1
+, orders
+, nation
 WHERE s_suppkey = l1.l_suppkey
     AND o_orderkey = l1.l_orderkey
     AND o_orderstatus = 'F'

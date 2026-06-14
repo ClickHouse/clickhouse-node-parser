@@ -6,7 +6,7 @@ FROM (
         FROM `system`.numbers
         LIMIT 1001
     )
-ORDER BY x ASC;
+ORDER BY x ASC NULLS FIRST;
 
 SELECT x
 FROM (
@@ -14,4 +14,4 @@ FROM (
         FROM `system`.numbers
         LIMIT 1001
     )
-ORDER BY x ASC;
+ORDER BY x ASC NULLS FIRST;

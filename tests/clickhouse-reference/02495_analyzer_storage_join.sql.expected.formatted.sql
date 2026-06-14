@@ -36,7 +36,7 @@ INSERT INTO t1;
 SELECT *
 FROM
     t1
-RIGHT JOIN tj
+ALL RIGHT JOIN tj
     ON t1.id1 == tj.key1
     AND t1.id2 == tj.key2
 ORDER BY key1 ASC
@@ -50,7 +50,7 @@ SELECT
     x
 FROM
     t1
-RIGHT JOIN tj
+ALL RIGHT JOIN tj
     ON t1.id1 == tj.key1
     AND t1.id2 == tj.key2
 ORDER BY key1 ASC
@@ -64,7 +64,7 @@ SELECT
     tj.x
 FROM
     t1
-RIGHT JOIN tj
+ALL RIGHT JOIN tj
     ON t1.id1 == tj.key1
     AND t1.id2 == tj.key2
 ORDER BY key1 ASC
@@ -76,7 +76,7 @@ SELECT
     x
 FROM
     t1
-RIGHT JOIN tj
+ALL RIGHT JOIN tj
     ON t1.id1 == tj.key1
     AND t1.id2 == tj.key2
 ORDER BY key1 ASC
@@ -85,7 +85,7 @@ FORMAT TSVWithNames;
 SELECT val
 FROM
     t1
-RIGHT JOIN tj
+ALL RIGHT JOIN tj
     ON t1.id1 == tj.key1
     AND t1.id2 == tj.key2
 ORDER BY key1 ASC
@@ -94,7 +94,7 @@ FORMAT TSVWithNames;
 SELECT x
 FROM
     t1
-RIGHT JOIN tj
+ALL RIGHT JOIN tj
     ON t1.id1 == tj.key1
     AND t1.id2 == tj.key2
 ORDER BY key1 ASC
@@ -115,7 +115,7 @@ INSERT INTO t;
 SELECT *
 FROM
     t
-RIGHT JOIN tj
+ALL RIGHT JOIN tj
     USING (key1, key2)
 ORDER BY key1 ASC
 FORMAT TSVWithNames;
@@ -123,7 +123,7 @@ FORMAT TSVWithNames;
 SELECT key1
 FROM
     t
-RIGHT JOIN tj
+ALL RIGHT JOIN tj
     USING (key1, key2)
 ORDER BY key1 ASC
 FORMAT TSVWithNames;
@@ -133,7 +133,7 @@ SELECT
     tj.key1
 FROM
     t
-RIGHT JOIN tj
+ALL RIGHT JOIN tj
     USING (key1, key2)
 ORDER BY key1 ASC
 FORMAT TSVWithNames;
@@ -143,7 +143,7 @@ SELECT
     tj.key2
 FROM
     t
-RIGHT JOIN tj
+ALL RIGHT JOIN tj
     USING (key1, key2)
 ORDER BY key1 ASC
 FORMAT TSVWithNames;
@@ -153,7 +153,7 @@ SELECT
     tj.b
 FROM
     t
-RIGHT JOIN tj
+ALL RIGHT JOIN tj
     USING (key1, key2)
 ORDER BY key1 ASC
 FORMAT TSVWithNames;
@@ -163,7 +163,7 @@ SELECT
     tj.b
 FROM
     t
-RIGHT JOIN tj
+ALL RIGHT JOIN tj
     USING (key1, key2)
 ORDER BY key1 ASC
 FORMAT TSVWithNames;
@@ -171,7 +171,7 @@ FORMAT TSVWithNames;
 SELECT tj.a
 FROM
     t
-RIGHT JOIN tj
+ALL RIGHT JOIN tj
     USING (key1, key2)
 ORDER BY key1 ASC
 FORMAT TSVWithNames;
@@ -179,7 +179,7 @@ FORMAT TSVWithNames;
 SELECT tj.b
 FROM
     t
-RIGHT JOIN tj
+ALL RIGHT JOIN tj
     USING (key1, key2)
 ORDER BY key1 ASC
 FORMAT TSVWithNames;
@@ -187,7 +187,7 @@ FORMAT TSVWithNames;
 SELECT tj.x
 FROM
     t
-RIGHT JOIN tj
+ALL RIGHT JOIN tj
     USING (key1, key2)
 ORDER BY key1 ASC
 FORMAT TSVWithNames;
@@ -195,7 +195,7 @@ FORMAT TSVWithNames;
 SELECT tj.y
 FROM
     t
-RIGHT JOIN tj
+ALL RIGHT JOIN tj
     USING (key1, key2)
 ORDER BY key1 ASC
 FORMAT TSVWithNames;
@@ -203,7 +203,7 @@ FORMAT TSVWithNames;
 SELECT a
 FROM
     t
-RIGHT JOIN tj
+ALL RIGHT JOIN tj
     USING (key1, key2)
 ORDER BY key1 ASC
 FORMAT TSVWithNames;
@@ -211,7 +211,7 @@ FORMAT TSVWithNames;
 SELECT b
 FROM
     t
-RIGHT JOIN tj
+ALL RIGHT JOIN tj
     USING (key1, key2)
 ORDER BY key1 ASC
 FORMAT TSVWithNames; -- { serverError AMBIGUOUS_IDENTIFIER }
@@ -219,7 +219,7 @@ FORMAT TSVWithNames; -- { serverError AMBIGUOUS_IDENTIFIER }
 SELECT x
 FROM
     t
-RIGHT JOIN tj
+ALL RIGHT JOIN tj
     USING (key1, key2)
 ORDER BY key1 ASC
 FORMAT TSVWithNames; -- { serverError AMBIGUOUS_IDENTIFIER }
@@ -227,7 +227,7 @@ FORMAT TSVWithNames; -- { serverError AMBIGUOUS_IDENTIFIER }
 SELECT y
 FROM
     t
-RIGHT JOIN tj
+ALL RIGHT JOIN tj
     USING (key1, key2)
 ORDER BY key1 ASC
 FORMAT TSVWithNames;
@@ -235,7 +235,7 @@ FORMAT TSVWithNames;
 SELECT t.val
 FROM
     t
-RIGHT JOIN tj
+ALL RIGHT JOIN tj
     USING (key1, key2)
 ORDER BY key1 ASC
 FORMAT TSVWithNames;
@@ -243,7 +243,7 @@ FORMAT TSVWithNames;
 SELECT val
 FROM
     t
-RIGHT JOIN tj
+ALL RIGHT JOIN tj
     USING (key1, key2)
 ORDER BY key1 ASC
 FORMAT TSVWithNames;
@@ -251,7 +251,7 @@ FORMAT TSVWithNames;
 SELECT *
 FROM
     t
-RIGHT JOIN tj
+ALL RIGHT JOIN tj
     ON t.key1 == tj.key1
     AND t.key2 == tj.key2
 ORDER BY t.key1 ASC
@@ -260,7 +260,7 @@ FORMAT TSVWithNames;
 SELECT key1
 FROM
     t
-RIGHT JOIN tj
+ALL RIGHT JOIN tj
     ON t.key1 == tj.key1
     AND t.key2 == tj.key2
 ORDER BY t.key1 ASC
@@ -271,7 +271,7 @@ SELECT
     tj.key1
 FROM
     t
-RIGHT JOIN tj
+ALL RIGHT JOIN tj
     ON t.key1 == tj.key1
     AND t.key2 == tj.key2
 ORDER BY t.key1 ASC
@@ -282,7 +282,7 @@ SELECT
     tj.key2
 FROM
     t
-RIGHT JOIN tj
+ALL RIGHT JOIN tj
     ON t.key1 == tj.key1
     AND t.key2 == tj.key2
 ORDER BY t.key1 ASC
@@ -293,7 +293,7 @@ SELECT
     tj.b
 FROM
     t
-RIGHT JOIN tj
+ALL RIGHT JOIN tj
     ON t.key1 == tj.key1
     AND t.key2 == tj.key2
 ORDER BY t.key1 ASC
@@ -304,7 +304,7 @@ SELECT
     tj.b
 FROM
     t
-RIGHT JOIN tj
+ALL RIGHT JOIN tj
     ON t.key1 == tj.key1
     AND t.key2 == tj.key2
 ORDER BY t.key1 ASC
@@ -313,7 +313,7 @@ FORMAT TSVWithNames;
 SELECT tj.a
 FROM
     t
-RIGHT JOIN tj
+ALL RIGHT JOIN tj
     ON t.key1 == tj.key1
     AND t.key2 == tj.key2
 ORDER BY t.key1 ASC
@@ -322,7 +322,7 @@ FORMAT TSVWithNames;
 SELECT tj.b
 FROM
     t
-RIGHT JOIN tj
+ALL RIGHT JOIN tj
     ON t.key1 == tj.key1
     AND t.key2 == tj.key2
 ORDER BY t.key1 ASC
@@ -331,7 +331,7 @@ FORMAT TSVWithNames;
 SELECT tj.x
 FROM
     t
-RIGHT JOIN tj
+ALL RIGHT JOIN tj
     ON t.key1 == tj.key1
     AND t.key2 == tj.key2
 ORDER BY t.key1 ASC
@@ -340,7 +340,7 @@ FORMAT TSVWithNames;
 SELECT tj.y
 FROM
     t
-RIGHT JOIN tj
+ALL RIGHT JOIN tj
     ON t.key1 == tj.key1
     AND t.key2 == tj.key2
 ORDER BY t.key1 ASC
@@ -349,7 +349,7 @@ FORMAT TSVWithNames;
 SELECT a
 FROM
     t
-RIGHT JOIN tj
+ALL RIGHT JOIN tj
     ON t.key1 == tj.key1
     AND t.key2 == tj.key2
 ORDER BY t.key1 ASC
@@ -358,7 +358,7 @@ FORMAT TSVWithNames;
 SELECT b
 FROM
     t
-RIGHT JOIN tj
+ALL RIGHT JOIN tj
     ON t.key1 == tj.key1
     AND t.key2 == tj.key2
 ORDER BY t.key1 ASC
@@ -367,7 +367,7 @@ FORMAT TSVWithNames; -- { serverError AMBIGUOUS_IDENTIFIER }
 SELECT x
 FROM
     t
-RIGHT JOIN tj
+ALL RIGHT JOIN tj
     ON t.key1 == tj.key1
     AND t.key2 == tj.key2
 ORDER BY t.key1 ASC
@@ -376,7 +376,7 @@ FORMAT TSVWithNames; -- { serverError AMBIGUOUS_IDENTIFIER }
 SELECT y
 FROM
     t
-RIGHT JOIN tj
+ALL RIGHT JOIN tj
     ON t.key1 == tj.key1
     AND t.key2 == tj.key2
 ORDER BY t.key1 ASC
@@ -385,7 +385,7 @@ FORMAT TSVWithNames;
 SELECT t.val
 FROM
     t
-RIGHT JOIN tj
+ALL RIGHT JOIN tj
     ON t.key1 == tj.key1
     AND t.key2 == tj.key2
 ORDER BY t.key1 ASC
@@ -394,7 +394,7 @@ FORMAT TSVWithNames;
 SELECT val
 FROM
     t
-RIGHT JOIN tj
+ALL RIGHT JOIN tj
     ON t.key1 == tj.key1
     AND t.key2 == tj.key2
 ORDER BY t.key1 ASC
@@ -403,7 +403,7 @@ FORMAT TSVWithNames;
 SELECT *
 FROM
     t
-RIGHT JOIN tj
+ALL RIGHT JOIN tj
     ON t.key1 == tj.key1
     AND t.key2 == tj.key2 + 1
 FORMAT TSVWithNames; -- { serverError INCOMPATIBLE_TYPE_OF_JOIN }
@@ -411,7 +411,7 @@ FORMAT TSVWithNames; -- { serverError INCOMPATIBLE_TYPE_OF_JOIN }
 SELECT *
 FROM
     t
-RIGHT JOIN tj
+ALL RIGHT JOIN tj
     ON t.key1 + 1 == tj.key1
     AND toUInt64(t.key2 - 1) == tj.key2
 ORDER BY
@@ -422,7 +422,7 @@ FORMAT TSVWithNames; -- Ok: expression on the left table
 SELECT *
 FROM
     t
-RIGHT JOIN tj
+ALL RIGHT JOIN tj
     ON t.key1 == tj.key1
     AND t.key2 == tj.key2
     AND 1 == 1
@@ -433,7 +433,7 @@ FORMAT TSVWithNames; -- { serverError INCOMPATIBLE_TYPE_OF_JOIN }
 SELECT *
 FROM
     t
-RIGHT JOIN tj
+ALL RIGHT JOIN tj
     ON t.key1 == tj.key1
     AND t.key2 == tj.key2
     AND 1 == 1
@@ -446,7 +446,7 @@ FORMAT TSVWithNames;
 SELECT *
 FROM
     t
-RIGHT JOIN tj
+ALL RIGHT JOIN tj
     ON t.key1 == tj.key1
     AND t.key2 == tj.key2
     AND 1 == 2
@@ -455,7 +455,7 @@ FORMAT TSVWithNames; -- { serverError INCOMPATIBLE_TYPE_OF_JOIN }
 SELECT *
 FROM
     t
-RIGHT JOIN tj
+ALL RIGHT JOIN tj
     ON t.key1 == tj.key1
     AND t.key2 == tj.key2
     AND tj.a == 20
@@ -464,7 +464,7 @@ FORMAT TSVWithNames; -- { serverError INCOMPATIBLE_TYPE_OF_JOIN }
 SELECT *
 FROM
     t
-RIGHT JOIN tj
+ALL RIGHT JOIN tj
     ON t.key1 == tj.key1
     AND t.key2 == tj.key2
     AND t.b == 22
@@ -476,7 +476,7 @@ FORMAT TSVWithNames; -- Ok: t.b from the left table
 SELECT *
 FROM
     t
-RIGHT JOIN tj
+ALL RIGHT JOIN tj
     ON t.key1 == tj.key1
     AND t.key2 == tj.key2
     AND 1 != 1
@@ -485,7 +485,7 @@ FORMAT TSVWithNames; -- { serverError INCOMPATIBLE_TYPE_OF_JOIN }
 SELECT *
 FROM
     t
-RIGHT JOIN tj
+ALL RIGHT JOIN tj
     ON t.key1 == tj.key1
     AND t.key2 == tj.key2
     AND NULL
@@ -496,7 +496,7 @@ FORMAT TSVWithNames; -- { serverError INCOMPATIBLE_TYPE_OF_JOIN }
 SELECT *
 FROM
     t
-RIGHT JOIN tj
+ALL RIGHT JOIN tj
     ON t.key1 == tj.key1
     AND t.key2 == tj.key2
     AND NULL
@@ -509,7 +509,7 @@ FORMAT TSVWithNames;
 SELECT *
 FROM
     t
-RIGHT JOIN tj
+ALL RIGHT JOIN tj
     ON t.key1 == tj.key1
     AND t.key2 == tj.key2
     AND 'aaa'
@@ -518,14 +518,14 @@ FORMAT TSVWithNames; -- { serverError ILLEGAL_TYPE_OF_ARGUMENT }
 SELECT *
 FROM
     t
-RIGHT JOIN tj
+ALL RIGHT JOIN tj
     ON 'aaa'
 FORMAT TSVWithNames; -- { serverError INVALID_JOIN_ON_EXPRESSION }
 
 SELECT *
 FROM
     t
-RIGHT JOIN tj
+ALL RIGHT JOIN tj
     ON t.key1 == tj.key1
     AND t.key2 == tj.key2
     AND 1
@@ -536,7 +536,7 @@ FORMAT TSVWithNames; -- { serverError INCOMPATIBLE_TYPE_OF_JOIN }
 SELECT *
 FROM
     t
-RIGHT JOIN tj
+ALL RIGHT JOIN tj
     ON t.key1 == tj.key1
     AND t.key2 == tj.key2
     AND 1
@@ -549,13 +549,13 @@ FORMAT TSVWithNames;
 SELECT *
 FROM
     t
-RIGHT JOIN tj
+ALL RIGHT JOIN tj
     ON 0
 FORMAT TSVWithNames; -- { serverError INCOMPATIBLE_TYPE_OF_JOIN }
 
 SELECT *
 FROM
     t
-RIGHT JOIN tj
+ALL RIGHT JOIN tj
     ON 1
 FORMAT TSVWithNames; -- { serverError INCOMPATIBLE_TYPE_OF_JOIN }

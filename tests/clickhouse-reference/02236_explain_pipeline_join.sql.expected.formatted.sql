@@ -14,7 +14,7 @@ FROM
         FROM `system`.numbers
         LIMIT 100000
     ) AS t1
-LEFT JOIN (
+ALL LEFT JOIN (
         SELECT *
         FROM `system`.numbers
         LIMIT 100000

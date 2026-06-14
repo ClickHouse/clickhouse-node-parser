@@ -12,7 +12,7 @@ FROM (
         FROM `system`.numbers
         LIMIT 10
     )
-ORDER BY x ASC;
+ORDER BY x ASC NULLS FIRST;
 
 SELECT x
 FROM (
@@ -20,15 +20,7 @@ FROM (
         FROM `system`.numbers
         LIMIT 10
     )
-ORDER BY x ASC;
-
-SELECT x
-FROM (
-        SELECT if(number % 5 = 0, NULL, (if(number % 3 = 0, nan, toFloat64(number)))) AS x
-        FROM `system`.numbers
-        LIMIT 10
-    )
-ORDER BY x DESC;
+ORDER BY x ASC NULLS LAST;
 
 SELECT x
 FROM (
@@ -44,7 +36,15 @@ FROM (
         FROM `system`.numbers
         LIMIT 10
     )
-ORDER BY x DESC;
+ORDER BY x DESC NULLS FIRST;
+
+SELECT x
+FROM (
+        SELECT if(number % 5 = 0, NULL, (if(number % 3 = 0, nan, toFloat64(number)))) AS x
+        FROM `system`.numbers
+        LIMIT 10
+    )
+ORDER BY x DESC NULLS LAST;
 
 SELECT
     x,
@@ -72,7 +72,7 @@ FROM (
     )
 ORDER BY
     x ASC,
-    y ASC;
+    y ASC NULLS FIRST;
 
 SELECT
     x,
@@ -85,8 +85,8 @@ FROM (
         LIMIT 10
     )
 ORDER BY
-    x DESC,
-    y ASC;
+    x DESC NULLS FIRST,
+    y ASC NULLS FIRST;
 
 SET max_block_size = 5;
 

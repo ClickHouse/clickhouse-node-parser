@@ -14,7 +14,7 @@ INSERT INTO t0 (c0);
 SELECT tx.c0.`null`
 FROM
     t0 AS tx
-RIGHT JOIN t0 AS ty
+GLOBAL RIGHT JOIN t0 AS ty
     ON tx.c0 = ty.c0
 SETTINGS
     allow_experimental_parallel_reading_from_replicas = 1,

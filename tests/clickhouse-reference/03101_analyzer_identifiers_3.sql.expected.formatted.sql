@@ -56,7 +56,7 @@ FROM
     (
         SELECT 1 AS a
     ) AS t
-CROSS JOIN (
+, (
         SELECT 2 AS b
     ) AS u;
 
@@ -68,7 +68,7 @@ FROM
     (
         SELECT 1 AS a
     ) AS t
-CROSS JOIN (
+, (
         SELECT 2 AS b
     ) AS u;
 
@@ -77,7 +77,7 @@ FROM
     (
         SELECT 1 AS a
     ) AS t
-CROSS JOIN (
+, (
         SELECT 1 AS a
     ) AS u;
 
@@ -89,7 +89,7 @@ FROM
     (
         SELECT 1 AS a
     ) AS t
-CROSS JOIN (
+, (
         SELECT 1 AS a
     ) AS u;
 

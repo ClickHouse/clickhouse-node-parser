@@ -29,8 +29,8 @@ EXPLAIN SYNTAX
 SELECT *
 FROM
     t1
-CROSS JOIN t2
-CROSS JOIN (
+, t2
+, (
         SELECT
             toNullable(10),
             *,
@@ -52,8 +52,8 @@ CROSS JOIN (
     ) AS t3
 WHERE if(t2.b > 0, t2.a, 0) = t1.a
 ORDER BY
-    t3.x ASC,
-    t2.a DESC,
-    t1.a DESC;
+    t3.x ASC NULLS FIRST,
+    t2.a DESC NULLS LAST,
+    t1.a DESC NULLS FIRST;
 
 SET enable_analyzer = 1;

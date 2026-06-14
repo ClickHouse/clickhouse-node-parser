@@ -32,7 +32,7 @@ SET join_algorithm = 'partial_merge';
 SELECT *
 FROM
     table1 AS t1
-LEFT JOIN (
+ALL LEFT JOIN (
         SELECT
             *,
             '0.10',
@@ -59,7 +59,7 @@ FROM
             toLowCardinality(toNullable(dummy)) AS val
         FROM `system`.one
     ) AS s1
-LEFT JOIN (
+ANY LEFT JOIN (
         SELECT toLowCardinality(dummy) AS rval
         FROM `system`.one
     ) AS s2

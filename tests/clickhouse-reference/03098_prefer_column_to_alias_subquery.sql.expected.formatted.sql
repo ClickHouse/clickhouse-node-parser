@@ -47,7 +47,7 @@ FROM (
         GROUP BY id
         SETTINGS prefer_column_name_to_alias = 1
     )
-ORDER BY `ALL` DESC;
+ORDER BY `ALL` DESC NULLS LAST;
 
 SELECT '-------------------------';
 

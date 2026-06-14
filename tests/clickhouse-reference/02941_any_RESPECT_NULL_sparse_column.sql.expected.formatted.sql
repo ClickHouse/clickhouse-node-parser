@@ -11,5 +11,5 @@ ORDER BY key;
 
 INSERT INTO data_sparse_column;
 
-SELECT any(value)
+SELECT any(value) RESPECT NULLS
 FROM data_sparse_column;

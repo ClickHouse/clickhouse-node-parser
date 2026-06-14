@@ -194,7 +194,7 @@ FROM
         SELECT *
         FROM Values('id UInt64, t UInt64', (1, 3))
     ) AS t1
-INNER JOIN (
+ASOF INNER JOIN (
         SELECT *
         FROM Values('id UInt64, t UInt64', (1, 1), (1, 2), (1, 3), (1, 4), (1, 5))
     ) AS t2

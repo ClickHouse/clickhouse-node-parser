@@ -86,7 +86,7 @@ FROM
     (
         SELECT 1 AS key
     ) AS t1
-RIGHT JOIN join_test_right
+ANY RIGHT JOIN join_test_right
     ON t1.key = join_test_right.key;
 
 INSERT INTO join_test_right (key, value) SELECT
@@ -99,7 +99,7 @@ FROM
     (
         SELECT 1 AS key
     ) AS t1
-RIGHT JOIN join_test_right
+ANY RIGHT JOIN join_test_right
     ON t1.key = join_test_right.key;
 
 SELECT count() == 10
@@ -107,5 +107,5 @@ FROM
     (
         SELECT 2 AS key
     ) AS t1
-RIGHT JOIN join_test_right
+ANY RIGHT JOIN join_test_right
     ON t1.key = join_test_right.key;

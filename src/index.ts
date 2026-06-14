@@ -137,6 +137,13 @@ export function parse(sql: string, options?: ParseOptions): Statement[] {
 
 export { format, formatNode } from './format';
 export { formatExplain } from './explain';
+export {
+  formatExplainJSON,
+  explainJSON,
+  AST_JSON_FORMAT_VERSION,
+  type ExplainJSONNode,
+  type ExplainJSONDocument,
+} from './explain-json';
 export { findNodes } from './find-nodes';
 export { transformNodes, type NodePositionMap } from './transform-nodes';
 export {

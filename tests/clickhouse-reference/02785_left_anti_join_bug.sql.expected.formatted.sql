@@ -36,6 +36,6 @@ FROM
         FROM test_table__fuzz_3
         GROUP BY value
     ) AS subquery
-LEFT JOIN test_table
+ANTI LEFT JOIN test_table
     ON subquery.corr_value = test_table.id
 FORMAT Null;

@@ -24,7 +24,7 @@ SET enable_analyzer = 1, query_plan_join_swap_table = 'auto';
 SELECT *
 FROM
     lhs
-INNER JOIN rhs
+ANY INNER JOIN rhs
     ON lhs.a = rhs.a
 FORMAT Null
 SETTINGS log_comment = '03593_any_join_swap_tables';

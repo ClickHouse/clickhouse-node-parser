@@ -463,10 +463,10 @@ FROM test_table);
 DESCRIBE TABLE (SELECT count() OVER (PARTITION BY id, value ORDER BY id ASC, value DESC ROWS BETWEEN ((1 + 1) AS frame_offset_begin) PRECEDING AND ((2 + 2) AS frame_offset_end) FOLLOWING)
 FROM test_table);
 
-DESCRIBE TABLE (SELECT count() OVER (ORDER BY toNullable(id) ASC)
+DESCRIBE TABLE (SELECT count() OVER (ORDER BY toNullable(id) ASC NULLS FIRST)
 FROM test_table);
 
-DESCRIBE TABLE (SELECT count() OVER (ORDER BY toNullable(id) ASC)
+DESCRIBE TABLE (SELECT count() OVER (ORDER BY toNullable(id) ASC NULLS LAST)
 FROM test_table);
 
 DESCRIBE TABLE (SELECT count() OVER (ORDER BY id ASC WITH FILL FROM 1 TO 5 STEP 1)
@@ -478,15 +478,15 @@ FROM test_table);
 DESCRIBE TABLE (SELECT count() OVER (ORDER BY id ASC WITH FILL FROM ((1 + 1) AS `from`) TO (6 AS to) STEP ((1 + 1) AS `step`))
 FROM test_table);
 
-DESCRIBE TABLE (SELECT count()
+DESCRIBE TABLE (SELECT count() OVER window_name
 FROM test_table
 WINDOW window_name AS (PARTITION BY id));
 
-DESCRIBE TABLE (SELECT count()
+DESCRIBE TABLE (SELECT count() OVER window_name
 FROM test_table
 WINDOW window_name AS (PARTITION BY id ORDER BY value ASC));
 
-DESCRIBE TABLE (SELECT count() OVER (ORDER BY id ASC)
+DESCRIBE TABLE (SELECT count() OVER (window_name ORDER BY id ASC)
 FROM test_table
 WINDOW window_name AS (PARTITION BY id));
 
@@ -556,22 +556,22 @@ INNER JOIN test_table_in_cte_2 AS test_table_in_cte_2
 DESCRIBE TABLE (SELECT *
 FROM
     test_table_join_1
-CROSS JOIN test_table_join_2);
+, test_table_join_2);
 
 DESCRIBE TABLE (SELECT *
 FROM
     test_table_join_1 AS t1
-CROSS JOIN test_table_join_2 AS t2);
+, test_table_join_2 AS t2);
 
 DESCRIBE TABLE (SELECT * APPLY(toString)
 FROM
     test_table_join_1 AS t1
-CROSS JOIN test_table_join_2 AS t2);
+, test_table_join_2 AS t2);
 
 DESCRIBE TABLE (SELECT * APPLY(x -> toString(x))
 FROM
     test_table_join_1 AS t1
-CROSS JOIN test_table_join_2 AS t2);
+, test_table_join_2 AS t2);
 
 DESCRIBE TABLE (SELECT
     test_table_join_1.*,
@@ -632,26 +632,26 @@ INNER JOIN test_table_join_2 AS t2
 DESCRIBE TABLE (SELECT *
 FROM
     test_table_join_1
-CROSS JOIN test_table_join_2
-CROSS JOIN test_table_join_3);
+, test_table_join_2
+, test_table_join_3);
 
 DESCRIBE TABLE (SELECT *
 FROM
     test_table_join_1 AS t1
-CROSS JOIN test_table_join_2 AS t2
-CROSS JOIN test_table_join_3 AS t3);
+, test_table_join_2 AS t2
+, test_table_join_3 AS t3);
 
 DESCRIBE TABLE (SELECT * APPLY(toString)
 FROM
     test_table_join_1 AS t1
-CROSS JOIN test_table_join_2 AS t2
-CROSS JOIN test_table_join_3 AS t3);
+, test_table_join_2 AS t2
+, test_table_join_3 AS t3);
 
 DESCRIBE TABLE (SELECT * APPLY(x -> toString(x))
 FROM
     test_table_join_1 AS t1
-CROSS JOIN test_table_join_2 AS t2
-CROSS JOIN test_table_join_3 AS t3);
+, test_table_join_2 AS t2
+, test_table_join_3 AS t3);
 
 DESCRIBE TABLE (SELECT
     test_table_join_1.*,

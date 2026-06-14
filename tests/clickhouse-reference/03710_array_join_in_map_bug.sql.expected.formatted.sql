@@ -6,7 +6,7 @@ SELECT DISTINCT
     __table4.`isNotDistinctFrom(3, isZeroOrNull(isNotNull(3)))` AS `isNotDistinctFrom(3, isZeroOrNull(isNotNull(3)))`
 FROM
     `system`.one AS __table3
-FULL JOIN (
+ALL FULL JOIN (
         SELECT DISTINCT
             __table5.dummy AS dummy,
             __table5.`isNotNull(map(assumeNotNull(isNull(3)), NULL))` AS `isNotNull(map(assumeNotNull(isNull(3)), NULL))`,

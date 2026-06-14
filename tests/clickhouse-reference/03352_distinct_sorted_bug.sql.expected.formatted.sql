@@ -52,7 +52,7 @@ FROM
             1 AS id,
             2 AS value
     ) AS subquery_1
-CROSS JOIN (
+, (
         SELECT
             3 AS id,
             4

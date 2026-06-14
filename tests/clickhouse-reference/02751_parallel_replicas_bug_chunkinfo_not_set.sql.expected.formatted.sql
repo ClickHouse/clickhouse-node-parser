@@ -39,6 +39,6 @@ WITH ROLLUP
 ORDER BY
     key ASC,
     value1 ASC,
-    value2 ASC
+    value2 ASC NULLS LAST
 LIMIT 10
 FORMAT Null;

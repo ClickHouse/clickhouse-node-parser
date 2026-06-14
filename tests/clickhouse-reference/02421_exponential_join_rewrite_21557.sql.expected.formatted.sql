@@ -366,7 +366,7 @@ WITH cs_ui AS (
         sum((cr_refunded_cash + cr_reversed_charge) + cr_store_credit) AS refund
     FROM
         catalog_sales
-    CROSS JOIN catalog_returns
+    , catalog_returns
     WHERE (cs_item_sk = cr_item_sk)
         AND (cs_order_number = cr_order_number)
     GROUP BY cs_item_sk
@@ -396,23 +396,23 @@ cross_sales AS (
         sum(ss_coupon_amt) AS s3
     FROM
         store_sales
-    CROSS JOIN store_returns
-    CROSS JOIN cs_ui
-    CROSS JOIN date_dim AS d1
-    CROSS JOIN date_dim AS d2
-    CROSS JOIN date_dim AS d3
-    CROSS JOIN store
-    CROSS JOIN customer
-    CROSS JOIN customer_demographics AS cd1
-    CROSS JOIN customer_demographics AS cd2
-    CROSS JOIN promotion
-    CROSS JOIN household_demographics AS hd1
-    CROSS JOIN household_demographics AS hd2
-    CROSS JOIN customer_address AS ad1
-    CROSS JOIN customer_address AS ad2
-    CROSS JOIN income_band AS ib1
-    CROSS JOIN income_band AS ib2
-    CROSS JOIN item
+    , store_returns
+    , cs_ui
+    , date_dim AS d1
+    , date_dim AS d2
+    , date_dim AS d3
+    , store
+    , customer
+    , customer_demographics AS cd1
+    , customer_demographics AS cd2
+    , promotion
+    , household_demographics AS hd1
+    , household_demographics AS hd2
+    , customer_address AS ad1
+    , customer_address AS ad2
+    , income_band AS ib1
+    , income_band AS ib2
+    , item
     WHERE (ss_store_sk = s_store_sk)
         AND (ss_sold_date_sk = d1.d_date_sk)
         AND (ss_customer_sk = c_customer_sk)
@@ -479,7 +479,7 @@ SELECT
     cs2.cnt
 FROM
     cross_sales AS cs1
-CROSS JOIN cross_sales AS cs2
+, cross_sales AS cs2
 WHERE (cs1.item_sk = cs2.item_sk)
     AND (cs1.syear = 2000)
     AND (cs2.syear = (2000 + 1))

@@ -42,14 +42,14 @@ FROM
     t2
 INNER JOIN t2 AS tx
     ON true
-RIGHT JOIN t1
+GLOBAL RIGHT JOIN t1
     ON true;
 
 -- just check that simple GLOBAL JOIN works with parallel replicas
 SELECT *
 FROM
     t2
-RIGHT JOIN t1
+GLOBAL RIGHT JOIN t1
     ON true;
 
 DROP TABLE t1;

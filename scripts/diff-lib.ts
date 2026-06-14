@@ -24,13 +24,13 @@ const EXPLAIN_ERROR = '<Explain Error>';
 
 // ── Output computation (shared by the plain and diff scripts) ───────────────────
 
-/** Recursively removes `location` and `parent` keys, matching tests/helpers.ts. */
+/** Recursively removes `location`, `parent`, and `isOperator` keys, matching tests/helpers.ts. */
 export function stripMeta(value: unknown): unknown {
   if (value === null || value === undefined || typeof value !== 'object') return value;
   if (Array.isArray(value)) return value.map(stripMeta);
   const result: Record<string, unknown> = {};
   for (const [k, v] of Object.entries(value as Record<string, unknown>)) {
-    if (k === 'location' || k === 'parent') continue;
+    if (k === 'location' || k === 'parent' || k === 'isOperator') continue;
     result[k] = stripMeta(v);
   }
   return result;
@@ -85,13 +85,13 @@ export type Compute = (sql: string, expected: string | null) => string;
  * pattern (matched against the `.sql` filenames). The `.sql` suffix is optional
  * for exact-name matches.
  */
-export function resolveReferences(selector: string): string[] {
-  if (!fs.existsSync(CLICKHOUSE_DIR)) {
-    throw new Error(`Reference directory not found: ${CLICKHOUSE_DIR}`);
+export function resolveReferences(selector: string, dir: string = CLICKHOUSE_DIR): string[] {
+  if (!fs.existsSync(dir)) {
+    throw new Error(`Reference directory not found: ${dir}`);
   }
 
   const allCases = fs
-    .readdirSync(CLICKHOUSE_DIR)
+    .readdirSync(dir)
     .filter((f) => f.endsWith('.sql') && !f.includes('.expected.'));
   const caseSet = new Set(allCases);
 
@@ -291,8 +291,24 @@ function renderCase(result: CaseResult, opts: CliOptions): boolean {
  * Top-level runner for the diff scripts. Resolves references, computes each case via
  * `compute`, renders them, and prints a summary / sets exit code.
  */
-export function run(opts: CliOptions, expectedSuffix: string, compute: Compute): void {
-  const files = resolveReferences(opts.selector);
+/** Optional corpus layout overrides for {@link run}. */
+export interface RunLayout {
+  /** Directory holding the `.sql` cases. Defaults to {@link CLICKHOUSE_DIR}. */
+  dir?: string;
+  /** Maps a case's `.sql` path to its expected-output path. Defaults to appending the suffix. */
+  expectedPathFor?: (sqlPath: string) => string;
+  /** Normalizes the raw expected file contents before comparison/diffing. */
+  normalizeExpected?: (expected: string) => string;
+}
+
+export function run(
+  opts: CliOptions,
+  expectedSuffix: string,
+  compute: Compute,
+  layout: RunLayout = {},
+): void {
+  const dir = layout.dir ?? CLICKHOUSE_DIR;
+  const files = resolveReferences(opts.selector, dir);
 
   if (files.length === 0) {
     process.stderr.write(pc.red('No reference cases matched the given selector.\n'));
@@ -303,9 +319,12 @@ export function run(opts: CliOptions, expectedSuffix: string, compute: Compute):
   let shown = 0;
 
   for (const fileName of files) {
-    const sqlPath = path.join(CLICKHOUSE_DIR, fileName);
-    const expectedPath = `${sqlPath}${expectedSuffix}`;
-    const expected = fs.existsSync(expectedPath) ? fs.readFileSync(expectedPath, 'utf-8') : null;
+    const sqlPath = path.join(dir, fileName);
+    const expectedPath = layout.expectedPathFor
+      ? layout.expectedPathFor(sqlPath)
+      : `${sqlPath}${expectedSuffix}`;
+    let expected = fs.existsSync(expectedPath) ? fs.readFileSync(expectedPath, 'utf-8') : null;
+    if (expected !== null && layout.normalizeExpected) expected = layout.normalizeExpected(expected);
 
     let actual: string;
     try {

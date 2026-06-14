@@ -5,7 +5,7 @@ FROM
         FROM `system`.merge_tree_settings
         WHERE name = 'index_granularity'
     ) AS t1
-CROSS JOIN (
+, (
         SELECT toString(getMergeTreeSetting('index_granularity')) AS val
     ) AS t2;
 
@@ -16,7 +16,7 @@ FROM
         FROM `system`.merge_tree_settings
         WHERE name = 'max_merge_selecting_sleep_ms'
     ) AS t1
-CROSS JOIN (
+, (
         SELECT toString(getMergeTreeSetting('max_merge_selecting_sleep_ms')) AS val
     ) AS t2;
 

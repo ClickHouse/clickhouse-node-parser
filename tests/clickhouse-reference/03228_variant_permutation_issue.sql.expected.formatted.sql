@@ -41,4 +41,4 @@ SELECT *
 FROM test_new_json_type FINAL
 PREWHERE isNotNull(data.foo2)
 WHERE isNotNull(data.foo2)
-ORDER BY id ASC;
+ORDER BY id ASC NULLS FIRST;

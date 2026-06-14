@@ -133,7 +133,7 @@ FROM
             covarSampStable(x_value, y_value) AS COVAR1
         FROM series
     )
-INNER JOIN (
+ANY INNER JOIN (
         SELECT
             arrayJoin([1]) AS ID2,
             sum(VAL) / ((count() - 1)) AS COVAR2
@@ -147,7 +147,7 @@ INNER JOIN (
                             avg(y_value) AS AVG_Y
                         FROM series
                     )
-                INNER JOIN (
+                ANY INNER JOIN (
                         SELECT
                             i AS ID,
                             x_value AS X,
@@ -186,7 +186,7 @@ FROM
             covarPopStable(x_value, y_value) AS COVAR1
         FROM series
     )
-INNER JOIN (
+ANY INNER JOIN (
         SELECT
             arrayJoin([1]) AS ID2,
             sum(VAL) / count() AS COVAR2
@@ -200,7 +200,7 @@ INNER JOIN (
                             avg(y_value) AS AVG_Y
                         FROM series
                     )
-                INNER JOIN (
+                ANY INNER JOIN (
                         SELECT
                             i AS ID,
                             x_value AS X,

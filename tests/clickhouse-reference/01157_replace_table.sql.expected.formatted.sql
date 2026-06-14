@@ -97,7 +97,7 @@ FROM t;
 SELECT *
 FROM
     numbers(10) AS t
-INNER JOIN `join`
+ANY INNER JOIN `join`
     ON t.number = `join`.n
 ORDER BY n ASC;
 

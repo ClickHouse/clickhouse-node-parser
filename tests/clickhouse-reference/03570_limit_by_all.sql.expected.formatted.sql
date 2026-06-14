@@ -387,7 +387,7 @@ SELECT
 FROM test_limit_by_all
 ORDER BY
     id ASC,
-    category ASC,
+    category ASC NULLS FIRST,
     value ASC
 LIMIT 1 BY ALL;
 

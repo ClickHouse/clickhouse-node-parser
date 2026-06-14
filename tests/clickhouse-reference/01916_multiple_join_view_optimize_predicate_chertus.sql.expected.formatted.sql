@@ -23,7 +23,7 @@ INSERT INTO j;
 SELECT *
 FROM
     a
-LEFT JOIN j
+ANY LEFT JOIN j
     USING (id)
 ORDER BY
     a.id ASC,
@@ -33,7 +33,7 @@ SETTINGS enable_optimize_predicate_expression = 1;
 SELECT *
 FROM
     a
-LEFT JOIN j
+ANY LEFT JOIN j
     USING (id)
 ORDER BY
     a.id ASC,

@@ -26,7 +26,7 @@ ENGINE = Distributed(test_shard_localhost, currentDatabase(), xp);
 SELECT count(7 = (
         SELECT number
         FROM numbers(0)
-        ORDER BY number ASC
+        ORDER BY number ASC NULLS FIRST
         LIMIT 7
     ))
 FROM xp_d
@@ -35,7 +35,7 @@ PREWHERE toYYYYMM(A) GLOBAL IN (
             NULL = (
                 SELECT number
                 FROM numbers(1)
-                ORDER BY number DESC
+                ORDER BY number DESC NULLS LAST
                 LIMIT 1
             ),
             toYYYYMM(min(A))
@@ -180,7 +180,7 @@ SELECT
     j2
 FROM
     remote('127.0.0.{2,3}', `system`.numbers)
-LEFT JOIN (
+GLOBAL ANY LEFT JOIN (
         SELECT
             number / 3 AS n,
             number AS j1,

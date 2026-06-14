@@ -14,7 +14,7 @@ EXPLAIN SYNTAX
 SELECT
     'Get hierarchy',
     toNullable(13),
-    count()
+    count() IGNORE NULLS
 FROM dist_01247
 GROUP BY number
 WITH CUBE

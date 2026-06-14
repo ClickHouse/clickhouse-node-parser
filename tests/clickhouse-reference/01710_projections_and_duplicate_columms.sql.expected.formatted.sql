@@ -76,8 +76,8 @@ GROUP BY dt_m
 WITH ROLLUP
 WITH TOTALS
 ORDER BY
-    count(retry_count / duration) ASC,
-    100000000000000000000. ASC
+    count(retry_count / duration) ASC NULLS LAST,
+    100000000000000000000. ASC NULLS FIRST
 FORMAT Null;
 
 DROP TABLE projection_test__fuzz_0;

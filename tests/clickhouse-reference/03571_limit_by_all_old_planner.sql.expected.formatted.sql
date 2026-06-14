@@ -197,7 +197,7 @@ SELECT
 FROM test_limit_by_all_old_planner
 ORDER BY
     id ASC,
-    category ASC,
+    category ASC NULLS FIRST,
     value ASC
 LIMIT 1 BY id, category;
 

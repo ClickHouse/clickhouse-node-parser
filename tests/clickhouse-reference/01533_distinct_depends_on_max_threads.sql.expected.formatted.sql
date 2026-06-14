@@ -16,7 +16,7 @@ SET max_threads = 5;
 SELECT DISTINCT 1
 FROM
     bug_13492
-CROSS JOIN numbers(1) AS n;
+, numbers(1) AS n;
 
 SET max_threads = 2;
 

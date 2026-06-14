@@ -17,7 +17,7 @@ FROM t0 AS ref_0;
 INSERT INTO t0;
 
 WITH cte_4 AS (
-    SELECT rank() AS c_2_c2398_0
+    SELECT rank() OVER w0 AS c_2_c2398_0
     FROM t3 AS ref_15
     WINDOW w0 AS (PARTITION BY ref_15.c_2_c16_0 ORDER BY ref_15.c_2_c16_0 DESC)
 )

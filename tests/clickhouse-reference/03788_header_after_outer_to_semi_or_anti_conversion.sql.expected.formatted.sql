@@ -22,7 +22,7 @@ FROM
         WITH CUBE
         WITH TOTALS
     ) AS foo
-LEFT JOIN (
+ANY LEFT JOIN (
         SELECT
             *
             AND ((((isNullable(isZeroOrNull(toNullable(1)))
@@ -46,7 +46,7 @@ WHERE ((and(*, toNullable(2), *
     AND ((*
     AND isZeroOrNull(2)))
     AND isNull(toNullable(2))))
-ORDER BY `ALL` ASC;
+ORDER BY `ALL` ASC NULLS FIRST;
 
 SELECT DISTINCT 2
 FROM
@@ -61,7 +61,7 @@ FROM
         WITH CUBE
         WITH TOTALS
     ) AS foo
-LEFT JOIN (
+ANY LEFT JOIN (
         SELECT
             2 AS b,
             1 AS a

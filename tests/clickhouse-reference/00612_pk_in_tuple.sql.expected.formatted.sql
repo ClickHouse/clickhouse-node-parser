@@ -103,7 +103,7 @@ WHERE (key, val.x) IN ((1, 1), (2, 2));
 SELECT max(key)
 FROM
     tab_00612
-LEFT JOIN (
+ANY LEFT JOIN (
         SELECT
             key,
             arrayJoin(n.x) AS val
@@ -115,7 +115,7 @@ WHERE (key, val) IN (1, 1);
 SELECT max(key)
 FROM
     tab_00612
-LEFT JOIN (
+ANY LEFT JOIN (
         SELECT
             key,
             arrayJoin(n.x) AS val

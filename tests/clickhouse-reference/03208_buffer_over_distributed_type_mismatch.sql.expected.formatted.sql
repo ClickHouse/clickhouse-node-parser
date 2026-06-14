@@ -147,5 +147,5 @@ GROUP BY
     materialize(toLowCardinality(-127)),
     intDivOrZero(0, 0) = toLowCardinality(toLowCardinality(0))
 WITH TOTALS
-ORDER BY `ALL` DESC
+ORDER BY `ALL` DESC NULLS FIRST
 FORMAT Null;

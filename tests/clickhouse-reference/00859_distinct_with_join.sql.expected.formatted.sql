@@ -34,7 +34,7 @@ FROM numbers(2);
 SELECT DISTINCT a
 FROM
     fooL
-LEFT JOIN fooR
+SEMI LEFT JOIN fooR
     USING (a)
 ORDER BY a ASC;
 

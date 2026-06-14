@@ -135,7 +135,7 @@ SELECT
     tab.number
 FROM
     remote('127.0.0.{1..3}', numbers(100)) AS tab
-INNER JOIN (
+ALL INNER JOIN (
         SELECT number
         FROM numbers(10)
         WHERE number = shardNum()
@@ -151,7 +151,7 @@ SELECT
     number
 FROM
     remote('127.0.0.{1..3}', numbers(100))
-INNER JOIN (
+ALL INNER JOIN (
         SELECT number AS flt_number
         FROM numbers(10)
         WHERE number = shardNum()
@@ -169,7 +169,7 @@ SELECT
     tab.number
 FROM
     remote('127.0.0.{1..3}', numbers(100)) AS tab
-INNER JOIN (
+GLOBAL ALL INNER JOIN (
         SELECT number
         FROM numbers(10)
         WHERE number = shardNum()
@@ -185,7 +185,7 @@ SELECT
     number
 FROM
     remote('127.0.0.{1..3}', numbers(100))
-INNER JOIN (
+GLOBAL ALL INNER JOIN (
         SELECT number AS flt_number
         FROM numbers(10)
         WHERE number = shardNum()
@@ -203,7 +203,7 @@ SELECT
     tab.number
 FROM
     remote('127.0.0.{1..3}', numbers(100)) AS tab
-INNER JOIN (
+ALL INNER JOIN (
         SELECT number
         FROM numbers(10)
         WHERE number = shardNum()
@@ -223,7 +223,7 @@ SELECT
     number
 FROM
     remote('127.0.0.{1..3}', numbers(100))
-INNER JOIN (
+ALL INNER JOIN (
         SELECT number AS flt_number
         FROM numbers(10)
         WHERE number = shardNum()
@@ -245,7 +245,7 @@ SELECT
     tab.number
 FROM
     remote('127.0.0.{1..3}', numbers(100)) AS tab
-INNER JOIN (
+GLOBAL ALL INNER JOIN (
         SELECT number
         FROM numbers(10)
         WHERE number = shardNum()
@@ -265,7 +265,7 @@ SELECT
     number
 FROM
     remote('127.0.0.{1..3}', numbers(100))
-INNER JOIN (
+GLOBAL ALL INNER JOIN (
         SELECT number AS flt_number
         FROM numbers(10)
         WHERE number = shardNum()

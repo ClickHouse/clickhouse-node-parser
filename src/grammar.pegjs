@@ -3096,7 +3096,8 @@ UnionQuery
           // UNION DISTINCT: always create a new union node with mode
           result = loc({ kind: 'union', queries: [result, right], unionMode: 'DISTINCT' });
         } else {
-          result = loc({ kind: 'intersect', op, left: result, right });
+          result = loc({ kind: 'intersect', op: op === 'EXCEPT DISTINCT' ? 'EXCEPT' : op, left: result, right });
+          if (op === 'EXCEPT DISTINCT') result.distinct = true;
         }
       }
       return result;
@@ -3109,6 +3110,7 @@ IntersectQuery
       let result = head;
       for (const t of tail) {
         result = loc({ kind: 'intersect', op: 'INTERSECT', left: result, right: addLeading(t[3], [...flattenWs(t[0]), ...flattenWs(t[2])]) });
+        if (t[1] === 'INTERSECT DISTINCT') result.distinct = true;
       }
       return result;
     }
@@ -3116,11 +3118,11 @@ IntersectQuery
 // UnionExceptOp: UNION [ALL|DISTINCT] or EXCEPT [ALL|DISTINCT]
 UnionExceptOp
   = KW_UNION _ mode:UnionAllOrDistinct? { return mode === 'DISTINCT' ? 'UNION DISTINCT' : 'UNION'; }
-  / "EXCEPT"i   ![a-zA-Z0-9_] ( _ UnionAllOrDistinct )? { return 'EXCEPT'; }
+  / "EXCEPT"i   ![a-zA-Z0-9_] mode:( _ UnionAllOrDistinct )? { return mode !== null && mode[1] === 'DISTINCT' ? 'EXCEPT DISTINCT' : 'EXCEPT'; }
 
 // IntersectOp: INTERSECT [ALL|DISTINCT]
 IntersectOp
-  = "INTERSECT"i ![a-zA-Z0-9_] ( _ UnionAllOrDistinct )? { return 'INTERSECT'; }
+  = "INTERSECT"i ![a-zA-Z0-9_] mode:( _ UnionAllOrDistinct )? { return mode !== null && mode[1] === 'DISTINCT' ? 'INTERSECT DISTINCT' : 'INTERSECT'; }
 
 // UnionAllOrDistinct: supports UNION ALL and UNION DISTINCT
 UnionAllOrDistinct
@@ -3521,25 +3523,32 @@ JoinPart
   = join_type:ArrayJoinKeyword exprs:( _ ExpressionList )? {
       return loc({ kind: 'arrayJoinExpr', joinType: join_type, expressions: exprs ? exprs[1] : [] });
     }
-  / join_type:JoinKeyword _ right:FromAtom _ constraint:JoinConstraint {
-      return loc({ kind: 'joinExpr', joinType: join_type, right, constraint });
+  / jk:JoinKeyword _ right:FromAtom _ constraint:JoinConstraint {
+      const result = loc({ kind: 'joinExpr', joinType: jk.type, right, constraint });
+      if (jk.strictness !== undefined) result.strictness = jk.strictness;
+      if (jk.global) result.global = true;
+      return result;
     }
-  / join_type:JoinKeyword _ right:FromAtom {
-      return loc({ kind: 'joinExpr', joinType: join_type, right });
+  / jk:JoinKeyword _ right:FromAtom {
+      const result = loc({ kind: 'joinExpr', joinType: jk.type, right });
+      if (jk.strictness !== undefined) result.strictness = jk.strictness;
+      if (jk.global) result.global = true;
+      return result;
     }
   // Comma-separated tables: implicit CROSS JOIN without constraint
   / "," _ right:FromAtom {
-      return loc({ kind: 'joinExpr', joinType: 'CROSS', right });
+      return loc({ kind: 'joinExpr', joinType: 'CROSS', comma: true, right });
     }
 
-// JoinKeyword: [GLOBAL] [strictness] [direction] [OUTER] JOIN — returns direction string.
+// JoinKeyword: [GLOBAL] [strictness] [direction] [OUTER] JOIN — returns the join
+// direction plus the optional strictness (ANY/ALL/ASOF/SEMI/ANTI) and GLOBAL locality.
 // Structured as optional qualifiers to avoid ~80 brute-force alternatives.
 JoinKeyword
   // PASTE JOIN (special case): [ANY|ALL] PASTE JOIN
-  = (KW_ANY / KW_ALL)? _ "PASTE"i ![a-zA-Z0-9_] _ KW_JOIN { return "PASTE"; }
+  = (KW_ANY / KW_ALL)? _ "PASTE"i ![a-zA-Z0-9_] _ KW_JOIN { return { type: "PASTE" }; }
   // Standard joins: [GLOBAL] [strictness-before] [direction] [strictness-after] [OUTER] JOIN
-  / (KW_GLOBAL _)?
-    (JoinStrictness _)?
+  / global:(KW_GLOBAL _)?
+    s1:(JoinStrictness _)?
     dir:(
       KW_CROSS { return "CROSS"; }
       / KW_FULL { return "FULL"; }
@@ -3548,12 +3557,23 @@ JoinKeyword
       / KW_INNER { return "INNER"; }
     )?
     // Handle strictness/qualifier after direction: LEFT ANY JOIN, LEFT ASOF JOIN, etc.
-    (_ JoinStrictness)?
+    s2:(_ JoinStrictness)?
     (_ KW_OUTER)?
-    _ KW_JOIN { return dir !== null ? dir : "INNER"; }
+    _ KW_JOIN {
+      const strictness = s1 !== null ? s1[0] : (s2 !== null ? s2[1] : undefined);
+      const result = { type: dir !== null ? dir : "INNER" };
+      if (strictness !== undefined) result.strictness = strictness;
+      if (global !== null) result.global = true;
+      return result;
+    }
 
-// JoinStrictness: any/all/semi/anti/asof qualifier (consumed but not used in AST)
-JoinStrictness = KW_ANY / KW_ALL / KW_SEMI / KW_ANTI / KW_ASOF
+// JoinStrictness: any/all/semi/anti/asof qualifier
+JoinStrictness
+  = KW_ANY { return 'ANY'; }
+  / KW_ALL { return 'ALL'; }
+  / KW_SEMI { return 'SEMI'; }
+  / KW_ANTI { return 'ANTI'; }
+  / KW_ASOF { return 'ASOF'; }
 
 ArrayJoinKeyword
   = KW_LEFT _ KW_ARRAY _ KW_JOIN { return "LEFT ARRAY"; }
@@ -3754,8 +3774,10 @@ OrderByItem
     {
       const resolvedExpr = alias !== null ? loc({ kind: 'alias', expr, alias: alias[3] }) : expr;
       const result = loc({ kind: 'orderByItem', expr: resolvedExpr, direction: dir !== null ? dir[1].toUpperCase() : 'ASC' });
+      if (nulls !== null) result.nullsFirst = /^first$/i.test(nulls[4]);
       if (collate !== null) result.collate = collate[4].value;
       if (fill !== null) {
+        result.withFill = true;
         const fillArgs = fill[6];
         if (fillArgs !== null) {
           if (fillArgs.fillFrom !== undefined) result.fillFrom = fillArgs.fillFrom;
@@ -3824,7 +3846,7 @@ ExpressionWithImplicitAlias
 // TernaryExpr: ternary ? : operator, maps to Function if(cond, then, else)
 TernaryExpr
   = cond:OrExpr ws1:_ "?" ws2:_ then:TernaryExpr ws3:_ ":" ws4:_ else_:TernaryExpr {
-      return loc({ kind: 'functionCall', name: 'if', args: [
+      return loc({ kind: 'functionCall', name: 'if', isOperator: true, args: [
         cond,
         addLeading(then, [...flattenWs(ws1), ...flattenWs(ws2)]),
         addLeading(else_, [...flattenWs(ws3), ...flattenWs(ws4)])
@@ -3898,30 +3920,30 @@ CompareBaseSuffix
   // LIKE / ILIKE
   / _ negated:(KW_NOT _)? KW_ILIKE _ right:AddExpr {
       const name = negated !== null ? 'notILike' : 'ilike';
-      return (left) => (loc({ kind: 'functionCall', name, args: [left, right] }));
+      return (left) => (loc({ kind: 'functionCall', name, isOperator: true, args: [left, right] }));
     }
   / _ negated:(KW_NOT _)? KW_LIKE _ right:AddExpr {
       const name = negated !== null ? 'notLike' : 'like';
-      return (left) => (loc({ kind: 'functionCall', name, args: [left, right] }));
+      return (left) => (loc({ kind: 'functionCall', name, isOperator: true, args: [left, right] }));
     }
   // REGEXP
   / _ "REGEXP"i ![a-zA-Z0-9_] _ right:AddExpr {
-      return (left) => (loc({ kind: 'functionCall', name: 'match', args: [left, right] }));
+      return (left) => (loc({ kind: 'functionCall', name: 'match', isOperator: true, args: [left, right] }));
     }
   // BETWEEN
   / _ KW_NOT _ KW_BETWEEN _ low:AddExpr _ KW_AND _ high:AddExpr {
       return (left) => (loc({
-        kind: 'functionCall', name: 'or', args: [
-          loc({ kind: 'functionCall', name: 'less', args: [left, low] }),
-          loc({ kind: 'functionCall', name: 'greater', args: [left, high] })
+        kind: 'functionCall', name: 'or', isOperator: true, args: [
+          loc({ kind: 'functionCall', name: 'less', isOperator: true, args: [left, low] }),
+          loc({ kind: 'functionCall', name: 'greater', isOperator: true, args: [left, high] })
         ]
       }));
     }
   / _ KW_BETWEEN _ low:AddExpr _ KW_AND _ high:AddExpr {
       return (left) => (loc({
-        kind: 'functionCall', name: 'and', args: [
-          loc({ kind: 'functionCall', name: 'greaterOrEquals', args: [left, low] }),
-          loc({ kind: 'functionCall', name: 'lessOrEquals', args: [left, high] })
+        kind: 'functionCall', name: 'and', isOperator: true, args: [
+          loc({ kind: 'functionCall', name: 'greaterOrEquals', isOperator: true, args: [left, low] }),
+          loc({ kind: 'functionCall', name: 'lessOrEquals', isOperator: true, args: [left, high] })
         ]
       }));
     }
@@ -3934,13 +3956,13 @@ CompareBaseSuffix
   // The arith tail allows arithmetic ops to bind tighter than comparison, matching ClickHouse precedence.
   / _ "IS"i ![a-zA-Z0-9_] _ "NOT"i ![a-zA-Z0-9_] _ "NULL"i ![a-zA-Z0-9_] arith:( _ op:AddOp _ right:NotPrefixExpr )* {
       return (left) => {
-        const base = loc({ kind: 'functionCall', name: 'isNotNull', args: [left] });
+        const base = loc({ kind: 'functionCall', name: 'isNotNull', isOperator: true, args: [left] });
         return arith.reduce((acc, t) => (loc({ kind: 'binaryExpr', op: t[1], left: acc, right: t[3] })), base);
       };
     }
   / _ "IS"i ![a-zA-Z0-9_] _ "NULL"i ![a-zA-Z0-9_] arith:( _ op:AddOp _ right:NotPrefixExpr )* {
       return (left) => {
-        const base = loc({ kind: 'functionCall', name: 'isNull', args: [left] });
+        const base = loc({ kind: 'functionCall', name: 'isNull', isOperator: true, args: [left] });
         return arith.reduce((acc, t) => (loc({ kind: 'binaryExpr', op: t[1], left: acc, right: t[3] })), base);
       };
     }
@@ -4019,7 +4041,7 @@ ConcatExpr
   = head:MulExpr tail:(_ "||" _ MulExpr)* {
       if (tail.length === 0) return head;
       const parts = [head, ...tail.map((t) => addLeading(t[3], [...flattenWs(t[0]), ...flattenWs(t[2])]))];
-      return loc({ kind: 'functionCall', name: 'concat', args: parts });
+      return loc({ kind: 'functionCall', name: 'concat', isOperator: true, args: parts });
     }
 
 MulExpr
@@ -4049,7 +4071,7 @@ UnaryExpr
       // (-1) without an outer minus stays as a UInt64 literal — only `-` immediately before a
       // bare literal folds. A parenthesized inner expression always wraps in negate().
       if (expr.parenthesized) {
-        return loc({ kind: 'functionCall', name: 'negate', args: [expr] });
+        return loc({ kind: 'functionCall', name: 'negate', isOperator: true, args: [expr] });
       }
       if (expr.kind === 'literal' && expr.type === 'UInt64') {
         // Negate a non-negative integer literal: compute decimal value using BigInt for precision
@@ -4105,7 +4127,7 @@ UnaryExpr
         }
       }
       // For all other cases (non-literal, already-negative literal, etc.), wrap in negate()
-      return loc({ kind: 'functionCall', name: 'negate', args: [expr] });
+      return loc({ kind: 'functionCall', name: 'negate', isOperator: true, args: [expr] });
     }
   / PrimaryExpr
 
@@ -4117,10 +4139,10 @@ UnaryExpr
 //   .name (tuple element by name), .:Type (JSON subcolumn), .* (tuple expansion)
 // e.g. arr[1], tuple.2, expr::Int32, json.:String, row.*
 PrimaryExpr
-  = base:PrimaryBase suffixes:PrimaryExprSuffix* NullsHandlingClause? over:OverClause? {
+  = base:PrimaryBase suffixes:PrimaryExprSuffix* nullsAction:NullsHandlingClause? over:OverClause? {
       const result = suffixes.reduce((acc, s) => {
         if (s.kind === 'subscript') {
-          return loc({ kind: 'functionCall', name: 'arrayElement', args: [acc, s.index] });
+          return loc({ kind: 'functionCall', name: 'arrayElement', isOperator: true, args: [acc, s.index] });
         } else if (s.kind === 'tuple_element') {
           let idxArg;
           const absIndex = s.index.charAt(0) === '-' ? s.index.substring(1) : s.index;
@@ -4134,14 +4156,14 @@ PrimaryExpr
           }
           if (s.index.charAt(0) === '-') {
             // Negative index: wrap as negate(literal)
-            idxArg = loc({ kind: 'functionCall', name: 'negate', args: [idxLiteral] });
+            idxArg = loc({ kind: 'functionCall', name: 'negate', isOperator: true, args: [idxLiteral] });
           } else {
             idxArg = idxLiteral;
           }
-          return loc({ kind: 'functionCall', name: 'tupleElement', args: [acc, idxArg] });
+          return loc({ kind: 'functionCall', name: 'tupleElement', isOperator: true, args: [acc, idxArg] });
         } else if (s.kind === 'field_access') {
           // Named field access: expr.name — tuple element by name
-          return loc({ kind: 'functionCall', name: 'tupleElement', args: [acc, loc({ kind: 'literal', type: 'String', value: s.name })] });
+          return loc({ kind: 'functionCall', name: 'tupleElement', isOperator: true, args: [acc, loc({ kind: 'literal', type: 'String', value: s.name })] });
         } else if (s.kind === 'json_subcolumn') {
           // .:Type or .:`QuotedType` — JSON subcolumn type annotation
           const node = loc({ kind: 'jsonSubcolumn', expr: acc, type: s.type });
@@ -4157,16 +4179,21 @@ PrimaryExpr
           return loc({ kind: 'castExpr', expr: acc, type: s.type, operator: true });
         }
       }, base);
-      // Attach window spec to function calls with an inline OVER (spec) clause
+      // Attach NULLS handling (RESPECT/IGNORE NULLS) to function calls
+      if (nullsAction !== null && nullsAction !== undefined && result !== null && result.kind === 'functionCall') {
+        result.nullsAction = nullsAction;
+      }
+      // Attach window spec / named-window reference to function calls with an OVER clause
       if (over !== null && over !== undefined && result !== null && result.kind === 'functionCall') {
-        result.window = over;
+        if (over.spec !== undefined) result.window = over.spec;
+        if (over.name !== undefined) result.windowName = over.name;
       }
       return result;
     }
 
-// NullsHandlingClause: RESPECT NULLS or IGNORE NULLS modifier on window functions (discarded)
+// NullsHandlingClause: RESPECT NULLS or IGNORE NULLS modifier on window functions
 NullsHandlingClause
-  = _ ("RESPECT"i / "IGNORE"i) ![a-zA-Z0-9_] _ "NULLS"i ![a-zA-Z0-9_]
+  = _ kw:("RESPECT"i / "IGNORE"i) ![a-zA-Z0-9_] _ "NULLS"i ![a-zA-Z0-9_] { return kw.toUpperCase() + ' NULLS'; }
 
 // OverClause: window function OVER clause.
 // Returns a WindowSpec for inline specs, or null for bare named-window references.
@@ -4179,11 +4206,15 @@ NullsHandlingClause
 OverClause
   // OVER (identifier [spec]) — always returns the spec (possibly empty {}) to trigger WindowDefinition
   // Named windows with OVER (w) produce an empty WindowDefinition; OVER (w spec) adds the spec content.
-  = _ "OVER"i ![a-zA-Z0-9_] _ "(" _ Identifier _ spec:WindowSpec _ ")" { return spec; }
+  // The leading identifier is the parent window name (window inheritance).
+  = _ "OVER"i ![a-zA-Z0-9_] _ "(" _ base:Identifier _ spec:WindowSpec _ ")" {
+      spec.baseWindow = base;
+      return { spec };
+    }
   // OVER (spec) — inline window spec
-  / _ "OVER"i ![a-zA-Z0-9_] _ "(" _ spec:WindowSpec _ ")" { return spec; }
+  / _ "OVER"i ![a-zA-Z0-9_] _ "(" _ spec:WindowSpec _ ")" { return { spec }; }
   // OVER name — bare window name reference; NO WindowDefinition (ClickHouse doesn't show one)
-  / _ "OVER"i ![a-zA-Z0-9_] _ Identifier { return null; }
+  / _ "OVER"i ![a-zA-Z0-9_] _ name:Identifier { return { name }; }
 
 // WindowSpec: optional PARTITION BY, ORDER BY, and frame clause
 WindowSpec
@@ -4384,7 +4415,7 @@ PrimaryBase
   // NOT(expr) and NOT (expr) — parenthesized NOT as a high-precedence unary operator.
   // This is distinct from NotExpr (low precedence): NOT (0) + NOT (0) → plus(not(0), not(0)).
   // NOT (a, b, c) — NOT applied to a multi-element tuple: not(tuple(a, b, c))
-  / KW_NOT _ tuple:TupleLiteral { return loc({ kind: 'functionCall', name: 'not', args: [tuple] }); }
+  / KW_NOT _ tuple:TupleLiteral { return loc({ kind: 'functionCall', name: 'not', isOperator: true, args: [tuple] }); }
   / KW_NOT _ "(" _ expr:ExpressionWithImplicitAlias _ ")" { return loc({ kind: 'unaryExpr', op: 'NOT', expr: expr }); }
   / ParenGroup
   / ArrayLiteral

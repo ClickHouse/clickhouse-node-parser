@@ -1,0 +1,1 @@
+SELECT COLUMNS('a.*') FROM t

@@ -28,7 +28,7 @@ SELECT
     tab1.b1
 FROM
     tab1
-LEFT JOIN tab1_copy
+ANY LEFT JOIN tab1_copy
     ON tab1.b1 + 3 = tab1_copy.b1 + 2;
 
 DROP TABLE tab1;

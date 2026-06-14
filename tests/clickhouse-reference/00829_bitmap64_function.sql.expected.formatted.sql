@@ -85,7 +85,7 @@ FROM
         GROUP BY city_id
         ORDER BY city_id ASC
     ) AS js1
-LEFT JOIN (
+ALL LEFT JOIN (
         SELECT
             city_id,
             groupBitmapState(uid) AS day_before
@@ -113,7 +113,7 @@ FROM
         GROUP BY city_id
         ORDER BY city_id ASC
     ) AS js1
-LEFT JOIN (
+ALL LEFT JOIN (
         SELECT
             city_id,
             groupBitmapState(uid) AS day_before

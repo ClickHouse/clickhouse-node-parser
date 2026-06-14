@@ -22,7 +22,7 @@ FROM
         FROM `system`.numbers
         LIMIT 2
     ) AS js1
-LEFT JOIN (
+ANY LEFT JOIN (
         SELECT
             number AS k,
             toString(number) AS b

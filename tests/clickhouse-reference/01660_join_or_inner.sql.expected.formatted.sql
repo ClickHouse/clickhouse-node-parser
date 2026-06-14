@@ -43,7 +43,7 @@ SELECT
     tab3.*
 FROM
     tab2
-INNER JOIN tab3
+ANY INNER JOIN tab3
     ON a2 = a3
     OR b2 = b3
 ORDER BY `ALL` ASC;
@@ -53,7 +53,7 @@ SELECT
     tab3.*
 FROM
     tab2
-INNER JOIN tab3
+ANY INNER JOIN tab3
     ON b2 = b3
     OR a2 = a3
 ORDER BY `ALL` ASC;

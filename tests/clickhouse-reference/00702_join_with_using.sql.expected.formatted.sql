@@ -23,7 +23,7 @@ INSERT INTO using2;
 SELECT *
 FROM
     using1
-LEFT JOIN (
+ALL LEFT JOIN (
         SELECT *
         FROM using2
     ) AS js2
@@ -62,7 +62,7 @@ INSERT INTO children (id, childName);
 SELECT *
 FROM
     persons
-INNER JOIN children
+ALL INNER JOIN children
     USING (id)
 ORDER BY
     id ASC,
@@ -72,7 +72,7 @@ ORDER BY
 SELECT *
 FROM
     persons
-INNER JOIN (
+ALL INNER JOIN (
         SELECT *
         FROM children
     ) AS j
@@ -88,7 +88,7 @@ FROM
         SELECT *
         FROM persons
     ) AS s
-INNER JOIN (
+ALL INNER JOIN (
         SELECT *
         FROM children
     ) AS j
@@ -104,7 +104,7 @@ SET joined_subquery_requires_alias = 0;
 SELECT *
 FROM
     persons
-INNER JOIN (
+ALL INNER JOIN (
         SELECT *
         FROM children
     )
@@ -120,7 +120,7 @@ FROM
         SELECT *
         FROM persons
     )
-INNER JOIN (
+ALL INNER JOIN (
         SELECT *
         FROM children
     )
@@ -136,7 +136,7 @@ FROM
         SELECT *
         FROM persons
     ) AS s
-INNER JOIN (
+ALL INNER JOIN (
         SELECT *
         FROM children
     )

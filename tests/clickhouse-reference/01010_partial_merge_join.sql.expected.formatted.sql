@@ -37,7 +37,7 @@ SET any_join_distinct_right_table_keys = 1;
 SELECT *
 FROM
     t1
-LEFT JOIN t0
+ANY LEFT JOIN t0
     USING (x)
 ORDER BY x ASC;
 
@@ -51,7 +51,7 @@ ORDER BY x ASC;
 SELECT *
 FROM
     t1
-INNER JOIN t0
+ANY INNER JOIN t0
     USING (x)
 ORDER BY x ASC;
 
@@ -65,7 +65,7 @@ ORDER BY x ASC;
 SELECT *
 FROM
     t1
-LEFT JOIN t0
+ANY LEFT JOIN t0
     ON t1.x = t0.x
 ORDER BY x ASC;
 
@@ -79,7 +79,7 @@ ORDER BY x ASC;
 SELECT *
 FROM
     t1
-INNER JOIN t0
+ANY INNER JOIN t0
     ON t1.x = t0.x
 ORDER BY x ASC;
 
@@ -89,6 +89,12 @@ FROM
 INNER JOIN t0
     ON t1.x = t0.x
 ORDER BY x ASC;
+
+SELECT *
+FROM
+    t0
+ANY LEFT JOIN t1
+    USING (x);
 
 SELECT *
 FROM
@@ -99,7 +105,7 @@ LEFT JOIN t1
 SELECT *
 FROM
     t0
-LEFT JOIN t1
+ANY INNER JOIN t1
     USING (x);
 
 SELECT *
@@ -111,13 +117,7 @@ INNER JOIN t1
 SELECT *
 FROM
     t0
-INNER JOIN t1
-    USING (x);
-
-SELECT *
-FROM
-    t0
-LEFT JOIN t1
+ANY LEFT JOIN t1
     ON t1.x = t0.x;
 
 SELECT *
@@ -129,7 +129,7 @@ LEFT JOIN t1
 SELECT *
 FROM
     t0
-INNER JOIN t1
+ANY INNER JOIN t1
     ON t1.x = t0.x;
 
 SELECT *
@@ -155,7 +155,7 @@ SELECT
     t2.x
 FROM
     t1
-LEFT JOIN t2
+ANY LEFT JOIN t2
     USING (x)
 ORDER BY x ASC;
 
@@ -164,7 +164,7 @@ SELECT
     t2.x
 FROM
     t1
-LEFT JOIN t2
+ANY LEFT JOIN t2
     USING (x, y)
 ORDER BY x ASC;
 
@@ -227,7 +227,7 @@ SELECT
     t2.x
 FROM
     t1
-INNER JOIN t2
+ANY INNER JOIN t2
     USING (x)
 ORDER BY x ASC;
 
@@ -236,7 +236,7 @@ SELECT
     t2.x
 FROM
     t1
-INNER JOIN t2
+ANY INNER JOIN t2
     USING (x, y)
 ORDER BY x ASC;
 

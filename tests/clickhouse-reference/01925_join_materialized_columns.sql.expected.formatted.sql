@@ -64,7 +64,7 @@ ORDER BY t1.dt ASC;
 SELECT *
 FROM
     t1
-INNER JOIN t2
+ALL INNER JOIN t2
     ON t1.dt = t2.dt
 ORDER BY
     t1.time ASC,
@@ -73,7 +73,7 @@ ORDER BY
 SELECT *
 FROM
     t1
-INNER JOIN t2
+ALL INNER JOIN t2
     USING (dt)
 ORDER BY
     t1.time ASC,
@@ -83,7 +83,7 @@ SETTINGS enable_analyzer = 0;
 SELECT *
 FROM
     t1
-INNER JOIN t2
+ALL INNER JOIN t2
     USING (dt)
 ORDER BY
     t1.time ASC,

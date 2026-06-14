@@ -32,5 +32,5 @@ FROM test;
 SELECT *
 FROM
     test
-LEFT JOIN test_join
+ANY LEFT JOIN test_join
     USING (TOPIC, `PARTITION`);

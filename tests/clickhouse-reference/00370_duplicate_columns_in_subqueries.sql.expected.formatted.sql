@@ -78,7 +78,7 @@ FROM
             b,
             c
     )
-LEFT JOIN (
+ANY LEFT JOIN (
         SELECT 1 AS a
     )
     USING (a);
@@ -95,7 +95,7 @@ FROM
             1 AS b,
             1 AS c
     )
-LEFT JOIN (
+ANY LEFT JOIN (
         SELECT 1 AS a
     )
     USING (a);
@@ -113,7 +113,7 @@ FROM
             1 AS b,
             2 AS c
     )
-LEFT JOIN (
+ANY LEFT JOIN (
         SELECT
             42 AS a,
             3 AS d
@@ -133,7 +133,7 @@ FROM
             1 AS b,
             2 AS c
     )
-LEFT JOIN (
+ANY LEFT JOIN (
         SELECT
             42 AS a,
             3 AS d
@@ -155,7 +155,7 @@ FROM
             'world' AS b1,
             a1
     )
-FULL JOIN (
+ANY FULL JOIN (
         SELECT
             1 AS k,
             'hello' AS a2,

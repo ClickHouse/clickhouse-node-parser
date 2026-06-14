@@ -33,6 +33,6 @@ SELECT
     a2.*
 FROM
     a1
-LEFT JOIN a2
+ANY LEFT JOIN a2
     USING (a)
 ORDER BY b ASC;

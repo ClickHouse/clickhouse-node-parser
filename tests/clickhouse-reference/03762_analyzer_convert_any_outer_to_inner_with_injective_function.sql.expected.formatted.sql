@@ -25,7 +25,7 @@ EXPLAIN actions = 1, keep_logical_steps = 1
 SELECT *
 FROM
     users AS u1
-LEFT JOIN (
+ANY LEFT JOIN (
         SELECT
             sum(age)::Nullable(Int64) AS age_sum,
             name
@@ -40,7 +40,7 @@ EXPLAIN actions = 1, keep_logical_steps = 1
 SELECT *
 FROM
     users AS u1
-LEFT JOIN (
+ANY LEFT JOIN (
         SELECT
             sum(age)::Nullable(Int64) AS age_sum,
             name
@@ -58,7 +58,7 @@ EXPLAIN actions = 1, keep_logical_steps = 1
 SELECT *
 FROM
     users AS u1
-LEFT JOIN (
+ANY LEFT JOIN (
         SELECT
             sum(age)::Nullable(Int64) AS age_sum,
             name,
@@ -76,7 +76,7 @@ EXPLAIN actions = 1, keep_logical_steps = 1
 SELECT *
 FROM
     users AS u1
-LEFT JOIN (
+ANY LEFT JOIN (
         SELECT
             sum(age)::Nullable(Int64) AS age_sum,
             name,

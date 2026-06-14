@@ -43,5 +43,5 @@ FROM (
 ORDER BY
     tuple('Nullable(String)', 16, toNullable(16), materialize(16)) DESC,
     tuple(toLowCardinality('9279104477'), toNullable(10), 10, 10, 10, 10, 10, toUInt128(10), 10, 10, 10, 10, 10, 10, 10, 10, 10, 10) DESC,
-    nn ASC,
-    vv ASC;
+    nn ASC NULLS FIRST,
+    vv ASC NULLS FIRST;

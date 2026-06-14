@@ -41,9 +41,9 @@ SELECT '-- no parallel replicas --';
 SELECT *
 FROM
     tab
-LEFT JOIN mem
+ANY LEFT JOIN mem
     ON k1 = mem.k
-RIGHT JOIN mem2
+ANY RIGHT JOIN mem2
     ON k2 = mem2.k
 ORDER BY tab.v ASC
 SETTINGS enable_parallel_replicas = 0;
@@ -51,9 +51,9 @@ SETTINGS enable_parallel_replicas = 0;
 SELECT *
 FROM
     tab
-LEFT JOIN mem
+ANY LEFT JOIN mem
     ON k1 = mem.k
-RIGHT JOIN mem2
+ANY RIGHT JOIN mem2
     ON k2 = mem2.k
 ORDER BY tab.v ASC
 SETTINGS
@@ -68,9 +68,9 @@ FROM (
         SELECT *
         FROM
             tab
-        LEFT JOIN mem
+        ANY LEFT JOIN mem
             ON k1 = mem.k
-        RIGHT JOIN mem2
+        ANY RIGHT JOIN mem2
             ON k2 = mem2.k
         ORDER BY tab.v ASC
         SETTINGS

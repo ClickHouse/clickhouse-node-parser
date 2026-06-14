@@ -31,7 +31,7 @@ INSERT INTO tab2;
 SELECT a1
 FROM
     tab1
-LEFT JOIN (
+ANY LEFT JOIN (
         SELECT *
         FROM tab2
     )
@@ -41,7 +41,7 @@ LEFT JOIN (
 SELECT a1
 FROM
     tab1
-LEFT JOIN (
+ANY LEFT JOIN (
         SELECT
             a2,
             b2
@@ -55,7 +55,7 @@ SELECT
     b1
 FROM
     tab1
-LEFT JOIN (
+ANY LEFT JOIN (
         SELECT *
         FROM tab2
     )
@@ -69,7 +69,7 @@ SELECT
     b2
 FROM
     tab1
-LEFT JOIN (
+ANY LEFT JOIN (
         SELECT
             *,
             a2 AS z
@@ -85,7 +85,7 @@ SELECT
     b2
 FROM
     tab1
-LEFT JOIN (
+ANY LEFT JOIN (
         SELECT
             *,
             a2 + 1 AS z

@@ -89,7 +89,7 @@ FROM
         SELECT number AS key
         FROM numbers(5)
     ) AS s1
-LEFT JOIN dict_flat AS d
+ANY LEFT JOIN dict_flat AS d
     USING (key)
 ORDER BY key ASC;
 
@@ -99,7 +99,7 @@ FROM
         SELECT number AS key
         FROM numbers(5)
     ) AS s1
-INNER JOIN dict_flat AS d
+SEMI INNER JOIN dict_flat AS d
     USING (key)
 ORDER BY key ASC;
 
@@ -109,7 +109,7 @@ FROM
         SELECT number AS key
         FROM numbers(5)
     ) AS s1
-INNER JOIN dict_flat AS d
+ANTI INNER JOIN dict_flat AS d
     USING (key)
 ORDER BY key ASC;
 
@@ -160,7 +160,7 @@ FROM
         SELECT number AS key
         FROM numbers(5)
     ) AS s1
-LEFT JOIN dict_hashed AS d
+ANY LEFT JOIN dict_hashed AS d
     USING (key)
 ORDER BY key ASC;
 
@@ -170,7 +170,7 @@ FROM
         SELECT number AS key
         FROM numbers(5)
     ) AS s1
-INNER JOIN dict_hashed AS d
+SEMI INNER JOIN dict_hashed AS d
     USING (key)
 ORDER BY key ASC;
 
@@ -180,7 +180,7 @@ FROM
         SELECT number AS key
         FROM numbers(5)
     ) AS s1
-INNER JOIN dict_hashed AS d
+ANTI INNER JOIN dict_hashed AS d
     USING (key)
 ORDER BY key ASC;
 
@@ -223,7 +223,7 @@ FROM
         SELECT number AS key
         FROM numbers(5)
     ) AS s1
-LEFT JOIN dict_flat AS d
+ANY LEFT JOIN dict_flat AS d
     USING (key)
 ORDER BY key ASC
 SETTINGS any_join_distinct_right_table_keys = '1';
@@ -276,7 +276,7 @@ FROM
         SELECT number AS key
         FROM numbers(2)
     ) AS s1
-INNER JOIN dict_flat AS d
+ANY INNER JOIN dict_flat AS d
     USING (key)
 ORDER BY s1.key ASC;
 
@@ -286,7 +286,7 @@ FROM
         SELECT number AS key
         FROM numbers(2)
     ) AS s1
-RIGHT JOIN dict_flat AS d
+ANY RIGHT JOIN dict_flat AS d
     USING (key)
 ORDER BY key ASC;
 
@@ -296,7 +296,7 @@ FROM
         SELECT number AS key
         FROM numbers(2)
     ) AS s1
-RIGHT JOIN dict_flat AS d
+SEMI RIGHT JOIN dict_flat AS d
     USING (key)
 ORDER BY s1.key ASC;
 
@@ -306,7 +306,7 @@ FROM
         SELECT number AS key
         FROM numbers(2)
     ) AS s1
-RIGHT JOIN dict_flat AS d
+ANTI RIGHT JOIN dict_flat AS d
     USING (key)
 ORDER BY key ASC;
 

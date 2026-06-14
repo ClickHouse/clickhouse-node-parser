@@ -8,7 +8,7 @@ SELECT
     count()
 FROM
     test.hits
-LEFT JOIN (
+ANY LEFT JOIN (
         SELECT
             UserID,
             sum(SearchEngineID = 2) AS yandex,
@@ -32,7 +32,7 @@ FROM
         SELECT UserID
         FROM test.hits
     )
-LEFT JOIN (
+ANY LEFT JOIN (
         SELECT
             UserID,
             sum(SearchEngineID = 2) AS yandex,
@@ -60,7 +60,7 @@ FROM (
                 SELECT UserID
                 FROM test.hits
             )
-        LEFT JOIN (
+        ANY LEFT JOIN (
                 SELECT
                     UserID,
                     sum(SearchEngineID = 2) AS yandex,
@@ -83,7 +83,7 @@ SELECT
     bar(log(c + 1) * 1000, 0, log(3000000) * 1000, 80)
 FROM
     test.hits
-INNER JOIN (
+ANY INNER JOIN (
         SELECT
             UserID,
             toInt8(if(yandex > google, yandex / ((yandex + google)), negate(google) / ((yandex + google))) * 10) AS loyalty

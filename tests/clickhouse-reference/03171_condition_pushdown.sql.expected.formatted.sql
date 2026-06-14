@@ -7,7 +7,7 @@ FROM
         SELECT *
         FROM numbers(1e19)
     ) AS t1
-CROSS JOIN (
+, (
         SELECT *
         FROM numbers(1e19)
     ) AS t2

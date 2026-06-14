@@ -11,7 +11,7 @@ ORDER BY x;
 SELECT count()
 FROM
     mt
-LEFT JOIN (
+ANY LEFT JOIN (
         SELECT 1 AS x
     ) AS js2
     USING (x)

@@ -81,7 +81,7 @@ WITH RECURSIVE subdepartment AS (
         d.*
     FROM
         department AS d
-    CROSS JOIN subdepartment AS sd
+    , subdepartment AS sd
     WHERE d.parent_department = sd.id
 )
 
@@ -104,7 +104,7 @@ WITH RECURSIVE subdepartment AS (
         d.*
     FROM
         department AS d
-    CROSS JOIN subdepartment AS sd
+    , subdepartment AS sd
     WHERE d.parent_department = sd.id
 )
 
@@ -128,7 +128,7 @@ WITH RECURSIVE subdepartment AS (
         d.*
     FROM
         department AS d
-    CROSS JOIN subdepartment AS sd
+    , subdepartment AS sd
     WHERE d.parent_department = sd.id
 )
 

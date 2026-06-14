@@ -49,7 +49,7 @@ SET enable_join_runtime_filters = 0;
 SELECT *
 FROM
     products
-CROSS JOIN sales
+, sales
 WHERE sales.product_id = products.id
     AND date = '2024-05-07'
 SETTINGS log_comment = '03279_join_choose_build_table_no_stats'
@@ -58,7 +58,7 @@ FORMAT Null;
 SELECT *
 FROM
     sales
-CROSS JOIN products
+, products
 WHERE sales.product_id = products.id
     AND date = '2024-05-07'
 SETTINGS log_comment = '03279_join_choose_build_table_no_stats'
@@ -73,7 +73,7 @@ ALTER TABLE sales MATERIALIZE STATISTICS date;
 SELECT *
 FROM
     products
-CROSS JOIN sales
+, sales
 WHERE sales.product_id = products.id
     AND date = '2024-05-07'
 SETTINGS log_comment = '03279_join_choose_build_table_stats'
@@ -82,7 +82,7 @@ FORMAT Null;
 SELECT *
 FROM
     sales
-CROSS JOIN products
+, products
 WHERE sales.product_id = products.id
     AND date = '2024-05-07'
 SETTINGS log_comment = '03279_join_choose_build_table_stats'

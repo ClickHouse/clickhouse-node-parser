@@ -34,7 +34,7 @@ EXPLAIN actions = 1, optimize = 1, header = 1
 SELECT t1.id
 FROM
     t1
-CROSS JOIN t2
+, t2
 WHERE t1.id = t2.id
 SETTINGS
     query_plan_use_new_logical_join_step = true,
@@ -45,7 +45,7 @@ SELECT
     t1.key2
 FROM
     t1
-INNER JOIN t2
+ALL INNER JOIN t2
     ON (t1.id = t2.id)
     AND (t2.key = t2.key2)
 ORDER BY

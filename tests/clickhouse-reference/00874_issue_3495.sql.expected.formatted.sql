@@ -19,7 +19,7 @@ FROM (
             t2.val AS val2
         FROM
             t AS t1
-        LEFT JOIN t AS t2
+        ANY LEFT JOIN t AS t2
             USING (a)
     )
 ORDER BY val1 ASC;

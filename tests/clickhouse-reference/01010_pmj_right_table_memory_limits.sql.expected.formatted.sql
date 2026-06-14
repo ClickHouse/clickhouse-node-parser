@@ -15,7 +15,7 @@ FROM
         SELECT number * 200000 AS n
         FROM numbers(5)
     ) AS nums
-LEFT JOIN (
+ANY LEFT JOIN (
         SELECT
             number * 2 AS n,
             number AS j
@@ -35,7 +35,7 @@ FROM
         SELECT number * 200000 AS n
         FROM numbers(5)
     ) AS nums
-LEFT JOIN (
+ANY LEFT JOIN (
         SELECT
             number * 2 AS n,
             number AS j
@@ -52,7 +52,7 @@ FROM
         SELECT number * 200000 AS n
         FROM numbers(5)
     ) AS nums
-LEFT JOIN (
+ANY LEFT JOIN (
         SELECT
             number * 2 AS n,
             number AS j

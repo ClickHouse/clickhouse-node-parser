@@ -1,0 +1,1 @@
+SELECT * FROM t LEFT ARRAY JOIN arr AS e, other

@@ -26,7 +26,7 @@ INSERT INTO t;
 SELECT id
 FROM
     t
-LEFT JOIN joint
+ANY LEFT JOIN joint
     ON t.id = joint.id;
 
 DROP TABLE joint;

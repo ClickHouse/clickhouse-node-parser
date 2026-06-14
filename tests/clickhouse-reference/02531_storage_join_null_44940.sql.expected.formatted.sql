@@ -33,4 +33,4 @@ FULL JOIN full_join__fuzz_4
 ORDER BY
     x DESC,
     str ASC,
-    s ASC;
+    s ASC NULLS LAST;

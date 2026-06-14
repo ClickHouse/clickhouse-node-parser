@@ -16,7 +16,7 @@ FROM
             toUInt8(number) AS dt
         FROM numbers(3)
     ) AS a
-LEFT JOIN (
+ASOF LEFT JOIN (
         SELECT
             1 AS pk,
             2 AS dt
@@ -40,7 +40,7 @@ FROM
             toNullable(toUInt8(number)) AS dt
         FROM numbers(3)
     ) AS a
-LEFT JOIN (
+ASOF LEFT JOIN (
         SELECT
             1 AS pk,
             2 AS dt
@@ -64,7 +64,7 @@ FROM
             toUInt8(number) AS dt
         FROM numbers(3)
     ) AS a
-LEFT JOIN (
+ASOF LEFT JOIN (
         SELECT
             1 AS pk,
             toNullable(0) AS dt
@@ -89,7 +89,7 @@ FROM
             toUInt8(number) AS dt
         FROM numbers(3)
     ) AS a
-LEFT JOIN (
+ASOF LEFT JOIN (
         SELECT
             1 AS pk,
             toNullable(0) AS dt
@@ -114,7 +114,7 @@ FROM
             toNullable(toUInt8(number)) AS dt
         FROM numbers(3)
     ) AS a
-LEFT JOIN (
+ASOF LEFT JOIN (
         SELECT
             1 AS pk,
             toNullable(0) AS dt
@@ -138,7 +138,7 @@ FROM
             toUInt8(number) AS dt
         FROM numbers(3)
     ) AS a
-LEFT JOIN (
+ASOF LEFT JOIN (
         SELECT
             1 AS pk,
             2 AS dt
@@ -163,7 +163,7 @@ FROM
             toNullable(toUInt8(number)) AS dt
         FROM numbers(3)
     ) AS a
-LEFT JOIN (
+ASOF LEFT JOIN (
         SELECT
             1 AS pk,
             2 AS dt
@@ -188,7 +188,7 @@ FROM
             toUInt8(number) AS dt
         FROM numbers(3)
     ) AS a
-LEFT JOIN (
+ASOF LEFT JOIN (
         SELECT
             1 AS pk,
             toNullable(0) AS dt
@@ -213,7 +213,7 @@ FROM
             toNullable(toUInt8(number)) AS dt
         FROM numbers(3)
     ) AS a
-LEFT JOIN (
+ASOF LEFT JOIN (
         SELECT
             1 AS pk,
             toNullable(0) AS dt
@@ -238,7 +238,7 @@ FROM
             toUInt8(number) AS dt
         FROM numbers(3)
     ) AS a
-INNER JOIN (
+ASOF INNER JOIN (
         SELECT
             1 AS pk,
             2 AS dt
@@ -262,7 +262,7 @@ FROM
             toNullable(toUInt8(number)) AS dt
         FROM numbers(3)
     ) AS a
-INNER JOIN (
+ASOF INNER JOIN (
         SELECT
             1 AS pk,
             2 AS dt
@@ -287,7 +287,7 @@ FROM
             toNullable(toUInt8(number)) AS dt
         FROM numbers(3)
     ) AS a
-INNER JOIN (
+ASOF INNER JOIN (
         SELECT
             1 AS pk,
             2 AS dt
@@ -312,7 +312,7 @@ FROM
             toUInt8(number) AS dt
         FROM numbers(3)
     ) AS a
-INNER JOIN (
+ASOF INNER JOIN (
         SELECT
             1 AS pk,
             toNullable(0) AS dt
@@ -337,7 +337,7 @@ FROM
             toUInt8(number) AS dt
         FROM numbers(3)
     ) AS a
-INNER JOIN (
+ASOF INNER JOIN (
         SELECT
             1 AS pk,
             toNullable(0) AS dt
@@ -362,7 +362,7 @@ FROM
             toNullable(toUInt8(number)) AS dt
         FROM numbers(3)
     ) AS a
-INNER JOIN (
+ASOF INNER JOIN (
         SELECT
             1 AS pk,
             toNullable(0) AS dt
@@ -386,7 +386,7 @@ FROM
             toUInt8(number) AS dt
         FROM numbers(3)
     ) AS a
-INNER JOIN (
+ASOF INNER JOIN (
         SELECT
             1 AS pk,
             2 AS dt
@@ -411,7 +411,7 @@ FROM
             toNullable(toUInt8(number)) AS dt
         FROM numbers(3)
     ) AS a
-INNER JOIN (
+ASOF INNER JOIN (
         SELECT
             1 AS pk,
             2 AS dt
@@ -436,7 +436,7 @@ FROM
             toUInt8(number) AS dt
         FROM numbers(3)
     ) AS a
-INNER JOIN (
+ASOF INNER JOIN (
         SELECT
             1 AS pk,
             toNullable(0) AS dt
@@ -461,7 +461,7 @@ FROM
             toNullable(toUInt8(number)) AS dt
         FROM numbers(3)
     ) AS a
-INNER JOIN (
+ASOF INNER JOIN (
         SELECT
             1 AS pk,
             toNullable(0) AS dt
@@ -486,7 +486,7 @@ FROM
             toNullable(toUInt8(number)) AS dt
         FROM numbers(3)
     ) AS a
-INNER JOIN (
+ASOF INNER JOIN (
         SELECT
             1 AS pk,
             toNullable(0) AS dt
@@ -503,7 +503,7 @@ FROM
             1 AS x,
             '2020-01-01 10:10:10'::DateTime64 AS t
     ) AS t1
-LEFT JOIN (
+ASOF LEFT JOIN (
         SELECT
             NULL AS y,
             1 AS x,

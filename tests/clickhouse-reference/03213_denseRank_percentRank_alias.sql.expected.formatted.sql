@@ -7,10 +7,10 @@ SELECT
     number,
     p,
     o,
-    count(*),
-    rank(),
-    denseRank(),
-    row_number()
+    count(*) OVER w,
+    rank() OVER w,
+    denseRank() OVER w,
+    row_number() OVER w
 FROM (
         SELECT
             number,

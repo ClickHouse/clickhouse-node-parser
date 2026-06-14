@@ -74,7 +74,7 @@ FROM format(TSVRaw, (
                         WITH CUBE
                     ), groupArray('some long string')), 'LowCardinality(String)')
                 FROM numbers(10000)
-            )), toLowCardinality('some long string')), '\n'), 'LowCardinality(String)')
+            )), toLowCardinality('some long string')) RESPECT NULLS, '\n'), 'LowCardinality(String)')
         FROM numbers(10000)
     ))
 FORMAT TSVRaw; -- { serverError UNKNOWN_IDENTIFIER, ILLEGAL_TYPE_OF_ARGUMENT }

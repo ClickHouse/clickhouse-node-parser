@@ -40,10 +40,10 @@ FROM
         SELECT *
         FROM
             a
-        LEFT JOIN id1
+        ANY LEFT JOIN id1
             USING (id1)
     ) AS js1
-LEFT JOIN id2
+ANY LEFT JOIN id2
     USING (id2);
 
 CREATE VIEW b
@@ -54,10 +54,10 @@ FROM
         SELECT *
         FROM
             a
-        LEFT JOIN id1
+        ANY LEFT JOIN id1
             USING (id1)
     ) AS js1
-LEFT JOIN id2
+ANY LEFT JOIN id2
     USING (id2));
 
 SELECT *

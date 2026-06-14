@@ -10,7 +10,7 @@ FROM
         SELECT number AS n
         FROM numbers(4)
     ) AS nums
-LEFT JOIN (
+ANY LEFT JOIN (
         SELECT
             number * 2 AS n,
             number + 10 AS j

@@ -19,7 +19,7 @@ FROM (
                     number / 2 AS n
                 FROM remote('127.0.0.{2,3}', `system`.numbers)
             )
-        LEFT JOIN (
+        ANY LEFT JOIN (
                 SELECT
                     number / 3 AS n,
                     number AS j1,
@@ -46,7 +46,7 @@ FROM (
                     number / 2 AS n
                 FROM remote('127.0.0.{2,3}', `system`.one)
             )
-        INNER JOIN (
+        ANY INNER JOIN (
                 SELECT
                     number / 3 AS n,
                     number AS j1,
@@ -73,7 +73,7 @@ FROM (
                     number / 2 AS n
                 FROM remote('127.0.0.{2,3}', `system`.numbers)
             )
-        LEFT JOIN (
+        GLOBAL ANY LEFT JOIN (
                 SELECT
                     number / 3 AS n,
                     number AS j1,
@@ -100,7 +100,7 @@ FROM (
                     number / 2 AS n
                 FROM remote('127.0.0.{2,3}', `system`.one)
             )
-        INNER JOIN (
+        GLOBAL ANY INNER JOIN (
                 SELECT
                     number / 3 AS n,
                     number AS j1,

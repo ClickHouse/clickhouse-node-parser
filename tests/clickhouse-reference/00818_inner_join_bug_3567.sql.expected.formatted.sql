@@ -41,7 +41,7 @@ FORMAT PrettyCompact;
 SELECT *
 FROM
     table1 AS t1
-LEFT JOIN (
+ALL LEFT JOIN (
         SELECT
             *,
             c,
@@ -57,7 +57,7 @@ FORMAT PrettyCompact;
 SELECT *
 FROM
     table1 AS t1
-INNER JOIN (
+ALL INNER JOIN (
         SELECT
             *,
             c,

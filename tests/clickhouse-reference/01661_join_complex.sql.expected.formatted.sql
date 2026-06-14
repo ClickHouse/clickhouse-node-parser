@@ -562,7 +562,7 @@ SELECT
     b3
 FROM
     tab2
-LEFT JOIN tab3
+ANY LEFT JOIN tab3
     ON a2 = a3
     AND a2 + 1 = b3 + 0
     OR b2 = b3

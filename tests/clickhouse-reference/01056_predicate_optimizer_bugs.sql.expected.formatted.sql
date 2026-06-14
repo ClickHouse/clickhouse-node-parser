@@ -99,7 +99,7 @@ FROM
         SELECT name
         FROM `system`.`settings`
     )
-INNER JOIN (
+ANY INNER JOIN (
         SELECT name
         FROM `system`.`settings`
     )
@@ -112,7 +112,7 @@ FROM
         SELECT name
         FROM `system`.`settings`
     )
-INNER JOIN (
+ANY INNER JOIN (
         SELECT name
         FROM `system`.`settings`
     )
@@ -188,7 +188,7 @@ FROM (
             (
                 SELECT 2 AS ccc
             )
-        INNER JOIN (
+        ANY INNER JOIN (
                 SELECT 2 AS ccc
             )
             USING (ccc)
@@ -204,7 +204,7 @@ FROM (
             (
                 SELECT 2 AS ccc
             )
-        INNER JOIN (
+        ANY INNER JOIN (
                 SELECT 2 AS ccc
             )
             USING (ccc)
@@ -254,7 +254,7 @@ FROM
             id_b
         FROM A
     ) AS a
-LEFT JOIN B AS b
+ALL LEFT JOIN B AS b
     ON b.id = a.id_b
 WHERE a.ts <= toDateTime('1970-01-01 03:00:00');
 
@@ -274,7 +274,7 @@ FROM
             id_b
         FROM A
     ) AS a
-LEFT JOIN B AS b
+ALL LEFT JOIN B AS b
     ON `--b.id` = `--a.id_b`
 WHERE `--a.ts` <= toDateTime('1970-01-01 03:00:00');
 

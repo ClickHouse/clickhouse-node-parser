@@ -11,7 +11,7 @@ INSERT INTO t0;
 SELECT 1
 FROM
     t0
-INNER JOIN t0 AS tx
+ASOF INNER JOIN t0 AS tx
     ON EXISTS((
         SELECT 1
     ))
@@ -21,7 +21,7 @@ INNER JOIN t0 AS ty
 SELECT 1
 FROM
     t0
-INNER JOIN t0 AS tx
+ASOF INNER JOIN t0 AS tx
     ON EXISTS((
         SELECT 1
     ))
@@ -32,7 +32,7 @@ SETTINGS allow_general_join_planning = 0; -- { serverError INVALID_JOIN_ON_EXPRE
 SELECT 1
 FROM
     t0
-INNER JOIN t0 AS tx
+ASOF INNER JOIN t0 AS tx
     ON EXISTS((
         SELECT 1
     ))

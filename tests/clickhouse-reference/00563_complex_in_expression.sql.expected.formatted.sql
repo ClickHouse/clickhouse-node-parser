@@ -36,7 +36,7 @@ INSERT INTO join_with_index;
 SELECT key + 1
 FROM
     join_with_index
-INNER JOIN (
+ALL INNER JOIN (
         SELECT
             key,
             data

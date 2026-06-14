@@ -53,7 +53,7 @@ FROM (
         SELECT *
         FROM
             lineitem
-        CROSS JOIN part
+        , part
         WHERE p_partkey = l_partkey
     ) AS lp
 WHERE l_quantity < (
@@ -67,7 +67,7 @@ FROM (
         SELECT *
         FROM
             lineitem
-        CROSS JOIN part
+        , part
         WHERE p_partkey = l_partkey
     ) AS lp
 WHERE l_quantity < (

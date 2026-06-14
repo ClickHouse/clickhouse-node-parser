@@ -22,7 +22,7 @@ FROM
         SELECT number::Float64 AS ts
         FROM numbers(10)
     ) AS p
-INNER JOIN events0 AS e
+ASOF INNER JOIN events0 AS e
     ON p.ts >= e.begin
 ORDER BY p.ts ASC;
 
@@ -34,7 +34,7 @@ FROM
         SELECT number::Float64 AS ts
         FROM numbers(10)
     ) AS p
-LEFT JOIN events0 AS e
+ASOF LEFT JOIN events0 AS e
     ON p.ts >= e.begin
 ORDER BY p.ts ASC;
 
@@ -66,7 +66,7 @@ SELECT
     ts.number
 FROM
     numbers(1, 2) AS key
-CROSS JOIN numbers(10) AS ts
+, numbers(10) AS ts
 SETTINGS join_algorithm = 'hash';
 
 SELECT
@@ -75,7 +75,7 @@ SELECT
     e.value
 FROM
     probes AS p
-INNER JOIN events AS e
+ASOF INNER JOIN events AS e
     ON p.key = e.key
     AND p.ts >= e.begin
 ORDER BY
@@ -88,9 +88,9 @@ SELECT
     e.value
 FROM
     probes AS p
-LEFT JOIN events AS e
+ASOF LEFT JOIN events AS e
     ON p.key = e.key
     AND p.ts >= e.begin
 ORDER BY
     p.key ASC,
-    p.ts ASC;
+    p.ts ASC NULLS FIRST;

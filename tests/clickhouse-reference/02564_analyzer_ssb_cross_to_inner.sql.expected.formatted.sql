@@ -109,10 +109,10 @@ SELECT
     sum(LO_REVENUE - LO_SUPPLYCOST) AS profit
 FROM
     date
-CROSS JOIN customer
-CROSS JOIN supplier
-CROSS JOIN part
-CROSS JOIN lineorder
+, customer
+, supplier
+, part
+, lineorder
 WHERE LO_CUSTKEY = C_CUSTKEY
     AND LO_SUPPKEY = S_SUPPKEY
     AND LO_PARTKEY = P_PARTKEY

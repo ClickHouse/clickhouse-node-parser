@@ -13,9 +13,9 @@ INSERT INTO nulls_first_sort_test;
 SELECT *
 FROM nulls_first_sort_test
 ORDER BY
-    a ASC,
-    b ASC,
-    c ASC
+    a ASC NULLS FIRST,
+    b ASC NULLS FIRST,
+    c ASC NULLS FIRST
 LIMIT 5;
 
 DROP TABLE nulls_first_sort_test;

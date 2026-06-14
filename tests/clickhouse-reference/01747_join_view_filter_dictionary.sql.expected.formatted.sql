@@ -60,7 +60,7 @@ SELECT
     rates01747.rates01747 AS rates01747
 FROM
     summing_table01747
-LEFT JOIN rates01747
+ANY LEFT JOIN rates01747
     ON rates01747.from_currency = summing_table01747.currency;
 
 SELECT *

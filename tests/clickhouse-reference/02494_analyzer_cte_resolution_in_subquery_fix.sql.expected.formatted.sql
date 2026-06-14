@@ -4,7 +4,7 @@ WITH a AS (
         t2.number AS n2
     FROM
         numbers(1) AS t1
-    CROSS JOIN numbers(1) AS t2
+    , numbers(1) AS t2
 ),
 
 b AS (
@@ -15,7 +15,7 @@ b AS (
 SELECT *
 FROM
     b AS l
-CROSS JOIN a AS r;
+, a AS r;
 
 WITH a AS (
     SELECT number
@@ -30,7 +30,7 @@ b AS (
 SELECT *
 FROM
     b AS l
-CROSS JOIN a AS r;
+, a AS r;
 
 WITH a AS (
     SELECT number
@@ -45,4 +45,4 @@ b AS (
 SELECT *
 FROM
     a AS l
-CROSS JOIN b AS r;
+, b AS r;

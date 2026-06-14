@@ -66,14 +66,14 @@ ORDER BY key ASC;
 SELECT k
 FROM
     t2
-LEFT JOIN rdb
+SEMI LEFT JOIN rdb
     ON rdb.key == t2.k
 ORDER BY k ASC;
 
 SELECT k
 FROM
     t2
-LEFT JOIN rdb
+ANTI LEFT JOIN rdb
     ON rdb.key == t2.k
 ORDER BY k ASC;
 
@@ -201,7 +201,7 @@ SETTINGS join_algorithm = 'direct,hash';
 SELECT *
 FROM
     t1
-RIGHT JOIN (
+SEMI RIGHT JOIN (
         SELECT *
         FROM rdb
     ) AS rdb
@@ -210,7 +210,7 @@ RIGHT JOIN (
 SELECT *
 FROM
     t1
-RIGHT JOIN (
+ANTI RIGHT JOIN (
         SELECT *
         FROM rdb
     ) AS rdb

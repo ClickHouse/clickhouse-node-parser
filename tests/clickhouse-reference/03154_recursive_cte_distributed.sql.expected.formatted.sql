@@ -32,7 +32,7 @@ WITH RECURSIVE search_tree AS (
         depth + 1
     FROM
         test_table AS t
-    CROSS JOIN search_tree AS st
+    , search_tree AS st
     WHERE t.parent_id = st.id
 )
 
@@ -60,7 +60,7 @@ WITH RECURSIVE search_tree AS (
         depth + 1
     FROM
         remote('127.0.0.1', currentDatabase(), test_table) AS t
-    CROSS JOIN search_tree AS st
+    , search_tree AS st
     WHERE t.parent_id = st.id
 )
 
@@ -86,7 +86,7 @@ WITH RECURSIVE search_tree AS (
         depth + 1
     FROM
         remote('127.0.0.{1,2}', currentDatabase(), test_table) AS t
-    CROSS JOIN search_tree AS st
+    , search_tree AS st
     WHERE t.parent_id = st.id
 )
 

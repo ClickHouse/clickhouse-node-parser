@@ -49,7 +49,7 @@ SELECT
     b2
 FROM
     tab2
-LEFT JOIN tab3
+ANY LEFT JOIN tab3
     ON a2 = a3
     OR b2 = b3
 ORDER BY
@@ -62,7 +62,7 @@ SELECT
     b3
 FROM
     tab2
-LEFT JOIN tab3
+ANY LEFT JOIN tab3
     ON a2 = a3
     OR b2 = b3
 ORDER BY
@@ -77,7 +77,7 @@ SELECT
     b3
 FROM
     tab2
-LEFT JOIN tab3
+ANY LEFT JOIN tab3
     ON a2 = a3
     OR b2 = b3
 ORDER BY
@@ -88,7 +88,7 @@ ORDER BY
 SELECT a1
 FROM
     tab1
-LEFT JOIN tab2
+ANY LEFT JOIN tab2
     ON b1 + 1 = a2 + 1
     OR a1 + 4 = b2 + 2
 ORDER BY a1 ASC;
@@ -98,7 +98,7 @@ SELECT
     b2
 FROM
     tab1
-LEFT JOIN tab2
+ANY LEFT JOIN tab2
     ON b1 + 1 = a2 + 1
     OR a1 + 4 = b2 + 2
 ORDER BY
@@ -112,7 +112,7 @@ SELECT
     b2
 FROM
     tab1
-LEFT JOIN tab2
+ANY LEFT JOIN tab2
     ON b1 + 1 = a2 + 1
     OR a1 + 4 = b2 + 2
 ORDER BY
@@ -126,7 +126,7 @@ SELECT
     b2 + 1
 FROM
     tab1
-LEFT JOIN tab2
+ANY LEFT JOIN tab2
     ON b1 + 1 = a2 + 1
     OR a1 + 4 = b2 + 2
 ORDER BY
@@ -138,7 +138,7 @@ SELECT
     b2
 FROM
     tab2
-RIGHT JOIN tab3
+ANY RIGHT JOIN tab3
     ON a2 = a3
     OR b2 = b3
 ORDER BY
@@ -150,7 +150,7 @@ SELECT
     b3
 FROM
     tab2
-RIGHT JOIN tab3
+ANY RIGHT JOIN tab3
     ON a2 = a3
     OR b2 = b3
 ORDER BY
@@ -164,7 +164,7 @@ SELECT
     b3
 FROM
     tab2
-RIGHT JOIN tab3
+ANY RIGHT JOIN tab3
     ON a2 = a3
     OR b2 = b3
 ORDER BY
@@ -176,7 +176,7 @@ ORDER BY
 SELECT a1
 FROM
     tab1
-RIGHT JOIN tab2
+ANY RIGHT JOIN tab2
     ON b1 + 1 = a2 + 1
     OR a1 + 4 = b2 + 2
 ORDER BY a1 ASC;
@@ -186,7 +186,7 @@ SELECT
     b2
 FROM
     tab1
-RIGHT JOIN tab2
+ANY RIGHT JOIN tab2
     ON b1 + 1 = a2 + 1
     OR a1 + 4 = b2 + 2
 ORDER BY
@@ -200,7 +200,7 @@ SELECT
     b2
 FROM
     tab1
-RIGHT JOIN tab2
+ANY RIGHT JOIN tab2
     ON b1 + 1 = a2 + 1
     OR a1 + 4 = b2 + 2
 ORDER BY
@@ -214,7 +214,7 @@ SELECT
     b2 + 1
 FROM
     tab1
-RIGHT JOIN tab2
+ANY RIGHT JOIN tab2
     ON b1 + 1 = a2 + 1
     OR a1 + 4 = b2 + 2
 ORDER BY
@@ -226,7 +226,7 @@ SET any_join_distinct_right_table_keys = 1;
 SELECT b3
 FROM
     tab2
-RIGHT JOIN tab3
+ANY RIGHT JOIN tab3
     ON a2 = a3
     OR b2 = b3
 ORDER BY

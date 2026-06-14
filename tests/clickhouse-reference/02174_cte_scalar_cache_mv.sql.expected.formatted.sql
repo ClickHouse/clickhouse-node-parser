@@ -123,7 +123,7 @@ SELECT
                         SELECT *
                         FROM
                             `system`.one AS _a
-                        CROSS JOIN t1 AS _b
+                        , t1 AS _b
                     )
             )
     ) AS z
@@ -180,7 +180,7 @@ SELECT
                         SELECT *
                         FROM
                             `system`.one AS _a
-                        CROSS JOIN t2 AS _b
+                        , t2 AS _b
                     )
             )
     ) AS z

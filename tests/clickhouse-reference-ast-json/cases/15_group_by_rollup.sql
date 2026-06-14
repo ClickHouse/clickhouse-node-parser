@@ -1,0 +1,1 @@
+SELECT g, count() FROM t GROUP BY g WITH ROLLUP HAVING count() > 1

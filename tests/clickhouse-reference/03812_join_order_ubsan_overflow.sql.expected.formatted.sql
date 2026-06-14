@@ -23,7 +23,7 @@ EXPLAIN PLAN
 SELECT 1
 FROM
     data_03812 AS t1
-INNER JOIN (
+ALL INNER JOIN (
         SELECT number
         FROM `system`.numbers
         LIMIT 9223372036854775806

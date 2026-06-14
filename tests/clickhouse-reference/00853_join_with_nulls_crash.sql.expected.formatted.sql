@@ -39,7 +39,7 @@ FROM
         FROM table_a
         GROUP BY other
     ) AS s1
-FULL JOIN (
+ALL FULL JOIN (
         SELECT
             other,
             count() AS count_b
@@ -67,7 +67,7 @@ FROM
         FROM table_a
         GROUP BY something
     ) AS s1
-FULL JOIN (
+ALL FULL JOIN (
         SELECT
             something,
             count() AS count_b
@@ -95,7 +95,7 @@ FROM
         FROM table_a
         GROUP BY something
     ) AS s1
-RIGHT JOIN (
+ALL RIGHT JOIN (
         SELECT
             something,
             count() AS count_b
@@ -123,7 +123,7 @@ FROM
         FROM table_a
         GROUP BY something
     ) AS s1
-FULL JOIN (
+ALL FULL JOIN (
         SELECT
             something,
             count() AS count_b

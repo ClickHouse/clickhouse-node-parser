@@ -12,7 +12,7 @@ FROM
     (
         SELECT 1
     ) AS tx
-LEFT JOIN (
+ANY LEFT JOIN (
         SELECT 1 AS c0
     ) AS tz
     ON true
@@ -23,7 +23,7 @@ FROM
     (
         SELECT 1
     ) AS tx
-LEFT JOIN (
+ANY LEFT JOIN (
         SELECT 1 AS c0
     ) AS tz
     ON true

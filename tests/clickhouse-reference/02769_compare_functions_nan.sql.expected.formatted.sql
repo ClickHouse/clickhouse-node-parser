@@ -83,7 +83,7 @@ INSERT INTO test_table;
 
 SELECT value
 FROM (
-        SELECT (corr(value_1, value_1)) AS value
+        SELECT (corr(value_1, value_1) OVER test_window) AS value
         FROM test_table
         WINDOW test_window AS (PARTITION BY value_2 ORDER BY id ASC)
     ) AS subquery
@@ -106,7 +106,7 @@ FROM
         FROM test_table
         GROUP BY value
     ) AS subquery
-LEFT JOIN test_table
+ANTI LEFT JOIN test_table
     ON (subquery.corr_value = test_table.id)
 WHERE (test_table.id >= test_table.id)
     AND (NOT test_table.id >= test_table.id);

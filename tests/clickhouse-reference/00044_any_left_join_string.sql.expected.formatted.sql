@@ -11,7 +11,7 @@ FROM
         FROM test.hits
         GROUP BY domain
     )
-LEFT JOIN (
+ANY LEFT JOIN (
         SELECT
             domain(StartURL) AS domain,
             sum(Sign) AS visits

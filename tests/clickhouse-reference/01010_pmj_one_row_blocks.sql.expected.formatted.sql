@@ -51,7 +51,7 @@ SELECT
     t2.x
 FROM
     t1
-LEFT JOIN t2
+ANY LEFT JOIN t2
     USING (x)
 ORDER BY x ASC;
 
@@ -60,7 +60,7 @@ SELECT
     t2.x
 FROM
     t1
-LEFT JOIN t2
+ANY LEFT JOIN t2
     USING (x, y)
 ORDER BY x ASC;
 
@@ -123,7 +123,7 @@ SELECT
     t2.x
 FROM
     t1
-INNER JOIN t2
+ANY INNER JOIN t2
     USING (x)
 ORDER BY x ASC;
 
@@ -132,7 +132,7 @@ SELECT
     t2.x
 FROM
     t1
-INNER JOIN t2
+ANY INNER JOIN t2
     USING (x, y)
 ORDER BY x ASC;
 

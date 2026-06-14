@@ -11,7 +11,7 @@ FROM
             2697418689476658272,
             1458561552
     ) AS js1
-INNER JOIN (
+ANY INNER JOIN (
         SELECT
             1034415739529768519 AS DeviceIDHash,
             1458566664 AS ReferrerTimestamp

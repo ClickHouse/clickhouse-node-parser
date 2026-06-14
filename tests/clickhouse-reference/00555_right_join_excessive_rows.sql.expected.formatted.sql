@@ -8,7 +8,7 @@ FROM
         SELECT toUInt64(1) AS s
         LIMIT 1
     ) AS js1
-RIGHT JOIN (
+ANY RIGHT JOIN (
         SELECT
             number AS s,
             s AS x

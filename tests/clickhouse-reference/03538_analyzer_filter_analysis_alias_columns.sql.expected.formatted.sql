@@ -37,7 +37,7 @@ FROM
         SELECT 1 AS c0
         FROM
             t0
-        CROSS JOIN remote('localhost:9000', currentDatabase(), 't0') AS ty
+        , remote('localhost:9000', currentDatabase(), 't0') AS ty
     ) AS tx
 INNER JOIN t0
     ON tx.c0 = t0.c0;

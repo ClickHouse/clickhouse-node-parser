@@ -67,7 +67,7 @@ FROM
             1 AS a,
             'x' AS b
     )
-INNER JOIN (
+ANY INNER JOIN (
         SELECT
             1 AS a,
             'y' AS b
@@ -81,7 +81,7 @@ FROM
             1 AS a,
             'x' AS b
     )
-LEFT JOIN (
+ANY LEFT JOIN (
         SELECT
             1 AS a,
             'y' AS b
@@ -95,7 +95,7 @@ FROM
             1 AS a,
             'x' AS b
     )
-FULL JOIN (
+ANY FULL JOIN (
         SELECT
             1 AS a,
             'y' AS b
@@ -109,7 +109,7 @@ FROM
             1 AS a,
             'x' AS b
     )
-RIGHT JOIN (
+ANY RIGHT JOIN (
         SELECT
             1 AS a,
             'y' AS b

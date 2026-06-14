@@ -43,7 +43,7 @@ FROM
             foo_id
         FROM bar
     ) AS js1
-LEFT JOIN (
+ANY LEFT JOIN (
         SELECT
             id AS foo_id,
             n AS foo_n

@@ -38,7 +38,7 @@ SELECT
     count() AS count
 FROM
     AddedToCart AS a
-LEFT JOIN Session AS s
+ANY LEFT JOIN Session AS s
     ON a.sessionId = s.id
 WHERE (isNotNull(a.`top`))
     AND (isNotNull(a.screenHeight))

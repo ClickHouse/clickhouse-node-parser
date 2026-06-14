@@ -51,7 +51,7 @@ FROM
         SELECT *
         FROM test1
     ) AS l
-INNER JOIN test1 AS r
+ANY INNER JOIN test1 AS r
     ON (l.i == r.i);
 
 WITH test1 AS (

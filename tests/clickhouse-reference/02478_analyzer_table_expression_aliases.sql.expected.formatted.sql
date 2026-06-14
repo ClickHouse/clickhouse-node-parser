@@ -19,29 +19,29 @@ SELECT '--';
 SELECT *
 FROM
     test_table AS t1
-CROSS JOIN t1;
+, t1;
 
 SELECT *
 FROM
     t1
-CROSS JOIN test_table AS t1;
+, test_table AS t1;
 
 SELECT *
 FROM
     test_table AS test_table
-CROSS JOIN test_table;
+, test_table;
 
 SELECT *
 FROM
     (
         SELECT 1
     ) AS test_table
-CROSS JOIN test_table AS subquery;
+, test_table AS subquery;
 
 SELECT *
 FROM
     test_table AS subquery
-CROSS JOIN (
+, (
         SELECT 1
     ) AS test_table;
 
@@ -59,22 +59,22 @@ WITH cte_subquery AS (
 SELECT *
 FROM
     cte_subquery AS cte_subquery
-CROSS JOIN cte_subquery AS subquery;
+, cte_subquery AS subquery;
 
 SELECT *
 FROM
     t3
-CROSS JOIN test_table AS t1
-CROSS JOIN t1 AS t2
-CROSS JOIN t2 AS t3;
+, test_table AS t1
+, t1 AS t2
+, t2 AS t3;
 
 SELECT *
 FROM
     t3 AS t4
-CROSS JOIN (
+, (
         SELECT 1
     ) AS t1
-CROSS JOIN t1 AS t2
-CROSS JOIN t2 AS t3;
+, t1 AS t2
+, t2 AS t3;
 
 DROP TABLE test_table;

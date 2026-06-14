@@ -2,7 +2,7 @@ SET optimize_rewrite_sum_if_to_count_if = 1;
 
 SELECT
     if(number % 10 = 0, 1, 0) AS dummy,
-    sum(dummy)
+    sum(dummy) OVER w
 FROM numbers(10)
 WINDOW w AS (ORDER BY number ASC ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW);
 

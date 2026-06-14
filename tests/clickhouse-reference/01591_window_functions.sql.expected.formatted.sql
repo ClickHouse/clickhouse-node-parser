@@ -177,8 +177,8 @@ SELECT 1
 WINDOW w1 AS ();
 
 SELECT
-    sum(number),
-    sum(number)
+    sum(number) OVER w1,
+    sum(number) OVER w2
 FROM numbers(10)
 WINDOW
     w1 AS (ROWS UNBOUNDED PRECEDING),
@@ -187,7 +187,7 @@ WINDOW
 -- FIXME both functions should use the same window, but they don't. Add an
 -- EXPLAIN test for this.
 SELECT
-    sum(number),
+    sum(number) OVER w1,
     sum(number) OVER (PARTITION BY intDiv(number, 3) AS value ORDER BY number ASC ROWS UNBOUNDED PRECEDING)
 FROM numbers(10)
 WINDOW w1 AS (PARTITION BY intDiv(number, 3) ROWS UNBOUNDED PRECEDING);
@@ -204,7 +204,7 @@ SELECT
     number,
     intDiv(number, 3) AS p,
     mod(number, 2) AS o,
-    count(number) AS c
+    count(number) OVER w AS c
 FROM numbers(31)
 ORDER BY number ASC
 WINDOW w AS (PARTITION BY p ORDER BY o ASC, number ASC RANGE UNBOUNDED PRECEDING)
@@ -214,7 +214,7 @@ SELECT
     number,
     intDiv(number, 5) AS p,
     mod(number, 3) AS o,
-    count(number) AS c
+    count(number) OVER w AS c
 FROM numbers(31)
 ORDER BY number ASC
 WINDOW w AS (PARTITION BY p ORDER BY o ASC, number ASC RANGE UNBOUNDED PRECEDING)
@@ -224,7 +224,7 @@ SELECT
     number,
     intDiv(number, 5) AS p,
     mod(number, 2) AS o,
-    count(number) AS c
+    count(number) OVER w AS c
 FROM numbers(31)
 ORDER BY number ASC
 WINDOW w AS (PARTITION BY p ORDER BY o ASC, number ASC RANGE UNBOUNDED PRECEDING)
@@ -234,7 +234,7 @@ SELECT
     number,
     intDiv(number, 3) AS p,
     mod(number, 5) AS o,
-    count(number) AS c
+    count(number) OVER w AS c
 FROM numbers(31)
 ORDER BY number ASC
 WINDOW w AS (PARTITION BY p ORDER BY o ASC, number ASC RANGE UNBOUNDED PRECEDING)
@@ -244,7 +244,7 @@ SELECT
     number,
     intDiv(number, 2) AS p,
     mod(number, 5) AS o,
-    count(number) AS c
+    count(number) OVER w AS c
 FROM numbers(31)
 ORDER BY number ASC
 WINDOW w AS (PARTITION BY p ORDER BY o ASC, number ASC RANGE UNBOUNDED PRECEDING)
@@ -254,7 +254,7 @@ SELECT
     number,
     intDiv(number, 2) AS p,
     mod(number, 3) AS o,
-    count(number) AS c
+    count(number) OVER w AS c
 FROM numbers(31)
 ORDER BY number ASC
 WINDOW w AS (PARTITION BY p ORDER BY o ASC RANGE UNBOUNDED PRECEDING)
@@ -272,10 +272,10 @@ FROM (
 
 -- UNBOUNDED FOLLOWING frame end
 SELECT
-    min(number),
-    min(number),
-    max(number),
-    max(number)
+    min(number) OVER wa,
+    min(number) OVER wo,
+    max(number) OVER wa,
+    max(number) OVER wo
 FROM (
         SELECT
             number,
@@ -334,7 +334,7 @@ FROM numbers(10);
 -- seen a use-after-free under MSan in this query once
 SELECT
     number,
-    max(number) OVER (PARTITION BY intDiv(number, 7) ORDER BY number ASC ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW)
+    max(number) OVER (PARTITION BY intDiv(number, 7) ORDER BY number ASC NULLS LAST ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW)
 FROM numbers(1024)
 SETTINGS max_block_size = 2
 FORMAT Null;
@@ -370,9 +370,9 @@ FROM numbers(3);
 -- a basic RANGE OFFSET frame
 SELECT
     x,
-    min(x),
-    max(x),
-    count(x)
+    min(x) OVER w,
+    max(x) OVER w,
+    count(x) OVER w
 FROM (
         SELECT toUInt8(number) AS x
         FROM numbers(11)
@@ -383,9 +383,9 @@ WINDOW w AS (ORDER BY x ASC RANGE BETWEEN 1 PRECEDING AND 2 FOLLOWING);
 -- overflow conditions
 SELECT
     x,
-    min(x),
-    max(x),
-    count(x)
+    min(x) OVER w,
+    max(x) OVER w,
+    count(x) OVER w
 FROM (
         SELECT toUInt8(if(mod(number, 2), toInt64(255 - intDiv(number, 2)), toInt64(intDiv(number, 2)))) AS x
         FROM numbers(10)
@@ -395,9 +395,9 @@ WINDOW w AS (ORDER BY x ASC RANGE BETWEEN 1 PRECEDING AND 2 FOLLOWING);
 
 SELECT
     x,
-    min(x),
-    max(x),
-    count(x)
+    min(x) OVER w,
+    max(x) OVER w,
+    count(x) OVER w
 FROM (
         SELECT toInt8(multiIf(mod(number, 3) == 0, toInt64(intDiv(number, 3)), mod(number, 3) == 1, toInt64(127 - intDiv(number, 3)), toInt64(-128 + intDiv(number, 3)))) AS x
         FROM numbers(15)
@@ -410,9 +410,9 @@ WINDOW w AS (ORDER BY x ASC RANGE BETWEEN 1 PRECEDING AND 2 FOLLOWING);
 -- after that. The frame from this query is equivalent to the entire partition.
 SELECT
     x,
-    min(x),
-    max(x),
-    count(x)
+    min(x) OVER w,
+    max(x) OVER w,
+    count(x) OVER w
 FROM (
         SELECT toUInt8(if(mod(number, 2), toInt64(255 - intDiv(number, 2)), toInt64(intDiv(number, 2)))) AS x
         FROM numbers(10)
@@ -423,9 +423,9 @@ WINDOW w AS (ORDER BY x ASC RANGE BETWEEN 255 PRECEDING AND 255 FOLLOWING);
 -- RANGE OFFSET ORDER BY DESC
 SELECT
     x,
-    min(x),
-    max(x),
-    count(x)
+    min(x) OVER w,
+    max(x) OVER w,
+    count(x) OVER w
 FROM (
         SELECT toUInt8(number) AS x
         FROM numbers(11)
@@ -436,9 +436,9 @@ SETTINGS max_block_size = 1;
 
 SELECT
     x,
-    min(x),
-    max(x),
-    count(x)
+    min(x) OVER w,
+    max(x) OVER w,
+    count(x) OVER w
 FROM (
         SELECT toUInt8(number) AS x
         FROM numbers(11)
@@ -449,9 +449,9 @@ SETTINGS max_block_size = 2;
 
 SELECT
     x,
-    min(x),
-    max(x),
-    count(x)
+    min(x) OVER w,
+    max(x) OVER w,
+    count(x) OVER w
 FROM (
         SELECT toUInt8(number) AS x
         FROM numbers(11)
@@ -462,9 +462,9 @@ SETTINGS max_block_size = 3;
 
 SELECT
     x,
-    min(x),
-    max(x),
-    count(x)
+    min(x) OVER w,
+    max(x) OVER w,
+    count(x) OVER w
 FROM (
         SELECT toUInt8(number) AS x
         FROM numbers(11)
@@ -527,8 +527,8 @@ FROM (
 
 -- A test case for the sort comparator found by fuzzer.
 SELECT
-    max(number) OVER (ORDER BY number DESC),
-    max(number) OVER (ORDER BY number ASC)
+    max(number) OVER (ORDER BY number DESC NULLS FIRST),
+    max(number) OVER (ORDER BY number ASC NULLS FIRST)
 FROM numbers(2);
 
 -- optimize_read_in_order conflicts with sorting for window functions, check that
@@ -566,10 +566,10 @@ SELECT
     number,
     p,
     o,
-    count(*),
-    rank(),
-    dense_rank(),
-    row_number()
+    count(*) OVER w,
+    rank() OVER w,
+    dense_rank() OVER w,
+    row_number() OVER w
 FROM (
         SELECT
             number,
@@ -598,10 +598,10 @@ SELECT
     number,
     p,
     pp,
-    lagInFrame(number) AS lag1,
-    lagInFrame(number, number - pp) AS lag2,
-    lagInFrame(number, number - pp, number * 11) AS lag,
-    leadInFrame(number, number - pp, number * 11) AS lead
+    lagInFrame(number) OVER w AS lag1,
+    lagInFrame(number, number - pp) OVER w AS lag2,
+    lagInFrame(number, number - pp, number * 11) OVER w AS lag,
+    leadInFrame(number, number - pp, number * 11) OVER w AS lead
 FROM (
         SELECT
             number,
@@ -630,18 +630,18 @@ SELECT
 -- Nullable; otherwise, it returns default values.
 SELECT
     number,
-    lagInFrame(toNullable(number), 1),
-    lagInFrame(toNullable(number), 2),
-    lagInFrame(number, 1),
-    lagInFrame(number, 2)
+    lagInFrame(toNullable(number), 1) OVER w,
+    lagInFrame(toNullable(number), 2) OVER w,
+    lagInFrame(number, 1) OVER w,
+    lagInFrame(number, 2) OVER w
 FROM numbers(4)
 WINDOW w AS (ORDER BY number ASC);
 
 -- case-insensitive SQL-standard synonyms for any and anyLast
 SELECT
     number,
-    fIrSt_VaLue(number),
-    lAsT_vAlUe(number)
+    fIrSt_VaLue(number) OVER w,
+    lAsT_vAlUe(number) OVER w
 FROM numbers(10)
 ORDER BY number ASC
 WINDOW w AS (ORDER BY number ASC RANGE BETWEEN 1 PRECEDING AND 1 FOLLOWING);
@@ -649,10 +649,10 @@ WINDOW w AS (ORDER BY number ASC RANGE BETWEEN 1 PRECEDING AND 1 FOLLOWING);
 -- nth_value without specific frame range given
 SELECT
     number,
-    nth_value(number, 1) AS firstValue,
-    nth_value(number, 2) AS secondValue,
-    nth_value(number, 3) AS thirdValue,
-    nth_value(number, 4) AS fourthValue
+    nth_value(number, 1) OVER w AS firstValue,
+    nth_value(number, 2) OVER w AS secondValue,
+    nth_value(number, 3) OVER w AS thirdValue,
+    nth_value(number, 4) OVER w AS fourthValue
 FROM numbers(10)
 ORDER BY number ASC
 WINDOW w AS (ORDER BY number ASC);
@@ -660,10 +660,10 @@ WINDOW w AS (ORDER BY number ASC);
 -- nth_value with frame range specified
 SELECT
     number,
-    nth_value(number, 1) AS firstValue,
-    nth_value(number, 2) AS secondValue,
-    nth_value(number, 3) AS thirdValue,
-    nth_value(number, 4) AS fourthValue
+    nth_value(number, 1) OVER w AS firstValue,
+    nth_value(number, 2) OVER w AS secondValue,
+    nth_value(number, 3) OVER w AS thirdValue,
+    nth_value(number, 4) OVER w AS fourthValue
 FROM numbers(10)
 ORDER BY number ASC
 WINDOW w AS (ORDER BY number ASC RANGE BETWEEN 1 PRECEDING AND 1 FOLLOWING);
@@ -672,8 +672,8 @@ WINDOW w AS (ORDER BY number ASC RANGE BETWEEN 1 PRECEDING AND 1 FOLLOWING);
 -- Nullable; otherwise, it returns default values.
 SELECT
     number,
-    nth_value(toNullable(number), 1) AS firstValue,
-    nth_value(toNullable(number), 3) AS thridValue
+    nth_value(toNullable(number), 1) OVER w AS firstValue,
+    nth_value(toNullable(number), 3) OVER w AS thridValue
 FROM numbers(5)
 WINDOW w AS (ORDER BY number ASC);
 
@@ -814,7 +814,7 @@ WHERE NULL;
 -- Inheriting another window.
 SELECT
     number,
-    count() OVER (ROWS UNBOUNDED PRECEDING)
+    count() OVER (w1 ROWS UNBOUNDED PRECEDING)
 FROM numbers(10)
 ORDER BY
     p ASC,
@@ -825,24 +825,24 @@ WINDOW
     w1 AS (w0 ORDER BY mod(number, 3) AS o ASC, number ASC);
 
 -- can't redefine PARTITION BY
-SELECT count() OVER (PARTITION BY number)
+SELECT count() OVER (w PARTITION BY number)
 FROM numbers(1)
 WINDOW w AS (PARTITION BY intDiv(number, 5)); -- { serverError BAD_ARGUMENTS }
 
 -- can't redefine existing ORDER BY
-SELECT count() OVER (ORDER BY number ASC)
+SELECT count() OVER (w ORDER BY number ASC)
 FROM numbers(1)
 WINDOW w AS (PARTITION BY intDiv(number, 5) ORDER BY mod(number, 3) ASC); -- { serverError BAD_ARGUMENTS }
 
 -- parent window can't have frame
-SELECT count() OVER (RANGE UNBOUNDED PRECEDING)
+SELECT count() OVER (w RANGE UNBOUNDED PRECEDING)
 FROM numbers(1)
 WINDOW w AS (PARTITION BY intDiv(number, 5) ORDER BY mod(number, 3) ASC ROWS UNBOUNDED PRECEDING); -- { serverError BAD_ARGUMENTS }
 
 -- looks weird but probably should work -- this is a window that inherits and changes nothing
-SELECT count() OVER ()
+SELECT count() OVER (w)
 FROM numbers(1)
 WINDOW w AS ();
 
 -- nonexistent parent window
-SELECT count() OVER (ROWS UNBOUNDED PRECEDING); -- { serverError BAD_ARGUMENTS }
+SELECT count() OVER (w2 ROWS UNBOUNDED PRECEDING); -- { serverError BAD_ARGUMENTS }

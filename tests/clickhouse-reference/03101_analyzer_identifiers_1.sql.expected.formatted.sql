@@ -38,7 +38,7 @@ FROM
             y
         FROM VALUES('x UInt16, y UInt16', (0,1))
     ) AS t1
-CROSS JOIN (
+, (
         SELECT
             x,
             z
